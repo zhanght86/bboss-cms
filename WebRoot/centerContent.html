@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>南宁公安局数据复用平台</title>
+<meta http-equiv="Content-Type" content="text/html; charset=GBK" />
+	<script type="text/javascript" src="common/scripts/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="common/scripts/jquery.jerichotab.js"></script>
+	 <script type="text/javascript" src="common/scripts/tab.js"></script>
+    <link rel="Stylesheet" href="common/jerichotab/css/common.css" />
+    <link rel="Stylesheet" href="common/css/jquery.jerichotab.css" />
+    <link rel="Stylesheet" href="common/css/style.css" /> 
+    
+<script type="text/javascript">
+
+	
+		var maxTabs = window.parent.parent.maxTabs;	
+
+        $(document).ready(function() {
+        	
+        	 d1 = new Date().getTime();
+             divMainLoader = "#divMainLoader";
+             divSourceclick = '.divLeft';//需要单击打开TAB的DIV
+             divTarget = '.divRight';//加载TAB的DIV
+             
+             jericho.showLoader();
+             var w = $(window).width();//$(document).width();
+             var h = $(window).height();//$(document).height();   
+             //$(divSourceclick).css({ width:w -40, 'display': 'block' });
+                	$(divTarget).css({ width: w-10, height: h, 'display': 'block'});   
+             jericho.buildTree();       
+            //jericho.buildTabpanel();
+           // jericho.removeLoader();            
+           var iframe = $('<iframe id="indexFrame" name="indexFrame" width= "100%" height="'+h+'" border= 0 src="" frameborder="0" scrolling="auto" />')
+                .appendTo($('#indexdiv'));  
+           $('#indexdiv').show();  
+        });
+
+        
+        $(window).resize(function() {
+            var w = $(window).width();
+            if ($('table').css('display')!='block'){
+	            $('#indexFrame').css('height',$(window).height());
+            }           
+            $(divTarget).css({ width: w-10,height:$(window).height()});
+			if (typeof tabHash != 'undefined' && tabHash.length >0){ 
+				 for (var tab in tabHash) {
+		               $('#'+tabHash[tab].iframeId).css("height",$(window).height()-23);
+		               $('#'+tabHash[tab].iframeId).css("width",$(window).width()-10);
+		            }
+			}
+        });  
+        
+ </script>
+ <script></script>
+</head>
+<body id="home" topmargin="0" leftmargin="0" rightmargin="0" bottommargin="0">
+<div id="indexdiv" style="display: none; height: 100%;"></div>
+<table width="100%" border="0" cellpadding="0" cellspacing="0"
+	style="display: none; padding: 0 5px;">
+	<tr>
+		<td align="left" width="100%">
+		<div class="divRight"
+			style="width: 100%; float: left; overflow: hidden; padding: 0; margin: 0px;"></div>
+		</td>
+	</tr>
+</table>
+</body>
+</html>
+<script type="text/javascript">
+ function showInit(){
+	window.parent.parent.parent.frames['topFrame'].showInit();
+	}	
+	setTimeout('showInit()',1000);
+ </script>
+
