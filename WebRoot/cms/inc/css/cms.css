@@ -1,0 +1,164 @@
+/* Cms.css modifyed last by Xiaojun.huang@chinacreator.com at 04-11-2007 */
+
+BODY {font-size:12px; color:#486086; margin:0px; font-family: Verdana, "宋体", Vrinda, serif} 
+
+img{ border:0}
+.cms_title_blue{ font-size:14px; color:#52657A; font-weight:bold}
+.cms_title_blue td{ text-align:left}
+text,button,textarea{ 
+border-bottom-width:1px; border-bottom-color:#cccccc;
+border-top-width:1px; border-top-color:#cccccc;
+border-left-width:1px; border-left-color:#cccccc;
+border-right-width:1px; border-right-color:#cccccc;
+ font-size:12px}
+.td{ padding:4,4,4; background:#DAEBFE; text-align:center;border:1 solid #9FC4F1; font-family: Verdana, "宋体", Vrinda, serif}
+
+.cms_button {padding-left:4; padding-right:4; width:60px;padding-top:2; height:24px;
+          cursor:hand; font-size:12px; letter-spacing:1; vertical-align:middle;
+		  color:#587489;border-bottom-width:0px; border-top-width:0px;  border-left-width:0px;  border-right-width:0px;background-image:url(../../images/22word_button.gif);border-style:solid;
+		  border-width:1;
+		 }
+		 
+a.pic:hover {POSITION: relative;TOP: 1px;}
+
+.cms_login { padding-left:4; padding-right:4; width:50;padding-top:2; width:73px;height:29px;
+          cursor:hand; font-size:12px; letter-spacing:1; vertical-align:middle;
+		  background-color:#ffffff;
+		  border-bottom-width:0px; border-bottom-color:#ffffff;
+		  border-top-width:0px; border-top-color:#ffffff;
+		  border-left-width:0px;  border-left-color:#ffffff;
+		  border-right-width:0px; border-right-color:#ffffff; background-image: url(../../images/login_button.gif);
+		     border-style:solid
+		 }
+table,td {
+font-size: 12px; font-family: Verdana, "宋体", Vrinda, serif
+}
+
+/* define HyperLink style */
+a:link { color:#486086;text-decoration:none;}
+a:visited {	color:#486086; text-decoration: none;}
+a:hover {	color: #FF3300 ; text-decoration: underline;position:relative; top:1px;}
+a.black:link {color: 00ff00;text-decoration: none;}
+a.black:visited {color: 00ff00; text-decoration: none;}
+a.black:hover {color: #ff0000;text-decoration:underline; }
+
+a.blue:link {
+color: 2B43A7;
+text-decoration: none;
+}
+a.blue:visited {
+color: 2B43A7; 
+text-decoration: none;
+
+}
+a.blue:hover {
+color: F68400;
+text-decoration: none;
+
+}
+
+form {
+margin: 0px;
+padding: 0px;
+}
+
+/* define control style */
+.cms_text{ font-family: Verdana, "宋体", Vrinda, serif
+height:18px; padding-top:1px; padding-left:2px;
+border-bottom-width:1px; border-bottom-color:#C3CBDC;
+border-top-width:1px; border-top-color:#59657C;
+border-left-width:1px; border-left-color:#77849E;
+border-right-width:1px; border-right-color:#99A3B8;
+color:#566686; font-size:12px; border-style:solid
+}
+.cms_text_fordisplay{
+height:17;
+border-bottom-width:1px; border-bottom-color: #FF6600;
+border-top-width:0px; border-top-color:#77849E;
+border-left-width:0px; border-left-color:#77849E;
+border-right-width:0px; border-right-color:#77849E;
+color: #C0CDDA; font-size:12px; border-style:solid
+}
+.cms_file{
+height:18;
+border-bottom-width:1px; border-bottom-color:#77849E;
+border-top-width:1px; border-top-color:#77849E;
+border-left-width:1px; border-left-color:#77849E;
+border-right-width:1px; border-right-color:#77849E;
+color:#486086; font-size:12px; border-style:solid
+}
+.cms_select{
+order-bottom-width:1px; border-bottom-color:#77849E;
+border-top-width:1px; border-top-color:#77849E;
+border-left-width:1px; border-left-color:#77849E;
+border-right-width:1px; border-right-color:#77849E;
+color:#486086; font-size:12px  
+}
+
+.cms_color_select{ font-size:12px;
+order-bottom-width:0px; border-bottom-color:#77849E;
+border-top-width:0px; border-top-color:#77849E;
+border-left-width:0px; border-left-color:#77849E;
+border-right-width:0px; border-right-color:#77849E;
+color:#486086; background-color:#C5DAF9  
+}
+.red_star{ color:#FF0000}
+.cms_textarea{color:#486086; border:1px #77849E solid}
+
+.cms_report_tr{ text-align:center;background-color:#8E9BD2; background-image: url(../../images/data_tr_tile.jpg);color:#435374; height:20px;}
+.cms_data_tr{color:#435374; height:18px;}
+
+.mhwz_table	{wangbs:expression(this.cellSpacing=1); background: #E4E4E4 url(../mac_line.gif); vertical-align:middle;}
+
+.mhwz_td	{height:23; vertical-align:middle;color: #3366CC;text-align:left; background-image:url(../images/new_table_td.gif); background-repeat:no-repeat;letter-spacing: 2px;}
+
+.mhwz_table tr { vertical-align:middle; background-color:#FFFFFF;height:23; font-family: Verdana, "宋体", Vrinda, serif}
+.mhwz_table td {padding-left:2px;word-break:break-all; height:23; color:#435374; font-family: Verdana, "宋体", Vrinda, serif}
+
+/*add by xiaojun.huang*/
+.checkbox {background-Color:expression(this.checked?'#BDD2E9':'transparent');}
+.thin{background:#f8f8f8}
+.thin td{background:#FFFFFF;text-align:center}
+.query_table{border-collapse:collapse; color:#435374; font-family:Verdana, Arial, Helvetica, sans-serif}
+.query_table td{border:1px solid #DEE6EF}
+.query_box{ color:#435374; font-family:Verdana, Arial, Helvetica, sans-serif}
+
+.Template_CreateBox{ margin:5px; padding:5px; background:#D7F0FF; border:1px #76BDFA solid}
+
+/*add by xiaojun.huang  [listpage's Datalist css]*/
+.Datalisttable{ border-collapse:collapse;}
+.Datalisttable td{border:1px solid #B7CBE4; text-align:center;  font-family: Verdana, "宋体", Vrinda, serif}
+.Datalisttable_1 td{border:1px solid #B7CBE4; font-family: Verdana, "宋体", Vrinda, serif}
+.Datalisttable_1{ border-collapse:collapse;}
+/*.Datalisttable tr{background-color:expression((this.sectionRowIndex%2==0)?'#EEF4F7':'#ffffff')}*/
+
+
+/*权限列表头样式*/
+.authority_title{font-size:14px; font-weight:bold}
+.operStyle{  display:none;}
+/*文字按钮链接*/
+/*.operStyle{ background:url(../../images/operStyle_bg1.gif) no-repeat; float:left; width:53px; height:21px; text-align:center}
+.operStyle{ }
+.operStyle{ }
+.operStyle{ }*/
+
+.Data_List_Table_Bottom{background:#F0F3F8; color:#657C8E; text-align:center; padding:2px; margin:0px; }
+/*文档操作样式*/
+.DocumentOperT{width:100px; float:left; text-align:right; margin-top:5px; color:#fff; font-weight:bold}
+.DocumentOperbox{ float:left}
+.DocumentOper {width:60px;height:18px; background:url(../../images/button_DocumentOperBg.gif); padding-top:3px; float:left; text-align:center; margin:2px;}
+
+/*模板部份样式*/
+.Templateedittable{ border-collapse:collapse;}
+.Templateedittable td{border:1px solid #B7CBE4; font-family: Verdana, "宋体", Vrinda, serif}
+
+.templateCTitle{margin-top:30px; font-size:14px; font-weight:bold; margin-left:20px;}
+
+/*Site manager部份样式*/
+.siteCTitle{margin-top:22px;font-size:14px; font-weight:bold;color:#ffffff; margin-left:34px;}
+
+/*Channel按钮部份样式*/
+.Channel_5wordsBtn{ width:63px; height:23px; background:url(../../images/5words_botton.gif); padding-top:2px; letter-spacing:-1px;color:#4F5570; border:0px}
+.Channel_7wordsBtn{ width:91px; height:23px; background:url(../../images/7words_botton.gif); padding-top:2px; letter-spacing:-1px;color:#4F5570; border:0px}
+
+
