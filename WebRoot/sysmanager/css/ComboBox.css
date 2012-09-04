@@ -1,0 +1,49 @@
+.selecttext{
+	border-bottom-width: 1px;
+	border-color: #000000;
+	border-left-width: 1px;
+	border-top-width: 1px;
+	border-style: solid;
+	height: 19;
+	border-right-width: 0px;
+}
+.selectbutton{
+	font-family:webdings;
+	font-size:10px;
+	height: 19;
+	width: 19; 
+	line-height:0px;
+	padding-bottom:3px;
+	border: 1px solid #000000;
+	background-color: #eaf2ff;
+}
+.selecttable{
+	font-family:arial;
+	font-size:12px;
+	cursor:default;
+}
+.selectcontent
+{
+	position: absolute;
+	top:0;
+	left:0;
+	overflow:auto;
+	border:1px solid #000000
+}
+
+.selectdiv
+{
+	position: absolute; 
+	width:100;
+	overflow:hidden;
+}
+.select{
+	border-collapse: collapse;
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+.dtee{
+	height: 100px;
+	overflow: scroll
+}

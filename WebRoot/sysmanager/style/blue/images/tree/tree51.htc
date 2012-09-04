@@ -1,0 +1,513 @@
+<PUBLIC:COMPONENT>
+	<PUBLIC:ATTACH EVENT="onclick" HANDLER="cancel" />
+	<PUBLIC:ATTACH EVENT="ondblclick" HANDLER="cancel" />
+	<PUBLIC:ATTACH EVENT="onmousedown" HANDLER="cancel" />
+	<PUBLIC:ATTACH EVENT="onmousemove" HANDLER="cancel" />
+	<PUBLIC:ATTACH EVENT="onmouseup" HANDLER="cancel" />
+	<PUBLIC:PROPERTY NAME="src" />
+	<PUBLIC:PROPERTY NAME="autoclose" />
+	<PUBLIC:PROPERTY NAME="pic" PUT="setPicture" GET="getPicture" />
+	<PUBLIC:PROPERTY NAME="cpic" PUT="setClosePicture" GET="getClosePicture" />
+	<PUBLIC:PROPERTY NAME="open" PUT="setOpenStatus" GET="getOpenStatus" />
+	<PUBLIC:PROPERTY NAME="text" PUT="pText" GET="gText" />
+	<PUBLIC:PROPERTY NAME="href" PUT="pHref" GET="gHref" />
+	<PUBLIC:PROPERTY NAME="target" PUT="pTarget" GET="gTarget" />
+	<PUBLIC:PROPERTY NAME="checkValue" />           //checkbox的值
+	<PUBLIC:PROPERTY NAME="checked" />              //是否需要checkbox
+	
+	<PUBLIC:METHOD NAME="closechild" />
+	<PUBLIC:METHOD NAME="exch" />
+	<PUBLIC:METHOD NAME="load" />
+	<PUBLIC:METHOD NAME="srcLoad" />
+	<PUBLIC:METHOD NAME="fold" />
+	<PUBLIC:METHOD NAME="unSelected" />
+	<script language="javascript">
+
+	function cancel()
+	{
+		event.cancelBubble=true;
+	}
+
+	/**
+	*指定节点的图标
+	*/
+	function setPicture(v)
+	{
+		if(noChildren)
+			fop.src=v;
+		else
+		{
+			 mo=v;
+			 fix();
+		}
+	}
+	function getPicture()
+	{
+		return noChildren?fop.src:mo;
+	}
+
+
+	/**
+	 *指定目录关闭时的图标
+	 */
+	function setClosePicture(v)
+	{
+		mc=v; fix();
+	}
+	function getClosePicture() 
+	{
+		return mc;
+	}
+	
+	/**
+	 *设置这个属性，表示该层目录一开始就呈现打开状态。
+	 *如果希望某个位于下层的目录一开始就打开，那么讲它的每一个上级目录的open属性设置为true。
+	 *根目录的openstatus属性预设值就为true。可以不必在设置
+	 */
+	function setOpenStatus(v)
+	{
+		v=(v!=null||v!="false"&&v!=false);
+		
+		if(v&&!lod&&src!=null)
+			v=!v;
+			
+		if(v!=openStatus)
+			fold();
+			
+		openStatus=v;
+	}
+	function getOpenStatus()
+	{
+		return openStatus;
+	}
+	
+	
+	function pText(v)
+	{
+		txt.title=v;
+		txt.innerText=v;
+	}
+	function gText()
+	{
+		return txt.title;
+	}
+	
+	
+	function pHref(v) 
+	{
+		hre.href=v;
+	}
+	function gHref()
+	{
+		return hre.href;
+	}
+	
+	
+	function pTarget(v)
+	{
+		hre.target=v;
+	}
+	function gTarget()
+	{
+		return hre.target;
+	}
+
+	
+	
+	function closechild(c)
+	{
+		for(i=0;i<childNodes.length;i++)
+			if(childNodes[i].nodeName=="tree"&&childNodes[i]!=c)
+				if(!childNodes[i].noChildren&&childNodes[i].open)
+					childNodes[i].fold();
+	}
+
+	function down(t)
+	{
+		tmp[0].outerHTML=t;
+	}
+	
+	function srcLoad() 
+	{
+		removeChild(tmp[1]);
+		for(i=0;i<childNodes.length;i++)
+			if(childNodes[i].nodeName=="tree") 
+			{
+				childNodes[i].style.display=style.display;
+				if(childNodes[i].open)
+					childNodes[i].fold();
+			}
+	}	
+
+	function fix()
+	{
+		if(nod.src.match(/ml?node.gif/))
+			 fop.src=mo;
+		else
+			fop.src=mc;
+	}
+	
+	function exch() 
+	{
+		if(nod.src.match(/ml?node.gif/))
+		{
+			if(isLastNode)
+				nod.src=imgPath+"plnode.gif";
+			else nod.src=imgPath+"pnode.gif";
+		}
+		else
+		{
+			if(isLastNode)
+				nod.src=imgPath+"mlnode.gif";
+			else
+				nod.src=imgPath+"mnode.gif";
+		}
+		openStatus=!openStatus;
+		fix();
+		
+		if(openStatus&&objParentNode.autoclose)
+			objParentNode.closechild(element);
+	}
+	
+	
+	function fold()
+	{
+		if(!lod)
+		{
+			lod=true;
+			exch();
+			for(i=0;i<childNodes.length;i++)
+				if(childNodes[i].nodeName=="tree") 
+				{
+//					try 
+//					{
+						childNodes[i].style.display=style.display;
+						childNodes[i].load();
+						if(childNodes[i].open)
+							childNodes[i].fold();
+//					}
+//					catch(e)
+//					{}
+				}
+				if(src!=null) 
+				{
+
+						var dow=document.createElement("span");
+						dow.addBehavior("#default#download");
+						//dow.style.behavior="url(#default#download)";
+						dow.startDownload(src, down);
+
+				}
+				
+		}
+		else
+		{
+			exch();
+			for(i=0;i<childNodes.length;i++)
+				if(childNodes[i].nodeName=="tree")
+					childNodes[i].style.display=childNodes[i].style.display!="none"?"none":"block";
+		}
+	}
+
+	function load() 
+	{
+		/**
+		 *判断当前节点是否是父节点的最后的子节点
+		 */
+		if(objParentNode.nodeName=="tree"&&(objParentNode.lastChild==element||objParentNode.lastChild.previousSibling==element&&objParentNode.src!=null)) 
+			isLastNode=true;
+			
+		/**
+		 *如果当前节点是父节点的最后一个子节点并且父节点是动态载入的，并且父节点的打开状态是true，并且父节点
+		 */
+		if(isLastNode&&objParentNode.src!=null&&!objParentNode.open&&objParentNode.lod) 
+			objParentNode.exch();
+			
+		/**
+		 *如果有子节点
+		 */
+		if(!noChildren) 
+		{
+			nod.src=imgPath+"pnode.gif";
+			fop.src=mc;
+			
+			if(objParentNode.nodeName!="tree") 
+				fop.src=mo;
+				
+			nod.onclick=fold;
+			nod.ondblclick=fold; 
+			fop.ondblclick=fold;
+			txt.ondblclick=fold;
+			insertBefore(hea, childNodes[0]); 
+			hea.appendChild(lin);
+			if(objParentNode.nodeName=="tree") 
+			{
+				lin.innerHTML=objParentNode.lin.innerHTML+((objParentNode.parentNode.nodeName=="tree")?"<img style='vertical-align:bottom;' width=16 height=22 src='"+((objParentNode.parentNode.lastChild==objParentNode)?imgPath+"bl.gif":imgPath+"vl.gif")+"'>":"");
+				
+				if(isLastNode)
+					nod.src=imgPath+"plnode.gif"; 
+				hea.appendChild(nod);
+			}
+			hea.appendChild(fop);
+			if(bIsCheck){
+				var objChk=document.createElement("input");
+				objChk.type="checkbox";
+				objChk.id="chkid";
+				objChk.name="chkid";			
+				if(checked=="true"){
+					objChk.defaultChecked ="true";
+				}
+				objChk.value=checkValue;
+
+				hre.appendChild(objChk);
+			}			
+			hre.appendChild(txt);
+			hea.appendChild(hre);
+		}
+		else
+		{
+			nod.src=imgPath+"node.gif";
+			if(!fop.src)
+				fop.src=imgPath+"link.gif";
+				
+			appendChild(hea);
+			hea.appendChild(lin);
+			if(objParentNode.parentNode.nodeName=="tree") 
+			{
+				lin.innerHTML=objParentNode.lin.innerHTML+"<img style='vertical-align:bottom;' width=16 height=22 src='"+((objParentNode.parentNode.lastChild==objParentNode)?imgPath+"bl.gif":imgPath+"vl.gif")+"'>";
+			}
+			if(isLastNode)
+				nod.src=imgPath+"lnode.gif";
+				
+			hea.appendChild(nod);
+			hre.appendChild(fop);
+			if(bIsCheck){
+				var objChk=document.createElement("input");
+				objChk.type="checkbox";
+				objChk.id="chkid";
+				objChk.name="chkid";
+				objChk.value=checkValue;
+				if(checked=="true"){
+					objChk.defaultChecked ="true";
+				}
+				hre.appendChild(objChk);
+			}					
+			hre.appendChild(txt);
+			hea.appendChild(hre);
+		}
+
+		if(objParentNode.lastChild.previousSibling==element&&objParentNode.src!=null)
+		{
+			objParentNode.srcLoad();
+		}
+	}
+	//图片路径的设置在417行
+	//默认的连接颜色设置在448行
+	//鼠标经过时的时间
+	function node_mouseover(){
+		if(bSelected){
+			txt.style.color="#ffffff";
+		}
+		else
+		{
+			txt.style.color="#990000";
+		}
+		txt.style.cursor="hand";
+	}
+
+	//鼠标移出时的事件
+	function node_mouseout(){
+		if(bSelected==false){
+			txt.style.borderStyle="none";
+			txt.style.background="";
+			txt.style.color="#000000";
+			txt.style.fontWeight="";
+		}
+		txt.style.cursor="";
+	}
+
+
+	//鼠标点击时的
+	function node_click(){
+		var objParentNode=element.parentElement;
+		while(objParentNode!=null&&objParentNode.tagName=="tree"){
+			objParentNode=objParentNode.parentElement;
+		}
+		var objTreeNodes=objParentNode.all.tags("tree");
+		for(var i=0;i<objTreeNodes.length;i++){
+			objTreeNodes[i].unSelected();
+		}
+		
+		bSelected=true;
+		
+		txt.style.paddingTop="3px"
+		txt.style.paddingRight="4px";
+		txt.style.paddingLeft="4px";
+
+		txt.style.fontWeight="normal"; 	
+		txt.style.height="20px";
+		txt.style.borderRight="#999999 1px solid";
+		txt.style.borderTop="#999999 1px solid"; 
+		txt.style.background="#15488C";
+		txt.style.borderLeft="#999999 1px solid";
+		txt.style.borderBottom="#999999 1px solid";
+		
+		txt.style.color="#ffffff";
+
+		FindTarget();
+
+	}
+
+	function FindTarget()
+	{
+		if(href==null||href==""){
+			return true;
+		}
+		
+		if (target==null||target == "")
+		{	
+			
+			return true;
+		}
+
+	  
+		//  Is there a frames collection and is this one of them?
+		if (window.top.frames.length > 1)
+		{
+			for (i=0; i<window.top.frames.length; i++)
+			{
+				if (window.top.frames(i).name == target)
+				{
+					window.top.frames(i).src = href;
+					return true;
+				}
+			}
+		}
+
+		for (i=0; i<window.document.frames.length; i++)
+		{
+			if (window.document.frames(i).name == target)
+			{
+				window.document.frames(i).document.location.href = href;
+				return true;
+			}
+		}
+		window.open(href, target);
+	}
+
+	function unSelected()
+	{
+		bSelected=false;
+		node_mouseout();
+	}
+
+	var hea;
+	var lin;
+	var nod;
+	var lpk;
+	var fop;
+	var hre;
+	var txt;
+	var chi;
+	var blo;
+	var objParentNode=parentNode;
+	var tmp;
+	var isLastNode=false;
+	var openStatus=false;
+	var imgPath="/themes/newstyle/styles/mac/tree/";
+//图片路径的设置
+	
+	var mc=imgPath+"folclose.gif";
+	var mo=imgPath+"folopen.gif";
+	
+	var bSelected=false;
+	hea=document.createElement("div"); 
+	hea.noWrap=true;
+	hea.style.overflow="hidden";
+	hea.style.textOverflow="ellipsis"; 
+	hea.style.width="100%";
+	
+	nod=document.createElement("img");
+	nod.style.verticalAlign="bottom";
+	nod.width=16; 
+	nod.height=22;
+	
+	fop=document.createElement("img"); 
+	fop.style.verticalAlign="bottom"; 
+	fop.border=0; 
+	fop.width=24; 
+	fop.height=22; 
+	
+	lin=document.createElement("span");
+	
+	//hre=document.createElement("a");
+	hre=document.createElement("span");
+	hre.style.fontSize=""; 
+	style.color="#000000";
+	hre.style.color=style.color; 
+	//style.color="";
+	
+
+	txt=document.createElement("span");
+	txt.onmouseover=node_mouseover;
+	txt.onmouseout=node_mouseout;
+	txt.onclick=node_click;
+
+	if(src!=null) 
+	{
+		innerHTML="<span style='display:none;'></span><eway:tree text='请稍等...'/>";
+		tmp=[childNodes[0], childNodes[1]];
+	}
+
+/*
+	if(objParentNode.nodeName=="tree")
+		hre.target=objParentNode.target; 
+	else
+		hre.target=null;
+*/
+		
+	style.display="none";
+	
+	element.noChildren=!hasChildNodes();
+	element.lod=false;
+
+	autoclose=(autoclose!=null);
+	if(objParentNode.autoclose)
+		 autoclose=true;
+	
+	
+	var bIsCheck=false;
+	if(checkValue!=null)
+	{
+		bIsCheck=true;
+	}	
+	
+	/**
+	 *如果父节点的节点名称不是tree，则当前节点是根节点
+	 *默认打开的状态是true
+	 */
+	if(objParentNode.nodeName!="tree")
+	{
+		lod=openStatus=true; 
+		style.display="block"; 
+		load();
+	}
+	
+	/**
+	 *如果父节点的为展开状态，并且父节点不是自动装入节点
+	 */
+	if(objParentNode.open&&objParentNode.src==null)
+		 if(objParentNode.style.display=="block")
+		 {
+			style.display="block";
+			load();
+		}
+		
+	if(objParentNode.src!=null)
+		load();
+
+	blo=lin.lastChild;
+	element.lin=lin;
+	
+	</script>
+</PUBLIC:COMPONENT>

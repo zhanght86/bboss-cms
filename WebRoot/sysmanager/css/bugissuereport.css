@@ -1,0 +1,10 @@
+a {
+	font-family: "宋体", "Times New Roman", Times, serif;
+	text-decoration: none;
+	color: #000000;
+}
+a:hover {
+	font-family: "宋体","Times New Roman", Times, serif;
+	color: #0033CC;
+	text-decoration: underline;
+}

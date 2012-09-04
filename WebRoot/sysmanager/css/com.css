@@ -1,0 +1,188 @@
+a  { font:normal 12px 宋体; color:#000000; text-decoration:none; }
+a:hover  { color:#428EFF }
+
+body
+{
+    FONT-SIZE: 12px;
+    COLOR: #000000;
+    FONT-FAMILY: 宋体;
+    background-color: #E5EFFF;
+}
+/*
+页面一级标题,调用方式如:<tr><td class="headOne">我是一个菠萝....</td></tr>
+*/
+td.headOne
+{
+  	font-weight:bold;
+  	FONT-SIZE: 	20px;
+	TEXT-ALIGN: 	center;
+        line-height: 	25px;
+}
+
+/*列表中表头的样式,字体居中,粗体*/
+tr.title
+{
+    background-color:	#6779BB;
+	COLOR:#FFFFFF;
+    TEXT-ALIGN: 	center;
+}
+
+/*列表中数据行的样式*白色底色*/
+tr.row
+{
+	background-color:	#FFFFFF;
+}
+
+/*列表中一行的默认样式*/
+TR
+{
+   background-color:#E5EFFF;
+}
+
+TD{
+font-family:宋体; font-size: 12px; line-height: 15px;
+}
+
+td.headerBackgroundAlternate
+{
+    background-color: #799AE1;
+	color:#FFFFFF
+}
+#TableTitleLink A:link, #TableTitleLink A:visited, #TableTitleLink A:active {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none;
+}
+#TableTitleLink A:hover {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: underline;}
+
+
+.tableBorder
+{
+    background-color:	#A5ACB2;
+}
+
+
+/*th的样式*/
+th
+{
+    /*background-image: url(../images/admin_bg_1.gif);*/
+    background-color: #85AAEF;
+    color: #000000;
+    font-size: 12px;
+    font-weight:bold;
+}
+
+/*input、select、textarea的默认样式*/
+input,select,Textarea{
+font-family:Tahoma,Verdana,宋体; font-size: 12px; line-height: 15px;border: 1px solid #A5ACB2;}
+}
+
+/*[ 按钮 - 激活的 - 适用于两个字的按钮] ,背景为一张图片*/
+.buttonActive {
+	background-image: url(../images/b-xz.1.gif);
+	border: 1px none;
+	font-size: 12px;
+	line-height: 17px;
+	text-indent: 2pt;
+}
+/*[ 按钮 - 禁用的 - 适用于两个字的按钮] ,背景为一张图片*/
+.buttonDisabled{
+  	background-image: url(../images/b-H.GIF);
+	border: 1px none;
+	font-size: 12px;
+	line-height: 17px;
+	text-indent: 2pt;
+}
+
+
+/*字体右对齐*/
+input.f_right{
+    text-align: right;
+}
+
+/*只读元素,字体左对齐*/
+input.readonly_left{
+    background-color: #E6E7E8;
+    text-align: left;
+}
+
+textarea.readonly_left2{
+    background-color: #E6E7E8;
+    text-align: left;
+}
+
+
+/*只读元素,字体右对齐*/
+input.readonly_right{
+    background-color: #E6E7E8;
+    text-align: right;
+}
+
+/*只读元素,字体左对齐*/
+textarea.readonly_tleft{
+    background-color: #E6E7E8;
+    text-align: left;
+}
+
+/*---[Top33 新定义]-- --------------------*/
+fieldset.default{
+	border: 1px #A5ACB2 solid;
+    background-color: #E5EFFF;
+}
+
+legend.default{
+          font-weight:bold;
+          background-color: #E5EFFF;
+}
+
+
+/*[将对象隐藏]*/
+.objHidden{
+        display:none;
+}
+
+/*---[jackson新定义]-- --------------------*/
+.keybutton { cursor:hand; font-size: 12px; color: #003300; background: #E5EFFF; border: 0px solid;}
+/*---[jackson新定义]-- --------------------*/
+
+
+/*---[黄霖懿新定义]-- --------------------*/
+th a, th a:visited {
+  color: #FFFFFF;
+}
+th a:hover {
+  text-decoration: underline;
+  color: #FFFFFF;
+}
+th.sorted a, th.sortable a {
+        color: #RGB(255,255,255);
+	background-position: right;
+	display: block;
+	width: 100%;
+	line-height: 	20px;
+	
+}
+th.sortable a {
+        color: #RGB(255,255,255);
+	background-image: url(../img/arrow_off.png);
+	background-color: #6779BB;	
+	text-align: center;
+}
+th.order1 a {
+	background-image: url(../img/arrow_down.png);
+}
+th.order2 a {
+	background-image: url(../img/arrow_up.png);
+}
+a.thHref
+{
+  color: #FFFFFF;
+}
+td.rowOne
+{
+  	FONT-SIZE: 	12 px;
+	TEXT-ALIGN: 	center;
+        line-height: 	20px;
+}
+/*---[黄霖懿新定义]-- --------------------*/

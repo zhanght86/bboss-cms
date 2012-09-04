@@ -1,0 +1,1022 @@
+﻿
+<public:event	name="onrowselect" ID=rowSelect />
+	/*可以为空*/
+<public:property name="hlColor" />
+<public:property name="slColor" />
+<public:property name='dragColor' />
+/**是否可以修改, 不在使用*/
+<public:property name="Editable"/>
+/**是否可以排序*/
+<public:property name="Sortable"/>
+/**排序类型
+	培训类型有两种：
+	1。系统排序   System 将使用FutureTable的javascript进行排序
+	2。自定义排序，User  自定义排序， 用户需要定义SortMethod, 并且通过setSortField设置当前排序字段
+*/
+<public:property name="SortType"/>
+/**排序方法*/
+<public:property name="SortMethod"/>
+/**是否可以移动列*/
+<public:property name="MoveColable"/>
+/**是否设置row表列*/
+<public:property name="SetRowNumber"/>
+/**是否有过滤行*/
+<public:property name="HasQueryRow"/>
+/**初始化数据时是否显示过滤行*/
+<public:property name="QueryRowShow"/>
+/**是否有过滤行*/
+<public:property name="rightMenu"/>
+/**记录ID是那一列
+<public:property name="idColNum"/>*/
+/**记录ID是那几列*/
+<public:property name="idColNums"/>
+/**记录名称是那一列*/
+<public:property name="nameColNum"/>
+/**鼠标左键点击是触发的事件*/
+<public:property name="onClickMethod" />
+/**基本路径*/
+<public:property name="basePath"/>
+/**排序字段的颜色*/
+<public:property name="sortRowColor"/>
+/**是否显示状态栏*/
+<public:property name="showStatus"/>
+<public:attach event="ondetach" onevent="cleanup()" />
+<public:attach event=oncontentready onevent="init();" />
+<public:method name="addMenuItem" />
+<public:method name="addMenuLine" />
+<public:method name="registerMenu" />
+<public:method name="showQueryRow" />
+<public:method name="setQueryRowShow" />
+<public:method name="setSortField" />
+
+/**
+ * 得到表中可以copy的内容 	
+ */
+<public:method name="getTableCopyContent" />
+
+
+<script language=jscript>
+var orColor;
+var currRow = -1;
+var selRow = -1;
+var selRows=new Array();
+var sortBlankImg="../images/vnblank.gif";
+var sortUpImg="../test/vndown_1.gif";
+var sortDownImg="../test/vnup_1.gif";
+// 
+var sortBlankText = "&nbsp;&nbsp;&nbsp;";
+var sortUpText = "↑";
+var sortDownText = "↓";
+var hideQueryImage = "images/hideQuery.gif";
+//var idcol = 0;
+var idcols = new Array;
+var namecol = 0;
+
+if (element.tagName == 'TABLE')
+{
+	element.attachEvent('onmouseover', onMouseOver);
+	element.attachEvent('onmouseout', onMouseOut);
+	element.attachEvent('onclick', onClick);
+}
+else
+{
+	alert("请在TABLE上使用此htc")
+}
+
+function cleanup()
+{
+	hilite(-1);
+	
+	element.detachEvent('onmouseover', onMouseOver);
+	element.detachEvent('onmouseout', onMouseOut);
+	element.detachEvent('onclick', onClick);
+}
+
+function AddRow(){
+	var oTR;
+	var oTD;
+	oTR=tbody.insertRow(getMinSelRow());
+	for(i=0;i<colCount;i++)	{
+		oTD=oTR.insertCell();
+		oTD.innerHTML="<div contentEditable=false> </DIV>";
+		oTD.children[0].attachEvent("ondblclick",EditTD);
+		oTD.children[0].attachEvent("onblur",editDisable);
+		}
+	
+}
+
+function DelRow(){
+if(selRow==-1) {alert("no selected rows to delete");return;}
+for (i=0;i<selRow+1;i++ )
+	{
+	oTR=tbody.deleteRow(selRows[i].rowIndex-1);
+	}
+
+	selRow=-1;
+	selRows=new Array();
+}
+
+function getMinSelRow(){
+	var trMin=10000;
+	var oTR;
+	for(i=0;i<selRow+1;i++)	if (selRows[i].rowIndex<trMin) trMin=selRows[i].rowIndex;
+	if (trMin==10000) trMin=-1;
+	return trMin;
+}
+
+function EditTD(){
+	var oe=window.event.srcElement;
+	if(Editable!="true") return;
+	oe.contentEditable=true;
+	oe.runtimeStyle.backgroundColor="#FFFFFF";
+}
+
+function editDisable(){
+	var oe=window.event.srcElement;
+	if(Editable!="true") return;
+	oe.contentEditable=false;
+	oe.runtimeStyle.backgroundColor="";
+}
+function doAnyClick(evt){
+		srcElem = evt.srcElement;
+
+	//crawl up the tree to find the table row
+	while (srcElem.tagName != "TR" && srcElem.tagName != "TABLE")
+		srcElem = srcElem.parentElement;
+	if(srcElem.tagName != "TR") return;
+	if(srcElem.parentElement.tagName=="THEAD") return;
+	if(srcElem.parentElement.tagName=="TFOOT") return;
+	if(selRow!=-1){
+	  if(event.ctrlKey){
+		if(srcElem.style.backgroundColor == slColor) delSelItem(srcElem)
+			else addSelItem(srcElem);
+	    }
+	    else{
+	    	  if(event.shiftKey) selectBetween(srcElem)
+			  else{
+				clearSelItems(srcElem);
+				addSelItem(srcElem);
+				}
+		}
+	}
+	else{
+	  addSelItem(srcElem);
+	}
+
+	showSelStatus();
+
+	 var oEvent 	= createEventObject();
+	 oEvent.selected = srcElem;
+	 rowSelect.fire(oEvent);
+}
+function onClick()
+{
+	doAnyClick(window.event);
+	if(onClickMethod){
+		eval(onClickMethod+"(_sIDs,_sNames)");
+	}	
+}
+
+function selectBetween(){
+	var cRows=srcElem.parentElement.rows;
+	var trMin=10000;
+	var trMax=0;
+
+	for(i=0;i<selRow+1;i++)	if (selRows[i].rowIndex<trMin) trMin=selRows[i].rowIndex;
+	if (srcElem.rowIndex<trMin) {trMax=trMin;trMin=srcElem.rowIndex;}
+		else{trMax=srcElem.rowIndex}
+	clearSelItems(srcElem);
+	for(i=trMin-1;i<trMax;i++){
+		addSelItem(cRows[i]);
+	}
+}
+
+function addSelItem(oItem){
+	for(si=0;si<selRow+1;si++){
+		if(selRows[si]==oItem) {
+			return false;
+		};
+	}	
+	oItem.style.backgroundColor = slColor;
+	selRow++;
+	selRows[selRow]=oItem;
+	
+}
+
+function delSelItem(oItem){
+var obj;
+	oItem.style.backgroundColor = orColor;
+	for(i=0;i<selRow+1;i++){
+		if(selRows[i]==oItem) selRows[i]=selRows[selRow];
+	}	
+	selRow--;
+}
+
+function clearSelItems(otr){
+	var oRows=otr.parentElement.rows;//彻底清除
+	for (i=0;i<oRows.length;i++){
+		oRows[i].style.backgroundColor=orColor;
+	}
+	selRow=-1;
+	selRows=new Array();
+	
+}
+
+	var _sIDs= new Array();
+	var _sNames= new Array();
+function showSelStatus(){
+	var sInfo="已选择:";
+	_sIDs= new Array();
+	_sNames= new Array();
+	for(i=0;i<selRow+1;i++){
+		//sInfo+=selRows[i].rowIndex+",";
+		if(_sNames.length==0){
+			sInfo+=selRows[i].cells[namecol].innerHTML;
+		}else{
+			sInfo+=","+selRows[i].cells[namecol].innerHTML;
+		}
+		sIDArr = new Array();
+		for(sIt = 0;sIt<idcols.length;sIt++){
+			sIDArr[sIDArr.length]= selRows[i].cells[idcols[sIt]].innerHTML;
+		}
+		if(sIDArr.length>0){
+			_sIDs[_sIDs.length]=sIDArr;
+		}
+		_sNames[_sNames.length]=selRows[i].cells[namecol].innerHTML;
+	}
+	if(sMenu){
+		sMenu.setIDS(_sIDs);
+		sMenu.setNames(_sNames);
+	}
+	tableStatus.innerText=sInfo;
+}
+
+function onMouseOver()
+{
+	srcElem = window.event.srcElement;
+	//crawl up to find the row
+	while (srcElem.tagName != "TR" && srcElem.tagName != "TABLE")
+		srcElem = srcElem.parentElement;
+
+	if(srcElem.tagName != "TR") return;
+	if(srcElem.parentElement.tagName!="TBODY") return;
+	if (srcElem.rowIndex > 0)
+		hilite(srcElem);
+	else
+		hilite(-1);
+
+}
+
+function onMouseOut()
+{
+	// Make sure we catch exit from the table
+	hilite(-1, -1);
+}
+
+function hilite(newRow)
+{
+/*
+	if (hlColor!= undefined && hlColor != null )
+	{
+		if (currRow != -1 )
+		{
+			currRow.runtimeStyle.backgroundColor = '';
+		}
+
+		if (newRow != -1)
+		{
+			newRow.runtimeStyle.backgroundColor = hlColor;
+		}
+	}
+*/
+	currRow = newRow;
+} 
+
+/// sort
+//
+// global variables
+//
+var tbody=null;					
+var theadrow=null;
+var colCount = null;
+
+
+var reverse = false;
+var lastclick = -1;					// stores the object of our last used object
+
+var arrHitTest = new Array();
+var bDragMode = false;
+var objDragItem;
+var arrHitTest = new Array();
+var iArrayHit = false;
+function chickRightMouse(evt){
+	doAnyClick(evt);
+	if(sMenu){
+		sMenu.showMenu("FutureTable");
+	}
+	return false;
+	
+}
+function init() {
+	tfoot=element.tFoot;
+	if (tfoot){
+		if(showStatus!="true"){
+			tfoot.style.display="none";
+		}
+//	tfoot=element.tFoot.children[0].children[0];//get tfoot TD 
+//	for(i=0;i<tfoot.children.length;i++){
+//		if(tfoot.children[i].Action== "AddRow") tfoot.children[i].attachEvent("onclick",AddRow);
+//		if(tfoot.children[i].Action== "DelRow") tfoot.children[i].attachEvent("onclick",DelRow);
+//		}
+	}
+	
+		
+	orColor=element.style.backgroundColor;
+	// get TBODY - take the first TBODY for the table to sort
+	tbody = element.tBodies(0);
+	if (!tbody) return;
+	tbody.oncontextmenu=function(){chickRightMouse(event)};
+	//得到THEAD  
+	var thead = element.tHead;
+	if (!thead)  return;
+	
+	if(thead.children.length==1){
+		theadrow = thead.children[0]; //Assume just one Head row
+		theadrow.cells[0].innerHTML="#";
+	}else{
+		theadrow = thead.children[thead.children.length-1]; //Assume just one Head row
+		if(HasQueryRow=="true" && QueryRowShow=="false"){
+			setQueryRowShow(false);
+		}
+	}
+	//alert(theadrow.cells[0].innerHTML);
+	if (theadrow.tagName != "TR") return;
+		
+
+	colCount = theadrow.cells.length;
+	var sW, clickCell;
+	var cx=0;
+	var cy=0;
+	var c;
+
+	for (var i=0; i<colCount; i++) 
+	{
+		// Create our blank gif
+			clickCell = theadrow.cells[i];
+			clickCell.selectIndex = i;
+			
+		if(!((SetRowNumber=="true" || SortType=="User") && i==0)){
+			sW=document.createElement("SPAN");
+			sW.innerHTML=sortBlankText;
+			sW.runtimeStyle.fontSize=12;
+			if(sortRowColor){
+				sW.runtimeStyle.color=sortRowColor;
+			}else{
+				sW.runtimeStyle.color="white";
+			}
+			sW.id="sortTextField";
+			clickCell.insertAdjacentElement("beforeEnd", sW);
+		}
+
+		//Jerry Bookmark   用来定义表头的点击时间
+		if(Sortable=="true" || SortType=="User"){
+			if(!((SetRowNumber=="true" || SortType=="User")&& i==0)){
+				//设置指针为手
+				clickCell.runtimeStyle.cursor = "hand";
+				clickCell.attachEvent("onclick", doClick);
+			}else{
+				//alert("a");
+				clickCell.runtimeStyle.cursor = "arrow";
+			}
+		}
+
+        arrHitTest[i] = new Array();
+
+    	c = clickCell.offsetParent;
+
+
+	   if(cx == 0 && cy == 0 )
+	   {
+	    	while (c.offsetParent != null) {
+                  cy += c.offsetTop;
+                  cx += c.offsetLeft;
+                  c = c.offsetParent;
+		}
+	}
+
+	arrHitTest[i][0] = cx + clickCell.offsetLeft;
+	arrHitTest[i][1] = cy + clickCell.offsetTop;
+	arrHitTest[i][2] = clickCell;
+	arrHitTest[i][3] = cx + clickCell.offsetLeft + eval(clickCell.width);
+		if(MoveColable=="true"){
+			clickCell.attachEvent("onmousedown",onMouseDown);
+		}
+	}
+
+	defaultTitleColor = theadrow.children[0].currentStyle.backgroundColor;	 
+
+	element.document.attachEvent("onmousemove",onMouseMove);
+	element.document.attachEvent("onmouseup",onMouseUp);
+	element.document.attachEvent("onselectstart",onSelect);
+
+	//make the Table editable
+	//设置Table是否可修改
+	var sstr;
+  	if (Editable=="true") {
+  		sInitJ = 0;
+		if(SetRowNumber=="true"){
+			sInitJ=1;
+		}
+		for(i=0;i<tbody.children.length;i++) 
+		for (j=sInitJ;j<colCount;j++)
+		{	
+			sstr=tbody.children[i].children[j].innerText;
+			tbody.children[i].children[j].innerHTML="<div contentEditable=false>"+sstr+"</DIV>";
+			tbody.children[i].children[j].children[0].attachEvent("ondblclick",EditTD);
+			tbody.children[i].children[j].children[0].attachEvent("onblur",editDisable);
+		}
+	}
+	
+	initSetRowNumber();
+	
+	sIdCols = idColNums.split(",");
+	for(sIntC = 0;sIntC<sIdCols.length;sIntC++){
+		if(!isNaN(parseInt(sIdCols[sIntC]))){
+			idcols[idcols.length]=parseInt(sIdCols[sIntC]);
+		}
+	}
+	if(idcols.length==0){
+		idcols[0]=0;
+	}
+
+	if(!isNaN(parseInt(nameColNum))){
+		namecol=parseInt(nameColNum);
+	}
+
+}
+//设置标识字段
+function initSetRowNumber(){
+	tbody = element.tBodies(0);
+	if (!tbody) return;
+  	if (SetRowNumber=="true") {
+		for(i=0;i<tbody.children.length;i++) {
+			tbody.children[i].children[0].innerHTML=""+(i+1);
+		}
+	}	
+}
+//
+// doClick handler
+// 
+//
+function doClick(e) 
+{
+	if(SortType=="User"){
+		sortByUser(e)
+	}else{
+		sortBySystem(e)
+	}
+}
+var ASC = "ASC";
+var DESC = "DESC";
+function sortByUser(e){
+	var clickObject = e.srcElement;
+	while (clickObject.tagName != "TD") 
+	{
+		clickObject = clickObject.parentElement;
+	}
+	var keyF = getSpanByKey(clickObject,"key").innerHTML;
+	var sortF = getSpanByKey(clickObject,"sortTextField").innerHTML;
+	var sortOrder = ASC;
+	if(sortF==sortUpText ){
+		sortOrder = DESC;
+	}
+	eval(SortMethod+"(keyF,sortOrder)");
+}
+function sortBySystem(e){
+	var clickObject = e.srcElement;
+
+	while (clickObject.tagName != "TD") 
+	{
+		clickObject = clickObject.parentElement;
+	}
+
+	// clear the sort images in the head
+	var imgcol= theadrow.all('sortTextField');
+	for(var x = 0; x < imgcol.length; x++) 
+		imgcol[x].innerHTML = sortBlankText;
+
+	if(lastclick == clickObject.selectIndex)
+	{
+		if(reverse == false)
+		{
+			getSpanByKey(clickObject,"sortTextField").innerHTML = sortDownText;
+			reverse = true;
+		}else{
+			getSpanByKey(clickObject,"sortTextField").innerHTML = sortUpText;
+			reverse = false;
+		}
+	}else{
+		reverse = false;
+		lastclick = clickObject.selectIndex;
+		getSpanByKey(clickObject,"sortTextField").innerHTML = sortUpText;
+	}
+
+	insertionSort(tbody, tbody.rows.length-1,  reverse, clickObject.selectIndex,getSortFieldType(clickObject));
+	//getSpanByKey
+}
+function getSortFieldType(clickObject){
+	var spanFT = getSpanByKey(clickObject,"FieldType");
+	if(spanFT==null)
+		return "string";
+	return spanFT.innerHTML;
+}
+//根据Span的ID值得到Object中的对应span
+function getSpanByKey(clickObject,key){
+	var clds = clickObject.children;
+	for(var i = 0;i<clds.length;i++){
+		if(clds[i].id == key){
+			return clds[i];
+		}
+	}
+	return null;
+}
+	//insertionSort 对选中的列进行排序
+	//
+	//t是TBody的对象
+	//iColumn 是需要排序的列
+	//iRowEnd 排序结束的行
+	//reverse 排序顺序
+	//fldtype 排序字段的类型
+function insertionSort(t, iRowEnd, fReverse, iColumn,fldtype)
+{
+	//alert(fldtype);
+	var iRowInsertRow, iRowWalkRow, current, insert;
+    for ( iRowInsert = 0 + 1 ; iRowInsert <= iRowEnd ; iRowInsert++ )
+    {
+        if (iColumn) {	
+		if( typeof(t.children[iRowInsert].children[iColumn]) != "undefined")
+     		      textRowInsert = t.children[iRowInsert].children[iColumn].innerText;
+		else
+			textRowInsert = "";
+        } else {
+           textRowInsert = t.children[iRowInsert].innerText;
+        }
+		
+        for ( iRowWalk = 0; iRowWalk <= iRowInsert ; iRowWalk++ )
+        {
+            if (iColumn) {
+			if(typeof(t.children[iRowWalk].children[iColumn]) != "undefined")
+				textRowCurrent = t.children[iRowWalk].children[iColumn].innerText;
+			else
+				textRowCurrent = "";
+            } else {
+			textRowCurrent = t.children[iRowWalk].innerText;
+            }
+
+		//
+		// We save our values so we can manipulate the numbers for
+		// comparison
+		//
+		current = textRowCurrent;
+		insert  = textRowInsert;
+		//如果类型为number数值型， 那么需要去掉中间的，
+		//如果类型为percent百分比， 那么需要去掉%，
+		if(fldtype=="number"){
+			current = removeDouHao(current);
+			insert = removeDouHao(insert);
+		}else if(fldtype=="percent"){
+			current = removePercent(current);
+			insert = removePercent(insert);
+			//alert(insert+"[");
+		}
+
+		//  If the value is not a number, we sort normally, else we evaluate	
+		//  the value to get a numeric representation
+		//
+		if ( !isNaN(current) && !isNaN(insert)) //fix a bug by VN 2002.6.18
+		{
+			current= eval(current);
+			insert= eval(insert);
+		}
+		else
+		{
+			current	= current.toLowerCase();
+			insert	= insert.toLowerCase();
+		}
+		//alert(current);
+		//alert(insert);
+
+            if ( (   (!fReverse && insert < current)
+                 || ( fReverse && insert > current) )
+                 && (iRowInsert != iRowWalk) )
+            {
+		    eRowInsert = t.children[iRowInsert];
+                eRowWalk = t.children[iRowWalk];
+                t.insertBefore(eRowInsert, eRowWalk);
+                iRowWalk = iRowInsert; // done
+            }
+        }
+    }
+    initSetRowNumber();
+}
+//去掉中间的 逗号
+function removeDouHao(nubm){
+	var str = nubm.replace(",","");
+	return str;
+}
+//去掉中间的 %
+function removePercent(nubm){
+	var str = nubm.replace("%","");
+	return str;
+}
+
+
+/// Drag
+
+function InitHeader()
+{
+  var cx=0;
+  var cy=0;
+  var c;
+	 
+  for (i=0; i<colCount ; i++) {
+
+	var clickCell = theadrow.children[i];
+	clickCell.selectIndex = i;
+	c = clickCell.offsetParent;
+
+	if(cx == 0 && cy == 0 )
+	{
+		while (c.offsetParent != null) {
+                  cy += c.offsetTop;
+                  cx += c.offsetLeft;
+                  c = c.offsetParent;
+		}
+	}
+
+	arrHitTest[i][0] = cx + clickCell.offsetLeft;
+	arrHitTest[i][1] = cy + clickCell.offsetTop;
+	arrHitTest[i][2] = clickCell;
+	arrHitTest[i][3] = cx + clickCell.offsetLeft + eval(clickCell.width);
+  } 
+}
+
+function onSelect()
+{
+	if(event.srcElement.tagName=="INPUT"){
+		return true;
+	}
+	if(event.srcElement.tagName=="SELECT"){
+		return true;
+	}
+	return false;
+}
+
+function ChangeHeader(iChange)
+{
+
+	InitHeader();
+	for(var y = 0; y < arrHitTest.length; y++)
+	{
+	if (arrHitTest[y][2].currentStyle.backgroundColor == dragColor)
+		arrHitTest[y][2].style.backgroundColor = defaultTitleColor;
+	}
+
+	if(iChange == "-1") return; 
+
+	arrHitTest[iChange][2].style.backgroundColor = dragColor;
+
+}
+
+function onMouseUp(e)
+{
+	if(!bDragMode)	return;
+	bDragMode = false;
+
+	var iSelected = objDragItem.selectIndex;
+	
+	objDragItem.removeNode(true);
+	objDragItem = null;
+
+	ChangeHeader(-1);
+
+	if( (iArrayHit - 1) < 0 || iSelected < 0) return;	// default faliure
+
+	CopyRow(iSelected, (iArrayHit - 1) );
+
+	// Reset our variables
+	iSelected = 0;
+	iArrayHit = -1;
+}
+
+function onMouseDown(e)
+{
+	bDragMode 	= true;
+	var src 	= e.srcElement;
+	var c 	= e.srcElement;
+
+	while (src.tagName != "TD") 
+		src = src.parentElement;
+
+	// Create our header on the fly
+	objDragItem = document.createElement("DIV");
+	objDragItem.innerHTML		= src.innerHTML;
+	objDragItem.style.height	= src.currentStyle.height;
+	objDragItem.style.width 	= src.currentStyle.width;
+	objDragItem.style.background 	= src.currentStyle.backgroundColor;
+	objDragItem.style.fontColor	= src.currentStyle.fontColor;
+	objDragItem.style.position 	= "absolute";
+	objDragItem.selectIndex		= src.selectIndex;
+	while (c.offsetParent != null) 
+        {
+		objDragItem.style.y += c.offsetTop;
+		objDragItem.style.x += c.offsetLeft;
+		c = c.offsetParent;
+	}
+ 	objDragItem.style.borderStyle	= "outset";
+	objDragItem.style.display	= "none";
+
+	src.insertBefore(objDragItem);
+}
+
+function onMouseMove(e)
+{
+	if(!bDragMode || !objDragItem) return;	// If we aren't dragging or our object
+								// is null, we return
+
+	if(event.button!=1) onMouseUp(event);
+	// Hardcoded value for height difference
+	var midWObj = objDragItem.style.posWidth / 2;
+	var midHObj = 12;
+
+	// Save mouse's position in the document
+     var intTop = e.clientY + element.document.body.scrollTop;
+     var intLeft = e.clientX + element.document.body.scrollLeft;
+
+
+	var cx=0,cy=0;
+	var elCurrent = objDragItem.offsetParent;
+               while (elCurrent.offsetParent != null) {
+                  cx += elCurrent.offsetTop;
+                  cy += elCurrent.offsetLeft;
+                  elCurrent = elCurrent.offsetParent;
+               }
+
+
+      objDragItem.style.pixelTop  = intTop  - cx - midHObj;
+      objDragItem.style.pixelLeft = intLeft - cy - midWObj;
+
+
+	if(objDragItem.style.display == "none") objDragItem.style.display = "";
+
+	iArrayHit = CheckHit(intTop , intLeft , e);
+
+	e.cancelBubble = false;
+	e.returnValue = false;
+}
+
+function CheckHit(x,y,e)
+{
+	midWObj = objDragItem.style.posWidth / 2;
+	midHObj = 12;
+
+	if( ((x) > (arrHitTest[0][1] + 20) ) || ( (x) < (arrHitTest[0][1]) ) )
+	{
+		ChangeHeader(-1);
+		return -1;
+	}
+
+	for(var i=0; i < colCount; i++)
+	{
+		if( (y) > (arrHitTest[i][0]) && (y) < (arrHitTest[i][3] )) //+ 100))
+		{
+			ChangeHeader(i);
+			return i + 1;
+		}
+	}
+	return -1;
+}
+
+//
+// Copy from row to row.. Does the Header also.
+//
+function CopyRow(from, to)
+{	
+	if(from == to) return;
+
+
+	var origfrom = from;
+	var origto = to;
+	var iDiff = 0;
+
+	if( from > to )
+	{
+
+		iDiff = from - to;
+
+		var saveObj 	= theadrow.children[from].innerHTML;
+		var saveWidth 	= theadrow.children[from].width;
+
+		for(var i = 0 ; i < iDiff; i++)
+		{
+			theadrow.children[from].innerHTML = theadrow.children[from - 1].innerHTML;
+			theadrow.children[from].width = theadrow.children[from - 1].width;
+			from--;
+		}
+		theadrow.children[to].innerHTML 	= saveObj;
+		theadrow.children[to].width = saveWidth;
+		
+	}
+	else
+	{
+
+		iDiff = to - from;
+
+		var saveObj = theadrow.children[from].innerHTML;
+		var saveWidth 	= theadrow.children[from].width;
+
+		for(var i = 0 ; i < iDiff; i++)
+		{
+			theadrow.children[from].innerHTML = theadrow.children[from + 1].innerHTML;
+			theadrow.children[from].width = theadrow.children[from + 1].width;
+			from++;
+		}
+
+		theadrow.children[to].innerHTML 	= saveObj;
+		theadrow.children[to].width = saveWidth;
+	}
+
+
+
+	for(var i = 0 ; i < theadrow.children.length; i++)
+			theadrow.children[i].selectIndex = i;
+
+
+
+	InitHeader();
+	for ( var iRowInsert = 0 ; iRowInsert < tbody.rows.length; iRowInsert++ )
+	{
+		from = origfrom;
+		to = origto;
+		if( from > to )
+		{
+			iDiff = from - to;
+			var saveObj = tbody.children[iRowInsert].children[from].innerHTML
+			for(var i = 0 ; i < iDiff; i++)
+			{
+				tbody.children[iRowInsert].children[from].innerHTML = tbody.children[iRowInsert].children[from - 1].innerHTML;
+				from--;
+			}
+			tbody.children[iRowInsert].children[to].innerHTML = saveObj;
+
+		}
+		else
+		{
+			iDiff = to - from;
+			var saveObj = tbody.children[iRowInsert].children[from].innerHTML
+			for(var i = 0 ; i < iDiff; i++)
+			{
+				tbody.children[iRowInsert].children[from].innerHTML = tbody.children[iRowInsert].children[from + 1].innerHTML;
+				from++;
+			}
+			tbody.children[iRowInsert].children[to].innerHTML = saveObj;
+		}
+	}
+}
+/**
+ * 以下是和Menu相关的方法 	
+ */
+    var sMenu;
+    function registerMenu(menu1){
+    	sMenu = menu1;
+    }
+/**
+ * 以上是和Menu相关的方法 	
+ */
+/**
+ * 以下是和查询相关的方法 	
+ */
+function showQueryRow(){
+	if(HasQueryRow!="true"){
+		return false;
+	}
+	var thead_s=element.tHead;
+	if(thead_s.children.length==1){
+		return false;
+	}
+//	theadrow = thead.children[thead.children.length-1]; //Assume just one Head row
+	var disP = "none";
+//	var imgAlt="显示查询";
+	var displayed = false;
+	if(thead_s.children[0].style.display=="none"){
+		disP = "";
+//		imgAlt="隐藏查询";
+		displayed = true;
+	}
+	for(it =0;it<thead_s.children.length-1;it++){
+		thead_s.children[it].style.display=disP;
+	}
+//	var queryImg1 = thead_s.children[thead_s.children.length-1].cells[0].children[0];
+//	alert(queryImg1.tagName);
+//	queryImg1.alt = imgAlt;
+	return displayed;
+}
+function setQueryRowShow(show){
+	if(HasQueryRow!="true"){
+		return false;
+	}
+	var thead_s=element.tHead;
+	if(thead_s.children.length==1){
+		return false;
+	}
+//	theadrow = thead.children[thead.children.length-1]; //Assume just one Head row
+	var disP = "none";
+	var imgAlt="显示查询";
+	var displayed = false;
+//	if(thead_s.children[0].style.display=="none"){
+//		disP = "";
+//		imgAlt="隐藏查询";
+//		displayed = true;
+//	}
+	if(show){
+		disP = "";
+		imgAlt="隐藏查询";
+		displayed = true;
+	}
+	
+	for(it =0;it<thead_s.children.length-1;it++){
+		thead_s.children[it].style.display=disP;
+	}
+//	var queryImg1 = thead_s.children[thead_s.children.length-1].cells[0].children[0];
+//	alert(queryImg1.tagName);
+//	queryImg1.alt = imgAlt;
+	return displayed;
+}
+/**
+ * 以上是和查询相关的方法 	
+ */
+function setSortField(field,order){
+	var thead = element.tHead;
+	if (!thead)  return;
+	//if(HasQueryRow!="true") return;	
+	var theadrow = thead.children[thead.children.length-1]; //Assume just one Head row
+	for(var it = 0;it < theadrow.cells.length;it++){
+		var keyObj = getSpanByKey(theadrow.cells(it),"key");
+		var sortObj = getSpanByKey(theadrow.cells(it),"sortTextField");
+		if(keyObj!=null && sortObj!=null && keyObj.innerHTML==field){
+			if(order.toUpperCase()==DESC){
+				sortObj.innerHTML = sortDownText;
+			}else{
+				sortObj.innerHTML = sortUpText;
+			}
+		}
+	}
+}
+/**
+ * 得到表中可以copy的内容 	
+ */
+function getTableCopyContent(){
+	var copyCts = new Array();
+	/*
+	var copyT = document.createElement("TABLE");
+	copyT.id = "__Copy_Table_Cont";
+	var thead = element.tHead;
+	var row = null;
+	var midRow = null;
+	var iCol = 0;
+	var iRow = 0;
+	var cell = null;
+	var midcell = null;
+	if (thead && thead.children.length>0)  {
+		row = copyT.insertRow()
+		midRow = thead.rows(thead.children.length-1);
+		for(iCol =0;iCol<midRow.cells.length;iCol++){
+			midcell = midRow.cells(iCol);
+			if(midcell.style.display!="none"){
+				cell = row.insertCell();
+				cell.innerText = midcell.innerText;
+			}
+		}
+	}
+	if(tbody){
+		for(iRow = 0;iRow<tbody.children.length;iRow++){
+			row = copyT.insertRow()
+			midRow = tbody.rows(iRow);
+			for(iCol =0;iCol<midRow.cells.length;iCol++){
+				midcell = midRow.cells(iCol);
+				if(midcell.style.display!="none"){
+					cell = row.insertCell();
+					cell.innerText = midcell.innerText;
+				}
+			}		
+		}
+	}
+	//copyT.style.display="none";
+	document.body.appendChild(copyT);
+	copyCts[copyCts.length] = document.__Copy_Table_Cont;
+	*/
+	copyCts[copyCts.length] = element;
+	return copyCts;
+}
+
+</script>

@@ -1,0 +1,23 @@
+
+A:link {text-decoration: underline;}
+A:visited {  text-decoration:underline }
+A:active { text-decoration: underline; }
+A:hover {text-decoration:underline;background-color:#cccccc;}
+TD.TreeTextUserStyle
+{
+    BORDER-RIGHT: #669999 1px solid;
+    BORDER-TOP: #669999 1px solid;
+    BORDER-LEFT: #669999;
+    BORDER-BOTTOM: #669999;
+    HEIGHT: 20px;
+    color: blue;  
+}
+TD.TreeTextBlueStyle
+{
+    BORDER-RIGHT: #669999 1px solid;
+    BORDER-TOP: #669999 1px solid;
+    BORDER-LEFT: #669999;
+    BORDER-BOTTOM: #669999;
+    HEIGHT: 20px;
+    color: #339900;  
+}

@@ -1,0 +1,162 @@
+DIV.MainMenuBG    /*主菜单背景（即横向菜单）*/
+{
+/* border-right: teal 0px solid;
+ border-left: #ffffff 0px solid;
+ border-bottom: teal 0px solid;*/
+ 
+ font-size: 12px;
+ cursor: default;
+ color: #ffffff;
+ font-family: Verdana, 宋体;
+ position: absolute; 
+ background-color: none;
+
+ /*BACKGROUND-IMAGE: url("../images/button.gif);*/
+}
+
+DIV.MainMenu  /*主菜单某个菜单项（即横向菜单）*/
+{
+/* border-right: #d6d3ce 1px solid;
+ border-top: #d6d3ce 1px solid;
+ border-left: #d6d3ce 1px solid;
+ border-bottom: #d6d3ce 1px solid;*/
+ padding-right: 0px;
+ padding-top: 6px;
+  padding-left: 8px;
+ padding-bottom: 1px;
+ cursor: default; 
+ position: absolute; 
+  /*background-color: #FFFFFF;*/
+ /*BACKGROUND-IMAGE: url(common/images/m_r1_c4.jpg);*/
+}
+DIV.MainMenuOver  /*当鼠标移到主菜单某个菜单项时（即横向菜单）*/
+{
+/* border-right: #d6d3ce 1px solid;
+ border-top: #d6d3ce 1px solid;
+ border-left: #d6d3ce 1px solid;
+ border-bottom: #08246b 1px solid;*/
+ padding-right: 8px;
+ padding-top: 6px;
+ padding-left: 8px;
+ padding-bottom: 1px;
+ cursor: default;
+ position: absolute;
+/* background-color: #FFFFFF;*/
+ /*BACKGROUND-IMAGE: url(common/images/m_r1_c4.jpg);*/
+}
+DIV.MainMenuClick   /*当鼠标单击主菜单某个菜单项时（即横向菜单）*/
+{
+/* border-right: #636563 1px solid;
+ border-top: #636563 1px solid;
+ border-left: #636563 1px solid;
+ border-bottom: #636563 1px solid;*/
+ padding-right: 8px;
+ padding-top: 6px;
+ padding-left: 8px;
+ padding-bottom: 1px;
+ cursor: default;
+ position: absolute;
+ /*background-color: #FFFFFF;*/
+ /*BACKGROUND-IMAGE: url(common/images/m_r1_c4.jpg);*/
+}
+DIV.SubMenuBG  /*子菜单背景（即竖向菜单）*/
+{
+/* border-right: #FFFFFF 1px solid;
+ border-top: #FFFFFF 1px solid;
+ border-left: #FFFFFF 1px solid;
+ border-bottom: #FFFFFF 1px solid;*/
+ font-size: 12px;
+ visibility: hidden;
+ color: #000000;
+ font-family: Verdana, 宋体;
+ position: absolute;
+ background-color: none;   /*子菜单的边框颜色*/
+}
+
+
+DIV.SubMenu   /*子菜单中某个菜单项（即竖向菜单）*/
+{
+ cursor: default;
+ position: absolute;
+}
+DIV.SubMenuOver /*当鼠标移到子菜单中某个菜单项时（即竖向菜单）*/
+{
+ cursor: default;
+ position: absolute;
+ }
+TD.ico   /*子菜单中某个菜单项的图标（即竖向菜单）*/
+{
+ border-top: #dedbd6 1px solid;
+ border-left: #dedbd6 1px solid;
+ border-bottom: #dedbd6 1px solid;
+ background-color: #FFFFFF;
+}
+TD.icoOver /*当鼠标移到子菜单中某个菜单项的图标时（即竖向菜单）*/
+{
+ border-top: #08246b 1px solid;
+ border-left: #08246b 1px solid;
+ border-bottom: #08246b 1px solid;
+ background-color: #b5bed6;
+ border-right-width: 1px;
+ border-right-color: #FFFFFF;
+}
+TD.text   /*子菜单中某个菜单项的文本（即竖向菜单）*/
+{ text-align:center;
+ width:170;
+ height:23;
+ border-top: #fffbf7 0px solid;
+ border-bottom: #89A5CF 0px solid;
+ padding-right: 1px;
+ padding-left: 0px;
+ background-color: #FFFFFF; 
+  background-image:url(../images/sys_menu_reset.gif)
+    /*子菜单中text那一块的颜色*/
+}
+TD.textOver    /*当鼠标移到子菜单中某个菜单项的文本时（即竖向菜单）*/
+{ text-align:center;
+width:170;
+height:23;
+color:#6396F9;
+ border-top: #fffbf7 0px solid;
+ border-bottom: #89A5CF 0px solid;
+ padding-right: 1px;
+ padding-left: 2px;
+ 
+ background-image:url(../images/sys_menu_mousemove.gif)
+}
+TD.skey   /*子菜单中某个菜单项的快捷键（即竖向菜单）*/
+{
+ border-top: #fffbf7 1px solid;
+ border-bottom: #fffbf7 1px solid;
+ padding-right: 2px;
+ padding-left: 2px;
+ background-color: #FFFFFF;   /*子菜单中快捷键那一块的颜色*/
+}
+TD.skeyOver   /*当鼠标移到子菜单中某个菜单项的快捷键时（即竖向菜单）*/
+{
+ border-top: #08246b 1px solid;
+ border-bottom: #08246b 1px solid;
+ padding-right: 2px;
+ padding-left: 2px;
+ background-color: #FFFFFF; 
+}
+TD.sub    /*子菜单中某个菜单项的子目录图标（即竖向菜单）*/
+{ width:0;
+ border-right: #fffbf7 0px solid;
+ border-top: #fffbf7 0px solid;
+ border-bottom: #89A5CF 0px solid;
+ /*子菜单中表示还有下级菜单图片那一块的颜色*/
+}
+TD.subOver   /*当鼠标移到子菜单中某个菜单项的子目录图标时（即竖向菜单）*/
+{ width:0;
+ border-right: #fffbf7 0px solid;
+ border-top: #fffbf7 0px solid;
+ border-bottom: #89A5CF 0px solid;
+
+}
+DIV.SubMenu TD
+{
+ font-size: 12px;
+ padding-top: 2px;
+}
+

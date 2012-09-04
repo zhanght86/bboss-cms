@@ -1,0 +1,120 @@
+a  { font:normal 12px 宋体; color:#000000; text-decoration:none; }
+a:hover  { color:#428EFF }
+
+body
+{
+    FONT-SIZE: 12px;
+    COLOR: #000000;
+    FONT-FAMILY: 宋体;
+     background-color: #FDF9F0;
+   /*background-color: #EFF3FC;    
+    background-image: url(../images/common/h-bg.jpg);*/
+}
+/*列表中一行数据的样式*/
+tr.row
+{
+    background-color:#DEE5FA;
+    /*background-color: #EFF3FC*/
+}
+
+/*列表中表头的样式,字体居中*/
+tr.title
+{
+    background-color:#AEC5F4;TEXT-ALIGN: center;
+}
+
+/*列表中表头的样式*/
+tr.title1
+{
+    background-color:#AEC5F4;;
+}
+TD{
+font-family:宋体; font-size: 12px; line-height: 15px;
+}
+td.headerBackgroundAlternate
+{
+    background-color: #799AE1;
+	color:#FFFFFF
+}
+#TableTitleLink A:link, #TableTitleLink A:visited, #TableTitleLink A:active {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: none;
+}
+#TableTitleLink A:hover {
+	COLOR: #FFFFFF;
+	TEXT-DECORATION: underline;}
+
+/*列表中数据列数据的样式*/
+td.row
+{
+    background-color:#DEE5FA;
+    /*background-color:#EFF3FC;*/
+}
+
+td.rowHighlight
+{
+    background-color: #D4DEF9;
+    /*background-color: #EFF3FC*/
+}
+.tableBorder
+{
+    width:100%;border: 1px #A5ACB2 solid;
+   /* background-color: #FFFFFF; */
+}
+
+.tableBorder1
+{
+    background-color: #FFFFFF;
+}
+/*th的样式*/
+th
+{
+    /*background-image: url(../images/admin_bg_1.gif);*/
+    background-color: #85AAEF;
+    color: #000000;
+    font-size: 12px;
+    font-weight:bold;
+}
+
+/*input、select、textarea的默认样式*/
+input,select,Textarea{
+font-family:Tahoma,Verdana,宋体; font-size: 12px; line-height: 15px;border: 1px solid #A5ACB2;}
+}
+
+/*按钮样式,背景为一张图片*/
+.button {
+	background-image: url(../images/common/b.jpg);
+	border: 1px none;
+	font-size: 12px;
+	line-height: 17px;
+	text-indent: 2pt;
+}
+
+/*字体右对齐*/
+input.f_right{
+    text-align: right;
+}
+
+/*只读元素,字体左对齐*/
+input.readonly_left{
+    background-color: #E6E7E8;
+    text-align: left;
+}
+
+textarea.readonly_left2{
+    background-color: #E6E7E8;
+    text-align: left;
+}
+
+
+/*只读元素,字体右对齐*/
+input.readonly_right{
+    background-color: #E6E7E8;
+    text-align: right;
+}
+
+/*只读元素,字体左对齐*/
+textarea.readonly_tleft{
+    background-color: #E6E7E8;
+    text-align: left;
+}

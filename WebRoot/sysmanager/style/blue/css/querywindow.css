@@ -1,0 +1,71 @@
+/*BODY的默认设置*/
+body {font-family:宋体;font-size:9pt;background-color:#D6DFF7;color:#2b2b2b;margin:0pt;text-align:center;}
+/*TABLE的默认设置*/
+table{FONT-SIZE: 9pt;width:100%;background-color:#AEC5F4;color:#2b2b2b;border-width:0;}
+/*List Table的设置  在Jsp的TABLE标签中加cellspacing=1*/
+.listtab {width:100%;}
+/*Form table的设置*/
+.formtab {width:auto;}
+
+/*TR的默认设置*/
+TR{LINE-HEIGHT: 14pt;}
+
+/*查询输入条件表格的TR设置*/
+tr.settr{LINE-HEIGHT: 28pt;}
+
+/*TH的默认设置--用于列表的Title*/
+Th {FONT-SIZE: 10pt;font-weight:normal;LINE-HEIGHT:14pt;background-color:#C3C3CF;color:#000000;}
+
+/*TD的默认设置*/
+TD {padding-left:2pt;}
+
+/*第一列的设置*/
+td.first {FONT-SIZE: 10pt;font-weight:normal;}
+
+/*带radio button的列*/
+td.radio{width:15pt;}
+
+/*title banner*/
+.top{
+	FONT-SIZE: 9pt; LINE-HEIGHT: 12pt;	background-color:#E3E6E7;color:#2b2b2b;border-left-width:2px;border-left-style:solid;border-left-color:#FFFFFF;border-top-width:2px;border-top-style:solid;border-top-color:#FFFFFF;border-bottom-width:2px;border-bottom-style:solid;border-bottom-color:#A0A0A0;border-right-width:2px;border-right-style:solid;border-right-color:#A0A0A0
+;}
+/*title banner的颜色*/
+td.none{background-color:#E3E6E7;LINE-HEIGHT: 12pt;}
+
+/*标题单元格的设置*/
+TD.title {text-align:left;}
+TD.title2 {text-align:right;padding-right:2pt;}
+
+/*链接的设置*/
+A:link {COLOR: #000000; FONT-SIZE: 9pt; TEXT-DECORATION:underline;}
+A:visited {COLOR: #000000; FONT-SIZE: 9pt; TEXT-DECORATION:underline;}
+A:hover {COLOR: #0072E3; FONT-SIZE: 9pt; TEXT-DECORATION: none;}
+A.tablink:link {COLOR: #0000C4; FONT-SIZE: 9pt; TEXT-DECORATION: underline;}
+A.tablink:visited
+{COLOR: #0000C4; FONT-SIZE: 9pt; TEXT-DECORATION: underline;}
+A.tablink:hover {COLOR: red; FONT-SIZE:9pt; TEXT-DECORATION: underline;}
+/*输入框的设置*/
+input {height:14pt;font-size:9pt;}
+
+/*只有底线的输入框的设置*/
+.edline{border: none;border-bottom: 1px solid #a0a0a0;background-color:transparent;}
+select{border: none;border-bottom: 1px solid #a0a0a0;background-color:transparent;}
+textarea.line1{border: 1px solid #a0a0a0;background-color:transparent;}
+
+/*隐藏输入框的设置*/
+input.view{border-left-style: solid; border-left-color:#AEC5F4; border-right-style: solid;border-right-color:#AEC5F4; border-top-style: solid; border-top-color: #AEC5F4;border-bottom-style:solid;border-bottom-color:#AEC5F4;background-color:#AEC5F4;color:#2b2b2b;}
+/*不可编辑输入框设置*/
+.blur {background-color:#F2F2F2;}
+/*Button的设置*/
+.small {height:14pt;font-size:9pt;border-left:1
+ridge #ffffff;border-top:1 ridge #ffffff;border-bottom:1;border-right:1;border-style:ridge;background-color:#cfcfcf;}
+
+/*报表查询结果标题*/
+.toptitle {font-weight:bold;font-size:10pt;}
+
+/*列表斑马条设置*/
+.color1{  background-color : #4455aa;}
+.color2{  background-color : #AEC5F4;}
+.color3{  background-color : #D6DFF7}
+
+

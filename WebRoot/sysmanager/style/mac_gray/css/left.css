@@ -1,0 +1,207 @@
+BODY {background-color:#3967A7; FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; FONT-STYLE: normal;TEXT-DECORATION: none}
+TD {FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; color:white; FONT-STYLE: normal; TEXT-DECORATION: none}
+TEXTAREA {FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; FONT-STYLE: normal; TEXT-DECORATION: none}
+INPUT {FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; FONT-STYLE: normal; TEXT-DECORATION: none;}
+SELECT {FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; FONT-STYLE: normal; LIST-STYLE: none; TEXT-DECORATION: none;}
+
+
+
+hr { border:solid 1;
+		background-color:#CCCCCC;
+ 		border-color:gray #ffffff #ffffff gray ;
+}
+.date {width: 90px}
+.chkbox {FONT-FAMILY: "宋体"; FONT-SIZE: 9pt; FONT-STYLE: normal; TEXT-DECORATION: none;height: 15px}
+.free {width:48}
+.selectA {width: 90px}
+.selectB {width: 105px}
+.select {width: 110px}
+.select1 {width: 120px}
+.select2 {width: 132px}
+.select3 {width: 158px}
+.select4 {width: 252px}
+.select41 {width: 309px}
+.select5 {width: 190px}
+.select6 {width: 220px}
+.select7 {width: 240px}
+.select8 {width: 220px}
+.select9 {width: 96px}
+.select10 {width: 120px}
+.text1 {width: 311px}
+.text2 {width: 99px}
+.text3 {width: 171px}
+.text4 {width: 70px}
+.button1 {width: 190px}
+.browser {width: 21px;height: 18px}
+.browser {height: 20px}
+.calendar {height: 20px}
+.calendar2 {height: 18px;VERTICAL-ALIGN: top;}
+.textarea1 {width: 157px}
+.H16 {height: 20px}
+.text208 {width: 208px}
+
+.btn {  font-family: "Arial", "Helvetica", "sans-serif"; font-size: 9px; height: 20px; width: 20px}
+.lbtn { font-family: "Arial", "Helvetica", "sans-serif"; font-size: 9px; height: 20px; width: 40px}
+.text11 {width: 247px}
+.text12 {width: 280px}
+.bb {height:20;width:64}
+.timeput {width: 86px}
+
+.disabledMenuItem {FILTER: chroma(color=#010101) dropshadow(color=ButtonHighlight, offx=1, offy=1); color: graytext; font-family: sans-serif; font-size:9pt; width:145; height=17;padding-left:20;padding-top:3;}
+.menuItem {font-family: sans-serif; font-size:9pt; width:145; height=17;padding-left:5;padding-top:3;color:black;filter: black();}
+
+.highlightItem { font-family: sans-serif; font-size: 9pt; width: 145;height=17; padding-left: 5;padding-top:3;background-Color: highlight; color: white; }
+.clickableDiv { padding: 4; width: 500; background-Color: blue; color: white; border: 10px double blue; }
+.blankItem {font-family: sans-serif; font-size:7px; width:145; height:7;background-Color: menu;color:black; }
+
+.MouseDown{
+	 background-color: ButtonFace;
+	 border-color: "#000000";
+	 BORDER-LEFT: graytext 1px solid;
+	 BORDER-TOP: graytext 1px solid;
+	 BORDER-RIGHT: graytext 1px solid;
+	 BORDER-BOTTOM: ButtonHighlight 0px solid;
+}
+.MouseUp{
+	 background-color: ButtonFace;
+
+	 BORDER-LEFT: ButtonHighlight 1px solid;
+	 BORDER-TOP: graytext  0px solid ;
+	 BORDER-RIGHT: black  1px solid;
+	 BORDER-BOTTOM: ButtonShadow  1px solid
+}
+.flat{
+	  border-color: gray;
+	 BORDER-LEFT: gray 0px solid;
+	 BORDER-TOP: gray  1px solid ;
+	 BORDER-RIGHT: gray  1px solid;
+	 BORDER-BOTTOM: gray  0px solid
+}
+
+.flat0{
+	 border-color: white;
+	 BORDER-LEFT: white 1px solid;
+	 BORDER-TOP: white  1px solid ;
+	 BORDER-RIGHT: white  1px solid;
+	 BORDER-BOTTOM: white  1px solid
+}
+
+.flat2{
+	 border-color: gray;
+	 BORDER-LEFT: gray 2px solid;
+	 BORDER-TOP: gray  2px solid ;
+	 BORDER-RIGHT: gray  2px solid;
+	 BORDER-BOTTOM: gray  2px solid
+}
+
+.flat1{
+	 border-color: gray;
+	 BORDER-LEFT: gray 1px solid;
+	 BORDER-TOP: gray  1px solid ;
+	 BORDER-RIGHT: gray  1px solid;
+	 BORDER-BOTTOM: gray  1px solid
+}
+
+.flat1_MouseOver{
+	 border-color: gray;
+	 background-color:ButtonFace;
+	 BORDER-LEFT: gray 1px solid;
+	 BORDER-TOP: gray  1px solid ;
+	 BORDER-RIGHT: gray  1px solid;
+	 BORDER-BOTTOM: gray  1px solid
+}
+
+HTML {
+	FONT-WEIGHT: normal; FONT-SIZE: 9pt; LINE-HEIGHT: normal; FONT-STYLE: normal; FONT-VARIANT: normal
+}
+
+.ButtonTable {
+	BORDER-RIGHT: 0px groove; BORDER-TOP: 0px groove; BORDER-LEFT: 1px #cccccc; BORDER-BOTTOM: 0px groove
+}
+.Button {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 2px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 2px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: hand; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap;
+}
+.ButtonHover {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 2px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 2px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: hand; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap;
+}
+.ButtonHover {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 1px; PADDING-LEFT: 1px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: buttonhighlight; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: black; PADDING-BOTTOM: 1px; BORDER-TOP-COLOR: buttonhighlight; PADDING-TOP: 1px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: black
+}
+.ButtonActiveHover {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 2px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 2px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: hand; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap; BACKGROUND-COLOR: buttonface
+}
+.ButtonActive {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 2px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 2px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: hand; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap;
+}
+.ButtonActiveDisabled {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 5px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 5px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: default; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap; BACKGROUND-COLOR: buttonface
+}
+.ButtonDisabled {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 5px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 5px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: default; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap; BACKGROUND-COLOR: buttonface
+}
+.ButtonUpDisabled {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 5px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 5px; FONT-WEIGHT: normal; PADDING-BOTTOM: 2px; FONT: Icon; VERTICAL-ALIGN: middle; BORDER-LEFT: buttonface 0px solid; CURSOR: default; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap; BACKGROUND-COLOR: buttonface
+}
+
+
+.ButtonActiveHover {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 3px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: black; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: buttonhighlight; PADDING-BOTTOM: 0px; BORDER-TOP-COLOR: black; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: buttonhighlight
+}
+.ButtonActive {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 0px; PADDING-LEFT: 2px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: black; BACKGROUND-IMAGE: url(images/cbback.gif); BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: buttonhighlight; PADDING-BOTTOM: 0px; BORDER-TOP-COLOR: black; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: buttonhighlight
+}
+.ButtonUpDisabled {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 2px; COLOR: graytext; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 0px
+}
+.ButtonActiveDisabled {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 2px; COLOR: graytext; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 0px
+}
+.ButtonDisabled {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 5px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 2px; COLOR: graytext; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 0px
+}
+.ButtonActiveDisabled {
+	BORDER-TOP-WIDTH: 1px; PADDING-RIGHT: 3px; PADDING-LEFT: 5px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: buttonshadow; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: buttonhighlight; PADDING-BOTTOM: 0px; BORDER-TOP-COLOR: buttonshadow; PADDING-TOP: 2px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: buttonhighlight
+}
+.ButtonUpDisabled {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: buttonhighlight; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: buttonshadow; BORDER-TOP-COLOR: buttonhighlight; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: buttonshadow
+}
+
+.ButtonHover2 {
+	BORDER-RIGHT: buttonface 0px solid; PADDING-RIGHT: 5px; BORDER-TOP: buttonface 0px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; VERTICAL-ALIGN: bottom; BORDER-LEFT: buttonface 0px solid; CURSOR: default; PADDING-TOP: 2px; BORDER-BOTTOM: buttonface 0px solid; WHITE-SPACE: nowrap;
+}
+
+.ButtonHover2 {
+	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 4px; PADDING-LEFT: 4px; BORDER-LEFT-WIDTH: 0px; BORDER-LEFT-COLOR: buttonhighlight; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: buttonshadow; PADDING-BOTTOM: 1px; BORDER-TOP-COLOR: buttonhighlight; PADDING-TOP: 1px; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: buttonshadow
+}
+
+
+
+.yToolbar {
+	BACKGROUND-COLOR: buttonface; BORDER-BOTTOM: buttonshadow 1px solid; BORDER-LEFT: buttonhighlight 1px solid; BORDER-RIGHT: buttonshadow 1px solid; BORDER-TOP: buttonhighlight 1px solid; HEIGHT: 27px; LEFT: 0px; POSITION: relative; TOP: 0px
+}
+
+.TBHandle {
+	BACKGROUND-COLOR: #cccccc; BORDER-LEFT: buttonhighlight 1px solid; BORDER-RIGHT: buttonshadow 1px solid; BORDER-TOP: buttonhighlight 1px solid; FONT-SIZE: 1px; HEIGHT: 22px; POSITION: absolute; TOP: 1px; WIDTH: 3px
+}
+.TabUp{
+	 height:21;
+	 font-size:13pt;
+	 background-color: white;
+	 BORDER-LEFT: #cccccc 1px solid;
+	 BORDER-TOP: #cccccc  1px solid ;
+	 BORDER-RIGHT: ButtonShadow  1px solid;
+	 BORDER-BOTTOM: white  1px solid;
+	 PADDING-TOP: 0px;
+}
+
+.TabDn{
+	 height:21;
+	 color:white;
+	 font-size:13pt;
+	 background-color: #6699ff;
+	 BORDER-LEFT: #cccccc 1px solid;
+	 BORDER-TOP: #cccccc  1px solid ;
+	 BORDER-RIGHT: ButtonShadow  1px solid;
+	 BORDER-BOTTOM: #cccccc  1px solid;
+	 PADDING-TOP: 0px;
+}
