@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	
+	<property name="cleardeskmenu">
+		<![CDATA[
+			delete FROM TD_SM_DESKMENU WHERE userid=? and subsystem=?
+		]]>
+	</property>
+	
+	<property name="insertDESKMENUs">
+		<![CDATA[
+			insert into TD_SM_DESKMENU (userid,menupath,subsystem) values(#[userid],#[menupath],#[subsystem])
+		]]>
+	</property>
+	
+	<property name="getUserDeskMenus">
+		<![CDATA[
+					SELECT DESKMENU.*, menucustom.width, menucustom.height
+					  FROM TD_SM_DESKMENU DESKMENU
+					  left join td_sm_menucustom menucustom on 
+					                                       DESKMENU.userid =
+					                                           menucustom.userid
+					                                       and DESKMENU.subsystem =
+					                                           menucustom.subsystem
+					                                       and DESKMENU.menupath =
+					                                           menucustom.menupath
+					 where DESKMENU.userid = #[userid] and DESKMENU.subsystem = #[subsystem]
+		                                       
+		                                       order by DESKMENU.item_order
+		]]>
+	</property>
+	
+	
+	<property name="getUserDeskMapMenus">
+		<![CDATA[
+			SELECT * FROM TD_SM_DESKMENU WHERE userid=#[userid] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="deleteUserDeskMapMenusSort">
+		<![CDATA[
+		  delete FROM TD_SM_DESKMENU WHERE userid=#[userid] and menupath=#[menupath] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="insertUserDeskMapMenusSort">
+		<![CDATA[
+		insert into TD_SM_DESKMENU (userid,menupath,subsystem,item_order) values(#[userid],#[menupath],#[subsystem],#[item_order])
+		]]>
+	</property>
+	
+	<property name="updateUserDeskMapMenusSort">
+		<![CDATA[
+		update TD_SM_DESKMENU set item_order=#[item_order] where userid=#[userid] and menupath=#[menupath] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="getDeskMenuWinSize">
+		<![CDATA[
+			SELECT * FROM td_sm_menucustom WHERE userid=#[userid] and subsystem=#[subsystem] and menupath=#[menupath]
+		]]>
+	</property>
+	
+	<property name="updateDeskMenuWinSize">
+		<![CDATA[
+		update td_sm_menucustom set width=#[width],height=#[height] where userid=#[userid] and menupath=#[menupath] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="insertDeskMenuWinSize">
+		<![CDATA[
+		insert into td_sm_menucustom(userid,menupath,subsystem,width,height) values(#[userid],#[menupath],#[subsystem],#[width],#[height]) 
+		]]>
+	</property>
+
+	<property name="getDeskMenuCustom">
+		<![CDATA[
+			SELECT * FROM td_sm_menucustom  WHERE userid=#[userid] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="resetDeskMenuCustom">
+		<![CDATA[
+			delete FROM td_sm_menucustom  WHERE userid=#[userid] and subsystem=#[subsystem] and menupath=#[menupath]
+		]]>
+	</property>
+	
+	<property name="deleteAllDeskMenuCustom">
+		<![CDATA[
+			delete FROM td_sm_menucustom  WHERE userid=? and subsystem=?
+		]]>
+	</property>
+	
+	
+	
+	
+	
+	
+	
+	
+	<property name="getDesktopBlackGround">
+		<![CDATA[
+			select * FROM td_sm_desktopblackground WHERE userid=#[userid] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="insertDesktopBlackGround">
+		<![CDATA[
+			insert into td_sm_desktopblackground(userid,subsystem,filename,fit) values(#[userid],#[subsystem],#[filename],#[fit])
+		]]>
+	</property>
+	
+	<property name="updateDesktopBlackGround">
+		<![CDATA[
+			 update td_sm_desktopblackground set filename=#[filename],fit=#[fit] where userid=#[userid] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="deleteDesktopStyleCustom">
+		<![CDATA[
+			 delete from td_sm_desktopstylecustom  where userid=#[userid] and subsystem=#[subsystem] and filename=#[filename]
+		]]>
+	</property>
+	
+	<property name="insertDesktopStyleCustom">
+		<![CDATA[
+			insert into td_sm_desktopstylecustom(userid,subsystem,filename,creatdate,cn_name,picture) values(#[userid],#[subsystem],#[filename],#[creatdate],#[cn_name],#[picture])
+		]]>
+	</property>
+	
+	<property name="getListDesktopStyleCustom">
+		<![CDATA[
+			select userid,subsystem,filename,creatdate,cn_name FROM td_sm_desktopstylecustom WHERE userid=#[userid] and subsystem=#[subsystem]
+		]]>
+	</property>
+	
+	<property name="getDesktopStyleCustomByFileName">
+		<![CDATA[
+			select userid,subsystem,filename,creatdate,cn_name FROM td_sm_desktopstylecustom WHERE userid=#[userid] and subsystem=#[subsystem] and filename=#[filename]
+		]]>
+	</property>
+	
+	
+	
+	<property name="updateDesktopStyleCustom">
+		<![CDATA[
+			update  td_sm_desktopstylecustom set cn_name=#[cn_name] WHERE userid=#[userid] and subsystem=#[subsystem] and filename=#[filename]
+		]]>
+	</property>
+	
+	<property name="storeDesktopStyleCustomPictureToDisk">
+		<![CDATA[
+			select picture from td_sm_desktopstylecustom where userid=#[userid] and subsystem=#[subsystem] and filename=#[filename]
+		]]>
+	</property>
+</properties>
