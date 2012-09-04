@@ -1,0 +1,28 @@
+
+<!--
+/* 页面具体内容 :路径 
+ * 可以根据当前页获得路径
+ * **
+ * 跳转的路径和当前页相关:f(currentpage)=link_path;
+ * ...
+ */
+-->
+<!--追加页面内容 翻页标签 -->
+	
+			<div id = "pagination" nowrap>
+			<span nowrap>
+				共${totalpage}页,当前第${currentpage}页 
+<!--向前翻处理 -->
+<script language="javascript">
+	if(${currentpage}==1){
+	    document.write("${fisrt}&nbsp");	
+	    document.write("${prevstr}&nbsp");
+	}else{	    
+	    document.write("<a href='${firstPageLink}' target='_self'> ");
+		document.write("${fisrt}");
+		document.write("</a>&nbsp"); 
+		document.write("<a href='${currentpath}' target='_self'> ");
+		document.write("${prevstr}");
+		document.write("</a>&nbsp");
+	}
+</script>

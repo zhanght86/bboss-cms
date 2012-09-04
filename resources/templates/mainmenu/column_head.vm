@@ -1,0 +1,6 @@
+<tr>
+<td align="center">
+<fieldset title="${fieldset_tile}" class="fieldsetstyle">
+    <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>          
+  <TR>
+    <TD vAlign=center noWrap align=left height=6></TD></TR>

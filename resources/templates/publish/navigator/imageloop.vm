@@ -1,0 +1,11 @@
+<td>
+<img src="${mouseUpImage}" onclick="change(this,'${mouseClickImage}')" 
+onmouseover="over(this,'${mouseInImage}')" onmouseout="out(this,'${mouseOutImage}')" /> 
+</td>
+<script language="javascript">
+    if("${flag}".valueOf()==""){
+        document.write("<td></td>");
+    }else{
+        document.write("</tr><tr>");
+    }
+</script> 

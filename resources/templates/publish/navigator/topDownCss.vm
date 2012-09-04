@@ -1,0 +1,75 @@
+<head>
+<!--[if lte IE 6]>
+<style type="text/css">
+/* common styling width:84px;${} totalwidth:800px; ${} ; background:#EF2829; ${}; ${bgColor} ; ${bgImage}*/
+.leftNavMenu {font-family: arial, sans-serif;  width:auto; height:${height}px; position:relative; margin:0; font-size:${fontsize}; margin:0px 0;}
+.leftNavMenu ul li a, .leftNavMenu ul li a:visited {display:block; font-weight: bold;text-decoration:none; color:#fff; 
+width:${colWidth}px; height:${height}px; text-align:center;  solid #fff;  background:${bgColor}; background-image: url("${bgImage}");
+background-repeat: repeat-x; line-height:${height}px; font-size:${fontsize};}
+.leftNavMenu ul {padding:0; width:auto; margin:0 0;}
+.leftNavMenu ul li {float:left;  position:relative;}
+.leftNavMenu ul li ul {display: none;width:auto;}
+
+/* specific to non IE browsers */
+.leftNavMenu ul li:hover a {color:#fff; background:#b3ab79;}
+.leftNavMenu ul li:hover ul {display:block; position:absolute; top:0; left:auto; width:105px;}
+.leftNavMenu ul li:hover ul li a.hide {background:#dfc184; color:#000;}
+.leftNavMenu ul li:hover ul li:hover a.hide {width:150px;}
+.leftNavMenu ul li:hover ul li ul {display: none;}
+.leftNavMenu ul li:hover ul li a {display:block; background:#b3ab79; color:#000; width:150px;}
+.leftNavMenu ul li:hover ul li a:hover {background:#dfc184; color:#000;}
+.leftNavMenu ul li:hover ul li:hover ul {display:block; position:absolute; left:auto; top:0; color:#000;}
+.leftNavMenu ul li:hover ul li:hover ul li a {display:block; width:200px; background:#dfc184; color:#000;}
+.leftNavMenu ul li:hover ul li:hover ul li a:hover {background:#bd8d5e; color:#fff;}
+</style>
+<![endif]-->
+
+<style type="text/css">
+
+.subtable {border-collapse:collapse; border:0; margin:0; padding:0;}
+.leftNavMenu ul li a.hide, 
+.leftNavMenu ul li a:visited.hide {display:"none";}
+.hide {display:none;}
+
+/*访问当前层样式 (ul li a:hover)循环 只设置第一层 ${onMouseOverColor}:#FAFAFA ${onMouseOverImage} : */
+.leftNavMenu ul li a:hover {display:block;color:#fff; background-color:${onMouseOverColor};background-image:url(${onMouseOverImage});background-repeat: repeat-x; text-decoration: none; }
+.leftNavMenu ul li a:hover ul li a:hover {display:block;color:#FF0000;background-color:${onMouseOverColor}; text-decoration: none;background-image:url(images/menuico_on.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover{display:block; color:#FF0000;background-color:${onMouseOverColor}; text-decoration: none;background-image:url(images/menuico_on.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover {display:block; color:#FF0000;background-color:${onMouseOverColor}; text-decoration: none;background-image:url(images/menuico_on.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul li a:hover{color:#FF0000; text-decoration: none;background-color:${onMouseOverColor};background-image:url(images/menuico_on.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul li a:hover{color:#FF0000; text-decoration: none;background-color:${onMouseOverColor};background-image:url(images/menuico_on.gif);background-repeat: no-repeat;background-position: 10px;}
+
+/*访问当前层时,显示其子层UL 指定颜色和子层其他样式 (ul li a:hover)循环+ul left:85px; width:84px;${} ${subBgColor}  #D6D3CE;${subBgImage}*/
+.leftNavMenu ul li a:hover ul {display:block; visibility:visible;position:absolute; top:auto;  left: 0;margin:0 ;padding:0; width:${colWidth}px; background:${subBgColor};z-index:30;}
+.leftNavMenu ul li a:hover ul li a:hover ul {display:block;visibility:visible; position:absolute; left:${left}; top:0;  background:${subBgColor};z-index:30}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul {display:block;visibility:visible; position:absolute; left:${left}; top:0; background:${subBgColor};z-index:30;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul {display:block;visibility:visible; position:absolute; left:${left}; top:0; background:${subBgColor};z-index:30;}
+
+/*访问当前层时,显示其子层a 指定颜色和子层其他样式 (ul li a:hover)循环+ul li a ${subBgColor}:#EFEFEF ,${subBgImage}*/
+.leftNavMenu ul li a:hover ul li a {display:block; background:${subBgColor};background-image: url("${subBgImage}"); color:#000; width:auto;height:${height}px;font-weight: normal;background-image:url(images/menuico_over.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a {display:block; width:auto; background:${subBgColor}; background-image: url("${bgImage}");color:#000;font-weight: normal;background-image:url(images/menuico_over.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a {display:block; width:auto; background:${subBgColor};background-image: url("${bgImage}");color:#000;font-weight: normal;background-image:url(images/menuico_over.gif);background-repeat: no-repeat;background-position: 10px;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul li a {display:block; width:auto; background:${subBgColor}; background-image: url("${bgImage}");color:#000;font-weight: normal;background-image:url(images/menuico_over.gif);background-repeat: no-repeat;background-position: 10px;}
+
+.leftNavMenu ul li:hover{border-bottom:0px solid #E3E3E3;}
+.leftNavMenu ul li a:hover ul li{border:1 solid #E3E3E3;border-top: 0 ;}
+.leftNavMenu ul li a:hover ul li a:hover ul li{border:1 solid #E3E3E3;border-top: 0 ;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li{border:1 solid #E3E3E3;border-top: 0 ;}
+
+
+/*隐藏 (ul li a:hover)循环+ul li a ul*/
+.leftNavMenu ul li a:hover ul li a ul {visibility:hidden;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a ul {visibility:hidden;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a ul {visibility:hidden;}
+.leftNavMenu ul li a:hover ul li a:hover ul li a:hover ul li a:hover ul li a ul {visibility:hidden;}
+
+/*高度 ul li a:visited!!!!!!!*/
+.leftNavMenu ul li a:visited {line-height: ${height}px}
+.leftNavMenu ul li a:link {line-height: ${height}px}
+.leftNavMenu ul li a {line-height: ${height}px}
+
+
+
+
+</style>
+</head>

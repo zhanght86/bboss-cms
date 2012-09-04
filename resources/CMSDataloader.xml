@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dataloaders>    
+	<!-- <dataloader name="default" type="com.frameworkset.platform.cms.driver.dataloader.CMSDefaultListData" single="false"/>-->
+	<!-- 频道概览数据接口 isnavigator=1
+	recursive=true
+	-->
+	<!-- 
+	    频道概览数据接口 获取 设置为导航的,设置了频道首页的 子频道列表		在概览标签里面使用,当概览标签的channel属性: 
+		channel:指定为特定的频道时, 获取该频道下的 导航子频道		channel:指定为"root"时, 获取站点下的一级导航频道	 -->
+	<dataloader name="channel" type="com.frameworkset.platform.cms.driver.dataloader.CMSNaviChannelListData" single="false"/>
+	<!-- 
+		频道概览数据接口 获取 设置了频道首页的 子频道列表		在概览标签里面使用,当概览标签的channel属性:  
+		channel:指定为特定的频道时, 获取该频道下的 导航子频道		channel:指定为"root"时, 获取站点下的一级导航频道	-->
+	<dataloader name="channelhomepage" type="com.frameworkset.platform.cms.driver.dataloader.CMSChannelListData" single="false"/>
+	<!-- 频道概览数据接口 获得兄弟频道列表-->
+	<dataloader name="brotherchannel" type="com.frameworkset.platform.cms.driver.dataloader.CMSBrotherChannelListData" single="false"/>
+	<!-- 频道概览数据接口 获得父频道的兄弟频道列表-->
+	<dataloader name="parentbrotherchannel" type="com.frameworkset.platform.cms.driver.dataloader.CMSParentBrothersChannelListData" single="false"/>
+	<!-- 频道概览数据接口 一级栏目引用二级栏目下的文档接口，递归发布待考虑 -->
+	<dataloader name="reference" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSLatestDocOfSubChnlsLstDt" single="false"/>
+	<!-- 获取文档的相关文档数据接口，递归发布待考虑，只能在细览模板中使用 -->
+	<dataloader name="related" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSRelatedDocListData" single="false"/>	
+	<!-- 问卷问题接口 -->
+	<dataloader name="questions" type="com.frameworkset.platform.cms.driver.dataloader.CMSQuestionListData" single="false"/>	
+	<!-- 频道问卷概览接口 -->
+	<dataloader name="survey" type="com.frameworkset.platform.cms.driver.dataloader.CMSSurveyListData" single="false"/>	
+	
+	<!-- 获取单个文档的附件列表标签 ，递归发布待考虑-->
+	<dataloader name="attach" type="com.frameworkset.platform.cms.driver.dataloader.CMSDocAttachDataList" single="false"/>	
+	
+	<!-- 获取频道下的 子频道和文档的混合概览数据接口 直接频道和子文档-->
+	<dataloader name="specialDirectdoc" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSDirectSpecialDocDataList" single="false"/>	
+	<!-- 获取频道下的 文档和引用文档,引用频道的混合概览数据接口 -->
+	<dataloader name="specialArrangedoc" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSArrangeSpecialDocDataList" single="false"/>	
+    
+	<!-- 获取频道下的文档列表,按照 发布 时间排序数据接口 -->
+	<dataloader name="document" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSDocumentListData" single="false"/>	
+	
+	<!-- 获得频道下所有发布的带主题图片的文档列表接口 -->
+	<dataloader name="channelImages" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSChannelImagesListData" single="false"/>
+	<!-- 获取图片新闻频道下 所有最近发布图片文档接口，包含带主题图片的和不带主题图片的文档 -->
+	<dataloader name="imageChannel" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSImageChannelListData" single="false"/>
+	
+	<!--根据文档关键字获取文档所属的站点中所有已发文档中标题 内容包含本关键字的文档列表 -->
+	<!--
+		关键字标签, 功能做了修改:
+		原来是 搜索跟文档 标题 和 内容 相关的所有文档, 如果没有, 就获取该文档所在频道的最新发布的文档
+		现在是 搜索跟文档 标题 摘要 关键字 相关的所有文档, 如果没有, 就获取该文档所在频道的最新发布的文档
+	-->
+	<dataloader name="keywordRelated" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSKeyWordRelatedDocListData" single="false"/>
+<!--
+		搜索文档关键字与本文档标题相同的已发布文档
+	-->
+	<dataloader name="keywordRelated2" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSKeyWordRelated2DocListData" single="false"/>
+	<!-- 
+		 频道所有文档附件列表和分页数据加载器，将文档中的附件作为列表和分页进行处理，要求频道文档只做附件类型发布 		 与概览(outline)、attach标签结合使用，输出下载专区列表和下载专区首页 ，当文档进行相应的处理后可以联动发布文档相关的页面 		 
+ 		 使用本加载器时，必须将频道的文档发布属性设置为只发布附件 	-->
+	<dataloader name="specialattachment" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSSpecialAttachmentList" single="false"/>
+	
+	<!-- 
+		 获取文档相关图片列表数据加载器
+		 只能在细览模板中使用
+	-->
+	<dataloader name="relatepic" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSDocRelatePicList" single="false"/>
+	
+</dataloaders>

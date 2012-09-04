@@ -1,0 +1,14 @@
+  <TABLE cellSpacing=0 cellPadding=3 width="100%" border=0>          
+  <TR>
+    <TD class=text vAlign=center noWrap align=left height=25>
+    <A href="${navigator_link}"
+      target="${target}"><IMG
+      onmouseup="src='${onmouseup_img}';mouseup(this)"
+      class=normal
+      onmousedown="src='${onmousedown_img}';mousedown(this)"
+      id=img_navigator
+      onmouseover="src='${onmouseover_img}';mouseover(this);"
+      title=${title_dec}
+      onmouseout="src='${onmouseout_img}';mouseout(this)"
+      alt=${title_dec}
+    src="${default_img}"></A></TD></TR></table>

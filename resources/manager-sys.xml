@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+<!--
+			User Management Implement Class and JNDI Name
+			获取方法：
+			获取缺省的用户管理接口
+			com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase.getUserManager();
+			获取不同数据源的用户管理接口
+			com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase.getUserManager(String type);
+
+			interceptor:拦截器，执行同步方法时提供事务处理机制,必须实现接口com.frameworkset.proxy.Interceptor
+		-->
+		<manager id="UserManagement" singlable="true" default="true" >
+			<!--
+				基于数据库的用户管理实现
+				属性描述：
+				type：代表数据存储的类型,例如DB，LDAP,ACTIVEDIRECTORY等等
+				default:缺省实现
+				class：实现类代码
+				used：标识是否使用
+			-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl" />
+			<provider type="VODDB" used="false" class="com.frameworkset.platform.sysmgrcore.manager.db.VODUserManager" />
+
+			<!--基于LDAP的用户管理实现-->
+			 <provider type="LDAP" used="false" class="com.frameworkset.platform.sysmgrcore.manager.ldap.UserManagerImpl" />
+			 
+			 <!-- 同步portal库的用户表 -->
+			 <provider type="portal" used="false" 
+			 	class="com.frameworkset.platform.sysmgrcore.manager.db.PortalUserManagerImpl" />
+			<!--
+				定义同步方法:
+				enabled:是否需要同步，true表示同步，false表示不同步，缺省值为false
+			-->
+			<synchronize enabled="true">
+			<!-- 
+				<method name="storeUser" />
+				<method name="storeUserjoborg" />
+				<method name="storeUserattr" />
+				<method name="storeUsergroup" />
+				<method name="deleteUser" />
+				<method name="deleteUserjoborg" />
+				<method name="deleteUsergroup" />
+             -->
+				<!--调整用户顺序-->
+             <!--    <method name="storeOrgUserOrder" /> -->
+            	
+            	
+            	<method name="creatorUser" >
+            		<param type="com.frameworkset.platform.sysmgrcore.entity.User"/>
+            		<param type="java.lang.String"/>
+            		<param type="java.lang.String"/>
+            	</method>
+            	<method name="updateUserPassword" >
+            		<param type="com.frameworkset.platform.sysmgrcore.entity.User"/>
+            	</method>
+            	<method name="updateUser" >
+            		<param type="com.frameworkset.platform.sysmgrcore.entity.User"/>
+            	</method>
+            	<method name="deleteUser" >
+            		<param type="com.frameworkset.platform.sysmgrcore.entity.User"/>
+            	</method>
+            	<method name="deleteBatchUser">
+            		<param type="[Lcom.frameworkset.platform.sysmgrcore.entity.User;"/>
+            		
+            	</method>
+            
+			</synchronize>
+		</manager>
+		<!-- Group Management Implement Class and JNDI Name -->
+		<manager id="GroupManagement" jndiname="security.GroupManager" singlable="true">
+			<!--基于数据库的用户组管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl" />
+			<!--基于LDAP的用户组管理实现-->
+			<provider type="LDAP" used="true" class="com.frameworkset.platform.sysmgrcore.manager.ldap.GroupManagerImpl" />
+
+			<synchronize enabled="false">
+				<method name="storeGroup" />
+				<method name="deleteGroup" />
+			</synchronize>
+		</manager>
+		<!-- InputType Management Implement Class and JNDI Name -->
+		<!-- <manager id="InputTypeManagement" jndiname="security.InputTypeManager" singlable="false">-->
+			<!--基于数据库的输入类型管理实现-->
+			<!-- <provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.InputTypeManagerImpl" />-->
+		<!-- </manager>-->
+		<!-- Role Management Implement Class and JNDI Name -->
+		<manager id="RoleManagement" jndiname="security.RoleManager" singlable="true">
+			<!--基于数据库的角色管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.RoleManagerImpl" />
+		</manager>
+
+		<!-- Resource Management Implement Class and JNDI Name -->
+		<manager id="ResourceManagement" jndiname="security.EntryManager" singlable="true">
+			<!--基于数据库的资源管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl" />
+			<!--基于LDAP的资源管理实现-->
+		</manager>
+		<!-- Resource Management Implement Class and JNDI Name -->
+		<manager id="JobManagement" jndiname="security.JobManager" singlable="true">
+			<!--基于数据库的资源管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.JobManagerImpl" />
+			<!--基于LDAP的资源管理实现-->
+		</manager>
+		<!-- Resource Management Implement Class and JNDI Name -->
+		<manager id="OperManagement" jndiname="security.OperManager" singlable="true">
+			<!--基于数据库的资源管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OperManagerImpl" />
+		</manager>
+		<!-- Resource Management Implement Class and JNDI Name -->
+		<manager id="OrgManagement" jndiname="security.OrgManager" singlable="true">
+			<!--基于数据库的资源管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl" />
+			<provider type="VODDB" used="false" class="com.frameworkset.platform.sysmgrcore.manager.db.VODOrgManger" />
+			<!--基于LDAP的资源管理实现-->
+			 <provider type="LDAP" used="false" class="com.frameworkset.platform.sysmgrcore.manager.ldap.OrgManagerImpl" />
+
+			<synchronize enabled="false">
+				<method name="storeOrg" />
+				<method name="deleteOrg" />
+			</synchronize>
+		</manager>
+		
+		<manager id="LogManagement" jndiname="security.LogManagement" singlable="true">
+			<!--基于数据库的日志管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.LogManagerImpl" />
+		</manager>
+		<manager id="SchedularManagement" jndiname="security.SchedularManagement" singlable="true">
+			<!--基于数据库的日程管理实现-->
+			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.SchedularManagerImpl" />
+		</manager>
+</manager-config>

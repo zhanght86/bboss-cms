@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sysmenu name="spplatform" left_width="300" top_height="48" showhidden="true" showhidden_width="10" 
+	 messagesource="messages_module">
+	<description>内容管理系统平台</description>
+	<!--
+		公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目
+	-->
+	<publicitem name="欢迎" id="contentindex" main="true">
+		<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+		<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+		<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+		<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+		<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+		<top>/cms/top.jsp</top>
+		<left>/cms/siteManage/navigator_content.jsp</left>
+		<workspace>
+			<content>/cms/main.jsp</content>
+		</workspace>
+	</publicitem>
+	<module name="内容管理视图" id="contentview">
+		<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+		<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+		<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+		<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+		<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+		<description>内容管理视图</description>
+		<module name="个人工作台" id="personalconsole">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>个人工作台</description>
+				
+				<item name="新稿文档" id="newdocument" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/newdoc_list_frmset.jsp</content>
+					</workspace>
+				</item>			
+				<item name="待审文档" id="auditdocument" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docAudit.jsp</content>
+					</workspace>
+				</item>
+	
+				<item name="返工文档" id="denydocument" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/workAgain.jsp</content>
+					</workspace>
+				</item>
+	
+				<item name="待发文档" id="publishdocument" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docPublish.jsp</content>
+					</workspace>
+				</item>	
+				
+				<item name="发布中文档" id="publishingdocument" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docPublishing.jsp</content>
+					</workspace>
+				</item>	
+				
+			</module>
+			
+			<module name="归档管理" id="pigeonholeManager">
+				<mouseupimg>sysmanager/itemicon/project_images/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>归档管理</description>
+				
+				<item name="归档管理" id="pigeonholeQuery" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/pigeonholeDoc.jsp</content>
+					</workspace>
+				</item>
+				<item name="发布管理" id="toPigeonhole" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/publishedDoc.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			
+			<module name="回收站" id="garbageStation">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>回收站</description>
+				
+				<item name="回收管理" id="garbageManager" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/garbageManager.jsp</content>
+					</workspace>
+				</item>
+			</module>
+	
+			<module name="发布管理" id="publishManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>发布管理</description>
+				
+				<item name="发布历史查询" id="pubHisQuery" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docAudit.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			<module name="稿源管理" id="docsourceManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>稿源管理</description>
+				
+				<item name="稿源管理" id="docsourcelist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>/cms/docsourceManage/docsource_list.jsp</content>
+					</workspace>
+				</item>
+				<item name="文档内部分类" id="docinnerclass" >
+						
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>/cms/docclass/main.page</content>
+					</workspace>
+				</item>
+			</module>
+		</module>
+		
+		<module name="站点管理视图" id="siteview">
+			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			<description>站点管理视图</description>
+			<module name="图片管理" id="imageManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>图片管理</description>
+				
+				<item name="水印图片管理" id="waterimageManager" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../imageManager/imageManager.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			
+			<module name="表单管理" id="formManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>表单管理</description>
+				
+				<item name="表单管理" id="formlist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/formManager.jsp</content>
+					</workspace>
+				</item>
+				<item name="扩展字段" id="extfieldlist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/doc_extfieldofall_list.jsp?</content>
+					</workspace>
+				</item>
+				<item name="系统扩展字段" id="sys_extfieldlist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docExtColumnManage.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			
+			<module name="标签管理" id="tagManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>标签管理</description>
+				
+				<item name="附件管理" id="attlist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/tagManager.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			
+			<module name="字典管理" id="dictManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>字典管理</description> 
+				
+				<item name="字典管理" id="wordlist" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../docManage/docCommentDictManage.jsp</content>
+					</workspace>
+				</item>
+			</module>
+			
+			
+			
+			
+			<module name="全文检索管理" id="textsearchManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>全文检索管理</description>
+				
+				<item name="全文检索管理" id="textsearch" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>    
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>/cms/searchManage/admin/index.jsp</content>
+					</workspace>
+				</item>
+				
+			</module>
+            
+            <!--module name="导出模板管理" id="exportTeplManager">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>导出模板管理</description>
+
+            	<item name="导出模板管理" id="exportTeplList" >
+					<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+					<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+					<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+					<top>/cms/top.jsp</top>
+					<left>/cms/siteManage/navigator_content.jsp</left>
+					<workspace>
+						<content>../templateManage/tmplZipManager.jsp</content>
+					</workspace>
+				</item>
+            </module-->
+		</module>
+		
+		<!--<module name="模版管理" id="filesManager">
+			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			<description>模版管理</description>
+			
+			<item name="模版管理" id="fileManagerItem" >
+				<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+				<top>/cms/top.jsp</top>
+				<left>/cms/templateManage/navigator_content.jsp</left>
+				<workspace>
+					<content>/cms/templateManage/file_ListFrameset.jsp</content>
+				</workspace>
+			</item>
+		</module>-->
+		
+		
+		<module name="视图管理" id="viewManager">
+			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			<description>视图管理</description>
+			
+			<item name="内容管理" id="contentManageItem" >
+				<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+				<top>/cms/top.jsp</top>
+				<left>/cms/siteManage/navigator_content.jsp</left>
+				<workspace>
+					<content>/cms/main.jsp</content>
+				</workspace>
+			</item>
+			<item name="模板管理" id="templetmanager" >
+				<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+				<top>/cms/top.jsp</top>
+				<left>/cms/templateManage/navigator_content.jsp</left>
+				<workspace>
+					<content>/cms/templateManage/selectView.jsp</content>
+				</workspace>
+			</item>
+			
+			<item name="站点管理" id="siteManageItem" >
+				<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+				<top>/cms/top.jsp</top>
+				<left>/cms/siteManage/allSiteTree.jsp</left>
+				<workspace>
+					<content>/cms/main.jsp</content>
+				</workspace>
+			</item>
+
+			
+			<item name="权限管理" id="userManageItem" >
+				<mouseupimg>sysmanager/itemicon/applications.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/applications.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/applications.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/applications.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/applications.gif</headimg>
+				<top>/cms/top.jsp</top>
+				<workspace>
+					<content>/purviewmanager/main.jsp</content>
+				</workspace>
+			</item>
+			<item name="系统监控" id="dbmonitor">
+				<mouseupimg>sysmanager/itemicon/project_images/Pixadex.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/Pixadex.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/Pixadex.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/Pixadex.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/Pixadex.gif</headimg>
+				<top>/cms/top.jsp</top>
+				
+				<workspace>					
+					<content>/monitor/monitor_console.jsp</content>
+				</workspace>
+			</item>
+			<item name="统计分析" id="browserCounter" i18n:en_US="BrowserCounter">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>/counter/index.freepage</content>
+				</workspace>
+			</item>
+		
+			
+			
+			
+		</module>
+		
+		
+		<module name="应用项管理" id="appManager">
+            <mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+            <mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+            <mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+            <mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+            <headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+            <description>应用项管理</description>
+            
+            
+            
+         
+		
+		<!-- <item name="网上测评" id="wscptotal">
+				<mouseupimg>sysmanager/itemicon/project_images/edit_user.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/edit_user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/edit_user.gif</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<workspace>
+					<content>/comm/wscp/list.jsp</content>
+				</workspace>
+		</item> --> 
+		
+		
+    
+		
+		
+         
+        		  
+		    
+		
+		
+
+        <!-- 这里是交流互动后台部分 -->
+    	</module>
+    
+    
+	
+	
+</sysmenu>

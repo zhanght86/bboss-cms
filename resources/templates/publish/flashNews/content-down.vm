@@ -1,0 +1,41 @@
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td class="imgTitleRed">
+          <DIV id=focusViwer>
+          
+          </DIV>
+          <!-- js 其中一些参数可以作为外部参数传进来 -->
+          <script type=text/javascript>
+		  <!--
+			var focus_width=${imgWidth};                       /*图片宽*/
+			var focus_height=${imgHeight};                     /*图片高*/
+			var text_height=20
+			var swf_height = focus_height+text_height
+	        var curhref=document.location.href;
+            //pics是图片的地址
+			//links是图片链接到的url地址
+			//texts是相关图片的文字说明。
+            var pics='${pic_path}'
+            var texts='${title}'
+	        var links='${link_path}'
+			
+		    var FocusFlash = new sinaFlash	("${flash_path}", "focusflash", focus_width, swf_height, "${m_second}", "#8BABF5", false, "High");
+			FocusFlash.addParam("allowScriptAccess", "sameDomain");
+			FocusFlash.addParam("menu", "false");
+			FocusFlash.addParam("wmode", "opaque");
+	
+			FocusFlash.addVariable("pics", pics);
+			FocusFlash.addVariable("links", links);
+			FocusFlash.addVariable("texts", texts);
+
+			FocusFlash.addVariable("borderwidth", focus_width);
+			FocusFlash.addVariable("borderheight", focus_height);
+			FocusFlash.addVariable("textheight", text_height);
+			FocusFlash.addVariable("curhref", curhref);
+ 
+			FocusFlash.write("focusViwer");
+		 //-->
+        </script>
+       </td>
+    </tr>
+</table>

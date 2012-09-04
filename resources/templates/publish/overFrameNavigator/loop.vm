@@ -1,0 +1,10 @@
+<TD align=middle width=${colWidth} >
+    <TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+      <TR>
+        <td><img src="${menuBorderImg}"/><td>
+        <TD name="${name}" id="${name}"  align=middle height=${height} onmouseover="${TDOnMouseOverimg};${subHTML}" onmouseout="this.style.backgroundImage='url()';${subHTMLOut};">
+            <a onclick="javascript:parent.location.href='${channelPath}'" href="#" onmouseout="setTimer()" onmouseover="clearTimer()">${displayName}</a>
+        </TD>
+      </TR>
+    </TABLE>
+</TD>

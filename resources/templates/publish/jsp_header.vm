@@ -1,0 +1,1 @@
+<%@ page contentType="${mimetype}; charset=${charset}"%><%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="cms"%>

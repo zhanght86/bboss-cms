@@ -1,0 +1,6 @@
+#if( !$showpage )
+    outlookbar.additem('<div id=div_${id} onmouseup=showDiv(this,"${onmouseup_img}","mouseup"); onmousedown=showDiv(this,"${onmousedown_img}","mousedown"); onmouseover=showDiv(this,"${onmouseover_img}","mouseover"); onmouseout=showDiv(this,"${onmouseout_img}","mouseout")><img src=${head_img} border=0 id=img_${id} >${br}${br}${title_dec}</div>',t,'${link_url}','${target}');
+#else
+    outlookbar.additempage(t,'${page_url}','${target}');
+#end
+

@@ -1,0 +1,19 @@
+<head>
+<style>
+body,table,td{font-family:"宋体"; font-size:14px;}
+/* 链接 */
+a{text-decoration:underline;}
+a:link{color:#009;}
+a:visited{color:#800080;}
+a:hover,a:active,a:focus{color:#c00;}
+/* 导航 */
+.nav{width:584px; color:#989898; margin-top:9px;}
+.nav td{line-height:17px; text-align:center;}
+.nav a{text-decoration:none;}
+.nav a:link,.nav a:visited{color:#333;}
+.nav a:hover,.nav a:active,.nav a:focus{color:#c00;}
+/* logo导航区 */
+#logonav{width:100%; height:85px; clear:both; no-repeat left top; }
+/* logo */
+#logo{float:left; width:140px; padding:5px 0 0 20px; text-align:left; }
+</style>

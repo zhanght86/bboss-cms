@@ -1,0 +1,14 @@
+
+<script language="javascript"> 
+    
+    
+    function change(e,path){ 
+		e.src= path 
+	} 
+	function over(e,path){  
+		e.src= path  
+	} 
+	function out(e,path){  
+		e.src= path  
+	} 
+</script> 

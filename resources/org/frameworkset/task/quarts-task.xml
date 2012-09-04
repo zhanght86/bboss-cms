@@ -1,0 +1,91 @@
+<!-- 
+	任务调度
+-->
+<properties>
+	<property name="taskconfig" enable="true">
+		<list>
+			<property name="定时任务执行器" taskid="default"
+				class="org.frameworkset.task.DefaultScheduleService" used="true">
+				<!--
+					可执行的任务项
+					属性说明：
+					name：任务项名称
+					id:任务项标识
+					class:具体的任务执行处理程序,实现org.frameworkset.task.Execute接口
+					cron_time：	cron格式的时间表达式，用来管理任务执行的生命周期，相关的规则请参照日期管理控件quartz的说明文档
+					used 是否使用
+					true 加载，缺省值
+					false 不加载	  
+					子元素说明：
+					parameter:设置任务执行的参数，name标识参数名称，value指定参数的值
+				-->
+				
+				<list>
+				  <!-- 
+					<property name="runDroolsRules" jobid="runDroolsRules"						
+						bean-class="com.frameworkset.platform.integralwarning.drools.service.impl.StartupRuleCalculateServiceImpl"
+						method="doCalculate"
+						cronb_time="0/30 * * * * ?" used="true"
+						shouldRecover="false">
+						<construction>
+							<property value="100" />
+						</construction>
+					</property>
+					
+					<property name="runpointsum" jobid="runpointsum"						
+						bean-class="com.frameworkset.platform.integralwarning.assistjudge.service.RunPPointSum"
+						method="runPointSum"
+						cronb_time="0 0 0/1 * * ?" used="true"
+						shouldRecover="false">
+					</property>
+									
+					 <property name="runportalPending" jobid="runportalPending"						
+						bean-name="portalMonitor"
+						method="PendingMonitor"
+						cronb_time="0 0/10 * * * ?" used="false"
+						shouldRecover="false">
+						
+					</property>
+					 -->	
+					<property name="hrMasterDataSync" 
+						jobid="hrMasterDataSync"						
+						bean-name="hrSyncTask"
+						method="syncExpandData"
+						cronb_time="0 0 2 * * ?" 
+						used="false"
+						shouldRecover="false">
+					</property>
+					
+					<property name="browserCounterStatisticDailyJob" jobid="browserCounterStatisticDailyJob"						
+						bean-name="browserCounterStatisticDailyJob"
+						method="statisticBrowserCounterDailyJob"
+						cronb_time="0 0 1 * * ?"  used="true"
+						shouldRecover="false"
+						>
+					</property>
+					
+				</list>
+				 
+			</property>
+			
+			
+		</list>
+	</property>
+	
+	<property name="hrSyncTask" class="com.sany.masterdata.task.HrSyncTask" />
+	
+	
+	<property name="portalMonitor" factory-bean="webapplicationcontext" factory-method="getBeanObject">
+		<construction>
+			<property value="appMonitorService" />
+		</construction>
+	</property>
+	
+	<property name="browserCounterStatisticDailyJob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
+		<construction>
+			<property value="browserCounterStatisticDailyTask" />
+		</construction>
+	</property>
+	
+	<property name="webapplicationcontext" factory-class="org.frameworkset.web.servlet.support.WebApplicationContextUtils" factory-method="getWebApplicationContext"/>
+</properties>
