@@ -1,0 +1,51 @@
+*{margin:0;padding:0;border:0;}
+body {font-family: arial, 宋体, serif;
+      font-size:12px;
+     }
+#nav {line-height: 26px;      
+      background:#FFFFFF;
+      width:110px;
+}
+#nav a {display: block;
+        width: 100px;
+        
+        text-align:center;
+        background: #EFEFEF;
+}
+#nav a:link {color:#000000;             
+             text-decoration:none;
+}
+#nav a:visited {color:#000000;
+                text-decoration:none;
+}
+#nav a:hover {color:#E72C31;
+              text-decoration:none;
+              font-weight:normal;
+              text-decoration: underline
+}
+.li {width: 100px;
+         list-style-position: inside;
+         list-style-image: url("dot_red.gif");
+         padding: 1px ;
+         color:#000000;
+         margin: 0px;
+         background:#949694;
+}
+
+.li.sfhover a { float:left;}
+
+.ul {line-height: 27px;
+            list-style-type: none;
+            text-align:left;
+            left: -999em;
+            width: 100px;             
+            position: absolute;
+}
+
+
+.li.sfhover ul { left: auto;}
+.li.sfhover ul li ul{ left: 9em;}
+.li:hover ul {left: auto;}
+.li:hover ul li {left: auto;}
+
+

@@ -1,0 +1,18 @@
+*{margin:0;padding:0;border:0;}
+body {font-family: arial, 宋体, serif; font-size:12px;}
+#nav a {display: block; width: 80px; text-align:center;}
+#nav a:link {color:#666; text-decoration:none;}
+#nav a:visited {color:#666;text-decoration:none;}
+#nav a:hover {color:#FFF;text-decoration:none;font-weight:bold;}
+#nav li a:hover{background:#999;}
+#nav li ul a{display: block; width: 80px;text-align:center;padding-left:24px;}
+#nav li ul a:link {color:#666; text-decoration:none;}
+#nav li ul a:visited {color:#666;text-decoration:none;}
+#nav li ul a:hover {color:#F3F3F3;text-decoration:none;font-weight:normal;background:#C00;}
+#nav li:hover ul {left: auto;}
+
+#nav {line-height: 24px; list-style-type: none; background:#666;}
+#nav li {float: left; width: 60px; background:#CCC;}
+#nav li ul {line-height: 27px; list-style-type: none;text-align:left;left: -999em; width: 800px; position: absolute; float:left;}
+#nav li ul li{float: left; width: 80px;background: #F6F6F6; }
+#nav li.sfhover ul { left: 0;}
