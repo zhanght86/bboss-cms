@@ -1,0 +1,249 @@
+<%
+/**
+ * 项目：系统管理 
+ * 描述：实现用户查询报表打印
+ * 版本：1.0 
+ * 日期：2007.12.29
+ * 公司：科创信息
+ * @author gao.tang
+ */
+%>
+
+
+<%@ page language="java" contentType="text/html;charset=GBK"%>
+<%@ page import="net.sf.jasperreports.engine.JasperFillManager"%>
+<%@ page import="com.frameworkset.common.poolman.PreparedDBUtil"%>
+<%@ page import="net.sf.jasperreports.engine.JasperPrint"%>
+<%@ page import="net.sf.jasperreports.engine.JRExporter"%>
+<%@ page import="net.sf.jasperreports.engine.export.JRHtmlExporter"%>
+<%@ page import="net.sf.jasperreports.engine.export.JRHtmlExporterParameter"%>
+<%@ page import="net.sf.jasperreports.engine.JRExporterParameter"%>
+<%@ page import="com.frameworkset.platform.security.AccessControl"%>
+<%@ page import="java.io.*"%>
+
+<html>
+<head>
+	<title>用户信息</title>
+<%@ include file="/include/css.jsp"%>
+	<link rel="stylesheet" type="text/css" href="../../../css/treeview.css">
+	<script defer>  
+		function window.onload() 
+		{
+			 // -- advanced features
+			 factory.printing.SetMarginMeasure(2); // measure margins in inches
+			 //factory.printing.printer = "HP DeskJet 870C";
+			 factory.printing.paperSize = "A4";
+			 factory.printing.paperSource = "Manual feed";
+			 factory.printing.collate = true;
+			 factory.printing.copies = 1;
+			 factory.printing.SetPageRange(false, 1, 1); // need pages from 1 to 3
+
+			 // -- basic features
+			 factory.printing.header = "This is MeadCo";
+			 factory.printing.font = "宋体";
+			 factory.printing.footer = "Advanced Printing by ScriptX";
+			 factory.printing.portrait = false;
+			 factory.printing.leftMargin = 1.0;
+			 factory.printing.topMargin = 1.0;
+			 factory.printing.rightMargin = 1.0;
+			 factory.printing.bottomMargin = 1.0;
+		}
+	</script>
+
+	<script language="javascript">
+		function printTure() //打印函数
+		{
+			 document.all("dayinDiv").style.display="none";//隐藏按钮
+			 factory.printing.Print(true); //调用控件打印
+			 document.all("dayinDiv").style.display="";//显示
+		}
+		
+		function printTurePre() //打印预览
+		{
+			 document.all("dayinDiv").style.display="none";//隐藏按钮
+			 factory.printing.Preview(); //调用控件预览
+			 document.all("dayinDiv").style.display="";//显示
+		}
+		
+		function printTureSet() //设置函数
+		{
+			 document.all("dayinDiv").style.display="none";//隐藏按钮
+			 factory.printing.PageSetup(); //调用控件设置
+			 document.all("dayinDiv").style.display="";//显示
+		}
+
+		function killErrors()
+		{
+		    return true;
+		}
+		
+		window.onerror = killErrors;
+	</script>
+</head>
+<body >
+	<div  id="dayinDiv" style="display:block" name="dayinDiv" align="center">
+		<input type=button value="打印本页"  class="input" onclick="printTure()"> 
+		<input type=button value="页面设置"  class="input" onclick="printTureSet()"> 
+		<input type=button value="打印预览"  class="input" onclick="printTurePre()">
+		<input type=button value="关闭"  class="input" onclick="window.close();">
+	</div>
+
+<%  
+	AccessControl accesscontroler = AccessControl.getInstance();
+	accesscontroler.checkAccess(request, response);
+	String strAbsPath = new File(request.getRealPath(request.getServletPath())).getParent();
+
+	strAbsPath = strAbsPath.replace('\\','/');
+	String curUserId = accesscontroler.getUserID();
+	String userName = request.getParameter("userName");
+	String userRealname = request.getParameter("userRealname");
+	String userOrgType = request.getParameter("userOrgType");
+	
+	StringBuffer sb_user = new StringBuffer();//条件查询
+	StringBuffer sql = null;
+	
+	if(userName != null && userName.length()>0)
+	{
+		sb_user.append(" and t.user_name like '%" + userName.trim()+ "%' ");
+	}
+	
+	if(userRealname != null && userRealname.length()>0)
+	{
+		sb_user.append(" and t.user_realname like '%" + userRealname.trim()+ "%'");
+	}
+	
+	if(userOrgType.equalsIgnoreCase("hasMainOrg"))
+	{
+		sql = new StringBuffer()	
+			.append(" select bb.same_job_user_sn,getUserorgjobinfos(t.user_id || '') as org_job,  ")
+			.append(" t.*, a.org_id,a.org_sn from  ")
+			.append(" (select rownum as num,org_sn, a.org_id  from td_sm_organization a start with a.parent_id= '0'  ")
+			.append(" connect by prior a.org_id = a.parent_id order siblings by a.org_sn) a, ")
+			.append(" ( select min(tmp.same_job_user_sn) as same_job_user_sn,tmp.org_id,tmp.user_id from (  ")
+			.append(" (select  ujo.* from td_sm_userjoborg ujo,TD_SM_ORGUSER ou where ")
+			.append(" ou.org_id=ujo.org_id  and ou.user_id=ujo.user_id  ) ")
+			.append(" )tmp group by  tmp.user_id ,tmp.org_id   ")
+			.append("  ) bb, ")
+			.append(" td_sm_user t  ")
+			.append(" where a.org_id=bb.org_id ");
+			
+			if(!accesscontroler.isAdmin())
+			{//过滤用户查询。根据用户可管理的机构条件过滤
+				sql.append(" and a.org_id in(select distinct org.org_id from td_sm_organization org ")
+					.append(" start with org.org_id in(select o.org_id from td_sm_organization o, td_sm_orgmanager om ")
+					.append(" where o.org_id = om.org_id  and om.user_id = '").append(curUserId).append("') ")
+					.append("connect by prior org.org_id = org.parent_id)");
+			}
+			sql.append(sb_user.toString())
+				.append(" and bb.user_id=t.user_id  ")
+				.append(" order by a.num,bb.same_job_user_sn,t.user_id ");
+	}
+	else if(userOrgType.equalsIgnoreCase("noMainOrg"))
+	{
+		//没有主机构
+			sql = new StringBuffer()	
+				.append(" select bb.same_job_user_sn,getUserorgjobinfos(t.user_id || '') as org_job,  ")
+				.append(" t.*, a.org_id,a.org_sn from  ")
+				.append(" (select rownum as num,org_sn, a.org_id  from td_sm_organization a start with a.parent_id= '0'  ")
+				.append(" connect by prior a.org_id = a.parent_id order siblings by a.org_sn) a, ")
+				.append(" ( select min(tmp.same_job_user_sn) as same_job_user_sn,tmp.org_id,tmp.user_id from (  ")
+				.append(" (select ujo.* from td_sm_userjoborg ujo where ujo.user_id not in (select ou.user_id from TD_SM_ORGUSER ou)) ")
+				.append(" )tmp group by  tmp.user_id ,tmp.org_id   ")
+				.append("  ) bb, ")
+				.append(" td_sm_user t  ")
+				.append(" where a.org_id=bb.org_id");
+				
+				if(!accesscontroler.isAdmin())
+				{
+					//过滤用户查询。根据用户可管理的机构条件过滤
+					sql.append(" and a.org_id in(select distinct org.org_id from td_sm_organization org ")
+						.append(" start with org.org_id in(select o.org_id from td_sm_organization o, td_sm_orgmanager om ")
+						.append(" where o.org_id = om.org_id  and om.user_id = '").append(curUserId).append("') ")
+						.append("connect by prior org.org_id = org.parent_id)");
+				}
+				
+				sql.append(" and bb.user_id=t.user_id  ")
+					.append(sb_user.toString())
+					.append(" order by a.num,bb.same_job_user_sn,t.user_id ");
+					
+	}
+	else if(userOrgType.equalsIgnoreCase("dis"))
+	{
+		//离散用户查询
+		sql = new StringBuffer()	
+		.append("select t.*,'离散用户' as org_job,'0' as SAME_JOB_USER_SN,'0' as ORG_ID,'0' as ORG_SN from td_sm_user  t where 1=1 ")
+		.append(sb_user.toString())
+		.append(" and t.user_id in (select user1_.USER_ID from td_sm_user user1_ minus select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_)");
+	}
+	java.sql.Connection con = null;
+	
+	try
+	{
+		JasperPrint jp = null;
+		java.util.Map map = new java.util.HashMap();
+		
+		PreparedDBUtil pd = new PreparedDBUtil();
+		con = pd.getConection();            
+		map.put("SQLSTR", sql.toString());
+		jp = JasperFillManager.fillReport(strAbsPath + "/queryUserInfo.jasper", map, con);
+	   StringBuffer sout = new StringBuffer();
+
+		try 
+		{
+			JRExporter exporter = new JRHtmlExporter();
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, jp);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STRING_BUFFER,
+								  sout);
+			exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "report_image/");
+			exporter.setParameter(JRHtmlExporterParameter.
+								  IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+								  Boolean.TRUE); // 删除记录最下面的空行
+			exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "");
+			exporter.setParameter(JRHtmlExporterParameter.
+								  BETWEEN_PAGES_HTML, "");
+			exporter.setParameter(JRHtmlExporterParameter.HTML_FOOTER, "");
+			exporter.setParameter(JRHtmlExporterParameter.
+								  IS_USING_IMAGES_TO_ALIGN,
+								  Boolean.valueOf(true));
+			exporter.exportReport();
+			
+%>
+
+
+
+	<!--startprint-->
+	<div  id="jasper" style="display:block" name="dayinDiv">
+	<%  
+		out.println(sout.toString());
+	%>
+	</div>
+	
+	<!--endprint-->
+	<object id="factory" viewastext  style="display:none"   WIDTH=0 HEIGHT=0 
+	  classid="clsid:1663ed61-23eb-11d2-b92f-008048fdd814" 
+	  codebase="../../../ScriptX/smsx.cab#Version=6,2,433,70">
+	</object>
+
+<%
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			sout.append("生成报表数据错误!");              
+		}
+
+	}
+	catch (Exception e1) 
+	{
+        e1.printStackTrace();
+		//System.out.println("final exception");
+	}
+	finally
+	{
+		if(con != null)
+			con.close();
+	}
+%>
+
+</body>
+</html>

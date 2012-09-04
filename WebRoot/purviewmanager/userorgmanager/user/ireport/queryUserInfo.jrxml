@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="queryUserInfo"
+		 columnCount="1"
+		 printOrder="Horizontal"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+
+	<field name="userName" class="java.lang.String">
+		<fieldDescription><![CDATA[userName]]></fieldDescription>
+	</field>
+	<field name="userRealname" class="java.lang.String">
+		<fieldDescription><![CDATA[userRealname]]></fieldDescription>
+	</field>
+	<field name="orgName" class="java.lang.String">
+		<fieldDescription><![CDATA[orgName]]></fieldDescription>
+	</field>
+	<field name="userMobiletel1" class="java.lang.String">
+		<fieldDescription><![CDATA[userMobiletel1]]></fieldDescription>
+	</field>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="40"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="535"
+						height="40"
+						key="staticText-1"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="13" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[用户列表]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="30"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="100"
+						height="30"
+						backcolor="#CCFFFF"
+						key="staticText-2"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[用户登陆名称]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="100"
+						y="0"
+						width="100"
+						height="30"
+						backcolor="#CCFFFF"
+						key="staticText-3"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[用户实名]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="435"
+						y="0"
+						width="100"
+						height="30"
+						backcolor="#CCFFFF"
+						key="staticText-4"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[手机号码]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="200"
+						y="0"
+						width="235"
+						height="30"
+						backcolor="#CCFFFF"
+						key="staticText-5"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<text><![CDATA[所在机构]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="20"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="100"
+						height="20"
+						key="textField-2"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{userName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="100"
+						y="0"
+						width="100"
+						height="20"
+						key="textField-3"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{userRealname}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="200"
+						y="0"
+						width="235"
+						height="20"
+						key="textField-4"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{orgName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="435"
+						y="0"
+						width="100"
+						height="20"
+						key="textField-5"/>
+					<box>					<pen lineWidth="0.25" lineColor="#666666"/>
+					<topPen lineWidth="0.25" lineColor="#666666"/>
+					<leftPen lineWidth="0.25" lineColor="#666666"/>
+					<bottomPen lineWidth="0.25" lineColor="#666666"/>
+					<rightPen lineWidth="0.25" lineColor="#666666"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="STSong-Light" size="12" pdfEncoding ="UniGB-UCS2-H"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{userMobiletel1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="50"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>
