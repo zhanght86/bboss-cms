@@ -36,8 +36,8 @@
                 <td><pg:cell colName="docName"/></td>
                 <td><pg:cell colName="channelName"/></td>
                 <td><pg:cell colName="siteName"/></td>
-        		<td><pg:cell colName="pageURL" maxlength="40" replace="..."/></td>  
-        		<td><pg:cell colName="referer" maxlength="40" replace="..."/></td>  
+        		<td><a href="<pg:cell colName="pageURL"/>" target="_blank"><pg:cell colName="pageURL" maxlength="40" replace="..."/></a></td>  
+        		<td><a href="<pg:cell colName="referer"/>" target="_blank"><pg:cell colName="referer" maxlength="40" replace="..."/></a></td>  
         		<td><pg:cell colName="browserType" /></td>  
         		<td><pg:cell colName="browserUser" /></td>  
         		<td><pg:cell colName="browserIp" /></td>  

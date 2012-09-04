@@ -37,10 +37,14 @@
 				
 				var url =  'addNewComment.freepage?jsonp_callback=?';
 		
-				$.getJSON(url, { docId:${docId}, commentUser:encodeURIComponent(commentUser), isGuest:isGuest, docComment:encodeURIComponent(docComment), status:1 },
+				$.getJSON(url, { docId:${docId}, channelId:${channelId}, commentUser:encodeURIComponent(commentUser), isGuest:isGuest, docComment:encodeURIComponent(docComment) },
 				function(data) {   
                  	if (data = "success") {
-                 		alert("评论成功！");
+                 		if ("${aduitSwitchFlag}" == "0") {
+                 			alert("评论成功，已提交评论审核！");
+                 		} else {
+                 			alert("评论成功！");
+                 		}
                  	} else {
                  		alert(data);
                  	}

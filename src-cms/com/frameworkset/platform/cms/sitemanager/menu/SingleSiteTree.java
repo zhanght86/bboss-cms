@@ -1452,7 +1452,7 @@ public class SingleSiteTree extends COMTree implements java.io.Serializable {
 									 Menu.ContextMenuItem channelmenuitem9 = new Menu.ContextMenuItem();
 									 channelmenuitem9.setName("开/关评论");
 									 channelmenuitem9.setLink("javascript:switchComments('"
-														+ channelId + "')");
+														+ channel.getChannelId() + "')");
 									 channelmenuitem9
 												.setTarget("base_properties_content");
 									 channelmenuitem9
@@ -1464,7 +1464,7 @@ public class SingleSiteTree extends COMTree implements java.io.Serializable {
 									 Menu.ContextMenuItem channelmenuitem10 = new Menu.ContextMenuItem();
 									 channelmenuitem10.setName("开/关评论审核");
 									 channelmenuitem10.setLink("javascript:switchCommentAudit('"
-														+ channelId + "')");
+														+ channel.getChannelId() + "')");
 									 channelmenuitem10
 												.setTarget("base_properties_content");
 									 channelmenuitem10

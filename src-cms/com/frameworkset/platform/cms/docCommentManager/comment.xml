@@ -19,13 +19,13 @@
 	
 	<property name="getChannelCommentAduitSwitch">
 		<![CDATA[
-			select t.commentauditswitch from td_cms_channel t where t.channel_id = #[channelId]
+			select t.auditflag from td_cms_channel t where t.channel_id = #[channelId]
 		]]>
 	</property>
 	
 	<property name="switchDocCommentAudit">
 		<![CDATA[
-			update td_cms_channel t set t.commentauditswitch = #[switchFlag] where t.channel_id = #[channelId]
+			update td_cms_channel set auditflag = #[switchFlag] where channel_id = #[channelId]
 		]]>
 	</property>
 	

@@ -37,7 +37,7 @@
 		<![CDATA[
 			select doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime, ds.srcname as docsource_name, 
 			doc.pic_path as picPath, site.second_name as siteName, doc.mediapath,
-			(select count(cm.comment_id) from td_cms_doc_comment cm where cm.doc_id = doc.document_id) cmCount,
+			(select count(cm.comment_id) from td_cms_doc_comment cm where cm.doc_id = doc.document_id and cm.status = 1) cmCount,
 			nvl((select count(vh.doc_id) from td_cms_vidio_hits vh where doc.document_id = vh.doc_id(+)), 0) playedCount
 			from td_cms_document doc, td_cms_docsource ds, td_cms_channel channel, td_cms_site site,
 			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.publishtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange

@@ -44,7 +44,7 @@ public class DocCommentController {
 	 * @return String
 	 * @throws Exception
 	 */
-	public String showDocumentCommentList(int docId, HttpServletRequest request, HttpServletResponse response)
+	public String showDocumentCommentList(int docId, long channelId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 		// 获得该文档所在的频道评论开关
@@ -56,8 +56,17 @@ public class DocCommentController {
 			int documentCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "doc");
 			request.setAttribute("commentSwitch", documentCommentSwitch);
 		}
+		
+		//获得该文档所在频道的评论审核开关
+		Integer aduitSwitchFlag = docCommentManager.getChannelCommentAduitSwitch((int)channelId);
+		if (aduitSwitchFlag != null) {
+			request.setAttribute("aduitSwitchFlag", aduitSwitchFlag);
+		} else {
+			request.setAttribute("aduitSwitchFlag", 1);
+		}
 
 		request.setAttribute("docId", docId);
+		request.setAttribute("channelId", channelId);
 
 		return "path:showDocumentCommentList";
 	}
@@ -127,7 +136,7 @@ public class DocCommentController {
 	 * @throws Exception
 	 */
 	public @ResponseBody(datatype = "jsonp")
-	String addNewComment(int docId, String commentUser, String isGuest, String docComment, int status, HttpServletRequest request)
+	String addNewComment(long channelId, int docId, String commentUser, String isGuest, String docComment, HttpServletRequest request)
 			throws Exception {
 
 		DocComment docCommentBean = new DocComment();
@@ -145,6 +154,16 @@ public class DocCommentController {
 		}
 
 		docCommentBean.setUserIP(request.getRemoteAddr());
+		
+		//默认即可发布
+		int status = 1;
+		
+		//获取频道的评论审核开关
+		Integer aduitSwitchFlag = docCommentManager.getChannelCommentAduitSwitch((int)channelId);
+		if (aduitSwitchFlag != null) {
+			//如果评论为开通状态，则评论的状态为待审核，否则为即可发布状态
+			status = aduitSwitchFlag == 0 ? 2 : 1;
+		}
 		docCommentBean.setStatus(status);
 
 		try {
