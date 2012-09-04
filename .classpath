@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-common"/>
+	<classpathentry kind="src" path="src-sanydesktop"/>
+	<classpathentry kind="src" path="src-masterdata"/>
+	<classpathentry kind="src" path="src-ldap"/>
+	<classpathentry kind="src" path="src-mail"/>
+	<classpathentry kind="src" path="src-parameters-handler"/>
 	<classpathentry kind="src" path="src-dictionary"/>
 	<classpathentry kind="src" path="src-htmlparser"/>
 	<classpathentry kind="src" path="src-cms"/>

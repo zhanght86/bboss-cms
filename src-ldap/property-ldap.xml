@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<property name="default" class="com.sany.ldap.LdapBean"
+		f:url="172.16.9.179"
+		f:port="389"
+		f:securityId="cn=ldapsa,cn=USERS,dc=sany,dc=com,dc=cn"
+		f:securityPsw="44e0aa5d2d46ae9cabc2deee6b3cdc19"
+		f:searchDc="DC=sany,DC=com,DC=cn"
+		f:searchObjectCategory="CN=Person,CN=Schema,CN=Configuration,DC=sany,DC=com,DC=cn"/>
+</properties>		
