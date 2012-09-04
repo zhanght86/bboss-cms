@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	<property name="incrementBrowserCounter">
+		<![CDATA[
+			insert into td_cms_browser_counts(browser_id, doc_id, docname, site_id, sitename, channel_id, channelname, browsercount, browserip, browser_user, pageurl, browsertype, browsertime, referer) values
+			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], systimestamp, #[referer])
+		]]>
+	</property>
+	
+	<property name="countBrowserCounter">
+		<![CDATA[
+			select count(*) from td_cms_browser_counts 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="incrementDownlodCounter">
+		<![CDATA[
+			insert into td_cms_download_counts (count_id, doc_id, docname, site_id, sitename, channel_id, channelname, downloadcount, attach_path, attach_id, down_user, downip, downtime) values
+			(#[counterId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[downloadCount], #[attachPath], #[attachId], #[downloadIP], systimestamp)
+		]]>
+	</property>
+	
+	<property name="countDownLoadCounter">
+		<![CDATA[
+			select count(*) from td_cms_download_counts 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="incrementVideoHitsCounter">
+		<![CDATA[
+			insert into td_cms_vidio_hits (hit_id, doc_id, docname, site_id, sitename, channel_id, channelname, hitcount, hit_user, vidiopath, hitip, hittime, referer) values
+			(#[hitId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[hitCount], #[hitUser], #[videoPath], #[hitIP], systimestamp, #[referer])
+		]]>
+	</property>
+	
+	<property name="countVideoHitsCounter">
+		<![CDATA[
+			select count(*) from td_cms_vidio_hits 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="getVideoHitsCounterList">
+		<![CDATA[
+			select hit_id hitId, doc_id docId, site_id siteId, channel_id channelId, hitcount, hit_user hitUser, vidiopath videoPath, hitip, hittime
+			from td_cms_vidio_hits
+			where 1 = 1
+			#if ($siteId)
+				and site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and channel_id = #[channelId]
+			#end
+			#if ($docId)
+				and doc_id = #[docId]
+			#end
+			#if ($hitUser && !$hitUser.equals(""))
+				and hit_user = #[hitUser]
+			#end
+			#if ($hitIP && !$hitIP.equals(""))
+				and hitip = #[hitIP]
+			#end
+			#if ($startTime && $endTime)
+				and hittime >= #[startTime] and hittime <= #[endTime]
+			#elseif ($startTime)
+				and hittime >= #[startTime]
+			#elseif ($endTime)
+				and hittime <= #[endTime]
+			#end
+			order by hittime desc
+		]]>
+	</property>
+	
+	<property name="getBrowserCounterList">
+		<![CDATA[
+			select tmp.browser_id browserId, tmp.doc_id docId, tmp.site_id siteId, tmp.channel_id channelId, 
+			tmp.docname docName, tmp.channelname channelName, tmp.sitename siteName,
+			tmp.browsercount browserCount, tmp.browserip browserIp, 
+			tmp.browser_user browserUser, tmp.pageurl, tmp.browsertype, tmp.browsertime, tmp.referer
+			from td_cms_browser_counts tmp
+			where 1 = 1
+			#if ($siteId)
+				and tmp.site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and tmp.channel_id = #[channelId]
+			#end
+			#if ($docName && !$docName.equals(""))
+				and doc.docName = #[docName]
+			#end
+			#if ($browserType && !$browserType.equals(""))
+				and tmp.browsertype like #[browserType]
+			#end
+			#if ($browserIp && !$browserIp.equals(""))
+				and tmp.browserip = #[browserIp]
+			#end
+			#if ($browserUser && !$browserUser.equals(""))
+				and tmp.browser_user = #[browserUser]
+			#end
+			#if ($startTime && $endTime)
+				and tmp.browsertime >= #[startTime] and tmp.browsertime <= #[endTime]
+			#elseif ($startTime)
+				and tmp.browsertime >= #[startTime]
+			#elseif ($endTime)
+				and tmp.browsertime <= #[endTime]
+			#end
+			order by tmp.browsertime desc
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserCounter">
+		<![CDATA[
+			  delete from td_cms_browser_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserType">
+		<![CDATA[
+			  delete from td_cms_browser_type_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserIP">
+		<![CDATA[
+			  delete from td_cms_browser_ip_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<!-- 统计浏览明细表插入到浏览统计表内 -->
+	<property name="statisticBrowserCounter">
+		<![CDATA[
+			  insert into td_cms_browser_statistics 
+      		  select count(browser_id) vcount, vday,  vmonth, vyear, vdate, site_id siteid from
+      		  (select browser_id, site_id,
+      		  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	      substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	      substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	      to_char(browsertime, 'yyyy-mm-dd') vdate
+      		  from td_cms_browser_counts t
+      		   where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+     	      ) group by vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<!-- 统计浏览明细表插入到浏览器类型统计表内 -->
+	<property name="statisticBrowserType">
+		<![CDATA[
+			  insert into td_cms_browser_type_statistics  
+              select count(browser_id), browsertype vbrowsertype, vday, vmonth, vyear, vdate, site_id siteid from 
+          	  (select browser_id, browsertype, site_id,
+           	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	  	  to_char(browsertime, 'yyyy-mm-dd') vdate
+           	  from td_cms_browser_counts t
+           	  where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+           	  ) group by browsertype, vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<!-- 统计浏览明细表插入到浏览IP地址统计表内 -->
+	<property name="statisticBrowserIP">
+		<![CDATA[
+			  insert into td_cms_browser_ip_statistics
+			  select count(browser_id), vbrowserip, vday, vmonth, vyear, vdate, site_id siteid from 
+          	  (select browser_id, substr(t.browserip, 1, Instr(t.browserip, '.', 1, 3)-1) vbrowserip, site_id,
+           	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	  	  to_char(browsertime, 'yyyy-mm-dd') vdate
+           	  from td_cms_browser_counts t
+           	  where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+           	  ) group by vbrowserip, vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<!-- 获取浏览计数统计小时分布 -->
+	<property name="getBrowserCounterHourDistribute">
+		<![CDATA[
+			 select count(browser_id) vcount, vhour from
+      		 (select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 12, 2) vhour
+      		 from td_cms_browser_counts t where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+      		 and site_id = #[siteId])
+     	     group by vhour
+		]]>
+	</property>
+	
+	<!-- 获取浏览计数统计日分布 -->
+	<property name="getBrowserCounterDayDistribute">
+		<![CDATA[
+			select t.vcount, t.vday from td_cms_browser_statistics t
+			where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+			and siteid = #[siteId]
+			order by t.vdate asc
+		]]>
+	</property>
+	
+	<!-- 获取浏览计数统计日分布(按月查询) -->
+	<property name="getBrowserCounterDayDistributeByMonth">
+		<![CDATA[
+			select t.vcount, t.vday from td_cms_browser_statistics t
+			where vmonth >= #[startMonth] and vmonth<= #[endMonth]
+			and siteid = #[siteId]
+			order by t.vdate asc
+		]]>
+	</property>
+	
+	<!-- 获取浏览器类型统计日分布-->
+	<property name="getBrowserTypeDayDistributeByTime">
+		<![CDATA[
+		   select count(t.browser_id) vcount, t.browsertype vbrowsertype
+           from td_cms_browser_counts t
+           where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+           and site_id = #[siteId]
+           group by t.browsertype
+		]]>
+	</property>
+	
+	<!--获取浏览器类型统计日分布(按时限查询)-->
+	<property name="getBrowserTypeDayDistributeByTimeLimit">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowsertype from td_cms_browser_type_statistics t
+		   where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+		   and siteid = #[siteId]
+		   group by t.vbrowsertype
+		]]>
+	</property>
+	
+	<!-- 获取浏览器类型统计日分布(按月查询) -->
+	<property name="getBrowserTypeDayDistributeByMonth">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowsertype from td_cms_browser_type_statistics t
+		   where vmonth >= #[startMonth] and vmonth<= #[endMonth]
+		   and siteid = #[siteId]
+		   group by t.vbrowsertype
+		]]>
+	</property>
+	
+	<!-- 获取浏览IP地址日分布 -->
+	<property name="getBrowserIPDayDistributeByTime">
+		<![CDATA[
+		   select count(browser_id) vcount, vbrowserip from 
+		   (select t.browser_id, substr(t.browserip, 1, Instr(t.browserip, '.', 1, 3)-1) vbrowserip
+           from td_cms_browser_counts t
+           where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+           and site_id = #[siteId])
+		   group by vbrowserip
+		]]>
+	</property>
+	
+	<!-- 获取浏览IP地址日分布(按时限查询) -->
+	<property name="getBrowserIPDayDistributeByTimeLimit">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowserip from td_cms_browser_ip_statistics t
+		   where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+		   and siteid = #[siteId]
+		   group by t.vbrowserip
+		]]>
+	</property>
+	
+	<property name="getPageBrowserCounterGatherList">
+		<![CDATA[
+			select count(tmp.browser_id) browserCount, tmp.sitename siteName, tmp.channelname channelName, tmp.docname docName, tmp.pageurl
+			from td_cms_browser_counts tmp
+			where 1 = 1
+			#if ($siteId)
+				and tmp.site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and tmp.channel_id = #[channelId]
+			#end
+			#if ($docName && !$docName.equals(""))
+				and tmp.docName = #[docName]
+			#end
+			#if ($pageURL && !$pageURL.equals(""))
+				and tmp.pageurl = #[pageURL]
+			#end
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and tmp.browsertime >= to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and tmp.browsertime <= to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+			#elseif ($startTime && !$startTime.equals(""))
+				and tmp.browsertime >= to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss')
+			#elseif ($endTime  && !$endTime.equals(""))
+				and tmp.browsertime <= to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+			#end
+      		group by siteName, channelname, docName, pageurl
+			order by browserCount desc
+		]]>
+	</property>
+	
+	<!--
+		 获取浏览统计概况信息，包括：总计，平均，历史最高和历史累计
+		 总计：时间段内浏览的总PV数和独立IP数
+		 平均：所有明细内按日分组的PV数除以天数，按日分组的独立IP数除以天数
+		 历史最高：所有明细内按日分组最多PV数和日期，按日分组最多独立IP数和日期
+		 历史累计：所有明细内浏览的总PV数和独立IP数
+	 -->
+	<property name="getBrowserVisitInfo">
+		<![CDATA[
+		select '总计' name, count(t.browser_id) pv, count(distinct t.browserip) ip, '' topPV, '' topIP
+		from td_cms_browser_counts t                       
+		where t.browsertime between to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')                                                                                                 
+		union all 
+		select '平均' name,
+		Round((select  avg(vcount) from
+		(select count(browser_id) vcount, vday from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vday))) pv,
+		Round((select avg(vbrowserip) from
+		(select count(vbrowserip) vbrowserip, vdate from 
+		(select distinct t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vdate))) ip,  '' topPV, '' topIP
+		from dual
+		union all
+		select '历史最高' name, 
+		(select max(vcount) from
+		 (select count(browser_id) vcount, vday from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vday)) pv,
+		(select max(vbrowserip) from
+		(select count(vbrowserip) vbrowserip,  vdate from 
+		(select distinct t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate 
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vdate)) ip,
+     	'(' || (select vdate from
+		 (select count(browser_id) vcount, vdate from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd'), 0, 10) vdate
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vdate order by vcount desc) where rownum = 1) || ')' topPV,
+    	'(' || (select vdate from
+		(select count(vbrowserip) vbrowserip, vdate from 
+		(select distinct  t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate
+		from td_cms_browser_counts t where site_id = #[siteId])
+		group by vdate order by vbrowserip desc) where rownum = 1) || ')' topIP
+		from dual
+		union all
+		select '历史累计' name, count(t.browser_id) pv, count(distinct t.browserip) ip,  '' topPV, '' topIP
+		from td_cms_browser_counts t                              
+		]]>
+	</property>
+
+</properties>

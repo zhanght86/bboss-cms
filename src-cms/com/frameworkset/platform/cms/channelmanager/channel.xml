@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	<property name="querySubChannels">
+		<![CDATA[
+			select channel_id as channelId, channel.name, channel.createtime as createTime, outlinepicture, channel_desc,
+			site.second_name as siteName
+			from td_cms_channel channel, td_cms_site site
+			where channel.site_id = site.site_id
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and channel.createtime >= to_date(#[startTime], 'yyyy-mm-dd') and channel.createtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#elseif ($startTime && !$startTime.equals(""))
+				and channel.createtime >= to_date(#[startTime], 'yyyy-mm-dd')
+			#elseif ($endTime && !$endTime.equals(""))
+				and channel.createtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#end
+			#if ($keywords && !$keywords.equals(""))
+				and channel.name like #[keywords]
+			#end
+			#if ($siteId)
+				and site.site_id = #[siteId]
+			#end
+			and channel.parent_id = #[channelId]
+			and channel.status = 0
+			and channel.specialflag = 1
+			order by channel.order_no desc, channel.createtime desc
+		]]>
+	</property>
+	
+</properties>

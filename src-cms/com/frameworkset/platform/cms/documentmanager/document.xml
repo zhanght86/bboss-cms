@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	<property name="queryNewsByPublishTimeAndKeywords">
+		<![CDATA[
+			select doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime, ds.srcname as docsource_name, 
+			doc.docabstract, doc.pic_path as picPath, site.second_name as siteName
+			from td_cms_document doc, td_cms_docsource ds, td_cms_channel channel, td_cms_site site,
+			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.publishtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
+			where doc.docsource_id = ds.docsource_id
+      		and doc.channel_id = channel.channel_id
+      		and channel.site_id = site.site_id
+      		and doc.document_id = arrange.document_id(+)
+			and doc.status = 5
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and doc.publishtime >= to_date(#[startTime], 'yyyy-mm-dd') and doc.publishtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#elseif ($startTime && !$startTime.equals(""))
+				and doc.publishtime >= to_date(#[startTime], 'yyyy-mm-dd')
+			#elseif ($endTime && !$endTime.equals(""))
+				and doc.publishtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#end
+			#if ($keywords && !$keywords.equals(""))
+				and doc.keywords like #[keywords]
+			#end
+			#if ($channelId)
+				and doc.channel_id = #[channelId]
+			#end
+			#if ($siteId)
+				and site.site_id = #[siteId]
+			#end
+			 order by arrange.order_no desc, doc.ordertime desc
+		]]>
+	</property>
+	
+	<property name="queryVideosByOrderType">
+		<![CDATA[
+			select doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime, ds.srcname as docsource_name, 
+			doc.pic_path as picPath, site.second_name as siteName, doc.mediapath,
+			(select count(cm.comment_id) from td_cms_doc_comment cm where cm.doc_id = doc.document_id) cmCount,
+			nvl((select count(vh.doc_id) from td_cms_vidio_hits vh where doc.document_id = vh.doc_id(+)), 0) playedCount
+			from td_cms_document doc, td_cms_docsource ds, td_cms_channel channel, td_cms_site site,
+			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.publishtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
+			where doc.docsource_id = ds.docsource_id
+      		and doc.channel_id = channel.channel_id
+      		and channel.site_id = site.site_id
+      		and doc.document_id = arrange.document_id(+)
+			and doc.status = 5
+			#if ($channelId)
+				and doc.channel_id = #[channelId]
+			#end
+			#if ($siteId)
+				and site.site_id = #[siteId]
+			#end
+			 #if ($orderByTime && !$orderByTime.equals(""))
+			 	order by doc.ordertime desc, arrange.order_no desc
+			 #end
+			  #if ($orderByPlay && !$orderByPlay.equals(""))
+			 	order by playedCount desc, cmCount desc, arrange.order_no desc
+			 #end
+			  #if ($orderByComment && !$orderByComment.equals(""))
+			 	order by cmCount desc, playedCount desc, arrange.order_no desc
+			 #end
+		]]>
+	</property>
+	
+</properties>

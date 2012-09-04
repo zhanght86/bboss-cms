@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	<property name="queryDocclass">
+		<![CDATA[
+			select * from td_cms_document_class where site_id=?
+		]]>
+	</property>
+	
+	<property name="saveClasses">
+		<![CDATA[
+			insert into td_cms_document_class(site_id,class_name,class_desc) values(#[site_id],#[class_name],#[class_desc])
+		]]>
+	</property>
+	
+	<property name="deleteClasses">
+		<![CDATA[
+			delete td_cms_document_class where site_id=?
+		]]>
+	</property>
+	
+</properties>

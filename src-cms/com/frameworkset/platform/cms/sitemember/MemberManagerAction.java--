@@ -1,0 +1,1538 @@
+package com.frameworkset.platform.cms.sitemember;
+
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+
+import com.frameworkset.platform.security.authentication.EncrpyPwd;
+import com.frameworkset.platform.sysmgrcore.entity.Role;
+import com.frameworkset.platform.sysmgrcore.entity.User;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.sysmgrcore.web.struts.form.RoleManagerForm;
+import com.frameworkset.platform.sysmgrcore.web.struts.form.UserInfoForm;
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.util.StringUtil;
+
+
+public class MemberManagerAction extends DispatchAction implements java.io.Serializable {
+	
+	private static Logger logger = Logger.getLogger(MemberManagerAction.class
+			.getName());
+	/**当前时间*/
+	java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd"); 
+	
+	java.util.Date currentTime = new java.util.Date(); 
+	String riqi = formatter.format(currentTime);
+	/**
+	 * 返回到会员列表
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward getMemberList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+			String flag = request.getParameter("flag");
+			if(flag.equals("1")){
+				return (mapping.findForward("enroll_memberList"));
+			}
+			else if(flag.equals("2"))
+			{
+				return (mapping.findForward("charge_memberList"));
+			}
+			else
+			{
+				return (mapping.findForward("inner_memberList"));
+			}
+			
+	}
+	/**
+	 * 取会员信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward getMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		String uid = request.getParameter("memberId");
+		String userType = request.getParameter("userType");
+		String flag = request.getParameter("flag");
+		Integer userId = Integer.valueOf(uid);
+	
+		if (userId == null) {
+			return mapping.findForward("noUser");
+		}
+		request.setAttribute("userId",userId.toString());
+		User user = null;
+		UserManager userManager = SecurityDatabase.getUserManager();
+		try {
+			user = userManager.getUserById(userId.toString());
+			String username = user.getUserRealname();
+			request.setAttribute("username",username);
+		} catch (ManagerException e) {
+			e.printStackTrace();
+		}
+		UserInfoForm userInfoForm = new UserInfoForm();
+		userInfoForm.setHomePhone(user.getUserHometel());
+		userInfoForm.setUserId(user.getUserId().toString());
+		userInfoForm.setUserName(user.getUserName());
+		//取用户信息的时候对密码解密
+		String pwd = EncrpyPwd.decodePassword(user.getUserPassword());
+		userInfoForm.setUserPassword(pwd);
+		
+		//----
+		DBUtil db1 = new DBUtil();
+		db1.executeSelect("select SERVICE_TYPE from TD_SM_USER_ADDONS where user_id ="+ uid +"");
+		if(db1.size()>0){
+			userInfoForm.setServiceType(db1.getString(0,"SERVICE_TYPE"));
+			request.setAttribute("serviceType",db1.getString(0,"SERVICE_TYPE"));
+			
+		}
+		
+		userInfoForm.setUserRealname(user.getUserRealname());
+		userInfoForm.setUserSn(user.getUserSn());
+		userInfoForm.setUserWorknumber(user.getUserWorknumber());
+		userInfoForm.setUserWorktel(user.getUserWorktel());
+		userInfoForm.setUserSex(user.getUserSex());
+		userInfoForm.setMail(user.getUserEmail());
+		userInfoForm.setRemark1(StringUtil.replaceNull(user.getRemark1()));
+		userInfoForm.setRemark3(StringUtil.replaceNull(user.getRemark3()));
+		
+		if (user.getUserIsvalid() != null)
+			userInfoForm.setUserIsvalid(user.getUserIsvalid().intValue());
+		 if (user.getRemark2() != null)
+		userInfoForm.setShortMobile(user.getRemark2());
+		 if (user.getUserPinyin() != null)
+		userInfoForm.setUserPinyin(user.getUserPinyin());
+		 if (user.getUserMobiletel2() != null)
+		userInfoForm.setUserMobiletel2(user.getUserMobiletel2());
+		userInfoForm.setMobile(user.getUserMobiletel1());
+		userInfoForm.setRemark4(user.getRemark4());
+		userInfoForm.setRemark5(user.getRemark5());
+		userInfoForm.setPostalCode(user.getUserPostalcode());
+		
+		userInfoForm.setLastloginDate(user.getLastlogindate());
+		 if (user.getUserFax() != null)
+		userInfoForm.setUserFax(user.getUserFax());
+		 if (user.getUserOicq() != null)
+		userInfoForm.setUserOicq(user.getUserOicq());
+		if (user.getUserBirthday() != null)		
+			userInfoForm.setUserBirthday(user.getUserBirthday().toString());
+		if (user.getPastTime() != null)		
+			userInfoForm.setPast_Time(user.getPastTime().toString());
+		if (user.getDredgeTime() != null)		
+			userInfoForm.setDredgeTime(user.getDredgeTime());
+		 if (user.getUserAddress() != null)
+		userInfoForm.setUserAddress(user.getUserAddress());
+		 if (user.getUserIdcard() != null)
+		userInfoForm.setUserIdcard(user.getUserIdcard());
+		if (user.getUserRegdate() != null)
+			userInfoForm.setUserRegdate(user.getUserRegdate().toString());
+		if (user.getUserLogincount() != null)
+			userInfoForm.setUserLogincount(user.getUserLogincount().intValue());
+		if(user.getUserType().equals("0")){
+			userInfoForm.setUserType("内部会员");
+		}else{
+			userInfoForm.setUserType("外部会员");
+		}
+		
+		request.setAttribute("currUser", userInfoForm);
+		request.getSession().setAttribute("currUserForm", userInfoForm);
+		request.setAttribute("reFlush", "false");
+		request.getSession().setAttribute("currUserId", user.getUserId());
+		request.setAttribute("flag", "1");
+		request.setAttribute("userNameDisable", "true");
+		request.setAttribute("isaddorupdate", "2");
+		//取用户属性表中的信息
+		String membertype;
+		DBUtil db = new DBUtil();
+		String sql ="select * from TD_SM_USER_ADDONS where user_id =" + uid + "";
+		db.executeSelect(sql);
+		if(db.size()>0){
+			membertype = db.getString(0,"MEMBER_TYPE");
+			userInfoForm.setQuestion(db.getString(0,"QUESTION"));
+			userInfoForm.setAnswer(db.getString(0,"ANSWER"));
+			userInfoForm.setType(Integer.parseInt(db.getString(0,"MEMBER_TYPE")));
+			if(db.getString(0,"MEMBER_TYPE").equals("1")){
+				request.setAttribute("entpeach", "each");
+			}else{
+				request.setAttribute("entpeach", "entp");
+			}
+			userInfoForm.setEnterpriseIntro(db.getString(0,"ENTERPRISE_INTRO"));
+			userInfoForm.setEnterpriseLinkman(db.getString(0,"ENTERPRISE_LINKMAN"));
+			userInfoForm.setEnableopen(db.getString(0,"ENABLEOPEN"));
+			userInfoForm.setIspay(db.getString(0,"ISPAY "));
+			userInfoForm.setNetwork_address(db.getString(0," NETWORK_ADDRESS "));
+			userInfoForm.setStatus(db.getString(0,"STATUS "));
+			userInfoForm.setUser_desc(db.getString(0,"USER_DESC "));
+			userInfoForm.setServerexplain(db.getString(0,"SERVER_EXPLAIN"));
+			userInfoForm.setEnterpriseName(db.getString(0,"ENTERPRISE_NAME"));
+
+		}
+		if(flag.equals("1")){
+			return (mapping.findForward("addenrollmember"));
+		}
+		else if(flag.equals("2"))
+		{
+			return (mapping.findForward("addchargemember"));
+		}
+		else
+		{
+			return (mapping.findForward("addinnermember"));
+		}
+	}
+
+	
+	
+	
+
+	
+	
+	public ActionForward updateMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+			String flag = request.getParameter("flag");
+			String userRegdate = request.getParameter("userRegdate");
+			String[] roleId = request.getParameterValues("roleId");
+			String[] drugId = request.getParameterValues("drugId");
+		try {
+			UserInfoForm userInfoForm = (UserInfoForm) form;
+			int newFlag = 0;
+			UserManager userManager = SecurityDatabase.getUserManager();
+			
+			User user = new User();
+			
+			if (userInfoForm.getUserId().equals("")) {
+				userInfoForm.setUserId(null);
+				newFlag = 1;
+			}
+			else{
+				user = userManager.getUserById(userInfoForm.getUserId());
+			}
+			user.setUserId(userInfoForm.getUserId() != null ? Integer
+					.valueOf(userInfoForm.getUserId()) : null);
+			
+			user.setUserName(userInfoForm.getUserName());
+			user.setUserPassword(userInfoForm.getUserPassword());
+			user.setUserRealname(userInfoForm.getUserRealname());
+			//user_sn不能为空
+			user.setUserSn(new Integer(0));
+			//1为外部会员
+			user.setUserType("1");
+			user.setUserWorktel(userInfoForm.getUserWorktel());
+			user.setUserAddress(userInfoForm.getUserAddress());
+			user.setUserEmail(userInfoForm.getMail());
+			user.setUserPostalcode(userInfoForm.getPostalCode());
+			user.setRemark4(userInfoForm.getRemark4());
+			
+			//开通日期
+			if (userInfoForm.getDredgeTime() != null
+					&& userInfoForm.getDredgeTime().length() > 0)
+				user.setDredgeTime(userInfoForm.getDredgeTime());
+			else{
+				user.setDredgeTime(riqi);
+			}
+
+			//注册日期
+			if(userRegdate!=null && !userRegdate.equals(""))
+			{
+				user.setUserRegdate(Date.valueOf(userRegdate));
+			}
+			
+			GregorianCalendar now = new GregorianCalendar();
+			SimpleDateFormat fmtrq = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+			DateFormat df = DateFormat.getDateInstance();
+			now.add(GregorianCalendar.YEAR,+1);
+			String pasttime = fmtrq.format(now.getTime());
+		
+			//过期时间
+			if (userInfoForm.getPast_Time() != null
+					&& userInfoForm.getPast_Time().length() > 0)
+				user.setPastTime(Date.valueOf(userInfoForm.getPast_Time()));
+			else{
+				user.setPastTime(Date.valueOf(pasttime));
+			}
+			userManager.updateUser(user);
+			//会员属性表要存的TD_SM_USER_ADDONS
+			DBUtil db = new DBUtil();
+			String sql;
+			if(flag.equals("1"))
+			{
+				sql ="update TD_SM_USER_ADDONS set"+
+				 " QUESTION ='"+userInfoForm.getQuestion()+"'," +
+				 " ANSWER ='"+userInfoForm.getAnswer()+"',"+
+				 " ENTERPRISE_INTRO='"+userInfoForm.getEnterpriseIntro()+"',"+
+				 " ENTERPRISE_LINKMAN='"+userInfoForm.getEnterpriseLinkman()+"'," +
+				 " NETWORK_ADDRESS ='"+userInfoForm.getNetwork_address()+"'," +
+				 " USER_DESC='"+userInfoForm.getUser_desc()+"'," +
+				 " ENABLEOPEN='"+userInfoForm.getEnableopen()+"'," +
+				 " STATUS='1'," +
+				 " SERVER_EXPLAIN ='"+userInfoForm.getServerexplain()+"'," +
+				 " ENTERPRISE_NAME='"+ userInfoForm.getEnterpriseName()+"'" +
+				 " where USER_ID = "+ userInfoForm.getUserId() +""; 
+				
+			}
+			else if(flag.equals("2"))
+			{
+				sql ="update TD_SM_USER_ADDONS set"+
+				 " QUESTION ='"+userInfoForm.getQuestion()+"'," +
+				 " ANSWER ='"+userInfoForm.getAnswer()+"',"+
+				 " ENTERPRISE_INTRO='"+userInfoForm.getEnterpriseIntro()+"',"+
+				 " ENTERPRISE_LINKMAN='"+userInfoForm.getEnterpriseLinkman()+"'," +
+				 " NETWORK_ADDRESS ='"+userInfoForm.getNetwork_address()+"'," +
+				 " USER_DESC='"+userInfoForm.getUser_desc()+"'," +
+				 " ENABLEOPEN='"+userInfoForm.getEnableopen()+"'," +
+				 " STATUS='"+ userInfoForm.getStatus() +"'," +
+				 " SERVER_EXPLAIN ='"+userInfoForm.getServerexplain()+"'," +
+				 " ENTERPRISE_NAME='"+ userInfoForm.getEnterpriseName()+"'," +
+				 " SERVICE_TYPE='"+ userInfoForm.getServiceType()+"'" +
+				 " where USER_ID = "+ userInfoForm.getUserId() +""; 
+			}
+			else
+			{
+				sql ="update TD_SM_USER_ADDONS set"+
+				 " QUESTION ='"+userInfoForm.getQuestion()+"'," +
+				 " ANSWER ='"+userInfoForm.getAnswer()+"',"+
+				 " ENTERPRISE_INTRO='"+userInfoForm.getEnterpriseIntro()+"',"+
+				 " ENTERPRISE_LINKMAN='"+userInfoForm.getEnterpriseLinkman()+"'," +
+				 " NETWORK_ADDRESS ='"+userInfoForm.getNetwork_address()+"'," +
+				 " USER_DESC='"+userInfoForm.getUser_desc()+"'," +
+				 " ENABLEOPEN='"+userInfoForm.getEnableopen()+"'," +
+				 " SERVER_EXPLAIN ='"+userInfoForm.getServerexplain()+"'" +
+				 " where USER_ID = "+ userInfoForm.getUserId() +""; 
+			}
+		
+	
+			db.executeUpdate(sql);
+
+			//----------------------------------
+			//保存用户权限
+			
+			if(roleId!=null)
+			{
+				for(int i = 0; i < roleId.length; i ++){
+					String select ="select count(*) from td_sm_userrole where user_id ="+ user.getUserId()+" and role_id='"+roleId[i]+"'";
+					String str ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'" + roleId[i] +"')";
+					db.executeSelect(select);
+					if(db.getInt(0,0)==0)
+					{
+						db.executeInsert(str);
+					}
+					
+				}
+			}
+			else
+			{
+				String delete ="delete from td_sm_userrole where user_id ="+ user.getUserId()+" and role_id in( "+
+				" select role_id from td_sm_role where role_type ='member' and remark1='1')";
+				db.executeDelete(delete);
+			}
+			System.out.println(drugId);
+			if(drugId!=null)
+			{
+				for(int i = 0; i < drugId.length; i ++){
+					String select ="select count(*) from td_sm_userrole where user_id ="+ user.getUserId()+" and role_id='"+drugId [i]+"'";
+					String str ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'" + drugId[i] +"')";
+					db.executeSelect(select);
+					if(db.getInt(0,0)==0)
+					{
+						db.executeInsert(str);
+					}
+				}
+			}
+			else
+			{
+				String delete ="delete from td_sm_userrole where user_id ="+ user.getUserId()+" and role_id in( "+
+				" select role_id from td_sm_role where role_type ='member' and remark1='2')";
+				db.executeDelete(delete);
+			}
+			
+			request.setAttribute("succeed","ok");
+			if(flag.equals("1")){
+				return (mapping.findForward("enroll_memberList"));
+			}
+			else if(flag.equals("2"))
+			{
+				return (mapping.findForward("charge_memberList"));
+			}
+			else
+			{
+				return (mapping.findForward("inner_memberList"));
+			}
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	
+	/**
+	 * 删除会员
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward deleteMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		String orgId = (String) request.getSession().getAttribute("orgId");
+		String flag = request.getParameter("flag");
+		request.setAttribute("orgId",orgId);
+		UserManager userManager = SecurityDatabase.getUserManager();
+		String[] id = request.getParameterValues("checkBoxOne");
+	
+		if (id != null) {
+			for (int i = 0; i < id.length; i++) {
+					if(id[i].equals("1")){
+						//系统管理员不能删除
+					}else{
+						User user = userManager.getUserById(id[i]);
+						userManager.deleteUser(user);
+					}
+			
+			}
+					
+		}
+		request.setAttribute("deleteuser","ok");
+		if(flag.equals("1"))
+		{
+			return (mapping.findForward("enroll_memberList"));
+		}
+		else if(flag.equals("2"))
+		{
+			return (mapping.findForward("charge_memberList"));
+		}
+		else
+		{
+			return (mapping.findForward("inner_memberList"));
+		}
+	
+	}
+	/**
+	 * 新增会员跳转页面
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward newMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String flag = request.getParameter("flag");
+		String entpeach ="each";
+	
+		if( request.getParameter("entpeach")!=null){
+			entpeach = request.getParameter("entpeach");
+		}
+		
+		request.setAttribute("entpeach", entpeach);
+		request.setAttribute("currUser", null);
+		request.setAttribute("isaddorupdate", "1");
+		request.setAttribute("reFlush", "false");
+		request.getSession().setAttribute("currUserId", null);
+		request.setAttribute("isNew", "1");
+		if(flag.equals("1"))
+		{
+			return (mapping.findForward("addenrollmember"));
+		}
+		else if(flag.equals("2"))
+		{
+			return (mapping.findForward("addchargemember"));
+		}
+		else
+		{
+			return (mapping.findForward("addinnermember"));
+		}
+		
+	}
+
+
+	/**
+	 * 恢复用户初始密码
+	 */
+	public ActionForward defaultpass(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+			UserManager userManager = SecurityDatabase.getUserManager();
+			String userId=request.getParameter("userId");
+			String flag = request.getParameter("flag");
+			User user = userManager.getUserById(userId);
+			user.setUserPassword("123456");
+			userManager.updateUser(user);
+			request.setAttribute("pass","ok");
+			if(flag.equals("1")){
+				return (mapping.findForward("enroll_memberList"));
+			}
+			else if(flag.equals("2"))
+			{
+				return (mapping.findForward("charge_memberList"));
+			}
+			else
+			{
+				return (mapping.findForward("inner_memberList"));
+			}
+	}
+	/**
+	 * 转为收费用户
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward onMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		DBUtil db = new DBUtil();
+		String[] id = request.getParameterValues("checkBoxOne");
+		if (id != null) {
+			for (int i = 0; i < id.length; i++) {
+				String str = "update TD_SM_USER_ADDONS set  ISPAY ='1' where user_id = "+ id[i] +"";
+					try{
+						db.executeUpdate(str);
+					}catch(Exception e){
+						e.getMessage();
+					}
+					
+				}
+					
+			}
+		return (mapping.findForward("enroll_memberList"));
+	}
+	/**
+	 * 开通用户
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward dredgeMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		DBUtil db = new DBUtil();
+		String[] id = request.getParameterValues("checkBoxOne");
+		if (id != null) {
+			for (int i = 0; i < id.length; i++) {
+				String str = "update TD_SM_USER_ADDONS set  status ='2' where user_id = "+ id[i] +" " ;
+						
+				
+					try{
+						db.executeUpdate(str);
+					}catch(Exception e){
+						e.getMessage();
+					}
+					
+				}
+					
+			}
+		return (mapping.findForward("charge_memberList"));
+	}
+	/**
+	 * 停用所选会员
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward offMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		DBUtil db = new DBUtil();
+		String[] id = request.getParameterValues("checkBoxOne");
+		if (id != null) {
+			for (int i = 0; i < id.length; i++) {
+				String sql = "update TD_SM_USER_ADDONS set  status ='0' where user_id = "+ id[i] +"";
+							
+					try{
+						db.executeUpdate(sql);
+					}catch(Exception e){
+						e.getMessage();
+					}
+					
+				}
+					
+			}
+		return (mapping.findForward("charge_memberList"));
+	}
+	
+	public ActionForward getRoleList(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String userId = request.getParameter("userId");
+		request.setAttribute("userId",userId);
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		UserManager userManager = SecurityDatabase.getUserManager();
+		User user = userManager.getUserById(userId);
+		request.setAttribute("userName",user.getUserName());
+		
+		//根据用户取相关角色
+		List existRole = roleManager.getRoleList(user);
+		//取所有外部会员角色,过虑F类角色和guest角色
+		String sql = "select * from td_sm_Role r where r.role_Type='member' and r.role_Id<>'15' and r.role_Id<>'7'  order by r.role_Name";
+		List allRole = roleManager.getRoleList(sql);
+	
+		request.setAttribute("allRole", allRole);
+		request.setAttribute("existRole",existRole);
+
+		return mapping.findForward("roleDetail");
+	}
+	/**
+	 * 会员管理>>会员角色授予
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeMemberRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		String roleId = request.getParameter("roleId");	
+		String roleIds[] =roleId.split("\\,") ;
+		
+		String userId = request.getParameter("userId");
+		request.setAttribute("userId",userId);
+		UserManager userManager = SecurityDatabase.getUserManager();
+		User user = userManager.getUserById(userId);
+		request.setAttribute("userName",user.getUserName());
+		userManager.deleteUserrole(user);
+		
+			for (int i = 0; i < roleIds.length; i++) {
+						
+						if(roleIds[i].equals("")){
+							//每个会员默认都有角色F和guest角色
+							userManager.storeUserrole(userId,"15");
+							userManager.storeUserrole(userId,"7");
+						}else{
+							userManager.storeUserrole(userId,roleIds[i]);
+						}
+				}
+		return mapping.findForward("charge_memberList");
+
+	}
+	
+	/**
+	 * 根据角色id获取角色信息
+	 * 
+	 * @param mapping
+	 *            ActionMapping
+	 * @param form
+	 *            ActionForm
+	 * @param request
+	 *            HttpServletRequest
+	 * @param response
+	 *            HttpServletResponse
+	 * @return ActionForward
+	 * @throws Exception
+	 */
+
+	public ActionForward getRoleById(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		HttpSession session = request.getSession();
+		String roleId = request.getParameter("roleId");
+		if (roleId == null) {
+			roleId = (String) session.getAttribute("currRoleId");
+		}
+		if (roleId == null) {
+			return mapping.findForward("noRole");
+		}
+
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		Role role = roleManager.getRoleById( roleId);
+
+		session.setAttribute("currRoleId", roleId);
+		session.setAttribute("roleTabId", "1");
+		request.setAttribute("role", role);
+		RoleManagerForm roleForm = (RoleManagerForm) form;
+		if (role != null) {
+			roleForm.setRoleId(role.getRoleId());
+			roleForm.setRoleDesc(role.getRoleDesc());
+			roleForm.setRoleName(role.getRoleName());
+		}
+		return mapping.findForward("roledetail");
+	}
+
+	/**
+	 * 存储会员信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+
+		try {
+			UserInfoForm userInfoForm = (UserInfoForm) form;
+			int newFlag = 0;
+			UserManager userManager = SecurityDatabase.getUserManager();
+			User user1 = userManager.getUserByName(userInfoForm.getUserName());
+			if(user1!=null){
+				request.setAttribute("entpeach", "entpeach");
+				request.setAttribute("currUser", null);
+				request.setAttribute("isaddorupdate", "1");
+				request.setAttribute("reFlush", "false");
+				request.getSession().setAttribute("currUserId", null);
+				request.setAttribute("isUserExist", "true");
+				request.setAttribute("isNew", "1");
+			
+				return (mapping.findForward("entpmember"));
+			}
+
+			User user = new User();
+			if (userInfoForm.getUserId().equals("")) {
+				userInfoForm.setUserId(null);
+				newFlag = 1;
+			}
+			user.setUserId(userInfoForm.getUserId() != null ? Integer
+					.valueOf(userInfoForm.getUserId()) : null);
+			user.setUserName(userInfoForm.getUserName());
+			user.setUserPassword(userInfoForm.getUserPassword());
+			user.setUserRealname(userInfoForm.getUserRealname());
+			user.setUserSn(userInfoForm.getUserSn());
+			//1新申请
+			user.setRemark1("1");
+			user.setRemark3(userInfoForm.getRemark3());
+		
+			user.setUserSex(userInfoForm.getUserSex());
+			user.setUserIsvalid(new Integer(userInfoForm.getUserIsvalid()));
+			user.setUserHometel(userInfoForm.getHomePhone());
+			user.setUserMobiletel1(userInfoForm.getMobile());
+			user.setUserPostalcode(userInfoForm.getPostalCode());
+			user.setRemark2(userInfoForm.getShortMobile());
+			user.setUserEmail(userInfoForm.getMail());
+			user.setUserMobiletel2(userInfoForm.getUserMobiletel2());
+			user.setRemark4(userInfoForm.getRemark4());
+			user.setRemark5(userInfoForm.getRemark5());
+			//1为外部会员
+			user.setUserType("1");
+			user.setUserPinyin(userInfoForm.getUserPinyin());
+			user.setUserWorktel(userInfoForm.getUserWorktel());
+			user.setUserFax(userInfoForm.getUserFax());
+			user.setUserOicq(userInfoForm.getUserOicq());
+			user.setUserAddress(userInfoForm.getUserAddress());
+			user.setUserIdcard(userInfoForm.getUserIdcard());
+			if (userInfoForm.getUserBirthday() != null
+					&& userInfoForm.getUserBirthday().length() > 0)
+				user.setUserBirthday(Date.valueOf(userInfoForm
+						.getUserBirthday()));
+			if (userInfoForm.getPast_Time() != null
+					&& userInfoForm.getPast_Time().length() > 0)
+				user.setPastTime(Date.valueOf(userInfoForm.getPast_Time()));
+
+			//注册日期
+			if (userInfoForm.getUserRegdate() != null
+					&& userInfoForm.getUserRegdate().length() > 0)
+				user.setUserRegdate(Date.valueOf(userInfoForm.getUserRegdate()));
+			else{
+				user.setUserRegdate(Date.valueOf(riqi));
+			}
+			
+			if (userInfoForm.getUserLogincount()>0) {
+				user.setUserLogincount(new Integer(userInfoForm.getUserLogincount()));
+						
+			} else
+				user.setUserLogincount(new Integer(0));
+			
+			userManager.addUser(user);
+			
+			//会员属性表要存的TD_SM_USER_ADDONS
+		
+			DBUtil db = new DBUtil();
+			String sql;
+		
+				sql ="insert into TD_SM_USER_ADDONS(USER_ID,"+
+					 " QUESTION,ANSWER,"+
+					 " MEMBER_TYPE,ENTERPRISE_INTRO,"+
+					 " ENTERPRISE_LINKMAN,ENABLEOPEN,SERVICE_TYPE, MEMBER_ROLE,RES) values" +
+					 "("+ user.getUserId()+",'"+userInfoForm.getQuestion()+"','"+userInfoForm.getAnswer()+"'," +
+					 "'"+userInfoForm.getType()+"','"+userInfoForm.getEnterpriseIntro()+"'," +
+					 "'"+userInfoForm.getEnterpriseLinkman()+"','"+userInfoForm.getEnableopen()+"'," +
+					 "'"+userInfoForm.getServiceType()+"','"+userInfoForm.getMemberRole()+"','"+userInfoForm.getRes()+"')"; 
+				//System.out.println("/////"+sql);
+				db.executeInsert(sql);
+			
+		
+			//新增会员默认加入外部会员机构
+		
+				sql ="insert into td_sm_userjoborg(user_id,job_id,org_id) values("+ user.getUserId()+",'1','102')";
+				db.executeInsert(sql);
+			
+			//新增会员默认授予F类角色
+				sql ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'15')";
+				db.executeInsert(sql);
+			return (mapping.findForward("memberlist"));
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	/**
+	 * 删除会员角色
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward deleteRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		String[] id = request.getParameterValues("checkBoxOne");
+	
+		if (id != null) {
+			for (int i = 0; i < id.length; i++) {
+				if(id[i].equals("1")){
+					
+				}else{
+					Role role = roleManager.getRoleById( id[i]);
+					roleManager.deleteRole(role);
+				} 
+			}
+					
+		}
+		return (mapping.findForward("memberTypeList"));
+	
+	}
+	/**
+	 * 根据角色id删除会员角色
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward deleteRoleByRoleId(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+				
+		String roleId = request.getParameter("roleId");
+		String flag = request.getParameter("flag");
+		
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		Role role = roleManager.getRoleById(roleId);
+		roleManager.deleteRole(role);
+		request.setAttribute("currUser", null);
+		request.setAttribute("reFlush", "false");
+		request.getSession().setAttribute("currUserId", null);
+		request.setAttribute("isNew", "1");
+		if(flag.equals("1"))
+		{
+			return (mapping.findForward("newRole"));
+		}
+		else
+		{
+			return (mapping.findForward("drug_Role"));
+		}
+		
+	
+	}
+	/**
+	 * 存储角色信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+			String flag = request.getParameter("flag");
+			
+		try {
+			RoleManagerForm roleManagerForm = (RoleManagerForm) form;
+			int newFlag = 0;
+			RoleManager roleManager = SecurityDatabase.getRoleManager();
+			Role role1 = roleManager.getRoleByName(roleManagerForm.getRoleName());
+		
+			if(role1!=null){
+				request.setAttribute("isUserExist", "true");
+			
+				return (mapping.findForward("newRole"));
+			}
+
+			Role role = new Role();
+			if (roleManagerForm.getRoleId().equals("")) {
+				roleManagerForm.setRoleId(null);
+				newFlag = 1;
+			}
+			role.setRoleName(roleManagerForm.getRoleName());
+			role.setRoleDesc(roleManagerForm.getRoleDesc());
+			role.setRoleType("member");
+			//1为价格在线角色，2为医药网角色
+			if(flag.equals("1"))
+			{
+				role.setRemark1("1");
+				
+			}	
+			else
+			{
+				role.setRemark1("2");
+				
+			}
+			
+			roleManager.storeRole(role);
+			roleManagerForm.setRoleId(role.getRoleId());
+			roleManagerForm.setRoleName(role.getRoleName());
+			roleManagerForm.setRoleDesc(role.getRoleDesc());
+			//新建会员角色自动给内部用户加上
+			MemberImpl  mi = new MemberImpl();
+			mi.MemberByRole(role.getRoleId());
+			request.setAttribute("currUser", roleManagerForm);
+			request.setAttribute("reFlush", "false");
+			if(role.getRoleId().equals("1")){
+				request.setAttribute("userNameDisable", "true");
+			}
+			if(flag.equals("1"))
+			{
+				return (mapping.findForward("updateRole"));
+			}
+			else
+			{
+				return (mapping.findForward("drugRole"));
+			}
+		
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	/**
+	 * 新增角色跳转页面
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward newRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		request.setAttribute("isNew", "1");
+		return (mapping.findForward("newRole"));
+	}
+	/**
+	 * 修改会员角色信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward getRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String flag = request.getParameter("flag");
+		String roleId = request.getParameter("roleId");
+	
+		HttpSession session = request.getSession();
+		session.setAttribute("currRoleId", roleId);
+		
+		Role role = null;
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		role = roleManager.getRoleById(roleId);
+		RoleManagerForm roleManagerForm = new RoleManagerForm();
+	
+		roleManagerForm.setRoleId(role.getRoleId());
+		roleManagerForm.setRoleName(role.getRoleName());
+		roleManagerForm.setRoleDesc(role.getRoleDesc());
+	
+		request.setAttribute("currUser", roleManagerForm);
+		request.setAttribute("reFlush", "false");
+		if(role.getRoleId().equals("1")){
+			request.setAttribute("userNameDisable", "true");
+		}
+		request.setAttribute("isNew", "0");
+		
+		// 系统管理用户信息跳转页面
+		if(!flag.equals("2"))
+		{
+			return (mapping.findForward("updateRole"));
+		}
+		else
+		{
+			return (mapping.findForward("drugRole"));
+		}
+		
+	}
+	/**
+	 * 修改角色信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward updateRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		String flag = request.getParameter("flag");
+		try {
+			RoleManagerForm roleManagerForm = (RoleManagerForm) form;
+			int newFlag = 0;
+			RoleManager roleManager = SecurityDatabase.getRoleManager();
+						Role role = new Role();
+			if (roleManagerForm.getRoleId().equals("")) {
+				roleManagerForm.setRoleId(null);
+				newFlag = 1;
+			}
+			role.setRoleId(roleManagerForm.getRoleId() != null ?roleManagerForm.getRoleId() : null);
+			role.setRoleName(roleManagerForm.getRoleName());
+			role.setRoleDesc(roleManagerForm.getRoleDesc());
+			role.setRoleType("member");
+			//1为价格在线角色，2为医药网角色
+			if(flag.equals("1"))
+			{
+				role.setRemark1("1");
+				
+			}	
+			else
+			{
+				role.setRemark1("2");
+				
+			}
+			roleManager.storeRole(role);
+		
+			
+			
+			roleManagerForm.setRoleId(role.getRoleId());
+			roleManagerForm.setRoleName(role.getRoleName());
+			roleManagerForm.setRoleDesc(role.getRoleDesc());
+			request.setAttribute("currUser", roleManagerForm);
+			request.setAttribute("reFlush", "false");
+			if(role.getRoleId().equals("1")){
+				request.setAttribute("userNameDisable", "true");
+			}
+			
+			if(flag.equals("1"))
+			{
+				return (mapping.findForward("updateRole"));
+			}
+			else
+			{
+				return (mapping.findForward("drugRole"));
+			}
+			
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	/**
+	 * 一批会员的等级设定页面
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward rankMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String[] id = request.getParameterValues("checkBoxOne");
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+		request.setAttribute("id",id);
+		//取所有外部会员角色,过虑F类角色和guest角色
+		String sql = "select * from td_sm_Role r where r.role_Type='member' and r.role_Id<>'15' and r.role_Id<>'7' order by r.role_Name";
+		List allRole = roleManager.getRoleList(sql);
+		request.setAttribute("allRole", allRole);
+		request.setAttribute("existRole","");
+		
+		return (mapping.findForward("changeRoleAll"));
+	}
+	/**
+	 * 角色批量授予用户
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeAllMemberRole(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		String roleId = request.getParameter("roleId");	
+		String roleIds[] =roleId.split("\\,") ;
+	
+		String id =request.getParameter("id");
+		String ids[] =id.split("\\,") ;
+	
+		UserManager userManager = SecurityDatabase.getUserManager();
+		RoleManager roleManager = SecurityDatabase.getRoleManager();
+//		User user = userManager.getUser("userId",userId);
+//		request.setAttribute("userName",user.getUserName());
+//		userManager.deleteUserrole(user);
+		
+			DBUtil db = new DBUtil();
+			for (int i = 0; i < roleIds.length; i++) {
+				 for(int j = 0;j < ids.length; j++){
+						if(roleIds[i].equals("")){
+							
+						}else{
+						
+							String sql ="select count(*) from td_sm_userrole where" +
+								" user_id ="+ ids[j] +" and role_id='"+ roleIds[i] +"'";
+							db.executeSelect(sql);
+							if(db.getInt(0,0)==0){
+								userManager.storeUserrole(ids[j],roleIds[i]);
+							}
+							
+						}
+				  }
+			}
+		return mapping.findForward("charge_memberList");
+	}
+	/**
+	 * 跳转到角色授予会员界面
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward RoleMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String roleId = request.getParameter("roleId");
+		UserManager userManager = SecurityDatabase.getUserManager();
+		request.setAttribute("roleId",roleId);
+		//取不包括内部用户的外部会员(只是收费的)
+		String sql = "select distinct a.* from td_sm_user a,td_sm_user_addons b where a.user_id = b.user_id "+
+			" and b.ISPAY='1' and a.user_id in "+
+			"(select user_id from td_sm_userjoborg where org_id ='102')order by a.user_id";
+		List allRole = userManager.getUserList(sql);
+		//取不包括内部用户的已授权的外部会员(只是收费的)
+		String sql1 =" select u.* from td_sm_user u,td_sm_user_addons d where u.user_id = d.user_id "+
+					" and d.ISPAY='1' and u.user_id in  "+
+					"(select user_id from td_sm_userjoborg where user_id in  "+
+					"(select a.user_id from td_sm_userrole a,td_sm_role b where a.role_id = b.role_id  "+
+					" and b.role_id='"+ roleId +"' and b.role_type='member')and org_id ='102')order by u.user_id";
+		List existRole = userManager.getUserList(sql1);
+		request.setAttribute("allRole", allRole);
+		request.setAttribute("existRole",existRole);
+		
+		return (mapping.findForward("rolegrantmember"));
+	}
+	/**
+	 * 会员管理>>会员权限管理>>角色授予会员
+	 */
+	public ActionForward roleGrantMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		String userId = request.getParameter("userId");	
+		String userIds[] =userId.split("\\,") ;
+		
+		String roleId = request.getParameter("roleId");
+		request.setAttribute("roleId",roleId);
+		UserManager userManager = SecurityDatabase.getUserManager();
+	
+		
+		DBUtil db = new DBUtil();
+		if(userId.equals("")){
+			String sql ="delete from td_sm_userrole where role_id = '"+roleId+"'";
+			db.executeUpdate(sql);
+		}
+		else
+		{
+			for (int i = 0; i < userIds.length; i++) {
+				String sql ="select count(*) from td_sm_userrole where " +
+						"role_id ='"+ roleId +"' and user_id ="+ userIds[i] +"";
+				//System.out.println(sql);
+				db.executeSelect(sql);
+				if(db.getInt(0,0)>0){
+					
+				}else{
+					userManager.storeUserrole(userIds[i],roleId);
+				}
+
+			}
+		}
+		return (mapping.findForward("newRole"));
+		
+	}
+	/**
+	 * 存储注册会员信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeEnrollMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		try {
+			UserInfoForm userInfoForm = (UserInfoForm) form;
+			int newFlag = 0;
+			String city = request.getParameter("city");
+			String area = request.getParameter("area");
+			String userName ;
+			MemberImpl mi = new MemberImpl();
+			userName = mi.getAccountNo(area);
+		
+			UserManager userManager = SecurityDatabase.getUserManager();
+			User user1 = userManager.getUserByName(userName);
+			if(user1!=null){
+				 userName = mi.getAccountNo(area);
+			}
+			User user = new User();
+			if (userInfoForm.getUserId().equals("")) {
+				userInfoForm.setUserId(null);
+				newFlag = 1;
+			}
+			user.setUserId(userInfoForm.getUserId() != null ? Integer
+					.valueOf(userInfoForm.getUserId()) : null);
+			
+			user.setUserName(userName);
+			user.setUserPassword(userInfoForm.getUserPassword());
+			user.setUserRealname(userInfoForm.getUserRealname());
+			//user_sn不能为空
+			user.setUserSn(new Integer(0));
+			//1为外部会员
+			user.setUserType("1");
+			user.setUserWorktel(userInfoForm.getUserWorktel());
+			user.setUserAddress(userInfoForm.getUserAddress());
+			user.setUserEmail(userInfoForm.getMail());
+			
+
+			//注册日期
+			if (userInfoForm.getUserRegdate() != null
+					&& userInfoForm.getUserRegdate().length() > 0)
+				user.setUserRegdate(Date.valueOf(userInfoForm.getUserRegdate()));
+			else{
+				user.setUserRegdate(Date.valueOf(riqi));
+			}
+			
+			userManager.addUser(user);
+			
+			//会员属性表要存的TD_SM_USER_ADDONS
+		
+			DBUtil db = new DBUtil();
+			String sql;
+			String sql1;
+				sql ="insert into TD_SM_USER_ADDONS(USER_ID,"+
+					 " QUESTION,ANSWER,"+
+					 " MEMBER_TYPE,ENTERPRISE_INTRO,"+
+					 " ENTERPRISE_LINKMAN,ENABLEOPEN,SERVICE_TYPE,ISPAY,NETWORK_ADDRESS," +
+					 " STATUS,USER_DESC,SERVER_EXPLAIN,ENTERPRISE_NAME ) values" +
+					 "("+ user.getUserId()+",'"+userInfoForm.getQuestion()+"','"+userInfoForm.getAnswer()+"'," +
+					 "'"+userInfoForm.getType()+"','"+userInfoForm.getEnterpriseIntro()+"'," +
+					 "'"+userInfoForm.getEnterpriseLinkman()+"','"+userInfoForm.getEnableopen()+"'," +
+					 "'F','0','"+userInfoForm.getNetwork_address()+"'," +
+					 "'1','"+ userInfoForm.getUser_desc() +"'," +
+					 "'"+ userInfoForm.getServerexplain() +"','"+ userInfoForm.getEnterpriseName()+"')"; 
+				//System.out.println("/////"+userInfoForm.getEnableopen());
+				db.executeInsert(sql);
+			
+			//新增会员默认加入外部会员机构
+		
+				sql ="insert into td_sm_userjoborg(user_id,job_id,org_id) values("+ user.getUserId()+",'1','102')";
+			
+				db.executeInsert(sql);
+				
+			//新增会员默认授予F类角色和guest角色
+				sql ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'15')";
+				sql1 ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'7')";
+				db.executeInsert(sql);
+				db.executeInsert(sql1);
+			request.setAttribute("isok","ok");
+			request.setAttribute("name",user.getUserName());
+			request.setAttribute("password",user.getUserPassword());
+			return (mapping.findForward("enroll_memberList"));
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	/**
+	 * 存储收费会员信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeChargeMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		try {
+			UserInfoForm userInfoForm = (UserInfoForm) form;
+			int newFlag = 0;
+			String city = request.getParameter("city");
+			String area = request.getParameter("area");
+			
+			String[] roleId = request.getParameterValues("roleId");
+			String[] drugId = request.getParameterValues("drugId");
+			String userName ;
+			MemberImpl mi = new MemberImpl();
+			userName = mi.getAccountNo(area);
+		
+			UserManager userManager = SecurityDatabase.getUserManager();
+			User user1 = userManager.getUserByName(userName);
+			if(user1!=null){
+				 userName = mi.getAccountNo(area);
+			}
+			User user = new User();
+			if (userInfoForm.getUserId().equals("")) {
+				userInfoForm.setUserId(null);
+				newFlag = 1;
+			}
+			user.setUserId(userInfoForm.getUserId() != null ? Integer
+					.valueOf(userInfoForm.getUserId()) : null);
+			
+			user.setUserName(userName);
+			user.setUserPassword(userInfoForm.getUserPassword());
+			user.setUserRealname(userInfoForm.getUserRealname());
+			//user_sn不能为空
+			user.setUserSn(new Integer(0));
+			//1为外部会员
+			user.setUserType("1");
+			user.setUserWorktel(userInfoForm.getUserWorktel());
+			user.setUserAddress(userInfoForm.getUserAddress());
+			user.setUserEmail(userInfoForm.getMail());
+			//开通日期
+			if (userInfoForm.getDredgeTime() != null
+					&& userInfoForm.getDredgeTime().length() > 0)
+				user.setDredgeTime(userInfoForm.getDredgeTime());
+			else{
+				user.setDredgeTime(riqi);
+			}
+
+			//注册日期
+			if (userInfoForm.getUserRegdate() != null
+					&& userInfoForm.getUserRegdate().length() > 0)
+				user.setUserRegdate(Date.valueOf(userInfoForm.getUserRegdate()));
+			else{
+				user.setUserRegdate(Date.valueOf(riqi));
+			}
+			
+
+			GregorianCalendar now = new GregorianCalendar();
+			SimpleDateFormat fmtrq = new SimpleDateFormat("yyyy-MM-dd",Locale.US);
+			DateFormat df = DateFormat.getDateInstance();
+			now.add(GregorianCalendar.YEAR,+1);
+			String pasttime = fmtrq.format(now.getTime());
+		
+			//过期时间
+			if (userInfoForm.getPast_Time() != null
+					&& userInfoForm.getPast_Time().length() > 0)
+				user.setPastTime(Date.valueOf(userInfoForm.getPast_Time()));
+			else{
+				user.setPastTime(Date.valueOf(pasttime));
+			}
+			
+			
+			userManager.addUser(user);
+			
+			//会员属性表要存的TD_SM_USER_ADDONS
+		
+			DBUtil db = new DBUtil();
+			String sql;
+			String sql1;
+		
+				sql ="insert into TD_SM_USER_ADDONS(USER_ID,"+
+					 " QUESTION,ANSWER,"+
+					 " MEMBER_TYPE,ENTERPRISE_INTRO,"+
+					 " ENTERPRISE_LINKMAN,ENABLEOPEN,SERVICE_TYPE,ISPAY,NETWORK_ADDRESS," +
+					 " STATUS,USER_DESC,SERVER_EXPLAIN,ENTERPRISE_NAME) values" +
+					 "("+ user.getUserId()+",'"+userInfoForm.getQuestion()+"','"+userInfoForm.getAnswer()+"'," +
+					 "'"+userInfoForm.getType()+"','"+userInfoForm.getEnterpriseIntro()+"'," +
+					 "'"+userInfoForm.getEnterpriseLinkman()+"','"+userInfoForm.getEnableopen()+"'," +
+					 "'" +userInfoForm.getServiceType() +"','1','"+userInfoForm.getNetwork_address()+"'," +
+					 "'"+ userInfoForm.getStatus() +"','"+ userInfoForm.getUser_desc() +"'," +
+					 "'"+ userInfoForm.getServerexplain()+"','"+ userInfoForm.getEnterpriseName() +"')"; 
+			
+				db.executeInsert(sql);
+			
+			//新增会员默认加入外部会员机构
+		
+				sql ="insert into td_sm_userjoborg(user_id,job_id,org_id) values("+ user.getUserId()+",'1','102')";
+				db.executeInsert(sql);
+			
+			//新增会员默认授予F类角色和guest角色
+				sql ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'15')";
+				sql1 ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'7')";
+				db.executeInsert(sql);
+				db.executeInsert(sql1);
+			//给新增用户授权
+				if(roleId!=null)
+				{
+					for(int i = 0; i < roleId.length; i ++){
+						String str ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'" + roleId[i] +"')";
+						db.executeInsert(str);
+					}
+				}
+				if(drugId!=null)
+				{
+					for(int i = 0; i < drugId.length; i ++){
+						String str ="insert into td_sm_userrole(user_id,role_id) values("+ user.getUserId()+",'" + drugId[i] +"')";
+						db.executeInsert(str);
+					}
+				}
+			
+			request.setAttribute("isok","ok");
+			request.setAttribute("name",user.getUserName());
+			request.setAttribute("password",user.getUserPassword());
+			return (mapping.findForward("charge_memberList"));
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+	/**
+	 * 存储内部会员信息
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward storeInnerMember(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+	
+		try {
+			UserInfoForm userInfoForm = (UserInfoForm) form;
+			int newFlag = 0;
+			
+			String userName ;
+			userName = userInfoForm.getUserName();
+			UserManager userManager = SecurityDatabase.getUserManager();
+			User user1 = userManager.getUserByName(userName);
+		
+			User user = new User();
+			if (userInfoForm.getUserId().equals("")) {
+				userInfoForm.setUserId(null);
+				newFlag = 1;
+			}
+			user.setUserId(userInfoForm.getUserId() != null ? Integer
+					.valueOf(userInfoForm.getUserId()) : null);
+			
+			user.setUserName(userName);
+			user.setUserPassword(userInfoForm.getUserPassword());
+			user.setUserRealname(userInfoForm.getUserRealname());
+			//user_sn不能为空
+			user.setUserSn(new Integer(0));
+			//1为外部会员
+			user.setUserType("1");
+			user.setUserWorktel(userInfoForm.getUserWorktel());
+			user.setUserAddress(userInfoForm.getUserAddress());
+			user.setUserEmail(userInfoForm.getMail());
+			
+
+			//注册日期
+			if (userInfoForm.getUserRegdate() != null
+					&& userInfoForm.getUserRegdate().length() > 0)
+				user.setUserRegdate(Date.valueOf(userInfoForm.getUserRegdate()));
+			else{
+				user.setUserRegdate(Date.valueOf(riqi));
+			}
+			
+			userManager.addUser(user);
+			
+			//会员属性表要存的TD_SM_USER_ADDONS
+			DBUtil db = new DBUtil();
+			String sql;
+			sql ="insert into TD_SM_USER_ADDONS(USER_ID,"+
+					 " QUESTION,ANSWER,"+
+					 " MEMBER_TYPE,ENTERPRISE_INTRO,"+
+					 " ENTERPRISE_LINKMAN,ENABLEOPEN,SERVICE_TYPE,ISPAY,NETWORK_ADDRESS," +
+					 " STATUS,USER_DESC,SERVER_EXPLAIN ) values" +
+					 "("+ user.getUserId()+",'"+userInfoForm.getQuestion()+"','"+userInfoForm.getAnswer()+"'," +
+					 "'"+userInfoForm.getType()+"','"+userInfoForm.getEnterpriseIntro()+"'," +
+					 "'"+userInfoForm.getEnterpriseLinkman()+"','"+userInfoForm.getEnableopen()+"'," +
+					 "'F','2','"+userInfoForm.getNetwork_address()+"'," +
+					 "'2','"+ userInfoForm.getUser_desc() +"','"+ userInfoForm.getServerexplain() +"')"; 
+				db.executeInsert(sql);
+			
+			//新增会员默认加入外部会员机构
+				sql ="insert into td_sm_userjoborg(user_id,job_id,org_id) values("+ user.getUserId()+",'1','102')";
+				db.executeInsert(sql);
+				
+		    //内部用户自动拥有所有会员角色
+			MemberImpl mi = new MemberImpl();
+			mi.UserMemberRole(user.getUserId()+"");
+			request.setAttribute("isok","ok");
+			request.setAttribute("name",user.getUserName());
+			request.setAttribute("password",user.getUserPassword());
+			return (mapping.findForward("inner_memberList"));
+		
+		} catch (ManagerException e) {
+			logger.error(e);
+			return mapping.findForward("fail");
+		}
+	}
+}

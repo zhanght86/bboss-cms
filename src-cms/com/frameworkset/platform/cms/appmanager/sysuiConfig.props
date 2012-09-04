@@ -1,0 +1,4 @@
+# 属性的名称请使用大写
+# 数据字典的数据提供者实现类，业务系统实现了自己的数据提供者后可以替换 DefaultDataProvide 。 
+# DefaultDataProvide 仅用于示范如何构建数据字典标签应用
+DICT_DATAPROVIDE=com.frameworkset.platform.dictionary.DictDataProvide  

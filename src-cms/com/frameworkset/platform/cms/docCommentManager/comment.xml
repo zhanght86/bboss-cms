@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	<property name="getCommnetList">
+		<![CDATA[
+			select comment_id commentId, doc_id docId, doc_comment docComment, user_name userName, 
+			comtime subTime, user_ip userIP, src_comment_id srcCommentId, status
+			from td_cms_doc_comment t where t.doc_id = #[docId] and status = 1 
+			order by comtime desc
+		]]>
+	</property>
+	
+	<property name="getCommentNextId">
+		<![CDATA[
+			select seq_td_cms_doc_comment.nextval from dual
+		]]>
+	</property>
+	
+	<property name="getChannelCommentAduitSwitch">
+		<![CDATA[
+			select t.commentauditswitch from td_cms_channel t where t.channel_id = #[channelId]
+		]]>
+	</property>
+	
+	<property name="switchDocCommentAudit">
+		<![CDATA[
+			update td_cms_channel t set t.commentauditswitch = #[switchFlag] where t.channel_id = #[channelId]
+		]]>
+	</property>
+	
+</properties>
