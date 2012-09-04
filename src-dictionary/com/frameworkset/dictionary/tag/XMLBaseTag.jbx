@@ -1,0 +1,12 @@
+[PropertyInfo]
+data,com.frameworkset.dictionary.Data,false,false, , ,false,<default>
+defaultValue,Object,false,false, , ,true,<default>
+formula,String,false,false, , ,false,<default>
+name,String,false,false, , ,true,<default>
+style,String,false,false, , ,true,<default>
+xmlID,String,false,false, , ,true,<default>
+[IconNames]
+
+
+
+

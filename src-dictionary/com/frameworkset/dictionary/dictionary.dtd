@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="GB2312"?>
+<!--
+The web-app element is the root of the deployment descriptor for
+a web application
+-->
+
+<!ELEMENT dictionary (version,description,data*)>
+<!ELEMENT data (item*)>
+<!ELEMENT item (name,value,data*)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST data   
+	name             CDATA            #REQUIRED
+	id				 CDATA			  #REQUIRED>
+
