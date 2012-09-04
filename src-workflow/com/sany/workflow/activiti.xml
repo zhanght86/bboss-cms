@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<property name="queryProdef">
+		<![CDATA[
+			select p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_
+			from act_re_procdef p
+			join act_re_deployment d on p.deployment_id_=d.id_
+			left join td_wf_pro_businesstype b on p.key_=b.process_key
+			where p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
+			#if($processKey && !$processKey.equals(""))
+				and p.key_ like #[processKey]
+			#end
+			#if($resourceName && !$resourceName.equals(""))
+				and p.resource_name_ like #[resourceName]
+			#end
+			#if($businesstype_id && !$businesstype_id.equals(""))
+				and b.businesstype_id = #[businesstype_id]
+			#end
+			#if($deploymentId && !$deploymentId.equals(""))
+				and d.id_ = #[deploymentId]
+			#end
+			
+		]]>
+	</property>
+
+	<property name="selectTaskByUser">
+		<![CDATA[
+			select  t.id_ as id,t.execution_id_ as executionId,t.proc_inst_id_ as processInstanceId ,
+			t.proc_def_id_ as processDefinitionId,t.name_ as name ,t.task_def_key_ as taskDefinitionKey  from act_ru_task t 
+			inner join act_ru_identitylink i on t.id_=i.task_id_ and i.user_id_ = ?
+			inner join act_re_procdef p on t.proc_def_id_ = p.id_ and p.key_= ?
+		]]>
+	</property>
+	
+	<property name="selectGroupByUser">
+		<![CDATA[
+			select g.group_name from td_sm_group g inner join  td_sm_usergroup ug on g.group_id=ug.group_id 
+			where ug.user_id=(select u.user_id from td_sm_user u where u.user_name=?)
+		]]>
+	</property>
+	
+	<property name="selectTaskByGroup">
+		<![CDATA[
+			select  t.id_ as id,t.execution_id_ as executionId,t.proc_inst_id_ as processInstanceId ,
+			t.proc_def_id_ as processDefinitionId,t.name_ as name ,t.task_def_key_ as taskDefinitionKey  from act_ru_task t
+      		inner join act_ru_identitylink i on t.id_=i.task_id_ and i.group_id_ = ? 
+      		inner join act_re_procdef p on t.proc_def_id_ = p.id_ and p.key_= ?
+		]]>
+	</property>
+	
+	<property name="selectAllTaskByUser">
+		<![CDATA[
+			select  t.id_ as id,t.execution_id_ as executionId,t.proc_inst_id_ as processInstanceId ,
+			t.proc_def_id_ as processDefinitionId,t.name_ as name ,t.task_def_key_ as taskDefinitionKey  from act_ru_task t
+      		left join act_ru_identitylink i on t.id_=i.task_id_  
+      		#if($processKeys)
+      			inner join act_re_procdef p on t.proc_def_id_ = p.id_ and p.key_ in (
+      				#foreach($processKey in $processKeys)
+							#if($velocityCount == 0)
+								#[processKeys[$velocityCount]]
+							#else
+								,#[processKeys[$velocityCount]]
+							#end
+						#end
+      			)
+			#end
+      		where i.user_id_ = #[username] 
+      		or i.group_id_ in (select g.group_name from td_sm_group g inner join  td_sm_usergroup ug on g.group_id=ug.group_id 
+			where ug.user_id=(select u.user_id from td_sm_user u where u.user_name= #[username] )) 
+			or t.assignee_ = #[username]
+			order by  t.create_time_ desc
+		]]>
+	</property>
+	
+	<property name="queryHisTask">
+		<![CDATA[
+			select t.id_ as id,t.proc_def_id_ as processDefinitionId ,t.task_def_key_ as taskDefinitionKey,t.proc_inst_id_ as processInstanceId,
+			t.execution_id_ as executionId,t.parent_task_id_ as parentTaskId,t.name_ as name,t.description_ as description,t.owner_ as owner,
+			t.assignee_ as assignee,t.start_time_ as startTime,t.end_time_ as endTime,t.delete_reason_ as deleteReason
+			from act_hi_taskinst t where 
+			assignee_ =#[username] and   t.end_time_ is not null
+			#if($processKeys)
+				and proc_def_id_ in (select ID_ from act_re_procdef where key_ in(
+					#foreach($processKey in $processKeys)
+							#if($velocityCount == 0)
+								#[processKeys[$velocityCount]]
+							#else
+								,#[processKeys[$velocityCount]]
+							#end
+					#end
+				)
+				)
+			#end
+		]]>
+	</property>
+	
+	<property name="selectOrgByParentId">
+		<![CDATA[
+			select  org_id as id,org_name as text from td_sm_organization  where parent_id=?
+		]]>
+	</property>
+	
+	<property name="selectOrgNameByOrgId">
+		<![CDATA[
+			select org_name from td_sm_organization  where org_id=?
+		]]>
+	</property>
+	
+	<property name="selectActivitiNodeInfoByKeys">
+		<![CDATA[
+			select * from td_wf_activiti_node_info where process_key=#[process_key] and node_key=#[node_key]
+		]]>
+	</property>
+	
+	<property name="selectActivitiNodeCandidateByNodeId">
+		<![CDATA[
+			select * from td_wf_activiti_node_candidate where node_id=#[node_id] and org_id=#[org_id]
+		]]>
+	</property>
+	
+	<property name="selectUserInfoByNames">
+		<![CDATA[
+			select u.user_id ,u.user_name ,u.user_realname ,u.user_worknumber  
+			,org.org_name ,j.job_name 
+			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
+			inner join td_sm_organization org on oj.org_id=org.org_id
+			inner join td_sm_job j on oj.job_id = j.job_id
+			 where u.user_name in (
+						#foreach($user in $usernames)
+							#if($velocityCount == 0)
+								#[usernames[$velocityCount]]
+							#else
+								,#[usernames[$velocityCount]]
+							#end
+						#end
+						)
+		]]>
+	</property>
+	
+	<property name="selectUserRealNameByName">
+		<![CDATA[
+			select user_realname from td_sm_user where user_name=?
+		]]>
+	</property>
+	
+	<property name="selectUsersByCondition">
+		<![CDATA[
+			select u.user_id ,u.user_name ,u.user_realname ,u.user_worknumber  
+			,org.org_name ,j.job_name
+			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
+			inner join td_sm_organization org on oj.org_id=org.org_id
+			inner join td_sm_job j on oj.job_id = j.job_id
+			where 1=1 
+			#if($org_id && !$org_id.equals(""))
+				and oj.org_id = #[org_id]
+			#end
+			#if($user_worknumber && !$user_worknumber.equals(""))
+				and u.user_worknumber like #[user_worknumber]
+			#end
+			#if($user_realname && !$user_realname.equals(""))
+				and u.user_realname like #[user_realname]
+			#end
+			#if($user_name && !$user_name.equals(""))
+				and u.user_name like #[user_name]
+			#end
+		]]>
+	</property>
+	
+	<property name="selectGroupInfoByNames">
+		<![CDATA[
+			select t.*,u.user_realname as owner_name from td_sm_group t inner join td_sm_user u on t.owner_id = u.user_id 
+			 where t.group_name in (
+			#foreach($group in $groups)
+							#if($velocityCount == 0)
+								#[groups[$velocityCount]]
+							#else
+								,#[groups[$velocityCount]]
+							#end
+						#end
+						)
+		]]>
+	</property>
+	
+	<property name="selectActivitiNodeCandidateById">
+		<![CDATA[
+			select * from td_wf_activiti_node_candidate where id=#[id]
+		]]>
+	</property>
+	
+	<property name="selectActivitiNodeInfoById">
+		<![CDATA[
+			select * from td_wf_activiti_node_info where id=#[id]
+		]]>
+	</property>
+	
+	<property name="selectActivitiNodeInfoIDByNodeKey">
+		<![CDATA[
+			select * from td_wf_activiti_node_info where process_key=? and node_key=?
+		]]>
+	</property>
+	
+	<property name="insertActivitiNodeInfo">
+		<![CDATA[
+			insert into td_wf_activiti_node_info(ID,
+        PROCESS_KEY,
+        NODE_KEY,
+        NODE_NAME,
+       
+        ORDER_NUM
+    ) values(#[id],#[process_key],#[node_key],#[node_name],#[order_num])
+		]]>
+	</property>
+	
+	<property name="deleteActivitiNodeInfoByKey">
+		<![CDATA[
+			delete from  td_wf_activiti_node_info where process_key=#[process_key]
+		]]>
+	</property>
+	
+	<property name="deleteActivitiNodeCandidataByKey">
+		<![CDATA[
+			 delete from td_wf_activiti_node_candidate where node_id in 
+                  (select id from td_wf_activiti_node_info where process_key=#[process_key])
+		]]>
+	</property>
+	
+	<property name="deleteNodevariableByKey">
+		<![CDATA[
+			 delete from td_wf_nodevariable where node_id in 
+                  (select id from td_wf_activiti_node_info where process_key=#[process_key])
+		]]>
+	</property>
+	
+	
+	<property name="insertActivitiNodeCandidate">
+		<![CDATA[
+			insert into td_wf_activiti_node_candidate
+  			(id, node_id, candidate_groups_id, candidate_groups_name, candidate_users_id, 
+  			 candidate_users_name, business_id, business_type, create_date, create_person_id,
+   			create_person_name, is_valid, is_edit_candidate, candidate_orgs_id, candidate_orgs_name, 
+  			 candidate_jobs_id, candidate_jobs_name, candidate_roles_id, candidate_roles_name)
+   			values(#[id],#[node_id],#[candidate_groups_id],#[candidate_groups_name],
+			#[candidate_users_id],#[candidate_users_name],#[business_id],#[business_type],#[create_date],
+			#[create_person_id],#[create_person_name],#[is_valid],#[is_edit_candidate],#[candidate_orgs_id],
+			#[candidate_orgs_name],#[candidate_jobs_id],#[candidate_jobs_name],#[candidate_roles_id],#[candidate_roles_name])
+		]]>
+	</property>
+	
+	<property name="queryActivitiNodeCandidate">
+		<![CDATA[
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			from td_wf_activiti_node_info n 
+			left join td_wf_activiti_node_candidate t on t.node_id=n.id  where 1=1
+			#if($process_key && !$process_key.equals(""))
+				and n.process_key = #[process_key]
+			#end
+			#if($business_id && !$business_id.equals(""))
+				and t.business_id = #[business_id]
+			#end
+			#if($business_type && !$business_type.equals(""))
+				and t.business_type = #[business_type]
+			#end
+			#if($node_key && !$node_key.equals(""))
+				and n.node_key = #[node_key]
+			#end
+			order by n.order_num
+		]]>
+	</property>
+	
+	<property name="queryActivitiNodeInfo">
+		<![CDATA[
+			select n.*
+			from td_wf_activiti_node_info n 
+			where n.process_key = #[process_key]
+			order by n.order_num
+		]]>
+	</property>
+	
+	<property name="deleteActivitiNodeCandidateByNodeId">
+		<![CDATA[
+			delete from  td_wf_activiti_node_candidate where node_id=#[node_id] and business_id=#[business_id] and business_type=#[business_type]
+		]]>
+	</property>
+	
+	<property name="addNodevariable">
+		<![CDATA[
+			insert into td_wf_nodevariable (id,business_id,business_type,node_id,param_name,param_value,param_type,param_des,is_edit_param) 
+			values(#[id],#[business_id],#[business_type],#[node_id],#[param_name],#[param_value],#[param_type],#[param_des],#[is_edit_param])
+		]]>
+	</property>
+	
+	<property name="addNodevariableresource">
+		<![CDATA[
+			insert into td_wf_nodevariableresource
+            (id, node_id, param_name, param_value, param_des, is_edit_param)
+            values
+            (#[id], #[node_id], #[param_name], #[param_value], #[param_des], #[is_edit_param])
+		]]>
+	</property>
+	
+	<property name="deleteNodevariableresource">
+		<![CDATA[
+			delete from td_wf_nodevariableresource where node_id in (select id from td_wf_activiti_node_info where process_key=#[process_key])
+		]]>
+	</property>
+	
+	<property name="selectNodevariableresource">
+		<![CDATA[
+			select t.*,n.node_key,n.node_name from  td_wf_nodevariableresource t
+			inner join td_wf_activiti_node_info n on t.node_id=n.id where 1=1
+			and process_key=#[process_key]
+		]]>
+	</property>
+	
+	<property name="selectNodevariableresourceById">
+		<![CDATA[
+			select * from  td_wf_nodevariableresource t
+			where t.id=?
+		]]>
+	</property>
+	
+	<property name="updateNodeVariable">
+		<![CDATA[
+			update td_wf_nodevariable set param_value=#[param_value],param_des=#[param_des] where id=#[id]
+		]]>
+	</property>
+	
+	<property name="updateNodeVariableByNodeId">
+		<![CDATA[
+			update td_wf_nodevariable set param_value=#[param_value],param_des=#[param_des] where node_id=#[node_id] and param_name=#[param_name]
+		]]>
+	</property>
+	
+	<property name="deleteNodeVariable">
+		<![CDATA[
+			delete from td_wf_nodevariable where id=#[id]
+		]]>
+	</property>
+	
+	<property name="batchDeleteNodeVariable">
+		<![CDATA[
+			delete from td_wf_nodevariable t
+			where node_id in (select id from td_wf_activiti_node_info where process_key=?)
+			and t.business_id=? and t.business_type=?
+		]]>
+	</property>
+	
+	
+	<property name="queryNodevariableByParamName">
+		<![CDATA[
+			select * from  td_wf_nodevariable t
+			where t.param_name=#[param_name] and node_id=#[node_id] 
+		]]>
+	</property>
+	
+	<property name="queryNodevariable">
+		<![CDATA[
+			select t.*,n.node_key,n.node_name from  td_wf_nodevariable t
+			inner join td_wf_activiti_node_info n on t.node_id=n.id where 1=1
+			#if($node_key && !$node_key.equals(""))
+				and n.node_key = #[node_key]
+			#end
+			#if($process_key && !$process_key.equals(""))
+				and n.process_key = #[process_key]
+			#end
+			#if($business_id && !$business_id.equals(""))
+				and t.business_id = #[business_id]
+			#end
+			#if($business_type && !$business_type.equals(""))
+				and t.business_type = #[business_type]
+			#end
+			#if($node_key && !$node_key.equals(""))
+				and t.node_key = #[node_key]
+			#end
+			order by n.order_num
+		]]>
+	</property>
+	
+	<property name="selectNodevariableById">
+		<![CDATA[
+			select t.*,n.node_name from  td_wf_nodevariable t inner join td_wf_activiti_node_info n on t.node_id=n.id  where t.id=?
+		]]>
+	</property>
+	
+	<property name="queryGroup">
+		<![CDATA[
+			select t.*,u.user_realname as owner_name from td_sm_group t inner join td_sm_user u on t.owner_id = u.user_id 
+			where 1=1
+			#if($group_name && !$group_name.equals(""))
+				and t.group_name like #[group_name]
+			#end
+			#if($group_desc && !$group_desc.equals(""))
+				and t.group_desc like #[group_desc]
+			#end
+			#if($user_name && !$user_name.equals(""))
+				and u.user_name like #[user_name]
+			#end
+		]]>
+	</property>
+	
+	<property name="insertProBusinessType">
+		<![CDATA[
+			insert into td_wf_pro_businesstype (id,process_key,businesstype_id) values(#[id],#[process_key],#[businessType_id])
+		]]>
+	</property>
+	
+	<property name="updateProBusinessType">
+		<![CDATA[
+			update td_wf_pro_businesstype set businesstype_id=#[businessType_id] where process_key=#[process_key]
+		]]>
+	</property>
+	
+	<property name="queryProBusinessTypeByProKey">
+		<![CDATA[
+			select id from td_wf_pro_businesstype where process_key=#[process_key]
+		]]>
+	</property>
+	
+	<property name="queryBusinessNameByProKey">
+		<![CDATA[
+			select business_name from td_wf_businesstype where business_id = (select businesstype_id from td_wf_pro_businesstype where process_key=?)
+		]]>
+	</property>
+</properties>

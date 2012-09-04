@@ -1,0 +1,85 @@
+package com.frameworkset.platform.sysmgrcore.web.tag;
+
+import java.io.Serializable;
+
+import com.frameworkset.platform.mq.RemindManagerImpl;
+import com.frameworkset.common.poolman.util.SQLManager;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
+
+public class RemindInfoList extends DataInfoImpl implements Serializable
+{
+
+    protected ListInfo getDataList (String sortKey , boolean desc ,
+            long offset , int maxPagesize)
+    {
+
+        ListInfo listInfo = new ListInfo();
+        RemindManagerImpl rmi = new RemindManagerImpl();
+        // 查询条件传过来的username
+        String userName = request.getParameter("username");
+        // 当前用户
+        String curUser = super.accessControl.getUserAccount();
+        // 类型
+        String source = request.getParameter("source");
+
+        String content = request.getParameter("content");
+
+        String beginTime = request.getParameter("beginTime");
+
+        String endTime = request.getParameter("endTime");
+
+        if (beginTime == null || beginTime.length() == 0)
+        {
+            beginTime = "1000-03-02 12:00:00";
+        }
+        if (endTime == null || endTime.length() == 0)
+        {
+            endTime = "3000-03-02 12:00:00";
+        }
+        try
+        {
+            String sql = "select a.* ,b.user_name,b.user_realname from Td_Remindinfo a,td_sm_user b where  a.user_id=b.user_id ";
+            if (source != null && source.length() > 0)
+            {
+                sql = sql + " and a.source like '%" + source + "%'";
+            }
+            if (content != null && content.length() > 0)
+            {
+                sql = sql + " and a.content like '%" + content + "%'";
+            }
+            // 如果查询条件不是用户自己则采取匹配
+            if (userName != null && userName.length() > 0
+                    && !userName.equals(curUser))
+            {
+                sql = sql + " and b.user_name like '%" + userName + "%'";
+            }
+            // 如果查询条件是用户自己,并且该用户不是系统管理员那么直接查询该用户的消息
+            else if ((userName == null && !super.accessControl.isAdmin())
+                    || (userName != null && userName.equals(curUser)))
+            {
+                sql = sql + " and b.user_name = '" + curUser + "'";
+            }
+            sql = sql
+                    + " and a.time >= "
+                    + SQLManager.getInstance().getDBAdapter().getDateString(
+                            StringUtil.stringToDate(beginTime))
+                    + " "
+                    + " and a.time <= "
+                    + SQLManager.getInstance().getDBAdapter().getDateString(
+                            StringUtil.stringToDate(endTime)) + ""
+                    + " order by a.id desc";
+            listInfo = rmi.getRemindInfoAndUser(sql, (int) offset, maxPagesize);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return listInfo;
+    }
+
+    protected ListInfo getDataList (String arg0 , boolean arg1)
+    {
+        return null;
+    }
+}

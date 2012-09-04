@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:37:32 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Tempaccredit" table="td_sm_tempaccredit">
+		<composite-id name="id" class="TempaccreditKey">
+			<key-property name="opId" column="OP_ID"
+				type="java.lang.String" />
+			<key-property name="userId" column="USER_ID"
+				type="java.lang.Integer" />
+		</composite-id>
+
+		<property name="validfrom" column="VALIDFROM"
+			type="java.sql.Date" not-null="true" />
+		<property name="validto" column="VALIDTO" type="java.sql.Date"
+			not-null="true" />
+
+		<many-to-one name="user" column="USER_ID" cascade="none"
+			not-null="true" insert="false" update="false" />
+		<many-to-one name="operation" column="OP_ID" cascade="none"
+			not-null="true" insert="false" update="false" />
+
+	</class>
+
+</hibernate-mapping>

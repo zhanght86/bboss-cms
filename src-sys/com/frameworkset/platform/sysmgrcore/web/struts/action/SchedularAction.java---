@@ -1,0 +1,1335 @@
+package com.frameworkset.platform.sysmgrcore.web.struts.action;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import com.frameworkset.platform.schedularmanage.Notepaper;
+import com.frameworkset.platform.schedularmanage.Notic;
+import com.frameworkset.platform.schedularmanage.RatifyAdvice;
+import com.frameworkset.platform.schedularmanage.Schedular;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.JobManager;
+import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.SchedularManagerImpl;
+import com.frameworkset.platform.sysmgrcore.web.struts.form.NoticForm;
+import com.frameworkset.platform.sysmgrcore.web.struts.form.SchedularForm;
+import com.frameworkset.platform.task.TaskService;
+import com.frameworkset.util.StringUtil;
+
+public class SchedularAction extends BasicAction
+{
+    public ActionForward addSchedular(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        // String direct = request.getParameter("direct");
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(schedularForm.getExecutorID());
+        sch.setRequestID(schedularForm.getRequestID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setType(schedularForm.getType());
+        
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setIsHistory(schedularForm.getIsHistory());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        smi.addSchedular(sch);
+
+        return mapping.findForward("daySchedularList");
+
+    }
+
+    public ActionForward addSchedularAndRemind(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        // String direct = request.getParameter("direct");
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+
+        String executors;
+        int executorID = 0;
+        executors = schedularForm.getExecutors();
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        int userID = Integer.parseInt(accesscontroler.getUserID());
+
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(userID);
+        sch.setRequestID(schedularForm.getRequestID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setType(schedularForm.getType());
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setIsHistory(schedularForm.getIsHistory());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        if (schedularForm.getPartner() != null)
+        {
+            sch.setPartner(schedularForm.getPartner());
+        }
+        sch.setSchedularID(smi.addSchedular(sch));
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+        smi.addRemind(sch);
+        
+        if (sch.getRemindBeginTime() != null)
+        {
+            TaskService.getTaskService().startExecuteJob("dateschedule", sch);
+        }
+        sch.setType("他人预约");
+        for (int i = 0; i < executors.length(); i++)
+        {
+            if (executors.charAt(i) != ',')
+            {
+                executorID = executorID * 10 + (executors.charAt(i) - '0');
+            } else
+            {
+                if (executorID != 0 && executorID != userID)
+                {
+                    sch.setExecutorID(executorID);
+                    sch.setSchedularID(smi.addSchedular(sch));
+                    sch.setRemindBeginTime(StringUtil
+                            .stringToDate(schedularForm.getRemindBeginTime()));
+                    sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                            .getRemindEndTime()));
+                    sch.setIntervalType(schedularForm.getIntervalType());
+                    sch.setInterval(schedularForm.getInterval());
+                    sch.setIsSys(schedularForm.getIsSys());
+                    sch.setIsEmail(schedularForm.getIsEmail());
+                    sch.setIsMessage(schedularForm.getIsMessage());
+                    smi.addRemind(sch);
+                    if (sch.getRemindBeginTime() != null)
+                    {
+                        TaskService.getTaskService().startExecuteJob(
+                                "dateschedule", sch);
+                    }
+                    executorID = 0;
+                }
+            }
+        }
+        if (executorID != 0 && executorID != userID)
+        {
+            sch.setExecutorID(executorID);
+            sch.setSchedularID(smi.addSchedular(sch));
+            sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                    .getRemindBeginTime()));
+            sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                    .getRemindEndTime()));
+            sch.setIntervalType(schedularForm.getIntervalType());
+            sch.setInterval(schedularForm.getInterval());
+            sch.setIsSys(schedularForm.getIsSys());
+            sch.setIsEmail(schedularForm.getIsEmail());
+            sch.setIsMessage(schedularForm.getIsMessage());
+            smi.addRemind(sch);
+            if (sch.getRemindBeginTime() != null)
+            {
+                TaskService.getTaskService().startExecuteJob("dateschedule",
+                        sch);
+            }
+
+        }
+        return mapping.findForward("daySchedularList");
+
+    }
+
+    public ActionForward addSchedular1(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        String curDate = request.getParameter("date");
+        request.setAttribute("curDate", curDate);
+        SchedularForm schedularForm = (SchedularForm) form;
+        String curDate1 = schedularForm.getDate1();
+        request.setAttribute("curDate1", curDate1);
+        String weekday = schedularForm.getWeekday();
+        request.setAttribute("weekday", weekday);
+        Schedular sch = new Schedular();
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+
+        String executors;
+        int executorID = 0;
+        executors = schedularForm.getExecutors();
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        int userID = Integer.parseInt(accesscontroler.getUserID());
+
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(schedularForm.getExecutorID());
+        sch.setRequestID(schedularForm.getRequestID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setType(schedularForm.getType());
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setIsHistory(schedularForm.getIsHistory());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        if (schedularForm.getPartner() != null)
+        {
+            sch.setPartner(schedularForm.getPartner());
+        }
+
+        sch.setSchedularID(smi.addSchedular(sch));
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+        smi.addRemind(sch);
+        sch.setType("他人预约");
+        if (sch.getRemindBeginTime() != null)
+        {
+            TaskService.getTaskService().startExecuteJob("dateschedule", sch);
+        }
+        for (int i = 0; i < executors.length(); i++)
+        {
+            if (executors.charAt(i) != ',')
+            {
+                executorID = executorID * 10 + (executors.charAt(i) - '0');
+            } else
+            {
+                if (executorID != 0 && executorID != userID)
+                {
+                    sch.setExecutorID(executorID);
+                    sch.setSchedularID(smi.addSchedular(sch));
+                    sch.setRemindBeginTime(StringUtil
+                            .stringToDate(schedularForm.getRemindBeginTime()));
+                    sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                            .getRemindEndTime()));
+                    sch.setIntervalType(schedularForm.getIntervalType());
+                    sch.setInterval(schedularForm.getInterval());
+                    sch.setIsSys(schedularForm.getIsSys());
+                    sch.setIsEmail(schedularForm.getIsEmail());
+                    sch.setIsMessage(schedularForm.getIsMessage());
+                    smi.addRemind(sch);
+                    if (sch.getRemindBeginTime() != null)
+                    {
+                        TaskService.getTaskService().startExecuteJob(
+                                "dateschedule", sch);
+                    }
+                    executorID = 0;
+                }
+            }
+        }
+        if (executorID != 0 && executorID != userID)
+        {
+            sch.setExecutorID(executorID);
+            sch.setSchedularID(smi.addSchedular(sch));
+            sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                    .getRemindBeginTime()));
+            sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                    .getRemindEndTime()));
+            sch.setIntervalType(schedularForm.getIntervalType());
+            sch.setInterval(schedularForm.getInterval());
+            sch.setIsSys(schedularForm.getIsSys());
+            sch.setIsEmail(schedularForm.getIsEmail());
+            sch.setIsMessage(schedularForm.getIsMessage());
+            smi.addRemind(sch);
+            if (sch.getRemindBeginTime() != null)
+            {
+                TaskService.getTaskService().startExecuteJob("dateschedule",
+                        sch);
+            }
+
+        }
+        ActionForward ff = mapping.findForward("daySchedularList");
+        return ff;
+
+    }
+
+    public ActionForward deleteSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        String curDate1 = schedularForm.getDate1();
+        request.setAttribute("curDate1", curDate1);
+        String weekday = schedularForm.getWeekday();
+        request.setAttribute("weekday", weekday);
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String[] schid = request.getParameterValues("ID");
+        if (schid != null)
+        {
+            for (int i = 0; i < schid.length; i++)
+            {
+                int j = Integer.parseInt(schid[i]);
+                smi.deleteSchedular(j);
+                TaskService.getTaskService()
+                        .deleteJob(schid[i], "dateschedule");
+            }
+        }
+        String path = request.getParameter("path");
+        if (path == null)
+        {
+            return mapping.findForward("daySchedularList");
+        }
+        if (path.equals("allSchedular"))
+        {
+            return mapping.findForward("allSchedular");
+        }
+        if (path.equals("arrangeSDList"))
+        {
+            return mapping.findForward("arrangeSDList");
+        }
+        if (path.equals("refuseArrangeSDList"))
+        {
+            return mapping.findForward("refuseArrangeSDList");
+        }
+        if (path.equals("auditingSDList"))
+        {
+            return mapping.findForward("auditingSDList");
+        }
+        if (path.equals("noPassList"))
+        {
+            return mapping.findForward("noPassList");
+        }
+        if (path.equals("history"))
+        {
+            return mapping.findForward("history");
+        }
+        if (path.equals("query"))
+        {
+            return mapping.findForward("query");
+        }
+        if (path.equals("latest"))
+        {
+            return mapping.findForward("latest");
+        }
+        if (path.equals("success"))
+        {
+            return mapping.findForward("success");
+        }
+        if (path.equals("overtime"))
+        {
+            return mapping.findForward("overtime");
+        }
+        if (path.equals("bookingSchedularList"))
+        {
+            return mapping.findForward("bookingSchedularList");
+        }
+        if (path.equals("departmentSchedularList"))
+        {
+            return mapping.findForward("departmentSchedularList");
+        }
+        return mapping.findForward("daySchedularList");
+
+    }
+
+    public ActionForward getSchedular(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String schid = request.getParameter("ID");
+
+        int j = Integer.parseInt(schid);
+        Schedular sch = smi.getSchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setExecutorID(sch.getExecutorID());
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setPlannerName(sch.getUserName());
+        schedularForm.setPlannerRealName(sch.getUserRealName());
+        schedularForm.setType(sch.getType());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        request.setAttribute("schedular", schedularForm);
+        return mapping.findForward("schedularInfo");
+    }
+
+    public ActionForward getRefuseSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String schid = request.getParameter("ID");
+
+        int j = Integer.parseInt(schid);
+        Schedular sch = smi.getSchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setExecutorID(sch.getExecutorID());
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setPlannerName(sch.getUserName());
+        schedularForm.setPlannerRealName(sch.getUserRealName());
+        schedularForm.setType(sch.getType());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        request.setAttribute("schedular", schedularForm);
+        return mapping.findForward("reRequestArr");
+    }
+
+    public ActionForward getSchedularAndRemind(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String schid = request.getParameter("ID");
+        Schedular sch = new Schedular();
+
+        int j = Integer.parseInt(schid);
+        sch = smi.getModifySchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setType(sch.getType());
+        schedularForm.setStatus(sch.getStatus());
+        schedularForm.setRemindBeginTime(StringUtil.getFormatDate(sch
+                .getRemindBeginTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setRemindEndTime(StringUtil.getFormatDate(sch
+                .getRemindEndTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setInterval(sch.getInterval());
+        schedularForm.setIntervalType(sch.getIntervalType());
+        schedularForm.setIsSys(sch.getIsSys());
+        schedularForm.setIsEmail(sch.getIsEmail());
+        schedularForm.setIsMessage(sch.getIsMessage());
+        schedularForm.setPlannerName(sch.getUserName());
+        schedularForm.setPlannerRealName(sch.getUserRealName());
+        schedularForm.setPartner(sch.getPartner());
+        request.setAttribute("schedular", schedularForm);
+        return mapping.findForward("schedularRemindInfo");
+    }
+
+    public ActionForward getModifySchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String schid = request.getParameter("ID");
+        int j = Integer.parseInt(schid);
+        sch = smi.getModifySchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setStatus(sch.getStatus());
+        schedularForm.setRemindBeginTime(StringUtil.getFormatDate(sch
+                .getRemindBeginTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setRemindEndTime(StringUtil.getFormatDate(sch
+                .getRemindEndTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setInterval(sch.getInterval());
+        schedularForm.setIntervalType(sch.getIntervalType());
+        schedularForm.setIsSys(sch.getIsSys());
+        schedularForm.setIsEmail(sch.getIsEmail());
+        schedularForm.setIsMessage(sch.getIsMessage());
+        schedularForm.setPlannerName(sch.getUserName());
+        schedularForm.setPlannerRealName(sch.getUserRealName());
+        schedularForm.setPartner(sch.getPartner());
+        request.setAttribute("schedular", schedularForm);
+
+        return mapping.findForward("modifySchedular");
+
+    }
+
+    public ActionForward getResumeSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+
+        String schid = request.getParameter("ID");
+        int j = Integer.parseInt(schid);
+        sch = smi.getModifySchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setStatus(sch.getStatus());
+        schedularForm.setRemindBeginTime(StringUtil.getFormatDate(sch
+                .getRemindBeginTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setRemindEndTime(StringUtil.getFormatDate(sch
+                .getRemindEndTime(), "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setInterval(sch.getInterval());
+        schedularForm.setIntervalType(sch.getIntervalType());
+        schedularForm.setIsSys(sch.getIsSys());
+        schedularForm.setIsEmail(sch.getIsEmail());
+        schedularForm.setIsMessage(sch.getIsMessage());
+        
+
+        request.setAttribute("schedular", schedularForm);
+
+        return mapping.findForward("resumeSchedular");
+
+    }
+
+    public ActionForward getAuditingSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+
+        String schid = request.getParameter("ID");
+        int j = Integer.parseInt(schid);
+        sch = smi.getSchedular(j);
+
+        schedularForm.setSchedularID(j);
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        schedularForm.setStatus(sch.getStatus());
+
+        request.setAttribute("schedular", schedularForm);
+
+        return mapping.findForward("auditingSchedular");
+
+    }
+
+    public ActionForward getArrangeSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+
+        String schid = request.getParameter("ID");
+        int j = Integer.parseInt(schid);
+        sch = smi.getSchedular(j);
+        schedularForm.setSchedularID(j);
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setExecutorID(sch.getExecutorID());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsOpen(sch.getIsOpen());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        request.setAttribute("schedular", schedularForm);
+
+        return mapping.findForward("arrangeSchedular");
+
+    }
+
+    public ActionForward modifySchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        String userId = accesscontroler.getUserID();
+        int j = Integer.parseInt(userId);
+
+        String path = request.getParameter("path");
+        String curDate = request.getParameter("date");
+        request.setAttribute("curDate", curDate);
+        String curDate1 = schedularForm.getDate1();
+        request.setAttribute("curDate1", curDate1);
+        String weekday = schedularForm.getWeekday();
+        request.setAttribute("weekday", weekday);
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(j);
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+
+        smi.modifySchedular(sch);
+        smi.modifyRemind(sch);
+        if (smi.isRemind(sch.getSchedularID()) == true)
+        {
+            if (sch.getRemindBeginTime() == null)
+            {
+                TaskService.getTaskService().deleteJob(
+                        sch.getSchedularID() + "", "dateschedule");
+            } else
+            {
+                TaskService.getTaskService().updateExecuteJob("dateschedule",
+                        sch);
+            }
+        } else
+        {
+            if (sch.getRemindBeginTime() != null)
+            {
+                TaskService.getTaskService().startExecuteJob("dateschedule",
+                        sch);
+            }
+        }
+        if (path == null)
+        {
+            return mapping.findForward("daySchedularList");
+        }
+        if (path.equals("allSchedular"))
+        {
+            return mapping.findForward("allSchedular");
+        }
+        if (path.equals("arrangeSDList"))
+        {
+            return mapping.findForward("arrangeSDList");
+        }
+        if (path.equals("refuseArrangeSDList"))
+        {
+            return mapping.findForward("refuseArrangeSDList");
+        }
+        if (path.equals("auditingSDList"))
+        {
+            return mapping.findForward("auditingSDList");
+        }
+        if (path.equals("noPassList"))
+        {
+            return mapping.findForward("noPassList");
+        }
+        if (path.equals("history"))
+        {
+            return mapping.findForward("history");
+        }
+        if (path.equals("query"))
+        {
+            return mapping.findForward("query");
+        }
+        if (path.equals("latest"))
+        {
+            return mapping.findForward("latest");
+        }
+        if (path.equals("success"))
+        {
+            return mapping.findForward("success");
+        }
+        if (path.equals("overtime"))
+        {
+            return mapping.findForward("overtime");
+        }
+        if (path.equals("bookingSchedularList"))
+        {
+            return mapping.findForward("bookingSchedularList");
+        }
+        if (path.equals("departmentSchedularList"))
+        {
+            return mapping.findForward("departmentSchedularList");
+        }
+
+        return mapping.findForward("daySchedularList");
+
+    }
+
+    public ActionForward reRequestSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+
+        sch.setStatus(schedularForm.getStatus());
+
+        smi.requestSchedular(sch);
+        return mapping.findForward("refuseArrangeSDList");
+    }
+
+    public ActionForward arrangeSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(2);
+
+        smi.modifySchedular(sch);
+        return mapping.findForward("arrangeSDList");
+    }
+
+    public ActionForward arrangeOtherSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+        String executors;
+        int executorID = 0;
+        executors = schedularForm.getExecutors();
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(schedularForm.getExecutorID());
+        sch.setRequestID(schedularForm.getRequestID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setType(schedularForm.getType());
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setIsHistory(schedularForm.getIsHistory());
+        for (int i = 0; i < executors.length(); i++)
+        {
+            if (executors.charAt(i) != ',')
+            {
+                executorID = executorID * 10 + (executors.charAt(i) - '0');
+            } else
+            {
+                sch.setExecutorID(executorID);
+                smi.addSchedular(sch);
+                executorID = 0;
+            }
+        }
+        sch.setExecutorID(executorID);
+        smi.addSchedular(sch);
+        return mapping.findForward("daySchedularList");
+    }
+
+    public ActionForward agreeSchedular(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+        RatifyAdvice ratifyAdvice = new RatifyAdvice();
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        String userId = accesscontroler.getUserID();
+        int j = Integer.parseInt(userId);
+
+        ratifyAdvice.setSchedularID(schedularForm.getSchedularID());
+        ratifyAdvice.setRatifierID(j);
+        ratifyAdvice.setAdvice(schedularForm.getAdvice());
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setStatus(0);
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+        smi.modifyStatus(sch);
+        smi.addRatifyAdvice(ratifyAdvice);
+        smi.addRemind(sch);
+        if (sch.getRemindBeginTime() != null)
+        {
+            TaskService.getTaskService().startExecuteJob("dateschedule", sch);
+        }
+
+        return mapping.findForward("auditingSDList");
+    }
+
+    public ActionForward refuseArr(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+
+        String[] schid = request.getParameterValues("ID");
+        if (schid != null)
+        {
+            for (int i = 0; i < schid.length; i++)
+            {
+                int j = Integer.parseInt(schid[i]);
+                sch.setSchedularID(j);
+                sch.setStatus(4);
+                smi.modifyStatus(sch);
+            }
+        }
+
+        return mapping.findForward("arrangeSDList");
+    }
+
+    public ActionForward refuseSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+        RatifyAdvice ratifyAdvice = new RatifyAdvice();
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        String userId = accesscontroler.getUserID();
+        int j = Integer.parseInt(userId);
+
+        ratifyAdvice.setSchedularID(schedularForm.getSchedularID());
+        ratifyAdvice.setRatifierID(j);
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setStatus(3);
+        ratifyAdvice.setAdvice(schedularForm.getAdvice());
+        smi.modifyStatus(sch);
+        smi.addRatifyAdvice(ratifyAdvice);
+
+        return mapping.findForward("auditingSDList");
+    }
+
+    public ActionForward viewAdvice(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+        RatifyAdvice ratifyAdvice = new RatifyAdvice();
+        String schid = request.getParameter("ID");
+        int j = Integer.parseInt(schid);
+        sch = smi.getSchedular(j);
+        ratifyAdvice = smi.getAdvice(j);
+
+        schedularForm.setSchedularID(j);
+        schedularForm.setTopic(sch.getTopic());
+        schedularForm.setPlannerID(sch.getPlannerID());
+        schedularForm.setPlace(sch.getPlace());
+        schedularForm.setBeginTime(StringUtil.getFormatDate(sch.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEndTime(StringUtil.getFormatDate(sch.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        schedularForm.setEssentiality(sch.getEssentiality());
+        schedularForm.setContent(sch.getContent());
+        schedularForm.setIsLeisure(sch.getIsLeisure());
+        schedularForm.setIsPublicAffair(sch.getIsPublicAffair());
+        schedularForm.setStatus(sch.getStatus());
+        schedularForm.setAdvice(ratifyAdvice.getAdvice());
+
+        request.setAttribute("schedular", schedularForm);
+
+        return mapping.findForward("viewAdvice");
+    }
+
+    public ActionForward resumeSchedular(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularForm schedularForm = (SchedularForm) form;
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+
+        sch.setSchedularID(schedularForm.getSchedularID());
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setStatus(schedularForm.getStatus());
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+
+        smi.modifySchedular(sch);
+        smi.modifyRemind(sch);
+        if (sch.getRemindBeginTime() != null)
+        {
+            TaskService.getTaskService().startExecuteJob("dateschedule", sch);
+        }
+        smi.resumeHistory(sch.getSchedularID());
+        return mapping.findForward("history");
+    }
+
+    public ActionForward history(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String[] schid = request.getParameterValues("ID");
+        if (schid != null)
+        {
+            for (int i = 0; i < schid.length; i++)
+            {
+                int j = Integer.parseInt(schid[i]);
+                smi.history(j);
+                TaskService.getTaskService()
+                        .deleteJob(schid[i], "dateschedule");
+            }
+        }
+        String path = request.getParameter("path");
+
+        if (path == null)
+        {
+            return mapping.findForward("daySchedularList");
+        }
+        if (path.equals("allSchedular"))
+        {
+            return mapping.findForward("allSchedular");
+        }
+        if (path.equals("arrangeSDList"))
+        {
+            return mapping.findForward("arrangeSDList");
+        }
+        if (path.equals("auditingSDList"))
+        {
+            return mapping.findForward("auditingSDList");
+        }
+        if (path.equals("noPassList"))
+        {
+            return mapping.findForward("noPassList");
+        }
+        if (path.equals("history"))
+        {
+            return mapping.findForward("history");
+        }
+        if (path.equals("query"))
+        {
+            return mapping.findForward("query");
+        }
+        if (path.equals("latest"))
+        {
+            return mapping.findForward("latest");
+        }
+        if (path.equals("success"))
+        {
+            return mapping.findForward("success");
+        }
+        if (path.equals("overtime"))
+        {
+            return mapping.findForward("overtime");
+        }
+        if (path.equals("bookingSchedularList"))
+        {
+            return mapping.findForward("bookingSchedularList");
+        }
+        if (path.equals("departmentSchedularList"))
+        {
+            return mapping.findForward("departmentSchedularList");
+        }
+        return mapping.findForward("daySchedularList");
+    }
+
+    public ActionForward getNotic(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        NoticForm noticForm = new NoticForm();
+        Notic notic = new Notic();
+
+        String noticID = request.getParameter("ID");
+        int j = Integer.parseInt(noticID);
+        notic = smi.getNotic(j);
+        noticForm.setNoticID(j);
+        noticForm.setTopic(notic.getTopic());
+        noticForm.setPlace(notic.getPlace());
+        noticForm.setBeginTime(StringUtil.getFormatDate(notic.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        noticForm.setEndTime(StringUtil.getFormatDate(notic.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        noticForm.setSource(notic.getSource());
+        noticForm.setStatus(notic.getStatus());
+        noticForm.setNoticPlannerName(notic.getNoticPlannerName());
+        noticForm.setContent(notic.getContent());
+        noticForm.setExecutorID(notic.getExecutorID());
+        request.setAttribute("notic", noticForm);
+
+        return mapping.findForward("notic_info");
+    }
+
+    public ActionForward getArrangeNotic(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        NoticForm noticForm = new NoticForm();
+        Notic notic = new Notic();
+
+        String noticID = request.getParameter("ID");
+        int j = Integer.parseInt(noticID);
+        notic = smi.getNotic(j);
+
+        noticForm.setBeginTime(StringUtil.getFormatDate(notic.getBeginTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        noticForm.setEndTime(StringUtil.getFormatDate(notic.getEndTime(),
+                "yyyy-MM-dd HH:mm:ss"));
+        noticForm.setTopic(notic.getTopic());
+        noticForm.setContent(notic.getContent());
+        noticForm.setNoticPlannerID(notic.getNoticPlannerID());
+        noticForm.setNoticID(j);
+        noticForm.setPlace(notic.getPlace());
+        noticForm.setStatus(notic.getStatus());
+
+        request.setAttribute("notic", noticForm);
+
+        return mapping.findForward("arrange_notic");
+    }
+
+    public ActionForward deleteNotic(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String[] schid = request.getParameterValues("ID");
+        if (schid != null)
+        {
+            for (int i = 0; i < schid.length; i++)
+            {
+                int j = Integer.parseInt(schid[i]);
+                smi.deleteNotic(j);
+            }
+        }
+        return mapping.findForward("noticlist");
+    }
+
+    // public ActionForward addNotic(ActionMapping mapping, ActionForm form,
+    // HttpServletRequest request, HttpServletResponse response)
+    // throws Exception {
+    // SchedularManagerImpl smi = new SchedularManagerImpl();
+    // NoticForm noticForm = (NoticForm) form;
+    // SchedularForm schedularForm = (SchedularForm) form;
+    // Notic notic = new Notic();
+    //		
+    // notic.setBeginTime(StringUtil.stringToDate(noticForm.getBeginTime()));
+    // notic.setEndTime(StringUtil.stringToDate(noticForm.getEndTime()));
+    // notic.setTopic(noticForm.getTopic());
+    // notic.setPlace(noticForm.getPlace());
+    // notic.setContent(noticForm.getContent());
+    // notic.setExecutorID(noticForm.getExecutorID());
+    // notic.setNoticPlannerID(noticForm.getNoticPlannerID());
+    // notic.setSource(noticForm.getSource());
+    // notic.setStatus(0);
+    //		
+    // smi.addNotic(notic);
+    // return mapping.findForward("noticlist");
+    //
+    // }
+
+    public ActionForward arrangeNotic(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        Schedular sch = new Schedular();
+        SchedularForm schedularForm = (SchedularForm) form;
+
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        String userId = accesscontroler.getUserID();
+
+        int i = schedularForm.getSchedularID();
+        int j = Integer.parseInt(userId);
+        int schID = 0;
+        sch.setPlannerID(schedularForm.getPlannerID());
+        sch.setExecutorID(j);
+        sch.setRequestID(0);
+        sch.setTopic(schedularForm.getTopic());
+        sch.setPlace(schedularForm.getPlace());
+        sch.setBeginTime(StringUtil.stringToDate(schedularForm.getBeginTime()));
+        sch.setEndTime(StringUtil.stringToDate(schedularForm.getEndTime()));
+        sch.setType("会议任务通知");
+        sch.setEssentiality(schedularForm.getEssentiality());
+        sch.setContent(schedularForm.getContent());
+        sch.setIsLeisure(schedularForm.getIsLeisure());
+        sch.setIsPublicAffair(schedularForm.getIsPublicAffair());
+        sch.setIsOpen(schedularForm.getIsOpen());
+        sch.setStatus(0);
+        sch.setIsHistory(0);
+        schID = smi.addSchedular(sch);
+        if (schID != 0)
+        {
+            smi.arrNotic(i);
+        }
+        sch.setSchedularID(schID);
+        sch.setRemindBeginTime(StringUtil.stringToDate(schedularForm
+                .getRemindBeginTime()));
+        sch.setRemindEndTime(StringUtil.stringToDate(schedularForm
+                .getRemindEndTime()));
+        sch.setInterval(schedularForm.getInterval());
+        sch.setIntervalType(schedularForm.getIntervalType());
+        sch.setIsSys(schedularForm.getIsSys());
+        sch.setIsEmail(schedularForm.getIsEmail());
+        sch.setIsMessage(schedularForm.getIsMessage());
+        smi.addRemind(sch);
+        if (sch.getRemindBeginTime() != null)
+        {
+            TaskService.getTaskService().startExecuteJob("dateschedule", sch);
+        }
+
+        return mapping.findForward("noticlist");
+    }
+
+    /**
+     * 增加便笺
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ActionForward addNotepaper(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        Notepaper notepaper = new Notepaper();
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        SchedularForm schedularForm = (SchedularForm) form;
+        notepaper.setContent(schedularForm.getContent());
+        Date time = new Date();
+        notepaper.setTime(time);
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        String userId = accesscontroler.getUserID();
+        notepaper.setUserID(Integer.parseInt(userId));
+        smi.addNotepaper(notepaper);
+        return mapping.findForward("notepaperList");
+    }
+
+    public ActionForward deleteNotepaper(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        String[] schid = request.getParameterValues("ID");
+        if (schid != null)
+        {
+            for (int i = 0; i < schid.length; i++)
+            {
+                smi.deleteNotepaper(Integer.parseInt(schid[i]));
+            }
+        }
+        return mapping.findForward("notepaperList");
+    }
+
+    public ActionForward modifyNotepaper(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+        Notepaper notepaper = new Notepaper();
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        SchedularForm schedularForm = (SchedularForm) form;
+        notepaper.setNotepaparID(schedularForm.getSchedularID());
+        notepaper.setContent(schedularForm.getContent());
+        Date time = new Date();
+        notepaper.setTime(time);
+        smi.modifyNotepaper(notepaper);
+        return mapping.findForward("notepaperList");
+    }
+
+    public ActionForward getNotepaper(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        Notepaper notepaper = new Notepaper();
+        SchedularForm schedularForm = new SchedularForm();
+        SchedularManagerImpl smi = new SchedularManagerImpl();
+        notepaper = smi.getNotepaper(Integer.parseInt(request
+                .getParameter("ID")));
+        schedularForm.setContent(notepaper.getContent());
+        schedularForm.setSchedularID(notepaper.getNotepaparID());
+        request.setAttribute("schedular", schedularForm);
+        return mapping.findForward("modifyNotepaper");
+    }
+
+    /**
+     * 得到某一机构的用户列表
+     * 
+     * @param mapping
+     *            ActionMapping
+     * @param form
+     *            ActionForm
+     * @param request
+     *            HttpServletRequest
+     * @param response
+     *            HttpServletResponse
+     * @return ActionForward
+     * @throws Exception
+     */
+    public ActionForward getUserList(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+        String orgId = request.getParameter("orgId");
+        String displayNameInput = request.getParameter("displayNameInput");
+        String displayValueInput = request.getParameter("displayValueInput");
+        request.setAttribute("displayNameInput", displayNameInput);
+        request.setAttribute("displayValueInput", displayValueInput);
+
+        UserManager userManager = SecurityDatabase.getUserManager();
+        JobManager jobManager = SecurityDatabase.getJobManager();
+        OrgManager orgManager = SecurityDatabase.getOrgManager();
+        Organization org = orgManager.getOrgById(orgId);
+
+        if (org != null)
+        {
+            List allUser = userManager.getUserList(org);
+
+            List existUser = null;
+            if (allUser == null)
+            {
+                allUser = new ArrayList();
+            }
+            if (existUser == null)
+            {
+                existUser = new ArrayList();
+            }
+            request.setAttribute("allUser", allUser);
+            // request.setAttribute("existUser", existUser);
+        }
+
+        return mapping.findForward("userlist1");
+    }
+
+}

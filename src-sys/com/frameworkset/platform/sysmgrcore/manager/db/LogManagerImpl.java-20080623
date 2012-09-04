@@ -1,0 +1,415 @@
+package com.frameworkset.platform.sysmgrcore.manager.db;
+
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import com.frameworkset.platform.event.EventHandle;
+import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.LogManager;
+import com.frameworkset.common.poolman.DBUtil;
+
+	/**
+	 * 项目：SysMgrCore <br>
+	 * 描述：日志管理实现类 <br>
+	 * 版本：1.0 <br>
+	 * 
+	 * @author 
+	 */
+public class LogManagerImpl extends EventHandle implements LogManager {
+
+		
+		
+		Map map = new HashMap(); 
+
+		private static Logger logger = Logger.getLogger(LogManagerImpl.class
+				.getName());
+
+		
+	
+
+
+
+
+
+		/**
+		 * 没有被使用的方法
+		 */
+		public boolean storeLog(Log log) throws ManagerException {//存储日志
+			boolean r = false;
+
+			// 保存
+			
+//			Parameter p = new Parameter();
+//			p.setCommand(Parameter.COMMAND_STORE);
+//			p.setObject(log);
+//
+//			try {
+//				if (cb.execute(p) != null) {
+//					r = true;
+//				}
+//			} catch (ControlException e) {
+//				e.printStackTrace();
+//				throw new ManagerException(e.getMessage());
+//			}
+
+			return r;
+		}
+
+
+
+		/**
+		 * 没有被使用的方法
+		 */
+		public List getLogList() throws ManagerException {//取所有日志
+			List list = new ArrayList();
+
+//			try {
+//				Parameter p = new Parameter();
+//				p.setCommand(Parameter.COMMAND_GET);
+//				p.setObject("from Log log order by log.operTime desc");
+//
+//				list = (List) cb.execute(p);
+//			} catch (ControlException e) {
+//				throw new ManagerException(e.getMessage());
+//			}
+
+			return list;
+		}
+
+
+
+
+		/**
+		 * 没有被使用的方法
+		 */
+		public List getLogList(String hql) throws ManagerException {
+//			Parameter p = new Parameter();
+//			p.setCommand(Parameter.COMMAND_GET);
+//			p.setObject(hql);
+
+			List list = new ArrayList();
+
+//			try {
+//				list = (List) cb.execute(p);
+//			} catch (ControlException e) {
+//				logger.error(e);
+//				throw new ManagerException(e.getMessage());
+//			}
+
+			return list;
+		}
+
+
+
+		/**
+		 * 去掉hibernate后的方法
+		 */
+		public boolean deleteLog(Log log) throws ManagerException {
+			boolean r = false;
+
+			if (log != null) {
+//				try {
+//					cb.setAutoCommit(false);
+//					
+//					Parameter p = new Parameter();
+//					p.setCommand(Parameter.COMMAND_DELETE);
+//					
+//					// 删除指定的日志实例
+//					p.setObject("from Log j where j.logId = '" + log.getLogId()
+//							+ "'");
+//					cb.execute(p);
+//					cb.commit(true);
+//					r = true;
+//				} catch (ControlException e) {
+//					try {
+//						cb.rollback(true);
+//					} catch (ControlException e1) {
+//						logger.error(e1);
+//					}
+//					throw new ManagerException(e.getMessage());
+//				}
+				String sql = "delete from td_sm_log where log_id='" + log.getLogId() + "'";
+				DBUtil db = new DBUtil();
+				try {
+					db.executeDelete(sql);
+					r = true;
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			return r;
+		}
+
+		/*
+		 * 对日志记录进行批量删除
+		 */
+		public boolean deleteLog(String[] logId) throws ManagerException {
+			boolean r = false;
+			//对参数的合法性进行判断
+			if(logId!=null && logId.length>0)
+			{
+			try {
+				String logIds="0";
+				int i=0,count=logId.length;
+				//对待删除的ID数组进行IN条件的组合
+				for(i=0;i<count;i++)
+				{
+					logIds+=","+logId[i];
+				}
+				// 删除指定的日志实例
+		        DBUtil dbUtil = new DBUtil();
+		        dbUtil.executeDelete("delete from td_sm_log j where j.log_Id in (" + logIds + ")");
+		        r=true;
+			}
+			catch (Exception e) {
+						e.printStackTrace();
+					}
+			}
+			return r;
+		}
+
+		/**
+		 * 没有被使用的方法
+		 */
+		public boolean deleteLog(String logId) throws ManagerException {
+			boolean r = false;
+
+//			try {
+//				cb.setAutoCommit(false);
+//				
+//				Parameter p = new Parameter();
+//				p.setCommand(Parameter.COMMAND_DELETE);
+//				
+//
+//				// 删除指定的日志实例
+//				p.setObject("from Log j where j.logId = '" + logId + "'");
+//				cb.execute(p);
+//				cb.commit(true);
+//				r = true;
+//
+//			} catch (ControlException e) {
+//				try {
+//					cb.rollback(true);
+//				} catch (ControlException e1) {
+//					logger.error(e1);
+//				}
+//				throw new ManagerException(e.getMessage());
+//			}
+
+			return r;
+		}
+		/**
+		 * 删除所有操作日志
+		 * @return
+		 * @throws ManagerException
+		 */
+		public boolean deleteAllLog() throws ManagerException {
+			boolean r = false;
+			try {
+		        DBUtil dbUtil = new DBUtil();
+		        dbUtil.executeDelete("delete from td_sm_log j");
+		        r=true;
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return r;
+		}
+		
+		/**
+		 * add by gao.tang 2007.12.28
+		 * 删除用户可管理机构的所有操作日志
+		 * @return
+		 * @throws ManagerException
+		 */
+		public boolean deleteAllLog(String curUserId) throws ManagerException {
+			boolean state = false;
+			StringBuffer sql = new StringBuffer()
+			   .append("delete from (select * ")
+	           .append(" from TD_SM_LOG where log_operuser in(select user_name || ':' || user_realname ")
+	           .append("from td_sm_user where user_id in(select user_id from td_sm_userjoborg ")
+    		   .append("where org_id in (select distinct org.org_id from td_sm_organization org ")
+    		   .append("start with org.org_id in (select o.org_id from td_sm_organization o, ")
+    		   .append("td_sm_orgmanager om where o.org_id = om.org_id and om.user_id = '")
+    		   .append(curUserId).append("') ")
+    		   .append("connect by prior org.org_id = org.parent_id)))) lg ");
+			try{
+				DBUtil dbUtil = new DBUtil();
+				dbUtil.executeDelete(sql.toString());
+				state = true;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return state;
+		}
+		
+		public String transRealName2Counter(String name){
+			String counter = "";
+			String sql = "select u.user_name from td_sm_user u where ";
+			sql += " u.user_name='"+name+"' or u.user_realname='"+name+"' ";
+			DBUtil db = new DBUtil();
+			try {
+				db.executeSelect(sql);
+				if(db.size()>0){
+					counter = db.getString(0,"user_name");
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return counter;
+			
+		}
+		
+		public void log(String operUser,
+						String operContent,
+						String operModle,
+						String operSource,
+						String Desc) 
+		throws ManagerException{
+			if(!enabledlog(operModle))
+                return;
+			DBUtil db = new DBUtil();
+			//operUser = this.transRealName2Counter(operUser);
+			String sql ="insert into TD_SM_LOG(LOG_OPERUSER,LOG_OPER,LOG_VISITORIAL,LOG_OPERTIME,LOG_TYPE,remark1)" +
+					" values('"+ operUser +"','"+ operModle +"','"+ operSource +"',"+ DBUtil.getDBDate(new Date())+"," +
+					" '"+ operContent  +"','"+ Desc +"') ";
+			
+			try {
+				db.addBatch(sql);
+				db.executeBatch();
+			} catch (Exception e) {
+			
+				e.printStackTrace();
+			}finally{
+				db.resetBatch();
+			}
+		}
+		public void log(String operUser,String operContent,String operModle,String operSource) 
+		throws ManagerException{
+			log( operUser, operContent, operModle, operSource, "");
+		}
+		
+		 /**
+         * 判断是否允许记日志
+         * 判断module是否存在于logmodule表中，如果存在继续下一步工作，如果不存在就往logmodule表中插入module记录
+         * @param logmodule
+         * @return
+         */
+        public boolean enabledlog(String logmodule)
+        {
+        	Integer o_status = (Integer)this.map.get(logmodule);
+        	if(o_status == null)
+        	{
+	            String sql = "select * from td_sm_logmodule where logmodule='" + logmodule +"'";
+	            DBUtil dbUtil = new DBUtil();
+	            try
+	            {
+	                dbUtil.executeSelect(sql);
+	                if(dbUtil.size() > 0)
+	                {
+	                    int status = dbUtil.getInt(0,"status");
+	                    map.put(logmodule,new Integer(status)); 
+	                    return status == 0;
+	                    //return true;
+	                }else{
+		                sql = "insert into td_sm_logmodule(logmodule,status) values('"+ logmodule+"',0)";
+		                dbUtil.executeInsert(sql);
+		                map.put(logmodule,new Integer(0));
+		                return true;
+	                }
+	              
+	            }
+	            catch (SQLException e)
+	            {
+	                return false;
+	            }
+        	}
+        	else
+        	{
+        		int status = o_status.intValue();
+        		return status == 0;
+        	}
+        }
+        
+      
+//
+//        /**
+//         * 记录系统登录、退出时得日志
+//         */
+//
+//		public void log(String operUser, String operContent, String operType, String operSource, String Desc) throws ManagerException {
+//			
+//            log(operUser,operContent,operType,operSource,operSource,Desc);
+//		} 
+       
+        public boolean updatelog(String status,String logid) throws ManagerException{
+        	boolean b = false;
+        	DBUtil db = new DBUtil();
+    		String sql;
+    		if(status.equals("0")){
+    			 sql ="update TD_SM_LOGMODULE set status=1 where id="+ logid +"";
+    		}else{
+    			 sql ="update TD_SM_LOGMODULE set status=0 where id="+ logid +"";
+    		} 
+    		try {
+				db.executeUpdate(sql);				
+				map.put(logid,new Integer(Integer.parseInt(status)));
+				b = true;
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+			return b;
+        	
+        }
+        
+        public List querylog(Log log)throws ManagerException{
+        	List list = new java.util.ArrayList();
+        	DBUtil db = new DBUtil();
+    		StringBuffer sql = new StringBuffer();
+    		sql.append("select ");
+    		if(log.getOper() != null ){
+    			
+    		}
+    		
+        	return list;
+        }
+        
+        public boolean isNotNull(String str){
+        	boolean flag = true;
+        	if(str==null || str.trim().length()==0 || "null".equalsIgnoreCase(str)){
+        		flag = false;
+        	}
+        	return flag;
+        }
+
+	}
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

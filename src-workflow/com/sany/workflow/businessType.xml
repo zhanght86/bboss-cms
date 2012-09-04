@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<property name="hasSonNodes">
+		<![CDATA[
+			select 
+				count(1)
+			from td_wf_businesstype t
+			where use_flag='1'				
+				
+				and parent_id = ? 
+				and parent_id != business_id
+				
+		]]>
+	</property>	
+	
+	<property name="hastopNodes">
+		<![CDATA[
+			select 
+				count(1)
+			from td_wf_businesstype t
+			where  use_flag='1'				
+				
+				and parent_id = business_id 
+				
+		]]>
+	</property>
+	<property name="selectBusinessList">
+		<![CDATA[
+			select 
+				t.business_id as businessId,
+				t.business_code as businessCode,
+				t.business_name as businessName,
+				(select business_name from td_wf_businesstype p where p.business_id=t.parent_id) as parent_name,
+				t.parent_id as parentId,
+				t.use_flag as useFlag,
+				t.remark as remark
+			from td_wf_businesstype t
+			where 1=1
+				#if($useFlag == 1) 
+					and use_flag='1'				
+				#elseif($useFlag == 0)
+					and use_flag='0' 
+				#end
+				#if($businessId && !$businessId.equals(""))
+					and business_id like #[businessId] 
+				#end
+				#if($businessCode && !$businessCode.equals(""))
+					and business_code like #[businessCode] 
+				#end
+				#if($businessName && !$businessName.equals(""))
+					and business_name like #[businessName] 
+				#end
+				#if($parentId && !$parentId.equals(""))
+					and parent_id = #[parentId] 
+				#end
+		]]>
+	</property>
+	
+	
+	<property name="selectSonBusinessList">
+		<![CDATA[
+			select 
+				t.business_id as businessId,
+				t.business_code as businessCode,
+				t.business_name as businessName,
+				t.parent_id as parentId,
+				t.use_flag as useFlag,
+				t.remark as remark
+			from td_wf_businesstype t
+			where  use_flag='1'				
+				
+				and parent_id = ? 
+				and parent_id != business_id
+		]]>
+	</property>
+	
+	<property name="selectTopBusinessList">
+		<![CDATA[
+			select 
+				t.business_id as businessId,
+				t.business_code as businessCode,
+				t.business_name as businessName,
+				t.parent_id as parentId,
+				t.use_flag as useFlag,
+				t.remark as remark
+			from td_wf_businesstype t
+			where use_flag='1'	
+				and parent_id = business_id 
+		]]>
+	</property>
+	
+	<property name="insertBusinessType">
+		<![CDATA[
+			insert into td_wf_businesstype
+				(business_id, business_code, business_name, parent_id, use_flag, remark) 
+			values
+				(#[businessId], #[businessCode], #[businessName], #[parentId], #[useFlag], #[remark])
+		]]>
+	</property>
+	
+	<property name="updateBusinessType">
+		<![CDATA[
+			update td_wf_businesstype
+			set business_code=#[businessCode],
+				business_name=#[businessName],
+				parent_id=#[parentId],
+				use_flag=#[useFlag],
+				remark=#[remark]
+			where business_id=#[businessId]
+		]]>
+	</property>
+	
+	<property name="queryBusinessNode">
+		<![CDATA[
+			select business_id as id,business_name as text from td_wf_businesstype where parent_id=?
+		]]>
+	</property>
+	<property name="deleteBusinessType">
+		<![CDATA[
+			delete from td_wf_businesstype where business_id=#[businessId]
+		]]>
+	</property>
+</properties>

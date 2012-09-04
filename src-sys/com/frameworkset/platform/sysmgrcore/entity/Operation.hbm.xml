@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:36:07 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Operation" table="td_sm_operation">
+		<id name="opId" column="OP_ID" type="java.lang.String">
+				<generator class="uuid.hex" />
+		</id>
+		<property name="opName" column="OP_NAME" type="java.lang.String" />
+		<property name="opDes" column="OP_DES" type="java.lang.String" />
+		<property name="priority" column="PRIORITY"
+			type="java.lang.String" />
+		<property name="reserved1" column="RESERVED1"
+			type="java.lang.String" />
+		<property name="reserved2" column="RESERVED2"
+			type="java.lang.String" />
+		<property name="reserved3" column="RESERVED3"
+			type="java.lang.String" />
+		<property name="reserved4" column="RESERVED4"
+			type="java.lang.String" />
+		<property name="reserved5" column="RESERVED5"
+			type="java.lang.String" />
+
+		<!--用户资源操作集合-->
+		<set name="userresopSet" cascade="none" inverse="true" lazy="true">
+			<key column="OP_ID" />
+			<one-to-many class="Userresop" />
+		</set>
+
+		<!--临时授权集合-->
+		<set name="tempaccreditSet" cascade="none" inverse="true" lazy="true">
+			<key column="OP_ID" />
+			<one-to-many class="Tempaccredit" />
+		</set>
+
+		<!--角色资源操作实体集合-->
+		<set name="roleresopSet" cascade="none" inverse="true" lazy="true">
+			<key column="OP_ID" />
+			<one-to-many class="Roleresop" />
+		</set>
+
+		<!--操作资源实体集合-->
+		<set name="operresSet" cascade="none" inverse="true" lazy="true">
+			<key column="OP_ID" />
+			<one-to-many class="Operres" />
+		</set>
+	</class>
+
+</hibernate-mapping>

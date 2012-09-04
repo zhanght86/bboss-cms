@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:34:17 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Accredit" table="td_sm_accredit">
+		<id name="accreditId" column="ACCREDIT_ID"
+			type="java.lang.String">
+			<generator class="uuid.hex" />
+		</id>
+
+		<!--		<property name="userId" column="USER_ID" type="java.lang.String"-->
+		<!--			not-null="true" />-->
+		<!--		<property name="accreditUserId" column="ACCREDIT_USER_ID"-->
+		<!--			type="java.lang.String" not-null="true" />-->
+		<property name="validfrom" column="VALIDFROM"
+			type="java.sql.Date" not-null="true" />
+		<property name="validto" column="VALIDTO" type="java.sql.Date"
+			not-null="true" />
+
+		<many-to-one name="user" column="USER_ID" not-null="true"
+			cascade="none" />
+		<many-to-one name="accreditUser" column="ACCREDIT_USER_ID" not-null="true"
+			cascade="none" />
+	</class>
+
+</hibernate-mapping>

@@ -1,0 +1,46 @@
+// Decompiled by DJ v3.7.7.81 Copyright 2004 Atanas Neshkov  Date: 2007-9-12 ÏÂÎç 07:33:18
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   OrgSubUserList.java
+
+package com.frameworkset.platform.sysmgrcore.web.tag;
+
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.util.ListInfo;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+
+public class OrgSubUserList extends DataInfoImpl
+{
+
+    public OrgSubUserList()
+    {
+        logger = Logger.getLogger(com.frameworkset.platform.sysmgrcore.web.tag.OrgSubUserList.class.getName());
+    }
+
+    protected ListInfo getDataList(String sortKey, boolean desc, long offset, int maxPagesize)
+    {
+        ListInfo listInfo = new ListInfo();
+        String orgId = request.getParameter("orgId");
+        try
+        {
+            UserManager userManager = SecurityDatabase.getUserManager();
+            String sql = "select * from td_sm_user a inner join ( select user_id,min(job_sn) x,min(same_job_user_sn) y from td_sm_userjoborg  where org_id='" + orgId + "' " + " group by user_id" + " ) b on a.user_id=b.user_id " + " order by b.x,b.y";
+            listInfo = userManager.getUserList(sql, (int)offset, maxPagesize);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return listInfo;
+    }
+
+    protected ListInfo getDataList(String arg0, boolean arg1)
+    {
+        return null;
+    }
+
+    private Logger logger;
+}

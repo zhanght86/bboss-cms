@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Feb 14 11:47:27 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+	<class name="Log" table="td_sm_log">
+		<id name="logId" column="log_ID" type="java.lang.Integer">
+			<generator class="com.frameworkset.common.hibernate.KeyGenerator">
+				<param name="tableName">td_sm_log</param>
+			</generator>
+		</id>
+
+		
+		<property name="operUser" column="log_OPERUSER" type="java.lang.String" not-null="false" />
+		<property name="oper" column="log_OPER" type="java.lang.String" not-null="false" />
+		<property name="visitorial" column="log_VISITORIAL" type="java.lang.String" not-null="false" />
+
+		<property name="operTime" column="log_OPERTIME" type="java.sql.Timestamp" not-null="false" />
+		<property name="type" column="log_TYPE" type="java.lang.String" not-null="false" />
+		<property name="remark1" column="REMARK1" type="java.lang.String" not-null="false" />
+		<property name="remark2" column="REMARK2" type="java.lang.String" not-null="false" />
+		<property name="remark3" column="REMARK3" type="java.lang.String" not-null="false" />
+		
+		
+	</class>
+
+</hibernate-mapping>

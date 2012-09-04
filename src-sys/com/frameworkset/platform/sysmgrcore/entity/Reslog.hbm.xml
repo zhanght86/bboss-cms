@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:37:05 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+    <class name="Reslog" table="td_sm_reslog">
+        <id name="reslogId" column="RESLOG_ID" type="java.lang.String">
+            <generator class="uuid.hex"/>
+        </id>
+ 
+        <property name="opId" column="OP_ID" type="java.lang.String" />
+        <property name="resId" column="RES_ID" type="java.lang.String" />
+        <property name="userId" column="USER_ID" type="java.lang.Integer" />
+        <property name="reslogDate" column="RESLOG_DATE" type="java.util.Date" />
+    </class>
+    
+</hibernate-mapping>

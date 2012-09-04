@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:35:32 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+    <class name="Lcontrol" table="td_sm_lcontrol">
+        <id name="lcontrolId" column="LCONTROL_ID" type="java.lang.String">
+            <generator class="uuid.hex"/>
+        </id>
+ 
+        <property name="listdictId" column="LISTDICT_ID" type="java.lang.String" />
+        <property name="lcontrolAction" column="LCONTROL_ACTION" type="java.lang.String" />
+    </class>
+    
+</hibernate-mapping>

@@ -1,0 +1,863 @@
+package com.frameworkset.platform.sysmgrcore.manager.db;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
+import javax.xml.rpc.ServiceException;
+
+import org.apache.log4j.Logger;
+import org.frameworkset.spi.SPIException;
+
+import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.platform.portal.client.model.SimpleUserSoap;
+import com.frameworkset.platform.portal.client.service.SimpleUserServiceSoap;
+import com.frameworkset.platform.portal.client.service.SimpleUserServiceSoapService;
+import com.frameworkset.platform.portal.client.service.SimpleUserServiceSoapServiceLocator;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+import com.frameworkset.platform.sysmgrcore.entity.Accredit;
+import com.frameworkset.platform.sysmgrcore.entity.Group;
+import com.frameworkset.platform.sysmgrcore.entity.Job;
+import com.frameworkset.platform.sysmgrcore.entity.Operation;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.entity.Orgjob;
+import com.frameworkset.platform.sysmgrcore.entity.Res;
+import com.frameworkset.platform.sysmgrcore.entity.Role;
+import com.frameworkset.platform.sysmgrcore.entity.Tempaccredit;
+import com.frameworkset.platform.sysmgrcore.entity.User;
+import com.frameworkset.platform.sysmgrcore.entity.Userattr;
+import com.frameworkset.platform.sysmgrcore.entity.Usergroup;
+import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
+import com.frameworkset.platform.sysmgrcore.entity.Userresop;
+import com.frameworkset.platform.sysmgrcore.entity.Userrole;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.util.ListInfo;
+
+public class PortalUserManagerWebServiceImpl implements UserManager {
+	public static final String PORTAL_WEB_SERVICE_URL_CONF = "portalWebServiceUrl";
+	public static final String PORTAL_USER_MAPPING_APP_ID = "portalUserMappingAppId";
+	public static final String IS_SYN_PORTAL_USER = "isSynPortalUser";
+	// public static final String IS_SYN_PORTAL_USER_MAPPING =
+	// "isSynPortalUserMapping";
+	public static final String HTTP_CONTEXT_FOR_PORTAL = "httpContextForPortal";
+
+	public String addUser(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean addUserOrg(String[] userIds, String orgId, String classType)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean addUsergroup(Integer userid, String[] groupid)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void addUserrole(String userId, String[] roleIds)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addUserrole(String userId, String[] roleIds,
+			String currentUserId) throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean delAlotJobRole(String[] ids, String[] jobid, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void delAlotUserOrg(String[] ids, String[] jobids, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean delAlotUserRole(String[] ids, String[] roleid)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteAccredit(Accredit accredit) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteBatchUser(String[] userIds) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteBatchUserRes(String[] userIds) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteDisperseOrguser() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteTempaccredit(Tempaccredit tempaccredit)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String deleteUJOAjax(String uid, String[] jobIds, String orgId)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void deleteUJOAjax_batch(String[] ids, String[] jobid, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String deleteUserOrgJob(Integer uid, String orgId, String[] jobid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean deleteUserRes(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserattr(Userattr userattr) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUsergroup(Usergroup usergroup) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUsergroup(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUsergroup(Group group) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUsergroup(String userId, String groupId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUsergroup(Integer userid, String[] groupids)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(Userjoborg userjoborg)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(Job job, Organization org)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(Job job, User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(Organization org, User user)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(String userId, String jobId, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserjoborg(String userId, String jobId, String orgId,
+			boolean sendEvent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserresop(Userresop userresop) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserrole(Userrole userrole) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserrole(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserrole(Organization org, Role role)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean deleteUserrole(Role role, Group group)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void deleteUserrole(String userId, String[] roleIds)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void deleteUserrole(String userId, String[] roleIds, String roleTypes)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public List getAccreditList(String userName) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String[] getCuruserAdministrableDeleteUser(String curUserId,
+			String[] selectUserNames) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getDicList() throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getOrgUserList(String orgid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getOrgUserList(String orgid, String userId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public PageConfig getPageConfig() throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getTempaccredit(String userName) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUser(String propName, String value) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUser(String hql) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUserById(String userId) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUserByName(String userName) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ListInfo getUserInfoList(String sql, int offset, int maxItem)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(String propName, String value, boolean isLike)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Role role) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Job job) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ListInfo getUserList(String sql, int offset, int maxItem)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(String sql) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Organization org) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Group group) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Operation oper) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Res res) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList() throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Organization org, Role role)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Organization org, Job job) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(Orgjob orgjob) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(String orgid, String jobid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUserList(String[][] orgjobs) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getUserMainOrgId(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getUserSN(String orgid, String userid) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean getUserSnList(String orgId, String jobId, int jobSn)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public List getUserjoborgList(String userId, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUsersListOfRole(String roleid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getUsersListOfRoleInOrg(String roleid, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List getmemberTypeList(String typeid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isContainUser(Organization org) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isTaxmanager(String userId) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isUserExist(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isUserjoborgExist(Userjoborg userjoborg)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isUserroleExist(Userrole userrole) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public User loadAssociatedSet(String userId, String associated)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void resetUserMainOrg(String userid, String oldmainorg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean storeAccredit(Accredit accredit) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String storeAllUserSnJobOrg(String orgId, String jobId,
+			String jobSn, String[] userId) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean storeAlotUserJob(String[] ids, String[] jobid, String orgid)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void storeAlotUserOrg(String[] ids, String[] jobids, String orgid)
+			throws ManagerException, SPIException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean storeAlotUserRole(String[] ids, String[] roleid)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds,
+			boolean isInsert) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeLogincount(String userName) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void storeOrgUserOrder(String orgId, String[] userId)
+			throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean storeTempaccredit(Tempaccredit tempaccredit)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String storeUJOAjax(String uid, String[] jobIds, String orgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void storeUJOAjax_batch(String[] ids, String[] jobid, String orgid) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean storeUser(User user, String propName, String value)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String storeUserOrgJob(Integer uid, String orgId, String[] jobid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean storeUserattr(Userattr userattr) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUsergroup(Usergroup usergroup) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserjoborg(Userjoborg userjoborg)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserjoborg(String userId, String[] jobId, String orgId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserjoborg(String userId, String jobId, String orgId,
+			boolean needevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserjoborg(String userId, String jobId, String orgId,
+			String jobuserSn, String jobSn, boolean needevent)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserresop(Userresop userresop) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean storeUserrole(Userrole userrole) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void storeUserrole(String userId, String roleId)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void creatorUser(User user, String orgId, String jobId)
+			throws ManagerException {
+		this.addUser(user, true);
+	}
+
+	public String addUser(User user, boolean isEvent) throws ManagerException {
+		// 是否同步portal真实用户
+		boolean isSynPortalUser = isSynPortalUser();
+		if (isSynPortalUser) {
+			try {
+				// 
+				long companyId = 0;
+				SimpleUserServiceSoap simpleUserServiceSoap = getUserServiceSoap();
+
+				if (simpleUserServiceSoap.isExistsUser(companyId, user
+						.getUserName())) {
+					SimpleUserSoap simpleUserSoap = new SimpleUserSoap();
+
+					simpleUserSoap.setScreenName(user.getUserName());
+					simpleUserSoap.setPassword(user.getUserPassword());
+					simpleUserSoap.setFirstName(user.getUserRealname());
+					simpleUserSoap.setMiddleName(null);
+					simpleUserSoap.setLastName(null);
+					// 性别
+					simpleUserSoap.setMale(user.getUserSex().equals("M") ? true
+							: false);
+					simpleUserSoap.setEmailAddress(user.getUserEmail());
+					// 欢迎信息
+					simpleUserSoap.setGreeting("欢迎 " + user.getUserRealname()
+							+ "!");
+					// 调用添加方法
+					simpleUserServiceSoap.addUser(companyId, simpleUserSoap);
+				}
+
+			} catch (Exception e) {
+				System.err
+						.println("["
+								+ this.getClass().getName()
+								+ "] exception:调用Portal的WebService方法失败!请检查参数portalWebServiceUrl设置是否正确!");
+			}
+		}
+		return null;
+	}
+
+	public boolean deleteBatchUser(User[] users) throws ManagerException {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < users.length; i++) {
+			this.deleteUser(users[i]);
+		}
+		return false;
+	}
+
+	public boolean deleteUser(User user) throws ManagerException {
+		long companyId = 0;
+		// TODO Auto-generated method stub
+		// 是否同步portal真实用户
+		boolean isSynPortalUser = isSynPortalUser();
+
+		try {
+			SimpleUserServiceSoap simpleUserServiceSoap = getUserServiceSoap();
+
+			// 删除用户映射关系成功否
+			boolean delUserMappingSuccessed = false;
+
+			// 删除用户映射关系
+			String appUserName = user.getUserName();
+			String appHttpContext = this.getAppHttpContext();
+			String appId = this.getAppId();
+			// 如果配置了appHttpContext，才更新映射关系
+			if (appHttpContext != null && appHttpContext.trim().length() > 0) {
+				// 如果不存在映射关系，将返回false
+				delUserMappingSuccessed = simpleUserServiceSoap
+						.deleteUserMappingForApp(appHttpContext, appId,
+								appUserName);
+			}
+
+			// 如果已经删除了映射关系，就不再删除Portal的真实用户，防止误删Portal的用户还映射到其他系统。
+			if (isSynPortalUser && !delUserMappingSuccessed) {
+				// 删除Portal用户
+				simpleUserServiceSoap.deleteUser(companyId, user.getUserName());
+			}
+		} catch (Exception e) {
+			System.err
+					.println("["
+							+ this.getClass().getName()
+							+ "] exception:调用Portal的WebService方法失败!请检查参数portalWebServiceUrl设置是否正确!");
+		}
+
+		return false;
+	}
+
+	public boolean updateUser(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		long companyId = 0;
+		// TODO Auto-generated method stub
+		// 是否同步portal真实用户
+		boolean isSynPortalUser = isSynPortalUser();
+
+		if (!isSynPortalUser) {
+			return true;
+		} else {
+
+			try {
+				//对应Portal的用户名
+				String portalUserName = null;
+				SimpleUserServiceSoap simpleUserServiceSoap = getUserServiceSoap();
+
+				String appUserName = user.getUserName();
+				String appHttpContext = this.getAppHttpContext();
+				String appId = this.getAppId();
+
+				// 如果配置了appHttpContext，才查找映射关系
+				if (appHttpContext != null
+						&& appHttpContext.trim().length() > 0) {
+					// 查找是用户映射关系
+					portalUserName = simpleUserServiceSoap
+							.getUserNameInPortalForApp(appHttpContext, appId,
+									appUserName);
+				}
+				
+				//如果不存在映射关系，则对应Portal用户名与应用系统的用户名相同
+				if (portalUserName == null
+						|| portalUserName.length() == 0) {
+					portalUserName = user.getUserName();
+				}
+
+				SimpleUserSoap userSoap = simpleUserServiceSoap
+						.getUserByScreenName(companyId, portalUserName);
+
+				// 如果Portal存在该用户
+				if (userSoap != null) {
+					// 如果用户真实姓名发生改变，将真实姓名更新到Portal
+					String realName = user.getUserRealname();
+					if (!userSoap.getFirstName().equals(realName)) {
+						String greeting = "欢迎 " + realName + "！";
+						simpleUserServiceSoap.updateUser(companyId,
+								portalUserName, realName, null, null, greeting);
+					}
+				}
+
+			} catch (Exception e) {
+				System.err
+						.println("["
+								+ this.getClass().getName()
+								+ "] exception:调用Portal的WebService方法失败!请检查参数portalWebServiceUrl设置是否正确!");
+			}
+		}
+
+		return false;
+
+	}
+
+	public boolean updateUserPassword(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+
+		// 是否同步portal真实用户
+		boolean isSynPortalUser = isSynPortalUser();
+		long companyId = 0;
+
+		try {
+			SimpleUserServiceSoap simpleUserServiceSoap = getUserServiceSoap();
+
+			// 需要用户映射（默认为true)才去更新映射关系表里的密码
+
+			String appUserName = user.getUserName();
+			String password = user.getUserPassword();
+			String appHttpContext = this.getAppHttpContext();
+			String appId = this.getAppId();
+
+			// 如果配置了appHttpContext，才更新映射关系
+			if (appHttpContext != null && appHttpContext.trim().length() > 0) {
+				// 如果需要同步Portal用户，则同时同步对应Portal用户的密码
+				simpleUserServiceSoap.updateUserPasswordForApp(appHttpContext,
+						appId, appUserName, password, companyId,
+						isSynPortalUser);
+			} else {
+				// 不需求更新映射关系，就直接判断是否要同步Portal用户密码
+
+				// 需要同步时，才同步Portal的用户表
+				if (isSynPortalUser) {
+
+					// 同步portal真实用户
+					// 直接用密码明文更新，不需要加密
+					simpleUserServiceSoap.updateUserPassword(companyId, user
+							.getUserName(), user.getUserPassword());
+				}
+			}
+
+		} catch (Exception e) {
+			System.err
+					.println("["
+							+ this.getClass().getName()
+							+ "] exception:调用Portal的WebService方法失败!请检查参数portalWebServiceUrl设置是否正确!");
+		}
+		return false;
+	}
+
+	public String userOrgInfo(AccessControl control, String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean userResCopy(String userId, String[] userid2)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * UserSoap接口操作对象
+	 * 
+	 * @return
+	 * @throws MalformedURLException
+	 * @throws ServiceException
+	 * @throws Exception
+	 */
+	private SimpleUserServiceSoap getUserServiceSoap()
+			throws MalformedURLException, ServiceException {
+		SimpleUserServiceSoapService serviceSoapService = new SimpleUserServiceSoapServiceLocator();
+
+		URL serviceUrl = getServiceURL("SimpleUserServiceSoap");
+		SimpleUserServiceSoap serviceSoap = serviceSoapService
+				.getSimpleUserServiceSoap(serviceUrl);
+		return serviceSoap;
+	}
+
+	private URL getServiceURL(String serviceName) throws MalformedURLException {
+		String portalWebServiceUrl = ConfigManager.getInstance()
+				.getConfigValue(PORTAL_WEB_SERVICE_URL_CONF);
+		// http://validateCenter:123456@172.16.17.143:8081/tunnel-web/secure/axis/
+		URL serviceUrl = new URL(portalWebServiceUrl + "/" + serviceName);
+
+		return serviceUrl;
+	}
+
+	private String getAppHttpContext() {
+		// AccessControl control = AccessControl.getAccessControl();
+		//
+		// String ipAdd = control.getRemoteAddr();
+		// String port = control.getPort();
+		// String contextpath = control.getContextPath();
+
+		return ConfigManager.getInstance().getConfigValue(
+				HTTP_CONTEXT_FOR_PORTAL);
+	}
+
+	private String getAppId() {
+		String appId = ConfigManager.getInstance().getConfigValue(
+				PORTAL_USER_MAPPING_APP_ID);
+		if (appId != null && appId.trim().length() > 0) {
+			return appId;
+		} else {
+			AccessControl control = AccessControl.getAccessControl();
+			String sybsystemId = control.getCurrentSystemID();
+			return sybsystemId;
+		}
+	}
+
+	private boolean isSynPortalUser() {
+		return ConfigManager.getInstance().getConfigBooleanValue(
+				IS_SYN_PORTAL_USER, false);
+	}
+
+	// private boolean isSynPortalUserMapping() {
+	// return ConfigManager.getInstance().getConfigBooleanValue(
+	// IS_SYN_PORTAL_USER_MAPPING, false);
+	// }
+
+	private static Logger _log = Logger
+			.getLogger(PortalUserManagerWebServiceImpl.class);
+
+}

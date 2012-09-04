@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:36:57 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Res" table="td_sm_res">
+		<id name="resId" column="RES_ID" type="java.lang.String">
+			<generator class="com.frameworkset.common.hibernate.KeyGenerator">
+				<param name="tableName">td_sm_res</param>
+			</generator>
+
+		</id>
+
+		<!--		<property name="restypeId" column="RESTYPE_ID"-->
+		<!--			type="java.lang.String" />-->
+		<property name="title" column="TITLE" type="java.lang.String" />
+		<property name="roleUsage" column="ROLE_USAGE"
+			type="java.lang.String" />
+		<property name="parentId" column="PARENT_ID"
+			type="java.lang.String" />
+		<property name="path" column="PATH" type="java.lang.String" />
+		<property name="marker" column="MARKER" type="java.lang.String" />
+        <property name="restypeId" column="RESTYPE_ID" type="java.lang.String" />
+		<property name="reserved1" column="RESERVED1"
+			type="java.lang.String" />
+		<property name="reserved3" column="RESERVED3"
+			type="java.lang.String" />
+		<property name="reserved4" column="RESERVED4"
+			type="java.lang.String" />
+		<property name="reserved5" column="RESERVED5"
+			type="java.lang.String" />
+		<property name="attr1" column="ATTR1" type="java.lang.String" />
+		<property name="attr2" column="ATTR2" type="java.lang.String" />
+		<property name="attr3" column="ATTR3" type="java.lang.String" />
+		<property name="attr4" column="ATTR4" type="java.lang.String" />
+		<property name="attr5" column="ATTR5" type="java.lang.String" />
+		<property name="attr6" column="ATTR6" type="java.lang.String" />
+		<property name="attr7" column="ATTR7" type="java.lang.String" />
+		<property name="attr8" column="ATTR8" type="java.lang.String" />
+		<property name="attr9" column="ATTR9" type="java.lang.String" />
+		<property name="attr10" column="ATTR10" type="java.lang.String" />
+		<property name="attr11" column="ATTR11" type="java.lang.String" />
+		<property name="attr12" column="ATTR12" type="java.lang.String" />
+		<property name="attr13" column="ATTR13" type="java.lang.String" />
+		<property name="attr14" column="ATTR14" type="java.lang.String" />
+		<property name="attr15" column="ATTR15" type="java.lang.String" />
+		<property name="attr16" column="ATTR16" type="java.lang.String" />
+		<property name="attr17" column="ATTR17" type="java.lang.String" />
+		<property name="attr18" column="ATTR18" type="java.lang.String" />
+		<property name="attr19" column="ATTR19" type="java.lang.String" />
+		<property name="attr20" column="ATTR20" type="java.lang.String" />
+		<property name="attr21" column="ATTR21" type="java.lang.String" />
+		<property name="attr22" column="ATTR22" type="java.lang.String" />
+		<property name="attr23" column="ATTR23" type="java.lang.String" />
+		<property name="attr24" column="ATTR24" type="java.lang.String" />
+		<property name="attr25" column="ATTR25" type="java.lang.String" />
+		<property name="attr26" column="ATTR26" type="java.lang.String" />
+		<property name="attr27" column="ATTR27" type="java.lang.String" />
+
+		<!--资源实体与用户资源操作实体为一对多双向关系，不可以使用级联操作-->
+		<!--<set name="userresopSet" cascade="none" inverse="true" lazy="true">
+			<key column="RES_ID" />
+			<one-to-many class="Userresop" />
+		</set>-->
+
+		<!--角色资源操作实体集合-->
+		<set name="roleresopSet" cascade="none" inverse="true" lazy="true">
+			<key column="RES_ID" />
+			<one-to-many class="Roleresop" />
+		</set>
+
+		<!--操作资源实体集合-->
+		<!--<set name="operresSet" cascade="none" inverse="true" lazy="true">
+			<key column="RES_ID" />
+			<one-to-many class="Operres" />
+		</set>-->
+
+		<!--<many-to-one name="restype" column="RESTYPE_ID" cascade="none" 
+			not-null="false" />-->
+
+	</class>
+
+</hibernate-mapping>

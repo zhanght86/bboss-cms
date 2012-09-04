@@ -1,0 +1,114 @@
+package com.frameworkset.platform.sysmgrcore.web.struts.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import com.frameworkset.platform.mq.RemindManagerImpl;
+import com.frameworkset.platform.security.AccessControl;
+
+/**
+ * O
+ * @author lin.jian Sep 7, 2006
+ * 
+ */
+public class RemindInfoAction extends BasicAction
+{
+
+    /**
+     * 删除提醒
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ActionForward deleteRemindInfo(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        RemindManagerImpl rmi = new RemindManagerImpl();
+        String[] id = request.getParameterValues("ID");
+        if (id != null)
+        {
+            for (int i = 0; i < id.length; i++)
+            {
+                int j = Integer.parseInt(id[i]);
+                rmi.deleteRemindInfo(j);
+            }
+        }
+        return mapping.findForward("remindinfomanager");
+    }
+    
+     /**
+     * 
+     * <p>Description: 根据删除当前登录用户的所有提醒</p>
+     * <p>creationTime: Oct 30, 2006</p>
+     * @author lin.jian
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ActionForward deleteAllRemindInfoByUser(ActionMapping mapping,
+            ActionForm form, HttpServletRequest request,
+            HttpServletResponse response) throws Exception
+    {
+
+        RemindManagerImpl rmi = new RemindManagerImpl();
+        AccessControl accesscontroler = AccessControl.getInstance();
+        accesscontroler.checkAccess(request, response);
+        int userID = Integer.parseInt(accesscontroler.getUserID());
+        rmi.deleteRemindInfoByUserId(userID);
+        return mapping.findForward("remindinfomanager");
+    }
+
+    /**
+     * 发送提醒
+     * 
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    public ActionForward sendRemindInfo(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+
+        RemindManagerImpl rmi = new RemindManagerImpl();
+        String source = request.getParameter("source");
+        String isSys = request.getParameter("isSys");
+        String isEmail = request.getParameter("isEmail");
+        String isMessage = request.getParameter("isMessage");
+        String id = "";
+        String userId = request.getParameter("executors");
+        String content = request.getParameter("content");
+        if (userId != null)
+        {
+            for (int i = 0; i < userId.length();)
+            {
+
+                if (userId.indexOf(',', i) < 0)
+                    break;
+                id = userId.substring(i, userId.indexOf(',', i));
+                i = userId.indexOf(',', i) + 1;
+                rmi.sendRemindInfoByUserId(source,isSys,isEmail,isMessage,Integer.parseInt(id),content);
+
+            }
+            id = userId.substring(userId.lastIndexOf(',') + 1);
+            rmi.sendRemindInfoByUserId(source,isSys,isEmail,isMessage,Integer.parseInt(id),content);
+        }
+        return mapping.findForward("send_remindinfo");
+    }
+}

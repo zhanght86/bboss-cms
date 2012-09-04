@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:37:24 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Roleresop" table="td_sm_roleresop">
+		<composite-id name="id" class="RoleresopKey" unsaved-value="any">
+			<key-property name="opId" column="OP_ID" type="java.lang.String" />
+			<key-property name="resId" column="RES_ID" type="java.lang.String" />
+			<key-property name="roleId" column="ROLE_ID" type="java.lang.String" />
+			<key-property name="restypeId" column="RESTYPE_ID" type="java.lang.String" />
+			
+						
+		</composite-id>
+         <!--尹标平在2006.4.28日添加-->
+        <property name="resName" column="RES_NAME"
+			type="java.lang.String" not-null="false" />
+
+        <property name="auto" column="auto"
+			type="java.lang.String" not-null="false" />
+         <!--尹标平在2006.4.28日添加结束-->
+		<property name="types" column="TYPES"
+			type="java.lang.String" not-null="false" />
+		         
+<!--		<many-to-one name="role" column="ROLE_ID" cascade="none" not-null="true" insert="false" update="false" />-->
+		<!--吴卫雄暂时屏蔽：目前资源的范围已扩展到机构，而机构没有定义在 TD_SM_RES 表中，所以-->
+		<!--如果不屏蔽下面的映射就会出现无法在 TD_SM_RES 表中找到相关机构资源的异常。-->
+		<!--		<many-to-one name="res" column="RES_ID" cascade="none"-->
+		<!--			not-null="true" insert="false" update="false" />-->
+        <!--尹标平在2006.4.13日修改-->
+		<!--<many-to-one name="operation" column="OP_ID" cascade="none" not-null="true" insert="false" update="false" />-->
+		<!--<many-to-one name="restype" column="RESTYPE_ID" cascade="none" not-null="true" insert="false" update="false" />-->
+	</class>
+
+</hibernate-mapping>

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Feb 14 11:47:27 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="User" table="td_sm_user">
+		<id name="userId" column="USER_ID" type="java.lang.Integer">
+			<generator class="com.frameworkset.common.hibernate.KeyGenerator">
+				<param name="tableName">td_sm_user</param>
+			</generator>
+		</id>
+
+		<property name="userSn" column="USER_SN" type="java.lang.Integer" not-null="true" />
+		<property name="userName" column="USER_NAME" type="java.lang.String" not-null="true" />
+		<property name="userPassword" column="USER_PASSWORD" type="java.lang.String" not-null="true" />
+		<property name="userRealname" column="USER_REALNAME" type="java.lang.String" not-null="true" />
+
+		<property name="userWorknumber" column="USER_WORKNUMBER" type="java.lang.String" not-null="false" />
+		<property name="userPinyin" column="USER_PINYIN" type="java.lang.String" not-null="false" />
+		<property name="userSex" column="USER_SEX" type="java.lang.String" not-null="false" />
+		<property name="userHometel" column="USER_HOMETEL" type="java.lang.String" not-null="false" />
+		<property name="userWorktel" column="USER_WORKTEL" type="java.lang.String" not-null="false" />
+		<property name="userMobiletel1" column="USER_MOBILETEL1" type="java.lang.String" not-null="false" />
+		<property name="userMobiletel2" column="USER_MOBILETEL2" type="java.lang.String" not-null="false" />
+		<property name="userFax" column="USER_FAX" type="java.lang.String" not-null="false" />
+		<property name="userOicq" column="USER_OICQ" type="java.lang.String" not-null="false" />
+		<property name="userBirthday" column="USER_BIRTHDAY" type="java.sql.Date" not-null="false" />
+		<property name="userEmail" column="USER_EMAIL" type="java.lang.String" not-null="false" />
+		<property name="userAddress" column="USER_ADDRESS" type="java.lang.String" not-null="false" />
+		<property name="userPostalcode" column="USER_POSTALCODE" type="java.lang.String" not-null="false" />
+		<property name="userIdcard" column="USER_IDCARD" type="java.lang.String" not-null="false" />
+		<property name="userIsvalid" column="USER_ISVALID" type="java.lang.Integer" not-null="false" />
+		<property name="userRegdate" column="USER_REGDATE" type="java.sql.Date" not-null="false" />
+		<property name="userLogincount" column="USER_LOGINCOUNT" type="java.lang.Integer" not-null="false" />
+		<property name="userType" column="USER_TYPE" type="java.lang.String" not-null="false" />
+
+		<property name="remark1" column="REMARK1" type="java.lang.String" not-null="false" />
+		<property name="remark2" column="REMARK2" type="java.lang.String" not-null="false" />
+		<property name="remark3" column="REMARK3" type="java.lang.String" not-null="false" />
+		<property name="remark4" column="REMARK4" type="java.lang.String" not-null="false" />
+		<property name="remark5" column="REMARK5" type="java.lang.String" not-null="false" />
+		<property name="pastTime" column="PAST_TIME" type="java.sql.Date" not-null="false" />
+		<property name="dredgeTime" column="DREDGE_TIME" type="java.lang.String" not-null="false" />
+		<property name="lastlogindate" column="LASTLOGIN_DATE" type="java.sql.Date" not-null="false" />
+		<property name="worklength" column="WORKLENGTH" type="java.lang.String" not-null="false" />
+		<property name="politics" column="POLITICS" type="java.lang.String" not-null="false" />
+		<!--用户实体与用户岗位机构中间表实体为一对多双向关系，不可以使用级联操作否则会将该操作级联到其它实体-->
+		<set name="userjoborgSet" cascade="none" inverse="true" lazy="true">
+			<key column="USER_ID" />
+			<one-to-many class="Userjoborg" />
+		</set>
+
+	
+		<!--用户和用户组集合实体-->
+		<set name="usergroupSet" cascade="none" inverse="true" lazy="true">
+			<key column="USER_ID" />
+			<one-to-many class="Usergroup" />
+		</set>
+
+	
+		<!--用户角色实体-->
+		<set name="userroleSet" cascade="none" inverse="true" lazy="true">
+			<key column="USER_ID" />
+			<one-to-many class="Userrole" />
+		</set>
+	</class>
+
+</hibernate-mapping>

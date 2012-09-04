@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<property name="selectjoblist">
+		<![CDATA[
+			Select * from td_sm_job t where t.job_id<>'1'
+			and JOB_NAME <> ' '
+			#if($jobname && !$jobname.equals(""))
+				and JOB_NAME like  #[jobname]
+			#end
+			#if($jobnumber && !$jobnumber.equals(""))
+				and JOB_NUMBER like  #[jobnumber]
+			#end
+			 order by t.job_name
+			
+		]]>
+	</property>	
+</properties>

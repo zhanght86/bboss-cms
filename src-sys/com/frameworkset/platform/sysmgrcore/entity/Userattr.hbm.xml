@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Tue Feb 14 11:48:24 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Userattr" table="td_sm_userattr">
+		<id name="userattrId" column="USERATTR_ID"
+			type="java.lang.String">
+			<generator class="uuid.hex" />
+		</id>
+
+		<!--USER_ID是用户实体的外键，如果要在用户属性实体中关联用户实体则必须注释下面的属性定义-->
+		<!--		<property name="userId" column="USER_ID"-->
+		<!--			type="java.lang.String" not-null="true" />-->
+		<property name="userattrName" column="USERATTR_NAME"
+			type="java.lang.String" />
+		<property name="userattrValue" column="USERATTR_VALUE"
+			type="java.lang.String" />
+
+		<many-to-one name="user" column="USER_ID" not-null="true"
+			cascade="none" />
+	</class>
+
+</hibernate-mapping>

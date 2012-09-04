@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:36:16 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Operres" table="td_sm_operres">
+		<composite-id name="id" class="OperresKey" unsaved-value="any">
+			<key-property name="opId" column="OP_ID"
+				type="java.lang.String" />
+			<key-property name="resId" column="RES_ID"
+				type="java.lang.String" />
+		</composite-id>
+
+		<many-to-one name="operation" column="OP_ID" cascade="none"
+			not-null="true" insert="false" update="false" />
+		<many-to-one name="res" column="RES_ID" cascade="none"
+			not-null="true" insert="false" update="false" />
+
+	</class>
+
+</hibernate-mapping>

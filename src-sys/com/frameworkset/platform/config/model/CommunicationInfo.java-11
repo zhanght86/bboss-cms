@@ -1,0 +1,71 @@
+package com.frameworkset.platform.config.model;
+
+import com.frameworkset.platform.communication.Mail;
+import com.frameworkset.platform.communication.SMS;
+
+/**
+ * 系统消息程序信息，包括短信和邮件的发送接口
+ * @author Administrator
+ *
+ */
+public class CommunicationInfo implements java.io.Serializable {
+	private  String sms;
+	private  String mail;
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+	public String getSms() {
+		return sms;
+	}
+	public void setSms(String sms) {
+		this.sms = sms;
+	}
+	
+	
+	public SMS getSMSService()
+	{
+		if(this.sms != null)
+		{
+			try {
+				SMS smsInf = (SMS)Class.forName(this.sms).newInstance();
+				return smsInf;
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public Mail getMailService()
+	{
+		if(this.mail != null)
+		{
+			try {
+				Mail mailInf = (Mail)Class.forName(this.mail).newInstance();
+				return mailInf;
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+
+}

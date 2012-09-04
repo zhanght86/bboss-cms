@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Fri Mar 17 08:40:14 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Opergprestype" table="TD_SM_OPERGPRESTYPE">
+		<composite-id name="id" class="OpergprestypeKey" unsaved-value="any">
+			<key-property name="groupId" column="GROUP_ID" type="java.lang.String" />
+			<key-property name="restypeId" column="RESTYPE_ID" type="java.lang.String" />
+
+		</composite-id>
+
+
+	</class>
+
+</hibernate-mapping>

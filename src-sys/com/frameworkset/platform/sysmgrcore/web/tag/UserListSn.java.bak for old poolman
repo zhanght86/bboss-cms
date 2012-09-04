@@ -1,0 +1,108 @@
+// Decompiled by DJ v3.7.7.81 Copyright 2004 Atanas Neshkov  Date: 2007-9-12 ÏÂÎç 07:09:35
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   UserListSn.java
+
+package com.frameworkset.platform.sysmgrcore.web.tag;
+
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.util.ListInfo;
+import java.io.PrintStream;
+import javax.servlet.http.HttpServletRequest;
+
+public class UserListSn extends DataInfoImpl
+{
+
+    public UserListSn()
+    {
+    }
+
+    protected ListInfo getDataList(String sortKey, boolean desc, long offset, int maxPagesize)
+    {
+        String userName = request.getParameter("userName");
+        String userRealname = request.getParameter("userRealname");
+        String recursion = request.getParameter("intervalType");
+        String userId = (String)request.getAttribute("userId");
+        String flag = request.getParameter("flag");
+        System.out.println("----------------" + flag);
+        ListInfo listInfo = new ListInfo();
+        String orgId = request.getParameter("orgId");
+        try
+        {
+            UserManager userManager = SecurityDatabase.getUserManager();
+            StringBuffer sb_user = new StringBuffer();
+            if(flag == null && userName == null && userRealname == null && recursion == null)
+            {
+                sb_user.append("select * from td_sm_user a inner join (");
+                sb_user.append(" select user_id,min(job_sn) x,min(same_job_user_sn) y from td_sm_userjoborg ");
+                sb_user.append(" where org_id='" + orgId + "' ");
+                sb_user.append(" group by user_id");
+                sb_user.append(" ) b on a.user_id=b.user_id ");
+                sb_user.append(" order by b.x,b.y");
+            } else
+            if(flag != null && flag.equals("1"))
+            {
+                sb_user.append("select * from td_sm_user a inner join (");
+                sb_user.append(" select user_id,min(job_sn) x,min(same_job_user_sn) y from td_sm_userjoborg ");
+                sb_user.append(" where org_id='" + orgId + "' ");
+                sb_user.append(" group by user_id");
+                sb_user.append(" ) b on a.user_id=b.user_id ");
+                if(userName != null && userName != "")
+                    sb_user.append("and a.user_name like '%" + userName + "%' ");
+                if(userRealname != null && userRealname != "")
+                    sb_user.append("and a.user_realname like '%" + userRealname + "%'");
+                sb_user.append(" order by b.x,b.y");
+            } else
+            if(flag != null && flag.equals("2") || flag != null && flag.equals("3"))
+            {
+                sb_user.append("select * from td_sm_user a inner join (");
+                sb_user.append(" select user_id,min(job_sn) x,min(same_job_user_sn) y from td_sm_userjoborg ");
+                sb_user.append(" where org_id='" + orgId + "' ");
+                sb_user.append(" group by user_id");
+                sb_user.append(" ) b on a.user_id=b.user_id ");
+                sb_user.append(" order by b.x,b.y");
+            } else
+            {
+                sb_user.append("select * from td_sm_user a inner join (");
+                sb_user.append(" select user_id,min(job_sn) x,min(same_job_user_sn) y from td_sm_userjoborg ");
+                sb_user.append(" where org_id='" + orgId + "' ");
+                sb_user.append(" group by user_id");
+                sb_user.append(" ) b on a.user_id=b.user_id ");
+                if(userName != null && userName != "")
+                    sb_user.append("and a.user_name like '%" + userName + "%' ");
+                if(userRealname != null && userRealname != "")
+                    sb_user.append("and a.user_realname like '%" + userRealname + "%'");
+                sb_user.append(" order by b.x,b.y");
+            }
+            if(recursion != null && recursion != "" && recursion.equals("1"))
+            {
+                StringBuffer sb_user1 = new StringBuffer();
+                sb_user1.append("select distinct * from td_sm_user where user_id in(select user_id from td_sm_userjoborg   where  org_id in ");
+                sb_user1.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH ");
+                sb_user1.append("t.org_id='" + orgId + "' CONNECT BY PRIOR t.org_id=t.PARENT_ID))");
+                if(userName != null && userName != "")
+                    sb_user1.append("and user_name like '%" + userName + "%' ");
+                if(userRealname != null && userRealname != "")
+                    sb_user1.append("and user_realname like '%" + userRealname + "%'");
+                listInfo = userManager.getUserList(sb_user1.toString(), (int)offset, maxPagesize);
+                return listInfo;
+            } else
+            {
+                listInfo = userManager.getUserList(sb_user.toString(), (int)offset, maxPagesize);
+                return listInfo;
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return listInfo;
+    }
+
+    protected ListInfo getDataList(String arg0, boolean arg1)
+    {
+        return null;
+    }
+}

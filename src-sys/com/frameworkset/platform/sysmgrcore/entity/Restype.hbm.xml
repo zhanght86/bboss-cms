@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+                            "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+                            "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd" >
+
+<!-- DO NOT EDIT: This is a generated file that is synchronized -->
+<!-- by MyEclipse Hibernate tool integration.                   -->
+<!-- Created Wed Feb 08 15:34:02 CST 2006                         -->
+<hibernate-mapping package="com.frameworkset.platform.sysmgrcore.entity">
+
+	<class name="Restype" table="td_sm_restype">
+		<id name="restypeId" column="RESTYPE_ID"
+			type="java.lang.String">
+			<generator class="uuid.hex" />
+		</id>
+
+		<property name="restypeName" column="RESTYPE_NAME"
+			type="java.lang.String" />
+		<property name="parentRestypeId" column="PARENT_RESTYPE_ID"
+			type="java.lang.String" />
+		<property name="reserved1" column="RESERVED1"
+			type="java.lang.String" />
+		<property name="reserved2" column="RESERVED2"
+			type="java.lang.String" />
+		<property name="reserved3" column="RESERVED3"
+			type="java.lang.String" />
+		<property name="reserved4" column="RESERVED4"
+			type="java.lang.String" />
+		<property name="reserved5" column="RESERVED5"
+			type="java.lang.String" />
+
+		<!--资源实体集合-->
+		<set name="resSet" cascade="all-delete-orphan" inverse="true" lazy="true">
+			<key column="RESTYPE_ID" />
+			<one-to-many class="Res" />
+		</set>
+
+		<!--资源属性说明-->
+		<set name="attrdescSet" cascade="all-delete-orphan"
+			inverse="true" lazy="true">
+			<key column="RESTYPE_ID" />
+			<one-to-many class="Attrdesc" />
+		</set>
+	</class>
+
+</hibernate-mapping>
