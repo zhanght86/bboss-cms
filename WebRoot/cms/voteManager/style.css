@@ -1,0 +1,151 @@
+BODY
+{
+    FONT-SIZE: 9pt;
+    FONT-FAMILY: "Verdana", "Arial", "宋体"
+}
+TD
+{
+    FONT-SIZE: 9pt;
+    FONT-FAMILY: "宋体"
+}
+P
+{
+    FONT-SIZE: 9pt;
+    FONT-FAMILY: "宋体"
+}
+LI
+{
+    FONT-SIZE: 9pt
+}
+BigFont
+{
+    FONT-SIZE: 11pt
+}
+SELECT.smallselsect
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000080
+}
+INPUT.smallInput
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000080;
+    FONT-FAMILY: "Verdana", 
+  "Arial", "Helvetica", "sans-serif", "宋体";
+    BACKGROUND-COLOR: white
+}
+TEXTAREA.smallarea
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000080;
+    FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif", "宋体";
+    BACKGROUND-COLOR: white
+}
+SELECT.smallSel
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000080;
+    FONT-FAMILY: "宋体";
+    BACKGROUND-COLOR: white
+}
+INPUT.buttonface
+{
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 9pt;
+    COLOR: #ffffff;
+    FONT-FAMILY: "宋体";
+    BACKGROUND-COLOR: #0099cc
+}
+INPUT.dialogbutton
+{
+    FONT-SIZE: 9pt;
+    CURSOR: hand;
+    COLOR: #000080;
+    FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif", "宋体";
+    BACKGROUND-COLOR: #d2e9ff
+}
+A
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000000;
+    TEXT-DECORATION: underline
+}
+A:visited
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000000;
+    TEXT-DECORATION: underline
+}
+A:link
+{
+    FONT-SIZE: 9pt;
+    COLOR: #000000;
+    TEXT-DECORATION: underline
+}
+A:active
+{
+    FONT-SIZE: 9pt;
+    COLOR: #cccccc;
+    TEXT-DECORATION: underline
+}
+A:hover
+{
+    FONT-SIZE: 9pt;
+    COLOR: #336666;
+    TEXT-DECORATION: underline
+}
+A.02:link
+{
+    COLOR: #ffffff;
+    TEXT-DECORATION: none
+}
+A.02:visited
+{
+    COLOR: #cccccc;
+    TEXT-DECORATION: none
+}
+A.02:active
+{
+    FONT-SIZE: 9pt;
+    COLOR: #cccccc;
+    TEXT-DECORATION: underline
+}
+A.02:hover
+{
+    FONT-SIZE: 9pt;
+    COLOR: #cccccc;
+    TEXT-DECORATION: underline
+}
+A.03:link
+{
+    COLOR: #ff6600;
+    TEXT-DECORATION: none
+}
+A.03:visited
+{
+    COLOR: #ff6600;
+    TEXT-DECORATION: none
+}
+A.03:active
+{
+    FONT-SIZE: 9pt;
+    COLOR: #cc9900;
+    TEXT-DECORATION: underline
+}
+A.03:hover
+{
+    FONT-SIZE: 9pt;
+    COLOR: #cc9900;
+    TEXT-DECORATION: underline
+}
+.NEWS
+{
+    FONT-SIZE: 10.5pt;
+    COLOR: #000000;
+    LINE-HEIGHT: 150%
+}
+INPUT
+{
+    FONT-FAMILY: Arial
+}
+

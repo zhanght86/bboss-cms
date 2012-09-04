@@ -1,0 +1,15 @@
+body,a,table,div,span,td,th,input,select{font-size:9pt;font-family:"宋体,Verdana,Arial";Color:#000000;}
+body {background-color:#FFFFFF;SCROLLBAR-BASE-COLOR:#D3E5FA}
+.cmstag {
+	margin: 5px;
+	border: 2px solid #0000FF;
+	font-size: 13px;
+	color: #FF0000;
+	font-family: Verdana, "宋体";
+	width:1px;
+	heigth:1px;
+	white-space: nowrap;
+}
+div{
+	padding: 2px;
+}
