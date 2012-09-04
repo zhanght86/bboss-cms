@@ -1,0 +1,16 @@
+欢迎使用eWebSoft在线文本编辑器飞鱼修改版 。
+
+JSP+XML+BEAN
+
+部署方式：
+直接把压缩目录中的文件拷贝到您的网站发布目录下即可。
+
+修改：
+
+一般来说，您只要修改/WEB-INF目录下面的style.xml和button.xml就可以了。
+
+应用：请参考index.jsp和submit.jsp。
+
+有什么问题欢迎到飞鱼论坛来提！
+
+网站地址：http://www.fiyu.net

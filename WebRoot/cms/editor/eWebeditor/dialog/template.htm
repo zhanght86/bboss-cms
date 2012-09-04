@@ -1,0 +1,122 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>选择模板</title>
+<style type="text/css">
+body, a, table, div, span, td, th, input, select{font:9pt;font-family: "宋体", Verdana, Arial, Helvetica, sans-serif;}
+body {padding:5px}
+</style>
+
+<script language="JavaScript" src="dialog.js"></script>
+
+<script language="JavaScript">
+//alert(dialogArguments.parent.document.all("channelId").value);
+var channelId = dialogArguments.parent.document.all("channelId").value;
+// 本窗口返回值
+function ReturnValue(){
+	var text = "";
+	var imgsrc = "";
+	var systmp = document.all("systmp").value;
+	//var checktmp = document.all("checktmp")[0].value;alert(checktmp);
+
+	if(document.all("sys").checked)//系统模板
+	{
+		if(systmp == 0)
+		{
+			text = "<table width='800' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td height='70'>&nbsp;</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/import_03.gif")+"' width='622' height='77'></td></tr><tr><td height='50'>&nbsp;</td></tr><tr><td style='font-family:仿宋_UTF-8;font-size: 18px;line-height:35px;color:#000;' align='center'>郴政办发〔2007〕1号</td></tr><tr><td align='center'><div style='background:#FF0000; width:630;'><img src='"+GetHttpUrl1("sysimage/template/line.gif")+"' height='4' width='3'></div></td></tr><tr><td><table width='80%' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td style='font-family:'仿宋_UTF-8';font-size:18px;line-height:35px;color:#000;'></td></tr></table><td></tr></table>";
+		}
+		if(systmp == 1)
+		{
+			text = "<table width='800' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td height='70'>&nbsp;</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/import_04.gif")+"' width='622' height='77'></td></tr><tr><td height='50'>&nbsp;</td></tr><tr><td style='font-family:仿宋_UTF-8;font-size: 18px;line-height:35px;color:#000;' align='center'>郴政办发〔2007〕1号</td></tr><tr><td align='center'><div style='background:#FF0000; width:630;'><img src='"+GetHttpUrl1("sysimage/template/line.gif")+"' height='4' width='3'></div></td></tr><tr><td><table width='80%' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td style='font-family:'仿宋_UTF-8';font-size:18px;line-height:35px;color:#000;'></td></tr></table><td></tr></table>";
+		}
+		if(systmp == 2)
+		{
+			text = "<table width='800' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td height='70'>&nbsp;</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/import_05.gif")+"' width='622' height='77'></td></tr><tr><td height='50'>&nbsp;</td></tr><tr><td style='font-family:仿宋_UTF-8;font-size: 18px;line-height:35px;color:#000;' align='center'>郴办发〔2007〕1号</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/star.gif")+"' height='31' width='651'></td></tr><tr><td><table width='80%' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td style='font-family:'仿宋_UTF-8';font-size:18px;line-height:35px;color:#000;'></td></tr></table><td></tr></table>";
+		}
+		if(systmp == 3)
+		{
+			text = "<table width='800' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td height='70'>&nbsp;</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/import_06.gif")+"' width='622' height='77'></td></tr><tr><td height='50'>&nbsp;</td></tr><tr><td style='font-family:仿宋_UTF-8;font-size: 18px;line-height:35px;color:#000;' align='center'>郴办发〔2007〕1号</td></tr><tr><td align='center'><img src='"+GetHttpUrl1("sysimage/template/star.gif")+"' height='31' width='651'></td></tr><tr><td><table width='80%' border='0' align='center' cellpadding='0' cellspacing='0'><tr><td style='font-family:'仿宋_UTF-8';font-size:18px;line-height:35px;color:#000;'></td></tr></table><td></tr></table>";
+		}
+	}
+	if(document.all("selfttemplate").checked)//自定义模板
+	{
+		text = selftmp.selftmp.value;
+	}
+
+	dialogArguments.insertHTML(text);
+
+	window.returnValue = null;
+	window.close();
+}
+
+//图片来源单选点击事件
+function RadioClick(what){
+	try{
+		if (what=="sys"){
+			selfttemplate.checked=false;
+			selftmp.selftmp.disabled=true;
+			sys.checked=true;
+			systmp.disabled=false;
+		}else{
+			selfttemplate.checked=true;
+			selftmp.selftmp.disabled=false;
+			sys.checked=false;
+			systmp.disabled=true;
+		}
+	}catch(e){}
+}
+
+// 点确定时执行
+function ok(){
+	ReturnValue();
+}
+
+</script>
+</HEAD>
+
+<BODY bgColor=menu>
+
+<table border=0 cellpadding=0 cellspacing=0 align=center>
+<tr>
+	<td>
+	<fieldset>
+	<legend>选择模板</legend>
+	<table border=0 cellpadding=0 cellspacing=0>
+		<tr><td colspan=9 height=5></td></tr>
+		<tr>
+			<td width=7></td>
+			<td width=54 align=right >
+			<input type=radio name="sys" id="sys" onclick="RadioClick('sys')" checked>系统:</td>
+			<td width=5></td>
+			<td colspan=5>
+				<select id="systmp" size=1 style="width:180px;">
+					<option value="0" selected>郴州市人民政府文件</option>
+					<option value="1">郴州市人民政府办公室文件</option>
+					<option value="2">中共郴州市委文件</option>
+					<option value="3">中共郴州市委办公室文件</option>
+				</select>
+			</td>
+			<td width=7></td>
+		</tr>
+		<tr><td colspan=9 height=5></td></tr>
+		<tr>
+			<td width=7></td>
+			<td width=54 align=right >
+			<input type=radio name="selfttemplate" id="selfttemplate" onclick="RadioClick('self')">引用:</td>
+			<td width=5></td>
+			<td colspan=5>
+				<Script Language=JavaScript>
+					document.write('<iframe id=selftmp frameborder=0 src="../select_tml.jsp?channelId=' + channelId + '" width="100%"  height="22" scrolling=no></iframe>');
+				</Script>
+			</td>
+			<td width=7></td>
+		</tr>
+	</table>
+	</fieldset>
+	</td>
+</tr>
+<tr><td height=5>&nbsp;</td></tr>
+<tr><td align=right><input type=submit value='  确定  ' id=Ok onclick="ok()">&nbsp;&nbsp;<input type=button value='  取消  ' onclick="window.close();"></td></tr>
+</table>
+</body>
+</html>
