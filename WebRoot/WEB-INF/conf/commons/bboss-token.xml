@@ -1,0 +1,8 @@
+<properties>
+	<!-- 生成令牌控制配置文件
+	author：biaoping.yin
+    CopyRight：sany
+    Date:2011.4.13
+	-->
+	<property name="/token/*.freepage" class="com.sany.common.action.TokenController" />
+</properties>

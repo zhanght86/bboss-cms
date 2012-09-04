@@ -1,0 +1,22 @@
+<properties>
+	
+	<property name="/cms/docclass/*.page" class="com.frameworkset.platform.cms.documentmanager.action.DocClassController"
+		f:docClassManager="attr:document.docclassmanager"
+		path:main="/cms/docclass/paramsList.jsp"		
+		/>
+		
+	<property name="document.docclassmanager"
+		f:executor="attr:document.docclassmanager.configsqlexecutor"
+		class="com.frameworkset.platform.cms.documentmanager.DocClassManager"
+		/>
+	
+	<property name="document.docclassmanager.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/cms/documentmanager/docclass.xml"/>
+		</construction>		
+	</property>
+	
+	
+	
+</properties>

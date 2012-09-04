@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 
+		描述:业务类别管理模块
+	    author:caix3
+		CopyRight:sany
+		版本:1.0
+	    Date: 2012-04-20
+	-->
+
+	<property name="/workflow/businesstype/*.page"
+		path:index="/workflow/businesstype/businessTypeManager.jsp"
+		path:queryDataModify="/workflow/businesstype/businessTypeModify.jsp"
+		path:queryListPage="/workflow/businesstype/businessTypeList.jsp"
+		f:businessTypeService="attr:workflow.businesstype.service"
+		class="com.sany.workflow.action.ActivitiBusinessTypeAction" />	
+	
+		
+	<property name="workflow.businesstype.service"
+		f:executor="attr:workflow.businessType.configsqlexecutor"
+		class="com.sany.workflow.service.impl.BusinessTypeServiceImpl" />
+	
+	
+	<property name="workflow.businessType.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/workflow/businessType.xml"/>
+		</construction>
+	</property>
+		
+</properties>

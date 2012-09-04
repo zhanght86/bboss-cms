@@ -1,0 +1,29 @@
+<properties>
+	
+	<property name="/counter/*.freepage" class="com.frameworkset.platform.cms.countermanager.action.CounterController" singlable="true"
+		f:counterManager="attr:counterManager"
+		path:index="/counter/browserCounterFrame.jsp"
+		path:showBrowserCounterList="/counter/browserCounterList.jsp"
+		path:showPageBrowserCounterGatherList="/counter/browserCounterGatherList.jsp"
+		path:showBrowserCounterDistribute="/counter/browserCounterChart.jsp"
+		/>
+		
+	<property name="browserCounterStatisticDailyTask"
+		f:counterManager="counterManager"
+		class="com.frameworkset.platform.cms.countermanager.task.BrowserCounterStatisticDailyTask"
+		/>
+	
+	<property name="counterManager"
+		f:executor="attr:counter.configsqlexecutor"
+		class="com.frameworkset.platform.cms.countermanager.impl.CounterManagerImpl"
+		/>
+	
+	<property name="counter.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/cms/countermanager/counter.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>

@@ -1,0 +1,7 @@
+<properties>
+	
+	<property name="/params/*.page" class="org.frameworkset.util.ParamsAction" singlable="true"
+		path:showParams="/params/paramsList.jsp"
+		/>
+		
+</properties>

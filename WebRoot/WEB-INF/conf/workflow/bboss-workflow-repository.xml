@@ -1,0 +1,26 @@
+
+<properties>
+
+
+	<!-- 
+		描述:工作流资源管理模块
+	    author:尹标平
+		CopyRight:三一
+		版本:1.0
+	    Date: 2012-03-22
+	-->
+
+	<property name="/workflow/repository/*.page"
+		path:index="/workflow/repository/main.jsp"
+		path:queryProcessDefs="/workflow/repository/processDefsList.jsp"	
+		path:queryProcessHisVer = "/workflow/repository/processDefHisList.jsp"
+		path:viewProcessInfo = "/workflow/repository/viewProcessInfo.jsp"
+		path:viewHisProcessInfo = "/workflow/repository/viewHisProcessInfo.jsp"
+		path:deployProcess="/workflow/repository/deployProcess.jsp"
+		path:viewBom="/workflow/repository/processDefView.jsp"
+		f:activitiService="attr:activitiService"
+		f:activitiConfigService="attr:activitiConfigService"
+		class="com.sany.workflow.action.ActivitiRepositoryAction" >
+	</property>
+	
+</properties>

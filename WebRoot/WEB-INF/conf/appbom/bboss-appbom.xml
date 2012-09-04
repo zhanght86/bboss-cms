@@ -1,0 +1,35 @@
+
+<properties>
+
+<!-- 平台台账管理控制器-->
+	<!-- 
+		描述:初始化一个控制器AppBomController，并将所有关联的service注入到此控制器中。并以别名的形式定义好跳转页面。
+	    author:许石玉
+		CopyRight:三一
+		版本:1.0
+	    Date: 2011-09-21
+	-->
+
+	<property name="/appbom/*.page"
+		path:index="/appbom/main.jsp"
+		path:getAllListAppBom="/appbom/appBomList.jsp"
+		path:updatePre="/appbom/appBomEdit.jsp"
+		path:addPre="/appbom/appBomAdd.jsp"
+		path:viewBom="/appbom/appBomView.jsp"
+		f:service="attr:appBomService"
+		class="com.sany.appbom.action.AppBomController" >
+	</property>
+	
+	<property name="appBomService"
+		f:executor="attr:appbom.configsqlexecutor"
+		class="com.sany.appbom.service.AppBomServiceImpl"
+		/>
+	<property name="appbom.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/appbom/service/appbom.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>

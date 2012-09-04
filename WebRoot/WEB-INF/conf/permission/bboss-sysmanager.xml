@@ -1,0 +1,11 @@
+
+<properties>
+
+	<property name="/sysmanager/menumanager/*.page"
+		path:viewMenuInfo="/sysmanager/menumanager/resMenu_tab.jsp"
+		
+		class="com.frameworkset.platform.menu.action.MenuManageAction" >
+	</property>
+	
+	
+</properties>

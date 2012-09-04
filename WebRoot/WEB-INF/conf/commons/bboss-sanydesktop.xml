@@ -1,0 +1,16 @@
+<properties>
+	<!-- 二级菜单列表 
+	author：biaoping.yin
+    CopyRight：sany
+    Date:2011.4.13
+	-->
+	<property name="/sanydesktop/*.page"	
+	path:index="/sanydesktop/index.jsp"
+	path:webindex="/sanydesktop/webindex.jsp"
+	path:frame="/sanydesktop/frame.jsp"
+	path:webframe="/sanydesktop/webframe.jsp"
+	path:login="redirect:/login.jsp"
+	path:products="/sanydesktop/Concrete_Pump_Trucks.jsp"
+	
+	class="com.sany.common.action.DesktopController" />
+</properties>

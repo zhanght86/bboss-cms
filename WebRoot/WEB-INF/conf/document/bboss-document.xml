@@ -1,0 +1,26 @@
+<properties>
+	
+	<property name="/document/*.freepage" class="com.frameworkset.platform.cms.documentmanager.action.DocumentController" singlable="true"
+		f:documentManager="attr:documentManager"
+		path:showNewsList="/cms/docManage/showNewsList.jsp"
+		path:showReportsList="/cms/docManage/showReportsList.jsp"
+		path:showVideosList="/cms/docManage/showVideoList.jsp"
+		path:showVideosLadder="/cms/docManage/showVideoLadder.jsp"
+		/>
+		
+	<property name="documentManager"
+		f:executor="attr:document.configsqlexecutor"
+		class="com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl"
+		/>
+	
+	<property name="document.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/cms/documentmanager/document.xml"/>
+		</construction>
+		
+	</property>
+	
+	
+	
+</properties>

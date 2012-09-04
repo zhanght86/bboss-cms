@@ -1,0 +1,19 @@
+<properties>
+	<!-- 二级菜单列表 
+	author：jianfeng.liu
+    CopyRight：Chinacreator
+    Date:2011.4.13
+	-->
+	<property name="/menu/*.page,/header.page,/jf.page,/headersimple.page,/contentoutlook.page"	
+	path:goheader="/header.jsp"	
+	path:gosetting="/desktop/setting.jsp"
+	path:goheadersimple="/header_simple.jsp"
+	path:gocontentoutlook="/content_outlook.jsp"
+	path:jf="/jf.jsp"	
+	
+	f:deskTopMenuShorcutManager="attr:deskTopMenuShorcutManager"
+	class="com.frameworkset.platform.esb.datareuse.common.action.MenuItemController" />
+	
+	
+	
+</properties>

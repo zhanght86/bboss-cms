@@ -1,0 +1,23 @@
+<properties>
+	
+	<property name="/comment/*.freepage" class="com.frameworkset.platform.cms.docCommentManager.action.DocCommentController" singlable="true"
+		f:docCommentManager="attr:docCommentManager"
+		path:showDocumentCommentList="/cms/docManage/showCommentList.jsp"
+		path:queryDocumentCommentList="/cms/docManage/commentList.jsp"
+		path:showAllCommentList="/cms/docManage/showAllCommentList.jsp"
+		/>
+		
+	<property name="docCommentManager"
+		f:executor="attr:comment.configsqlexecutor"
+		class="com.frameworkset.platform.cms.docCommentManager.DocCommentManagerImpl"
+		/>
+		
+	<property name="comment.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/cms/docCommentManager/comment.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>

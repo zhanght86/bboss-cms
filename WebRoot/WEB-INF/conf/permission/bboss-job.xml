@@ -1,0 +1,20 @@
+
+<properties>
+
+<!-- 平台台账管理控制器-->
+	<!-- 
+		描述:初始化一个控制器AppBomController，并将所有关联的service注入到此控制器中。并以别名的形式定义好跳转页面。
+	    author:许石玉
+		CopyRight:三一
+		版本:1.0
+	    Date: 2011-09-21
+	-->
+
+	<property name="/purviewmanager/userorgmanager/org/*.page"
+		path:selectjoblist="/purviewmanager/userorgmanager/org/selectjoblist.jsp"
+		
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.JobControler" >
+	</property>
+	
+	
+</properties>

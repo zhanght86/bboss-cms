@@ -1,0 +1,38 @@
+
+<properties>
+
+<!-- desktop控制器-->
+	<!-- 
+		描述:Desktop桌面快捷模块，初始化一个控制器DeskTopController，并将所有关联的service注入到此控制器中。并以别名的形式定义好跳转页面。
+	    author:qian.wang
+		CopyRight:湖南三一集团
+		版本:1.0
+	    Date: 2011-09-21
+	-->
+
+	<property name="/desktop/*.page"
+		path:desktop="/desktop/desktop.jsp"
+		path:desktop1="/desktop/desktop.jsp"
+		path:sort="/desktop/desktopsort.jsp"
+		path:shortcut="/desktop/shortcut.jsp"
+		path:menucustom="/desktop/menucustom/setdesktopwindowsize.jsp"
+		
+		f:deskTopMenuShorcutManager="attr:deskTopMenuShorcutManager"
+		class="com.frameworkset.platform.esb.datareuse.common.action.DeskTopController" >
+	</property>
+	
+	<property name="deskTopMenuShorcutManager"
+		f:executor="attr:deskTopMenuShorcutManager.configexecutor"
+		class="com.frameworkset.platform.esb.datareuse.common.service.DeskTopMenuShorcutManager"
+		/>
+	
+		
+	<!--数据库操作通用辅助类 -->	
+	<property name="deskTopMenuShorcutManager.configexecutor" class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/frameworkset/platform/esb/datareuse/common/service/deskmenu.xml"/>
+		</construction>
+	</property>
+	
+	
+</properties>

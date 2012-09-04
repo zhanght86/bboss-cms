@@ -1,0 +1,24 @@
+<properties>
+	
+	<property name="/channel/*.freepage" class="com.frameworkset.platform.cms.channelmanager.action.ChannelController" singlable="true"
+		f:channelManager="attr:channelManager"
+		f:siteManager="attr:siteManager"
+		path:showReportsList="/cms/docManage/showReportsList.jsp"
+		/>
+		
+	<property name="channelManager"
+		f:executor="attr:channel.configsqlexecutor"
+		class="com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl"
+		/>
+	
+	<property name="channel.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/cms/channelmanager/channel.xml"/>
+		</construction>
+		
+	</property>
+	
+	
+	
+</properties>

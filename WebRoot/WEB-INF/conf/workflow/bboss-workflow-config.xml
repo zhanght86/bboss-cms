@@ -1,0 +1,61 @@
+
+<properties>
+
+
+	<!-- 
+		描述:工作流配置模块
+	    author:蔡明
+		CopyRight:三一
+		版本:1.0
+	    Date: 2012-04-06
+	-->
+
+	<property name="/workflow/config/*.page"
+		path:main="/workflow/taskConfig/task_config_main.jsp"
+		f:activitiConfigService="attr:activitiConfigService"
+		f:activitiService="attr:activitiService"
+		path:nodeinfo="/workflow/taskConfig/nodeinfo.jsp"
+		path:chooseusers="/workflow/taskConfig/chooseOrgUser.jsp"
+		path:chooseuserlist="/workflow/taskConfig/chooseUserlist.jsp"
+		path:choosegroups="/workflow/taskConfig/group_main.jsp"
+		path:choosegroupslist="/workflow/taskConfig/chooseGroupslist.jsp"
+		path:userlist="/workflow/taskConfig/userlist.jsp"
+		path:nodevariablelist="/workflow/taskConfig/nodevariableList.jsp"
+		path:addnodevariable="/workflow/taskConfig/addNodevariable.jsp"
+		path:updatenodevariable="/workflow/taskConfig/updateNodevariable.jsp"
+		path:runmain="/workflow/runTaskConfig/runTaskConfigMain.jsp"
+		path:nodeinfolist="/workflow/runTaskConfig/nodeinfolist.jsp"
+		
+		path:runchooseusers="/workflow/runTaskConfig/chooseOrgUser.jsp"
+		path:runchoosegroups="/workflow/runTaskConfig/group_main.jsp"
+		path:runuserlist="/workflow/runTaskConfig/userlist.jsp"
+		path:runchooseuserlist="/workflow/runTaskConfig/chooseUserlist.jsp"
+		path:task_config_org_tree="/workflow/taskConfig/task_config_org_tree.jsp"
+		class="com.sany.workflow.action.ActivitiTaskConfigAction">
+	</property>
+	
+	<property name="activitiConfigService"
+		f:executor="attr:activiti.configsqlexecutor"
+		f:activitiService="attr:activitiService"
+		class="com.sany.workflow.service.impl.ActivitiConfigServiceImpl"
+		/>
+	
+	<property name="activiti.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/workflow/activiti.xml"/>
+		</construction>
+		
+	</property>
+	
+	<property name="activitiService"
+		f:executor="attr:activiti.configsqlexecutor"
+		f:activitiConfigService="attr:activitiConfigService"
+		class="com.sany.workflow.service.impl.ActivitiServiceImpl">
+		<construction>
+			<property value="activiti.cfg.xml"/>
+		</construction>
+	</property>
+	
+	
+</properties>

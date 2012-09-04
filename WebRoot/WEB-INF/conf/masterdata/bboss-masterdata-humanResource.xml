@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<!-- Human resource master data controller-->
+	<!-- 
+	    author: caix3
+		CopyRight: SANY Group Co, Ltd
+		version: v1.0
+	    Date: 2012-03-21
+	-->
+	
+	<!-- Relational database template -->
+	<property name="masterdata.hr.configSqlExecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/sany/masterdata/hr/dao/HumanDataSql.xml" />
+		</construction>
+	</property>
+
+</properties>

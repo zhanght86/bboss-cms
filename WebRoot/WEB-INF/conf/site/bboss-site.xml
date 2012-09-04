@@ -1,0 +1,11 @@
+<properties>
+	
+	<property name="/site/*.freepage" class="com.frameworkset.platform.cms.sitemanager.action.SiteController" singlable="true"
+		f:siteManager="attr:siteManager"
+		/>
+		
+	<property name="siteManager"
+		class="com.frameworkset.platform.cms.sitemanager.SiteManagerImpl"
+		/>
+	
+</properties>

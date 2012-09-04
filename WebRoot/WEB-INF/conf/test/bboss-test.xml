@@ -1,0 +1,36 @@
+<properties>
+	<property name="/test/*.page" class="com.sany.activiti.demo.action.ActivitiTestAction" singlable="true"
+		f:activitiTestService="attr:activitiTestService"
+		f:activitiService="attr:activitiService"
+		path:listProcDef="/test/listProcDef.jsp"
+		path:task_apply="/test/task_apply.jsp"
+		path:task_tasklist="/test/task_tasklist.jsp"
+		path:task_userlist="/test/task_userlist.jsp" 
+		path:task_main="/test/task_main.jsp"
+		path:chooseuser="/test/task_chooseuser.jsp"
+		path:his_tasklist="/test/his_tasklist.jsp"
+		path:nodelist="/test/node_list.jsp"
+		path:nodeinfo="/test/nodeinfo.jsp"
+		path:chooseusers="/test/chooseOrgUser.jsp"
+		path:chooseuserlist="/test/chooseUserlist.jsp"
+		path:choosegroups="/test/group_main.jsp"
+		path:choosegroupslist="/test/chooseGroupslist.jsp"
+		/>
+		
+	<property name="activitiTestService"
+		f:executor="attr:demo.configsqlexecutor"
+		f:activitiService="attr:activitiService"
+		class="com.sany.activiti.demo.service.impl.ActivitiTestServiceImpl"
+		/>
+	
+	<property name="demo.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/activiti/demo/demo.xml"/>
+		</construction>
+		
+	</property>
+	
+	
+	
+</properties>

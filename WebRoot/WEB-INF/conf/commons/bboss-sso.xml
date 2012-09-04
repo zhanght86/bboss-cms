@@ -1,0 +1,11 @@
+<properties>
+	<!-- 
+	author：biaoping.yin
+    CopyRight：sany
+    Date:2011.4.13
+	-->
+	<property name="/sso/*.page"	
+	path:sso="/sso/login.jsp"
+	class="com.sany.common.action.SSOControler" />
+	
+</properties>
