@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>编辑页面</title>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="js/dialog/lhgdialog.js"></script>	
+<script type="text/javascript">
+function opdg( url ){    
+    $.dialog({ id:'iframeId', title:'标题',width:750,height:530, content:'url:'+url});    
+}
+</script>
+</head>
+<body>
+<div id="wrap" >
+  <div class="index_contain">
+	<div class="titlebox"> <span class="location">您的当前位置：<a href="#">个人中心</a> &gt; 个人信息</span></div>
+	<div class="form_box">
+	  <table  border="0" cellspacing="0" cellpadding="0" width="100%"  class="table4">
+	    <tr>
+	      <th width="25%">姓名：</th>
+	      <td width="25%"><input name="Input" class="w200" /></td>
+	      <th width="15%">&nbsp;</th>
+	      <td width="35%">&nbsp;</td>
+        </tr>
+	    <tr>
+	      <th>工号：</th>
+	      <td><input name="Input2" class="w200" /></td>
+	      <th>域账号：</th>
+	      <td><input name="Input3" class="w200" /></td>
+        </tr>
+	    <tr>
+	      <th>所属部门：</th>
+	      <td><input name="Input4" class="w200" />
+          <img src="images/icon_search.jpg" width="16" height="16" onclick="opdg('content.html')" /></td>
+	      <th>首签领导：</th>
+	      <td><input name="Input5" class="w200" />
+          <img src="images/icon_search.jpg" width="16" height="16" onclick="opdg('content.html')" /></td>
+        </tr>
+	    <tr>
+	      <th>行政级别：</th>
+	      <td><select name="select3"  class="w205">
+	        <option>董事长</option>
+	        <option>董事级副总裁</option>
+            <option>总裁</option>
+	        <option>副总裁</option>
+	        <option>副总经理</option>
+	        <option>总裁助理</option>
+	        <option>总监级</option>
+	        <option>副总监级</option>
+	        <option>总监助理级</option>
+	        <option>正部级</option>
+	        <option>副部级</option>
+            <option>部长助理级</option>
+	        <option>正科级</option>
+	        <option>副科级</option>
+	        <option>一般员工</option>
+          </select></td>
+	      <th>待遇级别：</th>
+	      <td><select name="select2"  class="w205">
+	        <option>董事长</option>
+	        <option>董事级副总裁</option>
+	        <option>总裁</option>
+	        <option>副总裁</option>
+	        <option>副总经理</option>
+	        <option>总裁助理</option>
+	        <option>总监级</option>
+	        <option>副总监级</option>
+	        <option>总监助理级</option>
+	        <option>正部级</option>
+	        <option>副部级</option>
+	        <option>部长助理级</option>
+	        <option>正科级</option>
+	        <option>副科级</option>
+	        <option>一般员工</option>
+          </select></td>
+        </tr>
+	    <tr>
+	      <th>座机号码：</th>
+	      <td><input name="Input7" class="w200" /></td>
+	      <th>移动电话：</th>
+	      <td><input name="Input9" class="w200" /></td>
+        </tr>
+	    <tr>
+	      <th >邮箱地址：</th>
+	      <td><input name="Input6" class="w200" /></td>
+	      <th>所属项目：</th>
+	      <td><input name="Input8" class="w200" />
+          <img src="images/icon_search.jpg" width="16" height="16" onclick="opdg('content.html')" /></td>
+        </tr>
+	    <tr>
+	      <th>是否接收邮件：</th>
+	      <td><input type="checkbox" name="checkbox" id="checkbox" class="noborder" /></td>
+	      <th>是否审批代提单：</th>
+	      <td><input type="checkbox" name="checkbox2" id="checkbox2" class="noborder" /></td>
+        </tr>
+	    <tr>
+	      <th valign="top">备注：</th>
+	      <td colspan="3"><textarea name="" class="tarea"></textarea></td>
+        </tr>
+      </table>
+	  
+	  <div class="btnarea" ><a href="#" class="bt_1"><span>保存</span></a><a href="#" class="bt_2"><span>重置</span></a></div>
+    </div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" media="screen" />
+<SCRIPT type=text/javascript>
+	var api = frameElement.api,W = api.opener;
+	//关闭弹窗
+	function cancel(){
+		api.close()
+	}
+	function  send(){
+		var win=api.config["currentwindow"];
+		win.location.reload();
+		win.document.getElementById("getvalue").value=document.getElementById("data").value;
+		W.$.dialog.alert("保存成功",function(){api.close();},api);
+	}
+</SCRIPT>
+<body>
+<div style="text-align:center; margin-top:10px;">
+  <div class="btnarea"> 
+  	数据传输：<input type="text" value="" id="data" />
+  <a href="#" class="bt_1" onclick="send()"><span>确定</span></a> 
+  <a href="#" class="bt_2" onclick="cancel()"><span>取消</span></a> 
+  </div>
+</div>
+</body>
+</html>

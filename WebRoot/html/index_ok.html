@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title></title>
+<style type="text/css">
+*{ margin:0; padding:0;}
+html{ padding:0; _padding:100px 0; width:100%;  overflow:hidden; font-size:12px; font-family:"宋体";}
+body{ padding:100px 0; _padding:0; height:100%; overflow: hidden;}
+.l_top { position:absolute; top:0; width:100%; height:100px; background:#75bfde; line-height:100px; text-align:center;}
+.l_body { position: absolute; _position: relative; top:100px; _top:0; bottom:100px; width:100%; height:auto; _height:100%; background:#ffc; text-align:center;}
+.l_bottom { position:absolute; bottom:0; width:100%; height:100px; background:#d1edf8; line-height:100px; text-align:center;}
+.l_main { padding-left:200px; height:100%; float:left;}
+.l_content { position:absolute; _position:relative; width:auto; left:200px; top:0; bottom:0; _left:0; right:0; height:auto; _height:100%; overflow:auto; background:#93d2ec;}
+.l_side { position:absolute; _position:relative; width:200px; left:0; top:0; bottom:0; _left:0; height:auto; _height:100%; _margin-left:-100%; _float:left; overflow:auto; background:#93d2ec; }
+</style>
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+<script>
+$(function(){		   
+	$("#change").click(function(){
+		$("#mainFrame").attr("src","table1.html")
+	})
+}); 
+
+</script>
+</head>
+<body>
+<div class="l_top"><a href="#" id="change">顶部</a></div>
+<div class="l_body">
+  <div class="l_main">
+    <div class="l_content"><iframe id="mainFrame" name="mainFrame" src="main.html" scrolling="auto" frameborder="0" style="width:100%;height:100%;position:absolute; left:0; top:0; right:0; bottom:0;"></iframe></div>
+  </div>
+  <div class="l_side"> 无<br />
+    标<br />
+    题<br />
+    文<br />
+    档<br />
+    无<br />
+    标<br />
+    题<br />
+    文<br />
+    档<br />
+    无<br />
+    标<br />
+    题<br />
+    文<br />
+    档<br />
+    无<br />
+  </div>
+</div>
+<div class="l_bottom">底部</div>
+</body>
+</html>

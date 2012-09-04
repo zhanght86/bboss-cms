@@ -1,0 +1,147 @@
+@charset "utf-8";
+
+body{font-size:12px; font-family:Arial, Helvetica, sans-serif;; margin:0px; padding:0px;}
+p,img,ul,li,form,table,h5,h4,h3,h2,h1{border:none; margin:0px; padding:0px; list-style:none;}
+a{ text-decoration:none; color:#565656}
+a:hover { text-decoration:underline; color:#0036ff;}
+
+.clear:after{ content:"."; display:block; height:0; clear:both; visibility:hidden;}
+.clear { display:inline-block;}
+.clear { display:block;}
+.Zclear {
+	clear:both;
+	line-height:1px;
+	visibility:hidden;
+	height: 1px;
+}
+
+#logging_bg{
+	width:100%;
+	zoom:1;
+	height:100%;
+	background-image: url(../images/logging_bg.jpg);
+	background-repeat: repeat-x;
+}
+.c_log { height:100%; position:absolute; left:0; top:0; z-index:10; width:100%;}
+.c_logWrapper {
+	position:absolute;
+	height:100%;
+	min-height:600px;
+	width:100%;
+	overflow:hidden;
+	text-align:center;
+	left: -9px;
+}
+.c_logHeight { height:100%; display:inline-block; *display:inline; zoom:1; width:1px; margin-left:-1px; vertical-align:middle;}
+.c_logContent { display:inline-block; *display:inline; zoom:1; width:587px;vertical-align:middle;margin:auto;}
+.c_log_top{
+	width:587px;
+	height:122px;
+	background: url(../images/c_log_pdp.png) no-repeat bottom;
+}
+.c_log_min{ background:url(../images/c_log_bg.png) repeat-y; width:100%; height:auto; padding:0 0 10px 0;}
+.c_log_bot{ background:url(../images/c_log_bot.png) no-repeat top; width:587px; height:25px; clear:both;}
+.c_log_left{
+	color:#28599e;
+	width:136px;
+	float:left;
+	padding-left: 4px;
+}
+#logging_bg .c_log .c_logWrapper .c_logContent .c_log_min .c_log_left {
+	height: 130px; margin-left: 18px;
+}
+
+.c_log_right{ float:left; width:392px; padding-top:15px;margin-bottom:0px;}
+.c_log_right li { clear:both; height:24px; line-height:24px; margin-bottom:10px; overflow:hidden;}
+.c_log_right li label{ width:120px; text-align:right; float:left;}
+.c_log_right li input {width:217px; float:left; height:22px;padding:0 0 0 3px; font-size:12px;background: url(../images/input-bg.png) #fff no-repeat 0px 0px;border: #a7a6aa 1px solid; line-height:20px;}
+.c_log_right li .c_num{ width:100px;}
+.c_log_right li .blur { float:left; color:#666666; margin-left:3px;}
+.img_num{ float:left; width:59px; margin-left:10px;}
+a.log_bt {background:url(../images/log_bt.gif) no-repeat top left; height:23px; display:inline-block; line-height:23px; color:#333333; padding-left:25px;}
+a.log_bt span{ background:url(../images/log_bt.gif) no-repeat top right; height:23px; display:inline-block;line-height:23px; color:#333333; padding-right:25px; cursor:pointer;}
+a.log_bt:hover{background:url(../images/log_bt.gif) no-repeat bottom left; text-decoration:none; color:#0066ff;}
+a.log_bt:hover span{background:url(../images/log_bt.gif) no-repeat bottom right; text-decoration:none; color:#0066ff;}
+.c_20{
+	margin-left:27px;
+	color: #FFFFFF;
+	background-image: url(../images/log_bt2.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+}
+.log_cancel{ margin-left:20px;}
+
+.c_log_right .log_bts{ margin-top:15px;}
+#logging_bg .c_log .c_logWrapper .c_logContent .c_log_min .c_log_right .select_country {
+	width: 110px;
+	float: left;
+}
+
+.c_log_left p{ height:65px; clear:both; overflow:hidden; text-align:center;}
+#logging_bg .c_log .c_logWrapper .c_logContent .c_edition {
+	color: #B7C7CE;
+	text-align: right;
+	padding-right: 15px;
+}
+
+#logging_bg .c_log .c_logWrapper .c_logContent .c_log_min .original {
+	color: #0066CC;
+	text-decoration: underline;
+	padding-left: 40px;
+}
+#logging_bg .c_log .c_logWrapper .c_logContent .c_log_min a:hover {
+	color: #990000;
+}
+#logging_bg .c_log .c_logWrapper .c_logContent .c_log_min .manual {
+	color: #0066CC;
+	text-decoration: underline;
+	padding-left: 170px;
+}
+.c_logContent2 { display:inline-block; *display:inline; zoom:1; width:540px;vertical-align:middle;margin:auto;}
+.c_logContent2 .c_edition {
+	color: #B7C7CE;
+	text-align: right;
+	padding-right: 15px;
+}
+a.bt_1,a.bt_2{ margin:0 3px; cursor:hand;}
+a.bt_1,a.bt_1 span,a.bt_1:hover,a.bt_1:hover span,a.bt_2,a.bt_2 span,a.bt_2:hover,a.bt_2:hover span{ background:url(../images/bt_1.gif) no-repeat top left; padding-left:15px; height:23px; display:inline-block; text-indent:0; line-height:23px; color:#FFF;}
+a.bt_2,a.bt_2 span,a.bt_2:hover,a.bt_2:hover span{ background:url(../images/bt_2.gif) no-repeat top left; color:#000;}
+
+a.bt_1 span,a.bt_2 span,a.handle_bt span{background-position:top right; padding:0; padding-right:12px;}
+a.bt_1:hover,a.bt_2:hover,a.handle_bt:hover{background-position:bottom left; text-decoration:none; color:#000000;}
+a.bt_1:hover span,a.bt_2:hover span,a.handle_bt:hover span{background-position:bottom right; padding:0; padding-right:12px;}
+
+.c_prompt {
+	background-image: url(../images/prompt.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 178px;
+	width: 370px;
+	padding-top: 100px;
+	padding-left: 145px;
+	text-align: left;
+	line-height: 22px;
+}
+.c_prompt .verification {
+	padding-top: 35px;
+}
+.c_prompt .verification a {
+	color: #0066CC;
+	text-decoration: underline;
+}
+
+.c_prompt .verification .input1 {
+	background-image: url(../images/input-bg.png);
+	background-repeat: no-repeat;
+	background-position: left top;
+	width: 80px;
+	border: 1px solid #a7a6aa;
+	padding-top: 3px;
+	padding-bottom: 2px;
+	padding-left: 3px;
+}
+.c_prompt .button {
+	padding-top: 12px;
+	text-align: center;
+	padding-right: 130px;
+}

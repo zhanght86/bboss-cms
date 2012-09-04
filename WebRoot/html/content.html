@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>无标题文档</title>
+</head>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" media="screen" />
+<SCRIPT type=text/javascript>
+	var api = frameElement.api,W = api.opener;
+		
+	function myevent(){ 	
+	    W.location.reload(); //刷新父页面
+	} 
+	
+	function cancel(){
+		api.close()//关闭弹窗
+	}
+	function other(){
+		W.$.dialog({ title:'另一个窗口',width:350,height:150, content:'url:../html/content2.html',parent:api,currentwindow:this})
+	}
+</SCRIPT>
+<body style="overflow:auto;">
+<script>
+var d = new Date()
+document.write(d)
+</script>
+<div style="text-align:center; margin-top:10px;">
+     再开窗口传回数据：<input type="text" value="" id="getvalue" />
+  <div class="btnarea"> 
+  <a href="#" class="bt_1" onclick="myevent()"><span>确定</span></a>   
+  <a href="#" class="bt_1" onclick="other()"><span>再打开一个窗口</span></a>   
+  <a href="#" class="bt_2" onclick="cancel()"><span>取消</span></a> 
+  </div>
+</div>
+</body>
+</html>

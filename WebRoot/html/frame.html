@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>三一集团开发平台</title>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<style>
+html,body{ height:100%;}
+</style>
+</head>
+<body>
+  <div class="main_contain" style="height:100%">
+    <table width="100%"  height="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="170" valign="top" id="Tbasic2" height="100%"><iframe src="menu_left.html" frameborder="0" style="width:100%; height:99% " scrolling="auto"></iframe>
+        
+        </td>
+        <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
+            <tr>
+              <td valign="middle"><a href="javascript:togglevisible('basic2')"><img src="images/expand.gif"  name="Ibasic2"/></a></td>
+            </tr>
+          </table></td>
+        <td valign="top" height="100%">
+        <iframe src="table2.html" name="rightFrame" id="rightFrame" frameborder="0" style="width:100%; height:99% "></iframe>        
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+<script type="text/javascript">
+function getobj(menu)
+{
+return (navigator.appName == "Microsoft Internet Explorer")?this[menu]:document.getElementById(menu);
+}
+function togglevisible(treepart)
+{
+if (this.getobj("T"+treepart).style.visibility == "hidden")
+{
+this.getobj("T"+treepart).style.position="";
+this.getobj("T"+treepart).style.visibility="";
+document["I"+treepart].src="images/expand.gif";
+}
+else
+{
+this.getobj("T"+treepart).style.position="absolute";
+this.getobj("T"+treepart).style.visibility="hidden";
+document["I"+treepart].src="images/shrink.gif";
+}
+}
+</script>
+</html>

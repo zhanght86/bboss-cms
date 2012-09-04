@@ -1,0 +1,43 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">
+<HTML>
+<HEAD>
+<TITLE>GCP</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<LINK rel=stylesheet type=text/css href="stylesheet/css.css">
+<link href="stylesheet/main.css" rel="stylesheet" type="text/css" />
+<link type="text/css"  rel="stylesheet" href="stylesheet/menu.css"/>
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script> 
+<script type="text/javascript" src="js/menu.js"></script>
+</HEAD>
+<BODY>
+<DIV class=order>
+  <H1 class=h1>
+    <div class="fright"><a href="#">Home</a> > <a href="#">Parts</a> > Parts Search</div>
+    Parts Search </H1>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" class="partbox" >
+    <tr>
+      <td width="240" valign="top" id="leftbar"><div class="parttop">
+        <label>SIN:</label>
+        <input type="text" name="textfield" class="input1" style="width:100px;">
+        <a href="#" class="bt_1"><span>Search</span></a> </div>
+        <div class="tree"> <img src="images/tree.jpg" width="229" height="261"> </div></td>
+      <td width="20" align="center" valign="middle"><img src="images/page-prev.gif" id="closeicon" width="16" height="16" onClick="leftclose();" style="cursor:pointer;"></td>
+      <td><img src="images/detail.jpg" width="758" height="665"></td>
+    </tr>
+  </table>
+</DIV>
+<script>
+function leftclose(){
+		var leftbar=document.getElementById("leftbar");
+		var closeicon=document.getElementById("closeicon");
+		if(leftbar.style.display=="none"){
+			leftbar.style.display="block"
+			closeicon.src="images/page-prev.gif"
+		}else{
+			leftbar.style.display="none"
+			closeicon.src="images/page-next.gif"
+		}
+}
+</script>
+</BODY>
+</HTML>

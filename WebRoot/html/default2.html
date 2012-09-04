@@ -1,0 +1,52 @@
+<!--Quirks Mode-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="UTF-8" />
+<title>DY CSS Layout</title>
+<meta name="Author" content="Doyoe(飘零雾雨), edzmaster@gmail.com" />
+<style>
+html,body {
+ margin:0;
+ font:14px/200% tahoma, "宋体", Simsun, Arial, Helvetica;
+ height:100%;
+ overflow:hidden;
+}
+#dyhead,#dyfoot {
+ background:#eee;
+ width:100%;
+ height:30px;
+ position:absolute;
+ z-index:100;
+}
+#dyhead {
+ top:0;
+}
+#dyfoot {
+ bottom:0;
+}
+#dycontent {
+ width:100%;
+ background:#f7f7f7;
+ overflow:auto;
+ top:30px;
+ bottom:30px;
+ position:absolute;
+ z-index:99;
+ _height:100%;
+ _border-top:30px solid #eee;
+ _border-bottom:30px solid #eee;
+ _top:0;
+}
+
+
+</style>
+</head>
+<body>
+<div id="dyhead">Header</div>
+<div id="dycontent">Begin<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br /><br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />中间大段的内容<br />End</div>
+<div id="dyfoot">Footer</div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="stylesheet/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="js/jquery.ztree.core-3.1.js"></script>
+<style>
+*{ margin:0; padding:0}
+html,body{ height:100%}
+</style>
+<script>
+var setting = {
+	data: {
+		simpleData: {enable: true}
+	},
+	callback: {	
+		onClick: onClick
+	}
+};
+var zNodes =[
+	{ id:1, pId:0, name:"父节点1 - 展开", open:true, isParent:true},
+	{ id:11, pId:1, name:"父节点11 - 折叠", isParent:true},
+	{ id:111, pId:11, name:"叶子节点111"},
+	{ id:112, pId:11, name:"叶子节点112"},
+	{ id:113, pId:11, name:"叶子节点113"},
+	{ id:114, pId:11, name:"叶子节点114"},
+	{ id:12, pId:1, name:"父节点12 - 折叠", isParent:true},
+	{ id:121, pId:12, name:"叶子节点121"},
+	{ id:122, pId:12, name:"叶子节点122"},
+	{ id:123, pId:12, name:"叶子节点123"},
+	{ id:124, pId:12, name:"叶子节点124"},
+	{ id:13, pId:1, name:"父节点13", isParent:true},
+	{ id:2, pId:0, name:"父节点2 - 折叠", isParent:true},
+	{ id:21, pId:2, name:"父节点21 - 展开", open:true, isParent:true},
+	{ id:211, pId:21, name:"叶子节点211"},
+	{ id:212, pId:21, name:"叶子节点212"},
+	{ id:213, pId:21, name:"叶子节点213"},
+	{ id:214, pId:21, name:"叶子节点214"},
+	{ id:22, pId:2, name:"父节点22 - 折叠", isParent:true},
+	{ id:221, pId:22, name:"叶子节点221"},
+	{ id:222, pId:22, name:"叶子节点222"},
+	{ id:223, pId:22, name:"叶子节点223"},
+	{ id:224, pId:22, name:"叶子节点224"},
+	{ id:23, pId:2, name:"父节点23 - 折叠", isParent:true},
+	{ id:231, pId:23, name:"叶子节点231"},
+	{ id:232, pId:23, name:"叶子节点232"},
+	{ id:233, pId:23, name:"叶子节点233"},
+	{ id:234, pId:23, name:"叶子节点234"},
+	{ id:3, pId:0, name:"父节点3 - 没有子节点", isParent:true}
+];
+
+$(document).ready(function(){
+	$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+	$("#select1").click(function(){
+		var detail=$("#select1").find('option:selected').html();
+		if(detail)
+		$("#selectDetail").html("描述："+detail);
+	})
+});
+
+function onClick(event, treeId, treeNode){
+	$("#select1").empty();	
+	var html;
+	var nodeArray=getChildNodes(treeNode);
+	for(i=0;i<nodeArray.length;i++){
+		html+="<option value="+nodeArray[i].id+">"+nodeArray[i].name+"</option>"
+	}	
+	$("#select1").append(html)
+}
+function getChildNodes(treeNode) { 
+	var ztree = $.fn.zTree.getZTreeObj("treeDemo");
+	var childNodes = ztree.transformToArray(treeNode); 
+	var nodes = new Array(); 
+	var j=0;
+	for(i = 0; i < childNodes.length; i++) { 
+		if(childNodes[i].isParent!=true){
+			nodes[j]=childNodes[i];
+			++j;
+		}		
+	} 
+	return nodes; 
+}
+
+/* 添加选择的项 */
+function move(ObjSource, ObjTarget) {
+	if (ObjSource.val() == null)
+		return;
+	try{
+		$.each(ObjSource.find('option:selected'), function(i, n) {
+			if(SelectIsExitItem(ObjTarget,n.value)){throw "已选列表中已存在  "+n.innerHTML;};
+			ObjTarget.append(n);
+		});
+		ObjSource.find('option:selected').remove();
+	}catch(e) {    
+	    alert(e);    
+	}	
+}
+
+/* 添加全部 */
+function moveAll(ObjSource, ObjTarget) {
+	try{
+		$.each(ObjSource.find('option'), function(i, m) {		
+				if(SelectIsExitItem(ObjTarget,m.value)){throw "已选列表中已存在  "+m.innerHTML;};		
+		});
+		ObjTarget.append(ObjSource.html());
+		ObjSource.empty();
+	}catch(e) {    
+	    alert(e);    
+	}	
+}
+function SelectIsExitItem(objSelect, objItemValue) {        
+    var isExit = false;
+    for (var i = 0; i < objSelect.find('option').length; i++) {        
+        if (objSelect.find('option')[i].value == objItemValue) {        
+            isExit = true;        
+            break;        
+         }
+     }        
+    return isExit;        
+}
+//-->
+</script>
+</head>
+<body>
+	<table width="775" border="0" cellspacing="0" cellpadding="0" align="center" height="100%">
+		<tr>
+			<td width="225" align="left" valign="top">
+            <div class="treetop">列表名称</div>   
+            <div class="treeleft">                     
+            <ul id="treeDemo" class="ztree"></ul>            
+            </div>
+			</td>
+			<td valign="top">
+				<div class="treesearch">
+					关键字：<input type="text" name="textfield" id="textfield"
+						class="input0 w180" /> <a href="#"  class="bt_1"><span>搜索</span></a>
+			  </div>
+				<div class="treesearch">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0"
+						class="select_table">
+						<tr>
+							<th width="40%">待选列表</th>
+							<td width="20%">&nbsp;</td>
+							<th width="40%">已选列表</th>
+						</tr>
+						<tr>
+							<td align="left"><select name="select1" size="15"
+								multiple="multiple" id="select1" style="width:220px;height: 225px">									
+							</select></td>
+							<td align="center"><input type="button" name="button"
+								id="button" value=">"
+								onclick="move($('#select1'),$('#select2'))" /> <br /> <input
+								type="button" name="button3" id="button3" value="<"
+								onclick="move($('#select2'),$('#select1'))" /> <br /> <input
+								type="button" name="button4" id="button4" value=">>"
+								onclick="moveAll($('#select1'),$('#select2'))" /> <br /> <input
+								type="button" name="button5" id="button5" value="<<"
+								onclick="moveAll($('#select2'),$('#select1'))" /></td>
+							<td align="right"><select name="select2" size="15"
+								multiple="multiple" id="select2" style="width: 220px;height: 225px">
+
+							</select></td>
+						</tr>
+						<tr>
+							<td colspan="3"><div class="treesearch" id="selectDetail">描述：</div></td>
+						</tr>
+						<tr>
+							<td colspan="3" align="center" height="40"><a href="#"  class="bt_1"><span>确定</span></a></td>
+						</tr>
+					</table>
+				</div>
+		  </td>
+	  </tr>
+	</table>
+</body>
+</html>

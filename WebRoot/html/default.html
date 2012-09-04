@@ -1,0 +1,211 @@
+<!--Quirks Mode-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>框架页</title>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+<script type="text/javascript" src="js/menu.js"></script>
+<style>
+html,body {
+ margin:0; 
+ height:100%;
+ overflow:hidden;
+}
+#dyhead,#dyfoot {
+ width:100%;
+ position:absolute;
+ z-index:100;
+}
+#dyhead {
+ top:0;
+ height:70px;
+}
+#dyfoot {
+ bottom:0;
+ height:45px;
+}
+#dycontent {
+ width:100%;
+ overflow:auto;
+ top:70px;
+ bottom:45px;
+ position:absolute;
+ z-index:99;
+ _height:100%;
+ _border-top:70px solid white;
+ _border-bottom:45px solid white;
+ _top:0;
+ background-color:white
+}
+#dycontent  iframe{ width:100%; height:100%; overflow-x:hidden }
+</style>
+</head>
+<body>
+<div id="dyhead">
+    <div  class="top">
+      <div class="logo_top"><img src="images/top_logo.jpg" width="300" height="31" /></div>
+      <div class="log_message">
+    <span class="blue1">周红</span>（1003118），欢迎您　<a href="#" class="zhuxiao">注销</a>　 <a class="blue">帮助</a></div>
+    </div>
+    <div id="menubar">
+      <ul id="menus" class="menus">
+        <li><a class="select" href="#">首页</a></li>
+        <li><a href="#">费用申请</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>新建申请单</div>
+            </a></li>
+            <li><a href="#"><span></span>
+              <div>申请单草稿箱</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我的申请单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我经手的申请单</div>
+            </a></li>
+          </ul>
+        </li>
+        <li><a href="#">借款交款</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>在线填单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>借交款草稿箱</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我的借款单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我的交款单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我经手的借交款</div>
+            </a></li>
+          </ul>
+        </li>
+        <li><a href="#">费用报销</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>新建报销单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>报销单草稿箱</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我的报销单</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我经手的报销单</div>
+            </a></li>
+          </ul>
+        </li>
+        <li><a href="#">业务审批</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>待我审批</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我已审批</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>待我批阅</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我已批阅</div>
+            </a></li>
+          </ul>
+        </li>
+        <li><a href="#">财务管理</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>待我审核</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我已审核</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>付款管理</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>收款管理</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>账务管理</div>
+              </a>
+              <ul class="third">
+                <li><a  href="#"><span></span>单据处理</a></li>
+                <li><a  href="#"><span></span>单号对应凭证号</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">机票</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>国内机票查询</div></a>
+            </li>
+            <li><a  href="#"><span></span>
+              <div>机票订单</div></a>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#">个人中心</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>个人信息</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>我的审批意见</div></a>
+            </li>
+            <li><a  href="#"><span></span>
+              <div>提单授权</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>职位授权</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>系统消息</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>公司公告</div>
+            </a></li>
+          </ul>
+        </li>
+        <li><a href="#">统计分析</a>
+          <ul class="second">
+            <li><a  href="#"><span></span>
+              <div>查询分析</div>
+            </a></li>
+            <li><a  href="#"><span></span>
+              <div>费用分析报表</div></a>
+            </li>
+            <li><a  href="#"><span></span>
+              <div>商旅分析报表</div>
+            </a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+</div>
+
+<div id="dycontent">
+    <iframe frameborder="0" src="table1.html" scrolling="auto"></iframe>
+</div>
+
+<div id="dyfoot">
+    <div class="footer">
+      <div class="left_footer"><a href="ghp/index.html">全球招聘平台</a> | <a href="http://olm.sany.com.cn/SanyOLM/login.do?method=login">在线学习平台</a> | <a href="contact.html">联系我们</a> | <a href="vote.html">调查问卷</a> | <a href="system.html">系统管理</a> | <br />
+        <script type="text/javascript"> 
+    copyright=new Date();
+    update=copyright.getFullYear();
+    document.write( "&copy;" + "1989-"+ update + " 三一集团有限公司 版权所有");
+    </script>
+    </div>
+    </div>
+</div>
+</body>
+</html>
