@@ -1,0 +1,1306 @@
+
+            <!ELEMENT ActivemqAcks EMPTY>
+<!ATTLIST ActivemqAcks
+    Container CDATA #REQUIRED
+    SubDest CDATA #IMPLIED
+    ClientId CDATA #REQUIRED
+    SubName CDATA #REQUIRED
+    Selector CDATA #IMPLIED
+    LastAckedId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT ActivemqLock EMPTY>
+<!ATTLIST ActivemqLock
+    Id CDATA #REQUIRED
+    Time CDATA #IMPLIED
+    BrokerName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT ActivemqMsgs EMPTY>
+<!ATTLIST ActivemqMsgs
+    Id CDATA #REQUIRED
+    Container CDATA #IMPLIED
+    MsgidProd CDATA #IMPLIED
+    MsgidSeq CDATA #IMPLIED
+    Expiration CDATA #IMPLIED
+    Msg CDATA #IMPLIED
+>
+
+
+            <!ELEMENT CcTrigMsg EMPTY>
+<!ATTLIST CcTrigMsg
+    RecordId CDATA #IMPLIED
+    OperateFlag CDATA #IMPLIED
+    Remark CDATA #IMPLIED
+    Tabname CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Demo EMPTY>
+<!ATTLIST Demo
+    UserName CDATA #IMPLIED
+    UserPwd CDATA #IMPLIED
+>
+
+
+            <!ELEMENT EsbParams EMPTY>
+<!ATTLIST EsbParams
+    NodeId CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    Value CDATA #IMPLIED
+    ParamType CDATA #REQUIRED
+>
+
+
+            <!ELEMENT GroupUsers EMPTY>
+<!ATTLIST GroupUsers
+    UserId CDATA #REQUIRED
+    GroupId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Address EMPTY>
+<!ATTLIST J3Address
+    Id CDATA #REQUIRED
+    SortCode CDATA #IMPLIED
+    TmodelKey CDATA #IMPLIED
+    UseType CDATA #IMPLIED
+    AddressId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3AddressLine EMPTY>
+<!ATTLIST J3AddressLine
+    Id CDATA #REQUIRED
+    KeyName CDATA #IMPLIED
+    KeyValue CDATA #IMPLIED
+    Line CDATA #REQUIRED
+    AddressId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3AuthToken EMPTY>
+<!ATTLIST J3AuthToken
+    AuthToken CDATA #REQUIRED
+    AuthorizedName CDATA #REQUIRED
+    Created CDATA #REQUIRED
+    LastUsed CDATA #REQUIRED
+    NumberOfUses CDATA #REQUIRED
+    PublisherName CDATA #IMPLIED
+    TokenState CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BindingCategoryBag EMPTY>
+<!ATTLIST J3BindingCategoryBag
+    Id CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BindingDescr EMPTY>
+<!ATTLIST J3BindingDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BindingTemplate EMPTY>
+<!ATTLIST J3BindingTemplate
+    EntityKey CDATA #REQUIRED
+    AccessPointType CDATA #IMPLIED
+    AccessPointUrl CDATA #IMPLIED
+    HostingRedirector CDATA #IMPLIED
+    ServiceKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessCategoryBag EMPTY>
+<!ATTLIST J3BusinessCategoryBag
+    Id CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessDescr EMPTY>
+<!ATTLIST J3BusinessDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessEntity EMPTY>
+<!ATTLIST J3BusinessEntity
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessIdentifier EMPTY>
+<!ATTLIST J3BusinessIdentifier
+    Id CDATA #REQUIRED
+    KeyName CDATA #IMPLIED
+    KeyValue CDATA #REQUIRED
+    TmodelKeyRef CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessName EMPTY>
+<!ATTLIST J3BusinessName
+    Id CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    Name CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3BusinessService EMPTY>
+<!ATTLIST J3BusinessService
+    EntityKey CDATA #REQUIRED
+    BusinessKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3CategoryBag EMPTY>
+<!ATTLIST J3CategoryBag
+    Id CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Clerk EMPTY>
+<!ATTLIST J3Clerk
+    ClerkName CDATA #REQUIRED
+    Cred CDATA #IMPLIED
+    PublisherId CDATA #REQUIRED
+    NodeName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT J3ClientSubscriptioninfo EMPTY>
+<!ATTLIST J3ClientSubscriptioninfo
+    SubscriptionKey CDATA #REQUIRED
+    LastNotified CDATA #IMPLIED
+    ToclerkClerkName CDATA #IMPLIED
+    FromclerkClerkName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT J3Contact EMPTY>
+<!ATTLIST J3Contact
+    Id CDATA #REQUIRED
+    UseType CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3ContactDescr EMPTY>
+<!ATTLIST J3ContactDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    ContactId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3DiscoveryUrl EMPTY>
+<!ATTLIST J3DiscoveryUrl
+    Id CDATA #REQUIRED
+    Url CDATA #REQUIRED
+    UseType CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Email EMPTY>
+<!ATTLIST J3Email
+    Id CDATA #REQUIRED
+    EmailAddress CDATA #REQUIRED
+    UseType CDATA #IMPLIED
+    ContactId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3InstanceDetailsDescr EMPTY>
+<!ATTLIST J3InstanceDetailsDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    TmodelInstanceInfoId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3InstanceDetailsDocDescr EMPTY>
+<!ATTLIST J3InstanceDetailsDocDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    TmodelInstanceInfoId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3KeyedReference EMPTY>
+<!ATTLIST J3KeyedReference
+    Id CDATA #REQUIRED
+    KeyName CDATA #IMPLIED
+    KeyValue CDATA #REQUIRED
+    TmodelKeyRef CDATA #IMPLIED
+    KeyedReferenceGroupId CDATA #IMPLIED
+    CategoryBagId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT J3KeyedReferenceGroup EMPTY>
+<!ATTLIST J3KeyedReferenceGroup
+    Id CDATA #REQUIRED
+    TmodelKey CDATA #IMPLIED
+    CategoryBagId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Node EMPTY>
+<!ATTLIST J3Node
+    Name CDATA #REQUIRED
+    CustodyTransferUrl CDATA #REQUIRED
+    FactoryInitial CDATA #IMPLIED
+    FactoryNamingProvider CDATA #IMPLIED
+    FactoryUrlPkgs CDATA #IMPLIED
+    InquiryUrl CDATA #REQUIRED
+    JuddiApiUrl CDATA #IMPLIED
+    ProxyTransport CDATA #REQUIRED
+    PublishUrl CDATA #REQUIRED
+    SecurityUrl CDATA #REQUIRED
+    SubscriptionUrl CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3OverviewDoc EMPTY>
+<!ATTLIST J3OverviewDoc
+    Id CDATA #REQUIRED
+    OverviewUrl CDATA #REQUIRED
+    OverviewUrlUseType CDATA #IMPLIED
+    TomodelInstanceInfoId CDATA #IMPLIED
+    EntityKey CDATA #IMPLIED
+>
+
+
+            <!ELEMENT J3OverviewDocDescr EMPTY>
+<!ATTLIST J3OverviewDocDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    OverviewDocId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT J3PersonName EMPTY>
+<!ATTLIST J3PersonName
+    Id CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    Name CDATA #REQUIRED
+    ContactId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Phone EMPTY>
+<!ATTLIST J3Phone
+    Id CDATA #REQUIRED
+    PhoneNumber CDATA #REQUIRED
+    UseType CDATA #IMPLIED
+    ContactId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Publisher EMPTY>
+<!ATTLIST J3Publisher
+    AuthorizedName CDATA #REQUIRED
+    EmailAddress CDATA #IMPLIED
+    IsAdmin CDATA #IMPLIED
+    IsEnabled CDATA #IMPLIED
+    MaxBindingsPerService CDATA #IMPLIED
+    MaxBusinesses CDATA #IMPLIED
+    MaxServicesPerBusiness CDATA #IMPLIED
+    MaxTmodels CDATA #IMPLIED
+    PublisherName CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3PublisherAssertion EMPTY>
+<!ATTLIST J3PublisherAssertion
+    FromKey CDATA #REQUIRED
+    ToKey CDATA #REQUIRED
+    FromCheck CDATA #REQUIRED
+    KeyName CDATA #REQUIRED
+    KeyValue CDATA #REQUIRED
+    TmodelKey CDATA #REQUIRED
+    ToCheck CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3ServiceCategoryBag EMPTY>
+<!ATTLIST J3ServiceCategoryBag
+    Id CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3ServiceDescr EMPTY>
+<!ATTLIST J3ServiceDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3ServiceName EMPTY>
+<!ATTLIST J3ServiceName
+    Id CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    Name CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3ServiceProjection EMPTY>
+<!ATTLIST J3ServiceProjection
+    BusinessKey CDATA #REQUIRED
+    ServiceKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Subscription EMPTY>
+<!ATTLIST J3Subscription
+    SubscriptionKey CDATA #REQUIRED
+    AuthorizedName CDATA #REQUIRED
+    BindingKey CDATA #IMPLIED
+    Brief CDATA #IMPLIED
+    CreateDate CDATA #REQUIRED
+    ExpiresAfter CDATA #IMPLIED
+    LastNotified CDATA #IMPLIED
+    MaxEntities CDATA #IMPLIED
+    NotificationInterval CDATA #IMPLIED
+    SubscriptionFilter CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3SubscriptionChunkToken EMPTY>
+<!ATTLIST J3SubscriptionChunkToken
+    ChunkToken CDATA #REQUIRED
+    Data CDATA #REQUIRED
+    EndPoint CDATA #IMPLIED
+    ExpiresAfter CDATA #REQUIRED
+    StartPoint CDATA #IMPLIED
+    SubscriptionKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3SubscriptionMatch EMPTY>
+<!ATTLIST J3SubscriptionMatch
+    Id CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+    SubscriptionKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3Tmodel EMPTY>
+<!ATTLIST J3Tmodel
+    EntityKey CDATA #REQUIRED
+    Deleted CDATA #IMPLIED
+    LangCode CDATA #IMPLIED
+    Name CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TmodelCategoryBag EMPTY>
+<!ATTLIST J3TmodelCategoryBag
+    Id CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TmodelDescr EMPTY>
+<!ATTLIST J3TmodelDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TmodelIdentifier EMPTY>
+<!ATTLIST J3TmodelIdentifier
+    Id CDATA #REQUIRED
+    KeyName CDATA #IMPLIED
+    KeyValue CDATA #REQUIRED
+    TmodelKeyRef CDATA #IMPLIED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TmodelInstanceInfo EMPTY>
+<!ATTLIST J3TmodelInstanceInfo
+    Id CDATA #REQUIRED
+    InstanceParms CDATA #IMPLIED
+    TmodelKey CDATA #REQUIRED
+    EntityKey CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TmodelInstanceInfoDescr EMPTY>
+<!ATTLIST J3TmodelInstanceInfoDescr
+    Id CDATA #REQUIRED
+    Descr CDATA #REQUIRED
+    LangCode CDATA #IMPLIED
+    TmodelInstanceInfoId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TransferToken EMPTY>
+<!ATTLIST J3TransferToken
+    TransferToken CDATA #REQUIRED
+    ExpirationDate CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3TransferTokenKeys EMPTY>
+<!ATTLIST J3TransferTokenKeys
+    Id CDATA #REQUIRED
+    EntityKey CDATA #IMPLIED
+    TransferToken CDATA #REQUIRED
+>
+
+
+            <!ELEMENT J3UddiEntity EMPTY>
+<!ATTLIST J3UddiEntity
+    EntityKey CDATA #REQUIRED
+    AuthorizedName CDATA #REQUIRED
+    Created CDATA #IMPLIED
+    Modified CDATA #REQUIRED
+    ModifiedIncludingChildren CDATA #IMPLIED
+    NodeId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Log217 EMPTY>
+<!ATTLIST Log217
+    IdBatch CDATA #IMPLIED
+    Transname CDATA #IMPLIED
+    Status CDATA #IMPLIED
+    LinesRead CDATA #IMPLIED
+    LinesWritten CDATA #IMPLIED
+    LinesUpdated CDATA #IMPLIED
+    LinesInput CDATA #IMPLIED
+    LinesOutput CDATA #IMPLIED
+    Errors CDATA #IMPLIED
+    Startdate CDATA #IMPLIED
+    Enddate CDATA #IMPLIED
+    Logdate CDATA #IMPLIED
+    Depdate CDATA #IMPLIED
+    Replaydate CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqBigLob EMPTY>
+<!ATTLIST MqBigLob
+    LobId CDATA #REQUIRED
+    LobContent CDATA #IMPLIED
+    LobName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqBroker EMPTY>
+<!ATTLIST MqBroker
+    CaDate CDATA #IMPLIED
+    BrokerId CDATA #REQUIRED
+    BrokerName CDATA #IMPLIED
+    IsPersistent CDATA #IMPLIED
+    IsUsemirrq CDATA #IMPLIED
+    MemMaxlimit CDATA #IMPLIED
+    StoreLimite CDATA #IMPLIED
+    StoreName CDATA #IMPLIED
+    TempLimite CDATA #IMPLIED
+    ServerIp CDATA #IMPLIED
+    JmxPort CDATA #IMPLIED
+    JmxCreatecon CDATA #IMPLIED
+    JmxCrembserver CDATA #IMPLIED
+    UseCluster CDATA #IMPLIED
+    NcName CDATA #IMPLIED
+    NcUri CDATA #IMPLIED
+    Datadirectory CDATA #IMPLIED
+    PaDatasource CDATA #IMPLIED
+    UseSsl CDATA #IMPLIED
+    SslKs CDATA #IMPLIED
+    SslKspassword CDATA #IMPLIED
+    SslTs CDATA #IMPLIED
+    SslDirectory CDATA #IMPLIED
+    SslTspassword CDATA #IMPLIED
+    IsUsejmx CDATA #IMPLIED
+    UseAuth CDATA #IMPLIED
+    Needsupdate CDATA #IMPLIED
+    UsePermission CDATA #IMPLIED
+    UseLog CDATA #IMPLIED
+    PersistentType CDATA #IMPLIED
+    Maxfilelength CDATA #IMPLIED
+    Synconwrite CDATA #IMPLIED
+    Conduitsubscriptions CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqClientCa EMPTY>
+<!ATTLIST MqClientCa
+    CaId CDATA #REQUIRED
+    CaName CDATA #IMPLIED
+    TsFile CDATA #IMPLIED
+    KsFile CDATA #IMPLIED
+    CaDate CDATA #IMPLIED
+    CaDirectory CDATA #IMPLIED
+    CaTsorinName CDATA #IMPLIED
+    CaKsorinName CDATA #IMPLIED
+    TsPassword CDATA #IMPLIED
+    KsPassword CDATA #IMPLIED
+    Needsupdate CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqConnectors EMPTY>
+<!ATTLIST MqConnectors
+    BrokerId CDATA #IMPLIED
+    ConnectorId CDATA #REQUIRED
+    ConnectorUri CDATA #IMPLIED
+    ConnectorName CDATA #IMPLIED
+    ConProtocol CDATA #IMPLIED
+    ClusterUri CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqConParams EMPTY>
+<!ATTLIST MqConParams
+    NodeId CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    Value CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqGroup EMPTY>
+<!ATTLIST MqGroup
+    BrokerId CDATA #IMPLIED
+    GroupId CDATA #REQUIRED
+    GroupName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqHugemessageSchedule EMPTY>
+<!ATTLIST MqHugemessageSchedule
+    TaskId CDATA #REQUIRED
+    ScheduleId CDATA #REQUIRED
+    States CDATA #IMPLIED
+    FilePath CDATA #IMPLIED
+    FileSize CDATA #IMPLIED
+    SegmentSize CDATA #IMPLIED
+    DestName CDATA #IMPLIED
+    Finished CDATA #IMPLIED
+    RegDate CDATA #IMPLIED
+    Isbroke CDATA #IMPLIED
+    Useparrel CDATA #IMPLIED
+    Tasktype CDATA #REQUIRED
+    Sendpath CDATA #IMPLIED
+    MachineUuid CDATA #IMPLIED
+    BussinessId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqHugemessageSchedulecheck EMPTY>
+<!ATTLIST MqHugemessageSchedulecheck
+    TaskId CDATA #REQUIRED
+    ScheduleId CDATA #REQUIRED
+    States CDATA #IMPLIED
+    FilePath CDATA #IMPLIED
+    FileSize CDATA #IMPLIED
+    SegmentSize CDATA #IMPLIED
+    DestName CDATA #IMPLIED
+    Finished CDATA #IMPLIED
+    RegDate CDATA #IMPLIED
+    Isbroke CDATA #IMPLIED
+    Useparrel CDATA #IMPLIED
+    Tasktype CDATA #REQUIRED
+    Sendpath CDATA #IMPLIED
+    MachineUuid CDATA #IMPLIED
+    BussinessId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqMemConf EMPTY>
+<!ATTLIST MqMemConf
+    ConfigId CDATA #REQUIRED
+    BrokerId CDATA #IMPLIED
+    ObjectType CDATA #IMPLIED
+    ObjectName CDATA #IMPLIED
+    MemLimit CDATA #IMPLIED
+    DeadPrefix CDATA #IMPLIED
+    Producerflowcontrol CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqMirrorTable EMPTY>
+<!ATTLIST MqMirrorTable
+    MirrorName CDATA #IMPLIED
+    MirrorId CDATA #REQUIRED
+    BrokerId CDATA #IMPLIED
+    Remark CDATA #IMPLIED
+    MirrorPrefix CDATA #IMPLIED
+    Copymessage CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqMonTable EMPTY>
+<!ATTLIST MqMonTable
+    MonitorId CDATA #REQUIRED
+    MqMonitorIp CDATA #IMPLIED
+    MqMonitorPort CDATA #IMPLIED
+    MqJmxmonPort CDATA #IMPLIED
+    MqTcpPort CDATA #IMPLIED
+    MqUser CDATA #IMPLIED
+    MqPassword CDATA #IMPLIED
+    MonitorName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqNode EMPTY>
+<!ATTLIST MqNode
+    NodeId CDATA #REQUIRED
+    NodeFactoryId CDATA #IMPLIED
+    NodeName CDATA #IMPLIED
+    DestType CDATA #IMPLIED
+    Destination CDATA #IMPLIED
+    Remark CDATA #IMPLIED
+    Isvalidate CDATA #IMPLIED
+    Ispersistent CDATA #IMPLIED
+    Priority CDATA #IMPLIED
+    Expiration CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqNodeFactory EMPTY>
+<!ATTLIST MqNodeFactory
+    NodeFactoryId CDATA #REQUIRED
+    NodeFactoryName CDATA #IMPLIED
+    ServerUrl CDATA #IMPLIED
+    UseAuth CDATA #IMPLIED
+    UserName CDATA #IMPLIED
+    UserPassword CDATA #IMPLIED
+    CaId CDATA #IMPLIED
+    UseSsl CDATA #IMPLIED
+    UseFailover CDATA #IMPLIED
+    Reconnectdelay CDATA #IMPLIED
+    Maxreconnectdelay CDATA #IMPLIED
+    Useexponentialbackoff CDATA #IMPLIED
+    Backoffmutipler CDATA #IMPLIED
+    Maxreconnecttimes CDATA #IMPLIED
+    Randomize CDATA #IMPLIED
+    ConCollisionavoidancepercent CDATA #IMPLIED
+    ConMaximumredeliveries CDATA #IMPLIED
+    ConInitialredeliverydelay CDATA #IMPLIED
+    ConUsecollisionavoidance CDATA #IMPLIED
+    ConUseexponentialbackoff CDATA #IMPLIED
+    ConBackoffmultiplier CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqPermissions EMPTY>
+<!ATTLIST MqPermissions
+    ResourceType CDATA #REQUIRED
+    ResName CDATA #REQUIRED
+    ResOp CDATA #REQUIRED
+    GroupType CDATA #REQUIRED
+    GroupName CDATA #REQUIRED
+    BrokerId CDATA #REQUIRED
+    Author CDATA #IMPLIED
+    AuthDate CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqPolicyTable EMPTY>
+<!ATTLIST MqPolicyTable
+    BrokerId CDATA #IMPLIED
+    PolicyId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqProperties EMPTY>
+<!ATTLIST MqProperties
+    ProId CDATA #REQUIRED
+    TaskId CDATA #IMPLIED
+    ProName CDATA #REQUIRED
+    ProType CDATA #IMPLIED
+    StringValue CDATA #IMPLIED
+    ValueNumber CDATA #IMPLIED
+    ValueObject CDATA #IMPLIED
+    ValueBoolean CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqRealNodes EMPTY>
+<!ATTLIST MqRealNodes
+    VirtualNodeid CDATA #IMPLIED
+    RealNodeId CDATA #REQUIRED
+    DestinationType CDATA #IMPLIED
+    DestinationName CDATA #REQUIRED
+>
+
+
+            <!ELEMENT MqRoutenode EMPTY>
+<!ATTLIST MqRoutenode
+    BrokerId CDATA #IMPLIED
+    NodeId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqRouters EMPTY>
+<!ATTLIST MqRouters
+    RouterId CDATA #REQUIRED
+    BrokerId CDATA #IMPLIED
+    RouterName CDATA #IMPLIED
+    RouterRegular CDATA #IMPLIED
+    Isvalid CDATA #IMPLIED
+    Importclass CDATA #IMPLIED
+    Orderby CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqRulesTpl EMPTY>
+<!ATTLIST MqRulesTpl
+    RuleTplId CDATA #REQUIRED
+    Rules CDATA #IMPLIED
+    RulesName CDATA #IMPLIED
+    Modifiable CDATA #IMPLIED
+    TplAuth CDATA #IMPLIED
+    TplDesc CDATA #IMPLIED
+    Importclass CDATA #IMPLIED
+    Orderby CDATA #IMPLIED
+    RuteImage CDATA #IMPLIED
+    TplType CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqSegmentRecvCache EMPTY>
+<!ATTLIST MqSegmentRecvCache
+    SegmentId CDATA #REQUIRED
+    Content CDATA #IMPLIED
+    Offset CDATA #IMPLIED
+    Filename CDATA #IMPLIED
+    Scheduleid CDATA #IMPLIED
+    Filesize CDATA #IMPLIED
+    Segmentsize CDATA #IMPLIED
+    RegDate CDATA #IMPLIED
+    SendDestinction CDATA #REQUIRED
+>
+
+
+            <!ELEMENT MqSegmentRecvCachecheck EMPTY>
+<!ATTLIST MqSegmentRecvCachecheck
+    SegmentId CDATA #REQUIRED
+    Content CDATA #IMPLIED
+    Offset CDATA #IMPLIED
+    Filename CDATA #IMPLIED
+    Scheduleid CDATA #IMPLIED
+    Filesize CDATA #IMPLIED
+    Segmentsize CDATA #IMPLIED
+    RegDate CDATA #IMPLIED
+    SendDestinction CDATA #REQUIRED
+>
+
+
+            <!ELEMENT MqUsers EMPTY>
+<!ATTLIST MqUsers
+    BrokerId CDATA #IMPLIED
+    UserId CDATA #REQUIRED
+    UserName CDATA #IMPLIED
+    UserPassword CDATA #IMPLIED
+>
+
+
+            <!ELEMENT MqVirtualNodes EMPTY>
+<!ATTLIST MqVirtualNodes
+    BrokerId CDATA #IMPLIED
+    NodeName CDATA #REQUIRED
+    VirtualNodeid CDATA #REQUIRED
+    NodeType CDATA #IMPLIED
+    Copymessage CDATA #IMPLIED
+    Forwardonly CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RCluster EMPTY>
+<!ATTLIST RCluster
+    IdCluster CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    BasePort CDATA #IMPLIED
+    SocketsBufferSize CDATA #IMPLIED
+    SocketsFlushInterval CDATA #IMPLIED
+    SocketsCompressed CDATA #IMPLIED
+    DynamicCluster CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RClusterSlave EMPTY>
+<!ATTLIST RClusterSlave
+    IdClusterSlave CDATA #REQUIRED
+    IdCluster CDATA #IMPLIED
+    IdSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RCondition EMPTY>
+<!ATTLIST RCondition
+    IdCondition CDATA #REQUIRED
+    IdConditionParent CDATA #IMPLIED
+    Negated CDATA #IMPLIED
+    Operator CDATA #IMPLIED
+    LeftName CDATA #IMPLIED
+    ConditionFunction CDATA #IMPLIED
+    RightName CDATA #IMPLIED
+    IdValueRight CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabase EMPTY>
+<!ATTLIST RDatabase
+    IdDatabase CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    IdDatabaseType CDATA #IMPLIED
+    IdDatabaseContype CDATA #IMPLIED
+    HostName CDATA #IMPLIED
+    DatabaseName CDATA #IMPLIED
+    Port CDATA #IMPLIED
+    Username CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    Servername CDATA #IMPLIED
+    DataTbs CDATA #IMPLIED
+    IndexTbs CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseAttribute EMPTY>
+<!ATTLIST RDatabaseAttribute
+    IdDatabaseAttribute CDATA #REQUIRED
+    IdDatabase CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseContype EMPTY>
+<!ATTLIST RDatabaseContype
+    IdDatabaseContype CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseType EMPTY>
+<!ATTLIST RDatabaseType
+    IdDatabaseType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDependency EMPTY>
+<!ATTLIST RDependency
+    IdDependency CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdDatabase CDATA #IMPLIED
+    TableName CDATA #IMPLIED
+    FieldName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDirectory EMPTY>
+<!ATTLIST RDirectory
+    IdDirectory CDATA #REQUIRED
+    IdDirectoryParent CDATA #IMPLIED
+    DirectoryName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJob EMPTY>
+<!ATTLIST RJob
+    IdJob CDATA #REQUIRED
+    IdDirectory CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    ExtendedDescription CDATA #IMPLIED
+    JobVersion CDATA #IMPLIED
+    JobStatus CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+    CreatedUser CDATA #IMPLIED
+    CreatedDate CDATA #IMPLIED
+    ModifiedUser CDATA #IMPLIED
+    ModifiedDate CDATA #IMPLIED
+    UseBatchId CDATA #IMPLIED
+    PassBatchId CDATA #IMPLIED
+    UseLogfield CDATA #IMPLIED
+    SharedFile CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentry EMPTY>
+<!ATTLIST RJobentry
+    IdJobentry CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentryType CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryAttribute EMPTY>
+<!ATTLIST RJobentryAttribute
+    IdJobentryAttribute CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentry CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryCopy EMPTY>
+<!ATTLIST RJobentryCopy
+    IdJobentryCopy CDATA #REQUIRED
+    IdJobentry CDATA #IMPLIED
+    IdJob CDATA #IMPLIED
+    IdJobentryType CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiDraw CDATA #IMPLIED
+    Parallel CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryType EMPTY>
+<!ATTLIST RJobentryType
+    IdJobentryType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobAttribute EMPTY>
+<!ATTLIST RJobAttribute
+    IdJobAttribute CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobHop EMPTY>
+<!ATTLIST RJobHop
+    IdJobHop CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentryCopyFrom CDATA #IMPLIED
+    IdJobentryCopyTo CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+    Evaluation CDATA #IMPLIED
+    Unconditional CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobNote EMPTY>
+<!ATTLIST RJobNote
+    IdJob CDATA #IMPLIED
+    IdNote CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RLog EMPTY>
+<!ATTLIST RLog
+    IdLog CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    IdLoglevel CDATA #IMPLIED
+    Logtype CDATA #IMPLIED
+    Filename CDATA #IMPLIED
+    Fileextention CDATA #IMPLIED
+    AddDate CDATA #IMPLIED
+    AddTime CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RLoglevel EMPTY>
+<!ATTLIST RLoglevel
+    IdLoglevel CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RNote EMPTY>
+<!ATTLIST RNote
+    IdNote CDATA #REQUIRED
+    ValueStr CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiLocationWidth CDATA #IMPLIED
+    GuiLocationHeight CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPartition EMPTY>
+<!ATTLIST RPartition
+    IdPartition CDATA #REQUIRED
+    IdPartitionSchema CDATA #IMPLIED
+    PartitionId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPartitionSchema EMPTY>
+<!ATTLIST RPartitionSchema
+    IdPartitionSchema CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    DynamicDefinition CDATA #IMPLIED
+    PartitionsPerSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPermission EMPTY>
+<!ATTLIST RPermission
+    IdPermission CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RProfile EMPTY>
+<!ATTLIST RProfile
+    IdProfile CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RProfilePermission EMPTY>
+<!ATTLIST RProfilePermission
+    IdProfile CDATA #IMPLIED
+    IdPermission CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RRepositoryLog EMPTY>
+<!ATTLIST RRepositoryLog
+    IdRepositoryLog CDATA #REQUIRED
+    RepVersion CDATA #IMPLIED
+    LogDate CDATA #IMPLIED
+    LogUser CDATA #IMPLIED
+    OperationDesc CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RSlave EMPTY>
+<!ATTLIST RSlave
+    IdSlave CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    HostName CDATA #IMPLIED
+    Port CDATA #IMPLIED
+    Username CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    ProxyHostName CDATA #IMPLIED
+    ProxyPort CDATA #IMPLIED
+    NonProxyHosts CDATA #IMPLIED
+    Master CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStep EMPTY>
+<!ATTLIST RStep
+    IdStep CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    IdStepType CDATA #IMPLIED
+    Distribute CDATA #IMPLIED
+    Copies CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiDraw CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepAttribute EMPTY>
+<!ATTLIST RStepAttribute
+    IdStepAttribute CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepDatabase EMPTY>
+<!ATTLIST RStepDatabase
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    IdDatabase CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepType EMPTY>
+<!ATTLIST RStepType
+    IdStepType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    Helptext CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransformation EMPTY>
+<!ATTLIST RTransformation
+    IdTransformation CDATA #REQUIRED
+    IdDirectory CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    ExtendedDescription CDATA #IMPLIED
+    TransVersion CDATA #IMPLIED
+    TransStatus CDATA #IMPLIED
+    IdStepRead CDATA #IMPLIED
+    IdStepWrite CDATA #IMPLIED
+    IdStepInput CDATA #IMPLIED
+    IdStepOutput CDATA #IMPLIED
+    IdStepUpdate CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+    UseBatchid CDATA #IMPLIED
+    UseLogfield CDATA #IMPLIED
+    IdDatabaseMaxdate CDATA #IMPLIED
+    TableNameMaxdate CDATA #IMPLIED
+    FieldNameMaxdate CDATA #IMPLIED
+    OffsetMaxdate CDATA #IMPLIED
+    DiffMaxdate CDATA #IMPLIED
+    CreatedUser CDATA #IMPLIED
+    CreatedDate CDATA #IMPLIED
+    ModifiedUser CDATA #IMPLIED
+    ModifiedDate CDATA #IMPLIED
+    SizeRowset CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransAttribute EMPTY>
+<!ATTLIST RTransAttribute
+    IdTransAttribute CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransCluster EMPTY>
+<!ATTLIST RTransCluster
+    IdTransCluster CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdCluster CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransHop EMPTY>
+<!ATTLIST RTransHop
+    IdTransHop CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdStepFrom CDATA #IMPLIED
+    IdStepTo CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+    Condition CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransNote EMPTY>
+<!ATTLIST RTransNote
+    IdTransformation CDATA #IMPLIED
+    IdNote CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransPartitionSchema EMPTY>
+<!ATTLIST RTransPartitionSchema
+    IdTransPartitionSchema CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdPartitionSchema CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransSlave EMPTY>
+<!ATTLIST RTransSlave
+    IdTransSlave CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransStepCondition EMPTY>
+<!ATTLIST RTransStepCondition
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    IdCondition CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RUser EMPTY>
+<!ATTLIST RUser
+    IdUser CDATA #REQUIRED
+    IdProfile CDATA #IMPLIED
+    Login CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RValue EMPTY>
+<!ATTLIST RValue
+    IdValue CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    ValueType CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+    IsNull CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RVersion EMPTY>
+<!ATTLIST RVersion
+    IdVersion CDATA #REQUIRED
+    MajorVersion CDATA #IMPLIED
+    MinorVersion CDATA #IMPLIED
+    UpgradeDate CDATA #IMPLIED
+    IsUpgrade CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Tableinfo EMPTY>
+<!ATTLIST Tableinfo
+    TableName CDATA #REQUIRED
+    TableIdName CDATA #IMPLIED
+    TableIdIncrement CDATA #IMPLIED
+    TableIdValue CDATA #IMPLIED
+    TableIdGenerator CDATA #IMPLIED
+    TableIdType CDATA #IMPLIED
+    TableIdPrefix CDATA #IMPLIED
+>
+
+

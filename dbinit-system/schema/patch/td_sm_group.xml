@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	数据库升级脚本
+ ]]>
+	</description>
+
+	<property name="all_datas">
+		<list>
+
+			<property name="drop_index">
+				<map>
+					<property name="mysql">
+
+						<list>
+
+							<property action="update"><![CDATA[
+							 alter table td_sm_group add group_tree_level varchar(200)
+							]]></property>
+
+						</list>
+					</property>
+
+					<property name="default">
+
+						<list>
+							<property action="update"><![CDATA[
+							  alter table td_sm_group add group_tree_level varchar2(200)
+						]]></property>
+
+						</list>
+					</property>
+				</map>
+			</property>
+
+		</list>
+	</property>
+</manager-config>

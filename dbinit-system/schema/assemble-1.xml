@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding='gb2312'?>
+<manager-config>
+	<description>
+<![CDATA[
+	初始化数据库装配文件
+ ]]>
+	</description>
+	<!--
+		<properties name="insert"> <property name="insert-mysql">
+
+		<![CDATA[insert into mq_users (broker_id, user_id, user_name,
+		user_password) values (?, ?, 'system', 'manager')]]> </property>
+		<property name="insert-oracle"> <![CDATA[insert into mq_users
+		(broker_id, user_id, user_name, user_password) values (?, ?, 'system',
+		'manager')]]> </property> </properties>
+	-->
+	<properties>
+		<property name="schemafiles">
+				<list>
+					<property index="1" dbname="bspf"><![CDATA[schema/tableinfo.xml]]></property>
+					<property index="2" dbname="mq"><![CDATA[schema/tableinfo.xml]]></property>
+					<property index="3" dbname="cim"><![CDATA[schema/tableinfo.xml]]></property>
+					<property index="4" dbname="bspf"><![CDATA[schema/sys.xml]]></property>
+					<property index="5" dbname="mq"><![CDATA[schema/smc.xml]]></property>
+				    <property index="6" dbname="cim"><![CDATA[schema/cim.xml]]></property>
+					<property index="7" dbname="kettle"><![CDATA[schema/smc.xml]]></property>
+	            	
+	  			</list>
+	
+		</property>
+		<property name="executefiles">
+			<list>
+			    <property index="0" dbname="bspf"><![CDATA[schema/data/mysql-sequence.xml]]></property>
+				<property index="1" dbname="bspf"><![CDATA[schema/data/sys-init.xml]]></property>
+				<property index="1" dbname="bspf"><![CDATA[schema/data/smc-init.xml]]></property>
+				
+				
+<!--				<property index="3"><![CDATA[schema/data/cmc-init.xml]]></property>-->
+  			</list>
+
+		</property>
+	</properties>
+
+</manager-config>

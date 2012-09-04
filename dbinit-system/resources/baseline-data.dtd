@@ -1,0 +1,2071 @@
+
+            <!ELEMENT TbCmsFlowDocTrans EMPTY>
+<!ATTLIST TbCmsFlowDocTrans
+    FlowId CDATA #IMPLIED
+    TransisionId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsChannelfield EMPTY>
+<!ATTLIST TdCmsChannelfield
+    FieldId CDATA #REQUIRED
+    ChannelId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsChannelVote EMPTY>
+<!ATTLIST TdCmsChannelVote
+    ChannelId CDATA #REQUIRED
+    VoteTitleId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsChnlRefDoc EMPTY>
+<!ATTLIST TdCmsChnlRefDoc
+    ChnlId CDATA #REQUIRED
+    DocId CDATA #REQUIRED
+    OpUserId CDATA #REQUIRED
+    OpTime CDATA #REQUIRED
+    Citetype CDATA #IMPLIED
+    SiteId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsCollectTimectrl2 EMPTY>
+<!ATTLIST TdCmsCollectTimectrl2
+    Id CDATA #REQUIRED
+    TitleId CDATA #IMPLIED
+    TimeStart CDATA #IMPLIED
+    TimeEnd CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDbtsearchDetail EMPTY>
+<!ATTLIST TdCmsDbtsearchDetail
+    Id CDATA #REQUIRED
+    DbName CDATA #REQUIRED
+    TableName CDATA #REQUIRED
+    ContentFields CDATA #REQUIRED
+    TitleField CDATA #IMPLIED
+    DescriptionField CDATA #IMPLIED
+    KeywordField CDATA #IMPLIED
+    PublishtimeField CDATA #IMPLIED
+    AccessUrl CDATA #IMPLIED
+    Wheres CDATA #IMPLIED
+    Primarys CDATA #IMPLIED
+    ContentTypes CDATA #IMPLIED
+    ContentPath CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDoccomImpeachinfo EMPTY>
+<!ATTLIST TdCmsDoccomImpeachinfo
+    Id CDATA #REQUIRED
+    CommentId CDATA #REQUIRED
+    Impeacher CDATA #REQUIRED
+    Email CDATA #IMPLIED
+    Reason CDATA #REQUIRED
+    Descriptioninfo CDATA #IMPLIED
+    Comtime CDATA #REQUIRED
+    Replyed CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocAggregation EMPTY>
+<!ATTLIST TdCmsDocAggregation
+    AggrDocId CDATA #REQUIRED
+    Seq CDATA #REQUIRED
+    IdByAggr CDATA #REQUIRED
+    Title CDATA #REQUIRED
+    Type CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocArrange EMPTY>
+<!ATTLIST TdCmsDocArrange
+    DocumentId CDATA #REQUIRED
+    StartTime CDATA #REQUIRED
+    EndTime CDATA #REQUIRED
+    OrderNo CDATA #REQUIRED
+    OpUser CDATA #REQUIRED
+    OpTime CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocDistManner EMPTY>
+<!ATTLIST TdCmsDocDistManner
+    DocumentId CDATA #REQUIRED
+    DistMannerId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocPublishing EMPTY>
+<!ATTLIST TdCmsDocPublishing
+    DocumentId CDATA #REQUIRED
+    OldStatus CDATA #REQUIRED
+    Publisher CDATA #IMPLIED
+    PubStartTime CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocRelated EMPTY>
+<!ATTLIST TdCmsDocRelated
+    DocId CDATA #REQUIRED
+    RelatedDocId CDATA #REQUIRED
+    OpUserId CDATA #REQUIRED
+    OpTime CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocTask EMPTY>
+<!ATTLIST TdCmsDocTask
+    TaskId CDATA #REQUIRED
+    PreTaskId CDATA #IMPLIED
+    DocumentId CDATA #REQUIRED
+    PreStatus CDATA #IMPLIED
+    SubmitId CDATA #REQUIRED
+    SubmitTime CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocTaskDetail EMPTY>
+<!ATTLIST TdCmsDocTaskDetail
+    TaskId CDATA #REQUIRED
+    Performer CDATA #REQUIRED
+    AfterStatus CDATA #IMPLIED
+    Valid CDATA #IMPLIED
+    CompleteTime CDATA #IMPLIED
+    Opinion CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocTemplate EMPTY>
+<!ATTLIST TdCmsDocTemplate
+    Id CDATA #REQUIRED
+    Tplname CDATA #REQUIRED
+    Tplcode CDATA #REQUIRED
+    ChannelId CDATA #REQUIRED
+    Creator CDATA #REQUIRED
+    Description CDATA #IMPLIED
+    Creattime CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocVerAttach EMPTY>
+<!ATTLIST TdCmsDocVerAttach
+    DocumentId CDATA #REQUIRED
+    Version CDATA #REQUIRED
+    AttachId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsExtfieldvalue EMPTY>
+<!ATTLIST TdCmsExtfieldvalue
+    FieldId CDATA #REQUIRED
+    DocumentId CDATA #REQUIRED
+    Fieldvalue CDATA #IMPLIED
+    Numbervalue CDATA #IMPLIED
+    Clobvalue CDATA #IMPLIED
+    Datevalue CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsExtvaluescope EMPTY>
+<!ATTLIST TdCmsExtvaluescope
+    FieldId CDATA #IMPLIED
+    Value CDATA #IMPLIED
+    Id CDATA #REQUIRED
+    Description CDATA #IMPLIED
+    Minvalue CDATA #IMPLIED
+    Maxvalue CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsSiteapps EMPTY>
+<!ATTLIST TdCmsSiteapps
+    SiteId CDATA #REQUIRED
+    AppId CDATA #REQUIRED
+    AppPath CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsSitefield EMPTY>
+<!ATTLIST TdCmsSitefield
+    FileId CDATA #REQUIRED
+    SiteId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsSiteuser EMPTY>
+<!ATTLIST TdCmsSiteuser
+    SiteId CDATA #REQUIRED
+    UserId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsSiteTpl EMPTY>
+<!ATTLIST TdCmsSiteTpl
+    SiteId CDATA #REQUIRED
+    TemplateId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsVoteAnswer EMPTY>
+<!ATTLIST TdCmsVoteAnswer
+    AnserId CDATA #REQUIRED
+    Qid CDATA #IMPLIED
+    Type CDATA #IMPLIED
+    ItemId CDATA #IMPLIED
+    WhoIp CDATA #IMPLIED
+    When CDATA #IMPLIED
+    Isbigtitle CDATA #IMPLIED
+    State CDATA #IMPLIED
+    Answer CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteIpctrl EMPTY>
+<!ATTLIST TdCmsVoteIpctrl
+    Id CDATA #REQUIRED
+    TitleId CDATA #IMPLIED
+    IpStart CDATA #IMPLIED
+    IpEnd CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteItems EMPTY>
+<!ATTLIST TdCmsVoteItems
+    Id CDATA #REQUIRED
+    Qid CDATA #IMPLIED
+    Options CDATA #IMPLIED
+    Count CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteTimectrl EMPTY>
+<!ATTLIST TdCmsVoteTimectrl
+    Id CDATA #REQUIRED
+    TitleId CDATA #IMPLIED
+    TimeStart CDATA #IMPLIED
+    TimeEnd CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteTq EMPTY>
+<!ATTLIST TdCmsVoteTq
+    TitleId CDATA #REQUIRED
+    QuesiontId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdRemindinfo EMPTY>
+<!ATTLIST TdRemindinfo
+    Id CDATA #REQUIRED
+    Time CDATA #IMPLIED
+    Type CDATA #IMPLIED
+    Source CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    UserId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSdNotepaper EMPTY>
+<!ATTLIST TdSdNotepaper
+    NotepaperId CDATA #REQUIRED
+    Time CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    UserId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSdNotic EMPTY>
+<!ATTLIST TdSdNotic
+    Content CDATA #IMPLIED
+    Begintime CDATA #IMPLIED
+    Endtime CDATA #IMPLIED
+    Place CDATA #IMPLIED
+    ExecutorId CDATA #IMPLIED
+    NoticId CDATA #REQUIRED
+    Status CDATA #IMPLIED
+    Topic CDATA #IMPLIED
+    Source CDATA #IMPLIED
+    NoticPlannerId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSdRatifyadvice EMPTY>
+<!ATTLIST TdSdRatifyadvice
+    SchedularId CDATA #IMPLIED
+    RatifierId CDATA #IMPLIED
+    Advice CDATA #IMPLIED
+    RatifyadviceId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSdRemind EMPTY>
+<!ATTLIST TdSdRemind
+    RemindId CDATA #REQUIRED
+    Issystem CDATA #IMPLIED
+    Isemail CDATA #IMPLIED
+    Ismessage CDATA #IMPLIED
+    SchedularId CDATA #IMPLIED
+    RemindBeginTime CDATA #IMPLIED
+    RemindEndTime CDATA #IMPLIED
+    IntervalTime CDATA #IMPLIED
+    Intervaltype CDATA #IMPLIED
+    Triggertype CDATA #IMPLIED
+    CronTime CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSdShare EMPTY>
+<!ATTLIST TdSdShare
+    ViewuserId CDATA #REQUIRED
+    SchedularId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmDictdata EMPTY>
+<!ATTLIST TdSmDictdata
+    DictdataId CDATA #REQUIRED
+    DicttypeId CDATA #IMPLIED
+    DictdataName CDATA #IMPLIED
+    DictdataValue CDATA #IMPLIED
+    DictdataOrder CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmDictkeywords EMPTY>
+<!ATTLIST TdSmDictkeywords
+    KeywordId CDATA #REQUIRED
+    DicttypeId CDATA #IMPLIED
+    FiledName CDATA #IMPLIED
+    JavaProperty CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmGrouprole EMPTY>
+<!ATTLIST TdSmGrouprole
+    GroupId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    ResopOriginUserid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmLogdetail EMPTY>
+<!ATTLIST TdSmLogdetail
+    DetailId CDATA #REQUIRED
+    OperTable CDATA #IMPLIED
+    LogId CDATA #IMPLIED
+    OpKeyId CDATA #IMPLIED
+    DetailContent CDATA #IMPLIED
+    OpType CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmLogdetailHis EMPTY>
+<!ATTLIST TdSmLogdetailHis
+    DetailId CDATA #REQUIRED
+    OperTable CDATA #IMPLIED
+    LogId CDATA #IMPLIED
+    OpKeyId CDATA #IMPLIED
+    DetailContent CDATA #IMPLIED
+    OpType CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmOrgjob EMPTY>
+<!ATTLIST TdSmOrgjob
+    OrgId CDATA #REQUIRED
+    JobId CDATA #REQUIRED
+    JobSn CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmOrgjobrole EMPTY>
+<!ATTLIST TdSmOrgjobrole
+    OrgId CDATA #REQUIRED
+    JobId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    ResopOriginUserid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmOrgmanager EMPTY>
+<!ATTLIST TdSmOrgmanager
+    UserId CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmOrgrole EMPTY>
+<!ATTLIST TdSmOrgrole
+    OrgId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    ResopOriginUserid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmOrguser EMPTY>
+<!ATTLIST TdSmOrguser
+    OrgId CDATA #REQUIRED
+    UserId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmTaxcodeOrganization EMPTY>
+<!ATTLIST TdSmTaxcodeOrganization
+    OrgId CDATA #REQUIRED
+    DicttypeId CDATA #REQUIRED
+    DataValue CDATA #REQUIRED
+    Opcode CDATA #REQUIRED
+    DataName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmUserjoborg EMPTY>
+<!ATTLIST TdSmUserjoborg
+    UserId CDATA #REQUIRED
+    JobId CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+    SameJobUserSn CDATA #IMPLIED
+    JobSn CDATA #IMPLIED
+    JobStarttime CDATA #IMPLIED
+    JobFettle CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmUserrole EMPTY>
+<!ATTLIST TdSmUserrole
+    UserId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    ResopOriginUserid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSpHoliday EMPTY>
+<!ATTLIST TdSpHoliday
+    Holiday CDATA #REQUIRED
+    Yholiday CDATA #REQUIRED
+    Mholiday CDATA #REQUIRED
+    OrgId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TlCmsDocOperLog EMPTY>
+<!ATTLIST TlCmsDocOperLog
+    Id CDATA #REQUIRED
+    UserId CDATA #REQUIRED
+    DocId CDATA #REQUIRED
+    DocOperId CDATA #REQUIRED
+    DocTransId CDATA #IMPLIED
+    OperTime CDATA #REQUIRED
+    OperContent CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TlCmsSiteFlowHis EMPTY>
+<!ATTLIST TlCmsSiteFlowHis
+    SiteId CDATA #REQUIRED
+    OldFlowId CDATA #IMPLIED
+    NewFlowId CDATA #REQUIRED
+    OpUserId CDATA #REQUIRED
+    OpTime CDATA #IMPLIED
+>
+
+
+            <!ELEMENT XTdCmsPublishschedular EMPTY>
+<!ATTLIST XTdCmsPublishschedular
+    Schedulertype CDATA #IMPLIED
+    Starttime CDATA #IMPLIED
+    Publishtimes CDATA #IMPLIED
+    Publishinterval CDATA #IMPLIED
+    Endtime CDATA #IMPLIED
+    PublishschedularId CDATA #REQUIRED
+    SiteId CDATA #IMPLIED
+    DocumentId CDATA #REQUIRED
+    ChannelId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TbCmsDocStatusTrans EMPTY>
+<!ATTLIST TbCmsDocStatusTrans
+    Id CDATA #REQUIRED
+    SrcStatus CDATA #REQUIRED
+    DestStatus CDATA #REQUIRED
+    Desc CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocAttach EMPTY>
+<!ATTLIST TdCmsDocAttach
+    Id CDATA #REQUIRED
+    DocumentId CDATA #REQUIRED
+    Url CDATA #REQUIRED
+    Type CDATA #REQUIRED
+    Description CDATA #IMPLIED
+    OriginalFilename CDATA #REQUIRED
+    Valid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocVer EMPTY>
+<!ATTLIST TdCmsDocVer
+    DocumentId CDATA #REQUIRED
+    Version CDATA #REQUIRED
+    Title CDATA #REQUIRED
+    Subtitle CDATA #REQUIRED
+    Author CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    ChannelId CDATA #REQUIRED
+    Keywords CDATA #IMPLIED
+    Docabstract CDATA #IMPLIED
+    Doctype CDATA #REQUIRED
+    Docwtime CDATA #REQUIRED
+    Titlecolor CDATA #IMPLIED
+    DocsourceId CDATA #REQUIRED
+    DetailtemplateId CDATA #IMPLIED
+    Linktarget CDATA #IMPLIED
+    FlowId CDATA #REQUIRED
+    DocLevel CDATA #IMPLIED
+    DocKind CDATA #IMPLIED
+    ParentDetailTpl CDATA #REQUIRED
+    OpUser CDATA #REQUIRED
+    OpTime CDATA #REQUIRED
+    Label CDATA #IMPLIED
+    Versiondescription CDATA #IMPLIED
+    PicPath CDATA #IMPLIED
+    Mediapath CDATA #IMPLIED
+    Publishfilename CDATA #IMPLIED
+    Secondtitle CDATA #IMPLIED
+    Isnew CDATA #IMPLIED
+    NewpicPath CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSdSchedular EMPTY>
+<!ATTLIST TdSdSchedular
+    SchedularId CDATA #REQUIRED
+    PlannerId CDATA #IMPLIED
+    ExecutorId CDATA #IMPLIED
+    RequestId CDATA #IMPLIED
+    Topic CDATA #IMPLIED
+    Place CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    Begintime CDATA #IMPLIED
+    Endtime CDATA #IMPLIED
+    Type CDATA #IMPLIED
+    Ispublicaffair CDATA #IMPLIED
+    Essentiality CDATA #IMPLIED
+    Ishistory CDATA #IMPLIED
+    Isleisure CDATA #IMPLIED
+    Status CDATA #IMPLIED
+    Isopen CDATA #IMPLIED
+    Partner CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmDicttype EMPTY>
+<!ATTLIST TdSmDicttype
+    DataValidateField CDATA #IMPLIED
+    DataCreateOrgidField CDATA #IMPLIED
+    DicttypeType CDATA #IMPLIED
+    IsTree CDATA #IMPLIED
+    DicttypeId CDATA #REQUIRED
+    UserId CDATA #IMPLIED
+    DicttypeName CDATA #IMPLIED
+    DicttypeDesc CDATA #IMPLIED
+    DicttypeParent CDATA #IMPLIED
+    DataTableName CDATA #IMPLIED
+    DataNameFiled CDATA #IMPLIED
+    DataValueField CDATA #IMPLIED
+    DataOrderField CDATA #IMPLIED
+    DataTypeidField CDATA #IMPLIED
+    DataDbname CDATA #IMPLIED
+    DataParentidField CDATA #IMPLIED
+    DataNameCn CDATA #IMPLIED
+    DataValueCn CDATA #IMPLIED
+    KeyGeneralType CDATA #IMPLIED
+    NameGeneralType CDATA #IMPLIED
+    KeyGeneralInfo CDATA #IMPLIED
+    Needcache CDATA #IMPLIED
+    EnableValueModify CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsChannel EMPTY>
+<!ATTLIST TdCmsChannel
+    ChannelId CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    DisplayName CDATA #IMPLIED
+    ParentId CDATA #IMPLIED
+    ChnlPath CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    Createtime CDATA #REQUIRED
+    OrderNo CDATA #REQUIRED
+    SiteId CDATA #REQUIRED
+    Status CDATA #REQUIRED
+    OutlineTplId CDATA #IMPLIED
+    DetailTplId CDATA #IMPLIED
+    Workflow CDATA #REQUIRED
+    ChnlOutlineDynamic CDATA #REQUIRED
+    DocDynamic CDATA #REQUIRED
+    ChnlOutlineProtect CDATA #REQUIRED
+    DocProtect CDATA #REQUIRED
+    ParentWorkflow CDATA #REQUIRED
+    PubFileName CDATA #REQUIRED
+    Inheritsitefield CDATA #IMPLIED
+    Isnavigator CDATA #IMPLIED
+    Navigatorlevel CDATA #IMPLIED
+    Mouseinimage CDATA #IMPLIED
+    Mouseoutimage CDATA #IMPLIED
+    Mouseclickimage CDATA #IMPLIED
+    Mouseupimage CDATA #IMPLIED
+    Outlinepicture CDATA #IMPLIED
+    Pageflag CDATA #IMPLIED
+    Indexpagepath CDATA #IMPLIED
+    Commentswitch CDATA #IMPLIED
+    CommentTemplateId CDATA #IMPLIED
+    Commentpagepath CDATA #IMPLIED
+    Specialflag CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocument EMPTY>
+<!ATTLIST TdCmsDocument
+    DocumentId CDATA #REQUIRED
+    Title CDATA #REQUIRED
+    Subtitle CDATA #REQUIRED
+    Author CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    ChannelId CDATA #REQUIRED
+    Status CDATA #REQUIRED
+    Keywords CDATA #IMPLIED
+    Docabstract CDATA #IMPLIED
+    Doctype CDATA #REQUIRED
+    Docwtime CDATA #REQUIRED
+    Titlecolor CDATA #IMPLIED
+    Createtime CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    DocsourceId CDATA #REQUIRED
+    DetailtemplateId CDATA #IMPLIED
+    Linktarget CDATA #IMPLIED
+    FlowId CDATA #IMPLIED
+    DocLevel CDATA #IMPLIED
+    DocKind CDATA #IMPLIED
+    ParentDetailTpl CDATA #REQUIRED
+    Isdeleted CDATA #IMPLIED
+    Audittime CDATA #IMPLIED
+    Publishtime CDATA #IMPLIED
+    Guidangtime CDATA #IMPLIED
+    Recycletime CDATA #IMPLIED
+    Guidangman CDATA #IMPLIED
+    Recycleman CDATA #IMPLIED
+    Version CDATA #IMPLIED
+    PicPath CDATA #IMPLIED
+    Mediapath CDATA #IMPLIED
+    Publishfilename CDATA #IMPLIED
+    CommentTemplateId CDATA #IMPLIED
+    Commentswitch CDATA #IMPLIED
+    Secondtitle CDATA #IMPLIED
+    Isnew CDATA #IMPLIED
+    NewpicPath CDATA #IMPLIED
+    Ordertime CDATA #IMPLIED
+    Filecontent CDATA #IMPLIED
+    Seq CDATA #IMPLIED
+    ExtClass CDATA #IMPLIED
+    ExtOrg CDATA #IMPLIED
+    ExtWh CDATA #IMPLIED
+    ExtIndex CDATA #IMPLIED
+    ExtDjh CDATA #IMPLIED
+    Count CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDocComment EMPTY>
+<!ATTLIST TdCmsDocComment
+    CommentId CDATA #REQUIRED
+    DocId CDATA #IMPLIED
+    DocComment CDATA #REQUIRED
+    UserName CDATA #IMPLIED
+    Comtime CDATA #IMPLIED
+    UserIp CDATA #IMPLIED
+    SrcCommentId CDATA #IMPLIED
+    Status CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsSite EMPTY>
+<!ATTLIST TdCmsSite
+    SiteId CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    SecondName CDATA #IMPLIED
+    MainsiteId CDATA #IMPLIED
+    Sitedesc CDATA #IMPLIED
+    Dbname CDATA #IMPLIED
+    Sitedir CDATA #REQUIRED
+    Status CDATA #IMPLIED
+    Ftpip CDATA #IMPLIED
+    Ftpport CDATA #IMPLIED
+    Ftpuser CDATA #IMPLIED
+    Ftppassword CDATA #IMPLIED
+    Ftpfolder CDATA #IMPLIED
+    Webhttp CDATA #IMPLIED
+    Siteorder CDATA #IMPLIED
+    Createtime CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    Publishdestination CDATA #IMPLIED
+    Indexfilename CDATA #IMPLIED
+    IndextemplateId CDATA #IMPLIED
+    FlowId CDATA #IMPLIED
+    ParentWorkflow CDATA #REQUIRED
+    Localpublishpath CDATA #IMPLIED
+    Distributemanners CDATA #IMPLIED
+    Siteencodeing CDATA #IMPLIED
+>
+
+
+            <!ELEMENT ActivemqAcks EMPTY>
+<!ATTLIST ActivemqAcks
+    Container CDATA #REQUIRED
+    SubDest CDATA #IMPLIED
+    ClientId CDATA #REQUIRED
+    SubName CDATA #REQUIRED
+    Selector CDATA #IMPLIED
+    LastAckedId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT ActivemqLock EMPTY>
+<!ATTLIST ActivemqLock
+    Id CDATA #REQUIRED
+    Time CDATA #IMPLIED
+    BrokerName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT ActivemqMsgs EMPTY>
+<!ATTLIST ActivemqMsgs
+    Id CDATA #REQUIRED
+    Container CDATA #IMPLIED
+    MsgidProd CDATA #IMPLIED
+    MsgidSeq CDATA #IMPLIED
+    Expiration CDATA #IMPLIED
+    Msg CDATA #IMPLIED
+>
+
+
+            <!ELEMENT AgentWorkload EMPTY>
+<!ATTLIST AgentWorkload
+    Agentid CDATA #IMPLIED
+    Businessid CDATA #IMPLIED
+    Businessname CDATA #IMPLIED
+    Taskname CDATA #IMPLIED
+    Committime CDATA #IMPLIED
+    Result CDATA #IMPLIED
+    Performer CDATA #IMPLIED
+    Nextperformer CDATA #IMPLIED
+    Ext1 CDATA #IMPLIED
+    Ext2 CDATA #IMPLIED
+    Ext3 CDATA #IMPLIED
+>
+
+
+            <!ELEMENT AssignmentAgent EMPTY>
+<!ATTLIST AssignmentAgent
+    Id CDATA #IMPLIED
+    Client CDATA #IMPLIED
+    Agent CDATA #IMPLIED
+    Starttime CDATA #IMPLIED
+    Endtime CDATA #IMPLIED
+    Realendtime CDATA #IMPLIED
+    Procdefid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT CcTrigMsg EMPTY>
+<!ATTLIST CcTrigMsg
+    RecordId CDATA #IMPLIED
+    OperateFlag CDATA #IMPLIED
+    Remark CDATA #IMPLIED
+    Tabname CDATA #IMPLIED
+>
+
+
+            <!ELEMENT CharTable EMPTY>
+<!ATTLIST CharTable
+    Id CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RCluster EMPTY>
+<!ATTLIST RCluster
+    IdCluster CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    BasePort CDATA #IMPLIED
+    SocketsBufferSize CDATA #IMPLIED
+    SocketsFlushInterval CDATA #IMPLIED
+    SocketsCompressed CDATA #IMPLIED
+    DynamicCluster CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RClusterSlave EMPTY>
+<!ATTLIST RClusterSlave
+    IdClusterSlave CDATA #REQUIRED
+    IdCluster CDATA #IMPLIED
+    IdSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RCondition EMPTY>
+<!ATTLIST RCondition
+    IdCondition CDATA #REQUIRED
+    IdConditionParent CDATA #IMPLIED
+    Negated CDATA #IMPLIED
+    Operator CDATA #IMPLIED
+    LeftName CDATA #IMPLIED
+    ConditionFunction CDATA #IMPLIED
+    RightName CDATA #IMPLIED
+    IdValueRight CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabase EMPTY>
+<!ATTLIST RDatabase
+    IdDatabase CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    IdDatabaseType CDATA #IMPLIED
+    IdDatabaseContype CDATA #IMPLIED
+    HostName CDATA #IMPLIED
+    DatabaseName CDATA #IMPLIED
+    Port CDATA #IMPLIED
+    Username CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    Servername CDATA #IMPLIED
+    DataTbs CDATA #IMPLIED
+    IndexTbs CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseAttribute EMPTY>
+<!ATTLIST RDatabaseAttribute
+    IdDatabaseAttribute CDATA #REQUIRED
+    IdDatabase CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseContype EMPTY>
+<!ATTLIST RDatabaseContype
+    IdDatabaseContype CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDatabaseType EMPTY>
+<!ATTLIST RDatabaseType
+    IdDatabaseType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDependency EMPTY>
+<!ATTLIST RDependency
+    IdDependency CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdDatabase CDATA #IMPLIED
+    TableName CDATA #IMPLIED
+    FieldName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RDirectory EMPTY>
+<!ATTLIST RDirectory
+    IdDirectory CDATA #REQUIRED
+    IdDirectoryParent CDATA #IMPLIED
+    DirectoryName CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJob EMPTY>
+<!ATTLIST RJob
+    IdJob CDATA #REQUIRED
+    IdDirectory CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    ExtendedDescription CDATA #IMPLIED
+    JobVersion CDATA #IMPLIED
+    JobStatus CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+    CreatedUser CDATA #IMPLIED
+    CreatedDate CDATA #IMPLIED
+    ModifiedUser CDATA #IMPLIED
+    ModifiedDate CDATA #IMPLIED
+    UseBatchId CDATA #IMPLIED
+    PassBatchId CDATA #IMPLIED
+    UseLogfield CDATA #IMPLIED
+    SharedFile CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentry EMPTY>
+<!ATTLIST RJobentry
+    IdJobentry CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentryType CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryAttribute EMPTY>
+<!ATTLIST RJobentryAttribute
+    IdJobentryAttribute CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentry CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryCopy EMPTY>
+<!ATTLIST RJobentryCopy
+    IdJobentryCopy CDATA #REQUIRED
+    IdJobentry CDATA #IMPLIED
+    IdJob CDATA #IMPLIED
+    IdJobentryType CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiDraw CDATA #IMPLIED
+    Parallel CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobentryType EMPTY>
+<!ATTLIST RJobentryType
+    IdJobentryType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobAttribute EMPTY>
+<!ATTLIST RJobAttribute
+    IdJobAttribute CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobHop EMPTY>
+<!ATTLIST RJobHop
+    IdJobHop CDATA #REQUIRED
+    IdJob CDATA #IMPLIED
+    IdJobentryCopyFrom CDATA #IMPLIED
+    IdJobentryCopyTo CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+    Evaluation CDATA #IMPLIED
+    Unconditional CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RJobNote EMPTY>
+<!ATTLIST RJobNote
+    IdJob CDATA #IMPLIED
+    IdNote CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RLog EMPTY>
+<!ATTLIST RLog
+    IdLog CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    IdLoglevel CDATA #IMPLIED
+    Logtype CDATA #IMPLIED
+    Filename CDATA #IMPLIED
+    Fileextention CDATA #IMPLIED
+    AddDate CDATA #IMPLIED
+    AddTime CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RLoglevel EMPTY>
+<!ATTLIST RLoglevel
+    IdLoglevel CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RNote EMPTY>
+<!ATTLIST RNote
+    IdNote CDATA #REQUIRED
+    ValueStr CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiLocationWidth CDATA #IMPLIED
+    GuiLocationHeight CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPartition EMPTY>
+<!ATTLIST RPartition
+    IdPartition CDATA #REQUIRED
+    IdPartitionSchema CDATA #IMPLIED
+    PartitionId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPartitionSchema EMPTY>
+<!ATTLIST RPartitionSchema
+    IdPartitionSchema CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    DynamicDefinition CDATA #IMPLIED
+    PartitionsPerSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RPermission EMPTY>
+<!ATTLIST RPermission
+    IdPermission CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RProfile EMPTY>
+<!ATTLIST RProfile
+    IdProfile CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RProfilePermission EMPTY>
+<!ATTLIST RProfilePermission
+    IdProfile CDATA #IMPLIED
+    IdPermission CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RRepositoryLog EMPTY>
+<!ATTLIST RRepositoryLog
+    IdRepositoryLog CDATA #REQUIRED
+    RepVersion CDATA #IMPLIED
+    LogDate CDATA #IMPLIED
+    LogUser CDATA #IMPLIED
+    OperationDesc CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RSlave EMPTY>
+<!ATTLIST RSlave
+    IdSlave CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    HostName CDATA #IMPLIED
+    Port CDATA #IMPLIED
+    Username CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    ProxyHostName CDATA #IMPLIED
+    ProxyPort CDATA #IMPLIED
+    NonProxyHosts CDATA #IMPLIED
+    Master CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStep EMPTY>
+<!ATTLIST RStep
+    IdStep CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    IdStepType CDATA #IMPLIED
+    Distribute CDATA #IMPLIED
+    Copies CDATA #IMPLIED
+    GuiLocationX CDATA #IMPLIED
+    GuiLocationY CDATA #IMPLIED
+    GuiDraw CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepAttribute EMPTY>
+<!ATTLIST RStepAttribute
+    IdStepAttribute CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepDatabase EMPTY>
+<!ATTLIST RStepDatabase
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    IdDatabase CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RStepType EMPTY>
+<!ATTLIST RStepType
+    IdStepType CDATA #REQUIRED
+    Code CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    Helptext CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransformation EMPTY>
+<!ATTLIST RTransformation
+    IdTransformation CDATA #REQUIRED
+    IdDirectory CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    ExtendedDescription CDATA #IMPLIED
+    TransVersion CDATA #IMPLIED
+    TransStatus CDATA #IMPLIED
+    IdStepRead CDATA #IMPLIED
+    IdStepWrite CDATA #IMPLIED
+    IdStepInput CDATA #IMPLIED
+    IdStepOutput CDATA #IMPLIED
+    IdStepUpdate CDATA #IMPLIED
+    IdDatabaseLog CDATA #IMPLIED
+    TableNameLog CDATA #IMPLIED
+    UseBatchid CDATA #IMPLIED
+    UseLogfield CDATA #IMPLIED
+    IdDatabaseMaxdate CDATA #IMPLIED
+    TableNameMaxdate CDATA #IMPLIED
+    FieldNameMaxdate CDATA #IMPLIED
+    OffsetMaxdate CDATA #IMPLIED
+    DiffMaxdate CDATA #IMPLIED
+    CreatedUser CDATA #IMPLIED
+    CreatedDate CDATA #IMPLIED
+    ModifiedUser CDATA #IMPLIED
+    ModifiedDate CDATA #IMPLIED
+    SizeRowset CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransAttribute EMPTY>
+<!ATTLIST RTransAttribute
+    IdTransAttribute CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    Nr CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    ValueNum CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransCluster EMPTY>
+<!ATTLIST RTransCluster
+    IdTransCluster CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdCluster CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransHop EMPTY>
+<!ATTLIST RTransHop
+    IdTransHop CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdStepFrom CDATA #IMPLIED
+    IdStepTo CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+    Condition CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransNote EMPTY>
+<!ATTLIST RTransNote
+    IdTransformation CDATA #IMPLIED
+    IdNote CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransPartitionSchema EMPTY>
+<!ATTLIST RTransPartitionSchema
+    IdTransPartitionSchema CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdPartitionSchema CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransSlave EMPTY>
+<!ATTLIST RTransSlave
+    IdTransSlave CDATA #REQUIRED
+    IdTransformation CDATA #IMPLIED
+    IdSlave CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RTransStepCondition EMPTY>
+<!ATTLIST RTransStepCondition
+    IdTransformation CDATA #IMPLIED
+    IdStep CDATA #IMPLIED
+    IdCondition CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RUser EMPTY>
+<!ATTLIST RUser
+    IdUser CDATA #REQUIRED
+    IdProfile CDATA #IMPLIED
+    Login CDATA #IMPLIED
+    Password CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    Description CDATA #IMPLIED
+    Enabled CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RValue EMPTY>
+<!ATTLIST RValue
+    IdValue CDATA #REQUIRED
+    Name CDATA #IMPLIED
+    ValueType CDATA #IMPLIED
+    ValueStr CDATA #IMPLIED
+    IsNull CDATA #IMPLIED
+>
+
+
+            <!ELEMENT RVersion EMPTY>
+<!ATTLIST RVersion
+    IdVersion CDATA #REQUIRED
+    MajorVersion CDATA #IMPLIED
+    MinorVersion CDATA #IMPLIED
+    UpgradeDate CDATA #IMPLIED
+    IsUpgrade CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Tableinfo EMPTY>
+<!ATTLIST Tableinfo
+    TableName CDATA #REQUIRED
+    TableIdName CDATA #IMPLIED
+    TableIdIncrement CDATA #IMPLIED
+    TableIdValue CDATA #IMPLIED
+    TableIdGenerator CDATA #IMPLIED
+    TableIdType CDATA #IMPLIED
+    TableIdPrefix CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TableA EMPTY>
+<!ATTLIST TableA
+    Id CDATA #IMPLIED
+    Id1 CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TableB EMPTY>
+<!ATTLIST TableB
+    Id CDATA #IMPLIED
+    Id1 CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TbCmsDocKind EMPTY>
+<!ATTLIST TbCmsDocKind
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    ParentId CDATA #IMPLIED
+    OrderNo CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TbCmsDocLevel EMPTY>
+<!ATTLIST TbCmsDocLevel
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    LevelValue CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TbCmsDocOper EMPTY>
+<!ATTLIST TbCmsDocOper
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TbCmsDocStatus EMPTY>
+<!ATTLIST TbCmsDocStatus
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    Type CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TbCmsFlow EMPTY>
+<!ATTLIST TbCmsFlow
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TbSmInputtype EMPTY>
+<!ATTLIST TbSmInputtype
+    InputTypeId CDATA #REQUIRED
+    InputTypeDesc CDATA #IMPLIED
+    DatasourcePath CDATA #IMPLIED
+    InputTypeName CDATA #REQUIRED
+    Script CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsAddwaterimage EMPTY>
+<!ATTLIST TdCmsAddwaterimage
+    Url CDATA #REQUIRED
+    Createtime CDATA #IMPLIED
+    Isbackup CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsCollectAnswer EMPTY>
+<!ATTLIST TdCmsCollectAnswer
+    Answer CDATA #IMPLIED
+    Cid CDATA #IMPLIED
+    WhoIp CDATA #IMPLIED
+    When CDATA #IMPLIED
+    Name CDATA #IMPLIED
+    State CDATA #IMPLIED
+    Operatorid CDATA #IMPLIED
+    Otime CDATA #IMPLIED
+    Anstime CDATA #IMPLIED
+    AnswerId CDATA #REQUIRED
+    Phone CDATA #IMPLIED
+    Email CDATA #IMPLIED
+    Address CDATA #IMPLIED
+    Card CDATA #IMPLIED
+    Title CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsCollectIpctrl2 EMPTY>
+<!ATTLIST TdCmsCollectIpctrl2
+    Id CDATA #REQUIRED
+    TitleId CDATA #IMPLIED
+    IpStart CDATA #IMPLIED
+    IpEnd CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsCollectTitle EMPTY>
+<!ATTLIST TdCmsCollectTitle
+    Name CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    Id CDATA #REQUIRED
+    Siteid CDATA #IMPLIED
+    IpRepeat CDATA #IMPLIED
+    TimeGap CDATA #IMPLIED
+    FounderId CDATA #IMPLIED
+    Ctime CDATA #IMPLIED
+    Istop CDATA #IMPLIED
+    Depart CDATA #IMPLIED
+    Stime CDATA #IMPLIED
+    Etime CDATA #IMPLIED
+    State CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsCustomForm EMPTY>
+<!ATTLIST TdCmsCustomForm
+    TargetId CDATA #REQUIRED
+    TargetType CDATA #REQUIRED
+    FormType CDATA #REQUIRED
+    FileName CDATA #REQUIRED
+    Description CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsDoccommentDict EMPTY>
+<!ATTLIST TdCmsDoccommentDict
+    Id CDATA #REQUIRED
+    Word CDATA #REQUIRED
+    Description CDATA #IMPLIED
+    Siteid CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocsource EMPTY>
+<!ATTLIST TdCmsDocsource
+    Srcname CDATA #REQUIRED
+    Srcdesc CDATA #IMPLIED
+    Srclink CDATA #IMPLIED
+    Cruser CDATA #IMPLIED
+    Crtime CDATA #IMPLIED
+    DocsourceId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdCmsDocumentTemp EMPTY>
+<!ATTLIST TdCmsDocumentTemp
+    DocumentId CDATA #REQUIRED
+    Title CDATA #REQUIRED
+    Subtitle CDATA #REQUIRED
+    Author CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    ChannelId CDATA #REQUIRED
+    Status CDATA #REQUIRED
+    Keywords CDATA #IMPLIED
+    Docabstract CDATA #IMPLIED
+    Doctype CDATA #REQUIRED
+    Docwtime CDATA #REQUIRED
+    Titlecolor CDATA #IMPLIED
+    Createtime CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    DocsourceId CDATA #REQUIRED
+    DetailtemplateId CDATA #IMPLIED
+    Linktarget CDATA #IMPLIED
+    FlowId CDATA #REQUIRED
+    DocLevel CDATA #IMPLIED
+    DocKind CDATA #IMPLIED
+    ParentDetailTpl CDATA #REQUIRED
+    Isdeleted CDATA #IMPLIED
+    Audittime CDATA #IMPLIED
+    Publishtime CDATA #IMPLIED
+    Guidangtime CDATA #IMPLIED
+    Recycletime CDATA #IMPLIED
+    Guidangman CDATA #IMPLIED
+    Recycleman CDATA #IMPLIED
+    Version CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsExtfield EMPTY>
+<!ATTLIST TdCmsExtfield
+    FieldId CDATA #REQUIRED
+    Fieldname CDATA #REQUIRED
+    Fieldlabel CDATA #REQUIRED
+    Fielddesc CDATA #IMPLIED
+    Fieldtype CDATA #IMPLIED
+    Maxlen CDATA #IMPLIED
+    Inputtype CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsFileChangeLog EMPTY>
+<!ATTLIST TdCmsFileChangeLog
+    SiteId CDATA #REQUIRED
+    Uri CDATA #REQUIRED
+    Version CDATA #REQUIRED
+    UserId CDATA #REQUIRED
+    ChangeTime CDATA #REQUIRED
+    BakFileName CDATA #IMPLIED
+    ChangeRemark CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsFileStatus EMPTY>
+<!ATTLIST TdCmsFileStatus
+    SiteId CDATA #REQUIRED
+    Uri CDATA #REQUIRED
+    Version CDATA #IMPLIED
+    CheckoutUser CDATA #IMPLIED
+    CheckoutTime CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsMailserverinfo EMPTY>
+<!ATTLIST TdCmsMailserverinfo
+    Id CDATA #REQUIRED
+    SmtpServer CDATA #IMPLIED
+    MailSender CDATA #IMPLIED
+    MailSendername CDATA #IMPLIED
+    MailDesc CDATA #IMPLIED
+    ServerName CDATA #IMPLIED
+    MailDomain CDATA #IMPLIED
+    MailUsername CDATA #IMPLIED
+    MailPassword CDATA #IMPLIED
+    SmtpPort CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsPubobjectRelation EMPTY>
+<!ATTLIST TdCmsPubobjectRelation
+    Publishobject CDATA #REQUIRED
+    Referenceobject CDATA #REQUIRED
+    Publishtype CDATA #REQUIRED
+    PublishSite CDATA #REQUIRED
+    Referencetype CDATA #REQUIRED
+    ReferenceSite CDATA #REQUIRED
+    Counter CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsSiteSearch EMPTY>
+<!ATTLIST TdCmsSiteSearch
+    SiteId CDATA #REQUIRED
+    ChnlOrDomain CDATA #IMPLIED
+    Lever CDATA #IMPLIED
+    Day CDATA #IMPLIED
+    Time CDATA #IMPLIED
+    SearchType CDATA #REQUIRED
+    StartUrl CDATA #IMPLIED
+    Id CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    SiteIds CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsTemplate EMPTY>
+<!ATTLIST TdCmsTemplate
+    TemplateId CDATA #REQUIRED
+    Name CDATA #REQUIRED
+    Description CDATA #IMPLIED
+    Header CDATA #REQUIRED
+    Text CDATA #IMPLIED
+    Type CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    Createtime CDATA #REQUIRED
+    IncPubFlag CDATA #REQUIRED
+    Persisttype CDATA #IMPLIED
+    Templatefilename CDATA #IMPLIED
+    Templatepath CDATA #IMPLIED
+    TemplateStyle CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsTemplateStyle EMPTY>
+<!ATTLIST TdCmsTemplateStyle
+    StyleId CDATA #REQUIRED
+    StyleName CDATA #IMPLIED
+    StyleDesc CDATA #IMPLIED
+    StyleOrder CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsTmplExport EMPTY>
+<!ATTLIST TdCmsTmplExport
+    Tmplname CDATA #REQUIRED
+    Tmpldesc CDATA #IMPLIED
+    Exportdate CDATA #IMPLIED
+    Exporterid CDATA #IMPLIED
+    Flag CDATA #IMPLIED
+    Siteid CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteQuestions EMPTY>
+<!ATTLIST TdCmsVoteQuestions
+    Id CDATA #REQUIRED
+    Title CDATA #IMPLIED
+    Style CDATA #IMPLIED
+    Votecount CDATA #IMPLIED
+    Active CDATA #IMPLIED
+    Istop CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdCmsVoteTitle EMPTY>
+<!ATTLIST TdCmsVoteTitle
+    Name CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    Id CDATA #REQUIRED
+    Siteid CDATA #IMPLIED
+    IpRepeat CDATA #IMPLIED
+    TimeGap CDATA #IMPLIED
+    FounderId CDATA #IMPLIED
+    Active CDATA #IMPLIED
+    Seetype CDATA #IMPLIED
+    Ctime CDATA #IMPLIED
+    Istop CDATA #IMPLIED
+    Picpath CDATA #IMPLIED
+    DepartId CDATA #IMPLIED
+    Islook CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSecSmsInterface EMPTY>
+<!ATTLIST TdSecSmsInterface
+    MessageId CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    Donetime CDATA #IMPLIED
+    Status CDATA #IMPLIED
+    MessageType CDATA #IMPLIED
+    Srcmobile CDATA #IMPLIED
+    Dstmobile CDATA #IMPLIED
+    WorkerName CDATA #IMPLIED
+    Id CDATA #REQUIRED
+    Sendtime CDATA #IMPLIED
+    Meetingid CDATA #IMPLIED
+    Retry CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmDicattachfield EMPTY>
+<!ATTLIST TdSmDicattachfield
+    DicttypeId CDATA #IMPLIED
+    FieldName CDATA #IMPLIED
+    Label CDATA #IMPLIED
+    InputTypeId CDATA #IMPLIED
+    TableColumn CDATA #IMPLIED
+    Isnullable CDATA #IMPLIED
+    Isunique CDATA #IMPLIED
+    Dateformat CDATA #IMPLIED
+    Sn CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmGroup EMPTY>
+<!ATTLIST TdSmGroup
+    GroupId CDATA #REQUIRED
+    GroupName CDATA #IMPLIED
+    GroupDesc CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    Remark2 CDATA #IMPLIED
+    Remark3 CDATA #IMPLIED
+    Remark4 CDATA #IMPLIED
+    Remark5 CDATA #IMPLIED
+    ParentId CDATA #IMPLIED
+    OwnerId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmInityearHoliday EMPTY>
+<!ATTLIST TdSmInityearHoliday
+    OrgId CDATA #IMPLIED
+    Yholiday CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmJob EMPTY>
+<!ATTLIST TdSmJob
+    JobId CDATA #REQUIRED
+    JobName CDATA #IMPLIED
+    JobDesc CDATA #IMPLIED
+    JobFunction CDATA #IMPLIED
+    JobAmount CDATA #IMPLIED
+    JobNumber CDATA #IMPLIED
+    JobCondition CDATA #IMPLIED
+    JobRank CDATA #IMPLIED
+    OwnerId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmLog EMPTY>
+<!ATTLIST TdSmLog
+    LogId CDATA #REQUIRED
+    LogOperuser CDATA #IMPLIED
+    OpOrgid CDATA #IMPLIED
+    OperModule CDATA #IMPLIED
+    LogVisitorial CDATA #IMPLIED
+    LogOpertime CDATA #IMPLIED
+    LogContent CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    OperType CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmLogmodule EMPTY>
+<!ATTLIST TdSmLogmodule
+    Logmodule CDATA #IMPLIED
+    Status CDATA #IMPLIED
+    ModuleDesc CDATA #IMPLIED
+    Id CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmLogHis EMPTY>
+<!ATTLIST TdSmLogHis
+    LogId CDATA #REQUIRED
+    LogOperuser CDATA #IMPLIED
+    OpOrgid CDATA #IMPLIED
+    OperModule CDATA #IMPLIED
+    LogVisitorial CDATA #IMPLIED
+    LogOpertime CDATA #IMPLIED
+    LogContent CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    OperType CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmOrganization EMPTY>
+<!ATTLIST TdSmOrganization
+    OrgId CDATA #REQUIRED
+    OrgSn CDATA #REQUIRED
+    OrgName CDATA #REQUIRED
+    ParentId CDATA #REQUIRED
+    Path CDATA #IMPLIED
+    Layer CDATA #IMPLIED
+    Children CDATA #IMPLIED
+    Code CDATA #IMPLIED
+    Jp CDATA #IMPLIED
+    Qp CDATA #IMPLIED
+    Creatingtime CDATA #IMPLIED
+    Creator CDATA #IMPLIED
+    Orgnumber CDATA #IMPLIED
+    Orgdesc CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    Remark2 CDATA #IMPLIED
+    Remark3 CDATA #IMPLIED
+    Remark4 CDATA #IMPLIED
+    Remark5 CDATA #IMPLIED
+    Chargeorgid CDATA #IMPLIED
+    Ispartybussiness CDATA #IMPLIED
+    Satrapjobid CDATA #IMPLIED
+    OrgLevel CDATA #IMPLIED
+    OrgXzqm CDATA #IMPLIED
+    Isdirectlyparty CDATA #IMPLIED
+    Isforeignparty CDATA #IMPLIED
+    Isjichaparty CDATA #IMPLIED
+    Isdirectguanhu CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmPermissionOrigine EMPTY>
+<!ATTLIST TdSmPermissionOrigine
+    OrigineType CDATA #REQUIRED
+    OrigineId CDATA #REQUIRED
+    OpId CDATA #REQUIRED
+    ResId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    RestypeId CDATA #REQUIRED
+    Types CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmRes EMPTY>
+<!ATTLIST TdSmRes
+    ResId CDATA #REQUIRED
+    RestypeId CDATA #IMPLIED
+    Title CDATA #IMPLIED
+    RoleUsage CDATA #IMPLIED
+    ParentId CDATA #IMPLIED
+    Path CDATA #IMPLIED
+    Marker CDATA #IMPLIED
+    Reserved1 CDATA #IMPLIED
+    Reserved3 CDATA #IMPLIED
+    Reserved4 CDATA #IMPLIED
+    Reserved5 CDATA #IMPLIED
+    Attr1 CDATA #IMPLIED
+    Attr2 CDATA #IMPLIED
+    Attr3 CDATA #IMPLIED
+    Attr4 CDATA #IMPLIED
+    Attr5 CDATA #IMPLIED
+    Attr6 CDATA #IMPLIED
+    Attr7 CDATA #IMPLIED
+    Attr8 CDATA #IMPLIED
+    Attr9 CDATA #IMPLIED
+    Attr10 CDATA #IMPLIED
+    Attr11 CDATA #IMPLIED
+    Attr12 CDATA #IMPLIED
+    Attr13 CDATA #IMPLIED
+    Attr14 CDATA #IMPLIED
+    Attr15 CDATA #IMPLIED
+    Attr16 CDATA #IMPLIED
+    Attr17 CDATA #IMPLIED
+    Attr18 CDATA #IMPLIED
+    Attr19 CDATA #IMPLIED
+    Attr20 CDATA #IMPLIED
+    Attr21 CDATA #IMPLIED
+    Attr22 CDATA #IMPLIED
+    Attr23 CDATA #IMPLIED
+    Attr24 CDATA #IMPLIED
+    Attr25 CDATA #IMPLIED
+    Attr26 CDATA #IMPLIED
+    Attr27 CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmRole EMPTY>
+<!ATTLIST TdSmRole
+    RoleId CDATA #REQUIRED
+    RoleName CDATA #REQUIRED
+    RoleType CDATA #IMPLIED
+    RoleDesc CDATA #IMPLIED
+    RoleUsage CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    Remark2 CDATA #IMPLIED
+    Remark3 CDATA #IMPLIED
+    OwnerId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmRoleresop EMPTY>
+<!ATTLIST TdSmRoleresop
+    OpId CDATA #REQUIRED
+    ResId CDATA #REQUIRED
+    RoleId CDATA #REQUIRED
+    RestypeId CDATA #REQUIRED
+    Auto CDATA #IMPLIED
+    ResName CDATA #IMPLIED
+    Types CDATA #REQUIRED
+    AuthorizationType CDATA #IMPLIED
+    UseCount CDATA #IMPLIED
+    AuthorizationStime CDATA #IMPLIED
+    AuthorizationEtime CDATA #IMPLIED
+    UseCounted CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmRoletype EMPTY>
+<!ATTLIST TdSmRoletype
+    TypeName CDATA #IMPLIED
+    TypeDesc CDATA #IMPLIED
+    TypeId CDATA #REQUIRED
+    CreatorUserId CDATA #IMPLIED
+    CreatorOrgId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmUser EMPTY>
+<!ATTLIST TdSmUser
+    UserId CDATA #REQUIRED
+    UserSn CDATA #REQUIRED
+    UserName CDATA #REQUIRED
+    UserPassword CDATA #REQUIRED
+    UserRealname CDATA #REQUIRED
+    UserPinyin CDATA #IMPLIED
+    UserSex CDATA #IMPLIED
+    UserHometel CDATA #IMPLIED
+    UserWorktel CDATA #IMPLIED
+    UserWorknumber CDATA #IMPLIED
+    UserMobiletel1 CDATA #IMPLIED
+    UserMobiletel2 CDATA #IMPLIED
+    UserFax CDATA #IMPLIED
+    UserOicq CDATA #IMPLIED
+    UserBirthday CDATA #IMPLIED
+    UserEmail CDATA #IMPLIED
+    UserAddress CDATA #IMPLIED
+    UserPostalcode CDATA #IMPLIED
+    UserIdcard CDATA #IMPLIED
+    UserIsvalid CDATA #IMPLIED
+    UserRegdate CDATA #IMPLIED
+    UserLogincount CDATA #IMPLIED
+    UserType CDATA #IMPLIED
+    Remark1 CDATA #IMPLIED
+    Remark2 CDATA #IMPLIED
+    Remark3 CDATA #IMPLIED
+    Remark4 CDATA #IMPLIED
+    Remark5 CDATA #IMPLIED
+    PastTime CDATA #IMPLIED
+    DredgeTime CDATA #IMPLIED
+    LastloginDate CDATA #IMPLIED
+    Worklength CDATA #IMPLIED
+    Politics CDATA #IMPLIED
+    LogonIp CDATA #IMPLIED
+    Istaxmanager CDATA #IMPLIED
+    CertSn CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TdSmUsergroup EMPTY>
+<!ATTLIST TdSmUsergroup
+    GroupId CDATA #REQUIRED
+    UserId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT TdSmUserjoborgHistory EMPTY>
+<!ATTLIST TdSmUserjoborgHistory
+    UserId CDATA #REQUIRED
+    JobId CDATA #REQUIRED
+    JobName CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+    OrgName CDATA #REQUIRED
+    JobStarttime CDATA #IMPLIED
+    JobQuashtime CDATA #IMPLIED
+    JobFettle CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Test EMPTY>
+<!ATTLIST Test
+    Id CDATA #IMPLIED
+    Blobname CDATA #IMPLIED
+    Clobname CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TestDict EMPTY>
+<!ATTLIST TestDict
+    Id CDATA #REQUIRED
+    Value CDATA #IMPLIED
+    Isvalid CDATA #IMPLIED
+    Ordernum CDATA #IMPLIED
+    OrgId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT TestDict1 EMPTY>
+<!ATTLIST TestDict1
+    Id CDATA #REQUIRED
+    Value CDATA #IMPLIED
+    Isvalid CDATA #IMPLIED
+    Ordernum CDATA #IMPLIED
+    OrgId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT Usertable EMPTY>
+<!ATTLIST Usertable
+    Userid CDATA #REQUIRED
+    Firstname CDATA #REQUIRED
+    Lastname CDATA #REQUIRED
+    Passwd CDATA #REQUIRED
+    Email CDATA #IMPLIED
+    Oid CDATA #REQUIRED
+    Version CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VDocFlowTrans EMPTY>
+<!ATTLIST VDocFlowTrans
+    FlowId CDATA #IMPLIED
+    TransisionId CDATA #IMPLIED
+    SrcStatus CDATA #REQUIRED
+    DestStatus CDATA #REQUIRED
+>
+
+
+            <!ELEMENT VTbResOrgRole EMPTY>
+<!ATTLIST VTbResOrgRole
+    RoleId CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+    OpId CDATA #REQUIRED
+    RestypeId CDATA #REQUIRED
+    ParentId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT VTbResOrgUser EMPTY>
+<!ATTLIST VTbResOrgUser
+    UserId CDATA #IMPLIED
+    OrgId CDATA #IMPLIED
+    ParentId CDATA #IMPLIED
+    OpId CDATA #IMPLIED
+    RestypeId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VTbResOrgUserWrite EMPTY>
+<!ATTLIST VTbResOrgUserWrite
+    UserId CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT VTbResRoleRole EMPTY>
+<!ATTLIST VTbResRoleRole
+    RoleId CDATA #REQUIRED
+    ResId CDATA #REQUIRED
+    OpId CDATA #REQUIRED
+    RestypeId CDATA #REQUIRED
+>
+
+
+            <!ELEMENT VTbResRoleUser EMPTY>
+<!ATTLIST VTbResRoleUser
+    UserId CDATA #IMPLIED
+    RoleId CDATA #IMPLIED
+    OpId CDATA #IMPLIED
+    RestypeId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VTbUserAllrole EMPTY>
+<!ATTLIST VTbUserAllrole
+    UserId CDATA #IMPLIED
+    RoleId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VTdCmsDocument EMPTY>
+<!ATTLIST VTdCmsDocument
+    DocumentId CDATA #REQUIRED
+    Title CDATA #REQUIRED
+    Subtitle CDATA #REQUIRED
+    Author CDATA #IMPLIED
+    Content CDATA #IMPLIED
+    ChannelId CDATA #REQUIRED
+    Status CDATA #REQUIRED
+    Keywords CDATA #IMPLIED
+    Docabstract CDATA #IMPLIED
+    Doctype CDATA #REQUIRED
+    Docwtime CDATA #REQUIRED
+    Titlecolor CDATA #IMPLIED
+    Createtime CDATA #REQUIRED
+    Createuser CDATA #REQUIRED
+    DocsourceId CDATA #REQUIRED
+    DetailtemplateId CDATA #IMPLIED
+    Linktarget CDATA #IMPLIED
+    FlowId CDATA #IMPLIED
+    DocLevel CDATA #IMPLIED
+    DocKind CDATA #IMPLIED
+    ParentDetailTpl CDATA #REQUIRED
+    Isdeleted CDATA #IMPLIED
+    Audittime CDATA #IMPLIED
+    Publishtime CDATA #IMPLIED
+    Guidangtime CDATA #IMPLIED
+    Recycletime CDATA #IMPLIED
+    Guidangman CDATA #IMPLIED
+    Recycleman CDATA #IMPLIED
+    Version CDATA #IMPLIED
+    PicPath CDATA #IMPLIED
+    Mediapath CDATA #IMPLIED
+    Publishfilename CDATA #IMPLIED
+    CommentTemplateId CDATA #IMPLIED
+    Commentswitch CDATA #IMPLIED
+    Secondtitle CDATA #IMPLIED
+    Isnew CDATA #IMPLIED
+    NewpicPath CDATA #IMPLIED
+    Ordertime CDATA #IMPLIED
+    Filecontent CDATA #IMPLIED
+    Seq CDATA #IMPLIED
+    ExtClass CDATA #IMPLIED
+    ExtOrg CDATA #IMPLIED
+    ExtWh CDATA #IMPLIED
+    ExtIndex CDATA #IMPLIED
+    ExtDjh CDATA #IMPLIED
+    Count CDATA #IMPLIED
+    DetailTplId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VTdSmUserAllrole EMPTY>
+<!ATTLIST VTdSmUserAllrole
+    UserId CDATA #IMPLIED
+    RoleId CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VUserOneOrgOneJob EMPTY>
+<!ATTLIST VUserOneOrgOneJob
+    UserId CDATA #IMPLIED
+    OrgId CDATA #IMPLIED
+    ParentId CDATA #REQUIRED
+    OrgSn CDATA #REQUIRED
+    Orgnumber CDATA #IMPLIED
+    JobId CDATA #IMPLIED
+    JobSn CDATA #IMPLIED
+    SameJobUserSn CDATA #IMPLIED
+>
+
+
+            <!ELEMENT VUserOrg EMPTY>
+<!ATTLIST VUserOrg
+    UserId CDATA #REQUIRED
+    OrgId CDATA #REQUIRED
+    ParentId CDATA #REQUIRED
+    OrgSn CDATA #REQUIRED
+    Orgnumber CDATA #IMPLIED
+>
+
+

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	smc 约束的初始化，包括mysql和oracle
+ ]]>
+	</description>
+
+	<property name="all_datas">
+		<list>
+		
+		<property name="drop_index">
+				<map>
+					<property name="mysql">
+
+						<list>
+						
+							  <property  action="drop"><![CDATA[
+							  drop index UNIQUE_VNODE on MQ_REAL_NODES
+							 ]]></property>
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index VUUID on MQ_VIRTUAL_NODES
+							 ]]></property>
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index GRP_N_IDX on MQ_GROUP
+							 ]]></property>
+							 
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index PRO_UIDX on MQ_PROPERTIES
+							 ]]></property>
+
+							  <property  action="drop"><![CDATA[
+							   DROP INDEX TASK_UUIDX 
+							 ]]></property>
+							 
+							 
+						</list>
+					</property>
+					
+					<property name="default">
+
+						<list>
+						
+							  <property  action="drop"><![CDATA[
+							  drop index UNIQUE_VNODE
+							 ]]></property>
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index VUUID
+							 ]]></property>
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index GRP_N_IDX
+							 ]]></property>
+							 
+							 
+							  <property  action="drop"><![CDATA[
+							  drop index PRO_UIDX
+							 ]]></property>
+							 
+							 
+						</list>
+					</property>
+				</map>
+			</property>
+		
+		
+			<property name="create_index">
+				<map>
+					<property name="  ">
+
+						<list>
+						
+							  <property  action="create"><![CDATA[
+							  create unique index UNIQUE_VNODE on MQ_REAL_NODES (VIRTUAL_NODEID,DESTINATION_NAME ASC)
+							 ]]></property>
+							 
+							  <property  action="create"><![CDATA[
+							  create unique index VUUID on MQ_VIRTUAL_NODES (BROKER_ID,NODE_NAME ASC)
+							 ]]></property>
+							 
+							  <property  action="create"><![CDATA[
+							  create unique index GRP_N_IDX on MQ_GROUP (GROUP_NAME ASC,BROKER_ID ASC)
+							 ]]></property>
+							 
+							 
+							  <property  action="create"><![CDATA[
+							  create unique index PRO_UIDX on MQ_PROPERTIES (TASK_ID,PRO_NAME ASC)
+							  
+							 ]]></property>
+
+							 	<property  action="create"><![CDATA[
+							create unique index TASK_UUIDX on MQ_HUGEMESSAGE_SCHEDULE (
+							case when nvl(bussiness_id,'-1') <> '-1' then (bussiness_id|| '#' || SCHEDULE_ID || '#' ||TASKTYPE) 
+							else (SCHEDULE_ID|| '#' ||TASKTYPE)
+							end   ASC
+							)
+							 ]]></property>
+							 
+						</list>
+					</property>
+				</map>
+			</property>
+		</list>
+	</property>
+</manager-config>

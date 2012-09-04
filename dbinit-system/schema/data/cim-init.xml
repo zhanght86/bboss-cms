@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding='gb2312'?>
+<manager-config>
+	<description>
+<![CDATA[
+	cim sql初始化语句
+ ]]>
+	</description>
+	
+	<property name="all_datas" >
+		<list>
+
+			<property name="tableinfo">
+
+				<map>
+					<property name="default">
+						<list>
+							<property index="0"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_COLLECT_STRATEGY', 'ID', 1, 1, 'SEQ_CIM_COLLECT_STRATEGY', 'sequence')
+				]]></property>
+							<property index="1"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_hostinfo', 'HOST_ID', 1, 1, 'seq_hostinfo', 'sequence')
+				]]></property>
+							<property index="2"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_dbpool', 'ID', 1, 1, 'seq_dbpool', 'sequence')
+				]]></property>
+							<!--
+							<property index="3"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_DATACACHE', 'CACHEID', 1, 1, null, 'uuid')
+				]]></property>
+							
+							<property index="4"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_plugin_category', 'id', 1, 1, 'seq_pluginCategory', 'sequence')
+				]]></property>
+							
+							<property index="5"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_PLUGIN_HOST', 'id', 1, 1, 'seq_CIM_PLUGIN_HOST', 'sequence')
+				]]></property>
+				-->
+							<property index="6"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_SYS_BASE_INFO', 'id', 1, 1, 'seq_SYS_BASE_INFO', 'sequence')
+				]]></property>
+							<property index="7"><![CDATA[
+insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_HOSTCPUS', 'id', 1, 1, 'seq_HOSTCPUS', 'sequence')
+				]]></property>
+							<property index="8"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_FILESYSTEUSAGE', 'id', 1, 1, 'seq_FILESYSTEUSAGE', 'sequence')
+				]]></property>
+							<property index="9"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_CPUSTATICS', 'id', 1, 1, 'seq_CPUSTATICS', 'sequence')
+				]]></property>
+							<property index="10"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_NETCONNECT', 'id', 1, 1, 'seq_NETCONNECT', 'sequence')
+				]]></property>
+							<property index="11"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_NETSTAT', 'id', 1, 1, 'seq_NETSTAT', 'sequence')
+				]]></property>
+							<property index="12"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_NetRoute', 'id', 1, 1, 'seq_NetRoute', 'sequence')
+				]]></property>
+							<property index="13"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_NetStatusStat', 'id', 1, 1, 'seq_NetStatusStat', 'sequence')
+				]]></property>
+							<property index="14"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_TCPConnectInfo', 'id', 1, 1, 'seq_TCPConnectInfo', 'sequence')
+				]]></property>
+							<property index="15"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_MQ', 'ID', 1, 1, 'SEQ_CIM_MQ', 'sequence')
+				]]></property>
+				
+											<property index="16"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_AlarmDataInfo', 'ID', 1, 0, 'seq_AlarmDataInfo', 'sequence')
+				]]></property>
+				
+											<property index="17"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_AlarmEntry', 'ITEMID', 1, 9, 'seq_AlarmEntry', 'sequence')
+				]]></property>
+				
+				<property index="18"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_AlarmLog', 'ITEMID', 1, 0, 'seq_AlarmLog', 'sequence')
+  
+  
+				]]></property>
+				
+				<property index="19"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('cim_datacache', 'cacheid', 1, 0, 'seq_AlarmLog', 'uuid')
+  
+  
+				]]></property>
+				
+				<property index="20"><![CDATA[insert into tableinfo
+  (table_name,
+   table_id_name,
+   table_id_increment,
+   table_id_value,
+   table_id_generator,
+   table_id_type)
+values
+  ('CIM_ETL_REPOSITORY', 'ID', 1, 0, 'SEQ_CIM_ETL_REPOSITORY', 'sequence')
+  
+  
+				]]></property>
+						</list>
+					</property>
+				</map>
+			</property>
+
+
+
+
+			<property name="squence_list">
+				<map>
+					<property name="mysql">
+
+						<list>
+							<property index="0"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_CIM_COLLECT_STRATEGY')
+					]]></property>
+							<property index="1"><![CDATA[INSERT INTO sequence_data 
+(sequence_name,sequence_cur_value) 
+VALUES 
+('seq_hostinfo',2)
+					]]></property>
+							<property index="2"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_dbpool')
+					]]></property>
+							<!--<property index="3"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_pluginCategory')
+					]]></property>
+							<property index="4"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_CIM_PLUGIN_HOST')
+					]]></property>
+							--><property index="5"><![CDATA[ INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_SYS_BASE_INFO')
+					]]></property>
+							<property index="6"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_HOSTCPUS')
+					]]></property>
+							<property index="7"><![CDATA[ INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_FILESYSTEUSAGE')
+					]]></property>
+							<property index="8"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_CPUSTATICS')
+					
+					]]></property>
+							<property index="9"><![CDATA[ INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_NETCONNECT')
+					]]></property>
+							<property index="10"><![CDATA[ INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_NETSTAT')
+					]]></property>
+							<property index="11"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_NetRoute')
+					]]></property>
+							<property index="12"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_NetStatusStat')
+					]]></property>
+							<property index="13"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES
+('seq_TCPConnectInfo')
+					]]></property>
+							<property index="14"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('SEQ_CIM_MQ')
+					]]></property>
+					
+					<property index="15"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_AlarmDataInfo')
+					]]></property>
+					
+					<property index="16"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_AlarmEntry')
+					]]></property>
+					
+					<property index="17"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_AlarmLog')
+					]]></property>
+					
+					<property index="18"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('SEQ_CIM_ETL_REPOSITORY')
+					]]></property>
+
+<property index="19"><![CDATA[INSERT INTO sequence_data 
+(sequence_name) 
+VALUES 
+('seq_datacache')
+					]]></property>
+						</list>
+					</property>
+
+
+					<property name="default">
+						<list>
+						
+						<property index="0"><![CDATA[  drop sequence seq_CIM_COLLECT_STRATEGY
+
+	                                ]]></property>
+							<property index="1"><![CDATA[  drop sequence seq_hostinfo
+ 
+	                                ]]></property>
+							<property index="2"><![CDATA[ drop sequence seq_dbpool
+                           ]]></property>
+							<!--<property index="3"><![CDATA[  drop sequence seq_pluginCategory
+
+	                                ]]></property>
+							<property index="4"><![CDATA[  drop sequence seq_CIM_PLUGIN_HOST
+
+	                                ]]></property>
+							--><property index="5"><![CDATA[ drop sequence seq_SYS_BASE_INFO
+ 
+	                                ]]></property>
+							<property index="6"><![CDATA[  drop sequence seq_HOSTCPUS
+
+	                                ]]></property>
+							<property index="7"><![CDATA[  drop sequence seq_FILESYSTEUSAGE
+
+	                                ]]></property>
+							<property index="8"><![CDATA[ drop sequence seq_CPUSTATICS
+ 
+	                                ]]></property>
+							<property index="9"><![CDATA[  drop sequence seq_NETCONNECT
+                              ]]></property>
+							<property index="10"><![CDATA[  drop sequence seq_NETSTAT
+                             ]]></property>
+							<property index="11"><![CDATA[ drop sequence seq_NetRoute
+                             ]]></property>
+							<property index="12"><![CDATA[ drop sequence seq_NetStatusStat
+
+	                                ]]></property>
+							<property index="13"><![CDATA[ drop sequence seq_TCPConnectInfo
+ 
+	                                ]]></property>
+							<property index="14"><![CDATA[ drop sequence SEQ_CIM_MQ
+
+	                                ]]></property>
+	                                <property index="15"><![CDATA[ drop sequence seq_AlarmDataInfo
+
+	                                ]]></property>
+	                                <property index="16"><![CDATA[ drop sequence seq_AlarmEntry
+
+	                                ]]></property>
+	                                <property index="17"><![CDATA[ drop sequence seq_AlarmLog
+
+	                                ]]></property>
+	                                <property index="18"><![CDATA[ drop sequence SEQ_CIM_ETL_REPOSITORY
+
+	                                ]]></property>
+	                                <property index="19"><![CDATA[ drop sequence seq_datacache
+
+	                                ]]></property>
+						
+							<property index="0"><![CDATA[  create sequence seq_CIM_COLLECT_STRATEGY
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="1"><![CDATA[  create sequence seq_hostinfo
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="2"><![CDATA[ create sequence seq_dbpool
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<!--<property index="3"><![CDATA[  create sequence seq_pluginCategory
+minvalue 0
+maxvalue 999999999
+start with 0
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="4"><![CDATA[  create sequence seq_CIM_PLUGIN_HOST
+minvalue 0
+maxvalue 999999999
+start with 0
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							--><property index="5"><![CDATA[ create sequence seq_SYS_BASE_INFO
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="6"><![CDATA[  create sequence seq_HOSTCPUS
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="7"><![CDATA[  create sequence seq_FILESYSTEUSAGE
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="8"><![CDATA[ create sequence seq_CPUSTATICS
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="9"><![CDATA[  create sequence seq_NETCONNECT
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="10"><![CDATA[  create sequence seq_NETSTAT
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="11"><![CDATA[ create sequence seq_NetRoute
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="12"><![CDATA[ create sequence seq_NetStatusStat
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="13"><![CDATA[ create sequence seq_TCPConnectInfo
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							<property index="14"><![CDATA[ create sequence SEQ_CIM_MQ
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+	                                 
+	                                 <property index="15"><![CDATA[ create sequence seq_AlarmDataInfo
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+	                                <property index="16"><![CDATA[ create sequence seq_AlarmEntry
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+	                                <property index="17"><![CDATA[ create sequence seq_AlarmLog
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+	                                <property index="18"><![CDATA[ create sequence SEQ_CIM_ETL_REPOSITORY
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+	                                <property index="19"><![CDATA[ create sequence seq_datacache
+minvalue 0
+maxvalue 999999999
+start with 1
+increment by 1
+cache 20
+cycle  
+	                                ]]></property>
+							
+
+						</list>
+
+					</property>
+				</map>
+			</property>
+			
+				
+
+
+		</list>
+	</property>
+
+
+
+
+</manager-config>

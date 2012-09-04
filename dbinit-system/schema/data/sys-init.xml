@@ -1,0 +1,2511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	smc mysql初始化语句
+ ]]>
+	</description>
+	<!--
+		<properties name="insert"> <property name="insert-mysql">
+
+		<![CDATA[insert into mq_users (broker_id, user_id, user_name,
+		user_password) values (?, ?, 'system', 'manager')]]> </property>
+		<property name="insert-oracle"> <![CDATA[insert into mq_users
+		(broker_id, user_id, user_name, user_password) values (?, ?, 'system',
+		'manager')]]> </property> </properties>
+	-->
+
+
+
+
+		<property name="all_datas">
+			<list>
+				<property name="sys_tableinfo_list" index="0">
+					<map>
+						<property name="default">
+							<list>
+								
+								<property index="0"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sd_notic',
+									   'notic_id',
+									   1,
+									   0,
+									   'SEQ_TD_SD_NOTIC',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="1"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sd_ratifyadvice',
+									   'ratifyadvice_id',
+									   1,
+									   0,
+									   'SEQ_TD_SD_RATIFYADVICE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="2"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sd_schedular',
+									   'schedular_id',
+									   1,
+									   0,
+									   'SEQ_TD_SD_SCHEDULAR',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="3"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_dictdata',
+									   'dictdata_id',
+									   1,
+									   193,
+									   'SEQ_TD_SM_DICTDATA',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="4"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_dicttype',
+									   'dicttype_id',
+									   1,
+									   2312,
+									   'SEQ_TD_SM_DICTTYPE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="5"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_group',
+									   'group_id',
+									   1,
+									   0,
+									   'SEQ_TD_SM_GROUP',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="6"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_job',
+									   'job_id',
+									   1,
+									   1,
+									   'SEQ_TD_SM_JOB',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="7"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_organization',
+									   'org_id',
+									   1,
+									   1,
+									   'SEQ_TD_SM_ORGANIZATION',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="8"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_res',
+									   'res_id',
+									   1,
+									   0,
+									   'SEQ_TD_SM_RES',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="9"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_role',
+									   'role_id',
+									   1,
+									   4,
+									   'SEQ_TD_SM_ROLE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="10"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sd_remind',
+									   'remind_id',
+									   1,
+									   0,
+									   'SEQ_TD_SD_REMIND',
+									   'sequence',
+									   ' ')]]></property>
+								
+								<property index="11"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_user',
+									   'user_id',
+									   1,
+									   1,
+									   'SEQ_TD_SM_USER',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="12"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('TB_SM_INPUTTYPE',
+									   'INPUT_TYPE_ID',
+									   1,
+									   9,
+									   'SEQ_TB_SM_INPUTTYPE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="13"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sd_notepaper',
+									   'notepaper_id',
+									   1,
+									   0,
+									   'SEQ_TD_SD_NOTEPAPER',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="14"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('td_sm_roletype',
+									   'type_id',
+									   1,
+									   1,
+									   'SEQ_TD_SM_ROLETYPE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="15"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('TD_SM_LOGMODULE',
+									   'id',
+									   1,
+									   3,
+									   'SEQ_TD_SM_LOGMODULE',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="16"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('TD_SM_DICTKEYWORDS',
+									   'KEYWORD_ID',
+									   1,
+									   0,
+									   'SEQ_DICTKEYWORD',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="17"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('TD_SM_LOGDETAIL',
+									   'DETAIL_ID',
+									   1,
+									   0,
+									   'SEQ_LOG_DETAIL',
+									   'sequence',
+									   ' ')]]></property>
+								<property index="18"><![CDATA[insert into tableinfo
+									  (table_name,
+									   table_id_name,
+									   table_id_increment,
+									   table_id_value,
+									   table_id_generator,
+									   table_id_type,
+									   table_id_prefix)
+									values
+									  ('TD_SM_LOG',
+									   'LOG_ID',
+									   1,
+									   121,
+									   'SEQ_LOG',
+									   'sequence',
+									   ' ')]]></property>
+								
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtableinfo_seqlist" index="1">
+					<map>
+						<property name="mysql">
+							<list>
+								
+								<property index="0"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SD_NOTIC')]]></property>
+								<property index="1"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SD_RATIFYADVICE')]]></property>
+								<property index="2"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SD_SCHEDULAR')]]></property>
+								<property index="3"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_DICTDATA',200)]]></property>
+								<property index="4"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_DICTTYPE',2313)]]></property>
+								<property index="5"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SM_GROUP')]]></property>
+								<property index="6"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_JOB',5)]]></property>
+								<property index="7"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SM_ORGANIZATION')]]></property>
+								<property index="8"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_RES',100)]]></property>
+								<property index="9"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_ROLE',100)]]></property>
+								<property index="10"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SD_REMIND')]]></property>
+								
+								<property index="11"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TD_SM_USER',2)]]></property>
+								<property index="12"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name,sequence_cur_value) 
+				VALUES
+				('SEQ_TB_SM_INPUTTYPE',10)]]></property>
+								<property index="13"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SD_NOTEPAPER')]]></property>
+								<property index="14"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SM_ROLETYPE')]]></property>
+								<property index="15"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_TD_SM_LOGMODULE')]]></property>
+								<property index="16"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_DICTKEYWORD')]]></property>
+								<property index="17"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_LOG_DETAIL')]]></property>
+								<property index="18"><![CDATA[INSERT INTO sequence_data 
+				(sequence_name) 
+				VALUES
+				('SEQ_LOG')]]></property>
+								
+
+							</list>
+						</property>
+
+
+						<property name="default">
+							<list>
+								
+								   
+								<property index="3"><![CDATA[  drop sequence SEQ_DICTKEYWORD
+
+	                                ]]></property>
+								<property index="4"><![CDATA[  drop sequence SEQ_LOG
+                            ]]></property>
+								<property index="5"><![CDATA[ drop sequence SEQ_LOG_DETAIL
+ 
+	                                ]]></property>
+								
+								
+								<property index="9"><![CDATA[  drop sequence SEQ_TB_SM_INPUTTYPE
+
+	                                ]]></property>
+								<property index="10"><![CDATA[  drop sequence SEQ_TD_SD_NOTEPAPER
+
+	                                ]]></property>
+								<property index="11"><![CDATA[ drop sequence SEQ_TD_SD_NOTIC
+
+	                                ]]></property>
+								<property index="12"><![CDATA[ drop sequence SEQ_TD_SD_RATIFYADVICE
+ 
+	                                ]]></property>
+								<property index="13"><![CDATA[ drop sequence SEQ_TD_SD_REMIND
+ 
+	                                ]]></property>
+								<property index="14"><![CDATA[ drop sequence SEQ_TD_SD_SCHEDULAR
+ 
+	                                ]]></property>
+								<property index="15"><![CDATA[ drop sequence SEQ_TD_SM_DICTDATA
+  
+	                                ]]></property>
+								<property index="16"><![CDATA[  drop sequence SEQ_TD_SM_DICTTYPE
+
+	                                ]]></property>
+								<property index="17"><![CDATA[ drop sequence SEQ_TD_SM_GROUP
+ 
+	                                ]]></property>
+								<property index="18"><![CDATA[ drop sequence SEQ_TD_SM_JOB
+
+	                                ]]></property>
+								<property index="19"><![CDATA[  drop sequence SEQ_TD_SM_LOGMODULE
+
+	                                ]]></property>
+								<property index="20"><![CDATA[ drop sequence SEQ_TD_SM_ORGANIZATION
+ 
+	                                ]]></property>
+								<property index="21"><![CDATA[  drop sequence SEQ_TD_SM_RES
+
+	                                ]]></property>
+
+								<property index="22"><![CDATA[  drop sequence SEQ_TD_SM_ROLE
+
+	                                ]]></property>
+								<property index="23"><![CDATA[  drop sequence SEQ_TD_SM_ROLETYPE
+                                        
+	                                ]]></property>
+								<property index="24"><![CDATA[ drop sequence SEQ_TD_SM_USER
+                                         
+	                                ]]></property>
+								
+								
+	                              
+								<property index="3"><![CDATA[  create sequence SEQ_DICTKEYWORD
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="4"><![CDATA[  create sequence SEQ_LOG
+minvalue 1
+maxvalue 99999999999999999999
+start with 146
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="5"><![CDATA[ create sequence SEQ_LOG_DETAIL
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								
+								
+								<property index="9"><![CDATA[  create sequence SEQ_TB_SM_INPUTTYPE
+minvalue 1
+maxvalue 99999999999999999999
+start with 10
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="10"><![CDATA[  create sequence SEQ_TD_SD_NOTEPAPER
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="11"><![CDATA[ create sequence SEQ_TD_SD_NOTIC
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="12"><![CDATA[ create sequence SEQ_TD_SD_RATIFYADVICE
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="13"><![CDATA[ create sequence SEQ_TD_SD_REMIND
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="14"><![CDATA[ create sequence SEQ_TD_SD_SCHEDULAR
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="15"><![CDATA[ create sequence SEQ_TD_SM_DICTDATA
+minvalue 1
+maxvalue 99999999999999999999
+start with 194
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="16"><![CDATA[  create sequence SEQ_TD_SM_DICTTYPE
+minvalue 1
+maxvalue 99999999999999999999
+start with 2313
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="17"><![CDATA[ create sequence SEQ_TD_SM_GROUP
+minvalue 1
+maxvalue 99999999999999999999
+start with 1
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="18"><![CDATA[ create sequence SEQ_TD_SM_JOB
+minvalue 1
+maxvalue 99999999999999999999
+start with 2
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="19"><![CDATA[  create sequence SEQ_TD_SM_LOGMODULE
+minvalue 1
+maxvalue 99999999999999999999
+start with 4
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="20"><![CDATA[ create sequence SEQ_TD_SM_ORGANIZATION
+minvalue 1
+maxvalue 99999999999999999999
+start with 2
+increment by 1
+nocache  
+	                                ]]></property>
+								<property index="21"><![CDATA[  create sequence SEQ_TD_SM_RES
+minvalue 1
+maxvalue 99999999999999999999
+start with 100
+increment by 1
+nocache 
+	                                ]]></property>
+
+								<property index="22"><![CDATA[  create sequence SEQ_TD_SM_ROLE
+minvalue 1
+maxvalue 99999999999999999999
+start with 100
+increment by 1
+nocache 
+	                                ]]></property>
+								<property index="23"><![CDATA[  create sequence SEQ_TD_SM_ROLETYPE
+                                         minvalue 1
+                                         maxvalue 99999999999999999999
+                                         start with 2
+                                         increment by 1
+                                         nocache 
+	                                ]]></property>
+								<property index="24"><![CDATA[ create sequence SEQ_TD_SM_USER
+                                          minvalue 1
+                                          maxvalue 99999999999999999999
+                                          start with 2
+                                          increment by 1
+                                          nocache  
+	                                ]]></property>
+
+							</list>
+
+						</property>
+						
+					</map>
+				</property>
+
+				<property name="addtb_sm_inputtype_list">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (1,
+									   ' ',
+									   ' ',
+									   '文本类型',
+									   ' ')]]></property>
+								<property index="1"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (2,
+									   ' ',
+									   ' ',
+									   '选择字典',
+									   ' ')]]></property>
+								<property index="2"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (3,
+									   ' ',
+									   ' ',
+									   '选择时间',
+									   ' ')]]></property>
+								<property index="3"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (4,
+									   ' ',
+									   ' ',
+									   '主键生成',
+									   ' ')]]></property>
+								<property index="4"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (5,
+									   ' ',
+									   ' ',
+									   '选择机构',
+									   ' ')]]></property>
+								<property index="5"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (6,
+									   ' ',
+									   ' ',
+									   '选择人员',
+									   ' ')]]></property>
+								<property index="6"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (7,
+									   ' ',
+									   ' ',
+									   '当前用户',
+									   ' ')]]></property>
+								<property index="7"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (8,
+									   ' ',
+									   ' ',
+									   '当前机构',
+									   ' ')]]></property>
+								<property index="8"><![CDATA[insert into tb_sm_inputtype
+									  (INPUT_TYPE_ID,
+									   INPUT_TYPE_DESC,
+									   DATASOURCE_PATH,
+									   INPUT_TYPE_NAME,
+									   SCRIPT)
+									values
+									  (9,
+									   ' ',
+									   ' ',
+									   '当前用户',
+									   ' ')]]></property>
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtd_sm_dicttype_list">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '9',
+									   null,
+									   'isPublicAffair',
+									   '日程管理是否公事',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="1"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '6',
+									   null,
+									   'intervalType',
+									   '日程管理提醒时间间隔单位',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="2"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '2',
+									   null,
+									   'isvalid',
+									   '有效否',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="3"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '1',
+									   null,
+									   'sex',
+									   '性别',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="4"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '5',
+									   null,
+									   'orgType',
+									   '机构类型',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="5"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '4',
+									   null,
+									   'MailPostfix',
+									   '邮箱后缀',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="6"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '3',
+									   null,
+									   'userType',
+									   '用户类型',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="7"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '7',
+									   null,
+									   'essentiality',
+									   '日程管理重要性',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="8"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '8',
+									   null,
+									   'isLeisure',
+									   '日程管理是否空闲',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="9"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '45',
+									   null,
+									   'ispartybussiness',
+									   '机构是否业务部门',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+								<property index="10"><![CDATA[insert into td_sm_dicttype
+									  (DATA_VALIDATE_FIELD,
+									   DATA_CREATE_ORGID_FIELD,
+									   DICTTYPE_TYPE,
+									   IS_TREE,
+									   DICTTYPE_ID,
+									   USER_ID,
+									   DICTTYPE_NAME,
+									   DICTTYPE_DESC,
+									   DICTTYPE_PARENT,
+									   DATA_TABLE_NAME,
+									   DATA_NAME_FILED,
+									   DATA_VALUE_FIELD,
+									   DATA_ORDER_FIELD,
+									   DATA_TYPEID_FIELD,
+									   DATA_DBNAME,
+									   DATA_PARENTID_FIELD,
+									   DATA_NAME_CN,
+									   DATA_VALUE_CN,
+									   KEY_GENERAL_TYPE,
+									   NAME_GENERAL_TYPE,
+									   KEY_GENERAL_INFO,
+									   NEEDCACHE,
+									   ENABLE_VALUE_MODIFY)
+									values
+									  (' ',
+									   ' ',
+									   0,
+									   0,
+									   '2312',
+									   null,
+									   '是否字典',
+									   '是否字典',
+									   '0',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   '名称',
+									   '真实值',
+									   null,
+									   ' ',
+									   ' ',
+									   1,
+									   0)]]></property>
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtd_sm_dictdata_list">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('70',
+									   2312,
+									   '是',
+									   '1',
+									   0)]]></property>
+								<property index="1"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('71',
+									   2312,
+									   '否',
+									   '0',
+									   1)]]></property>
+								<property index="2"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('60',
+									   9,
+									   '公事',
+									   '0',
+									   0)]]></property>
+								<property index="3"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('61',
+									   9,
+									   '私事',
+									   '1',
+									   0)]]></property>
+								<property index="4"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('62',
+									   6,
+									   '分',
+									   '0',
+									   0)]]></property>
+								<property index="5"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('63',
+									   6,
+									   '小时',
+									   '1',
+									   0)]]></property>
+								<property index="6"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('64',
+									   6,
+									   '天',
+									   '2',
+									   0)]]></property>
+								<property index="7"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('65',
+									   7,
+									   '重要',
+									   '0',
+									   0)]]></property>
+								<property index="8"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('66',
+									   7,
+									   '一般',
+									   '1',
+									   0)]]></property>
+								<property index="9"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('67',
+									   7,
+									   '不重要',
+									   '2',
+									   0)]]></property>
+								<property index="10"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('68',
+									   8,
+									   '忙',
+									   '0',
+									   0)]]></property>
+								<property index="11"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('69',
+									   8,
+									   '空闲',
+									   '1',
+									   0)]]></property>
+								<property index="12"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('11',
+									   1,
+									   '男',
+									   'M',
+									   0)]]></property>
+								<property index="13"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('12',
+									   1,
+									   '女',
+									   'F',
+									   0)]]></property>
+								<property index="14"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('124',
+									   2,
+									   '删除',
+									   '0',
+									   3)]]></property>
+								<property index="15"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('125',
+									   2,
+									   '申请',
+									   '1',
+									   1)]]></property>
+								<property index="16"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('126',
+									   2,
+									   '开通',
+									   '2',
+									   0)]]></property>
+								<property index="17"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('127',
+									   2,
+									   '停用',
+									   '3',
+									   2)]]></property>
+								<property index="18"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('31',
+									   4,
+									   'kechuang.com',
+									   'kechuang.com',
+									   0)]]></property>
+								<property index="19"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('32',
+									   4,
+									   'furongwang.com',
+									   'furongwang.com',
+									   0)]]></property>
+								<property index="20"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('33',
+									   4,
+									   'china.com',
+									   'china.com',
+									   0)]]></property>
+								<property index="21"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('13',
+									   1,
+									   '未知',
+									   '-1',
+									   0)]]></property>
+								<property index="22"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('41',
+									   5,
+									   '有效',
+									   '0',
+									   0)]]></property>
+								<property index="23"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('42',
+									   5,
+									   '无效',
+									   '1',
+									   0)]]></property>
+								<property index="24"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('51',
+									   3,
+									   '非三一域用户',
+									   '2',
+									   2)]]></property>
+								<property index="24"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('52',
+									   3,
+									   '三一域用户',
+									   '1',
+									   1)]]></property>
+								<property index="25"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('53',
+									   3,
+									   '系统用户',
+									   '0',
+									   0)]]></property>
+								<property index="26"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('192',
+									   45,
+									   '是',
+									   '0',
+									   1)]]></property>
+								<property index="27"><![CDATA[insert into td_sm_dictdata
+									  (DICTDATA_ID,
+									   DICTTYPE_ID,
+									   DICTDATA_NAME,
+									   DICTDATA_VALUE,
+									   DICTDATA_ORDER)
+									values
+									  ('193',
+									   45,
+									   '否',
+									   '1',
+									   2)]]></property>
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property  name="addtd_sm_job">
+					<map>
+						<property name="default">
+
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_job
+  				(JOB_ID, JOB_NAME, JOB_DESC, JOB_FUNCTION,JOB_AMOUNT,JOB_NUMBER,JOB_CONDITION,JOB_RANK,OWNER_ID)
+				values
+  				('1','在职','不能删除',' ',' ',' ',' ',' ',1)]]></property>
+
+
+							</list>
+
+						</property>
+					</map>
+				</property>
+
+				<property  name="addtd_sm_role_list">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('1',
+									   'administrator',
+									   '1',
+									   '超级管理员角色，此角色不要修改，超级管理员admin自动拥有本角色，只有admin可以将本角色授予其他用户，本角色也不需要授予权限，默认拥有系统中的所有权限',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+								<property index="1"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('2',
+									   'roleofeveryone',
+									   '1',
+									   '每个用户都缺省拥有的角色，此角色不能被修改，也不能被删除',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+								<property index="2"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('3',
+									   'orgmanager',
+									   '1',
+									   '部门管理员角色,此角色不能被修改，也不能被删除，所有部门管理员自动拥有本角色',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+								<property index="3"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('4',
+									   'orgmanagerroletemplate',
+									   '1',
+									   '部门管理员角色模板,本角色不能被删除和修改，不能授予普通用户，只能够授权，新增部门管理员时自动拥有本角色，只有超级管理员才能给部门管理员角色模板授权',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+									   
+									   <property index="4"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('5',
+									   'cim_admin',
+									   '2',
+									   '监控系统的管理员角色，拥有管理、配置监控系统的权限',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+									   
+									   <property index="5"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('6',
+									   'cim_browse',
+									   '2',
+									   '监控系统的浏览角色，拥有浏览监控平台信息的权限',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+									   
+									   <property index="6"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('7',
+									   'cim_guest',
+									   '2',
+									   '监控平台的游客角色，拥有部分查看监控信息的权限',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property>
+
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtd_sm_roleresop_list">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('rolemanager',
+									   'globalrole',
+									   '3',
+									   'role',
+									   '0',
+									   '角色资源',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   <!-- 
+								<property index="1"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('lisanusermanager',
+									   'orgunit',
+									   '3',
+									   'orgunit',
+									   '0',
+									   '机构资源',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									    -->
+							<!-- 
+								<property index="2"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('lisanusertoorg',
+									   'orgunit',
+									   '3',
+									   'orgunit',
+									   '0',
+									   '角色资源',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									    -->
+								<property index="3"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('visible',
+									   'org_taxcode',
+									   '3',
+									   'column',
+									   '0',
+									   '机构授权编码维护',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+								<property index="4"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('visible',
+									   'usualorg_taxcode',
+									   '3',
+									   'column',
+									   '0',
+									   '机构常用编码维护',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+<!--								<property index="5"><![CDATA[insert into td_sm_roleresop-->
+<!--									  (OP_ID,-->
+<!--									   RES_ID,-->
+<!--									   ROLE_ID,-->
+<!--									   RESTYPE_ID,-->
+<!--									   AUTO,-->
+<!--									   RES_NAME,-->
+<!--									   TYPES,-->
+<!--									   AUTHORIZATION_TYPE,-->
+<!--									   USE_COUNT,-->
+<!--									   AUTHORIZATION_STIME,-->
+<!--									   AUTHORIZATION_ETIME,-->
+<!--									   USE_COUNTED)-->
+<!--									values-->
+<!--									  ('visible',-->
+<!--									   'rolemanager',-->
+<!--									   '3',-->
+<!--									   'column',-->
+<!--									   '0',-->
+<!--									   '角色管理',-->
+<!--									   'role',-->
+<!--									   0,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null)]]></property>-->
+<!--								<property index="6"><![CDATA[insert into td_sm_roleresop-->
+<!--									  (OP_ID,-->
+<!--									   RES_ID,-->
+<!--									   ROLE_ID,-->
+<!--									   RESTYPE_ID,-->
+<!--									   AUTO,-->
+<!--									   RES_NAME,-->
+<!--									   TYPES,-->
+<!--									   AUTHORIZATION_TYPE,-->
+<!--									   USE_COUNT,-->
+<!--									   AUTHORIZATION_STIME,-->
+<!--									   AUTHORIZATION_ETIME,-->
+<!--									   USE_COUNTED)-->
+<!--									values-->
+<!--									  ('visible',-->
+<!--									   'usermanage',-->
+<!--									   '3',-->
+<!--									   'column',-->
+<!--									   '0',-->
+<!--									   '用户管理',-->
+<!--									   'role',-->
+<!--									   0,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null)]]></property>-->
+<!--								<property index="7"><![CDATA[insert into td_sm_roleresop-->
+<!--									  (OP_ID,-->
+<!--									   RES_ID,-->
+<!--									   ROLE_ID,-->
+<!--									   RESTYPE_ID,-->
+<!--									   AUTO,-->
+<!--									   RES_NAME,-->
+<!--									   TYPES,-->
+<!--									   AUTHORIZATION_TYPE,-->
+<!--									   USE_COUNT,-->
+<!--									   AUTHORIZATION_STIME,-->
+<!--									   AUTHORIZATION_ETIME,-->
+<!--									   USE_COUNTED)-->
+<!--									values-->
+<!--									  ('visible',-->
+<!--									   'orgmanager',-->
+<!--									   '3',-->
+<!--									   'column',-->
+<!--									   '0',-->
+<!--									   '机构管理',-->
+<!--									   'role',-->
+<!--									   0,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null)]]></property>-->
+<!--								<property index="8"><![CDATA[insert into td_sm_roleresop-->
+<!--									  (OP_ID,-->
+<!--									   RES_ID,-->
+<!--									   ROLE_ID,-->
+<!--									   RESTYPE_ID,-->
+<!--									   AUTO,-->
+<!--									   RES_NAME,-->
+<!--									   TYPES,-->
+<!--									   AUTHORIZATION_TYPE,-->
+<!--									   USE_COUNT,-->
+<!--									   AUTHORIZATION_STIME,-->
+<!--									   AUTHORIZATION_ETIME,-->
+<!--									   USE_COUNTED)-->
+<!--									values-->
+<!--									  ('visible',-->
+<!--									   'userManageItem',-->
+<!--									   '3',-->
+<!--									   'column',-->
+<!--									   '0',-->
+<!--									   '权限维护',-->
+<!--									   'role',-->
+<!--									   0,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null)]]></property>-->
+<!--								<property index="9"><![CDATA[insert into td_sm_roleresop-->
+<!--									  (OP_ID,-->
+<!--									   RES_ID,-->
+<!--									   ROLE_ID,-->
+<!--									   RESTYPE_ID,-->
+<!--									   AUTO,-->
+<!--									   RES_NAME,-->
+<!--									   TYPES,-->
+<!--									   AUTHORIZATION_TYPE,-->
+<!--									   USE_COUNT,-->
+<!--									   AUTHORIZATION_STIME,-->
+<!--									   AUTHORIZATION_ETIME,-->
+<!--									   USE_COUNTED)-->
+<!--									values-->
+<!--									  ('visible',-->
+<!--									   'permissionmanager',-->
+<!--									   '3',-->
+<!--									   'column',-->
+<!--									   '0',-->
+<!--									   '权限维护',-->
+<!--									   'role',-->
+<!--									   0,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null,-->
+<!--									   null)]]></property>-->
+								<property index="10"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('visible',
+									   'sysuserpassword',
+									   '3',
+									   'column',
+									   '0',
+									   '系统账户修改',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+								<property index="11"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('visible',
+									   'purviewmanager',
+									   '3',
+									   'column',
+									   '0',
+									   '权限管理',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									   <property index="12"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('synchroRepository',
+									   'ETLManager',
+									   '5',
+									   'ETLresource',
+									   '0',
+									   '对ETL数据同步、流程启停操作进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									    <property index="13"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('startorstop',
+									   'ETLManager',
+									   '5',
+									   'ETLresource',
+									   '0',
+									   '对ETL数据同步、流程启停操作进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									     <property index="14"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('startorstopMQ',
+									   'MQManager',
+									   '5',
+									   'MQresource',
+									   '0',
+									   '对MQ相关功能进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									   <property index="15"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('newQueue',
+									   'MQManager',
+									   '5',
+									   'MQresource',
+									   '0',
+									   '对MQ相关功能进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									  
+									   
+									   <property index="17"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('managerHost',
+									   'HostInfoManager',
+									   '5',
+									   'HOSTresource',
+									   '0',
+									   '对主机配置中的相关功能进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									    <property index="18"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('managerApp',
+									   'HostInfoManager',
+									   '5',
+									   'HOSTresource',
+									   '0',
+									   '对主机配置中的相关功能进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									    <property index="19"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('managerAlarm',
+									   'HostInfoManager',
+									   '5',
+									   'HOSTresource',
+									   '0',
+									   '对主机配置中的相关功能进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									    
+									   
+									   
+									   
+									   <property index="22"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('connection_poolInfo',
+									   'POOLMANManager',
+									   '5',
+									   'POOLMANresource',
+									   '0',
+									   '对POOLMAN监控的相关操作进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									    <property index="23"><![CDATA[insert into td_sm_roleresop
+									  (OP_ID,
+									   RES_ID,
+									   ROLE_ID,
+									   RESTYPE_ID,
+									   AUTO,
+									   RES_NAME,
+									   TYPES,
+									   AUTHORIZATION_TYPE,
+									   USE_COUNT,
+									   AUTHORIZATION_STIME,
+									   AUTHORIZATION_ETIME,
+									   USE_COUNTED)
+									values
+									  ('configGather',
+									   'GatherStaticsManager',
+									   '5',
+									   'configGatherStatic',
+									   '0',
+									   '对采集策略进行权限控制',
+									   'role',
+									   0,
+									   null,
+									   null,
+									   null,
+									   null)]]></property>
+									   
+									   
+									   
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtd_sm_roletype">
+					<map>
+						<property name="default">
+
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_roletype
+  				(TYPE_NAME, TYPE_DESC, TYPE_ID, CREATOR_USER_ID,CREATOR_ORG_ID)
+				values
+  				('通用角色类型','通用角色类型',1,'1','1')]]></property>
+  				
+  				               <property index="1"><![CDATA[insert into td_sm_roletype
+  				(TYPE_NAME, TYPE_DESC, TYPE_ID, CREATOR_USER_ID,CREATOR_ORG_ID)
+				values
+  				('监控系统角色','监控系统角色',2,'2','2')]]></property>
+
+							</list>
+						</property>
+					</map>
+				</property>
+
+				<property name="addtd_sm_user">
+					<map>
+						<property name="default">
+
+
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_user
+  				(USER_ID, USER_SN, USER_NAME, USER_PASSWORD,USER_REALNAME,USER_PINYIN,USER_SEX,USER_HOMETEL,
+  				USER_WORKTEL,USER_WORKNUMBER,USER_MOBILETEL1,USER_MOBILETEL2,USER_FAX,USER_OICQ,USER_BIRTHDAY,
+  				USER_EMAIL,USER_ADDRESS,USER_POSTALCODE,USER_IDCARD,USER_ISVALID,USER_REGDATE,USER_LOGINCOUNT,
+  				USER_TYPE,REMARK1,REMARK2,REMARK3,REMARK4,REMARK5,PAST_TIME,DREDGE_TIME,LASTLOGIN_DATE,
+  				WORKLENGTH,POLITICS,ISTAXMANAGER,LOGON_IP,CERT_SN)
+				values
+  				(1,1,'admin','123456','系统管理员',' ','M',' ',
+  				' ',' ',' ',' ',' ',' ',null,
+  				' ',' ',' ',' ',2,null,null,
+  				'0',' ',' ',' ',' ',' ',null,' ',null,
+  				' ',' ',null,' ',' ')]]></property>
+
+							</list>
+						</property>
+					</map>
+
+				</property>
+
+
+				<property name="addtd_sm_userrole">
+					<map>
+						<property name="default">
+
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_userrole
+  				(USER_ID, ROLE_ID, RESOP_ORIGIN_USERID)
+				values
+  				(1,'1',' ')]]></property>
+
+							</list>
+						</property>
+					</map>
+
+				</property>
+				
+				<property name="addtd_sm_res">
+					<map>
+						<property name="default">
+
+							<list>
+								<property index="0"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('1','ETLresource','ETL管理','ETLManager','对ETL数据同步、流程启停操作进行权限控制','-1','1')]]></property>
+  				
+  				<property index="1"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('2','MQresource','MQ管理','MQManager','对MQ相关功能进行权限控制','-1','1')]]></property>
+  				
+  				<property index="2"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('3','HOSTresource','HOST资源','HostInfoManager','对主机配置中的相关功能进行权限控制','-1','1')]]></property>
+  				
+  				<property index="3"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('4','POOLMANresource','POOLMAN资源','POOLMANManager','对POOLMAN监控的相关操作进行权限控制','-1','1')]]></property>
+  				
+  				<property index="4"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('5','configGatherStatic','采集策略配置','GatherStaticsManager','对采集策略进行权限控制','-1','1')]]></property>
+  				
+  				<property index="5"><![CDATA[insert into td_sm_res
+  				(RES_ID,RESTYPE_ID,ATTR27, TITLE, PATH,PARENT_ID,ATTR26)
+				values
+  				('6','TOMCATresource','tomcat资源','TOMCATManager','对tomcat监控的相关操作进行权限控制','-1','1')]]></property>
+
+							</list>
+						</property>
+					</map>
+
+				</property>
+
+			
+			
+
+			</list>
+		</property>
+	
+
+
+</manager-config>

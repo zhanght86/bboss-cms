@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding='gb2312'?>
+<manager-config>
+	<description>
+<![CDATA[
+	cim alerm sql初始化语句
+ ]]>
+	</description>
+	
+	<property name="all_datas" >
+		<list>
+
+			<property name="tableinfo">
+
+				<map>
+					<property name="default">
+						<list>
+							<property index="0"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'obj_id' ,null ,'uuid' ,0 ,'CIM_ALERM_OBJINFO')
+				]]></property>
+
+				<property index="1"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'strategy_id' ,null ,'uuid' ,0 ,'CIM_ALERM_SCHEDULE')
+				]]></property>
+
+				<property index="2"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'id' ,null ,'uuid' ,0 ,'CIM_ALERM_CONTACTOR')
+				]]></property>
+
+				<property index="3"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'log_id' ,null ,'uuid' ,0 ,'CIM_ALERM_LOG')
+				]]></property>
+
+				<property index="4"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'event_id' ,null ,'uuid' ,0 ,'CIM_ALERM_EVENTLOG')
+				]]></property>
+
+				<property index="5"><![CDATA[insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'attach_id' ,null ,'uuid' ,0 ,'CIM_ALERM_EVENTATTACH')
+				]]></property>
+
+                      
+
+
+				   <property index="6"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(1 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate' ,0)
+				]]></property>
+                   
+				   <property index="7"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(1 ,'leveltpl' ,'您好,科创应用监控中心提示您:IP地址为${hostip}的服务器运行${rs}！' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="8"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(1 ,'leveltpl' ,'您好,科创应用监控中心提示您:IP地址为${hostip}的服务器运行${rs}！，异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+
+			<property index="18"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(2 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate',0)
+				]]></property>
+                   
+				   <property index="19"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(2 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的MQ(${appname})运行:${rs}!' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="20"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(2 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的MQ(${appname})运行:${rs},异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+
+
+				<property index="9"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(3 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate',0)
+				]]></property>
+                   
+				   <property index="10"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(3 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})运行:${rs}!' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="11"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(3 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})运行:${rs},异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+
+
+
+
+				<property index="12"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(4 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate' ,0)
+				]]></property>
+                   
+				   <property index="13"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(4 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})的(${repname})资源库运行:${rs}' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="14"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(4 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})的(${repname})资源库运行:${rs},异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+
+
+
+
+				<property index="15"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(5 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate' ,0)
+				]]></property>
+                   
+				   <property index="16"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(5 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})的(${repname})资源库，${objname}数据源运行:${rs}' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="17"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(5 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ETL(${appname})的(${repname})资源库，${objname}数据源运行:${rs},异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+							
+
+	
+				
+				<property index="21"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(6 ,'evaltpl' ,'#if(${flag}) 1 #else 2 #end' ,'polaytemplate',0)
+				]]></property>
+                   
+				   <property index="22"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(6 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ESB(${appname})的(${repname})资源库，${objname}数据源运行:${rs}' ,'polaytemplate',0)
+				]]></property>
+
+					<property index="23"><![CDATA[insert into cim_alerm_params(NODE_ID ,NAME ,VALUE ,PARAM_TYPE,RN) 
+ values(6 ,'leveltpl' ,'您好,科创应用监控中心提示您:地址为${hostip}的ESB(${appname})的(${repname})资源库，${objname}数据源运行:${rs},异常信息：${errormsg}' ,'polaytemplate',1)
+				]]></property>
+						</list>
+					</property>
+				</map>
+			</property>
+		</list>
+	</property>
+</manager-config>

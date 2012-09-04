@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	初始化cms数据库装配文件,对以下系统库库表以及进行初始化：
+	bspf
+		
+	
+	属性集：
+	    startup.bat/startup.sh
+		schemafiles对应数据库的建库脚本
+		executefiles对应数据库的初始化脚本
+		
+		patch.bat/patch.sh
+		schemafiles_patch 补丁执行脚本
+		executefiles_patch 补丁数据脚本 
+ ]]>
+	</description>
+	
+	<properties>
+		<property name="schemafiles">
+				<list>
+					<property dbname="bspf"><![CDATA[schema/tableinfo.xml,schema/sys.xml,schema/sany.xml,schema/sany-workflow.xml,schema/cms.xml,schema/cms-ext.xml,schema/sany-mms.xml]]></property>
+				
+<!--					<property dbname="kettle"><![CDATA[schema/smc.xml]]></property>-->
+	  			</list>
+		</property>
+		<property name="executefiles">
+			<list>
+				<property dbname="bspf"><![CDATA[schema/data/mysql-sequence.xml,schema/data/sys-init.xml,schema/index/sys_index_init.xml,schema/data/cms-init.xml,schema/data/cms-init-1.xml,schema/data/sany-init.xml]]></property>
+			
+<!--				<property dbname="kettle"><![CDATA[schema/data/mysql-sequence.xml,schema/data/smc-init.xml]]></property>-->
+  			</list>
+
+		</property>
+		
+		
+		<property name="schemafiles_patch">
+				<list>
+				<property	dbname="bspf"><![CDATA[schema/cms-ext.xml]]></property>
+	  			</list>
+		</property>
+		<property name="executefiles_patch">
+			<list>
+				
+			
+  			</list>
+		</property>
+	</properties>
+
+</manager-config>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	sys 约束的初始化,包括mysql和oracle
+ ]]>
+	</description>
+
+	<property name="all_datas">
+		<list>
+		<property name="drop_index">
+				<map>
+					<property name="mysql">
+
+						<list>
+						
+						    
+							 
+							
+							 
+						
+							 <property  action="drop"><![CDATA[
+							  DROP INDEX idx_username 
+							 ]]></property>
+							 
+							 
+							  <property  action="drop"><![CDATA[
+							  DROP INDEX idx_userworknumber
+							 ]]></property>
+							 
+							   <property  action="drop"><![CDATA[
+							  DROP INDEX td_sm_job_ix1
+							 ]]></property>
+							 
+							
+							 
+							
+						</list>
+					</property>
+					
+					<property name="default">
+
+						<list>
+							
+							 
+							
+							 
+							
+							
+							 <property  action="drop"><![CDATA[
+							  DROP INDEX idx_userworknumber 
+							 ]]></property>
+							 
+							 <property  action="drop"><![CDATA[
+							  DROP INDEX idx_username 
+							 ]]></property>
+							 
+							 <property  action="drop"><![CDATA[
+							  DROP INDEX idx_tableinfo 
+							 ]]></property>
+							  <property  action="drop"><![CDATA[
+							  DROP INDEX td_sm_job_ix1
+							 ]]></property>
+							
+						</list>
+					</property>
+					
+				</map>
+			</property>
+		
+		
+		
+		
+			<property name="create_index">
+				<map>
+					<property name="default">
+
+						<list>
+							 <property  action="create"><![CDATA[
+                create index org_parent_ididx on td_sm_organization (parent_id)
+							 ]]></property>
+							 <property  action="create"><![CDATA[
+                alter table td_sm_user add index idx_username(user_name)
+							 ]]></property>
+
+							  <property  action="create"><![CDATA[
+                alter table td_sm_user add index idx_userworknumber(USER_WORKNUMBER)
+							 ]]></property>
+							 <property  action="create"><![CDATA[
+                create index td_sm_job_ix1 on td_sm_job (JOB_NAME)
+							 ]]></property>
+						</list>
+					</property>
+				</map>
+			</property>
+			
+			
+			<property name="create_index_for_oracle">
+				<map>
+					<property name="oracle">
+
+						<list>
+						
+						    
+							 
+						
+							 
+							 
+							<property  action="create"><![CDATA[
+create unique index idx_tableinfo on tableinfo (upper(trim(table_name)))
+							 ]]></property>
+							 
+							 <property  action="create"><![CDATA[
+                create index org_parent_ididx on td_sm_organization (parent_id)
+							 ]]></property>
+							 <property  action="create"><![CDATA[
+                create index td_sm_job_ix1 on td_sm_job (JOB_NAME)
+							 ]]></property>
+
+							<property  action="create"><![CDATA[
+                alter table td_sm_user add index idx_userworknumber(USER_WORKNUMBER)
+							 ]]></property>
+						</list>
+					</property>
+				</map>
+			</property>
+		</list>
+	</property>
+</manager-config>
