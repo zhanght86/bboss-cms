@@ -1,0 +1,66 @@
+{
+    "bg_colour": "#ffffff", 
+    "elements": [
+        {
+            "alpha": 0.5,
+			"animate":[{"type":"bounce","distance":5},{"type":"fade"}],
+            "border": 2, 
+            "colours": [
+                "#0247fe", 
+                "#3d01a4", 
+                "#8601af", 
+                "#a7194b", 
+                "#fe2712", 
+                "#fd5308", 
+                "#fb9902", 
+                "#fabc02", 
+                "#fefe33", 
+                "#d0ea2b", 
+                "#66b032", 
+                "#0392ce"
+            ], 
+            "label-colour": "#432baf", 
+            "start-angle": 0, 
+            "tip": "占据百分比#percent#", 
+            "type": "pie", 
+            "values": [
+                {
+                    "label": "NOKIA(诺基亚)", 
+                    "value": 52236
+                }, 
+                {
+                    "label": "IPhone(苹果iphone)", 
+                    "value": 9560
+                }, 
+                {
+                    "label": "MOTOROLA(摩托罗拉)", 
+                    "value": 6367
+                }, 
+                {
+                    "label": "HTC(宏达)", 
+                    "value": 5870
+                }, 
+                {
+                    "label": "SAMSUNG(三星)", 
+                    "value": 2627
+                }, 
+                {
+                    "label": "lenovo(联想)", 
+                    "value": 2360
+                }, 
+                {
+                    "label": "SonyEricson(索尼爱立信)", 
+                    "value": 2068
+                }, 
+                {
+                    "label": "其他品牌", 
+                    "value": 1747
+                }
+            ]
+        }
+    ], 
+    "title": {
+        "style": "{color: #888888; font-size: 16; text-align: center}", 
+        "text": "手机上网终端排名"
+    }
+}

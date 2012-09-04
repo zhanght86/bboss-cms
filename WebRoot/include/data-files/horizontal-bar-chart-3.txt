@@ -1,0 +1,43 @@
+{
+
+  "title_":{
+    "text":"校园内部网访问量前10名",
+    "style":"{font-size: 20px; font-family: Verdana; text-align: center;}"
+  },
+
+  "elements":[
+    {
+      "type":      "hbar",
+      "tip":       "R:#right#",
+      "colour":    "#9933CC",
+      "text":      "",
+      "font-size": 10,
+      "values" :   [{"right":8900000},{"right":7789510},{"right":6789510},{"right":4689510},{"right":4089510},{"right":3989510},{"right":2789510},{"right":1389510},{"right":1189510},{"right":1089510}]
+    }
+  ],
+  
+  "x_axis":{
+  	"steps": 2000000,
+  	"labels": {
+			"text":"",
+			"labels": [
+				{"text":"400000","size":14,"align": "center"},
+				{"text":"800000","size":14,"align":	"center"},
+				{"text":"1200000","size":14,"align": "center"},
+				{"text":"1200000","size":14,"align": "center"},
+				{"text":"1200000","size":14,"align": "center"}
+			]
+		},
+    "max":    10000000
+  },
+  
+  "y_axis":{
+    "offset":      true,
+    "labels": ["sasd.com","wewe.com","ae.com","read.com","dde.com","wew.com","wow.com","aada.com","1545.com","8090.com"]
+    
+  },
+
+  "tooltip":{
+    "mouse": 2
+  }
+}

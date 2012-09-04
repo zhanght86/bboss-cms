@@ -1,0 +1,35 @@
+{
+
+  "title_":{
+    "text":"Tooltip Hover",
+    "style":"{font-size: 20px; font-family: Verdana; text-align: center;}"
+  },
+
+  "elements":[
+    {
+      "type":      "hbar",
+      "tip":       "#val#<br>L:#left#, R:#right#",
+      "colour":    "#9933CC",
+      "text":      "Page views",
+      "font-size": 10,
+      "values" :   [{"right":10},{"right":15},{"left":20, "right": 10}]
+    }
+  ],
+  "x_axis":{
+    "min":    0,
+    "max":    24,
+    "offset": false,
+    "labels": {
+      "labels": ["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+    }
+  },
+  "y_axis":{
+    "offset":      true,
+    "labels": ["slashdot.org","digg.com","reddit.com"]
+    
+  },
+
+  "tooltip":{
+    "mouse": 1
+  }
+}
