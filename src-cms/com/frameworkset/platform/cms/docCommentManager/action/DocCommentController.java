@@ -22,9 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 
+import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.container.Container;
+import com.frameworkset.platform.cms.container.ContainerImpl;
+import com.frameworkset.platform.cms.docCommentManager.CommentResult;
 import com.frameworkset.platform.cms.docCommentManager.DocComment;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManager;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManagerException;
+import com.frameworkset.platform.cms.docCommentManager.NComentList;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
@@ -35,6 +40,47 @@ import com.frameworkset.util.StringUtil;
 public class DocCommentController {
 
 	private DocCommentManager docCommentManager;
+	
+	public String showAllComments(String siteId,int docId, long channelId, HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		Container container = new ContainerImpl();
+		container.initWithSiteid(siteId, request, request.getSession(false), response);
+		
+		TransactionManager tm = new TransactionManager(); 
+		try
+		{
+			
+			tm.begin(tm.RW_TRANSACTION);
+			// 获得该文档所在的频道评论开关
+			int channelCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "chnl");
+			if (channelCommentSwitch != 0) {
+				// 首先判断频道的评论开关
+				request.setAttribute("commentSwitch", channelCommentSwitch);
+			} else {
+				int documentCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "doc");
+				request.setAttribute("commentSwitch", documentCommentSwitch);
+			}
+			
+			//获得该文档所在频道的评论审核开关
+			Integer aduitSwitchFlag = docCommentManager.getChannelCommentAduitSwitch((int)channelId);
+			if (aduitSwitchFlag != null) {
+				request.setAttribute("aduitSwitchFlag", aduitSwitchFlag);
+			} else {
+				request.setAttribute("aduitSwitchFlag", 1);
+			}
+			String docurl = container.getPublishedDocumentUrl(docId+"");
+			request.setAttribute("docId", docId);
+			request.setAttribute("channelId", channelId);
+			request.setAttribute("docurl", docurl);
+			
+
+			return "path:showAllComments";
+		}
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
 
 	/**
 	 * 展示文档评论
@@ -47,28 +93,38 @@ public class DocCommentController {
 	public String showDocumentCommentList(int docId, long channelId, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
-		// 获得该文档所在的频道评论开关
-		int channelCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "chnl");
-		if (channelCommentSwitch != 0) {
-			// 首先判断频道的评论开关
-			request.setAttribute("commentSwitch", channelCommentSwitch);
-		} else {
-			int documentCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "doc");
-			request.setAttribute("commentSwitch", documentCommentSwitch);
+		TransactionManager tm = new TransactionManager(); 
+		try
+		{
+			
+			tm.begin(tm.RW_TRANSACTION);// 获得该文档所在的频道评论开关
+			int channelCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "chnl");
+			if (channelCommentSwitch != 0) {
+				// 首先判断频道的评论开关
+				request.setAttribute("commentSwitch", channelCommentSwitch);
+			} else {
+				int documentCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "doc");
+				request.setAttribute("commentSwitch", documentCommentSwitch);
+			}
+			
+			//获得该文档所在频道的评论审核开关
+			Integer aduitSwitchFlag = docCommentManager.getChannelCommentAduitSwitch((int)channelId);
+			if (aduitSwitchFlag != null) {
+				request.setAttribute("aduitSwitchFlag", aduitSwitchFlag);
+			} else {
+				request.setAttribute("aduitSwitchFlag", 1);
+			}
+	
+			request.setAttribute("docId", docId);
+			request.setAttribute("total", docCommentManager.getTotalCommnet( docId));
+			request.setAttribute("channelId", channelId);
+	
+			return "path:showDocumentCommentList";
 		}
-		
-		//获得该文档所在频道的评论审核开关
-		Integer aduitSwitchFlag = docCommentManager.getChannelCommentAduitSwitch((int)channelId);
-		if (aduitSwitchFlag != null) {
-			request.setAttribute("aduitSwitchFlag", aduitSwitchFlag);
-		} else {
-			request.setAttribute("aduitSwitchFlag", 1);
+		finally
+		{
+			tm.releasenolog();
 		}
-
-		request.setAttribute("docId", docId);
-		request.setAttribute("channelId", channelId);
-
-		return "path:showDocumentCommentList";
 	}
 
 	/**
@@ -91,12 +147,36 @@ public class DocCommentController {
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ListInfo docCommentList = docCommentManager.getCommnetList(docId, (int) offset, pagesize);
-
+		request.setAttribute("total", docCommentList.getTotalSize());
 		request.setAttribute("docCommentList", docCommentList);
 		request.setAttribute("docId", docId);
 
 		return "path:queryDocumentCommentList";
 	}
+	
+	
+	/**
+	 * 查询文档前n条评论和评论总数
+	 * 
+	 * @param sortKey 排序关键字
+	 * @param desc 排序方式	 
+	 * @param docId 文档ID
+	 * @param HttpServletRequest request
+	 * @return String
+	 * @throws Exception Exception
+	 */
+	public @ResponseBody(datatype="jsonp") NComentList getDocumentCommentNList(int docId,int n) {
+
+		
+		try {
+			NComentList docCommentList = docCommentManager.getCommnetList(docId, n);
+			return docCommentList;
+		} catch (Exception e) {
+			return null;
+		}	
+		
+	}
+	
 
 	/**
 	 * 展示所有该文档的评论
@@ -117,7 +197,7 @@ public class DocCommentController {
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ListInfo docCommentList = docCommentManager.getCommnetList(docId, (int) offset, pagesize);
-
+		
 		request.setAttribute("docCommentList", docCommentList);
 		request.setAttribute("docId", docId);
 
@@ -136,13 +216,14 @@ public class DocCommentController {
 	 * @throws Exception
 	 */
 	public @ResponseBody(datatype = "jsonp")
-	String addNewComment(long channelId, int docId, String commentUser, String isGuest, String docComment, HttpServletRequest request)
+	CommentResult addNewComment(long channelId, int docId, String commentUser, String isGuest, String docComment, HttpServletRequest request)
 			throws Exception {
 
 		DocComment docCommentBean = new DocComment();
 
-		if (Boolean.parseBoolean(isGuest)) {
-			docCommentBean.setUserName("__quest");
+		if (StringUtil.isEmpty(commentUser)) {
+			if( Boolean.parseBoolean(isGuest))
+				docCommentBean.setUserName("__quest");
 		} else {
 			docCommentBean.setUserName(URLDecoder.decode(commentUser, "UTF-8"));
 		}
@@ -165,15 +246,16 @@ public class DocCommentController {
 			status = aduitSwitchFlag == 0 ? 2 : 1;
 		}
 		docCommentBean.setStatus(status);
-
+		CommentResult result = new CommentResult();
+		result.setAduitSwitchFlag(aduitSwitchFlag+ "");
 		try {
 			docCommentManager.addOneComment(docCommentBean);
+			result.setMsg("success");
 		} catch (DocCommentManagerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.getLocalizedMessage();
+			result.setMsg("failed");
+			result.setError(StringUtil.exceptionToString(e));
 		}
 
-		return "success";
+		return result;
 	}
 }

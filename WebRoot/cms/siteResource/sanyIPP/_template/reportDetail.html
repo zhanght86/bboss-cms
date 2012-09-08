@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>三一集团内网宣传平台</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href="components/highslide/highslide.css" rel="stylesheet" type="text/css" />
+<cms:distribute dir="components/highslide" />
+<script type="text/javascript" src="js/nav.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="components/highslide/highslide-with-gallery.js"></script>
+<script>
+	function show(a,b){
+		$(".tab div").each(function(){
+			$(this).removeClass("current")							
+		});
+		$(".tab div").eq(a-1).addClass("current");
+		$(".tabcontent > div").removeClass("noshow");	
+		$("#tab"+b).addClass("noshow");	
+	}
+	
+	  hs.graphicsDir = '../../../components/highslide/graphics/';
+      hs.align = 'center';
+      hs.transitions = ['expand', 'crossfade'];
+      hs.fadeInOut = true;
+      hs.dimmingOpacity = 0.8;
+      hs.outlineType = 'rounded-white';
+      hs.captionEval = 'this.thumb.alt';
+      hs.marginBottom = 105; 
+      hs.numberPosition = 'caption';
+
+      hs.addSlideshow({
+        interval: 5000,
+        repeat: false,
+        useControls: true,
+        overlayOptions: {
+          className: 'text-controls',
+          position: 'bottom center',
+          relativeTo: 'viewport',
+          offsetY: -60
+        },
+        thumbstrip: {
+          position: 'bottom center',
+          mode: 'horizontal',
+          relativeTo: 'viewport'
+        }
+      });
+      
+      $(document).ready(function() {
+ 
+ 		var siteId = '<cms:siteinfo property="siteId"/>';
+		var channelId = '<cms:channel  property="channelId" />';
+		var docId = '<cms:cell colName="document_id"/>';
+ 		var pageURL = window.location.href;
+
+		var siteName = '<cms:siteinfo property="name"/>';
+ 		var channelName = '<cms:channel property="name"/>';
+		var docName = '<cms:cell colName="title"/>';
+ 		
+		var url =  '<cms:siteparam name="staticcontext"/>/counter/browserCounter.freepage?jsonp_callback=?';
+		
+		$.getJSON(url, { siteId:siteId, channelId:channelId, docId:docId, pageURL:pageURL, siteName:encodeURIComponent(siteName), 
+			channelName:encodeURIComponent(channelName), docName:encodeURIComponent(docName) },
+            function(data) {   
+                 
+            });
+	 });
+</script>
+</head>
+<body>
+<div id="wrapper">
+  <div  class="top">
+    <div class="logo_top"><img src="images/top_logo.jpg" width="303" height="31" /></div>
+
+  </div>
+  <div class="daohang">
+       <cms:sanynav/>
+    <div class="clear"></div>
+  </div>
+  <div class="container">
+      <cms:sanyleftnav channel="news"/>
+    <div class="rightcontent">
+      <div class="titleMenu">
+        <div class="path"><cms:position/></div><span class="title"><cms:channel property="name"/> </span></div>
+      <div class="report_div">
+      <cms:outline docType="概述" count="1">
+        <div class="date"><cms:cell colName="publishTime"  dateformat="yyyy-MM-dd "/></div>
+        <div class="title"><cms:cell colName="title" /></div>
+		<P><cms:cell colName="docabstract" /></P>
+		</cms:outline>
+		
+		<div class="aboutlist_zibt1">
+		<div class="title">焦点新闻</div>
+		<DIV class=news_ima2>
+				<SCRIPT type=text/javascript>
+				var widths=240; //焦点图片宽
+				var w=0;
+				var widthss=widths+w;
+				var heights=167; //焦点图片高
+				var heightss=heightss+w;
+				var heightt=0;
+				
+				 var imgArr=new Array();
+                 var urlArr=new Array();
+                 
+                 <cms:outline  docType="焦点新闻" >
+	                   imgArr.push("<cms:uri colName="picPath"/>");
+	               	   urlArr.push("<cms:url/>");
+	             </cms:outline> 
+					
+				
+				var counts=imgArr.length; //总条数
+				var nn=1; //当前所显示的滚动图
+				var key=0; //标识是否为第一次开始执行
+				var tt; //标识作用
+
+				function change_img()
+				{
+				 var ss = nn;
+					if(key==0){key=1;} //如果第一次执行KEY=1，表示已经执行过一次了。
+					else if(document.all)//document.all仅IE6/7认识，firefox不会执行此段内容
+				{
+					document.getElementById("picjs").filters[0].Apply(); //将滤镜应用到对像上
+					document.getElementById("picjs").filters[0].Play(duration=1); //开始转换,效果换换时间
+				}
+				var temp= nn-1;
+				eval('document.getElementById("picjs").src=imgArr['+temp+']'); //替换图片
+				eval('document.getElementById("url").href=urlArr['+temp+']'); //替换URL
+				
+				//eval('document.getElementById("title").innerHTML=txt'+temp+'.txt'); //替换ALT 
+				
+				for (var i=1;i<=counts;i++)
+				{
+					document.getElementById("xxjdjj"+i).className='axx'; //将下面黑条上的所有链接变为未选中状态
+					document.getElementById("xxjdjj"+i).blur();
+				}
+			      document.getElementById("xxjdjj"+ss).className='bxx'; //将当前页面的ID设置为选中状态
+				  document.getElementById("xxjdjj"+ss).blur();
+
+				nn++;
+				if(nn>counts){nn=1;} //如果ID大于总图片数量。则重放
+				//if(nn>counts){nn=counts;}如果ID大于总图片数量。则暂停
+				tt=setTimeout('change_img()',6000); //在6秒后重新执行change_img()方法
+				}
+				function changeimg(n)//点击黑条上的链接执行的方法。
+				{
+					nn=n; //当前页面的ID等于传入的N值,
+					window.clearInterval(tt); //清除用于循环的TT
+					//重新执行change_img();但change_img()内所调用的图片ID已经在此处被修改,会从新ID处开始执行.
+					change_img();
+				}
+				//样式表
+				document.write('<style>');
+				document.write('.axx{padding:1px 10px;border-left:#cccccc 1px solid;font-size:12px;}');
+				document.write('a.axx:link,a.axx:visited{text-decoration:none;color:#fff;line-height:12px;font:9px sans-serif;background-color:#666;}');
+				document.write('a.axx:active,a.axx:hover{text-decoration:none;color:#fff;line-height:12px;font:9px sans-serif;background-color:#999;}');
+				document.write('.bxx{padding:1px 7px;border-left:#cccccc 1px solid;}');
+				document.write('a.bxx:link,a.bxx:visited{text-decoration:none;color:#fff;line-height:12px;font:9px sans-serif;background-color:#003E98;}');
+				document.write('a.bxx:active,a.bxx:hover{text-decoration:none;color:#fff;line-height:12px;font:9px sans-serif;background-color:#003E98;}');
+				document.write('</style>');
+				//内容部分
+				document.write('<div style="width:'+widthss+'px;height:'+heights+'px;overflow:hidden;text-overflow:clip;float:left;">');
+				document.write('<div><a id="url" target="_blank"><img id="picjs" style="border:0;FILTER: progid:DXImageTransform.Microsoft. BlendTrans(duration=2)" width='+widths+' height='+heights+' /></a></div>');
+				document.write('<div style="filter:alpha(style=1,opacity=90,finishOpacity=10);background: #888888;width:217px;text-align:left;padding-left:20px;top:-16px;position:relative;margin:1px;margin-left:0px;margin-bottom:0px;height:15px;border:0px;padding-top:1px;z-index:400;"><div>');
+				for(var i=1;i<counts+1;i++){document.write('<a href="javascript:changeimg('+i+');" id="xxjdjj'+i+'" class="axx" target="_self">'+i+'</a>');}
+				document.write('</div></div></div>');
+				//开始执行滚动操作
+				change_img();
+				</SCRIPT>
+            </DIV>
+ <cms:outline docType="焦点新闻" count="1">
+<div class="title2"><cms:link colName="title" target="_blank"/></div>
+<cms:cell colName="docabstract" />
+</div>
+</cms:outline>
+<div class="Series">
+<div class="title">系列报道</div>
+ <cms:outline docType="系列报道">
+ <ul><li><div class="date"><cms:cell colName="publishTime"  dateformat="yyyy-MM-dd "/></div> <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="37"
+					replace=""
+					useTitle="false"/> </li></li>
+ </cms:outline >
+</div>
+
+<div class="photos">
+<div class="title">相关图片</div>
+<ul>
+<cms:outline config="{'doctype':'相关图片','loadrelatepic':true}">
+<cms:list colName="relatePics">
+<li><a href="<cms:attachmenturl />" class=highslide onclick="return hs.expand(this)" ><img src="<cms:attachmenturl />"/></a></li>
+</cms:list>
+</cms:outline>
+</ul>
+</div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="isany"></div>
+    <div class="quality"></div>
+    <div class="copy_right"> <a href="http://www.sanygroup.com/group/zh-cn/" >三一集团门户</a>|<a href="http://www.sanygroup.com/group/zh-cn/media/product_download.htm">资料下载</a>|<a href="http://www.sanygroup.com/group/zh-cn/foot/item.htm">使用条款</a><br/>
+      &nbsp;
+      <script type="text/javascript">
+		copyright=new Date();
+		update=copyright.getFullYear();
+		document.write("1989-"+ update + " 三一集团有限公司 版权所有 ");
+	  </script>
+    </div>
+</div>
+</body>
+</html>

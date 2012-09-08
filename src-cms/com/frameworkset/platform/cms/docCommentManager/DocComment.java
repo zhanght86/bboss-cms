@@ -9,6 +9,7 @@ public class DocComment implements java.io.Serializable {
 	private String docComment;				//评论内容
 	private String userName;			//评论发表人名
 	private Date subTime;				//评论发表时间
+	private String str_subTime;
 	private String userIP;				//评论发表人IP
 	private int srcCommentId;			//源评论ID
 	private int status;                 //评论状态，0－未审；1－通过；2－删除 
@@ -79,6 +80,12 @@ public class DocComment implements java.io.Serializable {
 	}
 	public void setDocComment(String docComment) {
 		this.docComment = docComment;
+	}
+	public String getStr_subTime() {
+		return str_subTime;
+	}
+	public void setStr_subTime(String str_subTime) {
+		this.str_subTime = str_subTime;
 	}
 	
 }

@@ -4,10 +4,10 @@
 	
 	<property name="queryNewsByPublishTimeAndKeywords">
 		<![CDATA[
-			select doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime, ds.srcname as docsource_name, 
+			select nvl(arrange.order_no,-1) order_no_nvl,doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime,doc.docwtime, ds.srcname as docsource_name, 
 			doc.docabstract, doc.pic_path as picPath, site.second_name as siteName
 			from td_cms_document doc, td_cms_docsource ds, td_cms_channel channel, td_cms_site site,
-			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.publishtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
+			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.document_id = arr2.document_id and   doc2.docwtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
 			where doc.docsource_id = ds.docsource_id
       		and doc.channel_id = channel.channel_id
       		and channel.site_id = site.site_id
@@ -29,18 +29,18 @@
 			#if ($siteId)
 				and site.site_id = #[siteId]
 			#end
-			 order by arrange.order_no desc, doc.ordertime desc
+			 order by order_no_nvl desc, doc.ordertime desc
 		]]>
 	</property>
 	
 	<property name="queryVideosByOrderType">
 		<![CDATA[
-			select doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime, ds.srcname as docsource_name, 
+			select nvl(arrange.order_no,-1) order_no_nvl,doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime,doc.docwtime, ds.srcname as docsource_name, 
 			doc.pic_path as picPath, site.second_name as siteName, doc.mediapath,
 			(select count(cm.comment_id) from td_cms_doc_comment cm where cm.doc_id = doc.document_id and cm.status = 1) cmCount,
 			nvl((select count(vh.doc_id) from td_cms_vidio_hits vh where doc.document_id = vh.doc_id(+)), 0) playedCount
 			from td_cms_document doc, td_cms_docsource ds, td_cms_channel channel, td_cms_site site,
-			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where  doc2.publishtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
+			 (select arr2.* from td_cms_doc_arrange arr2,  td_cms_document doc2 where doc2.document_id = arr2.document_id and   doc2.docwtime between to_date(start_time,'YYYY-MM-DD HH24:MI:SS') and to_date(end_time, 'YYYY-MM-DD HH24:MI:SS')) arrange
 			where doc.docsource_id = ds.docsource_id
       		and doc.channel_id = channel.channel_id
       		and channel.site_id = site.site_id
@@ -53,13 +53,13 @@
 				and site.site_id = #[siteId]
 			#end
 			 #if ($orderByTime && !$orderByTime.equals(""))
-			 	order by doc.ordertime desc, arrange.order_no desc
+			 	order by order_no_nvl desc,doc.ordertime   desc
 			 #end
 			  #if ($orderByPlay && !$orderByPlay.equals(""))
-			 	order by playedCount desc, cmCount desc, arrange.order_no desc
+			 	order by order_no_nvl desc,playedCount desc, cmCount desc
 			 #end
 			  #if ($orderByComment && !$orderByComment.equals(""))
-			 	order by cmCount desc, playedCount desc, arrange.order_no desc
+			 	order by order_no_nvl desc,cmCount desc, playedCount desc 
 			 #end
 		]]>
 	</property>

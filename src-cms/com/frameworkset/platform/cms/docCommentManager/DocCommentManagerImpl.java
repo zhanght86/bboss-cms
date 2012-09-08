@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
-
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.transaction.TransactionException;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.docCommentManager.docCommentDictManager.DocCommentDict;
 import com.frameworkset.platform.cms.mailmanager.EMailImpl;
 import com.frameworkset.platform.cms.mailmanager.EMailInterface;
@@ -194,6 +194,45 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		return executor.queryListInfoBean(DocComment.class, "getCommnetList",
 				offset, maxItem, paramMap);
 	}
+	
+	public NComentList getCommnetList(int docId,int n)
+			throws Exception {
+		// TODO Auto-generated method stub
+		// throw new DocCommentManagerException("未实现！");
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("docId", docId);
+		paramMap.put("n", n+1);
+		TransactionManager tm = new TransactionManager(); 
+		try
+		{
+			tm.begin(tm.RW_TRANSACTION);
+			NComentList nComentList = new NComentList();
+			nComentList.setComments(executor.queryListBean(DocComment.class, "getCommnetNList",paramMap));
+			nComentList.setTotal(getTotalCommnet(docId));
+			return nComentList;
+		} catch (SQLException e) {
+			throw e;
+		
+		} catch (Exception e) {
+			throw e;
+		}		
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
+
+	public int getTotalCommnet(int docId)
+			throws SQLException {
+		
+
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("docId", docId);
+		
+		return executor.queryObjectBean(int.class, "getTotalCommnet",paramMap);
+	}
+	
 
 	public ListInfo getCommnetList(String sql, int offset, int maxItem)
 			throws DocCommentManagerException {

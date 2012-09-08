@@ -44,6 +44,17 @@ public interface Container extends java.io.Serializable {
 	public void init(String site,HttpServletRequest request,
 			 HttpSession session,
 			 HttpServletResponse response) throws ContainerException;
+	
+	/**
+	 * 初始化内容管理系统容器，在动态页面上使用，必须指定站点的英文名称
+	 * @param site 站点英文名称
+	 * @param request
+	 * @param session
+	 * @param response
+	 */
+	public void initWithSiteid(String siteid,HttpServletRequest request,
+			 HttpSession session,
+			 HttpServletResponse response) throws ContainerException;
 	/**
 	 * 添加链接以便系统能够自动发布出去，通过
 	 * @param link

@@ -28,7 +28,7 @@
 				     	<li>
 				     		<pg:cell colName="docsource_name"/>：</span>
 				           	<a title='<pg:cell colName="title"/>' target='_blank' href='<pg:cell colName="docpuburl"/>' class='linkTagClass '><pg:cell colName="title"/></a>
-				       		<pg:cell colName="publishTime" dateformat="yyyy-MM-dd"/>
+				       		<pg:cell colName="docwtime" dateformat="yyyy-MM-dd"/>
 				       </li>
 				 </pg:list>
 				 <br/>

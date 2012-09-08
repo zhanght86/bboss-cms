@@ -77,6 +77,23 @@ public interface DocCommentManager extends java.io.Serializable {
 	 * @throws DocCommentManagerException
 	 */
 	public ListInfo getCommnetList(int docId,int offset,int maxItem) throws SQLException;
+	
+	/**
+	 * 获取文档评论 前n条数据
+	 * @param docId
+	 * @return
+	 * @throws SQLException
+	 */
+	public NComentList getCommnetList(int docId,int n)
+			throws Exception;
+	/**
+	 * 获取总评论数
+	 * @param docId
+	 * @return
+	 * @throws SQLException
+	 */
+	public int getTotalCommnet(int docId)
+			throws SQLException;
 	/**
 	 * 根据sql查询语句获取文档列表
 	 * @param sql

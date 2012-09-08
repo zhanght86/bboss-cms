@@ -38,7 +38,25 @@ public class ContainerImpl implements Container{
 	
 	public static final int LINK_FROM_WEBPRJS = 1;
 	public static final int LINK_FROM_TEMPLATE = 2;
-	
+	/**
+	 * 初始化内容管理系统容器，在动态页面上使用，必须指定站点的英文名称
+	 * @param site 站点英文名称
+	 * @param request
+	 * @param session
+	 * @param response
+	 */
+	public void initWithSiteid(String siteid,HttpServletRequest request,
+			 HttpSession session,
+			 HttpServletResponse response) throws ContainerException
+	 {
+			try {
+				String site = CMSUtil.getSiteCacheManager().getSite(siteid).getSecondName();
+				this.init(site, request, session, response);
+			} catch (Exception e) {
+				throw new ContainerException(e);
+			}
+			
+	 }
 	/**
 	 * 本方法在模板中调用
 	 */

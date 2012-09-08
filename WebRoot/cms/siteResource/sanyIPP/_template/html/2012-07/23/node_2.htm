@@ -1,0 +1,552 @@
+﻿<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>三一集团数字报刊平台</title>
+    <link href="../../../style/calendar.css" rel="stylesheet" type="text/css" />
+    <script language="Javascript" src="../../../js/excanvas.compiled.js"></script>
+
+    <script language="Javascript" src="../../../js/jquery-1.3.2.min.js"></script>
+    <script src="../../../js/swfobject.js" type="text/javascript"></script>
+<script type="text/javascript"> 
+    var JQ = $;
+    </script>    
+
+    <script language="Javascript" src="../../../js/highlight.js"></script>     
+
+    <script language="Javascript" src="../../../js/prototype.js"></script>
+
+    <script language="Javascript" src="../../../js/mp.js"></script>
+
+    <script language="Javascript" src="../../../js/calendar2.js"></script>
+
+    <!--<script language="Javascript" src="../../../js/range.js"></script>-->
+
+    <script language="Javascript" src="../../../js/newPower.js"></script>
+
+    <style type="text/css">
+<!--
+body { background: #c7c7c7;}
+body,td,th,prelink {font-size: 12px;}
+.STYLE30 {color: #333; font-weight: bold; }
+.commonlight2{background-color:#a2dbff;}
+.commoncolor3{background-color:#FFFFFF;}
+-->
+</style>
+
+    <script language="javascript">
+
+function MM_swapImgRestore() { //v3.0
+ var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+ var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+ var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+ if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+ var p,i,x; if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+ d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+ if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+ for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+ if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+
+ var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+ if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+    </script>
+
+</head>
+<span id="leveldiv" title="点击查看内容" style="border-top-width: 0px; border-left-width: 0px;
+    z-index: 100; left: 233px; border-bottom-width: 0px; width: 210px; cursor: hand;
+    position: absolute; top: 123px; height: 34px; border-right-width: 0px"></span>
+<body onLoad="initialize();initMPPage();makeCanvas();" text="#000000" vlink="#000000" alink="#ff0000"
+    link="#000000" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+<table cellpadding="0" cellspacing="0" width="1012" align="center" border="0" background="../../../image/bg1.jpg" style="background-repeat:repeat-y;">
+<tr><td>
+    <table cellspacing="0" cellpadding="0" width="1000" align="center" border="0" background="../../../image/bg.jpg">
+    <tr>
+          <td colspan="2" align="center" height="130" style="background-repeat: no-repeat; background:url(../../../image/t1.jpg)" id="showgg"></td>
+        </tr>
+        <tr>
+            <td valign="top" width="410">
+                <table width="410" border="0" align="right" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="410" align="middle">
+                            <table width="410" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td width="25" rowspan="3" valign="top"><img src="../../../image/jwb_red_r1_c1.jpg" width="25" height="30" border="0" id="logoImg">
+                                        </td>
+                                    <td width="372" valign="top">
+                                        </td>
+                                    <td width="13" rowspan="2" valign="top" background="../../../image/jwb_red_r6_c3.jpg"
+                                        style="background-repeat: repeat-y; overflow:hidden;"> <img src="../../../image/jwb_red_r1_c3.jpg" width="13" height="30" border="0">
+                                        </td>
+                                </tr>
+                                <tr>
+                                    <td width="372" bgcolor="#ffffff" style="border: #111111 1px solid;padding:10px;">
+                                    <div id="main-ed-map">
+                                        <map name="PagePicMap">
+                                            
+                                                <area coords="21,41,67,41,67,60,21,60,21,41,79,38,308,38,308,60,79,60,79,38" shape="polygon" href="content_2_1.htm"> 
+                                            
+                                                <area coords="9,70,305,70,305,93,9,93,9,70,9,95,261,95,261,105,9,105,9,95,9,70,9,113,36,113,36,116,9,116,9,113,9,70,10,123,21,123,21,135,10,135,10,123,9,70,26,124,92,124,92,128,26,128,26,124,9,70,27,131,118,131,118,136,27,136,27,131,9,70,9,143,66,143,66,227,9,227,9,143,9,70,71,144,128,144,128,227,71,227,71,144,9,70,10,234,18,234,18,246,10,246,10,234,9,70,24,234,55,234,55,239,24,239,24,234,9,70,24,241,98,241,98,247,24,247,24,241,9,70,9,253,66,253,66,377,9,377,9,253,9,70,71,254,128,254,128,378,71,378,71,254,9,70,9,389,21,389,21,401,9,401,9,389,9,70,26,390,91,390,91,394,26,394,26,390,9,70,26,397,85,397,85,403,26,403,26,397,9,70,9,409,66,409,66,542,9,542,9,409,9,70,71,409,128,409,128,542,71,542,71,409,9,70,144,268,154,268,154,280,144,280,144,268,9,70,158,269,194,269,194,274,158,274,158,269,9,70,158,276,217,276,217,282,158,282,158,276,9,70,147,287,228,287,228,388,147,388,147,287,9,70,297,250,340,250,340,253,297,253,297,250,9,70,137,124,342,124,342,255,137,255,137,124,9,70,138,399,237,399,237,464,138,464,138,399,9,70,207,537,234,537,234,540,207,540,207,537,9,70,138,469,237,469,237,542,138,542,138,469" shape="polygon" href="content_2_2.htm"> 
+                                            
+                                                <area coords="246,283,332,283,332,300,246,300,246,283,255,268,274,268,274,277,255,277,255,268,246,283,246,304,334,304,334,543,246,543,246,304" shape="polygon" href="content_2_3.htm"> 
+                                            
+                                        </map>
+                                        <img src="../../../resfile/2012-07-23/02/Page_b.jpg" border="0" usemap="#PagePicMap">
+                                        </div></td>
+                                </tr>
+                                <tr>
+                                    <td height="23" align="right" valign="top">
+                                        <img src="../../../image/jwb_red_r8_c2.jpg" width="355" height="9"></td>
+                                    <td valign="top">
+                                        <img src="../../../image/jwb_red_r8_c3.jpg" width="9" height="9"></td>
+                                </tr>
+                            </table>
+                            <table width="373" border="0" cellpadding="5" cellspacing="0" style="margin-bottom: 3px">
+                                <tr>
+                                    <td width="25" align="left">
+                                        </td>
+                                    <td width="145" align="left">
+                                        02：<strong>聚焦</strong></td>
+                                    <td width="125" align="right" nowrap style="padding-right: 0px; padding-left: 0px;
+                                        padding-bottom: 0px; padding-top: 0px">&nbsp;</td>
+                                    <td width="50" align="right" valign="center" nowrap style="padding-right: 5px">&nbsp;</td>
+                                </tr>
+                            </table>
+                            <table cellspacing="0" cellpadding="4" width="376" border="0">
+                                <tr>
+                                    <td width="12" align="left" valign="top">&nbsp;
+                                        </td>
+                                    <td width="348" align="left" valign="top">&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                </table>
+            </td>
+            <td valign="top">
+                <table height="30" cellspacing="0" cellpadding="0" width="580" border="0">
+                    <tr>
+                        <td width="40%" align="center" valign="middle">
+                            <span class="default"><strong>2012年07月23日 </strong><strong> 星期一 出版</strong>
+                            </span>
+                        </td>
+                        <td width="60%" align="right" valign="middle" height="30"><span id="goIndexSpan"><a href="../../../paperindex.htm">返回首页</a> |</span> <span id="goTilePageSpan"><a
+                                href="index_2012-07-23.htm">版面概览</a> |</span> <span id="bmdhSpan" onMouseOver="document.getElementById('bmdh').style.display = 'block';setbmdh();"
+                                    onmouseout="document.getElementById('bmdh').style.display = 'none';"><a href="javascript:;">
+                                        版面导航</a> |</span> <span id="btdhSpan" onMouseOver="document.getElementById('btdh').style.display = 'block';setbtdh();"
+                                            onmouseout="document.getElementById('btdh').style.display = 'none';"><a href="javascript:;">
+                                                标题导航</a></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                    </tr>
+                </table>
+                <table width="590" height="300" border="0" cellpadding="0" cellspacing="0">
+                    <tr valign="top">
+                        <td width="350" align="left">
+                            <table width="350" height="192" border="0" cellpadding="0" cellspacing="0" style="margin-bottom: 5px; margin-top:10px;">
+                              <tr>
+                                <td height="192" valign="top">
+                                <table width="350"  height="183" border="0" cellpadding="0" cellspacing="0" style="border: #C0C0C0 1px solid">
+                                  <tr>
+                                    <td width="200" background="../../../image/image04.jpg" valign="top"><img src="../../../image/image03.jpg" width="180" height="23"></td>
+                                    <td nowrap width="141" class="px12"  background="../../../image/image04.jpg" >
+                                                    <a class="preart" href="node_1.htm" id="ed_pre">上一版<span style='font-size: 12px; font-family: webdings'>3</span></a>&nbsp;&nbsp;
+                                                     <a class="preart" href="node_3.htm" id="ed_next"><span style='font-size: 12px; font-family: webdings'>
+                                                        4</span>下一版</a>&nbsp;&nbsp;</td>
+                                  </tr>
+                                  <tr>
+                                    <td height="158" colspan="2" bgcolor="#FFFFFF" style="border-top: #C0C0C0 1px solid"><div style="height: 150px; width: 100%;">
+                                      <table cellspacing="0" cellpadding="2" width="100%" border="0">
+                                        <tbody>
+                                          
+                                            <tr>
+                                              <td class="default" align="left">&nbsp;<a id="pageLink2" href="node_1.htm">第01版：一版要闻</a></td>
+                                              <td nowrap align="middle" width="55"><a href="../../../resfile/2012-07-23/01/01.pdf" target="_blank"> <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a></td>
+                                            </tr>
+                                          
+                                            <tr>
+                                              <td class="default" align="left">&nbsp;<a id="pageLink2" href="node_2.htm">第02版：聚焦</a></td>
+                                              <td nowrap align="middle" width="55"><a href="../../../resfile/2012-07-23/02/02.pdf" target="_blank"> <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a></td>
+                                            </tr>
+                                          
+                                            <tr>
+                                              <td class="default" align="left">&nbsp;<a id="pageLink2" href="node_3.htm">第03版：资讯</a></td>
+                                              <td nowrap align="middle" width="55"><a href="../../../resfile/2012-07-23/03/03.pdf" target="_blank"> <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a></td>
+                                            </tr>
+                                          
+                                            <tr>
+                                              <td class="default" align="left">&nbsp;<a id="pageLink2" href="node_4.htm">第04版：生活</a></td>
+                                              <td nowrap align="middle" width="55"><a href="../../../resfile/2012-07-23/04/04.pdf" target="_blank"> <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a></td>
+                                            </tr>
+                                          
+                                        </tbody>
+                                      </table>
+                                     </div></td>
+                                  </tr>
+                                </table>
+                                </td>
+                              </tr>
+                            </table>
+                            <table width="350" border="0" cellspacing="0" cellpadding="0" style="border: #C0C0C0 1px solid">
+              <tr>
+                                                <td bgcolor="#FFFFFF" height="4">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td bgcolor="#FFFFFF" height="20" style="padding-left: 10px;">
+                                                    <span class="STYLE30">标题导航</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td bgcolor="#FFFFFF">
+                                                    <img src="../../../image/image06.jpg"></td>
+                                            </tr>
+                                            <tr>
+                                                <td bgcolor="#FFFFFF" style="padding-left: 10px;">
+                                                    <div id="main-ed-articlenav-list" style="height: 170px; overflow-y: scroll; width: 100%;">
+                                                        <table cellspacing="0" cellpadding="1" border="0">
+                                                            <tbody>
+                                                                
+                                                                <tr>
+                                                                    <td class="default" valign="top">
+                                                                        <img src="../../../image/checkbox.gif" width="10" height="10">
+                                                                    </td>
+                                                                    <td class="default" valign="top">
+                                                                        <div style="display: inline" id="content_2_1">
+                                                                        <a href="content_2_1.htm">信心三一</a></div>
+                                                                        <span style="display:none">#article-pretitle#~~~#article-subtitle#</span>
+                                                                    </td>
+                                                                </tr>
+                                                                 
+                                                                <tr>
+                                                                    <td class="default" valign="top">
+                                                                        <img src="../../../image/checkbox.gif" width="10" height="10">
+                                                                    </td>
+                                                                    <td class="default" valign="top">
+                                                                        <div style="display: inline" id="content_2_2">
+                                                                        <a href="content_2_2.htm">并购半年，优势叠加效应初显</a></div>
+                                                                        <span style="display:none">#article-pretitle#~~~#article-subtitle#</span>
+                                                                    </td>
+                                                                </tr>
+                                                                 
+                                                                <tr>
+                                                                    <td class="default" valign="top">
+                                                                        <img src="../../../image/checkbox.gif" width="10" height="10">
+                                                                    </td>
+                                                                    <td class="default" valign="top">
+                                                                        <div style="display: inline" id="content_2_3">
+                                                                        <a href="content_2_3.htm">三一并购凸显示范效应
+“中国制造”海外并购加速</a></div>
+                                                                        <span style="display:none">#article-pretitle#~~~#article-subtitle#</span>
+                                                                    </td>
+                                                                </tr>
+                                                                 
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                        </td>
+                        <td width="200" align="left">
+                        <table width="200" height="60" border="0" align="left" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td valign="top" align="center">
+
+                                        <script language="JavaScript">
+<!--
+document.write("<div id=detail style=position:absolute;width:250px;></div>");
+//-->
+                                        </script>
+
+                                        <table cellspacing="0" cellpadding="0" width="200" border="0">
+                                            <tr>
+                                                <td height="10">
+                                                <table width="100%" height="27" border="0">
+                                            <tr>
+                                                <td width="141" align="center" valign="bottom" style="padding-right:20px; padding-top:5px;"><span id="upqi" style="display: none"> <img src="../../../image/image01.jpg"><a href="#" onClick="goPrePeriod()" id="preHref">上一期</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                    href="#" onClick="goNextPeriod()" id="nextHref">下一期</a><img src="../../../image/image02.jpg" width="5"
+                                        height="9"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                             </tr>
+                                        </table>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="0">
+                                                    <span id="dmtFrameQY"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                            <td>
+                                               <span id="searchQY" style="display: none"></span>
+                                            </td>
+                                            </tr>
+                                              <tr>
+                                                <td height="10">
+                                                </td>
+                                            </tr>
+                              <tr>
+                                                <td background="../../../image/bg-2.gif" class="default" style="padding-right: 3px; padding-left: 3px; padding-bottom: 3px; padding-top: 3px;
+                                                   border: #d2d2d2 1px solid;">
+                                                    <div align="center">
+                                                        <strong class="whitenav"><font style="font-size: 13px;">按日期查阅</font></strong></div>
+                                                </td>
+                                            </tr>
+                                            <tr align="center">
+                                                <td>
+                                                    <table width="200" height="100" border="0" cellpadding="0" cellspacing="0" style="border: #d2d2d2 1px solid; border-top:none;">
+                                                        <tr>
+                                                            <td height="33" colspan="2" align="left" bgcolor="#FFFFFF">
+                                                                <form name="CLD" style="padding: 0px; margin: 0px;">
+                                                                    <table cellspacing="0" cellpadding="0" width="100%" align="center" border="0">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <table width="100%" align="center" border="0" cellpadding="1" cellspacing="1">
+                                                                                    <tr class="default" align="center">
+                                                                                        <td height="15" colspan="7" bgcolor="#FFFFFF">
+                                                                                            <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                                                                                                <tr align="center">
+                                                                                                    <td align="left" nowrap>
+                                                                                                        <img src="../../../image/d1.gif" width="7" height="11" style="cursor: hand;" onClick="turnpage(SY,0)"></td>
+                                                                                                    <td>
+                                                                                                        <select class="jumpmenu" onChange="changeMPCld()" name="SY">
+
+                                                                                                            <script language="JavaScript">
+					for(i=autoStartYear;i<autoEndYear;i++)
+					document.write('<option>'+i+'</option>')
+                                                                                                            </script>
+
+                                                                                                        </select>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <img src="../../../image/d.gif" width="7" height="11" style="cursor: hand;" onClick="turnpage(SY,1)"></td>
+                                                                                                    <td align="center" nowrap>
+                                                                                                        <img src="../../../image/d1.gif" width="7" height="11" style="cursor: hand;" onClick="turnpage(SM,0)"></td>
+                                                                                                    <td>
+                                                                                                        <select class="jumpmenu" onChange="changeMPCld()" name="SM">
+
+                                                                                                            <script language="JavaScript">
+				<!-- 
+					for(i=1;i<13;i++) document.write('<option>'+i+'</option>')
+				//-->
+                                                                                                            </script>
+
+                                                                                                        </select>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <img src="../../../image/d.gif" width="7" height="11" style="cursor: hand;" onClick="turnpage(SM,1)"></td>
+                                                                                                    <td align="right" nowrap>
+                                                                                                        <strong><font id="GZ" fface="Arial, Helvetica, sans-serif"></font></strong>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr align="middle" bgcolor="#e8e8e8" class="default">
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">日</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">一</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">二</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">三</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">四</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">五</font></b></td>
+                                                                                        <td align="center" class="default">
+                                                                                            <b><font face="Arial, Helvetica, sans-serif">六</font></b>
+                                                                                        </td>
+                                                                                    </tr>
+
+                                                                                    <script language="JavaScript">
+		<!--
+			var gNum;
+			for(i=0;i<6;i++) 
+			{
+				document.write('<tr align=center>');
+				for(j=0;j<7;j++) 
+				{
+					gNum = i*7+j;
+					document.write('<td bgcolor="#EFF3F7" class="default" align=center id="GD' + gNum +'" style="cursor: default;" width="14%"><a href="" id="CD' + gNum + '"><span class="date" style="font-family:Verdana, Arial;font-size:11px;"><font _onMouseOver="mOvr(' + gNum +')" onMouseOut="mOut()" id="SD' + gNum +'"');
+					document.write('></font></span></a><br><font id="LD' + gNum + '" size=2 class=pt9 style=display:none></font></td>');
+				}
+				document.write('</tr>');
+			}
+		//-->
+                                                                                    </script>
+
+                                                                                </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr align="center">
+                                                <td height="10">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="0">
+                                                    <span id="yqljFrameQY">
+                                                        <iframe id="yqljFrame" name="yqljFrame" marginwidth="0" marginheight="0" src="../../../framepage/yqLink.htm"
+                                                            frameborder="0" width="100%" scrolling="no" height="0"></iframe>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <div style="display: none">
+                    <img src="../../../image/paper1_01.jpg"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" height="15">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" style="line-height: 120%; color: #FFFFFF;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td height="85" align="center" background="../../../image/footbg.jpg" class="menus" style="line-height:25px; background-repeat:no-repeat;">
+                            <font face="Times New Roman, Times, serif"><span id="copyLK">&copy; 杭州前方信息技术有限公司</span></font>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</td></tr></table>
+<div id="float"></div>
+    <!-------bmdh版面导航------>
+    <div id="bmdh" onMouseOver="document.getElementById('bmdh').style.display = 'block';"
+        onmouseout="document.getElementById('bmdh').style.display = 'none';">
+        <table width="200px" border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF">
+            <tbody>
+                
+                <tr id="row_black01" onMouseOver="Javascript:focus_row_black('01')" onMouseOut="Javascript:blur_row_black('01')">
+                    <td align="left">&nbsp;
+                        </td>
+                    <td align="left" height="24" class="black">
+                        &nbsp;<a href="node_1.htm" class="black" id="pageLink">第01版：一版要闻</a></td>
+                    <td width="28" align="middle" nowrap>
+                        <a href="../../../resfile/2012-07-23/01/01.pdf" target="_blank">
+                            <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a>
+                    </td>
+                </tr>
+                
+                <tr id="row_black02" onMouseOver="Javascript:focus_row_black('02')" onMouseOut="Javascript:blur_row_black('02')">
+                    <td align="left">&nbsp;
+                        </td>
+                    <td align="left" height="24" class="black">
+                        &nbsp;<a href="node_2.htm" class="black" id="pageLink">第02版：聚焦</a></td>
+                    <td width="28" align="middle" nowrap>
+                        <a href="../../../resfile/2012-07-23/02/02.pdf" target="_blank">
+                            <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a>
+                    </td>
+                </tr>
+                
+                <tr id="row_black03" onMouseOver="Javascript:focus_row_black('03')" onMouseOut="Javascript:blur_row_black('03')">
+                    <td align="left">&nbsp;
+                        </td>
+                    <td align="left" height="24" class="black">
+                        &nbsp;<a href="node_3.htm" class="black" id="pageLink">第03版：资讯</a></td>
+                    <td width="28" align="middle" nowrap>
+                        <a href="../../../resfile/2012-07-23/03/03.pdf" target="_blank">
+                            <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a>
+                    </td>
+                </tr>
+                
+                <tr id="row_black04" onMouseOver="Javascript:focus_row_black('04')" onMouseOut="Javascript:blur_row_black('04')">
+                    <td align="left">&nbsp;
+                        </td>
+                    <td align="left" height="24" class="black">
+                        &nbsp;<a href="node_4.htm" class="black" id="pageLink">第04版：生活</a></td>
+                    <td width="28" align="middle" nowrap>
+                        <a href="../../../resfile/2012-07-23/04/04.pdf" target="_blank">
+                            <img height="16" src="../../../image/pdf.gif" width="16" border="0"></a>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+    <!-------bmdh版面导航END------>
+    <!---------------------------标题导航-------------->
+    <div id="btdh" onMouseOver="document.getElementById('btdh').style.display = 'block';"
+        onmouseout="document.getElementById('btdh').style.display = 'none';">
+        <table border="0" cellpadding="2" cellspacing="0" bgcolor="#FFFFFF" width="277">
+            <tbody>
+                
+                <tr height="27px" id="row_blackcontent_2_1" onMouseOver="Javascript:focus_row_black('content_2_1')"
+                    onmouseout="Javascript:blur_row_black('content_2_1')">
+                    <td width="10px">
+                    </td>
+                    <td class="black">
+                        <a href="content_2_1.htm">信心三一</a>
+                    </td>
+                </tr>
+                
+                <tr height="27px" id="row_blackcontent_2_2" onMouseOver="Javascript:focus_row_black('content_2_2')"
+                    onmouseout="Javascript:blur_row_black('content_2_2')">
+                    <td width="10px">
+                    </td>
+                    <td class="black">
+                        <a href="content_2_2.htm">并购半年，优势叠加效应初显</a>
+                    </td>
+                </tr>
+                
+                <tr height="27px" id="row_blackcontent_2_3" onMouseOver="Javascript:focus_row_black('content_2_3')"
+                    onmouseout="Javascript:blur_row_black('content_2_3')">
+                    <td width="10px">
+                    </td>
+                    <td class="black">
+                        <a href="content_2_3.htm">三一并购凸显示范效应
+“中国制造”海外并购加速</a>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+        <!---------------------------标题导航 END -------------->
+    </div>
+    <!-------阅读率统计分析系统------>
+
+    
+
+    <table style="display: none;">
+        <tr>
+            <td>
+                <span id="NewsPaperName">三一集团</span> <span id="NewsEditionName">聚焦</span>
+                <span id="NewsEditionNumber">02</span> <span id="NewsArticleTitle"></span>
+                <span id="NewsArticleAuthor"></span><span id="NewsArticleTime">2012-07-23</span><span
+                    id="Class">1</span> <span id="jbdata">2012年07月23日  星期一</span>
+            </td>
+        </tr>
+    </table>
+    <!-------END------>
+</body>
+</html>
+

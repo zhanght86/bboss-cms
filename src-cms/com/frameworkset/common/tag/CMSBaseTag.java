@@ -3,11 +3,16 @@ package com.frameworkset.common.tag;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
+import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponse;
 import com.frameworkset.platform.cms.driver.jsp.InternalImplConverter;
+import com.frameworkset.platform.cms.sitemanager.Site;
+import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.util.StringUtil;
+
 
 /**
  * 内容管理标签库的基类
@@ -62,8 +67,40 @@ public class CMSBaseTag extends BaseTag  {
 		{
 //			if(site == null || site.equals(""))
 //				throw new JspException("没有指定站点名称，请检查对应的模板和文件是否设置了site属性。");
+			
 			if(site != null)
 				((DefaultContextImpl)context).setSite(site);
+			else
+			{
+				String siteId = request.getParameter("siteId");
+				if(!StringUtil.isEmpty(siteId))
+				{
+					try {
+						Site  site_ = CMSUtil.getSiteCacheManager().getSite(siteId);
+						site = site_.getSecondName();
+						((DefaultContextImpl)context).setSite(site);
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
+				}
+				
+			}
+			
+			if(channel == null)
+			{
+				String channelid = request.getParameter("channelId");
+				if(!StringUtil.isEmpty(channelid))
+				{
+					try {
+						Channel  channel_ = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannel(channelid);
+						channel = channel_.getDisplayName();
+					} catch (Exception e) {
+						
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 		
 		return EVAL_BODY_INCLUDE;

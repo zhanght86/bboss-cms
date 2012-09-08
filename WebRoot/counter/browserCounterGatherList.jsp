@@ -26,16 +26,16 @@
 
       <pg:list autosort="false">
    		<tr>
-                <td><pg:cell colName="docName"/></td>
+                <td><span class="toolTip" title="<pg:cell colName="docName"/>"><pg:cell colName="docName"  maxlength="30" replace="..."/></span></td>
                 <td><pg:cell colName="channelName"/></td>
                 <td><pg:cell colName="siteName"/></td>
-        		<td><pg:cell colName="pageURL" maxlength="100" replace="..."/></td>  
+        		<td><a href="<pg:cell colName="pageURL"/>" target="_blank"><span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="100" replace="..."/></span></a></td>  
         		<td><pg:cell colName="browserCount" /></td>  
         </tr>
 	 </pg:list>
     </table>
     </div>
-	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+	<div class="pages"><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
 
     </pg:pager>
 </pg:notequal>

@@ -29,9 +29,10 @@ import com.frameworkset.platform.cms.util.CMSUtil;
 public class CurrentPosTag extends CMSBaseTag {
 	
 	protected String content = null;
-	protected String channel = null;
+	
 	protected String target="";
-	protected String style = "cursor:hand;color:#595959;";
+//	protected String style = "cursor:hand;color:#595959;";
+	protected String style = "";
 	protected String currentPosPrompt = "当前位置： ";
 	protected String indexPrompt = "首页";
 	/**
@@ -128,6 +129,7 @@ public class CurrentPosTag extends CMSBaseTag {
 	}
 	public int doStartTag() throws JspException{
 		try {
+			super.doStartTag();
 			StringBuffer outputStrng = new StringBuffer();
 			if (channel == null && this.content == null){
 				Channel chnl = CMSTagUtil.getCurrentChannel(context);
@@ -143,7 +145,7 @@ public class CurrentPosTag extends CMSBaseTag {
 			else if(channel != null){
 				channelPos(outputStrng,channel);
 			}
-			out.println(this.currentPosPrompt + outputStrng);		
+			out.print(this.currentPosPrompt + outputStrng);		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,6 +229,17 @@ public class CurrentPosTag extends CMSBaseTag {
 
 	public void setNotDisplayIds(String notDisplayIds) {
 		this.notDisplayIds = notDisplayIds;
+	}
+
+	@Override
+	public int doEndTag() throws JspException {
+		content = null;
+		
+		target="";
+		style = "";
+		currentPosPrompt = "当前位置： ";
+		indexPrompt = "首页";
+		return super.doEndTag();
 	}
 
 

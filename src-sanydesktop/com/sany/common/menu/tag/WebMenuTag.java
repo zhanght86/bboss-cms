@@ -215,6 +215,7 @@ public class WebMenuTag extends BaseTag {
 				datas.append("<li><a href=\"#\" id=\"anchor_")
 				 .append("isany_personcenter")
 				 .append("\" onClick=\"navto_sany_sysmanagermodule('")
+				 .append(tokenurl).append("','")
 				 .append("sysmanagermodule")
 				 .append("','")
 				 .append(sysmanagermodule_url)

@@ -11,6 +11,21 @@
 		]]>
 	</property>
 	
+	<property name="getCommnetNList">
+		<![CDATA[
+			select comment_id commentId, doc_id docId, doc_comment docComment, user_name userName, 
+			comtime subTime,to_char(comtime,'yyyy-mm-dd hh24:mi:ss') str_subTime, user_ip userIP, src_comment_id srcCommentId, status
+			from td_cms_doc_comment t where t.doc_id = #[docId] and status = 1 and rownum < #[n]
+			order by comtime desc
+		]]>
+	</property>
+	
+	<property name="getTotalCommnet">
+		<![CDATA[
+			select count(*) from td_cms_doc_comment t where t.doc_id = #[docId] and status = 1 
+		]]>
+	</property>
+	
 	<property name="getCommentNextId">
 		<![CDATA[
 			select seq_td_cms_doc_comment.nextval from dual
