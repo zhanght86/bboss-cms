@@ -1,0 +1,1 @@
+ant distrib-jars >build.log

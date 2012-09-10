@@ -1,0 +1,527 @@
+<project name="cms_baseline" default="default" basedir=".">
+	<description>
+		cms_baseline build file
+	</description>
+	<tstamp prefix="start" />
+
+	<tstamp>
+		<format property="compile.timestamp" pattern="yyyy-MM-dd HH.mm.ss" />
+	</tstamp>
+
+
+
+	<!-- set global properties for this build -->
+	<property file="build.properties" />
+	<target name="init" description="create timestamp and directories">
+		<echo>Init...</echo>
+
+		<tstamp />
+		<delete dir="classes-all" />	
+		<delete dir="classes-mq" />	
+		<delete dir="${distrib}" />
+		<mkdir dir="classes-all" />
+		<mkdir dir="classes-sany" />
+		<mkdir dir="classes-mq" />
+		<mkdir dir="${distrib}" />
+
+	</target>
+	<target name="default" depends="complete" description="default = build distribution package" />
+
+	<!--
+		       ==========================
+		        Distribution jar package
+		       ==========================
+	-->
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appmonitor,jar-sany-appbom,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+		<echo>Construct the distribution package...</echo>
+		
+	</target>
+	
+	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appmonitor,jar-sany-appbom" description="copy jar file to distribution directory">
+			<echo>Construct the distribution package...</echo>
+			
+	</target>
+	<!--<target name="distrib-cim" depends="init,jar-system,copy-resource,copy-depends-liberary,copy-cim-resource" description="copy jar file to distribution directory">
+		<echo>Construct the distribution package...</echo>
+		
+	</target>-->
+	
+
+	<target name="compile-all"  depends="jar-sany-html" description="compile the compile-all source ">
+		<echo>compile the compile-all source ...</echo>
+		<javac encoding="UTF-8" destdir="classes-all" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+			<src path="${source}/src-cms" />
+			<src path="${source}/src-dictionary" />
+			<src path="${source}/src-sys" />
+			<!--<src path="${source}/src-communication" />-->
+			<src path="${source}/src-common" />
+			<!--
+			<src path="${source}/test" />
+			-->
+			<classpath id="cp-cms_baseline">
+
+				<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+				<fileset dir="${source}/lib" includes="*.jar *.zip" />
+				<fileset dir="${distrib}" includes="*.jar *.zip" />
+			</classpath>
+		</javac>
+		<copy todir="classes-all">
+			<fileset dir="${source}/src-common" includes="**/*.xml"/>
+			<fileset dir="${source}/src-cms" includes="**/*.xml"/>
+			<fileset dir="${source}/src-sys" includes="com/frameworkset/platform/sysmgrcore/manager/db/job.xml"/>
+		</copy>
+		
+	</target>
+	
+	<target name="compile-sany-desktop" depends="jar-system" description="compile the sany source ">
+			<echo>compile the compile-all source ...</echo>
+			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-sanydesktop" />				
+				<classpath id="cp-cms_baseline">
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+					
+				</classpath>
+			</javac>
+		<copy todir="classes-sany">
+			<fileset dir="${source}/src-sanydesktop" includes="**/*.xml"/>
+		</copy>
+	</target>
+	
+	<target name="jar-sany-desktop" depends="compile-sany-desktop" description="generate the sany-desktop-lib library sany-desktop.jar">
+			<echo>Generate the jar-sany-desktop library sany-desktop.jar ...</echo>
+			<jar jarfile="${distrib}/sany-desktop.jar" basedir="classes-sany" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-sany"/>
+		 <mkdir dir="classes-sany"/>	
+		
+	</target>
+	<target name="compile-parameters-handler"  description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-parameters-handler" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			
+	</target>
+		
+	<target name="jar-parameters-handler" depends="compile-parameters-handler" description="generate the sany-desktop-lib library parameters-handler.jar">
+			<echo>Generate the library parameters-handler.jar ...</echo>
+			<jar jarfile="${distrib}/parameters-handler.jar" basedir="classes-sany" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-sany"/>
+		 <mkdir dir="classes-sany"/>	
+		
+	</target>
+	
+	
+	<target name="compile-sany-ldap" depends="jar-system" description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-ldap" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-ldap" includes="**/*.xml"/>
+			</copy>
+		
+	</target>
+	
+	<target name="jar-sany-ldap" depends="compile-sany-ldap" description="generate the sany-ldap-lib library sany-ldap.jar">
+				<echo>Generate the jar-sany-desktop library sany-ldap.jar ...</echo>
+				<jar jarfile="${distrib}/sany-ldap.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
+			
+	</target>
+	
+	<target name="compile-sany-html" depends="init" description="compile the sany source ">
+					<echo>compile the compile-all source ...</echo>
+					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+						<src path="${source}/src-htmlparser" />				
+						<classpath id="cp-cms_baseline">
+							<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+							<fileset dir="${source}/lib" includes="*.jar *.zip" />
+							<fileset dir="${distrib}" includes="*.jar *.zip" />
+							
+						</classpath>
+					</javac>
+				
+			
+		</target>
+		
+		<target name="jar-sany-html" depends="compile-sany-html" description="generate htmlparser-1.5-20050925.jar">
+					<echo>Generate the cms html parser library htmlparser-1.5-20050925.jar ...</echo>
+					<jar jarfile="${distrib}/htmlparser-1.5-20050925.jar" basedir="classes-sany" includes="**/*">
+						<manifest>
+							<attribute name="Implementation-Version" value="${impl.version}" />
+							<attribute name="Specification-Version" value="${revision}" />
+							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+							<attribute name="Implementation-ProductID" value="${impl.productID}" />
+							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+							<attribute name="Compile-User" value="${username}" />
+						</manifest>
+					</jar>
+				 <delete dir="classes-sany"/>
+				 <mkdir dir="classes-sany"/>	
+				
+		</target>
+	
+	<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-appmonitor" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-appmonitor" includes="**/*.xml"/>
+			</copy>
+		</target>
+		
+		<target name="jar-sany-appmonitor" depends="compile-sany-appmonitor" description="generate the sany-appmonitor-lib library sany-appmonitor.jar">
+				<echo>Generate the jar-sany-appmonitor library sany-appmonitor.jar ...</echo>
+				<jar jarfile="${distrib}/sany-appmonitor.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
+			
+		</target>
+		
+		
+		<target name="compile-sany-mail" depends="jar-system" description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-mail" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-mail" includes="**/*.xml"/>
+			</copy>
+		
+	</target>
+	
+	<target name="jar-sany-mail" depends="compile-sany-mail" description="generate the sany-mail-lib library sany-mail.jar">
+				<echo>Generate the jar-sany-mail library sany-mail.jar ...</echo>
+				<jar jarfile="${distrib}/sany-mail.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
+			
+	</target>
+	
+	
+	
+	<target name="compile-sany-masterdata" depends="jar-system" description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-masterdata" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-masterdata" includes="**/*.xml"/>
+			</copy>
+		
+	</target>
+	
+	<target name="jar-sany-masterdata" depends="compile-sany-masterdata" description="generate the sany-mail-lib library sany-masterdata.jar">
+				<echo>Generate the jar-sany-masterdata library sany-masterdata.jar ...</echo>
+				<jar jarfile="${distrib}/sany-masterdata.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany-ldap"/>
+			 <mkdir dir="classes-sany-ldap"/>	
+			
+	</target>
+	<target name="compile-sany-workflow" depends="jar-system" description="compile the sany appbom source ">
+			<echo>compile the appbom source ...</echo>
+			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-workflow" />				
+				<src path="${source}/test" />				
+				<classpath id="cp-cms_baseline">
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+				</classpath>
+			</javac>
+		<copy todir="classes-sany">
+			<fileset dir="${source}/src-workflow" includes="**/*.xml"/>
+			<fileset dir="${source}/test" includes="**/*.xml"/>
+		</copy>
+	</target>
+	
+	<target name="jar-sany-workflow" depends="compile-sany-workflow" description="generate the sany-workflow-lib library sany-workflow.jar">
+			<echo>Generate the sany-workflow library sany-workflow.jar ...</echo>
+			<jar jarfile="${distrib}/sany-workflow.jar" basedir="classes-sany" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-sany"/>
+		  <mkdir dir="classes-sany"/>	
+		
+	</target>
+	<target name="compile-sany-appbom" depends="jar-sany-desktop" description="compile the sany appbom source ">
+			<echo>compile the appbom source ...</echo>
+			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-appbom" />				
+				<classpath id="cp-cms_baseline">
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+				</classpath>
+			</javac>
+		<copy todir="classes-sany">
+			<fileset dir="${source}/src-appbom" includes="**/*.xml **/*.xlsx **/*.xls"/>
+		</copy>
+	</target>
+	
+	<target name="jar-sany-appbom" depends="compile-sany-appbom" description="generate the sany-desktop-lib library sany-appbom.jar">
+			<echo>Generate the jar-appbom library appbom.jar ...</echo>
+			<jar jarfile="${distrib}/sany-appbom.jar" basedir="classes-sany" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-sany"/>
+		 
+		
+	</target>
+	<target name="jar-system" depends="jar-cms" description="generate the system-lib library system.jar">
+		<echo>Generate the jar-system library system.jar ...</echo>
+		<jar jarfile="${distrib}/system.jar" basedir="classes-all" includes="**/*">
+			<manifest>
+				<attribute name="Implementation-Version" value="${impl.version}" />
+				<attribute name="Specification-Version" value="${revision}" />
+				<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+				<attribute name="Implementation-ProductID" value="${impl.productID}" />
+				<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+				<attribute name="Compile-User" value="${username}" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="jar-cms" depends="compile-all" description="generate the cms library cms.jar">
+		<echo>Generate the cms library cms.jar ...</echo>
+		<jar jarfile="${distrib}/cms.jar" basedir="classes-all" 
+			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/* com/frameworkset/platform/security/AccessControl*.class">
+			<manifest>
+				
+				<attribute name="Implementation-Version" value="${impl.version}" />
+				<attribute name="Specification-Version" value="${revision}" />
+				<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+				<attribute name="Implementation-ProductID" value="${impl.productID}" />
+				<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+				<attribute name="Compile-User" value="${username}" />
+			</manifest>
+		</jar>
+		
+		<delete dir="classes-all/com/frameworkset/platform/cms/"/>
+		<delete dir="classes-all/com/frameworkset/common/tag/"/>
+		<delete file="classes-all/com/frameworkset/platform/security/AccessControl*.class"/>
+		<delete dir="classes-all/org/"/>
+	</target>
+	<target name="compile-mq" depends="jar-cms" description="compile the compile-all source ">
+			<echo>compile the compile-all source ...</echo>
+			<javac encoding="UTF-8" destdir="classes-mq" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-mq" />
+				<classpath id="cp-cms_baseline">
+
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					
+				</classpath>
+			</javac>
+		</target>
+	<target name="jar-mqservice" depends="jar-mqtransfer" description="generate the mqservice.jar">
+				<echo>Generate the mqservice.jar ...</echo>
+				<copy todir="classes-mq/org/frameworkset/mq/">
+					<fileset dir="${source}/resources/org/frameworkset/mq" includes="mq-init.xml"/>
+				</copy>
+				<jar jarfile="${distrib}/mqservice.jar" basedir="classes-mq" 
+					 includes="org/frameworkset/mq/mq-init.xml com/frameworkset/platform/mq/broker/**/* com/frameworkset/platform/mq/client/**/* com/frameworkset/platform/mq/rpc/**/* com/frameworkset/platform/mq/MQUtil*.class com/frameworkset/platform/mq/MQServiceException.class com/frameworkset/platform/mq/FileUtil*.class com/frameworkset/platform/mq/CAInfo.class com/frameworkset/platform/mq/TransConfProperties.class">
+					<manifest>
+						
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+		<delete dir="classes-mq/com/frameworkset/platform/mq/broker"/>
+		
+		  
+	</target>
+	
+	<target name="jar-mqtransfer" depends="compile-mq" description="generate the bboss-taglib library frameworkset.jar">
+		<echo>Generate the mq-transferservice.jar ...</echo>
+		<jar jarfile="${distrib}/mq-transferservice.jar" basedir="classes-mq" includes="com/frameworkset/platform/mq/transfer/**/*">
+			<manifest>
+				
+				<attribute name="Implementation-Version" value="${impl.version}" />
+				<attribute name="Specification-Version" value="${revision}" />
+				<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+				<attribute name="Implementation-ProductID" value="${impl.productID}" />
+				<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+				<attribute name="Compile-User" value="${username}" />
+			</manifest>
+		</jar>
+		<delete dir="classes-mq/com/frameworkset/platform/mq/transfer"/>
+	</target>
+		
+	
+
+	<target name="copy-resource" description="copy resource files">
+		<echo>copy resource files ...</echo>
+		<copy todir="${distrib}/WebRoot/">
+			<fileset dir="${webroot}/"/>
+		</copy>
+		<delete dir="${distrib}/WebRoot/WEB-INF/classes"/>
+		<mkdir dir="${distrib}/WebRoot/WEB-INF/classes"/>
+		<copy todir="${distrib}/WebRoot/WEB-INF/classes">
+			<fileset dir="${source}/resources" includes="**/*" 
+				excludes="org/frameworkset/mq/mq-init.xml"/>
+		</copy>		
+	</target>	
+	<target name="copy-depends-liberary" description="copy depends liberarys">
+				<echo>copy depends liberarys ...</echo>
+				<copy todir="${distrib}/WebRoot/WEB-INF/lib">
+						<fileset dir="${distrib}" includes="*.jar" />
+				</copy>
+	</target>
+	
+	<target name="copy-cim-resource" description="copy cim resources">
+		<echo>copy cim resources ...</echo>
+		<copy todir="${distrib}/WebRoot/" overwrite="true">
+				<fileset dir="${cimbaseconsole}/WebRoot" includes="**/*" />
+		</copy>
+		<copy todir="${distrib}/WebRoot/WEB-INF/classes" overwrite="true">
+				<fileset dir="${cimbaseconsole}/resources" includes="**/*" />
+		</copy>
+		<delete dir="${distrib}/WebRoot/cms"/>
+	</target>
+	
+	<target name="war" depends="distrib" description="copy depends liberarys">
+		<war destfile="${distrib}/WebRoot.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
+		  <fileset dir="${distrib}/WebRoot/"/>	  
+		</war>
+		
+		<zip destfile="${distrib}/dbinit-system.zip" basedir="dbinit-system"/>
+		<delete dir="${distrib}/WebRoot"/>
+	</target>
+	
+	<target name="war-cim" description="copy depends liberarys">
+		<war destfile="${distrib}/cimconsole.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
+		  <fileset dir="${distrib}/WebRoot/"/>	  
+		</war>
+		<delete dir="classes-all" />
+	</target>
+	
+	<target name="complete" depends="war" description="copy depends liberarys">
+		<delete dir="classes-all" />
+		<delete dir="classes-mq" />	
+		<!--
+		<delete dir="distrib/WebRoot" -->
+	</target>
+	
+	<!-- 压缩 mqserver -->
+	<target name="zip-mqserver-ver" depends="default">
+		<ant  antfile="${mqserver.script.dir}" inheritrefs="true" target="updateToDefault" >
+		
+		</ant>
+	</target>
+	
+	<!-- 压缩 mqclient -->
+	<target name="zip-mqclient-ver" depends="default">
+		<ant  antfile="${mqclient.script.dir}" inheritrefs="true" target="updateToDefault" >
+		
+		</ant>
+	</target>
+	
+</project>
