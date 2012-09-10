@@ -132,7 +132,8 @@ public class CounterController {
 				}
 			}
 		}
-		paramCounter.setReferer(request.getHeader("Referer"));
+		if(StringUtil.isEmpty(paramCounter.getReferer()))
+			paramCounter.setReferer(request.getHeader("Referer"));
 
 		TransactionManager tm = new TransactionManager();
 		try {

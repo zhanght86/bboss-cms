@@ -26,10 +26,10 @@
 				<pg:param name="channelId"/>
 				
 				<div class="videoList"> 
-				<div class="items">
+				<div class="items" style="width:580px;">
 				  <pg:list autosort="false">
 				  <ul class="v">
-                    	<li><a target='_blank' href="<pg:cell colName="docpuburl"/>"><img src="<pg:sitedomain/>/<pg:cell colName="picPath"/>" width="128" height="80"/></a></li>
+                    	<li><a target='_blank' href="<pg:cell colName="docpuburl"/>"><img src="<pg:sitedomain/>/<pg:cell colName="picPath"/>" width="120" height="80"/></a></li>
                         <li class="v_title"><a target='_blank' href="<pg:cell colName="docpuburl"/>"><pg:cell colName="title" maxlength="18" replace=".."/></a></li>
                         <li></li>
                         <li><span class="ico__statplay"></span><span class="num"><pg:cell colName="playedCount"/></span><span class="ico__statcomment"></span><span class="num"><pg:cell colName="cmCount"/></span></li>
