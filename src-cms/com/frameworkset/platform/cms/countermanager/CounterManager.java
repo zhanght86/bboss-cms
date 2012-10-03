@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 
+import com.frameworkset.platform.cms.countermanager.bean.Browser;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserCounter;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserVisitInfo;
 import com.frameworkset.platform.cms.countermanager.bean.DownLoadCounter;
@@ -46,6 +47,14 @@ public interface CounterManager {
 	 * @throws SQLException
 	 */
 	public long getBrowserCount(int siteId) throws SQLException;
+	
+	/**
+	 * 获得浏览统计计数和今日统计计数
+	 * @param siteId 站点ID
+	 * @return 计数值
+	 * @throws SQLException
+	 */
+	public Browser getTotalAndTodayBrowserCount(int siteId) throws SQLException;
 
 	/**
 	 * 获得浏览统计计数

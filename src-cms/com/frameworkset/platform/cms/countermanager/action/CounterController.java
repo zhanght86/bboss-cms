@@ -32,6 +32,7 @@ import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.countermanager.CounterManager;
+import com.frameworkset.platform.cms.countermanager.bean.Browser;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserCounter;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserVisitInfo;
 import com.frameworkset.platform.cms.countermanager.bean.VideoHitsCounter;
@@ -99,7 +100,63 @@ public class CounterController {
 	}
 
 	/**
-	 * 浏览器计数
+	 * 获取总浏览计数和今天计数
+	 * @param paramCounter 计数器参数
+	 * @param enable 是否启用
+	 * @param request HttpServletRequest
+	 * @return long 浏览计数 
+	 * @throws Exception
+	 */
+	public @ResponseBody(datatype = "jsonp")
+	Browser browserTotalCounter(BrowserCounter paramCounter, boolean enable, HttpServletRequest request) throws Exception {
+
+		paramCounter.setBrowserId(UUID.randomUUID().toString());
+
+		String siteName = paramCounter.getSiteName();
+		String channelName = paramCounter.getChannelName();
+		String docName = paramCounter.getDocName();
+
+		paramCounter.setSiteName(StringUtil.isEmpty(siteName) ? null : URLDecoder.decode(siteName, "UTF-8"));
+		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
+		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
+
+		paramCounter.setBrowserIp(request.getRemoteAddr());
+		paramCounter.setBrowserUser(AccessControl.getAccessControl().getUserAccount());
+		paramCounter.setPageURL(paramCounter.getPageURL());
+
+		String userAgent = request.getHeader("User-Agent");
+		for (String agent : userAgent.split(";")) {
+			for (String browser : browserTypeSet) {
+				if (agent.indexOf(browser) > 0) {
+					paramCounter.setBrowserType(agent.substring(agent.indexOf(browser)).replaceAll("/", " "));
+					break;
+				}
+			}
+		}
+		if(StringUtil.isEmpty(paramCounter.getReferer()))
+			paramCounter.setReferer(request.getHeader("Referer"));
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin(TransactionManager.RW_TRANSACTION);
+			counterManager.incrementBrowserCounter(paramCounter);
+			
+			Browser browser = null;
+			if (enable) {
+				
+				browser = counterManager.getTotalAndTodayBrowserCount(paramCounter.getSiteId());
+//				browser.setTotal(ret);
+			}
+			
+			return browser;
+		} finally {
+			tm.releasenolog();
+		}
+	}
+	
+	
+	/**
+	 * 获取总浏览数
 	 * @param paramCounter 计数器参数
 	 * @param enable 是否启用
 	 * @param request HttpServletRequest
@@ -132,20 +189,24 @@ public class CounterController {
 				}
 			}
 		}
-		paramCounter.setReferer(request.getHeader("Referer"));
+		if(StringUtil.isEmpty(paramCounter.getReferer()))
+			paramCounter.setReferer(request.getHeader("Referer"));
 
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin(TransactionManager.RW_TRANSACTION);
 			counterManager.incrementBrowserCounter(paramCounter);
-			long ret = 0;
+			
+			long browser = 0;
 			if (enable) {
-				ret = counterManager.getBrowserCount(paramCounter.getSiteId());
+				
+				browser = counterManager.getBrowserCount(paramCounter.getSiteId());
+
 			}
-			tm.commit();
-			return ret;
+			
+			return browser;
 		} finally {
-			tm.release();
+			tm.releasenolog();
 		}
 	}
 

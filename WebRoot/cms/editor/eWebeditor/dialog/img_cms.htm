@@ -287,12 +287,15 @@ function ok(){
 		var waterimage = document.all("waterimage").value;
 		var position = document.all("position").value;
 		var waterStr = document.all("waterStr").value;
+		
 		var backup = document.all("backup").value;
+		
 		var addwater = getCheckBoxValue("addwater");
 		d_file.document.all("waterimage").value = waterimage;
 		d_file.document.all("position").value = position;
 		d_file.document.all("waterStr").value = waterStr;
-		d_file.document.all("backup").value = backup;
+		if(document.all("backup").checked)
+			d_file.document.all("backup").value = backup;
 		d_file.document.all("addwater").value = addwater;
 		//alert(d_file.document.myform.innerHTML);//createElement("td");
 		
@@ -301,6 +304,7 @@ function ok(){
 
 		// 上传表单提交
 		d_file.myform.action +="&cusdir="+parent.dialogArguments.document.all("cusdir").value;
+		
 		
 		d_file.myform.submit();
 	}
@@ -376,7 +380,7 @@ function xuanzeWatepic()
 		<td width=5></td>
 		<td colspan=5>
 		<Script Language=JavaScript>
-		document.write('<iframe id=d_file frameborder=0   src="../upload.jsp?type=image&style='+config.StyleName+'"    width="100%"  height="22" scrolling=no></iframe>');
+		document.write('<iframe id=d_file frameborder=0   src="../ewebeditupload.page?type=image&style='+config.StyleName+'"    width="100%"  height="22" scrolling=no></iframe>');
 		</Script>
 		</td>
 		<td width=7></td>

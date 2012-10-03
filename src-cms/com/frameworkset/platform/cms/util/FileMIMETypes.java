@@ -48,6 +48,8 @@ public class FileMIMETypes extends ListResourceBundle implements java.io.Seriali
 			{ "java", "text/plain" }, { "jfif", "image/jpeg" },
 			{ "jfif-tbnl", "image/jpeg" }, { "jpe", "image/jpeg" },
 			{ "jpeg", "image/jpeg" }, { "jpg", "image/jpeg" },
+			{ "jpg", "image/pjpeg" },
+			
 			{ "png", "image/png" }, { "bmp", "image/bmp" },
 			{ "jsp", "text/html" }, { "js", "application/x-javascript" },
 			{ "latex", "application/x-latex" },

@@ -1609,7 +1609,8 @@ public class Framework implements ResourceInitial,MessageSource {
 		this.listen.stopped();
 		//listen.interrupt();
 //		listen.stop();
-		log.debug("uninstalling module[" + this + "]");
+		if(log != null)
+			log.debug("uninstalling module[" + this + "]");
 		this.monitered = false;
 		this.messagesource = null;
 		this.messagesourcefiles = null;
@@ -1621,7 +1622,8 @@ public class Framework implements ResourceInitial,MessageSource {
 
 				Map.Entry entry = (Map.Entry) it.next();
 				Framework framework = (Framework) entry.getValue();
-				log.debug("uninstalling module[" + framework + "]");
+				if(log != null)
+					log.debug("uninstalling module[" + framework + "]");
 				framework.stop();
 			}
 			this.subsystemFrameworks.clear();

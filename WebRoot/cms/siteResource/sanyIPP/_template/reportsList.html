@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>三一集团内网宣传平台</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href="css/foot2.css" rel="stylesheet" type="text/css" />
+<cms:distribute dir="components/datepicker" />
+<cms:distribute dir="css/report.css" />
+<cms:distribute dir="images/no_data.jpg" />
+<script type="text/javascript" src="js/nav.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="components/datepicker/blue_WdatePicker.js?lang=zh_CN"></script>
+<script>
+
+function queryList() {	
+	var startTime = $("#startTime").val();
+	var endTime = $("#endTime").val();
+	var keywords = $("#keywords").val();
+		
+	var url = '<cms:siteparam name="appcontext"/>/channel/showReportsList.freepage?siteId=<cms:siteinfo property='siteId'/>&channelId=<cms:channel property='channelId'/>&startTime='
+		+startTime+'&endTime='+endTime+'&keywords='+encodeURIComponent(encodeURIComponent(keywords));
+		
+	document.getElementById("reportsList").src = url;
+}
+
+$(document).ready(function() {
+ 
+ 		var siteId = '<cms:siteinfo property="siteId"/>';
+		var channelId = '<cms:channel property="channelId"/>';
+ 		var pageURL = window.location.href;
+
+		var siteName = '<cms:siteinfo property="name"/>';
+ 		var channelName = '<cms:channel property="name"/>';
+ 		
+		var docrefer = document.referrer;
+		var url =  '<cms:siteparam name="staticcontext"/>/counter/browserCounter.freepage?jsonp_callback=?';
+		
+		$.getJSON(url, { siteId:siteId, channelId:channelId, pageURL:pageURL,referer:docrefer, siteName:encodeURIComponent(siteName), channelName:encodeURIComponent(channelName) },
+            function(data) {   
+                 
+            });
+	 });
+
+</script>
+</head>
+<body>
+<div id="wrapper">
+  <div  class="top">
+    <div class="logo_top"><img src="images/top_logo.jpg" width="303" height="31" /></div>
+  </div>
+  <div class="daohang">
+      <cms:sanynav/>
+    <div class="clear"></div>
+  </div>
+  <div class="container">
+<cms:sanyleftnav channel="news"/>
+    <div class="rightcontent">
+      <div class="titleMenu"><div class="path"><cms:position/></div><span class="title"><cms:channel property="name"/> </span></div>
+      <div class="searchbox">
+        <h1 class="title">检索 专题报道</h1>
+        <table border="0" cellspacing="6" width="100%">
+          <tr>
+            <td height="28">发布日期 :
+             <input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />
+      	  	  ~
+      	  	 <input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
+          </tr>
+          <tr>
+            <td height="28"> 按关键词  :
+              <input style="WIDTH: 193px;" type="text" id="keywords" name="keywords" />  
+              <img src="images/search_zh-cn.gif" width="58" height="17" align="absmiddle" onclick="queryList();"/></td>
+          </tr>
+        </table>
+      </div>
+      <div class="ulList">
+        <h1 class="title">所有 新闻动态</h1>
+        <br/>
+        <ul class="report">
+         	<iframe id="reportsList"  src="<cms:siteparam name='appcontext'/>/channel/showReportsList.freepage?siteId=<cms:siteinfo property='siteId'/>&channelId=<cms:channel property='channelId'/>" scrolling="auto" width="100%"  height="500px" frameborder="0"></iframe>
+        </ul>
+      </div>
+    </div>
+  </div></div>
+  <div class="footer">
+    <div class="isany"></div>
+    <div class="quality"></div>
+    <div class="copy_right"> <a href="http://www.sanygroup.com/group/zh-cn/" >三一集团门户</a>|<a href="http://www.sanygroup.com/group/zh-cn/media/product_download.htm">资料下载</a>|<a href="http://www.sanygroup.com/group/zh-cn/foot/item.htm">使用条款</a><br/>
+      &nbsp;
+      <script type="text/javascript">
+		copyright=new Date();
+		update=copyright.getFullYear();
+		document.write("1989-"+ update + " 三一集团有限公司 版权所有 ");
+	  </script>
+  </div>
+</div>
+</body>
+</html>

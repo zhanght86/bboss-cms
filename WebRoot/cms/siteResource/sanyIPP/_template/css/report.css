@@ -1,0 +1,16 @@
+li {height: 80px;margin-top:7px}
+
+.report_img {float: left;height: 80px;width: 140px;}
+.report_title {font-weight: bold;}
+.report_div {
+	margin-top: 40px;
+}
+.date {
+	font-weight: bold;
+	color: #8f8f8f;
+}
+.title {
+	font-weight: bold;
+	color: #555555;
+	border-bottom: 1px  solid #e1e1e1;margin-bottom:15px;
+}

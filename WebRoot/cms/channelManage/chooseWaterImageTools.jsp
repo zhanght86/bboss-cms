@@ -73,7 +73,7 @@ function send(){
 		}
 	}
 	var path = "<%=waterpicpath%>" + parent.ImageListFrm.uri;
-	document.all.form1.action="uploadImageFile_do.jsp?uri=" + path;
+	document.all.form1.action="<%=request.getContextPath()%>/cms/upload/uploadImageFile_do.page?uri=" + path;
 	document.all.form1.submit();
 }
 var selectedFileName;

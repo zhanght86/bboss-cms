@@ -810,6 +810,38 @@ from td_cms_document a
 								   SITE_ID ASC
 								)
 								]]></property>
+								
+								<property index="12"><![CDATA[
+							create index vhits_docid on TD_CMS_VIDIO_HITS(doc_id)
+								]]></property>
+
+
+
+								<property index="13"><![CDATA[
+						create index vhits_channelid on TD_CMS_VIDIO_HITS(CHANNEL_ID)
+								]]></property>
+
+
+								<property index="14"><![CDATA[
+						
+							create index vhits_siteid on TD_CMS_VIDIO_HITS(SITE_ID)
+								
+								]]></property>
+								
+								<property index="15"><![CDATA[
+							 create index brwcounts_docid on TD_CMS_BROWSER_COUNTS(doc_id)
+								]]></property>
+
+
+
+								<property index="16"><![CDATA[
+ 								create index brwcounts_channelid on TD_CMS_BROWSER_COUNTS(CHANNEL_ID)
+								]]></property>
+
+
+								<property index="17"><![CDATA[					
+ 								create index brwcounts_siteid on TD_CMS_BROWSER_COUNTS(SITE_ID)
+								]]></property>
 				
 
 							</list>

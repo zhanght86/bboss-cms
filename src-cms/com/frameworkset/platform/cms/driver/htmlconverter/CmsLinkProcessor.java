@@ -1102,6 +1102,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 					if (link != null) {
 						// tag.setLink(escapeLink(link.getHref()));
 						tag.setAttribute("src",link.getHref());
+//						tag.setText(link.getHref());
 					} else {
 						if (this.baseUrl != null)
 							link = new CMSLink(baseUrl, scriptsrc,linkhandletype);
@@ -1157,6 +1158,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 						else
 						{
 							tag.setAttribute("src",link.getHref());
+//							tag.setText(link.getHref());
 						}
 						
 	
@@ -1168,6 +1170,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 					if (link != null) {
 						// tag.setLink(escapeLink(link.getHref()));
 						tag.setAttribute("src",link.getHref());
+//						tag.setText(link.getHref());
 					} else {
 						if (this.baseUrl != null)
 							link = new CMSLink(baseUrl, scriptsrc,linkhandletype);
@@ -1219,6 +1222,8 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 						else
 						{
 							tag.setAttribute("src",link.getHref());
+//							System.out.println(tag.getText());
+//							tag.setText(link.getHref());
 						}
 					}
 					break;
@@ -1230,12 +1235,11 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		
 	}
 	
-	/**
-	 * 处理object标签
-	 * @param tag
-	 */
-	protected void processObjectTag(ObjectTag tag) {
-		String scriptsrc = tag.getParameter("MOVIE");
+	
+	protected void processObjectTagParam(ObjectTag tag,String paramName) {
+		String scriptsrc = tag.getParameter(paramName);
+		if(StringUtil.isEmpty(scriptsrc))
+			return;
 //		tag.removeAttribute("movie");
 		Hashtable parameters = tag.getObjectParams();
 //		tag.setObjectParams(parameters);
@@ -1254,7 +1258,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 					link = m_linkTable.getLink(scriptsrc);
 					if (link != null) {
 						// tag.setLink(escapeLink(link.getHref()));
-						parameters.put("MOVIE",link.getHref());
+						parameters.put(paramName,link.getHref());
 						
 						tag.setObjectParams(parameters);
 					} else {
@@ -1311,7 +1315,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 						 */
 						else
 						{
-							parameters.put("MOVIE",link.getHref());
+							parameters.put(paramName,link.getHref());
 							tag.setObjectParams(parameters);
 						}
 						
@@ -1322,7 +1326,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 				case REPLACE_LINKS:
 					link = m_linkTable.getLink(scriptsrc);
 					if (link != null) {
-						parameters.put("MOVIE",link.getHref());
+						parameters.put(paramName,link.getHref());
 						tag.setObjectParams(parameters);
 					} else {
 						if (this.baseUrl != null)
@@ -1374,7 +1378,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 						 */
 						else
 						{
-							parameters.put("MOVIE",link.getHref());
+							parameters.put(paramName,link.getHref());
 							tag.setObjectParams(parameters);
 						}
 					}
@@ -1384,6 +1388,15 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 				default: // noop
 			}
 		}
+	}
+	/**
+	 * 处理object标签
+	 * @param tag
+	 */
+	protected void processObjectTag(ObjectTag tag) {
+		
+		processObjectTagParam(tag,"MOVIE");
+		processObjectTagParam(tag,"SRC");
 		
 	}
 

@@ -1,0 +1,319 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>三一集团内网宣传平台</title>
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href="components/slide/slide.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/nav.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/until.js"></script>
+<script>
+
+    
+function downloadPdf(url, chanel_id, document_id) {
+ 	var page = '<cms:siteparam name="appcontext"/>/document/downloadDocument.freepage?siteId=<cms:siteinfo property="siteId"/>&channelId='+chanel_id+'&docId='+document_id+'&url='+url;
+ 	window.open(page);
+ }
+
+    $(document).ready(function() {
+ 
+ 		var siteId = '<cms:siteinfo property="siteId"/>';
+ 		var siteName = '<cms:siteinfo property="name"/>';
+ 		var pageURL = window.location.href;
+ 		var docrefer = document.referrer;
+ 		
+ 
+		var url =  '<cms:siteparam name="staticcontext"/>/counter/browserCounter.freepage?jsonp_callback=?';
+		
+		$.getJSON(url, { siteId:siteId, siteName:encodeURIComponent(siteName), pageURL:pageURL,referer:docrefer, enable:false },
+            function(data) {   
+                 
+            });
+	 });
+</script>
+</head>
+<body>
+<div id="wrapper">
+  <div  class="top">
+    <div class="logo_top"><img src="images/top_logo.jpg" width="303" height="31" /></div>
+  </div>
+  <div class="daohang">
+        <cms:sanynav/>
+    <div class="clear"></div>
+  </div>
+  <div class="container" style="height:100%;overflow:hidden;">
+  		<div class="lc">
+  		  <div class="box_1" >
+  		    <div  class="content_top">
+  		      <div class="right_top"></div>
+  		      <div class="left_top"></div>
+  		      <cms:channel displayname="importantnews" property="name"/> </div>
+  		    <div class="box_content">
+            	<SCRIPT type=text/javascript>
+                	var arr=new Array();
+ 					var tarr=new Array();
+					var ftarr=new Array();
+ 					var slink=new Array();
+ 									
+ 					<cms:outline channel="importantnews" count="5">
+	   					arr.push("<cms:uri colName="picPath"/>");
+	   					tarr.push("<cms:cell colName="subtitle" maxlength="29" replace=""/>");
+						ftarr.push("<cms:cell colName="subtitle"/>");
+						
+		 				slink.push("<cms:url/>");
+					</cms:outline> 
+             	</SCRIPT>
+  		    		
+                  <table cellspacing="0" cellpadding="0" >
+                    <tbody>
+                      <tr>
+                        <td id="bimg" class="pic">
+                          <div id="top_pictures">
+                          		<SCRIPT type=text/javascript>
+                          			for (var i=0; i<arr.length; i++) {
+                          				if (i == 0) {
+                          					document.write('<div style="" id="top_picture_image_'+i+'" class="dis">');
+                          				} else {
+                          					document.write('<div style="display: none;" id="top_picture_image_'+i+'" class="dis">');
+                          				}
+                          				document.write('<a title="'+tarr[i]+'" target="_blank" href="'+slink[i]+'"><img src="'+arr[i]+'" alt="'+ftarr[i]+'" width="364" height="270"></a>');
+                          				document.write('</div>');
+                          			}
+                          		</SCRIPT>
+                           </div>
+                          <table cellspacing="0" cellpadding="0" id="font_hd">
+                            <tbody>
+                              <tr>
+                                <td id="info" class="lkff">
+                                	<SCRIPT type=text/javascript>
+                                	for (var i=0; i<arr.length; i++) {
+                                		if (i == 0) {
+                          					document.write('<div style="" id="top_picture_title_'+i+'" class="dis">');
+                          				} else {
+                          					document.write('<div style="display: none;" id="top_picture_title_'+i+'" class="dis">');
+                          				}
+                          				document.write('<a title="'+tarr[i]+'" target="_blank" href="'+slink[i]+'">'+tarr[i]+'</a>');
+                          				document.write('</div>');
+                          			}
+                                	</SCRIPT>
+                                 </td>
+                                <td id="simg">
+                                  <div id="simg-wrap">
+                                  	<SCRIPT type=text/javascript>
+                                  		for (var i=0; i<arr.length; i++) {
+                                			if (i == 0) {
+                          						document.write('<div id="top_picture_button_'+i+'" class="dis">'+(i+1)+'</div>');
+                          					} else {
+                          						document.write('<div id="top_picture_button_'+i+'" class="dis  f1">'+(i+1)+'</div>');
+                          					}
+                          				}
+                                  	</SCRIPT>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
+                
+                <script type="text/javascript">
+                   (function(){
+                      var total = arr.length;
+                      var current = 0;
+                      var auto_play_on = true;
+
+                      $('#bimg').mouseover(function() {auto_play_on = false;});
+                      $('#bimg').mouseout(function() {auto_play_on = true;});
+
+                      var showPicture = function(index) {
+                        if (current !== index) {
+                          $('#top_picture_image_' + current).fadeOut('slow');
+                          $('#top_picture_image_' + index).fadeIn('slow');
+                          $('#top_picture_title_' + current).hide();
+                          $('#top_picture_title_' + index).show();
+                          $('#top_picture_button_' + current).addClass('f1');
+                          $('#top_picture_button_' + index).removeClass('f1');
+                          current = index;
+                        }
+                      };
+
+                      for (var i = 0; i < total; i++) {
+                        $('#top_picture_button_' + i).click((function(i) {
+                          			return function(ev) {
+                            				showPicture(i);
+                          			}
+                          		})
+                          		(i)
+                          	);
+                      };
+
+                      var autoPlay = function() {
+                        if (total !== 0 && auto_play_on) {
+                          var next = (current < (total - 1)) ? (current + 1) : 0;
+                          showPicture(next);
+                        }
+                      };
+                      setInterval(autoPlay, 5000);
+                    })();
+                </script>
+            </div>
+  		    <div  class="content_bottom">
+  		      <div class="right_bottom"></div>
+  		      <div class="left_bottom"></div>
+	        </div>
+	      </div>
+          <div class="box_2 mt10">
+          	<h1><div class="more"><cms:more channel="latestnews" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="latestnews" property="name"/></h1>
+            <ul>
+             <cms:outline channel="latestnews"  count="3">
+                  <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="25"
+					replace=""
+					useTitle="false"/></li></cms:outline> 
+			 <cms:outline channel="mediasany"  count="2">
+                  <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="25"
+					replace=""
+					useTitle="false"/></li></cms:outline> 
+            </ul>
+          </div>
+          <div class="box_2 mt10">
+            <h1>
+              <div class="more"><cms:more channel="specialnews" target="_blank" moretext="更多 >>"/></div>
+              <cms:channel displayname="specialnews" property="name"/></h1>
+            <ul>
+               <cms:outline channel="specialnews" datatype="channelhomepage" count="3">
+                  <li><div class="date"><cms:cell colName="createTime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="name" 
+					maxlength="25"
+					replace=""
+					useTitle="false"/></li></cms:outline> 
+             </ul></div>
+        </div>
+    <div class="mc">
+       <div class="box_2 h287">
+        <h1><cms:channel displayname="magazine" property="name"/></h1>
+        <cms:outline channel="magazine"  count="3">
+       <div class="block">
+ <table width="100%" border="0" cellpadding="0" cellspacing="0" height="96">
+  <tr>
+    <td width="24%" height="94"><cms:imagelink colName="picPath" width="80" height="90" /></td>
+    <td width="76%" valign="top"><div><strong><cms:cell colName="title" maxlength="8"/></strong></div>
+      <div><span class="red"><cms:cell colName="title" maxlength="8"/></span> <a href="javascript:void('0')" onclick="showPdf('<cms:url/>')">浏览</a>|<cms:more channel="magazine" target="_blank" moretext="更多 >>"/></div>
+      <div><cms:cell colName="docabstract" maxlength="45" replace=".."/></div></td>
+  </tr>
+  </table>
+ </div>
+ </cms:outline> 
+      </div>
+      <div class="box_2 mt10">        
+        <h1><div class="more"><cms:more channel="entrancebrands" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="entrancebrands" property="name"/></h1>
+        <div class="block2">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+            <cms:outline channel="entrancebrands"  count="2">
+              <td width="50%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="46%" rowspan="3"><cms:imagelink colName="picPath" width="80" height="90" /></td>
+                  <td width="54%" height="45" valign="top" class="pt5"><strong><cms:cell colName="title" maxlength="8"/></strong></td>
+                </tr>
+                <tr>
+                  <td><a href="javascript:void('0')" onclick="showPdf('<cms:url/>')">浏览</a><span class="mgin5">|</span><a href="#" onclick="downloadPdf('<cms:url/>', '<cms:cell colName="chanel_id"/>', '<cms:cell colName="document_id"/>')">下载</a></td>
+                </tr>
+                <tr>
+                  <td><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></td>
+                </tr>
+              </table></td>
+               </cms:outline> 
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="box_2 mt20">       
+        <h1> <div class="more"><cms:more channel="ppstory" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="ppstory" property="name"/></h1>
+        <div class="block2">
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+             <cms:outline channel="ppstory"  count="2">
+              <td width="50%"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="46%" rowspan="3"><cms:imagelink colName="picPath" width="80" height="90" /></td>
+                  <td width="54%" height="45" valign="top" class="pt5"><strong><cms:cell colName="title" maxlength="8"/></strong></td>
+                </tr>
+                <tr>
+                  <td><a href="javascript:void('0')" onclick="showPdf('<cms:url/>')">浏览</a><span class="mgin5">|</span><a href="#" onclick="downloadPdf('<cms:url/>', '<cms:cell colName="chanel_id"/>', '<cms:cell colName="document_id"/>')">下载</a></td>
+                </tr>
+                <tr>
+                  <td><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></td>
+                </tr>
+              </table></td>
+               </cms:outline>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="rc">
+      <div class="box_2 h287">
+        <h1>视频</h1>
+        <div class="video">
+          <h2><cms:more channel="inlinevideos" target="_blank" moretext="更多 >>"/><cms:channel displayname="inlinevideos" property="name"/></h2>
+          <cms:outline channel="inlinevideos"  count="1">
+          <div><cms:cell colName="title" maxlength="14"/></div>
+          <div><cms:imagelink colName="picPath" width="180" height="95" target="_blank" />
+          	</div>
+          </cms:outline>
+        </div>
+        <div class="video">
+  <h2><cms:more channel="mediavideos" target="_blank" moretext="更多 >>"/> <cms:channel displayname="mediavideos" property="name"/></h2>
+ <cms:outline channel="mediavideos"  count="1">
+  <div><cms:cell colName="title" maxlength="14"/></div>
+  <div><cms:imagelink colName="picPath" width="180" height="95" target="_blank" /></div>
+ </cms:outline>
+</div>
+      </div>
+      <div class="box_2 mt10">
+        <h1>VI规范</h1>
+        <div class="vi">
+          <ul>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >环境知识类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >建筑标识类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >办公指示类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >公共指示类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >文化形象类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >生产管理类 ></a></li>
+            <li><a href="http://it.sany.com.cn/Sany_VI/index-frame.htm"  target="_blank" >警示类 ></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  
+  <div class="footer">
+    <div class="isany"></div>
+    <div class="quality"></div>
+    <div class="copy_right">
+    <a href="http://www.sanygroup.com/group/zh-cn/" target="_blank" >三一集团门户</a>|<a href="http://www.sanygroup.com/group/zh-cn/media/product_download.htm" target="_blank">资料下载</a>|<a href="http://www.sanygroup.com/group/zh-cn/foot/item.htm" target="_blank">使用条款</a><br/>
+ <script type="text/javascript">
+		copyright=new Date();
+		update=copyright.getFullYear();
+		document.write("1989-"+ update + " 三一集团有限公司 版权所有 ");
+	  </script>
+    </div>
+  </div>
+
+</body>
+</html>

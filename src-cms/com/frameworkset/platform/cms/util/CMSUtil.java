@@ -389,10 +389,10 @@ public class CMSUtil{
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement().toString();
 			String mimeType = mimeTypes.getString(key);
-			if (mimeType == null)
-				System.out.println("mimeType:" + mimeType);
-			if (mimetype == null)
-				System.out.println("mimetype:" + mimetype);
+//			if (mimeType == null)
+//				System.out.println("mimeType:" + mimeType);
+//			if (mimetype == null)
+//				System.out.println("mimetype:" + mimetype);
 
 			if (mimetype.equals(mimeType))
 				return key;

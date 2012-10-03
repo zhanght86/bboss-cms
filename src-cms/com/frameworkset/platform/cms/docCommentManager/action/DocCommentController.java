@@ -30,6 +30,8 @@ import com.frameworkset.platform.cms.docCommentManager.DocComment;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManager;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManagerException;
 import com.frameworkset.platform.cms.docCommentManager.NComentList;
+import com.frameworkset.platform.cms.documentmanager.Document;
+import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
@@ -68,11 +70,16 @@ public class DocCommentController {
 			} else {
 				request.setAttribute("aduitSwitchFlag", 1);
 			}
-			String docurl = container.getPublishedDocumentUrl(docId+"");
+			Document doc = CMSUtil.getCMSDriverConfiguration()
+					  .getCMSService()
+					  .getDocumentManager()
+					  .getPartDocInfoById(docId+"");
+			String docurl = container.getPublishedDocumentUrl(doc);
 			request.setAttribute("docId", docId);
 			request.setAttribute("channelId", channelId);
 			request.setAttribute("docurl", docurl);
-			
+			request.setAttribute("docTitle", doc.getTitle());
+			request.setAttribute("doc", doc);
 
 			return "path:showAllComments";
 		}

@@ -22,6 +22,39 @@
 			#if($docId)
 			 and doc_id = #[docId]
 			#end 
+			
+		]]>
+	</property>
+	
+	
+	<property name="countTodayAndTotalBrowserCounter">
+		<![CDATA[
+			select (select count(*) from td_cms_browser_counts 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+			) total,
+			(select count(*) from td_cms_browser_counts 
+			where 1=1 and BROWSERTIME between to_date(to_char(sysdate,'yyyy-MM-dd'),'yyyy-MM-dd')
+			  and  to_date(to_char(sysdate,'yyyy-MM-dd')||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')  
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+			) today
+			from dual
 		]]>
 	</property>
 	

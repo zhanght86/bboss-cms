@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.util.FileUtil"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%request.setCharacterEncoding("UTF-8");%>
 <%@ page import="java.util.*,java.util.regex.*,java.text.*,java.io.*,java.net.*,javax.imageio.*,java.awt.*,java.awt.image.*,java.awt.geom.*,javax.swing.*" %>
@@ -364,7 +365,15 @@ static String getUploadForm(String s_Type, String s_StyleName, String s_AllowExt
 }
 
 static String ReadFile(String s_FileName){
-	String s_Result = "";
+	try
+	{
+		return FileUtil.getFileContent(s_FileName, "utf-8");
+	}
+	catch(Exception e)
+	{
+		return "";
+	}
+	/**String s_Result = "";
 	try {
 		java.io.File objFile;
 		java.io.FileReader objFileReader;
@@ -384,6 +393,7 @@ static String ReadFile(String s_FileName){
 		System.out.println(e.getMessage());
 	}
 	return s_Result;
+	*/
 }
 
 static ArrayList getConfigArray(String s_Key, String s_Config){
@@ -796,7 +806,7 @@ if (sAction.equals("REMOTE")){
 
 	// jspsmartupload begin
 	mySmartUpload.initialize(pageContext);
-	mySmartUpload.setMaxFileSize(nAllowSize*1024);
+	mySmartUpload.setMaxFileSize(nAllowSize*1024*1024);
 	String sAllowedFilesList = replace(sAllowExt, "|", ",");
 	//mySmartUpload.setAllowedFilesList(sAllowedFilesList);
 	try {

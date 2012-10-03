@@ -52,7 +52,8 @@
 			}
 		}
 
-		uploadform.action = "doc_attach_upload.jsp?docpath=<%=docpath%>";
+		//uploadform.action = "doc_attach_upload.jsp?docpath=<%=docpath%>";
+		uploadform.action="<%=request.getContextPath()%>/cms/upload/docattachupload.page?docpath=<%=docpath%>";
 		uploadform.submit();
 		document.all.divProcessing.style.display = "";
 	}

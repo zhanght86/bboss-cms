@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>三一集团内网宣传平台</title>
-<pg:config enablecontextmenu="false"/>
+<pg:config enablecontextmenu="false" enabletree="false"/>
 <link href="<pg:sitedomain/>/css/main.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<pg:sitedomain/>/js/nav.js"></script>
 
@@ -33,7 +33,7 @@
   </div>
   <div class="container">
     <DIV class=video_k>
-        <DIV id=videoTitle class=video_bt><a href="${docurl}">凤凰卫视：日本福岛救援工程师感恩三一行</a></DIV>
+        <DIV id=videoTitle class=video_bt><a href="${docurl}">${docTitle}</a></DIV>
     </DIV>
     <div class="comment_box">
         

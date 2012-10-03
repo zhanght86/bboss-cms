@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.platform.cms.countermanager.CounterManager;
+import com.frameworkset.platform.cms.countermanager.bean.Browser;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserCounter;
 import com.frameworkset.platform.cms.countermanager.bean.BrowserVisitInfo;
 import com.frameworkset.platform.cms.countermanager.bean.DownLoadCounter;
@@ -143,7 +144,22 @@ public class CounterManagerImpl implements CounterManager {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("siteId", siteId);
 
-		return executor.queryObjectBean(Long.class, "countBrowserCounter", paramMap);
+		return executor.queryObjectBean(long.class, "countBrowserCounter", paramMap);
+	}
+	
+
+	/**
+	 * 获得浏览统计计数和今日统计计数
+	 * @param siteId 站点ID
+	 * @return 计数值
+	 * @throws SQLException
+	 */
+	public Browser getTotalAndTodayBrowserCount(int siteId) throws SQLException
+	{
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("siteId", siteId);
+
+		return executor.queryObjectBean(Browser.class, "countTodayAndTotalBrowserCounter", paramMap);
 	}
 
 	/*

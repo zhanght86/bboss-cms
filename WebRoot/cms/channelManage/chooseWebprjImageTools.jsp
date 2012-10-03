@@ -139,7 +139,7 @@ function send(){
 		}
 	}
 	parent.ImageListFrm.document.getElementById("divProcessing").style.display="block";
-	document.all.form1.action="uploadImageFile_do.jsp?coverflag="+document.all.coverFlag.checked+"&uri="+parent.ImageListFrm.uri;
+	document.all.form1.action="<%=request.getContextPath()%>/cms/upload/uploadImageFile_do.page?coverflag="+document.all.coverFlag.checked+"&uri="+parent.ImageListFrm.uri;
 	document.all.form1.submit();
 }
 var selectedFileName = null;

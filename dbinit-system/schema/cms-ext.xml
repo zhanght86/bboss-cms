@@ -49,10 +49,11 @@ value:http://localhost:8081/SanyPDP
         <column name="HIT_USER" size="50" type="VARCHAR"/>
         <column name="VIDIOPATH" size="500" type="VARCHAR"/>
         <column name="HITIP" size="500" type="VARCHAR"/>         
-        <column name="TIME" size="6" type="TIMESTAMP"/>     
+        <column name="HITTIME" size="6" type="TIMESTAMP"/>     
         <column name="SITENAME" size="500" type="VARCHAR"/>       
         <column name="CHANNELNAME" size="500" type="VARCHAR"/>       
-        <column name="DOCNAME" size="500" type="VARCHAR"/>              
+        <column name="DOCNAME" size="500" type="VARCHAR"/>   
+        <column name="REFERER" size="500" type="VARCHAR"/>               
     </table>
     <table name="TD_CMS_DOWNLOAD_COUNTS">
         <column name="COUNT_ID" primaryKey="true" required="true"
@@ -65,10 +66,11 @@ value:http://localhost:8081/SanyPDP
         <column name="ATTACH_ID" size="10" type="DECIMAL"/>
         <column name="DOWN_USER" size="50" type="VARCHAR"/>
         <column name="DOWNIP" size="500" type="VARCHAR"/>          
-        <column name="TIME" size="6" type="TIMESTAMP"/>         
+        <column name="DOWNTIME" size="6" type="TIMESTAMP"/>         
         <column name="SITENAME" size="500" type="VARCHAR"/>       
         <column name="CHANNELNAME" size="500" type="VARCHAR"/>       
-        <column name="DOCNAME" size="500" type="VARCHAR"/>   
+        <column name="DOCNAME" size="500" type="VARCHAR"/>  
+        <column name="REFERER" size="500" type="VARCHAR"/>     
     </table>
     <table name="TD_CMS_BROWSER_COUNTS">
         <column name="BROWSER_ID" primaryKey="true" required="true"
@@ -81,10 +83,11 @@ value:http://localhost:8081/SanyPDP
         <column name="BROWSER_USER" size="50" type="VARCHAR"/>  
         <column name="PAGEURL" size="500" type="VARCHAR"/> 
         <column name="BROWSERTYPE" size="50" type="VARCHAR"/> 
-        <column name="TIME" size="6" type="TIMESTAMP"/>       
+        <column name="BROWSERTIME" size="6" type="TIMESTAMP"/>       
         <column name="SITENAME" size="500" type="VARCHAR"/>       
         <column name="CHANNELNAME" size="500" type="VARCHAR"/>       
-        <column name="DOCNAME" size="500" type="VARCHAR"/>       
+        <column name="DOCNAME" size="500" type="VARCHAR"/>   
+        <column name="REFERER" size="500" type="VARCHAR"/>            
     </table>
     <!-- 文档分类表 -->
     <table name="TD_CMS_DOCUMENT_CLASS">

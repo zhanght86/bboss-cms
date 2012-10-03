@@ -13,6 +13,7 @@
       		and channel.site_id = site.site_id
       		and doc.document_id = arrange.document_id(+)
 			and doc.status = 5
+			and doc.ISDELETED = 0
 			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
 				and doc.publishtime >= to_date(#[startTime], 'yyyy-mm-dd') and doc.publishtime <= to_date(#[endTime], 'yyyy-mm-dd')
 			#elseif ($startTime && !$startTime.equals(""))
@@ -46,6 +47,7 @@
       		and channel.site_id = site.site_id
       		and doc.document_id = arrange.document_id(+)
 			and doc.status = 5
+			and doc.ISDELETED = 0
 			#if ($channelId)
 				and doc.channel_id = #[channelId]
 			#end

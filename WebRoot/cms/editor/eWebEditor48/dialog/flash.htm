@@ -75,15 +75,32 @@ function ReturnValue(){
 	var sFromUrl = d_fromurl.value;
 	var sWidth = d_width.value;
 	var sHeight = d_height.value;
+	var idx = sFromUrl.indexOf(".flv");
+	var sHTML = "";
+	if(idx > 0)
+	{
+		sHTML = "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" width=\"480\" height=\"400\">";
+		sHTML += "<param name=\"movie\" value=\"/ewebeditor/plugin/flvplayer.swf\">";
+		sHTML += "<param name=\"FlashVars\" value=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\">";
+		sHTML += "<param name=\"quality\" value=\"high\">";
+		sHTML += "<param name=\"allowfullscreen\" value=\"true\"><embed type=\"application/x-shockwave-flash\" src=\"/ewebeditor/plugin/flvplayer.swf\" width=\"480\" height=\"400\" flashvars=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\" quality=\"high\" allowfullscreen=\"true\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed></object>";
+	}
+	else
+	{
+		sHTML = "<embed type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" " ;
+		if (sWidth!="") sHTML+=" width=\""+sWidth + "\"";
+		if (sHeight!="") sHTML+=" height=\""+sHeight+ "\"";
+		sHTML +=" src=\""+ sFromUrl +"\" loop=\"true\" play=\"true\" quality=\"high\"></embed>";	
+	}
 	
-	var sHTML = "<OBJECT codeBase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0 classid=clsid:D27CDB6E-AE6D-11cf-96B8-444553540000";
-	if (sWidth!="") sHTML+=" width="+sWidth;
-	if (sHeight!="") sHTML+=" height="+sHeight;
-	sHTML+="><PARAM NAME=movie VALUE='"+sFromUrl+"'><PARAM NAME=quality VALUE=high><embed src='"+sFromUrl+"' quality=high pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash' type='application/x-shockwave-flash'";
-	if (sWidth!="") sHTML+=" width="+sWidth;
-	if (sHeight!="") sHTML+=" height="+sHeight;
-	sHTML+=">"+sFromUrl+"</embed></OBJECT>";
-	
+	//var sHTML = "<OBJECT codeBase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'";
+	//if (sWidth!="") sHTML+=" width="+sWidth;
+	//if (sHeight!="") sHTML+=" height="+sHeight;
+	//sHTML+="><PARAM NAME='movie' VALUE='"+sFromUrl+"'><PARAM NAME='quality' VALUE='high'><EMBED src='"+sFromUrl+"' quality='high' pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash' type='application/x-shockwave-flash'";
+	//if (sWidth!="") sHTML+=" width="+sWidth;
+	//if (sHeight!="") sHTML+=" height="+sHeight;
+	//sHTML+=">"+sFromUrl+"</EMBED></OBJECT>"; 
+	//alert(sHTML);
 	dialogArguments.insertHTML(sHTML);
 
 	window.returnValue = null;
@@ -155,7 +172,9 @@ function InitDocument(){
 		<table border=0 cellpadding=0 cellspacing=0 width="300px"><tr><td></td></tr></table>
 		<table border=0 cellpadding=0 cellspacing=2 width="100%">
 			<script language=javascript>
+			
 			if (bAllowUpload){
+				
 				document.write("<tr>");
 				document.write("<td noWrap width=\"20%\"><input type=radio id=\"d_checkfromfile\" value=\"1\" onclick=\"RadioClick('file')\"><label for=d_checkfromfile>上传</label>:</td>");
 				document.write("<td noWrap width=\"80%\">");

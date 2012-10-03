@@ -186,7 +186,7 @@
         <column name="WORKTABLENUM" required="true" size="32" type="VARCHAR"/>
         <column name="WORKTABLEDESC" required="true" size="256" type="VARCHAR"/>
         <column name="TEAMID" required="true" size="32" type="VARCHAR"/>
-        <column default="SYSDATE " name="TEAMNAME" required="true"
+        <column default="SYSDATE" name="TEAMNAME" required="true"
             size="32" type="VARCHAR"/>
     </table>
 </database>
