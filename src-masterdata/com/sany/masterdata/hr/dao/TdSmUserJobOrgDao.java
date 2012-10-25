@@ -57,12 +57,13 @@ public class TdSmUserJobOrgDao extends DaoHandler {
         int response = 0;
         TransactionManager tm = new TransactionManager();
         try {
-            tm.begin(TransactionManager.RW_TRANSACTION);
+          
             executor.insertBeans("tdSmUserJobOrgSave", List);
-            tm.commit();
+           
         } catch (Exception e) {
             logger.error("save TdSmUserJobOrg error", e);
         }
+       
         return response;
     }
     

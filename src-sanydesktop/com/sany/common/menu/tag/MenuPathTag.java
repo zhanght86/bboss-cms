@@ -50,8 +50,7 @@ public class MenuPathTag extends BaseTag {
 	@Override
 	public int doStartTag() throws JspException {	
 		int ret = super.doStartTag();
-		AccessControl control = AccessControl.getAccessControl();
-		
+		AccessControl control = AccessControl.getAccessControl(this.request,this.response);		
 		Framework framework = Framework.getInstance(control.getCurrentSystemID());
 		StringBuffer datas = new StringBuffer();
 		if(this.pretitle == null)

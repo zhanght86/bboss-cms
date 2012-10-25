@@ -1,0 +1,39 @@
+<properties>
+	
+	<property name="/sanylog/*.freepage" class="com.frameworkset.platform.sanylog.action.CounterController" singlable="true"
+		f:counterManager="attr:counterManagerLog"
+		path:index="/sanylog/browserCounterFrame.jsp"
+		path:attachindex="/sanylog/browserCounterFrame.jsp"
+		path:operateindex="/sanylog/operateCounterFrame.jsp"
+		path:showBrowserCounterList="/sanylog/browserCounterList.jsp"
+		path:showPageBrowserCounterGatherList="/sanylog/browserCounterGatherList.jsp"
+		path:showBrowserCounterDistribute="/sanylog/browserCounterChart.jsp"
+		path:showoperateCounterList="/sanylog/operateCounterList.jsp"
+		path:operateCounterDetail="/sanylog/operateCounterDetail.jsp"
+		path:operCounterRankData="/sanylog/operCounterRankData.jsp"
+		/>
+		 
+	<property name="sanylogBrowserCounterStatisticDailyTask"
+		f:counterManager="attr:counterManagerLog"
+		class="com.frameworkset.platform.sanylog.task.BrowserCounterStatisticDailyTask"
+		/>
+		<property name="sanylogOperCounterStatisticDailyTask"
+		f:counterManager="attr:counterManagerLog"
+		class="com.frameworkset.platform.sanylog.task.OperCounterStatisticDailyTask"
+		/>
+	<!-- 定时任务   " -->
+	
+	<property name="counterManagerLog"
+		f:executor="attr:sanylog.configsqlexecutor"
+		class="com.frameworkset.platform.sanylog.service.impl.CounterManagerImpl"
+		/>
+	
+	<property name="sanylog.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/sanylog/service/counter.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>

@@ -51,19 +51,32 @@
 						jobid="hrMasterDataSync"						
 						bean-name="hrSyncTask"
 						method="syncExpandData"
-						cronb_time="0 0 2 * * ?" 
+						cronb_time="0 0 1 * * ?" 
 						used="false"
 						shouldRecover="false">
 					</property>
 					
-					<property name="browserCounterStatisticDailyJob" jobid="browserCounterStatisticDailyJob"						
+				 <property name="browserCounterStatisticDailyJob" jobid="browserCounterStatisticDailyJob"						
 						bean-name="browserCounterStatisticDailyJob"
 						method="statisticBrowserCounterDailyJob"
-						cronb_time="0 0 1 * * ?"  used="true"
+						cronb_time="0 0 0am * * ?" used="false"
+						shouldRecover="false"
+						>
+					</property> 
+				 <property name="sanylogBrowserCounterStatisticDailyJob" jobid="sanylogBrowserCounterStatisticDailyJob"						
+						bean-name="sanylogBrowserCounterStatisticDailyJob"
+						method="statisticBrowserCounterDailyJob"
+						cronb_time="0 0 0am * * ?" used="false"
 						shouldRecover="false"
 						>
 					</property>
-					
+					<property name="sanylogOperCounterStatisticDailyJob" jobid="sanylogOperCounterStatisticDailyJob"						
+						bean-name="sanylogOperCounterStatisticDailyJob"
+						method="statisticOperCounterDailyJob"
+						cronb_time="59 59 23 * * ?" used="false"
+						shouldRecover="false"
+						>
+					</property> 
 				</list>
 				 
 			</property>
@@ -80,12 +93,22 @@
 			<property value="appMonitorService" />
 		</construction>
 	</property>
+	<property name="sanylogOperCounterStatisticDailyJob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
+		<construction>
+			<property value="sanylogOperCounterStatisticDailyTask" />
+		</construction>
+	</property>
+	 <property name="sanylogBrowserCounterStatisticDailyJob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
+		<construction>
+			<property value="sanylogBrowserCounterStatisticDailyTask" />
+		</construction>
+	</property>
 	
 	<property name="browserCounterStatisticDailyJob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
 		<construction>
 			<property value="browserCounterStatisticDailyTask" />
 		</construction>
-	</property>
+	</property> 
 	
 	<property name="webapplicationcontext" factory-class="org.frameworkset.web.servlet.support.WebApplicationContextUtils" factory-method="getWebApplicationContext"/>
 </properties>

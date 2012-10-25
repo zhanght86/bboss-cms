@@ -13,7 +13,7 @@
 		<jndiName>proxool_datasource_jndiname</jndiName>
 		<datasourceFile>proxool.xml</datasourceFile>
 		<autoprimarykey>false</autoprimarykey>
-		<showsql>true</showsql>
+		<showsql>false</showsql>
 		<keygenerate>composite</keygenerate>
   </datasource>
 

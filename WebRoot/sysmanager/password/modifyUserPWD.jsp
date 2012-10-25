@@ -6,8 +6,9 @@
 %>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
 <%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,8 +58,8 @@ function resetpwd(){
 
 function openChoose(){
 	
-	var url="<%=request.getContextPath()%>/sysmanager/password/chooseOrgUser.jsp";
-	$.dialog({title:'<pg:message code="sany.pdp.personcenter.person.select"/>',width:1050,height:550, content:'url:'+url}); 
+	var url="<%=request.getContextPath()%>/purviewmanager/common/selectuser.jsp?loginName=loginName";
+	$.dialog({title:'<pg:message code="sany.pdp.personcenter.person.select"/>',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
 	
 	//var v = window.showModalDialog("chooseOrgUser.jsp",window,"dialogWidth:900px;dialogHeight:550px;help:no;scroll:auto;status:no");
 	//if(v!="undefined" && v!=null){
@@ -80,7 +81,8 @@ function openChoose(){
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.loginname"/>：</th>
               			<td width="60%">
-              				<input type="text" name="loginName" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginname'/>" size="25"  class="w120" />
+              				<input type="text" name="loginName" id="loginName" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginname'/>" size="25"  class="w120" />
+              				          				
               				&nbsp;&nbsp;<a href="#"  class="bt_2" onclick="openChoose()"><span><pg:message code="sany.pdp.personcenter.person.select"/></span></a>
               			</td>
               		</tr>

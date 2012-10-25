@@ -397,12 +397,7 @@
         <column name="ORG_ID" required="true" size="50" type="VARCHAR"/>
         <column name="USER_ID" primaryKey="true" required="true"
             size="22" type="DECIMAL"/>
-        <foreign-key foreignTable="TD_SM_USER">
-            <reference foreign="USER_ID" local="USER_ID"/>
-        </foreign-key>
-        <foreign-key foreignTable="TD_SM_ORGANIZATION">
-            <reference foreign="ORG_ID" local="ORG_ID"/>
-        </foreign-key>
+      
     </table>
     <table name="TD_SM_PERMISSION_ORIGINE">
         <column name="ORIGINE_TYPE" primaryKey="true" required="true"
@@ -518,7 +513,7 @@
             size="22" type="DECIMAL"/>
         <column name="USER_SN" required="true" size="22" type="DECIMAL"/>
         <column name="USER_NAME" required="true" size="200" type="VARCHAR"/>
-        <column name="USER_PASSWORD" required="true" size="40" type="VARCHAR"/>
+        <column name="USER_PASSWORD" required="true" size="200" type="VARCHAR"/>
         <column name="USER_REALNAME" required="true" size="100" type="VARCHAR"/>
         <column name="USER_PINYIN" size="100" type="VARCHAR"/>
         <column name="USER_SEX" size="100" type="VARCHAR"/>

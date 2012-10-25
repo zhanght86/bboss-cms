@@ -36,7 +36,7 @@
   <title>属性容器</title>
 </head>
 
-<body class="contentbodymargin" scroll="no">
+<body class="contentbodymargin" >
 	<div id="contentborder">
 		<center>
 			<form name="OrgJobForm" action="" method="post" >

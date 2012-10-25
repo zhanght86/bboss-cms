@@ -34,7 +34,7 @@
 	<head>    
 	  <title>属性容器</title>
 	 </head>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" >
 		<div id="contentborder">
 			<form name="OrgJobForm" action="" method="post" >
 				<table class="table" width="100%" border="0" cellpadding="0" cellspacing="1"> 

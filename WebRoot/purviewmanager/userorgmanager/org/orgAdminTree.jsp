@@ -24,7 +24,7 @@
 <head>    
   <title>属性容器</title>
   <link rel="stylesheet" type="text/css" href="../../css/treeview.css">
-<body class="contentbodymargin" scroll="no">
+<body class="contentbodymargin" >
 <div id="">
 <form name="OrgJobForm" action="" method="post" >
 <table class="table" width="80%" border="0" cellpadding="0" cellspacing="1"> 

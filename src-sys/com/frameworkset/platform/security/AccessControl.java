@@ -2933,6 +2933,27 @@ public class AccessControl {
 		}
 		return context;
 	}
+	
+	public static AccessControl getAccessControl(HttpServletRequest request,HttpServletResponse response) {
+		AccessControl context = (AccessControl) current.get();
+		if(context == null)
+		{
+			context = AccessControl.getAccessControl(request);
+			if(context == null)
+			{
+				context = AccessControl.getInstance();
+				boolean success = context.checkAccess(request, response,false);
+				if(success)
+				{
+					request.setAttribute(AccessControl.accesscontrol_request_attribute_key,context);
+					return context;
+				}
+				else
+					return AccessControl.guest;
+			}
+		}
+		return context;
+	}
 
 	public Subject getSubject() {
 		return ((AuthPrincipal) this.principal).getSubject();

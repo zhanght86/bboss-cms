@@ -1,3 +1,44 @@
+内网宣传平台
+todolist：
+1.评论顺序问题(ok)
+2.访问页面来源不准确(ok)
+3.定时统计没起作用
+4.点播此时统计优化-播放时才计数
+5.将视屏播放页面拉入访问统计中(ok)
+6.将模板中的publishedtime统一改为docwtime(ok)
+7.专题首页、首页高度问题（ok）
+8.视屏点击表删除表外键并添加站点、频道、文档字段索引，删除浏览统计表外键并添加站点、频道、文档字段索引，解决回收站中已删除文档无法清空的问题
+9.视屏和新闻列表中出现已经删除的文档
+/SanyPDP/src-cms/com/frameworkset/platform/cms/documentmanager/document.xml
+10.首页图片新闻banner提示不对
+/SanyPDP/WebRoot/cms/siteResource/sanyIPP/_template/index.html
+11.新建站点时，组件包没有解开
+ALTER TABLE TD_CMS_VIDIO_HITS
+ DROP CONSTRAINT TD_CMS_VIDIO_HITS_FK_1;
+
+ALTER TABLE TD_CMS_VIDIO_HITS
+ DROP CONSTRAINT TD_CMS_VIDIO_HITS_FK_2;
+
+ALTER TABLE TD_CMS_VIDIO_HITS
+ DROP CONSTRAINT TD_CMS_VIDIO_HITS_FK_3;
+
+create index vhits_docid on TD_CMS_VIDIO_HITS(doc_id)
+create index vhits_channelid on TD_CMS_VIDIO_HITS(CHANNEL_ID)
+create index vhits_siteid on TD_CMS_VIDIO_HITS(SITE_ID)
+
+ALTER TABLE TD_CMS_BROWSER_COUNTS
+ DROP CONSTRAINT TD_CMS_BROWSER_COUNTS_FK_1;
+
+ALTER TABLE TD_CMS_BROWSER_COUNTS
+ DROP CONSTRAINT TD_CMS_BROWSER_COUNTS_FK_2;
+
+ALTER TABLE TD_CMS_BROWSER_COUNTS
+ DROP CONSTRAINT TD_CMS_BROWSER_COUNTS_FK_3;
+ 
+ create index brwcounts_docid on TD_CMS_BROWSER_COUNTS(doc_id)
+ create index brwcounts_channelid on TD_CMS_BROWSER_COUNTS(CHANNEL_ID)
+ create index brwcounts_siteid on TD_CMS_BROWSER_COUNTS(SITE_ID)
+12.文档相关附件处理由jspsmartupload切换为common upload机制，解决参数和文件件名中文乱码问题
 o 单独打开菜单(不带一级导航条和top页面)的方法：
 contextpath + "sanydesktop/frame.page?sany_menupath=dp::menu://sysmenu$root/products$module/xxxx$item"
 contextpath + "sanydesktop/webframe.page?sany_menupath=dp::menu://sysmenu$root/products$module/xxxx$item"

@@ -19,7 +19,7 @@
 	$(document).ready(function() {
 		querySiteInfo();
 	  });
-	
+	//获得站点的浏览的总访问量
 	function getSiteSumCount(siteId) {
 		$.ajax({
 	 	 	type: "POST",
@@ -35,7 +35,7 @@
 			}	
 		 });
 	}
-	
+	//页面加载时查询列表数据
 	function querySiteInfo() {
 		$.ajax({
 	 	 	type: "POST",
@@ -47,21 +47,23 @@
 				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
 				},
 			success : function(data){
-				$.each(data,function(i,o){
+				$.each(data,function(i,o){//为下拉添加选项
 					document.getElementById("siteId").options.add(new Option(data[i].name, data[i].siteId));
 				});	
-				
+				//获得站点的浏览的总访问量,默认为返回数据的第一个节点
 				getSiteSumCount(data[0].siteId);
+				//加载页面mainframe 并传入站点的SiteID
 				document.getElementById("browserCounterMain").src="browserCounterMain.jsp?siteId="+data[0].siteId;
 			}	
 		 });
 	}
-	
+	//根据siteId来选择数据
 	function doSiteChange(siteId) {
 		getSiteSumCount(siteId);
 		document.getElementById("browserCounterMain").src="browserCounterMain.jsp?siteId="+siteId;
 	}
 	
+	//立即统计
 	function statistic() {
 		
 		var siteId = document.getElementById("siteId").value;
@@ -88,6 +90,8 @@
 </script>
 </head>
 <body>
+<sany:menupath />
+
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<select id="siteId" name="siteId" onchange="doSiteChange(value)">
 			

@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.sany.masterdata.hr.dao.TdSmOrgUserDao;
 import com.sany.masterdata.hr.dao.TdSmUserDao;
 import com.sany.masterdata.hr.dao.TdSmUserJobOrgDao;
@@ -47,6 +48,11 @@ public class SyncUserInfo {
     private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
     private static Logger logger = Logger.getLogger(SyncUserInfo.class);
+    private static final String usepassword ;
+    static
+    {
+    	usepassword = EncrpyPwd.encodePassword("123456");
+    }
 
     /**
      * 同步所有人员数据
@@ -174,7 +180,7 @@ public class SyncUserInfo {
         tdSmUser.setUserId(Integer.parseInt(userInfo.getUserId().getValue()));
         tdSmUser.setUserSn(Integer.parseInt(userInfo.getUserId().getValue()));
         tdSmUser.setUserName(userInfo.getUsrid5().getValue().trim().toLowerCase());
-        tdSmUser.setUserPassword("123456");
+        tdSmUser.setUserPassword(usepassword);
         tdSmUser.setUserRealname(userInfo.getNachn().getValue() + userInfo.getVorna().getValue());
         tdSmUser.setUserWorknumber(userInfo.getUserId().getValue());
         tdSmUser.setUserMobiletel1(userInfo.getUsrid3().getValue());

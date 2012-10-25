@@ -6,10 +6,11 @@
 		path:showBrowserCounterList="/counter/browserCounterList.jsp"
 		path:showPageBrowserCounterGatherList="/counter/browserCounterGatherList.jsp"
 		path:showBrowserCounterDistribute="/counter/browserCounterChart.jsp"
+		
 		/>
 		
 	<property name="browserCounterStatisticDailyTask"
-		f:counterManager="counterManager"
+		f:counterManager="attr:counterManager"
 		class="com.frameworkset.platform.cms.countermanager.task.BrowserCounterStatisticDailyTask"
 		/>
 	

@@ -83,6 +83,7 @@
     		/sso/login.jsp,
     		/sso/sso.page,
     		/sanydesktop/cookieLocale.page
+    		
     	   </param-value>
     </init-param>
     <init-param>
@@ -170,7 +171,9 @@
             /WEB-INF/conf/channel/bboss-*.xml,
             /WEB-INF/conf/site/bboss-*.xml,
             /WEB-INF/conf/bboss-*.xml,
-            /WEB-INF/conf/permission/bboss-*.xml</param-value>
+            /WEB-INF/conf/permission/bboss-*.xml,
+            /WEB-INF/conf/sanylog/bboss-*.xml
+            </param-value>
         </init-param>
         <init-param>
 			<param-name>messagesources</param-name>

@@ -1,0 +1,10 @@
+<properties>
+	
+	<property name="/cms/upload/*.page,/cms/editor/eWebeditor/*.page" 
+		class="com.frameworkset.platform.cms.upload.FileUpload" 
+		path:docattachupload="/cms/docManage/doc_attach_upload.jsp"
+		path:uploadImageFile_do="/cms/channelManage/uploadImageFile_do.jsp"
+		path:ewebeditupload="/cms/editor/eWebeditor/upload_do.jsp"
+	/>
+	
+</properties>

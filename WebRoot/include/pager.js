@@ -324,14 +324,16 @@ function loadPageContent(pageurl, containerid, selector) {
 		$("#" + containerid).load(pageurl + " #" + selector,function(){
 			setTable_grayCss();
 			if($.parser)	$.parser.parse("#" + containerid);
-			loadjs();
+			try{loadjs();}
+			catch(e){}
 		});
 		
 	} else {
 		$("#" + containerid).load(pageurl,function(){
 			setTable_grayCss();
 			if($.parser)	$.parser.parse("#" + containerid);
-			loadjs();			
+			try{loadjs();}
+			catch(e){}			
 		});
 	}
 	

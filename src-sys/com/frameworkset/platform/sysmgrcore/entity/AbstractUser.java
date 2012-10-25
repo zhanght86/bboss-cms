@@ -305,6 +305,12 @@ public abstract class AbstractUser implements Serializable {
      * ADDED BY BIAOPING.YIN 2007.11.15
      */
     private int istaxmanager = 0;
+    /**
+     * 用户登录类型
+     * 0-平台验证
+     * 1-ldap验证
+     */
+    private int logintype = 0;
 
 	// TODO 注意，增加新的字段属性时，请手工在 db.UserManagerImpl.getUserList(Organization org)
 	// 中增加相应的项

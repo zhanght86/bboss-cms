@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+  
+ <property name="sap.applicationcontext" factory-class="org.frameworkset.spi.DefaultApplicationContext" factory-method="getApplicationContext">
+	<construction>
+		<property value="com/sany/sap/connection/sapserver.xml" />
+	</construction>
+</property>				  	
+			  	
+<property name="sap.sapconffactory" factory-bean="sap.applicationcontext" factory-method="getBeanObject">
+		<construction>
+			<property value="sapconffactory" />
+		</construction>
+	</property>			  	
+ <property name="sapoperationutil" class="com.sany.sap.test.SFASAPUtil"
+			  	f:sapConnectFactory="attr:sap.sapconffactory"
+			  	/>
+</properties>

@@ -38,7 +38,7 @@
     			   includeRootNode="true"    			   
     			   href="userList.jsp"    			   
     			   target="userList"
-    			   mode="static"  
+    			   mode="static-dynamic"
     			   >                         
                  
 

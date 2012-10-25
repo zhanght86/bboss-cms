@@ -424,6 +424,42 @@
 				<workspace>
 					<content>counter/index.freepage</content>
 				</workspace>
+				
+				
+			</item>
+			
+			<item name="浏览统计" id="attachCounter" i18n:en_US="attachCounter">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>sanylog/attachIndex.freepage</content>
+				</workspace>
+			</item>
+			
+			<item name="操作统计" id="operateCounter" i18n:en_US="operateCounter">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>sanylog/operateIndex.freepage</content>
+				</workspace>
 			</item>
 		</module>
 

@@ -36,7 +36,7 @@
   					passwords.encryption.algorithm=SHA-384
   					#passwords.encryption.algorithm=SSHA - 该加密方式需要加密后的密码，系统管理不支持这种加密方式
 			-->
-			<property name="passwordsEncryptionAlgorithm" value="NONE" />
+			<property name="passwordsEncryptionAlgorithm" value="SHA-384" />
             <!--
                     定义系统管理密码的加密机制(算法)，目前系统管理中提供以下几种方式：
                      MD5：一种不可逆算法，安全
@@ -45,7 +45,7 @@
                      NONE：对密码不加密
    			      和所请求算法的结合进行加密
             -->
-  			<property name="encrpytype" value="NONE"/>
+  			<property name="encrpytype" value="HEX"/>
   			<!-- 系统管理加密方式属性配置 end -->
   			
   			<!-- 

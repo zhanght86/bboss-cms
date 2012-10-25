@@ -36,13 +36,7 @@
 		<publicitem name="首页" 
 			i18n:en_US="Index" 	
 			id="indexpage" main="true">
-			<mouseupimg i18n:en_US="sysmanager/itemicon/bbs_enabled.gif" >sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			
 			<top>headersimple.page</top>
 			<!--<left>perspective_outlookbar.jsp</left> -->
 			<workspace>
@@ -149,7 +143,7 @@
 		</module>
 		
 		
-		<module name="系统维护" id="sysmanagermodule" used="false" enableinmenu="false" showleftmenu="true"  i18n:en_US="System Manage">
+		<module name="系统维护" id="sysmanagermodule" used="false" enableinmenu="true" showleftmenu="true"  i18n:en_US="System Manage">
 			<module name="系统管理" id="sysmanager" used="false" showleftmenu="true"  i18n:en_US="System Manage">
 				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
 				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif

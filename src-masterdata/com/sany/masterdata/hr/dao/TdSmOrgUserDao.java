@@ -54,11 +54,11 @@ public class TdSmOrgUserDao extends DaoHandler {
     public int batchsave(List<TdSmOrgUser> list) {
 
         int response = 0;
-        TransactionManager tm = new TransactionManager();
+       
         try {
-            tm.begin(TransactionManager.RW_TRANSACTION);
+           
             executor.insertBeans("tdSmOrgUserSave", list);
-            tm.commit();
+          
         } catch (Exception e) {
             logger.error("save TdSmOrgUser error", e);
         }

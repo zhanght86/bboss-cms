@@ -81,11 +81,11 @@ public class TdSmUserDao extends DaoHandler {
     public int batchSave(List<TdSmUser> userList) {
         
         int response = 0;
-        TransactionManager tm = new TransactionManager();
+  
         try {
-            tm.begin(TransactionManager.RW_TRANSACTION);
+      
             executor.insertBeans("tdSmUserSave", userList);
-            tm.commit();
+         
         } catch (Exception e) {
             logger.error("save TdSmUser error", e);
         }

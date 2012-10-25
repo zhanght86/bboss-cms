@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+		select #foreach($filed in $groupfileds) 
+				    #if($velocityCount == 0)
+						$filed
+					#else
+						,$filed
+					#end
+				#end
+		
+		from td_sm_group g where g.group_name in (
+			#foreach($group in $groups)
+							#if($velocityCount == 0)
+								#[groups[$velocityCount]]
+							#else
+								,#[groups[$velocityCount]]
+							#end
+						#end
+						)
+ -->
+<properties>
+	
+	
+	<property name="batchsave">
+		<![CDATA[
+			insert into td_app_bom
+  (id, bm,app_name_en, app_name, apply_domain, description, soft_level, supplier, start_year, state, rd_type, version_no, domain_url, struct_mode, soft_language, develop_tool, db_type, department_develop, product_manager, department_maintain, sys_manager, plan_type, evolve_strategy, evolve_plan, evolve_depart, manage_scope, main_description)
+values
+  (#[id],#[bm], #[app_name_en], #[app_name], #[apply_domain], 
+  #[description], #[soft_level], #[supplier], 
+  #[start_year], #[state], #[rd_type], #[version_no], #[domain_url],
+   #[struct_mode], #[soft_language], #[develop_tool], #[db_type], 
+  #[department_develop], #[product_manager], #[department_maintain], #[sys_manager], #[plan_type], 
+  #[evolve_strategy], #[evolve_plan], #[evolve_depart], #[manage_scope], #[main_description])
+		]]>
+	</property>
+	
+	<property name="deleteByKeys">
+		<![CDATA[
+			delete from TD_APP_BOM where id=#[id]
+		]]>
+	</property>
+	<property name="deleteAll">
+		<![CDATA[
+			delete from TD_APP_BOM
+		]]>
+	</property>
+	
+	<property name="getAllListAppBom">
+		<![CDATA[
+			select * from TD_APP_BOM order by bm
+		]]>
+	</property>
+	<property name="selectByKeys">
+		<![CDATA[
+			select * from TD_APP_BOM where id=#[id]
+		]]>
+	</property>
+	<property name="CheckBmExist">
+		<![CDATA[
+			select count(1) from TD_APP_BOM where 1=1 and bm=#[bm]
+			#if($id && !$id.equals(""))
+				and id <> #[id]
+			#end
+		]]>
+	</property>
+	
+	<property name="queryCntByCondition">
+		<![CDATA[
+			select count(1) from TD_APP_BOM where 1=1
+			#if($bm && !$bm.equals(""))
+				and bm = #[bm]
+			#end
+			#if($app_name_en && !$app_name_en.equals(""))
+				and app_name_en like #[app_name_en]
+			#end
+			#if($app_name && !$app_name.equals(""))
+				and app_name like #[app_name]
+			#end
+			#if($soft_level && !$soft_level.equals(""))
+				and soft_level=#[soft_level]
+			#end
+			#if($state && !$state.equals(""))
+				and state=#[state]
+			#end
+			#if($rd_type && !$rd_type.equals(""))
+				and rd_type=#[rd_type]
+			#end
+		]]>
+	</property>
+	
+	<property name="queryListAppBom">
+		<![CDATA[
+			select * from TD_APP_BOM where 1=1 
+			#if($bm && !$bm.equals(""))
+				and bm = #[bm]
+			#end
+			#if($app_name_en && !$app_name_en.equals(""))
+				and app_name_en like #[app_name_en]
+			#end
+			#if($app_name && !$app_name.equals(""))
+				and app_name like #[app_name]
+			#end
+			#if($soft_level && !$soft_level.equals(""))
+				and soft_level=#[soft_level]
+			#end
+			#if($state && !$state.equals(""))
+				and state=#[state]
+			#end
+			#if($rd_type && !$rd_type.equals(""))
+				and rd_type=#[rd_type]
+			#end
+			#if($sortKey && !$sortKey.equals(""))
+			  	order by $sortKey 
+			  	#if($sortDESC )
+				  	desc
+				#else
+				 	asc
+				#end	
+			#else
+			 	order by bm 
+			#end
+				
+		]]>
+	</property>
+	
+</properties>

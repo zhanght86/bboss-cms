@@ -35,7 +35,7 @@
 	            %>
 	            <script language="javascript" type="text/javascript">
 	            	$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.fail.noexist"/>', function() {
-	            		history.back();
+	            		window.location.href="<%=request.getContextPath()%>/sysmanager/password/modifyUserPWD.jsp";
 	            	});
 	            </script>  
 	            <%
@@ -67,7 +67,7 @@
 			      			 %>
 			            	<script language="javascript" type="text/javascript">
 			            			$.dialog.alert("<%=orgAdmin%>", function() {
-			            				history.back();
+			            				window.location.href="<%=request.getContextPath()%>/sysmanager/password/modifyUserPWD.jsp";
 			            			});
 			            	</script> 
 		            		<%
@@ -82,7 +82,7 @@
 		      			 %>
 		            	<script language="javascript" type="text/javascript">
 		            			$.dialog.alert("<%=orgAdmin%>", function() {
-		            				history.back();
+		            				window.location.href="<%=request.getContextPath()%>/sysmanager/password/modifyUserPWD.jsp";
 		            			});
 		            	</script> 
 	            		<%
@@ -98,11 +98,11 @@
             if(loginName.equals(accesscontroler.getUserAccount())) 
             accesscontroler.refreshPassword(EncrpyPwd.encodePassword(passWord));
             accesscontroler.updateMailPassword(user.getUserEmail(),passWord);
-            System.out.println("hello");
+           
              %>                 
             <script language="javascript" type="text/javascript">
             			$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.success.login"/>', function() {
-            				history.back();
+            				window.location.href="<%=request.getContextPath()%>/sysmanager/password/modifyUserPWD.jsp";
             			});
             </script>      	
                      
@@ -111,7 +111,7 @@
          		e.printStackTrace();%>
              <script language="javascript" type="text/javascript">
                          	$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.fail.login"/>', function() {
-                         		history.back();
+                         		window.location.href="<%=request.getContextPath()%>/sysmanager/password/modifyUserPWD.jsp";
                          	});
              </script>                 
 	<% }

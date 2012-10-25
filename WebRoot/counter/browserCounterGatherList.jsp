@@ -12,6 +12,8 @@
 	<pg:param name="channelId"/>
 	<pg:param name="docName"/>
 	<pg:param name="pageUrl"/>
+	<pg:param name="startTime"/>
+	<pg:param name="endTime"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
