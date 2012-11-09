@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<property name="addDemo">
+		<![CDATA[
+			insert into demo(id,name) values(#[id],#[name])
+		]]>
+	</property>
+	
+	<property name="updateDemo">
+		<![CDATA[
+			update demo set name=#[name] where id=#[id] 
+		]]>
+	</property>
+	
+	<property name="deleteDemo">
+		<![CDATA[
+			delete demo where id=?
+		]]>
+	</property>
+	
+	<property name="queryDemos">
+		<![CDATA[
+			select id,name from demo where 1=1 
+			#if($name && !$name.equals(""))
+				and name like #[name]
+			#end
+			order by $sortKey 
+			#if($desc )
+				  	desc
+				#else
+				 	asc
+				#end
+		]]>
+	</property>
+	<property name="getDemo">
+		<![CDATA[
+			select id,name from demo where id=?
+		]]>
+	</property>
+</properties>	

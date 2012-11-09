@@ -172,7 +172,8 @@
             /WEB-INF/conf/site/bboss-*.xml,
             /WEB-INF/conf/bboss-*.xml,
             /WEB-INF/conf/permission/bboss-*.xml,
-            /WEB-INF/conf/sanylog/bboss-*.xml
+            /WEB-INF/conf/sanylog/bboss-*.xml,
+            /WEB-INF/conf/demo/bboss-*.xml
             </param-value>
         </init-param>
         <init-param>

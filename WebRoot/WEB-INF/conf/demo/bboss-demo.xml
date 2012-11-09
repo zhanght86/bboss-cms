@@ -1,0 +1,35 @@
+
+<properties>
+
+	<!-- 
+		描述:demo演示示例MVC控制器配置文件
+	    author:尹标平
+		CopyRight:三一
+		版本:1.0
+	    Date: 2011-11-01
+	    /demo/index.page
+	-->
+
+	<property name="/demo/*.page"
+		path:index="/demo/main.jsp"
+		path:updatePre="/demo/updateDemo.jsp"
+		path:viewDemo="/demo/viewDemo.jsp"
+		path:queryDemos="/demo/demoList.jsp"
+		path:addPre="/demo/addDemo.jsp"
+		f:demoServiceImpl="attr:sany.demo.demoServiceImpl"
+		class="com.sany.demo.action.DemoController" >
+	</property>
+	
+	<property name="sany.demo.demoServiceImpl"
+		f:executor="attr:sany.demo.configsqlexecutor"
+		class="com.sany.demo.service.DemoServiceImpl"
+		/>
+	<property name="sany.demo.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/demo/service/demo.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>
