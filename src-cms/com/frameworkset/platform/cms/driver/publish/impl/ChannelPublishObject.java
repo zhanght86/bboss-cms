@@ -35,6 +35,7 @@ import com.frameworkset.platform.cms.driver.publish.RecursivePublishException;
 import com.frameworkset.platform.cms.driver.publish.RecursivePublishManager;
 import com.frameworkset.platform.cms.util.AttributeKeys;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.platform.cms.util.StringUtil;
 
 /**
  * 
@@ -569,6 +570,10 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 			{
 //				String channelinfo = channelContext.getChannel().getIndexpagepath();
 ////				String[] infos = channelinfo.split(":");				
+			}
+			if(!StringUtil.isEmpty(this.channelContext.getChannel().getOutlinepicture()))
+			{
+				CMSUtil.addPublishLink(channelContext, "", this.channelContext.getChannel().getOutlinepicture());
 			}
 		}
 		

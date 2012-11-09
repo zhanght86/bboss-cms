@@ -17,7 +17,6 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
-		alert("${param.siteId}");
 	 	queryModuleInfo("${param.siteId}");
 	 	
 	 	queryList(); 
@@ -33,14 +32,14 @@
 		var browserUser = $("#browserUser").val();
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
-	   	$("#custombackContainer").load("showBrowserCounterList.freepage #customContent", { siteId:siteId, channelId:channelId, docName:docName, browserType:browserType, browserIp:browserIp, browserUser:browserUser, startTime:startTime, endTime:endTime }, function(){loadjs()});
+	   	$("#custombackContainer").load("showBrowserCounterList.page #customContent", { siteId:siteId, channelId:channelId, docName:docName, browserType:browserType, browserIp:browserIp, browserUser:browserUser, startTime:startTime, endTime:endTime }, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {
 	  if (appId != null && appId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../sanylog/getModuleBySiteId.freepage",
+			url : "../sanylog/getModuleBySiteId.page",
 			data :{"appId":appId},
 			dataType : 'json',
 			async:false,
@@ -60,7 +59,7 @@
 	  if (siteId != null && siteId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../channel/getChannelBySiteId.freepage",
+			url : "../channel/getChannelBySiteId.page",
 			data :{"siteId":siteId},
 			dataType : 'json',
 			async:false,
@@ -75,7 +74,13 @@
 		 });
 	  }
 	}
-	 
+	function checkBrowserDetail(browserId){
+	    var url='';
+	  	  title="浏览记录明细";
+	  	  url='<%=request.getContextPath()%>/sanylog/checkBrowserDetail.page?browserId='+browserId;
+	  		$.dialog({ id:'iframeNewId', title:title,width:1200,height:550, content:'url:'+url});
+	  	
+ }
 	 //重置查询条件
 	 function doreset() {
    		$("#reset").click();
@@ -98,14 +103,14 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>模块：</th>
+										<th>功能路径：</th>
 										<td>
-											<select id="channelId" name="channelId" class="w120">
+											<select id="channelId" name="channelId"  maxlength="40"><!-- class="w120" -->
 												<option value="">无限制</option>
 											<select>
 										</td>
-									 <th>页面：</th>
-										<td><input id="docName" name="docName"
+									 <th style="display: none">页面：</th>
+										<td style="display: none"><input id="docName" name="docName"
 											type="text" value="" class="w120" /></td> 	
 										<th>用户：</th>
 										<td><input id="browserUser" name="browserUser"

@@ -33,8 +33,9 @@
 		var endTime = $("#endTime").val();
 		var operation = $("#operation").val();
 		var operContent = $("#operContent").val();
-	   	$("#custombackContainer").load("showOperateCounterList.freepage #customContent", 
-	   	{ appId:appId, moduleId:moduleId, pageName:pageName, browserType:browserType, operateIp:operateIp, 
+		var moduleCode = $("#moduleCode").val();
+	   	$("#custombackContainer").load("showOperateCounterList.page #customContent", 
+	   	{ appId:appId, moduleId:moduleId, pageName:pageName, browserType:browserType, operateIp:operateIp,moduleCode:moduleCode, 
 	   		operator:operator, startTime:startTime, endTime:endTime ,operation:operation,operContent:operContent}, function(){loadjs()});
 	}
 	//查询相应的模块
@@ -42,7 +43,7 @@
 		  if (appId != null && appId != "") {
 		  	$.ajax({
 		 	 	type: "POST",
-				url : "../sanylog/getModuleBySiteId.freepage",
+				url : "../sanylog/getModuleBySiteId.page",
 				data :{"appId":appId},
 				dataType : 'json',
 				async:false,
@@ -62,7 +63,7 @@
 	  if (siteId != null && siteId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../channel/getChannelBySiteId.freepage",
+			url : "../channel/getChannelBySiteId.page",
 			data :{"siteId":siteId},
 			dataType : 'json',
 			async:false,
@@ -81,7 +82,7 @@
 	 function checkOperateDetail(operateId){
 		    var url='';
 		  	  title="操作记录明细";
-		  	  url='<%=request.getContextPath()%>/sanylog/checkOperateDetail.freepage?operateId='+operateId;
+		  	  url='<%=request.getContextPath()%>/sanylog/checkOperateDetail.page?operateId='+operateId;
 		  		$.dialog({ id:'iframeNewId', title:title,width:1200,height:550, content:'url:'+url});
 		  	
 	 }
@@ -107,17 +108,20 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>模块：</th>
+										<th>功能路径：</th>
 										<td>
-											<select id="moduleId" name="modulelId" class="w120">
+											<select id="moduleId" name="modulelId" maxlength="40">
 												<option value="">无限制</option>
 											<select>
 										</td>
-									 <th>页面：</th>
-										<td><input id="pageName" name="pageName"
+									 <th style="display: none">页面：</th>
+										<td style="display: none"><input id="pageName" name="pageName"
 											type="text" value="" class="w120" /></td> 	
 										<th>用户：</th>
 										<td><input id="operator" name="operator"
+											type="text" value="" class="w120" /></td>
+											<th style="display: none">功能编码：</th>
+										<td style="display: none"><input id="moduleCode" name="moduleCode"
 											type="text" value="" class="w120" /></td>
 									</tr>
 									<tr>
@@ -134,8 +138,8 @@
 										<th>IP地址：</th>
 										<td><input id="operateIp" name="operateIp" type="text"
 											value="" class="w120" /></td>
-											<th>操作：</th>
-										<td>
+											<th style="display: none">操作：</th>
+										<td style="display: none">
 											<select id="operation" name="operation" class="w120">
 												<option value="">无限制</option>
 												<option value="add">新增</option>

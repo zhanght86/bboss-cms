@@ -142,12 +142,13 @@ public class ContentContextImpl extends PagineContextImpl implements
 			}
 			if (detailTemplate != null) {
 				// 指定中间模板jsp页面的名称
-				if (document.getPublishfilename() == null
-						|| document.getPublishfilename().equals(""))
-					super.tempFileName = "content_"
-							+ this.detailTemplate.getTemplateId();
-				else
-					super.tempFileName = document.getPublishfilename();
+//				if (document.getPublishfilename() == null
+//						|| document.getPublishfilename().equals(""))
+//					super.tempFileName = "content_"
+//							+ this.detailTemplate.getTemplateId();
+//				else
+//					super.tempFileName = document.getPublishfilename();
+				evalFileName();
 			}
 			if(detailTemplate == null)
 			{
@@ -281,12 +282,13 @@ public class ContentContextImpl extends PagineContextImpl implements
 			}
 			if (detailTemplate != null) {
 				// 指定中间模板jsp页面的名称
-				if (document.getPublishfilename() == null
-						|| document.getPublishfilename().equals(""))
-					super.tempFileName = "content_"
-							+ this.detailTemplate.getTemplateId();
-				else
-					super.tempFileName = document.getPublishfilename();
+//				if (document.getPublishfilename() == null
+//						|| document.getPublishfilename().equals(""))
+//					super.tempFileName = "content_"
+//							+ this.detailTemplate.getTemplateId();
+//				else
+//					super.tempFileName = document.getPublishfilename();
+				evalFileName();
 			}
 
 			if (!isPreview
@@ -348,6 +350,29 @@ public class ContentContextImpl extends PagineContextImpl implements
 	public boolean isAggregation() {
 		return document.getDoctype() == 3;
 	}
+	
+	private void evalFileName()
+	{
+		
+		// 指定中间模板jsp页面的名称
+		if (document.getPublishfilename() == null
+				|| document.getPublishfilename().equals(""))
+		{
+			if(detailTemplate == null)
+				return;
+			super.tempFileName = "content_"
+					+ this.detailTemplate.getTemplateId();
+			super.jspFileName = "content_"
+					+ this.detailTemplate.getTemplateId() + ".jsp";
+		}
+		else
+		{
+			super.tempFileName = document.getPublishfilename();
+			if(detailTemplate == null)
+				return;
+			super.jspFileName = CMSUtil.getJspFileName(super.tempFileName,this.detailTemplate.getTemplateId()+"");
+		}
+	}
 
 	/**
 	 * 
@@ -406,12 +431,20 @@ public class ContentContextImpl extends PagineContextImpl implements
 
 			if (detailTemplate != null) {
 				// 指定中间模板jsp页面的名称
-				if (document.getPublishfilename() == null
-						|| document.getPublishfilename().equals(""))
-					super.tempFileName = "content_"
-							+ this.detailTemplate.getTemplateId();
-				else
-					super.tempFileName = document.getPublishfilename();
+//				if (document.getPublishfilename() == null
+//						|| document.getPublishfilename().equals(""))
+//				{
+//					super.tempFileName = "content_"
+//							+ this.detailTemplate.getTemplateId();
+//					super.jspFileName = "content_"
+//							+ this.detailTemplate.getTemplateId() + ".jsp";
+//				}
+//				else
+//				{
+//					super.tempFileName = document.getPublishfilename();
+//					super.jspFileName = CMSUtil.getJspFileName(super.tempFileName,this.detailTemplate.getTemplateId()+"");
+//				}
+				evalFileName();
 			}
 			if (this.getActionType() == PublishObject.ACTIONTYPE_PUBLISH) {
 				try {

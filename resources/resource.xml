@@ -185,7 +185,7 @@
         <globaloperationgroup globalresourceid="orgunit" groupid="gloabelorgunit"/>
 	</resource>
 	<!-- 角色资源 -->
-	<resource id="role" name="角色资源"  i18n:en_US="Role Resource"  class="resRoleTree.jsp"  auto="true" system="module,cms,trans_server,trans_client,esb,autodeploy,dp">
+	<resource id="role" name="角色资源"  i18n:en_US="Role Resource"  class="resRoleTree.jsp"  auto="true" system="module,cms,trans_server,trans_client,esb,autodeploy,dp,sanylog">
 		<!--定义非未受保护的特殊资源-->
 		<!--
                 定义资源操作组
@@ -196,7 +196,7 @@
 		<globaloperationgroup globalresourceid="globalrole" groupid="globalroleoperation"/>
 	</resource>
 	<!-- 用户组资源 -->
-	<resource id="group" name="用户组资源"  i18n:en_US="UserGroup Resource"  class="resGroupTree.jsp"  auto="true"  system="module,cms,trans_server,trans_client,esb,autodeploy,dp">
+	<resource id="group" name="用户组资源"  i18n:en_US="UserGroup Resource"  class="resGroupTree.jsp"  auto="true"  system="module,cms,trans_server,trans_client,esb,autodeploy,dp,sanylog">
 		<!--定义非未受保护的特殊资源-->
 
               <!--
@@ -209,7 +209,7 @@
 		<globaloperationgroup globalresourceid="globalgroup" groupid="globalgroupoperation"/>
 	</resource>
 	<!-- 菜单资源 -->
-	<resource id="column" name="菜单资源"  i18n:en_US="Menu Resource"   class="resColumnTree.jsp" auto="true" allowIfNoRequiredRole="false" struction="tree"  system="module,cms,trans_server,trans_client,cimconsole,esb,autodeploy,dp">
+	<resource id="column" name="菜单资源"  i18n:en_US="Menu Resource"   class="resColumnTree.jsp" auto="true" allowIfNoRequiredRole="false" struction="tree"  system="module,cms,trans_server,trans_client,cimconsole,esb,autodeploy,dp,sanylog">
 		<unprotected resourceid="personuserinfomodify" />
 		<unprotected resourceid="personsecretpassword" />
 		<unprotected resourceid="appManager" />
@@ -237,7 +237,7 @@
 		<operationgroup groupid="group23"/>
 	</resource>
 	<!-- 岗位资源 -->
-	<resource id="job" name="岗位资源"  i18n:en_US="Post Resource"   class="resJobTree.jsp" auto="true" system="module,cms,trans_server,trans_client,esb,autodeploy,dp" >
+	<resource id="job" name="岗位资源"  i18n:en_US="Post Resource"   class="resJobTree.jsp" auto="true" system="module,cms,trans_server,trans_client,esb,autodeploy,dp,sanylog" >
 		<!--定义非未受保护的特殊资源-->
 
 		<!--定义资源操作组-->

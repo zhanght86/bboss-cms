@@ -3,10 +3,11 @@
 
 <%
 	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();
+	//com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getInstance();
 	
-	if (!accesscontroler.checkAccess(request, response)){
-		return;
-	}
+	//if (!accesscontroler.checkAccess(request, response)){
+	//	return;
+	//}
 	boolean hasaddpermission = accesscontroler.checkPermission("test","add","testresource");
 	boolean hasupdatepermission = accesscontroler.checkPermission("test","write","testresource");
 	boolean hasdeletepermission = accesscontroler.checkPermission("test","delete","testresource");

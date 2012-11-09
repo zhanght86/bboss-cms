@@ -17,7 +17,7 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
-	 	queryChannelInfo("${param.siteId}");
+		queryModuleInfo("${param.siteId}");
 	 	queryList(); 
 	  });
 	
@@ -27,28 +27,29 @@
 		var channelId = $("#channelId").val();
 		var docName = $("#docName").val();
 		var pageURL = $("#pageURL").val();
-	   	$("#custombackContainer").load("showPageBrowserCounterGatherList.freepage #customContent", { siteId:siteId, channelId:channelId, docName:docName, pageURL:pageURL }, function(){loadjs()});
+	   	$("#custombackContainer").load("showPageBrowserCounterGatherList.page #customContent", { siteId:siteId, channelId:channelId, docName:docName, pageURL:pageURL }, function(){loadjs()});
 	}
-	//查询站点下面模块的名称
-	function queryChannelInfo(siteId) {
-	  if (siteId != null && siteId != "") {
-	  	$.ajax({
-	 	 	type: "POST",
-			url : "../channel/getChannelBySiteId.freepage",
-			data :{"siteId":siteId},
-			dataType : 'json',
-			async:false,
-			beforeSend: function(XMLHttpRequest){
-				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-				},
-			success : function(data){
-				$.each(data,function(i,o){
-					document.getElementById("channelId").options.add(new Option(data[i].name, data[i].channelId));
-				});	
-			}	
-		 });
-	  }
-	}
+	
+	 function queryModuleInfo(appId) {
+		  if (appId != null && appId != "") {
+		  	$.ajax({
+		 	 	type: "POST",
+				url : "../sanylog/getModuleBySiteId.page",
+				data :{"appId":appId},
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+					 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+					},
+				success : function(data){
+					$.each(data,function(i,o){
+						document.getElementById("channelId").options.add(new Option(data[i].moduleName, data[i].moduleId));
+					});	
+				}	
+			 });
+		  }
+		}
+	
 	 
 	 //重置查询条件
 	 function doreset() {
@@ -72,14 +73,14 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>模块：</th>
+										<th>功能路径：</th>
 										<td>
 											<select id="channelId" name="channelId" class="w120">
 												<option value="">无限制</option>
 											<select>
 										</td>
-										<th>页面名称：</th>
-										<td><input id="docName" name="docName"
+										<th style="display: none">页面名称：</th>
+										<td style="display: none"><input id="docName" name="docName"
 											type="text" value="" class="w120" /></td>
 										<th>被访问页面地址：</th>
 										<td><input id="pageURL" name="pageURL" type="text"

@@ -34,6 +34,8 @@ import com.frameworkset.util.ListInfo;
  */
 public interface CounterManager {
 	
+	public List<BrowserCounter> getBrowserCounterDetail(String browserId)throws SQLException;
+	
 	//获得所有的应用ID
 	public List<String> getSiteList()throws SQLException;
 	//按天统计操作量
@@ -64,6 +66,7 @@ public interface CounterManager {
 	public void incrementOperateCounter(OperateCounter counter) throws SQLException;
 	public List<Module> getAllModulesOfApp(String appId) throws SQLException;
     public List<App> getApp( String userId )throws SQLException;
+    public List<App> getAdminApp( String userId )throws SQLException;
 	/**
 	 * 增加浏览计数器
 	 * @param counter BrowserCounter

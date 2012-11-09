@@ -57,7 +57,6 @@ public class CounterController {
 	public String index() {
 		return "path:index";
 	}
-
 	/**
 	 * 视频点击播放计数
 	 * @param paramCounter 计数器参数

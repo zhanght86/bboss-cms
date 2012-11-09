@@ -7,6 +7,7 @@
             size="50" type="VARCHAR"/>
         <column name="APP_ID" required="true" size="20" type="VARCHAR"/>
         <column name="APP_NAME" required="true" size="100" type="VARCHAR"/>
+        <column name="USE_FLAG" size="1" type="VARCHAR"/>
     </table>
     <table name="TD_LOG_BROWSER_COUNTS">
         <column name="BROWSER_ID" primaryKey="true" required="true"
@@ -24,6 +25,8 @@
         <column name="SITENAME" size="500" type="VARCHAR"/>
         <column name="CHANNELNAME" size="500" type="VARCHAR"/>
         <column name="DOCNAME" size="500" type="VARCHAR"/>
+        <column name="MODULE_CODE" size="40" type="VARCHAR"/>
+        <column name="MODULE_PATH" size="400" type="VARCHAR"/>
     </table>
     <table name="TD_LOG_BROWSER_IP_STATISTICS">
         <column name="VCOUNT" size="22" type="DECIMAL"/>
@@ -57,6 +60,9 @@
         <column name="APP_ID" required="true" size="10" type="VARCHAR"/>
         <column name="MODULE_ID" required="true" size="10" type="VARCHAR"/>
         <column name="MODULE_NAME" required="true" size="100" type="VARCHAR"/>
+        <column name="USE_FLAG" size="1" type="VARCHAR"/>
+        <column name="MODULE_CODE" size="40" type="VARCHAR"/>
+        <column name="MODULE_PATH" size="400" type="VARCHAR"/>
     </table>
     <table name="TD_LOG_OPERATE_COUNTS">
         <column name="OPERATE_ID" primaryKey="true" required="true"
@@ -72,10 +78,12 @@
         <column name="OPERATE_IP" size="50" type="VARCHAR"/>
         <column name="BROWSER_TYPE" size="20" type="VARCHAR"/>
         <column name="OPERATOR" size="20" type="VARCHAR"/>
-        <column name="OPER_CONTENT" size="200" type="VARCHAR"/>
+        <column name="OPER_CONTENT" type="CLOB"/>
         <column name="OPERATION" size="10" type="VARCHAR"/>
         <column name="OPER_TIME" type="DATE"/>
         <column name="LOG_LEVEL" size="10" type="VARCHAR"/>
+        <column name="MODULE_CODE" size="40" type="VARCHAR"/>
+        <column name="MODULE_PATH" size="400" type="VARCHAR"/>
     </table>
     <table name="TD_LOG_OPERSTATIC_BYDAY">
         <column name="APP_ID" required="true" size="10" type="VARCHAR"/>

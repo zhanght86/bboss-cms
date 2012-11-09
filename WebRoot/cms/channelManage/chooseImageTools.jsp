@@ -72,7 +72,7 @@ function cancel(){
 
 
 function send(){
-    var pattern=/\.(bmp|gif|jpeg|jpg)$/i;
+    var pattern=/\.(bmp|gif|jpeg|jpg|png)$/i;
    
 	var filename = document.all.form1.file.value;
 	if(fileFlag == "" || fileFlag == "pic")//图片
@@ -82,7 +82,7 @@ function send(){
 			return;
 		}
 		if(!pattern.test(filename)){
-			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg图片!");
+			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg,.png图片!");
 			return;
 		}
 	}
@@ -125,7 +125,7 @@ function send(){
 	
 	if(fileFlag == "" || fileFlag == "picOrFlash")//图片或Flash动画文件
 	{
-		var pattern1=/\.(bmp|gif|jpeg|jpg)$/i;
+		var pattern1=/\.(bmp|gif|jpeg|jpg|png)$/i;
 		var pattern2=/\.(swf)$/i;
 		
 		if(filename.search(/\S/)==-1){
@@ -133,7 +133,7 @@ function send(){
 			return;
 		}
 		if(!pattern1.test(filename)&&!pattern2.test(filename)){
-			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg图片或后缀名为swf的Flash动画文件!");
+			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg,.png图片或后缀名为swf的Flash动画文件!");
 			return;
 		}
 	}

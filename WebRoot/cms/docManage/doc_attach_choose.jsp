@@ -44,7 +44,7 @@
 		}
 		if(type=="3")
 		{
-			var reg =/.+\.([Jj][Pp][Gg]|[Bb][Mm][Pp]|[Gg][Ii][Ff]|[Jj][Pp][Ee][Gg])\b/;
+			var reg =/.+\.([Jj][Pp][Gg]|[Pp][Nn][Gg]|[Bb][Mm][Pp]|[Gg][Ii][Ff]|[Jj][Pp][Ee][Gg])\b/;
 			if(!reg.test(filepath))
 			{
 				alert("提示：\n\n请选择一个有效的文件，\n支持的格式有（gif|jpg|jpeg|bmp）！");

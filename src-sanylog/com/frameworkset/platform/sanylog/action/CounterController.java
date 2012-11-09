@@ -40,6 +40,7 @@ import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.Module;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
+import com.frameworkset.platform.sanylog.service.ConfigManager;
 import com.frameworkset.platform.sanylog.service.CounterManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
@@ -52,7 +53,7 @@ import com.frameworkset.util.StringUtil;
 public class CounterController {
 
 	private final String[] browserTypeSet = { "MSIE", "Firefox", "Safari", "Chrome" };
-
+    private ConfigManager  configManager;
 	private CounterManager counterManager;
 	private Logger log = Logger.getLogger(CounterController.class);
 	/**手动统计操作量
@@ -145,7 +146,18 @@ public class CounterController {
 		model.addAttribute("datas", datas);
 		return "path:operCounterRankData";
 	}
+	/**
+	 * 查看详细的浏览记录
+	 */
 	
+	
+	public String checkBrowserDetail(String browserId,ModelMap model) throws SQLException{
+		log.info("operateId-----"+browserId);
+		
+		List<BrowserCounter> browserCounterDetail = counterManager.getBrowserCounterDetail(browserId);
+        model.addAttribute("browserCounterDetail",browserCounterDetail);
+		return "path:browserCounterDetail";
+	}
 	/**
 	 * 查看详细的操作记录
 	 */
@@ -173,16 +185,28 @@ public class CounterController {
        
 		String appName = paramCounter.getAppName();
 		String moduleName = paramCounter.getModuleName();
+		String moduleCode = paramCounter.getModuleCode();
+		String modulePath = paramCounter.getModulePath();
+		String operator = paramCounter.getOperator();
+		if(null!=operator&&!"".equals(operator)){
+			paramCounter.setOperator(URLDecoder.decode(operator, "UTF-8"));
+		}else{
+			paramCounter.setOperator(AccessControl.getAccessControl().getUserAccount());
+		}
+		
 		String pageName = paramCounter.getPageName();
 		String operContent = paramCounter.getOperContent();
-
+		
+		paramCounter.setModulePath(StringUtil.isEmpty(modulePath) ? null : URLDecoder.decode(modulePath, "UTF-8"));
 		paramCounter.setAppName(StringUtil.isEmpty(appName) ? null : URLDecoder.decode(appName, "UTF-8"));
 		paramCounter.setModuleName(StringUtil.isEmpty(moduleName) ? null : URLDecoder.decode(moduleName, "UTF-8"));
 		paramCounter.setPageName(StringUtil.isEmpty(pageName) ? null : URLDecoder.decode(pageName, "UTF-8"));
 		paramCounter.setOperContent(StringUtil.isEmpty(operContent) ? null : URLDecoder.decode(operContent, "UTF-8"));
-		
+		Module module = configManager.checkAppModule(paramCounter.getAppName(), paramCounter.getModuleName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
+		paramCounter.setAppId(Integer.parseInt(module.getAppId()));
+		paramCounter.setModuleId(Integer.parseInt(module.getModuleId()));
 		paramCounter.setOperateIp(request.getRemoteAddr());
-		paramCounter.setOperator(AccessControl.getAccessControl().getUserAccount());
+		
 		paramCounter.setPageURL(paramCounter.getPageURL());
 //设置浏览器类型
 		String userAgent = request.getHeader("User-Agent");
@@ -261,12 +285,11 @@ public class CounterController {
 		com.frameworkset.platform.security.AccessControl control = com.frameworkset.platform.security.AccessControl.getInstance();
 		control.checkAccess(request, response,false);
 		String userId = control.getUserID();
-		 
-		return counterManager.getApp(userId);
-		
-		
-		
-		
+		 if("1".equals(userId)){
+			 return counterManager.getAdminApp(userId);
+		 }else{
+			 return counterManager.getApp(userId);
+		 }
 	}
 	public String index() {
 		return "path:index";
@@ -332,17 +355,23 @@ public class CounterController {
 	 */
 	public @ResponseBody(datatype = "jsonp")
 	long browserCounter(BrowserCounter paramCounter, boolean enable, HttpServletRequest request) throws Exception {
-
+       log.info("------------------here-------------------");
 		paramCounter.setBrowserId(UUID.randomUUID().toString());
 
 		String siteName = paramCounter.getSiteName();
 		String channelName = paramCounter.getChannelName();
 		String docName = paramCounter.getDocName();
+		String moduleCode = paramCounter.getModuleCode();
+		String modulePath = paramCounter.getModulePath();
+		paramCounter.setModuleCode(StringUtil.isEmpty(moduleCode) ? null : URLDecoder.decode(moduleCode, "UTF-8"));
+		paramCounter.setModulePath(StringUtil.isEmpty(modulePath) ? null : URLDecoder.decode(modulePath, "UTF-8"));
 
 		paramCounter.setSiteName(StringUtil.isEmpty(siteName) ? null : URLDecoder.decode(siteName, "UTF-8"));
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
-
+		Module module = configManager.checkAppModule(paramCounter.getSiteName(), paramCounter.getChannelName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
+		paramCounter.setSiteId(Integer.parseInt(module.getAppId()));
+		paramCounter.setChannelId(Integer.parseInt(module.getModuleId()));
 		paramCounter.setBrowserIp(request.getRemoteAddr());
 		paramCounter.setBrowserUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setPageURL(paramCounter.getPageURL());
@@ -873,14 +902,14 @@ public class CounterController {
 		model.addAttribute("siteId", siteId);
 		model.addAttribute("type", type);
 
-		String browserCounterForwordPage = "showBrowserCounterDayDistribute.freepage";
-		String browserTypeForwordPage = "showBrowserTypeDayDistribute.freepage";
-		String browserIPForwordPage = "showBrowserIPDayDistribute.freepage";
+		String browserCounterForwordPage = "showBrowserCounterDayDistribute.page";
+		String browserTypeForwordPage = "showBrowserTypeDayDistribute.page";
+		String browserIPForwordPage = "showBrowserIPDayDistribute.page";
 
 		if ("today".equals(type) || "yesterday".equals(type) || "custom".equals(type)) {
-			browserCounterForwordPage = "showBrowserCounterHourDistribute.freepage";
-			browserTypeForwordPage = "showBrowserTypeDistributeToday.freepage";
-			browserIPForwordPage = "showBrowserIPDistributeToday.freepage";
+			browserCounterForwordPage = "showBrowserCounterHourDistribute.page";
+			browserTypeForwordPage = "showBrowserTypeDistributeToday.page";
+			browserIPForwordPage = "showBrowserIPDistributeToday.page";
 		}
 
 		model.addAttribute("browserCounterForwordPage", browserCounterForwordPage);

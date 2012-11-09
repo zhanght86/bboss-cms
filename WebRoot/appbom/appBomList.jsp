@@ -22,7 +22,7 @@
 	<pg:param name="state"/>
 	<pg:param name="rd_type"/>
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
-	<div id="changeColor">
+	<div id="changeColor" style="overflow: scroll;">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
             <th align=center><input id="CKA" name="CKA" type="checkbox" 

@@ -16,6 +16,8 @@ package com.frameworkset.platform.sanylog.bean;
 
 import java.sql.Timestamp;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 /**
  * @author gw_hel
  * 浏览器计数
@@ -35,6 +37,7 @@ public class BrowserCounter {
 	/**
 	 * 文档名称
 	 */
+	@RequestParam(decodeCharset="UTF-8")
 	private String docName;
 	
 	/**
@@ -45,6 +48,7 @@ public class BrowserCounter {
 	/**
 	 * 站点名称
 	 */
+	@RequestParam(decodeCharset="UTF-8")
 	private String siteName;
 	
 	/**
@@ -55,6 +59,7 @@ public class BrowserCounter {
 	/**
 	 * 频道名称
 	 */
+	@RequestParam(decodeCharset="UTF-8")
 	private String channelName;
 	
 	/**
@@ -70,6 +75,7 @@ public class BrowserCounter {
 	/**
 	 * 浏览器用户
 	 */
+	@RequestParam(decodeCharset="UTF-8")
 	private String browserUser;
 	
 	/**
@@ -91,6 +97,25 @@ public class BrowserCounter {
 	 * 浏览的来源地址
 	 */
 	private String referer;
+	
+	public String getModuleCode() {
+		return moduleCode;
+	}
+
+	public void setModuleCode(String moduleCode) {
+		this.moduleCode = moduleCode;
+	}
+
+	public String getModulePath() {
+		return modulePath;
+	}
+
+	public void setModulePath(String modulePath) {
+		this.modulePath = modulePath;
+	}
+	private String moduleCode;
+	@RequestParam(decodeCharset="UTF-8")
+	private String modulePath;
 
 	public String getBrowserId() {
 		return browserId;

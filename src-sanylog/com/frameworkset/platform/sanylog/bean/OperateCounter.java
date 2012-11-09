@@ -2,11 +2,32 @@ package com.frameworkset.platform.sanylog.bean;
 
 import java.sql.Timestamp;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 public class OperateCounter {
 	//主键
 	private String operateId;
+	private String moduleCode;
+	@RequestParam(decodeCharset="UTF-8")
+	private String modulePath;
 	public String getOperateId() {
 		return operateId;
+	}
+
+	public String getModuleCode() {
+		return moduleCode;
+	}
+
+	public void setModuleCode(String moduleCode) {
+		this.moduleCode = moduleCode;
+	}
+
+	public String getModulePath() {
+		return modulePath;
+	}
+
+	public void setModulePath(String modulePath) {
+		this.modulePath = modulePath;
 	}
 
 	public void setOperateId(String operateId) {
@@ -32,14 +53,17 @@ public class OperateCounter {
 	}
 
 	//应用名称
+	@RequestParam(decodeCharset="UTF-8")
 	private String appName;
 	//模块ID
 	private Integer moduleId;
 	//模块名称
+	@RequestParam(decodeCharset="UTF-8")
 	private String moduleName;
 	//页面ID
 	private Integer pageId;
 	//页面名称
+	@RequestParam(decodeCharset="UTF-8")
 	private String pageName;
 	//访问页面URL
 	private String pageURL;
@@ -50,8 +74,10 @@ public class OperateCounter {
 	//IP
 	private String operateIp;
 	//操作人
+	@RequestParam(decodeCharset="UTF-8")
 	private String operator;
 	//操作内容
+    @RequestParam(decodeCharset="UTF-8")
 	private String operContent;
 	//操作类型
 	private String operation;

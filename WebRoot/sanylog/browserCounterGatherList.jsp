@@ -18,8 +18,8 @@
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
        	 	<th>应用名称</th> 
-       		<th>模块名称</th>
-       		<th>页面名称</th>
+       		<th>功能路径</th>
+       		<th style="display: none">页面名称</th>
        		<th>浏览页面地址</th>
        		<th>浏览次数</th>
        	</pg:header>	
@@ -28,8 +28,8 @@
    		<tr>     
    		        <td><pg:cell colName="siteName"/></td>
                 <td><pg:cell colName="channelName"/></td>
-                <td><pg:cell colName="docName"/></td>
-        		<td><pg:cell colName="pageURL" maxlength="100" replace="..."/></td>  
+                <td style="display: none"><pg:cell colName="docName"/></td>
+        		<td><span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="50" replace="..."/></span></td>  
         		<td><pg:cell colName="browserCount" /></td>  
         </tr>
 	 </pg:list>

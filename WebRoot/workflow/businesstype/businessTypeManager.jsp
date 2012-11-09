@@ -78,7 +78,7 @@
 			
 			$("#parentBusinessType").combotree({
 				url:"showComboxBusinessTree.page"
-				});
+			});
 		});
 				
 		function queryList(){	

@@ -23,7 +23,7 @@
 		}
 		
 		document.getElementById("span1").innerHTML = "<span>"+startTime+"</span>";
-		document.getElementById("frame1").src="showBrowserCounterDistribute.freepage?type=custom&siteId=${param.siteId}&startTime="+startTime+"&endTime="+startTime;
+		document.getElementById("frame1").src="showBrowserCounterDistribute.page?type=custom&siteId=${param.siteId}&startTime="+startTime+"&endTime="+startTime;
 	}
 </script>
 </head>
@@ -44,22 +44,22 @@
 		</div>
 		<div id="main1">
 			<ul  id="tab1" style="display:block;">
-				<iframe id="frame1" src="showBrowserCounterDistribute.freepage?type=today&siteId=${param.siteId}"  frameborder="0" width="100%"  height="900" ></iframe>
+				<iframe id="frame1" src="showBrowserCounterDistribute.page?type=today&siteId=${param.siteId}"  frameborder="0" width="100%"  height="900" ></iframe>
 			</ul>
 			<ul id="tab2" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=yesterday&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe src="showBrowserCounterDistribute.page?type=yesterday&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab3" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=week&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe src="showBrowserCounterDistribute.page?type=week&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab4" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=7days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe src="showBrowserCounterDistribute.page?type=7days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab5" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=month&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe src="showBrowserCounterDistribute.page?type=month&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab6" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=30days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe src="showBrowserCounterDistribute.page?type=30days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 		</div>
 </body>

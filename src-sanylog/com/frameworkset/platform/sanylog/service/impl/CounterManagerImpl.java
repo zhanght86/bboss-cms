@@ -576,6 +576,8 @@ public class CounterManagerImpl implements CounterManager {
 		paramMap.put("operator", counter.getOperator());
 		paramMap.put("operation", counter.getOperation());
 		paramMap.put("operContent", counter.getOperContent());
+		paramMap.put("moduleCode", counter.getModuleCode());
+
 		paramMap.put("startTime", startTime);
 		paramMap.put("endTime", endTime);
 		
@@ -649,6 +651,18 @@ public class CounterManagerImpl implements CounterManager {
 	public List<String> getSiteList()throws SQLException{
 		
 		return executor.queryList(String.class, "getAllAppId", "");
+	}
+
+	@Override
+	public List<BrowserCounter> getBrowserCounterDetail(String browserId)throws SQLException {
+		List<BrowserCounter> datas = executor.queryList(BrowserCounter.class, "getBrowserCounterDetail", browserId);
+		return datas;
+	}
+
+	@Override
+	public List<App> getAdminApp(String userId) throws SQLException {
+		List<App> datas = executor.queryList(App.class, "getAdminApp");
+		return datas;
 	}
 
 	

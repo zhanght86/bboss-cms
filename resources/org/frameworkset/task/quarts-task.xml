@@ -66,14 +66,14 @@
 				 <property name="sanylogBrowserCounterStatisticDailyJob" jobid="sanylogBrowserCounterStatisticDailyJob"						
 						bean-name="sanylogBrowserCounterStatisticDailyJob"
 						method="statisticBrowserCounterDailyJob"
-						cronb_time="0 0 0am * * ?" used="false"
+						cronb_time="0 0 0am * * ?" used="true"
 						shouldRecover="false"
 						>
 					</property>
 					<property name="sanylogOperCounterStatisticDailyJob" jobid="sanylogOperCounterStatisticDailyJob"						
 						bean-name="sanylogOperCounterStatisticDailyJob"
 						method="statisticOperCounterDailyJob"
-						cronb_time="59 59 23 * * ?" used="false"
+						cronb_time="59 59 23 * * ?" used="true"
 						shouldRecover="false"
 						>
 					</property> 

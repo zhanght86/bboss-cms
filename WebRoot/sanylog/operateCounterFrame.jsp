@@ -23,7 +23,7 @@
 	function getSiteSumCount(siteId) {
 		$.ajax({
 	 	 	type: "POST",
-			url : "getBrowserCount.freepage",
+			url : "getBrowserCount.page",
 			data :{siteId:siteId},
 			dataType : 'json',
 			async:false,
@@ -39,7 +39,7 @@
 	function queryAppInfo() {
 		$.ajax({
 	 	 	type: "POST",
-			url : "../sanylog/getAllApp.freepage",
+			url : "../sanylog/getAllApp.page",
 			data :{},
 			dataType : 'json',
 			async:false,
@@ -61,7 +61,7 @@
 	function querySiteInfo() {
 		$.ajax({
 	 	 	type: "POST",
-			url : "../site/getAllSite.freepage",
+			url : "../site/getAllSite.page",
 			data :{},
 			dataType : 'json',
 			async:false,
@@ -89,7 +89,7 @@
 	function statistic() {
 		$.ajax({
 	 	 	type: "POST",
-			url : "statisticOperCounterImmediately.freepage",
+			url : "statisticOperCounterImmediately.page",
 			data :{},
 			dataType : 'json',
 			async:false,

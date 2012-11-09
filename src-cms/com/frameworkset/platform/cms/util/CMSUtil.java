@@ -166,18 +166,40 @@ public class CMSUtil{
 		}
 	}
 
-	public static String getJspFileName(String fileName) {
+	public static String getJspFileName(String fileName,String templateid) {
+		if(fileName == null)
+			return null;
 		if (fileName.toLowerCase().endsWith(".jsp"))
 			return fileName;
 		else {
 			int idx = fileName.lastIndexOf(".");
 			if (idx >= 0) {
-				String name = fileName.substring(0, idx);
-				return name.concat(".jsp");
-				//				String[] infos = StringUtil.split(fileName,"\\.");
-				//				return infos[0].concat(".").concat("jsp");
+				StringBuffer st = new StringBuffer();
+				if(!StringUtil.isEmpty(templateid))
+				{
+					st.append(fileName.substring(0, idx)).append("_").append(templateid).append(".jsp");
+				}
+				else
+				{
+					st.append(fileName.substring(0, idx)).append(".jsp");
+				}
+				return st.toString();
+			
 			} else
-				return fileName.concat(".").concat("jsp");
+			{
+				StringBuffer st = new StringBuffer();
+				if(!StringUtil.isEmpty(templateid))
+				{
+					st.append(fileName).append("_").append(templateid).append(".jsp");
+				}
+				else
+				{
+					st.append(fileName).append(".jsp");
+				}
+				
+				return st.toString();
+//				return fileName.concat(".").concat("jsp");
+			}
 
 		}
 	}
@@ -395,7 +417,11 @@ public class CMSUtil{
 //				System.out.println("mimetype:" + mimetype);
 
 			if (mimetype.equals(mimeType))
+			{
+				if(key.equals(".png"))
+					return "png";
 				return key;
+			}
 
 		}
 		return "";

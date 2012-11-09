@@ -15,7 +15,7 @@
 	</operations>
 	
 	
-	<resource id="custom_" name="自定义资源" auto="false" system="module,dp" >
+	<resource id="custom_" name="自定义资源" auto="false" system="module,dp,sanylog" >
 		<!--定义非未受保护的特殊资源-->
 
                 <!--

@@ -1,7 +1,17 @@
 <properties>
-	
-	<property name="/sanylog/*.freepage" class="com.frameworkset.platform.sanylog.action.CounterController" singlable="true"
+	<property name="/sanylog/*.freepage" class="com.frameworkset.platform.sanylog.action.InterfaceController" singlable="true"
 		f:counterManager="attr:counterManagerLog"
+		f:configManager="attr:logConfigManager"
+		/>
+		
+		<property name="/sanylog/stat/*.freepage" class="com.frameworkset.platform.sanylog.action.StatJSController" 
+		f:counterManager="attr:counterManagerLog"
+		f:configManager="attr:logConfigManager"
+		/>
+	
+	<property name="/sanylog/*.page" class="com.frameworkset.platform.sanylog.action.CounterController" singlable="true"
+		f:counterManager="attr:counterManagerLog"
+		f:configManager="attr:logConfigManager"
 		path:index="/sanylog/browserCounterFrame.jsp"
 		path:attachindex="/sanylog/browserCounterFrame.jsp"
 		path:operateindex="/sanylog/operateCounterFrame.jsp"
@@ -11,6 +21,7 @@
 		path:showoperateCounterList="/sanylog/operateCounterList.jsp"
 		path:operateCounterDetail="/sanylog/operateCounterDetail.jsp"
 		path:operCounterRankData="/sanylog/operCounterRankData.jsp"
+		path:browserCounterDetail="/sanylog/browserCounterDetail.jsp"
 		/>
 		 
 	<property name="sanylogBrowserCounterStatisticDailyTask"
@@ -36,4 +47,17 @@
 		
 	</property>
 	
+	<property name="logConfigManager"
+		f:executor="attr:sanylog.configsqlexecutor"
+		class="com.frameworkset.platform.sanylog.service.impl.ConfigManagerImpl"
+		/>
+		
+	<property name="/sanylog/config/*.page" class="com.frameworkset.platform.sanylog.action.ConfigController" singlable="true"
+		f:configManager="attr:logConfigManager"
+		path:unSelectApp="/sanylog/config/unSelectApp.jsp"
+		path:selectedApp="/sanylog/config/selectedApp.jsp"
+		path:appList="/sanylog/config/appList.jsp"
+		path:moduleList="/sanylog/config/moduleList.jsp"
+		/>
+		
 </properties>

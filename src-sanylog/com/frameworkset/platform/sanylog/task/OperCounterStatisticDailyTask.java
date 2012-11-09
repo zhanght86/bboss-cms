@@ -20,6 +20,7 @@ public class OperCounterStatisticDailyTask {
 			
 		}*/
 		//按天统计
+		counterManager.deleteOperCounterByDay(todayTime);
 		counterManager.staticOperCounterByDay(todayTime);
 		
 		//按月统计

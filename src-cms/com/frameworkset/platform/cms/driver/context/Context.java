@@ -548,7 +548,8 @@ public interface Context extends java.io.Serializable {
 	public boolean forcepublishLinks(CMSLink link);
 	public boolean isClearFileCache();	
 
-	public void setClearFileCache(boolean clearFileCache) ;	
+	public void setClearFileCache(boolean clearFileCache) ;
+	public String getJspFileName();	
 	
 	
 	

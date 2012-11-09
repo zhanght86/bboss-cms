@@ -388,12 +388,13 @@ DD_belatedPNG.fix('div');
 
 <script language="JavaScript">
 	//最大化窗口
+	/**
 	var wHeight = window.screen.height-1;
 	var wWidth = window.screen.width-1;
 	window.moveTo(0,0)
 	window.resizeTo(wWidth, wHeight);	
 
-	/**
+	
    if (window.opener) {
 		window.opener.opener=null; 
 		window.opener.open('','_self');

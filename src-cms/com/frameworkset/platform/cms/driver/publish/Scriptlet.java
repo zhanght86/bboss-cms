@@ -118,7 +118,8 @@ public class Scriptlet {
 																this.context.getPublisher());
 					return;
 				}
-				String jspFileName = CMSUtil.getJspFileName(context.getTempFileName()); //如果模板文件名称为空，则说明相应的模板不存在，直接跳转倒异常处理块
+//				String jspFileName = CMSUtil.getJspFileName(context.getTempFileName()); //如果模板文件名称为空，则说明相应的模板不存在，直接跳转倒异常处理块
+				String jspFileName = context.getJspFileName(); //如果模板文件名称为空，则说明相应的模板不存在，直接跳转倒异常处理块
 				ContentContext contentctx = null;
 				if(context instanceof ContentContext)
 					contentctx = (ContentContext)context;
@@ -673,7 +674,8 @@ lable1:			if(contentctx != null)
 			
 			if(pagecontext.getPageType().equals(CMSLink.TYPE_STATIC_PAGE + ""))//静态页面
 			{
-				String jspName = CMSUtil.getJspFileName(context.getTempFileName());
+//				String jspName = CMSUtil.getJspFileName(context.getTempFileName());
+				String jspName = context.getJspFileName();
 				JspFile t_jspFile = new JspFile(context.getRealProjectPath(),
 //															CMSUtil.getPath(context.getRendPath() 
 //																	,jspName),

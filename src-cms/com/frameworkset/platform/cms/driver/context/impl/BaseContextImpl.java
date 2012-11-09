@@ -143,7 +143,10 @@ public abstract class BaseContextImpl implements Context {
 	 * 发布临时文件名称
 	 */
 	protected String tempFileName;
-
+	/**
+	 * 发布临时文件名称
+	 */
+	protected String jspFileName;
 	protected String fileExt;
 
 	protected boolean[] local2ndRemote = PublishObject.DEFAULT_PUBLISH_LOCAL;
@@ -1479,6 +1482,10 @@ public abstract class BaseContextImpl implements Context {
 	public void setEnableRecursive(boolean enableRecursive)
 	{
 		this.enableRecursive = enableRecursive;
+	}
+
+	public String getJspFileName() {
+		return jspFileName;
 	}
 	
 	

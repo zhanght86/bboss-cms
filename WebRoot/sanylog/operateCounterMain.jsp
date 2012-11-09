@@ -23,7 +23,9 @@
 				
 				  <li><a href="javascript:void(0)" onclick="setTab(2,1)"><span>模块操作量日统计排名</span></a></li>
 				<li><a href="javascript:void(0)"  onclick="setTab(2,2)"><span>模块操作量月统计排名</span></a></li>
-				<li><a href="javascript:void(0)"  onclick="setTab(2,3)"><span>模块操作量年统计排名</span></a></li>  
+				<li><a href="javascript:void(0)"  onclick="setTab(2,3)"><span>模块操作量年统计排名</span></a></li> 
+				<!-- <li><a href="javascript:void(0)"  onclick="setTab(2,4)"><span>模块操作量月统计</span></a></li>   -->
+				 
 			</ul>
 		</div>
 		<div id="main2">
@@ -41,7 +43,10 @@
 			<ul id="tab4" style="display: none;">
 			<iframe src="operateCounterStaticByYearQuery.jsp?siteId=${param.siteId}"  frameborder="0" width="100%"  height="630" ></iframe>
 				<%--<jsp:include page="operateCounterStaticByYearQuery.jsp?siteId=${param.siteId}"  flush="true"/> --%>
-			</ul> 
+			</ul>
+			<%-- <ul id="tab4" style="display: none;">
+			<iframe src="moduleOperateCounterStaticByMonthQuery.jsp?siteId=${param.siteId}"  frameborder="0" width="100%"  height="630" ></iframe>
+			</ul>  --%> 
 		</div>
 	</div>
 </body>

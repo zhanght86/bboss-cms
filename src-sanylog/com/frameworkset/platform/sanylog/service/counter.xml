@@ -3,6 +3,11 @@
 <properties>
 
 	<!-- added by qingl 2012-09-20 -->
+	<property name="getAdminApp">
+		<![CDATA[
+			  select distinct(APP_ID) appId ,APP_NAME appName from td_log_app_manager
+		]]>
+	</property>
 	<property name="deleteOperCounterByDay">
 		<![CDATA[
 			  delete from TD_LOG_OPERSTATIC_BYDAY where vtime = #[Time]
@@ -80,7 +85,7 @@
 			#if ($vtime)
 				and tmp.vtime = #[vtime]
 			#end
-			
+			order by tmp.vcount desc
 			]]>
 	</property>
 	<property name="getOperCounterRankByMonth">
@@ -94,7 +99,7 @@
 			#if ($vtime)
 				and tmp.vtime = #[vtime]
 			#end
-			
+			order by tmp.vcount desc
 			]]>
 	</property>
 	<property name="getOperCounterRankByYear">
@@ -108,6 +113,18 @@
 			#if ($vtime)
 				and tmp.vtime = #[vtime]
 			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
+	<property name="getBrowserCounterDetail">
+		<![CDATA[
+			select tmp.browser_id browserId, tmp.doc_id docId, tmp.site_id siteId, tmp.channel_id channelId, 
+			tmp.docname docName, tmp.channelname channelName, tmp.sitename siteName,
+			tmp.browsercount browserCount, tmp.browserip browserIp, 
+			tmp.browser_user browserUser, tmp.pageurl, tmp.browsertype, tmp.browsertime, tmp.referer,
+			tmp.module_code moduleCode,tmp.module_path modulePath
+			from td_log_browser_counts tmp
+			where tmp.browser_id = ?
 			
 			]]>
 	</property>
@@ -115,7 +132,8 @@
 		<![CDATA[
 			select tmp.operate_id operateId ,tmp.app_name appName, tmp.module_name moduleName, tmp.page_name pageName, tmp.page_url pageURL, 
 			tmp.operator operator, tmp.operation operation, tmp.referer referer,
-			tmp.oper_time operTime, tmp.operate_ip operateIp, tmp.browser_type browserType ,tmp.oper_content operContent
+			tmp.oper_time operTime, tmp.operate_ip operateIp, tmp.browser_type browserType ,tmp.oper_content operContent,
+			tmp.module_code moduleCode,tmp.module_path modulePath 
 			from td_log_operate_counts tmp
 			where tmp.operate_id = ?
 			
@@ -123,15 +141,15 @@
 	</property>
 	<property name="incrementOperateCounter">
 		<![CDATA[
-			insert into td_log_operate_counts(operate_id,app_id,app_name,module_id,module_name,page_id,page_name,page_url,referer,operate_ip,browser_type,operator,oper_content,operation,oper_time,log_level) 
+			insert into td_log_operate_counts(operate_id,app_id,app_name,module_id,module_name,page_id,page_name,page_url,referer,operate_ip,browser_type,operator,oper_content,operation,oper_time,log_level,module_code,module_path) 
 			values
-			(#[operateId], #[appId], #[appName], #[moduleId], #[moduleName], #[pageId], #[pageName], #[pageURL], #[referer], #[operateIp], #[browserType], #[operator], #[operContent],#[operation],systimestamp, #[logLevel])
+			(#[operateId], #[appId], #[appName], #[moduleId], #[moduleName], #[pageId], #[pageName], #[pageURL], #[referer], #[operateIp], #[browserType], #[operator], #[operContent],#[operation],systimestamp, #[logLevel],#[moduleCode],#[modulePath])
 		]]>
 	</property>
 	<property name="getOperateCounterList">
 		<![CDATA[
 			select tmp.operate_id operateId ,tmp.app_name appName, tmp.module_name moduleName, tmp.page_name pageName, tmp.page_url pageURL, 
-			tmp.operator operator, tmp.operation operation, tmp.referer referer,
+			tmp.operator operator, tmp.operation operation, tmp.referer referer,tmp.module_code moduleCode,
 			tmp.oper_time operTime, tmp.operate_ip operateIp, tmp.browser_type browserType 
 			from td_log_operate_counts tmp
 			where 1 = 1
@@ -156,6 +174,9 @@
 			#if ($operation && !$operation.equals(""))
 				and tmp.operation = #[operation]
 			#end
+			#if ($moduleCode && !$moduleCode.equals(""))
+				and tmp.module_code = #[moduleCode]
+			#end
 			#if ($startTime && $endTime)
 				and tmp.oper_time >= #[startTime] and tmp.oper_time <= #[endTime]
 			#elseif ($startTime)
@@ -169,8 +190,8 @@
 	<!-- added by qingl 2012-09-20 -->
 	<property name="incrementBrowserCounter">
 		<![CDATA[
-			insert into td_log_browser_counts(browser_id, doc_id, docname, site_id, sitename, channel_id, channelname, browsercount, browserip, browser_user, pageurl, browsertype, browsertime, referer) values
-			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], systimestamp, #[referer])
+			insert into td_log_browser_counts(browser_id, doc_id, docname, site_id, sitename, channel_id, channelname, browsercount, browserip, browser_user, pageurl, browsertype, browsertime, referer,module_code,module_path) values
+			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], systimestamp, #[referer], #[moduleCode], #[modulePath])
 		]]>
 	</property>
 	
@@ -548,4 +569,162 @@
 			order by hittime desc
 		]]>
 	</property>
+	
+	<property name="selectAppInfo">
+		<![CDATA[
+			select 
+				auto_id as autoId, app_id as appId, app_name as appName, use_flag as useFlag
+			from 
+				td_log_app_manager t
+			where 1=1
+			#if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($appName && !$appName.equals(""))
+				and app_name like #[appName]
+			#end
+		]]>
+	</property>
+	
+	<property name="selectModuleInfo">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId,
+				a.module_id as moduleId, a.module_name as moduleName,
+				a.use_flag as useFlag, b.app_name as appName,
+				a.module_code as moduleCode, a.module_path as modulePath
+			from 
+				td_log_module_manager a, td_log_app_manager b
+			where a.app_id=b.app_id
+			#if ($appId && !$appId.equals(""))
+				and a.app_id = #[appId]
+			#end
+			#if ($appName && !$appName.equals(""))
+				and b.app_name like #[appName]
+			#end
+			#if ($moduleId && !$moduleId.equals(""))
+				and a.module_id = #[moduleId]
+			#end
+			#if ($moduleName && !$moduleName.equals(""))
+				and a.module_name like #[moduleName]
+			#end
+		]]>
+	</property>
+	
+	<property name="getSelectedAppList">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId, a.app_name as appName
+			from 
+				td_log_app_manager a
+			where a.app_id in (select b.app_id from td_log_user_authorize b where b.user_id=?)
+			order by a.app_id
+		]]>
+	</property>
+	
+	<property name="getUnSelectAppList">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId, a.app_name as appName
+			from 
+				td_log_app_manager a
+			where a.app_id not in (select b.app_id from td_log_user_authorize b where b.user_id=?)
+			order by a.app_id
+		]]>
+	</property>
+	
+	<property name="deleteUserAllApp">
+		<![CDATA[
+			delete from td_log_user_authorize where user_id = ? 
+		]]>
+	</property>
+	
+	<property name="addUserAppList">
+		<![CDATA[
+		insert into td_log_user_authorize 
+			(auto_id, user_id, app_id, app_name)
+		values
+			(#[autoId], #[userId], #[appId], #[appName])
+		]]>
+	</property>
+	
+	<property name="saveAppInfo">
+		<![CDATA[
+		insert into td_log_app_manager 
+			(auto_id, app_id, app_name, use_flag)
+		values
+			(#[autoId], #[appId], #[appName], #[useFlag])
+		]]>
+	</property>
+	
+	<property name="saveModuleInfo">
+		<![CDATA[
+		insert into td_log_module_manager 
+			(auto_id, app_id, module_id, module_name, use_flag, module_code, module_path)
+		values
+			(#[autoId], #[appId], #[moduleId], #[moduleName], #[useFlag], #[moduleCode], #[modulePath])
+		]]>
+	</property>
+	
+	<property name="getModuleKeyValue">
+		<![CDATA[
+			select max(to_number(auto_id)) from td_log_module_manager
+		]]>
+	</property>
+	
+	<property name="getAppKeyValue">
+		<![CDATA[
+			select max(to_number(auto_id)) from td_log_app_manager
+		]]>
+	</property>
+	
+	<property name="getUserAuthorizeKeyValue">
+		<![CDATA[
+			select max(auto_id) from td_log_user_authorize
+		]]>
+	</property>
+	
+	
+	<property name="getAppName">
+		<![CDATA[
+			select app_name from td_log_app_manager where app_id=?
+		]]>
+	</property>
+	
+	<property name="getAppInfoByName">
+		<![CDATA[
+			select 
+				auto_id as autoId, app_id as appId, app_name as appName, use_flag as useFlag
+			from 
+				td_log_app_manager t
+			where app_name = ?
+		]]>
+	</property>
+	
+	
+	<property name="getModuleInfoByName">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId,
+				a.module_id as moduleId, a.module_name as moduleName,
+				a.use_flag as useFlag, 
+				a.module_code as moduleCode, a.module_path as modulePath
+			from 
+				td_log_module_manager a
+			where a.app_id = ? and a.module_name = ?
+		]]>
+	</property>
+	
+	<property name="modifyAppFlag">
+		<![CDATA[
+			update td_log_app_manager set use_flag=? where auto_id=?
+		]]>
+	</property>
+	
+	<property name="modifyModuleFlag">
+		<![CDATA[
+			update td_log_module_manager set use_flag=? where auto_id=?
+		]]>
+	</property>
+	
 </properties>

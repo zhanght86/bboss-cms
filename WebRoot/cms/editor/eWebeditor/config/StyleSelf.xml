@@ -12,8 +12,8 @@
 		<sissys>1</sissys>
 		<sfileext>rar|zip|exe|doc|xls|chm|hlp</sfileext>
 		<sflashext>swf</sflashext>
-		<sremoteext>gif|jpg|jpeg|bmp|png</sremoteext>
-		<simageext>gif|jpg|jpeg|bmp|png</simageext>
+		<sremoteext>gif|jpg|png|jpeg|bmp|png</sremoteext>
+		<simageext>gif|jpg|png|jpeg|bmp|png</simageext>
 		<smediaext>rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov</smediaext>
 		<sfilesize>5000</sfilesize>
 		<sflashsize>5000</sflashsize>

@@ -21,83 +21,97 @@ import com.sap.conn.jco.ext.DestinationDataEventListener;
 import com.sap.conn.jco.ext.DestinationDataProvider;
 import com.sap.conn.jco.ext.Environment;
 
-public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
+public class SapConnectFactory implements org.frameworkset.spi.InitializingBean {
 	private static Logger logger = Logger.getLogger(SapConnectFactory.class);
 	private SanyDestinationDataProvider sanyDestinationDataProvider;
-	private SAPConf sapconf ;
-	
+	private SAPConf sapconf;
+
 	private String ABAP_AS_POOLED = "ABAP_AS_WITH_POOL";
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		sanyDestinationDataProvider=new SanyDestinationDataProvider();
-		sanyDestinationDataProvider.setDestinationDataEventListener(new DestinationDataEventListener(){
-			public void deleted(String arg0) {
-				logger.info("deleted:"+arg0);
-			}
+		sanyDestinationDataProvider = new SanyDestinationDataProvider();
+		sanyDestinationDataProvider
+				.setDestinationDataEventListener(new DestinationDataEventListener() {
+					public void deleted(String arg0) {
+						logger.info("deleted:" + arg0);
+					}
 
-			public void updated(String arg0) {
-				logger.info("updated:"+arg0);
-			}
-		});
+					public void updated(String arg0) {
+						logger.info("updated:" + arg0);
+					}
+				});
 
 		Properties connectProperties = new Properties();
 		connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
 				sapconf.getHost());
-		connectProperties.setProperty(DestinationDataProvider.JCO_SYSNR, sapconf.getSysnr());
+		connectProperties.setProperty(DestinationDataProvider.JCO_SYSNR,
+				sapconf.getSysnr());
 		connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT,
 				sapconf.getClient());
-		connectProperties.setProperty(DestinationDataProvider.JCO_USER, sapconf.getUser());
+		connectProperties.setProperty(DestinationDataProvider.JCO_USER,
+				sapconf.getUser());
 		connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,
 				sapconf.getPassward());
-		connectProperties.setProperty(DestinationDataProvider.JCO_LANG, sapconf.getLang());
+		connectProperties.setProperty(DestinationDataProvider.JCO_LANG,
+				sapconf.getLang());
 
 		connectProperties.setProperty(
-				DestinationDataProvider.JCO_POOL_CAPACITY, sapconf.getJco_pool_capacity() + "");
+				DestinationDataProvider.JCO_POOL_CAPACITY,
+				sapconf.getJco_pool_capacity() + "");
 		connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
 				sapconf.getJco_peak_limit() + "");
 		this.addJcoDestinationData(ABAP_AS_POOLED, connectProperties);
-		
-		Environment.registerDestinationDataProvider(sanyDestinationDataProvider);
+
+		Environment
+				.registerDestinationDataProvider(sanyDestinationDataProvider);
 
 	}
-	
-	private Semaphore semaphore=new Semaphore(1);
-	private void addJcoDestinationData(String destinationName,java.util.Properties jcoproperties){
+
+	private Semaphore semaphore = new Semaphore(1);
+
+	private void addJcoDestinationData(String destinationName,
+			java.util.Properties jcoproperties) {
 		try {
 			semaphore.acquire();
-			if(sanyDestinationDataProvider.getDestinationProperties(destinationName)==null){
-				logger.info("Add destinationName:"+destinationName+",jcoproperties:"+jcoproperties);
-				sanyDestinationDataProvider.addDestination(destinationName, jcoproperties);
-			}else{
-				logger.info("destinationName:"+destinationName+" alread exist");
+			if (sanyDestinationDataProvider
+					.getDestinationProperties(destinationName) == null) {
+				logger.info("Add destinationName:" + destinationName
+						+ ",jcoproperties:" + jcoproperties);
+				sanyDestinationDataProvider.addDestination(destinationName,
+						jcoproperties);
+			} else {
+				logger.info("destinationName:" + destinationName
+						+ " alread exist");
 			}
 		} catch (Exception e) {
 			logger.error(e);
-		}finally{
+		} finally {
 			semaphore.release();
 		}
 	}
-	
-	public final JCoDestination getJcoDestination(String destinationName) throws SapException{
+
+	public final JCoDestination getJcoDestination(String destinationName)
+			throws SapException {
 		try {
 			return JCoDestinationManager.getDestination(destinationName);
 		} catch (JCoException e) {
-			
+
 			throw new SapException(e);
 		}
-		
-	}
-	public final JCoDestination getJcoDestination() throws SapException{
-		try {
-			return JCoDestinationManager.getDestination(this.getABAP_AS_POOLED());
-		} catch (JCoException e) {
-			
-			throw new SapException(e);
-		}
-		
+
 	}
 
-	
+	public final JCoDestination getJcoDestination() throws SapException {
+		try {
+			return JCoDestinationManager.getDestination(this
+					.getABAP_AS_POOLED());
+		} catch (JCoException e) {
+
+			throw new SapException(e);
+		}
+
+	}
 
 	/**
 	 * 调用RFC返回表格
@@ -112,10 +126,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 *            各表格中需要返回的字段名称
 	 * @return 
 	 *         返回数据表格的列表，列表长度与returnTableNames的长度一致，各表格中的字段与returnTableColumns中的字段一致
+	 * @throws SapException
 	 */
 	public List<Map<String, Object>>[] callFunctionForTable(String rfcName,
 			Map<String, Object> inParams, String[] returnTableNames,
-			String[][] returnTableColumns) {
+			String[][] returnTableColumns) throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
 			System.out.println("rfc name is empty");
@@ -134,6 +149,9 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 					.getDestination(ABAP_AS_POOLED);
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
+			if (function == null)
+				throw new SapException("获取函数[" + rfcName
+						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
 			if (inParams != null && inParams.size() > 0) {
 				Set<String> inParamsKeys = inParams.keySet();
 				for (String inParamsKey : inParamsKeys) {
@@ -170,9 +188,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 				retRecords[i] = records;
 			}
 
+		} catch (SapException e) {
+
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage(), e);
+			// e.printStackTrace();
+			// logger.error(e.getMessage(), e);
+			throw new SapException(e);
 		}
 
 		return retRecords;
@@ -195,11 +217,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 *            返回表单的参数名称列表
 	 * @return 
 	 *         返回数据表格的列表，列表长度与returnTableNames的长度一致，各表格中的字段与returnTableColumns中的字段一致
+	 * @throws SapException
 	 */
 	public List<Map<String, Object>>[] callFunctionForTable(String rfcName,
 			Map<String, Object> inParams, String[] inTableNames,
 			List<Map<String, Object>>[] inTableValues,
-			String[] returnTableNames, String[][] returnTableColumns) {
+			String[] returnTableNames, String[][] returnTableColumns)
+			throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
 			System.out.println("rfc name is empty");
@@ -218,6 +242,9 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 					.getDestination(ABAP_AS_POOLED);
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
+			if (function == null)
+				throw new SapException("获取函数[" + rfcName
+						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
 			if (inParams != null && inParams.size() > 0) {
 				Set<String> inParamsKeys = inParams.keySet();
 				for (String inParamsKey : inParamsKeys) {
@@ -271,9 +298,12 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 				retRecords[i] = records;
 			}
 
+		} catch (SapException e) {
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage(), e);
+
+			// logger.error(e.getMessage(), e);
+			throw new SapException(e);
 		}
 
 		return retRecords;
@@ -289,9 +319,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 * @param returnParameterColumns
 	 *            返回表单的参数名称列表
 	 * @return 返回表单的键值对表格，键名称与returnParameterColumns对应
+	 * @throws SapException
 	 */
 	public Map<String, Object> callFunctionForParameter(String rfcName,
-			Map<String, Object> inParams, String[] returnParameterColumns) {
+			Map<String, Object> inParams, String[] returnParameterColumns)
+			throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
 			System.out.println("rfc name is empty");
@@ -311,6 +343,9 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 					.getDestination(ABAP_AS_POOLED);
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
+			if (function == null)
+				throw new SapException("获取函数[" + rfcName
+						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
 			if (inParams != null && inParams.size() > 0) {
 				Set<String> inParamsKeys = inParams.keySet();
 				for (String inParamsKey : inParamsKeys) {
@@ -330,9 +365,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 				retRecords.put(columnName, value);
 			}
 
+		} catch (SapException e) {
+
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage(), e);
+			// e.printStackTrace();
+			// logger.error(e.getMessage(), e);
+			throw new SapException(e);
 		}
 
 		return retRecords;
@@ -352,12 +391,12 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 * @param returnParameterColumns
 	 *            返回表单的参数名称列表
 	 * @return 返回表单的键值对列表，键与returnParameterColumns相对应
+	 * @throws SapException
 	 */
 	public Map<String, Object> callFunctionForParameterInTable(String rfcName,
-			Map<String, Object> inParams, 
-			String[] inParamsTableNames,
+			Map<String, Object> inParams, String[] inParamsTableNames,
 			List<Map<String, Object>>[] inParamsTableValues,
-			String[] returnParameterColumns) {
+			String[] returnParameterColumns) throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
 			System.out.println("rfc name is empty");
@@ -377,7 +416,9 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 					.getDestination(ABAP_AS_POOLED);
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
-
+			if (function == null)
+				throw new SapException("获取函数[" + rfcName
+						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
 			// 传入表单参数
 			if (inParams != null && inParams.size() > 0) {
 				Set<String> inParamsKeys = inParams.keySet();
@@ -399,9 +440,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 						inTable.appendRow();
 						Set<String> columnSet = rowMap.keySet();
 						for (String columnName : columnSet) {
-							inTable
-									.setValue(columnName, rowMap
-											.get(columnName));
+							inTable.setValue(columnName, rowMap.get(columnName));
 						}
 					}
 				}
@@ -422,9 +461,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 				retRecords.put(columnName, value);
 			}
 
+		} catch (SapException e) {
+
+			throw e;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage(), e);
+			// e.printStackTrace();
+			// logger.error(e.getMessage(), e);
+			throw new SapException(e);
 		}
 
 		return retRecords;
@@ -448,7 +491,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 * @param returnTableColumns
 	 *            输出表格中的参数列表
 	 * @return
-	 * @throws SapException 
+	 * @throws SapException
 	 */
 	public SapResult callFunctionForParameterAndTable(String rfcName,
 			Map<String, Object> inParams, String[] inParamsTableNames,
@@ -457,18 +500,12 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 			List<String>[] returnTableColumns) throws SapException {
 
 		return callFunctionForParameterInTableAndStructure(
-				 this.getABAP_AS_POOLED(),
-				 rfcName, 
-				  inParams,
-				 (String[])null,
-				 (Map<String, Object>[])null,
-				 (String[]) inParamsTableNames,
-				 (List<Map<String, Object>>[]) inParamsTableValues,
-				 (String[] )returnParameterColumns,
-				 (String[] )null,
-				 (List<String>[]) null,
-				 (String[]) returnTableNames, 
-				 (List<String>[]) returnTableColumns);
+				this.getABAP_AS_POOLED(), rfcName, inParams, (String[]) null,
+				(Map<String, Object>[]) null, (String[]) inParamsTableNames,
+				(List<Map<String, Object>>[]) inParamsTableValues,
+				(String[]) returnParameterColumns, (String[]) null,
+				(List<String>[]) null, (String[]) returnTableNames,
+				(List<String>[]) returnTableColumns);
 	}
 
 	/**
@@ -485,276 +522,257 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 	 * @param returnTableColumns
 	 *            输出表格中的参数列表
 	 * @return
-	 * @throws SapException 
+	 * @throws SapException
 	 */
 	public SapResult callFunctionForParameterAndTable(String rfcName,
 			Map<String, Object> inParams, String[] returnParameterColumns,
-			String[] returnTableNames,  List<String>[] returnTableColumns) throws SapException {
+			String[] returnTableNames, List<String>[] returnTableColumns)
+			throws SapException {
 
 		return callFunctionForParameterInTableAndStructure(
-				 this.getABAP_AS_POOLED(),
-				 rfcName, 
-				 inParams,
-				 (String[] )null,
-				(Map<String, Object>[]) null,
-				(String[])null,
-				 (List<Map<String, Object>>[])null,
-				 ( String[] )returnParameterColumns,
-				(String[]) null,
-				(List<String>[]) null,
-				 (String[])returnTableNames, 
-				 returnTableColumns);
+				this.getABAP_AS_POOLED(), rfcName, inParams, (String[]) null,
+				(Map<String, Object>[]) null, (String[]) null,
+				(List<Map<String, Object>>[]) null,
+				(String[]) returnParameterColumns, (String[]) null,
+				(List<String>[]) null, (String[]) returnTableNames,
+				returnTableColumns);
 	}
-	
-	
+
 	public final SapResult callFunctionForParameterInTableAndStructure(
-			 String destinationName,
-			 String rfcName) throws SapException
-	{
-		return callFunctionForParameterInTableAndStructure(
-				destinationName, rfcName, null, null,
-				null, null, null, null, null, null, null, null);
+			String destinationName, String rfcName) throws SapException {
+		return callFunctionForParameterInTableAndStructure(destinationName,
+				rfcName, null, null, null, null, null, null, null, null, null,
+				null);
 	}
-	
-	public final SapResult callFunctionForParameterInTableAndStructure(			
-			 String rfcName) throws SapException
-	{
+
+	public final SapResult callFunctionForParameterInTableAndStructure(
+			String rfcName) throws SapException {
 		return callFunctionForParameterInTableAndStructure(
 				this.getABAP_AS_POOLED(), rfcName);
 	}
-	
+
 	public final SapResult callFunctionForParameterInTableAndStructure(
-			 String destinationName,
-			 String rfcName,Map<String, Object> inParams) throws SapException
-	{
-		return callFunctionForParameterInTableAndStructure(
-				destinationName, rfcName, inParams, null,
-				null, null, null, null, null, null, null, null);
+			String destinationName, String rfcName, Map<String, Object> inParams)
+			throws SapException {
+		return callFunctionForParameterInTableAndStructure(destinationName,
+				rfcName, inParams, null, null, null, null, null, null, null,
+				null, null);
 	}
-	
+
 	public final SapResult callFunctionForParameterInTableAndStructure(
-			 
-			 String rfcName,Map<String, Object> inParams) throws SapException
-	{
+
+	String rfcName, Map<String, Object> inParams) throws SapException {
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName, inParams, null,
-				null, null, null, null, null, null, null, null);
+				this.getABAP_AS_POOLED(), rfcName, inParams, null, null, null,
+				null, null, null, null, null, null);
 	}
-	
-	
-	public SapResult  rollback()
-	{
+
+	public SapResult rollback() {
 		try {
 
-			SapResult result = callFunctionForParameterInTableAndStructure(
-					SAPConf.rfcName_rollback);
+			SapResult result = callFunctionForParameterInTableAndStructure(SAPConf.rfcName_rollback);
 			return result;
 		} catch (Exception e1) {
 			return null;
 		}
 	}
-	
-	public SapResult commit(String wait) throws SapException
-	{
+
+	public SapResult commit(String wait) throws SapException {
 		Map<String, Object> inParams = new HashMap<String, Object>();
 		inParams.put("WAIT", wait);
 
 		return callFunctionForParameterInTableAndStructure(
-						SAPConf.rfcName_commit,
-						inParams);
+				SAPConf.rfcName_commit, inParams);
 	}
-	
-	public SapResult commit() throws SapException
-	{
-		return  commit("X");
+
+	public SapResult commit() throws SapException {
+		return commit("X");
 	}
-			 
-	public final SapResult callFunctionForParameterInTable(String rfcName, 
-	        String[] inParamsTableNames, List<Map<String, Object>>[]  inParamsTableValues, 
-	        String[] returnTableNames, 
-            List<String>[] returnTableColumns) throws SapException
-	{
-	    return callFunctionForParameterInTableAndStructure(rfcName, null, null, null, 
-	            inParamsTableNames, inParamsTableValues, null, null, null, returnTableNames, returnTableColumns);
+
+	public final SapResult callFunctionForParameterInTable(String rfcName,
+			String[] inParamsTableNames,
+			List<Map<String, Object>>[] inParamsTableValues,
+			String[] returnTableNames, List<String>[] returnTableColumns)
+			throws SapException {
+		return callFunctionForParameterInTableAndStructure(rfcName, null, null,
+				null, inParamsTableNames, inParamsTableValues, null, null,
+				null, returnTableNames, returnTableColumns);
 	}
-	
-	public final SapResult callFunctionForParameterInTableAndStructure(			 
-			 String rfcName, 
-			 Map<String, Object> inParams,
-			 String[] inParamsStructureNames,
-			 Map<String, Object>[] inParamsStructureValues,
-			 String[] inParamsTableNames,
-			 List<Map<String, Object>>[] inParamsTableValues,
-			 String[] returnParameterColumns,
-			 String[] returnParamsStructureNames,
-			 List<String>[] returnParamsStructureColumns,
-			 String[] returnTableNames, 
-			 List<String>[] returnTableColumns)
-			throws SapException{
-		return callFunctionForParameterInTableAndStructure(
-				 this.getABAP_AS_POOLED(),
-				 rfcName, 
-				 inParams,
-				inParamsStructureNames,
-				 inParamsStructureValues,
-				 inParamsTableNames,
-				 inParamsTableValues,
-				 returnParameterColumns,
-				 returnParamsStructureNames,
-				 returnParamsStructureColumns,
-				 returnTableNames, 
-				 returnTableColumns);
-				
-	}
+
 	public final SapResult callFunctionForParameterInTableAndStructure(
-			 String destinationName,
-			 String rfcName, 
-			 Map<String, Object> inParams,
-			 String[] inParamsStructureNames,
-			 Map<String, Object>[] inParamsStructureValues,
-			 String[] inParamsTableNames,
-			 List<Map<String, Object>>[] inParamsTableValues,
-			 String[] returnParameterColumns,
-			 String[] returnParamsStructureNames,
-			 List<String>[] returnParamsStructureColumns,
-			 String[] returnTableNames, 
-			 List<String>[] returnTableColumns)
-			throws SapException{
-		
-		 SapResult sapResult = null;
+			String rfcName, Map<String, Object> inParams,
+			String[] inParamsStructureNames,
+			Map<String, Object>[] inParamsStructureValues,
+			String[] inParamsTableNames,
+			List<Map<String, Object>>[] inParamsTableValues,
+			String[] returnParameterColumns,
+			String[] returnParamsStructureNames,
+			List<String>[] returnParamsStructureColumns,
+			String[] returnTableNames, List<String>[] returnTableColumns)
+			throws SapException {
+		return callFunctionForParameterInTableAndStructure(
+				this.getABAP_AS_POOLED(), rfcName, inParams,
+				inParamsStructureNames, inParamsStructureValues,
+				inParamsTableNames, inParamsTableValues,
+				returnParameterColumns, returnParamsStructureNames,
+				returnParamsStructureColumns, returnTableNames,
+				returnTableColumns);
+
+	}
+
+	public final SapResult callFunctionForParameterInTableAndStructure(
+			String destinationName, String rfcName,
+			Map<String, Object> inParams, String[] inParamsStructureNames,
+			Map<String, Object>[] inParamsStructureValues,
+			String[] inParamsTableNames,
+			List<Map<String, Object>>[] inParamsTableValues,
+			String[] returnParameterColumns,
+			String[] returnParamsStructureNames,
+			List<String>[] returnParamsStructureColumns,
+			String[] returnTableNames, List<String>[] returnTableColumns)
+			throws SapException {
+
+		SapResult sapResult = null;
 		try {
-			
-			 JCoDestination destination = JCoDestinationManager.getDestination(destinationName);
-			JCoFunction function = destination.getRepository().getFunction(rfcName);
-			
-					if (inParams != null) {
-						Set<String> inParamsKeys = inParams.keySet();
-						for (String inParamsKey : inParamsKeys)
-							function.getImportParameterList().setValue(inParamsKey,
-									inParams.get(inParamsKey));
-					}
-					
-					
-					if (inParamsStructureNames != null) {
-						String inStructureName = null;
-						Set<String> columnSet;
-						for (int i = 0; i < inParamsStructureNames.length; i++) {
-							inStructureName = inParamsStructureNames[i];
-							Map<String, Object> inStructureValues = inParamsStructureValues[i];
 
-							JCoStructure inStructure = function.getImportParameterList()
-									.getStructure(inStructureName);
-							columnSet = inStructureValues.keySet();
-							for (String columnName : columnSet) {
-								inStructure.setValue(columnName,
-										inStructureValues.get(columnName));
+			JCoDestination destination = JCoDestinationManager
+					.getDestination(destinationName);
+			JCoFunction function = destination.getRepository().getFunction(
+					rfcName);
+			if (function == null)
+				throw new SapException("获取函数[" + rfcName
+						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
+			if (inParams != null) {
+				Set<String> inParamsKeys = inParams.keySet();
+				for (String inParamsKey : inParamsKeys)
+					function.getImportParameterList().setValue(inParamsKey,
+							inParams.get(inParamsKey));
+			}
+
+			if (inParamsStructureNames != null) {
+				String inStructureName = null;
+				Set<String> columnSet;
+				for (int i = 0; i < inParamsStructureNames.length; i++) {
+					inStructureName = inParamsStructureNames[i];
+					Map<String, Object> inStructureValues = inParamsStructureValues[i];
+
+					JCoStructure inStructure = function
+							.getImportParameterList().getStructure(
+									inStructureName);
+					columnSet = inStructureValues.keySet();
+					for (String columnName : columnSet) {
+						inStructure.setValue(columnName,
+								inStructureValues.get(columnName));
+					}
+				}
+			}
+
+			if (inParamsTableNames != null) {
+				Set<String> columnSet;
+				for (int i = 0; i < inParamsTableNames.length; i++) {
+					String inTableName = inParamsTableNames[i];
+					List<Map<String, Object>> inTableValues = inParamsTableValues[i];
+					JCoTable inTable = function.getTableParameterList()
+							.getTable(inTableName);
+					for (Map<String, Object> rowMap : inTableValues) {
+						inTable.appendRow();
+						columnSet = rowMap.keySet();
+						for (String columnName : columnSet)
+							inTable.setValue(columnName, rowMap.get(columnName));
+					}
+				}
+
+			}
+
+			long be = System.currentTimeMillis();
+			function.execute(destination);
+			long en = System.currentTimeMillis();
+
+			if (returnParameterColumns != null) {
+				Map<String, Object> retRecords = new HashMap<String, Object>();
+				for (int i = 0; i < returnParameterColumns.length; i++) {
+					String columnName = returnParameterColumns[i];
+					Object value = function.getExportParameterList().getValue(
+							columnName);
+					retRecords.put(columnName, value);
+				}
+				sapResult = new SapResult();
+				sapResult.setResultParams(retRecords);
+			}
+
+			if (returnParamsStructureNames != null) {
+				Map<String, Map<String, Object>> resultStructures = new HashMap<String, Map<String, Object>>();
+				for (int i = 0; i < returnParamsStructureNames.length; i++) {
+					resultStructures.put(returnParamsStructureNames[i],
+							new HashMap<String, Object>());
+					JCoStructure js = function.getExportParameterList()
+							.getStructure(returnParamsStructureNames[i]);
+					for (int j = 0; j < returnParamsStructureColumns[i].size(); j++) {
+						resultStructures
+								.get(returnParamsStructureNames[i])
+								.put(returnParamsStructureColumns[i].get(j),
+										js.getValue(returnParamsStructureColumns[i]
+												.get(j)));
+					}
+
+				}
+				if (sapResult == null)
+					sapResult = new SapResult();
+				sapResult.setResultStructures(resultStructures);
+			}
+
+			if (returnTableNames != null) {
+				Map<String, List<Map<String, Object>>> retTableRecords = new HashMap<String, List<Map<String, Object>>>();
+				for (int i = 0; i < returnTableNames.length; i++) {
+					JCoTable table = function.getTableParameterList().getTable(
+							returnTableNames[i]);
+					List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
+					if (table != null)
+						for (int k = 0; k < table.getNumRows(); k++) {
+							table.setRow(k);
+							Map<String, Object> recordRow = new HashMap<String, Object>();
+							for (int j = 0; j < returnTableColumns[i].size(); j++) {
+								recordRow.put(returnTableColumns[i].get(j),
+										table.getValue(returnTableColumns[i]
+												.get(j)));
 							}
+							records.add(recordRow);
 						}
-					}
+					retTableRecords.put(returnTableNames[i], records);
 
-					if (inParamsTableNames != null) {
-						Set<String> columnSet;
-						for (int i = 0; i < inParamsTableNames.length; i++) {
-							String inTableName = inParamsTableNames[i];
-							List<Map<String, Object>> inTableValues = inParamsTableValues[i];
-							JCoTable inTable = function.getTableParameterList().getTable(
-									inTableName);
-							for (Map<String, Object> rowMap : inTableValues) {
-								inTable.appendRow();
-								columnSet = rowMap.keySet();
-								for (String columnName : columnSet)
-									inTable.setValue(columnName, rowMap.get(columnName));
-							}
-						}
+				}
+				if (sapResult == null)
+					sapResult = new SapResult();
+				sapResult.setResultTables(retTableRecords);
+			}
+		} catch (SapException e) {
 
-					}
-					
-					
-					
-					long be=System.currentTimeMillis();
-					function.execute(destination);
-					long en=System.currentTimeMillis();
-
-			
-					if (returnParameterColumns != null) {
-						Map<String, Object> retRecords = new HashMap<String, Object>();
-						for (int i = 0; i < returnParameterColumns.length; i++) {
-							String columnName = returnParameterColumns[i];
-							Object value = function.getExportParameterList().getValue(
-									columnName);
-							retRecords.put(columnName, value);
-						}
-						sapResult = new SapResult();
-						sapResult.setResultParams(retRecords);
-					}
-					
-					
-					if (returnParamsStructureNames != null) {
-						Map<String, Map<String, Object>> resultStructures = new HashMap<String, Map<String, Object>>();
-						for (int i = 0; i < returnParamsStructureNames.length; i++) {
-							resultStructures.put(returnParamsStructureNames[i],new HashMap<String, Object>());
-							JCoStructure js = function.getExportParameterList().getStructure(returnParamsStructureNames[i]);
-							for (int j = 0; j < returnParamsStructureColumns[i].size(); j++) {
-								resultStructures.get(returnParamsStructureNames[i]).put(
-										returnParamsStructureColumns[i].get(j),
-										js.getValue(returnParamsStructureColumns[i].get(j)));
-							}
-
-						}
-						if(sapResult == null)
-							sapResult = new SapResult();
-						sapResult.setResultStructures(resultStructures);
-					}
-					
-					
-					if (returnTableNames != null) {
-						Map<String,List<Map<String, Object>>> retTableRecords = new HashMap<String,List<Map<String, Object>>>();
-						for (int i = 0; i < returnTableNames.length; i++) {
-							JCoTable table = function.getTableParameterList().getTable(returnTableNames[i]);
-							List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
-							if (table != null)
-								for (int k = 0; k < table.getNumRows(); k++) {
-									table.setRow(k);
-									Map<String, Object> recordRow = new HashMap<String, Object>();
-									for (int j = 0; j < returnTableColumns[i].size(); j++) {
-										recordRow.put(returnTableColumns[i].get(j), table.getValue(returnTableColumns[i].get(j)));
-									}
-									records.add(recordRow);
-								}
-							retTableRecords.put(returnTableNames[i], records);
-							
-						}
-						if(sapResult == null)
-							sapResult = new SapResult();
-						sapResult.setResultTables(retTableRecords);
-					}
+			throw e;
 		} catch (Exception e) {
+			// e.printStackTrace();
+			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
-			
-		
-		
+
 		return sapResult;
 	}
 
 	public String getABAP_AS_POOLED() {
 		return ABAP_AS_POOLED;
 	}
-	public JCoDestination begin(String destination) throws SapException
-	{
+
+	public JCoDestination begin(String destination) throws SapException {
 		JCoDestination destination_ = getJcoDestination(destination);
 		com.sap.conn.jco.JCoContext.begin(destination_);
 		return destination_;
 	}
-	
-	public JCoDestination begin() throws SapException
-	{
+
+	public JCoDestination begin() throws SapException {
 		return begin(this.getABAP_AS_POOLED());
 	}
-	public void end(JCoDestination destination)
-	{
-		if(destination != null)
-		{
+
+	public void end(JCoDestination destination) {
+		if (destination != null) {
 			try {
 				com.sap.conn.jco.JCoContext.end(destination);
 			} catch (Exception e) {
@@ -764,7 +782,4 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean{
 		}
 	}
 
-	
-
 }
-

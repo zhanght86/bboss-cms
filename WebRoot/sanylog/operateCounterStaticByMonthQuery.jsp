@@ -25,14 +25,14 @@
 		   var appId = "${param.siteId}";
 			var year = $("#year").val();
 			var month = $("#month").val();
-		   	$("#custombackContainer").load("showOperCounterRankByMonth.freepage #customContent", { appId:appId, year:year,month:month}, function(){loadjs()});
+		   	$("#custombackContainer").load("showOperCounterRankByMonth.page #customContent", { appId:appId, year:year,month:month}, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {
 	  if (appId != null && appId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../sanylog/getModuleBySiteId.freepage",
+			url : "../sanylog/getModuleBySiteId.page",
 			data :{"appId":appId},
 			dataType : 'json',
 			async:false,
@@ -52,7 +52,7 @@
 	  if (siteId != null && siteId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../channel/getChannelBySiteId.freepage",
+			url : "../channel/getChannelBySiteId.page",
 			data :{"siteId":siteId},
 			dataType : 'json',
 			async:false,

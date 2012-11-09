@@ -29,7 +29,7 @@
 	 	var siteId = "${siteId}";
 	 	var startTime = "${startTime}";
 	 	var endTime = "${endTime}";
-	   	$("#custombackContainer").load("showPageBrowserCounterGatherList.freepage #customContent", { siteId:siteId, startTime:startTime, endTime:endTime }, function(){loadjs()});
+	   	$("#custombackContainer").load("showPageBrowserCounterGatherList.page #customContent", { siteId:siteId, startTime:startTime, endTime:endTime }, function(){loadjs()});
 	}
 </script>
 </head>

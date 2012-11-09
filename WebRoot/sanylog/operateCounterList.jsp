@@ -8,7 +8,7 @@
 </pg:equal> 
 <pg:notequal actual="${operateCounterDataList.totalSize}"  value="0">
    <pg:pager scope="request"  data="operateCounterDataList" desc="true" isList="false" containerid="custombackContainer" selector="customContent">
-	<pg:param name="siteId"/>
+	<pg:param name="appId"/>
 		<pg:param name="moduleId"/>
 		<pg:param name="pageName"/>
 		<pg:param name="browserType"/>
@@ -23,32 +23,34 @@
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
-        	<th>应用名称</th> 	
-       		<th>模块名称</th>
-       		<th>页面名称</th>
+        	 	
+       		<th>功能路径</th>
+       		<th style="display: none">页面名称</th>
+       		<th style="display: none">功能编号</th>
        		<th>页面URL</th>
        		<th>操作人</th>
-       		<th>操作类型</th>
+       		<th style="display: none">操作类型</th>
        		<th>来源页面</th>
        		<th>操作时间</th>
        		<th>操作IP</th>
        		<th>浏览器类型</th>
-       		<th>查看明细</th>
+       		<th >查看明细</th>
        	</pg:header>	
 
       <pg:list autosort="false">
    		<tr>
-                <td><pg:cell colName="appName"/></td>    
+                    
                 <td><pg:cell colName="moduleName"/></td> 
-                <td><pg:cell colName="pageName"/></td>    
-        		<td><pg:cell colName="pageURL" maxlength="40" replace="..."/></td>  
+                <td style="display: none"><pg:cell colName="pageName"/></td>
+                <td style="display: none"><pg:cell colName="moduleCode"/></td>    
+        		<td><span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="40" replace="..."/></span></td>  
         		<td><pg:cell colName="operator" /></td>  
-        		<td><pg:cell colName="operation" /></td>                          
-        		<td><pg:cell colName="referer" maxlength="40" replace="..."/></td>                          
+        		<td style="display: none"><pg:cell colName="operation" /></td>                          
+        		<td><span class="toolTip" title="<pg:cell colName="referer"/>"><pg:cell colName="referer" maxlength="40" replace="..."/></span></td>                          
         		<td><pg:cell colName="operTime" dateformat="yyyy-MM-dd  HH:mm:ss"/></td>
         		<td><pg:cell colName="operateIp" /></td>                             
         		<td><pg:cell colName="browserType"  /></td>
-        		<td><a href="#" onclick="checkOperateDetail('<pg:cell colName="operateId" />')">查看</a></td>  
+        		<td ><a href="#" onclick="checkOperateDetail('<pg:cell colName="operateId" />')">查看</a></td>  
         </tr>
 	 </pg:list>
     </table>

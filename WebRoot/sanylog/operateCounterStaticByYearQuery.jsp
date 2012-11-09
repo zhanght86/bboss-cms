@@ -24,14 +24,14 @@
 	 function queryList() {	
 		    var appId = "${param.siteId}";
 			var year = $("#year").val();
-		   	$("#custombackContainer").load("showOperCounterRankByYear.freepage #customContent", { appId:appId, year:year}, function(){loadjs()});
+		   	$("#custombackContainer").load("showOperCounterRankByYear.page #customContent", { appId:appId, year:year}, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {
 	  if (appId != null && appId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../sanylog/getModuleBySiteId.freepage",
+			url : "../sanylog/getModuleBySiteId.page",
 			data :{"appId":appId},
 			dataType : 'json',
 			async:false,
@@ -51,7 +51,7 @@
 	  if (siteId != null && siteId != "") {
 	  	$.ajax({
 	 	 	type: "POST",
-			url : "../channel/getChannelBySiteId.freepage",
+			url : "../channel/getChannelBySiteId.page",
 			data :{"siteId":siteId},
 			dataType : 'json',
 			async:false,

@@ -11,6 +11,9 @@
 		
 	<subsystem name="代理商门户" i18n:en_US="代理商门户" id="dp" module="module-dp.xml"
 	 	
+		baseuri="http://localhost:7000/creatorcms" />
+		<subsystem name="WEB应用统计平台" i18n:en_US="WEB应用统计平台" id="sanylog" module="module-sanylog.xml"
+	 	
 		baseuri="http://localhost:7000/creatorcms" />			
 	<!-- 
 		系统菜单国际化规范：
@@ -461,6 +464,40 @@
 					<content>sanylog/operateIndex.freepage</content>
 				</workspace>
 			</item>
+			
+			<item name="权限配置管理" id="permissionConfig" i18n:en_US="permissionConfig">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>sanylog/config/permissionConfig.jsp</content>
+				</workspace>
+			</item>
+			
+			<item name="应用配置管理" id="AppModuleList" i18n:en_US="AppModuleList">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<workspace>
+					<content>sanylog/config/appModuleIndex.jsp</content>
+				</workspace>
+			</item>
+			
 		</module>
 
 

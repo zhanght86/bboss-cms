@@ -4091,25 +4091,24 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		}
 		try {
 			DBUtil db = new DBUtil();
-			String sql = "select CHANNEL_ID, NAME,DISPLAY_NAME, PUB_FILE_NAME, "
-					+ "PARENT_ID,CHNL_PATH,CREATEUSER,CREATETIME, "
-					+ "ORDER_NO,SITE_ID,STATUS,OUTLINE_TPL_ID, "
-					+ "DETAIL_TPL_ID, "
-					// + "DETAIL_TPL_ID, CHANNEL_FLOW_ID(channel_id) WORKFLOW,"
-					+ "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC, "
-					+ "CHNL_OUTLINE_PROTECT, DOC_PROTECT,"
-					+ "PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE, MOUSECLICKIMAGE, MOUSEUPIMAGE , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH,  COMMENT_TEMPLATE_ID, COMMENTPAGEPATH "
-					+ "from TD_CMS_CHANNEL where  site_id= "
-					+ siteid
-					+ " and  status=0 "
-					+ subsql
-					+ " and (1=1 "
-					+ (count <= 0 ? "" : (" and rownum<=" + String.valueOf(count)))
-					+ ") "
-					+ " and ((PAGEFLAG=0 or PAGEFLAG is null )and OUTLINE_TPL_ID is not null or (PAGEFLAG=1 or PAGEFLAG=2) and INDEXPAGEPATH is not null)"
-					+ " order by order_no,channel_id desc";
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append((count <= 0 ? "" : (" select * from ("))).append("select CHANNEL_ID, NAME,DISPLAY_NAME, PUB_FILE_NAME, ")
+					.append("PARENT_ID,CHNL_PATH,CREATEUSER,CREATETIME, ")
+					.append("ORDER_NO,SITE_ID,STATUS,OUTLINE_TPL_ID, ")
+					.append("DETAIL_TPL_ID, ")
+					.append( "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC, ")
+					.append("CHNL_OUTLINE_PROTECT, DOC_PROTECT,")
+					.append("PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE, MOUSECLICKIMAGE, MOUSEUPIMAGE , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH,  COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ")
+					.append( "from TD_CMS_CHANNEL where  site_id= ")
+					.append(siteid)
+					.append(" and  status=0 ")
+					.append(subsql)
+					.append(" and (1=1 )")
+					.append( " and ((PAGEFLAG=0 or PAGEFLAG is null )and OUTLINE_TPL_ID is not null or (PAGEFLAG=1 or PAGEFLAG=2) and INDEXPAGEPATH is not null)")
+					.append(" order by order_no desc,createtime desc ").append((count <= 0 ? "" : (" ) where rownum <=" + String.valueOf(count))));
 			// System.out.println("sql=" + sql);
-			db.executeSelect(sql);
+			db.executeSelect(sql.toString());
 			List channels = new ArrayList();
 			for (int i = 0; i < db.size(); i++) {
 				Channel channel = new Channel();

@@ -222,7 +222,13 @@ public class ChannelContextImpl extends PagineContextImpl implements
 //			// e.printStackTrace();
 //		}
 //	}
-
+	private void evalFileName()
+	{
+		
+		this.tempFileName = fileName;
+		if(outlineTemplate != null)
+			this.jspFileName = CMSUtil.getJspFileName(this.fileName, this.outlineTemplate.getTemplateId() + "");
+	}
 	/**
 	 * 
 	 * @param siteid
@@ -262,7 +268,7 @@ public class ChannelContextImpl extends PagineContextImpl implements
 		}
 		
 		super.fileName = channel.getPubFileName();
-		super.tempFileName = fileName;
+//		super.tempFileName = fileName;
 		super.fileExt = channel.getPubFileNameSuffix();
 		super.mimeType = CMSUtil.getMimeType(fileExt);
 		super.publishPath = channel.getChannelPath();
@@ -306,7 +312,7 @@ public class ChannelContextImpl extends PagineContextImpl implements
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		evalFileName();
 		
 		try {
 			this.enablePublishStatus = parentContext.getDriverConfiguration()

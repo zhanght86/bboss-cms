@@ -13,6 +13,13 @@ import com.frameworkset.platform.cms.util.FileUtil;
 
 public class CMSContextImpl extends BaseContextImpl implements CMSContext {
 
+	private void evalFileName()
+	{
+		
+		this.tempFileName = fileName;
+		if(indexTemplate != null)
+			this.jspFileName = CMSUtil.getJspFileName(this.fileName, this.indexTemplate.getTemplateId() + "");
+	}
 	
 	/**
 	 * 站点首页模版
@@ -46,7 +53,8 @@ public class CMSContextImpl extends BaseContextImpl implements CMSContext {
 			this.fileName = site.getIndexFileName();
 			if(fileName == null || fileName.equals(""))
 				fileName = "default.htm";
-			this.tempFileName = fileName;
+//			this.tempFileName = fileName;
+			evalFileName();
 			this.fileExt = site.getIndexFileSuffix();
 			
 			if(fileExt == null) 
@@ -108,7 +116,8 @@ public class CMSContextImpl extends BaseContextImpl implements CMSContext {
 			this.fileName = site.getIndexFileName();
 			if(fileName == null || fileName.equals(""))
 				fileName = "default.htm";
-			this.tempFileName = fileName;
+//			this.tempFileName = fileName;
+			evalFileName();
 			this.fileExt = site.getIndexFileSuffix();
 			this.localPublishDestination = site.getLocalPublishPath();
 			if(fileExt == null) 
