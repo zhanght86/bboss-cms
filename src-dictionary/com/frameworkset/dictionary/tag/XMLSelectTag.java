@@ -34,6 +34,7 @@ import com.frameworkset.dictionary.Item;
 public class XMLSelectTag extends XMLBaseTag
 {
 	protected String textValue;
+	protected boolean multiple;
 	/* (non-Javadoc)
 	 * @see com.westerasoft.common.tag.BaseTag#generateContent()
 	 */
@@ -43,6 +44,7 @@ public class XMLSelectTag extends XMLBaseTag
 		select.setName(getName());
 		select.setDisabled(this.isDisabled());
 		select.setExtend(this.getExtend());
+		select.setMultiple(multiple);
 		if(this.data != null)
 		{
 			Option[] options = null;
@@ -122,7 +124,16 @@ public class XMLSelectTag extends XMLBaseTag
 	{
 		int ret = super.doEndTag();
 		this.textValue = null;
+		this.multiple = false;
 		return ret;
+	}
+
+	public boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
 	}
 
 }

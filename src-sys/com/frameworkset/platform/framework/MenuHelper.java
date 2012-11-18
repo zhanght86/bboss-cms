@@ -208,8 +208,8 @@ public class MenuHelper  {
     }
     
     public MenuItem getCurrentSystemMenu(MenuItem menu) {
-        System.out.println("menu----------------------" + menu);
-        System.out.println("permissionMenuIndex----------------------" + permissionMenuIndex);
+        //System.out.println("menu----------------------" + menu);
+        //System.out.println("permissionMenuIndex----------------------" + permissionMenuIndex);
    	 	MenuItem module = (MenuItem)permissionMenuIndex.get(menu.getPath());
 
         if (module == null) {
