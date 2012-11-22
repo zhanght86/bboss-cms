@@ -1134,7 +1134,7 @@ public class AccessControl {
 
 			machineIP = request.getParameter("machineIp_");
 			if(machineIP == null || machineIP.trim().equals(""))
-				machineIP = request.getRemoteAddr();
+				machineIP = StringUtil.getClientIP(request);
 		}
 		session.setAttribute(REMOTEADDR_CACHE_KEY, machineIP);
 		/**
@@ -1792,7 +1792,7 @@ public class AccessControl {
 		Date date = new java.util.Date() ; 
 		if(request != null)
 		{
-			String remoteip = request.getRemoteAddr();
+			String remoteip = StringUtil.getClientIP(request);
 			
 //			System.err.println(date + "===============================================");
 //			Exception e = new Exception("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
@@ -1815,7 +1815,7 @@ public class AccessControl {
 		Date date = new java.util.Date() ; 
 		if(request != null)
 		{
-			String remoteip = request.getRemoteAddr();
+			String remoteip = StringUtil.getClientIP(request);
 			
 //			System.err.println(date + "===============================================");
 //			Exception e = new Exception("date["+ date +"] [remoteip=" + remoteip + "] " +msg);

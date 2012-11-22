@@ -41,7 +41,7 @@ public Map<String, Object> getResultParams() {
 
 	public void setResultStructures(
 			Map<String, Map<String, Object>> resultStructures) {
-		// TODO Auto-generated method stub
+		this.resultStructures = resultStructures;
 		
 	}
 

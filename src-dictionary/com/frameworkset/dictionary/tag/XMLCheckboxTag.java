@@ -1,28 +1,13 @@
-/*
- * Title: The ERP System of kelamayi Downhole Company [PMIP]
- *
- * Copyright: Copyright (c) 2000-2004 westerasoft Co., Ltd All right reserved.
- *
- * Company: westerasoft Co., Ltd
- *
- * All right reserved.
- *
- * Created on 2004-8-2
- *
- * JDK version used		:1.4.1
- *
- * Modification history:
- *
- *
- */
+
 package com.frameworkset.dictionary.tag;
+
+import java.util.List;
 
 import org.apache.ecs.html.Input;
 
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.DataManagerFactory;
 import com.frameworkset.dictionary.Item;
-import com.frameworkset.util.StringUtil;
 
 
 /**
@@ -41,7 +26,7 @@ public class XMLCheckboxTag extends XMLBaseTag
 		if(data != null)
 		{
 			StringBuffer ret = new StringBuffer();
-			String[] defaultValues = this.parserDefaultValues(t_value);
+			List<String> defaultValues = super.selected();
 //			在父类中初始化
 //			AccessControl control = AccessControl.getInstance();
 //			control.checkAccess(request,response);
@@ -74,7 +59,7 @@ public class XMLCheckboxTag extends XMLBaseTag
 				input.setType(Input.CHECKBOX)
 					 .setName(getName())
 					 .setValue(item.getValue())
-					 .setChecked(isChecked(defaultValues,item.getValue())).setExtend(this.getExtend());
+					 .setChecked(selected(defaultValues,item.getValue())).setExtend(this.getExtend());
 				input.setDisabled(this.isDisabled());
 	
 				if(getStyle() != null)
@@ -94,16 +79,16 @@ public class XMLCheckboxTag extends XMLBaseTag
 		}
 	}
 	
-	private boolean isChecked(String[] defaultValues,String value)
-	{
-	    
-	    for(int i = 0; defaultValues != null && i < defaultValues.length; i ++)
-	    {
-	        if(value.equals(defaultValues[i]))
-	            return true;
-	    }
-	    return false;
-	}
+//	private boolean isChecked(String[] defaultValues,String value)
+//	{
+//	    
+//	    for(int i = 0; defaultValues != null && i < defaultValues.length; i ++)
+//	    {
+//	        if(value.equals(defaultValues[i]))
+//	            return true;
+//	    }
+//	    return false;
+//	}
 	/**
 	 * @return
 	 */
@@ -120,14 +105,6 @@ public class XMLCheckboxTag extends XMLBaseTag
 		vertical = string;
 	}
 	
-	private String[] parserDefaultValues(String defaultValues)
-	{
-	    if(defaultValues == null|| defaultValues.equals("") )
-	        return new String[0];
-	    else
-	    {
-	        return StringUtil.split(defaultValues,"#$");
-	    }
-	}
+	
 
 }

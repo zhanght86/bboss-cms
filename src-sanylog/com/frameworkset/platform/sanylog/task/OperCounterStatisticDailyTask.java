@@ -12,13 +12,15 @@ public class OperCounterStatisticDailyTask {
 	private CounterManager counterManager;
 	public void statisticOperCounterDailyJob() throws SQLException{
         Calendar today = Calendar.getInstance();
-		
+        String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
 		String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
-		
-		/*List<String> siteList = counterManager.getSiteList();
-		for(int i=0;i<siteList.size();i++){
-			
-		}*/
+		Calendar startDate = Calendar.getInstance();
+		int offset = startDate.get(Calendar.DAY_OF_WEEK);
+		startDate.add(Calendar.DAY_OF_MONTH, offset - (offset * 2 - 1));
+		String startTime =  DateUtils.format(startDate.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+		//按周统计
+		counterManager.deleteOperCounterByWeek(week);
+		counterManager.staticOperCounterByWeek(startTime,todayTime,week);
 		//按天统计
 		counterManager.deleteOperCounterByDay(todayTime);
 		counterManager.staticOperCounterByDay(todayTime);

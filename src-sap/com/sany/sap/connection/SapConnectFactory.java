@@ -27,7 +27,49 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 	private SAPConf sapconf;
 
 	private String ABAP_AS_POOLED = "ABAP_AS_WITH_POOL";
+	public final SapResult callFunctionForParameterInTableAndStructure(String rfcName,Map<String, Object> inParams
+			,String[] inParamsTableNames,List<Map<String, Object>>[] inParamsTableValues,String[] returnParamsStructureNames,List<String>[] returnParamsStructureColumns) throws SapException
+		{
+			return callFunctionForParameterInTableAndStructure(
+					this.getABAP_AS_POOLED(), rfcName, inParams, null,
+					null, inParamsTableNames, inParamsTableValues, null, returnParamsStructureNames, returnParamsStructureColumns, null, null);
 
+		}
+	
+	public static List<String> getDefalutReturnParamsStructureColumns(String returnTableName)
+	{
+		List<String> structureColumns = new ArrayList<String>(); 
+		if("RETURN".equals(returnTableName))
+		{
+			//返回表结构
+			structureColumns.add("TYPE");
+	        structureColumns.add("CODE");
+	        structureColumns.add("MESSAGE");
+		}
+		if("RETURN1".equals(returnTableName))
+		{
+			//返回表结构
+	        structureColumns= new ArrayList<String>();
+	        structureColumns.add("TYPE");
+	        structureColumns.add("ID");
+	        structureColumns.add("NUM");
+	        structureColumns.add("MESSAGE");
+		}
+		
+		if("HR_RETURN".equals(returnTableName))
+		{
+			//返回表结构
+	        structureColumns= new ArrayList<String>();
+	        structureColumns.add("PERNR");
+	        structureColumns.add("MSGTY");
+	        structureColumns.add("INFTY");
+	        structureColumns.add("SUBTY");
+	        structureColumns.add("ACTIO");
+
+		}
+        return structureColumns;
+		
+	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		sanyDestinationDataProvider = new SanyDestinationDataProvider();

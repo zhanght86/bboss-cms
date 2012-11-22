@@ -33,6 +33,9 @@ import com.frameworkset.util.ListInfo;
  *
  */
 public interface CounterManager {
+	//按周统计操作
+		public void deleteOperCounterByWeek(String week)throws SQLException;
+		public void staticOperCounterByWeek(String startTime, String todayTime,String week)throws SQLException;
 	
 	public List<BrowserCounter> getBrowserCounterDetail(String browserId)throws SQLException;
 	
@@ -60,7 +63,7 @@ public interface CounterManager {
 
 	//获得操作记录年度排名
 	public ListInfo getOperCounterRankByYear( String appId,String  vtime,int offset,int pagesize)throws SQLException;
-
+	public ListInfo getOperCounterRankByWeek(String appId,String  vtime,int offset,int pagesize)throws SQLException;
 	
 	//操作统计插入数据库
 	public void incrementOperateCounter(OperateCounter counter) throws SQLException;

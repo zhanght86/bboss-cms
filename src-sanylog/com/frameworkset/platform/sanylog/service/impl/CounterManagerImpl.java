@@ -42,6 +42,14 @@ import com.frameworkset.util.StringUtil;
 public class CounterManagerImpl implements CounterManager {
 
 	private ConfigSQLExecutor executor;
+	@Override
+	public ListInfo getOperCounterRankByWeek(String appId, String vtime,
+			int offset, int pagesize) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("appId", appId);
+		paramMap.put("vtime", vtime);
+		return executor.queryListInfoBean(OperRank.class, "getOperCounterRankByWeek", offset, pagesize, paramMap);	
+	}
 	//获得操作记录日排名
 		public ListInfo getOperCounterRankByDay( String appId,String  vtime,int offset,int pagesize)throws SQLException{
 			Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -646,7 +654,7 @@ public class CounterManagerImpl implements CounterManager {
 		paramMap.put("Time", vtime);
 
 		executor.deleteBean("deleteOperCounterByDay", paramMap);
-	};
+	}
 	@Override
 	public List<String> getSiteList()throws SQLException{
 		
@@ -664,6 +672,26 @@ public class CounterManagerImpl implements CounterManager {
 		List<App> datas = executor.queryList(App.class, "getAdminApp");
 		return datas;
 	}
+
+	@Override
+	public void deleteOperCounterByWeek(String week) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("Time", week);
+
+		executor.deleteBean("deleteOperCounterByWeek", paramMap);
+	}
+
+	@Override
+	public void staticOperCounterByWeek(String startTime, String todayTime,String week)
+			throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("Time", week);
+		paramMap.put("startTime", startTime);
+		paramMap.put("todayTime", todayTime);
+		executor.insertBean("staticOperCounterByWeek", paramMap);
+	}
+
+	
 
 	
 

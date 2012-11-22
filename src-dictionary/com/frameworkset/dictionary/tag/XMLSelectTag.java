@@ -1,22 +1,8 @@
-/*
- * Title: The ERP System of kelamayi Downhole Company [PMIP]
- *
- * Copyright: Copyright (c) 2000-2004 westerasoft Co., Ltd All right reserved.
- *
- * Company: westerasoft Co., Ltd
- *
- * All right reserved.
- *
- * Created on 2004-8-2
- *
- * JDK version used		:1.4.1
- *
- * Modification history:
- *
- *
- */
+
 package com.frameworkset.dictionary.tag;
 
+
+import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
@@ -35,6 +21,7 @@ public class XMLSelectTag extends XMLBaseTag
 {
 	protected String textValue;
 	protected boolean multiple;
+	
 	/* (non-Javadoc)
 	 * @see com.westerasoft.common.tag.BaseTag#generateContent()
 	 */
@@ -45,8 +32,14 @@ public class XMLSelectTag extends XMLBaseTag
 		select.setDisabled(this.isDisabled());
 		select.setExtend(this.getExtend());
 		select.setMultiple(multiple);
+		
 		if(this.data != null)
 		{
+			List<String> selected = null;
+			if(this.multiple && this.t_value != null)
+			{
+				selected = selected();
+			}
 			Option[] options = null;
 			int temp = 0;
 			if(this.getTextValue() != null)
@@ -60,7 +53,7 @@ public class XMLSelectTag extends XMLBaseTag
 			{
 				options = new Option[data.size()];
 			}
-
+			
 			DataManager  dataManager = DataManagerFactory.getDataManager();
 			for(int i = temp ; i < data.size() + temp; i ++)
 			{				
@@ -82,9 +75,22 @@ public class XMLSelectTag extends XMLBaseTag
 					    }
 					}
 				}
-				options[i] = new Option().setValue(item.getValue())
-									.setSelected(t_value != null && t_value.equals(item.getValue()));
-				options[i].setTagText(item.getName());
+				Option option = new Option().setValue(item.getValue());
+				if(this.multiple)
+				{
+					if(selected(selected,item.getValue()))
+						option.setSelected(true);
+				}
+				else
+				{
+					if(this.t_value != null && String.valueOf(t_value).equals(item.getValue()))
+					{
+						option.setSelected(true);
+					}
+				}
+				option.setTagText(item.getName());
+				options[i] = option;
+				
 				
 			}
 			

@@ -8,7 +8,7 @@ public class App {
 
     private String appName;
     
-    private String useFlag;  
+    private String useFlag;
     
     public String getAppId() {
         return appId;

@@ -8,6 +8,11 @@
 			  select distinct(APP_ID) appId ,APP_NAME appName from td_log_app_manager
 		]]>
 	</property>
+	<property name="deleteOperCounterByWeek">
+		<![CDATA[
+			  delete from TD_LOG_OPERSTATIC_BYWEEK where vtime = #[Time]
+		]]>
+	</property>
 	<property name="deleteOperCounterByDay">
 		<![CDATA[
 			  delete from TD_LOG_OPERSTATIC_BYDAY where vtime = #[Time]
@@ -28,11 +33,24 @@
 			 select distinct(app_id) from TD_LOG_APP_MANAGER
 		]]>
 	</property>
+	<property name="staticOperCounterByWeek">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYWEEK 
+      		  select  app_id,  app_name, module_id, module_name, $Time vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator
+      		  from TD_LOG_OPERATE_COUNTS t
+      		   where 1 = 1
+			  #if ($startTime && $todayTime)
+				and to_char(t.oper_time, 'yyyy-mm-dd') >= #[startTime] and to_char(t.oper_time, 'yyyy-mm-dd') <= #[todayTime]
+				#end
+     	      ) group by app_id,  app_name, module_id, module_name
+		]]>
+	</property>	
 	<property name="statisticOperCounterByDay">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYDAY 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount from
-      		  (select operate_id, app_id,app_name,module_id,module_name,
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
       		  to_char(oper_time, 'yyyy-mm-dd') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
@@ -46,8 +64,8 @@
 	<property name="statisticOperCounterByMonth">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYMONTH 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount from
-      		  (select operate_id, app_id,app_name,module_id,module_name,
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
       		  to_char(oper_time, 'yyyy-mm') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
@@ -61,8 +79,8 @@
 	<property name="statisticOperCounterByYear">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYYEAR 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount from
-      		  (select operate_id, app_id,app_name,module_id,module_name,
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
       		  to_char(oper_time, 'yyyy') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
@@ -73,10 +91,23 @@
      	      ) group by app_id,  app_name, module_id, module_name, vtime
 		]]>
 	</property>
-	
+	<property name="getOperCounterRankByWeek">
+		<![CDATA[
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
+			from TD_LOG_OPERSTATIC_BYWEEK tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($vtime)
+				and tmp.vtime = #[vtime]
+			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
 	<property name="getOperCounterRankByDay">
 		<![CDATA[
-			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
 			from TD_LOG_OPERSTATIC_BYDAY tmp
 			where 1 = 1
 			#if ($appId)
@@ -90,7 +121,7 @@
 	</property>
 	<property name="getOperCounterRankByMonth">
 		<![CDATA[
-			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
 			from TD_LOG_OPERSTATIC_BYMONTH tmp
 			where 1 = 1
 			#if ($appId)
@@ -104,7 +135,7 @@
 	</property>
 	<property name="getOperCounterRankByYear">
 		<![CDATA[
-			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
 			from TD_LOG_OPERSTATIC_BYYEAR tmp
 			where 1 = 1
 			#if ($appId)
@@ -456,7 +487,7 @@
 		select '平均' name,
 		Round((select  avg(vcount) from
 		(select count(browser_id) vcount, vday from
-		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 0, 10) vday
 		from td_log_browser_counts t where site_id = #[siteId])
 		group by vday))) pv,
 		Round((select avg(vbrowserip) from
@@ -490,7 +521,7 @@
 		from dual
 		union all
 		select '历史累计' name, count(t.browser_id) pv, count(distinct t.browserip) ip,  '' topPV, '' topIP
-		from td_log_browser_counts t                              
+		from td_log_browser_counts t  where t.site_id = #[siteId]                            
 		]]>
 	</property>
 <property name="incrementDownlodCounter">

@@ -1,37 +1,27 @@
-/*
- * Title: The ERP System of kelamayi Downhole Company [PMIP]
- *
- * Copyright: Copyright (c) 2000-2004 westerasoft Co., Ltd All right reserved.
- *
- * Company: westerasoft Co., Ltd
- *
- * All right reserved.
- *
- * Created on 2004-8-2
- *
- * JDK version used		:1.4.1
- *
- * Modification history:
- *
- *
- */
+
 package com.frameworkset.dictionary.tag;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 
-import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.common.tag.exception.FormulaException;
 import com.frameworkset.common.tag.pager.tags.CellTag;
 import com.frameworkset.dictionary.Data;
 import com.frameworkset.dictionary.DataManagerFactory;
 import com.frameworkset.dictionary.ProfessionDataManagerException;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.StringUtil;
 
 
 
@@ -64,7 +54,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 	  
 	 
 
-    protected String t_value ;
+    protected Object t_value ;
     
     /**
      * 做权限过滤,缺省不过滤
@@ -82,15 +72,88 @@ public class XMLBaseTag extends CellTag implements Serializable
     	accesscontroler = AccessControl.getInstance();
     	accesscontroler.checkAccess(request,response,false);
     }
-
-
+    
+    /**
+	 * 判断特定的选项是否是选中的
+	 * @param value
+	 * @return
+	 */
+	protected List<String> selected()
+	{
+		List<String> t_values = null;
+		if(t_value != null)
+		{			
+			t_values = new ArrayList<String>();
+			if(t_value.getClass().isArray())
+			{
+				int size = Array.getLength(t_value);
+				for(int i = 0; i < size; i ++)
+				{
+					t_values.add(String.valueOf(Array.get(t_value, i)));
+				}
+			}
+			else if(t_value instanceof Collection)
+			{
+				Collection c_values = (Collection)t_value;
+			
+				Iterator it = c_values.iterator();
+				while(it.hasNext())
+				{
+					t_values.add(String.valueOf(it.next()));
+				}
+			}
+			else if(t_value instanceof Iterator)
+			{
+				Iterator it = (Iterator)t_value;
+				while(it.hasNext())
+				{
+					t_values.add(String.valueOf(it.next()));
+				}
+			}
+			else if(t_value instanceof String)
+			{
+				t_values = this.parserDefaultValues((String)t_value);
+			}
+			else
+			{
+				t_values.add(String.valueOf(t_value));
+			}
+		}
+		return t_values;
+	}
+	protected boolean selected(List<String> selected,String value)
+	{
+		if(selected == null || selected.size() == 0)
+			return false;
+		for(String select:selected)
+		{
+			if(select.equals(value))
+				return true;
+		}
+		return false;
+	}
+	protected List<String> parserDefaultValues(String defaultValues)
+	{
+		List<String> ret = new ArrayList<String>();
+	    if(defaultValues == null|| defaultValues.equals("") )
+	        return ret;
+	    else
+	    {
+	    	String[] vs = StringUtil.split(defaultValues,"#$");
+	        for(String v:vs)
+        	{
+	        	ret.add(v);
+        	}
+	        return ret;
+	    }
+	}
 
 	public int doStartTag()
 		throws JspException
 	{
         super.init();
         Object defaultvalue  = this.getDefaultValue();
-        t_value = defaultvalue == null ?null:defaultvalue.toString();
+        t_value = defaultvalue == null ?null:defaultvalue;
 		try
 		{
 			//没有权限过滤
@@ -177,7 +240,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 
 		if(defaultValue == null && getName() != null)
 		{		    
-			String temp = (String)request.getAttribute(getName());
+			Object temp = request.getAttribute(getName());
 			if(temp != null)
 				defaultValue = temp;
 			else

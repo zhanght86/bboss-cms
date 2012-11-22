@@ -7,6 +7,13 @@ private String moduleId;
 private String moduleName;
 private String vtime;
 private String vcount;
+private String vcountUser;
+public String getVcountUser() {
+	return vcountUser;
+}
+public void setVcountUser(String vcountUser) {
+	this.vcountUser = vcountUser;
+}
 public String getAppId() {
 	return appId;
 }
