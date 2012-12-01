@@ -32,7 +32,7 @@ import com.sany.workflow.util.WorkFlowConstant;
 
 public class ActivitiTestAction {
 	
-	private final static  String PROCESS_KEY = "test";
+	private final static  String PROCESS_KEY = "Demo";
 	
 	private ActivitiTestService activitiTestService;
 	
@@ -57,7 +57,7 @@ public class ActivitiTestAction {
 	 * @return
 	 */
 	public String apply(MaterielTest materiel) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		
 		//List<ActivitiNode> nodeList = activitiTestService.showNodeList(PROCESS_KEY);
 //		for(ActivitiNode node:nodeList){
 //			Map<String,List<String>> childMap = new HashMap<String,List<String>>();
@@ -80,30 +80,31 @@ public class ActivitiTestAction {
 			tm.begin();
 			List list = new ArrayList();
 			list.add("admin");
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("usertask3_users_list", list);
 			processInstance = activitiService.startProcDefLoadCandidate(map, PROCESS_KEY,"50020021",WorkFlowConstant.BUSINESS_TYPE_ORG,materiel.getApply_name());
 			materiel.setProcess_instance_id(processInstance.getId());
 			activitiTestService.applyMateriel(materiel);
+		
+			List<Task> taskList = activitiService.listTaskByUser(materiel
+					.getApply_name());
+			map.put("isPass", true);
+			for (int i = 0; i < taskList.size(); i++) {
+				if(taskList.get(i).getProcessInstanceId().equals(processInstance.getId())){
+					activitiService.completeTask(taskList.get(i).getId(),
+							materiel.getApply_name(), map);
+				}
+			}
 			tm.commit();
 		}
 		catch(Throwable e)
 		{
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
 			e.printStackTrace();
 		}
-		List<Task> taskList = activitiService.listTaskByUser(materiel
-				.getApply_name());
-		map.put("isPass", true);
-		for (int i = 0; i < taskList.size(); i++) {
-			if(taskList.get(i).getProcessInstanceId().equals(processInstance.getId())){
-				activitiService.completeTask(taskList.get(i).getId(),
-						materiel.getApply_name(), map);
-			}
+		finally
+		{
+			tm.release();
 		}
 		return "path:task_userlist";
 	}
@@ -251,10 +252,25 @@ public class ActivitiTestAction {
 	 * @return
 	 */
 	public String operateTask(TaskInfo taskInfo){
-		activitiTestService.insertTaskInfo(taskInfo);
-		Map<String, Object> map = new HashMap<String, Object> ();
-		map.put("isPass", taskInfo.getIs_pass());
-		activitiService.completeTask(String.valueOf(taskInfo.getTask_id()),taskInfo.getDeal_user(), map);
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			activitiTestService.insertTaskInfo(taskInfo);
+			Map<String, Object> map = new HashMap<String, Object> ();
+			map.put("isPass", taskInfo.getIs_pass());
+			activitiService.completeTask(String.valueOf(taskInfo.getTask_id()),taskInfo.getDeal_user(), map);
+			tm.commit();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			tm.release();
+		}
+		
 		return "path:task_userlist";
 	}
 	

@@ -132,7 +132,7 @@
 	
 	
 	<!-- MQ服务数据库初始化脚本 -->
-	<managerimport file="org/frameworkset/mq/mq-init.xml" />	
+	<!--<managerimport file="org/frameworkset/mq/mq-init.xml" />	-->
 	
 	<!-- CA认证中心属性配置文件 -->
 	<managerimport file="properties-ca.xml" />	

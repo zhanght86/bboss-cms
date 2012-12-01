@@ -232,7 +232,7 @@ public class XMLBaseTag extends CellTag implements Serializable
                     defaultValue = temp;
             } catch (FormulaException ex) {
                 //ex.printStackTrace();
-                log.error(ex);
+                log.info(ex.getMessage());
                 //return null;
             }
 

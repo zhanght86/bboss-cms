@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-common"/>
+	<classpathentry kind="src" path="src-demo"/>
 	<classpathentry kind="src" path="src-sanylog"/>
 	<classpathentry kind="src" path="src-parameters-handler"/>
 	<classpathentry kind="src" path="src-htmlparser"/>
@@ -175,7 +176,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/proxool-0.9.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/proxool-cglib.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.10-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.10.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.10.jar" sourcepath="/activiti-engine"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sapjco3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-fileupload.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>

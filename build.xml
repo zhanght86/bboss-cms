@@ -32,12 +32,12 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appmonitor,jar-sany-appbom,jar-sany-log,jar-sany-sap,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
 	
-	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appmonitor,jar-sany-appbom,jar-sany-log,jar-sany-sap" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -271,7 +271,7 @@
 				
 		</target>
 	
-	<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
+	<!--<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>
 				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 					<src path="${source}/src-appmonitor" />				
@@ -302,7 +302,7 @@
 			 <delete dir="classes-sany"/>
 			 <mkdir dir="classes-sany"/>	
 			
-		</target>
+		</target>-->
 		
 		
 		<target name="compile-sany-mail" depends="jar-system" description="compile the sany source ">

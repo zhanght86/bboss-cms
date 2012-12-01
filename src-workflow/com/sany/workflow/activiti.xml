@@ -253,16 +253,40 @@
 		<![CDATA[
 			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
 			from td_wf_activiti_node_info n 
-			left join td_wf_activiti_node_candidate t on t.node_id=n.id  where 1=1
-			#if($process_key && !$process_key.equals(""))
-				and n.process_key = #[process_key]
-			#end
+			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
 			#if($business_id && !$business_id.equals(""))
 				and t.business_id = #[business_id]
 			#end
 			#if($business_type && !$business_type.equals(""))
 				and t.business_type = #[business_type]
 			#end
+			 where 1=1
+			#if($process_key && !$process_key.equals(""))
+				and n.process_key = #[process_key]
+			#end
+			
+			#if($node_key && !$node_key.equals(""))
+				and n.node_key = #[node_key]
+			#end
+			order by n.order_num
+		]]>
+	</property>
+	<property name="queryActivitiNodeWithCommonCandidate">
+		<![CDATA[
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			from td_wf_activiti_node_info n 
+			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
+				#if($business_id && !$business_id.equals(""))
+					and t.business_id = #[business_id] 
+				#end
+				#if($business_type && !$business_type.equals(""))
+					and t.business_type = #[business_type]
+				#end
+			  where 1=1
+			#if($process_key && !$process_key.equals(""))
+				and n.process_key = #[process_key]
+			#end
+			
 			#if($node_key && !$node_key.equals(""))
 				and n.node_key = #[node_key]
 			#end

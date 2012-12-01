@@ -500,7 +500,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		try{
 			Map<String,String> params = new HashMap<String,String>();
 			params.put("process_key", process_key);
-			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryActivitiNodeCandidate", params);
+			params.put("business_type", "0");
+			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryActivitiNodeWithCommonCandidate", params);
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();
