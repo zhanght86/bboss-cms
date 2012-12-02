@@ -3,17 +3,17 @@
   <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>  
   <!-- 连接数据库所用的URL -->
   <property name="driverUrl"
-   value="jdbc:oracle:thin:@//10.0.15.134:1521/orcl">
+   value="jdbc:oracle:thin:@//192.168.1.100:1521/orcl">
    <!-- 如果数据库url是加密的，则需要配置解密的编辑器 -->
 	<!--<editor clazz="com.frameworkset.common.poolman.security.DecryptEditor"/> -->
    </property>  
   <!-- 连接数据库的用户名 -->
-  <property name="user" value="sanygcmp">
+  <property name="user" value="mc">
     <!-- 如果账号是加密的账号，则需要配置解密的编辑器 -->
 <!--   	<editor clazz="com.frameworkset.common.poolman.security.DecryptEditor"/> -->
   </property>  
   <!-- 连接数据库的密码 -->
-  <property name="password" value="sanygcmp">
+  <property name="password" value="mc">
   <!-- 如果口令是加密的口令，则需要配置解密的编辑器 -->
 <!--   	<editor clazz="com.frameworkset.common.poolman.security.DecryptEditor"/> -->
   </property>

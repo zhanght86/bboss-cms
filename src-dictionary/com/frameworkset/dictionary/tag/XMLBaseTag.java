@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ public class XMLBaseTag extends CellTag implements Serializable
     
     protected AccessControl accesscontroler = null;
     protected String defaultName = "其它";
+    protected String splittoken = "#$";
     
     
     /**
@@ -139,7 +142,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 	        return ret;
 	    else
 	    {
-	    	String[] vs = StringUtil.split(defaultValues,"#$");
+	    	String[] vs = StringUtil.split(defaultValues,splittoken);
 	        for(String v:vs)
         	{
 	        	ret.add(v);
@@ -147,7 +150,15 @@ public class XMLBaseTag extends CellTag implements Serializable
 	        return ret;
 	    }
 	}
+	public String getSplittoken() {
+		return splittoken;
+	}
 
+	public void setSplittoken(String splittoken) {
+		this.splittoken = splittoken;
+	}
+
+	
 	public int doStartTag()
 		throws JspException
 	{
@@ -237,7 +248,15 @@ public class XMLBaseTag extends CellTag implements Serializable
             }
 
         }
+        else if(this.actual !=null)
+        {
+        	defaultValue = actual;
+        }
 
+		if(defaultValue == null)
+		{
+			defaultValue = getObjectValue();
+		}
 		if(defaultValue == null && getName() != null)
 		{		    
 			Object temp = request.getAttribute(getName());
@@ -323,6 +342,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 		this.style = null;
 		this.checkPermission = false;
 		defaultName = "其它";
+		splittoken = "#$";
 		return ret;
 	}
 
