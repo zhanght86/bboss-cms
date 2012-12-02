@@ -163,7 +163,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 		throws JspException
 	{
         super.init();
-        Object defaultvalue  = this.getDefaultValue();
+        Object defaultvalue  = this._getDefaultValue();
         t_value = defaultvalue == null ?null:defaultvalue;
 		try
 		{
@@ -232,7 +232,7 @@ public class XMLBaseTag extends CellTag implements Serializable
 	 * 获取缺省值
 	 * @return
 	 */
-	public Object getDefaultValue()
+	public Object _getDefaultValue()
 	{
 
         if(t_formula != null)
