@@ -70,6 +70,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 		processEngine = ProcessEngineConfiguration
 				.createProcessEngineConfigurationFromResource(xmlPath)
 				.buildProcessEngine();
+		
 	}
 
 	/**
@@ -1648,6 +1649,17 @@ public class ActivitiServiceImpl implements ActivitiService {
 		Task task = this.getTaskById(taskId);
 		return (List<String>) this.getRuntimeService().getVariable(
 				task.getProcessInstanceId(), task.getTaskDefinitionKey() + "_users");
+	}
+	
+	/**
+	 * 
+	 * 撤消流程实例
+	 * processInstanceId：要撤消的流程实例id
+	 * deleteReason：撤消流程实例的原因
+	 */
+	public void cancleProcessInstance(String processInstanceId, String deleteReason)
+	{
+		this.runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
 	}
 
 

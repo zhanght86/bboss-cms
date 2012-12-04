@@ -711,4 +711,6 @@ public interface ActivitiService {
 	 * @return
 	 */
 	ProcessEngine getProcessEngine();
+	
+	void cancleProcessInstance(String processInstanceId, String deleteReason);
 }
