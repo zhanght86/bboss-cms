@@ -82,6 +82,7 @@
 			}else{
 				user.setUserName(request.getParameter("userName"));
 			}
+			user.setUserWorknumber(request.getParameter("userWorknumber"));
 			user.setUserPassword(request.getParameter("userPassword"));
 			user.setUserRealname(request.getParameter("userRealname"));
 			user.setUserSn(new Integer(request.getParameter("userSn")));
@@ -445,7 +446,7 @@
 						</td>
 						<th><pg:message code="sany.pdp.identity.card"/>：</th>
 						<td height="25">
-							<input type="text" name="userIdcard" value="<pg:cell colName="userIdcard"  defaultValue=""/>" validator="intNull" cnname="身份证号码" maxlength="18">
+							<input type="text" name="userIdcard" value="<pg:cell colName="userIdcard"  defaultValue=""/>" validator="stringNull" cnname="身份证号码" maxlength="18"><span class="STYLE1">*</span>
 						</td>
 					</tr>
 					<tr>
@@ -565,6 +566,14 @@
 								</tr>
 							</table>
 						</td>
+
+					</tr>
+					<tr>
+						<th>工号： </th>
+						<td height="25" colspan="10">
+							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  />" validator="stringNull" cnname="用户工号" maxlength="40">
+						</td>
+					
 
 					</tr>
 
