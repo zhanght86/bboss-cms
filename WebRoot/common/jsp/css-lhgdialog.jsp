@@ -1,5 +1,7 @@
 <pg:config enablecontextmenu="false" enabletree="false"/>
 <script type="text/javascript"
+	src="${pageContext.request.contextPath}/include/locale/easyui-cn.js"></script>
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/include/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
