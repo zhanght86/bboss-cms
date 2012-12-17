@@ -588,16 +588,16 @@ public class OrgAdministratorImpl extends EventHandle implements
 	 * */
 	public List getManagerOrgsOfUserByID(String userId) {
 		List list = new ArrayList();
-		String sql = "select * from td_sm_orgmanager t where t.user_id = '"
-				+ userId + "'";
-		DBUtil dBUtil = new DBUtil();
+		String sql = "select org_id from td_sm_orgmanager t where t.user_id = ?";
+		
+		
 		try {
-			dBUtil.executeSelect(sql);
-			if (dBUtil.size() > 0) {
-				for (int i = 0; i < dBUtil.size(); i++) {
+			List<String> orgids = SQLExecutor.queryList(String.class, sql, userId);
+			if (orgids.size() > 0) {
+				for (int i = 0; i < orgids.size(); i++) {
 
 					Organization organization = OrgCacheManager.getInstance()
-							.getOrganization(dBUtil.getString(i, "org_id"));
+							.getOrganization(orgids.get(i));
 					if (organization != null) {
 						list.add(organization);
 					}
@@ -700,12 +700,12 @@ public class OrgAdministratorImpl extends EventHandle implements
 	 */
 	public boolean isOrgManager(String userId) {
 		boolean state = false;
-		String sql = "select count(1) from td_sm_orgmanager where user_id='"
-				+ userId + "'";
-		DBUtil db = new DBUtil();
+		String sql = "select count(1) from td_sm_orgmanager where user_id=?";
+		
 		try {
-			db.executeSelect(sql);
-			if (db.getInt(0, 0) > 0) {
+			int count = SQLExecutor.queryTField(int.class, sql, userId);
+			
+			if (count > 0) {
 				state = true;
 			}
 		} catch (SQLException e) {

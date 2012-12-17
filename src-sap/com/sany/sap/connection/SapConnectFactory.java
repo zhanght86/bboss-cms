@@ -76,11 +76,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 		sanyDestinationDataProvider
 				.setDestinationDataEventListener(new DestinationDataEventListener() {
 					public void deleted(String arg0) {
-						logger.info("deleted:" + arg0);
+						logger.debug("deleted:" + arg0);
 					}
 
 					public void updated(String arg0) {
-						logger.info("updated:" + arg0);
+						logger.debug("updated:" + arg0);
 					}
 				});
 
@@ -118,12 +118,12 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 			semaphore.acquire();
 			if (sanyDestinationDataProvider
 					.getDestinationProperties(destinationName) == null) {
-				logger.info("Add destinationName:" + destinationName
+				logger.debug("Add destinationName:" + destinationName
 						+ ",jcoproperties:" + jcoproperties);
 				sanyDestinationDataProvider.addDestination(destinationName,
 						jcoproperties);
 			} else {
-				logger.info("destinationName:" + destinationName
+				logger.debug("destinationName:" + destinationName
 						+ " alread exist");
 			}
 		} catch (Exception e) {
@@ -175,12 +175,12 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 			String[][] returnTableColumns) throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
-			System.out.println("rfc name is empty");
+			logger.debug("rfc name is empty");
 			return null;
 		}
 
 		if (returnTableNames == null || returnTableNames.length <= 0) {
-			System.out.println("return table names are empty");
+			logger.debug("return table names are empty");
 			return null;
 		}
 
@@ -201,6 +201,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 							inParams.get(inParamsKey));
 				}
 			}
+			logger.debug("JCoFunction ["+rfcName+"]:" + function);
 			function.execute(destination);
 
 			retRecords = new ArrayList[returnTableNames.length];
@@ -211,8 +212,10 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 				List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
 				JCoTable table = function.getTableParameterList().getTable(
 						tableName);
-
+				
+				logger.debug("Return Table["+tableName+"]:" + table);
 				if (table != null && table.getNumRows() > 0) {
+					
 					for (int k = 0; k < table.getNumRows(); k++) {
 						table.setRow(k);
 
@@ -310,7 +313,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 					}
 				}
 			}
-
+			logger.debug("JCoFunction ["+rfcName+"]:" + function);
 			function.execute(destination);
 
 			retRecords = new ArrayList[returnTableNames.length];
@@ -321,7 +324,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 				List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
 				JCoTable table = function.getTableParameterList().getTable(
 						tableName);
-
+				logger.debug("Return table ["+tableName+"]:" + table);
 				if (table != null && table.getNumRows() > 0) {
 					for (int k = 0; k < table.getNumRows(); k++) {
 						table.setRow(k);
@@ -388,6 +391,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 			if (function == null)
 				throw new SapException("获取函数[" + rfcName
 						+ "]失败：函数不存在，SAP服务器信息为\r\n" + destination.toString());
+			
 			if (inParams != null && inParams.size() > 0) {
 				Set<String> inParamsKeys = inParams.keySet();
 				for (String inParamsKey : inParamsKeys) {
@@ -395,6 +399,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 							inParams.get(inParamsKey));
 				}
 			}
+			logger.debug("Function ["+rfcName+"]:" + function);
 			function.execute(destination);
 
 			retRecords = new HashMap<String, Object>();
@@ -441,13 +446,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 			String[] returnParameterColumns) throws SapException {
 
 		if (rfcName == null || rfcName.length() <= 0) {
-			System.out.println("rfc name is empty");
+			logger.debug("rfc name is empty");
 			return null;
 		}
 
 		if (returnParameterColumns == null
 				|| returnParameterColumns.length <= 0) {
-			System.out.println("return parameter columns are empty");
+			logger.debug("return parameter columns are empty");
 			return null;
 		}
 
@@ -487,7 +492,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 					}
 				}
 			}
-
+			logger.debug("Function ["+rfcName+"]:" + function);
 			function.execute(destination);
 
 			retRecords = new HashMap<String, Object>();
@@ -706,6 +711,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 						inStructure.setValue(columnName,
 								inStructureValues.get(columnName));
 					}
+					logger.debug("inStructure ["+inStructureName+"]:" + inStructure);
 				}
 			}
 
@@ -722,10 +728,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 						for (String columnName : columnSet)
 							inTable.setValue(columnName, rowMap.get(columnName));
 					}
+					logger.debug("inTable ["+inTableName+"]:" + inTable);
 				}
 
 			}
-
+//			logger.debug("Function ["+rfcName+"]:" + function);
 			long be = System.currentTimeMillis();
 			function.execute(destination);
 			long en = System.currentTimeMillis();
@@ -749,6 +756,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 							new HashMap<String, Object>());
 					JCoStructure js = function.getExportParameterList()
 							.getStructure(returnParamsStructureNames[i]);
+					logger.debug("Return JCoStructure ["+returnParamsStructureNames[i]+"]:" + js);
 					for (int j = 0; j < returnParamsStructureColumns[i].size(); j++) {
 						resultStructures
 								.get(returnParamsStructureNames[i])
@@ -768,6 +776,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 				for (int i = 0; i < returnTableNames.length; i++) {
 					JCoTable table = function.getTableParameterList().getTable(
 							returnTableNames[i]);
+					logger.debug("Return table ["+returnTableNames[i]+"]:" + table);
 					List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
 					if (table != null)
 						for (int k = 0; k < table.getNumRows(); k++) {
@@ -825,3 +834,4 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 	}
 
 }
+

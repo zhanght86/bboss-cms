@@ -157,6 +157,7 @@
 	            		 password = (String)data.get("USER_PASSWORD");
 	            	 }
 	            	 control = AccessControl.getInstance();
+	            	 request.setAttribute("fromsso","true");
 	            	 control.login(request,
 								response, userName, password);
 						

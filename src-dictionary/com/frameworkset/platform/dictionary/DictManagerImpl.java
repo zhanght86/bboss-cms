@@ -71,16 +71,19 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		Data dicttype = null;
 		if(strIsNull(name))
 			return null;		
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		StringBuffer sql = new StringBuffer()		
 			.append("select  DICTTYPE_ID,DICTTYPE_NAME,DICTTYPE_DESC,DICTTYPE_PARENT,DATA_TABLE_NAME, ")
 			.append("DATA_NAME_FILED ,DATA_VALUE_FIELD,DATA_ORDER_FIELD,DATA_TYPEID_FIELD,DATA_DBNAME, ")
 			.append("DATA_PARENTID_FIELD,IS_TREE,DICTTYPE_TYPE,DATA_VALIDATE_FIELD,DATA_CREATE_ORGID_FIELD,KEY_GENERAL_TYPE ")
 			//新维护两个字段
 			.append(",DATA_NAME_CN,DATA_VALUE_CN,NAME_GENERAL_TYPE,KEY_GENERAL_INFO,NEEDCACHE,ENABLE_VALUE_MODIFY ")
-			.append("from TD_SM_DICTTYPE where DICTTYPE_NAME= '").append(name).append("'");	
+			.append("from TD_SM_DICTTYPE where DICTTYPE_NAME=?");	
 		try {			
-			dbUtil.executeSelect(sql.toString());
+			
+			dbUtil.preparedSelect(sql.toString());
+			dbUtil.setString(1, name);
+			dbUtil.executePrepared();
 			if(dbUtil.size()>0){				
 				//必选的 肯定有值	
 				dicttype = new Data();
@@ -197,16 +200,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public Data getDicttypeById(String id) throws ManagerException {
 		Data dicttype = null;
 		if(strIsNull(id)) return dicttype;
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		StringBuffer sql = new StringBuffer()
 			.append("select DICTTYPE_ID,DICTTYPE_NAME,DICTTYPE_DESC,DICTTYPE_PARENT,DATA_TABLE_NAME, ")
 			.append("DATA_NAME_FILED ,DATA_VALUE_FIELD,DATA_ORDER_FIELD,DATA_TYPEID_FIELD,DATA_DBNAME, ")
 			.append("DATA_PARENTID_FIELD,IS_TREE,DICTTYPE_TYPE,DATA_VALIDATE_FIELD,DATA_CREATE_ORGID_FIELD,KEY_GENERAL_TYPE,user_id ")
 			//新维护两个字段
 			.append(",DATA_NAME_CN,DATA_VALUE_CN,NAME_GENERAL_TYPE,KEY_GENERAL_INFO,NEEDCACHE,ENABLE_VALUE_MODIFY ")
-			.append("from TD_SM_DICTTYPE where DICTTYPE_ID= '").append(id).append("'");		
+			.append("from TD_SM_DICTTYPE where DICTTYPE_ID= ?");		
 		try {
-			dbUtil.executeSelect(sql.toString());
+			dbUtil.preparedSelect(sql.toString());
+			dbUtil.setString(1, id);
+			dbUtil.executePrepared();
 			if(dbUtil.size()>0){
 				dicttype = new Data();
 				//必选的 肯定有值

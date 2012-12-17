@@ -150,14 +150,23 @@ public class LdapLoginModule extends UserPasswordLoginModule{
     				.getConfigBooleanValue("isWebSealServer", false);
 //    	System.out.println(">>>>>>>>>>>isWebSealServer:"+isWebSealServer);		 
     	String user_name = request.getHeader("iv-user");
-    	 if(isWebSealServer && user_name!= null && !user_name.equals(""))
-	  	  {  
-    		 	return super.check(userName, password, checkCallBack);
-	  	  }
-	  	  else
-	  	  {
-	  		  	return check(userName, password, checkCallBack);
-	  	  }
+    	String fromsso = (String)request.getAttribute("fromsso");
+    	if(fromsso != null && fromsso.equals("true"))
+    	{
+    		return super.check(userName, password, checkCallBack);
+    	}
+    	else
+    	{
+	    	 if(isWebSealServer && user_name!= null && !user_name.equals(""))
+		  	  {  
+	    		 	
+	    		 	return super.check(userName, password, checkCallBack);
+		  	  }
+		  	  else
+		  	  {
+		  		  	return check(userName, password, checkCallBack);
+		  	  }
+    	}
         
     }
 }
