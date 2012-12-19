@@ -1,0 +1,63 @@
+
+<!-- 
+		select #foreach($filed in $groupfileds) 
+				    #if($velocityCount == 0)
+						$filed
+					#else
+						,$filed
+					#end
+				#end
+		
+		from td_sm_group g where g.group_name in (
+			#foreach($group in $groups)
+							#if($velocityCount == 0)
+								#[groups[$velocityCount]]
+							#else
+								,#[groups[$velocityCount]]
+							#end
+						#end
+						)
+ -->
+<properties>
+	
+	
+	<property name="queryAllRoles" istpl="true" multiparser="false">
+		<![CDATA[
+			select role_id,owner_id from TD_SM_ROLE where 1=1				
+				#if($roleName && !$roleName.equals("")) 
+					and ROLE_NAME like #[roleName]
+				#end
+		]]>
+	</property>
+	
+	<property name="queryAllPermissionRoles"  istpl="true" multiparser="false">
+		<![CDATA[
+			select r.ROLE_ID, r.ROLE_NAME, r.ROLE_DESC, rt.type_name, r.owner_id from TD_SM_ROLE r, 
+			td_sm_roletype rt,TD_SM_USER u where u.user_id = r.owner_id  and r.role_type=rt.type_id				
+				#if($roleName && !$roleName.equals(""))
+					and r.ROLE_NAME like #[roleName]
+				#end
+				#if($roleTypeName && $roleTypeName > 0)
+					 and rt.type_id = #[roleTypeName]
+				#end
+				#if($roleDesc && !$roleDesc.equals(""))
+					 and r.ROLE_DESC like #[roleDesc]
+				#end
+				#if($createrName && !$createrName.equals(""))
+				  and u.USER_NAME like #[createrName]	
+				#end
+			#if($roles && $roles.size() > 0)
+				and r.role_id in (
+				#foreach($role in $roles)		
+					#if($velocityCount == 0)
+						#[roles[$velocityCount]]
+					#else
+						,#[roles[$velocityCount]]
+					#end
+				#end
+				)
+			#end
+			order by rt.type_id,r.role_name
+		]]>
+	</property>
+</properties>	

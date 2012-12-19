@@ -2661,6 +2661,11 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>charset</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	
 	<!-- 
@@ -3869,6 +3874,10 @@
 		-->
 		<attribute>
 			<name>enablecontextmenu</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>jquery</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>

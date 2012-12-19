@@ -663,6 +663,13 @@
 				<content>monitor/monitor_console.jsp</content>
 			</workspace>
 		</item>
+		
+		<item name="缓存管理" id="cachemonitor" i18n:en_US="Cache Monitor">
+			
+			<workspace>
+				<content>monitor/cache_console.jsp</content>
+			</workspace>
+		</item>
 
 		<item name="权限测试" id="permissiontest" i18n:en_US="Role Unit">
 			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif

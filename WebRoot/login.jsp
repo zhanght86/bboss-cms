@@ -422,18 +422,18 @@ DD_belatedPNG.fix('div');
 		}
 	}
 	
-	function saveName(){
+	function saveName(event){
 	
 		var s = $("#userName").val();
 		var p = $("#password").val();
 		if((s==""&&p!="")||(s==""&&p=="")){
 			$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	    	$("#userName").focus();
-	    	window.event.returnValue=false;
+	    	event.returnValue=false;
 		    }else if(p==""&&s!=""){
 		    $.dialog.alert("<pg:message code='sany.pdp.input.password'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	    	$("#password").focus();
-	    	window.event.returnValue=false;
+	    	event.returnValue=false;
 		    }
 		    
 	    if(s!=""&&p!=""){
@@ -457,58 +457,58 @@ DD_belatedPNG.fix('div');
 		$("#loginForm").reset();
 	}
 	
-	function enterKeydowngoU(){
+	function enterKeydowngoU(event){
 		var userName = $("#userName").val();
 		var password = $("#password").val();
-		if(window.event.keyCode == 13){
+		if(event.keyCode == 13){
 			if(userName == ""){
 				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#userName").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}else{
 				$("#password").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}
 		}
 	}
 	
-	function enterKeydowngoP(){
+	function enterKeydowngoP(event){
 		var userName = $("#userName").val();
 		var password = $("#password").val();
-		if(window.event.keyCode == 13){
+		if(event.keyCode == 13){
 			if(userName == "" ){
 				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#userName").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}else if(userName != "" && password == ""){
 				$.dialog.alert("<pg:message code='sany.pdp.input.password'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#password").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}else if(userName != "" && password != ""){
 				//loginForm.subsystem_id.focus();
 				
 				document.getElementById('password').value = strEnc(password,userName, "", "");
 				$("#loginForm").submit();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}
 		}
 	}
 	
-	function enterKeydowngoS(){
+	function enterKeydowngoS(event){
 		var userName = $("#userName").val();
 		var password = $("#password").val();
 		if(window.event.keyCode == 13){
 			if(userName == "" ){
 				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#userName").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}else if(userName != "" && password == ""){
 				$.dialog.alert("<pg:message code='sany.pdp.input.password'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#password").focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}else if(userName != "" && password != ""){
 				loginForm.ok.focus();
-				window.event.returnValue=false;
+				event.returnValue=false;
 			}
 		}
 	}
@@ -543,8 +543,8 @@ DD_belatedPNG.fix('div');
                		out.print("<li><label></label><font color='red'>"+errorMessage + "</font></li>");
                    } 
 		                  %>
-				<li><label><pg:message code="sany.pdp.user.login.name"/>：</label><input id="userName" name="userName" type="text" maxlength="<%=userNamelength%>"	 onkeydown="enterKeydowngoU()"  /></li>
-				<li><label><pg:message code="sany.pdp.login.password"/>：</label><input id="password" name="password" type="password" type="text"	onkeydown="enterKeydowngoP()" /></li>
+				<li><label><pg:message code="sany.pdp.user.login.name"/>：</label><input id="userName" name="userName" type="text" maxlength="<%=userNamelength%>"	 onkeydown="enterKeydowngoU(event)"  /></li>
+				<li><label><pg:message code="sany.pdp.login.password"/>：</label><input id="password" name="password" type="password" type="text"	onkeydown="enterKeydowngoP(event)" /></li>
 				<li><label><pg:message code="sany.pdp.system"/>：</label>
 				<select name="subsystem_id" style="width:160px;margin-left:-110px;">
 					<option value="module"
@@ -618,7 +618,7 @@ DD_belatedPNG.fix('div');
 					<%} %>
 				</select>
 				</li>
-				<li class="log_bts" ><a href="#" class="log_bt c_20"  onclick="saveName()"><span><pg:message code="sany.pdp.login"/></span></a><a href="#" class="log_bt log_cancel" onclick="reset()" ><span><pg:message code="sany.pdp.common.operation.reset"/></span></a></li>
+				<li class="log_bts" ><a href="#" class="log_bt c_20"  onclick="saveName(event)"><span><pg:message code="sany.pdp.login"/></span></a><a href="#" class="log_bt log_cancel" onclick="reset()" ><span><pg:message code="sany.pdp.common.operation.reset"/></span></a></li>
 			</ul>
 			</form>			
 			<div class="Zclear"></div> 			
