@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.frameworkset.spi.Provider;
 
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
@@ -245,18 +244,7 @@ public interface JobManager extends Provider,java.io.Serializable {
 	 */
 	public Job loadAssociatedSet(String jobId, String associated)
 			throws ManagerException;
-	/**
-	 * 返回数据分页的配置类
-	 * 
-	 * @return 可以设置数据分页对象，如：<br>
-	 *         PageConfig pageConfig = jobManager.getPageConfig();
-	 *         pageConfig.setPageSize(当前页面中需要显示的数据大小);
-	 *         pageConfig.setStartIndex(当前页面中显示数据的起始索引值); <br>
-	 *         int recordCount = pageConfig.getTotalSize();
-	 * @throws ManagerException
-	 *             在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
+
 	/**
 	 * 判断机构下是否有岗位
 	 * @param org

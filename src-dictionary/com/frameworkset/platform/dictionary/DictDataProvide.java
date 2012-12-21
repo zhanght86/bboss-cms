@@ -25,7 +25,7 @@ import com.frameworkset.dictionary.ProfessionDataManagerException;
  * 描述：为 sysui 中的数据字典组件提供数据的数据提供实现类 <br>
  * 日期：Apr 20, 2006 <br>
  * 
- * @author 吴卫雄
+ * @author 
  * @author chunqiu.zhao 2007.11.2,biaoping.yin 2008.05.22
  */
 public class DictDataProvide implements DataManager,Listener {

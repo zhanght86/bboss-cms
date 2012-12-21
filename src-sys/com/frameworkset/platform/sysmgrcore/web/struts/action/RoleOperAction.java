@@ -11,7 +11,7 @@ import com.frameworkset.common.poolman.DBUtil;
 /**
  * 资源管理＝＝资源操作授予＝＝角色操作的保存
  * 
- * @author 景峰
+ * @author 
  * @file RoleOperAction.java
  * @Created on: Apr 14, 2006
  */

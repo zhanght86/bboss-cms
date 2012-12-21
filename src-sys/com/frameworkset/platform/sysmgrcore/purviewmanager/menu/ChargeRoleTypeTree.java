@@ -15,7 +15,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * 
- * @author 景峰
+ * @author 
  * @file RoleTree.java Created on: Apr 6, 2006
  */
 public class ChargeRoleTypeTree extends COMTree implements Serializable

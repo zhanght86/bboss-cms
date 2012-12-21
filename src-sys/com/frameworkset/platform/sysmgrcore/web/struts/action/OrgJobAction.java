@@ -53,7 +53,7 @@ public class OrgJobAction extends BasicAction {
 	private Logger logger = Logger.getLogger(OrgJobAction.class.getName());
 
 	/**
-	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 景峰修改
+	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 修改
 	 * 
 	 * @param mapping
 	 * @param form
@@ -200,7 +200,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 得到一个机构下某一岗位的用户列表 景峰修改
+	 * 得到一个机构下某一岗位的用户列表 修改
 	 * 
 	 * @param mapping
 	 * @param form
@@ -463,7 +463,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 机构管理==>岗位设置==>删除选中岗位下的用户 景峰
+	 * 机构管理==>岗位设置==>删除选中岗位下的用户 
 	 * 
 	 * @param mapping
 	 * @param form
@@ -593,7 +593,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 机构管理==>岗位设置==>保存选中岗位和机构的关系 景峰
+	 * 机构管理==>岗位设置==>保存选中岗位和机构的关系 
 	 * 
 	 * @param mapping
 	 * @param form
@@ -685,12 +685,12 @@ public class OrgJobAction extends BasicAction {
 
 		UserManager userManager = SecurityDatabase.getUserManager();
 
-		// 吴卫雄修改：需要完整用户对象信息
+		// 修改：需要完整用户对象信息
 		// Organization org = new Organization();
 		// org.setOrgId(orgId);
 		OrgManager orgMgr = SecurityDatabase.getOrgManager();
 		Organization org = orgMgr.getOrgById(orgId);
-		// 吴卫雄修改结束
+		// 修改结束
 		try {
 			Job job = new Job();
 			job.setJobId(jobId);
@@ -698,11 +698,11 @@ public class OrgJobAction extends BasicAction {
 				userManager.deleteUserjoborg(job, org);
 				String userLists_log = "";
 				for (int i = 0; i < userList.length; i++) {
-					// 吴卫雄修改：需要完成用户对象信息
+					// 修改：需要完成用户对象信息
 					// User user = new User();
 					// user.setUserId(Integer.valueOf(userList[i]));
 					User user = userManager.getUserById(userList[i]);
-					// 吴卫雄修改结束
+					// 修改结束
 
 					Userjoborg userjoborg = new Userjoborg();
 					userjoborg.setUser(user);
@@ -733,7 +733,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 景峰修改 通过Ajax来实现
+	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 修改 通过Ajax来实现
 	 * 
 	 * @param mapping
 	 * @param form
@@ -777,7 +777,7 @@ public class OrgJobAction extends BasicAction {
 	}
 	
 	/**
-	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 景峰修改 通过Ajax来实现
+	 * 保存机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。包括排序的先后 修改 通过Ajax来实现
 	 * 
 	 * @param mapping
 	 * @param form
@@ -810,7 +810,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 删除机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。 景峰修改 通过Ajax来实现
+	 * 删除机构及岗位的关系 机构管理－－岗位设置，左边的窗口右边列表的内容。 修改 通过Ajax来实现
 	 * 
 	 * @param mapping
 	 * @param form
@@ -847,7 +847,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 机构下岗位的排序 机构管理－－岗位设置，左边的窗口右边列表的内容。 景峰修改 通过Ajax来实现(只是2个jobsn的替换)
+	 * 机构下岗位的排序 机构管理－－岗位设置，左边的窗口右边列表的内容。 修改 通过Ajax来实现(只是2个jobsn的替换)
 	 * 下一级
 	 * gao.tang 修改
 	 * @param orgId
@@ -916,7 +916,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 机构下岗位的排序 机构管理－－岗位设置，左边的窗口右边列表的内容。 景峰修改 通过Ajax来实现(到顶部或者到底部的按钮事件)
+	 * 机构下岗位的排序 机构管理－－岗位设置，左边的窗口右边列表的内容。 修改 通过Ajax来实现(到顶部或者到底部的按钮事件)
 	 * 到顶部和到底部
 	 * @param orgId
 	 * @param jobId
@@ -984,21 +984,21 @@ public class OrgJobAction extends BasicAction {
 		try {
 			UserManager userManager = SecurityDatabase.getUserManager();
 
-			// 吴卫雄修改：需要完整用户对象信息
+			// 修改：需要完整用户对象信息
 			// Organization org = new Organization();
 			// org.setOrgId(orgId);
 			OrgManager orgMgr = SecurityDatabase.getOrgManager();
 			Organization org = orgMgr.getOrgById(orgId);
-			// 吴卫雄修改结束
+			// 修改结束
 			
 			Job job = new Job();
 			job.setJobId(jobId);
 			
-			// 吴卫雄修改：需要完成用户对象信息
+			// 修改：需要完成用户对象信息
 			// User user = new User();
 			// user.setUserId(Integer.valueOf(userList[i]));
 			User user = userManager.getUserById(userId1);
-			// 吴卫雄修改结束
+			// 修改结束
 			
 			Userjoborg userjoborg = new Userjoborg();
 			userjoborg.setUser(user);
@@ -1015,7 +1015,7 @@ public class OrgJobAction extends BasicAction {
 
 			// save the second user
 			User user2 = userManager.getUserById(userId2);
-			// 吴卫雄修改结束
+			// 修改结束
 			Userjoborg userjoborg2 = new Userjoborg();
 			userjoborg2.setUser(user2);
 			userjoborg2.setJob(job);
@@ -1041,15 +1041,15 @@ public class OrgJobAction extends BasicAction {
 		try {
 			UserManager userManager = SecurityDatabase.getUserManager();
 
-			// 吴卫雄修改：需要完整用户对象信息
+			// 修改：需要完整用户对象信息
 			// Organization org = new Organization();
 			// org.setOrgId(orgId);
 			OrgManager orgMgr = SecurityDatabase.getOrgManager();
 			Organization org = orgMgr.getOrgById(orgId);
-			// 吴卫雄修改结束
+			// 修改结束
 			Job job = new Job();
 			job.setJobId(jobId);
-			// 吴卫雄修改：需要完成用户对象信息
+			// 修改：需要完成用户对象信息
 			// User user = new User();
 			// user.setUserId(Integer.valueOf(userList[i]));
 
@@ -1062,7 +1062,7 @@ public class OrgJobAction extends BasicAction {
 
 			for (int i = 0; userId != null && i < userId.length; i++) {
 				User user = userManager.getUserById(userId[i]);
-				// 吴卫雄修改结束
+				// 修改结束
 				Userjoborg userjoborg = new Userjoborg();
 				userjoborg.setUser(user);
 				userjoborg.setJob(job);
@@ -1100,7 +1100,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 删除用户的机构岗位。机构管理－岗位设置－右边的调出（景峰）
+	 * 删除用户的机构岗位。机构管理－岗位设置－右边的调出（）
 	 * 
 	 * @param orgId
 	 * @param jobId
@@ -1138,7 +1138,7 @@ public class OrgJobAction extends BasicAction {
 	}
 
 	/**
-	 * 保存用户的机构岗位。机构管理－岗位设置－右边的调入（景峰）
+	 * 保存用户的机构岗位。机构管理－岗位设置－右边的调入（）
 	 * 
 	 * @param orgId
 	 * @param jobId

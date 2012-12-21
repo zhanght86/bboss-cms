@@ -537,7 +537,7 @@ public class GroupManagerAction extends DispatchAction implements Serializable {
 	}
 
 	/**
-	 * 保存用户组下的用户－ajax方式。景峰
+	 * 保存用户组下的用户－ajax方式。
 	 * 
 	 * @param groupId
 	 * @param userId
@@ -588,7 +588,7 @@ public class GroupManagerAction extends DispatchAction implements Serializable {
 	}
 	
 	/**
-	 * 删除用户组下的用户－ajax方式。景峰
+	 * 删除用户组下的用户－ajax方式。
 	 * 
 	 * @param groupId
 	 * @param userId

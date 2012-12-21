@@ -8,7 +8,6 @@ import org.frameworkset.spi.Provider;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.impl.AccessPermission;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -24,7 +23,7 @@ import com.frameworkset.util.ListInfo;
  * 描述：角色管理接口 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public interface RoleManager extends Provider, Serializable {
 
@@ -96,7 +95,7 @@ public interface RoleManager extends Provider, Serializable {
 	throws ManagerException; 
 	/**
 	 * 删除某一资源id及资源类型对应的所有角色及操作
-	 * 景峰添加
+	 * 添加
 	 * @param resId
 	 * @param restypeId
 	 * @return
@@ -167,7 +166,7 @@ public interface RoleManager extends Provider, Serializable {
 	 */
 	public List getRoleList(User user) throws ManagerException;
 
-	// 吴卫雄删除：该函数所对应的功能由 UserManager 中实现
+	// 删除：该函数所对应的功能由 UserManager 中实现
 	// /**
 	// * 根据用户删除该用户与角色的关系
 	// *
@@ -253,14 +252,6 @@ public interface RoleManager extends Provider, Serializable {
 	 */
 	public List getAllRoleHasPermissionInResource(String resId,
 			String operName, String restypeId) throws ManagerException;
-
-	/**
-	 * 返回页面配置管理类
-	 * 
-	 * @return
-	 * @throws ManagerException
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
 	
 	/**
 	 * 根据用户取所有相关的(机构角色关系)角色。

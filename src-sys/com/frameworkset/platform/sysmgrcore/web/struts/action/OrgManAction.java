@@ -103,10 +103,10 @@ public class OrgManAction extends BasicAction {
 //		}
 //	
 //		org = new Organization();
-//		// 吴卫雄修改：为了同步机构到LDAP中去
+//		// 修改：为了同步机构到LDAP中去
 //		org.setParentId(parentId);
 //		org.setParentOrg(parentOrg);
-//		// 吴卫雄修改结束
+//		// 修改结束
 //
 //		org.setLayer(layer);
 //		request.removeAttribute(mapping.getInput());
@@ -135,7 +135,7 @@ public class OrgManAction extends BasicAction {
 //		JobManager jobManager = SecurityDatabase.getJobManager();
 //		org.setOrgId(null);
 //
-//		// 吴卫雄添加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
+//		// 添加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
 //		if (org.getParentId() != null && org.getParentId().length() > 0) {
 //			Organization parentOrg = orgManager.getOrgById( org
 //					.getParentId());
@@ -302,14 +302,14 @@ public class OrgManAction extends BasicAction {
 //		JobManager jobManager = SecurityDatabase.getJobManager();
 //		org.setOrgId(null);
 //
-//		// 吴卫雄添加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
+//		// 添加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
 //		if (org.getParentId() != null && org.getParentId().length() > 0) {
 //			Organization parentOrg = orgManager.getOrgById(org
 //					.getParentId());
 //			org.setParentOrg(parentOrg);
 //		} else
 //			org.setParentId("0");
-//		// 吴卫雄添加结束
+//		// 添加结束
 //		
 //		boolean r = orgManager.insertOrg(org);
 //		if(!r)
@@ -422,12 +422,12 @@ public class OrgManAction extends BasicAction {
 //		
 //		String orgnumber = request.getParameter("orgNumber");
 //		
-//		// 吴卫雄增加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
+//		// 增加：为了实现与LDAP同步时将当前机构添加到父机构的 member 属性下
 //		if (org.getParentId() != null) {
 //			Organization parentOrg = orgManager.getOrgById(org.getParentId());
 //			org.setParentOrg(parentOrg);
 //		}
-//		// 吴卫雄结束
+//		// 结束
 //		DBUtil db = new DBUtil();
 //		String sql ="select orgnumber from TD_SM_ORGANIZATION where" +
 //		" orgnumber='"+ org.getOrgnumber()+"' and orgnumber<>'"+ orgnumber +"'";
@@ -848,7 +848,7 @@ public class OrgManAction extends BasicAction {
 	}
 
 	/**
-	 * 机构管理中保存机构角色，ajax－－景峰
+	 * 机构管理中保存机构角色，ajax－－
 	 * @param orgId
 	 * @param roleId
 	 * @return

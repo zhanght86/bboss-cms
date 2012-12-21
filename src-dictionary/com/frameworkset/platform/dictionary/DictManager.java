@@ -19,7 +19,7 @@ import com.frameworkset.util.ListInfo;
  * 描述：字典管理 <br>
  * 日期：Mar 28, 2006 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public interface DictManager extends Provider {
 	
@@ -563,7 +563,7 @@ public interface DictManager extends Provider {
 			String occurOrg, String isaVailability,String attachFieldSql, int offset, int size) throws ManagerException;
 //	
 //	/**
-//	 * 根据字典类型名称获得字典的数据 景峰添加
+//	 * 根据字典类型名称获得字典的数据 添加
 //	 * 
 //	 * @param dicttype 需要取得字典数据列表的字典类型对象
 //	 * @return 由参数 dicttype 所指定的字典类型的字典数据列表
@@ -573,7 +573,7 @@ public interface DictManager extends Provider {
 
 //	
 //	/**
-//	 * 根据字典类型名称获得字典的数据 景峰添加
+//	 * 根据字典类型名称获得字典的数据 添加
 //	 * 
 //	 * @param dicttype 需要取得字典数据列表的字典类型对象
 //	 * @return 由参数 dicttype 所指定的字典类型的字典数据列表
@@ -582,7 +582,7 @@ public interface DictManager extends Provider {
 //	public ListInfo getDictdataListByName(String dicttypename,int offset,int size) throws ManagerException;
 //
 //	/**
-//	 * 返回字典管理的分页配置管理 景峰添加
+//	 * 返回字典管理的分页配置管理 添加
 //	 * 
 //	 * @return 字典管理的分页配置管理对象
 //	 * @throws ManagerException 如果在执行该方法的过程中遇到问题将抛出 ManagerException 异常

@@ -14,7 +14,7 @@ import com.frameworkset.util.ListInfo;
  * select count(*) from td_sm_user  user0_ 
 where user0_.user_id in ( select user1_.USER_ID from td_sm_user user1_ 
       minus select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_ )
- * @author 景峰
+ * @author 
  * @file DiscreteUserList.java Created on: Apr 26, 2006
  */
 public class DiscreteUserList extends DataInfoImpl implements Serializable {

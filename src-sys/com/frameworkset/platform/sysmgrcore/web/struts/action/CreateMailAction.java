@@ -197,7 +197,7 @@ public class CreateMailAction extends DispatchAction implements Serializable {
 	}
 
 	/**
-	 * 标识选中用户,景峰
+	 * 标识选中用户,
 	 * 
 	 * @param mapping
 	 * @param form
@@ -229,7 +229,7 @@ public class CreateMailAction extends DispatchAction implements Serializable {
 	}
 
 	/**
-	 * 表示机构下的所有用户,景峰
+	 * 表示机构下的所有用户,
 	 * 
 	 * @param mapping
 	 * @param form

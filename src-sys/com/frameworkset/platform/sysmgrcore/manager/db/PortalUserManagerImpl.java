@@ -11,7 +11,6 @@ import org.frameworkset.spi.SPIException;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -376,10 +375,7 @@ public class PortalUserManagerImpl extends EventHandle implements UserManager {
 		return null;
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	public List getTempaccredit(String userName) throws ManagerException {
 		// TODO Auto-generated method stub

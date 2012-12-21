@@ -319,7 +319,7 @@ public class UserOrgManagerAction extends DispatchAction  implements Serializabl
 //				}
 
 				
-				// 景峰修改，删除所有机构后orgIdName为空，会抛异常
+				// 修改，删除所有机构后orgIdName为空，会抛异常
 //				if (tmp.length == 2) {
 //					orgId = tmp[0];
 //					jobId = tmp[1];

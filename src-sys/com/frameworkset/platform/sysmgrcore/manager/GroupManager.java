@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.frameworkset.spi.Provider;
 
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Groupexp;
 import com.frameworkset.platform.sysmgrcore.entity.Grouprole;
@@ -263,18 +263,7 @@ public interface GroupManager extends Provider,Serializable {
 	public Group loadAssociatedSet(String groupId, String associated)
 			throws ManagerException;
 
-	/**
-	 * 返回数据分页的配置类
-	 * 
-	 * @return 可以设置数据分页对象，如：<br>
-	 *         PageConfig pageConfig = jobManager.getPageConfig();
-	 *         pageConfig.setPageSize(当前页面中需要显示的数据大小);
-	 *         pageConfig.setStartIndex(当前页面中显示数据的起始索引值); <br>
-	 *         int recordCount = pageConfig.getTotalSize();
-	 * @throws ManagerException
-	 *             在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
+
 	/**
 	 * 检查指定的组是否包含子组
 	 * 

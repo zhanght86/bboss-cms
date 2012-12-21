@@ -62,6 +62,7 @@
     String userRegdate = request.getParameter("userRegdate");
     String shortMobile = request.getParameter("shortMobile");
     String userSn = request.getParameter("userSn");
+    String userWorknumber = request.getParameter("userWorknumber");
    // int isTax = Integer.parseInt(istaxmanagerStr.trim());
 	user.setUserId(new Integer(userId));
 	user.setUserName(userName);
@@ -87,6 +88,7 @@
 	user.setUserOicq(userOicq);
 	user.setUserAddress(userAddress);
 	user.setUserLogincount(new Integer(userLogincount));
+	
 	if(!"".equals(userBirthday)){
 		user.setUserBirthday(Date.valueOf(userBirthday));
 	}
@@ -95,6 +97,7 @@
 	}
 	user.setRemark2(shortMobile);
 	user.setUserSn(new Integer(userSn));
+	user.setUserWorknumber(userWorknumber);
     boolean state = userManager.updateUser(user);
    
 %>

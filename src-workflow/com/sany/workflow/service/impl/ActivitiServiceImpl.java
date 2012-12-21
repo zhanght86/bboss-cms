@@ -33,20 +33,19 @@ import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.repository.ProcessDefinitionQuery;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.util.ListInfo;
-import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
+import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
 
 public class ActivitiServiceImpl implements ActivitiService {
@@ -497,7 +496,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @return
 	 */
 	@Override
-	public ListInfo getHisTaskByUsername(String username,int offset,int pagesize) {
+	public ListInfo getHisTaskByUsername(String username,long offset,int pagesize) {
 		ListInfo listInfo = null;
 		try{
 			Map<String,Object> map  = new HashMap<String,Object>();
@@ -561,7 +560,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @return
 	 */
 	@Override
-	public ListInfo getHisTaskByUsernameProcessKey(String username,String[] processKeys,int offset,int pagesize) {
+	public ListInfo getHisTaskByUsernameProcessKey(String username,String[] processKeys,long offset,int pagesize) {
 		ListInfo listInfo = null;
 		try{
 			Map<String,Object> map  = new HashMap<String,Object>();
@@ -1243,7 +1242,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @return
 	 */
 	@Override
-	public ListInfo listTaskByUser(String username,int offset,int pagesize) {
+	public ListInfo listTaskByUser(String username,long offset,int pagesize) {
 		taskService = processEngine.getTaskService();
 		ListInfo listInfo = null;
 		try {
@@ -1255,6 +1254,45 @@ public class ActivitiServiceImpl implements ActivitiService {
 			e.printStackTrace();
 		}
 		return listInfo;
+	}
+	
+	public ListInfo listTaskAndVarsByUserWithState(Class clazz,String processkey,String state,String userAccount,long offset,int pagesize)
+	{
+		
+		ListInfo listInfo = null;
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("userAccount", userAccount);
+			map.put("state", state);
+			map.put("processkey", processkey);
+			
+			listInfo = executor.queryListInfoBean(clazz,
+					"listTaskAndVarsByUserWithState",offset,pagesize, map);
+		} catch (Exception e) {
+	
+			throw new ProcessException("获取待办任务失败：processkey="+processkey+",state="+state
+					+",userAccount="+userAccount+",offset="+offset+",pagesize="+pagesize,e);
+		}
+		return listInfo;
+	}
+	/**
+	 * 获取用户特定状态下的任务待办数
+	 */
+	public int countTasksByUserWithState(String processkey,String state,String userAccount)
+	{
+		
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("userAccount", userAccount);
+			map.put("state", state);
+			map.put("processkey", processkey);
+			
+			return  executor.queryObjectBean(int.class, "countlistTaskAndVarsByUserWithState", map);
+		} catch (Exception e) {
+	
+			throw new ProcessException("获取待办任务数失败：processkey="+processkey+",state="+state
+					+",userAccount="+userAccount,e);
+		}
 	}
 
 	/**
@@ -1313,7 +1351,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @return
 	 */
 	@Override
-	public ListInfo listTaskByUser(String processKey, String username,int offset,int pagesize) {
+	public ListInfo listTaskByUser(String processKey, String username,long offset,int pagesize) {
 		taskService = processEngine.getTaskService();
 		ListInfo userTaskList = null;
 		try {
@@ -1336,7 +1374,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @param username
 	 * @return
 	 */
-	public ListInfo listTaskByUser(String[] processKeys, String username,int offset,int pagesize) {
+	public ListInfo listTaskByUser(String[] processKeys, String username,long offset,int pagesize) {
 		taskService = processEngine.getTaskService();
 		ListInfo userTaskList = null;
 		try {
@@ -1639,6 +1677,17 @@ public class ActivitiServiceImpl implements ActivitiService {
 		return null;
 	}
 	
+	public List<Task> getCurrentTaskList(String processInstanceId) {
+		List<Task> taskList = processEngine.getTaskService().createTaskQuery().processInstanceId(processInstanceId)
+				.orderByTaskId().desc().list();
+
+		if (!CollectionUtils.isEmpty(taskList)) {
+			return taskList;
+		}
+
+		return null;
+	}
+	
 	/**
 	 * 根据任务ID查询任务的待办人
 	 * @param taskId
@@ -1661,6 +1710,11 @@ public class ActivitiServiceImpl implements ActivitiService {
 	{
 		this.runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
 	}
+	
+	public List<Task> listTaskByProcessInstanceId(String processInstanceId) {
+        taskService = processEngine.getTaskService();
+    	return taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+    }
 
 
 }

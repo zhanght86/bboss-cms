@@ -19,7 +19,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
 /**
  * 机构岗位树。显示在角色管理中资源操作授予的岗位和人员资源里面。
  * 
- * @author 景峰
+ * @author 
  * @file OrgJobTree.java Created on: Apr 17, 2006
  */
 public class OrgJobTree extends COMTree implements Serializable{

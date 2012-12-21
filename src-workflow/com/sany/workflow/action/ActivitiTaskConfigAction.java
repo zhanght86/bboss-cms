@@ -15,7 +15,6 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.Group;
@@ -157,8 +156,7 @@ public class ActivitiTaskConfigAction {
 	
 	
 	public String queryUsers(User user,
-			@PagerParam(name = PagerParam.OFFSET) int offset,
-			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			
 			ModelMap model) {
 		if(user.getUser_realname()!=null&&!user.getUser_realname().equals("")){
 			user.setUser_realname("%"+user.getUser_realname()+"%");
@@ -184,9 +182,8 @@ public class ActivitiTaskConfigAction {
 	 */
 	public String queryUserByNames(
 			String usernames,
-			ModelMap model,
-			@PagerParam(name = PagerParam.OFFSET) int offset,
-			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "3") int pagesize) {
+			ModelMap model
+			) {
 		if (usernames != null && !usernames.equals("")) {
 			List<User>  list = activitiConfigService.queryUsersByNames(usernames);
 			model.addAttribute("chooseuserlist", list);

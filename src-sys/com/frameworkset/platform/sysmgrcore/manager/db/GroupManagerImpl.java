@@ -19,9 +19,11 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.tag.pager.ListInfo;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Groupexp;
 import com.frameworkset.platform.sysmgrcore.entity.Grouprole;
@@ -29,10 +31,6 @@ import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.tag.pager.ListInfo;
-import com.frameworkset.orm.transaction.TransactionManager;
 /**
  * 项目：SysMgrCore <br>
  * 描述：组管理实现类 <br>
@@ -41,8 +39,7 @@ import com.frameworkset.orm.transaction.TransactionManager;
  * @author
  */  
 public class GroupManagerImpl extends EventHandle implements GroupManager {
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
+	
 	private List userList;
 	private Logger logger = Logger.getLogger(GroupManagerImpl.class.getName());
 
@@ -838,18 +835,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 		return returnGroup;
 	}
 
-	/**
-	 * @deprecated 不推荐使用的方法，方法实现已被注释掉
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-//		try {
-//			return cb.getPageConfig();
-//		} catch (ControlException e) {
-//			logger.error(e);
-//			return null;
-//		}
-		return null;
-	}
+
 
 	/**
 	 * 去掉hibernate后的方法

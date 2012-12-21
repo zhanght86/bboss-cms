@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.frameworkset.spi.Provider;
 
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Attrdesc;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Res;
@@ -22,7 +21,7 @@ import com.frameworkset.util.ListInfo;
  * 描述：资源管理接口 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public interface ResManager extends Provider, Serializable {
 
@@ -260,34 +259,7 @@ public interface ResManager extends Provider, Serializable {
 	 */
 	public boolean deleteRes(Res res) throws ManagerException;
 
-	/**
-	 * 删除指定的属性描述
-	 * 
-	 * @param attrdesc
-	 * @return boolean
-	 * @throws ManagerException
-	 */
-	public boolean deleteAttrdesc(Attrdesc attrdesc) throws ManagerException;
 
-	/**
-	 * 装载与资源相关的对象
-	 * 
-	 * @param res
-	 * @param associated
-	 * @return
-	 * @throws ManagerException
-	 */
-	public Res loadAssociatedSet(String resId, String associated)
-			throws ManagerException;
-
-	/**
-	 * 根据资源ID描述判断指定的资源是否存在
-	 * 
-	 * @param resId
-	 * @return
-	 * @throws ManagerException
-	 */
-	public boolean isResExist(String resId) throws ManagerException;
 
 	/**
 	 * 根据资源名称描述判断指定的资源是否存在
@@ -298,32 +270,7 @@ public interface ResManager extends Provider, Serializable {
 	 */
 	public boolean isResExistitle(String title) throws ManagerException;
 
-	/**
-	 * 判断指定的资源是否包含子资源
-	 * 
-	 * @param resId
-	 * @return
-	 * @throws ManagerException
-	 */
-	public boolean isContainChildRes(Res res) throws ManagerException;
 
-	/**
-	 * 判断指定的资源类型是否包含子资源类型
-	 * 
-	 * @param restype
-	 * @return
-	 * @throws ManagerException
-	 */
-	public boolean isContainChildResType(Restype restype)
-			throws ManagerException;
-
-	/**
-	 * 返回页面配置管理类
-	 * 
-	 * @return
-	 * @throws ManagerException
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
 
 	/**
 	 * 删除按岗位查询出的冗余资源数据 gao.tang

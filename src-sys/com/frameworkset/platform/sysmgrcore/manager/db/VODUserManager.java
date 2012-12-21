@@ -10,7 +10,6 @@ import org.frameworkset.event.Listener;
 import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -448,10 +447,6 @@ public class VODUserManager extends EventHandle implements UserManager {
 		return null;
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public void addListener(Listener listener) {
 		// TODO Auto-generated method stub
@@ -802,15 +797,15 @@ public class VODUserManager extends EventHandle implements UserManager {
 		try {
 			UserManager userManager = SecurityDatabase.getUserManager();
 
-			// 吴卫雄修改：需要完整用户对象信息
+			// 修改：需要完整用户对象信息
 			// Organization org = new Organization();
 			// org.setOrgId(orgId);
 			OrgManager orgMgr = SecurityDatabase.getOrgManager();
 			Organization org = orgMgr.getOrgById(orgId);
-			// 吴卫雄修改结束
+			// 修改结束
 			Job job = new Job();
 			job.setJobId(jobId);
-			// 吴卫雄修改：需要完成用户对象信息
+			// 修改：需要完成用户对象信息
 			// User user = new User();
 			// user.setUserId(Integer.valueOf(userList[i]));
 
@@ -823,7 +818,7 @@ public class VODUserManager extends EventHandle implements UserManager {
 
 			for (int i = 0; userId != null && i < userId.length; i++) {
 				User user = userManager.getUserById(userId[i]);
-				// 吴卫雄修改结束
+				// 修改结束
 				Userjoborg userjoborg = new Userjoborg();
 				userjoborg.setUser(user);
 				userjoborg.setJob(job);

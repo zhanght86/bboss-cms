@@ -28,8 +28,6 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.impl.AccessPermission;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -51,7 +49,7 @@ import com.frameworkset.util.ListInfo;
  * 描述：角色管理实现类 <br>
  * 版本：1.0 <br>
  * 
- * @author 潘伟林
+ * @author 
  */
 public class RoleManagerImpl extends EventHandle implements RoleManager {
 	
@@ -66,8 +64,6 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	private static Logger logger = Logger.getLogger(RoleManagerImpl.class
 			.getName());
 
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
 
 	/**
 	 * 删除角色实例同时将连带删除与该实例有关的所有实例，如：用户与角色关系实例。
@@ -322,7 +318,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 
 	/**
 	 * 没有被使用的方法
-	 * 删除某一资源id及资源类型对应的所有角色及操作 景峰添加
+	 * 删除某一资源id及资源类型对应的所有角色及操作 添加
 	 * 
 	 * @param resId
 	 * @param restypeId
@@ -1152,18 +1148,6 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		return list;
 	}
 
-	/**
-	 * 没有被使用的方法
-	 * @deprecated 不推荐使用的方法，方法实现已经被注释掉
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-//		try {
-//			return cb.getPageConfig();
-//		} catch (ControlException e) {
-//			e.printStackTrace();
-//		}
-		return null;
-	}
 
 	/**
 	 * 没有被使用的方法

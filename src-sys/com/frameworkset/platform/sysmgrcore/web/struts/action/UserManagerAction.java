@@ -430,8 +430,8 @@ public class UserManagerAction extends DispatchAction implements Serializable {
 //			// add end
 //			UserManager userManager = SecurityDatabase.getUserManager();
 //
-//			// 吴卫雄增加：判断用户是否存在，存在则转入操作失败页面
-//			// 潘伟林修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
+//			// 增加：判断用户是否存在，存在则转入操作失败页面
+//			// 修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
 //			if (user.getUserId() == null) {
 //				if (userManager.isUserExist(user)) {
 //					// return mapping.findForward("fail");
@@ -529,7 +529,7 @@ public class UserManagerAction extends DispatchAction implements Serializable {
 		}
 		String[] id = request.getParameterValues("checkBoxOne");
 		DBUtil db = new DBUtil();
-		//景峰添加，在离散用户删除成功后的forward
+		//添加，在离散用户删除成功后的forward
 		String disuser = request.getParameter("disuser");
 		// CMS标识 ，add by xinwang.jiao
 		String delcmsuser = request.getParameter("delcmsuser");
@@ -887,8 +887,8 @@ public class UserManagerAction extends DispatchAction implements Serializable {
 //			// add end
 //			UserManager userManager = SecurityDatabase.getUserManager();
 //
-//			// 吴卫雄增加：判断用户是否存在，存在则转入操作失败页面
-//			// 潘伟林修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
+//			// 增加：判断用户是否存在，存在则转入操作失败页面
+//			// 修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
 //			if (user.getUserId() == null) {
 //				if (userManager.isUserExist(user)) {
 //					// return mapping.findForward("fail");
@@ -949,7 +949,7 @@ public class UserManagerAction extends DispatchAction implements Serializable {
 //				Job job = jobmanager.getJobById("1");
 //
 //				Userjoborg userjoborg = new Userjoborg();
-//				// 吴卫雄修改：需要完整 userjoborg 对象
+//				// 修改：需要完整 userjoborg 对象
 //				OrgManager orgMgr = SecurityDatabase.getOrgManager();
 //				Organization org = orgMgr.getOrgById(orgId);
 ////				-----------------------------------------------------
@@ -1376,8 +1376,8 @@ public class UserManagerAction extends DispatchAction implements Serializable {
 //			// add end
 //			UserManager userManager = SecurityDatabase.getUserManager();
 //
-//			// 吴卫雄增加：判断用户是否存在，存在则转入操作失败页面
-//			// 潘伟林修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
+//			// 增加：判断用户是否存在，存在则转入操作失败页面
+//			// 修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
 //			if (user.getUserId() == null) {
 //				if (userManager.isUserExist(user)) {
 //					// return mapping.findForward("fail");

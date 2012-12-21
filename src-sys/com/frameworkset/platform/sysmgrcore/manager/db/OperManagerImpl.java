@@ -9,8 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Opergpoper;
 import com.frameworkset.platform.sysmgrcore.entity.Opergprestype;
@@ -24,7 +23,6 @@ import com.frameworkset.platform.sysmgrcore.entity.RoleresopKey;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.OperManager;
-import com.frameworkset.common.poolman.DBUtil;
 
 /**
  * 项目：SysMgrCore <br>
@@ -32,14 +30,13 @@ import com.frameworkset.common.poolman.DBUtil;
  * 版本：1.0 <br>
  * ---没有被使用的类
  * 
- * @author 潘伟林
+ * @author 
  */
 public class OperManagerImpl extends EventHandle implements OperManager {
 	private static Logger logger = Logger.getLogger(OperManagerImpl.class
 			.getName());
 
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
+
 
 	/**
 	 * 存储操作
@@ -744,16 +741,7 @@ public class OperManagerImpl extends EventHandle implements OperManager {
 		return r;
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		// try {
-		// return cb.getPageConfig();
-		// } catch (ControlException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// return null;
-		return null;
-	}
+
 
 	/**
 	 * 取资源对应的角色及操作列表 没有被使用的方法

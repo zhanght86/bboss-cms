@@ -1138,7 +1138,7 @@ public class RoleManagerAction extends DispatchAction implements Serializable{
 	}
 
 	/**
-	 * 角色管理＝资源操作授予＝机构授权，包括是否递归 add 景峰
+	 * 角色管理＝资源操作授予＝机构授权，包括是否递归 add 
 	 * 没有确定按钮
 	 * @param resId
 	 * @param resTypeId

@@ -28,8 +28,6 @@ import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.ChargeOrg;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -51,14 +49,12 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.db.OrgQuery;
  * 描述：机构管理实现类 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public class OrgManagerImpl extends EventHandle implements OrgManager  {
 	
 	private  SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
 
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
 
 	private static Logger logger = Logger.getLogger(OrgManagerImpl.class
 			.getName());
@@ -720,6 +716,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 				.append(user.getUserId()).append("') order by ORG_SN asc ");
 			DBUtil db = new DBUtil();
 			try {
+				
 				db.executeSelect(sql.toString());
 				list = dbutilToOrganziationList(db);
 			} catch (SQLException e) {
@@ -924,7 +921,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 			org.setIsforeignparty(dBUtil.getString(k, "isforeignparty"));
 			org.setIsjichaparty(dBUtil.getString(k, "isjichaparty"));
 			org.setIsdirectguanhu(dBUtil.getString(k, "isdirectguanhu"));
-			System.out.println(org.getOrgName());
+			
 			list.add(org);
 		}
 		return list;
@@ -1633,19 +1630,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 	
 	
 	
-	/**
-	 * 无效方法
-	 * @deprecated 不推荐使用该方法，方法实现已被注释掉
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-//		try {
-//			return cb.getPageConfig();
-//		} catch (ControlException e) {
-//			logger.error(e);
-//			return null;
-//		}
-		return null;
-	}
+
 
 	/**
 	 * 去掉hibernate后的方法

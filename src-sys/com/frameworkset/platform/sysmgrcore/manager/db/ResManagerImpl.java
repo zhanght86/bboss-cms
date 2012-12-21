@@ -27,9 +27,6 @@ import com.frameworkset.platform.resource.UNProtectedResource;
 import com.frameworkset.platform.resource.UNProtectedResourceQueue;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
-import com.frameworkset.platform.sysmgrcore.control.Parameter;
 import com.frameworkset.platform.sysmgrcore.entity.Attrdesc;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Permission;
@@ -55,15 +52,13 @@ import com.frameworkset.util.ListInfo;
  * 描述：资源管理接口 <br>
  * 版本：1.0 <br>
  * --没有被使用的类
- * @author 潘伟林
+ * @author 
  */
 public class ResManagerImpl extends EventHandle implements ResManager {
 
 	private static Logger logger = Logger.getLogger(ResManagerImpl.class
 			.getName());
 
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
 	
 	public static SQLUtil sqlUtilInsert = SQLUtil
 	.getInstance("org/frameworkset/insert.xml");
@@ -993,84 +988,8 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 		return r;
 	}
 
-	/**
-	 * 删除指定的属性描述
-	 * 
-	 * @param attrdesc
-	 * @return boolean
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public boolean deleteAttrdesc(Attrdesc attrdesc) throws ManagerException {
-		boolean r = false;
 
-		if (attrdesc != null) {
-			try {
-				// 删除当前资源所关联的 Roleresop 对象
-				Parameter p = new Parameter();
-				p.setCommand(Parameter.COMMAND_DELETE);
-				// 删除指定的资源实例
-				p.setObject(attrdesc);
-				if (cb.execute(p) != null) {
-					r = true;
-				}
-				Event event = new EventImpl("",
-						ACLEventType.RESOURCE_INFO_CHANGE);
-				super.change(event);
-			} catch (ControlException e) {
-				logger.error(e);
-				throw new ManagerException(e.getMessage());
-			}
-		}
 
-		return r;
-	}
-
-	/**
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public Res loadAssociatedSet(String resId, String associated)
-			throws ManagerException {
-		Res res = null;
-
-		try {
-			Parameter par = new Parameter();
-			par.setCommand(Parameter.COMMAND_GET);
-			par.setObject("from Res r left join fetch r." + associated
-					+ " where r.resId = '" + resId + "'");
-
-			List list = (List) cb.execute(par);
-			if (list != null && !list.isEmpty()) {
-				res = (Res) list.get(0);
-			}
-		} catch (ControlException e) {
-			logger.error(e);
-			throw new ManagerException(e.getMessage());
-		}
-
-		return res;
-	}
-
-	/**
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public boolean isResExist(String resId) throws ManagerException {
-		boolean r = false;
-
-		try {
-			Parameter p = new Parameter();
-			p.setCommand(Parameter.COMMAND_GET);
-			p.setObject("from Res r where r.resId='" + resId + "'");
-			List list = (List) cb.execute(p);
-
-			if (list != null && list.size() > 0)
-				r = true;
-		} catch (ControlException e) {
-			logger.error(e);
-			throw new ManagerException(e.getMessage());
-		}
-
-		return r;
-	}
 
 	/**
 	 * 去掉hibernate后的方法
@@ -1105,77 +1024,6 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 
 	}
 
-	/**
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public boolean isContainChildRes(Res res) throws ManagerException {
-		boolean r = false;
-
-		try {
-			Parameter p = new Parameter();
-			p.setCommand(Parameter.COMMAND_GET);
-			p.setObject("select count(*) from Res r where r.restypeId = '"
-					+ res.getRestypeId() + "'");
-			List list = (List) cb.execute(p);
-			if (list != null) {
-				if (!list.isEmpty()) {
-					int count = ((Integer) list.get(0)).intValue();
-					if (count > 0)
-						r = true;
-				}
-			} else
-				throw new ManagerException("由于意外错误，暂时无法计算出资源“" + res.getResId()
-						+ "”是否包含子资源");
-		} catch (ControlException e) {
-			logger.error(e);
-			throw new ManagerException(e.getMessage());
-		}
-
-		return r;
-	}
-
-	/**
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public boolean isContainChildResType(Restype restype)
-			throws ManagerException {
-		boolean r = false;
-
-		try {
-			Parameter p = new Parameter();
-			p.setCommand(Parameter.COMMAND_GET);
-			p
-					.setObject("select count(*) from Restype r where r.parentRestypeId = '"
-							+ restype.getRestypeId() + "'");
-			List list = (List) cb.execute(p);
-			if (list != null) {
-				if (!list.isEmpty()) {
-					int count = ((Integer) list.get(0)).intValue();
-					if (count > 0)
-						r = true;
-				}
-			} else
-				throw new ManagerException("由于意外错误，暂时无法计算出资源“"
-						+ restype.getRestypeId() + "”是否包含子资源类型");
-		} catch (ControlException e) {
-			logger.error(e);
-			throw new ManagerException(e.getMessage());
-		}
-
-		return r;
-	}
-
-	/**
-	 * @deprecated 不推荐使用该方法，该方法由hibernate实现
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-		try {
-			return cb.getPageConfig();
-		} catch (ControlException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	// public List getResList(String roleId,String restypeId) throws
 	// ManagerException{

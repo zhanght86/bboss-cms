@@ -8,7 +8,7 @@ import com.frameworkset.util.ListInfo;
 /**
  * 机构中生成邮箱帐户的用户列表
  * 
- * @author 景峰
+ * @author 
  * @file MailUserList.java Created on: Apr 8, 2006
  */
 public class MailUserList extends DataInfoImpl implements Serializable {	
@@ -36,13 +36,13 @@ public class MailUserList extends DataInfoImpl implements Serializable {
 //			pageConfig.setStartIndex((int) offset);
 //
 //			list = userManager.getUserList(org);
-//			// 景峰添加
+//			// 添加
 //			for (int i = 0; list != null && i < list.size(); i++) {
 //				User tuser = (User) list.get(i);
 //				List jobList = jobManager.getJobList(org, tuser);
 //				tuser.setJobList(jobList);
 //			}
-//			// 景峰添加结束
+//			// 添加结束
 //			listInfo.setTotalSize(pageConfig.getTotalSize());
 //			listInfo.setDatas(list);
 ////			session.setAttribute("userListPageOffset", "" + offset);

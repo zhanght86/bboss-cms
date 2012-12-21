@@ -45,7 +45,7 @@ public class UserInfoForm  implements Serializable {
     private String ou;//机构名字
     private String orgId;//机构ID
     private String postalCode;
-    //add by 景峰
+    //add by 
     /**
 	 * 工号
 	 */

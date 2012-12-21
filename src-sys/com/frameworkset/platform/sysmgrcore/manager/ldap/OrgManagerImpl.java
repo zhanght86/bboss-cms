@@ -16,8 +16,7 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
 
 import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+import com.frameworkset.platform.sysmgrcore.control.LdapControl;
 import com.frameworkset.platform.sysmgrcore.control.Parameter;
 import com.frameworkset.platform.sysmgrcore.entity.ChargeOrg;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -36,8 +35,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
       
 	private Logger logger = Logger.getLogger(OrgManagerImpl.class);
  
-	private DataControl dc = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+	
 
 	private String groupBase = ConfigManager.getInstance().getConfigValue(
 			"groupBase");
@@ -46,8 +44,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -87,6 +84,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_DELETE);
 
@@ -206,10 +204,6 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
 		return null;
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public boolean isContainChildOrg(Organization org) throws ManagerException {
 		// TODO Auto-generated method stub
@@ -242,6 +236,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Attribute itemClass = new BasicAttribute("objectclass");
 			itemClass.add("groupOfNames");
 			itemClass.add("ibm-appuuidaux");
@@ -349,8 +344,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager {
 			String propName) {
 		Attribute attr = null;
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);

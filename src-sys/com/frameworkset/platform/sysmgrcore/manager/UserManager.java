@@ -7,7 +7,6 @@ import org.frameworkset.spi.Provider;
 import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -31,7 +30,7 @@ import com.frameworkset.util.ListInfo;
  * 描述：用户管理接口 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public interface UserManager extends Provider, Serializable {
 
@@ -255,7 +254,7 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public boolean deleteUser(User user) throws ManagerException;
 
-	// 吴卫雄删除：因为根据 userId 来删除用户对象实例对于保存在数据库中的数据来说是合适的，但
+	// 删除：因为根据 userId 来删除用户对象实例对于保存在数据库中的数据来说是合适的，但
 	// 对于保存于 LDAP 中的数据确是行不通的。而通过传入 User 对象来决定删除的具体记录的优势
 	// 在于可以用具体的维护类来决定用什么属性来做为删除依据。
 	// /**
@@ -728,7 +727,7 @@ public interface UserManager extends Provider, Serializable {
 	public List getUserList(Organization org, Job job) throws ManagerException;
 
 	/**
-	 * 根据机构与岗位取得该机构下不属于该岗位的用户列表(景峰增加)
+	 * 根据机构与岗位取得该机构下不属于该岗位的用户列表(增加)
 	 * 
 	 * @param org
 	 *            机构实体对象，由于无法确定数据源所以传入该对象时请尽可能保证该对象的完整性也就是它的所有属性都有相应的值
@@ -776,18 +775,6 @@ public interface UserManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public List getUserList(String[][] orgjobs) throws ManagerException;
-	/**
-	 * 返回数据分页的配置类
-	 * 
-	 * @return 可以设置数据分页对象，如：<br>
-	 *         PageConfig pageConfig = userManager.getPageConfig();
-	 *         pageConfig.setPageSize(当前页面中需要显示的数据大小);
-	 *         pageConfig.setStartIndex(当前页面中显示数据的起始索引值); <br>
-	 *         int recordCount = pageConfig.getTotalSize();
-	 * @throws ManagerException
-	 *             在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
 	/**
 	 * 物价局项目（根据字典类型取会员相关属性列表）
 	 * @return

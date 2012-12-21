@@ -31,7 +31,6 @@ import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Dictdata;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -65,7 +64,7 @@ import com.frameworkset.util.StringUtil;
  * 描述：用户管理(DB实现类) <br> 
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public class UserManagerImpl extends EventHandle implements UserManager {
 	
@@ -2060,7 +2059,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //			try {
 //				Parameter p = new Parameter();
 //				p.setCommand(Parameter.COMMAND_GET);
-//				// 吴卫雄修改：实现排序
+//				// 修改：实现排序
 //				// p
 //				// .setObject("from User user where user.userId in ("
 //				// + "select ujo.id.userId from Userjoborg ujo where
@@ -2085,7 +2084,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //					}
 //				}
 //
-//				// 吴卫雄修改结束
+//				// 修改结束
 //			} catch (ControlException e) {
 //				throw new ManagerException(e.getMessage());
 //			}
@@ -2254,7 +2253,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	}
 
 	/**
-	 * 根据orgid 和 jobid 获得在该org下但岗位不是jobid的用户列表 add by 景峰
+	 * 根据orgid 和 jobid 获得在该org下但岗位不是jobid的用户列表 add by 
 	 */
 	public List getUserList(Orgjob orgjob) throws ManagerException {
 		List list = null;
@@ -2325,7 +2324,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //			try {
 //				Parameter p = new Parameter();
 //				p.setCommand(Parameter.COMMAND_GET);
-//				// 吴卫雄修改：实现同一机构下同一岗位的用户排序
+//				// 修改：实现同一机构下同一岗位的用户排序
 //				// p
 //				// .setObject("from User user where user.userId in ("
 //				// + "select ujo.id.userId from Userjoborg ujo where
@@ -2349,7 +2348,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //				// }
 //				return users;
 //
-//				// 吴卫雄修改结束
+//				// 修改结束
 //			} catch (ControlException e) {
 //				throw new ManagerException(e.getMessage());
 //			}
@@ -2620,18 +2619,6 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		return returnUser;
 	}
 
-	/**
-	 * 不使用的方法--
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-//		try {
-//			return cb.getPageConfig();
-//		} catch (ControlException e) {
-//			logger.error(e);
-//			return null;
-//		}
-		return null;
-	}
 
 	// 王卓添加
 	/**
@@ -4101,16 +4088,16 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		try {
 			UserManager userManager = SecurityDatabase.getUserManager();
 
-			// 吴卫雄修改：需要完整用户对象信息
+			// 修改：需要完整用户对象信息
 			// Organization org = new Organization();
 			// org.setOrgId(orgId);
 			Organization org = OrgCacheManager.getInstance().getOrganization(
 					orgId);
 			// Organization org = orgMgr.getOrg("org_id", orgId);
-			// 吴卫雄修改结束
+			// 修改结束
 			Job job = new Job();
 			job.setJobId(jobId);
-			// 吴卫雄修改：需要完成用户对象信息
+			// 修改：需要完成用户对象信息
 			// User user = new User();
 			// user.setUserId(Integer.valueOf(userList[i]));
 
@@ -4909,7 +4896,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					+ "USER_HOMETEL=?, USER_EMAIL=?, USER_MOBILETEL1=?, USER_MOBILETEL2=?, REMARK4=?, REMARK5=?,"
 					+ "USER_PINYIN=?, USER_TYPE=?, USER_POSTALCODE=?, USER_FAX=?, USER_OICQ=?, USER_BIRTHDAY=?,"
 					+ "USER_ADDRESS=?, USER_ISVALID=?, DREDGE_TIME=?, USER_REGDATE=?, USER_SN=?, REMARK3=?,"
-					+ "REMARK2=?, ISTAXMANAGER=? where USER_ID=?";
+					+ "REMARK2=?, ISTAXMANAGER=?,USER_WORKNUMBER=? where USER_ID=?";
 				PreparedDBUtil pe = new PreparedDBUtil();
 				pe.preparedUpdate(sql);
 				pe.setString(1, user.getUserRealname());
@@ -4937,6 +4924,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				pe.setString(23, user.getRemark2() == null ? "" : user.getRemark2());
 				pe.setInt(24, user.getIstaxmanager());
 				pe.setInt(25, user.getUserId());
+				pe.setString(26, user.getUserWorknumber());
 //				System.out.println(sql);
 				pe.executePrepared();
 //				StringBuffer hsql = new StringBuffer();

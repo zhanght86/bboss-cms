@@ -165,7 +165,7 @@ public class UserList extends DataInfoImpl implements Serializable{
 //					pageConfig.setPageSize(maxPagesize);
 //					pageConfig.setStartIndex((int) offset);
 //					//list = userManager.getUserList(hsql.toString()+ "order by u.userSn asc");
-//					// 景峰添加
+//					// 添加
 //					for (int i = 0; list != null && i < list.size(); i++) {
 //						User tuser = (User) list.get(i);
 //						List jobList = jobManager.getJobList(org, tuser);
@@ -197,13 +197,13 @@ public class UserList extends DataInfoImpl implements Serializable{
 //					pageConfig.setStartIndex((int) offset);
 //
 //					list = userManager.getUserList(org);
-//					// 景峰添加
+//					// 添加
 //					for (int i = 0; list != null && i < list.size(); i++) {
 //						User tuser = (User) list.get(i);
 //						List jobList = jobManager.getJobList(org, tuser);
 //						tuser.setJobList(jobList);
 //					}
-//					// 景峰添加结束
+//					// 添加结束
 //					listInfo.setTotalSize(pageConfig.getTotalSize());
 //					listInfo.setDatas(list);
 //					session.setAttribute("userListPageOffset", "" + offset);

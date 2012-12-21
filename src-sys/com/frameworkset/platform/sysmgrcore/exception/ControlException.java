@@ -7,7 +7,7 @@ import java.io.Serializable;
  * 描述：控制器异常类 <br>
  * 版本：1.0 <br>
  *
- * @author 吴卫雄
+ * @author 
  */
 public class ControlException extends Exception 
 							implements Serializable {

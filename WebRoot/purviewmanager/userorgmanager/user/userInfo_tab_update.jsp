@@ -445,7 +445,7 @@ function queryroleRes(name)
 						</th>
 						<td height="25" colspan="2">
 							
-							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  defaultValue="" />" validator="stringNull" cnname="用户工号" maxlength="40" readOnly=true>
+							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  defaultValue="" />" validator="stringNull" cnname="用户工号" maxlength="40" >
 							
 						</td>
 						

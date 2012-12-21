@@ -49,7 +49,7 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 //	public String[] getAllRoleOfPrincipal(String userName)
 //			throws SecurityException {
 //		try {
-//			// 吴卫雄修订：使用方法错误
+//			// 修订：使用方法错误
 //			// User user = new User();
 //			// user.setUserName(userName);
 //			// List list =
@@ -70,7 +70,7 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 //					.getProviderType());
 //
 //			List list = roleMgr.getAllRoleList(user);
-//			// 吴卫雄修订结束
+//			// 修订结束
 //
 //			boolean enableuserrole = ConfigManager.getInstance()
 //					.getConfigBooleanValue("enableuserrole", true);

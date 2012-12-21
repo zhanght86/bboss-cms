@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.frameworkset.spi.Provider;
 
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Opergpoper;
 import com.frameworkset.platform.sysmgrcore.entity.Opergprestype;
@@ -25,7 +24,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
  * 描述：操作的管理接口 <br>
  * 版本：1.0 <br>
  * 
- * @author 潘伟林
+ * @author 
  */
 public interface OperManager extends Provider, Serializable {
 
@@ -84,7 +83,7 @@ public interface OperManager extends Provider, Serializable {
 	public Operation getOper(String propName, String value)
 			throws ManagerException;
 
-	// 吴卫雄删除：该函数已经更名为 getOperList(Res res, int type);
+	// 删除：该函数已经更名为 getOperList(Res res, int type);
 	// /**
 	// * 根据资源取操作
 	// *
@@ -172,13 +171,7 @@ public interface OperManager extends Provider, Serializable {
 	 */
 	public boolean storeOperres(Operres operres) throws ManagerException;
 
-	/**
-	 * 返回页面配置管理类
-	 * 
-	 * @return
-	 * @throws ManagerException
-	 */
-	public PageConfig getPageConfig() throws ManagerException;
+
 
 	/**
 	 * 取操作组列表
@@ -256,7 +249,7 @@ public interface OperManager extends Provider, Serializable {
 	
 	/**
 	 * 检测一个rro对象是否存在
-	 * 景峰
+	 * 
 	 * @param rro
 	 * @return
 	 * @throws ManagerException

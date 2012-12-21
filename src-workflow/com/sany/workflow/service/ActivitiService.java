@@ -654,7 +654,7 @@ public interface ActivitiService {
 	 * @param pagesize
 	 * @return
 	 */
-	ListInfo listTaskByUser(String[] processKeys, String username, int offset,
+	ListInfo listTaskByUser(String[] processKeys, String username, long offset,
 			int pagesize);
 
 	/**
@@ -665,7 +665,7 @@ public interface ActivitiService {
 	 * @param pagesize
 	 * @return
 	 */
-	ListInfo getHisTaskByUsernameProcessKey(String username,String[] processKeys,int offset,int pagesize);
+	ListInfo getHisTaskByUsernameProcessKey(String username,String[] processKeys,long offset,int pagesize);
 
 	/**
 	 * 获得历史任务实例分页列表 by用户名
@@ -673,7 +673,7 @@ public interface ActivitiService {
 	 * @param username
 	 * @return
 	 */
-	ListInfo getHisTaskByUsername(String username, int offset, int pagesize);
+	ListInfo getHisTaskByUsername(String username, long offset, int pagesize);
 
 	/**
 	 * 根据用户名查询待办任务分页列表
@@ -682,7 +682,7 @@ public interface ActivitiService {
 	 * @param pagesize
 	 * @return
 	 */
-	ListInfo listTaskByUser(String username, int offset, int pagesize);
+	ListInfo listTaskByUser(String username, long offset, int pagesize);
 
 	/**
 	 * 获得历史任务实例分页列表 by用户名,流程KEY
@@ -701,7 +701,7 @@ public interface ActivitiService {
 	 * @param pagesize
 	 * @return
 	 */
-	ListInfo listTaskByUser(String processKey, String username, int offset,
+	ListInfo listTaskByUser(String processKey, String username, long offset,
 			int pagesize);
 
 	List<Task> listTaskByUser(String processKey, String username);
@@ -713,4 +713,7 @@ public interface ActivitiService {
 	ProcessEngine getProcessEngine();
 	
 	void cancleProcessInstance(String processInstanceId, String deleteReason);
+	public ListInfo listTaskAndVarsByUserWithState(Class clazz,String processkey,String state,String userAccount,long offset,int pagesize);
+	public int countTasksByUserWithState(String processkey,String state,String userAccount);
+	public List<Task> listTaskByProcessInstanceId(String processInstanceId) ;
 }

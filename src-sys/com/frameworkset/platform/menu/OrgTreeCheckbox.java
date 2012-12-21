@@ -14,7 +14,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * 
- * @author 景峰
+ * @author 
  * @file OrgTreeCheckbox.java Created on: Apr 7, 2006
  */
 public class OrgTreeCheckbox extends COMTree implements Serializable{

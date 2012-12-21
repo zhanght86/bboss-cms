@@ -14,9 +14,10 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
 
+import com.frameworkset.common.tag.pager.ListInfo;
+import com.frameworkset.common.tag.pager.config.PageConfig;
 import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+import com.frameworkset.platform.sysmgrcore.control.LdapControl;
 import com.frameworkset.platform.sysmgrcore.control.Parameter;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Groupexp;
@@ -26,15 +27,13 @@ import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
-import com.frameworkset.common.tag.pager.ListInfo;
   
 public class GroupManagerImpl extends EventHandle implements GroupManager {
 
 	private static Logger logger = Logger.getLogger(GroupManagerImpl.class
 			.getName());
 
-	private DataControl dc = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+//	private LdapControl dc = new LdapControl();
 
 	private String groupBase = ConfigManager.getInstance().getConfigValue(
 			"groupBase");
@@ -43,8 +42,9 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 			String propName) {
 		Attribute attr = null;
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
+//			DataControl dc = DataControl
+//					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -139,6 +139,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_DELETE);
 
@@ -258,8 +259,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -297,6 +297,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Attribute itemClass = new BasicAttribute("objectclass");
 			itemClass.add("groupOfNames");
 			itemClass.add("ibm-appuuidaux");

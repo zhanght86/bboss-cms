@@ -20,8 +20,7 @@ import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+import com.frameworkset.platform.sysmgrcore.control.LdapControl;
 import com.frameworkset.platform.sysmgrcore.control.Parameter;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -52,14 +51,13 @@ import com.frameworkset.util.ListInfo;
  * 描述：用户管理(LDAP实现类) <br>
  * 版本：1.0 <br>
  *  
- * @author 吴卫雄   
+ * @author    
  */    
 public class UserManagerImpl extends EventHandle implements UserManager {
      
 	private Logger logger = Logger.getLogger(UserManagerImpl.class.getName());
 
-	private DataControl dc = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+	
 
 	private String userBase = ConfigManager.getInstance().getConfigValue(
 			"userBase");
@@ -71,8 +69,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			String propName) {
 		Attribute attr = null;
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -99,8 +96,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -126,8 +122,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -153,8 +148,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -193,6 +187,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			// 删除指定的用户
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_DELETE);
@@ -231,6 +226,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Group group = usergroup.getGroup();
 			User user = usergroup.getUser();
 
@@ -287,6 +283,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			DBUtil db = new DBUtil();
 //			String sql ="select group_id from TD_SM_USERGROUP where " +
 //			"  user_id ="+ user.getUserId() +"";
@@ -358,6 +355,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			// 检查组条目是否存在
 			if (isGroupExist(group)) {
 				Attribute member = getItemAttribute(groupBase,
@@ -406,6 +404,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			String orgId = userjoborg.getId().getOrgId();
 			String uId = userjoborg.getId().getUserId().toString();
 			String jobId = userjoborg.getId().getJobId();
@@ -527,6 +526,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			String orgId = org.getOrgId();
 			String uId = user.getUserId().toString();
 			OrgManager orgManager = SecurityDatabase.getOrgManager();
@@ -592,6 +592,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
 
@@ -682,8 +683,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		User user = null;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -700,11 +700,11 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				user = new User();
 				Attributes attrs = sr.getAttributes();
 
-				// 吴卫雄更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1 ，而如果
+				// 更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1 ，而如果
 				// 需要保存数据到 DB 中的话则判断 UserID 是否为 -1 是则表明该数据来自 LDAP 中。
 				// user.setUserId(attrs.get("uid").get().toString());
 				user.setUserId(new Integer(-1));
-				// 吴卫雄更新结束
+				// 更新结束
 
 				user.setUserName(attrs.get("cn").get().toString());
 				user
@@ -728,6 +728,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		List userList = new ArrayList();
 
 		try {
+			LdapControl dc = new LdapControl();
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
 
@@ -743,11 +744,11 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					Attributes attrs = sr.getAttributes();
 					user.setUserName(attrs.get("uid").get().toString());
 
-					// 吴卫雄更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1
+					// 更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1
 					// ，而如果需要保存数据到 DB 中的话则判断 UserID 是否为 -1 是则表明该数据来自 LDAP 中。
 					// user.setUserId(attrs.get("cn").get().toString());
 					user.setUserId(new Integer(-1));
-					// 吴卫雄更新结束
+					// 更新结束
 
 					user.setUserPassword(attrs.get("userPassword").get()
 							.toString());
@@ -819,8 +820,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -857,8 +857,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		User user = null;
 
 		try {
-			DataControl dc = DataControl
-					.getInstance(DataControl.CONTROL_INSTANCE_LDAP);
+			LdapControl dc = new LdapControl();
 
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
@@ -874,11 +873,11 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				// 基本属性
 				Attributes attrs = sr.getAttributes();
 
-				// 吴卫雄更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1 ，而如果
+				// 更新开始：UserID 已经修改 Integer 型，从 LDAP 中取数据时设置 UserID 为 -1 ，而如果
 				// 需要保存数据到 DB 中的话则判断 UserID 是否为 -1 是则表明该数据来自 LDAP 中。
 				// user.setUserId(attrs.get("cn").get().toString());
 				user.setUserId(new Integer(-1));
-				// 吴卫雄更新结束
+				// 更新结束
 
 				user.setUserName(attrs.get("uid").get().toString());
 				user
@@ -936,6 +935,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			// 用户在LDAP中所继承的类
 			Attribute itemClass = new BasicAttribute("objectclass");
 			itemClass.add("inetOrgPerson");
@@ -1067,6 +1067,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Group group = usergroup.getGroup();
 			User user = usergroup.getUser();
 
@@ -1121,6 +1122,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Organization org = userjoborg.getOrg();
 			User user = userjoborg.getUser();
 
@@ -1192,14 +1194,6 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		try {
-			return dc.getPageConfig();
-		} catch (ControlException e) {
-			logger.error(e);
-			return null;
-		}
-	}
 
 	public boolean deleteUserjoborg(Job job, Organization org)
 			throws ManagerException {
@@ -1239,6 +1233,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			Parameter p = new Parameter();
 			p.setCommand(Parameter.COMMAND_GET);
 
@@ -1299,6 +1294,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			UserManager userManager = SecurityDatabase.getUserManager();
 			OrgManager orgManager = SecurityDatabase.getOrgManager();
 			Organization org = orgManager.getOrgById(orgId);
@@ -1356,6 +1352,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean r = false;
 
 		try {
+			LdapControl dc = new LdapControl();
 			DBUtil db = new DBUtil();
 			String sql ="select * from TD_SM_USERJOBORG where " +
 			" org_id ='"+ orgId +"' and user_id ="+ userId +"";
@@ -1439,6 +1436,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	public boolean deleteUsergroup(String userId,String groupId) throws ManagerException{
 		boolean r = false;
 			try {
+				LdapControl dc = new LdapControl();
 				UserManager userManager = SecurityDatabase.getUserManager();
 				User user = userManager.getUserById(userId);
 				GroupManager groupManager = SecurityDatabase.getGroupManager();
@@ -1572,15 +1570,15 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		try {
 			UserManager userManager = SecurityDatabase.getUserManager();
 
-			// 吴卫雄修改：需要完整用户对象信息
+			// 修改：需要完整用户对象信息
 			// Organization org = new Organization();
 			// org.setOrgId(orgId);
 			OrgManager orgMgr = SecurityDatabase.getOrgManager();
 			Organization org = orgMgr.getOrgById(orgId);
-			// 吴卫雄修改结束
+			// 修改结束
 			Job job = new Job();
 			job.setJobId(jobId);
-			// 吴卫雄修改：需要完成用户对象信息
+			// 修改：需要完成用户对象信息
 			// User user = new User();
 			// user.setUserId(Integer.valueOf(userList[i]));
 
@@ -1593,7 +1591,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 
 			for (int i = 0; userId != null && i < userId.length; i++) {
 				User user = userManager.getUserById(userId[i]);
-				// 吴卫雄修改结束
+				// 修改结束
 				Userjoborg userjoborg = new Userjoborg();
 				userjoborg.setUser(user);
 				userjoborg.setJob(job);

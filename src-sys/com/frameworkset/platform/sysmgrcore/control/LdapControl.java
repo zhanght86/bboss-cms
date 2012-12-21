@@ -20,9 +20,9 @@ import com.frameworkset.platform.sysmgrcore.exception.ControlException;
  * 描述：LDAP控制器 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
-class LdapControl extends DataControl {
+public class LdapControl  {
 
     private static Logger logger = Logger
             .getLogger(LdapControl.class.getName());
@@ -212,7 +212,5 @@ class LdapControl extends DataControl {
     public void rollback(boolean isExit) throws ControlException {
     }
 
-    public PageConfig getPageConfig() throws ControlException {
-        return null;
-    }
+
 }

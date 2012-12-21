@@ -8,7 +8,6 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
 
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
 import com.frameworkset.platform.sysmgrcore.entity.ChargeOrg;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -207,10 +206,6 @@ public class VODOrgManger extends EventHandle implements OrgManager {
 		return null;
 	}
 
-	public PageConfig getPageConfig() throws ManagerException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	public boolean isOrgExist(String orgName) throws ManagerException {
 		// TODO Auto-generated method stub

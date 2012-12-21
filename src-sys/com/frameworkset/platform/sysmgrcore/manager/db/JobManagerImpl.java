@@ -28,8 +28,7 @@ import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
-import com.frameworkset.platform.sysmgrcore.control.DataControl;
-import com.frameworkset.platform.sysmgrcore.control.PageConfig;
+
 import com.frameworkset.platform.sysmgrcore.entity.Job;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
@@ -47,8 +46,7 @@ import com.frameworkset.util.ListInfo;
  */
 public class JobManagerImpl extends EventHandle implements JobManager {
 
-	private DataControl cb = DataControl
-			.getInstance(DataControl.CONTROL_INSTANCE_DB);
+
 
 	private static Logger logger = Logger.getLogger(JobManagerImpl.class
 			.getName());
@@ -883,19 +881,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 		return null;
 	}
 
-	/**
-	 * 无效的方法
-	 * @deprecated 不推荐使用该方法，方法实现已被注释
-	 */
-	public PageConfig getPageConfig() throws ManagerException {
-//		try {
-//			return cb.getPageConfig();
-//		} catch (ControlException e) {
-//			logger.error(e);
-//			return null;
-//		}
-		return null;
-	}
+
 
 	public boolean isContainJob(Organization org) throws ManagerException {
 		boolean r = false;

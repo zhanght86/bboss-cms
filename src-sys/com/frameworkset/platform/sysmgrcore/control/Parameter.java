@@ -8,7 +8,7 @@ import java.util.Properties;
  * 描述：参数管理器 <br>
  * 版本：1.0 <br>
  * 
- * @author 吴卫雄
+ * @author 
  */
 public class Parameter implements Serializable {
 
