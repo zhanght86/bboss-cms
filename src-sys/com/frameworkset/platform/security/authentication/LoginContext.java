@@ -16,7 +16,7 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 
 import org.apache.log4j.Logger;
 
-import sun.security.util.ResourcesMgr;
+//import sun.security.util.ResourcesMgr;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.config.LoginModuleInfoQueue;
