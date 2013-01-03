@@ -17,10 +17,19 @@ import org.apache.log4j.Logger;
 public class XMLItemvalueTag extends XMLBaseTag
 {
     private static Logger log = Logger.getLogger(XMLItemvalueTag.class);
-	String itemName;
+	private String itemName;
+	private String defaultItemValue;
 	/* (non-Javadoc)
 	 * @see com.westerasoft.common.tag.BaseTag#generateContent()
 	 */
+
+	public String getDefaultItemValue() {
+		return defaultItemValue;
+	}
+
+	public void setDefaultItemValue(String defaultItemValue) {
+		this.defaultItemValue = defaultItemValue;
+	}
 
 	protected String getItemValues(Object t_value) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, ProfessionDataManagerException
 	{
@@ -31,9 +40,9 @@ public class XMLItemvalueTag extends XMLBaseTag
 			for(int i = 0; i < size; i ++)
 			{
 				if(i == 0)
-					buffer.append(data.getItemValue(String.valueOf(Array.get(t_value, i))));
+					buffer.append(data.getItemValue(String.valueOf(Array.get(t_value, i)),defaultItemValue));
 				else
-					buffer.append(",").append(data.getItemValue(String.valueOf(Array.get(t_value, i))));
+					buffer.append(",").append(data.getItemValue(String.valueOf(Array.get(t_value, i)),defaultItemValue));
 			}
 		}
 		else if(t_value instanceof Collection)
@@ -45,9 +54,9 @@ public class XMLItemvalueTag extends XMLBaseTag
 			while(it.hasNext())
 			{
 				if(i == 0)
-					buffer.append(data.getItemValue(String.valueOf(it.next())));
+					buffer.append(data.getItemValue(String.valueOf(it.next()),defaultItemValue));
 				else
-					buffer.append(",").append(data.getItemValue(String.valueOf(it.next())));
+					buffer.append(",").append(data.getItemValue(String.valueOf(it.next()),defaultItemValue));
 //				t_values.add(String.valueOf(it.next()));
 				i ++;
 			}
@@ -59,9 +68,9 @@ public class XMLItemvalueTag extends XMLBaseTag
 			while(it.hasNext())
 			{
 				if(i == 0)
-					buffer.append(data.getItemValue(String.valueOf(it.next())));
+					buffer.append(data.getItemValue(String.valueOf(it.next()),defaultItemValue));
 				else
-					buffer.append(",").append(data.getItemValue(String.valueOf(it.next())));
+					buffer.append(",").append(data.getItemValue(String.valueOf(it.next()),defaultItemValue));
 				i ++;
 //				t_values.add(String.valueOf(it.next()));
 			}
@@ -78,9 +87,9 @@ public class XMLItemvalueTag extends XMLBaseTag
 		        for(String v:vs)
 	        	{
 		        	if(i == 0)
-						buffer.append(data.getItemValue(v));
+						buffer.append(data.getItemValue(v,defaultItemValue));
 					else
-						buffer.append(",").append(data.getItemValue(v));
+						buffer.append(",").append(data.getItemValue(v,defaultItemValue));
 					i ++;
 	        	}
 		        
@@ -88,7 +97,7 @@ public class XMLItemvalueTag extends XMLBaseTag
 		}
 		else
 		{
-			return data.getItemValue((String.valueOf(t_value)));
+			return data.getItemValue((String.valueOf(t_value)),defaultItemValue);
 		}
 		return buffer.toString();
 	}
@@ -116,7 +125,10 @@ public class XMLItemvalueTag extends XMLBaseTag
 		}
 		else
 		{
-			return "字典[" + this.type + "]不存在";
+			if(defaultItemValue == null)
+				return "字典[" + this.type + "]不存在";
+			else
+				return defaultItemValue;
 		}
 	}
 	/**

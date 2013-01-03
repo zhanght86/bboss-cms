@@ -48,15 +48,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
      
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
-	AccessControl accessControl = AccessControl.getInstance();
+	AccessControl accessControl = null;
 	
 	/**
 	 * 初始化函数,获取当前页面的信息
 	 */
 	public void init(HttpServletRequest request,HttpServletResponse response)
 	{
+		
 		this.request = request;
 		this.response = response; 
+		accessControl = AccessControl.getInstance();
 		accessControl.checkAccess(request, response);
 	}
 	

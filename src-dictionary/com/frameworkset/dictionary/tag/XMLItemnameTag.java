@@ -25,9 +25,9 @@ public class XMLItemnameTag extends XMLBaseTag
 			for(int i = 0; i < size; i ++)
 			{
 				if(i == 0)
-					buffer.append(data.getItemName(String.valueOf(Array.get(t_value, i))));
+					buffer.append(data.getItemName(String.valueOf(Array.get(t_value, i)),this.defaultName));
 				else
-					buffer.append(",").append(data.getItemName(String.valueOf(Array.get(t_value, i))));
+					buffer.append(",").append(data.getItemName(String.valueOf(Array.get(t_value, i)),this.defaultName));
 			}
 		}
 		else if(t_value instanceof Collection)
@@ -39,9 +39,9 @@ public class XMLItemnameTag extends XMLBaseTag
 			while(it.hasNext())
 			{
 				if(i == 0)
-					buffer.append(data.getItemName(String.valueOf(it.next())));
+					buffer.append(data.getItemName(String.valueOf(it.next()),this.defaultName));
 				else
-					buffer.append(",").append(data.getItemName(String.valueOf(it.next())));
+					buffer.append(",").append(data.getItemName(String.valueOf(it.next()),this.defaultName));
 //				t_values.add(String.valueOf(it.next()));
 				i ++;
 			}
@@ -53,9 +53,9 @@ public class XMLItemnameTag extends XMLBaseTag
 			while(it.hasNext())
 			{
 				if(i == 0)
-					buffer.append(data.getItemName(String.valueOf(it.next())));
+					buffer.append(data.getItemName(String.valueOf(it.next()),this.defaultName));
 				else
-					buffer.append(",").append(data.getItemName(String.valueOf(it.next())));
+					buffer.append(",").append(data.getItemName(String.valueOf(it.next()),this.defaultName));
 				i ++;
 //				t_values.add(String.valueOf(it.next()));
 			}
@@ -72,9 +72,9 @@ public class XMLItemnameTag extends XMLBaseTag
 		        for(String v:vs)
 	        	{
 		        	if(i == 0)
-						buffer.append(data.getItemName(v));
+						buffer.append(data.getItemName(v,this.defaultName));
 					else
-						buffer.append(",").append(data.getItemName(v));
+						buffer.append(",").append(data.getItemName(v,this.defaultName));
 					i ++;
 	        	}
 		        
@@ -82,7 +82,7 @@ public class XMLItemnameTag extends XMLBaseTag
 		}
 		else
 		{
-			return data.getItemName((String.valueOf(t_value)));
+			return data.getItemName((String.valueOf(t_value)),this.defaultName);
 		}
 		return buffer.toString();
 	}

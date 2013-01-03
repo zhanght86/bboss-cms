@@ -235,6 +235,11 @@
 			<name>actual</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		
+		<attribute>
+			<name>defaultItemValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
     </tag>
 
 	
