@@ -7,5 +7,10 @@
 		class="com.frameworkset.platform.menu.action.MenuManageAction" >
 	</property>
 	
+	<property name="/monitor/*.page"
+		path:cache_console="/monitor/cache_console.jsp"
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.CacheController" >
+	</property>
+	
 	
 </properties>

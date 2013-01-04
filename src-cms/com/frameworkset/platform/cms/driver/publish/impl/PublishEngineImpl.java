@@ -555,6 +555,11 @@ public class PublishEngineImpl implements PublishEngine {
 			return false;
 		}		
 	}
+	
+	public void clearTasks() {
+		this.currentTasktraceIndexs.clear();
+		
+	}
 	 
 	
 }

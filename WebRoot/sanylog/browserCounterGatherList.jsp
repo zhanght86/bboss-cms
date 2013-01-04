@@ -26,7 +26,7 @@
 
       <pg:list autosort="false">
    		<tr>     
-   		        <td><pg:cell colName="siteName"/></td>
+   		        <td align="center"><pg:cell colName="siteName"/></td>
                 <td><pg:cell colName="channelName"/></td>
                 <td style="display: none"><pg:cell colName="docName"/></td>
         		<td><span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="50" replace="..."/></span></td>  

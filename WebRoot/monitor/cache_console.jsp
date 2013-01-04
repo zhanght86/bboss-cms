@@ -20,7 +20,7 @@
 		<div class="title_box">
 			<strong>系统缓存管理</strong>
 			<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('ALL')"><span>全部清除</span> </a> 
+											id="queryButton" onclick="clearAll()"><span>全部清除</span> </a> 
 		</div>
 		<div id="changeColor" style="width: 1150px; overflow: auto;">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0"
@@ -34,56 +34,56 @@
 				<td>机构缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('org')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearOrg()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
 				<td>部门管理员缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('orgadmin')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearOrgAdminCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
 				<td>字典缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('dict')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearDict()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
 				<td>权限缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('permission')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearPermission()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
 				<td>角色缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('role')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearRoleCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
 				<td>用户组缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('group')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearGroupCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
-				<td>CMS站点缓存</td>
+				<td>CMS站点和频道缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('site')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearCMSSite2ndChannelCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
 				<tr>
-				<td>CMS频道缓存</td>
+				<td>CMS发布缓存</td>
 				<td >
 				<a  href="javascript:void(0)" class="bt_1 sp"
-											id="queryButton" onclick="clear('channel')"><span>清除</span> </a> 
+											id="queryButton" onclick="clearCMSPublishCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
 			</table>
@@ -93,3 +93,333 @@
 	<div id = "custombackContainer"></div>
 </body>
 </html>
+
+<script language="javascript">
+var api = frameElement.api;
+
+function clearCMSPublishCache()
+{
+	$.dialog.confirm("是否CMS站点发布缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			   type: "POST",
+				url : "clearCMSPublishCache.page",
+				data :{},
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+						blockUI();	
+				      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+					},
+				success : function(responseText){
+					//去掉遮罩	
+					unblockUI();
+					if(responseText=="success"){
+						$.dialog.alert("CMS站点发布缓存完成.",function(){},api);
+						
+					}else{
+						$.dialog.alert(responseText,function(){},api);
+					}
+				}
+			  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearAll()
+{
+	$.dialog.confirm("是否清除所有缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearAll.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除所有缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+
+function clearOrg()
+{
+	$.dialog.confirm("是否清除机构缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearOrg.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除机构完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearOrgAdminCache()
+{
+	$.dialog.confirm("是否清除机构管理员缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearOrgAdminCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除机构管理员缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearDict()
+{
+	$.dialog.confirm("是否清除字典缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearDict.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除字典缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearPermission()
+{
+	$.dialog.confirm("是否清除权限缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearPermission.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除权限缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearRoleCache()
+{
+	$.dialog.confirm("是否清除角色缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearRoleCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除角色缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearGroupCache()
+{
+	$.dialog.confirm("是否清除用户组缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearGroupCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除用户组缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+function clearCMSSite2ndChannelCache()
+{
+	$.dialog.confirm("是否清除站点和频道缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearCMSSite2ndChannelCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除站点和频道缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+</script>

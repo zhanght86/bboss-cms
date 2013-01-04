@@ -189,11 +189,15 @@ function pageSubmit(formName, params, forwardurl, promotion, id, executeflag,
 		}
 	}
 }
-function keydowngo(event, goid) {
+function ___keydowngo(event, goid) {
 
 	if (event.keyCode == 13) {
-		document.getElementById(goid).onclick();
-		// $("#" + goid).live("click", function() { return false; });
+		//alert(goid);
+		var tets = document.getElementById(goid);
+		
+		document.getElementById(goid).click();
+		
+		
 	}
 
 	return false;
@@ -322,17 +326,31 @@ function loadPageContent(pageurl, containerid, selector) {
 	containerid = convertValue(containerid, true);	
 	if (selector && selector != "") {
 		$("#" + containerid).load(pageurl + " #" + selector,function(){
-			setTable_grayCss();
+			//setTable_grayCss();
 			if($.parser)	$.parser.parse("#" + containerid);
-			try{loadjs();}
-			catch(e){}
+			try{
+		          if(typeof(eval(loadjs))=="function")  
+		          {
+		        	  loadjs();
+		          }        
+				}
+				catch(e){}
 		});
 		
 	} else {
 		$("#" + containerid).load(pageurl,function(){
-			setTable_grayCss();
+			try{
+				setTable_grayCss()
+			}catch(e){
+				
+			};
 			if($.parser)	$.parser.parse("#" + containerid);
-			try{loadjs();}
+			try{
+	          if(typeof(eval(loadjs))=="function")  
+	          {
+	        	  loadjs();
+	          }        
+			}
 			catch(e){}			
 		});
 	}

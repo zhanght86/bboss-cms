@@ -14,6 +14,7 @@ public class OperCounterStatisticDailyTask {
         Calendar today = Calendar.getInstance();
         String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
 		String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+		week = todayTime.substring(0, 4)+"-"+week;
 		Calendar startDate = Calendar.getInstance();
 		int offset = startDate.get(Calendar.DAY_OF_WEEK);
 		startDate.add(Calendar.DAY_OF_MONTH, offset - (offset * 2 - 1));

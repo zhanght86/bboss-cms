@@ -117,7 +117,7 @@
 		</select>
 		&nbsp;&nbsp;
 		
-		实时统计：<font id="sumCount"></font>&nbsp;&nbsp;<a href="javascript:void(0)" class="bt_1"
+		<font id="sumCount"></font>&nbsp;&nbsp;<a href="javascript:void(0)" class="bt_1"
 												id="queryButton" onclick="statistic()"><span>立即统计</span> </a> 
 		<div style="height: 10px"></div>
 		<iframe id="operateCounterMain"  name="operateCounterMain"  src=""  frameborder="0"  scrolling="no" width="100%"  height="1000" ></iframe>

@@ -17,22 +17,15 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
-		alert("frame---1");
-	 	queryModuleInfo("${param.siteId}");
 	 	queryList(); 
 	  });
 	
 	//查询浏览统计列表数据(页面加载时会加载这个方法，页面调用查询时也会调用)
 	 function queryList() {	
-	 	var siteId = "${param.siteId}";
-		var channelId = $("#channelId").val();
-		var docName = $("#docName").val();
-		var browserType = $("#browserType").val();
-		var browserIp = $("#browserIp").val();
-		var browserUser = $("#browserUser").val();
-		var startTime = $("#startTime").val();
-		var endTime = $("#endTime").val();
-	   	$("#custombackContainer").load("showBrowserCounterList.page #customContent", { siteId:siteId, channelId:channelId, docName:docName, browserType:browserType, browserIp:browserIp, browserUser:browserUser, startTime:startTime, endTime:endTime }, function(){loadjs()});
+	 	var appId = "${param.siteId}";
+		var vtime = $("#vtime").val();
+		var datetime = $("#date").val();
+	   	$("#custombackContainer").load("showOperCounterRankByWeek.page #customContent", { appId:appId, vtime:vtime,datetime:datetime}, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {
@@ -74,13 +67,7 @@
 		 });
 	  }
 	}
-	function checkBrowserDetail(browserId){
-	    var url='';
-	  	  title="浏览记录明细";
-	  	  url='<%=request.getContextPath()%>/sanylog/checkBrowserDetail.page?browserId='+browserId;
-	  		$.dialog({ id:'iframeNewId', title:title,width:1200,height:550, content:'url:'+url});
-	  	
- }
+	 
 	 //重置查询条件
 	 function doreset() {
    		$("#reset").click();
@@ -103,44 +90,26 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>功能路径：</th>
-										<td>
-											<select id="channelId" name="channelId"  maxlength="40"><!-- class="w120" -->
-												<option value="">无限制</option>
-											<select>
-										</td>
-									 <th style="display: none">页面：</th>
-										<td style="display: none"><input id="docName" name="docName"
-											type="text" value="" class="w120" /></td> 	
-										<th>用户：</th>
-										<td><input id="browserUser" name="browserUser"
-											type="text" value="" class="w120" /></td>
+										<th>选择日期：</th>
+											<td><input  id="date"  name="date" class="Wdate" type="text" onclick="WdatePicker({isShowWeek:true,onpicked:function(){$dp.$('vtime').value=$dp.cal.getP('W','W');}})" /></td> 	
+										<th>您选择了第：</th>
+										<td><input type="text" id="vtime" size="3" class="Wdate"/>周</td>
+									 <td><a href="javascript:void(0)" class="bt_1"
+											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
+											href="javascript:void(0)" class="bt_2" id="resetButton"
+											onclick="doreset()"><span>重置</span> </a> <input type="reset"
+											id="reset" style="display: none" /></td>
+											
+											
 									</tr>
-									<tr>
-										<th>浏览器类型：</th>
-										<td>
-											<select id="browserType" name="browserType" class="w120">
-												<option value="">无限制</option>
-												<option value="MSIE">IE</option>
-												<option value="Firefox">Firefox</option>
-												<option value="Safari">Safari</option>
-												<option value="Chrome">Chrome</option>
-											<select>
-										</td>
-										<th>IP地址：</th>
-										<td><input id="browserIp" name="browserIp" type="text"
-											value="" class="w120" /></td>
-										<th>统计时间：</th>
-										<td><input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />
-													-
-												<input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
+									<!-- <tr>
 										<th>&nbsp;</th>
 										<td><a href="javascript:void(0)" class="bt_1"
 											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
 											href="javascript:void(0)" class="bt_2" id="resetButton"
 											onclick="doreset()"><span>重置</span> </a> <input type="reset"
 											id="reset" style="display: none" /></td>
-									</tr>
+									</tr> -->
 								</table>
 							</td>
 							<td class="right_box"></td>
@@ -148,14 +117,14 @@
 					</table>
 				</form>
 			</div>
-			<div class="search_bottom">
+			 <div class="search_bottom">
 				<div class="right_bottom"></div>
 				<div class="left_bottom"></div>
 			</div>
 		</div>
 		<div class="title_box">
-			<strong>浏览计数统计数据</strong>
-		</div>
+			<strong>操作计数日统计数据</strong>
+		</div> 
 		<div id="custombackContainer"></div>
 	</div>
 </body>

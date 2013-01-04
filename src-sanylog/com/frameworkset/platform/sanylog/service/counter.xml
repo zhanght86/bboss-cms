@@ -36,7 +36,7 @@
 	<property name="staticOperCounterByWeek">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYWEEK 
-      		  select  app_id,  app_name, module_id, module_name, $Time vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
+      		  select  app_id,  app_name, module_id, module_name, '$Time' vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
       		  (select operate_id, app_id,app_name,module_id,module_name,operator
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1

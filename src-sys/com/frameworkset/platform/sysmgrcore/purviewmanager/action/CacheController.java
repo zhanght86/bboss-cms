@@ -2,6 +2,17 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
 import org.frameworkset.util.annotations.ResponseBody;
 
+import com.frameworkset.dictionary.DataManagerFactory;
+import com.frameworkset.platform.cms.driver.publish.impl.ScriptletUtil;
+import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
+import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.manager.db.GroupCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdminCache;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.RoleCacheManager;
+import com.frameworkset.util.StringUtil;
+
 /**
  * <p>
  * Title: CacheController.java
@@ -25,22 +36,158 @@ import org.frameworkset.util.annotations.ResponseBody;
  */
 public  class CacheController {
 
-	public @ResponseBody String clearcache(String cachetype)
+	public String cache_console()
 	{
-		return null;
+		return "path:cache_console";
 	}
-	private String clearAll()
+	public @ResponseBody String clearAll()
 	{
 		StringBuffer ret = new StringBuffer();
+		ret.append(clearOrg());
+		ret.append("<br/>").append(clearOrgAdminCache());
+		ret.append("<br/>").append(clearDict());
+		ret.append("<br/>").append(clearPermission());
+		ret.append("<br/>").append(clearRoleCache());
+		ret.append("<br/>").append(clearGroupCache());
+		ret.append("<br/>").append(clearCMSSite2ndChannelCache());
+		ret.append("<br/>").append(clearCMSPublishCache());
+		
 		return ret.toString();
 		
 	}
-	private String clearOrg()
+	public @ResponseBody String clearOrg()
 	{
-		StringBuffer ret = new StringBuffer();
-		return ret.toString();
+		
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			OrgCacheManager.getInstance().reset();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除机构缓存成功");
+		return errorMessage.toString();		
 		
 	}
+	
+	public @ResponseBody String clearOrgAdminCache()
+	{
+		
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			OrgAdminCache.getOrgAdminCache().reset();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除机构管理员缓存成功");
+		return errorMessage.toString();		
+		
+	}
+	
+	public @ResponseBody String clearDict()
+	{
+		
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			DataManagerFactory.getDataManager().reinit();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除字典缓存成功");
+		return errorMessage.toString();		
+	}
+	
+	public @ResponseBody String clearPermission()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			AccessControl.resetAuthCache();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		try{
+			
+			AccessControl.resetPermissionCache();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除权限缓存成功");
+		return errorMessage.toString();		
+		
+	}
+	
+	public @ResponseBody String clearRoleCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		RoleCacheManager.getInstance().reset();
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除角色缓存成功");
+		return errorMessage.toString();		
+		
+		
+	}
+	public @ResponseBody String clearGroupCache()
+	{
+		
+		
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			GroupCacheManager.getInstance().reset();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除用户组缓存成功");
+		return errorMessage.toString();			
+		
+		
+	}
+	
+	public @ResponseBody String clearCMSSite2ndChannelCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			SiteCacheManager.getInstance().reset();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除站点和频道缓存成功");
+		return errorMessage.toString();		
+		
+		
+		
+	}
+	
+	
+	public @ResponseBody String clearCMSPublishCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			CMSUtil.getCMSDriverConfiguration().getPublishEngine().clearTasks();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		try{
+			ScriptletUtil.resetCache();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除站点发布缓存成功");
+		return errorMessage.toString();		
+		
+		
+		
+		
+		
+		
+	}
+	
+	
 	
 	
 

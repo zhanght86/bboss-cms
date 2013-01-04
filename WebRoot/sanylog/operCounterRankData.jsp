@@ -19,14 +19,15 @@
         	<th>应用名称</th> 	
        		<th>模块名称</th>
        		<th>访问量</th>
-       		
+       		<th>访问用户量</th>
        	</pg:header>	
 
       <pg:list autosort="false">
    		<tr>
                 <td><pg:cell colName="appName"/></td>    
                 <td><pg:cell colName="moduleName"/></td> 
-                <td><pg:cell colName="vcount"/></td>    
+                <td><pg:cell colName="vcount"/></td>
+                <td><pg:cell colName="vcountUser"/></td>    
         </tr>
 	 </pg:list>
     </table>

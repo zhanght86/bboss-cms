@@ -67,7 +67,10 @@ public class ScriptletUtil implements java.io.Serializable {
 	}
 
 	protected static Map metas = new ConcurrentHashMap();
-	
+	public static void resetCache()
+	{
+		metas.clear();
+	}
 	/**
 	 * 根据路径获取缓冲中存在的模板文件信息，暂时不考虑并发同步控制问题
 	 * 

@@ -63,8 +63,9 @@ public class CounterController {
 	public @ResponseBody(datatype = "json")
 	String statisticOperCounterImmediately() {
 		Calendar today = Calendar.getInstance();
-		String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
 		String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+		String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
+		week = todayTime.substring(0, 4)+"-"+week;
 		Calendar startDate = Calendar.getInstance();
 		int offset = startDate.get(Calendar.DAY_OF_WEEK);
 		startDate.add(Calendar.DAY_OF_MONTH, offset - (offset * 2 - 1));
@@ -107,22 +108,19 @@ public class CounterController {
 			@PagerParam(name = PagerParam.SORT, defaultvalue = "vcount") String sortKey,
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) long offset,
-			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize, String appId,String vtime, ModelMap model) throws Exception {
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize, String appId,String vtime,String datetime, ModelMap model) throws Exception {
 				if(null == vtime||"".equals(vtime)){
 					Calendar calendar = Calendar.getInstance();
+					Calendar today = Calendar.getInstance();
+					String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+					String year = todayTime.substring(0, 4);
+					int weeks = calendar.get(Calendar.WEEK_OF_YEAR);
+					vtime = year+"-"+String.valueOf(weeks);
+				}
+				else{
+					String year = datetime.substring(0, 4);
+					vtime = year+"-"+vtime;
 					
-					int weeks = calendar.get(Calendar.WEEK_OF_YEAR);
-					System.out.println("weeks------------"+weeks);
-					vtime = String.valueOf(weeks);
-				}else{
-					Calendar calendar = Calendar.getInstance();
-					//vtime = DateUtils.format(calendar.getTime(), DateUtils.ISO8601_DATE_PATTERN);
-					int year= Integer.parseInt((String) vtime.subSequence(0, 4));
-					int month= Integer.parseInt((String) vtime.subSequence(5, 7));
-					int date= Integer.parseInt((String) vtime.subSequence(8, 10));
-					calendar.set(year, month-1, date);
-					int weeks = calendar.get(Calendar.WEEK_OF_YEAR);
-					System.out.println("weeks------------"+weeks);
 				}
 		ListInfo datas = counterManager.getOperCounterRankByWeek(appId, vtime,(int) offset, pagesize);
 		model.addAttribute("datas", datas);

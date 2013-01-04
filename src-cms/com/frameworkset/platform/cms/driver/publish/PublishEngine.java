@@ -19,7 +19,9 @@ public interface PublishEngine extends java.io.Serializable {
 	 * @param publishObject
 	 * @throws PublishException
 	 */
-	public void publish(PublishObject publishObject)  throws PublishException ;	
+	public void publish(PublishObject publishObject)  throws PublishException ;
+
+	public void clearTasks();	
 	
 	
 

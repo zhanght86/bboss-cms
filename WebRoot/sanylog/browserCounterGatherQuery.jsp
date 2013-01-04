@@ -17,6 +17,7 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
+		alert("frame---2");
 		queryModuleInfo("${param.siteId}");
 	 	queryList(); 
 	  });
@@ -75,7 +76,7 @@
 									<tr>
 										<th>功能路径：</th>
 										<td>
-											<select id="channelId" name="channelId" class="w120">
+											<select id="channelId" name="channelId"  maxlength="50">
 												<option value="">无限制</option>
 											<select>
 										</td>
