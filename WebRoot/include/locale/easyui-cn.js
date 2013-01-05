@@ -14,6 +14,9 @@
 			} ,
 			landline :{
 				validator : function(value, param) {
+					if(value.length < 12){
+						return false;
+					}
 					return /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test(value);
 				},
 				message : '* 请输入正确的座机格式.'

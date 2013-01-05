@@ -6,6 +6,7 @@
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 
 <%@ page import="com.frameworkset.dictionary.Data" %>
+<%@ page import="com.frameworkset.dictionary.Item" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityConstants" %>
 <%@ page import="org.frameworkset.spi.BaseSPIManager" %>
@@ -321,8 +322,13 @@
 							<%
 							    for(int j=0;j<dictatts.size();j++){
 							        DictAttachField dictatt = (DictAttachField)dictatts.get(j);
-								//InputType inputType = dictatt.getInputType();
-								String valueAttach = dictManager.getAttachValue(did,name,value,dictatt.getTable_column(),primarykeys);	
+									String valueAttach = dictManager.getAttachValue(did,name,value,dictatt.getTable_column(),primarykeys);	
+									if(dictatt.getDictField().split(":").length == 3){
+										List list = dictManager.getChildDictdataListByDataId(dictatt.getDictField().split(":")[1], valueAttach);
+										if(list != null && list.size() == 1){
+											valueAttach = ((Item)list.get(0)).getName();
+										}
+									}
 							%>
 							<td><%=valueAttach%></td>
 							<%}%>

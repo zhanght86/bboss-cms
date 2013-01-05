@@ -225,7 +225,7 @@
 	    }
 	    
 	    var url="<%=request.getContextPath()%>/sysmanager/dictmanager/newWin_dictdata.jsp?dicttypeId=<%=did%>";
-		$.dialog({title:'<pg:message code="sany.pdp.dictmanager.data.gather.add"/>',width:220,height:180, content:'url:'+url});   	
+		$.dialog({title:'<pg:message code="sany.pdp.dictmanager.data.gather.add"/>',width:420,height:280, content:'url:'+url});   	
 	    
 		/*
 	    var path = "newWin_dictdata.jsp?dicttypeId=<%=did%>";
@@ -465,7 +465,7 @@
 		if(checkValue!=""){
 			
 			var url="<%=request.getContextPath()%>/sysmanager/dictmanager/EditWin_dictdata.jsp?dicttypeId=<%=did%>&checkValue="+checkValue+"&validateState="+validateState;
-			$.dialog({title:'<pg:message code="sany.pdp.dictmanager.data.gather.modfiy"/>',width:220,height:180, content:'url:'+url});   	
+			$.dialog({title:'<pg:message code="sany.pdp.dictmanager.data.gather.modfiy"/>',width:420,height:280, content:'url:'+url});   	
 			
 		    //var path = "EditWin_dictdata.jsp?dicttypeId=<%=did%>&checkValue="+checkValue+"&validateState="+validateState;
 		    //var featrue = "dialogWidth=600px;dialogHeight=500px;scroll=yes;status=no;titlebar=no;toolbar=no;maximize=yes;minimize=0;help=0;dialogLeft="+(screen.availWidth-600)/2+";dialogTop="+(screen.availHeight-500)/2;
@@ -947,8 +947,7 @@
  				    <%
 							} else {
 					%>	
-						<a href="javascript:void(0)" class="bt_small" id="changeState1" ><span><pg:message code="sany.pdp.dictmanager.data.enable.yes"/></span> </a>
-						<a href="javascript:void(0)" class="bt_small" id="changeState0" ><span><pg:message code="sany.pdp.dictmanager.data.enable.no"/></span> </a>
+					
 					<%		
 							}
  				         }
@@ -972,14 +971,18 @@
 						     if (resId != null && !resId.equals("") && accesscontroler.checkPermission(resId,
 			   							"delete", AccessControl.DICT_RESOURCE)){ //数据删除
 						 %>
-						 	<a href="javascript:void(0)" class="bt_small" id="deletebt"  <%if(!stateDel){%>onclick="javascript:dealRecord(1);"<%}%>><span><pg:message code="sany.pdp.common.batch.delete"/></span> </a>							    
+						 <%if(!stateDel){%>
+						 	<a href="javascript:void(0)" class="bt_small" id="deletebt"  onclick="javascript:dealRecord(1);"><span><pg:message code="sany.pdp.common.batch.delete"/></span> </a>
+						 	<%}%>							    
 						 <%
 						     }
 						 }else{
 						 %>	 
 						 	<a href="javascript:void(0)" class="bt_small" id="advance_newbt"  onclick="advance_newDict()"><span><pg:message code="sany.pdp.common.operation.add"/></span> </a>							    
 						    <a href="javascript:void(0)" class="bt_small" id="advance_updatebt"  onclick="advance_EditDict()"><span><pg:message code="sany.pdp.common.operation.modfiy"/></span> </a>							    
-						    <a href="javascript:void(0)" class="bt_small" id="deletebt"  <%if(!stateDel){%>onclick="javascript:dealRecord(1);"<%}%>><span><pg:message code="sany.pdp.common.batch.delete"/></span> </a>							    
+						    <%if(!stateDel){%>
+						    <a href="javascript:void(0)" class="bt_small" id="deletebt"  onclick="javascript:dealRecord(1);"><span><pg:message code="sany.pdp.common.batch.delete"/></span> </a>							    
+						    <%}%>
 						 <%
 						 }
 						 %>

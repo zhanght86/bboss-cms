@@ -49,21 +49,21 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	protected HttpServletRequest request;
 	protected HttpServletResponse response;
 	AccessControl accessControl = null;
-	
+
 	/**
 	 * 初始化函数,获取当前页面的信息
 	 */
 	public void init(HttpServletRequest request,HttpServletResponse response)
 	{
-		
+
 		this.request = request;
 		this.response = response; 
 		accessControl = AccessControl.getInstance();
 		accessControl.checkAccess(request, response);
 	}
-	
+
 	private static Logger logger = Logger.getLogger(DictManagerImpl.class.getName());
-	
+
 	/**
 	 * 根据名称获取字典类型
 	 * modify by ge.tao
@@ -82,7 +82,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			.append(",DATA_NAME_CN,DATA_VALUE_CN,NAME_GENERAL_TYPE,KEY_GENERAL_INFO,NEEDCACHE,ENABLE_VALUE_MODIFY ")
 			.append("from TD_SM_DICTTYPE where DICTTYPE_NAME=?");	
 		try {			
-			
+
 			dbUtil.preparedSelect(sql.toString());
 			dbUtil.setString(1, name);
 			dbUtil.executePrepared();
@@ -102,7 +102,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dicttype.setKey_general_info(dbUtil.getString(0,"KEY_GENERAL_INFO"));
 				dicttype.setNeedcache(dbUtil.getInt(0,"NEEDCACHE"));
 				dicttype.setEnable_value_modify(dbUtil.getInt(0,"ENABLE_VALUE_MODIFY"));
-				
+
 				dicttype.setParent(String.valueOf(dbUtil.getString(0,"DICTTYPE_PARENT")));
 				dicttype.setDataParentIdFild(String.valueOf(dbUtil.getString(0,"DATA_PARENTID_FIELD")));
 				dicttype.setIsTree(dbUtil.getInt(0,"IS_TREE")); 
@@ -157,7 +157,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //				add 2007-12-06
 				dicttype.setData_validate_field(String.valueOf(dbUtil.getString(0,"DATA_VALIDATE_FIELD")));
 				dicttype.setData_create_orgid_field(String.valueOf(dbUtil.getString(0,"DATA_CREATE_ORGID_FIELD")));
-				
+
 				dicttype.setNextKeyValue("");
 			}
 		} catch (Exception e) {
@@ -167,7 +167,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 
 		return dicttype;
 	}
-	
+
 	/**
 	 * 判断字典类型是否缓冲数据
 	 * @param dataId
@@ -176,7 +176,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public boolean isCachable(String dataId)
 	{
 		int needcache = 0;
-		
+
 		String sql = "select NEEDCACHE from TD_SM_DICTTYPE where DICTTYPE_ID = ?";
 		PreparedDBUtil db = new PreparedDBUtil();
 		try {
@@ -224,14 +224,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//新维护两个字段
 				dicttype.setField_name_cn(dbUtil.getString(0,"DATA_NAME_CN"));
 				dicttype.setField_value_cn(dbUtil.getString(0,"DATA_VALUE_CN"));
-				
+
 				dicttype.setParent(dbUtil.getString(0,"DICTTYPE_PARENT"));
 				dicttype.setDataParentIdFild(dbUtil.getString(0,"DATA_PARENTID_FIELD"));
 				dicttype.setIsTree(dbUtil.getInt(0,"IS_TREE")); 
 				dicttype.setDicttype_type(dbUtil.getInt(0,"DICTTYPE_TYPE"));
-				
+
 				dicttype.setUser_id(dbUtil.getInt(0,"user_id"));
-				
+
 				if(strIsNull(dbUtil.getString(0,"DATA_DBNAME"))){
 					dicttype.setDataDBName(DEFAULT_DATA_DBNAME);
 				}else{
@@ -253,9 +253,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}
 					//dicttype.setDicttypeUseTabelstate(DICTTYPE_USE_TALBE_SINGLE);
 					//dicttype.setDicttypeUseTabelstate(getDictTypeUseTableStates(dbUtil.getString(0,"DATA_DBNAME"),dbUtil.getString(0,"DATA_TABLE_NAME")));
-					
+
 				}
-				
+
 				//不是必填的,只有当dbname和tablename都为空时,才能赋缺省值, 否则就确实是空
 				if(strIsNull(dbUtil.getString(0,"DATA_NAME_FILED"))){
 					if(strIsNull(dbUtil.getString(0,"DATA_TABLE_NAME")) && strIsNull(dbUtil.getString(0,"DATA_DBNAME"))){
@@ -310,8 +310,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return dicttype;
 	}	
-	
-	
+
+
 	/**
 	 * 新增字典类型 重复过滤
 	 * 把数据表中指定的类型ID字段,更新成当前新建的类型ID
@@ -331,7 +331,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(judge.size()>0){//有重复记录
 				if(judge.getInt(0,"num")>0) return "-1";
 			}
-			
+
 			//判断字典类型映射的表, 是否被其他字典映射, 并且这个字典是否指定了字典类型. 
 			//(1)如果这个字典没有指定类型字段, 表被改字典独占, 选表的时候做了过滤 这里不用考虑
 			//(2)如果这个字典指定了类型字段, 表可以被共享, 但是这个字典也必须指定类型字段
@@ -368,7 +368,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					return "-3:" + dataTypeIdFieldName;
 				}
 			}
-			
+
 			//往tabelinfo 表里面插入记录
 			if(dicttype.getKey_general_type() == KEY_CREATE_TYPE){
 				ColumnMetaData columnObj = DBUtil.getColumnMetaData(dicttype.getDataDBName(),dicttype.getDataTableName(),dicttype.getDataValueField());
@@ -397,16 +397,16 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				    .append("'").append(columnType).append("',")//id的类型 int string
 				    .append("'')");//id的前缀
 					tmp.executeInsert(dicttype.getDataDBName(),insert_tableinfo.toString()); 
-					
+
 					//modify by ge.tao
 					//date 2008-01-22
 					//刷缓冲
 					PrimaryKeyCacheManager.getInstance().loaderPrimaryKey(dicttype.getDataDBName(),
 							dicttype.getDataTableName().toUpperCase());
 				}
-				    				
+
 			}
-			
+
 			PreparedDBUtil dbUtil = new PreparedDBUtil();
 			String dicttype_id = dbUtil.getNextStringPrimaryKey("TD_SM_DICTTYPE");
 			StringBuffer insert_dicttype = new StringBuffer()
@@ -423,7 +423,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//多维护两个字段
 				.append(",?,?")
 				.append(",?)");
-					
+
 			dbUtil.preparedInsert(insert_dicttype.toString());;
 			dbUtil.setString(1,dicttype.getName());
 			dbUtil.setString(2,dicttype.getDescription());
@@ -463,18 +463,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			//发送事件
 			Event event = new EventImpl(dicttype, DictionaryChangeEvent.DICTIONARY_ADD);
 			super.change(event,true);		
-			
-			
+
+
 			//检测是否要强制添加附加字段,检测当前表是否有不能为空的字段;			
 			return this.getUnableNullColumnNames(dicttype);
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return "";
 	}
-	
+
 	/**
 	 * 更新字典类型 类型名称不能修改
 	 * add by ge.tao
@@ -493,7 +493,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(judge.size()>0 && judge.getInt(0,"num")>0){
 				return "-1";
 			}
-			
+
 			//判断字典类型映射的表, 是否被其他字典映射, 并且这个字典是否指定了字典类型. 
 			//(1)如果其他字典没有指定类型字段, 表被该字典独占, 选表的时候做了过滤 这里不用考虑
 			//(2)如果其他字典指定了类型字段, 表可以被共享, 但是这个字典也必须指定类型字段
@@ -529,9 +529,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					String dataTypeIdFieldName = typeJudge.getString(0,"DATA_TYPEID_FIELD");
 					return "-3:" + dataTypeIdFieldName;
 				}
-				
+
 			}
-			
+
 			//往tabelinfo 表里面插入记录
 			if(dicttype.getKey_general_type() == KEY_CREATE_TYPE){
 				ColumnMetaData columnObj = DBUtil.getColumnMetaData(dicttype.getDataDBName(),dicttype.getDataTableName(),dicttype.getDataValueField());
@@ -560,17 +560,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				    .append("'").append(columnType).append("',")//id的类型 int string
 				    .append("'')");//id的前缀
 					tmp.executeInsert(dicttype.getDataDBName(),insert_tableinfo.toString());
-					
+
 					//modify by ge.tao
 					//date 2008-01-22
 					//刷缓冲
 					PrimaryKeyCacheManager.getInstance().loaderPrimaryKey(dicttype.getDataDBName(),
 							dicttype.getDataTableName().toUpperCase());
 				}
-				
-				    				
+
+
 			}
-			
+
 			//没有重复类型名称
 			PreparedDBUtil dbUtil = new PreparedDBUtil();
 			StringBuffer sql = new StringBuffer()
@@ -605,7 +605,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			dbUtil.setInt(18, dicttype.getEnable_value_modify());//值字段的值可否改变
 			//dbUtil.setString(15,dicttype.getDataId());
 			dbUtil.setString(19,dicttype.getDataId());
-			
+
 			dbUtil.executePrepared();	
 			if(dicttype.getUpdate_dcitData_typeId()==UPDATE_DICTDATA_TYPEID){
 				//更新数据表的 类型ID字段的数据 值为当前类型ID 
@@ -618,7 +618,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			//发送事件
 			Event event = new EventImpl(dicttype, DictionaryChangeEvent.DICTIONARY_INFO_UPDATE);
 			super.change(event,true);			
-			
+
 			//检测是否要强制添加附加字段,检测当前表是否有不能为空的字段;
 			String unableNullColumnNames = "";
 			List unableNullColumns = this.getUnableNullColumns(dicttype.getDataDBName(),dicttype.getDataTableName());
@@ -632,7 +632,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}
 				}
 			}
-			
+
 			return unableNullColumnNames;
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
@@ -640,7 +640,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * 添加字典数据 树形的 平铺的
 	 * add by ge.tao
@@ -667,7 +667,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org_field = dicttype.getData_create_orgid_field();
 		int is_tree = dicttype.getIsTree();
-		
+
 		//判断数据是否有重复
 		StringBuffer isRepeat_sql = new StringBuffer();
 		isRepeat_sql.append("select count(*) as num from ").append(data_table_name).append(" where ")
@@ -688,7 +688,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					return false;
 				}
 			}			
-						
+
 			//处理基础字段			
 			StringBuffer insert_sqlstr = new StringBuffer();			
 			insert_sqlstr.append("insert into ").append(data_table_name).append("(")
@@ -710,8 +710,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				insert_sqlstr.append(", ").append(data_org_field);
 			}
 			//--结束基础字段处理			
-			
-		
+
+
 			insert_sqlstr.append(")values('").append(dictdata.getName()).append("','")
 				.append(dictdata.getValue()).append("' ");
 			if(DICTDATA_IS_TREE==is_tree){//插入 父类ID字段**值
@@ -755,8 +755,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}		
 		return r;
 	}
-	
-	
+
+
 	/**
 	 * 更新字典数据
 	 */
@@ -788,14 +788,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		StringBuffer isUsed_sql = new StringBuffer();
 		isUsed_sql.append("select count(*) as num from TD_SM_TAXCODE_ORGANIZATION where  DICTTYPE_ID = '")
 				  .append(dicttypeId).append("' ");
-		
+
 		try{
 			tm.begin();
 			db.executeSelect(isUsed_sql.toString());
 			if(db.size()>0 && db.getInt(0,"num")>0){
 				return false;
 			}
-		
+
 			//获取所有子类型
 			List childDittypes = new ArrayList(); 
 			childDittypes.add(getDicttypeById(dicttypeId));
@@ -804,14 +804,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			for(int i=childDittypes.size()-1;i>=0;i--){
 			    String dicttypeId_ = ((Data)childDittypes.get(i)).getDataId();
 				//删除数据字典类型的SQL
-							
+
 				Data dicttype = getDicttypeById(dicttypeId_);	
 				data[i] = dicttype;
 				//数据保存字段:
 				String data_dbName = dicttype.getDataDBName();
 				String data_table_name = dicttype.getDataTableName();
 				String data_typeid_field = dicttype.getDataTypeIdField();				
-								
+
 				//删除机构编码关系 like '%类型ID:%'
 				StringBuffer delete_orgTax = new StringBuffer();
 				delete_orgTax.append("delete TD_SM_TAXCODE_ORGANIZATION where DICTTYPE_ID = '")
@@ -819,7 +819,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//先
 				dbUtil.addBatch(delete_orgTax.toString());
 				delete_orgTax.setLength(0);
-				
+
 				//删除数据字典数据的SQL
 				String delete_data_sql = "";
 				if(!this.strIsNull(data_typeid_field)){//判断有没有类型ID字段
@@ -829,15 +829,15 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					//字典数据 立即删除 数据库不同 不能做事务
 					db.executeDelete(data_dbName,delete_data_sql);
 				}	
-				
+
 				if (dicttypeId_ != null) {						
 					//字典类型 批处理删除 后
 					String delete_type_sql = "delete TD_SM_DICTTYPE where DICTTYPE_ID='"+dicttypeId_+"'";
 					dbUtil.addBatch(delete_type_sql);
 					result = true;
-									
+
 				}
-				
+
 			}
 			//删除字典类型		
 			dbUtil.executeBatch();
@@ -847,7 +847,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			Event event1 = new EventImpl("",
 					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
 			super.change(event1);
-			
+
 		} catch (Exception e) {	
 			e.printStackTrace();
 			try {
@@ -860,7 +860,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	}
 	private void deletedict_(Data dicttype)
 	{
-		
+
 	}
 	/**
 	 * 根据字典类型对象,
@@ -884,7 +884,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		TransactionManager tm = new TransactionManager();
 		if(dicttype==null) return result;
 		boolean is_delete_dictdata = false;
-		
+
 		//判断类型是否被编码机构关系引用,如被引用,则不允许删除.
 		StringBuffer isUsed_sql = new StringBuffer();
 		isUsed_sql.append("select count(*) as num from TD_SM_TAXCODE_ORGANIZATION where DICTTYPE_ID='")
@@ -895,18 +895,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(db.size()>0 && db.getInt(0,"num")>0){
 				return false;
 			}
-		
+
 			//获取所有子类型
 			List childDittypes = new ArrayList(); 
 			childDittypes.add(getDicttypeById(dicttype.getDataId()));
 			this.getRecursionChildDicttypeList(childDittypes,dicttype.getDataId());
-			
+
 			Data[] data = new Data[childDittypes.size()];
 			for(int i=childDittypes.size()-1;i>=0;i--){
 			    String dicttypeId_ = ((Data)childDittypes.get(i)).getDataId();
 			    //删除字典类型的附加字段的SQL
 			    String delete_typeatt_sql = "delete from TD_SM_DICATTACHFIELD where DICTTYPE_ID='"+dicttypeId_+"'";	
-			    
+
 			    //删除数据字典类型的SQL
 				String delete_type_sql = "delete from TD_SM_DICTTYPE where DICTTYPE_ID='"+dicttypeId_+"'";			
 				Data subdicttype = getDicttypeById(dicttypeId_);	
@@ -915,7 +915,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				String data_dbName = subdicttype.getDataDBName();
 				String data_table_name = subdicttype.getDataTableName();
 				String data_typeid_field = subdicttype.getDataTypeIdField();	
-				
+
 				//删除数据字典数据的SQL
 				String delete_data_sql = "";
 				if(!this.strIsNull(data_typeid_field)){//判断有没有类型ID字段
@@ -925,9 +925,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					//字典数据 立即删除 数据库不同 不能做事务
 					db.executeDelete(data_dbName,delete_data_sql);
 				}	
-				
+
 				if (dicttypeId_ != null) {
-					
+
 					//删除字典类型的资源操作授予记录
 					String delete_res_dicttype = "delete from TD_SM_roleresop  " +
 												"where restype_id='dict' and res_id ='" + dicttypeId_ + "'";
@@ -937,9 +937,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					dbUtil.addBatch(delete_typeatt_sql);
 					dbUtil.addBatch(delete_type_sql);
 					result = true;
-									
+
 				}
-				
+
 			}
 			//删除字典类型		
 			//删除字典类型关联的附加字段
@@ -961,7 +961,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * 根据字典类型,删除一个字典类型的具体数据
 	 * 包含递归删除
@@ -1013,14 +1013,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dbUtil.preparedDelete(data_dbName,delete_orgTax.toString());
 				dbUtil.addPreparedBatch();
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" a where "+ data_value_field +" in ("+ 
 			    	"select " + data_value_field + " from " + data_table_name + " start with " +
 			    	data_value_field +"= '" + dictdataValue + "' connect by prior " + data_value_field + 
 			    	"= " + parentId_field + ")";
 			    if(dicttype_field != null && !dicttype_field.equals(""))
 			    	sql += " and " + dicttype_field  + "='" + dicttypeId +  "'";
-			    
+
 			    sql += primaryCondition;
 			    dbUtil.preparedDelete(data_dbName,sql);
 			    dbUtil.addPreparedBatch();
@@ -1031,17 +1031,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				   .append(dictdataValue).append("' ")
 				   .append(" and dicttype_id='").append(dicttypeId).append("'");
 				//先
-				
+
 //				dbUtil.addBatch(delete_orgTax.toString());
 				dbUtil.preparedDelete(data_dbName,delete_orgTax.toString());
 			    dbUtil.addPreparedBatch();
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" a where "+ data_value_field +" = '"+ dictdataValue +"' "+ 
 			          "and "+data_name_filed+"='"+dictdataName+"' ";
 			    if(dicttype_field != null && !dicttype_field.equals(""))
 			    	sql += " and " + dicttype_field  + "='" + dicttypeId +  "'";
-			    
+
 			    sql += primaryCondition;
 //			    dbUtil.addBatch(sql);
 			    dbUtil.preparedDelete(data_dbName,sql);
@@ -1071,11 +1071,11 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			result = false;
 			e.printStackTrace();
 		}		
-		
+
 		return result;
 	}
-	
-	
+
+
 	/**
 	 * 根据字典类型,删除一个字典类型的具体数据
 	 * 包含递归删除
@@ -1106,12 +1106,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_name_filed = dicttype.getDataNameField();
 		String data_value_field = dicttype.getDataValueField();
 		String dicttype_field = dicttype.getDataTypeIdField();
-		
+
 //		String data_order_field	= dicttype.getDataOrderField();
 //		String data_typeid_field = dicttype.getDataTypeIdField();
 		dbUtil.setBatchDBName(data_dbName);
 		String sql = "";
-		
+
 		StringBuffer delete_orgTax = new StringBuffer();
 		try {
 			if(DICTDATA_IS_TREE==isTree){//如果数据项是树形,递归删除子数据
@@ -1125,7 +1125,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				   .append(" and dicttype_id='").append(dicttypeId).append("'");
 				dbUtil.addBatch(delete_orgTax.toString());
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" where "+ data_value_field +" in ("+ 
 			    	"select " + data_value_field + " from " + data_table_name + " start with " +
 			    	data_value_field +"= '' connect by prior " + data_value_field + 
@@ -1140,11 +1140,11 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//先
 				dbUtil.addBatch(delete_orgTax.toString());
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" a where "+data_name_filed+"='"+dictdataName+"' ";
 			    if(dicttype_field != null && !dicttype_field.equals(""))
 			    	sql += " and " + dicttype_field  + "='" + dicttypeId +  "'";
-			    
+
 			    sql += primaryCondition;
 			    dbUtil.addBatch(sql);
 			}		
@@ -1159,17 +1159,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			super.change(event,true);
 		} catch (Exception e) {
 			logger.error(e);
-			
+
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
 		}finally{
 			dbUtil.resetBatch();
 		}
-		
-		
+
+
 		return result;
 	}
-	
+
 	/**
 	 * 根据字典类型,删除一个字典类型的具体数据
 	 * 包含递归删除
@@ -1201,12 +1201,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_value_field = dicttype.getDataValueField();
 		String dictdataName = "";
 		String dicttype_field = dicttype.getDataTypeIdField();
-		
+
 //		String data_order_field	= dicttype.getDataOrderField();
 //		String data_typeid_field = dicttype.getDataTypeIdField();
 		dbUtil.setBatchDBName(data_dbName);
 		String sql = "";
-		
+
 		StringBuffer delete_orgTax = new StringBuffer();
 		try {
 			if(DICTDATA_IS_TREE==isTree){//如果数据项是树形,递归删除子数据
@@ -1220,7 +1220,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				   .append(" and dicttype_id='").append(dicttypeId).append("'");
 				dbUtil.addBatch(delete_orgTax.toString());
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" where "+ data_value_field +" in ("+ 
 			    	"select " + data_value_field + " from " + data_table_name + " start with " +
 			    	data_value_field +"= '" + dictdataValue + "' connect by prior " + data_value_field + 
@@ -1235,12 +1235,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//先
 				dbUtil.addBatch(delete_orgTax.toString());
 				delete_orgTax.setLength(0);
-				
+
 			    sql = "delete from "+ data_table_name +" a where "+ data_value_field +" = '"+ dictdataValue +"' "+ 
 			          "and "+data_name_filed+"='"+dictdataName+"' ";
 			    if(dicttype_field != null && !dicttype_field.equals(""))
 			    	sql += " and " + dicttype_field  + "='" + dicttypeId +  "'";
-			    
+
 			    sql += primaryCondition;
 			    dbUtil.addBatch(sql);
 			}		
@@ -1255,16 +1255,16 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			super.change(event,true);
 		} catch (Exception e) {
 			logger.error(e);
-			
+
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
 		}finally{
 			dbUtil.resetBatch();
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * 更新字典数据的顺序
 	 * add by ge.tao
@@ -1306,7 +1306,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			flag = true;
 		}catch(Exception e){
 			e.printStackTrace();
-			
+
 			//throw new ManagerException(e.getMessage());
 		}finally{
 			db.resetBatch();
@@ -1314,7 +1314,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		return flag;
 	}	
 
-	
+
 	/**
 	 * 查看指定字典类型(通过类型ID)是否包含子字典类型
 	 */
@@ -1334,7 +1334,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 查看指定字典类型(通过类型ID)是否包含子业务字典类型
 	 */
@@ -1356,7 +1356,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 根据字典类型id获得字典的数据集合
 	 * 不翻页 不递归
@@ -1426,7 +1426,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by ").append(data_value_field);
 			}
 		}
-				
+
 			dbUtil.executeSelect(data_dbName,sql.toString());
 			for(int i= 0;i < dbUtil.size();i++){
 				Item dictdata = new Item();
@@ -1451,7 +1451,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return list;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.sysmgrcore.manager.DictManager#getChildDictdataListByDataId(java.lang.String)
 	 * 根据字典类型id,字典数据Value获得,该字典数据的子的数据
@@ -1473,7 +1473,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_typeid_field = dicttype.getDataTypeIdField();
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
-		
+
 		int is_tree = dicttype.getIsTree();		
 		StringBuffer sql = new StringBuffer();
 		if(DICTDATA_IS_TREE==is_tree){
@@ -1495,7 +1495,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //			{
 //				sql.append(",").append(data_parentId_field);
 //			}
-			
+
 			sql.append(" from ").append(data_table_name).append(" where ").append(data_parentId_field)
 			.append("='").append(dictdataValue).append("' ");
 		}else{
@@ -1528,7 +1528,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by ").append(data_value_field);
 			}
 		}
-		
+
 		try {			
             //System.out.println(sql.toString());
 			dbUtil.executeSelect(data_dbName,sql.toString());
@@ -1556,7 +1556,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return list;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.sysmgrcore.manager.DictManager#getChildDictdataListByDataId(java.lang.String)
 	 * 根据字典类型id,字典数据id获得,该字典数据的子的数据 递归
@@ -1613,7 +1613,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by ").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			dbUtil.executeSelect(data_dbName,sql.toString());
 			for(int i= 0;i < dbUtil.size();i++){
@@ -1636,8 +1636,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return list;
 	}
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.sysmgrcore.manager.DictManager#getDictdataList(java.lang.String)
 	 * 原来的方法
@@ -1730,7 +1730,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by ").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			dbUtil.executeSelect(data_dbName,sql.toString(),offset,size);
 			for(int i= 0;i < dbUtil.size();i++){
@@ -1765,7 +1765,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;		
 	}
-	
+
 	/**
 	 * 根据混合id获取该类型字典数据集合
 	 * ids 是123:123:aa 字典类型ID:数据项ID:数据项名称 
@@ -1814,7 +1814,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		map.put(data_value_field.toLowerCase(), null);
 		map.put(data_org.toLowerCase(), null);
 		String primaryColumnNames = getPrimaryColumnNames(data_table_name, map);
-		
+
 		if(DICTDATA_IS_TREE==is_tree){//树形,根节点取出一级数据项,其他节点,取出其对应的子数据项
 			String data_parentId_field = dicttype.getDataParentIdFild();
 			if(!this.strIsNull(data_org)){//如果机构字段不为空
@@ -1845,12 +1845,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}else{
 				sql.append(" and a." + data_parentId_field).append("='").append(data_parentId).append("'  ");	
 			}
-			
+
 			//判断是否有类型ID字段
 			if(!this.strIsNull(data_typeid_field)){
 				sql.append(" and a.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
 			}
-			
+
 			//如果机构字段不为空则显示机构ID加名称
 			if(!this.strIsNull(data_org)){
 				sql.append(" union (select 1,a.").append(data_name_filed).append(",a.").append(data_value_field);
@@ -1872,7 +1872,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				if(!this.strIsNull(data_typeid_field)){
 					sql.append(" and a.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
 				}
-				
+
 				sql.append(" minus select 1,a.").append(data_name_filed).append(",a.").append(data_value_field);
 				if(!this.strIsNull(data_validate_field)){
 					sql.append(",a.").append(data_validate_field);
@@ -1894,7 +1894,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}
 				sql.append(")) a where 1=1 ");
 			}
-			
+
 			//条件查询
 			if(!"".equals(showdata)){
 				sql.append(" and a.").append(data_name_filed).append(" like ")
@@ -1912,7 +1912,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" and a.").append(data_validate_field).append("=")
 					.append("'").append(isaVailability).append("'");
 			}
-			
+
 		}else{//平铺,取出所有记录
 			if(!this.strIsNull(data_org)){
 				sql.append("select * from (");
@@ -1933,7 +1933,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(!this.strIsNull(data_org)){
 				sql.append(",a.").append(data_org).append("||' '||org_name as ").append(data_org);
 			}
-			
+
 			sql.append(primaryColumnNames);
 			sql.append(" from ").append(data_table_name).append(" a");
 			if(!this.strIsNull(data_org)){
@@ -1962,7 +1962,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				if(!this.strIsNull(data_typeid_field)){
 					sql.append(" and a.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
 				}
-				
+
 				sql.append(" minus select 1,a.").append(data_name_filed).append(",a.").append(data_value_field);
 				if(!this.strIsNull(data_validate_field)){
 					sql.append(",a.").append(data_validate_field);
@@ -1998,7 +1998,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					.append("'").append(isaVailability).append("'");
 			}
 		}
-		
+
 		//判断是否有排序字段 没有排序字段 就按值排序
 		if(!this.strIsNull(data_order_field)){
 			sql.append(" order by a.").append(data_order_field);
@@ -2007,7 +2007,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by a.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			if(offset==-2 && size == -2){
 				dbUtil.executeSelect(data_dbName,sql.toString());
@@ -2057,7 +2057,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;		
 	}
-	
+
 	public ListInfo getDictdataList(String ids,String showdata, String realitydata, 
 			String occurOrg, String isaVailability,String attachFieldSql, int offset, int size) throws ManagerException{
 		ListInfo listInfo = new ListInfo();
@@ -2091,7 +2091,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		map.put(data_value_field.toLowerCase(), null);
 		map.put(data_org.toLowerCase(), null);
 		String primaryColumnNames = getPrimaryColumnNames(data_table_name, map);
-		
+
 		if(DICTDATA_IS_TREE==is_tree){//树形,根节点取出一级数据项,其他节点,取出其对应的子数据项
 			String data_parentId_field = dicttype.getDataParentIdFild();
 			if(!this.strIsNull(data_org)){//如果机构字段不为空
@@ -2122,7 +2122,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}else{
 				sql.append(" and a." + data_parentId_field).append("='").append(data_parentId).append("'  ");	
 			}
-			
+
 			//判断是否有类型ID字段
 			if(!this.strIsNull(data_typeid_field)){
 				sql.append(" and a.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
@@ -2131,7 +2131,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(attachFieldSql != null && !"".equals(attachFieldSql)){
 				sql.append(attachFieldSql);
 			}
-			
+
 			//如果机构字段不为空则显示机构ID加名称
 			if(!this.strIsNull(data_org)){
 				sql.append(" union (select 1,a.").append(data_name_filed).append(",a.").append(data_value_field);
@@ -2157,7 +2157,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				if(attachFieldSql != null && !"".equals(attachFieldSql)){
 					sql.append(attachFieldSql);
 				}
-				
+
 				sql.append(" minus select 1,a.").append(data_name_filed).append(",a.").append(data_value_field);
 				if(!this.strIsNull(data_validate_field)){
 					sql.append(",a.").append(data_validate_field);
@@ -2183,7 +2183,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}
 				sql.append(")) a where 1=1 ");
 			}
-			
+
 			//条件查询
 			if(!"".equals(showdata)){
 				sql.append(" and a.").append(data_name_filed).append(" like ")
@@ -2201,7 +2201,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" and a.").append(data_validate_field).append("=")
 					.append("'").append(isaVailability).append("'");
 			}
-			
+
 		}else{//平铺,取出所有记录
 			sql.append("select 1 ");
 			if(!this.strIsNull(data_name_filed)){
@@ -2223,8 +2223,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			 for(int z=0;dictatts!= null && z<dictatts.size();z++){
 			        DictAttachField dictatt = (DictAttachField)dictatts.get(z);
 				//InputType inputType = dictatt.getInputType();	
-		
-			        sql.append(",").append(dictatt.getDictField());
+
+			        sql.append(",").append(dictatt.getTable_column());
 			 }
 			sql.append(primaryColumnNames);
 			sql.append(" from ").append(data_table_name).append(" a");
@@ -2241,7 +2241,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(attachFieldSql != null && !"".equals(attachFieldSql)){
 				sql.append(attachFieldSql);
 			}
-			
+
 
 			//条件查询
 			if(!"".equals(showdata)){
@@ -2261,7 +2261,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					.append("'").append(isaVailability).append("'");
 			}
 		}
-		
+
 		//判断是否有排序字段 没有排序字段 就按值排序
 		if(!this.strIsNull(data_order_field)){
 			sql.append(" order by a.").append(data_order_field);
@@ -2273,7 +2273,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by a.").append(data_name_filed);
 			}
 		}
-		
+
 		try {			
 			if(offset==-2 && size == -2){
 				dbUtil.executeSelect(data_dbName,sql.toString());
@@ -2313,7 +2313,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;
 	}
-	
+
 	/**
 	 * 机构授权编码维护列表。超级管理员-分为已设置项列表与未设置项列表 gao.tang 2008.1.4
 	 * @param id 字典ID
@@ -2361,7 +2361,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(!this.strIsNull(data_order_field)){
 				sql.append(",t.").append(data_order_field).append(" as orby ");
 			}
-			
+
 			if(!this.strIsNull(data_org)){
 				sql.append(" from td_sm_organization org, ").append(data_table_name).append(" t where 1 = 1 ")
 				.append("and org.org_id=t.").append(data_org);
@@ -2392,7 +2392,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(!this.strIsNull(data_order_field)){
 				sql.append(",t.").append(data_order_field).append(" as orby ");
 			}
-			
+
 			if(!this.strIsNull(data_org)){
 				sql.append(" from td_sm_organization org, TD_SM_TAXCODE_ORGANIZATION tax, ").append(data_table_name).append(" t ")
 					.append("where tax.data_value = t.").append(data_value_field)
@@ -2422,7 +2422,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(!this.strIsNull(data_order_field)){
 				sql.append(",o.").append(data_order_field).append(" as orby ");
 			}
-			
+
 			if(!this.strIsNull(data_org)){
 				sql.append(" from td_sm_organization org,TD_SM_TAXCODE_ORGANIZATION tax, ").append(data_table_name).append(" o ")
 					.append("where tax.data_value = o.").append(data_value_field)
@@ -2436,12 +2436,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				.append(" and tax.dicttype_id = '").append(dicttypeid).append("' ")
 				.append("and tax.org_id = '").append(orgId).append("' ");
 		}
-		
+
 		if(!"".equals(showdata)){
 			sql.append(" and o.").append(data_name_filed).append(" like ")
 				.append("'%").append(showdata).append("%'");
 		}
-		
+
 		//判断是否有排序字段 没有排序字段 就按值排序
 		if(!this.strIsNull(data_order_field)){
 			sql.append(" order by orby");
@@ -2450,7 +2450,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by o.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			dbUtil.executeSelect(data_dbName,sql.toString(),offset,size);
 			for(int i= 0;i < dbUtil.size();i++){
@@ -2486,7 +2486,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;		
 	}
-	
+
 	/**
 	 * 部门管理员 
 	 * 有权限看到 授权字典数据项 翻页
@@ -2572,7 +2572,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			sql.append(" and t.").append(data_validate_field).append("=")
 				.append("'").append(isaVailability).append("'");
 		}
-		
+
 		//判断是否有类型ID字段
 		if(!this.strIsNull(data_typeid_field)){
 			sql.append(" and t.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
@@ -2585,7 +2585,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by t.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			if(offset==-2 && size == -2){//不翻页
 				dbUtil.executeSelect(data_dbName,sql.toString());
@@ -2616,7 +2616,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;		
 	}
-	
+
 	/**
 	 * 机构权限看到 授权字典数据项 翻页
 	 * 
@@ -2698,7 +2698,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			sql.append(" and t.").append(data_validate_field).append("=")
 				.append("'").append(isaVailability).append("'");
 		}
-		
+
 		//判断是否有类型ID字段
 		if(!this.strIsNull(data_typeid_field)){
 			sql.append(" and t.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
@@ -2711,7 +2711,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by t.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			if(offset==-2 && size == -2){//不翻页
 				dbUtil.executeSelect(data_dbName,sql.toString());
@@ -2742,7 +2742,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;	
 	}
-	
+
 	/**
 	 * 普通用户
 	 * 有权限看到 授权字典数据项 翻页
@@ -2817,7 +2817,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			    sql.append(",  t.").append(data_order_field);
 			}
 		}
-		
+
 		sql.append(" from ").append(data_table_name).append(" t, TD_SM_TAXCODE_ORGANIZATION torg  ")
 		.append(" where  torg.DATA_VALUE= t.").append(data_value_field)
 		.append(" and torg.DATA_NAME=t.").append(data_name_filed)
@@ -2840,12 +2840,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			sql.append(" and t.").append(data_validate_field).append("=")
 				.append("'").append(isaVailability).append("'");
 		}
-		
+
 		//判断是否有类型ID字段
 		if(!this.strIsNull(data_typeid_field)){
 			sql.append(" and t.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
 		}
-		
+
 		//本机构建的数据项 union到一起
 		if(!this.strIsNull(data_org)){
 			sql.append(" union ");
@@ -2871,7 +2871,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				    sql.append(",  t.").append(data_order_field);
 				}
 			}
-			
+
 			sql.append(" from ").append(data_table_name).append(" t ")
 			.append(" where t.").append(data_org).append(" in (")
             .append("select ou.ORG_ID from TD_SM_ORGUSER ou where ou.USER_ID=").append(userId).append(") ");
@@ -2905,7 +2905,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by abc.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			if(offset==-2 && size == -2){//不翻页
 				dbUtil.executeSelect(data_dbName,sql.toString());
@@ -2937,22 +2937,22 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		return listInfo;		
 	}
 
-	
+
 	/**
 	 * 根据字典类型ID,获得指定字典类型的子字典类型列表
 	 * 直接子类型 当dicttypeId='0'  获取所有类型
 	 */
 	public List getChildDicttypeList(String dicttypeId) throws ManagerException{
-			
+
 		return getPartChildDicttypeList(dicttypeId,-1);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getBaseChildDicttypeList(java.lang.String)
 	 * 基本字典列表
 	 */
 	public List getBaseChildDicttypeList(String dicttypeId) throws ManagerException {
-		
+
 		return getPartChildDicttypeList(dicttypeId,this.BASE_DICTTYPE);
 	}
 
@@ -2973,7 +2973,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		// TODO Auto-generated method stub
 		return getPartChildDicttypeList(dicttypeId,this.PARTREAD_BUSINESS_DICTTYPE);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getBusinessChildDicttypeList(java.lang.String, int)
 	 * 业务字典类表 包括 授权可见和全部可见
@@ -2982,9 +2982,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		// TODO Auto-generated method stub
 		return getPartChildDicttypeList(dicttypeId,this.BUSINESS_DICTTYPE);
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 根据字典类型ID,获得指定字典类型的子字典类型列表
 	 * 直接子类型 当dicttypeId='0' is null 获取一级类型
@@ -3017,7 +3017,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				.append(dicttypeId).append("' ");
 			}
 		}			
-			
+
 		if(typeId != ALL_DICTTYPE){//不是获取所有字典
 			if(typeId == BUSINESS_DICTTYPE){//获取业务字典 三种
 				sql.append(" and DICTTYPE_TYPE in (").append(ALLREAD_BUSINESS_DICTTYPE).append(",")
@@ -3056,7 +3056,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dicttype.setKey_general_info(dbUtil.getString(i,"KEY_GENERAL_INFO"));
 				dicttype.setNeedcache(dbUtil.getInt(i,"NEEDCACHE"));
 				dicttype.setEnable_value_modify(dbUtil.getInt(i,"ENABLE_VALUE_MODIFY"));
-				
+
 				dicttype.setDataParentIdFild(dbUtil.getString(i,"DATA_PARENTID_FIELD"));
 				dicttype.setIsTree(dbUtil.getInt(i,"IS_TREE")); 
 				if(strIsNull(dbUtil.getString(i,"DATA_DBNAME"))){
@@ -3100,7 +3100,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}		
 		return dicttypes;
 	}
-	
+
 	/**
 	 * 根据字典类型ID,获得指定字典类型的子字典类型列表
 	 * 递归子类型
@@ -3131,13 +3131,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//新维护两个字段
 				dicttype.setField_name_cn(dbUtil.getString(0,"DATA_NAME_CN"));
 				dicttype.setField_value_cn(dbUtil.getString(0,"DATA_VALUE_CN"));
-				
+
 				//新维护四个字段：NAME_GENERAL_TYPE、KEY_GENERAL_INFO、NEEDCACHE、ENABLE_VALUE_MODIFY
 				dicttype.setName_general_type(dbUtil.getString(i,"NAME_GENERAL_TYPE"));
 				dicttype.setKey_general_info(dbUtil.getString(i,"KEY_GENERAL_INFO"));
 				dicttype.setNeedcache(dbUtil.getInt(i,"NEEDCACHE"));
 				dicttype.setEnable_value_modify(dbUtil.getInt(i,"ENABLE_VALUE_MODIFY"));
-				
+
 				if(strIsNull(dbUtil.getString(i,"DATA_DBNAME"))){
 					dicttype.setDataDBName(DEFAULT_DATA_DBNAME);
 				}else{
@@ -3172,7 +3172,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dicttype.setData_create_orgid_field(String.valueOf(dbUtil.getString(0,"DATA_CREATE_ORGID_FIELD")));
 				dicttypes.add(dicttype);
 				this.getRecursionChildDicttypeList(dicttypes, dbUtil.getString(i,"DICTTYPE_ID"));
-				
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -3180,7 +3180,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}	
 		return dicttypes;
 	}
-	
+
 	/**
 	 * 判断字符串是否为空
 	 */
@@ -3241,7 +3241,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	}
 
 
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.sysmgrcore.manager.DictManager#getTaxCodesByUserId(java.lang.String)
 	 * @return List<com.frameworkset.dictionary.Item>
@@ -3314,7 +3314,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		return taxCodes;
 	}
 
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.sysmgrcore.manager.DictManager#getTaxCodesByOrgId(java.lang.String)
 	 * @return List<com.frameworkset.dictionary.Item>
@@ -3446,17 +3446,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}
 					batchDB.addBatch(sql);					
 				}				
-				
+
 			}
 			batchDB.executeBatch();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			
+
 			e.printStackTrace();
 		}finally{
 			batchDB.resetBatch();
 		}
-		
+
 	}
 
 	/* (non-Javadoc)--gao.tang 0
@@ -3474,18 +3474,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			StringBuffer orgs_sql = new StringBuffer()
 			.append("select org.org_id from td_sm_organization org start with org.org_id='")
 			.append(orgId).append("' connect by prior org.org_id=org.parent_id ");	
-			
+
 			//上级机构
 			StringBuffer orgs_parent_sql = new StringBuffer()
 			.append("select org.org_id from td_sm_organization org start with org.org_id='")
 			.append(orgId).append("' connect by prior org.parent_id=org.org_id ");	
-			
+
 			//保存新数据
 			//保存当前机构的
 			String[] dataValues = new String[dictdataValues.length];//保存数据项的值 数组
 			String[] dataNames = new String[dictdataValues.length];//保存数据项的名称 数组
 			for(int i=0;i<dictdataValues.length;i++){
-				
+
 				String dictdataValue = dictdataValues[i];				
 				//dictdataValue value:name;
 				if(dictdataValue.trim().length()==0) continue;
@@ -3498,7 +3498,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					dataNames[i] = "";
 				}
 			}
-			
+
             //(1) 对照传入的最新的 - 原来老的 数据项 = 冗余的数据项
 			//本身多于的"常用"权限
 			//本身和子机构多于的"可见"权限
@@ -3530,8 +3530,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			db.addBatch(delete_useless_usual.toString());
 			db.addBatch(delete_subandself_read.toString());
 			db.executeBatch();
-			
-			
+
+
 			//(3)保存/更新			
 			//本机构 上级机构
 			DBUtil parentDB = new DBUtil();
@@ -3563,7 +3563,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
             //发事件
 			Event event = new EventImpl(dicttypeId,DictionaryChangeEvent.DICTIONARY_USERORG_CHANGE_READ);
 			super.change(event,true);
-						
+
 		}catch(Exception e){
 			e.printStackTrace();
 			try {
@@ -3573,7 +3573,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 		}
 	}
-	
+
 	private int getDictdataValue(String dicttypeId){
 		DBUtil db = new DBUtil();
 		String sql = "select t.IS_TREE from TD_SM_DICTTYPE t where t.dicttype_id='"+dicttypeId+"'";
@@ -3586,10 +3586,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return isTree;
 	}
-	
 
-	
-	
+
+
+
 	/**
 	 * 根据机构ID和字典类型ID,和操作码,获取该机构在该字典类型下绑定的字典数据列表
 	 * @param orgId
@@ -3623,7 +3623,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}		
 		return dictdataValues;
 	}
-	
+
 	/* (non-Javadoc)gao.tang--0
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictdatasByOrgIdAndTypeId()
 	 * 根据机构ID和字典类型ID,获取该机构在该字典类型下绑定的字典数据列表 所有(可见/常用)列表
@@ -3633,7 +3633,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public List getDictdatasByOrgIdAndTypeId(String orgId,String dicttypeId) {			
 		return this.getDictdatasByOrgIdAndTypeIdAndOpcode(orgId,dicttypeId,"");
 	}
-	
+
 	/* (non-Javadoc)gao.tang--0
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictdatasByOrgIdAndTypeId()
 	 * 根据机构ID和字典类型ID,获取该机构在该字典类型下绑定的字典数据列表.常用设置字典 usual
@@ -3641,10 +3641,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 * 从TD_SM_TAXCODE_ORGANIZATION中取
 	 */
 	public List getDictdatasByOrgIdAndTypeId2(String orgId,String dicttypeId) {
-		
+
 		return this.getDictdatasByOrgIdAndTypeIdAndOpcode(orgId,dicttypeId,"usual");
 	}
-	
+
 	/* (non-Javadoc)gao.tang--0
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictdatasByOrgIdAndTypeId()
 	 * 根据机构ID和字典类型ID,获取该机构在该字典类型下绑定的字典数据列表.可见设置字典 read
@@ -3652,10 +3652,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 * 从TD_SM_TAXCODE_ORGANIZATION中取
 	 */
 	public List getReadDictdatasByOrgIdAndTypeId(String orgId,String dicttypeId) {
-		
+
 		return this.getDictdatasByOrgIdAndTypeIdAndOpcode(orgId,dicttypeId,"read");
 	}
-	
+
 //	/* (non-Javadoc)
 //	 * @see com.frameworkset.platform.dictionary.DictManager#getDictdatasByOrgIdAndTypeId()
 //	 * 根据机构ID和字典类型ID,获取该机构在该字典类型下绑定的字典数据列表
@@ -3694,8 +3694,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //		// TODO Auto-generated method stub
 //		return dictdataValues;
 //	}
-	
-	
+
+
 
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getVvalidatorTypeByColumnMetaData(com.frameworkset.common.poolman.sql.ColumnMetaData)
@@ -3713,7 +3713,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		if(obj == null ) return "string";
 		return this.getValidatorTypeByColumnMetaData(obj,obj.getNullable());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getVvalidatorTypeByColumnMetaData(com.frameworkset.common.poolman.sql.ColumnMetaData)
 	 * return 校验类型在"../user/validateForm.js中定义 有:
@@ -3724,7 +3724,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		{
 			nullable = "no";
 		}
-		
+
 //		obj.getDECIMAL_DIGITS() > 0;//判断是否是浮点类型
 		if("date".equalsIgnoreCase(obj.getTypeName())){
 			if("yes".equalsIgnoreCase(nullable)){
@@ -3802,8 +3802,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			StringBuffer orgs_sql = new StringBuffer();
 			orgs_sql.append("select org.org_id from td_sm_organization org start with org.org_id='")
 			.append(orgId).append("' connect by prior org.org_id=org.parent_id ");		
-			
-			
+
+
 			//保存新数据
 			//保存当前机构的
 			String[] dataValues = new String[dictdataValues.length];//保存数据项的值 数组
@@ -3821,7 +3821,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					dataNames[i] = "";
 				}
 			}
-			
+
             //(1) 对照传入的最新的 - 原来老的 数据项 = 冗余的数据项
 			//本身多于的"常用"权限
 			StringBuffer uselessValue_sql = new StringBuffer();
@@ -3835,7 +3835,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				uselessValue_sql.append(",'").append(dataValues[i]).append("'");
 			}
 			uselessValue_sql.append("))");
-			
+
 			//(2)删除
 			//删除本身 多于的"常用"权限
 			StringBuffer delete_subandself_read = new StringBuffer();
@@ -3846,7 +3846,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			//加到批处理
 			db.addBatch(delete_subandself_read.toString());
 			db.executeBatch();
-			
+
 			//(3)保存/更新			
 			//不用 保存到 常用维护 和上级机构无关			
 			for(int i=0;i<dataValues.length;i++){
@@ -3868,13 +3868,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					addDB.executeBatch();
 				}
 			}
-		
+
 			addDB.executeBatch();
 			tm.commit();			
             //发事件
 			Event event = new EventImpl(dicttypeId,DictionaryChangeEvent.DICTIONARY_USERORG_CHANGE_READ);
 			super.change(event,true);
-						
+
 		}catch(Exception e){
 			try {
 				tm.rollback();
@@ -3884,7 +3884,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 判断字典类型的数据,是否有
 	 */
@@ -3953,7 +3953,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				String ownOrg = dicttype.getData_create_orgid_field();
 				if(!this.strIsNull(ownOrg)){
 					DBUtil selfDB = new DBUtil();
-					
+
 					String dbName = dicttype.getDataDBName();
 					String tableName = dicttype.getDataTableName();
 					String valueField = dicttype.getDataValueField();
@@ -3982,7 +3982,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return orgs;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictDataOpcodeOrgs(java.lang.String, java.lang.String, java.lang.String)
 	 * 根据字典类型ID,数据项ID和操作码,获取符合条件的机构列表, 
@@ -4127,7 +4127,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else if(info.length==2){
 					dictdataValue = info[0];
 					dictdataName = info[1];
-				
+
 				}else if(info.length==3){
 					dictdataValue = info[0];
 					dictdataName = info[1];
@@ -4170,7 +4170,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			for(int i= 0;i < dbUtil.size();i++){
 				DictAttachField dictatt = new DictAttachField();
 //				InputType inputType = new InputType();
-				
+
 				String fieldName = dbUtil.getString(i,"FIELD_NAME");
 				dictatt.setDicttypeId(dbUtil.getString(i,"DICTTYPE_ID"));
 				dictatt.setDictFieldName(dbUtil.getString(i,"LABEL"));
@@ -4183,7 +4183,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//如:text								
 				dictatt.setInputTypeName(dbUtil.getString(i,"INPUT_TYPE_NAME"));
 //				dictatt.setInputType(inputType);
-				
+
 				list.add(dictatt);				
 			}
 			listInfo.setDatas(list);
@@ -4194,7 +4194,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;	
 	}
-	
+
 	private String getNullString(int nullable)
 	{
 		if(nullable == DictAttachField.ISNULLABLE)
@@ -4204,7 +4204,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			return "no";
 		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictdataAttachFieldList(java.lang.String, int, long)
 	 * 获取字典类型的附加(高级)字段列表 不翻页
@@ -4228,7 +4228,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			Data dicttype = this.getDicttypeById(dicttypeId);
 			String dbName = dicttype.getDataDBName();
 			String tableName = dicttype.getDataTableName();
-			
+
 			dbUtil.executeSelect(sql.toString());
 			for(int i= 0;i < dbUtil.size();i++){
 				DictAttachField dictatt = new DictAttachField();
@@ -4240,7 +4240,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				String typeName = columnObj.getTypeName();
 				//字段在数据库中定义的长度
 				int columnObjLength = columnObj.getColunmSize();
-				
+
 				String fieldName = dbUtil.getString(i,"FIELD_NAME");
 				dictatt.setDicttypeId(dbUtil.getString(i,"DICTTYPE_ID"));
 				dictatt.setDictFieldName(dbUtil.getString(i,"LABEL"));
@@ -4254,10 +4254,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dictatt.setFieldValue("");
 				dictatt.setDateFormat(dbUtil.getString(i,"DATEFORMAT"));
 				dictatt.setMaxLength(columnObjLength);
-				
+
 				//数据库字段在页面的校验类型
 				String fieldValidType = getValidatorTypeByColumnMetaData(columnObj,getNullString(dictatt.getIsnullable()));
-				
+
 				//如果是日期类型，则需要指定日期格式---设置验证类型dictatt.setFieldValidType(fieldValidType);
 //				System.out.println("dateformat = " + dbUtil.getString(i,"DATEFORMAT"));
 				if(InputTypeManager.BASE_INPUTTYPE_CURRENT_DATE.equalsIgnoreCase(dictatt.getInputTypeName()) ||
@@ -4275,7 +4275,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else{
 					dictatt.setFieldValidType(fieldValidType);
 				}
-				
+
 				//几种普通的输入类型,不需要写script,直接生成
 				//如:text
 				if("text".equalsIgnoreCase(dictatt.getInputTypeName()) 
@@ -4324,14 +4324,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dictatt.setInputTypeScript(typeScript);
 				list.add(dictatt);				
 			}
-			
+
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
 		}
 		return list;	
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getAllDictdataAttachFieldList(java.lang.String)
 	 * 获取字典类型的所有附加(高级)字段列表,生成更新页面的时候
@@ -4347,26 +4347,26 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		   .append("t.ISNULLABLE,t.ISUNIQUE ,b.SCRIPT ,b.INPUT_TYPE_NAME,t.dateformat ")
 		   .append("from TD_SM_DICATTACHFIELD t,TB_SM_INPUTTYPE b where t.INPUT_TYPE_ID=b.INPUT_TYPE_ID ")
 		   .append("and t.DICTTYPE_ID='").append(dicttypeId).append("'");
-		
+
 		try {	
 			Data dicttype = this.getDicttypeById(dicttypeId);
 			String dbName = dicttype.getDataDBName();
 			String tableName = dicttype.getDataTableName();
-			
+
 			dbUtil.executeSelect(sql.toString());
 			BaseInputTypeScript typeScript = null;
 			for(int i= 0;i < dbUtil.size();i++){
 				StringBuffer fileValueSql = new StringBuffer();
 				DictAttachField dictatt = new DictAttachField();
 				//InputType inputType = new InputType();
-				
+
 				dictatt.setTable_column(dbUtil.getString(i,"TABLE_COLUMN"));
 				ColumnMetaData columnObj = DBUtil.getColumnMetaData(dbName,tableName,dictatt.getTable_column());
 				//数据库字段的类型
 				String typeName = columnObj.getTypeName();
 				//字段在数据库中定义的长度
 				int columnObjLength = columnObj.getColunmSize();
-				
+
 				String fieldName = dbUtil.getString(i,"FIELD_NAME");
 				dictatt.setDicttypeId(dbUtil.getString(i,"DICTTYPE_ID"));
 				dictatt.setDictFieldName(dbUtil.getString(i,"LABEL"));
@@ -4378,10 +4378,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dictatt.setMaxLength(columnObjLength);
 				dictatt.setInputTypeName(dbUtil.getString(i,"INPUT_TYPE_NAME"));
 				dictatt.setDateFormat(dbUtil.getString(i,"dateformat"));
-				
+
 				//数据库字段在页面的校验类型
 				String fieldValidType = getValidatorTypeByColumnMetaData(columnObj,getNullString(dictatt.getIsnullable()));
-				
+
 				//如果是日期类型，则需要指定日期格式---dictatt.setFieldValidType(fieldValidType)设置验证类型
 				if(InputTypeManager.BASE_INPUTTYPE_CURRENT_DATE.equalsIgnoreCase(dictatt.getInputTypeName()) ||
 						InputTypeManager.BASE_INPUTTYPE_DATE.equalsIgnoreCase(dictatt.getInputTypeName())){
@@ -4395,17 +4395,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}else{
 						dictatt.setFieldValidType(fieldValidType);
 					}
-					
+
 				}else{
 					dictatt.setFieldValidType(fieldValidType);
 				}
 //				String[] filedNames = fieldName.split(":");
-				
+
 				//获取域的值 开始---------------------------------------------------
 				String filedValue = "";
 				//域对应值的类型 varchar date number typeName
 //				String filedType = typeName;
-						
+
 				if("date".equalsIgnoreCase(typeName)){
 					if(dbUtil.getString(i,"DATEFORMAT").equals("yyyy-MM-dd")){
 						fileValueSql.append("select to_char(").append(dictatt.getTable_column()).append(",'yyyy-mm-dd') ")
@@ -4418,23 +4418,23 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					fileValueSql.append("select to_char(").append(dictatt.getTable_column()).append(") ")
 					.append(" as ").append(dictatt.getTable_column());
 				}
-				
+
 				fileValueSql.append(" from ").append(tableName)
 				    .append(" a where to_char(").append(dicttype.getDataNameField()).append(")='")
 				    .append(nameKey).append("' and to_char(").append(dicttype.getDataValueField())
 				    .append(")='").append(valueKey).append("' ");
-				
+
 				DBUtil tmpDB = new DBUtil();
-				
+
 				tmpDB.executeSelect(fileValueSql.toString());
-				
+
 				if(tmpDB.size()>0){					
 					filedValue = tmpDB.getString(0,dictatt.getTable_column());					
 				}
 				//System.out.println("field_value--------------------------"+filedValue);
 				dictatt.setFieldValue(filedValue);
 				//处理域的值结束--------------------------------------------------
-				
+
 				//几种普通的输入类型,不需要写script,直接生成
 				//如:text
 				if("text".equalsIgnoreCase(dictatt.getInputTypeName()) 
@@ -4450,7 +4450,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else if(InputTypeManager.BASE_INPUTTYPE_DATE.equalsIgnoreCase(dictatt.getInputTypeName())){
 					//选择日期 
 					typeScript = new DateTypeScript(dictatt);
-					
+
 //					inputType.setInputScript(typeScript.getExtendHtmlContent(dictatt));
 				}else if(InputTypeManager.BASE_INPUTTYPE_PK.equalsIgnoreCase(dictatt.getInputTypeName())){
 					//选择主键 
@@ -4485,14 +4485,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				list.add(dictatt);		
 				fileValueSql.setLength(0);
 			}
-			
+
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
 		}
 		return list;	
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getAllDictdataAttachFieldList(java.lang.String)
 	 * 获取字典类型的所有附加(高级)字段列表,生成更新页面的时候
@@ -4508,26 +4508,26 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		   .append("t.ISNULLABLE,t.ISUNIQUE ,b.SCRIPT ,b.INPUT_TYPE_NAME,t.dateformat ")
 		   .append("from TD_SM_DICATTACHFIELD t,TB_SM_INPUTTYPE b where t.INPUT_TYPE_ID=b.INPUT_TYPE_ID ")
 		   .append("and t.DICTTYPE_ID='").append(dicttypeId).append("' order by t.SN ");
-		
+
 		try {	
 			Data dicttype = this.getDicttypeById(dicttypeId);
 			String dbName = dicttype.getDataDBName();
 			String tableName = dicttype.getDataTableName();
-			
+
 			dbUtil.executeSelect(sql.toString());
 			BaseInputTypeScript typeScript = null;
 			for(int i= 0;i < dbUtil.size();i++){
 				StringBuffer fileValueSql = new StringBuffer();
 				DictAttachField dictatt = new DictAttachField();
 				//InputType inputType = new InputType();
-				
+
 				dictatt.setTable_column(dbUtil.getString(i,"TABLE_COLUMN"));
 				ColumnMetaData columnObj = DBUtil.getColumnMetaData(dbName,tableName,dictatt.getTable_column());
 				//数据库字段的类型
 				String typeName = columnObj.getTypeName();
 				//字段在数据库中定义的长度
 				int columnObjLength = columnObj.getColunmSize();
-		
+
 				String fieldName = dbUtil.getString(i,"FIELD_NAME");
 				dictatt.setDicttypeId(dbUtil.getString(i,"DICTTYPE_ID"));
 				dictatt.setDictFieldName(dbUtil.getString(i,"LABEL"));
@@ -4539,9 +4539,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dictatt.setMaxLength(columnObjLength);
 				dictatt.setInputTypeName(dbUtil.getString(i,"INPUT_TYPE_NAME"));
 				dictatt.setDateFormat(dbUtil.getString(i,"dateformat"));
-				
+
 				String fieldValidType = getValidatorTypeByColumnMetaData(columnObj,getNullString(dictatt.getIsnullable()));
-				
+
 				//如果是日期类型，则需要指定日期格式---dictatt.setFieldValidType(fieldValidType)设置验证类型
 				if(InputTypeManager.BASE_INPUTTYPE_CURRENT_DATE.equalsIgnoreCase(dictatt.getInputTypeName()) ||
 						InputTypeManager.BASE_INPUTTYPE_DATE.equalsIgnoreCase(dictatt.getInputTypeName())){
@@ -4555,17 +4555,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}else{
 						dictatt.setFieldValidType(fieldValidType);
 					}
-					
+
 				}else{
 					dictatt.setFieldValidType(fieldValidType);
 				}
 //				String[] filedNames = fieldName.split(":");
-				
+
 				//获取域的值 开始---------------------------------------------------
 				String filedValue = "";
 				//域对应值的类型 varchar date number typeName
 //				String filedType = typeName;
-						
+
 				if("date".equalsIgnoreCase(typeName)){
 					if(dbUtil.getString(i,"DATEFORMAT").equals("yyyy-MM-dd")){
 						fileValueSql.append("select to_char(").append(dictatt.getTable_column()).append(",'yyyy-mm-dd') ")
@@ -4578,7 +4578,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					fileValueSql.append("select ").append(dictatt.getTable_column()).append("||'' ")
 					.append(" as ").append(dictatt.getTable_column());
 				}
-				
+
 				fileValueSql.append(" from ").append(tableName)
 				    .append(" a where ");
 				if(nameKey==null || "".equals(nameKey)){
@@ -4603,16 +4603,16 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				//主键信息
 				fileValueSql.append(primaryCondition);
 				DBUtil tmpDB = new DBUtil();
-				
+
 				tmpDB.executeSelect(dbName,fileValueSql.toString());
-				
+
 				if(tmpDB.size()>0){					
 					filedValue = tmpDB.getString(0,dictatt.getTable_column());					
 				}
 				//System.out.println("field_value--------------------------"+filedValue);
 				dictatt.setFieldValue(filedValue);
 				//处理域的值结束--------------------------------------------------
-				
+
 				//几种普通的输入类型,不需要写script,直接生成
 				//如:text
 				if("text".equalsIgnoreCase(dictatt.getInputTypeName()) 
@@ -4628,7 +4628,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else if(InputTypeManager.BASE_INPUTTYPE_DATE.equalsIgnoreCase(dictatt.getInputTypeName())){
 					//选择日期 
 					typeScript = new DateTypeScript(dictatt);
-					
+
 //					inputType.setInputScript(typeScript.getExtendHtmlContent(dictatt));
 				}else if(InputTypeManager.BASE_INPUTTYPE_PK.equalsIgnoreCase(dictatt.getInputTypeName())){
 					//选择主键 
@@ -4663,7 +4663,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				list.add(dictatt);		
 				fileValueSql.setLength(0);
 			}
-			
+
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
@@ -4676,7 +4676,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public boolean storeDictdataAttachField(DictAttachField dictatt) {
 		if(dictatt == null) return false;
-		
+
 		StringBuffer judge = new StringBuffer();
 		DBUtil db = new DBUtil();		
 		judge.append("select count(*) as num from TD_SM_DICATTACHFIELD where TABLE_COLUMN='")
@@ -4686,7 +4686,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(db.size()>0 && db.getInt(0,"num")>1){//字段已经被使用了
 				return false;
 			}
-			
+
 			StringBuffer sql = new StringBuffer();
 			sql.append("insert into TD_SM_DICATTACHFIELD(DICTTYPE_ID,FIELD_NAME,LABEL,")
 				.append("INPUT_TYPE_ID,TABLE_COLUMN,ISNULLABLE,ISUNIQUE,dateformat)values(?,?,?,?,?,?,?,?)");
@@ -4709,10 +4709,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
-	
+
 
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#deleteDictdataAttachField(List<com.frameworkset.platform.dictionary.DictAttachField>)
@@ -4754,14 +4754,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				return PART_DELETE_SUCCESS;
 			}
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}finally{
 			db.resetBatch();
 		}
 		return ALL_DELETE_FAILD;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#updateDictdataAttachField(com.frameworkset.platform.dictionary.DictAttachField)
 	 * 修改扩展字段
@@ -4770,12 +4770,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		if(dictatt == null) return false;
 		PreparedDBUtil pd = new PreparedDBUtil();
 		try {			
-			
+
 			StringBuffer sql = new StringBuffer();
 			sql.append("update TD_SM_DICATTACHFIELD set FIELD_NAME=?,LABEL=?,")
 				.append("INPUT_TYPE_ID=?,ISNULLABLE=?,ISUNIQUE=?,dateformat=? where TABLE_COLUMN=? and DICTTYPE_ID=? ");
 			pd.preparedUpdate(sql.toString());
-			
+
 			pd.setString(1,dictatt.getDictField());
 			pd.setString(2,dictatt.getDictFieldName());
 			int inputTypeid = 0;
@@ -4791,7 +4791,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			pd.setString(6,dictatt.getDateFormat());
 			pd.setString(7,dictatt.getTable_column());
 			pd.setString(8,dictatt.getDicttypeId());
-			
+
 			pd.executePrepared();
 			return true;
 		} catch (Exception e) {
@@ -4826,9 +4826,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}else{//可供选择的
 			return COLUMN_AVIALABLE;
 		}
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#columnUseStatue(com.frameworkset.dictionary.Data, java.lang.String, java.lang.String)
 	 * 当前数据库字段的被字典类型的高级字段使用情况
@@ -4931,7 +4931,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_org_field = dicttype.getData_create_orgid_field();
 		int KEY_GENERAL_TYPE = dicttype.getKey_general_type();
 		int is_tree = dicttype.getIsTree();
-		
+
 		//判断数据是否有重复
 		StringBuffer isRepeat_sql = new StringBuffer();
 		isRepeat_sql.append("select count(1) as num from ").append(data_table_name).append(" where (")
@@ -4953,7 +4953,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //					return false;
 //				}
 //			}			
-						
+
 			//处理基础字段			
 			StringBuffer insert_sqlstr = new StringBuffer();			
 			insert_sqlstr.append("insert into ").append(data_table_name).append("(");
@@ -5004,7 +5004,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			    }
 			}
 			//--结束基础字段处理
-			
+
 			//处理附加字段
 			//得到这个类型的附加字段列表
 			List dictatts = this.getDictdataAttachFieldList(dicttypeId,-1);
@@ -5017,7 +5017,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				String requestValue = request.getParameter(dictatt.getTable_column().toLowerCase())==null?"":request.getParameter(dictatt.getTable_column().toLowerCase());
 //				
 //				System.out.println("值 ： " + request.getParameter(test));
-				
+
 				//对应的数据库字段
 				String tableColumn = dictatt.getTable_column();
 				//保存的值是  value:type
@@ -5029,7 +5029,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			    }
 			}
 			//--结束附加字段处理
-			
+
 			String itemid = "";
 			//设置主键
 			if(KEY_GENERAL_TYPE == 1) // 主键自动生成
@@ -5043,7 +5043,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				{
 					itemid = dictdata.getValue();
 				}
-				
+
 			}
 			else //手动生成主键
 			{
@@ -5066,13 +5066,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				{
 					itemid = dictdata.getValue();
 				}
-				
+
 			}
 			insert_sqlstr.append(")values(");			
-			
+
 			if(!this.strIsNull(data_name_filed)){//插入名称字段**值				
 				insert_sqlstr.append(" '").append(dictdata.getName()).append("' ");
-				
+
 			}
 			if(!this.strIsNull(data_value_field)){//插入值字段**值
 				if(insert_sqlstr.toString().endsWith("(")){
@@ -5127,10 +5127,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 			//处理字段的值(考虑三种类型 varchar,date number)
 			for(int i=0;values!=null && i<values.size();i++){
-				
+
 //				String[] infos = tmp.split("\\^");
 				String value = String.valueOf(values.get(i));
-				
+
 //				String columnName = "";
 				DictAttachField dictatt = (DictAttachField)dictatts.get(i);	
 				String type = dictatt.getColumnTypeName();
@@ -5175,7 +5175,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					    }
 					}
 				}
-				
+
 			if(KEY_GENERAL_TYPE == 1) // 主键自动生成
 			{
 				if(data_table_name.trim().equalsIgnoreCase("TD_SM_DICTDATA") )
@@ -5187,7 +5187,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				{
 //					itemid = dictdata.getValue();
 				}
-				
+
 			}
 			else //手动生成主键
 			{
@@ -5207,11 +5207,11 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 						insert_sqlstr.append(",'").append(itemid).append("'");
 					}
 				}
-				
+
 			}
 			insert_sqlstr.append(")");
 			//返回主键
-			
+
 //			Object ob = pd.executeInsert(data_dbName,insert_sqlstr.toString());
 			pd.executeInsert(data_dbName,insert_sqlstr.toString());
 			insert_sqlstr.setLength(0);
@@ -5254,12 +5254,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String DATA_NAME_FILED = data.getDataNameField();
 		String DATA_VALUE_FIELD = data.getDataValueField();
 		String DATA_ORDER_FIELD = data.getDataOrderField();
-		
+
 		String order_sql = toString(docid,DATA_TABLE_NAME,DATA_VALUE_FIELD,DATA_NAME_FILED,DATA_ORDER_FIELD);
-		
+
 		DBUtil db_order = new DBUtil();
 		int[] order_val = new int[docid.length];
-		
+
 		StringBuffer update_dict = new StringBuffer();
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -5289,7 +5289,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else{
 					update_dict.append("='").append(value).append("' ");
 				}
-				
+
 				//如果doc长度为3时，则DATA_NAME_FILED与DATA_VALUE_FIELD不能唯一确定一条记录；doc[2]为主键条件
 				if(doc.length == 3){
 					update_dict.append(doc[2]);
@@ -5327,7 +5327,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return state;
 	}
-	
+
 	/**
 	 * 
 	 * @param checkboxIdVal 页面checkbox传入需要排序的值
@@ -5368,7 +5368,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return s.toString();
 	}
-	
+
 	/**
 	 * 更新树形字典列表排序
 	 * @param dicttypeId
@@ -5389,17 +5389,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String DATA_ORDER_FIELD = data.getDataOrderField();
 		String DATA_PARENTID_FIELD = data.getDataParentIdFild();
 		String DATA_TYPEID_FIELD = data.getDataTypeIdField();
-		
-		
+
+
 		String order_sql = toString(docid,DATA_TABLE_NAME,DATA_VALUE_FIELD,DATA_NAME_FILED,DATA_ORDER_FIELD);
-			
+
 		DBUtil db_order = new DBUtil();
 		int[] order_val = new int[docid.length];
-		
+
 		StringBuffer update_tree_dict = new StringBuffer();
-		
+
 		TransactionManager tm = new TransactionManager();
-		
+
 		try{
 			tm.begin();
 			db_order.executeSelect(order_sql);
@@ -5494,7 +5494,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return state;
 	}
-	
+
 	/**
 	 * 树形启用，停用字典项
 	 * @param dicttypeId
@@ -5569,7 +5569,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				update_change_dict.setLength(0);				
 			}
 			dbUtil.executeBatch();
-			
+
 			//构造Item, 刷新内存
 			Item item = new Item();
 			item.setDataId(dicttypeId);
@@ -5590,7 +5590,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				Event event = new EventImpl(item, DictionaryChangeEvent.DICTIONARY_DATA_VALIDATE_UPDATE);
 				super.change(event,true);
 			}
-			
+
 			state = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -5601,7 +5601,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return state;
 	}
-	
+
 	/**
 	 * 列表启用，停用字典项
 	 * @param dicttypeId
@@ -5630,17 +5630,17 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				itemForRefresh.setItemId(value);
 				itemForRefresh.setValue(value);
 				mutiItems.add(itemForRefresh);
-				
+
 				update_dict.append("update ").append(DATA_TABLE_NAME).append(" set ")
 					.append(DATA_VALIDATE_FIELD).append("=").append(flag).append(" where ")
 					.append(DATA_NAME_FILED).append("='").append(name)
 					.append("' and ").append(DATA_VALUE_FIELD).append("='").append(value).append("'");
-				
+
 				dbUtil.addBatch(update_dict.toString());
 				update_dict.setLength(0);
 			}
 			dbUtil.executeBatch();
-			
+
 			//构造Item, 刷新内存
 			Item item = new Item();
 			item.setDataId(dicttypeId);
@@ -5653,12 +5653,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 			item.setDataValidate(flag_);
 			item.setFlag(false);
-			
+
 			if(isCachable(dicttypeId)){
 				Event event = new EventImpl(item, DictionaryChangeEvent.DICTIONARY_DATA_VALIDATE_UPDATE);
 				super.change(event,true);
 			}
-			
+
 			state = true;
 		}catch (SQLException e) {
 			e.printStackTrace();
@@ -5669,7 +5669,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return state;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getDictTypeUseTableStates(java.lang.String, java.lang.String)
 	 * 根据数据源名称和数据库表名称,判断数据库表被字典类型的使用情况
@@ -5698,7 +5698,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return 0;
 	}
-		
+
 	/* (non-Javadoc)
 	 * @see com.frameworkset.platform.dictionary.DictManager#getUnableNullColumns(java.lang.String, java.lang.String)
 	 * @return List<ColumnMetaData>
@@ -5727,7 +5727,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 根据数据源和数据库表名,获取数据库表不能为空的字段列的串 col1,col2...
 	 */
@@ -5746,7 +5746,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}		
 		return unableNullColumnNames;
 	}
-	
+
 	/**
 	 * 得到高级字段配置对应的数据库字段
 	 * @param dicttypeId
@@ -5772,7 +5772,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return columnName;
 	}
-	
+
 	/**
 	 * 得附字段值
 	 * @param dicttypeId
@@ -5846,7 +5846,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return attachFieldValue;
 	}
-	
+
 	public String getPrimarykeysCondition(Map primarykeys){
 		if(primarykeys != null && primarykeys.size() > 0){
 			Iterator iterator = primarykeys.keySet().iterator();
@@ -5859,7 +5859,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * 得附字段值
 	 * @param dicttypeId
@@ -5939,9 +5939,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			//dbUtil.executeSelect(sql.toString());
 			}else if(dbUtil_attachTypeName.getString(0,"input_type_name").equals("选择时间") ||
 					dbUtil_attachTypeName.getString(0,"input_type_name").equals("当前时间")){
-				sql.append("select to_char(")
-					.append(tableColumn).append(",'yyyy-mm-dd hh24:mi:ss') as ").append(tableColumn).append(" from ").append(data_table_name)
-					.append(" a where ");
+//				sql.append("select to_char(")
+//					.append(tableColumn).append(",'yyyy-mm-dd hh24:mi:ss') as ").append(tableColumn).append(" from ").append(data_table_name)
+//					.append(" a where ");
+				sql.append("select ")
+				.append(tableColumn).append(" from ").append(data_table_name)
+				.append(" a where ");
 				if(name == null || name.equals("")){
 					sql.append("(a.").append(data_name_filed).append(" ='").append(name).append("'")
 					.append(" or a.").append(data_name_filed).append(" is null) ");
@@ -5991,12 +5994,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 * 根据字典类型ID,获得所有需要维护 常用编码关系的字典类型
 	 */
 	public List getUsualRelationDicttypeList(String dicttypeId) throws ManagerException {
-		
+
 		return this.getPartChildDicttypeList(dicttypeId,BUSINESS_DICTTYPE_USUALONLY);
 	}
-	
+
 	public String getPrimaryColumnNames(String tableName,Map filterkeys){
-		
+
 		Set set = DBUtil.getPrimaryKeyMetaDatas(tableName);
 		if(set != null && set.size() > 0)
 		{
@@ -6005,7 +6008,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			while(it.hasNext())
 			{
 				PrimaryKeyMetaData key = (PrimaryKeyMetaData)it.next();
-				
+
 				String keyname = key.getColumnName();
 				if(filterkeys.containsKey(keyname.toLowerCase())){
 					continue;
@@ -6025,7 +6028,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String getUpdatePrimaryCondition(String tableName,HttpServletRequest request,Map filterkeys)
 	{
-	
+
 		Set set = DBUtil.getPrimaryKeyMetaDatas(tableName);
 		if(set != null && set.size() > 0)
 		{
@@ -6034,7 +6037,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			while(it.hasNext())
 			{
 				PrimaryKeyMetaData key = (PrimaryKeyMetaData)it.next();
-				
+
 				String keyname = key.getColumnName();
 				if(filterkeys.containsKey(keyname.toLowerCase())){
 					continue;
@@ -6067,7 +6070,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		DBUtil update_db = new DBUtil();
 		//字典类型ID
 		String dicttypeId = dictdata.getDataId();
-				
+
 		if(this.strIsNull(dicttypeId)) return false;
 		//根据字典类型ID,获取字典类型对象
 		Data dicttype = new Data();
@@ -6081,10 +6084,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_parentid_field = dicttype.getDataParentIdFild();
 		String data_org_field = dicttype.getData_create_orgid_field();
-		
-		
-		
-		
+
+
+
+
 		StringBuffer judge_sql = new StringBuffer()
 			.append("select * from ").append(data_table_name)
 			.append(" a where a.").append(data_name_filed).append("='").append(dictdata.getName())
@@ -6093,7 +6096,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		if(!strIsNull(data_typeid_field) ){
 			judge_sql.append(" and a.").append(data_typeid_field).append("='").append(dicttypeId).append("'");
 		}
-		
+
 		try {
 			if(!keyName.equals(dictdata.getName()) && !keyValue.equals(dictdata.getValue())){
 				judge_db.executeSelect(judge_sql.toString());
@@ -6101,7 +6104,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					return false;
 				}
 			}
-			
+
 			//基础字典修改
 			StringBuffer update_sql = new StringBuffer()
 				.append("update ").append(data_table_name).append(" a set ")
@@ -6115,8 +6118,8 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			    update_sql.append(", ").append(data_org_field)
 			    	.append("='").append(dictdata.getDataOrg()).append("'");
 			}
-			
-			
+
+
 			//处理附加字段
 			//得到这个类型的附加字段列表
 			List dictatts = this.getDictdataAttachFieldList(dicttypeId,-1);
@@ -6125,15 +6128,15 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				String requestValue = request.getParameter(dictatt.getTable_column().toLowerCase())==null?"":request.getParameter(dictatt.getTable_column().toLowerCase());
 				String tableColumn = dictatt.getTable_column();
 				ColumnMetaData colum = DBUtil.getColumnMetaData(data_table_name, tableColumn);
-				
-				
+
+
 				String type = dictatt.getColumnTypeName();
 				if("date".equalsIgnoreCase(type)){
 					update_sql.append(", ").append(tableColumn)
 			    		.append("=TO_DATE('").append(requestValue).append("', 'YYYY-MM-DD HH24:MI:SS') ");
 				}else if("number".equalsIgnoreCase(type) || "long".equalsIgnoreCase(type)){
-					
-				
+
+
 					try {
 						if(colum.getDECIMAL_DIGITS() > 0){
 							double v = Double.parseDouble(requestValue);
@@ -6155,9 +6158,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}
 			}
 			//--结束附加字段处理
-			
+
 			//修改条件
-			
+
 			update_sql.append(" where ");
 			if(keyName==null || keyName.equals("")){
 				update_sql.append("(").append(data_name_filed).append(" is null or ").append(data_name_filed)
@@ -6190,7 +6193,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			String primaryKey = request.getParameter("primaryCondition")==null?"":request.getParameter("primaryCondition");
 			update_sql.append(primaryKey);
 			update_db.executeUpdate(dicttype.getDataDBName(),update_sql.toString());
-			
+
 			StringBuffer update_orgTax = new StringBuffer();
 			update_orgTax.append("update TD_SM_TAXCODE_ORGANIZATION set DATA_NAME='")
 			.append(dictdata.getName()).append("' where DATA_VALUE='")
@@ -6216,7 +6219,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		if(this.strIsNull(orgId) || this.strIsNull(dicttypeId) ||  this.strIsNull(dictdataValue)){
 			return false;
 		}	
-		
+
 		DBUtil db = new DBUtil();
 		StringBuffer isChecked = new StringBuffer().append("select count(*) as num from ")
 			.append("TD_SM_TAXCODE_ORGANIZATION where OPCODE='read' and ORG_ID='" )
@@ -6231,7 +6234,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//自己建的
 		//前提是 指定了所属机构.
 		Data dicttype = null;
@@ -6245,7 +6248,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					String dbName = dicttype.getDataDBName();
 					String tableName = dicttype.getDataTableName();
 					String valueField = dicttype.getDataValueField();
-					
+
 					self_create.append("select count(*) as num from ").append(tableName).append(" where ").append(valueField)
 					.append("='").append(dictdataValue).append("' and ").append(ownOrg).append("='").append(orgId).append("' ");
 					try {
@@ -6263,7 +6266,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		return false;
 	}
 
@@ -6328,7 +6331,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 根据机构ID与字典ID得到该字典数据项是否已经授权给该机构
 	 * @param orgId
@@ -6350,7 +6353,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return map;
 	}
-	
+
 	/**
 	 * 树形字典--根据值字段得到下级所有数据
 	 * @param dicttypeId
@@ -6405,7 +6408,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return sunValues;
 	}
-	
+
 	private String[] getSunUsualValue(String selectOrg, String dicttypeId, String value) throws ManagerException{
 		String[] sunUsualValues = null;
 		Data dicttype = new Data();
@@ -6463,12 +6466,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			StringBuffer orgs_sql = new StringBuffer()
 				.append("select org.org_id from td_sm_organization org start with org.org_id='")
 				.append(orgId).append("' connect by prior org.org_id=org.parent_id ");	
-			
+
 			//上级机构sql
 			StringBuffer orgs_parent_sql = new StringBuffer()
 				.append("select org.org_id from td_sm_organization org start with org.org_id='")
 				.append(orgId).append("' connect by prior org.parent_id=org.org_id ");	
-			
+
 			//保存新数据 被选中的
 			//保存当前机构的
 			int dictdataValuesLength = 0;
@@ -6493,7 +6496,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					isDeploys[i] = "";
 				}
 			}
-			
+
 			//未被 被选中的
 			//串的格式: '','',''....
 //			String un_dataValues = "";//保存数据项的值 数组	
@@ -6560,7 +6563,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //				db.addBatch(delete_subandself_read_usual.toString());
 //				db.executeBatch();
 //			}
-			
+
 			//(3)保存/更新			
 			//本机构 上级机构
 			DBUtil parentDB = new DBUtil();
@@ -6631,7 +6634,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			throw new ManagerException(e);
 		}
             
-		
+
 	}
 
 	/* 
@@ -6668,13 +6671,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					isDeploys[i] = "";
 				}
 			}
-			
+
 			//保存新数据 未被 被选中的
 			//保存当前机构的 '','',''....
 //			(1)删除
 //			删除本身 多于的"常用"权限
 //			String un_dataValues = "";//保存数据项的值 数组		
-			
+
 			int count = 0;
 			tm.begin();
 			for(int i=0;i<unselected_dictdataValue.length ;i++){
@@ -6713,13 +6716,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					db.addBatch(delete_subandself_read.toString());
 					count ++;
 				}
-				
+
 				delete_subandself_read.setLength(0);
 				if(count > 900){
 					db.executeBatch();
 					count = 0;
 				}
-			
+
 			}
 			db.executeBatch();			
 			//(1)删除
@@ -6734,9 +6737,9 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //				db.addBatch(delete_subandself_read.toString());
 //				db.executeBatch();
 //			}
-			
-			
-			
+
+
+
 			//(2)保存/更新			
 			//不用 保存到 常用维护 和上级机构无关
 			int uncount = 0;
@@ -6748,7 +6751,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					StringBuffer addNewData = new StringBuffer();
 					if(values != null){
 						for(int v = 0; v < values.length; v++){
-							
+
 							addNewData.append("insert into TD_SM_TAXCODE_ORGANIZATION(ORG_ID,DICTTYPE_ID,DATA_VALUE,OPCODE,DATA_NAME) ")
 							   .append("(select '").append(orgId).append("' as ORG_ID, '").append(dicttypeId)
 							   .append("' as DICTTYPE_ID, '").append(values[v]).append("' as DATA_VALUE, 'usual' as OPCODE, '")
@@ -6763,7 +6766,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 							uncount ++;
 						}
 					}
-					
+
 				}
 				else
 				{
@@ -6781,19 +6784,19 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					addNewData.setLength(0);
 					uncount ++;
 				}
-				
+
 				if(uncount > 900){
 					addDB.executeBatch();
 					uncount = 0;
 				}
 			}
-		
+
 			addDB.executeBatch();
 			tm.commit();			
             //发事件
 			Event event = new EventImpl(dicttypeId,DictionaryChangeEvent.DICTIONARY_USERORG_CHANGE_READ);
 			super.change(event,true);
-						
+
 		}catch(Exception e){
 			try {
 				tm.rollback();
@@ -6803,7 +6806,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 			throw new ManagerException(e);
 		}
-		
+
 	}
 
 	/* (non-Javadoc)
@@ -6813,7 +6816,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public String getDictDataPropertyValue(String dicttypeId, String dictdataValue, String dictdataName, String property) {
 		if(strIsNull(dicttypeId) || strIsNull(dictdataValue) || strIsNull(property) ) return "";
 		DBUtil db = new DBUtil();
-		
+
 		//根据字典类型ID,获取字典类型对象
 		Data dicttype = null;
 		try {
@@ -6848,10 +6851,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 		}	
 		//数据保存字段:
-		
+
 		return "";
 	}
-	
+
 	/* (non-Javadoc)
 	 * public String getDictDataPropertyValue(String dicttypeId, String dictdataValue, String dictdataName, String property)
 	 * 重载上面方法，当name与value为空时以上方法存在问题
@@ -6860,7 +6863,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String getDictDataPropertyValue(String dicttypeId, String dictdataValue, String dictdataName, String property,String primaryCondition) {
 		DBUtil db = new DBUtil();
-		
+
 		//根据字典类型ID,获取字典类型对象
 		Data dicttype = null;
 		try {
@@ -6909,7 +6912,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 		}	
 		//数据保存字段:
-		
+
 		return "";
 	}
 
@@ -6920,7 +6923,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public String checkDictDataPropertyValueUnique(String dicttypeId,  String property, String value) {
 		if(strIsNull(dicttypeId) || strIsNull(property) || strIsNull(value) ) return "";
 		DBUtil db = new DBUtil();
-		
+
 		//根据字典类型ID,获取字典类型对象
 		Data dicttype = null;
 		try {
@@ -6952,7 +6955,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 		}	
 		//数据保存字段:
-		
+
 		return "";
 	}
 
@@ -7127,12 +7130,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				.append("=oo.").append(data_name_filed).append(" and o.").append(data_value_field)
 				.append("=oo.").append(data_value_field);
 		}
-		
+
 		if(!"".equals(showdata)){
 			sql.append(" and o.").append(data_name_filed).append(" like ")
 				.append("'%").append(showdata).append("%'");
 		}
-		
+
 		//判断是否有排序字段 没有排序字段 就按值排序
 		if(!this.strIsNull(data_order_field)){
 			if(identifier.equals("sealed")){
@@ -7145,7 +7148,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" order by o.").append(data_value_field);
 			}
 		}
-		
+
 		try {			
 			dbUtil.executeSelect(data_dbName,sql.toString(),offset,size);
 			for(int i= 0;i < dbUtil.size();i++){
@@ -7171,7 +7174,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;		
 	}
-	
+
 	/**
 	 * 授权编码列表未设置项选中保存操作 gao.tang 2008.1.5
 	 * @param orgId 授予机构ID
@@ -7240,7 +7243,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 		}
 	}
-	
+
 	/**
 	 * 授权编码列表得到全部的未设置项和全部的已设置项
 	 * @param id	字典ID
@@ -7253,7 +7256,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String[] getDictdataValues(String id, String orgId, String identifier, boolean isAdmin, String userId) throws ManagerException{
 		String[] dictdataValues = null;
-		
+
 		if(this.strIsNull(id)) return null;
 		DBUtil dbUtil = new DBUtil();
 		Data dicttype = new Data();
@@ -7268,7 +7271,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_typeid_field = dicttype.getDataTypeIdField();
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
-		
+
 		StringBuffer sql = new StringBuffer();
 		if(isAdmin){
 			if(identifier.equals("sealed")){//未设置项的数据
@@ -7510,7 +7513,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return dictdataValues;
 	}
-	
+
 	/**
 	 * 列表已设置项选中删除操作 gao.tang 2008.1.5
 	 * @param orgId 删除机构ID
@@ -7537,7 +7540,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					dataName = name_value[1];
 					dataValue = name_value[0];
 				}
-				
+
 				delete_subandself_read_usual.append("delete td_sm_taxcode_organization where DICTTYPE_ID='")
 					.append(dicttypeId).append("' and  opcode in ('read','usual') ")
 					.append(" and data_value = '").append(dataValue).append("' ")
@@ -7550,7 +7553,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					db.executeBatch();
 				}
 			} 
-			
+
 			db.executeBatch();
 			tm.commit();
 			//发事件
@@ -7574,7 +7577,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 		}
 	}
-	
+
 	/**
 	 * 得到常用编码的全部的未设置项和全部的已设置项
 	 * @param dicttypeId
@@ -7605,7 +7608,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
 		StringBuffer sql = new StringBuffer();
-		
+
 		//平铺,取出所有记录
 		if(identifier.equals("sealed")){//未设置项的数据
 			sql.append("select * from (select 1 ");			
@@ -7675,12 +7678,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				.append(" and tax.dicttype_id = '").append(dicttypeid).append("' ")
 				.append("and tax.org_id = '").append(orgId).append("' ");
 		}
-		
+
 		if(!"".equals(showdata)){
 			sql.append(" and o.").append(data_name_filed).append(" like ")
 				.append("'%").append(showdata).append("%'");
 		}
-		
+
 		//判断是否有排序字段 没有排序字段 就按值排序
 		if(!this.strIsNull(data_order_field)){
 			sql.append(" order by orby");
@@ -7715,7 +7718,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;
 	}
-	
+
 	/**
 	 * 常用编码列表未设置项选中保存操作 gao.tang 2008.1.5
 	 * @param orgId 授予机构ID
@@ -7724,7 +7727,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public void store_UsualOrgTaxcode(String orgId, String dicttypeId, String[] dictdataValues ){
 		if(strIsNull(orgId) || strIsNull(dicttypeId) || dictdataValues[0].equals("") ) return ;
-		
+
 		DBUtil db = new DBUtil();
 		try {
 			StringBuffer insertUsual_sql = new StringBuffer();
@@ -7753,15 +7756,15 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			super.change(event,true);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 		}finally{
 			db.resetBatch();
 		}
 	}
-	
+
 	/**
 	 * 常用编码列表已设置项选中删除操作 gao.tang 2008.1.5
 	 * @param orgId 删除机构ID
@@ -7800,15 +7803,15 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			super.change(event,true);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 		}finally{
 			db.resetBatch();
 		}
 	}
-	
+
 	/**
 	 * 得到常用编码的全部的未设置项和全部的已设置项
 	 * @param dicttypeId
@@ -7823,7 +7826,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public String[] getUsualDictdata(String dicttypeId, 
 			String orgId, String identifier) throws ManagerException{
 		String[] dictdataValues = null;
-		
+
 		if(this.strIsNull(dicttypeId)) return null;
 		DBUtil dbUtil = new DBUtil();
 		Data dicttype = new Data();
@@ -7839,7 +7842,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
 		StringBuffer sql = new StringBuffer();
-		
+
 		//平铺,取出所有记录
 		if(identifier.equals("sealed")){//未设置项的数据
 			sql.append("select * from (select 1 ");			
@@ -7930,7 +7933,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return dictdataValues;
 	}
-	
+
 	/**
 	 * 在常用编码中过滤未设置的read数据项
 	 * @param dicttypeId
@@ -7961,7 +7964,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
 		StringBuffer sql = new StringBuffer();
-		
+
 		if(identifier.equals("sealed")){//未设置项的数据
 			sql.append("select * from (select 1");
 			if(!this.strIsNull(data_name_filed)){
@@ -8044,7 +8047,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				sql.append(" and o.").append(data_typeid_field).append("='").append(dicttype.getDataId()).append("' ");
 			}
 		}
-		
+
 		if(!"".equals(showdata)){
 			sql.append(" and o.").append(data_name_filed).append(" like ")
 				.append("'%").append(showdata).append("%'");
@@ -8064,7 +8067,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				dictdata.setName(dbUtil.getString(i,data_name_filed)==null?"":dbUtil.getString(i,data_name_filed));
 
 				dictdata.setValue(dbUtil.getString(i,data_value_field)==null?"":dbUtil.getString(i,data_value_field));
-			
+
 				dictdata.setDataId(dicttypeid);
 				dictdata.setFlag(false);
 				if(!this.strIsNull(data_org)){
@@ -8084,7 +8087,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;
 	}
-	
+
 	/**
 	 * 常用编码中得到已授权read项的未设置usual项
 	 * @param dicttypeId
@@ -8109,7 +8112,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		String data_validate_field = dicttype.getData_validate_field();
 		String data_org = dicttype.getData_create_orgid_field();
 		StringBuffer sql = new StringBuffer();
-		
+
 		//未设置项的数据
 		sql.append("select 1");
 		if(!this.strIsNull(data_name_filed)){
@@ -8400,7 +8403,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return listInfo;
 	}
-	
+
 	/**
 	 * 机构授权编码，当字典设置了机构字段-保存数据项向上保存不超过本级机构
 	 * @param curOrg 用户所在机构
@@ -8475,7 +8478,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			}
 		}
 	}
-	
+
 	/**
 	 * 机构授权编码-选择用户所属机构时得到用户所属机构的所有数据项的已设置项与未设置项 gao.tang 2008.1.16
 	 * @param CurOrg
@@ -8593,7 +8596,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return dictDataValues;
 	}
-	
+
 	/**
 	 * 超级管理员登陆选择了设置字典机构授权编码，当字典设置了机构字段-保存数据项向上保存不超过数据项所属机构
 	 * @param orgId 授权给当前所选机构
@@ -8603,7 +8606,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public void storeReadOrgTaxcodeorAdmin(String orgId, String dicttypeId, String[] dictdataValues){
 		if(strIsNull(orgId) || strIsNull(dicttypeId) || dictdataValues[0].equals("") ) return ;
-		
+
 		String value = "";
 		String name = "";
 		String oid = "";
@@ -8627,7 +8630,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 						.append("join (select org.org_id from td_sm_organization org ")
 						.append("start with org.org_id in (select org_id from td_sm_organization where orgnumber='").append(oid).append("') ")
 						.append("connect by prior org.org_id = org.parent_id) b on a.org_id = b.org_id");
-			
+
 					parentDB.executeSelect(orgs_parent_sql.toString());
 					for(int p = 0; p < parentDB.size(); p++){
 						String parentId = parentDB.getString(p, "org_id");
@@ -8661,7 +8664,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 判断数据项是否被授权
 	 * @param dicttypeId
@@ -8712,7 +8715,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			try {
 				db.executeBatch();
 			} catch (Exception e) {
-				
+
 				e.printStackTrace();
 			}finally{
 				db.resetBatch();
@@ -8721,5 +8724,5 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		}
 		return state;
 	}
-	
+
 }
