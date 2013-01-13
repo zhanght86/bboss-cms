@@ -110,9 +110,9 @@
 	int dicttype_type = dtype.getDicttype_type();
 	
 	//启用停用灰掉开关
-	boolean state = ConfigManager.getInstance().getConfigBooleanValue("enableDictButton", true);
+	boolean state = false;
 	
-	boolean stateDel = ConfigManager.getInstance().getConfigBooleanValue("deleteDictButton", true);
+	boolean stateDel = false;
 	
 	List dictatts = dictManager.getDictdataAttachFieldList(did,-1);
 	
@@ -992,7 +992,7 @@
 				<strong><pg:message code="sany.pdp.dictmanager.data.list"/></strong>
 			</div>
 			
-			<iframe name="dictListIframe" src="dictList_iframe.jsp?did=<%=did%>" style="width:100%" height="100%" scrolling="no" frameborder="0" marginwidth="1" marginheight="1"></iframe>
+			<iframe name="dictListIframe" src="dictList_iframe.jsp?did=<%=did%>" style="width:100%" height="100%" scrolling="yes" frameborder="0" marginwidth="1" marginheight="1"></iframe>
 			
 		</div>
 		
@@ -1000,4 +1000,21 @@
 		
 	</body>
 	<iframe height="0" width="0" name="hiddenFrame"></iframe>	
+	<script type="text/javascript">   
+  
+function reinitIframe(){   
+  
+var iframe = document.getElementById("dictListIframe");   
+  
+try{   
+  
+iframe.height =  iframe.contentWindow.document.documentElement.scrollHeight;   
+  
+}catch (ex){}   
+  
+}   
+  
+window.setInterval("reinitIframe()", 200);   
+  
+</script>  
 </html>

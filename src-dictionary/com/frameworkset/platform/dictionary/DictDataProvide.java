@@ -140,23 +140,24 @@ public class DictDataProvide implements DataManager,Listener {
 				 
 				List items = dictMgr.getDictdataList(data.getDataId());
 				
-				if(data.isTree())
-				{
-					
-					List newItems = new ArrayList();
-					setCacheValue( data, items,newItems);
-					data.setItems(items);
-					data.setAllitems(newItems);
-				
-				}
-				else
-				{
-					data.setItems(items);
-					data.setAllitems(items);
-				}
-				
-				datas.put(data.getName(),data);
-				datasbyid.put(data.getDataId(),data);
+//				if(data.isTree())
+//				{
+//					
+//					List newItems = new ArrayList();
+//					setCacheValue( data, items,newItems);
+//					data.setItems(items);
+//					data.setAllitems(newItems);
+//				
+//				}
+//				else
+//				{
+//					data.setItems(items);
+//					data.setAllitems(items);
+//				}
+//				
+//				datas.put(data.getName(),data);
+//				datasbyid.put(data.getDataId(),data);
+				loadData(data, items);
 			}
 			return data;
 		} catch (ManagerException e1) {
@@ -189,26 +190,7 @@ public class DictDataProvide implements DataManager,Listener {
 				 
 				List items = dictMgr.getDictdataList(data.getDataId());
 				
-				if(data.isTree())
-				{
-					
-					List newItems = new ArrayList();
-					setCacheValue( data, items,newItems);
-					data.setItems(items);
-					data.setAllitems(newItems);
-					datas.put(data.getName(),data);
-					datasbyid.put(data.getDataId(),data);
-				}
-				else
-				{
-					data.setItems(items);
-					data.setAllitems(items);
-					if(data.isCachable())
-					{
-						datas.put(data.getName(),data);
-						datasbyid.put(data.getDataId(),data);
-					}
-				}
+				loadData(data, items);
 			}
 			return data;
 		} catch (ManagerException e1) {
@@ -219,6 +201,33 @@ public class DictDataProvide implements DataManager,Listener {
 			logger.error(e);
 		}
 		return null;
+	}
+
+	/**
+	 * @param data
+	 * @param items
+	 */
+	private void loadData(Data data, List items) {
+		if(data.isTree())
+		{
+			
+			List newItems = new ArrayList();
+			setCacheValue( data, items,newItems);
+			data.setItems(items);
+			data.setAllitems(newItems);
+			datas.put(data.getName(),data);
+			datasbyid.put(data.getDataId(),data);
+		}
+		else
+		{
+			data.setItems(items);
+			data.setAllitems(items);
+			if(data.isCachable())
+			{
+				datas.put(data.getName(),data);
+				datasbyid.put(data.getDataId(),data);
+			}
+		}
 	}
 	
 	public boolean removeDictFromCacheByID(String dictionaryID) throws ProfessionDataManagerException {
