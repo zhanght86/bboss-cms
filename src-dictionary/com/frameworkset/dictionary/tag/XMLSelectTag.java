@@ -58,6 +58,7 @@ public class XMLSelectTag extends XMLBaseTag
 			for(int i = temp ; i < data.size() + temp; i ++)
 			{				
 				Item item = data.getItem(i - temp);
+				if(item.getDataValidate() == 0) continue;
 				//设置了权限过滤
 //				if(this.isCheckPermission() && !super.accesscontroler.checkPermission(ids,this.getOpcode(),"orgTaxcode")){
 				if(this.isCheckPermission()){

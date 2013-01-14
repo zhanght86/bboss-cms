@@ -37,6 +37,7 @@ public class XMLCheckboxTag extends XMLBaseTag
 			{
 				Input input = new Input();
 				Item item = data.getItem(i);
+				if(item.getDataValidate() == 0) continue;
 				//设置了权限过滤
 //			    if(this.isCheckPermission() && !super.accesscontroler.checkPermission(ids,this.getOpcode(),"orgTaxcode")){
 //			    	continue;
