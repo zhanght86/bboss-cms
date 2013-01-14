@@ -24,6 +24,7 @@ import com.frameworkset.platform.sanylog.bean.BrowserCounter;
 import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.DownLoadCounter;
 import com.frameworkset.platform.sanylog.bean.Module;
+import com.frameworkset.platform.sanylog.bean.OperRank;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
 import com.frameworkset.util.ListInfo;
@@ -33,6 +34,9 @@ import com.frameworkset.util.ListInfo;
  *
  */
 public interface CounterManager {
+	
+	//导出Excel
+	public List<OperRank> getExcelDatas(String time,String type,String appId)throws SQLException;
 	//按周统计操作
 		public void deleteOperCounterByWeek(String week)throws SQLException;
 		public void staticOperCounterByWeek(String startTime, String todayTime,String week)throws SQLException;

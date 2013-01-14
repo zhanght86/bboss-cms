@@ -136,7 +136,7 @@
 			</div> 
 		</div>
 		 <div class="title_box">
-			<strong>操作计数月统计数据</strong>
+			<strong>操作月统计数据</strong>
 		</div> 
 		<div id="custombackContainer"></div>
 	</div>

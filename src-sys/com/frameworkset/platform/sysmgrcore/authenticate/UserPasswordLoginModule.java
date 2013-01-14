@@ -56,7 +56,13 @@ public class UserPasswordLoginModule extends ACLLoginModule
                             CheckCallBack checkCallBack) throws
             LoginException
     {
-        
+    	String fromsso = null;
+    	if(super.request != null)
+    	{
+    		fromsso =(String)request.getAttribute("fromsso");
+    	}
+    	
+    		
     	String password_i = password;
     	/**
     	 * 匿名用户登录系统
@@ -99,7 +105,14 @@ public class UserPasswordLoginModule extends ACLLoginModule
     		boolean isCasServer = ConfigManager.getInstance().getConfigBooleanValue("isCasServer", false);
     		boolean CA_LOGIN_SERVER = CaProperties.CA_LOGIN_SERVER;
     		if(!isCasServer || !CA_LOGIN_SERVER){
-    			password = EncrpyPwd.encodePassword(password);
+    			if(fromsso != null && fromsso.equals("true"))
+    			{
+    				
+    			}
+    			else
+    			{
+    				password = EncrpyPwd.encodePassword(password);
+    			}
     		}
             	
             if(user.getUserPassword().equals(password))

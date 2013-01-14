@@ -119,7 +119,7 @@
 			</div> 
 		</div>
 		 <div class="title_box">
-			<strong>操作计数年统计数据</strong>
+			<strong>操作年统计数据</strong>
 		</div>
 		<div id="custombackContainer"></div>
 	</div>

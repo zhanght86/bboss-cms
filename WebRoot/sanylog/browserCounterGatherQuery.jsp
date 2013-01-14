@@ -17,7 +17,6 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
-		alert("frame---2");
 		queryModuleInfo("${param.siteId}");
 	 	queryList(); 
 	  });

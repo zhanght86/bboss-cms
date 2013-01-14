@@ -13,6 +13,7 @@
 <head>
 <title>浏览统计数据</title>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<%@ include file="/sanylog/calender.jsp"%>
 <script type="text/javascript">
 	
 	//页面加载时查询列表数据
@@ -24,8 +25,9 @@
 	 function queryList() {	
 	 	var appId = "${param.siteId}";
 		var vtime = $("#vtime").val();
-		var datetime = $("#date").val();
-	   	$("#custombackContainer").load("showOperCounterRankByWeek.page #customContent", { appId:appId, vtime:vtime,datetime:datetime}, function(){loadjs()});
+		var date = $("#date").val();
+		vtime = date.substring(0,4)+"-"+vtime;
+	   	$("#custombackContainer").load("showOperCounterRankByWeek.page #customContent", { appId:appId, vtime:vtime}, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {
@@ -67,11 +69,27 @@
 		 });
 	  }
 	}
-	 
+	 function outputExcel(){
+		 var appId = "${param.siteId}";
+		 var vtime = $("#vtime").val();
+			var date = $("#date").val();
+		var type = "td_log_operstatic_byweek";
+		if(""==vtime||null==vtime){
+			$.dialog.alert("请选择时间！");
+		}else{
+			var week  = date.substring(0,4)+"-"+vtime;
+			alert(week);
+			document.getElementById("outputExcel").href="downloadExcel.page?time="+week+"&type="+type+"&appId="+appId;
+
+		}
+	 }
 	 //重置查询条件
 	 function doreset() {
    		$("#reset").click();
    	}
+	 function clearweek(){
+		 $("#inputdate_week").val("");
+	 }
 </script>
 </head>
 <body>
@@ -90,32 +108,44 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
+									<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 										<th>选择日期：</th>
-											<td><input  id="date"  name="date" class="Wdate" type="text" onclick="WdatePicker({isShowWeek:true,onpicked:function(){$dp.$('vtime').value=$dp.cal.getP('W','W');}})" /></td> 	
+											<td><input  id="date"  name="date"  type="text" onclick="WdatePicker({isShowWeek:true,onpicked:function(){$dp.$('vtime').value=$dp.cal.getP('W','WW');}})" /></td> 	
 										<th>您选择了第：</th>
-										<td><input type="text" id="vtime" size="3" class="Wdate"/>周</td>
+										<td><input type="text" id="vtime" size="3" class="Wdate"/>&nbsp;&nbsp;周</td> 
+											<!-- <td>
+											<a href="javascript:void(0)" class="bt_1"	id="calendar_trigger_week" ><span>选择周</span> </a>
+											<input id="inputdate_week" value=""/>
+                               <a href="javascript:void(0)" class="bt_1" id="calendar_trigger_week" onclick="clearweek()"><span>清除</span> </a></td>  -->
 									 <td><a href="javascript:void(0)" class="bt_1"
 											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
 											href="javascript:void(0)" class="bt_2" id="resetButton"
 											onclick="doreset()"><span>重置</span> </a> <input type="reset"
-											id="reset" style="display: none" /></td>
+											id="reset" style="display: none" /><a href="#" class="bt_1"
+											id="outputExcel" onclick="outputExcel()"><span>导出周统计报表</span> </a></td>
 											
 											
 									</tr>
-									<!-- <tr>
-										<th>&nbsp;</th>
-										<td><a href="javascript:void(0)" class="bt_1"
-											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
-											href="javascript:void(0)" class="bt_2" id="resetButton"
-											onclick="doreset()"><span>重置</span> </a> <input type="reset"
-											id="reset" style="display: none" /></td>
-									</tr> -->
+									
 								</table>
 							</td>
 							<td class="right_box"></td>
 						</tr>
 					</table>
+					<!-- 下面这段script代码必须放在form体的最后  
+             loadcalendar方法的五个参数分别解释如下：
+             1、日期显示文本框的ID号
+             2、触发日历控件显示的控件ID号
+             3、要显示的日期格式，%Y表示年，%m表示月，%d表示日
+             4、是否带周显示，默认是不带
+             5、是否带时间显示，默认是不带
+             6、日历显示文字的语言，默认是中文 -->
+        <!-- <script language="javascript" type="text/javascript">
+            loadcalendar('inputdate_week', 'calendar_trigger_week', '%Y年%m月%d日', true, false, "cn");
+        </script> -->
+        <!-- 上面这段script代码必须放在form体的最后 -->
 				</form>
+				
 			</div>
 			 <div class="search_bottom">
 				<div class="right_bottom"></div>
@@ -123,7 +153,7 @@
 			</div>
 		</div>
 		<div class="title_box">
-			<strong>操作计数日统计数据</strong>
+			<strong>操作周统计数据</strong>
 		</div> 
 		<div id="custombackContainer"></div>
 	</div>

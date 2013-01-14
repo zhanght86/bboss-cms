@@ -17,7 +17,6 @@
 	
 	//页面加载时查询列表数据
 	$(document).ready(function() {
-		alert("frame---1");
 	 	queryModuleInfo("${param.siteId}");
 	 	queryList(); 
 	  });
@@ -117,6 +116,14 @@
 											type="text" value="" class="w120" /></td>
 									</tr>
 									<tr>
+									<th>统计时间：</th>
+										<td><input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />
+													&nbsp;&nbsp;---&nbsp;&nbsp;
+												<input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
+										
+										<th>IP地址：</th>
+										<td><input id="browserIp" name="browserIp" type="text"
+											value="" class="w120" /></td>
 										<th>浏览器类型：</th>
 										<td>
 											<select id="browserType" name="browserType" class="w120">
@@ -127,13 +134,6 @@
 												<option value="Chrome">Chrome</option>
 											<select>
 										</td>
-										<th>IP地址：</th>
-										<td><input id="browserIp" name="browserIp" type="text"
-											value="" class="w120" /></td>
-										<th>统计时间：</th>
-										<td><input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />
-													-
-												<input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
 										<th>&nbsp;</th>
 										<td><a href="javascript:void(0)" class="bt_1"
 											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a

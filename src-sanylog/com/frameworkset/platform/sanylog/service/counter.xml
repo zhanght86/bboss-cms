@@ -3,6 +3,35 @@
 <properties>
 
 	<!-- added by qingl 2012-09-20 -->
+	
+	<property name="getExcelDatas">
+		<![CDATA[
+		select app_name appName,module_name moduleName,'('||vcount||','||vcountuser||'人)' vcount from $type
+		where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and vtime = #[time]
+			#end
+			union all
+			select t1.app_name appName,t2.module_name moduleName,'(0,0人)' vcount 
+			from td_log_app_manager t1 ,td_log_module_manager t2 where t1.app_id = t2.app_id
+			#if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			and t2.module_id not in (
+			select module_id from $type 
+			where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and vtime = #[time]
+			#end )
+			order by vcount desc
+		]]>
+	</property>
 	<property name="getAdminApp">
 		<![CDATA[
 			  select distinct(APP_ID) appId ,APP_NAME appName from td_log_app_manager

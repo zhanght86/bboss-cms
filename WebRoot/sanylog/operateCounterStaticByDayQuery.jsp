@@ -99,14 +99,7 @@
 											onclick="doreset()"><span>重置</span> </a> <input type="reset"
 											id="reset" style="display: none" /></td>
 									</tr>
-									<!-- <tr>
-										<th>&nbsp;</th>
-										<td><a href="javascript:void(0)" class="bt_1"
-											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
-											href="javascript:void(0)" class="bt_2" id="resetButton"
-											onclick="doreset()"><span>重置</span> </a> <input type="reset"
-											id="reset" style="display: none" /></td>
-									</tr> -->
+									
 								</table>
 							</td>
 							<td class="right_box"></td>
@@ -120,7 +113,7 @@
 			</div>
 		</div>
 		<div class="title_box">
-			<strong>操作计数日统计数据</strong>
+			<strong>操作日统计数据</strong>
 		</div> 
 		<div id="custombackContainer"></div>
 	</div>

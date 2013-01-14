@@ -690,6 +690,16 @@ public class CounterManagerImpl implements CounterManager {
 		paramMap.put("todayTime", todayTime);
 		executor.insertBean("staticOperCounterByWeek", paramMap);
 	}
+	@Override
+	public List<OperRank> getExcelDatas(String time, String type, String appId)
+			throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("time", time);
+		paramMap.put("type", type);
+		paramMap.put("appId", appId);
+		List<OperRank> datas = executor.queryListBean(OperRank.class, "getExcelDatas", paramMap);
+		return datas;
+	}
 
 	
 

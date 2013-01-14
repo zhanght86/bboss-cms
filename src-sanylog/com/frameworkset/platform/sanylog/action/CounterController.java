@@ -26,7 +26,10 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.tools.ant.util.DateUtils;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
@@ -38,10 +41,13 @@ import com.frameworkset.platform.sanylog.bean.App;
 import com.frameworkset.platform.sanylog.bean.BrowserCounter;
 import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.Module;
+import com.frameworkset.platform.sanylog.bean.OperRank;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
+import com.frameworkset.platform.sanylog.dictionary.Dictionary;
 import com.frameworkset.platform.sanylog.service.ConfigManager;
 import com.frameworkset.platform.sanylog.service.CounterManager;
+import com.frameworkset.platform.sanylog.util.POIExcelUtil2007;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
@@ -102,13 +108,45 @@ public class CounterController {
 			tm.release();
 		}
 	}
-	/**获得操作统计的日排名
+	/**
+	 * 导出Excel
+	*/
+	public void downloadExcel(String time,String type,String appId,HttpServletResponse response){
+
+		try{
+			List<OperRank> datas =  counterManager.getExcelDatas(time,type,appId);
+			if(null!=datas&&datas.size()>0){
+				for(int i=0;i<datas.size();i++){
+					int j=i+1;
+					datas.get(i).setAppId("("+j+")");
+				}
+			}
+			String colDesc = getExcelColDesc(Dictionary.titles);
+			XSSFWorkbook wb = POIExcelUtil2007.createHSSFWorkbook(colDesc, datas);
+
+			response.setContentType("application/vnd.ms-excel");
+			response.setHeader("Content-Disposition", "attachment;filename=" + new URLCodec().encode(time+"__"+datas.get(0).getAppName()+"__操作统计报表.xlsx"));
+			wb.write(response.getOutputStream());
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}
+
+	}
+	public String getExcelColDesc(String []desc) {
+		List<String> colList = new ArrayList<String>();
+		for(int i =0;i<desc.length;i++){
+			colList.add(desc[i]);
+		}
+		return StringUtils.join(colList, ", ");
+	}
+	/**获得操作统计的周排名
 	*/
 	public String showOperCounterRankByWeek(
 			@PagerParam(name = PagerParam.SORT, defaultvalue = "vcount") String sortKey,
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) long offset,
-			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize, String appId,String vtime,String datetime, ModelMap model) throws Exception {
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize, String appId,String vtime, ModelMap model) throws Exception {
 				if(null == vtime||"".equals(vtime)){
 					Calendar calendar = Calendar.getInstance();
 					Calendar today = Calendar.getInstance();
@@ -117,11 +155,12 @@ public class CounterController {
 					int weeks = calendar.get(Calendar.WEEK_OF_YEAR);
 					vtime = year+"-"+String.valueOf(weeks);
 				}
-				else{
-					String year = datetime.substring(0, 4);
-					vtime = year+"-"+vtime;
+				/*else{
+					String year = vtime.substring(0, 4);
+					String week = vtime.substring(5,7);
+					vtime = year+"-"+week;
 					
-				}
+				}*/
 		ListInfo datas = counterManager.getOperCounterRankByWeek(appId, vtime,(int) offset, pagesize);
 		model.addAttribute("datas", datas);
 		return "path:operCounterRankData";
@@ -990,6 +1029,5 @@ public class CounterController {
 			tm.release();
 		}
 	}
-	
 	
 }

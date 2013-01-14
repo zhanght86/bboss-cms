@@ -125,16 +125,11 @@
 											type="text" value="" class="w120" /></td>
 									</tr>
 									<tr>
-										<th>浏览器类型：</th>
-										<td>
-											<select id="browserType" name="browserType" class="w120">
-												<option value="">无限制</option>
-												<option value="MSIE">IE</option>
-												<option value="Firefox">Firefox</option>
-												<option value="Safari">Safari</option>
-												<option value="Chrome">Chrome</option>
-											<select>
-										</td>
+									<th>操作时间：</th>
+										<td><input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />&nbsp;&nbsp;
+													---&nbsp;&nbsp;
+												<input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
+										
 										<th>IP地址：</th>
 										<td><input id="operateIp" name="operateIp" type="text"
 											value="" class="w120" /></td>
@@ -151,11 +146,17 @@
 											<th style="display:none">操作内容：</th>
 										<td style="display:none"><input id="operContent" name="operContent" type="text"
 											value="" class="w120" /></td>
-											
-										<th>操作时间：</th>
-										<td><input  id="startTime"  name="startTime" class="Wdate" type="text" onclick="WdatePicker()" />
-													-
-												<input id="endTime" name="endTime"  class="Wdate" type="text" onclick="WdatePicker()" /></td>
+											<th>浏览器类型：</th>
+										<td>
+											<select id="browserType" name="browserType" class="w120">
+												<option value="">无限制</option>
+												<option value="MSIE">IE</option>
+												<option value="Firefox">Firefox</option>
+												<option value="Safari">Safari</option>
+												<option value="Chrome">Chrome</option>
+											<select>
+										</td>
+										
 										<th>&nbsp;</th>
 										<td><a href="javascript:void(0)" class="bt_1"
 											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
