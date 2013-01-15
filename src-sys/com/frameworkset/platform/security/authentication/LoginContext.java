@@ -841,8 +841,9 @@ public class LoginContext implements Serializable{
 //                                                (new java.io.PrintWriter(sw));
 //                    sw.flush();
 //                    le = new LoginException(sw.toString());
-                      
-                    le = new LoginException(ite.getTargetException().getMessage());
+                	
+                    le = new LoginException(ite.getTargetException().getMessage(),ite.getTargetException());
+                    
                 }
 
                 //如果是REQUISITE，那么立即抛出异常

@@ -49,7 +49,8 @@
              userName = userinfo.getUser_name();
              AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request, response, false);
-			String user = control.getUserAccount();				
+			String user = control.getUserAccount();		
+			 request.setAttribute("fromsso","true");
 			if (user == null || "".equals(user) || !userName.equals(user)) {
 			 
              

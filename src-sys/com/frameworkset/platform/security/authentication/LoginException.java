@@ -27,5 +27,13 @@ public class LoginException extends Exception implements Serializable{
     {
         super(msg);
     }
+	public LoginException(String message, Throwable cause) {
+		super(message, cause);
+		// TODO Auto-generated constructor stub
+	}
+	public LoginException(Throwable cause) {
+		super(cause);
+		// TODO Auto-generated constructor stub
+	}
 
 }

@@ -18,10 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.web.interceptor.AuthenticateFilter;
 import org.frameworkset.web.servlet.handler.HandlerMeta;
 
 import com.frameworkset.platform.config.ConfigManager;
+
 
 /**
  * 公共开发平台页面保护拦截器
@@ -30,6 +32,7 @@ import com.frameworkset.platform.config.ConfigManager;
  */
 public class SYSAuthenticateFilter extends AuthenticateFilter
 {
+	private static Logger log = Logger.getLogger(SYSAuthenticateFilter.class);
 	private boolean iswebsealserver = false;
 	public SYSAuthenticateFilter()
 	{
@@ -54,10 +57,10 @@ public class SYSAuthenticateFilter extends AuthenticateFilter
 //				System.out.println("iswebsealserver filter:" + iswebsealserver);
 				String uimusername = request.getHeader("iv-user");
 				String useraccount = control.getUserAccount();
-//				System.out.println("iswebsealserver uimusername:" + uimusername);
-//				System.out.println("iswebsealserver useraccount:" + useraccount);
+				
 				if(uimusername != null && !uimusername.equals(useraccount))
 				{
+					log.warn("Filter uim user is not same with session user:[uim username=" + uimusername + ",session username=" + useraccount);
 					HttpSession session = request.getSession(false);
 					if(session != null)
 						AccessControl.resetSession(session);

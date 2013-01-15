@@ -1032,11 +1032,11 @@ public class AccessControl {
 			return true;
 		} catch (LoginException ex) {
 			
-			throw new AccessException(ex.getMessage());
+			throw new AccessException(ex.getMessage(),ex);
 		}
 		catch (Exception ex) {
 			
-			throw new AccessException(ex.getMessage());
+			throw new AccessException(ex.getMessage(),ex);
 		}
 	}
 	

@@ -17,7 +17,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
-import org.eclipse.jdt.internal.compiler.parser.Scanner;
+
 
 import com.frameworkset.platform.config.ConfigManager;
 
