@@ -79,7 +79,7 @@
 		</div>
 		<div id="main1">
 			<ul  id="tab1" style="display:block;">
-				<iframe id="frame1" src="showBrowserCounterDistribute.page?type=today&siteId=${param.siteId}"  frameborder="0" width="100%"  height="900" ></iframe>
+				<iframe id="frame1" src="showBrowserCounterDistribute.page?type=today&siteId=${param.siteId}"  frameborder="0" width="100%" height="900"></iframe>
 			</ul>
 			<ul id="tab2" style="display: none;">
 				<iframe id="frame2" src=""  frameborder="0" width="100%" height="900" ></iframe>

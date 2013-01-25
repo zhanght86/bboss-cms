@@ -2078,6 +2078,23 @@ public class MenuHelper  {
     	}
     	return menuHelper;
     }
+    
+    public static MenuHelper getMenuHelper(HttpServletRequest request,boolean refreshCurrentSystemID)
+    {
+    	MenuHelper menuHelper = (MenuHelper)request.getAttribute(MENUHELPER_REQUEST_ATTRIBUTE);
+    	if(menuHelper == null)
+    	{
+    		AccessControl control = AccessControl.getAccessControl();
+    		if(refreshCurrentSystemID)
+    		{
+    			control.refreshCurrentSystemID(request);
+    		}
+    		menuHelper = new MenuHelper(
+    				control.getCurrentSystemID(), control);
+    		request.setAttribute(MENUHELPER_REQUEST_ATTRIBUTE,menuHelper);
+    	}
+    	return menuHelper;
+    }
 
 	public Framework getFramework() {
 		return framework;

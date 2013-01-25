@@ -4637,5 +4637,28 @@ public class AccessControl {
 	public HttpSession getSession() {
 		return session;
 	}
+
+
+	
+	public void refreshCurrentSystemID(HttpServletRequest request) {
+		String subsystem_id = request.getParameter(SUBSYSTEM_ID);
+		if(!StringUtil.isEmpty(subsystem_id))
+		{
+			if (subsystem_id == null || subsystem_id.equals(""))
+            {
+                        ;
+                // 将用户登录的子系统模块名称添加到session中
+            }
+            else
+            {
+                String old = (String)session.getAttribute(Framework.SUBSYSTEM);
+                if(old != null && !old.equals(subsystem_id))
+                    session.setAttribute(Framework.SUBSYSTEM, subsystem_id);
+            }
+			
+			FrameworkServlet.setSubSystemToCookie(response, getUserAccount(), subsystem_id);
+		}
+		
+	}
 	
 }

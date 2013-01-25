@@ -47,7 +47,7 @@ function setFrame2(){
 				<iframe src="" id="frame2" frameborder="0" width="100%"  height="630"  flush="false"></iframe>
 			</ul>
 			<ul id="tab3" style="display: block;">
-			<iframe src="browserCounterView.jsp?siteId=${param.siteId}"  frameborder="0" width="100%"  height="100%"  flush="true" id="frame1"></iframe>
+			<iframe src="browserCounterView.jsp?siteId=${param.siteId}"  frameborder="0" width="100%"  height="1000"  flush="true" id="frame1"></iframe>
 				<%-- <jsp:include page="browserCounterView.jsp?siteId=${param.siteId}"  flush="true"/> --%>
 			</ul>
 		</div>

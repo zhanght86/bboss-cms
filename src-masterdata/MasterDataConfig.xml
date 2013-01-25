@@ -3,19 +3,19 @@
 <properties>
 	<!-- human data master webservices client configuration -->
 	<property name="hdmWebServicesUrlUser" class="com.sany.masterdata.hr.entity.WebServiceProperties"
-		f:url="http://10.0.6.247:7800/GetUserInfoList?wsdl"
+		f:url="http://mbesb.sany.com.cn/GetUserInfoList?wsdl"
 		f:name="GetUserInfoList"
 		f:nameSpace="http://service.sany.com"
 		f:pageSize="1000"/>
 	
 	<property name="hdmWebServicesUrlJob" class="com.sany.masterdata.hr.entity.WebServiceProperties"
-		f:url="http://10.0.6.247:7800/GetJobInfoList?wsdl"
+		f:url="http://mbesb.sany.com.cn/GetJobInfoList?wsdl"
 		f:name="GetJobInfoList"
 		f:nameSpace="http://service.sany.com"
 		f:pageSize="2000"/>
 		
 	<property name="hdmWebServicesUrlOrg" class="com.sany.masterdata.hr.entity.WebServiceProperties"
-		f:url="http://10.0.6.247:7800/GetOrgInfoList?wsdl"
+		f:url="http://mbesb.sany.com.cn/GetOrgInfoList?wsdl"
 		f:name="GetOrgInfoList"
 		f:nameSpace="http://service.sany.com"
 		f:pageSize="2000"/>

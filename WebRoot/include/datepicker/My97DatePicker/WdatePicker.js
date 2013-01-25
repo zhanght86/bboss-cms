@@ -3,9 +3,20 @@
  * My97 DatePicker 4.71 Release
  * License: http://www.my97.net/dp/license.asp
  */
+var __scriptTags = document.getElementsByTagName('script');
+var __language = 'zh_CN';
+if (__scriptTags != null && __scriptTags.length != 0) {
+	for (var i=0; i<__scriptTags.length; i++) {
+		if (__scriptTags[i].src != "" && __scriptTags[i].src.indexOf('WdatePicker') != -1 && __scriptTags[i].src.indexOf('lang') != -1) {
+			__language = __scriptTags[i].src.substr(__scriptTags[i].src.lastIndexOf('lang')+5);
+			break;
+		}
+	}
+}
 var $dp, WdatePicker;
 (function () {
 	var _ = {$wdate:true, $dpPath:"", $crossFrame:true, doubleCalendar:false, enableKeyboard:true, enableInputMask:true, autoUpdateOnChanged:null, whichDayIsfirstWeek:4, position:{}, lang:"auto", skin:"default", dateFmt:"yyyy-MM-dd", realDateFmt:"yyyy-MM-dd", realTimeFmt:"HH:mm:ss", realFullFmt:"%Date %Time", minDate:"1900-01-01 00:00:00", maxDate:"2099-12-31 23:59:59", startDate:"", alwaysUseStartDate:false, yearOffset:1911, firstDayOfWeek:0, isShowWeek:false, highLineWeekDay:true, isShowClear:true, isShowToday:true, isShowOK:true, isShowOthers:true, readOnly:false, errDealMode:0, autoPickDate:null, qsEnabled:true, autoShowQS:false, specialDates:null, specialDays:null, disabledDates:null, disabledDays:null, opposite:false, onpicking:null, onpicked:null, onclearing:null, oncleared:null, ychanging:null, ychanged:null, Mchanging:null, Mchanged:null, dchanging:null, dchanged:null, Hchanging:null, Hchanged:null, mchanging:null, mchanged:null, schanging:null, schanged:null, eCont:null, vel:null, errMsg:"", quickSel:[], has:{}};
+	_.lang = __language;
 	WdatePicker = U;
 	var X = window, O = "document", J = "documentElement", C = "getElementsByTagName", V, A, T, I, b;
 	switch (navigator.appName) {

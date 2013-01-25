@@ -9,31 +9,33 @@
 <pg:notequal actual="${datas.totalSize}"  value="0">
    <pg:pager scope="request"  data="datas" desc="true" isList="false" containerid="custombackContainer" selector="customContent">
 	<pg:param name="appId"/>
-		<pg:param name="vtime"/>
-		
-	
+	<pg:param name="functionCode"/>
+	<pg:param name="functionName"/>
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
+	<!-- <span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="100" replace="..."/></span> -->
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
         	<th>应用名称</th> 	
-       		<th>模块名称</th>
-       		<th>访问量</th>
-       		<th>用户量</th>
-       		<th>耗费工时</th>
-       		<th>预计访问量</th>
-       		<th>预计用户量</th>
+       		<th >功能名称</th>
+       		<th >功能编码</th>
+       		<th>预计使用人数(人/月)</th>
+       		<th>预计使用频次(次/月)</th>
+       		<th>耗费工时(小时)</th>
+       		<th>删除</th>
+       		<th>修改</th>
        	</pg:header>	
 
       <pg:list autosort="false">
    		<tr>
-                <td><pg:cell colName="appName"/></td>    
-                <td><pg:cell colName="moduleName"/></td> 
-                <td><pg:cell colName="vcount"/>&nbsp;&nbsp;次/周</td>
-                <td><pg:cell colName="vcountUser"/>&nbsp;&nbsp;人/周</td>
-                <td><pg:cell colName="a"/></td>
-                <td><pg:cell colName="c"/>&nbsp;&nbsp;次/周</td>
-                <td><pg:cell colName="b"/>&nbsp;&nbsp;人/周</td>    
+   		        <td><pg:cell colName="appName"/></td>
+                <td><pg:cell colName="functionName"/></td>
+                <td ><pg:cell colName="functionCode"/></td>  
+        		<td><pg:cell colName="estimateUser" /></td>  
+        		<td><pg:cell colName="estimateOper" /></td>  
+        		<td><pg:cell colName="spentTime" /></td>
+        		<td><a href="#" onclick="deleteRecord('<pg:cell colName="id" />')">删除</a></td>
+        		<td><a href="#" onclick="modifyOrIncrementRecord('<pg:cell colName="id" />','modify')">修改</a></td>
         </tr>
 	 </pg:list>
     </table>

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 import org.frameworkset.web.token.MemTokenManager;
 import org.frameworkset.web.token.MemTokenManagerFactory;
@@ -695,6 +694,22 @@ public class DesktopController {
 	{
 		response.setContentType(FrameworkServlet.CONTENT_TYPE);
 		PrintWriter out = response.getWriter();
+	}
+	/**
+	 * 在系统首页切换平台
+	 * @param request
+	 * @return
+	 */
+	public String switchSystem(HttpServletRequest request,ModelMap model)
+	{
+		MenuHelper menuHelper = MenuHelper.getMenuHelper(request,true);
+		
+		String indexpage = AccessControl.getIndexPage(request);
+		if(!indexpage.startsWith("/"))
+			indexpage = "/"+indexpage;
+		model.addAttribute("selected", AccessControl.getAccessControl().getCurrentSystemID());
+		return indexpage;
+			
 	}
 	
 

@@ -1,7 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <properties>
+<!-- 功能清单管理  start -->
 
+<property name="insertApp">
+		<![CDATA[
+		
+		insert into td_log_app_manager(auto_id,app_id,app_name)values (#[autoId],#[appId],#[appName])
+		]]>
+	</property>  
+
+<property name="batchInsertFunctionList">
+		<![CDATA[
+		
+		insert into TD_LOG_FUNCTIONLIST (ID,APP_ID,APP_NAME,FUNCTION_CODE,ESTIMATE_OPER,ESTIMATE_USER,FUNCTION_NAME)
+		values(#[id],#[appId],#[appName],#[functionCode],#[estimateOper],#[estimateUser],#[functionName])
+		]]>
+	</property>  
+  <property name="getFunctionListInDB">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
+		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName
+		from TD_LOG_FUNCTIONLIST t1
+		]]>
+	</property>              
+   
+<property name="insertSysSpentTime">
+		<![CDATA[
+		insert into td_log_spent (APP_ID,APP_NAME,FUNCTION_CODE,SPENT_TIME)values (#[appId],#[appName],#[functionCode],#[timeSpent])
+		]]>
+	</property>
+<property name="deleteSysSpentTime">
+		<![CDATA[
+		delete from td_log_spent where app_id = ?
+		]]>
+	</property>
+<property name="staticSpentTimeByAppName">
+		<![CDATA[
+		SELECT '$appName' appName,'$appId' appId ,t3.STRINGVALUE functionCode,SUM(t3.spent) timeSpent FROM(
+
+        SELECT t1.ID,t1.pkey,t1.SUMMARY,t1.TIMEORIGINALESTIMATE,t1.TIMEESTIMATE,t1.TIMESPENT,t2.STRINGVALUE,ROUND(IFNULL(t1.TIMESPENT,0)/3600,1) spent
+
+        from jiraissue t1,customfieldvalue t2
+
+        WHERE t1.ID = t2.ISSUE
+
+        AND t2.CUSTOMFIELD = '10465'
+
+        AND t1.pkey LIKE concat('%',concat(#[appName],'%'))
+        )t3
+
+        GROUP BY t3.STRINGVALUE
+		]]>
+	</property>
+<property name="jiratest">
+		<![CDATA[
+		select pname from issuetype
+		]]>
+	</property>
+<property name="functionListSingleIncrement">
+		<![CDATA[
+		insert into TD_LOG_FUNCTIONLIST (ID,APP_ID,APP_NAME,FUNCTION_CODE,ESTIMATE_OPER,ESTIMATE_USER,FUNCTION_NAME) values 
+		(#[id],#[appId],#[appName],#[functionCode],#[estimateOper],#[estimateUser],#[functionName])
+		]]>
+	</property>
+<property name="getMaxAppId">
+		<![CDATA[
+		select max(app_id) from td_log_app_manager
+		]]>
+	</property>
+<property name="getAppId">
+		<![CDATA[
+		select app_id from td_log_app_manager where app_name = ?
+		]]>
+	</property>
+<property name="functionListSingleModify">
+		<![CDATA[
+		update TD_LOG_FUNCTIONLIST set ESTIMATE_OPER = #[estimateOper],ESTIMATE_USER = #[estimateUser]
+		where id = #[id]
+		]]>
+	</property>
+<property name="functionListSingleModify">
+		<![CDATA[
+		update TD_LOG_FUNCTIONLIST set ESTIMATE_OPER = #[estimateOper],ESTIMATE_USER = #[estimateUser]
+		where id = #[id]
+		]]>
+	</property>
+<property name="getSingleFunctionList">
+		<![CDATA[
+		select  ID id,APP_ID appId , APP_NAME appName,FUNCTION_CODE  functionCode,ESTIMATE_OPER  estimateOper ,
+		ESTIMATE_USER  estimateUser,TIME_SPENT timeSpent,FUNCTION_NAME  functionName
+		from TD_LOG_FUNCTIONLIST
+		where id = ?
+		]]>
+	</property>
+
+<property name="deleteRecord">
+		<![CDATA[
+		delete from TD_LOG_FUNCTIONLIST where id = ?
+		]]>
+	</property>
+<property name="getAllApp">
+		<![CDATA[
+		select distinct(APP_ID) appId,app_name appName
+		from TD_LOG_FUNCTIONLIST
+			order by app_id
+		]]>
+	</property>
+<property name="showFunctionList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
+		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName,t2.spent_time timeSpent
+		from TD_LOG_FUNCTIONLIST t1
+			
+			left join td_log_spent t2
+			on t1.app_id = t2.app_id
+			and t1.function_code = t2.function_code
+		where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($functionCode && !$functionCode.equals(""))
+				and t1.FUNCTION_CODE like '%'||#[functionCode]||'%'
+			#end
+			#if ($functionName && !$functionName.equals(""))
+				and t1.FUNCTION_NAME like '%'||#[functionName]||'%'
+			#end
+			order by t1.app_id,t1.function_code
+		]]>
+	</property>
+<!-- 功能清单管理  end -->
 	<!-- added by qingl 2012-09-20 -->
 	
 	<property name="getExcelDatas">

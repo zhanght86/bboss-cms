@@ -29,6 +29,12 @@ function logout()
 		function(){},'','<pg:message code="sany.pdp.common.confirm"/>'
 	)
 }
+function switchsystem()
+{
+	var systemid=$("#switchsystem").find("option:selected").val();
+	
+	location.href = "switchSystem.page?subsystem_id="+systemid;
+}
 </script>
 <style type="text/css">
 *{ margin:0; padding:0;}
@@ -45,7 +51,10 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
 <div class="l_top">
 	<div  class="top">
     <div class="logo_top"><img src="${logoimage}" width="300" height="31" /></div>
-    <div class="log_message">
+    <div class="log_message">系统切换
+    <span class="blue1"> <select onchange="javascript:switchsystem()" id="switchsystem">
+    	<option value="module" <pg:equal actual="${selected}" value="module">selected</pg:equal>>应用台账管理</option>
+    	<option value="esb" <pg:equal actual="${selected}" value="esb">selected</pg:equal>>请求服务平台</option></select></span>
 	<span class="blue1"> <sany:accesscontrol userattribute="userAccount"/></span>，<pg:message code="sany.pdp.module.welcome"></pg:message>　
 		<pg:false actual="${fromwebseal}">
 			<a href="#" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>

@@ -9,7 +9,7 @@
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet"
 			type="text/css" />
 <script language="javascript" type="text/javascript"
-src="${pageContext.request.contextPath}/html/js/blue_WdatePicker.js?lang=<pg:locale/>"></script>
+src="${pageContext.request.contextPath}/include/datepicker/My97DatePicker/WdatePicker.js?lang=<pg:locale/>"></script>
 <script language="javascript" type="text/javascript"
 src="${pageContext.request.contextPath}/html/js/collapsible.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/commontool.js"></script>

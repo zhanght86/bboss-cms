@@ -24,7 +24,7 @@
 	 function queryList() {	
 		    var appId = "${param.siteId}";
 			var year = $("#year").val();
-		   	$("#custombackContainer").load("showOperCounterRankByYear.page #customContent", { appId:appId, year:year}, function(){loadjs()});
+		   	$("#custombackContainer").load("showOperCounterRankByYear.page #customContent", { appId:appId, vtime:year}, function(){loadjs()});
 	}
 	//查询相应的模块
 	function queryModuleInfo(appId) {

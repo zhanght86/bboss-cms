@@ -1,0 +1,34 @@
+<properties>
+	
+	<!-- 功能清单管理 -->
+	<property name="/sanylog/functionList/*.page" class="com.frameworkset.platform.sanylog.action.FunctionListController" 
+		f:templateDir="attr:sanylog.templateDir"
+		f:functionListDir="attr:sanylog.functionListDir"
+		f:functionListManager="attr:functionListManager"
+		f:util="attr:sanylog.util"
+		path:functionQuery="/sanylog/functionList/functionListQuery.jsp"
+		path:functionList="/sanylog/functionList/functionList.jsp"
+		path:singleFunctionList="/sanylog/functionList/singleFunctionList.jsp"
+		path:functionListbatchInput="/sanylog/functionList/functionListbatchInput.jsp"
+		/>
+	<property name="functionListManager"
+		f:executor="attr:sanylog.functionlist.configsqlexecutor"
+		class="com.frameworkset.platform.sanylog.service.impl.FunctionListManagerImpl"
+		/>
+	<property name="sanylog.functionlist.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/sanylog/service/functionlist.xml"/>
+		</construction>
+	</property>
+	<property name="sanylog.util"
+		f:functionListManager="attr:functionListManager"
+		class="com.frameworkset.platform.sanylog.util.SanyLogUtil"
+		/>
+	<property name="sanylog.templateDir"
+		value="D:\sanylog\template"
+		/>
+		<property name="sanylog.functionListDir"
+		value="D:\sanylog\functionListDir"
+		/>	
+</properties>

@@ -2,6 +2,87 @@
 	任务调度
 -->
 <properties>
+		<!--
+		quartz引擎监听器配置
+		-->
+	<property name="quartz.config.schedulerlistener">
+		<list componentType="bean">
+			<property name="DefaultSchedulerlistener" class="org.frameworkset.task.DefaultSchedulerListener"/>
+		</list>
+	</property>
+	<!--
+		任务全局监听器配置
+		-->
+	<property name="quartz.config.globaljoblistener">
+		<list componentType="bean">
+			
+		</list>
+		<!-- for cluster -->
+		
+	</property>
+	<!--
+		任务监听器配置
+		-->
+	<property name="quartz.config.joblistener">
+		<list componentType="bean">
+			<property name="DefaultJobListener" class="org.frameworkset.task.DefaultJobListener"/>
+		</list>
+		<!-- for cluster -->
+		
+	</property>
+	<!--
+		任务全局Trigger监听器配置
+		-->
+	<property name="quartz.config.globaltriggerlistener">
+		<list componentType="bean">
+			<!--<property name="GlobleTriggerListener" class="org.frameworkset.task.GlobalTriggerListener"/>-->
+		</list>
+		<!-- for cluster -->
+		
+	</property>
+	<!--
+		任务Trigger监听器配置
+		-->
+	<property name="quartz.config.triggerlistener">
+		<list componentType="bean">
+			<property name="DefaultTriggerListener" class="org.frameworkset.task.DefaultTriggerListener"/>
+		</list>
+		<!-- for cluster -->
+		
+	</property>
+	<!--
+		任务日历配置
+		AnnualCalendar
+		CronCalendar
+		DailyCalendar
+		HolidayCalendar
+		MonthlyCalendar
+		WeeklyCalendar
+		-->
+	<property name="quartz.config.calendar">
+		<map>
+			<property name="2012year">
+				<![CDATA[ 
+				//法定节日是以每年为周期的，所以使用AnnualCalendar
+				AnnualCalendar holidays = new AnnualCalendar();
+				//五一劳动节
+				java.util.Calendar laborDay = new GregorianCalendar();
+				laborDay.add(java.util.Calendar.MONTH,5);
+				laborDay.add(java.util.Calendar.DATE,1);
+				holidays.setDayExcluded(laborDay, true); //排除的日期，如果设置为false则为包含
+				//国庆节
+				java.util.Calendar nationalDay = new GregorianCalendar();
+				nationalDay.add(java.util.Calendar.MONTH,10);
+				nationalDay.add(java.util.Calendar.DATE,1);
+				holidays.setDayExcluded(nationalDay, true);//排除该日期
+				return holidays;
+					]]>
+			</property>
+			<property name="2013year" class="org.frameworkset.task.TestCalendarBuilder"/>
+		</map>
+		<!-- for cluster -->
+		
+	</property>
 	<property name="taskconfig" enable="true">
 		<list>
 			<property name="定时任务执行器" taskid="default"
@@ -52,7 +133,7 @@
 						bean-name="hrSyncTask"
 						method="syncExpandData"
 						cronb_time="0 0 1 * * ?" 
-						used="false"
+						used="true"
 						shouldRecover="false">
 					</property>
 					

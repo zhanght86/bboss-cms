@@ -78,9 +78,7 @@
 			$.dialog.alert("请选择时间！");
 		}else{
 			var week  = date.substring(0,4)+"-"+vtime;
-			alert(week);
 			document.getElementById("outputExcel").href="downloadExcel.page?time="+week+"&type="+type+"&appId="+appId;
-
 		}
 	 }
 	 //重置查询条件
@@ -110,7 +108,7 @@
 									<tr>
 									<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 										<th>选择日期：</th>
-											<td><input  id="date"  name="date"  type="text" onclick="WdatePicker({isShowWeek:true,onpicked:function(){$dp.$('vtime').value=$dp.cal.getP('W','WW');}})" /></td> 	
+											<td><input  id="date"  name="date"  type="text" onclick="WdatePicker({isShowWeek:true,onpicked:function(){$dp.$('vtime').value=$dp.cal.getP('W','W');}})" /></td> 	
 										<th>您选择了第：</th>
 										<td><input type="text" id="vtime" size="3" class="Wdate"/>&nbsp;&nbsp;周</td> 
 											<!-- <td>
