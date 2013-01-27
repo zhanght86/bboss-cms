@@ -17,6 +17,13 @@ else
 	$dp = $pdp;
 	
 $dp.getLangIndex = function(name){
+	//name=name.toLowerCase();
+	if(name == "zh_cn" || name == "zh_CN")
+		name = "zh-cn";
+	else if(name == "zh_tw" || name == "zh_TW")
+		name = "zh-tw";
+		
+	
 	var arr = langList;
 	for (var i = 0; i < arr.length; i++) {
 		if (arr[i].name == name) {

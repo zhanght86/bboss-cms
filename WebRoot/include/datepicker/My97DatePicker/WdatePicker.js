@@ -4,7 +4,7 @@
  * License: http://www.my97.net/dp/license.asp
  */
 var __scriptTags = document.getElementsByTagName('script');
-var __language = 'zh_CN';
+var __language = 'zh_cn';
 if (__scriptTags != null && __scriptTags.length != 0) {
 	for (var i=0; i<__scriptTags.length; i++) {
 		if (__scriptTags[i].src != "" && __scriptTags[i].src.indexOf('WdatePicker') != -1 && __scriptTags[i].src.indexOf('lang') != -1) {
