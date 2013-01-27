@@ -22,6 +22,8 @@ $dp.getLangIndex = function(name){
 		name = "zh-cn";
 	else if(name == "zh_tw" || name == "zh_TW")
 		name = "zh-tw";
+	else if(name == "en_us" || name == "en_US")
+		name = "en";
 		
 	
 	var arr = langList;
