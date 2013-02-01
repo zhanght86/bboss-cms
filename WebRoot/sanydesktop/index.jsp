@@ -18,7 +18,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?skin=sany"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <script type="text/javascript" src="../html/js/menu.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
+
+
 <script type="text/javascript">
+
 function logout()
 {
 	$.dialog.confirm("<pg:message code='sany.pdp.index.check.signout'/>",
@@ -53,8 +57,10 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
     <div class="logo_top"><img src="${logoimage}" width="300" height="31" /></div>
     <div class="log_message">系统切换
     <span class="blue1"> <select onchange="javascript:switchsystem()" id="switchsystem">
+    
     	<option value="module" <pg:equal actual="${selected}" value="module">selected</pg:equal>>应用台账管理</option>
-    	<option value="esb" <pg:equal actual="${selected}" value="esb">selected</pg:equal>>请求服务平台</option></select></span>
+    	<option value="esb" <pg:equal actual="${selected}" value="esb">selected</pg:equal>>请求服务平台</option>
+    	<option value="sanylog" <pg:equal actual="${selected}" value="sanylog">selected</pg:equal>>WEB日志统计分析平台</option></select></span>
 	<span class="blue1"> <sany:accesscontrol userattribute="userAccount"/></span>，<pg:message code="sany.pdp.module.welcome"></pg:message>　
 		<pg:false actual="${fromwebseal}">
 			<a href="#" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>

@@ -32,7 +32,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -54,7 +54,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -188,6 +188,59 @@
 				</jar>
 			 <delete dir="classes-sany"/>
 			 <mkdir dir="classes-sany"/>	
+			
+		</target>
+	
+	<target name="compile-sany-sms"  description="compile the sany source ">
+				<mkdir dir="classes-sany"/>	
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-sms" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="javaee.jar" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-sms" includes="**/*.xml"/>
+			</copy>
+		</target>
+		
+		<target name="jar-sany-sms" depends="compile-sany-sms,jar-sany-sms-source" description="generate the sany-sms-lib library sany-sms.jar">
+				<echo>Generate the jar-sany-sms library sany-sms.jar ...</echo>
+				<jar jarfile="${distrib}/sany-sms.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
+			
+		</target>
+		
+			
+		<target name="jar-sany-sms-source"  description="generate the sany-sms-lib library sany-sms.jar">
+				<echo>Generate the jar-sany-sms library sany-sms-source.jar ...</echo>
+				<jar jarfile="${distrib}/sany-sms-source.jar" >
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+						<fileset dir="src-sms" includes="**/*.java"/>
+				</jar>
+			 
 			
 		</target>
 	<target name="compile-parameters-handler"  description="compile the sany source ">

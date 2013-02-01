@@ -14,6 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>三一集团开发平台</title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 <style>
 html,body{ height:100%;}

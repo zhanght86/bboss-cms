@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<property name="smsconf" class="com.sany.sms.Config"
+		f:user=""
+		f:password=""
+		f:ORGEH_CODE=""
+	    f:SMS_SUBCODE=""
+		f:smsurl="http://sms.sany.com.cn/sms/services/SmsNewOperatoraddsubCode"/>
+
+</properties>
