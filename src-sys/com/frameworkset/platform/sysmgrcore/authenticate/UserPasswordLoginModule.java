@@ -2,7 +2,6 @@ package com.frameworkset.platform.sysmgrcore.authenticate;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;

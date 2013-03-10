@@ -8,10 +8,10 @@
 
     <dbname>bspf</dbname>
 	<loadmetadata>false</loadmetadata>
-    <jndiName>jdbc/oracle-ds</jndiName>
+    <jndiName>jdbc/mysql-ds</jndiName>
 	
     <driver>oracle.jdbc.driver.OracleDriver</driver>
-    <url>jdbc:oracle:thin:@//localhost:1521/orcl</url> 
+    <url>jdbc:oracle:thin:@//88.88.88.106:1521/orcl</url> 
     
     <username>mc</username>
     <password>mc</password>

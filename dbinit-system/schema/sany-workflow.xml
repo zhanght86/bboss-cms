@@ -40,6 +40,19 @@
         
     </table>
     
+    <table name="TD_WF_ACTIVITI_NODE_DELEGATE">
+        <column name="ID" primaryKey="true" size="100" required="true"  type="VARCHAR"/>
+        <column name="NODE_ID" size="100" type="VARCHAR"/>
+        <column name="DELEGATE_USERS_ID" size="100" type="VARCHAR"/>
+        <column name="DELEGATE_USERS_NAME" size="100" type="VARCHAR"/>
+        <column name="business_id" size="100" type="VARCHAR"/>
+        <column name="business_type" size="100" type="VARCHAR"/>
+        <column name="CREATE_DATE" type="TIMESTAMP"/>
+        <column name="CREATE_PERSON_ID" size="100" type="VARCHAR"/>
+        <column name="CREATE_PERSON_NAME" size="100" type="VARCHAR"/>
+        <column name="ISDELEGATE" size="1" type="DECIMAL"/>
+   </table>
+    
     <table name="TD_WF_ACTIVITI_NODE_INFO">
         <column name="ID" primaryKey="true" size="100" required="true"  type="VARCHAR"/>
         <column name="PROCESS_KEY" size="255" type="VARCHAR"/>

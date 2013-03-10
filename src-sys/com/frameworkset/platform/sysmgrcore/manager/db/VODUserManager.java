@@ -1047,5 +1047,11 @@ public class VODUserManager extends EventHandle implements UserManager {
 		return null;
 	}
 
+	@Override
+	public void loadUsers(UserCacheManager userCache) throws ManagerException {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

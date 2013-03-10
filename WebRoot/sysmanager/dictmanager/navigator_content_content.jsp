@@ -26,7 +26,7 @@
 <script type="text/javascript" src="js/dictTreeQuery.js"></script>
 
 </head>
-<body class="contentbodymargin" scroll="no">
+<body class="contentbodymargin" scroll="auto">
 <div id="contentborder">
          <tree:tree tree="dict_tree"
     	           node="dict_tree.node"

@@ -1,3 +1,56 @@
+
+
+增加用户缓冲信息获取标签和缓冲数据刷新功能：
+<%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
+
+<dict:user user="1" isAccount="false" attribute="userName"/>
+<dict:user user="1" isAccount="false"/>
+<dict:user user="admin" attribute="userName" />
+<dict:user user="admin"  />
+
+<dict:user user="1" isAccount="false" attribute="userName"/>
+<dict:user user="1" isAccount="false"/>
+<dict:user user="admin" attribute="userName" />
+<dict:user user="admin"  />
+
+<dict:user colName="userAccount" />
+<dict:user colName="userAccount"  attribute="userName" />
+
+<dict:user colName="userId" isAccount="false"/>
+<dict:user colName="userId"  isAccount="false" attribute="userName" />
+
+attribute的值可以为：
+
+			 userName（默认值）
+			 userID 
+			 password
+			 orgId
+             logincount
+             userAccount
+             remark1
+             remark2
+             remark3
+             remark4
+             remark5
+             userAddress
+             userEmail
+             userFax
+             userHometel
+             userIdcard
+             userMobiletel1
+             userMobiletel2
+             userOicq
+             userPinyin
+             userPostalcode
+             userSex
+             userType
+             userWorknumber
+             userWorktel
+             userBirthday
+             userRegdate
+             userSn
+             userIsvalid
+
 o 内容管理修复严重bug
 当频道切换模板偶尔会出现发布无法按照新的模板进行发布的问题原因查明：
 每个频道的发布时缓存的模板时间戳机制，以临时文件路径为key，模板时间戳为值，所用的临时文件的路径是直接根据频道

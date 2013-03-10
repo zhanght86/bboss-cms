@@ -1,8 +1,5 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
-
-
-
 <%--
 	
 	 --%>
@@ -18,7 +15,11 @@
 	<div id="customContent">
 	    <sany:menupath />
 		<div class="title_box">
-			<strong>系统缓存管理</strong>
+			<strong>系统缓存管理
+			<dict:user userId="1" attribute="userName"/>
+<dict:user userId="1" />
+<dict:user userAccount="admin" attribute="userName" />
+<dict:user userAccount="admin"  /></strong>
 			<a  href="javascript:void(0)" class="bt_1 sp"
 											id="queryButton" onclick="clearAll()"><span>全部清除</span> </a> 
 		</div>
@@ -29,6 +30,13 @@
 				<tr>
 				<th width="20%">缓存类别</th>
 				<th width="80%">操作</th>
+				</tr>
+				<tr>
+				<td>用户缓存</td>
+				<td >
+				<a  href="javascript:void(0)" class="bt_1 sp"
+											id="queryButton" onclick="clearUser()"><span>清除</span> </a> 
+				</td>
 				</tr>
 				<tr>
 				<td>机构缓存</td>
@@ -189,6 +197,43 @@ function clearOrg()
 				unblockUI();
 				if(responseText=="success"){
 					$.dialog.alert("清除机构完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+
+function clearUser()
+{
+	$.dialog.confirm("是否清除用户缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearUserCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除用户缓冲完成.",function(){},api);
 					
 				}else{
 					$.dialog.alert(responseText,function(){},api);

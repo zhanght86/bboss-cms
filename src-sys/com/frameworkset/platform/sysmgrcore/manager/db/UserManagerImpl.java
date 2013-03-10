@@ -2414,9 +2414,51 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		return r;
 
 	}
+	public void loadUsers(final UserCacheManager userCache) throws ManagerException
+	{
+		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id";
 
+		try {
+			
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler<User>(){
+
+				
+
+				@Override
+				public void handleRow(Record record) throws Exception {
+					int userid = record.getInt("user_id");
+					User user = new User();
+                    getUser( user,record) ;
+
+					String orgjob = FunctionDB.getUserorgjobinfos(userid);
+					if(orgjob.endsWith(","))
+					{
+						orgjob = orgjob.substring(0, orgjob.length() - 1);
+					}
+					
+					
+					
+//				try{
+//					orgjob = dbUtil.getString(i, "org_job");
+//				}catch(Exception e){
+//					orgjob = "";
+//				}
+					user.setOrgName(orgjob);
+					
+					//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
+					user.setMainOrg(record.getString( "org_id"));
+					userCache.addUser(user);
+				}
+				
+			}, sql);
+		} catch (SQLException e) {
+			throw new ManagerException(e);
+		}
+
+	}
 	/**
 	 * 去掉hibernate后的方法
+	 * @throws SQLException 
 	 */
 	public List getUserList() throws ManagerException {
 		List list = null;
@@ -2430,12 +2472,47 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //		} catch (ControlException e) {
 //			throw new ManagerException(e.getMessage());
 //		}
-		String sql = "select * from td_sm_user";
-		DBUtil db = new DBUtil();
+		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id";
+//		DBUtil db = new DBUtil();
+//		try {
+//			db.executeSelect(sql);
+//			list = getUsers(db);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+		
 		try {
-			db.executeSelect(sql);
-			list = getUsers(db);
+			list = SQLExecutor.queryListByRowHandler(new RowHandler<User>(){
+
+				@Override
+				public void handleRow(User user, Record record)
+						throws Exception {
+					int userid = record.getInt("user_id");
+                    getUser( user,record) ;
+
+					String orgjob = FunctionDB.getUserorgjobinfos(userid);
+					if(orgjob.endsWith(","))
+					{
+						orgjob = orgjob.substring(0, orgjob.length() - 1);
+					}
+					
+					
+					
+//				try{
+//					orgjob = dbUtil.getString(i, "org_job");
+//				}catch(Exception e){
+//					orgjob = "";
+//				}
+					user.setOrgName(orgjob);
+					
+					//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
+					user.setMainOrg(record.getString( "org_id"));
+					
+				}
+				
+			},User.class, sql);
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

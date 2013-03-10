@@ -3,10 +3,7 @@ package com.frameworkset.dictionary.tag;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,7 +29,7 @@ import com.frameworkset.util.StringUtil;
  * @author biaoping.yin
  * 2004-8-2
  */
-public class XMLBaseTag extends CellTag implements Serializable
+public class XMLBaseTag extends CellTag 
 {
     private static Logger log = Logger.getLogger(XMLBaseTag.class);
     

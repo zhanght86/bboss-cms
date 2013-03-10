@@ -1,7 +1,5 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
-import java.sql.SQLException;
-
 import org.frameworkset.util.annotations.ResponseBody;
 
 import com.frameworkset.common.poolman.SQLExecutor;
@@ -14,6 +12,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.GroupCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdminCache;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.RoleCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.StringUtil;
 
 /**
@@ -53,10 +52,9 @@ public  class CacheController {
 		ret.append("<br/>").append(clearRoleCache());
 		ret.append("<br/>").append(clearGroupCache());
 		
-			ret.append("<br/>").append(clearCMSSite2ndChannelCache());
-			ret.append("<br/>").append(clearCMSPublishCache());
-		
-		
+		ret.append("<br/>").append(clearCMSSite2ndChannelCache());
+		ret.append("<br/>").append(clearCMSPublishCache());
+		ret.append("<br/>").append(clearUserCache());
 		
 		return ret.toString();
 		
@@ -199,6 +197,27 @@ public  class CacheController {
 		}
 		if(errorMessage.length() == 0)
 			errorMessage.append("清除站点发布缓存成功");
+		return errorMessage.toString();		
+		
+		
+		
+		
+		
+		
+	}
+	
+	public @ResponseBody String clearUserCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try {
+			UserCacheManager.getInstance().refresh();
+			
+		} catch (Exception e) {
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除用户缓存成功");
 		return errorMessage.toString();		
 		
 		

@@ -34,7 +34,7 @@
 </script>
 
 </head>
-<body class="contentbodymargin" scroll="no">
+<body class="contentbodymargin" scroll="auto">
 <div id="contentborder">
 <form action="" name="dictForm" target="hiddenFrame" method="post">
     <table>

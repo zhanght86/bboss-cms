@@ -122,6 +122,7 @@ public class DesktopController {
 		model.addAttribute("logoimage", logoimage);
 		model.addAttribute("fromwebseal", AccessControl.fromWebseal(request));
 		model.addAttribute("isweb", isweb);
+		model.addAttribute("selected", AccessControl.getAccessControl().getCurrentSystemID());
 		if(!isweb)
 		{
 			return "path:index";

@@ -43,6 +43,7 @@ import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.util.ListInfo;
   
@@ -1819,6 +1820,12 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	public List<User> getOrgManager(String org_id) throws ManagerException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void loadUsers(UserCacheManager userCache) throws ManagerException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

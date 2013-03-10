@@ -2,6 +2,7 @@ package com.frameworkset.platform.sysmgrcore.manager;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.frameworkset.spi.Provider;
 import org.frameworkset.spi.SPIException;
@@ -23,6 +24,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
 import com.frameworkset.platform.sysmgrcore.entity.Userresop;
 import com.frameworkset.platform.sysmgrcore.entity.Userrole;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -33,7 +35,7 @@ import com.frameworkset.util.ListInfo;
  * @author 
  */
 public interface UserManager extends Provider, Serializable {
-
+	public void loadUsers(UserCacheManager userCache) throws ManagerException;
 	/**
 	 * 用户所对应的“用户岗位机构”关系对象集合的名称 userjoborgSet
 	 */
