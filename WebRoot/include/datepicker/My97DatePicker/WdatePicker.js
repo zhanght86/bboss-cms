@@ -412,7 +412,7 @@ var $dp, WdatePicker;
 			if (_.$dpPath == "") {
 				F(A);
 			}
-			var B = "<iframe style=\"width:1px;height:1px\" src=\"" + _.$dpPath + "DatePicker.jsp\" frameborder=\"0\" border=\"0\" scrolling=\"no\"></iframe>";
+			var B = "<iframe style=\"width:1px;height:1px\" src=\"" + _.$dpPath + "DatePicker.html\" frameborder=\"0\" border=\"0\" scrolling=\"no\"></iframe>";
 			if ($dp.eCont) {
 				$dp.eCont.innerHTML = B;
 				Z($dp.eCont.childNodes[0], Y);
