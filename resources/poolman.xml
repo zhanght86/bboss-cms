@@ -11,10 +11,10 @@
     <jndiName>jdbc/mysql-ds</jndiName>
 	
     <driver>oracle.jdbc.driver.OracleDriver</driver>
-    <url>jdbc:oracle:thin:@//88.88.88.106:1521/orcl</url> 
+    <url>jdbc:oracle:thin:@//192.168.1.102:1521/orcl</url> 
     
-    <username>mc</username>
-    <password>mc</password>
+    <username>mcdev</username>
+    <password>mcdev</password>
 
     <txIsolationLevel>READ_COMMITTED</txIsolationLevel>
     <nativeResults>true</nativeResults>

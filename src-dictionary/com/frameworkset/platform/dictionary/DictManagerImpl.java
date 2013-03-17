@@ -6863,7 +6863,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String getDictDataPropertyValue(String dicttypeId, String dictdataValue, String dictdataName, String property,String primaryCondition) {
 		DBUtil db = new DBUtil();
-
+		if(property == null || property.trim().equals(""))
+		{
+			return "";
+		}
 		//根据字典类型ID,获取字典类型对象
 		Data dicttype = null;
 		try {

@@ -8,13 +8,13 @@
 
     <dbname>bspf</dbname>
 	<loadmetadata>false</loadmetadata>
-    <jndiName>jdbc/sanysfa-ds</jndiName>
+    <jndiName>jdbc/mysql-ds</jndiName>
 	
     <driver>oracle.jdbc.driver.OracleDriver</driver>
-    <url>jdbc:oracle:thin:@//10.0.15.134:1521/orcl</url> 
+    <url>jdbc:oracle:thin:@//192.168.1.102:1521/orcl</url> 
     
-    <username>sanysfa</username>
-    <password>sanysfa</password>
+    <username>mcdev</username>
+    <password>mcdev</password>
 
     <txIsolationLevel>READ_COMMITTED</txIsolationLevel>
     <nativeResults>true</nativeResults>
@@ -35,7 +35,7 @@
     <maxWait>60</maxWait>
     <validationQuery>select 1 from dual</validationQuery>
     <autoprimarykey>false</autoprimarykey>
-	<showsql>false</showsql>
+	<showsql>true</showsql>
   </datasource>
   
   
