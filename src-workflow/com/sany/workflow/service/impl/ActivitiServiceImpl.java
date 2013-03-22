@@ -38,6 +38,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.CollectionUtils;
 
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.Nodevariable;
@@ -66,9 +67,25 @@ public class ActivitiServiceImpl implements ActivitiService {
 	private IdentityService identityService;// 用于管理组织结构
 
 	public ActivitiServiceImpl(String xmlPath) {
-		processEngine = ProcessEngineConfiguration
-				.createProcessEngineConfigurationFromResource(xmlPath)
-				.buildProcessEngine();
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			processEngine = ProcessEngineConfiguration
+					.createProcessEngineConfigurationFromResource(xmlPath)
+					.buildProcessEngine();
+			tm.commit();
+		}
+		catch(Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+		finally
+		{
+			tm.releasenolog();
+		}
+		
+		
 		
 	}
 
