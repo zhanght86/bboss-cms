@@ -78,14 +78,12 @@ public class ActivitiServiceImpl implements ActivitiService {
 		}
 		catch(Exception e)
 		{
-			throw new RuntimeException(e);
+			throw new java.lang.RuntimeException(e);
 		}
 		finally
 		{
 			tm.releasenolog();
 		}
-		
-		
 		
 	}
 
@@ -262,7 +260,17 @@ public class ActivitiServiceImpl implements ActivitiService {
 		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map);
 	}
-
+	
+	/**
+	 * 完成任务(普通)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTask(String taskId, Map<String, Object> map,String destinationTaskKey) {
+		taskService = processEngine.getTaskService();
+		taskService.complete(taskId, map, destinationTaskKey);
+	}
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
 	 * 
@@ -272,9 +280,19 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 *            组织机构ID
 	 */
 	public void completeTaskLoadOrgParams(String taskId, String orgId) {
-		completeTaskLoadOrgParams(taskId, null, orgId);
+		completeTaskLoadOrgParams(taskId, (Map<String, Object>)null, orgId);
 	}
-
+	/**
+	 * 完成任务(加载组织机构节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param orgId
+	 *            组织机构ID,String destinationTaskKey
+	 */
+	public void completeTaskLoadOrgParams(String taskId, String orgId,String destinationTaskKey) {
+		completeTaskLoadOrgParams(taskId, (Map<String, Object>)null, orgId, destinationTaskKey);
+	}
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
 	 * 
@@ -286,7 +304,23 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 *            组织机构ID
 	 */
 	public void completeTaskLoadOrgParams(String taskId,
-			Map<String, Object> map, String orgId) {
+			Map<String, Object> map, String orgId)
+	{
+		completeTaskLoadOrgParams( taskId,
+				 map,  orgId,(String )null);
+	}
+	/**
+	 * 完成任务(加载组织机构节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 * @param orgId
+	 *            组织机构ID
+	 */
+	public void completeTaskLoadOrgParams(String taskId,
+			Map<String, Object> map, String orgId,String destinationTaskKey) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -304,7 +338,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 			paramsMap.putAll(map);
 		}
 		taskService = processEngine.getTaskService();
-		taskService.complete(taskId, paramsMap);
+		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
 
 	/**
@@ -317,9 +351,21 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 */
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			String bussinesstypeId) {
-		completeTaskLoadBussinesstypeParams(taskId, null, bussinesstypeId);
+		completeTaskLoadBussinesstypeParams(taskId, (Map<String, Object>)null, bussinesstypeId,(String)null);
 	}
-
+	
+	/**
+	 * 完成任务(加载业务类型节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param bussinesstypeId
+	 *            业务类型ID,String destinationTaskKey
+	 */
+	public void completeTaskLoadBussinesstypeParams(String taskId,
+			String bussinesstypeId,String destinationTaskKey) {
+		completeTaskLoadBussinesstypeParams(taskId, (Map<String, Object>)null, bussinesstypeId,destinationTaskKey);
+	}
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
 	 * 
@@ -329,9 +375,27 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 *            自定义参数MAP
 	 * @param bussinesstypeId
 	 *            业务类型ID
+	 *            ,String destinationTaskKey
 	 */
 	public void completeTaskLoadBussinesstypeParams(String taskId,
-			Map<String, Object> map, String bussinesstypeId) {
+			Map<String, Object> map, String bussinesstypeId)
+	{
+		completeTaskLoadBussinesstypeParams( taskId,
+				map,  bussinesstypeId,(String)null);
+	}
+	/**
+	 * 完成任务(加载业务类型节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 * @param bussinesstypeId
+	 *            业务类型ID
+	 *            
+	 */
+	public void completeTaskLoadBussinesstypeParams(String taskId,
+			Map<String, Object> map, String bussinesstypeId ,String destinationTaskKey) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -350,9 +414,8 @@ public class ActivitiServiceImpl implements ActivitiService {
 			paramsMap.putAll(map);
 		}
 		taskService = processEngine.getTaskService();
-		taskService.complete(taskId, paramsMap);
+		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
-
 	/**
 	 * 完成任务(加载通用节点参数配置)
 	 * 
@@ -362,9 +425,19 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 *            自定义参数MAP
 	 */
 	public void completeTaskLoadCommonParams(String taskId) {
-		completeTaskLoadCommonParams(taskId, null);
+		completeTaskLoadCommonParams(taskId, (Map<String, Object>)null);
 	}
-
+	/**
+	 * 完成任务(加载通用节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 */
+	public void completeTaskLoadCommonParams(String taskId,String destinationTaskKey) {
+		completeTaskLoadCommonParams(taskId, (Map<String, Object>)null,destinationTaskKey);
+	}
 	/**
 	 * 完成任务(加载通用节点参数配置)
 	 * 
@@ -375,6 +448,19 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 */
 	public void completeTaskLoadCommonParams(String taskId,
 			Map<String, Object> map) {
+		completeTaskLoadCommonParams( taskId,
+				map,(String)null);
+	}
+	/**
+	 * 完成任务(加载通用节点参数配置)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP,String destinationTaskKey
+	 */
+	public void completeTaskLoadCommonParams(String taskId,
+			Map<String, Object> map,String destinationTaskKey) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -392,9 +478,23 @@ public class ActivitiServiceImpl implements ActivitiService {
 			paramsMap.putAll(map);
 		}
 		taskService = processEngine.getTaskService();
-		taskService.complete(taskId, paramsMap);
+		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
-
+	/**
+	 * 处理任务(加载配置好的参数)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param business_id
+	 *            业务配置ID
+	 * @param business_type
+	 *            业务配置类型,String destinationTaskKey
+	 */
+	public void completeTaskLoadParams(String taskId, String business_id,
+			String business_type) {
+		completeTaskLoadParams( taskId,  business_id,
+				 business_type,(String) null);
+	}
 	/**
 	 * 处理任务(加载配置好的参数)
 	 * 
@@ -406,10 +506,9 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 *            业务配置类型
 	 */
 	public void completeTaskLoadParams(String taskId, String business_id,
-			String business_type) {
-		completeTaskLoadParams(taskId, null, business_id, business_type);
+			String business_type,String destinationTaskKey) {
+		completeTaskLoadParams(taskId, (Map<String, Object>)null, business_id, business_type, destinationTaskKey);
 	}
-
 	/**
 	 * 处理任务(加载配置好的参数)
 	 * 
@@ -424,6 +523,23 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 */
 	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
 			String business_id, String business_type) {
+		completeTaskLoadParams( taskId,  map,
+				 business_id,  business_type,(String)null);
+	}
+	/**
+	 * 处理任务(加载配置好的参数)
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数
+	 * @param business_id
+	 *            业务配置ID
+	 * @param business_type
+	 *            业务配置类型,String destinationTaskKey
+	 */
+	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
+			String business_id, String business_type,String destinationTaskKey) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -441,7 +557,7 @@ public class ActivitiServiceImpl implements ActivitiService {
 			paramsMap.putAll(map);
 		}
 		taskService = processEngine.getTaskService();
-		taskService.complete(taskId, paramsMap);
+		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
 
 	/**
@@ -463,12 +579,39 @@ public class ActivitiServiceImpl implements ActivitiService {
 	 * @param taskId
 	 * @param map
 	 */
+	public void completeTask(String taskId, String username,
+			Map<String, Object> map,String destinationTaskKey) {
+		taskService = processEngine.getTaskService();
+		taskService.claim(taskId, username);
+		taskService.complete(taskId, map, destinationTaskKey);
+	}
+	
+	/**
+	 * 完成任务(先领用再完成)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map) {
 		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 		taskService.setVariablesLocal(taskId, map);
 		taskService.complete(taskId);
+	}
+	
+	/**
+	 * 完成任务(先领用再完成)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskWithLocalVariables(String taskId, String username,
+			Map<String, Object> map,String destinationTaskKey) {
+		taskService = processEngine.getTaskService();
+		taskService.claim(taskId, username);
+		taskService.setVariablesLocal(taskId, map);
+		taskService.complete(taskId, destinationTaskKey);
 	}
 
 	/**

@@ -23,7 +23,7 @@
     <property name="mailServerPort" value="5025" />    
     <property name="history" value="audit" />
   	<property name="idGenerator" class="org.activiti.engine.impl.persistence.StrongUuidGenerator" />
-    
+    <property name="userInfoMap" class="com.frameworkset.platform.sysmgrcore.purviewmanager.PDPUserInfoMapImpl"/>
   </property>
     <property name="beanFactory" 
 			  factory-class="org.frameworkset.web.servlet.support.WebApplicationContextUtils" 

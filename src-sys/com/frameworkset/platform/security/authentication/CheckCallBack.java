@@ -28,7 +28,10 @@ public class CheckCallBack implements Serializable{
     private AttributeQueue  list = new AttributeQueue();
     public Object getUserAttribute(String userAttribute)
     {
-        return ((Attribute)callBacks.get(userAttribute)).getValue();
+    	Attribute attr = (Attribute)callBacks.get(userAttribute);
+    	if(attr == null)
+    		return null;
+        return attr.getValue();
     }
     public void setUserAttribute(String userAttribute,Object value)
     {
