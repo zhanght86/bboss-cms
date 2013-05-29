@@ -327,6 +327,13 @@ public interface ActivitiService {
 	 * @param map
 	 */
 	public void completeTask(String taskId, Map<String, Object> map);
+	/**
+	 * 完成任务(普通)，并驳回到指定节点
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTask(String taskId, Map<String, Object> map,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -337,6 +344,16 @@ public interface ActivitiService {
 	 *            组织机构ID
 	 */
 	public void completeTaskLoadOrgParams(String taskId, String orgId);
+	
+	/**
+	 * 完成任务(加载组织机构节点参数配置),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param orgId
+	 *            组织机构ID
+	 */
+	public void completeTaskLoadOrgParams(String taskId, String orgId,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -350,6 +367,19 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadOrgParams(String taskId,
 			Map<String, Object> map, String orgId);
+	
+	/**
+	 * 完成任务(加载组织机构节点参数配置)，并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 * @param orgId
+	 *            组织机构ID
+	 */
+	public void completeTaskLoadOrgParams(String taskId,
+			Map<String, Object> map, String orgId,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
@@ -361,6 +391,17 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			String bussinesstypeId);
+	
+	/**
+	 * 完成任务(加载业务类型节点参数配置),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param bussinesstypeId
+	 *            业务类型ID
+	 */
+	public void completeTaskLoadBussinesstypeParams(String taskId,
+			String bussinesstypeId,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
@@ -374,6 +415,19 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			Map<String, Object> map, String bussinesstypeId);
+	
+	/**
+	 * 完成任务(加载业务类型节点参数配置)，并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 * @param bussinesstypeId
+	 *            业务类型ID
+	 */
+	public void completeTaskLoadBussinesstypeParams(String taskId,
+			Map<String, Object> map, String bussinesstypeId,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
@@ -384,6 +438,17 @@ public interface ActivitiService {
 	 *            自定义参数MAP
 	 */
 	public void completeTaskLoadCommonParams(String taskId);
+	
+	/**
+	 * 完成任务(加载通用节点参数配置),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 */
+	public void completeTaskLoadCommonParams(String taskId,String destinationTaskKey);
+
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
@@ -395,6 +460,18 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadCommonParams(String taskId,
 			Map<String, Object> map);
+	
+	/**
+	 * 完成任务(加载通用节点参数配置),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数MAP
+	 */
+	public void completeTaskLoadCommonParams(String taskId,
+			Map<String, Object> map,String destinationTaskKey);
+
 
 	/**
 	 * 处理任务(加载配置好的参数)
@@ -408,6 +485,19 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadParams(String taskId, String business_id,
 			String business_type);
+	
+	/**
+	 * 处理任务(加载配置好的参数)，并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param business_id
+	 *            业务配置ID
+	 * @param business_type
+	 *            业务配置类型
+	 */
+	public void completeTaskLoadParams(String taskId, String business_id,
+			String business_type,String destinationTaskKey);
 
 	/**
 	 * 处理任务(加载配置好的参数)
@@ -423,6 +513,21 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
 			String business_id, String business_type);
+	
+	/**
+	 * 处理任务(加载配置好的参数),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 *            任务ID
+	 * @param map
+	 *            自定义参数
+	 * @param business_id
+	 *            业务配置ID
+	 * @param business_type
+	 *            业务配置类型
+	 */
+	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
+			String business_id, String business_type,String destinationTaskKey);
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -433,8 +538,27 @@ public interface ActivitiService {
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map);
 	
+	/**
+	 * 完成任务(先领用再完成),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTask(String taskId, String username,
+			Map<String, Object> map,String destinationTaskKey);
+	
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map);
+	
+	/**
+	 * 完成任务并拨回到指定节点
+	 * @param taskId
+	 * @param username
+	 * @param map
+	 * @param destinationTaskKey
+	 */
+	public void completeTaskWithLocalVariables(String taskId, String username,
+			Map<String, Object> map,String destinationTaskKey);
 
 	/**
 	 * 获得历史任务实例by流程实例ID
