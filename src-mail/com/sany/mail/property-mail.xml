@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<property name="mailConf" class="com.sany.mail.MailConf"
+		f:mailServerHost="smtp.sany.com.cn"
+		f:validate="true"
+		f:mailServerPort="25"
+		f:userName="yinbp"
+		f:password="Sany_007"
+		f:fromAddress="yinbp@sany.com.cn"/>
+	<property name="sendMail" class="com.sany.mail.SendMail"
+		f:mailConf="attr:mailConf"/>	
+</properties>		

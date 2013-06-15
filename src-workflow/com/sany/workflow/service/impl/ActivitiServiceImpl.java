@@ -2,7 +2,9 @@ package com.sany.workflow.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,6 +50,8 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
+import com.sleepycat.je.tree.IN;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class ActivitiServiceImpl implements ActivitiService {
 
@@ -66,6 +70,44 @@ public class ActivitiServiceImpl implements ActivitiService {
 	private ManagementService managementService;// 用于管理定时任务
 	private IdentityService identityService;// 用于管理组织结构
 
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
+	   * @param taskId
+	   * @param variables
+	   */
+   public void rejecttoPreTask(String taskId, Map<String, Object> variables)
+   {
+//	   taskService.claim(taskId, username);
+	   this.taskService.rejecttoPreTask(taskId,variables);
+   }
+	  
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处
+	   * @param taskId
+	   */
+   public void rejecttoPreTask(String taskId){
+	   this.taskService.rejecttoPreTask(taskId);
+   }
+   
+   /**
+	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
+	   * @param taskId
+	   * @param variables
+	   */
+public void rejecttoPreTask(String taskId, String username,Map<String, Object> variables)
+{
+	   taskService.claim(taskId, username);
+	   this.taskService.rejecttoPreTask(taskId,variables);
+}
+	  
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处
+	   * @param taskId
+	   */
+public void rejecttoPreTask(String taskId,String username){
+	taskService.claim(taskId, username);
+	   this.taskService.rejecttoPreTask(taskId);
+}
 	public ActivitiServiceImpl(String xmlPath) {
 		TransactionManager tm = new TransactionManager();
 		try
@@ -1201,8 +1243,13 @@ public class ActivitiServiceImpl implements ActivitiService {
 				.list();
 		if (pdList != null && !pdList.isEmpty()) {
 			for (ProcessDefinition pd : pdList) {
-				processEngine.getRepositoryService().deleteDeployment(
-						pd.getDeploymentId(), true);
+				try {
+					processEngine.getRepositoryService().deleteDeployment(
+							pd.getDeploymentId(), true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -1798,6 +1845,153 @@ public class ActivitiServiceImpl implements ActivitiService {
 			String resourceName) {
 		return processEngine.getRepositoryService().getResourceAsStream(
 				deploymentId, resourceName);
+	}
+	
+	public void getProccessPic(String processId, OutputStream out) throws IOException {
+		InputStream is = null;
+		try
+		{
+			if(processId!=null&&!processId.equals("")){
+				ProcessDefinition processDefinition = getProcessDefinitionById(processId);
+				String diagramResourceName = processDefinition.getDiagramResourceName();
+				
+				is = getResourceAsStream(processDefinition.getDeploymentId(),
+						diagramResourceName);
+				
+				byte[] b = new byte[1024];
+				int len = -1;
+	//			OutputStream out = response.getOutputStream();
+				while ((len = is.read(b, 0, 1024)) != -1) {
+					out.write(b, 0, len);
+				}
+				out.flush();
+			}
+		}
+		finally
+		{
+			try {
+				if(is != null)
+					is.close();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
+	/**
+	 * 获取流程定义xml
+	 * @param processId
+	 * @return
+	 * @throws IOException
+	 */
+	public String getProccessXML(String processId) throws IOException 
+	{
+		return getProccessXML(processId,"UTF-8");
+	}
+	
+	/**
+	 * 获取流程定义xml
+	 * @param processId
+	 * @return
+	 * @throws IOException
+	 */
+	public String getProccessXML(String processId,String encode) throws IOException 
+	{
+	
+		ByteOutputStream out = null;
+		InputStream is = null;
+		try
+		{
+			if(processId!=null&&!processId.equals("")){
+				ProcessDefinition processDefinition = getProcessDefinitionById(processId);
+				String diagramResourceName = processDefinition.getResourceName();
+				
+				is = getResourceAsStream(processDefinition.getDeploymentId(),
+						diagramResourceName);
+				
+				byte[] b = new byte[1024];
+				int len = -1;
+				out = new ByteOutputStream();
+				while ((len = is.read(b, 0, 1024)) != -1) {
+					out.write(b, 0, len);
+				}
+				return new String(out.getBytes(),encode);
+			}
+			return null;
+		}
+		finally
+		{
+			try {
+				if(out != null)
+					out.close();
+			} catch (Exception e) {
+				
+			}
+			try {
+				if(is != null)
+					is.close();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
+	
+	/**
+	 * 获取流程定义xml
+	 * @param processId
+	 * @return
+	 * @throws IOException
+	 */
+	public String getProccessXMLByKey(String processKey) throws IOException 
+	{
+		return getProccessXMLByKey(processKey,"UTF-8");
+	}
+	
+	/**
+	 * 获取流程定义xml
+	 * @param processId
+	 * @return
+	 * @throws IOException
+	 */
+	public String getProccessXMLByKey(String processKey,String encode) throws IOException 
+	{
+		ByteOutputStream out = null;
+		InputStream is = null;
+		try
+		{
+			if(processKey!=null&&!processKey.equals("")){
+				ProcessDefinition processDefinition = this.getProcessDefinitionByKey(processKey);
+				String diagramResourceName = processDefinition.getResourceName();
+				
+				is = getResourceAsStream(processDefinition.getDeploymentId(),
+						diagramResourceName);
+				
+				byte[] b = new byte[1024];
+				int len = -1;
+				out = new ByteOutputStream();
+				while ((len = is.read(b, 0, 1024)) != -1) {
+					out.write(b, 0, len);
+				}
+				return new String(out.getBytes(),encode);
+			}
+			return null;
+		}
+		finally
+		{
+			try {
+				if(out != null)
+					out.close();
+			} catch (Exception e) {
+				
+			}
+			try {
+				if(is != null)
+					is.close();
+			} catch (Exception e) {
+				
+			}
+		}
 	}
 
 	/*

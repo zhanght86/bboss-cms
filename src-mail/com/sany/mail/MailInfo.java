@@ -6,8 +6,9 @@ public class MailInfo {
 
 	// 发送邮件的服务器的IP和端口[大多默认为25，gmail：465] 
 //	private String mailServerHost = "172.16.9.7";   
-	private String mailServerHost = "smtp.sany.com.cn";   
-	private String mailServerPort = "25";   
+	private String mailServerHost  ;   
+	private String mailServerPort ;   
+	
 	//邮件发送者的地址      
 	private String fromAddress;   
 	//邮件接收者的地址[支持多用户]　 

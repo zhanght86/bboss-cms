@@ -1,6 +1,8 @@
 package com.sany.workflow.service;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
@@ -28,6 +30,31 @@ import com.sany.workflow.entity.ProcessDefCondition;
 
 public interface ActivitiService {
 
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
+	   * @param taskId
+	   * @param variables
+	   */
+	  void rejecttoPreTask(String taskId, Map<String, Object> variables);
+	  
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处
+	   * @param taskId
+	   */
+	  void rejecttoPreTask(String taskId);
+	  
+	  /**
+	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
+	   * @param taskId
+	   * @param variables
+	   */
+	void rejecttoPreTask(String taskId, String username,Map<String, Object> variables);
+		  
+		  /**
+		   * 将当前任务驳回到上一个任务处理人处
+		   * @param taskId
+		   */
+	void rejecttoPreTask(String taskId,String username);
 	/**
 	 * 获得activiti服务
 	 * 
@@ -710,6 +737,22 @@ public interface ActivitiService {
 	 */
 	public InputStream getResourceAsStream(String deploymentId,
 			String resourceName);
+	/**
+	 * 获取流程定义xml
+	 * @param processId
+	 * @return
+	 * @throws IOException
+	 */
+	public String getProccessXML(String processId) throws IOException ;
+	public String getProccessXMLByKey(String processKey,String encode) throws IOException ;
+	public String getProccessXMLByKey(String processKey) throws IOException; 
+	/**
+	 * 获取流程图片并输出到out中
+	 * @param processId
+	 * @param out
+	 * @throws IOException
+	 */
+	public void getProccessPic(String processId, OutputStream out) throws IOException ;
 
 	/**
 	 * 获得所有待删除列表

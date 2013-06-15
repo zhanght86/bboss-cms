@@ -239,19 +239,16 @@ public class ActivitiRepositoryAction extends MultiActionController {
 
 	public void getProccessPic(String processId, HttpServletResponse response) throws IOException {
 		if(processId!=null&&!processId.equals("")){
-			ProcessDefinition processDefinition = this.activitiService.getProcessDefinitionById(processId);
-			String diagramResourceName = processDefinition.getDiagramResourceName();
-			
-			InputStream is = this.activitiService.getResourceAsStream(processDefinition.getDeploymentId(),
-					diagramResourceName);
-			
-			byte[] b = new byte[1024];
-			int len = -1;
 			OutputStream out = response.getOutputStream();
-			while ((len = is.read(b, 0, 1024)) != -1) {
-				out.write(b, 0, len);
-			}
-			out.flush();
+			activitiService.getProccessPic(processId, out);
 		}
+	}
+	
+	public String getProccessXML(String processId) throws IOException {
+		if(processId!=null&&!processId.equals("")){
+			
+			return activitiService.getProccessXML(processId);
+		}
+		return null;
 	}
 }

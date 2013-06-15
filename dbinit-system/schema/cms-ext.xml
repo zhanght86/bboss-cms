@@ -82,7 +82,7 @@ value:http://localhost:8081/SanyPDP
         <column name="BROWSERIP" size="500" type="VARCHAR"/>       
         <column name="BROWSER_USER" size="50" type="VARCHAR"/>  
         <column name="PAGEURL" size="500" type="VARCHAR"/> 
-        <column name="BROWSERTYPE" size="50" type="VARCHAR"/> 
+        <column name="BROWSERTYPE" size="200" type="VARCHAR"/> 
         <column name="BROWSERTIME" size="6" type="TIMESTAMP"/>       
         <column name="SITENAME" size="500" type="VARCHAR"/>       
         <column name="CHANNELNAME" size="500" type="VARCHAR"/>       
@@ -109,7 +109,7 @@ value:http://localhost:8081/SanyPDP
     <!-- 浏览器类型统计表 -->
     <table name="TD_CMS_BROWSER_TYPE_STATISTICS">
         <column name="VCOUNT" size="10" type="DECIMAL"/>      
-        <column name="VBROWSERTYPE" size="32" type="VARCHAR"/>
+        <column name="VBROWSERTYPE" size="200" type="VARCHAR"/>
         <column name="VDAY" size="10" type="DECIMAL"/>      
         <column name="VMONTH" size="10" type="DECIMAL"/>
         <column name="VYEAR" size="10" type="DECIMAL"/>  
