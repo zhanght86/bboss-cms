@@ -9,6 +9,8 @@
 <%@ page import="com.frameworkset.platform.framework.Framework,com.sany.webseal.LoginValidate.*"%>
 <%@ page import="org.frameworkset.web.servlet.support.WebApplicationContextUtils"%>
 <%@ page import="org.frameworkset.spi.support.MessageSource"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.UserManager"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
 	
 <%@ page import="java.util.*"%>
@@ -17,7 +19,9 @@
 
 	String successRedirect = request.getParameter("successRedirect");
 	String language = request.getParameter("language");
-	
+	boolean enable_login_validatecode = ConfigManager.getInstance()
+			.getConfigBooleanValue("enable_login_validatecode", true);
+	 int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
 	String errorMessage = null;
 	
     String userName = request.getParameter("userName");
@@ -280,11 +284,21 @@
 			
 			if (userName != null) {
 				try {
+					if(enable_login_validatecode)
+					{
+						String rand=request.getParameter("rand");
+						String session_rand=String.valueOf(session.getAttribute("rand"));
+						session.removeAttribute("rand");
+						if(session_rand==null||(!session_rand.equalsIgnoreCase(rand))){
+							throw new AccessException("验证码错误!");
+						}
+					}
+					
 					AccessControl.getInstance().login(request,
 							response, userName, password);
 					String subsystem = request
 							.getParameter("subsystem_id");
-
+					UserManager userManager = SecurityDatabase.getUserManager();   
 					//System.out.println("orgName========================"+orgName);
 					//System.out.println("orgId========================"+orgId);
 					if (!isCert) {
@@ -322,10 +336,10 @@
 
 					errorMessage = ex.getMessage();
 					if (errorMessage != null) {
-						errorMessage = errorMessage.replaceAll("\\n",
-								"\\\\n");
-						errorMessage = errorMessage.replaceAll("\\r",
-								"\\\\r");
+						//errorMessage = errorMessage.replaceAll("\\n",
+						//		"\\\\n");
+						//errorMessage = errorMessage.replaceAll("\\r",
+						//		"\\\\r");
 					}
 					else
 					{
@@ -343,12 +357,13 @@
 	               
 				} catch (Exception ex) {
 					errorMessage = ex.getMessage();
+					ex.printStackTrace();
 					if(errorMessage != null)
 					{
-						errorMessage = errorMessage.replaceAll("\\n",
-								"\\\\n");
-						errorMessage = errorMessage.replaceAll("\\r",
-								"\\\\r");
+						//errorMessage = errorMessage.replaceAll("\\n",
+						//		"\\\\n");
+						//errorMessage = errorMessage.replaceAll("\\r",
+						//		"\\\\r");
 					}
 						else
 						{
@@ -404,6 +419,29 @@ DD_belatedPNG.fix('div');
 	}
 	*/
 	
+	function modifyExpiredPassword(){
+		
+		
+  		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?userAccount=<%=userName%>";
+  		$.dialog({close:reloadhref,title:'对不起，<%=userName %>的密码已经失效（密码有效期为<%=expiredays%>天），请定期修改密码!',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
+  		
+		
+		
+	}
+	
+	function reloadhref()
+	{
+		location.href = "login.jsp";
+	}
+	
+	function changcode()
+	{
+		
+		$("#img1").attr("src","passward/generateImageCode.page?"+Math.random());
+		
+	}
+	
+	
 	function getName(){
 		loginForm.userName.focus();
 		if(document.all.userName.value == ""){
@@ -428,6 +466,11 @@ DD_belatedPNG.fix('div');
 	
 		var s = $("#userName").val();
 		var p = $("#password").val();
+		var y = $("#rand").val();
+		if(y==""){
+			$.dialog.alert("验证码不能为空");
+			return;
+		}
 		if((s==""&&p!="")||(s==""&&p=="")){
 			$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	    	$("#userName").focus();
@@ -463,6 +506,11 @@ DD_belatedPNG.fix('div');
 		var userName = $("#userName").val();
 		var password = $("#password").val();
 		if(event.keyCode == 13){
+		var y = $("#rand").val();
+		if(y==""){
+			$.dialog.alert("验证码不能为空");
+			return;
+		}
 			if(userName == ""){
 				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#userName").focus();
@@ -478,6 +526,11 @@ DD_belatedPNG.fix('div');
 		var userName = $("#userName").val();
 		var password = $("#password").val();
 		if(event.keyCode == 13){
+		var y = $("#rand").val();
+		if(y==""){
+			$.dialog.alert("验证码不能为空");
+			return;
+		}
 			if(userName == "" ){
 				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				$("#userName").focus();
@@ -541,12 +594,25 @@ DD_belatedPNG.fix('div');
 				<%
 			  	if(errorMessage==null){
                		//out.print("登陆失败，请确保输入的用户名和口令是否正确！");
-               	}else{
+               	}
+			  	else if(errorMessage.equals("PasswordExpired"))//密码过期
+			  	{
+			  		out.print("<li><label></label><font color='red'>密码已经失效（有效期为"+expiredays+"天），请定期修改密码!<a href='#' onclick='javascript:modifyExpiredPassword()'>点击修改</a></font></li>");
+			  		
+			  	}
+			  		
+			  	else{
                		out.print("<li><label></label><font color='red'>"+errorMessage + "</font></li>");
                    } 
 		                  %>
 				<li><label><pg:message code="sany.pdp.user.login.name"/>：</label><input id="userName" name="userName" type="text" maxlength="<%=userNamelength%>"	 onkeydown="enterKeydowngoU(event)"  /></li>
 				<li><label><pg:message code="sany.pdp.login.password"/>：</label><input id="password" name="password" type="password" type="text"	onkeydown="enterKeydowngoP(event)" /></li>
+				<%
+				if(enable_login_validatecode){
+				%><li><label>验证码：</label>
+				<input id="rand" name="rand" type="text" style="width:120px"/>
+				<img name="img1" id='img1' src="passward/generateImageCode.page" width="50"/><a onclick="changcode()">看不清,换一张</a>
+				</li><%} %>
 				<li><label><pg:message code="sany.pdp.system"/>：</label>
 				<select name="subsystem_id" style="width:160px;margin-left:-110px;">
 					<option value="module"

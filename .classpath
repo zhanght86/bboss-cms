@@ -174,11 +174,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-wordpdf.jar" sourcepath="/bboss-plugin-wordpdf"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-1.8.6.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-converter-5.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-layout-5.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-model-5.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-hessian.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jodconverter-core.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.7.jar"/>
@@ -186,5 +181,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-log4j12-1.7.2.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/activiti-engine-5.12"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

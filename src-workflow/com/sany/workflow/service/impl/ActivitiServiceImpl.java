@@ -1,5 +1,6 @@
 package com.sany.workflow.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,8 +51,7 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
-import com.sleepycat.je.tree.IN;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
 
 public class ActivitiServiceImpl implements ActivitiService {
 
@@ -1898,7 +1898,7 @@ public void rejecttoPreTask(String taskId,String username){
 	public String getProccessXML(String processId,String encode) throws IOException 
 	{
 	
-		ByteOutputStream out = null;
+		ByteArrayOutputStream out = null;
 		InputStream is = null;
 		try
 		{
@@ -1911,11 +1911,11 @@ public void rejecttoPreTask(String taskId,String username){
 				
 				byte[] b = new byte[1024];
 				int len = -1;
-				out = new ByteOutputStream();
+				out = new ByteArrayOutputStream();
 				while ((len = is.read(b, 0, 1024)) != -1) {
 					out.write(b, 0, len);
 				}
-				return new String(out.getBytes(),encode);
+				return new String(out.toByteArray(),encode);
 			}
 			return null;
 		}
@@ -1956,7 +1956,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public String getProccessXMLByKey(String processKey,String encode) throws IOException 
 	{
-		ByteOutputStream out = null;
+		ByteArrayOutputStream out = null;
 		InputStream is = null;
 		try
 		{
@@ -1969,11 +1969,11 @@ public void rejecttoPreTask(String taskId,String username){
 				
 				byte[] b = new byte[1024];
 				int len = -1;
-				out = new ByteOutputStream();
+				out = new ByteArrayOutputStream();
 				while ((len = is.read(b, 0, 1024)) != -1) {
 					out.write(b, 0, len);
 				}
-				return new String(out.getBytes(),encode);
+				return new String(out.toByteArray(),encode);
 			}
 			return null;
 		}

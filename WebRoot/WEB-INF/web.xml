@@ -82,8 +82,11 @@
     		/test/testmmssso.jsp,
     		/sso/login.jsp,
     		/sso/sso.page,
-    		/sanydesktop/cookieLocale.page
-    		
+    		/sanydesktop/cookieLocale.page,
+    		/yzm.jsp,
+		   /sysmanager/password/modifyExpiredUserPWD.jsp,
+		  /passward/modifyExpiredPassword.page,
+		  /passward/generateImageCode.page
     	   </param-value>
     </init-param>
     <init-param>
@@ -105,7 +108,7 @@
 			启用，false 不启用，默认为不启用 -->
 		<init-param>
 			<param-name>enableToken</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		<!-- 指定动态令牌校验失败跳转地址
 		如果没有指定直接采用redirecturl对应的地址作为跳转地址 -->
@@ -161,7 +164,6 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/conf/appbom/bboss-*.xml,
-            /WEB-INF/conf/appmonitor/bboss-*.xml,
             /WEB-INF/conf/commons/bboss-*.xml,
             /WEB-INF/conf/test/bboss-*.xml,
             /WEB-INF/conf/workflow/bboss-*.xml,

@@ -1,4 +1,16 @@
-
+1.登录页增加校验码功能
+2.增加登录密码过期检查功能，并提供过期密码修改功能，修改密码时记录历史密码，密码不能重复
+3.权限管理和用户查询及离散用户列表中增加密码过期时间属性的展示
+4.工作流扩展自由流功能
+5.td_sm_user表增加字段 PASSWORD_UPDATETIME  TIMESTAMP(6)
+6.增加记录历史密码表
+CREATE TABLE TD_SM_PASSWORDHIS
+(
+  USER_ID        NUMBER,
+  PASSWORD_      VARCHAR2(100 BYTE),
+  PASSWORD_TIME  TIMESTAMP(6)
+)
+7.添加数据库更新脚本文件D:\workspace\microcredit-1.0.1\doc\02_设计\01_DB\02_sql\2013-06-16-0.sql
 
 增加用户缓冲信息获取标签和缓冲数据刷新功能：
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>

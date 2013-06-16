@@ -270,6 +270,7 @@
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.category"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.common.status"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.workflow.organization"/></th>
+							<th onclick="sortBy('userName')">密码过期时间</th>
 						</tr>
 					
 						
@@ -675,6 +676,9 @@
 										expression="{user_isvalid}" /></td>
 								<td><pg:cell colName="org_Name"
 										defaultValue="" /></td>
+										
+								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
+										defaultValue="" /></td>		
 							</tr>
 							<%}else{%>
 							<tr>
@@ -693,6 +697,8 @@
 								<td><dict:itemname type="userType" expression="{userType}" /></td>
 								<td><dict:itemname type="isvalid" expression="{user_isvalid}" /></td>
 								<td><pg:cell colName="org_Name" defaultValue="" /></td>
+								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
+										defaultValue="" /></td>		
 							</tr>
 							<%}%>
 						</pg:list>

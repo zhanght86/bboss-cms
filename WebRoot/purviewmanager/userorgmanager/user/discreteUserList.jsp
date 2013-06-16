@@ -252,7 +252,8 @@ function userInfo(userId){
 								<th><pg:message code="sany.pdp.user.login.name"/>	</th>
 								<th><pg:message code="sany.pdp.user.real.name"/></th>
 								<th><pg:message code="sany.pdp.user.type"/></th>
-								<th><pg:message code="sany.pdp.email"/></th>						
+								<th><pg:message code="sany.pdp.email"/></th>
+								<th>密码过期时间</th>						
 								
 							</pg:header>
 							<pg:param name="orgId" />
@@ -305,6 +306,8 @@ function userInfo(userId){
 									<td>
 										<pg:cell colName="userEmail"/>
 									</td>	
+									<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
+										defaultValue="" /></td>		
 								</tr>
 							<%}else{%>
 								<tr>
@@ -323,6 +326,8 @@ function userInfo(userId){
 									<td>
 										<pg:cell colName="userEmail"/>
 									</td>	
+									<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
+										defaultValue="" /></td>		
 								</tr>
 							<%}%>
 							</pg:list>

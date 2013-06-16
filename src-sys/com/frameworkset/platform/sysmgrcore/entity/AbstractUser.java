@@ -8,6 +8,7 @@ package com.frameworkset.platform.sysmgrcore.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -311,9 +312,43 @@ public abstract class AbstractUser implements Serializable {
      * 1-ldap验证
      */
     private int logintype = 0;
+    /**
+     * 密码修改时间
+     */
+    private Timestamp passwordUpdatetime;
+    
+    private Timestamp passwordExpiredTime; 
 
 	// TODO 注意，增加新的字段属性时，请手工在 db.UserManagerImpl.getUserList(Organization org)
 	// 中增加相应的项
+
+	/**
+	 * @return the passwordExpiredTime
+	 */
+	public Timestamp getPasswordExpiredTime() {
+		return passwordExpiredTime;
+	}
+
+	/**
+	 * @param passwordExpiredTime the passwordExpiredTime to set
+	 */
+	public void setPasswordExpiredTime(Timestamp passwordExpiredTime) {
+		this.passwordExpiredTime = passwordExpiredTime;
+	}
+
+	/**
+	 * @return the passwordUpdatetime
+	 */
+	public Timestamp getPasswordUpdatetime() {
+		return passwordUpdatetime;
+	}
+
+	/**
+	 * @param passwordUpdatetime the passwordUpdatetime to set
+	 */
+	public void setPasswordUpdatetime(Timestamp passwordUpdatetime) {
+		this.passwordUpdatetime = passwordUpdatetime;
+	}
 
 	/**
 	 * @return 返回 userroleSet。

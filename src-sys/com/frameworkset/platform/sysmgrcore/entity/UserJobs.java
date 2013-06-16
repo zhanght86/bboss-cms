@@ -1,6 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class UserJobs implements Serializable{
@@ -21,6 +22,43 @@ public class UserJobs implements Serializable{
 	Date jobStartTime;//上岗时间
 	String orgId;//递归查询时用户所属机构
 	Integer istaxmanager;
+	/**
+     * 密码修改时间
+     */
+    private Timestamp passwordUpdatetime;
+    
+    private Timestamp passwordExpiredTime; 
+
+	// TODO 注意，增加新的字段属性时，请手工在 db.UserManagerImpl.getUserList(Organization org)
+	// 中增加相应的项
+
+	/**
+	 * @return the passwordExpiredTime
+	 */
+	public Timestamp getPasswordExpiredTime() {
+		return passwordExpiredTime;
+	}
+
+	/**
+	 * @param passwordExpiredTime the passwordExpiredTime to set
+	 */
+	public void setPasswordExpiredTime(Timestamp passwordExpiredTime) {
+		this.passwordExpiredTime = passwordExpiredTime;
+	}
+
+	/**
+	 * @return the passwordUpdatetime
+	 */
+	public Timestamp getPasswordUpdatetime() {
+		return passwordUpdatetime;
+	}
+
+	/**
+	 * @param passwordUpdatetime the passwordUpdatetime to set
+	 */
+	public void setPasswordUpdatetime(Timestamp passwordUpdatetime) {
+		this.passwordUpdatetime = passwordUpdatetime;
+	}
 	public String getFettle() {
 		return fettle;
 	}

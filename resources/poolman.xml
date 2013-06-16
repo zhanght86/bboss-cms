@@ -11,10 +11,10 @@
     <jndiName>jdbc/mysql-ds</jndiName>
 	
     <driver>oracle.jdbc.driver.OracleDriver</driver>
-    <url>jdbc:oracle:thin:@//192.168.1.102:1521/orcl</url> 
+    <url>jdbc:oracle:thin:@//localhost:1521/orcl</url> 
     
-    <username>mcdev</username>
-    <password>mcdev</password>
+    <username>jishiyu</username>
+    <password>jishiyu</password>
 
     <txIsolationLevel>READ_COMMITTED</txIsolationLevel>
     <nativeResults>true</nativeResults>
@@ -37,6 +37,41 @@
     <autoprimarykey>false</autoprimarykey>
 	<showsql>true</showsql>
   </datasource>
+  
+  
+  <!--<datasource>
+
+    <dbname>bspfyy</dbname>
+	<loadmetadata>false</loadmetadata>
+    <jndiName>jdbc/sqlsqlerver-ds</jndiName>
+	
+    <driver>net.sourceforge.jtds.jdbc.Driver</driver>
+    <url>jdbc:jtds:sqlserver://88.88.88.108:1460;DatabaseName=master</url> 
+    
+    <username>sa</username>
+    <password>123456</password>
+
+    <txIsolationLevel>READ_COMMITTED</txIsolationLevel>
+    <nativeResults>true</nativeResults>
+    <poolPreparedStatements>false</poolPreparedStatements>
+    <initialConnections>2</initialConnections>
+    <minimumSize>2</minimumSize>
+    <maximumSize>10</maximumSize>
+    <maximumSoft>false</maximumSoft>
+    <removeAbandoned>true</removeAbandoned>
+    <userTimeout>50</userTimeout>
+    <logAbandoned>true</logAbandoned>
+    <readOnly>false</readOnly>
+	<skimmerFrequency>120000</skimmerFrequency>
+	<connectionTimeout>240000</connectionTimeout>
+    <shrinkBy>5</shrinkBy>
+    <testWhileidle>true</testWhileidle>
+    <keygenerate>composite</keygenerate>
+    <maxWait>60</maxWait>
+    <validationQuery>select 1 </validationQuery>
+    <autoprimarykey>false</autoprimarykey>
+	<showsql>true</showsql>
+  </datasource>-->
   
   
 </poolman>

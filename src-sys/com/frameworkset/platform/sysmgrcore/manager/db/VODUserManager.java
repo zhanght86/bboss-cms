@@ -1,6 +1,8 @@
 package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -1053,5 +1055,61 @@ public class VODUserManager extends EventHandle implements UserManager {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#ishistorypassword(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean ishistorypassword(int userid, String password)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#isPasswordExpired(int)
+	 */
+	@Override
+	public boolean isPasswordExpired(int userid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#isPasswordExpired(com.frameworkset.platform.sysmgrcore.entity.User)
+	 */
+	@Override
+	public boolean isPasswordExpired(User user) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#initpasswordupdatetime(int)
+	 */
+	@Override
+	public Timestamp initpasswordupdatetime(int userid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getPasswordExpiredTime(int)
+	 */
+	@Override
+	public Date getPasswordExpiredTime(int userid) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getPasswordExpiredTime(java.sql.Timestamp)
+	 */
+	@Override
+	public Date getPasswordExpiredTime(Timestamp passwordupdatetime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 	
 }

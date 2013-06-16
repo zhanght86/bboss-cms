@@ -1,10 +1,13 @@
 package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.frameworkset.platform.sysmgrcore.entity.User;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
@@ -26,7 +29,7 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 		try {
 			String userName = request.getParameter("userName");
 			String userRealname = request.getParameter("userRealname");
-			StringBuffer hsql = new StringBuffer("select user_id,user_name,user_realname,user_type,user_email from td_sm_user  user0_ where 1=1 ");
+			StringBuffer hsql = new StringBuffer("select user_id,user_name,user_realname,user_type,user_email,PASSWORD_UPDATETIME from td_sm_user  user0_ where 1=1 ");
 			if (userName != null && userName.length() > 0) {
 				hsql.append(" and user_name like '%" + userName + "%' ");
 			}
@@ -45,6 +48,7 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 			dbUtil.executeSelect(hsql.toString(),offset,maxPagesize);
 			User user = null;
 			List users = new ArrayList();
+			 UserManager userManager = SecurityDatabase.getUserManager();
 			for(int i = 0; i < dbUtil.size(); i ++)
 			{
 				user = new User();
@@ -53,6 +57,8 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 				user.setUserRealname(dbUtil.getString(i, "user_realname"));
 				user.setUserType(dbUtil.getString(i, "user_type"));
 				user.setUserEmail(dbUtil.getString(i, "user_email"));
+				user.setPasswordUpdatetime(dbUtil.getTimestamp(i,"password_updatetime"));
+				user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 				users.add(user);
 				
 			}

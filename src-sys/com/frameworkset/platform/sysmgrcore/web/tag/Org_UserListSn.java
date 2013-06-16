@@ -6,7 +6,6 @@
  */
 package com.frameworkset.platform.sysmgrcore.web.tag;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;

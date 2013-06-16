@@ -26,26 +26,41 @@
                 </script><%
                 return;
       	}
-
+		String errormessage = null;
         try{
-
-            user.setUserPassword(passWord);
-            UserManager manager =SecurityDatabase.getUserManager();
-            
-            manager.updateUserPassword(user); 
-            accesscontroler.refreshPassword(passWord);
-            accesscontroler.updateMailPassword(user.getUserEmail(),passWord);
-            %>                 
-            <script language="javascript" type="text/javascript">
-                         	$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.success"/>');
-                         	               	                              
-            </script>      	
-                     
-            
-         <%}catch(Exception e){
-         		e.printStackTrace();%>
+			if(oldPassword.equals(passWord))
+			{
+				errormessage ="新密码和旧密码相同，请输入不同的密码!";
+			}
+			
+			else
+			{
+	            user.setUserPassword(passWord);
+	            UserManager manager =SecurityDatabase.getUserManager();
+	           
+	            manager.updateUserPassword(user); 
+	            accesscontroler.refreshPassword(passWord);
+	            accesscontroler.updateMailPassword(user.getUserEmail(),passWord);
+	            %>                 
+	            <script language="javascript" type="text/javascript">
+	                         	$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.success"/>');
+	                         	               	                              
+	            </script>              
+         <%
+			}
+			if(errormessage != null)
+			{
+				%>                 
+	            <script language="javascript" type="text/javascript">
+	                         	$.dialog.alert('<%=errormessage%>');
+	                         	               	                              
+	            </script>              
+         <%
+			}
+		}catch(Exception e){
+         		%>
              <script language="javascript" type="text/javascript">
-                         	$.dialog.alert('<pg:message code="sany.pdp.personcenter.person.password.modfiy.fail.login"/>');
+                         	$.dialog.alert('<%=e.getMessage()%>');
              </script>                 
 	<% }
 %>

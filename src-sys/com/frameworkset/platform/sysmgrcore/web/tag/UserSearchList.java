@@ -2,6 +2,7 @@ package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -373,6 +374,7 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 				AccessControl control = AccessControl.getInstance();
 				control.checkAccess(session);
 				String curUserId = control.getUserID();
+				   UserManager userManager = SecurityDatabase.getUserManager();
 //				StringBuffer sql = new StringBuffer()	
 //				.append(" select bb.same_job_user_sn,getUserorgjobinfos(t.user_id || '') as org_job,  ")
 //				.append(" t.*, a.org_id,a.org_sn from  ")
@@ -431,6 +433,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 						user.setUserMobiletel2(pe.getString(j,
 								"USER_MOBILETEL2"));
 						user.setUserEmail(pe.getString(j, "USER_EMAIL"));
+						user.setPasswordUpdatetime(pe.getTimestamp(j,"password_updatetime"));
+						user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 						
 //						ora_org_name = db_user.getString(j, "org_job");
 						
@@ -455,8 +459,9 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 				}
 				
 			}else if(userOrgType.equalsIgnoreCase("dis")){//离散用户查询
+				  UserManager userManager = SecurityDatabase.getUserManager();
 					StringBuffer sql = new StringBuffer()	
-					.append("select user_id,user_name,user_realname,USER_MOBILETEL1 from td_sm_user  t where 1=1 ")
+					.append("select user_id,user_name,user_realname,USER_MOBILETEL1,password_updatetime from td_sm_user  t where 1=1 ")
 					.append(sb_user.toString())
 					.append("and t.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( ")
 					.append("select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_ where user1_.USER_ID= userjoborg1_.user_id)) order by user_id");
@@ -484,6 +489,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 							user.setUserMobiletel1(pe.getString(j,
 									"USER_MOBILETEL1"));
 							user.setOrgName("离散用户");
+							user.setPasswordUpdatetime(pe.getTimestamp(j,"password_updatetime"));
+							user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 							userList.add(user); 
 						}
 						System.out.println("离散用户查询----------------------"+sql.toString());

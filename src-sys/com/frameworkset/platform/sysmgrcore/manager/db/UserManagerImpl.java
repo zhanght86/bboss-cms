@@ -3,6 +3,7 @@ package com.frameworkset.platform.sysmgrcore.manager.db;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.orm.annotation.TransactionType;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.security.event.ACLEventType;
@@ -1468,7 +1470,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				}else{
 					user.setUserBirthday((java.sql.Date)dbUtil.getDate(i, "USER_BIRTHDAY"));
 				}
-				
+				user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
+				user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 				user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
 				user.setUserAddress(dbUtil.getString(i, "USER_ADDRESS"));
 				user.setUserPostalcode(dbUtil.getString(i, "USER_POSTALCODE"));
@@ -1554,7 +1557,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			}else{
 				user.setUserRegdate((java.sql.Date)dbUtil.getDate(0, "USER_REGDATE"));
 			}
-			
+			user.setPasswordUpdatetime(dbUtil.getTimestamp(0, "password_updatetime"));
+			user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 			user.setUserLogincount(new Integer(dbUtil.getInt(0,"USER_LOGINCOUNT")));
 			user.setUserType(dbUtil.getString(0, "USER_TYPE"));
 			user.setRemark1(dbUtil.getString(0, "REMARK1"));
@@ -1627,7 +1631,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			}else{
 				user.setUserRegdate((java.sql.Date)dbUtil.getDate( "USER_REGDATE"));
 			}
-			
+			user.setPasswordUpdatetime(dbUtil.getTimestamp("password_updatetime"));
+			user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 			user.setUserLogincount(new Integer(dbUtil.getInt("USER_LOGINCOUNT")));
 			user.setUserType(dbUtil.getString( "USER_TYPE"));
 			user.setRemark1(dbUtil.getString( "REMARK1"));
@@ -1656,10 +1661,10 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			user.setPolitics(dbUtil.getString( "POLITICS"));
 			user.setIstaxmanager(dbUtil.getInt( "ISTAXMANAGER"));
 		} catch (SQLException e) {
-			 throw new ManagerException(e.getMessage());
+			 throw new ManagerException(e);
 		}
 		catch (Exception e) {
-			 throw new ManagerException( e.getMessage());
+			 throw new ManagerException( e);
 		}
 		return user;
 	}
@@ -1688,7 +1693,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
 			   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
 			   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
-			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER from TD_SM_USER ")
+			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime from TD_SM_USER ")
 			   .append("where ").append(propName).append(" = '").append(value).append("' ");
 			db.executeSelect(sql.toString());
 			if (db.size() > 0) {
@@ -1719,7 +1724,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
 			   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
 			   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
-			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER from TD_SM_USER ")
+			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime from TD_SM_USER ")
 			   .append("where USER_ID = '").append(userId).append("' ");
 		
 			db.executeSelect(sql.toString());
@@ -1745,7 +1750,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
 			   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
 			   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
-			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER from TD_SM_USER ")
+			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime from TD_SM_USER ")
 			   .append("where USER_NAME = ? ");
 		
 //			db.preparedSelect(sql.toString());
@@ -1820,7 +1825,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
 				   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
 				   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
-				   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER from TD_SM_USER ")
+				   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime from TD_SM_USER ")
 				   .append("where ").append(propName).append(" = '").append(value).append("' ");
 				dbUtil.executeSelect(sql.toString());
 				if(dbUtil.size() > 0){
@@ -1832,7 +1837,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
 				   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
 				   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
-				   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER from TD_SM_USER ")
+				   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime from TD_SM_USER ")
 				   .append("where ").append(propName).append(" like '%").append(value).append("%' ");
 				dbUtil.executeSelect(sql.toString());
 				if(dbUtil.size() > 0){
@@ -2169,6 +2174,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					user.setUserIsvalid(new Integer(isvalid));
 					user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
 					user.setUserType(dbUtil.getString(i, "USER_TYPE"));
+					user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
+					user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 
 					list.add(user);
 				}
@@ -2215,7 +2222,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					user.setUserIsvalid(new Integer(isvalid));
 					user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
 					user.setUserType(dbUtil.getString(i, "USER_TYPE"));
-
+					user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
+					user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 					list.add(user);
 				}
 			} catch (SQLException e) {
@@ -2776,6 +2784,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						uj.setUser_regdate(record.getString("USER_REGDATE"));
 						uj.setDredge_time(record.getString( "DREDGE_TIME"));
 						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
+						uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
+						uj.setPasswordExpiredTime((Timestamp)getPasswordExpiredTime(uj.getPasswordUpdatetime()));
 //						try{
 //							orgjob = dbUtil.getString(i, "org_job");
 //						}catch(Exception e){
@@ -2831,6 +2841,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						uj.setUser_regdate(record.getString("USER_REGDATE"));
 						uj.setDredge_time(record.getString( "DREDGE_TIME"));
 						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
+						uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
+						uj.setPasswordExpiredTime((Timestamp)getPasswordExpiredTime(uj.getPasswordUpdatetime()));
 //						try{
 //							orgjob = dbUtil.getString(i, "org_job");
 //						}catch(Exception e){
@@ -3495,7 +3507,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				user.setUserIsvalid(new Integer(isvalid));
 				user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
 				user.setUserType(dbUtil.getString(i, "USER_TYPE"));
-
+				user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
+				user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime()));
 				list.add(user);
 			}
 
@@ -4781,7 +4794,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					.append("USER_WORKNUMBER, USER_MOBILETEL1, USER_MOBILETEL2, USER_FAX, ")
 					.append("USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, USER_POSTALCODE, ")
 					.append("USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, USER_TYPE, ")
-					.append("REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ISTAXMANAGER, WORKLENGTH, POLITICS) ")
+					.append("REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ISTAXMANAGER, WORKLENGTH, POLITICS,password_updatetime) ")
 					.append(" values(?,?,?,?,")
 					.append("?,?,?,?,?,")
 					.append("?,?,?,?,")
@@ -4836,7 +4849,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				preparedDBUtil.setInt(31, user.getIstaxmanager());
 				preparedDBUtil.setString(32, user.getWorklength() == null ? "" : user.getWorklength());
 				preparedDBUtil.setString(33, user.getPolitics() == null ? "" : user.getPolitics());
-				
+				preparedDBUtil.setTimestamp(34, new Timestamp(new Date().getTime()));
 				preparedDBUtil.executePrepared();
 				
 				
@@ -4974,36 +4987,48 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					+ "USER_PINYIN=?, USER_TYPE=?, USER_POSTALCODE=?, USER_FAX=?, USER_OICQ=?, USER_BIRTHDAY=?,"
 					+ "USER_ADDRESS=?, USER_ISVALID=?, DREDGE_TIME=?, USER_REGDATE=?, USER_SN=?, REMARK3=?,"
 					+ "REMARK2=?, ISTAXMANAGER=?,USER_WORKNUMBER=? where USER_ID=?";
-				PreparedDBUtil pe = new PreparedDBUtil();
-				pe.preparedUpdate(sql);
-				pe.setString(1, user.getUserRealname());
-				pe.setString(2, user.getUserIdcard() == null ? "" : user.getUserIdcard());
-				pe.setString(3, user.getUserWorktel() == null ? "" : user.getUserWorktel());
-				pe.setString(4, user.getUserSex());
-				pe.setString(5, user.getUserHometel() == null ? "" : user.getUserHometel());
-				pe.setString(6, user.getUserEmail() == null ? "" : user.getUserEmail());
-				pe.setString(7, user.getUserMobiletel1() == null ? "" : user.getUserMobiletel1());
-				pe.setString(8, user.getUserMobiletel2() == null ? "" : user.getUserMobiletel2());
-				pe.setString(9, user.getRemark4() == null ? "" : user.getRemark4());
-				pe.setString(10, user.getRemark5() == null ? "" : user.getRemark5());
-				pe.setString(11, user.getUserPinyin() == null ? "" : user.getUserPinyin());
-				pe.setString(12, user.getUserType());
-				pe.setString(13, user.getUserPostalcode() == null ? "" : user.getUserPostalcode());
-				pe.setString(14, user.getUserFax() == null ? "" : user.getUserFax());
-				pe.setString(15, user.getUserOicq() == null ? "" : user.getUserOicq());
-				pe.setDate(16, String.valueOf(user.getUserBirthday()) == "null" ? null :user.getUserBirthday());
-				pe.setString(17, user.getUserAddress() == null ? "" : user.getUserAddress());
-				pe.setInt(18, user.getUserIsvalid());
-				pe.setString(19, user.getUserIsvalid().intValue()==2?riqi:"尚未开通");
-				pe.setDate(20, reg == "null" ? null : user.getUserRegdate());
-				pe.setInt(21, user.getUserSn());
-				pe.setString(22, user.getRemark3() == null ? "" : user.getRemark3());
-				pe.setString(23, user.getRemark2() == null ? "" : user.getRemark2());
-				pe.setInt(24, user.getIstaxmanager());
-				pe.setInt(25, user.getUserId());
-				pe.setString(26, user.getUserWorknumber());
-//				System.out.println(sql);
-				pe.executePrepared();
+				TransactionManager tm = new TransactionManager();
+				try
+				{
+					PreparedDBUtil pe = new PreparedDBUtil();
+					tm.begin();
+					pe.preparedUpdate(sql);
+					pe.setString(1, user.getUserRealname());
+					pe.setString(2, user.getUserIdcard() == null ? "" : user.getUserIdcard());
+					pe.setString(3, user.getUserWorktel() == null ? "" : user.getUserWorktel());
+					pe.setString(4, user.getUserSex());
+					pe.setString(5, user.getUserHometel() == null ? "" : user.getUserHometel());
+					pe.setString(6, user.getUserEmail() == null ? "" : user.getUserEmail());
+					pe.setString(7, user.getUserMobiletel1() == null ? "" : user.getUserMobiletel1());
+					pe.setString(8, user.getUserMobiletel2() == null ? "" : user.getUserMobiletel2());
+					pe.setString(9, user.getRemark4() == null ? "" : user.getRemark4());
+					pe.setString(10, user.getRemark5() == null ? "" : user.getRemark5());
+					pe.setString(11, user.getUserPinyin() == null ? "" : user.getUserPinyin());
+					pe.setString(12, user.getUserType());
+					pe.setString(13, user.getUserPostalcode() == null ? "" : user.getUserPostalcode());
+					pe.setString(14, user.getUserFax() == null ? "" : user.getUserFax());
+					pe.setString(15, user.getUserOicq() == null ? "" : user.getUserOicq());
+					pe.setDate(16, String.valueOf(user.getUserBirthday()) == "null" ? null :user.getUserBirthday());
+					pe.setString(17, user.getUserAddress() == null ? "" : user.getUserAddress());
+					pe.setInt(18, user.getUserIsvalid());
+					pe.setString(19, user.getUserIsvalid().intValue()==2?riqi:"尚未开通");
+					pe.setDate(20, reg == "null" ? null : user.getUserRegdate());
+					pe.setInt(21, user.getUserSn());
+					pe.setString(22, user.getRemark3() == null ? "" : user.getRemark3());
+					pe.setString(23, user.getRemark2() == null ? "" : user.getRemark2());
+					pe.setInt(24, user.getIstaxmanager());
+					pe.setInt(25, user.getUserId());
+					pe.setString(26, user.getUserWorknumber());
+	//				System.out.println(sql);
+					pe.executePrepared();
+					initpasswordupdatetime(user.getUserId());
+					tm.commit();
+				}
+				finally
+				{
+					tm.releasenolog();
+				}
+				
 //				StringBuffer hsql = new StringBuffer();
 //				hsql.append("update TD_SM_USER set USER_REALNAME='")
 //					.append(user.getUserRealname()).append("', ")
@@ -5081,31 +5106,210 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				state = true;
 				Event event = new EventImpl(user.getUserId().toString(), ACLEventType.USER_INFO_CHANGE);
 				super.change(event);
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new ManagerException(e);
 			}
 
 		}
 		return state;
 	}
-
+	/**
+	 * 获取用户密码过期时间，如果返回为null,表示密码永不过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException 
+	 */
+	public Date getPasswordExpiredTime(int userid) throws ManagerException
+	{
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			Timestamp updatetime = SQLExecutor.queryObject(Timestamp.class, "select password_updatetime from TD_SM_USER where USER_ID=?", userid);
+			if(updatetime == null)
+				updatetime = this.initpasswordupdatetime(userid);
+			tm.commit();
+			return getPasswordExpiredTime(updatetime);
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
+	/**
+	 * 获取密码过期时间，如果返回为null,表示密码永不过期
+	 * @param passwordupdatetime
+	 * @return
+	 */
+	public Date getPasswordExpiredTime(Timestamp passwordupdatetime)
+	{
+		if(passwordupdatetime == null)
+			return null;
+		int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
+		if(expiredays <= 0)
+			return null;
+		 Calendar calendar=Calendar.getInstance();   
+		 calendar.setTime(passwordupdatetime); 
+		 calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)+expiredays);
+		 return new Timestamp(calendar.getTime().getTime());
+	}
+	public Timestamp initpasswordupdatetime(int userid) throws ManagerException
+	{
+		try {
+			Timestamp updatetime = SQLExecutor.queryObject(Timestamp.class, "select password_updatetime from TD_SM_USER where USER_ID=?", userid);
+			
+			if(updatetime == null)
+			{
+				updatetime =  new Timestamp(new Date().getTime());
+				StringBuffer hsql = new StringBuffer();
+				hsql.append("update TD_SM_USER set password_updatetime=? where ").append(
+						"USER_ID=?");
+				SQLExecutor.update(hsql.toString(), updatetime,userid);
+				return updatetime;
+			}
+			return updatetime;
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+	}
+	public boolean ishistorypassword(int userid,String password)throws ManagerException
+	{
+		try {
+			int count = SQLExecutor.queryObject(int.class, "select count(1) from TD_SM_PASSWORDHIS where user_id=? and PASSWORD_= ?", 
+					userid,EncrpyPwd.encodePassword(password));
+			return count > 0;
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+	}
+	/**
+	 * 判断用户口令是否过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException
+	 */
+	public boolean isPasswordExpired(int userid)throws ManagerException
+	{
+		try {
+			int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
+			if(expiredays <= 0)
+				return false;
+			Timestamp updatetime = SQLExecutor.queryObject(Timestamp.class, "select password_updatetime from TD_SM_USER where USER_ID=?", userid);
+			
+			if(updatetime == null)
+			{
+				StringBuffer hsql = new StringBuffer();
+				hsql.append("update TD_SM_USER set password_updatetime=? where ").append(
+						"USER_ID=?");
+				SQLExecutor.update(hsql.toString(), new Timestamp(new Date().getTime()),userid);
+				return false;
+			}
+		   Calendar calendar=Calendar.getInstance();   
+		   calendar.setTime(updatetime); 
+		
+		   calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)+expiredays); 
+		   Calendar calendarnow=Calendar.getInstance();   
+		   calendarnow.setTime(new Date());
+			return calendarnow.after(calendar);
+			  
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+	}
+	
+	/**
+	 * 判断用户口令是否过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException
+	 */
+	public boolean isPasswordExpired(User user)throws ManagerException
+	{
+		try {
+			int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
+			if(expiredays <= 0)
+				return false;
+			Timestamp updatetime = user.getPasswordUpdatetime();
+			
+			if(updatetime == null)
+			{
+				StringBuffer hsql = new StringBuffer();
+				hsql.append("update TD_SM_USER set password_updatetime=? where ").append(
+						"USER_ID=?");
+				SQLExecutor.update(hsql.toString(), new Timestamp(new Date().getTime()),user.getUserId());
+				return false;
+			}
+		   Calendar calendar=Calendar.getInstance();   
+		   calendar.setTime(updatetime); 
+		
+		   calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)+expiredays);//让日期加1  
+		   Calendar calendarnow=Calendar.getInstance();   
+		   calendarnow.setTime(new Date());
+			return calendarnow.after(calendar);
+			  
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+	}
+	
 	public boolean updateUserPassword(User user) throws ManagerException {
 		boolean state = false;
 		if (user != null) {
 			StringBuffer hsql = new StringBuffer();
-			hsql.append("update TD_SM_USER set USER_PASSWORD='").append(
-					EncrpyPwd.encodePassword(user.getUserPassword())).append("' where ").append(
-					"USER_ID='").append(user.getUserId()).append("'");
-			DBUtil db = new DBUtil();
+			
+			
+			hsql.append("update TD_SM_USER set USER_PASSWORD=? ,password_updatetime=? where ").append(
+					"USER_ID=?");
+			PreparedDBUtil db = new PreparedDBUtil();
+			TransactionManager tm = new TransactionManager();
 			try {
-				db.executeUpdate(hsql.toString());
+				tm.begin();
+				if(this.ishistorypassword(user.getUserId(), user.getUserPassword()))
+				{
+					throw new ManagerException("密码曾经被使用过，请重新输入新的密码！");
+				}
+				Map oldpassword = SQLExecutor.queryObject(HashMap.class, "select USER_PASSWORD,password_updatetime from td_sm_user where user_id=?", user.getUserId());
+				//记录旧密码
+				SQLExecutor.insert("INSERT INTO TD_SM_PASSWORDHIS (   USER_ID, PASSWORD_, PASSWORD_TIME) VALUES ( ?,?,? )", 
+						user.getUserId(),oldpassword.get("USER_PASSWORD"),oldpassword.get("PASSWORD_UPDATETIME")!=null?oldpassword.get("PASSWORD_UPDATETIME"):new Timestamp(new Date().getTime()));
+				db.preparedUpdate( hsql.toString());
+				db.setString(1, EncrpyPwd.encodePassword(user.getUserPassword()));
+				db.setTimestamp(2, new Timestamp(new Date().getTime()));
+				db.setInt(3, user.getUserId());		
+				db.executePrepared();
+				tm.commit();
 				state = true;
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} catch (ManagerException e) {
+				throw e;
+			}
+			 catch (Exception e) {
+					throw new ManagerException(e);
+				}
+			finally
+			{
+				tm.releasenolog();
 			}
 		}
 		return state;
 	}
+//	public boolean updateUserPassword(User user) throws ManagerException {
+//		boolean state = false;
+//		if (user != null) {
+//			StringBuffer hsql = new StringBuffer();
+//			hsql.append("update TD_SM_USER set USER_PASSWORD='").append(
+//					EncrpyPwd.encodePassword(user.getUserPassword())).append("' where ").append(
+//					"USER_ID='").append(user.getUserId()).append("'");
+//			DBUtil db = new DBUtil();
+//			try {
+//				db.executeUpdate(hsql.toString());
+//				state = true;
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return state;
+//	}
 
 	public boolean addUserOrg(String[] userIds, String orgId, String classType)
 			throws ManagerException {

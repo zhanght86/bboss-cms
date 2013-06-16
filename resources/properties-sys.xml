@@ -311,6 +311,16 @@
 	
 	<!-- 系统默认登录模块，如果在登录时没有指定特定的模块,则使用这个配置值  -->
 	<property name="default_module" value="module"/>
+	
+	
+	<!-- 密码过期时间，大于0时有效，小于等于0时无效  -->
+	<property name="password_dualtime" value="90"/>
+	
+	<!-- 是否启用登录验证码  -->
+	<property name="enable_login_validatecode" value="true"/>
+	
+	
+	
 	 
 		
 

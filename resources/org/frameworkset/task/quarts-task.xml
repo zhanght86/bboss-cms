@@ -78,7 +78,7 @@
 				return holidays;
 					]]>
 			</property>
-			<property name="2013year" class="org.frameworkset.task.TestCalendarBuilder"/>
+			<!--<property name="2013year" class="org.frameworkset.task.TestCalendarBuilder"/>-->
 		</map>
 		<!-- for cluster -->
 		

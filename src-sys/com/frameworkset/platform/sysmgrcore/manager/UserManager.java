@@ -1,12 +1,14 @@
 package com.frameworkset.platform.sysmgrcore.manager;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.frameworkset.spi.Provider;
 import org.frameworkset.spi.SPIException;
 
+import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -70,7 +72,21 @@ public interface UserManager extends Provider, Serializable {
 	 * 用户所对应的“用户角色”关系对象集合的名称 userroleSet
 	 */
 	public static final String ASSOCIATED_USERROLESET = "userroleSet";
-
+	/**
+	 * 判断用户口令是否被使用过，如果是则返回true，否则返回false
+	 * @param userid
+	 * @param password
+	 * @return
+	 * @throws ManagerException
+	 */
+	public boolean ishistorypassword(int userid,String password)throws ManagerException;
+	/**
+	 * 判断用户口令是否过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException
+	 */
+	public boolean isPasswordExpired(int userid)throws ManagerException;
 	/**
 	 * 存储用户实例
 	 * 
@@ -1143,4 +1159,23 @@ public interface UserManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public List<User> getOrgManager(String org_id) throws ManagerException;
+	/**
+	 * @param user
+	 * @return
+	 */
+	public boolean isPasswordExpired(User user) throws ManagerException;
+	public Timestamp initpasswordupdatetime(int userid) throws ManagerException;
+	/**
+	 * 获取用户密码过期时间，如果返回为null,表示密码永不过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException 
+	 */
+	public Date getPasswordExpiredTime(int userid) throws ManagerException;
+	/**
+	 * 获取密码过期时间，如果返回为null,表示密码永不过期
+	 * @param passwordupdatetime
+	 * @return
+	 */
+	public Date getPasswordExpiredTime(Timestamp passwordupdatetime);
 }

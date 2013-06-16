@@ -116,6 +116,10 @@ public class UserPasswordLoginModule extends ACLLoginModule
             	
             if(user.getUserPassword().equals(password))
             {
+            	 if(SecurityDatabase.getUserManager(registTable).isPasswordExpired(user))
+            	 {
+            		 throw new LoginException("PasswordExpired");
+            	 }
             	 OrgManager orgManager = SecurityDatabase.getOrgManager();
                  Organization org = orgManager.getMainOrganizationOfUser(userName);
                
@@ -136,7 +140,12 @@ public class UserPasswordLoginModule extends ACLLoginModule
             
             return false;
 
-        } catch (ManagerException ex) {
+        }
+        catch(LoginException e)
+        {
+        	throw e;
+        }
+        catch (ManagerException ex) {
         	
             throw new LoginException(StringUtil.exceptionToString(ex));
         } catch (SPIException ex) {

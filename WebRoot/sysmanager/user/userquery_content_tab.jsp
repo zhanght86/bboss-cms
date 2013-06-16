@@ -239,6 +239,7 @@
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.realname"/></td>								
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.belongorg"/></td>
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.mobile"/></td>
+							<th>密码过期时间</th>			
 						</pg:header>
 						<pg:list>
 							<tr onDBLclick=getUserInfo2(this,'<pg:cell colName="userId" defaultValue=""/>','<pg:querystring encode="true"/>') >
@@ -256,6 +257,8 @@
 									<pg:null colName="userMobiletel1"><pg:message code="sany.pdp.sysmanager.user.phoneno.no"/></pg:null>
 									<pg:equal colName="userMobiletel1" value=""><pg:message code="sany.pdp.sysmanager.user.phoneno.no"/></pg:equal>
 								</td>	
+								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
+										defaultValue="" /></td>		
 								</tr>
 						</pg:list>
 					</table>

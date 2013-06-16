@@ -12,5 +12,10 @@
 		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.CacheController" >
 	</property>
 	
+	<property name="/passward/*.page"
+		
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.PasswordController" >
+	</property>
+	
 	
 </properties>
