@@ -31,9 +31,9 @@
             </ul>
             <ul>
             	<div style="position:absolute;">
- 		<img src="pic.jsp" style=" position:absolute;left:-600px; top:-10px;">
+ 		<img src="getPicByProceccDefid.page?process_defid=${process_defid}" style=" position:absolute;left:100px; top:-10px;">
  		<!-- 给执行的节点加框 -->
- 		<div style=" position:absolute;border:1px solid red;left:${coordinateObj.x-601 }px;top:${coordinateObj.y-11 }px;width:${coordinateObj.width }px;height:${coordinateObj.height }px;"></div>
+ 		<div style=" position:absolute;border:1px solid red;left:${coordinateObj.x+100 }px;top:${coordinateObj.y-11 }px;width:${coordinateObj.width }px;height:${coordinateObj.height }px;"></div>
  </div>
             </ul>
         </div>

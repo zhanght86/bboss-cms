@@ -15,8 +15,11 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -193,7 +196,20 @@ public interface ActivitiService {
 	 */
 	public Deployment deployProcDefByPath(String deploymentName,
 			String xmlPath, String jpgPath);
-
+	
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 */
+	public Deployment deployProcDefByPath(String deploymentName,
+			String xmlPath, String jpgPath,int deploypolicy);
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 */
+	public Deployment deployProcDefByZip(String deploymentName, String zip,int deploypolicy) ;
 	/**
 	 * 部署流程
 	 * 
@@ -211,6 +227,18 @@ public interface ActivitiService {
 	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key,
 			Map<String, Object> map);
+	
+	/**
+	 * 启动流程
+	 * 
+	 * @param businessKey
+	 * @param variableMap
+	 * @param process_key
+	 * identityService.setAuthenticatedUserId(initor);
+	 * @return
+	 */
+	public ProcessInstance startProcDef(String businessKey, String process_key,
+			Map<String, Object> map,String initor);
 
 	/**
 	 * 启动流程
@@ -337,7 +365,8 @@ public interface ActivitiService {
 
 	public List<ActivityImpl> getActivitiImplListByProcessDefinitionId(
 			String processDefinitionId);
-
+	public ActivityImpl getActivityImplByDefId(String actDefId,
+			String processDefineId);
 	/**
 	 * 
 	 * @param actId
@@ -360,7 +389,7 @@ public interface ActivitiService {
 	 * @param taskId
 	 * @param map
 	 */
-	public void completeTask(String taskId, Map<String, Object> map,String destinationTaskKey);
+	public void completeTaskWithDest(String taskId, Map<String, Object> map,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -380,7 +409,7 @@ public interface ActivitiService {
 	 * @param orgId
 	 *            组织机构ID
 	 */
-	public void completeTaskLoadOrgParams(String taskId, String orgId,String destinationTaskKey);
+	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,String destinationTaskKey);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -427,7 +456,7 @@ public interface ActivitiService {
 	 * @param bussinesstypeId
 	 *            业务类型ID
 	 */
-	public void completeTaskLoadBussinesstypeParams(String taskId,
+	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
 			String bussinesstypeId,String destinationTaskKey);
 
 	/**
@@ -474,7 +503,7 @@ public interface ActivitiService {
 	 * @param map
 	 *            自定义参数MAP
 	 */
-	public void completeTaskLoadCommonParams(String taskId,String destinationTaskKey);
+	public void completeTaskLoadCommonParamsWithDest(String taskId,String destinationTaskKey);
 
 
 	/**
@@ -523,7 +552,7 @@ public interface ActivitiService {
 	 * @param business_type
 	 *            业务配置类型
 	 */
-	public void completeTaskLoadParams(String taskId, String business_id,
+	public void completeTaskLoadParamsWithDest(String taskId, String business_id,
 			String business_type,String destinationTaskKey);
 
 	/**
@@ -574,8 +603,35 @@ public interface ActivitiService {
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey);
 	
+	/**
+	 * 完成任务(先领用再完成)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUser(String taskId, String username);
+	
+	/**
+	 * 完成任务(先领用再完成),并驳回到指定节点
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUserWithDest(String taskId, String username,String destinationTaskKey);
+	
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map);
+	
+	/**
+	 * 查询指定任务节点的最新记录
+	 * 
+	 * @param processInstance
+	 *            流程实例
+	 * @param activityId
+	 * @return
+	 */
+	public List<HistoricActivityInstance> findHistoricUserTask(
+			String instanceId) ;
 	
 	/**
 	 * 完成任务并拨回到指定节点
@@ -747,12 +803,19 @@ public interface ActivitiService {
 	public String getProccessXMLByKey(String processKey,String encode) throws IOException ;
 	public String getProccessXMLByKey(String processKey) throws IOException; 
 	/**
-	 * 获取流程图片并输出到out中
-	 * @param processId
+	 * 根据流程定义id获取对应版本的流程图
+	 * @param processDefId
 	 * @param out
 	 * @throws IOException
 	 */
-	public void getProccessPic(String processId, OutputStream out) throws IOException ;
+	public void getProccessPic(String processDefId, OutputStream out) throws IOException ;
+	/**
+	 * 根据流程key获取流程的最新版本流程图
+	 * @param processKey
+	 * @param out
+	 * @throws IOException
+	 */
+	public void getProccessPicByProcessKey(String processKey, OutputStream out) throws IOException;
 
 	/**
 	 * 获得所有待删除列表

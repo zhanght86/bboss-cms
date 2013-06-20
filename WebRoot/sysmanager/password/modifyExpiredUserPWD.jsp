@@ -12,7 +12,7 @@
 <%
 	
     String userAccount = request.getParameter("userAccount");
-    int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
+    int expiredays = SecurityDatabase.getUserManager().getUserPasswordDualTimeByUserAccount(userAccount);
 %>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>

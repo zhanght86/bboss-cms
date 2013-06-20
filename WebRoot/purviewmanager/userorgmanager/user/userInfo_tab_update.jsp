@@ -441,9 +441,31 @@ function queryroleRes(name)
 					</tr>
 					<tr>
 						<th>
+							 上次修改密码时间:
+						</th>
+						<td height="25" >
+							<pg:cell colName="passwordUpdatetime"  dateformat="yyyy-MM-dd HH:mm:ss"/>							
+						</td>
+						<th>
+							 密码过期时间:
+						</th>
+						<td height="25" >
+							<pg:cell colName="passwordExpiredTime"  dateformat="yyyy-MM-dd HH:mm:ss"/>							
+						</td>
+					</tr>
+					<tr>
+						<th>
+							 设置密码有效期
+						</th>
+						<td height="25" >
+							
+							<input type="text" name="passwordDualedTime" value="<pg:cell colName="passwordDualedTime"  defaultValue="-1" />" validator="intNull" cnname="密码有效期" maxlength="40" >天
+							
+						</td>
+						<th>
 							 <pg:message code="sany.pdp.user.worknumber"/>：
 						</th>
-						<td height="25" colspan="2">
+						<td height="25" >
 							
 							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  defaultValue="" />" validator="stringNull" cnname="用户工号" maxlength="40" >
 							

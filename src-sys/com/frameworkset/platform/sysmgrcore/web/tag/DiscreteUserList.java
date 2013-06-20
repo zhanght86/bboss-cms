@@ -58,7 +58,9 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 				user.setUserType(dbUtil.getString(i, "user_type"));
 				user.setUserEmail(dbUtil.getString(i, "user_email"));
 				user.setPasswordUpdatetime(dbUtil.getTimestamp(i,"password_updatetime"));
-				user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
+				user.setPasswordDualedTime(dbUtil.getInt(i, "Password_DualTime"));
+				user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+				
 				users.add(user);
 				
 			}

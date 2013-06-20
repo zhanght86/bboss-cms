@@ -349,9 +349,9 @@
         <column name="JOB_ID" primaryKey="true" required="true"
             size="50" type="VARCHAR"/>
         <column name="JOB_SN" size="22" type="DECIMAL"/>
-        <foreign-key foreignTable="TD_SM_JOB">
-            <reference foreign="JOB_ID" local="JOB_ID"/>
-        </foreign-key>
+<!--        <foreign-key foreignTable="TD_SM_JOB">-->
+<!--            <reference foreign="JOB_ID" local="JOB_ID"/>-->
+<!--        </foreign-key>-->
     </table>
     <table name="TD_SM_ORGJOBROLE">
         <column name="ORG_ID" primaryKey="true" required="true"
@@ -546,6 +546,7 @@
         <column name="ISTAXMANAGER" size="1" type="DECIMAL"/>
         <column name="LOGON_IP" size="15" type="VARCHAR"/>
         <column name="CERT_SN" size="50" type="VARCHAR"/>
+         <column name="PASSWORD_UPDATETIME" type="TIMESTAMP"/>
     </table>
     <table name="TD_SM_USERGROUP">
         <column name="GROUP_ID" primaryKey="true" required="true"
@@ -647,5 +648,10 @@
     <table name="V_TB_RES_ORG_USER_WRITE">
         <column name="USER_ID" required="true" size="50" type="VARCHAR"/>
         <column name="ORG_ID" required="true" size="100" type="VARCHAR"/>
+    </table>
+    <table name="TD_SM_PASSWORDHIS">
+        <column name="USER_ID" size="19" type="DECIMAL"/>
+        <column name="PASSWORD_" size="100" type="VARCHAR"/>
+        <column name="PASSWORD_TIME" type="TIMESTAMP"/>
     </table>
 </database>

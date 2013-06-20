@@ -1010,9 +1010,25 @@ public class PortalUserManagerImpl extends EventHandle implements UserManager {
 	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getPasswordExpiredTime(java.sql.Timestamp)
 	 */
 	@Override
-	public Date getPasswordExpiredTime(Timestamp passwordupdatetime) {
+	public Date getPasswordExpiredTime(Timestamp passwordupdatetime,int expiredays) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getDefaultPasswordDualTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getUserPasswordDualTimeByUserAccount(java.lang.String)
+	 */
+	@Override
+	public int getUserPasswordDualTimeByUserAccount(String userAccount)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

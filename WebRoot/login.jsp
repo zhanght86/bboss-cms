@@ -21,7 +21,7 @@
 	String language = request.getParameter("language");
 	boolean enable_login_validatecode = ConfigManager.getInstance()
 			.getConfigBooleanValue("enable_login_validatecode", true);
-	 int expiredays = ConfigManager.getInstance().getConfigIntValue("password_dualtime", -1);
+	 int expiredays = SecurityDatabase.getUserManager().getDefaultPasswordDualTime();
 	String errorMessage = null;
 	
     String userName = request.getParameter("userName");

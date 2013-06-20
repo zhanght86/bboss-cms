@@ -3,7 +3,7 @@
  * <p>Title: 更新用户信息主页面</p>
  * <p>Description: 更新用户信息主页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: </p>
  * @Date 2008-3-21
  * @author liangbing.tao
  * @version 1.0
@@ -98,6 +98,17 @@
 	user.setRemark2(shortMobile);
 	user.setUserSn(new Integer(userSn));
 	user.setUserWorknumber(userWorknumber);
+	String passwordDualedTime_ = request.getParameter("passwordDualedTime");
+	int passwordDualedTime = userManager.getDefaultPasswordDualTime();
+	try
+	{
+		passwordDualedTime = Integer.parseInt(passwordDualedTime_);
+	}
+	catch(Exception e)
+	{
+		
+	}
+	user.setPasswordDualedTime(passwordDualedTime);
     boolean state = userManager.updateUser(user);
    
 %>

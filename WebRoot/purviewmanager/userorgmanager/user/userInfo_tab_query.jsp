@@ -422,9 +422,31 @@ function queryroleRes(name)
 					</tr>
 					<tr>
 						<th>
+							 上次修改密码时间:
+						</th>
+						<td height="25" >
+							<pg:cell colName="passwordUpdatetime"  dateformat="yyyy-MM-dd HH:mm:ss"/>							
+						</td>
+						<th>
+							 密码过期时间:
+						</th>
+						<td height="25" >
+							<pg:cell colName="passwordExpiredTime"  dateformat="yyyy-MM-dd HH:mm:ss"/>							
+						</td>
+					</tr>
+					<tr>
+						<th>
+							 设置密码有效期
+						</th>
+						<td height="25" >
+							
+							<pg:cell colName="passwordDualedTime"  defaultValue="-1" />天
+							
+						</td>
+						<th>
 							<pg:message code="sany.pdp.user.worknumber"/>：
 						</th>
-						<td height="25" colspan="2">
+						<td height="25" >
 							
 							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  defaultValue="" />" validator="stringNull" maxlength="40" readOnly=true>
 							
@@ -605,7 +627,7 @@ function queryroleRes(name)
 function renewPassword(){
 	var renewPaw = "<%=request.getParameter("renewPaw")%>";
 	if(renewPaw == "true"){
-		W.$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.user.password.resume"/>');
+		$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.user.password.resume"/>');
 	}
 }
 </script>

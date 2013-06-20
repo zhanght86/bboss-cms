@@ -434,7 +434,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 								"USER_MOBILETEL2"));
 						user.setUserEmail(pe.getString(j, "USER_EMAIL"));
 						user.setPasswordUpdatetime(pe.getTimestamp(j,"password_updatetime"));
-						user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
+						user.setPasswordDualedTime(pe.getInt(j, "Password_DualTime"));
+						user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
 						
 //						ora_org_name = db_user.getString(j, "org_job");
 						
@@ -461,7 +462,7 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 			}else if(userOrgType.equalsIgnoreCase("dis")){//离散用户查询
 				  UserManager userManager = SecurityDatabase.getUserManager();
 					StringBuffer sql = new StringBuffer()	
-					.append("select user_id,user_name,user_realname,USER_MOBILETEL1,password_updatetime from td_sm_user  t where 1=1 ")
+					.append("select user_id,user_name,user_realname,USER_MOBILETEL1,password_updatetime,Password_DualTime from td_sm_user  t where 1=1 ")
 					.append(sb_user.toString())
 					.append("and t.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( ")
 					.append("select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_ where user1_.USER_ID= userjoborg1_.user_id)) order by user_id");
@@ -490,7 +491,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 									"USER_MOBILETEL1"));
 							user.setOrgName("离散用户");
 							user.setPasswordUpdatetime(pe.getTimestamp(j,"password_updatetime"));
-							user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime()));
+							user.setPasswordDualedTime(pe.getInt(j, "Password_DualTime"));
+							user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
 							userList.add(user); 
 						}
 						System.out.println("离散用户查询----------------------"+sql.toString());

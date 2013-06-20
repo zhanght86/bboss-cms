@@ -47,6 +47,7 @@ public interface UserManager extends Provider, Serializable {
 	 * 用户所对应的“用户属性”关系对象集合的名称 userattrSet
 	 */
 	public static final String ASSOCIATED_USERATTRSET = "userattrSet";
+	
 
 	/**
 	 * 用户所对应的“用户资源操作”关系对象集合的名称 userresopSet
@@ -80,6 +81,7 @@ public interface UserManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public boolean ishistorypassword(int userid,String password)throws ManagerException;
+	public int getUserPasswordDualTimeByUserAccount(String userAccount) throws ManagerException;
 	/**
 	 * 判断用户口令是否过期
 	 * @param userid
@@ -1177,5 +1179,7 @@ public interface UserManager extends Provider, Serializable {
 	 * @param passwordupdatetime
 	 * @return
 	 */
-	public Date getPasswordExpiredTime(Timestamp passwordupdatetime);
+	public Date getPasswordExpiredTime(Timestamp passwordupdatetime,int expiredays);
+	
+	public int getDefaultPasswordDualTime();
 }

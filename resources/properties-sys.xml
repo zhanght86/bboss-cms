@@ -318,6 +318,9 @@
 	
 	<!-- 是否启用登录验证码  -->
 	<property name="enable_login_validatecode" value="true"/>
+	<!-- 是否启用用户级的口令过期时间  -->
+	<property name="enableUserScopePasswordExpiredDays" value="true"/>
+	
 	
 	
 	

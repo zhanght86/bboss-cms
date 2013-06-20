@@ -22,9 +22,12 @@ import org.activiti.engine.ProcessEngineConfiguration;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.activiti.engine.impl.persistence.deploy.DeploymentManager;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -32,7 +35,6 @@ import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.pvm.process.ProcessDefinitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -51,6 +53,7 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
+
 
 
 public class ActivitiServiceImpl implements ActivitiService {
@@ -113,9 +116,17 @@ public void rejecttoPreTask(String taskId,String username){
 		try
 		{
 			tm.begin();
-			processEngine = ProcessEngineConfiguration
-					.createProcessEngineConfigurationFromResource(xmlPath)
-					.buildProcessEngine();
+			
+			ProcessEngineConfigurationImpl config = (ProcessEngineConfigurationImpl)ProcessEngineConfiguration
+			.createProcessEngineConfigurationFromResource(xmlPath);
+			processEngine = config.buildProcessEngine();
+			this.taskService = processEngine.getTaskService();
+			this.historyService = processEngine.getHistoryService();
+			this.repositoryService = processEngine.getRepositoryService();
+			this.formService = this.processEngine.getFormService();
+			this.identityService = this.processEngine.getIdentityService();
+			this.runtimeService = this.processEngine.getRuntimeService();
+			this.managementService = this.processEngine.getManagementService();
 			tm.commit();
 		}
 		catch(Exception e)
@@ -143,7 +154,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return activiti服务
 	 */
 	public RepositoryService getRepositoryService() {
-		return processEngine.getRepositoryService();
+		return repositoryService;
 	}
 
 	/**
@@ -152,7 +163,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public RuntimeService getRuntimeService() {
-		return processEngine.getRuntimeService();
+		return runtimeService;
 	}
 
 	/**
@@ -161,7 +172,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public TaskService getTaskService() {
-		return processEngine.getTaskService();
+		return taskService;
 	}
 
 	/**
@@ -170,7 +181,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public HistoryService getHistoryService() {
-		return processEngine.getHistoryService();
+		return historyService;
 	}
 
 	/**
@@ -179,7 +190,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public FormService getFormService() {
-		return processEngine.getFormService();
+		return this.formService;
 	}
 
 	/**
@@ -188,7 +199,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public ManagementService getManagementService() {
-		return processEngine.getManagementService();
+		return managementService;
 	}
 
 	/**
@@ -197,7 +208,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public IdentityService getIdentityService() {
-		return processEngine.getIdentityService();
+		return identityService;
 	}
 
 	/**
@@ -209,7 +220,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 *            参数MAP
 	 */
 	public void setVariables(String taskId, Map<String, Object> map) {
-		processEngine.getTaskService().setVariables(taskId, map);
+		taskService.setVariables(taskId, map);
 	}
 
 	/**
@@ -223,7 +234,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 *            值
 	 */
 	public void setVariable(String taskId, String variable, Object object) {
-		processEngine.getTaskService().setVariable(taskId, variable, object);
+		taskService.setVariable(taskId, variable, object);
 	}
 
 	/**
@@ -236,7 +247,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public Object getVariable(String taskId, String key) {
-		return processEngine.getTaskService().getVariable(taskId, key);
+		return taskService.getVariable(taskId, key);
 	}
 
 	/**
@@ -247,7 +258,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<Task> getActList(String definitionKey) {
-		return processEngine.getTaskService().createTaskQuery()
+		return taskService.createTaskQuery()
 				.taskDefinitionKey(definitionKey).list();
 	}
 
@@ -258,7 +269,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public List<ProcessDefinition> activitiListByprocesskey(String process_key) {
 
-		repositoryService = processEngine.getRepositoryService();
 		List<ProcessDefinition> procDefList = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey(process_key)
@@ -273,7 +283,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<ProcessInstance> listProcInstByPdfid(String pdfid) {
-		runtimeService = processEngine.getRuntimeService();
 		List<ProcessInstance> procInstList = runtimeService
 				.createProcessInstanceQuery().processDefinitionId(pdfid).list();
 
@@ -286,7 +295,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<Execution> listExecutionByProId(String processInstanceId) {
-		runtimeService = processEngine.getRuntimeService();
 		List<Execution> exectionList = runtimeService.createExecutionQuery()
 				.processInstanceId(processInstanceId).list();
 		return exectionList;
@@ -299,7 +307,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param map
 	 */
 	public void completeTask(String taskId, Map<String, Object> map) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map);
 	}
 	
@@ -309,8 +317,8 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param taskId
 	 * @param map
 	 */
-	public void completeTask(String taskId, Map<String, Object> map,String destinationTaskKey) {
-		taskService = processEngine.getTaskService();
+	public void completeTaskWithDest(String taskId, Map<String, Object> map,String destinationTaskKey) {
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map, destinationTaskKey);
 	}
 	/**
@@ -332,7 +340,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param orgId
 	 *            组织机构ID,String destinationTaskKey
 	 */
-	public void completeTaskLoadOrgParams(String taskId, String orgId,String destinationTaskKey) {
+	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,String destinationTaskKey) {
 		completeTaskLoadOrgParams(taskId, (Map<String, Object>)null, orgId, destinationTaskKey);
 	}
 	/**
@@ -379,7 +387,7 @@ public void rejecttoPreTask(String taskId,String username){
 		if (map != null && map.size() > 0) {
 			paramsMap.putAll(map);
 		}
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
 
@@ -404,7 +412,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param bussinesstypeId
 	 *            业务类型ID,String destinationTaskKey
 	 */
-	public void completeTaskLoadBussinesstypeParams(String taskId,
+	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
 			String bussinesstypeId,String destinationTaskKey) {
 		completeTaskLoadBussinesstypeParams(taskId, (Map<String, Object>)null, bussinesstypeId,destinationTaskKey);
 	}
@@ -455,7 +463,7 @@ public void rejecttoPreTask(String taskId,String username){
 		if (map != null && map.size() > 0) {
 			paramsMap.putAll(map);
 		}
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
 	/**
@@ -477,7 +485,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param map
 	 *            自定义参数MAP
 	 */
-	public void completeTaskLoadCommonParams(String taskId,String destinationTaskKey) {
+	public void completeTaskLoadCommonParamsWithDest(String taskId,String destinationTaskKey) {
 		completeTaskLoadCommonParams(taskId, (Map<String, Object>)null,destinationTaskKey);
 	}
 	/**
@@ -519,7 +527,7 @@ public void rejecttoPreTask(String taskId,String username){
 		if (map != null && map.size() > 0) {
 			paramsMap.putAll(map);
 		}
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap,destinationTaskKey);
 	}
 	/**
@@ -534,7 +542,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTaskLoadParams(String taskId, String business_id,
 			String business_type) {
-		completeTaskLoadParams( taskId,  business_id,
+		completeTaskLoadParamsWithDest( taskId,  business_id,
 				 business_type,(String) null);
 	}
 	/**
@@ -547,7 +555,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param business_type
 	 *            业务配置类型
 	 */
-	public void completeTaskLoadParams(String taskId, String business_id,
+	public void completeTaskLoadParamsWithDest(String taskId, String business_id,
 			String business_type,String destinationTaskKey) {
 		completeTaskLoadParams(taskId, (Map<String, Object>)null, business_id, business_type, destinationTaskKey);
 	}
@@ -598,7 +606,7 @@ public void rejecttoPreTask(String taskId,String username){
 		if (map != null && map.size() > 0) {
 			paramsMap.putAll(map);
 		}
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
 
@@ -610,7 +618,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 		taskService.complete(taskId, map);
 	}
@@ -623,9 +631,52 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 		taskService.complete(taskId, map, destinationTaskKey);
+	}
+	
+	
+	/**
+	 * 完成任务(先领用再完成)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUser(String taskId, String username) {
+//		taskService = processEngine.getTaskService();
+		taskService.claim(taskId, username);
+		taskService.complete(taskId);
+	}
+	
+	/**
+	 * 查询指定任务节点的最新记录
+	 * 
+	 * @param processInstance
+	 *            流程实例
+	 * @param activityId
+	 * @return
+	 */
+	public List<HistoricActivityInstance> findHistoricUserTask(
+			String instanceId) {
+		// 查询当前流程实例审批结束的历史节点
+		List<HistoricActivityInstance> historicActivityInstances = historyService
+				.createHistoricActivityInstanceQuery().activityType("userTask")
+				.processInstanceId(instanceId).finished()
+				.orderByHistoricActivityInstanceEndTime().desc().list();
+		return historicActivityInstances;
+	}
+	
+	/**
+	 * 完成任务(先领用再完成)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUserWithDest(String taskId, String username,String destinationTaskKey) {
+//		taskService = processEngine.getTaskService();
+		taskService.claim(taskId, username);
+		taskService.completeWithDest(taskId, destinationTaskKey);
 	}
 	
 	/**
@@ -636,7 +687,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 		taskService.setVariablesLocal(taskId, map);
 		taskService.complete(taskId);
@@ -650,10 +701,10 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 		taskService.setVariablesLocal(taskId, map);
-		taskService.complete(taskId, destinationTaskKey);
+		taskService.completeWithDest(taskId, destinationTaskKey);
 	}
 
 	/**
@@ -664,7 +715,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<HistoricTaskInstance> getHisTaskByProcessId(String processId) {
-		historyService = processEngine.getHistoryService();
+//		historyService = processEngine.getHistoryService();
 		List<HistoricTaskInstance> historyList = historyService
 				.createHistoricTaskInstanceQuery().processInstanceId(processId)
 				.list();
@@ -783,7 +834,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param userId
 	 */
 	public void claim(String taskId, String username) {
-		taskService = processEngine.getTaskService();
+//		taskService = processEngine.getTaskService();
 		taskService.claim(taskId, username);
 	}
 
@@ -794,7 +845,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param userId
 	 */
 	public void delegateTask(String taskId, String userId) {
-		taskService = processEngine.getTaskService();
 		taskService.delegateTask(taskId, userId);
 	}
 
@@ -805,7 +855,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public Deployment deployProcDefByZip(String deploymentName, String zip) {
 
-		repositoryService = processEngine.getRepositoryService();
 
 		/**
 		 * 部署图片时，命名必须为leave.activiti.jpg或leave.activiti.{processKey}.jpg
@@ -832,10 +881,68 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public Deployment deployProcDefByPath(String deploymentName,
 			String xmlPath, String jpgPath) {
-		repositoryService = processEngine.getRepositoryService();
-		Deployment deploy = repositoryService.createDeployment()
+		Deployment deploy = null;
+		if(jpgPath != null && !jpgPath.equals(""))
+		{
+			deploy = repositoryService.createDeployment()
+					.name(deploymentName).addClasspathResource(xmlPath)
+			.addClasspathResource(jpgPath).deploy();
+		}
+		else
+		{
+			deploy = repositoryService.createDeployment()
 				.name(deploymentName).addClasspathResource(xmlPath).deploy();
-		// .addClasspathResource(jpgPath).deploy();
+		}
+
+		return deploy;
+	}
+	
+	
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 */
+	public Deployment deployProcDefByZip(String deploymentName, String zip,int deploypolicy) {
+
+
+		/**
+		 * 部署图片时，命名必须为leave.activiti.jpg或leave.activiti.{processKey}.jpg
+		 * act_re_procdef.DGRM_RESOURCE_NAME_
+		 */
+		ZipInputStream inputStream = null;
+		try {
+			inputStream = new ZipInputStream(new FileInputStream(new File(zip)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		Deployment deploy = repositoryService.createDeployment()
+				.name(deploymentName)// act_re_deployment.NAME
+				.addZipInputStream(inputStream).deploy(deploypolicy);
+
+		return deploy;
+	}
+
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 */
+	public Deployment deployProcDefByPath(String deploymentName,
+			String xmlPath, String jpgPath,int deploypolicy) {
+		Deployment deploy = null;
+		if(jpgPath != null && !jpgPath.equals(""))
+		{
+			deploy = repositoryService.createDeployment()
+					.name(deploymentName).addClasspathResource(xmlPath)
+			.addClasspathResource(jpgPath).deploy(deploypolicy);
+		}
+		else
+		{
+			deploy = repositoryService.createDeployment()
+				.name(deploymentName).addClasspathResource(xmlPath).deploy(deploypolicy);
+		}
 
 		return deploy;
 	}
@@ -849,14 +956,9 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public ProcessInstance startProcDef(Map<String, Object> variableMap,
 			String process_key) {
-		runtimeService = processEngine.getRuntimeService();
-		repositoryService = processEngine.getRepositoryService();
-		ProcessDefinition processDefinition = repositoryService
-				.createProcessDefinitionQuery()
-				.processDefinitionKey(process_key).latestVersion()
-				.singleResult();
+		
 		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceById(processDefinition.getId(),
+				.startProcessInstanceByKey(process_key,
 						variableMap);
 		return processInstance;
 	}
@@ -871,7 +973,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key,
 			Map<String, Object> map) {
-		runtimeService = processEngine.getRuntimeService();
 		ProcessInstance processInstance = runtimeService
 				.startProcessInstanceByKey(process_key, businessKey, map);
 		return processInstance;
@@ -885,7 +986,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key) {
-		runtimeService = processEngine.getRuntimeService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey(process_key).latestVersion()
@@ -947,8 +1047,6 @@ public void rejecttoPreTask(String taskId,String username){
 	public ProcessInstance startProcessLoadBusinessCandidate(
 			Map<String, Object> variableMap, String process_key,
 			String businessid, String initor) {
-		repositoryService = processEngine.getRepositoryService();
-		runtimeService = processEngine.getRuntimeService();
 		Map<String, Object> candidateMap = new HashMap<String, Object>();
 
 		// 设置查询参数
@@ -997,8 +1095,6 @@ public void rejecttoPreTask(String taskId,String username){
 	public ProcessInstance startProcDefLoadOrgCandidate(
 			Map<String, Object> variableMap, String process_key, String orgId,
 			String initor) {
-		repositoryService = processEngine.getRepositoryService();
-		runtimeService = processEngine.getRuntimeService();
 		Map<String, Object> candidateMap = new HashMap<String, Object>();
 
 		// 设置查询参数
@@ -1028,6 +1124,43 @@ public void rejecttoPreTask(String taskId,String username){
 						candidateMap);
 		return processInstance;
 	}
+	
+	/**
+	 * 启动流程
+	 * 
+	 * @param businessKey
+	 * @param variableMap
+	 * @param process_key
+	 * identityService.setAuthenticatedUserId(initor);
+	 * @return
+	 */
+	public ProcessInstance startProcDef(String businessKey, String process_key,
+			Map<String, Object> map,String initor)
+	{
+		identityService.setAuthenticatedUserId(initor);
+		ProcessInstance processInstance = runtimeService
+				.startProcessInstanceByKey(process_key, businessKey, map);
+		return processInstance;	
+	}
+	
+	/**
+	 * 启动流程
+	 * 
+	 * @param businessKey
+	 * @param variableMap
+	 * @param process_key
+	 * identityService.setAuthenticatedUserId(initor);
+	 * @return
+	 */
+	public ProcessInstance startProcDef( String process_key,
+			Map<String, Object> map,String initor)
+	{
+		identityService.setAuthenticatedUserId(initor);
+		ProcessInstance processInstance = runtimeService
+				.startProcessInstanceByKey(process_key,  map);
+		return processInstance;	
+	}
+
 
 	/**
 	 * 启动流程(加载业务类型待办配置)
@@ -1143,9 +1276,6 @@ public void rejecttoPreTask(String taskId,String username){
 	public ProcessInstance startProcDefLoadCandidate(
 			Map<String, Object> variableMap, String process_key,
 			String business_id, String business_type, String initor) {
-		repositoryService = processEngine.getRepositoryService();
-		runtimeService = processEngine.getRuntimeService();
-		identityService = processEngine.getIdentityService();
 		Map<String, Object> candidateMap = new HashMap<String, Object>();
 		
 		if(business_type.equals(WorkFlowConstant.BUSINESS_TYPE_COMMON)){
@@ -1216,8 +1346,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param process_key
 	 */
 	public void deleteProcDefByprocesskey(String process_key) {
-		repositoryService = processEngine.getRepositoryService();
-		taskService = processEngine.getTaskService();
 		List<ProcessDefinition> procDefList = this
 				.activitiListByprocesskey(process_key);
 		for (ProcessDefinition task : procDefList) {
@@ -1238,13 +1366,13 @@ public void rejecttoPreTask(String taskId,String username){
 	 * .lang.String)
 	 */
 	public void deleteProcDef(String key) {
-		List<ProcessDefinition> pdList = processEngine.getRepositoryService()
+		List<ProcessDefinition> pdList = repositoryService
 				.createProcessDefinitionQuery().processDefinitionKey(key)
 				.list();
 		if (pdList != null && !pdList.isEmpty()) {
 			for (ProcessDefinition pd : pdList) {
 				try {
-					processEngine.getRepositoryService().deleteDeployment(
+					repositoryService.deleteDeployment(
 							pd.getDeploymentId(), true);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -1276,63 +1404,65 @@ public void rejecttoPreTask(String taskId,String username){
 	 * 
 	 * @param execId
 	 * @param process_key
+	 * @deprecated
 	 * @return
 	 */
 	public ActivityImpl traceProcess(String execId, String process_key) {
 
-		repositoryService = processEngine.getRepositoryService();
-		runtimeService = processEngine.getRuntimeService();
-		ProcessDefinition processDefinition = repositoryService
-				.createProcessDefinitionQuery()
-				.processDefinitionKey(process_key).latestVersion()
-				.singleResult();// 最近版本的流程实例
+		return getActivityImpl(execId);
+	}
+	/**
+	 * 获取流程图
+	 * 
+	 * @param execId
+	 * @param process_key
+	 * @return
+	 */
+	public ActivityImpl getActivityImpl(String execId) {
 
-		ProcessDefinitionImpl pdImpl = (ProcessDefinitionImpl) processDefinition;
-		String processDefinitionId = pdImpl.getId();// 流程标识
-
-		ProcessDefinitionEntity def = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
-				.getDeployedProcessDefinition(processDefinitionId);
-		ActivityImpl actImpl = null;
-
-		List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点
-
+		
 		ExecutionEntity execution = (ExecutionEntity) runtimeService
 				.createExecutionQuery().executionId(execId).singleResult();// 执行实例
 		if (execution == null) {
-			return activitiList.get(activitiList.size() - 1);
+			return null;
 		}
-		String activitiId = execution.getActivityId();// 当前实例的执行到哪个节点
+		
+		ProcessDefinitionEntity def =  (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(execution.getProcessDefinitionId());
+     
+		return def.findActivity(execution.getActivityId());
 
-		for (ActivityImpl activityImpl : activitiList) {
-			String id = activityImpl.getId();
-			if (id.equals(activitiId)) {// 获得执行到那个节点
-				actImpl = activityImpl;
-				break;
-			}
-		}
-		return actImpl;
+		
 	}
 
-	public ActivityImpl getActivityImplById(String actId,
+	public ActivityImpl getActivityImplById(String actDefId,
 			String processInstanceId) {
-		runtimeService = processEngine.getRuntimeService();
-		repositoryService = processEngine.getRepositoryService();
 		ActivityImpl actImpl = null;
 		ProcessInstance processInstance = runtimeService
 				.createProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
+		if(processInstance == null)
+			return null;
 		ProcessDefinitionEntity def = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
 				.getDeployedProcessDefinition(processInstance
 						.getProcessDefinitionId());
 		List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点
 		for (ActivityImpl activityImpl : activitiList) {
 			String id = activityImpl.getId();
-			if (id.equals(actId)) {// 获得执行到那个节点
+			if (id.equals(actDefId)) {// 获得执行到那个节点
 				actImpl = activityImpl;
 				break;
 			}
 		}
 		return actImpl;
+	}
+	
+	public ActivityImpl getActivityImplByDefId(String actDefId,
+			String processDefineId) {
+		ActivityImpl actImpl = null;
+	
+		ProcessDefinitionEntity def = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
+				.getDeployedProcessDefinition(processDefineId);
+		return def.findActivity(actDefId);
 	}
 
 	/**
@@ -1342,7 +1472,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<Task> listTaskByExecId(String execId) {
-		taskService = processEngine.getTaskService();
 		List<Task> taskList = taskService.createTaskQuery().executionId(execId)
 				.list();
 
@@ -1354,7 +1483,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public ProcessInstance getProcessInstanceById(String processInstanceId) {
-		runtimeService = processEngine.getRuntimeService();
 		ProcessInstance processInstance = runtimeService
 				.createProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
@@ -1369,7 +1497,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public HistoricProcessInstance getHisProcessInstanceById(
 			String processInstanceId) {
-		historyService = processEngine.getHistoryService();
 		HistoricProcessInstance processInstance = historyService
 				.createHistoricProcessInstanceQuery()
 				.processInstanceId(processInstanceId).singleResult();
@@ -1377,13 +1504,12 @@ public void rejecttoPreTask(String taskId,String username){
 	}
 
 	/**
-	 * 根据流程实例ID查询流程实例
+	 * 根据流程定义ID查询流程实例
 	 * 
 	 * @param processDefinitionId
 	 * @return
 	 */
 	public ProcessDefinition getProcessDefinitionById(String processDefinitionId) {
-		repositoryService = processEngine.getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionId(processDefinitionId).singleResult();// 最近版本的流程实例
@@ -1397,7 +1523,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public ProcessDefinition getProcessDefinitionByKey(String processKey) {
-		repositoryService = processEngine.getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey(processKey).latestVersion()
@@ -1412,7 +1537,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public Deployment getDeploymentById(String deploymentId) {
-		repositoryService = processEngine.getRepositoryService();
 		Deployment deployment = repositoryService.createDeploymentQuery()
 				.deploymentId(deploymentId).singleResult();
 		return deployment;
@@ -1426,7 +1550,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<Task> listTaskByUser(String username) {
-		taskService = processEngine.getTaskService();
 		List<Task> list = new ArrayList<Task>();
 		List<TaskEntity> userTaskList = null;
 		try {
@@ -1450,7 +1573,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	@Override
 	public ListInfo listTaskByUser(String username,long offset,int pagesize) {
-		taskService = processEngine.getTaskService();
 		ListInfo listInfo = null;
 		try {
 			Map<String, String> map = new HashMap<String, String>();
@@ -1510,7 +1632,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<Task> listTaskByUser(String[] processKeys, String username) {
-		taskService = processEngine.getTaskService();
 		List<Task> list = new ArrayList<Task>();
 		List<TaskEntity> userTaskList = null;
 		try {
@@ -1535,7 +1656,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	@Override
 	public List<Task> listTaskByUser(String processKey, String username) {
-		taskService = processEngine.getTaskService();
 		List<Task> userTaskList = new ArrayList<Task>();
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -1559,7 +1679,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	@Override
 	public ListInfo listTaskByUser(String processKey, String username,long offset,int pagesize) {
-		taskService = processEngine.getTaskService();
 		ListInfo userTaskList = null;
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -1582,7 +1701,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public ListInfo listTaskByUser(String[] processKeys, String username,long offset,int pagesize) {
-		taskService = processEngine.getTaskService();
 		ListInfo userTaskList = null;
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
@@ -1603,7 +1721,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public Task getTaskById(String taskId) {
-		taskService = processEngine.getTaskService();
 		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
 		return task;
 	}
@@ -1615,7 +1732,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public HistoricTaskInstance getHisTaskById(String hisTaskId) {
-		historyService = processEngine.getHistoryService();
 		HistoricTaskInstance hisTask = historyService
 				.createHistoricTaskInstanceQuery().taskId(hisTaskId)
 				.singleResult();
@@ -1638,7 +1754,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<ActivityImpl> getActivitImplListByProcessKey(String processKey) {
-		repositoryService = processEngine.getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey(processKey).latestVersion()
@@ -1660,7 +1775,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public List<String> getNextNodes(String nodeKey, String processKey) {
-		repositoryService = processEngine.getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery()
 				.processDefinitionKey(processKey).latestVersion()
@@ -1689,7 +1803,6 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 */
 	public String getPorcessKeyByDeployMentId(String deploymentId) {
-		repositoryService = processEngine.getRepositoryService();
 		ProcessDefinition processDefinition = repositoryService
 				.createProcessDefinitionQuery().deploymentId(deploymentId)
 				.singleResult();
@@ -1749,7 +1862,7 @@ public void rejecttoPreTask(String taskId,String username){
 			def.setSUSPENSION_STATE_(def_.isSuspended() ? 1 : 0);
 			def.setVERSION_(def_.getVersion());
 
-			Deployment deployment = processEngine.getRepositoryService()
+			Deployment deployment = repositoryService
 					.createDeploymentQuery()
 					.deploymentId(def_.getDeploymentId()).singleResult();
 			def.setDEPLOYMENT_NAME_(deployment.getName());
@@ -1785,12 +1898,12 @@ public void rejecttoPreTask(String taskId,String username){
 				.replace("[", "").replace("]", "").split(",");
 		if (cascades != null && cascades.length > 0) {
 			for (int i = 0; i < processDeploymentids.length; i++) {
-				processEngine.getRepositoryService().deleteDeployment(
+				repositoryService.deleteDeployment(
 						processDeploymentids[i], cascades[i]);
 			}
 		} else {
 			for (int i = 0; i < processDeploymentids.length; i++) {
-				processEngine.getRepositoryService().deleteDeployment(
+				repositoryService.deleteDeployment(
 						processDeploymentids[i], true);
 			}
 		}
@@ -1819,7 +1932,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * )
 	 */
 	public void activateProcess(String processId) {
-		processEngine.getRepositoryService().activateProcessDefinitionById(
+		repositoryService.activateProcessDefinitionById(
 				processId);
 	}
 
@@ -1830,7 +1943,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 * com.sany.workflow.service.ActivitiService#supendProcess(java.lang.String)
 	 */
 	public void suspendProcess(String processId) {
-		processEngine.getRepositoryService().suspendProcessDefinitionById(
+		repositoryService.suspendProcessDefinitionById(
 				processId);
 	}
 
@@ -1843,16 +1956,47 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public InputStream getResourceAsStream(String deploymentId,
 			String resourceName) {
-		return processEngine.getRepositoryService().getResourceAsStream(
+		return repositoryService.getResourceAsStream(
 				deploymentId, resourceName);
 	}
 	
-	public void getProccessPic(String processId, OutputStream out) throws IOException {
+	public void getProccessPic(String processDefId, OutputStream out) throws IOException {
 		InputStream is = null;
 		try
 		{
-			if(processId!=null&&!processId.equals("")){
-				ProcessDefinition processDefinition = getProcessDefinitionById(processId);
+			if(processDefId!=null&&!processDefId.equals("")){
+				ProcessDefinition processDefinition = getProcessDefinitionById(processDefId);
+				String diagramResourceName = processDefinition.getDiagramResourceName();
+				
+				is = getResourceAsStream(processDefinition.getDeploymentId(),
+						diagramResourceName);
+				
+				byte[] b = new byte[1024];
+				int len = -1;
+	//			OutputStream out = response.getOutputStream();
+				while ((len = is.read(b, 0, 1024)) != -1) {
+					out.write(b, 0, len);
+				}
+				out.flush();
+			}
+		}
+		finally
+		{
+			try {
+				if(is != null)
+					is.close();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
+	public void getProccessPicByProcessKey(String processKey, OutputStream out) throws IOException {
+		InputStream is = null;
+		try
+		{
+			if(processKey!=null&&!processKey.equals("")){
+				ProcessDefinition processDefinition = this.getProcessDefinitionByKey(processKey);
 				String diagramResourceName = processDefinition.getDiagramResourceName();
 				
 				is = getResourceAsStream(processDefinition.getDeploymentId(),
@@ -2021,7 +2165,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	@Override
 	public Task getCurrentTask(String processInstanceId) {
-		List<Task> taskList = processEngine.getTaskService().createTaskQuery().processInstanceId(processInstanceId)
+		List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstanceId)
 				.orderByTaskId().desc().list();
 
 		if (!CollectionUtils.isEmpty(taskList)) {
@@ -2032,7 +2176,7 @@ public void rejecttoPreTask(String taskId,String username){
 	}
 	
 	public List<Task> getCurrentTaskList(String processInstanceId) {
-		List<Task> taskList = processEngine.getTaskService().createTaskQuery().processInstanceId(processInstanceId)
+		List<Task> taskList = taskService.createTaskQuery().processInstanceId(processInstanceId)
 				.orderByTaskId().desc().list();
 
 		if (!CollectionUtils.isEmpty(taskList)) {
@@ -2066,7 +2210,6 @@ public void rejecttoPreTask(String taskId,String username){
 	}
 	
 	public List<Task> listTaskByProcessInstanceId(String processInstanceId) {
-        taskService = processEngine.getTaskService();
     	return taskService.createTaskQuery().processInstanceId(processInstanceId).list();
     }
 

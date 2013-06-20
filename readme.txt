@@ -12,6 +12,13 @@ CREATE TABLE TD_SM_PASSWORDHIS
 )
 7.添加数据库更新脚本文件D:\workspace\microcredit-1.0.1\doc\02_设计\01_DB\02_sql\2013-06-16-0.sql
 
+8.每个用户独立设置密码过期时间
+9.增加密码过期策略
+用户密码有效时间大于0则启用
+是否启用每个用户独立设置密码有效期开关
+PASSWORD_DUALTIME
+ALTER TABLE MICROCREDIT.TD_SM_USER
+ ADD (PASSWORD_DUALTIME  INTEGER);
 增加用户缓冲信息获取标签和缓冲数据刷新功能：
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 

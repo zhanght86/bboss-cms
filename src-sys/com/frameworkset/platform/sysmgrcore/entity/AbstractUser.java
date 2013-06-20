@@ -317,7 +317,11 @@ public abstract class AbstractUser implements Serializable {
      */
     private Timestamp passwordUpdatetime;
     
-    private Timestamp passwordExpiredTime; 
+    private Timestamp passwordExpiredTime;
+    /**
+     * 密码有效期
+     */
+    private int passwordDualedTime;
 
 	// TODO 注意，增加新的字段属性时，请手工在 db.UserManagerImpl.getUserList(Organization org)
 	// 中增加相应的项
@@ -986,5 +990,13 @@ public abstract class AbstractUser implements Serializable {
 
 	public void setIstaxmanager(int istaxmanager) {
 		this.istaxmanager = istaxmanager;
+	}
+
+	public int getPasswordDualedTime() {
+		return passwordDualedTime;
+	}
+
+	public void setPasswordDualedTime(int passwordDualedTime) {
+		this.passwordDualedTime = passwordDualedTime;
 	}
 }

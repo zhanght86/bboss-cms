@@ -46,10 +46,10 @@ import javax.servlet.http.HttpServletResponse;
 public class RandImgCreater {
 	public static final String CODE_LIST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 	private HttpServletResponse response = null;
-	private static final int HEIGHT = 28;
+	private static final int HEIGHT = 36;
 	public static final int FONT_NUM = 4;
 	private int width = 0;
-	private int iNum = 0;
+	private int iNum = FONT_NUM;
 	private String codeList = "";
 	private boolean drawBgFlag = false;
 
@@ -59,7 +59,7 @@ public class RandImgCreater {
 
 	public RandImgCreater(HttpServletResponse response) {
 		this.response = response;
-		this.width = 13 * FONT_NUM + 12;
+		this.width = 20 * FONT_NUM + 100;
 		this.iNum = FONT_NUM;
 		this.codeList = CODE_LIST;
 	}
@@ -67,48 +67,56 @@ public class RandImgCreater {
 	public RandImgCreater(HttpServletResponse response, int iNum,
 			String codeList) {
 		this.response = response;
-		this.width = 13 * iNum + 12;
 		if(iNum > 0)
 			this.iNum = iNum;
+		this.width = 20 * this.iNum + 100;
+		
 		if(codeList != null)
 			this.codeList = codeList;
 	}
 
 	public String createRandImage() {
-		BufferedImage image = new BufferedImage(width, HEIGHT,
+		int height = 65;
+		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
 
 		Graphics g = image.getGraphics();
-
+		
 		Random random = new Random();
 
 		if (drawBgFlag) {
 			g.setColor(new Color(rBg, gBg, bBg));
-			g.fillRect(0, 0, width, HEIGHT);
+			g.fillRect(0, 0, width, height);
 		} else {
 			g.setColor(getRandColor(200, 250));
-			g.fillRect(0, 0, width, HEIGHT);
+			g.fillRect(0, 0, width, height);
 
 			for (int i = 0; i < 155; i++) {
 				g.setColor(getRandColor(140, 200));
 				int x = random.nextInt(width);
-				int y = random.nextInt(HEIGHT);
-				int xl = random.nextInt(12);
-				int yl = random.nextInt(12);
+				int y = random.nextInt(height);
+				int xl = random.nextInt(20);
+				int yl = random.nextInt(20);
 				g.drawLine(x, y, x + xl, y + yl);
 			}
 		}
 
-		g.setFont(new Font("Times New Roman", Font.PLAIN, 25));
+		g.setFont(new Font("Times New Roman", Font.PLAIN, 60));
 
 		String sRand = "";
+		int interval = 8;
+		int total = 0;
 		for (int i = 0; i < iNum; i++) {
 			int rand = random.nextInt(codeList.length());
 			String strRand = codeList.substring(rand, rand + 1);
 			sRand += strRand;
 			g.setColor(new Color(20 + random.nextInt(110), 20 + random
 					.nextInt(110), 20 + random.nextInt(110)));
-			g.drawString(strRand, 13 * i + 6, 19);
+			total = total +interval + i*8;
+			
+			g.drawString(strRand, 18 * i + total, 50);
+//			interval = interval + i * interval;
+			
 		}
 		g.dispose();
 		try {

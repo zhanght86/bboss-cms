@@ -113,9 +113,20 @@
 			user.setUserIdcard(request.getParameter("userIdcard"));
 			if(!"".equals(request.getParameter("userRegdate")))
 				user.setUserRegdate(Date.valueOf(request.getParameter("userRegdate")));
-			
-			
 			UserManager userManager = SecurityDatabase.getUserManager();
+			String passwordDualedTime_ = request.getParameter("passwordDualedTime");
+			int passwordDualedTime = userManager.getDefaultPasswordDualTime();
+			try
+			{
+				passwordDualedTime = Integer.parseInt(passwordDualedTime_);
+			}
+			catch(Exception e)
+			{
+				
+			}
+			user.setPasswordDualedTime(passwordDualedTime);
+			
+			
 			
 			// 吴卫雄增加：判断用户是否存在，存在则转入操作失败页面
 			// 潘伟林修改， 存在则提示用户登陆名重复，返回原页面，清空登陆名
@@ -218,11 +229,11 @@
 				<%
 					if(isAutoUserName){
 				%>
-					W.$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+					$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				<%
 					}else{
 				%>
-					W.$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+					$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				<%
 					}
 				%>
@@ -234,23 +245,23 @@
 					if(isAutoUserName){
 						if(errorMessage != null && !"".equals(errorMessage)){
 						%>
-						W.$.dialog.alert("<pg:message code='sany.pdp.add.user.fail'/>：\n<%=errorMessage%>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+						$.dialog.alert("<pg:message code='sany.pdp.add.user.fail'/>：\n<%=errorMessage%>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 						<%			
 						}else{
 				%>
 							var newUserName = "<%=newUserName%>";
-							W.$.dialog.alert("<pg:message code='sany.pdp.add.user.success'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+							$.dialog.alert("<pg:message code='sany.pdp.add.user.success'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 							userInfo(newUserName);
 				<%
 						}
 					}else{
 						if(errorMessage != null && !"".equals(errorMessage)){
 						%>
-							W.$.dialog.alert("<pg:message code='sany.pdp.add.user.fail'/>：\n<%=errorMessage%>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+							$.dialog.alert("<pg:message code='sany.pdp.add.user.fail'/>：\n<%=errorMessage%>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 						<%			
 						}else{
 				%>
-							W.$.dialog.alert("<pg:message code='sany.pdp.add.user.success'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+							$.dialog.alert("<pg:message code='sany.pdp.add.user.success'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 					<%
 						}
 					}
@@ -277,7 +288,7 @@
 				
 				if(userName == "" || userName.length<1 || userName.replace(/\s/g,"")=="")
 				{
-					W.$.dialog.alert("<pg:message code='sany.pdp.input.username'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+					$.dialog.alert("<pg:message code='sany.pdp.input.username'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 					return false;
 				}
 				
@@ -287,21 +298,21 @@
 				
 				if(userRealname == "" || userRealname.length<1 || userRealname.replace(/\s/g,"")=="")
 				{
-					W.$.dialog.alert("<pg:message code='sany.pdp.input.realname'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+					$.dialog.alert("<pg:message code='sany.pdp.input.realname'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 					return false;
 				}
 				
 				var re_ = /^[a-zA-Z]\w*$/; 
 				if(!re_.test(userName))
 				{
-				W.$.dialog.alert("<pg:message code="sany.pdp.check.username"/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+				$.dialog.alert("<pg:message code="sany.pdp.check.username"/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				return false; 
 				}
 				
 				var re =  /^[A-Za-z0-9\u4e00-\u9fa5]+$/; 
 				if(!re.test(userRealname))
 				{
-				W.$.dialog.alert("<pg:message code="sany.pdp.check.realname"/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+				$.dialog.alert("<pg:message code="sany.pdp.check.realname"/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				return false; 
 				}
 				
@@ -374,7 +385,7 @@
 					}
 				}
 				if(!http_request){
-					W.$.dialog.alert("<pg:message code='sany.pdp.no.httprequest'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+					$.dialog.alert("<pg:message code='sany.pdp.no.httprequest'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 					return false;
 				}
 				http_request.onreadystatechange = processRequest;
@@ -396,7 +407,7 @@
 						
 					}
 					else{
-						W.$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+						$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 					}
 				}
 			}
@@ -569,8 +580,16 @@
 
 					</tr>
 					<tr>
+					<th>
+							 设置密码有效期
+						</th>
+						<td height="25" >
+							
+							<input type="text" name="passwordDualedTime" value="<pg:cell colName="passwordDualedTime"  defaultValue="-1" />" validator="intNull" cnname="密码有效期" maxlength="40" >天
+							
+						</td>
 						<th>工号： </th>
-						<td height="25" colspan="10">
+						<td height="25" >
 							<input type="text" name="userWorknumber" value="<pg:cell colName="userWorknumber"  />" validator="stringNull" cnname="用户工号" maxlength="40">
 						</td>
 					

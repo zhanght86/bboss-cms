@@ -15,7 +15,7 @@
 	RepositoryService repositoryService = processEngine.getRepositoryService();
 	String process_key = request.getParameter("process_key");
 	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-		.processDefinitionKey("process1")
+		.processDefinitionKey(process_key)
 		.latestVersion()
 		.singleResult();
 	

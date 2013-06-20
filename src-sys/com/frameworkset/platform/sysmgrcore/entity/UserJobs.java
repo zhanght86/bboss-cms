@@ -38,7 +38,17 @@ public class UserJobs implements Serializable{
 	public Timestamp getPasswordExpiredTime() {
 		return passwordExpiredTime;
 	}
+	 /**
+     * 密码有效期
+     */
+    private int passwordDualedTime;
+	public int getPasswordDualedTime() {
+		return passwordDualedTime;
+	}
 
+	public void setPasswordDualedTime(int passwordDualedTime) {
+		this.passwordDualedTime = passwordDualedTime;
+	}
 	/**
 	 * @param passwordExpiredTime the passwordExpiredTime to set
 	 */
