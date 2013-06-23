@@ -120,9 +120,9 @@ public class ActivitiTaskConfigAction {
 			ActivitiNodeCandidate activitiNodeCandidate = activitiConfigService.queryActivitiNodeCandidate(processKey, list.get(i).getNode_key(), business_id, business_type);
 			if(activitiNodeCandidate!=null){
 				list.get(i).setCandidate_groups_id(activitiNodeCandidate.getCandidate_groups_id());
-				list.get(i).setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name());
+				list.get(i).setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name() != null?activitiNodeCandidate.getCandidate_groups_name().trim():"");
 				list.get(i).setCandidate_users_id(activitiNodeCandidate.getCandidate_users_id());
-				list.get(i).setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name());
+				list.get(i).setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name() != null?activitiNodeCandidate.getCandidate_users_name().trim():"");
 				list.get(i).setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
 				list.get(i).setIs_valid(activitiNodeCandidate.getIs_valid());
 			}

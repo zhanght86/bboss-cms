@@ -14,6 +14,7 @@
  */
 package com.sany.workflow.entity;
 
+import org.activiti.engine.repository.DeploymentBuilder;
 import org.frameworkset.web.multipart.MultipartFile;
 
 /**
@@ -27,7 +28,22 @@ public class ProcessDeployment {
 	private MultipartFile processDef;
 	private java.sql.Timestamp DEPLOY_TIME_;
 	private MultipartFile paramFile;
+	private int upgradepolicy = DeploymentBuilder.Deploy_policy_default;
 	
+	/**
+	 * @return the upgradepolicy
+	 */
+	public int getUpgradepolicy() {
+		return upgradepolicy;
+	}
+
+	/**
+	 * @param upgradepolicy the upgradepolicy to set
+	 */
+	public void setUpgradepolicy(int upgradepolicy) {
+		this.upgradepolicy = upgradepolicy;
+	}
+
 	private String businessTypeId;
 	public String getID_() {
 		return ID_;

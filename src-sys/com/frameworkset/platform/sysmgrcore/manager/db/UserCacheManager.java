@@ -338,6 +338,8 @@ public class UserCacheManager {
             checkCallBack.setUserAttribute("userRegdate", t);
         checkCallBack.setUserAttribute("userSn", user.getUserSn() + "");
         checkCallBack.setUserAttribute("userIsvalid", user.getUserIsvalid() + "");
+        checkCallBack.setUserAttribute("orgName", user.getOrgName());
+        checkCallBack.setUserAttribute("mainOrg", user.getMainOrg());
         return checkCallBack;
     }
 	

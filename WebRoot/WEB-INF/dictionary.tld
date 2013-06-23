@@ -318,6 +318,8 @@
              userRegdate
              userSn
              userIsvalid
+			 orgName
+			 mainOrg
 		-->
 		 <attribute>
 			<name>attribute</name>

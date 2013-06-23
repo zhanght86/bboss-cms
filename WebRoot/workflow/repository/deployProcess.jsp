@@ -60,6 +60,17 @@
 							<input type="hidden" name="needConfig" id="needConfig" value="1"/>
 						</td>
 					</tr>
+					
+					<tr>
+						<th width="110px">
+							流程实例升级策略：
+						</th>
+						<td>
+							<input type="radio" name="upgradepolicy" value="0" checked/>保持旧版本
+							<input type="radio" name="upgradepolicy" value="1"/>升级旧版本实例到新版本
+							<input type="radio" name="upgradepolicy" value="2"/>删除旧版本流程实例
+						</td>
+					</tr>
 				</table>			
 			<div class="btnarea" >
 				<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="dosubmit2()"><span><pg:message code="sany.pdp.common.ok"/></span></a>
@@ -125,12 +136,12 @@ function checkBM(){
 		    	//去掉遮罩	
 				unblockUI();
 				if(responseText=="success"){
-					W.$.dialog.alert("部署成功",function(){	
+				$.dialog.alert("部署成功",function(){	
 							W.modifyQueryData();
 							api.close();
 					},api);													
 				}else{
-					W.$.dialog.alert("部署异常--"+responseText,function(){},api);
+					$.dialog.alert("部署异常--"+responseText,function(){},api);
 				}
 		    }
 		});	
@@ -142,7 +153,7 @@ function checkBM(){
 	   /*
 		if(!checkBM()){
 			
-			W.$.dialog.alert("编码已存在，请重新录入!",function(){return;},api);
+			$.dialog.alert("编码已存在，请重新录入!",function(){return;},api);
 			return;
 		}
 	   */
@@ -167,12 +178,12 @@ function checkBM(){
 				//去掉遮罩
 				unblockUI();
 				if(responseText=="success"){
-					W.$.dialog.alert("新增记录成功",function(){	
+					$.dialog.alert("新增记录成功",function(){	
 							W.modifyQueryData();
 							api.close();
 					},api);													
 				}else{
-					w.$.dialog.alert("新增出错",function(){},api);
+					$.dialog.alert("新增出错",function(){},api);
 				}
 			}
 		  });

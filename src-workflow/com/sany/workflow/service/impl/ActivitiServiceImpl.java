@@ -1828,6 +1828,15 @@ public void rejecttoPreTask(String taskId,String username){
 
 		return deploymentBuilder.deploy();
 	}
+	
+	public Deployment deployProcDefByInputStream(String deploymentName,
+			String xmlPath, InputStream processDef,int upgradepolicy) {
+		DeploymentBuilder deploymentBuilder = processEngine
+				.getRepositoryService().createDeployment().name(deploymentName);
+		deploymentBuilder.addInputStream(xmlPath, processDef);
+
+		return deploymentBuilder.deploy(upgradepolicy);
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -1843,6 +1852,22 @@ public void rejecttoPreTask(String taskId,String username){
 		deploymentBuilder.addZipInputStream(processDef);
 
 		return deploymentBuilder.deploy();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.sany.workflow.service.ActivitiService#deployProcDefByZip(java.lang
+	 * .String, java.util.zip.ZipInputStream)
+	 */
+	public Deployment deployProcDefByZip(String deploymentName,
+			ZipInputStream processDef,int upgradepolicy) {
+		DeploymentBuilder deploymentBuilder = processEngine
+				.getRepositoryService().createDeployment().name(deploymentName);
+		deploymentBuilder.addZipInputStream(processDef);
+
+		return deploymentBuilder.deploy(upgradepolicy);
 	}
 
 	private List<ProcessDef> convert(List<ProcessDefinition> defs) {

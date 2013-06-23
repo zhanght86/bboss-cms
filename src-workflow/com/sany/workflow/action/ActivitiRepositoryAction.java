@@ -70,10 +70,10 @@ public class ActivitiRepositoryAction extends MultiActionController {
 			Deployment deployment = null;
 			if (processDeployment.getProcessDef().getContentType().contains(FILE_TYPE_ZIP)) {
 				deployment = activitiService.deployProcDefByZip(processDeployment.getNAME_(), new ZipInputStream(processDeployment
-						.getProcessDef().getInputStream()));
+						.getProcessDef().getInputStream()),processDeployment.getUpgradepolicy());
 			} else {
 				deployment = activitiService.deployProcDefByInputStream(processDeployment.getNAME_(), processDeployment
-						.getProcessDef().getOriginalFilename(), processDeployment.getProcessDef().getInputStream());
+						.getProcessDef().getOriginalFilename(), processDeployment.getProcessDef().getInputStream(),processDeployment.getUpgradepolicy());
 			}
 			if(deployment!=null){
 				ProcessDef pd = activitiService.getProcessDefByDeploymentId(deployment.getId());

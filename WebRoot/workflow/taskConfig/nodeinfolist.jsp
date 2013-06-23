@@ -22,10 +22,10 @@
 			</pg:notify>
 			<pg:list autosort="false">
 				<tr id="<pg:cell colName="node_key" defaultValue="" />">
-					<td><pg:cell colName="node_key"></pg:cell></td>
-					<td><pg:cell colName="node_name"></pg:cell></td>
-					<td><pg:cell colName="candidate_users_name"></pg:cell></td>
-					<td><pg:cell colName="candidate_groups_name"></pg:cell></td>
+					<td><pg:cell colName="node_key"/></td>
+					<td><pg:cell colName="node_name"/></td>
+					<td><pg:cell colName="candidate_users_name"/></td>
+					<td><pg:cell colName="candidate_groups_name"/></td>
 					<td>
 						<a href="#">选择</a>
 					</td>

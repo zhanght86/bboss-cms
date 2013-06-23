@@ -176,6 +176,8 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public Deployment deployProcDefByZip(String deploymentName, String zip);
+	
+	
 
 	/**
 	 * 部署流程
@@ -188,6 +190,19 @@ public interface ActivitiService {
 	 */
 	public Deployment deployProcDefByZip(String deploymentName,
 			ZipInputStream processDef);
+	
+	
+	/**
+	 * 部署流程
+	 * 
+	 * @param deploymentName
+	 *            部署名称
+	 * @param processDef
+	 *            部署文件
+	 * @return Deployment
+	 */
+	public Deployment deployProcDefByZip(String deploymentName,
+			ZipInputStream processDef,int upgradepolicy);
 
 	/**
 	 * 部署流程
@@ -724,6 +739,14 @@ public interface ActivitiService {
 	 */
 	public Deployment deployProcDefByInputStream(String deploymentName,
 			String xmlPath, InputStream processDef);
+	
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 */
+	public Deployment deployProcDefByInputStream(String deploymentName,
+			String xmlPath, InputStream processDef,int upgradepolicy);
 
 	/**
 	 * 根据条件查询流程定义清单
