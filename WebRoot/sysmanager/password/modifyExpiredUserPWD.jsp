@@ -9,10 +9,13 @@
 <%@ page import="org.frameworkset.spi.support.MessageSource"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.UserManager"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
+<%@ page import="java.util.*"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%
 	
     String userAccount = request.getParameter("userAccount");
     int expiredays = SecurityDatabase.getUserManager().getUserPasswordDualTimeByUserAccount(userAccount);
+   
 %>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>

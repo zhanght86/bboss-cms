@@ -82,6 +82,14 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public boolean ishistorypassword(int userid,String password)throws ManagerException;
 	public int getUserPasswordDualTimeByUserAccount(String userAccount) throws ManagerException;
+	public  Date getPasswordExpiredTimeByUserAccount(String userAccount) throws ManagerException;
+	/**
+	 * 获取用户密码过期时间，如果返回为null,表示密码永不过期
+	 * @param userid
+	 * @return
+	 * @throws ManagerException 
+	 */
+	public Date getPasswordExpiredTime(int userid) throws ManagerException;
 	/**
 	 * 判断用户口令是否过期
 	 * @param userid
@@ -1167,13 +1175,7 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public boolean isPasswordExpired(User user) throws ManagerException;
 	public Timestamp initpasswordupdatetime(int userid) throws ManagerException;
-	/**
-	 * 获取用户密码过期时间，如果返回为null,表示密码永不过期
-	 * @param userid
-	 * @return
-	 * @throws ManagerException 
-	 */
-	public Date getPasswordExpiredTime(int userid) throws ManagerException;
+	
 	/**
 	 * 获取密码过期时间，如果返回为null,表示密码永不过期
 	 * @param passwordupdatetime

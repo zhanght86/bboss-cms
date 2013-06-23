@@ -2,6 +2,7 @@ package com.frameworkset.platform.util;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class CommonUtil implements Serializable{
   /**
@@ -83,6 +84,14 @@ public class CommonUtil implements Serializable{
      String a = "ab%cd";
      String x = replaceString(a,"ab","d");
      System.out.println(x);
+   }
+   
+   public static int getDaysBetween(Date start,Date end)
+   {
+	    long quot = 0; 
+	    quot = end.getTime() - start.getTime();   
+	    quot = quot / 1000 / 60 / 60 / 24;  
+	    return (int)quot; 
    }
    
 }

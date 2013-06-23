@@ -1,8 +1,21 @@
+<%@page import="com.frameworkset.platform.util.CommonUtil"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@page import="com.frameworkset.platform.security.AccessControl"%>
+<%@page import="com.frameworkset.platform.security.AccessControl"%><%@page import="com.frameworkset.platform.sysmgrcore.manager.UserManager"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%><%@ page import="java.util.*"%><%@page import="java.text.SimpleDateFormat"%>
 <%
 	AccessControl accessControl = AccessControl.getInstance();
     accessControl.checkAccess(request,response);
+    int expiredays = SecurityDatabase.getUserManager().getUserPasswordDualTimeByUserAccount(accessControl.getUserAccount());
+    String expriedtime_ = "";
+    Date expiretime = expiredays > 0?SecurityDatabase.getUserManager().getPasswordExpiredTimeByUserAccount(accessControl.getUserAccount()):null;
+    int resttime = 0;
+    if(expiretime != null)
+    {
+    	SimpleDateFormat dateformt = new SimpleDateFormat("yyyy-MM-dd");
+    	expriedtime_ = dateformt.format(expiretime);
+    	resttime = CommonUtil.getDaysBetween(new Date(),expiretime);
+    }
+   
 %>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
@@ -59,6 +72,35 @@ function resetpwd(){
 	<form name="cacForm" action="saveModifySelfPWD.jsp" target="backgroundDealFrame"
               onsubmit="return validateInput(cacForm)"> 
               <table width="100%" border="0"	cellpadding="0" cellspacing="0" class="table4">
+              
+              		<%if(expiredays > 0) {%>
+              		<tr>
+              			<th width="40%">密码有效期：</th>
+              			<td width="60%">
+              				<%=expiredays %>天
+              			</td>
+              		</tr>
+              		<tr>
+              			<th width="40%">密码过期时间：</th>
+              			<td width="60%">
+              				<%=expriedtime_ %>
+              			</td>
+              		</tr>
+              		<tr>
+              			<th width="40%">密码状态：</th>
+              			<td width="60%">
+              				<%if(resttime >= 0) 
+              				{
+              					out.print("还有" +resttime + "天过期!");
+              				}
+              				else
+              				{
+              					out.print("已过期" +(-resttime) + "天!");
+              				}
+              				%>
+              			</td>
+              		</tr>
+              		<%} %>
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.oldpasword"/>：</th>
               			<td width="60%">

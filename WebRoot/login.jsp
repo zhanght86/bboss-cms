@@ -1,3 +1,4 @@
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portlet.iframe.action.WebDes"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page session="true" language="java"
@@ -21,11 +22,18 @@
 	String language = request.getParameter("language");
 	boolean enable_login_validatecode = ConfigManager.getInstance()
 			.getConfigBooleanValue("enable_login_validatecode", true);
-	 int expiredays = SecurityDatabase.getUserManager().getDefaultPasswordDualTime();
+	
 	String errorMessage = null;
 	
     String userName = request.getParameter("userName");
-	
+    int expiredays = userName != null?SecurityDatabase.getUserManager().getUserPasswordDualTimeByUserAccount(userName):0;
+    String expriedtime_ = "";
+    Date expiretime = expiredays > 0&&userName != null?SecurityDatabase.getUserManager().getPasswordExpiredTimeByUserAccount(userName):null;
+    if(expiretime != null)
+    {
+    	SimpleDateFormat dateformt = new SimpleDateFormat("yyyy-MM-dd");
+    	expriedtime_ = dateformt.format(expiretime);
+    }
 	String loginStyle = null;
 	String system_id = null;
 	if(language==null){
@@ -423,7 +431,7 @@ DD_belatedPNG.fix('div');
 		
 		
   		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?userAccount=<%=userName%>";
-  		$.dialog({close:reloadhref,title:'对不起，<%=userName %>的密码已经失效（密码有效期为<%=expiredays%>天），请定期修改密码!',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
+  		$.dialog({close:reloadhref,title:'对不起，<%=userName %>的密码已经失效（密码有效期为<%=expiredays%>天），过期时间为<%=expriedtime_%>!',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
   		
 		
 		
@@ -549,6 +557,35 @@ DD_belatedPNG.fix('div');
 		}
 	}
 	
+	
+	function enterKeydowngoV(event){
+		var userName = $("#userName").val();
+		var password = $("#password").val();
+		if(event.keyCode == 13){
+		var y = $("#rand").val();
+		if(y==""){
+			$.dialog.alert("验证码不能为空");
+			$("#rand").focus();
+			return;
+		}
+			if(userName == "" ){
+				$.dialog.alert("<pg:message code='sany.pdp.input.login.name'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+				$("#userName").focus();
+				event.returnValue=false;
+			}else if(userName != "" && password == ""){
+				$.dialog.alert("<pg:message code='sany.pdp.input.password'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+				$("#password").focus();
+				event.returnValue=false;
+			}else if(userName != "" && password != ""){
+				//loginForm.subsystem_id.focus();
+				
+				document.getElementById('password').value = strEnc(password,userName, "", "");
+				$("#loginForm").submit();
+				event.returnValue=false;
+			}
+		}
+	}
+	
 	function enterKeydowngoS(event){
 		var userName = $("#userName").val();
 		var password = $("#password").val();
@@ -597,7 +634,7 @@ DD_belatedPNG.fix('div');
                	}
 			  	else if(errorMessage.equals("PasswordExpired"))//密码过期
 			  	{
-			  		out.print("<li><label></label><font color='red'>密码已经失效（有效期为"+expiredays+"天），请定期修改密码!<a href='#' onclick='javascript:modifyExpiredPassword()'>点击修改</a></font></li>");
+			  		out.print("<li><label></label><font color='red'>密码已经失效（有效期为"+expiredays+"天），过期时间为"+expriedtime_+"!<a href='#' onclick='javascript:modifyExpiredPassword()'>点击修改</a></font></li>");
 			  		
 			  	}
 			  		
@@ -610,7 +647,7 @@ DD_belatedPNG.fix('div');
 				<%
 				if(enable_login_validatecode){
 				%><li><label>验证码：</label>
-				<input id="rand" name="rand" type="text" style="width:120px"/>
+				<input id="rand" name="rand" type="text" style="width:120px" onkeydown="enterKeydowngoV(event)"/>
 				<img name="img1" id='img1' src="passward/generateImageCode.page" width="50"/><a onclick="changcode()">看不清,换一张</a>
 				</li><%} %>
 				<li><label><pg:message code="sany.pdp.system"/>：</label>

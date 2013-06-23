@@ -219,7 +219,7 @@
 		
 		<div id="changeColor">
 			<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList" keyName="UserSearchList" />
-			<pg:pager maxPageItems="15" id="UserSearchList" scope="request" data="UserSearchList" isList="false">
+			<pg:pager maxPageItems="5" id="UserSearchList" scope="request" data="UserSearchList" isList="false">
 				<pg:param name="orgId"/>
 				<pg:param name="userName"/>
 				<pg:param name="userRealname"/>
@@ -239,7 +239,8 @@
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.realname"/></td>								
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.belongorg"/></td>
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.mobile"/></td>
-							<th>密码过期时间</th>			
+							<th>密码过期时间</th>	
+							<th >密码有效期</th>		
 						</pg:header>
 						<pg:list>
 							<tr onDBLclick=getUserInfo2(this,'<pg:cell colName="userId" defaultValue=""/>','<pg:querystring encode="true"/>') >
@@ -259,7 +260,10 @@
 								</td>	
 								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
 										defaultValue="" /></td>		
+								<td><pg:cell colName="passwordDualedTime" 
+										defaultValue="0" />天</td>	
 								</tr>
+								
 						</pg:list>
 					</table>
 					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>

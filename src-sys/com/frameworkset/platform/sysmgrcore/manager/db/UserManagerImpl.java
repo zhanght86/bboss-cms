@@ -5146,13 +5146,27 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			Map updatetimes = SQLExecutor.queryObject(HashMap.class, "select password_updatetime,password_dualtime from TD_SM_USER where USER_ID=?", userid);
-			Timestamp updatetime = updatetimes != null?(Timestamp)updatetimes.get("password_updatetime".toUpperCase()):null;
+			Map updatetimes = SQLExecutor.queryObjectByRowHandler(new RowHandler<HashMap>(){
+
+				@Override
+				public void handleRow(HashMap rowValue, Record record)
+						throws Exception {
+					rowValue.put("password_updatetime", record.getTimestamp("password_updatetime"));
+					
+					rowValue.put("password_dualtime", record.getInt("password_dualtime"));
+				}
+				
+			},HashMap.class,  "select password_updatetime,password_dualtime from TD_SM_USER where USER_id=?", userid);
+			if(updatetimes == null)
+			{
+				return null;
+			}
+			Timestamp updatetime =(Timestamp)updatetimes.get("password_updatetime");
 			if(updatetime == null )
 				updatetime = this.initpasswordupdatetime(userid);
 			tm.commit();
 			
-			return getPasswordExpiredTime(updatetime,((Integer)updatetimes.get("password_dualtime".toUpperCase())).intValue());
+			return getPasswordExpiredTime(updatetime,((Integer)updatetimes.get("password_dualtime")).intValue());
 		} catch (Exception e) {
 			throw new ManagerException(e);
 		}
@@ -5179,6 +5193,39 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			return this.getDefaultPasswordDualTime();
 		}
 	}
+	public  Date getPasswordExpiredTimeByUserAccount(String userAccount) throws ManagerException
+	{
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			Map updatetimes = SQLExecutor.queryObjectByRowHandler(new RowHandler<HashMap>(){
+
+				@Override
+				public void handleRow(HashMap rowValue, Record record)
+						throws Exception {
+					rowValue.put("password_updatetime", record.getTimestamp("password_updatetime"));
+					
+					rowValue.put("password_dualtime", record.getInt("password_dualtime"));
+				}
+				
+			},HashMap.class,  "select password_updatetime,password_dualtime from TD_SM_USER where USER_name=?", userAccount);
+			if(updatetimes == null)
+				return null;
+			Timestamp updatetime = (Timestamp)updatetimes.get("password_updatetime");
+			if(updatetime == null )
+				updatetime = this.initpasswordupdatetimeByUserAccount(userAccount);
+			tm.commit();
+			int expiredays = ((Integer)updatetimes.get("password_dualtime")).intValue();
+			
+			return getPasswordExpiredTime(updatetime,expiredays);
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
 	/**
 	 * 获取密码过期时间，如果返回为null,表示密码永不过期
 	 * @param passwordupdatetime
@@ -5197,11 +5244,28 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		 calendar.set(Calendar.DAY_OF_MONTH,calendar.get(Calendar.DAY_OF_MONTH)+expiredays);
 		 return new Timestamp(calendar.getTime().getTime());
 	}
+	public Timestamp initpasswordupdatetimeByUserAccount(String userAccount) throws ManagerException
+	{
+		try {
+			Timestamp updatetime = SQLExecutor.queryObject(Timestamp.class, "select password_updatetime from TD_SM_USER where USER_name=?", userAccount);
+			if(updatetime == null)
+			{
+				updatetime =  new Timestamp(new Date().getTime());
+				StringBuffer hsql = new StringBuffer();
+				hsql.append("update TD_SM_USER set password_updatetime=? where ").append(
+						"USER_name=?");
+				SQLExecutor.update(hsql.toString(), updatetime,userAccount);
+				return updatetime;
+			}
+			return updatetime;
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+	}
 	public Timestamp initpasswordupdatetime(int userid) throws ManagerException
 	{
 		try {
 			Timestamp updatetime = SQLExecutor.queryObject(Timestamp.class, "select password_updatetime from TD_SM_USER where USER_ID=?", userid);
-			
 			if(updatetime == null)
 			{
 				updatetime =  new Timestamp(new Date().getTime());
@@ -5241,11 +5305,19 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	{
 		try {
 			
-			Map updatetimes = SQLExecutor.queryObject(HashMap.class,  "select password_updatetime,password_dualtime from TD_SM_USER where USER_ID=?", userid);
-			Timestamp updatetime = updatetimes != null?(Timestamp)updatetimes.get("password_updatetime".toUpperCase()):null;
-			int expiredays = ((Integer)updatetimes.get("password_dualtime".toLowerCase())).intValue();
-			if(expiredays <= 0)
-				return false;
+			Map updatetimes = SQLExecutor.queryObjectByRowHandler(new RowHandler<HashMap>(){
+
+				@Override
+				public void handleRow(HashMap rowValue, Record record)
+						throws Exception {
+					rowValue.put("password_updatetime", record.getTimestamp("password_updatetime"));
+					
+					rowValue.put("password_dualtime", record.getInt("password_dualtime"));
+				}
+				
+			},HashMap.class,  "select password_updatetime,password_dualtime from TD_SM_USER where USER_ID=?", userid);
+			Timestamp updatetime = updatetimes != null?(Timestamp)updatetimes.get("password_updatetime"):null;
+			
 			if(updatetime == null)
 			{
 				StringBuffer hsql = new StringBuffer();
@@ -5254,6 +5326,17 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				SQLExecutor.update(hsql.toString(), new Timestamp(new Date().getTime()),userid);
 				return false;
 			}
+			int expiredays = ((Integer)updatetimes.get("password_dualtime")).intValue();
+			if(expiredays <= 0)
+			{
+				if(!isUserScopePasswordExpiredDays())
+					expiredays = getDefaultPasswordDualTime();
+				
+			}
+			
+			
+			if(expiredays <= 0)
+				return false;
 //		   Calendar calendar=Calendar.getInstance();   
 //		   calendar.setTime(updatetime); 
 //		

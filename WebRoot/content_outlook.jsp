@@ -68,7 +68,7 @@ function removeOld(){
 
 function addMenubars(menuid)
 {
-	var menudiv="<div class=\"easyui-accordion\" animate=\"false\" fit=\"true\" border=\"false\" id=\""+menuid+"\"></div>";
+	var menudiv="<div class=\"easyui-accordion\" data-options=\"fit:true,border:false\" id=\""+menuid+"\"></div>";
 	$("#west_area").append(menudiv);
 	westmenus[menuid] = menuid;
 	if($.parser)	$.parser.parse("#west_area");
@@ -340,7 +340,7 @@ function insertTreeNode(pnode,data){
 	</head>
 
 	<body class="easyui-layout">
-		<div region="west" split="true" id="west_area" title="导航菜单"
+		<div data-options="region:'west',split:true" id="west_area" title="导航菜单"
 			style="width: 150; padding1: 1px; overflow: hidden;">
 			<%
 		
@@ -352,7 +352,7 @@ function insertTreeNode(pnode,data){
 				
 			%>
 				
-				<div class="easyui-accordion" style="display: none;" animate="false" fit="true" border="false" id="<%="menubar_" + m.getId() %>"></div>
+				<div class="easyui-accordion" style="display: none;"  data-options="fit:true,border:false" id="<%="menubar_" + m.getId() %>"></div>
 			<%
 				
 			}
@@ -361,7 +361,7 @@ function insertTreeNode(pnode,data){
 			if(hasrootitems != null&&hasrootitems.equals("true")){
 			%>
 				
-				<div class="easyui-accordion" style="display: none;" animate="false" fit="true" border="false" id="<%="menubar_rootitems"%>"></div>
+				<div class="easyui-accordion" style="display: none;"  data-options="fit:true,border:false" id="<%="menubar_rootitems"%>"></div>
 			<%
 			}
 			
@@ -372,8 +372,8 @@ function insertTreeNode(pnode,data){
 			String jfpage = MenuHelper.getRealUrl(request.getContextPath(),isanypage);
 		%>	
 		</div>
-		<div id="warpperDiv" region="center">
-			<div id="tt" class="easyui-tabs" fit="true" border="false">
+		<div id="warpperDiv" data-options="region:'center'">
+			<div id="tt" class="easyui-tabs" data-options="fit:true,border:false,plain:true">
 				<div title="工作台">
 					<iframe scrolling="auto" frameborder="0" src="<%=jfpage %>"
 						style="width: 100%; height: 100%;"></iframe>

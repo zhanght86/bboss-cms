@@ -1899,5 +1899,15 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getPasswordExpiredTimeByUserAccount(java.lang.String)
+	 */
+	@Override
+	public Date getPasswordExpiredTimeByUserAccount(String userAccount)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

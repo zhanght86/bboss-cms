@@ -271,6 +271,7 @@
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.common.status"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.workflow.organization"/></th>
 							<th onclick="sortBy('userName')">密码过期时间</th>
+							<th onclick="sortBy('userName')">密码有效期</th>
 						</tr>
 					
 						
@@ -337,6 +338,7 @@
 									menuitem2.setLink("javascript:userInfoupdate("+userId+")");
 									menuitem2.setIcon("../../images/edit.gif");
 									menuitem2.setDisabled(isSelf);
+									menuitem2.setDisableMsg("超级管理员不能修改自己的信息");
 									menu.addContextMenuItem(menuitem2);
 									menu.addSeperate();
 									
@@ -422,6 +424,7 @@
 										menuitem2.setDisableMsg("超级管理员不能修改自己的信息");
 									}else{
 										menuitem2.setDisabled(isSelf);
+										menuitem2.setDisableMsg("不能修改自己的信息");
 									}
 										menu.addContextMenuItem(menuitem2);
 									menu.addSeperate();
@@ -678,7 +681,9 @@
 										defaultValue="" /></td>
 										
 								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
-										defaultValue="" /></td>		
+										defaultValue="" /></td>	
+								<td><pg:cell colName="passwordDualedTime" 
+										defaultValue="0" />天</td>				
 							</tr>
 							<%}else{%>
 							<tr>
@@ -698,7 +703,9 @@
 								<td><dict:itemname type="isvalid" expression="{user_isvalid}" /></td>
 								<td><pg:cell colName="org_Name" defaultValue="" /></td>
 								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
-										defaultValue="" /></td>		
+										defaultValue="" /></td>	
+								<td><pg:cell colName="passwordDualedTime" 
+										defaultValue="0" />天</td>				
 							</tr>
 							<%}%>
 						</pg:list>

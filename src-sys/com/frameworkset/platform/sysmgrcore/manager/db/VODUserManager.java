@@ -1126,6 +1126,16 @@ public class VODUserManager extends EventHandle implements UserManager {
 		return 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.frameworkset.platform.sysmgrcore.manager.UserManager#getPasswordExpiredTimeByUserAccount(java.lang.String)
+	 */
+	@Override
+	public Date getPasswordExpiredTimeByUserAccount(String userAccount)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 }
