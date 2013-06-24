@@ -932,6 +932,13 @@ public void rejecttoPreTask(String taskId,String username){
 	public Deployment deployProcDefByPath(String deploymentName,
 			String xmlPath, String jpgPath,int deploypolicy) {
 		Deployment deploy = null;
+		/**
+		 * 参数deploypolicy可以为以下常量值：
+		 *  DeploymentBuilder.Deploy_policy_default 
+	 	 *	DeploymentBuilder.Deploy_policy_upgrade 
+	     *  DeploymentBuilder.Deploy_policy_delete 
+	     *
+		 */
 		if(jpgPath != null && !jpgPath.equals(""))
 		{
 			deploy = repositoryService.createDeployment()
@@ -1817,7 +1824,27 @@ public void rejecttoPreTask(String taskId,String username){
 	}
 
 	public Deployment deployProcDefByPath(String deploymentName, String xmlPath) {
-		return null;
+		Deployment deploy = repositoryService.createDeployment()
+				.name(deploymentName).addClasspathResource(xmlPath).deploy();
+		
+
+		return deploy;
+	}
+	public Deployment deployProcDefByPath(String deploymentName, String xmlPath,int deploypolicy) {
+		
+		/**
+		 * 参数deploypolicy可以为以下常量值：
+		 *  DeploymentBuilder.Deploy_policy_default 
+	 	 *	DeploymentBuilder.Deploy_policy_upgrade 
+	     *  DeploymentBuilder.Deploy_policy_delete 
+	     *
+		 */
+		
+		 Deployment deploy = repositoryService.createDeployment()
+				.name(deploymentName).addClasspathResource(xmlPath).deploy(deploypolicy);
+		
+
+		return deploy;
 	}
 
 	public Deployment deployProcDefByInputStream(String deploymentName,
@@ -1865,8 +1892,14 @@ public void rejecttoPreTask(String taskId,String username){
 			ZipInputStream processDef,int upgradepolicy) {
 		DeploymentBuilder deploymentBuilder = processEngine
 				.getRepositoryService().createDeployment().name(deploymentName);
-		deploymentBuilder.addZipInputStream(processDef);
-
+		deploymentBuilder.addZipInputStream(processDef);		
+		/**
+		 * 参数upgradepolicy可以为以下常量值：
+		 *  DeploymentBuilder.Deploy_policy_default 
+	 	 *	DeploymentBuilder.Deploy_policy_upgrade 
+	     *  DeploymentBuilder.Deploy_policy_delete 
+	     *
+		 */			
 		return deploymentBuilder.deploy(upgradepolicy);
 	}
 

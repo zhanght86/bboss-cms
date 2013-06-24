@@ -191,7 +191,7 @@ public interface ActivitiService {
 	public Deployment deployProcDefByZip(String deploymentName,
 			ZipInputStream processDef);
 	
-	
+	public Deployment deployProcDefByPath(String deploymentName, String xmlPath,int deploypolicy) ;
 	/**
 	 * 部署流程
 	 * 
