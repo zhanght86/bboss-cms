@@ -54,7 +54,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-sany-html,jar-sany-mail,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-parameters-handler,jar-sany-html,jar-sany-mail,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -243,7 +243,7 @@
 			 
 			
 		</target>
-	<target name="compile-parameters-handler"  description="compile the sany source ">
+	<target name="compile-parameters-handler"  depends="init" description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>
 				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 					<src path="${source}/src-parameters-handler" />				
@@ -309,7 +309,7 @@
 			
 	</target>
 	
-	<target name="compile-sany-html" depends="init" description="compile the sany source ">
+	<target name="compile-sany-html" depends="jar-parameters-handler" description="compile the sany source ">
 					<echo>compile the compile-all source ...</echo>
 					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 						<src path="${source}/src-htmlparser" />				
