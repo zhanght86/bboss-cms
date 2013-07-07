@@ -32,7 +32,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -54,7 +54,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-sany-html,jar-sany-mail,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
