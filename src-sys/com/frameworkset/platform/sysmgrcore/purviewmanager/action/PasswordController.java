@@ -41,7 +41,7 @@ import com.frameworkset.util.StringUtil;
  * @version 1.0
  */
 public class PasswordController {
-	private  String codelist = RandImgCreater.CODE_LIST;
+	private  String[] codelist = RandImgCreater.CODE_LIST;
 	private  int codenum = RandImgCreater.FONT_NUM;
 	public void generateImageCode(HttpServletRequest request,HttpServletResponse response)
 	{

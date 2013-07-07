@@ -44,13 +44,15 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  */
 public class RandImgCreater {
-	public static final String CODE_LIST = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+	public static final String CODE_LIST[] = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W",
+		"X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6",
+		"7","8","9","0"};
 	private HttpServletResponse response = null;
 	private static final int HEIGHT = 36;
 	public static final int FONT_NUM = 4;
 	private int width = 0;
 	private int iNum = FONT_NUM;
-	private String codeList = "";
+	private String[] codeList = new String[]{""};
 	private boolean drawBgFlag = false;
 
 	private int rBg = 0;
@@ -65,7 +67,7 @@ public class RandImgCreater {
 	}
 
 	public RandImgCreater(HttpServletResponse response, int iNum,
-			String codeList) {
+			String[] codeList) {
 		this.response = response;
 		if(iNum > 0)
 			this.iNum = iNum;
@@ -107,8 +109,8 @@ public class RandImgCreater {
 		int interval = 8;
 		int total = 0;
 		for (int i = 0; i < iNum; i++) {
-			int rand = random.nextInt(codeList.length());
-			String strRand = codeList.substring(rand, rand + 1);
+			int rand = random.nextInt(codeList.length);
+			String strRand = codeList[rand];
 			sRand += strRand;
 			g.setColor(new Color(20 + random.nextInt(110), 20 + random
 					.nextInt(110), 20 + random.nextInt(110)));

@@ -2,6 +2,7 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
 import org.frameworkset.util.annotations.ResponseBody;
 
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.dictionary.DataManagerFactory;
 import com.frameworkset.platform.cms.driver.publish.impl.ScriptletUtil;
@@ -55,6 +56,7 @@ public  class CacheController {
 		ret.append("<br/>").append(clearCMSSite2ndChannelCache());
 		ret.append("<br/>").append(clearCMSPublishCache());
 		ret.append("<br/>").append(clearUserCache());
+		ret.append("<br/>").append(this.clearDBMetaCache());
 		
 		return ret.toString();
 		
@@ -218,6 +220,27 @@ public  class CacheController {
 		
 		if(errorMessage.length() == 0)
 			errorMessage.append("清除用户缓存成功");
+		return errorMessage.toString();		
+		
+		
+		
+		
+		
+		
+	}
+	
+	public @ResponseBody String clearDBMetaCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try {
+			DBUtil.refreshDatabaseMetaData();
+			
+		} catch (Exception e) {
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除数据库元数据缓存成功");
 		return errorMessage.toString();		
 		
 		

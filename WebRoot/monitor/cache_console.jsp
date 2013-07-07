@@ -94,6 +94,14 @@
 											id="queryButton" onclick="clearCMSPublishCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
+					<tr>
+				<td>数据库元数据缓存</td>
+				<td >
+				<a  href="javascript:void(0)" class="bt_1 sp"
+											id="queryButton" onclick="clearDBCache()"><span>清除</span> </a> 
+				</td>
+				</tr>
+				
 			</table>
 			
 		</div>
@@ -467,4 +475,41 @@ function clearCMSSite2ndChannelCache()
 		
 		
 }
+function clearDBCache()
+{
+	$.dialog.confirm("是否清除数据库元数据缓存",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "clearDBMetaCache.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("清除数据库元数据缓存完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+
 </script>
