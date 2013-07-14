@@ -1,3 +1,4 @@
+<%@page import="java.net.URLDecoder"%>
 <%     
   response.setHeader("Cache-Control", "no-cache"); 
   response.setHeader("Pragma", "no-cache"); 
@@ -135,6 +136,10 @@
     }
     //处理附加字段
     String checkValue = request.getParameter("checkValue");
+    if(checkValue != null)
+    {
+    	checkValue = URLDecoder.decode(checkValue, "UTF-8");
+    }
 	String value = "";
 	String name = "";
 	String primaryCondition = "";//主键条件

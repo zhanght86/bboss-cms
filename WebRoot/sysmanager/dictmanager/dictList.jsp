@@ -464,7 +464,7 @@
 		}
 		if(checkValue!=""){
 			
-			var url="<%=request.getContextPath()%>/sysmanager/dictmanager/EditWin_dictdata.jsp?dicttypeId=<%=did%>&checkValue="+checkValue+"&validateState="+validateState;
+			var url="<%=request.getContextPath()%>/sysmanager/dictmanager/EditWin_dictdata.jsp?dicttypeId=<%=did%>&checkValue="+encodeURIComponent(encodeURIComponent(checkValue))+"&validateState="+validateState;
 			$.dialog({title:'<pg:message code="sany.pdp.dictmanager.data.gather.modfiy"/>',width:420,height:280, content:'url:'+url});   	
 			
 		    //var path = "EditWin_dictdata.jsp?dicttypeId=<%=did%>&checkValue="+checkValue+"&validateState="+validateState;
