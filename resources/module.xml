@@ -67,6 +67,7 @@
 						 i18n:en_US="/html/images/top_logo_en.jpg">contentoutlook.page</content>
 
 			</workspace>
+			
 		</publicitem>
 
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
@@ -86,6 +87,9 @@
 				<workspace>
 					<content>appbom/index.page</content>
 				</workspace>
+				<authoriaztion>				 
+				 	<url>appbom/*.page</url>				 
+				</authoriaztion>
 			</item>
 		
 			

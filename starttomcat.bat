@@ -1,0 +1,1 @@
+ant startTomcat >build.log

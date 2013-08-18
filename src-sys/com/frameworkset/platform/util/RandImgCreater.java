@@ -44,15 +44,16 @@ import javax.servlet.http.HttpServletResponse;
  * @version 1.0
  */
 public class RandImgCreater {
-	public static final String CODE_LIST[] = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W",
-		"X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6",
-		"7","8","9","0"};
+	public static final String[] CODE_LIST = new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"
+													,"R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j",
+													"k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1",
+													"2","3","4","5","6","7","8","9","0"};
 	private HttpServletResponse response = null;
 	private static final int HEIGHT = 36;
 	public static final int FONT_NUM = 4;
 	private int width = 0;
 	private int iNum = FONT_NUM;
-	private String[] codeList = new String[]{""};
+	private String[] codeList ;
 	private boolean drawBgFlag = false;
 
 	private int rBg = 0;

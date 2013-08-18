@@ -1,0 +1,1 @@
+ant stopTomcat >build.log

@@ -63,33 +63,35 @@ public class AppAccessManager extends BaseAccessManager
 		}
 	}
 
-	/**
-	 * 判定给定的资源没有授予任何的角色时， 是否可以访问， 缺省为false， 具体的应用可以根据不同的要求决定是否可以访问
-	 * 
-	 * @return boolean
-	 */
-	public boolean allowIfNoRequiredRoles(String resourceType)
-	{
-		// 判断资源类型本身是否允许
-		ResourceManager s = new ResourceManager();
-
-		ResourceInfo resourceInfo = s.getResourceInfoByType(resourceType);
-		if (resourceInfo == null || resourceInfo.defaultAllowIfNoRequiredRole())
-		{
-			// 判断系统是否允许
-
-			PermissionRoleMap permissionrolemap = ConfigManager.getInstance()
-					.getPermissionRoleMap();// ((AppAccessContext)
-											// accesscontext).
-			// getPermissionRoleMap();
-			return permissionrolemap.getPermissionRoleMapInfo()
-					.isAllowIfNoRequiredRole();
-		}
-		else
-		{
-			return resourceInfo.allowIfNoRequiredRole();
-		}
-	}
+//	/**
+//	 * 判定给定的资源没有授予任何的角色时， 是否可以访问， 缺省为false， 具体的应用可以根据不同的要求决定是否可以访问
+//	 * 
+//	 * @return boolean
+//	 */
+//	public boolean allowIfNoRequiredRoles(String resourceType)
+//	{
+//		// 判断资源类型本身是否允许
+//		ResourceManager s = new ResourceManager();
+//
+//		ResourceInfo resourceInfo = s.getResourceInfoByType(resourceType);
+//		if (resourceInfo == null || resourceInfo.defaultAllowIfNoRequiredRole())
+//		{
+//			// 判断系统是否允许
+//
+//			PermissionRoleMap permissionrolemap = ConfigManager.getInstance()
+//					.getPermissionRoleMap();// ((AppAccessContext)
+//											// accesscontext).
+//			// getPermissionRoleMap();
+//			return permissionrolemap.getPermissionRoleMapInfo()
+//					.isAllowIfNoRequiredRole();
+//		}
+//		else
+//		{
+//			return resourceInfo.allowIfNoRequiredRole();
+//		}
+//	}
+//	
+//	
 
 	/**
 	 * Description:获取相应的应用的中访问资源resource所需要的权限

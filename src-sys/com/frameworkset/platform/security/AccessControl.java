@@ -2541,6 +2541,8 @@ public class AccessControl {
 	}
 	
 	
+
+	
 	/**
 	 * 检测当前系统用户是否拥有访问资源的权限
 	 * 
@@ -2549,19 +2551,10 @@ public class AccessControl {
 	 * @param resourceType
 	 * @return
 	 */
-	public boolean checkURLPermission(String uri, String action,
-			String resourceType) {
-//		if(resourceType.equals("column"))//直接将uri和菜单关联，只能控制到菜单入口页面地址
-//		{
-//			return checkPermission( resourceID,  action,
-//					 resourceType,  false,  null);
-//		}
-//		else
-//		{
-//			return checkPermission( uri,  action,
-//					 resourceType,  false,  null);
-//		}
-		return true;//to fixed.
+	public boolean checkURLPermission(String uri) {
+
+		return AppSecurityCollaborator.getInstance().getPermissionTokenMap().checkUrlPermission(uri);
+		
 	}
 
 	/**

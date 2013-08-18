@@ -88,7 +88,7 @@ public class SYSAuthenticateFilter extends AuthenticateFilter
 	protected boolean checkPermission(HttpServletRequest request,
 			HttpServletResponse response, HandlerMeta handlerMeta, String uri) {
 		AccessControl control = AccessControl.getAccessControl();
-		return control.checkURLPermission(uri, "visible", "column");
+		return control.checkURLPermission(uri);
 	}
 
 }

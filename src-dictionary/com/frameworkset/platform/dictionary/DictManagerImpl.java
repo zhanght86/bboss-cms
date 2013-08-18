@@ -1027,7 +1027,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 //			    dbUtil.addBatch(sql);
 			}else{//如果数据项是不树形,删除数据
 				//删除机构编码关系 like '%:数据Value%'			
-				delete_orgTax.append("delete TD_SM_TAXCODE_ORGANIZATION where DATA_VALUE= '")
+				delete_orgTax.append("delete from TD_SM_TAXCODE_ORGANIZATION where DATA_VALUE= '")
 				   .append(dictdataValue).append("' ")
 				   .append(" and dicttype_id='").append(dicttypeId).append("'");
 				//先
@@ -1037,10 +1037,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			    dbUtil.addPreparedBatch();
 				delete_orgTax.setLength(0);
 
-			    sql = "delete from "+ data_table_name +" a where "+ data_value_field +" = '"+ dictdataValue +"' "+ 
+			    sql = "delete from "+ data_table_name +" where "+ data_value_field +" = '"+ dictdataValue +"' "+ 
 			          "and "+data_name_filed+"='"+dictdataName+"' ";
 			    if(dicttype_field != null && !dicttype_field.equals(""))
+			    {
+			    	if(dicttype_field.startsWith("a."))
+			    		dicttype_field = dicttype_field.substring(2);
 			    	sql += " and " + dicttype_field  + "='" + dicttypeId +  "'";
+			    }
 
 			    sql += primaryCondition;
 //			    dbUtil.addBatch(sql);
@@ -1066,7 +1070,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			} catch (RollbackException e1) {
 				e1.printStackTrace();
 			}
-			logger.error(e);
+			logger.error("",e);
 			//throw new ManagerException(e.getMessage());
 			result = false;
 			e.printStackTrace();
@@ -4133,6 +4137,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					dictdataName = info[1];
 					primaryCondition = info[2];
 				} 
+				primaryCondition = primaryCondition.replace("a.", "");
 				if(!"".equals(dictdataValue) && !"".equals(dictdataName)){
 					state = this.deletedictdata(dicttypeId,dictdataValue,dictdataName,primaryCondition);
 				}

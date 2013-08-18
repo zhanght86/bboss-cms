@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -29,6 +30,9 @@ import org.frameworkset.web.servlet.support.RequestContextUtils;
 import com.frameworkset.platform.framework.Item.ItemUrlStruction;
 import com.frameworkset.platform.framework.Item.Variable;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
+import com.frameworkset.platform.security.authorization.impl.PermissionToken;
+import com.frameworkset.platform.security.authorization.impl.PermissionTokenMap;
 import com.frameworkset.util.DaemonThread;
 import com.frameworkset.util.FileUtil;
 import com.frameworkset.util.ResourceInitial;
@@ -210,7 +214,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	 */
 	private String parentPath;
 
-	private DaemonThread listen;
+	private static DaemonThread listen;
 	public static final String defaultSystemID = "module";
 	private String systemid;
 
@@ -375,25 +379,29 @@ public class Framework implements ResourceInitial,MessageSource {
 			return path;
 		return init.parentPath + "/" + path;
 	}
-
+	private static Object mlock = new Object();
 	public void monitor(String configFile) {
 		if (menu_monitor && !monitered) {
-			listen = new DaemonThread(configFile, this);
-			listen.start();
-			BaseApplicationContext.addShutdownHook(new Runnable(){
+			if(listen == null)
+			{
+				synchronized(mlock)
+				{
+					if(listen == null)
+					{
+						listen = new DaemonThread(5000,"sysmenu refresh thread");
+						listen.start();
+						BaseApplicationContext.addShutdownHook(new Runnable(){
 
-				@Override
-				public void run() {
-					
-					try {
-						stop();
-					
-
-					} catch (Throwable e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+							public void run() {
+								if(listen != null)
+									listen.stopped();
+								
+							}});
 					}
-				}});
+					
+				}
+			}
+			listen.addFile(configFile, this);			
 			this.monitered = true;
 		}
 
@@ -450,6 +458,81 @@ public class Framework implements ResourceInitial,MessageSource {
 		
 		
 	}
+	
+	private PermissionTokenMap buildPermissionTokenMap()
+	{
+		PermissionTokenMap permissionTokenMap = AppSecurityCollaborator.getInstance().getPermissionTokenMap();
+		if(this.indexByIds != null && this.indexByIds.size() > 0)
+		{
+			permissionTokenMap.resetPermissionByRegion("column", this.getSystemid());
+			Iterator entrySet = indexByIds.entrySet().iterator();
+			while(entrySet.hasNext())
+			{
+				Object item = ((Entry)entrySet.next()).getValue();
+			
+				if(item instanceof Item)
+				{
+					
+					Item it = (Item) item;
+					PermissionToken token = new PermissionToken("column", it.getId(),
+							"visible");
+					if(it.getWorkspaceContent() != null && !it.getWorkspaceContent().equals(""))
+					{
+						
+						permissionTokenMap.addPermissionToken(it.getWorkspaceContent(),this.getSystemid(), token);
+					}
+					if(it.getAuthorResources() != null)
+					{
+						List<String> authorResources = it.getAuthorResources();
+						for(String authorResource:authorResources)
+						{
+							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
+						}
+					}
+				}
+				else if(item instanceof Module)
+				{
+					Module it = (Module) item;
+					PermissionToken token = new PermissionToken("column", it.getId(),
+							"visible");
+					if(it.getUrl() != null && !it.getUrl().equals(""))
+					{
+						
+						permissionTokenMap.addPermissionToken(it.getUrl(),this.getSystemid(), token);
+					}
+					if(it.getAuthorResources() != null)
+					{
+						List<String> authorResources = it.getAuthorResources();
+						for(String authorResource:authorResources)
+						{
+							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
+						}
+					}
+				}
+					
+			}
+			if(this.publicItem != null)
+			{
+				PermissionToken token = new PermissionToken("column", "publicItem",
+						"visible");
+				
+				permissionTokenMap.addUnprotectedPermissionToken(publicItem.getWorkspaceContent(), this.getSystemid(), token);
+				String isanypage = publicItem.getWorkspacecontentExtendAttribute("isany");
+				if(isanypage == null)
+					isanypage = "jf.jsp";
+				permissionTokenMap.addUnprotectedPermissionToken(isanypage , this.getSystemid(), token);
+				if(publicItem.getAuthorResources() != null)
+				{
+					List<String> authorResources = publicItem.getAuthorResources();
+					for(String authorResource:authorResources)
+					{
+						permissionTokenMap.addUnprotectedPermissionToken(authorResource,this.getSystemid(), token);
+					}
+				}
+			}
+		}
+		return permissionTokenMap ;
+	}
 	private void buildFramework(FrameworkConfiguration config) throws Exception
 	{	
 			
@@ -496,7 +579,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			this.languages = config.getLanguages();
 			this.localeDescriptions = config.getLocaleDescriptions();
 			inited = true;
-		
+			buildPermissionTokenMap();
 			this.showrootleftmenu = config.isShowrootleftmenu();
 			
 			
@@ -2050,6 +2133,11 @@ public class Framework implements ResourceInitial,MessageSource {
 	}
 	public String getSystemid() {
 		return systemid;
+	}
+	
+	public static String getSystemName(String systemid)
+	{
+		return Framework.getSubFramework(systemid).getDescription();
 	}
 	public Map<Locale, String> getLocaleDescriptions() {
 		return localeDescriptions;

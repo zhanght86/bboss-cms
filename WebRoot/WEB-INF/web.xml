@@ -28,6 +28,19 @@
 	</description>
 	<listener-class>org.frameworkset.web.listener.ApplicationLifeListener</listener-class>
 	</listener>
+	
+	 <filter>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+    <init-param>
+        <param-name>exclusions</param-name>
+        <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*,*.html</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>DruidWebStatFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
     <filter>
 	    <filter-name>CharsetEncoding</filter-name>
 	    <filter-class>com.frameworkset.common.filter.CharsetEncodingFilter</filter-class>
@@ -86,7 +99,9 @@
     		/yzm.jsp,
 		   /sysmanager/password/modifyExpiredUserPWD.jsp,
 		  /passward/modifyExpiredPassword.page,
-		  /passward/generateImageCode.page
+		  /passward/generateImageCode.page,
+		  /common/jsp/tokenfail.jsp
+		  
     	   </param-value>
     </init-param>
     <init-param>
@@ -108,13 +123,13 @@
 			启用，false 不启用，默认为不启用 -->
 		<init-param>
 			<param-name>enableToken</param-name>
-			<param-value>false</param-value>
+			<param-value>true</param-value>
 		</init-param>
 		<!-- 指定动态令牌校验失败跳转地址
 		如果没有指定直接采用redirecturl对应的地址作为跳转地址 -->
 		<init-param>
 		      <param-name>tokenfailpath</param-name>
-		      <param-value>/sysmanager/logoutredirect.jsp</param-value>
+		      <param-value>/common/jsp/tokenfail.jsp</param-value>
 	    </init-param>
 		<!-- 指定令牌存储机制，目前提供两种机制： mem：将令牌直接存储在内存空间中 session：将令牌存储在session中,如果对应的页面不存在session，则将token存储在内存中 
 			默认存储在session中 -->
@@ -134,7 +149,18 @@
 			<param-name>tokenscaninterval</param-name>
 			<param-value>1800000</param-value>
 		</init-param>
-		<!-- 防止跨站请求过滤器相关参数结束 -->    
+		<!-- 防止跨站请求过滤器相关参数结束 -->   
+		<init-param>
+			<param-name>enablePermissionCheck</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		 
+		
+		<init-param>
+			<param-name>authorfailedurl</param-name>
+			<param-value>/common/jsp/authorfail.jsp</param-value>
+		</init-param>
+		 
   </filter>
 
  
@@ -175,7 +201,7 @@
             /WEB-INF/conf/bboss-*.xml,
             /WEB-INF/conf/permission/bboss-*.xml,
             /WEB-INF/conf/sanylog/bboss-*.xml,
-            /WEB-INF/conf/demo/bboss-*.xml
+            /WEB-INF/conf/dictionary/bboss-*.xml
             </param-value>
         </init-param>
         <init-param>
@@ -221,7 +247,15 @@
   <servlet-name>RPCHttpServLet</servlet-name>
   <url-pattern>*.rpc</url-pattern>
  </servlet-mapping>
- 
+ <servlet> 
+<servlet-name>DruidStatView</servlet-name> 
+<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class> 
+</servlet>
+
+<servlet-mapping> 
+<servlet-name>DruidStatView</servlet-name> 
+<url-pattern>/druid/*</url-pattern> 
+</servlet-mapping>
  <servlet>
 		<display-name>cxf</display-name>
 		<servlet-name>cxf</servlet-name>

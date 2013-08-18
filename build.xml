@@ -9,7 +9,8 @@
 	</tstamp>
 
 
-
+	<typedef resource="net/sf/antcontrib/antlib.xml" classpath="ant-contrib-1.0b3.jar" />
+	
 	<!-- set global properties for this build -->
 	<property file="build.properties" />
 	<target name="init" description="create timestamp and directories">
@@ -22,6 +23,8 @@
 		<mkdir dir="classes-all" />
 		<mkdir dir="classes-sany" />
 		<mkdir dir="classes-mq" />
+		<delete dir="classes-sonar" />
+		<mkdir dir="classes-sonar" />
 		<mkdir dir="${distrib}" />
 
 	</target>
@@ -32,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -54,7 +57,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-parameters-handler,jar-sany-html,jar-sany-mail,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -87,6 +90,10 @@
 			<fileset dir="${source}/src-cms" includes="**/*.xml"/>
 			<fileset dir="${source}/src-sys" includes="com/frameworkset/platform/sysmgrcore/manager/db/job.xml"/>
 		</copy>
+		<copy todir="classes-sonar">
+			<fileset dir="classes-all" includes="**/*.*"/>
+		</copy>
+		
 		
 	</target>
 	
@@ -103,6 +110,9 @@
 			</javac>
 		<copy todir="classes-sany">
 			<fileset dir="${source}/src-sanydesktop" includes="**/*.xml"/>
+		</copy>
+		<copy todir="classes-sonar">
+			<fileset dir="classes-sany" includes="**/*.*"/>
 		</copy>
 	</target>
 	
@@ -138,6 +148,9 @@
 		<copy todir="classes-sany">
 			<fileset dir="${source}/src-sanylog" includes="**/*.xml"/>
 		</copy>
+		<copy todir="classes-sonar">
+			<fileset dir="classes-sany" includes="**/*.*"/>
+		</copy>
 	</target>
 	
 	<target name="jar-sany-log" depends="compile-sany-log" description="generate the sany-log-lib library sany-log.jar">
@@ -171,6 +184,9 @@
 				</javac>
 			<copy todir="classes-sany">
 				<fileset dir="${source}/src-sap" includes="**/*.xml"/>
+			</copy>
+			<copy todir="classes-sonar">
+				<fileset dir="classes-sany" includes="**/*.*"/>
 			</copy>
 		</target>
 		
@@ -206,6 +222,9 @@
 				</javac>
 			<copy todir="classes-sany">
 				<fileset dir="${source}/src-sms" includes="**/*.xml"/>
+			</copy>
+			<copy todir="classes-sonar">
+				<fileset dir="classes-sany" includes="**/*.*"/>
 			</copy>
 		</target>
 		
@@ -243,7 +262,7 @@
 			 
 			
 		</target>
-	<target name="compile-parameters-handler"  depends="init" description="compile the sany source ">
+	<target name="compile-parameters-handler"  description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>
 				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 					<src path="${source}/src-parameters-handler" />				
@@ -254,6 +273,9 @@
 						
 					</classpath>
 				</javac>
+				<copy todir="classes-sonar">
+					<fileset dir="classes-sany" includes="**/*.*"/>
+				</copy>
 			
 	</target>
 		
@@ -289,6 +311,9 @@
 			<copy todir="classes-sany">
 				<fileset dir="${source}/src-ldap" includes="**/*.xml"/>
 			</copy>
+			<copy todir="classes-sonar">
+				<fileset dir="classes-sany" includes="**/*.*"/>
+			</copy>
 		
 	</target>
 	
@@ -309,7 +334,45 @@
 			
 	</target>
 	
-	<target name="compile-sany-html" depends="jar-parameters-handler" description="compile the sany source ">
+	
+	<target name="compile-sany-demo" depends="jar-system" description="compile the sany source ">
+				<echo>compile the compile-all source ...</echo>
+				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+					<src path="${source}/src-demo" />				
+					<classpath id="cp-cms_baseline">
+						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${distrib}" includes="*.jar *.zip" />
+						
+					</classpath>
+				</javac>
+			<copy todir="classes-sany">
+				<fileset dir="${source}/src-demo" includes="**/*.xml"/>
+			</copy>
+			<copy todir="classes-sonar">
+				<fileset dir="classes-sany" includes="**/*.*"/>
+			</copy>
+		
+	</target>
+	
+	<target name="jar-sany-demo" depends="compile-sany-demo" description="generate the sany-demo-lib library sany-demo.jar">
+				<echo>Generate the jar-sany-demo library sany-demo.jar ...</echo>
+				<jar jarfile="${distrib}/sany-demo.jar" basedir="classes-sany" includes="**/*">
+					<manifest>
+						<attribute name="Implementation-Version" value="${impl.version}" />
+						<attribute name="Specification-Version" value="${revision}" />
+						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+						<attribute name="Implementation-ProductID" value="${impl.productID}" />
+						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+						<attribute name="Compile-User" value="${username}" />
+					</manifest>
+				</jar>
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
+			
+	</target>
+	
+	<target name="compile-sany-html" depends="init" description="compile the sany source ">
 					<echo>compile the compile-all source ...</echo>
 					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 						<src path="${source}/src-htmlparser" />				
@@ -320,7 +383,9 @@
 							
 						</classpath>
 					</javac>
-				
+				<copy todir="classes-sonar">
+					<fileset dir="classes-sany" includes="**/*.*"/>
+				</copy>
 			
 		</target>
 		
@@ -389,7 +454,9 @@
 			<copy todir="classes-sany">
 				<fileset dir="${source}/src-mail" includes="**/*.xml"/>
 			</copy>
-		
+		<copy todir="classes-sonar">
+			<fileset dir="classes-sany" includes="**/*.*"/>
+		</copy>	
 	</target>
 	
 	<target name="jar-sany-mail" depends="compile-sany-mail" description="generate the sany-mail-lib library sany-mail.jar">
@@ -444,7 +511,7 @@
 			 <mkdir dir="classes-sany-ldap"/>	
 			
 	</target>
-	<target name="compile-sany-workflow" depends="jar-system" description="compile the sany appbom source ">
+	<target name="compile-sany-workflow" depends="jar-sany-mail" description="compile the sany appbom source ">
 			<echo>compile the appbom source ...</echo>
 			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 				<src path="${source}/src-workflow" />				
@@ -626,7 +693,7 @@
 	</target>
 	
 	<target name="war" depends="distrib" description="copy depends liberarys">
-		<war destfile="${distrib}/WebRoot.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
+		<war destfile="${distrib}/SanyPDP.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
 		  <fileset dir="${distrib}/WebRoot/"/>	  
 		</war>
 		
@@ -667,5 +734,34 @@
 		
 		</ant>
 	</target>
-	
+	<target name="startTomcat">
+	   <if>
+	   <not>
+	    <socket server="${server.ip}" port="${tomcat.port}" /><!--判断tomcat服务器的端口是否能访问，如果不能访问到，则说明未启动，就执行then中的操作-->
+	   </not>
+	   <then>
+	    <echo message="start tomcat in ${server.ip}..." />
+	    <sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="${tomcat.home}/bin/startup.sh" trust="true" /><!--通过ssh远程启动tomcat-->
+	    <waitfor maxwait="5" maxwaitunit="minute" checkevery="5" checkeveryunit="second"><!--每5秒钟检查tomcat是否启动-->
+	     <and>
+	      <socket server="${server.ip}" port="${tomcat.port}" />
+	     </and>
+	    </waitfor>
+	   </then>
+	  </if>
+	</target>
+	<target name="stopTomcat">
+	  <if>
+	   <socket server="${server.ip}" port="${tomcat.port}" /><!--检查tomcat的端口，判断tomcat是否还在运行-->
+	   <then>
+	    <echo message="stop tomcat in ${server.ip}..." />
+	    <sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="${tomcat.home}/bin/shutdown.sh" trust="true" /><!--远程执行关闭tomcat-->
+	    <waitfor maxwait="5" maxwaitunit="minute" checkevery="5" checkeveryunit="second">
+	     <not>
+	      <socket server="${server.ip}" port="${tomcat.port}" />
+	     </not>
+	    </waitfor>
+	   </then>
+	  </if>
+	</target>
 </project>

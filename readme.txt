@@ -1,3 +1,10 @@
+mysql 5.6版本中timestamp时间字段处理报以下异常：
+Data truncation: Incorrect datetime value: '' for column xxxxx
+解决办法：
+更新最新的mysql connector驱动程序mysql-connector-java-5.1.25-bin.jar，下载地址：
+http://downloads.mysql.com/archives/mysql-connector-java-5.1/mysql-connector-java-5.1.25.zip
+
+http://localhost:8080/SanyPDP/appbom/index.page
 1.登录页增加校验码功能
 2.增加登录密码过期检查功能，并提供过期密码修改功能，修改密码时记录历史密码，密码不能重复
 3.权限管理和用户查询及离散用户列表中增加密码过期时间属性的展示

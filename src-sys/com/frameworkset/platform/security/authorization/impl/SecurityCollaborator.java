@@ -30,7 +30,7 @@ public abstract class SecurityCollaborator implements Serializable{
     private static Logger log  = Logger.getLogger(SecurityCollaborator.class);
     protected static boolean securityEnabled;
     protected static AccessManager appAccessManager;
-
+    protected PermissionTokenMap permissionTokenMap;
     protected Map permissionMapIndex = new HashMap();
 
 
@@ -64,6 +64,7 @@ public abstract class SecurityCollaborator implements Serializable{
         try
         {
             appAccessManager = new AppAccessManager();
+            permissionTokenMap = new PermissionTokenMap();
         }
         catch(Exception e)
         {
@@ -326,4 +327,8 @@ public abstract class SecurityCollaborator implements Serializable{
     	}
     	return this.appAccessManager.hasRolePermission(role,accessContext,resource,resourceType);
     }
+
+	public PermissionTokenMap getPermissionTokenMap() {
+		return permissionTokenMap;
+	}
 }

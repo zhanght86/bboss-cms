@@ -23,7 +23,23 @@ import com.sap.conn.jco.ext.Environment;
 
 public class SapConnectFactory implements org.frameworkset.spi.InitializingBean {
 	private static Logger logger = Logger.getLogger(SapConnectFactory.class);
-	private SanyDestinationDataProvider sanyDestinationDataProvider;
+	private static final SanyDestinationDataProvider sanyDestinationDataProvider;
+	static 
+	{
+		sanyDestinationDataProvider = new SanyDestinationDataProvider();
+		sanyDestinationDataProvider
+				.setDestinationDataEventListener(new DestinationDataEventListener() {
+					public void deleted(String arg0) {
+						logger.debug("deleted:" + arg0);
+					}
+
+					public void updated(String arg0) {
+						logger.debug("updated:" + arg0);
+					}
+				});
+		Environment
+		.registerDestinationDataProvider(sanyDestinationDataProvider);
+	}
 	private SAPConf sapconf;
 
 	private String ABAP_AS_POOLED = "ABAP_AS_WITH_POOL";
@@ -72,17 +88,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		sanyDestinationDataProvider = new SanyDestinationDataProvider();
-		sanyDestinationDataProvider
-				.setDestinationDataEventListener(new DestinationDataEventListener() {
-					public void deleted(String arg0) {
-						logger.debug("deleted:" + arg0);
-					}
-
-					public void updated(String arg0) {
-						logger.debug("updated:" + arg0);
-					}
-				});
+		
 
 		Properties connectProperties = new Properties();
 		connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
@@ -105,12 +111,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 				sapconf.getJco_peak_limit() + "");
 		this.addJcoDestinationData(ABAP_AS_POOLED, connectProperties);
 
-		Environment
-				.registerDestinationDataProvider(sanyDestinationDataProvider);
+		
 
 	}
 
-	private Semaphore semaphore = new Semaphore(1);
+	private static Semaphore semaphore = new Semaphore(1);
 
 	private void addJcoDestinationData(String destinationName,
 			java.util.Properties jcoproperties) {
@@ -127,7 +132,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 						+ " alread exist");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("addJcoDestinationData error destinationName["+destinationName+"],"+jcoproperties ,e);
 		} finally {
 			semaphore.release();
 		}

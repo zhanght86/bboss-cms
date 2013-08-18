@@ -83,4 +83,9 @@ public class AdAccountSearch {
         
         return response;
     }
+    
+    public static void main(String[] args) throws Exception
+    {
+    	System.out.println(new DESCipher().decrypt("44e0aa5d2d46ae9cabc2deee6b3cdc19"));
+    }
 }

@@ -4164,12 +4164,12 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				
 				
 			} catch (Exception e) {
-				try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					e1.printStackTrace();
-				}
+				
 				throw new ManagerException(e.getMessage());
+			}
+			finally
+			{
+				tm.release();
 			}
 
 		}
@@ -4939,27 +4939,16 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					super.change(event);
 				}
 			} catch (SQLException e1) {
-				try {
-					tm.rollback();
-				} catch (RollbackException e) {
-					e.printStackTrace();
-				}
-				e1.printStackTrace();
+				
 				throw new ManagerException(e1.getMessage());
 			} catch (RollbackException e) {
- 	            try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					e1.printStackTrace();
-				}				
-				e.printStackTrace();
+				throw new ManagerException(e.getMessage());
 			} catch (Exception e) {
-				try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					e1.printStackTrace();
-				}
-				e.printStackTrace();
+				throw new ManagerException(e.getMessage());
+			}
+			finally
+			{
+				tm.release();
 			}
 
 		}
@@ -5186,6 +5175,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		if(this.isUserScopePasswordExpiredDays())
 		{
 			User user = this.getUserByName(userAccount);
+			if(user == null)
+				return 0;
 			return user.getPasswordDualedTime();
 		}
 		else

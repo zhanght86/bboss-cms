@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.platform.config.model.ResourceInfo;
+import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.platform.security.authorization.AccessManager;
 import com.frameworkset.platform.security.authorization.AuthRole;
@@ -188,7 +190,44 @@ public abstract class BaseAccessManager implements AccessManager {
         }
 
     }
+    /**
+	 * 判定给定的资源没有授予任何的角色时， 是否可以访问， 缺省为false， 具体的应用可以根据不同的要求决定是否可以访问
+	 * 
+	 * @return boolean
+	 */
+	public boolean allowIfNoRequiredRoles(String resourceType)
+	{
+		return _allowIfNoRequiredRoles( resourceType);
+	}
+	/**
+	 * 判定给定的资源没有授予任何的角色时， 是否可以访问， 缺省为false， 具体的应用可以根据不同的要求决定是否可以访问
+	 * 
+	 * @return boolean
+	 */
+	public static boolean _allowIfNoRequiredRoles(String resourceType)
+	{
+		// 判断资源类型本身是否允许
+		ResourceManager s = new ResourceManager();
 
+		ResourceInfo resourceInfo = s.getResourceInfoByType(resourceType);
+		if (resourceInfo == null || resourceInfo.defaultAllowIfNoRequiredRole())
+		{
+			// 判断系统是否允许
+
+			PermissionRoleMap permissionrolemap = ConfigManager.getInstance()
+					.getPermissionRoleMap();// ((AppAccessContext)
+											// accesscontext).
+			// getPermissionRoleMap();
+			return permissionrolemap.getPermissionRoleMapInfo()
+					.isAllowIfNoRequiredRole();
+		}
+		else
+		{
+			return resourceInfo.allowIfNoRequiredRole();
+		}
+	}
+	
+	
     /**
      * @return boolean
      */

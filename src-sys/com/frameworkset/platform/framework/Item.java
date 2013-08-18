@@ -74,6 +74,7 @@ public class Item extends BaseMenuItem {
 	/**用来识别区域信息，符合三一风格*/
 	private String area;
 	
+	
 	private Map<Locale,String> localLogoimages;
 
 	public void setArea(String area) {

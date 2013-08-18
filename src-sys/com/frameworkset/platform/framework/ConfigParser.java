@@ -391,6 +391,10 @@ public class ConfigParser extends I18nXMLParser  {
             this.indexByIds.put(item.getId(), item);
             traceStack.push(item);
         }
+        else if(name.toLowerCase().equals("url"))
+        {
+        	this.currentValue.setLength(0);
+        }
         else if(name.toLowerCase().equals("navigator"))
         {
         	if(this.isjob())
@@ -563,6 +567,17 @@ public class ConfigParser extends I18nXMLParser  {
         	}
         	
             
+        }
+        else if(name.toLowerCase().equals("url"))
+        {
+        	Object obj = this.traceStack.peek();
+        	if(obj instanceof BaseMenuItem)
+        	{
+        		BaseMenuItem m = (BaseMenuItem)obj;
+        		m.addAuthorResource(this.currentValue.toString());
+        		
+        	}
+        	this.currentValue.setLength(0);
         }
         else if (name.equals("description")) {
         	if(this.isjob())

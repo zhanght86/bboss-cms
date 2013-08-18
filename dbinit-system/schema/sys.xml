@@ -546,7 +546,8 @@
         <column name="ISTAXMANAGER" size="1" type="DECIMAL"/>
         <column name="LOGON_IP" size="15" type="VARCHAR"/>
         <column name="CERT_SN" size="50" type="VARCHAR"/>
-         <column name="PASSWORD_UPDATETIME" type="TIMESTAMP"/>
+        <column name="PASSWORD_UPDATETIME" type="TIMESTAMP"/>
+        <column name="Password_DualTime" size="10" type="DECIMAL"/>
     </table>
     <table name="TD_SM_USERGROUP">
         <column name="GROUP_ID" primaryKey="true" required="true"

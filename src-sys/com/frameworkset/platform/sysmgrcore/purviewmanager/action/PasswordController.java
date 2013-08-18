@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.frameworkset.spi.SPIException;
-import org.frameworkset.util.annotations.PathVariable;
 import org.frameworkset.util.annotations.ResponseBody;
 
 import com.frameworkset.platform.security.authentication.EncrpyPwd;

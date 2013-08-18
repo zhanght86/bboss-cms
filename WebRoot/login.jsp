@@ -397,7 +397,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>应用台账管理系统</title>
+<title><%=Framework.getSystemName("module") %></title>
 <!--[if IE 6]> 
 <script language="javascript" type="text/javascript" src="<%=request.getContextPath()%>/html/login/js/png.js"></script>
 <script type="text/javascript">
@@ -430,7 +430,7 @@ DD_belatedPNG.fix('div');
 	function modifyExpiredPassword(){
 		
 		
-  		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?userAccount=<%=userName%>";
+  		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?<%="userAccount="+userName%>&<pg:dtoken element="param"/>";
   		$.dialog({close:reloadhref,title:'对不起，<%=userName %>的密码已经失效（密码有效期为<%=expiredays%>天），过期时间为<%=expriedtime_%>!',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
   		
 		
@@ -605,7 +605,7 @@ DD_belatedPNG.fix('div');
 		}
 	}
 	function changeLan(){
-		window.location.href="<%=request.getContextPath()%>/sanydesktop/cookieLocale.page?language="+$('#language').val();
+		window.location.href="<%=request.getContextPath()%>/sanydesktop/cookieLocale.page?language="+$('#language').val() + "&<pg:dtoken element="param"/>";
 	}
 </script>
 </HEAD>
