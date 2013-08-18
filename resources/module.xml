@@ -87,9 +87,9 @@
 				<workspace>
 					<content>appbom/index.page</content>
 				</workspace>
-				<authoriaztion>				 
+				<authoriation>				 
 				 	<url>appbom/*.page</url>				 
-				</authoriaztion>
+				</authoriation>
 			</item>
 		
 			
@@ -123,13 +123,7 @@
 				</workspace>
 			</item>
 			
-			<item name="台账查询222" id="materailQuery222" i18n:en_US="Query">
-					<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<workspace>
-					<content>appbom/index.page</content>
-				</workspace>
-			</item>
+			
 			
 
 
