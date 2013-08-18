@@ -86,7 +86,21 @@ public class PermissionTokenMap {
 		
 		
 	}
-	
+	public void addUnprotectedPermissionToken(String url,PermissionToken token)
+	{
+		String resourctType = token.getResourceType();
+		
+		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
+		if(resourceTokens == null)
+		{
+			resourceTokens = new PermissionTokenRegion();
+			this.resourcTokenMap.put(resourctType, resourceTokens);
+		}
+		resourceTokens.addUnprotectedPermissionToken(url, token);
+		
+		
+		
+	}
 	public void resetPermissionByResourceType(String resourctType)
 	{
 		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);

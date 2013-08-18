@@ -296,19 +296,41 @@ label:	while(entries.hasNext())
 	private static Object dual = new Object();
 	public void addUnprotectedPermissionToken(String url, String region,
 			PermissionToken token) {
+		if(url == null || url.equals(""))
+			return;
+		if(!url.startsWith("/"))
+		{
+			url = "/"+url;
+		}
+		int idx = url.indexOf("?");
+		if(idx > 0)
+		{
+			url = url.substring(0,idx);
+		}
 		Map<RID,Object> regionTokenMap = this.regionUnprotectedResourcTokenMap.get(region);
 		if(regionTokenMap == null)
 		{
 			regionTokenMap = new HashMap<RID,Object>();
 			this.regionUnprotectedResourcTokenMap.put(region,regionTokenMap);
 		}
-		regionTokenMap.put(new RID(url), dual);
+		regionTokenMap.put(new RID(url,true), dual);
 		
 	}
 	
 	public void addUnprotectedPermissionToken(String url, 
 			PermissionToken token) {
-		this.resourcUnprotectedTokenMap.put(new RID(url), dual);
+		if(url == null || url.equals(""))
+			return;
+		if(!url.startsWith("/"))
+		{
+			url = "/"+url;
+		}
+		int idx = url.indexOf("?");
+		if(idx > 0)
+		{
+			url = url.substring(0,idx);
+		}
+		this.resourcUnprotectedTokenMap.put(new RID(url,true), dual);
 		
 	}
 
