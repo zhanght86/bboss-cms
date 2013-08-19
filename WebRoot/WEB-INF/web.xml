@@ -205,6 +205,16 @@
 			<param-name>kaptcha.textproducer.char.space</param-name>
 			<param-value>5</param-value>
 		</init-param>
+		<init-param>
+			<param-name>kaptcha.image.height</param-name>
+			<param-value>50</param-value>
+		</init-param>
+
+		<init-param>
+			<param-name>kaptcha.image.width</param-name>
+			<param-value>200</param-value>
+		</init-param>
+
 
 	</servlet>
 
