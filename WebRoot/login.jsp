@@ -295,7 +295,7 @@
 					if(enable_login_validatecode)
 					{
 						String rand=request.getParameter("rand");
-						String session_rand=String.valueOf(session.getAttribute("rand"));
+						String session_rand=(String)session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 						session.removeAttribute("rand");
 						if(session_rand==null||(!session_rand.equalsIgnoreCase(rand))){
 							throw new AccessException("验证码错误!");
@@ -445,7 +445,7 @@ DD_belatedPNG.fix('div');
 	function changcode()
 	{
 		
-		$("#img1").attr("src","passward/generateImageCode.page?"+Math.random());
+		$("#img1").attr("src","Kaptcha.jpg?"+Math.random());
 		
 	}
 	
@@ -647,8 +647,11 @@ DD_belatedPNG.fix('div');
 				<%
 				if(enable_login_validatecode){
 				%><li><label>验证码：</label>
-				<input id="rand" name="rand" type="text" style="width:120px" onkeydown="enterKeydowngoV(event)"/>
-				<img name="img1" id='img1' src="passward/generateImageCode.page" width="50"/><a onclick="changcode()">看不清,换一张</a>
+				<input id="rand" name="rand" type="text" style="width:120px" onkeydown="enterKeydowngoV(event)"/><a onclick="changcode()">看不清,换一张</a>
+				
+				</li>
+				<li >
+				<img src="Kaptcha.jpg" height="25" width="200" id="img1">
 				</li><%} %>
 				<li><label><pg:message code="sany.pdp.system"/>：</label>
 				<select name="subsystem_id" style="width:160px;margin-left:-110px;">
