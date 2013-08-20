@@ -176,6 +176,11 @@
     <filter-name>securityFilter</filter-name>
     <url-pattern>*.frame</url-pattern>
   </filter-mapping>
+  
+   <filter-mapping>
+    <filter-name>securityFilter</filter-name>
+    <url-pattern>/druid/*</url-pattern>
+  </filter-mapping>
 
   <listener>
 	<listener-class>com.frameworkset.filter.BSServletRequestListener</listener-class>
