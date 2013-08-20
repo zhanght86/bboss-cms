@@ -87,9 +87,9 @@
 				<workspace>
 					<content>appbom/index.page</content>
 				</workspace>
-				<authoriation>				 
+				<authoration>				 
 				 	<url>appbom/*.page</url>				 
-				</authoriation>
+				</authoration>
 			</item>
 		
 			
@@ -204,42 +204,27 @@
 		
 
 		<module name="系统管理" id="sysmanager" used="true" showleftmenu="true"  i18n:en_US="System Manage">
-			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+		
 			<description>系统管理</description>
 			<item name="权限管理" id="purviewmanager" default="true" area="main" i18n:en_US="Authoration Manage" >
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>headersimple.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>purviewmanager/main.jsp</content>
 				</workspace>
+				<authoration>				 
+				 	<url>/purviewmanager/userorgmanager/org/*.jsp</url>	
+				 	<url>/purviewmanager/userorgmanager/user/*.jsp</url>
+				 	<url>/purviewmanager/rolemanager/*.jsp</url>
+				 	<url>/purviewmanager/jobmanager/*.jsp</url>
+				 	<url>/purviewmanager/groupmanager/*.jsp</url>
+				 	<url>/purviewmanager/resmanager/*.jsp</url>					 			 
+				</authoration>
 			</item>
 
 			<item name="菜单管理" id="menumanage" area="main" i18n:en_US="Menu Manage" >
-				<mouseupimg>sysmanager/itemicon/tb_messageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_13.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_messageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_messageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_messageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -249,18 +234,17 @@
 				<workspace>
 					<content>sysmanager/menumanager/menuList.jsp</content>
 				</workspace>
+				
+				<authoration>				 
+				 	<url>/sysmanager/menumanager/*.jsp</url>	
+				 	<url>/sysmanager/menumanager/*.page</url>
+				 				 			 
+				</authoration>
+				
 			</item>
 
 			<item name="用户查询" id="userquery" area="main" i18n:en_US="User Query">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/zjcx_d.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -268,17 +252,13 @@
 				<workspace>
 					<content>sysmanager/user/userquery_content_tab.jsp</content>
 				</workspace>
+				<authoration>				 
+				 	<url>/sysmanager/user/*.jsp</url>
+				</authoration>
+				
 			</item>
 			<item name="资源查询" id="resquery" area="main" i18n:en_US="Resource Query">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/zjcx_d.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -286,16 +266,13 @@
 				<workspace>
 					<content>sysmanager/resmanager/resquery_tab.jsp</content>
 				</workspace>
+				<authoration>				 
+				 	<url>/sysmanager/resmanager/*.jsp</url>
+				</authoration>
 			</item>
 
 			<item name="日志查询" id="logquery" area="main" i18n:en_US="Log Query">
-				<mouseupimg>sysmanager/itemicon/tb_logquery_enabled.gif</mouseupimg>
-				<mouseclickimg>common/ico/icon_17.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_logquery_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_logquery_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_logquery_disabled.gif</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -303,30 +280,20 @@
 				<workspace>
 					<content>sysmanager/logmanager/logList_tab.jsp</content>
 				</workspace>
+				<authoration>				 
+				 	<url>/sysmanager/logmanager/*.jsp</url>
+				</authoration>
+				
 			</item>
 
 		</module>
 
 
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
-			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			
 			<description>工作流管理</description>
 			<item name="工作流管理" id="workflowmanager" i18n:en_US="Workflow Manage">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -334,30 +301,14 @@
 				</workspace>
 			</item>
 			<item name="业务类别管理" id="businesstype" i18n:en_US="Business Type Manage">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<workspace>
 					<content>workflow/businesstype/index.page</content>
 				</workspace>
 			</item>
 			<item name="工作流demo" id="workflowdemo" i18n:en_US="Workflow Demo">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -366,15 +317,7 @@
 			</item>
 
 			<item name="用户待办" id="workflowusertask" i18n:en_US="User Tasks">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -383,15 +326,7 @@
 			</item>
 			
 			<item name="用户待审" id="workflowuserdedetails" i18n:en_US="User Check Tasks">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -399,15 +334,7 @@
 				</workspace>
 			</item>
 			<item name="用户已办" id="workflowuserhis" i18n:en_US="User History Tasks">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -419,15 +346,7 @@
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">
 			<item name="站点浏览统计" id="browserCounter" i18n:en_US="BrowserCounter">
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+				
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -476,16 +395,7 @@
 
 		<module name="字典管理" id="dictionarymanager" used="true" i18n:en_US="Dictionary Manage">
 			<item name="字典定义" id="dictmanage_info" area="main" i18n:en_US="Dictmanage Infomation">
-				<mouseupimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_content_0_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_dictmanage_content_0_disabled.gif
-				</headimg>
+				
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -499,16 +409,7 @@
 			</item>
 
 			<item name="字典高级字段配置" id="dictAttachField" area="main" i18n:en_US="Advanced Dictionary Manage">
-				<mouseupimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_info_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_dictmanage_info_disabled.gif
-				</headimg>
+				
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -527,16 +428,7 @@
 			</item>
 
 			<item name="输入类型管理" id="inputtypemanage" area="main" i18n:en_US="Input Type Manage">
-				<mouseupimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_content_1_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_dictmanage_content_1_disabled.gif
-				</headimg>
+				
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator></navigator>
@@ -547,16 +439,7 @@
 
 
 			<item name="基础字典数据采集" id="dictmanage_content_0" area="main" i18n:en_US="Base Dictionary Manage">
-				<mouseupimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_dictAttachField_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_dictAttachField_disabled.gif
-				</headimg>
+				
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -571,15 +454,7 @@
 		</module>
 
 		<item name="个人用户信息修改" id="personuserinfomodify" i18n:en_US="User Infomation Modification">
-			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseupimg>
-			<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</mouseoutimg>
-			<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</headimg>
+			
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -587,15 +462,7 @@
 			</workspace>
 		</item>
 		<item name="系统帐户修改" id="sysuserpassword" i18n:en_US="System Infomation Modification">
-			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseupimg>
-			<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</mouseoutimg>
-			<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</headimg>
+			
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -603,15 +470,7 @@
 			</workspace>
 		</item>
 		<item name="个人密码修改" id="personsecretpassword" i18n:en_US="User Password Modification">
-			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseupimg>
-			<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</mouseoutimg>
-			<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</headimg>
+			
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -620,15 +479,7 @@
 		</item>
 
 		<item name="系统监控" id="dbmonitor" i18n:en_US="System Monitor">
-			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseupimg>
-			<mouseclickimg>common/ico/zzjg_c.gif</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</mouseoutimg>
-			<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</headimg>
+			
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<navigator></navigator>
@@ -645,15 +496,7 @@
 		</item>
 
 		<item name="权限测试" id="permissiontest" i18n:en_US="Role Unit">
-			<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseupimg>
-			<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</mouseoutimg>
-			<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-			</headimg>
+			
 			<top>header.page</top>
 			<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 			<workspace>
