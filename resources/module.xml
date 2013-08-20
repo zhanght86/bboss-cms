@@ -502,7 +502,8 @@
 				<content>monitor/monitor_console.jsp</content>
 			</workspace>
 			<authoration>				 
-				 <url>monitor/**/*.jsp</url>
+				 <url>monitor/*.jsp</url>
+				 <url>monitor/spi/*.jsp</url>
 				 <url>/druid/*</url>
 			</authoration>
 		</item>
