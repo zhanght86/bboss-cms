@@ -40,7 +40,7 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
      */
     Map resourceMap;
     /**角色资源许可关系缓冲器*/
-    Map role_resourceMap;
+//    Map role_resourceMap;
     
     
     /**
@@ -76,7 +76,7 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
             {
             	resourceMap = Collections.synchronizedMap(new HashMap());
                 prMap = Collections.synchronizedMap(new HashMap());
-                role_resourceMap = Collections.synchronizedMap(new HashMap());
+//                role_resourceMap = Collections.synchronizedMap(new HashMap());
                 resourceRoleMaps  = Collections.synchronizedMap(new HashMap());
                 
                 List eventType = new ArrayList();              
@@ -223,18 +223,18 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
      */
     protected void cachResourceToRole(AuthRole[] roles,
                                       AccessPermission accesspermission) {
-    	AuthRole roleName = null;
-        Set set = null;
-        for (int i = 0; i < roles.length; i++) {
-            roleName = roles[i];
-            set = (Set) role_resourceMap.get(roleName);
-            if (set != null) {
-                set.add(accesspermission);
-            } else {
-                set = new TreeSet();
-                set.add(accesspermission);
-            }
-        }
+//    	AuthRole roleName = null;
+//        Set set = null;
+//        for (int i = 0; i < roles.length; i++) {
+//            roleName = roles[i];
+//            set = (Set) role_resourceMap.get(roleName);
+//            if (set != null) {
+//                set.add(accesspermission);
+//            } else {
+//                set = new TreeSet();
+//                set.add(accesspermission);
+//            }
+//        }
 
     }
 
@@ -251,7 +251,7 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
 //            role_resourceMap.remove(asecurityroles[i]);
 //        }
         
-        role_resourceMap.clear();
+//        role_resourceMap.clear();
 
     }
 
@@ -364,7 +364,7 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
 //            removeRoleToResource(roleName);
 //            role_resourceMap.remove(roleName);
             removeRoleToResource("");
-            role_resourceMap.clear();
+//            role_resourceMap.clear();
             resourceRoleMaps.clear();
         }
     }
@@ -498,7 +498,7 @@ public abstract class PermissionRoleMap implements Listener,Serializable {
     public void reset(){
     	resourceMap.clear();
         prMap.clear();
-        role_resourceMap.clear();
+//        role_resourceMap.clear();
         resourceRoleMaps.clear();
     }
     
