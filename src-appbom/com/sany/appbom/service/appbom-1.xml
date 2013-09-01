@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+		select #foreach($filed in $groupfileds) 
+				    #if($velocityCount == 0)
+						$filed
+					#else
+						,$filed
+					#end
+				#end
+		
+		from td_sm_group g where g.group_name in (
+			#foreach($group in $groups)
+							#if($velocityCount == 0)
+								#[groups[$velocityCount]]
+							#else
+								,#[groups[$velocityCount]]
+							#end
+						#end
+						)
+ -->
+<properties>
+	
+
+	<property name="selectByKeys">
+		<![CDATA[
+			select * from TD_APP_BOM where id=#[id]
+		]]>
+	</property>
+	<property name="CheckBmExist">
+		<![CDATA[
+			select count(1) from TD_APP_BOM where 1=1 and bm=#[bm]
+			#if($id && !$id.equals(""))
+				and id <> #[id]
+			#end
+		]]>
+	</property>
+	
+	<property name="queryCntByCondition">
+		<![CDATA[
+			select count(1) from TD_APP_BOM where 1=1
+			#if($bm && !$bm.equals(""))
+				and bm = #[bm]
+			#end
+			#if($app_name_en && !$app_name_en.equals(""))
+				and app_name_en like #[app_name_en]
+			#end
+			#if($app_name && !$app_name.equals(""))
+				and app_name like #[app_name]
+			#end
+			#if($soft_level && !$soft_level.equals(""))
+				and soft_level=#[soft_level]
+			#end
+			#if($state && !$state.equals(""))
+				and state=#[state]
+			#end
+			#if($rd_type && !$rd_type.equals(""))
+				and rd_type=#[rd_type]
+			#end
+		]]>
+	</property>
+	
+</properties>

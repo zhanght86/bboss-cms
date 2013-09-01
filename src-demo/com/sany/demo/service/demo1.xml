@@ -33,6 +33,9 @@
 				#end
 		]]>
 	</property>
-	<property name="getDemo" sqlfile="com/sany/demo/service/demo1.xml" sqlname="getDemo"/>
-	
+	<property name="getDemo">
+		<![CDATA[
+			select id,name from demo where id=?
+		]]>
+	</property>
 </properties>	
