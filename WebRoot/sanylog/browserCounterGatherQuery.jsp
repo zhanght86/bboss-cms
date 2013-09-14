@@ -73,7 +73,7 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>功能路径：</th>
+										<th>菜单路径：</th>
 										<td>
 											<select id="channelId" name="channelId"  maxlength="50">
 												<option value="">无限制</option>
@@ -82,8 +82,8 @@
 										<th style="display: none">页面名称：</th>
 										<td style="display: none"><input id="docName" name="docName"
 											type="text" value="" class="w120" /></td>
-										<th>被访问页面地址：</th>
-										<td><input id="pageURL" name="pageURL" type="text"
+										<th style="display: none">被访问页面地址：</th>
+										<td style="display: none"><input id="pageURL" name="pageURL" type="text"
 											value="" class="w120" /></td>
 										<th>&nbsp;</th>
 										<td><a href="javascript:void(0)" class="bt_1"

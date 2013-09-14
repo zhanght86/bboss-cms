@@ -1,4 +1,5 @@
 
+<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
@@ -31,12 +32,15 @@
 	String resId = request.getParameter("resId");
 	
 	String resname = request.getParameter("title");
-	
+	if(resname != null)
+		resname = URLDecoder.decode(resname);
 	String roleId = request.getParameter("currRoleId");
 	
 	String role_type = request.getParameter("role_type");
 	
 	String username = request.getParameter("username");
+	if(username != null)
+		username = URLDecoder.decode(username);
 	
 	//设置到request
 	session.setAttribute("resname",resname) ;
@@ -59,15 +63,22 @@
 	}
 %>
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>    
 <title>权限授予</title>
+<pg:config enablecontextmenu="true" enabletree="false"/>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <%@ include file="/include/css.jsp"%>
   <link rel="stylesheet" type="text/css" href="../css/contentpage.css">
   <link rel="stylesheet" type="text/css" href="../css/tab.winclassic.css">
   
 <SCRIPT LANGUAGE="JavaScript"> 
 	var ok = <%=isok%>;
+	var api = null, W = null;
 	if(ok!=null){
 		alert("授予操作项成功！");
 	}//alert(document.URL);
@@ -162,8 +173,39 @@
 				    }
 				}
 		    }
-			Form1.action="<%=request.getContextPath()%>/accessmanager/securityManager.do?method=siteAppAuthorization&isRecursion="+tt+"&resTypeId="+id;
-			Form1.submit();
+		    var url =  "<%=request.getContextPath()%>/accessmanager/siteAppAuthorization.page?isRecursion="+tt+"&resTypeId="+id;
+		    $.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#Form1"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      				 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						if(responseText=="success"){
+							
+							$.dialog.alert("操作成功",function(){	
+									
+							},api);													
+						}else{
+							$.dialog.alert("操作出错",function(){},api);
+						}
+						
+						
+						
+						
+					}
+				  });
+		    
+		//Form1.action="<%=request.getContextPath()%>/accessmanager/siteAppAuthorization.page?isRecursion="+tt+"&resTypeId="+id;
+			//Form1.submit();
 				 		
 	}
 </SCRIPT>
@@ -172,7 +214,7 @@
 <body class="contentbodymargin">
 <div id="contentborder">
 	
-			<form target="channel" name="Form1" action="" method="post" >
+			<form target="channel" name="Form1" id="Form1" action="" method="post" >
 			<table width="100%" height="22" border="0" cellpadding="0" cellspacing="1" class="thin">
 				  	<input name="resTypeId" value="<%=resTypeId%>" type=hidden>
 				  	<input name="resid" value="<%=resId%>" type=hidden>

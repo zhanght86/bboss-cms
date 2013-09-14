@@ -1,4 +1,5 @@
 
+<%@page import="java.net.URLEncoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.OperManager,
@@ -121,8 +122,9 @@
 			<%
 				if(flag.length()>0)
 				{
+					
 			%>
-			<td onclick="openWin('operList_siteapp_tab.jsp?currRoleId=<%=currRoleId%>&role_type=<%=role_type%>&resId=<%=resId+"$$"+itemId%>&resTypeId=<%=resTypeId%>&resTypeName=<%=itemId%>&title=<%=itemName%>&username=<%=itemName%>&currOrgId=<%=orgId %>',600,500)">
+			<td onclick="openWin('operList_siteapp_tab.jsp?currRoleId=<%=currRoleId%>&role_type=<%=role_type%>&resId=<%=resId+"$$"+itemId%>&resTypeId=<%=resTypeId%>&resTypeName=<%=URLEncoder.encode(URLEncoder.encode(itemId))%>&title=<%=URLEncoder.encode(URLEncoder.encode(itemName))%>&username=<%=URLEncoder.encode(URLEncoder.encode(itemName))%>&currOrgId=<%=orgId %>',600,500)">
 				<img src="../images/site/new_doc.gif" border="0"  style="cursor:hand">
 			</td>
 			<%

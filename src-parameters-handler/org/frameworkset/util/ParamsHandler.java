@@ -33,12 +33,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.spi.ApplicationContext;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
@@ -73,7 +74,15 @@ import com.frameworkset.util.ValueObjectUtil;
 public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	
 	private static final Logger log = Logger.getLogger(ParamsHandler.class);
-
+	private static Map<String,ParamsHandler> handlers = new HashMap<String,ParamsHandler>();
+	
+	/**
+	 * 缓存参数数据
+	 * paramType:paramID:Params
+	 * 参数类型      参数表        参数记录集
+	 * 
+	 */
+	private Map<String,Map<String,Params>> cache = new HashMap<String,Map<String,Params>>();
 	public static class Param {
 		private String param_type;// 参数分类
 		private String paramid; // 参数业务id
@@ -384,6 +393,52 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 
 	}
 
+	public boolean cleanCache(String paramid,String paramType)
+	{
+		Map<String,Params> table = this.cache.get(paramType);
+		if(table == null)
+			return false;
+		synchronized(table)
+		{
+			Object obj = table.remove(paramid);
+			if(obj == null)
+				return false;
+			else
+				return true;
+		}
+		
+	}
+	public boolean cleanCaches()
+	{
+		this.cache.clear();
+		return true;
+	}
+	
+	public static boolean cleanAllCache()
+	{
+		init();
+		Iterator<Map.Entry<String, ParamsHandler>> it = handlers.entrySet().iterator();
+		while(it.hasNext())
+		{
+			ParamsHandler handler = it.next().getValue();
+			handler.cleanCaches();
+		}
+		return true;
+	}
+	public boolean cleanCaches(Map<String,Object> keys)
+	{
+		if(keys == null || keys.size() == 0) return false;
+		Iterator<String> it = keys.keySet().iterator();
+		while(it.hasNext())
+		{
+			String v = it.next();
+			String[] vs = v.split("\\^\\^");
+			cleanCache(vs[0],vs[1]);
+		}
+		return true;
+		
+		
+	}
 	/**
 	 * 自定义参数存储
 	 * 
@@ -419,7 +474,6 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 				trace.put(key, t);
 
 			}
-			trace = null;
 			for (Param param : paramList) {
 
 				dbutil.preparedInsert(this.getDbname(), sql_in.toString());
@@ -514,22 +568,17 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			}
 			dbutil.executePreparedBatch();
 			tm.commit();
+			cleanCaches(trace);
+			trace = null;
 			return true;
-		} catch (SQLException e) {
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
+		
 		} catch (Exception e) {
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				e1.printStackTrace();
-			}
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
+		}
+		finally
+		{
+			tm.release();
 		}
 		return false;
 	}
@@ -614,10 +663,41 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		
 	}
 	public Params getParams(String paramid, String paramType) {
+		Map<String,Params> table  = this.cache.get(paramType);
+		if(table  == null)
+		{
+			synchronized(cache)
+			{
+				table  = this.cache.get(paramType);
+				if(table == null)
+				{
+					table = new HashMap<String,Params>();
+					cache.put(paramType, table);
+				}
+			}
+		}
+		Params params = table.get(paramid);
+		if(params != null)
+			return params;
+		else
+		{
+			synchronized(table)
+			{
+				params = table.get(paramid);
+				if(params != null)
+					return params;
+				params = _getParams(paramid, paramType);
+				table.put(paramid, params);
+			}
+		}
+		return params;
+	}
+	public Params _getParams(String paramid, String paramType) {
 		StringBuilder sql_query = new StringBuilder();
 		sql_query.append("select * from ").append(tableName).append(
 				" where NODE_ID=? and param_type= ? order by name,rn asc");
 		PreparedDBUtil pd = new PreparedDBUtil();
+		
 		final Params params = new Params();
 		try {
 			pd.preparedSelect(this.getDbname(),sql_query.toString());
@@ -1295,10 +1375,43 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		}
 		return false;
 	}
-
+	private static boolean loaded;
+	private static void init()
+	{
+		if(loaded)
+			return;
+		synchronized(ParamsHandler.class)
+		{
+			if(loaded)
+				return;
+			BaseApplicationContext context = DefaultApplicationContext.getApplicationContext("org/frameworkset/util/paramhandlers.xml");
+			Set<String> keys =context.getPropertyKeys();
+			if(keys == null || keys.size() == 0)
+			{
+				loaded = true;
+				return;
+			}
+			Iterator<String> its = keys.iterator();
+			while(its.hasNext())
+			{
+				String key = its.next();
+				Object value = context.getBeanObject(key);
+				if(value == null)
+					continue;
+				if(value instanceof ParamsHandler)
+				{
+					handlers.put(key, (ParamsHandler)value);
+				}
+			}
+			loaded = true;
+		}
+	}
 	public static ParamsHandler getParamsHandler(String name) {
-		return (ParamsHandler) DefaultApplicationContext.getApplicationContext("org/frameworkset/util/paramhandlers.xml")
-				.getBeanObject(name);
+		
+		init();
+//		return (ParamsHandler) DefaultApplicationContext.getApplicationContext("org/frameworkset/util/paramhandlers.xml")
+//				.getBeanObject(name);
+		return handlers.get(name);
 	}
 
 	public void afterPropertiesSet() throws Exception {

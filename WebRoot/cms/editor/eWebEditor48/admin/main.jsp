@@ -56,7 +56,7 @@ out.print(Header());
 	</tr>
 	<tr>
 		<td width="20%">服务器IP：</td>
-		<td width="80%"><%=request.getRemoteAddr()%></td>
+		<td width="80%"><%=com.frameworkset.util.StringUtil.getClientIP(request)%></td>
 	</tr>
 	<tr>
 		<td width="20%">服务器端口：</td>

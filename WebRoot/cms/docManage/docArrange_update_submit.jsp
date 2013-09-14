@@ -50,7 +50,7 @@
 	boolean b = dm.updateArrangeDoc(ad);
 	//记录操作日志
 	LogManager logManager = SecurityDatabase.getLogManager();
-	logManager.log(accesscontroler.getUserAccount(),"更新置顶文档时间.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+	logManager.log(accesscontroler.getUserAccount(),"更新置顶文档时间.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 	
 	if(dm.getDocStatus(Integer.parseInt(docid)) == 5)//只有已发的文档才要递归
 	{

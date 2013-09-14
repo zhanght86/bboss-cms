@@ -41,6 +41,8 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 		.registerDestinationDataProvider(sanyDestinationDataProvider);
 	}
 	private SAPConf sapconf;
+	
+	private DomainSAPConf domainSAPConf;
 
 	private String ABAP_AS_POOLED = "ABAP_AS_WITH_POOL";
 	public final SapResult callFunctionForParameterInTableAndStructure(String rfcName,Map<String, Object> inParams
@@ -90,26 +92,66 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 	public void afterPropertiesSet() throws Exception {
 		
 
-		Properties connectProperties = new Properties();
-		connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
-				sapconf.getHost());
-		connectProperties.setProperty(DestinationDataProvider.JCO_SYSNR,
-				sapconf.getSysnr());
-		connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT,
-				sapconf.getClient());
-		connectProperties.setProperty(DestinationDataProvider.JCO_USER,
-				sapconf.getUser());
-		connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,
-				sapconf.getPassward());
-		connectProperties.setProperty(DestinationDataProvider.JCO_LANG,
-				sapconf.getLang());
-
-		connectProperties.setProperty(
-				DestinationDataProvider.JCO_POOL_CAPACITY,
-				sapconf.getJco_pool_capacity() + "");
-		connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
-				sapconf.getJco_peak_limit() + "");
-		this.addJcoDestinationData(ABAP_AS_POOLED, connectProperties);
+		if(domainSAPConf == null)//通过ip连接sap服务器
+		{
+			Properties connectProperties = new Properties();
+			connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
+					sapconf.getHost());
+			connectProperties.setProperty(DestinationDataProvider.JCO_SYSNR,
+					sapconf.getSysnr());
+			connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT,
+					sapconf.getClient());
+			connectProperties.setProperty(DestinationDataProvider.JCO_USER,
+					sapconf.getUser());
+			connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,
+					sapconf.getPassward());
+			connectProperties.setProperty(DestinationDataProvider.JCO_LANG,
+					sapconf.getLang());
+	
+			connectProperties.setProperty(
+					DestinationDataProvider.JCO_POOL_CAPACITY,
+					sapconf.getJco_pool_capacity() + "");
+			connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
+					sapconf.getJco_peak_limit() + "");
+			this.addJcoDestinationData(ABAP_AS_POOLED, connectProperties);
+		}
+		else//通过域名连接sap服务器
+		{
+			
+			  //connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT, "318");//集团号，生产机318，测试机150
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_USER," ");//用户名
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,"");//密码
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_LANG, "en");//语言
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_MSHOST,"sapci.sany.com.cn");//消息服务器，生产机sapci.sany.com.cn
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_GROUP, "RFC");//登录组名称，测试机和生产机均为RFC
+			//  connectProperties.setProperty(DestinationDataProvider.JCO_MSSERV,"3600");//消息服务器端口号，生产机：3600，测试机3601
+			Properties connectProperties = new Properties();
+			connectProperties.setProperty(DestinationDataProvider.JCO_MSHOST,
+					domainSAPConf.getHost());
+			connectProperties.setProperty(DestinationDataProvider.JCO_ASHOST,
+					domainSAPConf.getHost());
+			connectProperties.setProperty(DestinationDataProvider.JCO_SYSNR,
+					domainSAPConf.getSysnr());
+			connectProperties.setProperty(DestinationDataProvider.JCO_GROUP,
+					domainSAPConf.getJco_group());
+			connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT,
+					domainSAPConf.getClient());
+			connectProperties.setProperty(DestinationDataProvider.JCO_USER,
+					domainSAPConf.getUser());
+			connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,
+					domainSAPConf.getPassward());
+			connectProperties.setProperty(DestinationDataProvider.JCO_LANG,
+					domainSAPConf.getLang());
+			connectProperties.setProperty(DestinationDataProvider.JCO_MSSERV,
+					domainSAPConf.getJco_msserv());
+	
+			connectProperties.setProperty(
+					DestinationDataProvider.JCO_POOL_CAPACITY,
+					domainSAPConf.getJco_pool_capacity() + "");
+			connectProperties.setProperty(DestinationDataProvider.JCO_PEAK_LIMIT,
+					domainSAPConf.getJco_peak_limit() + "");
+			this.addJcoDestinationData(ABAP_AS_POOLED, connectProperties);
+		}
 
 		
 

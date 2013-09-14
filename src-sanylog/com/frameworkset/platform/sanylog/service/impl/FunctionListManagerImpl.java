@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.frameworkset.common.poolman.CallableDBUtil;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.platform.sanylog.bean.App;
@@ -110,12 +111,12 @@ public class FunctionListManagerImpl implements FunctionListManager{
     }
 
 	@Override
-	public List<SpentTime> staticSpentTimeByAppName(String appName,String appId)
+	public List<FunctionList> staticSpentTimeByAppName(String appName,String appId)
 			throws SQLException {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("appName", appName);
 		paramMap.put("appId", appId);
-		List<SpentTime> datas = executor.queryListBeanWithDBName(SpentTime.class, "jira", "staticSpentTimeByAppName", paramMap);
+		List<FunctionList> datas = executor.queryListBeanWithDBName(FunctionList.class, "jira", "staticSpentTimeByAppName", paramMap);
 		return datas;
 	}
 
@@ -198,7 +199,19 @@ public class FunctionListManagerImpl implements FunctionListManager{
 		}
 		executor.insertBeans("batchInsertFunctionList", excelDatas);
 	}
-
+	@Override
+	public void testBatchInsertFunctionList(List<FunctionList> excelDatas)
+			throws SQLException {
+		executor.insertBeans("batchInsertFunctionList", excelDatas);
+        CallableDBUtil callableUtil = new CallableDBUtil();
+        callableUtil.prepareCallable("call clearfunctionlist_proc()");
+        /*callableUtil.setString(1, expScope.getDeptId());
+        callableUtil.setString(2, expScope.getExpType());
+        callableUtil.setString(3, expScope.getYearMonth());
+        callableUtil.registerOutParameter(4, java.sql.Types.INTEGER); */  
+        callableUtil.executeCallable();
+        int result = callableUtil.getInt(4);
+	} 
 	@Override
 	public void insertApp(String autoId, String appId, String appName)
 			throws SQLException {
@@ -207,7 +220,27 @@ public class FunctionListManagerImpl implements FunctionListManager{
 		bean.setAppId(appId);
 		bean.setAppName(appName);
 		executor.insertBean("insertApp", bean);
-	}   
+	}
+
+	@Override
+	public List<FunctionList> getFunctionList(String appId) throws SQLException {
+		List<FunctionList> datas = executor.queryList(FunctionList.class, "getFunctionList",appId);
+		return datas;
+	}
+
+	@Override
+	public void insertSysTime(List<FunctionList> sysSpentTime)
+			throws SQLException {
+executor.insertBeans("insertSysTime", sysSpentTime)	;	
+	}
+
+	@Override
+	public void updateSysTime(List<FunctionList> datasForUpdate)
+			throws SQLException {
+		executor.updateBeans("updateSysTime", datasForUpdate);
+	}
+
+	  
 
 		
 	

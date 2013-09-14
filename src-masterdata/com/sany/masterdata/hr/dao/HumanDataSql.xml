@@ -219,5 +219,34 @@
 		]]>
 	</property>
 	
+	<property name="selectTdSmUserKey">
+		<![CDATA[
+			select user_id from td_sm_user
+		]]>
+	</property>
+	
+	<property name="selectTdSmOrgKey">
+		<![CDATA[
+			select org_id from td_sm_organization
+		]]>
+	</property>
+	
+	<property name="selectTdSmJobKey">
+		<![CDATA[
+			select job_id from td_sm_job
+		]]>
+	</property>
+	
+	<property name="selectTdSmOrgUserKey">
+		<![CDATA[
+			select distinct(user_id) from td_sm_orguser
+		]]>
+	</property>
+	
+	<property name="selectTdSmOrgJobUserKey">
+		<![CDATA[
+			select distinct(user_id) from td_sm_userjoborg
+		]]>
+	</property>
 </properties>
 

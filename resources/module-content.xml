@@ -467,6 +467,27 @@
 					<content>/monitor/monitor_console.jsp</content>
 				</workspace>
 			</item>
+		<item name="缓存管理" id="cachemonitor" i18n:en_US="Cache Monitor">
+			
+			<workspace>
+				<content>/monitor/cache_console.page</content>
+			</workspace>
+			<authoration>				 
+				 	<url>/monitor/*.page</url>
+			</authoration>
+		</item>
+			<item name="应用管理" id="appManageItem" >
+				<mouseupimg>sysmanager/itemicon/project_images/user_of.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/user_of.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/user_of.gif</headimg>	
+				<top>/cms/top.jsp</top>
+				<left>/cms/appManager/navigator_content.jsp</left>
+				<workspace>
+					<content>/cms/hd_main.jsp</content>
+				</workspace>
+			</item>
 			<item name="统计分析" id="browserCounter" i18n:en_US="BrowserCounter">
 				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
 				</mouseupimg>
@@ -482,6 +503,21 @@
 				<workspace>
 					<content>/counter/index.freepage</content>
 				</workspace>
+			</item>
+			
+			<item name="日志查询" id="logquery" area="main" i18n:en_US="Log Query">
+				
+				<top>/header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> -->
+				<!-- <left>perspective_outlookbar.jsp</left> -->
+				<navigator></navigator>
+				<workspace>
+					<content>/sysmanager/logmanager/logList_tab.jsp</content>
+				</workspace>
+				<authoration>				 
+				 	<url>/sysmanager/logmanager/*.jsp</url>
+				</authoration>
+				
 			</item>
 		
 			
@@ -519,7 +555,38 @@
     
 		
 		
-         
+	         <module name="网上调查" id="voteManageItem">
+				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<description>调查管理</description>
+			   <item name="主题管理" id="titleManager">
+				<mouseupimg>sysmanager/itemicon/project_images/edit_user.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/edit_user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/edit_user.gif</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<workspace>
+					<content>/cms/voteManager/votelist.jsp?channel=网上调查</content>
+				</workspace>
+			  </item>
+			  <item name="意见审核" id="answerManager">
+				<mouseupimg>sysmanager/itemicon/project_images/edit_user.gif</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/project_images/edit_user.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/project_images/edit_user.gif</mouseoutimg>
+				<headimg>sysmanager/itemicon/project_images/edit_user.gif</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<workspace>
+					<content>/cms/voteManager/voteAnswerlist.jsp?channel=网上调查</content>
+				</workspace>
+			</item>
+			</module>
         		  
 		    
 		

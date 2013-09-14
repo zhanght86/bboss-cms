@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<property name="queryList">
+		<![CDATA[
+			select * from td_portal_p_monitor where 1=1
+			#if($appId && !$appId.equals(""))
+				and appId = #[appId]
+			#end
+			#if($sign &&!$sign.equals(""))
+				#if($useTime && !$useTime.equals("") && $sign.equals("=") )
+					and useTime = #[useTime]
+				#elseif	($useTime && !$useTime.equals("") && $sign.equals(">=") )
+					and useTime >= #[useTime]
+				#elseif	($useTime && !$useTime.equals("") && $sign.equals("<=") )
+					and useTime <= #[useTime]	
+				#end
+			#end
+			#if($monitorTimeBegin && !$monitorTimeBegin.equals(""))
+				and monitorTime >= #[monitorTimeBegin]
+			#end
+			#if($monitorTimeEnd && !$monitorTimeEnd.equals(""))
+				and monitorTime <= #[monitorTimeEnd]
+			#end
+			order by monitorTime desc
+		]]>
+	</property>
+
+	<property name="queryReportList">
+		<![CDATA[
+			select b.appName as appName,avg(useTime)as avgUseTime,max(useTime) as maxUseTime from td_portal_p_monitor a, td_portal_appinfo b
+			where 1=1 and a.appId=b.appId 
+			#if($monitorTimeBegin && !$monitorTimeBegin.equals(""))
+				and monitorTime >= #[monitorTimeBegin]
+			#end
+			#if($monitorTimeEnd && !$monitorTimeEnd.equals(""))
+				and monitorTime <= #[monitorTimeEnd]
+			#end
+			group by appName
+		]]>
+	</property>
+	<property name="getAllAppInfo">
+		<![CDATA[
+			select * from td_portal_appInfo
+	
+		]]>
+	</property>
+		<property name="getAppInfoUse">
+		<![CDATA[
+			select * from td_portal_appInfo where state=1
+		]]>
+	</property>
+	<property name="getAppInfoMap">
+		<![CDATA[
+			select appId,appName from td_portal_appInfo
+		]]>
+	</property>
+	<property name="getAppInfoByKey">
+		<![CDATA[
+			select * from td_portal_appInfo
+			where appId= #[appId]
+		]]>
+	</property>
+	<property name="insertPortalMonitor">
+		<![CDATA[
+			insert into td_portal_p_monitor(id,appId,useTime,monitorTime)
+			values
+  			(#[id],#[appId], #[useTime], #[monitorTime])
+		]]>
+	</property>
+</properties>

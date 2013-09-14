@@ -3,6 +3,16 @@ body {
 	font:12px/18px Arial, Helvetica, sans-serif;padding:0px;margin:0px;
 }
 body{_width:expression(parseInt(this.parentNode.clientWidth) + 'px');}
+body > #wrap {height: auto; min-height: 100%;}
+.clearfix:after {content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;}
+.clearfix {display: inline-block;}
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+
 td,th {
 	font:12px/18px  Arial, Helvetica, sans-serif;
 }
@@ -381,12 +391,13 @@ _background-position:2px bottom;
 	background:url(../images/split.jpg) right  center no-repeat;
 }
 
-.footer {   
+/*.footer {   
 	background-color: #eaeaea;
 	height: 34px;
 	border-top: 3px solid #d1d1d1;
 	color: #868686;
-	padding: 4px 0px; width:100%;	
+	padding: 4px 0px; 
+	width:100%;	
 	background-image: url(../images/foot_quality.jpg);
 	background-repeat: no-repeat;
 	background-position: right top;	position: relative;	
@@ -398,5 +409,32 @@ _background-position:2px bottom;
 	background-position: 5px top;
 	padding-left: 120px;
 }
+*/
 .footer a,.footer a:visited{ color:#666;}
 .footer a:hover{ color:#0066cc}
+
+
+.footer {
+	height: 45px;
+	border-top: 3px solid #d1d1d1;
+	color: #868686;
+	width:100%;
+	line-height: 18px;
+	background: #eaeaea url(../images/foot_quality.jpg) no-repeat  right top;
+	position: fixed;
+	left:0px;
+	bottom:0px;
+	_position:absolute;
+	_bottom:auto;
+	_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))
+	
+	
+	
+	
+}
+.footer .left_footer {padding:6px 0px 0px 110px;
+	background: url(../images/foot_logo.jpg) no-repeat left 3px;
+	line-height: 18px;
+	
+}
+

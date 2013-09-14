@@ -133,7 +133,7 @@
 				 select t.org_id,t.remark5,t.org_sn from td_sm_organization t inner join
                  td_sm_userjoborg c on t.org_id= c.org_id inner join td_sm_user b on b.user_id =
                  c.user_id where b.user_id =? 
-              	order by t.org_tree_level) mb
+              	order by t.org_tree_level)
 		]]>
 		</property>
 		<property name="FunctionDB_getUserorgjobinfos-mysql">
@@ -207,7 +207,7 @@
 	   <property name="orgAdministratorImpl_userAdminOrg">
 	
 		<![CDATA[select * from td_sm_orgmanager t where t.user_id = ? and t.org_id in 
-		( select o.org_id from td_sm_organization o where o.org_id=? )
+		( select o.org_id from td_sm_organization o where o.org_id=? ) 
 		]]>
 	
 	   </property >

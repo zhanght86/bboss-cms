@@ -616,7 +616,7 @@ public class OrgManAction extends BasicAction {
 		AccessControl control = AccessControl.getInstance();
 		control.checkAccess(request,response);
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="机构管理";
         String userName = control.getUserName();
         String description="";
@@ -678,7 +678,7 @@ public class OrgManAction extends BasicAction {
 		AccessControl control = AccessControl.getInstance();
 		control.checkAccess(request,response);
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="机构管理";
         String userName = control.getUserName();
         LogManager logManager = SecurityDatabase.getLogManager(); 
@@ -806,7 +806,7 @@ public class OrgManAction extends BasicAction {
 		AccessControl control = AccessControl.getInstance();
 		control.checkAccess(request,response);
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="机构管理";
         String userName = control.getUserName();
         String description="";
@@ -1228,7 +1228,7 @@ public class OrgManAction extends BasicAction {
 		AccessControl control = AccessControl.getInstance();
 		control.checkAccess(request,response);
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="机构管理";
         String userName = control.getUserName();
         String description="";
@@ -1270,7 +1270,7 @@ public class OrgManAction extends BasicAction {
 		AccessControl control = AccessControl.getInstance();
 		control.checkAccess(request,response);
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="机构管理";
         String userName = control.getUserName();
         String description="";

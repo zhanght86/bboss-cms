@@ -574,7 +574,12 @@ public class ConfigParser extends I18nXMLParser  {
         	if(obj instanceof BaseMenuItem)
         	{
         		BaseMenuItem m = (BaseMenuItem)obj;
-        		m.addAuthorResource(this.currentValue.toString());
+        		String url = this.currentValue.toString();
+        		String[] urls = url.split(",");
+        		for(int i = 0; i < urls.length; i ++)
+        		{
+        			m.addAuthorResource(urls[i].trim());
+        		}
         		
         	}
         	this.currentValue.setLength(0);

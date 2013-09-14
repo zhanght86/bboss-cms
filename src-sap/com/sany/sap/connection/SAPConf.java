@@ -26,6 +26,8 @@ package com.sany.sap.connection;
  * @version 1.0
  */
 public class SAPConf {
+	
+
 	/**
 	 * 10.0.13.11
 

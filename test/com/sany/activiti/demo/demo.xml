@@ -2,7 +2,45 @@
 
 <properties>
 
+	<description>
+		
+		  CREATE TABLE materiel_test
+(
+  ID            NVARCHAR2(64)                  NOT NULL,
+  title  NVARCHAR2(64),
+  apply_name  NVARCHAR2(64),
+  materiel_name      NVARCHAR2(64),
+  materiel_num         NUMBER(10),
+  process_instance_id      NVARCHAR2(100),
+  apply_time TIMESTAMP
+  
+)
+truncate table ACT_RU_VARIABLE
 
+truncate table ACT_RU_IDENTITYLINK
+
+
+truncate table ACT_HI_VARINST
+truncate table ACT_HI_ACTINST
+truncate table ACT_HI_TASKINST
+truncate table ACT_RU_EXECUTION
+delete from ACT_RU_TASK
+truncate table ACT_HI_PROCINST
+truncate table ACT_RU_EXECUTION
+
+CREATE TABLE task_info
+(
+  ID            NVARCHAR2(64)                  NOT NULL,
+  process_instance_id  NVARCHAR2(64),
+  task_id  NVARCHAR2(64),
+  deal_user      NVARCHAR2(64),
+  deal_opinion         NUMBER(10),
+  is_pass      NVARCHAR2(100),
+   task_name      NVARCHAR2(100),
+  deal_time TIMESTAMP
+  
+)
+	</description>
 	<property name="applyMateriel">
 		<![CDATA[
 			 insert into materiel_test (id,title,apply_name,apply_time,materiel_name,materiel_num,process_instance_id) values 

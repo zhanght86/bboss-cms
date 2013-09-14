@@ -3,7 +3,7 @@
 
 <div id="customContent">
 <div class="comment_title"><div class="comment_num"><a href="#">已有<span class="red_num" >${total }</span>条评论</a></div>
-          视频评论</div>
+          评论</div>
 	<pg:equal actual="${docCommentList.totalSize}" value="0" >
 		<div style="text-align: center;padding-top:10px;">
 			<img src="${pageContext.request.contextPath}/html/images/no_data.jpg"/></div>
@@ -16,9 +16,18 @@
 	<ul class="comment_content">
 	 <pg:list autosort="false">
 	 	<li onclick="this.className==''?this.className='select_comment':this.className=''">
-        	<div class="comment_user"><pg:cell colName="userName"/></div>
+        	<div class="comment_user">
+        	<pg:equal colName="userName" value="__quest">
+        		匿名用户
+        	</pg:equal>
+        	<pg:notequal colName="userName" value="__quest">
+        		<pg:cell colName="userName"/>
+        	</pg:notequal>
+        	<br/>
+        	<pg:cell colName="subTime" dateformat="yyyy-MM-dd HH:mm"/>
+        	</div>
             <div class="comment"><pg:cell colName="docComment" htmlDecode="true"/>
-             <div class="comment_date"><pg:cell colName="userIP"/>&nbsp;&nbsp;&nbsp;&nbsp;<pg:cell colName="subTime" dateformat="yyyy-MM-dd HH:mm:ss"/></div>
+             
              <div class="operation"><a href="javascript:void(0)" onclick="document.getElementById('docComment').focus()">评论</a></div>
              </div>
           </li>

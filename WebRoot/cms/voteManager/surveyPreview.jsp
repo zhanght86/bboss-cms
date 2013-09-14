@@ -32,9 +32,10 @@
 	response.setHeader("Pragma", "no-cache"); 
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
+	String id = request.getParameter("id");
 	%>
 	<body  style="background-color: #F3F4F9;">
-	<cms:vote id="<%=request.getParameter("id")%>">
+	<cms:vote id="<%=id%>">
 		<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F3F4F9" align="center">
 	<p>
 		<tr><td align="center"><div style="font-family: '黑体';font-weight: bold;font-size: 24px;">
@@ -44,7 +45,7 @@
 		</table>
 		<p>
 			<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F3F4F9" align="center">
-				<cms:outline datatype="questions" channel="<%=request.getParameter("id")%>">
+				<cms:outline datatype="questions" channel="<%=id%>">
 					<tr>
 						<td>
 							<strong><cms:rowid increament="1"/>. </strong><cms:question optionstyle="list-style:none;" textareastyle="width:300;height:100"/>

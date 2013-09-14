@@ -274,7 +274,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		serverPort = request.getServerPort();
 		serverProtocol = request.getProtocol();
 		serverHost = request.getRemoteHost();
-		serverAddr = request.getRemoteAddr();
+		serverAddr = com.frameworkset.util.StringUtil.getClientIP(request);
 		serverName = request.getServerName();
 		contextPath = request.getContextPath();
 
@@ -389,8 +389,8 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 				.getRequest().getProtocol();
 		serverHost = context.getRequestContext()
 				.getRequest().getRemoteHost();
-		serverAddr = context.getRequestContext()
-				.getRequest().getRemoteAddr();
+		serverAddr = com.frameworkset.util.StringUtil.getClientIP(context.getRequestContext()
+				.getRequest());
 		serverName = context.getRequestContext()
 				.getRequest().getServerName();
 		contextPath = context.getRequestContext()
@@ -425,8 +425,8 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 				.getRequest().getProtocol();
 		serverHost = context.getRequestContext()
 				.getRequest().getRemoteHost();
-		serverAddr = context.getRequestContext()
-				.getRequest().getRemoteAddr();
+		serverAddr = com.frameworkset.util.StringUtil.getClientIP(context.getRequestContext()
+				.getRequest());
 		serverName = context.getRequestContext()
 				.getRequest().getServerName();
 		contextPath = context.getRequestContext()

@@ -122,13 +122,14 @@
   String deptName = accesscontroler.getChargeOrgName();
   String login_user_name = accesscontroler.getUserAccount();
   int length = 0;
-  length = accesscontroler.getAllRoleofUser(login_user_name).length;
+  String siteNameRole = cmsM.getCurrentSite().getName()+"站点管理员";
+  com.frameworkset.platform.security.authorization.AuthRole[] roles = accesscontroler.getAllRoleofUser(login_user_name);
   String str = "";
   boolean flag = false;
-  for(int i=1;i<length;i++)
+  for(int i=1;roles != null && i<roles.length;i++)
   {
-    str = accesscontroler.getAllRoleofUser(login_user_name)[i].getRoleName();
-    if(str.equals("administrator")||str.equals("网上调查管理员"))
+    str = roles[i].getRoleName();
+    if(str.equals("administrator")||str.equals(siteNameRole)||str.equals("网上调查管理员"))
     {
       flag = true;
       break;
@@ -229,14 +230,17 @@
 				<td height='25' colspan="9" background="../images/data_list_tHeadbg.jpg" style="text-align:left; background:url(../images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7">
 					<div  class="DocumentOperT">问卷操作：</div>
 						<%
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","create","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","create","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")
+							 &&accesscontroler.checkPermission("dchmanager","create","titleManager"))
+							 ||(request.getParameter("channel").equals("网上测评")
+									 &&accesscontroler.checkPermission("wscpManager","create","wscpTitleManager")))
 					 {
 		            %>
 					<a style="cursor:hand" onClick="newq()">
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增问卷</div></a>
 					<%
 					}
-					if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","delete","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","delete","wscpTitleManager")))
+					if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","delete","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","delete","wscpTitleManager")))
 					// if(accesscontroler.checkPermission("dchmanager","delete","titleManager"))
 					 {
 		            %>
@@ -244,7 +248,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">删除问卷</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","audit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","audit","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","audit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","audit","wscpTitleManager")))
 					// if(accesscontroler.checkPermission("dchmanager","audit","titleManager"))
 					 {
 		            %>
@@ -252,7 +256,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">审核</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","stopaudit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","stopaudit","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","stopaudit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","stopaudit","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","stopaudit","titleManager"))
 					 {
 		            %>
@@ -260,7 +264,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">取消审核</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","top","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","top","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","top","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","top","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","top","titleManager"))
 					 {
 		            %>
@@ -268,7 +272,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">问卷置顶</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","stoptop","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","stoptop","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","stoptop","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","stoptop","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","stoptop","titleManager"))
 					 {
 		            %>
@@ -276,7 +280,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">取消置顶</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","cancellook","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","cancellook","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","cancellook","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","cancellook","wscpTitleManager")))
 					// if(accesscontroler.checkPermission("dchmanager","cancellook","titleManager"))
 					 {
 		            %>
@@ -284,7 +288,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">取消查看</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","look","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","look","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","look","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","look","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","look","titleManager"))
 					 {
 		            %>
@@ -292,7 +296,7 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">恢复查看</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","cleartitle","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","cleartitle","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","cleartitle","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","cleartitle","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","cleartitle","titleManager"))
 					 {
 		            %>
@@ -300,14 +304,14 @@
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">投票清零</div></a>
 					<%
 					 }
-					 if(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","copy","wscpTitleManager"))
+					 if(flag ||request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","copy","wscpTitleManager"))
 					 {
 		            %>
 					<a style="cursor:hand" onClick="return myAction('copy')">
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">复制测评</div></a>
 					<%
 					 }
-					 if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","questionlist","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","questionlist","wscpTitleManager")))
+					 if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","questionlist","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","questionlist","wscpTitleManager")))
 					 //if(accesscontroler.checkPermission("dchmanager","questionlist","titleManager"))
 					 {
 		            %>
@@ -394,7 +398,7 @@
 								<td class="tablecells" nowrap="true" >
 								<%
 								 boolean ff = false;
-					               if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","edit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","edit","wscpTitleManager")))
+					               if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","edit","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","edit","wscpTitleManager")))
 					              // if(accesscontroler.checkPermission("dchmanager","edit","titleManager"))
 					               {
 					               ff = true;
@@ -404,7 +408,7 @@
 								
 								<%
 								}
-								   if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","browse","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","browse","wscpTitleManager")))
+								   if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","browse","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","browse","wscpTitleManager")))
 					               //if(accesscontroler.checkPermission("dchmanager","browse","titleManager"))
 					               {
 					               ff = true;
@@ -415,7 +419,7 @@
 								
 								<%
 								}
-								if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","count","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","count","wscpTitleManager")))
+								if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","count","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","count","wscpTitleManager")))
 					              //if(accesscontroler.checkPermission("dchmanager","count","titleManager"))
 					               {
 					                ff = true;

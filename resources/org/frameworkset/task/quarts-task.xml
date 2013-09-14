@@ -83,7 +83,7 @@
 		<!-- for cluster -->
 		
 	</property>
-	<property name="taskconfig" enable="true">
+	<property name="taskconfig" enable="false">
 		<list>
 			<property name="定时任务执行器" taskid="default"
 				class="org.frameworkset.task.DefaultScheduleService" used="true">
@@ -131,8 +131,8 @@
 					<property name="hrMasterDataSync" 
 						jobid="hrMasterDataSync"						
 						bean-name="hrSyncTask"
-						method="syncExpandData"
-						cronb_time="0 0 1 * * ?" 
+						method="syncAllData"
+						cronb_time="0 30 9 * * ?" 
 						used="true"
 						shouldRecover="false">
 					</property>
@@ -147,14 +147,14 @@
 				 <property name="sanylogBrowserCounterStatisticDailyJob" jobid="sanylogBrowserCounterStatisticDailyJob"						
 						bean-name="sanylogBrowserCounterStatisticDailyJob"
 						method="statisticBrowserCounterDailyJob"
-						cronb_time="0 0 0am * * ?" used="true"
+						cronb_time="0 0 0am * * ?" used="false"
 						shouldRecover="false"
 						>
 					</property>
 					<property name="sanylogOperCounterStatisticDailyJob" jobid="sanylogOperCounterStatisticDailyJob"						
 						bean-name="sanylogOperCounterStatisticDailyJob"
 						method="statisticOperCounterDailyJob"
-						cronb_time="59 59 23 * * ?" used="true"
+						cronb_time="59 59 23 * * ?" used="false"
 						shouldRecover="false"
 						>
 					</property> 
@@ -166,7 +166,16 @@
 		</list>
 	</property>
 	
-	<property name="hrSyncTask" class="com.sany.masterdata.task.HrSyncTask" />
+	<property name="hrSyncTask"  factory-bean="hr.ioccontext" factory-method="getBeanObject">
+		<construction>
+			<property value="masterdata.hrSyncTask" />
+		</construction>
+	</property>
+	<property name="hr.ioccontext" factory-class="org.frameworkset.spi.DefaultApplicationContext" factory-method="getApplicationContext">
+		<construction>
+			<property value="bboss-masterdata-humanResource.xml" />
+		</construction>
+	</property>
 	
 	
 	<property name="portalMonitor" factory-bean="webapplicationcontext" factory-method="getBeanObject">

@@ -1544,7 +1544,7 @@ _use = function(event)
 		};
 	})();
 	
-	_dragEvent.start(event);
+	_dragEvent.start(event);  
 };
 
 lhgdialog.templates =
@@ -1576,7 +1576,7 @@ lhgdialog.templates =
 						'</tr>' +
 						'<tr>' +
 							'<td class="ui_icon">' +
-								'<img src="" class="ui_icon_bg"/>' + 
+								'<img  class="ui_icon_bg"/>' + 
 							'</td>' +
 							'<td class="ui_main">' +
 								'<div class="ui_content"></div>' +

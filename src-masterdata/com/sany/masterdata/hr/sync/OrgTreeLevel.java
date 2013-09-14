@@ -96,13 +96,24 @@ public class OrgTreeLevel {
     private static void getTreeLevel(LinkedHashMap<String, TdSmOrganization> orgMap, String key) {
         
         TdSmOrganization temp = orgMap.get(key);
+        if(temp == null)
+        {
+        	return;
+        }
         if (temp.getOrgTreeLevel() != null && temp.getOrgTreeLevel().equals("")) {
             return;
         } else if (temp.getParentId().equals(TREE_BASE)) {
             temp.setOrgTreeLevel(TREE_BASE + CUT_UP + temp.getOrgSn());
         } else {
             getTreeLevel(orgMap, temp.getParentId());
-            temp.setOrgTreeLevel(orgMap.get(temp.getParentId()).getOrgTreeLevel() + CUT_UP + temp.getOrgSn());
+            if(orgMap.get(temp.getParentId()) != null)
+            {
+            	temp.setOrgTreeLevel(orgMap.get(temp.getParentId()).getOrgTreeLevel() + CUT_UP + temp.getOrgSn());
+            }
+            else
+            {
+            	temp.setOrgTreeLevel(TREE_BASE + CUT_UP + temp.getOrgSn());
+            }
         }
         
     }

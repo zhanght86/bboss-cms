@@ -15,6 +15,7 @@
  */
 package com.frameworkset.platform.security.authorization.impl;
 
+
 /**
  * <p>Title: PermissionToken.java</p>
  *
@@ -33,6 +34,7 @@ package com.frameworkset.platform.security.authorization.impl;
 public class PermissionToken {
 	private String resourceType;
 	private String resourcedID;
+	
 	public PermissionToken(String resourceType, String resourcedID,
 			String operation) {
 		super();

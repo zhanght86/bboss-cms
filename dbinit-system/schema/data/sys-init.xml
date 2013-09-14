@@ -1813,6 +1813,26 @@ nocache
 									   ' ',
 									   ' ',
 									   1)]]></property>
+									  <property index="7"><![CDATA[insert into td_sm_role
+									  (ROLE_ID,
+									   ROLE_NAME,
+									   ROLE_TYPE,
+									   ROLE_DESC,
+									   ROLE_USAGE,
+									   REMARK1,
+									   REMARK2,
+									   REMARK3,
+									   OWNER_ID)
+									values
+									  ('99',
+									   'guest',
+									   '1',
+									   '匿名用户角色，没有登录系统时访客拥有的角色',
+									   ' ',
+									   ' ',
+									   ' ',
+									   ' ',
+									   1)]]></property> 
 
 
 							</list>

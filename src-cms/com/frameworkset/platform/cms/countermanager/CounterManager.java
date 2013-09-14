@@ -298,4 +298,5 @@ public interface CounterManager {
 	 * @throws SQLException
 	 */
 	public List<BrowserVisitInfo> getBrowserVisitInfo(int siteId, String startTime, String endTime) throws SQLException;
+
 }

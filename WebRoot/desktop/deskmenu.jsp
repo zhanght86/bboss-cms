@@ -5,7 +5,17 @@
 <%@ include file="/common/jsp/accessControl.jsp"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree"%>
+<%
+String customtype = request.getParameter("customtype");
+String url = "updatedeskmenu.page";
+String cleardeskmenu = "cleardeskmenu.page";
+if(customtype != null && customtype.equals("default"))
+{
+	url = "updatedefaultdeskmenu.page";
+	cleardeskmenu = "cleardefaultdeskmenu.page";
+}
 
+%>
 <html>
 	<head>
 		<title>属性容器</title>
@@ -42,7 +52,7 @@
 			});
 			function save(){
 				$("#myform").form('submit', {
-				    "url": "updatedeskmenu.page",
+				    "url": "<%=url%>",
 				    onSubmit:function(){			
 						//显示遮罩							
 						blockUI();	
@@ -59,7 +69,7 @@
 			
 			function clearmenus(){
 				$("#myform").form('submit', {
-				    "url": "cleardeskmenu.page",
+				    "url": "<%=cleardeskmenu%>",
 				    onSubmit:function(){			
 						//显示遮罩							
 						blockUI();	

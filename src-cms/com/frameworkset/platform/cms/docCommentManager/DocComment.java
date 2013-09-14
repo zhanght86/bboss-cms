@@ -15,6 +15,16 @@ public class DocComment implements java.io.Serializable {
 	private int status;                 //评论状态，0－未审；1－通过；2－删除 
 	private int alarm;					//标志此评论是否含有需报警的词，0表示没含，1表示报警
 	private int impeachFlag;				//标志此评论是否有举报信息，0表示没有，1表示有
+	
+	private String docUrl;
+	
+
+	public String getDocUrl() {
+		return docUrl;
+	}
+	public void setDocUrl(String docUrl) {
+		this.docUrl = docUrl;
+	}
 	public int getCommentId() {
 		return commentId;
 	}

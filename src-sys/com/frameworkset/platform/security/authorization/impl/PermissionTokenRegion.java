@@ -187,7 +187,7 @@ public class PermissionTokenRegion {
 		boolean touched = false;
 	}
 	/**
-	 * 判断url资源是否有访问权限
+	 * 判断url资源是否有访问权限,模式和精确匹配，精确匹配优先
 	 * @param url
 	 * @param resourceType
 	 * @return

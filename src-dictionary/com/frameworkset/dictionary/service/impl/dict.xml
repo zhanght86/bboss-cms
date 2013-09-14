@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+<!-- 字典管理  start -->
+<!-- 通过字典ID获取字典内容 -->
+<property name="getDictItemsById">
+		<![CDATA[
+select DICTDATA_NAME dictDataName ,DICTDATA_VALUE dictDataValue from TD_SM_DICTDATA where DICTTYPE_ID = ? order by DICTDATA_ORDER 
+		]]>
+	</property>
+	<!-- 通过字典ID获取字典名称 -->
+	<property name="getDictTypeById">
+		<![CDATA[
+ select DICTTYPE_DESC from TD_SM_DICTTYPE where DICTTYPE_ID = ?
+
+		]]>
+	</property>
+<!-- 字典管理 end -->
+
+	
+</properties>

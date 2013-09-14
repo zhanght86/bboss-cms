@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
 
-import com.sany.masterdata.hr.entity.WebServiceProperties;
+import com.sany.greatwall.MdmService;
 
 /**
  * load master data properties
@@ -26,7 +26,7 @@ import com.sany.masterdata.hr.entity.WebServiceProperties;
  */
 public class MDPropertiesUtil {
 
-    private static final String LDAP_CONFIG_PROPERTIES = "MasterDataConfig.xml";
+    private static final String LDAP_CONFIG_PROPERTIES = "bboss-masterdata-humanResource.xml";
 
     private static BaseApplicationContext context = null;
 
@@ -43,11 +43,17 @@ public class MDPropertiesUtil {
         }
     }
 
-    public static WebServiceProperties getBean(String beanId) {
-        return context.getTBeanObject(beanId, WebServiceProperties.class);
+
+    public static MdmService getMdmService()
+    {
+    	return context.getTBeanObject("mdmservice", MdmService.class);
     }
 
     public static String getPropertie(String id) {
         return context.getProperty(id);
+    }
+    
+    public static Object getBeanObject(String beanId) {
+        return context.getBeanObject(beanId);
     }
 }

@@ -26,7 +26,7 @@
 			docComment.setUserName(commenterName);
 			docComment.setStatus(1);			//后台管理员增加的评论无需审核
 			
-			String remoteIP = request.getRemoteAddr();
+			String remoteIP = com.frameworkset.util.StringUtil.getClientIP(request);
 			docComment.setUserIP(remoteIP);//保存IP,weida
 			
 			idm.addOneComment(docComment);

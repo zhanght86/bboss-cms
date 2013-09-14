@@ -52,8 +52,7 @@
 			i18n:en_US="Index" 	
 			id="indexpage" main="true">
 			<mouseupimg i18n:en_US="sysmanager/itemicon/bbs_enabled.gif" >sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseclickimg>
+			<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
 			</mouseoverimg>
 			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
@@ -62,12 +61,18 @@
 			<!--<left>perspective_outlookbar.jsp</left> -->
 			<workspace>
 				<!--<content>detail.html</content> -->
-				<content isany="/html/main1.html"
+				<content isany="/html/main.jsp"
 						 logoimage="/html/images/top_logo.jpg"
 						 i18n:en_US="/html/images/top_logo_en.jpg">contentoutlook.page</content>
 
 			</workspace>
-			
+			<authoration>				 
+				 	<url>/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
+				 		 	
+				 	<url>/sysmanager/resmanager/delRedundance.jsp</url>
+				 	<url>/sysmanager/user/userres_querylist.jsp</url>
+				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>				 
+			</authoration>
 		</publicitem>
 
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
@@ -81,7 +86,7 @@
 			<description i18n:en_US="App Bom" >应用台账</description>
 			<item name="应用台账"
 			i18n:en_US="App Bom" id="appbommanager" >
-				
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -94,13 +99,16 @@
 		
 			
 			<item name="创建领料单" id="newGetDoc" i18n:en_US="Apply Materail">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>appbom/index.page</content>
 				</workspace>
 			</item>
+			
 			<item name="创建退料单" id="newReturnDoc" i18n:en_US="Apply Return Materail">
+				<mouseclickimg>html/images/suzhi.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -108,6 +116,7 @@
 				</workspace>
 			</item>
 			<item name="工单管理" id="docManage" i18n:en_US="Invoices Manage" >
+				<mouseclickimg>html/images/salary.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -116,6 +125,7 @@
 			</item>
 			
 			<item name="台账查询" id="materailQuery" i18n:en_US="Query">
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -129,24 +139,10 @@
 
 
 			<module name="应用台账1" id="appbommanagermodule1" used="true" i18n:en_US="App Bom">
-				<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-				<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-				</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-				<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<description>应用台账</description>
 				<item name="标签页效果" id="appbommanager1" i18n:en_US="Label Page Demo">
-					<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-					</mouseupimg>
-					<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-					<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-					</mouseoverimg>
-					<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-					</mouseoutimg>
-					<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-					</headimg>
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -154,15 +150,7 @@
 					</workspace>
 				</item>
 				<item name="左侧菜单效果" id="appbommanager11" i18n:en_US="Left Menu Demo">
-					<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-					</mouseupimg>
-					<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-					<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-					</mouseoverimg>
-					<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-					</mouseoutimg>
-					<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-					</headimg>
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -176,24 +164,10 @@
 
 		</module>
 		<module name="应用监控" id="appmonitormodule" used="true" i18n:en_US="App Monitoring">
-			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
-			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<description>应用监控</description>
 			<item name="PORTAL监控" id="portalmonitor" i18n:en_US="Portal Monitor" >
-				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseupimg>
-				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
-				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
-				</mouseoverimg>
-				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</mouseoutimg>
-				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
-				</headimg>
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -207,7 +181,7 @@
 		
 			<description>系统管理</description>
 			<item name="权限管理" id="purviewmanager" default="true" area="main" i18n:en_US="Authoration Manage" >
-				
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 				<top>headersimple.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -224,7 +198,7 @@
 			</item>
 
 			<item name="菜单管理" id="menumanage" area="main" i18n:en_US="Menu Manage" >
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -244,7 +218,7 @@
 			</item>
 
 			<item name="用户查询" id="userquery" area="main" i18n:en_US="User Query">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -258,7 +232,7 @@
 				
 			</item>
 			<item name="资源查询" id="resquery" area="main" i18n:en_US="Resource Query">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -272,7 +246,7 @@
 			</item>
 
 			<item name="日志查询" id="logquery" area="main" i18n:en_US="Log Query">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
 				<!-- <left>perspective_outlookbar.jsp</left> -->
@@ -290,10 +264,10 @@
 
 
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<description>工作流管理</description>
 			<item name="工作流管理" id="workflowmanager" i18n:en_US="Workflow Manage">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -304,7 +278,7 @@
 				</authoration>
 			</item>
 			<item name="业务类别管理" id="businesstype" i18n:en_US="Business Type Manage">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<workspace>
 					<content>workflow/businesstype/index.page</content>
@@ -314,7 +288,7 @@
 				</authoration>
 			</item>
 			<item name="工作流demo" id="workflowdemo" i18n:en_US="Workflow Demo">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -323,7 +297,7 @@
 			</item>
 
 			<item name="用户待办" id="workflowusertask" i18n:en_US="User Tasks">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -332,7 +306,7 @@
 			</item>
 			
 			<item name="用户待审" id="workflowuserdedetails" i18n:en_US="User Check Tasks">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -380,7 +354,7 @@
 				</workspace>
 			</item>
 			<item name="权限配置管理" id="permissionConfig" i18n:en_US="permissionConfig">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -389,7 +363,7 @@
 			</item>
 			
 			<item name="应用配置管理" id="AppModuleList" i18n:en_US="AppModuleList">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<workspace>
 					<content>sanylog/config/appModuleIndex.jsp</content>
@@ -400,8 +374,9 @@
 
 
 		<module name="字典管理" id="dictionarymanager" used="true" i18n:en_US="Dictionary Manage">
+			<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<item name="字典定义" id="dictmanage_info" area="main" i18n:en_US="Dictmanage Infomation">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -415,7 +390,7 @@
 			</item>
 
 			<item name="字典高级字段配置" id="dictAttachField" area="main" i18n:en_US="Advanced Dictionary Manage">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -434,7 +409,7 @@
 			</item>
 
 			<item name="输入类型管理" id="inputtypemanage" area="main" i18n:en_US="Input Type Manage">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator></navigator>
@@ -445,7 +420,7 @@
 
 
 			<item name="基础字典数据采集" id="dictmanage_content_0" area="main" i18n:en_US="Base Dictionary Manage">
-				
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>perspective_toolbar.jsp</top>
 				<left>perspective_outlookbar.jsp</left>
 				<navigator>
@@ -459,8 +434,8 @@
 			</item>
 		</module>
 
-		<item name="个人用户信息修改" id="personuserinfomodify" i18n:en_US="User Infomation Modification">
-			
+		<item name="个人信息修改" id="personuserinfomodify" i18n:en_US="User Infomation Modification">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -471,7 +446,7 @@
 			</authoration>
 		</item>
 		<item name="系统帐户修改" id="sysuserpassword" i18n:en_US="System Infomation Modification">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -482,7 +457,7 @@
 			</authoration>
 		</item>
 		<item name="个人密码修改" id="personsecretpassword" i18n:en_US="User Password Modification">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<workspace>
@@ -494,7 +469,7 @@
 		</item>
 
 		<item name="系统监控" id="dbmonitor" i18n:en_US="System Monitor">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<top>perspective_toolbar.jsp</top>
 			<left>perspective_outlookbar.jsp</left>
 			<navigator></navigator>
@@ -509,7 +484,7 @@
 		</item>
 		
 		<item name="缓存管理" id="cachemonitor" i18n:en_US="Cache Monitor">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<workspace>
 				<content>monitor/cache_console.page</content>
 			</workspace>
@@ -519,13 +494,24 @@
 		</item>
 
 		<item name="权限测试" id="permissiontest" i18n:en_US="Role Unit">
-			
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<top>header.page</top>
 			<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 			<workspace>
 				<content>test/testcheckpermission.jsp</content>
 			</workspace>
 		</item>
+		
+		<item name="桌面快捷管理" id="desktopmanager" i18n:en_US="desktop manager">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+			<top>header.page</top>
+			<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+			<workspace>
+				<content>menu/setting.page</content>
+			</workspace>
+		</item>
+		
+		
 
 	</sysmenu>
 </system>

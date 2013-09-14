@@ -2111,6 +2111,35 @@ public class CMSUtil{
 //					"");
 //		}
 	}
+	
+	/**
+	 * 获取站点首页地址
+	 * @param channeldir
+	 * @param contentid
+	 * @return
+	 */
+	public static String getPublishedSitePath(HttpServletRequest request,HttpServletResponse response,Site site) {
+		String domain = site.getWebHttp();		
+		if(domain != null && !domain.trim().equals("") && !domain.equals("http://"))
+		{
+			return domain;
+		}
+		else
+		{
+			DefaultContextImpl context = new DefaultContextImpl(site.getSecondName(),request,response);
+			String indexName = site.getIndexFileName();
+			return context.getPublishedLinkPath(indexName);
+		}
+//		if (context instanceof DefaultContextImpl) {
+//			return ((DefaultContextImpl) context)
+//					.getPublishedLinkPath("");
+//		} else {
+//			String currentPublishPath = context.getPublishPath();
+//
+//			return CMSUtil.getSimplePathFromfullPath(currentPublishPath,
+//					"");
+//		}
+	}
 
 	/**
 	 * 获取原始的频道路径链接

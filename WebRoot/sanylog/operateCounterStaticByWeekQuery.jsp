@@ -4,7 +4,7 @@
 
 <%--
 	描述：浏览统计计数数据查询页面
-	作者：gw_hel
+	作者：qingl2
 	版本：1.0
 	日期：2012-08-27
 	 --%>
@@ -13,6 +13,9 @@
 <head>
 <title>浏览统计数据</title>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<script language="JavaScript" src="fusion/FusionCharts.js"></script>
+<script type="text/javascript" src="fusion/prettify.js"></script>
+<script type="text/javascript" src="fusion/json2.js"></script>
 <%@ include file="/sanylog/calender.jsp"%>
 <script type="text/javascript">
 	
@@ -153,6 +156,32 @@
 		<div class="title_box">
 			<strong>操作周统计数据</strong>
 		</div> 
+		<table width="100%" border="0">
+			<tr>
+				<td align="center" colspan="2">
+					<div id="operCountCompare"></div>
+					<script type="text/javascript">
+					var vtime = $("#vtime").val();
+					var date = $("#date").val();
+					var week  = date.substring(0,4)+"-"+vtime;
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operCountCompare.page?type=week&appId=${param.siteId}&time="+week);
+	    				chart.render("operCountCompare");
+					</script>
+				</td>
+				<td align="center">
+					<div id="operUserCompare"></div>
+					<script type="text/javascript">
+					var vtime = $("#vtime").val();
+					var date = $("#date").val();
+					var week  = date.substring(0,4)+"-"+vtime;
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operUserCompare.page?type=week&appId=${param.siteId}&time="+week);
+	    				chart.render("operUserCompare");
+					</script>
+				<td>
+			</tr>
+		</table>
 		<div id="custombackContainer"></div>
 	</div>
 </body>

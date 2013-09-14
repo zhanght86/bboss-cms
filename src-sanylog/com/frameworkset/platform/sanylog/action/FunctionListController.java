@@ -30,6 +30,12 @@ public class FunctionListController {
 	private String templateDir;
 	private String functionListDir;
 	private SanyLogUtil util;
+	//页面清单管理
+		public String pageListIndex(){
+			return "path:pageListIndex";
+		}
+	
+	//功能清单管理
 public String index(){
 	return "path:functionQuery";
 }
@@ -132,10 +138,41 @@ public String showFunctionList(
 				for(App bean:datas){
 					String appName = bean.getAppName();
 					String appId = bean.getAppId();
-					List<SpentTime> sysSpentTime = functionListManager.staticSpentTimeByAppName(appName,appId);
+					List<FunctionList> sysSpentTime = functionListManager.staticSpentTimeByAppName(appName,appId);
 					if(null!=sysSpentTime&&sysSpentTime.size()>0){
-						functionListManager.deleteSysSpentTime(appId);
-						functionListManager.insertSysSpentTime(sysSpentTime);
+						//functionListManager.deleteSysSpentTime(appId);
+						//functionListManager.insertSysSpentTime(sysSpentTime);
+						for(FunctionList sysTime:sysSpentTime){
+							sysTime.setId(UUID.randomUUID().toString());
+						}
+						List<FunctionList> datasInDB = functionListManager.getFunctionList(appId);
+						if(datasInDB.size()>0){
+							List<FunctionList> datasForInsert = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面没有的
+							List<FunctionList> datasForUpdate = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面有，但是时间更新了的
+							for(FunctionList sysTime:sysSpentTime){
+								String status = "notequal";
+								for(FunctionList beanInDB:datasInDB){
+									String result = sysTime.equal(beanInDB);
+									if("notequal".equals(result)){
+										
+									}else if("timediff".equals(result)){
+										 datasForUpdate.add(beanInDB);
+										 status = "timediff";
+										 break;
+									}else if("equal".equals(result)){
+										status = "equal";
+										 break;
+									}
+								}
+								if("notequal".equals(status)){
+									datasForInsert.add(sysTime);
+								}
+							}
+							functionListManager.insertSysTime(datasForInsert);
+							functionListManager.updateSysTime(datasForUpdate);
+						}else{
+							functionListManager.insertSysTime(sysSpentTime);
+						}
 					}
 					
 				}
@@ -171,4 +208,6 @@ public String showFunctionList(
 			model.addAttribute("errMsg", StringUtil.exceptionToString(ex));
 			return StringUtil.exceptionToString(ex);
 		}}
+		
+		
 }

@@ -30,11 +30,21 @@ public class DeskTopMenuTree extends COMTree {
 	        super.setPageContext(context);        
 	        if(menuHelper == null )
 	        {
+	        	String customtype = request.getParameter("customtype");
 	        	
-	        	MenuHelper menuHelper = MenuHelper.getMenuHelper(request);
+	        	
+	        	menuHelper = MenuHelper.getMenuHelper(request);
 	        	DeskTopMenuShorcutManager m = WebApplicationContextUtils.getWebApplicationContext().getTBeanObject("deskTopMenuShorcutManager", DeskTopMenuShorcutManager.class);
 	    		DeskTopMenuBean bean = new DeskTopMenuBean();
-	    		bean.setUserid(accessControl.getUserID());
+	    		if(customtype != null && customtype.equals("default"))
+	        	{
+	    			bean.setUserid("-1");
+	        	}
+	    		else
+	    		{
+	    			bean.setUserid(accessControl.getUserID());
+	    		}
+	    		
 	    		bean.setSubsystem(accessControl.getCurrentSystemID());
 	    		try
 				{

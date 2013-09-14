@@ -41,6 +41,7 @@ import com.frameworkset.platform.sanylog.bean.App;
 import com.frameworkset.platform.sanylog.bean.BrowserCounter;
 import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.Module;
+import com.frameworkset.platform.sanylog.bean.OperChart;
 import com.frameworkset.platform.sanylog.bean.OperRank;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
@@ -223,7 +224,6 @@ public class CounterController {
 	
 	
 	public String checkBrowserDetail(String browserId,ModelMap model) throws SQLException{
-		log.info("operateId-----"+browserId);
 		
 		List<BrowserCounter> browserCounterDetail = counterManager.getBrowserCounterDetail(browserId);
         model.addAttribute("browserCounterDetail",browserCounterDetail);
@@ -235,7 +235,6 @@ public class CounterController {
 	
 	
 	public String checkOperateDetail(String operateId,ModelMap model) throws SQLException{
-		log.info("operateId-----"+operateId);
 		
 		List<OperateCounter> operateCounterDetail = counterManager.getOperateCounterDetail(operateId);
         model.addAttribute("operateCounterDetail",operateCounterDetail);
@@ -276,7 +275,7 @@ public class CounterController {
 		Module module = configManager.checkAppModule(paramCounter.getAppName(), paramCounter.getModuleName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
 		paramCounter.setAppId(Integer.parseInt(module.getAppId()));
 		paramCounter.setModuleId(Integer.parseInt(module.getModuleId()));
-		paramCounter.setOperateIp(request.getRemoteAddr());
+		paramCounter.setOperateIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		
 		paramCounter.setPageURL(paramCounter.getPageURL());
 //设置浏览器类型
@@ -328,13 +327,11 @@ public class CounterController {
 			Timestamp startTime, Timestamp endTime, ModelMap model) throws Exception {
 
 		ListInfo operateCounterDataList = counterManager.getOperateCounterList(counter, startTime, endTime,(int) offset, pagesize);
-        System.out.println("--------------showOperateCounterList---------------");
 		model.addAttribute("operateCounterDataList", operateCounterDataList);
        
         
         
         if(operateCounterDataList.getSize()>0){
-        	 log.info("--------------result is not null!---------------");
         }
 		return "path:showoperateCounterList";
 	}
@@ -352,27 +349,25 @@ public class CounterController {
 	@SuppressWarnings("unchecked")
 	public @ResponseBody(datatype = "json")
 	List<App> getAllApp(HttpServletRequest request,HttpServletResponse response)throws SQLException{
-		System.out.println("------------程序执行到此处--------------");
 		com.frameworkset.platform.security.AccessControl control = com.frameworkset.platform.security.AccessControl.getInstance();
 		control.checkAccess(request, response,false);
 		String userId = control.getUserID();
-		 if("1".equals(userId)){
+		 /*if("1".equals(userId)){
 			 return counterManager.getAdminApp(userId);
 		 }else{
 			 return counterManager.getApp(userId);
-		 }
+		 }*/
+		return counterManager.getAdminApp("1");
 	}
 	public String index() {
 		return "path:index";
 	}
 	//访问统计的菜单跳转
 	public String attachIndex() {
-		System.out.println("-------------------path:attachindex--------------------");
 		return "path:attachindex";
 	}
 	//操作统计的菜单跳转
 	public String operateIndex() {
-		System.out.println("--------------------path:operateindex-------------------");
 		return "path:operateindex";
 	}
 	/**
@@ -396,7 +391,7 @@ public class CounterController {
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
 
-		paramCounter.setHitIP(request.getRemoteAddr());
+		paramCounter.setHitIP(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setHitUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setReferer(request.getHeader("Referer"));
 
@@ -426,7 +421,6 @@ public class CounterController {
 	 */
 	public @ResponseBody(datatype = "jsonp")
 	long browserCounter(BrowserCounter paramCounter, boolean enable, HttpServletRequest request) throws Exception {
-       log.info("------------------here-------------------");
 		paramCounter.setBrowserId(UUID.randomUUID().toString());
 
 		String siteName = paramCounter.getSiteName();
@@ -443,7 +437,7 @@ public class CounterController {
 		Module module = configManager.checkAppModule(paramCounter.getSiteName(), paramCounter.getChannelName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
 		paramCounter.setSiteId(Integer.parseInt(module.getAppId()));
 		paramCounter.setChannelId(Integer.parseInt(module.getModuleId()));
-		paramCounter.setBrowserIp(request.getRemoteAddr());
+		paramCounter.setBrowserIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setBrowserUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setPageURL(paramCounter.getPageURL());
 //设置浏览器类型
@@ -556,7 +550,6 @@ public class CounterController {
 		}
 
 		xml.append("<styles><definition><style name='LineShadow' type='shadow' color='333333' distance='6'/></definition><application><apply toObject='DATAPLOT' styles='LineShadow' /></application></styles></chart> ");
-		System.out.println("xml----------------------"+xml.toString());
 		return xml.toString();
 	}
 
@@ -653,7 +646,6 @@ public class CounterController {
 
 			xml.append("<styles><definition><style name='LineShadow' type='shadow' color='333333' distance='6'/></definition><application><apply toObject='DATAPLOT' styles='LineShadow' /></application></styles></chart> ");
 		}
-		System.out.println("xml---------浏览计数统计按天-------------"+xml.toString());
 		return xml.toString();
 	}
 
@@ -699,7 +691,7 @@ public class CounterController {
 		}
 
 		xml.append(" </chart>");
-		System.out.println("xml----------------------"+xml.toString());
+		//System.out.println("xml----------------------"+xml.toString());
 		return xml.toString();
 	}
 
@@ -769,7 +761,7 @@ public class CounterController {
 		}
 
 		xml.append(" </chart>");
-         System.out.println("xml--------------------------------"+xml.toString());
+        // System.out.println("xml--------------------------------"+xml.toString());
 		return xml.toString();
 	}
 
@@ -1029,5 +1021,195 @@ public class CounterController {
 			tm.release();
 		}
 	}
-	
+//操作统计新报表---历史数据比较
+	@SuppressWarnings("rawtypes")
+	public @ResponseBody
+	String historyCompare(String tableName,String appId,String compareType,String startTime,String endTime){
+		try{
+			List<OperRank> datas = new ArrayList<OperRank> ();
+			
+			datas = counterManager.getOperRankForCompareByDay(appId,startTime,endTime,tableName);
+			List<String> timeNodes = counterManager.getTimeNodes(startTime,endTime,tableName);
+			List<String> moduleNodes = counterManager.getModuleNodes(appId,startTime,endTime,tableName);
+			String caption = "";
+			if("count".equals(compareType)){
+				caption = "使用次数历史对比";
+			 }else{
+				 caption = "使用人数历史对比";
+			 }
+			String dataXML = "<chart caption='"+caption+"' subcaption='' " +
+					"lineThickness='1' showValues='0' formatNumberScale='0' anchorRadius='2'   " +
+					"divLineAlpha='20' divLineColor='CC3300' divLineIsDashed='1' showAlternateHGridColor='1' " +
+					"alternateHGridColor='CC3300' shadowAlpha='40' labelStep='2' " +
+							"numvdivlines='5' chartRightMargin='35' bgColor='FFFFFF,CC3300' bgAngle='270' bgAlpha='10,10' " +
+									"alternateHGridAlpha='5'  legendPosition ='RIGHT '>";
+			/**横轴，时间点
+			*/
+			String categories = "<categories>";
+			for(String timeNode:timeNodes){//拼接时间
+				categories += "<category label='" + timeNode + "' />";
+			}
+			categories += "</categories>";
+			dataXML = dataXML + categories;
+			for(String moduleNode:moduleNodes){//拼接数据
+				 String dataset = "<dataset seriesName='"+moduleNode+"'>";
+				 for(String timeNode:timeNodes){
+					 boolean dupli = false;
+					 for(OperRank bean:datas){
+						 if(moduleNode.equals(bean.getModuleName())&&timeNode.equals(bean.getVtime())){//找到名称和时间相对的
+							 if("count".equals(compareType)){
+								 dataset += "<set value='" + bean.getVcount() + "' />";
+							 }else{
+								 dataset += "<set value='" + bean.getVcount() + "' />";
+							 }
+							 datas.remove(bean);
+							  dupli = true; 
+							  break;
+						 }
+					 }
+					 if(!dupli){
+						 dataset += "<set value='0' />";
+					 }
+					}
+				 dataset += "</dataset>";
+				 dataXML = dataXML + dataset;
+			}	
+			dataXML += "</chart>";
+			return dataXML;
+		}catch(SQLException e){
+			return e.getSQLState();
+		}
+		
+		
+		
+		
+		
+	}
+	@SuppressWarnings("rawtypes")
+	public @ResponseBody
+	String operCountCompare(String type,String appId,  String time) throws Exception {
+		if("".equals(appId)||null == appId){
+			return null;
+		}
+		String tableName = "";
+		float divisor=1;
+		if("day".equals(type)){
+			if("".equals(time)||null == time){
+				Calendar today = Calendar.getInstance();
+				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+			}
+			
+			 tableName = "TD_LOG_OPERSTATIC_BYDAY";
+			 divisor = 30;
+			
+         }else if("week".equals(type)){
+
+ 			if("".equals(time)||null == time){
+ 				Calendar today = Calendar.getInstance();
+ 				String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+ 				String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
+ 				time = todayTime.substring(0, 4)+"-"+week;
+ 			}
+ 			
+ 			 tableName = "TD_LOG_OPERSTATIC_BYWEEK";
+ 			 divisor = 4;
+ 		
+			
+		}else if("month".equals(type)){
+			if("".equals(time)||null == time){
+				Calendar today = Calendar.getInstance();
+				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN).substring(0,7);
+			}
+			
+			 tableName = "TD_LOG_OPERSTATIC_BYMONTH";
+			 divisor = 1;
+		}else if("year".equals(type)){
+			if("".equals(time)||null == time){
+ 				Calendar today = Calendar.getInstance();
+ 				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN).substring(0,4);
+ 			}
+			 tableName = "TD_LOG_OPERSTATIC_BYYEAR";
+			 divisor = (float)0.083;
+		}
+		List<OperChart> datas = counterManager.getOperChartCount(appId,time,tableName,divisor);
+		String dataXML = "<chart xAxisName = '功能名称' yAxisName='使用次数' showValues='0'>";
+             dataXML += "<dataset label='' value='' />";
+            String categories = "<categories>";
+            String datasetSim = "<dataset seriesName='实际使用次数'>";
+            String datasetCom = "<dataset seriesName='预计使用次数'>";
+            if(datas.size()>0){
+            	for (OperChart bean:datas) {
+                    categories += "<category label=' " + bean.getModuleName() + " ' />";
+                    datasetSim += "<set value='" + bean.getVcount() + "' />";
+                    datasetCom += "<set value='" + bean.getEstimateOper() + "' />";
+                }
+            }
+             categories += "</categories>";
+             datasetSim += "</dataset>";
+             datasetCom += "</dataset>";
+             dataXML += categories + datasetSim + datasetCom;
+             dataXML += "</chart>";
+             return dataXML;
+		
+		}
+	@SuppressWarnings("rawtypes")
+	public @ResponseBody
+	String operUserCompare(String type,String appId,  String time) throws Exception {
+		if("".equals(appId)||null == appId){
+			return null;
+		}
+		String tableName = "";
+		float divisor =1;	
+		if("day".equals(type)){
+			if("".equals(time)||null == time){
+				Calendar today = Calendar.getInstance();
+				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+			}
+			 tableName = "TD_LOG_OPERSTATIC_BYDAY";
+			 divisor = 30;
+			
+         }else if("week".equals(type)){
+        	 if("".equals(time)||null == time){
+        		 Calendar today = Calendar.getInstance();
+				String todayTime = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN);
+				String week = String.valueOf(today.get(Calendar.WEEK_OF_YEAR));
+				time = todayTime.substring(0, 4)+"-"+week;
+				}
+        	 tableName = "TD_LOG_OPERSTATIC_BYWEEK";
+        	 divisor = 4;
+		}else if("month".equals(type)){
+			if("".equals(time)||null == time){
+ 				Calendar today = Calendar.getInstance();
+ 				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN).substring(0,7);
+ 			}
+			divisor = (float)0.083;
+			 tableName = "TD_LOG_OPERSTATIC_BYMONTH";
+		}else if("year".equals(type)){
+			if("".equals(time)||null == time){
+ 				Calendar today = Calendar.getInstance();
+ 				time = DateUtils.format(today.getTime(), DateUtils.ISO8601_DATE_PATTERN).substring(0,4);
+ 			}
+			 tableName = "TD_LOG_OPERSTATIC_BYYEAR";
+		}
+		List<OperChart> datas = counterManager.getOperChartUser(appId,time,tableName,divisor);
+		String dataXML = "<chart xAxisName = '功能名称' yAxisName='使用人数' showValues='0'>";
+             dataXML += "<dataset label='' value='' />";
+            String categories = "<categories>";
+            String datasetSim = "<dataset seriesName='实际使用人数'>";
+            String datasetCom = "<dataset seriesName='预计使用人数'>";
+            if(datas.size()>0){
+            	for (OperChart bean:datas) {
+                    categories += "<category label=' " + bean.getModuleName() + " ' />";
+                    datasetSim += "<set value='" + bean.getVcountUser() + "' />";
+                    datasetCom += "<set value='" + bean.getEstimateUser() + "' />";
+                }
+            }
+             categories += "</categories>";
+             datasetSim += "</dataset>";
+             datasetCom += "</dataset>";
+             dataXML += categories + datasetSim + datasetCom;
+             dataXML += "</chart>";
+             return dataXML;
+		
+		}
 }

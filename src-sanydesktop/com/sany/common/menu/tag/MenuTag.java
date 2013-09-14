@@ -166,6 +166,8 @@ public class MenuTag extends BaseTag {
 	public static final String personcenter = "个人中心";
 	
 	
+	
+	
 	private int level = 3;
 	private String web = "false";
 	
@@ -350,7 +352,7 @@ public class MenuTag extends BaseTag {
 				String target = "mainFrame";	
 				datas.append("<li><a href=\"#\" id=\"anchor_")
 				 .append("isany_personcenter")
-				 .append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+				 .append("\" ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 				.append("','")
 				 .append("isany_personcenter")
 				 .append("','")
@@ -399,8 +401,9 @@ public class MenuTag extends BaseTag {
 		}
 		  
 		datas.append(rooter);
+		
 		try {
-			//System.out.println(datas.toString());
+//			System.out.println(datas.toString());
 			this.out.write(datas.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

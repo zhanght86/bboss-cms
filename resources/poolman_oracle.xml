@@ -23,9 +23,9 @@
     <minimumSize>2</minimumSize>
     <maximumSize>10</maximumSize>
     <maximumSoft>false</maximumSoft>
-    <removeAbandoned>true</removeAbandoned>
+    <removeAbandoned>false</removeAbandoned>
     <userTimeout>50</userTimeout>
-    <logAbandoned>true</logAbandoned>
+    <logAbandoned>false</logAbandoned>
     <readOnly>true</readOnly>
 	<skimmerFrequency>120000</skimmerFrequency>
 	<connectionTimeout>240000</connectionTimeout>

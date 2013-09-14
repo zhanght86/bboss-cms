@@ -11,6 +11,7 @@
 	
 <%@ page import="java.util.*"%>
 <%
+
 	String u = "", p = "", ck = "";
 
 	String successRedirect = request.getParameter("successRedirect");
@@ -134,9 +135,24 @@
 			String user = control.getUserAccount();
 			DESCipher des = new DESCipher();
 			userName = des.decrypt(userName);
-			if (user == null || "".equals(user) || !userName.equals(user)) {
+			String worknumber = control.getUserAttribute("userWorknumber");
+			boolean issameuser = false;
+			 if(loginType.equals("2") )
+			 {
+				 if(worknumber != null && !worknumber.equals(""))
+				 	issameuser = userName.equals(worknumber);
+			 }
+			 else
+			 {
+				 if(user != null && !user.equals(""))
+				 	issameuser = userName.equals(user);
+			 }
+				 
+				 
+				 
+			if (user == null || "".equals(user) || !issameuser) {
 			 
-             	if(!userName.equals(user))
+             	if(!issameuser)
              	{
              		control.resetSession(session);
              	}
@@ -212,7 +228,7 @@
 		
      }
      catch(Throwable ex)
-     {
+     {    	 
                String errorMessage = ex.getMessage();               
                if(errorMessage == null)
             	   errorMessage = "";

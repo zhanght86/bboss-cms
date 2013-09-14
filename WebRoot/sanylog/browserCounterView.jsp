@@ -82,19 +82,19 @@
 				<iframe id="frame1" src="showBrowserCounterDistribute.page?type=today&siteId=${param.siteId}"  frameborder="0" width="100%" height="900"></iframe>
 			</ul>
 			<ul id="tab2" style="display: none;">
-				<iframe id="frame2" src=""  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="frame2" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab3" style="display: none;">
-				<iframe id="frame3" src=""  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="frame3" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab4" style="display: none;">
-				<iframe id="frame4" src=""  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="frame4" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab5" style="display: none;">
-				<iframe id="frame5" src=""  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="frame5" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab6" style="display: none;">
-				<iframe id="frame6" src=""  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="frame6" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 		</div>
 </body>

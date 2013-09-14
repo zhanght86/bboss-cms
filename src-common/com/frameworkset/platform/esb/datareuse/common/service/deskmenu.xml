@@ -32,7 +32,22 @@
 		]]>
 	</property>
 	
-	
+	<property name="getUserDeskMenusByParam">
+		<![CDATA[
+					SELECT DESKMENU.*, menucustom.width, menucustom.height
+					  FROM TD_SM_DESKMENU DESKMENU
+					  left join td_sm_menucustom menucustom on 
+					                                       DESKMENU.userid =
+					                                           menucustom.userid
+					                                       and DESKMENU.subsystem =
+					                                           menucustom.subsystem
+					                                       and DESKMENU.menupath =
+					                                           menucustom.menupath
+					 where DESKMENU.userid = ? and DESKMENU.subsystem = ?
+		                                       
+		                                       order by DESKMENU.item_order
+		]]>
+	</property>
 	<property name="getUserDeskMapMenus">
 		<![CDATA[
 			SELECT * FROM TD_SM_DESKMENU WHERE userid=#[userid] and subsystem=#[subsystem]

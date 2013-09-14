@@ -34,7 +34,7 @@
 					<fieldset>
 						<legend><pg:message code="sany.pdp.menumanager.menu.info.basic"/></legend>
 						<table>
-						<c:if test="${menuType eq 'item' or menuType eq 'module' or menuType eq 'subSystem'}">
+						<pg:in actual="${menuType}" scope="item,module,subSystem">
 							<tr>
 								<td width="100" height="28" class="detailtitle" wiidth="50%">
 									id:
@@ -43,7 +43,7 @@
 									${menu.id}
 								</td>
 							</tr>
-							<c:if test="${menuType eq 'item' or menuType eq 'module'}">
+							<pg:in actual="${menuType}" scope="item,module">
 								<tr>
 								<td width="100" height="28" class="detailtitle" wiidth="50%">
 									used:
@@ -52,7 +52,7 @@
 									${menu.used}
 								</td>
 							</tr>
-							</c:if>
+							</pg:in>
 							<tr>
 								<td class="detailtitle" height="28">
 									name:
@@ -181,7 +181,7 @@
 									${menu.showleftmenu}
 								</td>
 							</tr>
-						</c:if>
+						</pg:in>
 						<c:if test="${menuType eq 'framework'}">
 							<tr>
 								<td width="124" height="28" class="detailtitle">
@@ -254,7 +254,7 @@
 						</c:if>
 						</table>
 					</fieldset>
-					<c:if test="${menuType eq 'framework' or menuType eq 'subSystem'}">
+					<pg:in actual="${menuType}" scope="framework,subSystem">
 						<fieldset>
 							<legend><pg:message code="sany.pdp.menumanager.menu.portal"/></legend>
 							<table>
@@ -351,17 +351,27 @@
 										${publicItem.workspaceContent}
 									</td>
 								</tr>
-								<c:forEach var="attribute" items="${publicItem.workspacecontentExtendAttribute}">
+								<pg:map actual="${publicItem.workspacecontentExtendAttribute}">
 									<tr>
 										<td width="124" height="28" class="detailtitle">
-											${attribute.key}
+											<pg:mapkey />
 										</td>
 										<td class="detailcontent">
-											${attribute.value}
+											
+											<pg:cell/>
 										</td>
 									</tr>
-								</c:forEach>
+								</pg:map>
+								<tr>
+								<td width="124" height="28" class="detailtitle" >
+								额外的开放权限的url:</td>
+								<td class="detailcontent"><pg:list actual="${publicItem.authorResources}">
+									<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
+								</pg:list>
+								</td>
+								</tr>
 							</table>
+							
 						</fieldset>
 						
 						<fieldset>
@@ -434,7 +444,7 @@
 							</fieldset>
 						</c:forEach>
 						</fieldset>
-					</c:if>
+					</pg:in>
 					<pg:equal actual="${menuType}" value="item">
 						<fieldset>
 						<legend><pg:message code="sany.pdp.menumanager.menu.file"/></legend>
@@ -493,7 +503,16 @@
 					<c:if test="${menuType eq 'item' or menuType eq 'module'}">
 						<fieldset>
 							<legend><pg:message code="sany.pdp.menumanager.menu.image"/></legend>
+							
 							<table>
+							<tr>
+								<td width="124" height="28" class="detailtitle" >
+								额外的权限检测的url:</td>
+								<td class="detailcontent"><pg:list actual="${menu.authorResources}">
+									<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
+								</pg:list>
+								</td>
+							</tr>
 								<tr>
 									<td class="detailtitle" height="28" wiidth="40%">
 										mouseupimg:

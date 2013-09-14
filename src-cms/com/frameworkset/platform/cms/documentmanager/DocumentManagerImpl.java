@@ -1264,26 +1264,28 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * @author: 陶格
 	 */
 	public Document getPartDocInfoById(String docid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		Document document = null;
 		DocumentExtColumnManager extManager = new DocumentExtColumnManager();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select document_id,title,SUBTITLE,t.status as status,AUTHOR, indexpagepath,")
-				.append("CREATETIME, DOCTYPE, case when DOCTYPE=1 ")
-				.append("then t.content else null end linkfile,channel_id,LINKTARGET,t.DOCSOURCE_ID, ")
-				.append("DOCWTIME,CREATEUSER,t.DETAILTEMPLATE_ID,DOCABSTRACT,TITLECOLOR,")
+				.append("t.CREATETIME, DOCTYPE, case when DOCTYPE=1 ")
+				.append("then t.content else null end linkfile,t.channel_id,LINKTARGET,t.DOCSOURCE_ID, ")
+				.append("DOCWTIME,t.CREATEUSER,t.DETAILTEMPLATE_ID,DOCABSTRACT,TITLECOLOR,")
 				.append("KEYWORDS,doc_level,PARENT_DETAIL_TPL,PIC_PATH,mediapath,publishfilename,secondtitle, ")
 				.append("isnew,newpic_path,ordertime,")
 				.append("ds.SRCNAME as SRCNAME, tmpl.NAME as NAME,t_channel.site_id as site_id,t_channel.display_name as channelname ")
 				.append("from TD_CMS_DOCUMENT t inner join TD_CMS_DOCSOURCE ds on ds.DOCSOURCE_ID=t.DOCSOURCE_ID ")
 				.append("left join TD_CMS_TEMPLATE tmpl on tmpl.TEMPLATE_ID=t.DETAILTEMPLATE_ID ")
 				.append("left join td_cms_channel t_channel on t.channel_id = t_channel.channel_id ")
-				.append(" where document_id =").append(docid);
+				.append(" where document_id =?");
+//				.append(docid);
 
 		// log.warn(sql.toString());
 		try {
-			db.executeSelect(sql.toString());
-
+			db.preparedSelect(sql.toString());
+			db.setInt(1,Integer.parseInt(docid));
+			db.executePrepared();
 			if (db.size() > 0) {
 				document = new Document();
 				document.setDocument_id(db.getInt(0, "document_id"));

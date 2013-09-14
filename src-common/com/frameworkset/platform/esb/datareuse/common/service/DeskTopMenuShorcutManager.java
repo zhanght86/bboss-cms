@@ -73,6 +73,13 @@ public class DeskTopMenuShorcutManager {
 		return executor.queryListBeanWithDBName(DeskTopMenuBean.class, dbname,
 				sql, bean);
 	}
+	
+	public List<DeskTopMenuBean> getUserDeskMenus(String userid,String systemid)
+			throws Exception {
+		String sql = "getUserDeskMenusByParam";
+		return executor.queryListWithDBName(DeskTopMenuBean.class, dbname,
+				sql, userid,systemid);
+	}
 
 	public Map<String, String> getUserDeskMapMenus(DeskTopMenuBean bean)
 			throws Exception {

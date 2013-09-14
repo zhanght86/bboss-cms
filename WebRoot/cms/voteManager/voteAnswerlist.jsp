@@ -84,13 +84,15 @@
   String deptName = accesscontroler.getChargeOrgName();
   String login_user_name = accesscontroler.getUserAccount();
   int length = 0;
-  length = accesscontroler.getAllRoleofUser(login_user_name).length;
+  String siteNameRole = cmsM.getCurrentSite().getName()+"站点管理员";
+  com.frameworkset.platform.security.authorization.AuthRole[] roles = accesscontroler.getAllRoleofUser(login_user_name);
   String str = "";
+  
   boolean flag = false;
-  for(int i=1;i<length;i++)
+  for(int i=1;roles != null && i<roles.length;i++)
   {
-    str = accesscontroler.getAllRoleofUser(login_user_name)[i].getRoleName();
-    if(str.equals("administrator")||str.equals("网上调查管理员"))
+    str = roles[i].getRoleName();
+    if(str.equals("administrator")||str.equals(siteNameRole)||str.equals("网上调查管理员"))
     {
       flag = true;
       break;
@@ -254,7 +256,7 @@
 								</td>
 								<td class="tablecells" nowrap="true" >
 								<%
-					               if((request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager1","adviceaudit","answerManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager_1","adviceaudit","wscpAnswerManager")))
+					               if(flag || (request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager1","adviceaudit","answerManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager_1","adviceaudit","wscpAnswerManager")))
 					               //if(accesscontroler.checkPermission("dchmanager1","adviceaudit","answerManager"))
 					               {
 		                       %>

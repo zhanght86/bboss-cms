@@ -20,7 +20,7 @@
 	<head>
 		<title>属性容器</title>
 		<script language="JavaScript" src="changeView.js" type="text/javascript"></script>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" scroll="auto">
 	<%if(isAdminOrOrgManager){ %>
 		<div id="contentborder">
 

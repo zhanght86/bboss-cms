@@ -1,36 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <properties>
+	<!--
+	//connectProperties.setProperty(DestinationDataProvider.JCO_CLIENT, "318");//集团号，生产机318，测试机150
 
-  <property name="sapconf" class="com.sany.sap.connection.SAPConf"
+//  connectProperties.setProperty(DestinationDataProvider.JCO_USER," ");//用户名
+//  connectProperties.setProperty(DestinationDataProvider.JCO_PASSWD,"");//密码
+//  connectProperties.setProperty(DestinationDataProvider.JCO_LANG, "en");//语言
+//  connectProperties.setProperty(DestinationDataProvider.JCO_MSHOST,"sapci.sany.com.cn");//消息服务器，生产机sapci.sany.com.cn
+//  connectProperties.setProperty(DestinationDataProvider.JCO_GROUP, "RFC");//登录组名称，测试机和生产机均为RFC
+//  connectProperties.setProperty(DestinationDataProvider.JCO_MSSERV,"3600");//消息服务器端口号，生产机：3600，测试机3601
+	-->
+  <property name="sapconf" class="com.sany.sap.connection.DomainSAPConf"
 			  	f:client="150"
 			  	f:user="esb_rfc"
 			  	f:passward="ESB@1qaz"
-			  	f:host="10.0.13.11"
+			  	f:host="sapci.sany.com.cn"
 			  	f:sysnr="01"
+			  	f:jco_group="RFC"
+			  	f:jco_msserv="3601"
 			  	f:lang="ZH"
 			  	f:jco_pool_capacity="5"
 			  	f:jco_peak_limit="15"
   />  
   
   <property name="sapconffactory" class="com.sany.sap.connection.SapConnectFactory"
-			  	f:sapconf="attr:sapconf"
+			  	f:domainSAPConf="attr:sapconf"
 			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED"/>
 			  	
 			  	
-  <!--<property name="sapconf1" class="com.sany.sap.connection.SAPConf"
+  <!--  <property name="sapconf1" class="com.sany.sap.connection.DomainSAPConf"
 			  	f:client="150"
 			  	f:user="esb_rfc"
 			  	f:passward="ESB@1qaz"
-			  	f:host="10.0.13.12"
-			  	f:sysnr="01"
-			  	f:lang="ZH"
+			  	f:host="sapbi.sany.com.cn"
+			  	f:jco_group="RFC"
+			  	f:jco_msserv="3600"
+			  	f:lang="EN"
 			  	f:jco_pool_capacity="5"
 			  	f:jco_peak_limit="15"
-  />  
+  /> 
   
   <property name="sapconffactory1" class="com.sany.sap.connection.SapConnectFactory"
-			  	f:sapconf="attr:sapconf1"
+			  	f:domainSAPConf="attr:sapconf1"
 			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED1"/>			  	
 		-->	  	
 

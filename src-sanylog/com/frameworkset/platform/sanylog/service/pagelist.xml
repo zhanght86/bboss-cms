@@ -1,0 +1,1058 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+<!-- 页面清单管理  start -->
+
+<property name="savePages">
+		<![CDATA[
+		 update TD_LOG_APP_PAGES set pages = #[pages] where app_name = #[appName]
+		 
+		]]>
+	</property>
+
+<property name="insertMaintainPage">
+		<![CDATA[
+		 insert into TD_LOG_APP_PAGES 
+		 select APP_ID ,APP_NAME ,'' pages from TD_LOG_APP_MANAGER where app_id not in (
+		 select app_id from TD_LOG_APP_PAGES
+		 )
+		]]>
+	</property>
+<property name="getMaintainPage">
+		<![CDATA[
+  select APP_ID appId,APP_NAME appName,PAGES pages from  TD_LOG_APP_PAGES 
+		]]>
+	</property>
+
+<property name="getPages">
+		<![CDATA[
+		  select t1.pages pagesActual , t2.pages,t1.sitename appName
+		  from  
+		  (
+		  select count(channel_id) pages ,sitename from (
+		select CHANNEL_ID,sitename from TD_LOG_BROWSER_COUNTS
+		where to_char(BROWSERTIME ,'yyyy-mm-dd')>=#[startTime]
+		and to_char(BROWSERTIME ,'yyyy-mm-dd')<=#[endTime]
+		 group by channel_id,sitename
+		)
+		group by sitename 
+		  ) t1 left join
+		  (
+		  select app_name,pages from TD_LOG_APP_PAGES 
+		  ) t2 on t1.sitename = t2.app_name
+		]]>
+	</property>
+<property name="showPageCounterList">
+		<![CDATA[
+		   select sum(nodes) scope,sitename appName from 
+		(
+		
+		select  count(countid) nodes, countuser users ,SITENAME from (
+		
+		select CHANNEL_ID countid,count(BROWSER_USER) countuser ,SITENAME from (
+		
+		select CHANNEL_ID ,BROWSER_USER ,SITENAME  from TD_LOG_BROWSER_COUNTS 
+		where site_id in (
+		select site_id from td_log_app_manager
+		)  
+		and to_char(BROWSERTIME ,'yyyy-mm-dd')>=#[startTime]
+		and to_char(BROWSERTIME ,'yyyy-mm-dd')<=#[endTime]
+		group by CHANNEL_ID ,BROWSER_USER ,SITENAME
+		)
+		group by CHANNEL_ID,SITENAME
+		
+		order by count(BROWSER_USER) asc
+		)
+		
+		group by countuser ,SITENAME
+		
+		order by SITENAME ,countuser  asc
+		)
+		where users >= #[start]
+		and users <= #[end]
+		
+		group by sitename
+		
+		order by sitename
+		]]>
+	</property>
+
+<property name="updateBatchPageList">
+		<![CDATA[
+   update TD_LOG_PAGE_SPENTTIME set function_code = #[functionCode],
+   module_code = #[moduleCode]
+    where app_id = #[appId]
+    and function_name = #[functionName]
+		]]>
+	</property>
+
+<property name="getAppNameById">
+		<![CDATA[
+    select app_name from TD_LOG_APP_MANAGER  where app_id = ?
+		]]>
+	</property>
+
+<property name="getExcelDataByAppId">
+		<![CDATA[
+select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,
+		t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent,t1.MODULE_CODE moduleCode
+		from TD_LOG_PAGE_SPENTTIME t1
+		where t1.APP_ID = ?	
+		and(
+		t1.FUNCTION_CODE is null or t1.MODULE_CODE is null
+		)	
+		]]>
+	</property>
+
+<property name="updatePageList">
+		<![CDATA[
+		update TD_LOG_PAGE_SPENTTIME set function_code = #[functionCode] where id = #[id]
+		
+		]]>
+	</property>
+<property name="getPageList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,
+		t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent,t1.MODULE_CODE moduleCode
+		from TD_LOG_PAGE_SPENTTIME t1
+		
+		]]>
+	</property>
+<property name="getSinglePageList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,
+		t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent,t1.MODULE_CODE moduleCode
+		from TD_LOG_PAGE_SPENTTIME t1
+		where t1.id = ?
+		]]>
+	</property>
+<property name="insertPageList">
+		<![CDATA[
+		insert into TD_LOG_PAGE_SPENTTIME (ID,APP_ID,APP_NAME,FUNCTION_CODE,FUNCTION_NAME,TIME_SPENT) values 
+		(#[id],#[appId],#[appName],#[functionCode],#[functionName],#[timeSpent])
+		]]>
+	</property> 
+<property name="getSpentTime">
+		<![CDATA[
+		SELECT ROUND(IFNULL(t1.TIMESPENT,0)/3600,1) spent
+		FROM jiraissue t1,customfieldvalue t2
+		WHERE t1.ID = t2.ISSUE
+		AND t2.CUSTOMFIELD = '10465'
+		AND t1.pkey LIKE concat('%',concat(#[appName],'%'))
+		AND t2.STRINGVALUE LIKE #[functionCode]
+		UNION
+		SELECT ROUND(IFNULL(ji2.TIMESPENT,0)/3600,1)  spent 
+		FROM issuelink il join jiraissue ji on ji.ID = il.source
+			join jiraissue ji2 on ji2.ID = il.destination
+		WHERE ji.ID IN (
+		SELECT t3.ID
+		
+		from jiraissue t3,customfieldvalue t4
+		
+		WHERE t3.ID = t4.ISSUE
+		
+		AND t4.CUSTOMFIELD = '10465'
+		
+		AND t3.pkey LIKE concat('%',concat(#[appName],'%'))
+		AND t4.STRINGVALUE LIKE #[functionCode]
+		)
+		]]>
+	</property>  
+<property name="staticAllPageList">
+		<![CDATA[
+		select SITE_ID appId, SITENAME appName, CHANNELNAME functionName, MODULE_CODE functionCode
+		from TD_LOG_BROWSER_COUNTS
+		group by SITE_ID , SITENAME , CHANNELNAME , MODULE_CODE
+		]]>
+	</property>  
+<property name="deleteAllPageList">
+		<![CDATA[
+		delete from TD_LOG_PAGE_SPENTTIME
+		]]>
+	</property>  
+<property name="insertApp">
+		<![CDATA[
+		
+		insert into td_log_app_manager(auto_id,app_id,app_name)values (#[autoId],#[appId],#[appName])
+		]]>
+	</property>  
+
+<property name="batchInsertFunctionList">
+		<![CDATA[
+		
+		insert into TD_LOG_FUNCTIONLIST (ID,APP_ID,APP_NAME,FUNCTION_CODE,ESTIMATE_OPER,ESTIMATE_USER,FUNCTION_NAME)
+		values(#[id],#[appId],#[appName],#[functionCode],#[estimateOper],#[estimateUser],#[functionName])
+		]]>
+	</property>  
+  <property name="getFunctionListInDB">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
+		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName
+		from TD_LOG_FUNCTIONLIST t1
+		]]>
+	</property>              
+   
+<property name="insertSysSpentTime">
+		<![CDATA[
+		insert into td_log_spent (APP_ID,APP_NAME,FUNCTION_CODE,SPENT_TIME)values (#[appId],#[appName],#[functionCode],#[timeSpent])
+		]]>
+	</property>
+<property name="deleteSysSpentTime">
+		<![CDATA[
+		delete from td_log_spent where app_id = ?
+		]]>
+	</property>
+<property name="staticSpentTimeByAppName">
+		<![CDATA[
+		SELECT '$appName' appName,'$appId' appId ,t3.STRINGVALUE functionCode,SUM(t3.spent) timeSpent FROM(
+
+        SELECT t1.ID,t1.pkey,t1.SUMMARY,t1.TIMEORIGINALESTIMATE,t1.TIMEESTIMATE,t1.TIMESPENT,t2.STRINGVALUE,ROUND(IFNULL(t1.TIMESPENT,0)/3600,1) spent
+
+        from jiraissue t1,customfieldvalue t2
+
+        WHERE t1.ID = t2.ISSUE
+
+        AND t2.CUSTOMFIELD = '10465'
+
+        AND t1.pkey LIKE concat('%',concat(#[appName],'%'))
+        )t3
+
+        GROUP BY t3.STRINGVALUE
+		]]>
+	</property>
+<property name="jiratest">
+		<![CDATA[
+		select pname from issuetype
+		]]>
+	</property>
+<property name="functionListSingleIncrement">
+		<![CDATA[
+		insert into TD_LOG_FUNCTIONLIST (ID,APP_ID,APP_NAME,FUNCTION_CODE,ESTIMATE_OPER,ESTIMATE_USER,FUNCTION_NAME) values 
+		(#[id],#[appId],#[appName],#[functionCode],#[estimateOper],#[estimateUser],#[functionName])
+		]]>
+	</property>
+<property name="getMaxAppId">
+		<![CDATA[
+		select max(app_id) from td_log_app_manager
+		]]>
+	</property>
+<property name="getAppId">
+		<![CDATA[
+		select app_id from td_log_app_manager where app_name = ?
+		]]>
+	</property>
+
+
+
+<property name="getAllApp">
+		<![CDATA[
+		select distinct(APP_ID) appId,app_name appName
+		from TD_LOG_PAGE_SPENTTIME
+			order by app_id
+		]]>
+	</property>
+<property name="showPageList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,
+		t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent,t1.MODULE_CODE moduleCode
+		from TD_LOG_PAGE_SPENTTIME t1
+		where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($functionCode && !$functionCode.equals(""))
+				and t1.FUNCTION_CODE like '%'||#[functionCode]||'%'
+			#end
+			#if ($functionName && !$functionName.equals(""))
+				and t1.FUNCTION_NAME like '%'||#[functionName]||'%'
+			#end
+			order by t1.app_id,t1.function_code
+		]]>
+	</property>
+<!-- 功能清单管理  end -->
+	<!-- added by qingl 2012-09-20 -->
+	
+	<property name="getExcelDatas">
+		<![CDATA[
+		select app_name appName,module_name moduleName,'('||vcount||','||vcountuser||'人)' vcount from $type
+		where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and vtime = #[time]
+			#end
+			union all
+			select t1.app_name appName,t2.module_name moduleName,'(0,0人)' vcount 
+			from td_log_app_manager t1 ,td_log_module_manager t2 where t1.app_id = t2.app_id
+			#if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			and t2.module_id not in (
+			select module_id from $type 
+			where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and vtime = #[time]
+			#end )
+			order by vcount desc
+		]]>
+	</property>
+	<property name="getAdminApp">
+		<![CDATA[
+			  select distinct(APP_ID) appId ,APP_NAME appName from td_log_app_manager
+		]]>
+	</property>
+	<property name="deleteOperCounterByWeek">
+		<![CDATA[
+			  delete from TD_LOG_OPERSTATIC_BYWEEK where vtime = #[Time]
+		]]>
+	</property>
+	<property name="deleteOperCounterByDay">
+		<![CDATA[
+			  delete from TD_LOG_OPERSTATIC_BYDAY where vtime = #[Time]
+		]]>
+	</property>
+	<property name="deleteOperCounterByMonth">
+		<![CDATA[
+			  delete from TD_LOG_OPERSTATIC_BYMONTH where vtime = #[Time]
+		]]>
+	</property>
+	<property name="deleteOperCounterByYear">
+		<![CDATA[
+			  delete from TD_LOG_OPERSTATIC_BYYEAR where vtime = #[Time]
+		]]>
+	</property>
+	<property name="getAllAppId">
+		<![CDATA[
+			 select distinct(app_id) from TD_LOG_APP_MANAGER
+		]]>
+	</property>
+	<property name="staticOperCounterByWeek">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYWEEK 
+      		  select  app_id,  app_name, module_id, module_name, '$Time' vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator
+      		  from TD_LOG_OPERATE_COUNTS t
+      		   where 1 = 1
+			  #if ($startTime && $todayTime)
+				and to_char(t.oper_time, 'yyyy-mm-dd') >= #[startTime] and to_char(t.oper_time, 'yyyy-mm-dd') <= #[todayTime]
+				#end
+     	      ) group by app_id,  app_name, module_id, module_name
+		]]>
+	</property>	
+	<property name="statisticOperCounterByDay">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYDAY 
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
+      		  to_char(oper_time, 'yyyy-mm-dd') vtime
+      		  from TD_LOG_OPERATE_COUNTS t
+      		   where 1 = 1
+           	  #if ($Time && !$Time.equals(""))
+			  	and to_char(t.oper_time, 'yyyy-mm-dd') = #[Time]
+			  #end
+			  
+     	      ) group by app_id,  app_name, module_id, module_name, vtime
+		]]>
+	</property>
+	<property name="statisticOperCounterByMonth">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYMONTH 
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
+      		  to_char(oper_time, 'yyyy-mm') vtime
+      		  from TD_LOG_OPERATE_COUNTS t
+      		   where 1 = 1
+           	  #if ($Time && !$Time.equals(""))
+			  	and to_char(t.oper_time, 'yyyy-mm') = #[Time]
+			  #end
+			  
+     	      ) group by app_id,  app_name, module_id, module_name, vtime
+		]]>
+	</property>
+	<property name="statisticOperCounterByYear">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYYEAR 
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
+      		  to_char(oper_time, 'yyyy') vtime
+      		  from TD_LOG_OPERATE_COUNTS t
+      		   where 1 = 1
+           	  #if ($Time && !$Time.equals(""))
+			  	and to_char(t.oper_time, 'yyyy') = #[Time]
+			  #end
+			  
+     	      ) group by app_id,  app_name, module_id, module_name, vtime
+		]]>
+	</property>
+	<property name="getOperCounterRankByWeek">
+		<![CDATA[
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser,tmp.vcountuser||'小时' a,tmp.vcountuser b,tmp.vcount c
+			from TD_LOG_OPERSTATIC_BYWEEK tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($vtime)
+				and tmp.vtime = #[vtime]
+			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
+	<property name="getOperCounterRankByDay">
+		<![CDATA[
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
+			from TD_LOG_OPERSTATIC_BYDAY tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($vtime)
+				and tmp.vtime = #[vtime]
+			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
+	<property name="getOperCounterRankByMonth">
+		<![CDATA[
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
+			from TD_LOG_OPERSTATIC_BYMONTH tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($vtime)
+				and tmp.vtime = #[vtime]
+			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
+	<property name="getOperCounterRankByYear">
+		<![CDATA[
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
+			from TD_LOG_OPERSTATIC_BYYEAR tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($vtime)
+				and tmp.vtime = #[vtime]
+			#end
+			order by tmp.vcount desc
+			]]>
+	</property>
+	<property name="getBrowserCounterDetail">
+		<![CDATA[
+			select tmp.browser_id browserId, tmp.doc_id docId, tmp.site_id siteId, tmp.channel_id channelId, 
+			tmp.docname docName, tmp.channelname channelName, tmp.sitename siteName,
+			tmp.browsercount browserCount, tmp.browserip browserIp, 
+			tmp.browser_user browserUser, tmp.pageurl, tmp.browsertype, tmp.browsertime, tmp.referer,
+			tmp.module_code moduleCode,tmp.module_path modulePath
+			from td_log_browser_counts tmp
+			where tmp.browser_id = ?
+			
+			]]>
+	</property>
+	<property name="getOperateCounterDetail">
+		<![CDATA[
+			select tmp.operate_id operateId ,tmp.app_name appName, tmp.module_name moduleName, tmp.page_name pageName, tmp.page_url pageURL, 
+			tmp.operator operator, tmp.operation operation, tmp.referer referer,
+			tmp.oper_time operTime, tmp.operate_ip operateIp, tmp.browser_type browserType ,tmp.oper_content operContent,
+			tmp.module_code moduleCode,tmp.module_path modulePath 
+			from td_log_operate_counts tmp
+			where tmp.operate_id = ?
+			
+			]]>
+	</property>
+	<property name="incrementOperateCounter">
+		<![CDATA[
+			insert into td_log_operate_counts(operate_id,app_id,app_name,module_id,module_name,page_id,page_name,page_url,referer,operate_ip,browser_type,operator,oper_content,operation,oper_time,log_level,module_code,module_path) 
+			values
+			(#[operateId], #[appId], #[appName], #[moduleId], #[moduleName], #[pageId], #[pageName], #[pageURL], #[referer], #[operateIp], #[browserType], #[operator], #[operContent],#[operation],systimestamp, #[logLevel],#[moduleCode],#[modulePath])
+		]]>
+	</property>
+	<property name="getOperateCounterList">
+		<![CDATA[
+			select tmp.operate_id operateId ,tmp.app_name appName, tmp.module_name moduleName, tmp.page_name pageName, tmp.page_url pageURL, 
+			tmp.operator operator, tmp.operation operation, tmp.referer referer,tmp.module_code moduleCode,
+			tmp.oper_time operTime, tmp.operate_ip operateIp, tmp.browser_type browserType 
+			from td_log_operate_counts tmp
+			where 1 = 1
+			#if ($appId)
+				and tmp.app_id = #[appId]
+			#end
+			#if ($moduleId)
+				and tmp.module_id = #[moduleId]
+			#end
+			#if ($pageName && !$pageName.equals(""))
+				and tmp.doc_name = #[pageName]
+			#end
+			#if ($browserType && !$browserType.equals(""))
+				and tmp.browser_type like #[browserType]
+			#end
+			#if ($operateIp && !$operateIp.equals(""))
+				and tmp.operate_ip = #[operateIp]
+			#end
+			#if ($operator && !$operator.equals(""))
+				and tmp.operator = #[operator]
+			#end
+			#if ($operation && !$operation.equals(""))
+				and tmp.operation = #[operation]
+			#end
+			#if ($moduleCode && !$moduleCode.equals(""))
+				and tmp.module_code = #[moduleCode]
+			#end
+			#if ($startTime && $endTime)
+				and tmp.oper_time >= #[startTime] and tmp.oper_time <= #[endTime]
+			#elseif ($startTime)
+				and tmp.oper_time >= #[startTime]
+			#elseif ($endTime)
+				and tmp.oper_time <= #[endTime]
+			#end
+			order by tmp.oper_time desc
+		]]>
+	</property>
+	<!-- added by qingl 2012-09-20 -->
+	<property name="incrementBrowserCounter">
+		<![CDATA[
+			insert into td_log_browser_counts(browser_id, doc_id, docname, site_id, sitename, channel_id, channelname, browsercount, browserip, browser_user, pageurl, browsertype, browsertime, referer,module_code,module_path) values
+			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], systimestamp, #[referer], #[moduleCode], #[modulePath])
+		]]>
+	</property>
+	
+	<property name="countBrowserCounter">
+		<![CDATA[
+			select count(*) from td_log_browser_counts 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="getBrowserCounterList">
+		<![CDATA[
+			select tmp.browser_id browserId, tmp.doc_id docId, tmp.site_id siteId, tmp.channel_id channelId, 
+			tmp.docname docName, tmp.channelname channelName, tmp.sitename siteName,
+			tmp.browsercount browserCount, tmp.browserip browserIp, 
+			tmp.browser_user browserUser, tmp.pageurl, tmp.browsertype, tmp.browsertime, tmp.referer
+			from td_log_browser_counts tmp
+			where 1 = 1
+			#if ($siteId)
+				and tmp.site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and tmp.channel_id = #[channelId]
+			#end
+			#if ($docName && !$docName.equals(""))
+				and tmp.docName = #[docName]
+			#end
+			#if ($browserType && !$browserType.equals(""))
+				and tmp.browsertype like #[browserType]
+			#end
+			#if ($browserIp && !$browserIp.equals(""))
+				and tmp.browserip = #[browserIp]
+			#end
+			#if ($browserUser && !$browserUser.equals(""))
+				and tmp.browser_user = #[browserUser]
+			#end
+			#if ($startTime && $endTime)
+				and tmp.browsertime >= #[startTime] and tmp.browsertime <= #[endTime]
+			#elseif ($startTime)
+				and tmp.browsertime >= #[startTime]
+			#elseif ($endTime)
+				and tmp.browsertime <= #[endTime]
+			#end
+			order by tmp.browsertime desc
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserCounter">
+		<![CDATA[
+			  delete from td_log_browser_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserType">
+		<![CDATA[
+			  delete from td_log_browser_type_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<property name="deleteStatisticBrowserIP">
+		<![CDATA[
+			  delete from td_log_browser_ip_statistics where siteId = #[siteId]
+		]]>
+	</property>
+	
+	<property name="statisticBrowserCounter">
+		<![CDATA[
+			  insert into td_log_browser_statistics 
+      		  select count(browser_id) vcount, vday,  vmonth, vyear, vdate, site_id siteid from
+      		  (select browser_id, site_id,
+      		  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	      substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	      substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	      to_char(browsertime, 'yyyy-mm-dd') vdate
+      		  from td_log_browser_counts t
+      		   where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+     	      ) group by vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<property name="statisticBrowserType">
+		<![CDATA[
+			  insert into td_log_browser_type_statistics  
+              select count(browser_id), browsertype vbrowsertype, vday, vmonth, vyear, vdate, site_id siteid from 
+          	  (select browser_id, browsertype, site_id,
+           	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	  	  to_char(browsertime, 'yyyy-mm-dd') vdate
+           	  from td_log_browser_counts t
+           	  where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+           	  ) group by browsertype, vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<property name="statisticBrowserIP">
+		<![CDATA[
+			  insert into td_log_browser_ip_statistics
+			  select count(browser_id), vbrowserip, vday, vmonth, vyear, vdate, site_id siteid from 
+          	  (select browser_id, substr(t.browserip, 1, Instr(t.browserip, '.', 1, 3)-1) vbrowserip, site_id,
+           	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 6, 2) vmonth,
+      	  	  substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 1, 4) vyear,
+      	  	  to_char(browsertime, 'yyyy-mm-dd') vdate
+           	  from td_log_browser_counts t
+           	  where 1 = 1
+           	  #if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+			  	and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') and t.browsertime <= to_date(#[endTime]||' 23:59:59', 'yyyy-MM-dd hh24:mi:ss')
+			  #elseif ($startTime && !$startTime.equals(""))
+				and t.browsertime >= to_date(#[startTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #elseif ($endTime && !$endTime.equals(""))
+				and t.browsertime <= to_date(#[endTime]||' 00:00:00', 'yyyy-MM-dd hh24:mi:ss') 
+			  #end
+			  #if ($siteId)
+			  	and t.site_id = #[siteId]
+			  #end
+           	  ) group by vbrowserip, vday, vmonth, vyear, vdate, site_id
+		]]>
+	</property>
+	
+	<property name="getBrowserCounterHourDistribute">
+		<![CDATA[
+			 select count(browser_id) vcount, vhour from
+      		 (select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 12, 2) vhour
+      		 from td_log_browser_counts t where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+      		 and site_id = #[siteId])
+     	     group by vhour
+		]]>
+	</property>
+	
+	<property name="getBrowserCounterDayDistribute">
+		<![CDATA[
+			select t.vcount, t.vday from td_log_browser_statistics t
+			where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+			and siteid = #[siteId]
+			order by t.vdate asc
+		]]>
+	</property>
+	
+	<property name="getBrowserCounterDayDistributeByMonth">
+		<![CDATA[
+			select t.vcount, t.vday from td_log_browser_statistics t
+			where vmonth >= #[startMonth] and vmonth<= #[endMonth]
+			and siteid = #[siteId]
+			order by t.vdate asc
+		]]>
+	</property>
+	
+	<property name="getBrowserTypeDayDistributeByTime">
+		<![CDATA[
+		   select count(t.browser_id) vcount, t.browsertype vbrowsertype
+           from td_log_browser_counts t
+           where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+           and site_id = #[siteId]
+           group by t.browsertype
+		]]>
+	</property>
+	
+	<property name="getBrowserTypeDayDistributeByTimeLimit">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowsertype from td_log_browser_type_statistics t
+		   where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+		   and siteid = #[siteId]
+		   group by t.vbrowsertype
+		]]>
+	</property>
+	
+	<property name="getBrowserTypeDayDistributeByMonth">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowsertype from td_log_browser_type_statistics t
+		   where vmonth >= #[startMonth] and vmonth<= #[endMonth]
+		   and siteid = #[siteId]
+		   group by t.vbrowsertype
+		]]>
+	</property>
+	
+	<property name="getBrowserIPDayDistributeByTime">
+		<![CDATA[
+		   select count(browser_id) vcount, vbrowserip from 
+		   (select t.browser_id, substr(t.browserip, 1, Instr(t.browserip, '.', 1, 3)-1) vbrowserip
+           from td_log_browser_counts t
+           where to_char(t.browsertime, 'yyyy-mm-dd') = #[vtime]
+           and site_id = #[siteId])
+		   group by vbrowserip
+		]]>
+	</property>
+	
+	<property name="getBrowserIPDayDistributeByTimeLimit">
+		<![CDATA[
+		   select sum(t.vcount) vcount, t.vbrowserip from td_log_browser_ip_statistics t
+		   where to_date(t.vdate, 'yyyy-mm-dd') between to_date(#[startTime], 'yyyy-mm-dd') and to_date(#[endTime], 'yyyy-mm-dd')
+		   and siteid = #[siteId]
+		   group by t.vbrowserip
+		]]>
+	</property>
+	
+	<property name="getPageBrowserCounterGatherList">
+		<![CDATA[
+			select count(tmp.browser_id) browserCount, tmp.sitename siteName, tmp.channelname channelName, tmp.docname docName, tmp.pageurl
+			from td_log_browser_counts tmp
+			where 1 = 1
+			#if ($siteId)
+				and tmp.site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and tmp.channel_id = #[channelId]
+			#end
+			#if ($docName && !$docName.equals(""))
+				and tmp.docName = #[docName]
+			#end
+			#if ($pageURL && !$pageURL.equals(""))
+				and tmp.pageurl = #[pageURL]
+			#end
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and tmp.browsertime >= to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and tmp.browsertime <= to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+			#elseif ($startTime && !$startTime.equals(""))
+				and tmp.browsertime >= to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss')
+			#elseif ($endTime  && !$endTime.equals(""))
+				and tmp.browsertime <= to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')
+			#end
+      		group by siteName, channelname, docName, pageurl
+			order by browserCount desc
+		]]>
+	</property>
+	
+	
+	<property name="getBrowserVisitInfo">
+		<![CDATA[
+		select '总计' name, count(t.browser_id) pv, count(distinct t.browserip) ip, '' topPV, '' topIP
+		from td_log_browser_counts t                       
+		where t.browsertime between to_date(#[startTime] || ' 00:00:00', 'yyyy-mm-dd hh24:mi:ss') and to_date(#[endTime] || ' 23:59:59', 'yyyy-mm-dd hh24:mi:ss')                                                                                                 
+		union all 
+		select '平均' name,
+		Round((select  avg(vcount) from
+		(select count(browser_id) vcount, vday from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 0, 10) vday
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vday))) pv,
+		Round((select avg(vbrowserip) from
+		(select count(vbrowserip) vbrowserip, vdate from 
+		(select distinct t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vdate))) ip,  '' topPV, '' topIP
+		from dual
+		union all
+		select '历史最高' name, 
+		(select max(vcount) from
+		 (select count(browser_id) vcount, vday from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd hh24:mi:ss'), 9, 2) vday
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vday)) pv,
+		(select max(vbrowserip) from
+		(select count(vbrowserip) vbrowserip,  vdate from 
+		(select distinct t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate 
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vdate)) ip,
+     	'(' || (select vdate from
+		 (select count(browser_id) vcount, vdate from
+		(select browser_id, substr(to_char(browsertime, 'yyyy-mm-dd'), 0, 10) vdate
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vdate order by vcount desc) where rownum = 1) || ')' topPV,
+    	'(' || (select vdate from
+		(select count(vbrowserip) vbrowserip, vdate from 
+		(select distinct  t.browserip vbrowserip, to_char(t.browsertime, 'yyyy-mm-dd') vdate
+		from td_log_browser_counts t where site_id = #[siteId])
+		group by vdate order by vbrowserip desc) where rownum = 1) || ')' topIP
+		from dual
+		union all
+		select '历史累计' name, count(t.browser_id) pv, count(distinct t.browserip) ip,  '' topPV, '' topIP
+		from td_log_browser_counts t  where t.site_id = #[siteId]                            
+		]]>
+	</property>
+<property name="incrementDownlodCounter">
+		<![CDATA[
+			insert into td_cms_download_counts (count_id, doc_id, docname, site_id, sitename, channel_id, channelname, downloadcount, attach_path, attach_id, down_user, downip, downtime) values
+			(#[counterId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[downloadCount], #[attachPath], #[attachId], #[downloadIP], systimestamp)
+		]]>
+	</property>
+	
+	<property name="countDownLoadCounter">
+		<![CDATA[
+			select count(*) from td_cms_download_counts 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="incrementVideoHitsCounter">
+		<![CDATA[
+			insert into td_cms_vidio_hits (hit_id, doc_id, docname, site_id, sitename, channel_id, channelname, hitcount, hit_user, vidiopath, hitip, hittime, referer) values
+			(#[hitId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[hitCount], #[hitUser], #[videoPath], #[hitIP], systimestamp, #[referer])
+		]]>
+	</property>
+	
+	<property name="countVideoHitsCounter">
+		<![CDATA[
+			select count(*) from td_cms_vidio_hits 
+			where 1=1 
+			#if($siteId)
+			and site_id = #[siteId]
+			#end
+			#if($channelId)
+			 and channel_id = #[channelId] 
+			#end
+			#if($docId)
+			 and doc_id = #[docId]
+			#end 
+		]]>
+	</property>
+	
+	<property name="getVideoHitsCounterList">
+		<![CDATA[
+			select hit_id hitId, doc_id docId, site_id siteId, channel_id channelId, hitcount, hit_user hitUser, vidiopath videoPath, hitip, hittime
+			from td_cms_vidio_hits
+			where 1 = 1
+			#if ($siteId)
+				and site_id = #[siteId]
+			#end
+			#if ($channelId)
+				and channel_id = #[channelId]
+			#end
+			#if ($docId)
+				and doc_id = #[docId]
+			#end
+			#if ($hitUser && !$hitUser.equals(""))
+				and hit_user = #[hitUser]
+			#end
+			#if ($hitIP && !$hitIP.equals(""))
+				and hitip = #[hitIP]
+			#end
+			#if ($startTime && $endTime)
+				and hittime >= #[startTime] and hittime <= #[endTime]
+			#elseif ($startTime)
+				and hittime >= #[startTime]
+			#elseif ($endTime)
+				and hittime <= #[endTime]
+			#end
+			order by hittime desc
+		]]>
+	</property>
+	
+	<property name="selectAppInfo">
+		<![CDATA[
+			select 
+				auto_id as autoId, app_id as appId, app_name as appName, use_flag as useFlag
+			from 
+				td_log_app_manager t
+			where 1=1
+			#if ($appId && !$appId.equals(""))
+				and app_id = #[appId]
+			#end
+			#if ($appName && !$appName.equals(""))
+				and app_name like #[appName]
+			#end
+		]]>
+	</property>
+	
+	<property name="selectModuleInfo">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId,
+				a.module_id as moduleId, a.module_name as moduleName,
+				a.use_flag as useFlag, b.app_name as appName,
+				a.module_code as moduleCode, a.module_path as modulePath
+			from 
+				td_log_module_manager a, td_log_app_manager b
+			where a.app_id=b.app_id
+			#if ($appId && !$appId.equals(""))
+				and a.app_id = #[appId]
+			#end
+			#if ($appName && !$appName.equals(""))
+				and b.app_name like #[appName]
+			#end
+			#if ($moduleId && !$moduleId.equals(""))
+				and a.module_id = #[moduleId]
+			#end
+			#if ($moduleName && !$moduleName.equals(""))
+				and a.module_name like #[moduleName]
+			#end
+		]]>
+	</property>
+	
+	<property name="getSelectedAppList">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId, a.app_name as appName
+			from 
+				td_log_app_manager a
+			where a.app_id in (select b.app_id from td_log_user_authorize b where b.user_id=?)
+			order by a.app_id
+		]]>
+	</property>
+	
+	<property name="getUnSelectAppList">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId, a.app_name as appName
+			from 
+				td_log_app_manager a
+			where a.app_id not in (select b.app_id from td_log_user_authorize b where b.user_id=?)
+			order by a.app_id
+		]]>
+	</property>
+	
+	<property name="deleteUserAllApp">
+		<![CDATA[
+			delete from td_log_user_authorize where user_id = ? 
+		]]>
+	</property>
+	
+	<property name="addUserAppList">
+		<![CDATA[
+		insert into td_log_user_authorize 
+			(auto_id, user_id, app_id, app_name)
+		values
+			(#[autoId], #[userId], #[appId], #[appName])
+		]]>
+	</property>
+	
+	<property name="saveAppInfo">
+		<![CDATA[
+		insert into td_log_app_manager 
+			(auto_id, app_id, app_name, use_flag)
+		values
+			(#[autoId], #[appId], #[appName], #[useFlag])
+		]]>
+	</property>
+	
+	<property name="saveModuleInfo">
+		<![CDATA[
+		insert into td_log_module_manager 
+			(auto_id, app_id, module_id, module_name, use_flag, module_code, module_path)
+		values
+			(#[autoId], #[appId], #[moduleId], #[moduleName], #[useFlag], #[moduleCode], #[modulePath])
+		]]>
+	</property>
+	
+	<property name="getModuleKeyValue">
+		<![CDATA[
+			select max(to_number(auto_id)) from td_log_module_manager
+		]]>
+	</property>
+	
+	<property name="getAppKeyValue">
+		<![CDATA[
+			select max(to_number(auto_id)) from td_log_app_manager
+		]]>
+	</property>
+	
+	<property name="getUserAuthorizeKeyValue">
+		<![CDATA[
+			select max(auto_id) from td_log_user_authorize
+		]]>
+	</property>
+	
+	
+	<property name="getAppName">
+		<![CDATA[
+			select app_name from td_log_app_manager where app_id=?
+		]]>
+	</property>
+	
+	<property name="getAppInfoByName">
+		<![CDATA[
+			select 
+				auto_id as autoId, app_id as appId, app_name as appName, use_flag as useFlag
+			from 
+				td_log_app_manager t
+			where app_name = ?
+		]]>
+	</property>
+	
+	
+	<property name="getModuleInfoByName">
+		<![CDATA[
+			select 
+				a.auto_id as autoId, a.app_id as appId,
+				a.module_id as moduleId, a.module_name as moduleName,
+				a.use_flag as useFlag, 
+				a.module_code as moduleCode, a.module_path as modulePath
+			from 
+				td_log_module_manager a
+			where a.app_id = ? and a.module_name = ?
+		]]>
+	</property>
+	
+	<property name="modifyAppFlag">
+		<![CDATA[
+			update td_log_app_manager set use_flag=? where auto_id=?
+		]]>
+	</property>
+	
+	<property name="modifyModuleFlag">
+		<![CDATA[
+			update td_log_module_manager set use_flag=? where auto_id=?
+		]]>
+	</property>
+	
+</properties>

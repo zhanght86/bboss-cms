@@ -51,8 +51,8 @@ public class DocumentList extends DataInfoImpl implements java.io.Serializable
 			try {	
 				StringBuffer sql = new StringBuffer();
 				
-				sql.append("select x.document_id,title,subtitle,author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
-				   .append("doctype,nvl(doc_class, '未分类') as doc_class,docwtime,createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,docabstract,nvl(y.order_no,-1) as order_no,end_time,nvl(x.ordertime,x.docwtime) as ordertime,x.seq,x.count ")
+				sql.append("select x.document_id,x.title,x.subtitle,x.author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
+				   .append("x.doctype,nvl(x.doc_class, '未分类') as doc_class,x.docwtime,x.createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,x.docabstract,nvl(y.order_no,-1) as order_no,y.end_time,nvl(x.ordertime,x.docwtime) as ordertime,x.seq,x.count ")
 				   .append("from  TD_CMS_DOCUMENT x left outer join td_cms_doc_arrange y ")
 				   .append("on x.document_id = y.document_id ")
 				   .append(" left outer join tb_cms_flow z on x.flow_id = z.id ")

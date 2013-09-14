@@ -7,7 +7,7 @@
 <script language='javascript'>var s ="";</script>
 
 
-<%          String strIP=request.getRemoteAddr();
+<%          String strIP=com.frameworkset.util.StringUtil.getClientIP(request);
       	   
  
     	     VoteManager vote = new VoteManager();

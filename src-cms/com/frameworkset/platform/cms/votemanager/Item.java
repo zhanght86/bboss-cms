@@ -8,6 +8,24 @@ public class Item {
 	private String options;
 
 	private int count;
+	private String score;
+
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
+	}
+
+	private double percentCount;
+	public double getPercentCount() {
+		return percentCount;
+	}
+
+	public void setPercentCount(double percentCount) {
+		this.percentCount = percentCount;
+	}
 
 	public int getCount() {
 		return count;

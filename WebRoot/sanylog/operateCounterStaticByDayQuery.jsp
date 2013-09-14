@@ -13,6 +13,9 @@
 <head>
 <title>浏览统计数据</title>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<script language="JavaScript" src="fusion/FusionCharts.js"></script>
+<script type="text/javascript" src="fusion/prettify.js"></script>
+<script type="text/javascript" src="fusion/json2.js"></script>
 <script type="text/javascript">
 	
 	//页面加载时查询列表数据
@@ -115,6 +118,28 @@
 		<div class="title_box">
 			<strong>操作日统计数据</strong>
 		</div> 
+		<table width="100%" border="0">
+			<tr>
+				<td align="center" colspan="2">
+					<div id="operCountCompare"></div>
+					<script type="text/javascript">
+					    var time = $("#vtime").val();
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operCountCompare.page?type=day&appId=${param.siteId}&time="+time);
+	    				chart.render("operCountCompare");
+					</script>
+				</td>
+				<td align="center">
+					<div id="operUserCompare"></div>
+					<script type="text/javascript">
+					    var time = $("#vtime").val();
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operUserCompare.page?type=day&appId=${param.siteId}&time="+time);
+	    				chart.render("operUserCompare");
+					</script>
+				</td>
+			</tr>
+		</table>
 		<div id="custombackContainer"></div>
 	</div>
 </body>

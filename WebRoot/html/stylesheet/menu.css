@@ -8,14 +8,36 @@ body {
 	color: #666666;
 	background-color:#FFFFFF;
 }
-.top {
+/*.top {
  	padding: 3px;
 	background-image: url(../images/top_right.jpg);
 	background-repeat: no-repeat;
 	background-position: right bottom;
 	height: 35px;
 	text-align: right;
+	width:100%;		
+}*/
+.top {
+	padding: 3px;
+	background-image:  url(../images/top_right.jpg);
+	background-color:#fff;
+	background-repeat: no-repeat;
+	background-position: right bottom;
+	height: 28px;
+	text-align: right;
+	position: fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+    _position:absolute;
+    _bottom:auto;
+    _top:expression(eval(document.documentElement.scrollTop));
 }
+*html{ 
+    background-image:url(about:blank);
+    background-attachment:fixed; 
+}
+
 .top .logo_top {
 	float: left;
 	width: 300px;
@@ -26,9 +48,22 @@ body {
 	padding-top: 8px;
 	padding-right: 5px;
 }
-.ddsmoothmenu {
+/*.ddsmoothmenu {
 	background: #BFDBFF url(../images/menu_bg.jpg) repeat-x left top;
 	width: 100%;
+}
+*/
+.ddsmoothmenu  {
+	background: url(../images/menu_bg.jpg) repeat-x left top;
+	height: 29px;
+	position: fixed;
+	left:0px;
+	top:34px;
+	width:100%;
+	_position:absolute;
+    _bottom:auto;
+    _top:expression(eval(document.documentElement.scrollTop));
+	_margin-top:34px;
 }
 .ddsmoothmenu ul {
 	z-index:100;

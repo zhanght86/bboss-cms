@@ -188,7 +188,7 @@
 			//modify by xinwang.jiao 2007.07.25 替换成系统管理的日志接口。
 			//dmi.recordDocOperate(b,doc.getUser_id(),"新增",0,"新增");
 			logManager = SecurityDatabase.getLogManager();
-			logManager.log(accesscontroler.getUserAccount(),"新增文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+			logManager.log(accesscontroler.getUserAccount(),"新增文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 			
 			CmsLinkTable linktable = processor.getExternalPageLinkTable();
 			Iterator it = linktable.iterator();
@@ -226,7 +226,7 @@
 		doc.setContent(request.getParameter("content")==null?"":request.getParameter("content"));
 		b = dmi.creatorDoc(doc);
 		logManager = SecurityDatabase.getLogManager();
-		logManager.log(accesscontroler.getUserAccount(),"新增文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+		logManager.log(accesscontroler.getUserAccount(),"新增文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 	}
 
 
@@ -369,7 +369,7 @@
 		    dmi.deliverDoc(b,intAuditors,Integer.parseInt(userId),0); 
 		    //dmi.recordDocOperate(b,Integer.parseInt(userId),"送审",tanid,"送审");
 		    logManager = SecurityDatabase.getLogManager();
-			logManager.log(accesscontroler.getUserAccount(),"文档送审.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+			logManager.log(accesscontroler.getUserAccount(),"文档送审.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 		 }
 	}else if("11".equals(operFlag)){			//提交发布
 		String[] publishers = request.getParameterValues("publisher");
@@ -386,7 +386,7 @@
 			dmi.subPublishDoc(b,intPublishers,Integer.parseInt(userId),0);   
 			//dmi.recordDocOperate(b,Integer.parseInt(userId),"提交发布",tranid,"提交发布");
 			logManager = SecurityDatabase.getLogManager();
-			logManager.log(accesscontroler.getUserAccount(),"文档提交发布.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+			logManager.log(accesscontroler.getUserAccount(),"文档提交发布.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 		}
 	}else if("12".equals(operFlag)){				//立即发布	
 			//初始化发布引擎
@@ -413,7 +413,7 @@
 				//}biaoping.yin 注释 2007.10.20
 				//dmi.recordDocOperate(b,Integer.parseInt(userId),"发布",tranID,"发布");
 				logManager = SecurityDatabase.getLogManager();
-				logManager.log(accesscontroler.getUserAccount(),"文档发布.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+				logManager.log(accesscontroler.getUserAccount(),"文档发布.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 			}
 	}
 	

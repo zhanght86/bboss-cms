@@ -123,6 +123,14 @@ public class DesktopController {
 		model.addAttribute("fromwebseal", AccessControl.fromWebseal(request));
 		model.addAttribute("isweb", isweb);
 		model.addAttribute("selected", AccessControl.getAccessControl().getCurrentSystemID());
+		String selectedmenuid = request.getParameter(MenuHelper.sanyselectedmodule);//查找选择的菜单项path
+		
+		if(selectedmenuid != null)
+		{
+			model.addAttribute("selectedmenuid", selectedmenuid);
+		}
+		else
+			model.addAttribute("selectedmenuid", "publicitem");
 		if(!isweb)
 		{
 			return "path:index";

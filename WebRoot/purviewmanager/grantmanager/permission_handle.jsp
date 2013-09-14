@@ -59,11 +59,14 @@
 
 			
 			%>
+<pg:config enablecontextmenu="false" enabletree="false"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 
 <script language="javascript">
 	
 	if(<%=success%>){
-	    parent.W.$.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.operation.success"/>',function(){
+	    $.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.operation.success"/>',function(){
 	    	  //刷新左边的资源树
 	   <% if("false".equals(isBatch)){%>
 	    if(<%=globalTag%>)
@@ -79,6 +82,6 @@
 	}
 	else
 	{
-		parent.W.$.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.operation.fail"/>',function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		$.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.operation.fail"/>',function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	}
 </script>

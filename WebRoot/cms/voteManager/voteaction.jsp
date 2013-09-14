@@ -35,7 +35,7 @@
 		for (int j=0;items!=null&&j<items.length;j++){
 			if (strOptionID.indexOf(items[j]+";")>0)
 				continue;
-			flag = voteMgr.canVote(Integer.parseInt(array[i].substring(7)),request.getRemoteAddr());
+			flag = voteMgr.canVote(Integer.parseInt(array[i].substring(7)),com.frameworkset.util.StringUtil.getClientIP(request));
 			if (flag==2){
 				%><script language='javascript'>alert("不在投票时间段！感谢您的支持！");</script><%
 				break;
@@ -63,7 +63,7 @@
 		for (int i=0;array!=null&&i<array.length;i++){
 			String id = array[i].substring(8);
 			String content = request.getParameter(array[i]);
-			flag = voteMgr.canVote(Integer.parseInt(id),request.getRemoteAddr());
+			flag = voteMgr.canVote(Integer.parseInt(id),com.frameworkset.util.StringUtil.getClientIP(request));
 			if (flag==2){
 				%><script language='javascript'>alert("不在投票时间段！感谢您的支持！");</script><%
 				break;
@@ -79,7 +79,7 @@
 			flag = 0;
 			
 			if (!"".equals(content.replaceAll(" ",""))){
-				flag = voteMgr.doAnswer(Integer.parseInt(id),content,request.getRemoteAddr());
+				flag = voteMgr.doAnswer(Integer.parseInt(id),content,com.frameworkset.util.StringUtil.getClientIP(request));
 				if (flag!=1){
 					%><script language='javascript'>alert("您对第<<%=c%>>道问答题的回答失败！感谢您的支持！");</script><%
 					break;
@@ -90,7 +90,7 @@
 		//get vote answer
 		if (flag!=2&&flag!=3){
 			if (!"".equals(strOptionID)){
-				if (voteMgr.doVote(strOptionID,request.getRemoteAddr())==1){
+				if (voteMgr.doVote(strOptionID,com.frameworkset.util.StringUtil.getClientIP(request))==1){
 					%><script language='javascript'>alert("十分感谢您的回答！");</script><%
 				}
 				else{

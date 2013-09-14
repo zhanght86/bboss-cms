@@ -49,12 +49,11 @@ public class QuestionsTag extends BaseCellTag {
 		StringBuffer str = new StringBuffer();
 		try {
 
-			System.out.println("问卷标签参数id:" + id);
-			System.out.println("问卷标签参数channel:" + channel);
+		
 			
 			if (super.dataSet != null && super.dataSet.size()>0) {//有dataSet，从dataSet得到id
 				
-				System.out.println("dataSet.getInt('id'):" + dataSet.getInt("id"));
+				
 				
 				str.append("<script language='javascript'>questionids+=','+"+String.valueOf(dataSet.getInt("id"))+";</script>");
 				str.append("<strong>"+dataSet.getString("title")+"</strong>");

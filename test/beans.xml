@@ -1,0 +1,3 @@
+<properties>
+	<property name="mailsend" class="org.frameworkset.mail.MailSend"/>
+</properties>

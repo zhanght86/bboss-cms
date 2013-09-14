@@ -499,11 +499,11 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 					String path = "/cms/siteResource/"+docpath+"/"+FileName+"."+fileExt;
 					String parentPath = approot + "/cms/siteResource/"+docpath;
 					parentFile = new File(parentPath);
-					/*
+					
 					if(!parentFile.exists())
 					{
 						parentFile.mkdirs();
-					}*/
+					}
 					if(isold)
 					{
 						FileUtil.fileCopy(normalFile, approot+("/")+path);

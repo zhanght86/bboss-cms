@@ -10,6 +10,7 @@
 		path:functionList="/sanylog/functionList/functionList.jsp"
 		path:singleFunctionList="/sanylog/functionList/singleFunctionList.jsp"
 		path:functionListbatchInput="/sanylog/functionList/functionListbatchInput.jsp"
+		
 		/>
 	<property name="functionListManager"
 		f:executor="attr:sanylog.functionlist.configsqlexecutor"
@@ -23,6 +24,7 @@
 	</property>
 	<property name="sanylog.util"
 		f:functionListManager="attr:functionListManager"
+		f:pageListManager="attr:pageListManager"
 		class="com.frameworkset.platform.sanylog.util.SanyLogUtil"
 		/>
 	<property name="sanylog.templateDir"
@@ -31,4 +33,10 @@
 		<property name="sanylog.functionListDir"
 		value="D:\sanylog\functionListDir"
 		/>	
+		
+		<!-- 工时统计定时任务 -->
+		<property name="sanylogStaticSpentTimeJob"
+		f:functionListManager="attr:functionListManager"
+		class="com.frameworkset.platform.sanylog.task.SpentTimeStaticTask"
+		/>
 </properties>

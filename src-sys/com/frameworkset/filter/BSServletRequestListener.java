@@ -52,7 +52,7 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 				}
 			}
 			
-			if(com.frameworkset.listener.BSServletRequestListener.isInterceptResource(uri))
+//			if(com.frameworkset.listener.BSServletRequestListener.isInterceptResource(uri))
 			{
 //				
 				boolean state = TransactionManager.destroyTransaction();
@@ -63,10 +63,10 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 				AccessControl.init(null);
 
 			}
-			else if(uri.endsWith(".frame"))
-			{
-				AccessControl.init(null);
-			}
+//			else if(uri.endsWith(".frame"))
+//			{
+//				AccessControl.init(null);
+//			}
 				
 		}		
 //		System.out.println("requestDestroyed tx after:" + TransactionManager.getTransaction());
@@ -83,7 +83,7 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 
 			
 			
-			if(com.frameworkset.listener.BSServletRequestListener.isInterceptResource(uri))
+//			if(com.frameworkset.listener.BSServletRequestListener.isInterceptResource(uri))
 			{	
 				boolean state = TransactionManager.destroyTransaction();
 				if(state){
@@ -93,10 +93,10 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 				AccessControl.init(null);
 
 			}
-			else if(uri.endsWith(".frame"))
-			{
-				AccessControl.init(null);
-			}
+//			else if(uri.endsWith(".frame"))
+//			{
+//				AccessControl.init(null);
+//			}
 				
 				
 		}	

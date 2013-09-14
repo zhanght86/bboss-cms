@@ -1,0 +1,30 @@
+<properties>
+	
+	<!-- 功能清单管理 -->
+	<property name="/sanylog/pageList/*.page" class="com.frameworkset.platform.sanylog.action.PageListController" 
+		f:pageListManager="attr:pageListManager"
+		f:pageListDir="attr:sanylog.pageListDir"
+		f:util="attr:sanylog.util"
+		path:pageListIndex="/sanylog/pageList/pageListQuery.jsp"
+		path:pageList="/sanylog/pageList/pageList.jsp"
+		path:singlePageList="/sanylog/pageList/singlePageList.jsp"
+		path:showPageCounterList="/sanylog/pageCounterList.jsp"
+		path:showMaintainPage="/sanylog/maintainPage.jsp"
+		/>
+	<property name="pageListManager"
+		f:executor="attr:sanylog.pagelist.configsqlexecutor"
+		class="com.frameworkset.platform.sanylog.service.impl.PageListManagerImpl"
+		/>
+	<property name="sanylog.pagelist.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/sanylog/service/pagelist.xml"/>
+		</construction>
+	</property>
+	
+	<property name="sanylog.pageListDir"
+		value="D:\sanylog\pageListDir"
+		/>
+		
+		
+</properties>

@@ -10,12 +10,16 @@
 	    Date: 2012-03-21
 	-->
 	
-	<!-- Relational database template -->
-	<property name="masterdata.hr.configSqlExecutor"
-		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+
+	<property name="masterdata.hrSyncTask" factory-bean="hr.ioccontext" factory-method="getBeanObject">
 		<construction>
-			<property value="com/sany/masterdata/hr/dao/HumanDataSql.xml" />
+			<property value="masterdata.hrSyncTask" />
 		</construction>
 	</property>
-
+	<property name="hr.ioccontext" factory-class="org.frameworkset.spi.DefaultApplicationContext" factory-method="getApplicationContext">
+		<construction>
+			<property value="bboss-masterdata-humanResource.xml" />
+		</construction>
+	</property>
+	
 </properties>

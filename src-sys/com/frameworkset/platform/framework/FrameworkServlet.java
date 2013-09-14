@@ -68,14 +68,14 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 		HttpSession session = request.getSession(false);
 		if(session == null)
 		{
-			String remoteip = request.getRemoteAddr();
+			String remoteip = com.frameworkset.util.StringUtil.getClientIP(request);
 			String remoteurl = request.getRequestURI();
 			log_("line[" +line+"] [remoteip=" + remoteip + ",remoteurl=" + remoteurl + "] framework servlet session is null." );
 			return null;
 		}
 		if(session.isNew())
 		{	
-			String remoteip = request.getRemoteAddr();
+			String remoteip = com.frameworkset.util.StringUtil.getClientIP(request);
 			String remoteurl = request.getRequestURI();
 			log_("line[" +line+"] [remoteip=" + remoteip + ",remoteurl=" + remoteurl + "] framework servlet new session id=" + session.getId() );
 		}

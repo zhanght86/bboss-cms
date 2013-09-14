@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+
+<%@page import="org.frameworkset.spi.remote.RemoteException"%>
+
+
+<div Style="width: 100%; display: " id="exceptionDiv">
+	<img src="<%=approot %>/include/themes/default/images/messager_error.gif" />	
+
+	<a href="#">访问页面失败：</a>
+	<div id='exceptions'
+		style="display: ; OVERFLOW: auto; width: 100%; height: 460">
+		
+		<pre>
+			页面信息已经失效
+		</pre>		
+	</div>
+	<%
+		}
+	%>
+</div>
+
+
+		

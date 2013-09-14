@@ -70,7 +70,7 @@ public class ActivitiTestServiceImpl implements ActivitiTestService {
 	public List<TaskInfo> queryTaskInfoByProcessId(String processInstanceId) {
 		try {
 			TaskInfo taskInfo = new TaskInfo();
-			taskInfo.setProcess_instance_id(Long.parseLong(processInstanceId));
+			taskInfo.setProcess_instance_id(processInstanceId);
 			List<TaskInfo> list = executor.queryListBean(TaskInfo.class,
 					"selectTaskInfoByProcessId", taskInfo);
 			return list;

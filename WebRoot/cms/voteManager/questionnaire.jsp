@@ -511,12 +511,12 @@
 						所属部门：
 					</td>
 					<td>
-							<pg:listdata dataInfo="ForEmailDepart" keyName="ForEmailDepart" />
+							
 												<!--分页显示开始,分页标签初始化-->
-											<pg:pager  scope="request" data="ForEmailDepart" isList="true">				
+												
 												<select name="depart_id">
 												<OPTION value="">--请选择网上调查部门--</OPTION><font color="#FF0000">*</font>
-												<pg:list>
+												<pg:list statement="select id,disposedep from TD_COMM_EMAIL_DISPOSEDEP" dbname="bspf">
 												<%
 													String ID = dataSet.getString("id");
 													String disposedep1=dataSet.getString("disposedep");
@@ -534,7 +534,7 @@
 												</option>
 												</pg:list>
 												</select><font color="red">*</font>
-					            			</pg:pager>
+					            			
 					</td>
 				</tr>
 				<tr>

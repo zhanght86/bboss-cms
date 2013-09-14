@@ -1,0 +1,22 @@
+<properties>
+	
+	
+	<property name="/sysmanager/dictionarymanager/*.page" class="com.frameworkset.dictionary.action.DictController" singlable="true"
+		f:dictManager="attr:dictionary.dictManager"
+		
+		/>
+		 
+	<property name="dictionary.dictManager"
+		f:executor="attr:dictionary.sqlexecutor"
+		class="com.frameworkset.dictionary.service.impl.DictManagerImpl"
+		/>
+	
+	<property name="dictionary.sqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/dictionary/service/impl/dict.xml"/>
+		</construction>
+		
+	</property>
+	
+</properties>

@@ -25,7 +25,7 @@
         UserManager userManager = SecurityDatabase.getUserManager();
         
 		String operContent="";        
-        String operSource=request.getRemoteAddr();
+        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
         String openModle="用户管理";
         String userName = control.getUserName();//getUserName();
         String description="";

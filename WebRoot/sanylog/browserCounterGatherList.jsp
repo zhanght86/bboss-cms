@@ -18,7 +18,7 @@
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
        	 	<th>应用名称</th> 
-       		<th>功能路径</th>
+       		<th>菜单路径</th>
        		<th style="display: none">页面名称</th>
        		<th>浏览页面地址</th>
        		<th>浏览次数</th>

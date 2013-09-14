@@ -15,7 +15,9 @@
  */
 package com.frameworkset.platform.security.authorization.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.frameworkset.platform.config.ConfigManager;
@@ -33,6 +35,7 @@ import com.frameworkset.platform.config.ConfigManager;
  * @version 1.0
  */
 public class PermissionTokenMap {
+	private List<RID> allrids;
 	/**
 	 * Map<String,        PermissionTokenRegion>
 	 *     resourceType(资源类型划分)       资源权限区域
@@ -41,6 +44,7 @@ public class PermissionTokenMap {
 	public PermissionTokenMap ()
 	{
 		resourcTokenMap = new HashMap<String,PermissionTokenRegion>();
+		allrids = new ArrayList<RID>();
 	}
 	public void addPermissionToken(String url,PermissionToken token)
 	{

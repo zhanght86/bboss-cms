@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.platform.sysmgrcore.authenticate.LoginUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portlet.iframe.action.WebDes"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
@@ -79,7 +80,7 @@
 			certUserPassword = CAManager.getUserPassword(request);
 		}
 	}
-
+	String specialuser = LoginUtil.isSpesialUser(request);
 	if (isCasServer) {
 		userName = (String) session
 				.getAttribute("edu.yale.its.tp.cas.client.filter.user");
@@ -182,20 +183,29 @@
 			}
 		}
 	}
-	else if(isWebSealServer && userName == null)
+	else if((specialuser != null || isWebSealServer) && userName == null)
 	{
 		
 		
 		 String subsystem = request.getParameter("subsystem_id");
         try//uim检测
          {
-          CommonInfo info = new CommonInfo(); 
-          UimUserInfo userinfo = null;
-          String ip = "";
-          userinfo = info.validateUIM(request);
-          ip = userinfo.getUser_ip();		             
-          userName = userinfo.getUser_name();
-          AccessControl control = AccessControl.getInstance();
+        	 String ip = "";
+	          if(specialuser != null)
+	          {
+	        	  userName = specialuser;
+	        	  ip = com.frameworkset.util.StringUtil.getClientIP(request);
+	          }
+	          else        	  
+	          {
+		          CommonInfo info = new CommonInfo(); 
+		          UimUserInfo userinfo = null;
+		         
+		          userinfo = info.validateUIM(request);
+		          ip = userinfo.getUser_ip();		             
+	          	  userName = userinfo.getUser_name();
+	          }
+	          AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request, response, false);
 			String user = control.getUserAccount();	
 			request.setAttribute("fromsso","true");

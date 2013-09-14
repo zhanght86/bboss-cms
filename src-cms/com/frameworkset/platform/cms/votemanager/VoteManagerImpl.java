@@ -4,17 +4,23 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import javax.transaction.RollbackException;
 
 import org.frameworkset.spi.SPIException;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.platform.util.CommonUtil;
 
 public class VoteManagerImpl implements VoteManager {
 
@@ -28,8 +34,8 @@ public class VoteManagerImpl implements VoteManager {
 		try {
 			DBUtil dbUtil = new DBUtil();
 			
-			String sql = "select a.*,d.name as chname,d.CHANNEL_ID,e.disposedep  from td_cms_vote_title a,TD_CMS_CHANNEL_VOTE c,TD_CMS_CHANNEL d," +
-					"td_comm_email_disposedep e where e.id=a.depart_id and  a.id=c.VOTE_TITLE_ID(+) and c.CHANNEL_ID=d.CHANNEL_ID(+) and a.ID=" + titleID;
+			String sql = "select a.*,d.name as chname,d.CHANNEL_ID,e.disposedep,f.user_name  from td_cms_vote_title a,TD_CMS_CHANNEL_VOTE c,TD_CMS_CHANNEL d," +
+					"td_comm_email_disposedep e,td_sm_user f where e.id=a.depart_id and  a.id=c.VOTE_TITLE_ID(+) and c.CHANNEL_ID=d.CHANNEL_ID(+) and a.founder_id=f.user_id(+) and a.ID=" + titleID;
 			dbUtil.executeSelect(sql);
 
 			Title item = new Title();
@@ -53,6 +59,21 @@ public class VoteManagerImpl implements VoteManager {
 				item.setQuestions(getQstionsOfServey(dbUtil.getInt(0, "id")));
 				item.setIslook(dbUtil.getInt(0,"islook"));
 				item.setDepart_name(dbUtil.getString(0,"disposedep"));
+				item.setFoundername(dbUtil.getString(0,"user_name"));
+				if(item.getTimeCtrls()!=null&& item.getTimeCtrls().size()>0){
+					try{
+					TimeCtrl timeCtrl=(TimeCtrl)item.getTimeCtrls().get(0);
+					SimpleDateFormat dateformt = new SimpleDateFormat("yyyy-MM-dd");
+			    	Date expriedtime_ = dateformt.parse(timeCtrl.getTimeEnd());
+			    	String endStr=CommonUtil.getDaysBetween(new Date(),expriedtime_)+"天"
+			    	  + ((expriedtime_.getTime() -new Date().getTime())/1000/60/60%24)+"小时"
+			    	  + ((expriedtime_.getTime() -new Date().getTime())/1000/60%60)+"分";
+					item.setEndTime(endStr);
+					}catch(Exception ex){
+						
+					}
+				}
+				
 			}
 
 			return item;
@@ -855,8 +876,9 @@ public class VoteManagerImpl implements VoteManager {
 			dbUtil.executeSelect(sql);
 			for (int i=0;i<dbUtil.size();i++){
 				DBUtil db = new DBUtil();
-				sql = "insert into TD_CMS_VOTE_ANSWER(QID,TYPE,WHO_IP,WHEN,ITEM_ID)values" +
-						"("+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+")";
+				long id = DBUtil.getNextPrimaryKey("TD_CMS_VOTE_ANSWER");
+				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID)values" +
+						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+")";
 				db.executeInsert(sql);
 			}
 			
@@ -868,6 +890,59 @@ public class VoteManagerImpl implements VoteManager {
 
 		}
 	}
+	/**
+	 * 投票
+	 * 
+	 * @param strOptionId 单选，多选答案,question文本答案<问题编号，问题答案>,IP地址
+	 * @return
+	 */
+	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip) throws VoteManagerException{
+		TransactionManager tm = new TransactionManager();
+		try {
+		
+			String[] optionIDs = strOptionID.split(";");
+			DBUtil dbUtil = new DBUtil();
+			
+			String ids = "";
+			for (int i=0;i<optionIDs.length;i++){
+				ids += " or ID=" + optionIDs[i];
+			}
+			
+			tm.begin();
+			String sql = "update td_cms_vote_items set count=count+1 where  1=2"+ids;
+			dbUtil.executeUpdate(sql);
+			
+			sql = "update td_cms_vote_questions set votecount=votecount+1 where  ID in (select qid from td_cms_vote_items where 1=2"+ids+")";
+			dbUtil.executeUpdate(sql);
+			
+			sql = "select QID,0,'"+ip+"',sysdate,ID from TD_CMS_VOTE_ITEMS where  1=2"+ids;
+			dbUtil.executeSelect(sql);
+			for (int i=0;i<dbUtil.size();i++){
+				DBUtil db = new DBUtil();
+				long id = DBUtil.getNextPrimaryKey("TD_CMS_VOTE_ANSWER");
+				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID)values" +
+						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+")";
+				db.executeInsert(sql);
+			}
+			Iterator<Map.Entry<String, String>> it=questionAnswer.entrySet().iterator();
+			while(it.hasNext()){
+				Map.Entry<String, String> map=it.next();
+				doAnswer(Integer.parseInt(map.getKey()),map.getValue(),ip);
+			}
+			tm.commit();
+			return 1;
+		} catch (Exception e) {
+			try {
+				tm.rollback();
+			} catch (RollbackException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+			throw new VoteManagerException(e.getMessage());
+
+		}
+	}
+	
 	/**
 	 * 清空投票结果
 	 * 
@@ -1319,6 +1394,55 @@ public class VoteManagerImpl implements VoteManager {
 			throw new VoteManagerException(e.getMessage());
 		}
 	}
+	/**
+	 * 取得某站点当前时间活动问卷
+	 * @param siteid
+	 * @param displayName
+	 * @param count
+	 * @return
+	 * @throws VoteManagerException
+	 */
+	public List getCurActiveSurvey(String siteid,int count)
+	 throws VoteManagerException {
+		DBUtil db = new DBUtil();
+		List res = new ArrayList();
+		ChannelManager channel = new ChannelManagerImpl();
+		//equest.getInputStream();
+		try {
+			
+			String sql = "SELECT   a.ID, a.islook, a.NAME, a.siteid, a.ip_repeat, a.active, a.picpath, a.istop, a.content, a.ctime, b.user_name,c.time_end+1" +
+					" from td_cms_vote_title a,td_sm_user b, td_cms_vote_timectrl c " +
+					" where  a.founder_id=b.user_id " + (count>0?"and rownum<="+count:"")+
+					" and  a.id=c.title_id and sysdate between time_start and time_end+1   and a.SITEID="+siteid+" order by ctime desc";
+			
+			db.executeSelect(sql );	
+			
+			for (int i = 0; i < db.size(); i++) {
+
+				Title  title = new Title();
+				title.setId(db.getInt(i,"id"));
+				title.setName(db.getString(i,"name"));
+				title.setSiteid(db.getInt(i,"siteid"));
+				title.setIpRepeat(db.getInt(i,"ip_repeat"));
+				title.setActive(db.getInt(i,"active"));
+				title.setPicpath(db.getString(i,"picpath"));
+				title.setIsTop(db.getInt(i,"istop"));
+				title.setContent(db.getString(i,"content"));
+				title.setChannelID(String.valueOf(db.getInt(i,"CHANNEL_ID")));
+				title.setChannelName(String.valueOf(db.getString(i,"chname")));
+				title.setFoundDate(db.getDate(i,"ctime").toString());
+				title.setFoundername(db.getString(i,"user_name"));
+			    title.setIslook(db.getInt(i,"islook"));
+				res.add(title);
+			}
+
+			return res;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new VoteManagerException(e.getMessage());
+		}
+	}
+	
 	
 	/**
 	 * 取得某站点某频道下的所有活动问卷

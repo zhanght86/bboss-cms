@@ -22,23 +22,14 @@ public class Votelist extends  DataInfoImpl {
 		CMSManager cmsM = new CMSManager();
 		cmsM.init(request,session,accessControl);
 		int siteID = Integer.parseInt(cmsM.getSiteID());
-		String channelID = request.getParameter("channelid");
-		String channelName = request.getParameter("channel");
+		
 		String surveyTitle = request.getParameter("surveyTitle");
 		String active = request.getParameter("active");
 		String createDateFrom = request.getParameter("createDateFrom");
 		String createDateTo = request.getParameter("createDateTo");
-		String deptID = request.getParameter("deptID");//机构ID
-		String deptName = request.getParameter("deptName");//机构名字
 		
-		if (!"".equals(channelID) && channelID!=null && !"null".equals(channelID))
-			channelID = " and c.CHANNEL_ID="+channelID+" ";
-		else
-			channelID="";
-		if (!"".equals(channelName) && channelName!=null && !"null".equals(channelName))
-			channelName = " and d.name='"+channelName+"' ";
-		else
-			channelName = "";
+		
+		
 		
 		if (!"".equals(surveyTitle) && surveyTitle!=null && !"null".equals(surveyTitle))
 			surveyTitle = " and a.NAME like '%"+surveyTitle+"%' ";
@@ -59,13 +50,9 @@ public class Votelist extends  DataInfoImpl {
 			createDateTo = " and a.ctime <=to_date('"+createDateTo+"','yyyy-mm-dd')+1 ";
 		else
 			createDateTo="";
-		String strWhere = "";
-		String where = channelID + surveyTitle + active + createDateFrom + createDateTo + channelName;
-		if(deptID!=null&&!deptID.equals("")&&!deptName.equals("admin"))
-		{
-			where += " and e.orgid="+deptID;
-			//strWhere = ",td_comm_email_disposedep e ";
-		}
+	
+		String where =  surveyTitle + active + createDateFrom + createDateTo ;
+		
 		//equest.getInputStream();
 		try {
 			
@@ -95,8 +82,7 @@ public class Votelist extends  DataInfoImpl {
 				}
 				title.setIpRepeat(db.getInt(i, "ip_repeat"));
 				title.setActive(db.getInt(i, "active"));
-				title.setChannelID(String.valueOf(db.getInt(i, "CHANNEL_ID")));
-				title.setChannelName(String.valueOf(db.getString(i, "chname")));
+				
 				title.setFoundDate(bartDateFormat.format(db.getDate(i, "ctime")));
 				title.setFoundername(db.getString(i,"user_name"));
 				title.setIsTop(db.getInt(i,"istop"));

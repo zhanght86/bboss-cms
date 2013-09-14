@@ -24,6 +24,7 @@ import com.frameworkset.platform.sanylog.bean.BrowserCounter;
 import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.DownLoadCounter;
 import com.frameworkset.platform.sanylog.bean.Module;
+import com.frameworkset.platform.sanylog.bean.OperChart;
 import com.frameworkset.platform.sanylog.bean.OperRank;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
@@ -34,7 +35,14 @@ import com.frameworkset.util.ListInfo;
  *
  */
 public interface CounterManager {
+	//操作统计新报表
+	List<String> getModuleNodes(String appId,String startTime,String endTime,String tableName)throws SQLException;
+	List<String> getTimeNodes(String startTime,String endTime,String tableName)throws SQLException;
 	
+	List<OperRank> getOperRankForCompareByDay(String appId,String startTime,String endTime,String tableName)throws SQLException;
+	
+	List<OperChart> getOperChartUser(String appId,String time,String tableName,float divisor)throws SQLException;
+	List<OperChart> getOperChartCount(String appId,String time,String tableName,float divisor)throws SQLException;
 	//导出Excel
 	public List<OperRank> getExcelDatas(String time,String type,String appId)throws SQLException;
 	//按周统计操作

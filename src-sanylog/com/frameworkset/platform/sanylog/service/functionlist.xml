@@ -3,6 +3,26 @@
 <properties>
 <!-- 功能清单管理  start -->
 
+<property name="updateSysTime">
+		<![CDATA[
+		update TD_LOG_FUNCTIONLIST set time_spent = #[timeSpent]
+		where id = #[id]
+		]]>
+	</property>
+<property name="insertSysTime">
+		<![CDATA[
+		insert into TD_LOG_FUNCTIONLIST (ID,APP_ID,APP_NAME,FUNCTION_CODE,ESTIMATE_OPER,ESTIMATE_USER,FUNCTION_NAME,TIME_SPENT) values 
+		(#[id],#[appId],#[appName],#[functionCode],#[estimateOper],#[estimateUser],#[functionName],#[timeSpent])
+		]]>
+	</property>
+<property name="getFunctionList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
+		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent
+		from TD_LOG_FUNCTIONLIST t1
+		where t1.app_id = ?
+		]]>
+	</property>  
 <property name="insertApp">
 		<![CDATA[
 		
@@ -66,7 +86,7 @@
 	</property>
 <property name="getMaxAppId">
 		<![CDATA[
-		select max(app_id) from td_log_app_manager
+		select max(app_id*1) from td_log_app_manager
 		]]>
 	</property>
 <property name="getAppId">
@@ -74,12 +94,12 @@
 		select app_id from td_log_app_manager where app_name = ?
 		]]>
 	</property>
-<property name="functionListSingleModify">
+<!-- <property name="functionListSingleModify">
 		<![CDATA[
 		update TD_LOG_FUNCTIONLIST set ESTIMATE_OPER = #[estimateOper],ESTIMATE_USER = #[estimateUser]
 		where id = #[id]
 		]]>
-	</property>
+	</property> -->
 <property name="functionListSingleModify">
 		<![CDATA[
 		update TD_LOG_FUNCTIONLIST set ESTIMATE_OPER = #[estimateOper],ESTIMATE_USER = #[estimateUser]
@@ -103,17 +123,35 @@
 <property name="getAllApp">
 		<![CDATA[
 		select distinct(APP_ID) appId,app_name appName
-		from TD_LOG_FUNCTIONLIST
+		from TD_LOG_APP_MANAGER
 			order by app_id
 		]]>
 	</property>
-<property name="showFunctionList">
+	<property name="showFunctionList">
 		<![CDATA[
 		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t1.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
+		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName,t1.time_spent timeSpent
+		from TD_LOG_FUNCTIONLIST t1
+		where 1=1
+		    #if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($functionCode && !$functionCode.equals(""))
+				and t1.FUNCTION_CODE like '%'||#[functionCode]||'%'
+			#end
+			#if ($functionName && !$functionName.equals(""))
+				and t1.FUNCTION_NAME like '%'||#[functionName]||'%'
+			#end
+			order by t1.app_id,t1.function_code
+		]]>
+	</property>
+<!-- <property name="showFunctionList">
+		<![CDATA[
+		select  t1.ID id,t1.APP_ID appId , t1.APP_NAME appName,t2.FUNCTION_CODE  functionCode,t1.ESTIMATE_OPER  estimateOper ,
 		t1.ESTIMATE_USER  estimateUser,t1.FUNCTION_NAME  functionName,t2.spent_time timeSpent
 		from TD_LOG_FUNCTIONLIST t1
 			
-			left join td_log_spent t2
+			right join td_log_spent t2
 			on t1.app_id = t2.app_id
 			and t1.function_code = t2.function_code
 		where 1=1
@@ -128,7 +166,7 @@
 			#end
 			order by t1.app_id,t1.function_code
 		]]>
-	</property>
+	</property> -->
 <!-- 功能清单管理  end -->
 	<!-- added by qingl 2012-09-20 -->
 	

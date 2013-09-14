@@ -1,15 +1,11 @@
 package com.frameworkset.platform.cms.mailmanager;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailAttachment;
@@ -18,19 +14,8 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.commons.mail.SimpleEmail;
 
-
-import com.frameworkset.platform.config.ConfigManager;
-
 import com.frameworkset.common.poolman.DBUtil;
-
-
-import java.net.*;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import com.frameworkset.platform.config.ConfigManager;
 
 
 public class EMailImpl implements EMailInterface {

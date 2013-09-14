@@ -3,6 +3,7 @@ package com.frameworkset.platform.cms.docCommentManager;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.frameworkset.platform.cms.container.Container;
 import com.frameworkset.util.ListInfo;
 
 public interface DocCommentManager extends java.io.Serializable {
@@ -24,6 +25,19 @@ public interface DocCommentManager extends java.io.Serializable {
 	 * @throws DocCommentManagerException
 	 */
 	public int getCommentPublishedCount(int docId) throws DocCommentManagerException;
+	/**
+	 * 获取站点已发布的评论总数
+	 * @return
+	 * @throws DocCommentManagerException
+	 */
+	public int getSiteCommentPublishedCount() throws DocCommentManagerException;
+	/**
+	 * 获取频道已发布的评论总数
+	 * @return
+	 * @throws DocCommentManagerException
+	 */
+	public int getChannelCommentPublishedCount(String channel) throws DocCommentManagerException;
+	
 	/**
 	 * 获取指定文档的评论数
 	 * @param docId
@@ -85,6 +99,24 @@ public interface DocCommentManager extends java.io.Serializable {
 	 * @throws SQLException
 	 */
 	public NComentList getCommnetList(int docId,int n)
+			throws Exception;
+	/**
+	 * 获取站点评论 前n条数据
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
+	public NComentList getSiteCommnetList(int n)
+			throws Exception;
+	/**
+	 * 
+	 * 获取频道评论 前n条数据
+	 * @param channel
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
+	public NComentList getChannelCommnetList(String channel,int n)
 			throws Exception;
 	/**
 	 * 获取总评论数

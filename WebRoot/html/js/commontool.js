@@ -108,9 +108,12 @@ $(function(){
 
 function  loadjs(){
 	/*$('a.normalTip').aToolTip();*/		
-	$('.toolTip').aToolTip({
-			fixed: true
-		});
+	if($('.toolTip').length > 0)
+	{
+		$('.toolTip').aToolTip({
+				fixed: true
+			});
+	}
 	/*$('a.clickTip').aToolTip({
 			clickIt: true,
 			tipContent: 'Hello I am aToolTip with content from the "tipContent" param'

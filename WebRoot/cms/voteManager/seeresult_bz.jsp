@@ -149,43 +149,52 @@ function returnListVote(){
 						<%}%>
           </table>
         </td>
-		<%
-			    List items1 = new ArrayList(); 
-				items1=question.getItems();
-			    String[] area= new String[items1.size()];
-				
-				DefaultPieDataset dataset=new DefaultPieDataset();
-				//System.out.println(items.size());
-				for (int k =0; k <items1.size(); k++) {
-				
-				//System.out.println(((Item) items1.get(k)).getOptions());
-				
-				area[k]=((Item)items1.get(k)).getOptions();
-				int dq=((Item) items1.get(k)).getCount();
-				dataset.setValue(area[k],dq);
-				}
-								
-	     JFreeChart chart=ChartFactory.createPieChart("饼型图",dataset,true,true,true);
-        chart.setTitle("投票统计图");//设置图片标题
-        ChartRenderingInfo info=new ChartRenderingInfo(new StandardEntityCollection());
-        String filename=ServletUtilities.saveChartAsJPEG(chart,300,200,info,session);
-        //设置生成图片，包括图片的大小，长度是300，宽是200
-        //out.println(filename);
-        session.setAttribute("file_name1",filename);
-        String URL= request.getContextPath() + "/servlet/DisplayChart?filename=" + filename; 
-        session.setAttribute("file_url1",URL);
-
-		%>
 		<td class=c1  bgcolor=#E2F5FE valign=top align="center" rowspan="1" > 
-					<div align=center>
+					<div align=left>
 						<table border="1" cellpadding="0" cellspacing="0" bordercolor="#E2F5FE">
 							<tr>
-								<td>
-									<CENTER>
-										<img src="<%=session.getAttribute("file_url1")%>" width=300 height=185 border=0 usemap="#<%=session.getAttribute("file_name1") %>">
-									</CENTER>
+								<td style="align:left;">
+									
+										 <%
+											int count=0;
+											  double percentCount=0.0;
+											 double totalPercentCount=0.0;
+											
+												for(Item item:(List<Item>)items){
+													count=count+item.getCount();
+												}
+													for(int i=0;i<items.size();i++){
+														Item item =(Item)items.get(i);
+														Score score = new Score();
+														score.setValue(item.getCount());
+														score.setMaxValue(count);
+														score.setFullBlocks(10);
+														score.setPartialBlocks(5);
+														score.setShowA(true);
+														score.setShowB(true);
+														score.setShowEmptyBlocks(true);
+														item.setScore(score.pic("../../images/score/gifs/rb_{0}.gif"));
+														out.print(item.getScore());
+												
+														if(count!=0){
+															percentCount=new BigDecimal(""+item.getCount()*1.0/count).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+															
+															if(i==items.size() -1){ //最后一项修复
+																out.print( new BigDecimal(""+( 1 -totalPercentCount )).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue()*1000/10+"%");
+															}else{
+																out.print((percentCount*1000)/10+"%");
+															
+															}
+															totalPercentCount=totalPercentCount +percentCount;
+														}else{
+															out.print("0.0%");
+														}
+														out.print(" "+item.getOptions());
+														out.println("<br/>");
+													}
+									        
+										 %>	
 								</td>
-
 							</tr>
 						</table>
 					</div>

@@ -73,7 +73,7 @@
 		
 		//记录操作日志
 		LogManager logManager = SecurityDatabase.getLogManager();
-		logManager.log(accesscontroler.getUserAccount(),"删除文档.文档标题:" + doctitles.toString(),"文档管理",request.getRemoteAddr(),"");
+		logManager.log(accesscontroler.getUserAccount(),"删除文档.文档标题:" + doctitles.toString(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 		if("recursive".equals(flag))
 		{
 			if(recursivedocs.size() > 0)

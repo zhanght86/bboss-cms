@@ -47,6 +47,8 @@ public class SanyLeftNavTag extends CMSBaseTag{
 			
 	private String channel = "";
 	
+	
+	
 	private String target = "_self";
 	private int level = 3;
 	
@@ -136,7 +138,14 @@ public class SanyLeftNavTag extends CMSBaseTag{
           </ul>
 		 *  */
 		int currentLevel = 2;
-		sb.append("<h1>").append(channelName).append("</h1>");
+		if(channelName == null || channelName.equals(""))
+		{
+			sb.append("<h1></h1>");
+		}
+		else
+		{
+			sb.append("<h1>").append(channelName).append("</h1>");
+		}
 		if(list != null && list.size() > 0)
 		{
 			sb.append("<ul>");

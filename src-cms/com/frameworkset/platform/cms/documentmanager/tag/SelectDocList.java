@@ -54,8 +54,8 @@ public class SelectDocList extends DataInfoImpl implements java.io.Serializable
 			DocumentManager docManager = new DocumentManagerImpl();
 			try {	
 				StringBuffer sql= new StringBuffer();
-				sql.append("select x.document_id,title,subtitle,author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
-				   .append("doctype,docwtime,createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,docabstract,nvl(y.order_no,-1) as order_no,end_time,x.count ")
+				sql.append("select x.document_id,title,subtitle,x.author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
+				   .append("x.doctype,x.docwtime,x.createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,x.docabstract,nvl(y.order_no,-1) as order_no,end_time,x.count ")
 				   .append("from  TD_CMS_DOCUMENT x left outer join td_cms_doc_arrange y ")
 				   .append("on x.document_id = y.document_id ")
 				   .append(" left outer join tb_cms_flow z on x.flow_id = z.id ")
@@ -65,7 +65,7 @@ public class SelectDocList extends DataInfoImpl implements java.io.Serializable
 				   .append(" where x.channel_id =")
 				   .append(channelid)
 				   .append(" and ")
-				   .append("status not in(8,20,100,10,12) and isdeleted != 1 and " )
+				   .append("x.status not in(8,20,100,10,12) and isdeleted != 1 and " )
 				   .append("(select count(*) from td_cms_site a, td_cms_channel b " )
 				   .append("where b.site_id = a.site_id and (a.status = 0 or a.status = 1) " )
 				   .append(" and b.channel_id =" )

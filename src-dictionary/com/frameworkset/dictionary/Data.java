@@ -365,6 +365,30 @@ public class Data implements Serializable {
 		return "字典[id:" + dataId + " name:" + name + "]的数据项["+value+"]不存在";
 	}
 	
+	
+	public String getItemNameByValue(String value)
+			throws ProfessionDataManagerException {
+		if (items == null){
+//			throw new ProfessionDataManagerException("id为'" + dataId
+//					+ "'的专业数据不能为空");
+//			System.out.println("id为'" + dataId + "'的专业数据不能为空");
+			return null;
+		}
+
+		Item item = (Item) itemsIdxByValue.get(value);
+		if (item != null)
+			return item.getName();
+		// for(int i = 0; i < items.size(); i ++)
+		// {
+		// Item item = (Item)items.get(i);
+		// if(item.getValue().equals(value))
+		// return item.getName();
+		// }
+//		throw new ProfessionDataManagerException("id为'" + dataId
+//				+ "'专业数据中不存在值为'" + value + "'的数据项");
+		return null;
+	}
+	
 	public String getItemName(String value,String defaultName)
 			throws ProfessionDataManagerException {
 		if (items == null){
@@ -401,6 +425,43 @@ public class Data implements Serializable {
 			return defaultName;
 		}
 	}
+	
+	public String getItemNameByValue(String value,String defaultName)
+			throws ProfessionDataManagerException {
+		if (items == null){
+			if(defaultName == null)
+			{
+//			throw new ProfessionDataManagerException("id为'" + dataId
+//					+ "'的专业数据不能为空");
+//			System.out.println("id为'" + dataId + "'的专业数据不能为空");
+				return null;
+			}
+			else
+			{
+				return defaultName;
+			}
+		}
+
+		Item item = (Item) itemsIdxByValue.get(value);
+		if (item != null)
+			return item.getName();
+		// for(int i = 0; i < items.size(); i ++)
+		// {
+		// Item item = (Item)items.get(i);
+		// if(item.getValue().equals(value))
+		// return item.getName();
+		// }
+//		throw new ProfessionDataManagerException("id为'" + dataId
+//				+ "'专业数据中不存在值为'" + value + "'的数据项");
+		if(defaultName == null)
+		{
+			return null;
+		}
+		else
+		{
+			return defaultName;
+		}
+	}
 
 	public String getItemValue(String name)
 			throws ProfessionDataManagerException {
@@ -423,6 +484,29 @@ public class Data implements Serializable {
 //		throw new ProfessionDataManagerException("id为'" + dataId
 //				+ "'的专业数据中不存在名称为" + name + "数据项");
 		return "字典[id:" + dataId + " name:" + name + "]不存在名称为["+name+"]的数据项";
+	}
+	
+	public String getItemValueByName(String name)
+			throws ProfessionDataManagerException {
+		if (items == null){
+//			throw new ProfessionDataManagerException("id为'" + dataId
+//					+ "'的专业数据不能为空");
+			return null;
+		}
+		Item item = (Item) itemsIdxByName.get(name);
+
+		if (item != null)
+			return item.getValue();
+
+		// for(int i = 0; i < items.size(); i ++)
+		// {
+		// Item item = (Item)items.get(i);
+		// if(item.getName().equals(name))
+		// return item.getValue();
+		// }
+//		throw new ProfessionDataManagerException("id为'" + dataId
+//				+ "'的专业数据中不存在名称为" + name + "数据项");
+		return null;
 	}
 	
 	public String getItemValue(String name,String defaultValue)
@@ -455,6 +539,41 @@ public class Data implements Serializable {
 		if(defaultValue == null)
 		{
 			return "字典[id:" + dataId + " name:" + name + "]不存在名称为["+name+"]的数据项";
+		}
+		else
+			return defaultValue;
+	}
+	
+	public String getItemValueByName(String name,String defaultValue)
+			throws ProfessionDataManagerException {
+		if (items == null){
+//			throw new ProfessionDataManagerException("id为'" + dataId
+//					+ "'的专业数据不能为空");
+			if(defaultValue == null)
+			{
+				return null;
+			}
+			else
+			{
+				return defaultValue;
+			}
+		}
+		Item item = (Item) itemsIdxByName.get(name);
+
+		if (item != null)
+			return item.getValue();
+
+		// for(int i = 0; i < items.size(); i ++)
+		// {
+		// Item item = (Item)items.get(i);
+		// if(item.getName().equals(name))
+		// return item.getValue();
+		// }
+//		throw new ProfessionDataManagerException("id为'" + dataId
+//				+ "'的专业数据中不存在名称为" + name + "数据项");
+		if(defaultValue == null)
+		{
+			return null;
 		}
 		else
 			return defaultValue;

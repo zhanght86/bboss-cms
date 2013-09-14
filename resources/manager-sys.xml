@@ -19,7 +19,7 @@
 				class：实现类代码
 				used：标识是否使用
 			-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl" />
 			<provider type="VODDB" used="false" class="com.frameworkset.platform.sysmgrcore.manager.db.VODUserManager" />
 
 			<!--基于LDAP的用户管理实现-->
@@ -70,9 +70,9 @@
 		<!-- Group Management Implement Class and JNDI Name -->
 		<manager id="GroupManagement" jndiname="security.GroupManager" singlable="true">
 			<!--基于数据库的用户组管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl" />
 			<!--基于LDAP的用户组管理实现-->
-			<provider type="LDAP" used="true" class="com.frameworkset.platform.sysmgrcore.manager.ldap.GroupManagerImpl" />
+			<provider type="LDAP" used="false" class="com.frameworkset.platform.sysmgrcore.manager.ldap.GroupManagerImpl" />
 
 			<synchronize enabled="false">
 				<method name="storeGroup" />
@@ -87,30 +87,30 @@
 		<!-- Role Management Implement Class and JNDI Name -->
 		<manager id="RoleManagement" jndiname="security.RoleManager" singlable="true">
 			<!--基于数据库的角色管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.RoleManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.RoleManagerImpl" />
 		</manager>
 
 		<!-- Resource Management Implement Class and JNDI Name -->
 		<manager id="ResourceManagement" jndiname="security.EntryManager" singlable="true">
 			<!--基于数据库的资源管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl" />
 			<!--基于LDAP的资源管理实现-->
 		</manager>
 		<!-- Resource Management Implement Class and JNDI Name -->
 		<manager id="JobManagement" jndiname="security.JobManager" singlable="true">
 			<!--基于数据库的资源管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.JobManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.JobManagerImpl" />
 			<!--基于LDAP的资源管理实现-->
 		</manager>
 		<!-- Resource Management Implement Class and JNDI Name -->
 		<manager id="OperManagement" jndiname="security.OperManager" singlable="true">
 			<!--基于数据库的资源管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OperManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OperManagerImpl" />
 		</manager>
 		<!-- Resource Management Implement Class and JNDI Name -->
 		<manager id="OrgManagement" jndiname="security.OrgManager" singlable="true">
 			<!--基于数据库的资源管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl" />
 			<provider type="VODDB" used="false" class="com.frameworkset.platform.sysmgrcore.manager.db.VODOrgManger" />
 			<!--基于LDAP的资源管理实现-->
 			 <provider type="LDAP" used="false" class="com.frameworkset.platform.sysmgrcore.manager.ldap.OrgManagerImpl" />
@@ -123,10 +123,10 @@
 		
 		<manager id="LogManagement" jndiname="security.LogManagement" singlable="true">
 			<!--基于数据库的日志管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.LogManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.LogManagerImpl" />
 		</manager>
 		<manager id="SchedularManagement" jndiname="security.SchedularManagement" singlable="true">
 			<!--基于数据库的日程管理实现-->
-			<provider type="DB" default="true" class="com.frameworkset.platform.sysmgrcore.manager.db.SchedularManagerImpl" />
+			<provider type="DB" default="true" used="true" class="com.frameworkset.platform.sysmgrcore.manager.db.SchedularManagerImpl" />
 		</manager>
 </manager-config>

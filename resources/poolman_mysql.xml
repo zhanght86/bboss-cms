@@ -36,7 +36,7 @@
     true-检测，如果检测到有事务超时的链接，系统将强制回收（释放）该链接
     false-不检测，默认值
      -->
-    <removeAbandoned>true</removeAbandoned>
+    <removeAbandoned>false</removeAbandoned>
 	<!--
 		链接使用超时时间（事务超时时间）
 		单位：秒

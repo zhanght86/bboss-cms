@@ -774,7 +774,7 @@
 			            		<!--来源于别的网站才有父站点-->
   </table> 
    <script type="text/javascript">
-  document.all.inputdocsource.value=document.all.docsource_id.options(document.all.docsource_id.selectedIndex).text;
+  //document.all.inputdocsource.value=document.all.docsource_id.options(document.all.docsource_id.selectedIndex).text;
   </script>  
 </form>
 <div style="display:none">

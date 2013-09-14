@@ -4,8 +4,7 @@
  */
 package com.sany.test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,6 +32,18 @@ import com.sany.workflow.service.impl.ActivitiServiceImpl;
  */
 public class TestSrv {
 
+	@org.junit.Test
+	public void test()
+	{
+		String dirq = "F:\\workspace\\SanyIPP\\WebRoot\\cms\\siteResource\\sanyIPP\\_template\\reportDetail.html";
+		String dirb = "F:\\workspace\\SanyIPP\\WebRoot\\cms\\siteResource\\sanyIPP\\_template\\reportsList.html";
+		
+		java.io.File f = new java.io.File(dirq);
+		java.io.File f1 = new java.io.File(dirb);
+		System.out.println(f.lastModified() );
+		System.out.println(f1.lastModified() );
+		System.out.println(f.lastModified() == f1.lastModified());
+	}
     /**
      *
      */

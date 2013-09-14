@@ -184,7 +184,11 @@
 	return (result.toString());
   }
 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<pg:config enablecontextmenu="false" enabletree="false"/>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
 <link href="<%=request.getContextPath()%>/cms/inc/css/cms.css" rel="stylesheet" type="text/css">
 <script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
 <script src="<%=request.getContextPath()%>/cms/inc/js/killerror.js"></script>
@@ -506,6 +510,7 @@
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==2){
 			document.activeElement.blur();
@@ -522,6 +527,7 @@
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==3){
 			document.activeElement.blur();
@@ -538,6 +544,7 @@
 			document.all.tab3.style.color = "#FF6600";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==4){
 			document.activeElement.blur();
@@ -554,6 +561,7 @@
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "#FF6600";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==5){
 			document.activeElement.blur();
@@ -570,6 +578,7 @@
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "#FF6600";
+			document.all.tab6.style.color = "";
 		}
 		if(i==6){
 			document.activeElement.blur();
@@ -586,7 +595,8 @@
 			document.all.tab2.style.color = "";
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
-			document.all.tab5.style.color = "#FF6600";
+			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "#FF6600";
 		}
 	}
 	//初始化相关文档table表的数据
@@ -1236,7 +1246,7 @@ else
 								<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
 								<a id=tab5 href="#" onclick=tabClick(5) ><u>[扩展字段]</u></a>
 								<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
-								<a id=tab5 href="#" onclick=tabClick(6) ><u>[专题报道]</u></a>
+								<a id=tab6 href="#" onclick=tabClick(6) ><u>[专题报道]</u></a>
 		                  	</td>
 		                    <td width="30%" height="23">
 				<div align="center">

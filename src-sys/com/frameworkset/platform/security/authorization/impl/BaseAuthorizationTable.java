@@ -57,6 +57,8 @@ public abstract class BaseAuthorizationTable implements AuthorizationTable,
     private static final AuthUser[] EMPTY_USERS = new AuthUser[0];
 
     protected AuthorTableInfo authorTableInfo;
+    public static final String guest = "guest___";
+    public static final String password = "123456";
 
     /**缓冲用户与角色的关系*/
     private Map authorizationTable;
@@ -342,13 +344,25 @@ public abstract class BaseAuthorizationTable implements AuthorizationTable,
 	        	//update 20080721 gao.tang 如果抛出SecurityException异常返回false
 	        	try
 	        	{
-	        		roles = this.getAllRoleOfPrincipal(userName);
+	        		if(!userName.equals(guest))
+	        		{
+	        			roles = this.getAllRoleOfPrincipal(userName);
+	        		}
+	        		else
+	        		{	 
+	        			AuthRole authrole = new AuthRole();
+						authrole.setRoleName("guest");
+						authrole.setRoleId("99");
+						authrole.setRoleType(AuthRole.TYPE_ROLE);
+						roles = new AuthRole[]{authrole};						
+	        		}
 	        	}
-	        	catch(SecurityException se)
+	        	catch(Exception se)
 	        	{
 	        		log.debug("Get all roles of "
 	                        + userName + " error: " + se.getMessage());
 	        		return false;
+	        		
 	        	}
 	            if (roles == null || roles.length <= 0) {
 	                roles = EMPTY_ROLES;
@@ -386,9 +400,22 @@ public abstract class BaseAuthorizationTable implements AuthorizationTable,
         	//update 20080721 gao.tang 如果抛出SecurityException异常返回false
         	try
         	{
-        		roles = this.getAllRoleOfPrincipal(userName);
+        		
+        		
+        		if(!userName.equals(guest))
+        		{
+        			roles = this.getAllRoleOfPrincipal(userName);
+        		}
+        		else
+        		{	 
+        			AuthRole authrole = new AuthRole();
+					authrole.setRoleName("guest");
+					authrole.setRoleId("99");
+					authrole.setRoleType(AuthRole.TYPE_ROLE);
+					roles = new AuthRole[]{authrole};						
+        		}
         	}
-        	catch(SecurityException se)
+        	catch(Exception se)
         	{
         		log.debug("Get all roles of "
                         + userName + " error: " + se.getMessage());

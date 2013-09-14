@@ -7,9 +7,9 @@ public class TaskInfo {
 
 	private String id;
 	
-	private long process_instance_id;
+	private String process_instance_id;
 	
-	private long task_id;
+	private String task_id;
 	
 	private String deal_user;
 	
@@ -30,19 +30,19 @@ public class TaskInfo {
 		this.id = id;
 	}
 
-	public long getProcess_instance_id() {
+	public String getProcess_instance_id() {
 		return process_instance_id;
 	}
 
-	public void setProcess_instance_id(long process_instance_id) {
+	public void setProcess_instance_id(String process_instance_id) {
 		this.process_instance_id = process_instance_id;
 	}
 
-	public long getTask_id() {
+	public String getTask_id() {
 		return task_id;
 	}
 
-	public void setTask_id(long task_id) {
+	public void setTask_id(String task_id) {
 		this.task_id = task_id;
 	}
 

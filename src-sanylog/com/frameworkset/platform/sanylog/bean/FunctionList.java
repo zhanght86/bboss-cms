@@ -12,6 +12,19 @@ public class FunctionList {
 	private float timeSpent;
 	private String error;
 	
+	public String equal(FunctionList bean){
+		if(this.appId.equals(bean.getAppId())&&this.functionCode.equals(bean.getFunctionCode())){
+			if(this.timeSpent==(bean.getTimeSpent())){
+				return "equal";
+			}else{
+				bean.setTimeSpent(this.timeSpent)   ;
+				return "timediff";
+			}
+		}else{
+			return "notequal";
+		}
+		
+	}
 	public String getError() {
 		return error;
 	}

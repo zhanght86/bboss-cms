@@ -3,6 +3,7 @@ package com.frameworkset.platform.cms.votemanager;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.frameworkset.spi.SPIException;
 
@@ -19,6 +20,10 @@ public interface VoteManager {
 	 * @return
 	 */
 	public Title getSurveyBy(int titleID) throws VoteManagerException;
+	/*
+	 * 取得某站点当前时间活动问卷
+	 */
+	public List getCurActiveSurvey(String siteid,int count) throws VoteManagerException ;
 	
 	/**
 	 * 取得问题选项
@@ -91,6 +96,14 @@ public interface VoteManager {
 	 * @return
 	 */
 	public int doVote(String strOptionID,String ip) throws VoteManagerException;
+	
+	/**
+	 * 投票
+	 * 
+	 * @param strOptionId 单选，多选答案,question文本答案<问题编号，问题答案>,IP地址
+	 * @return
+	 */
+	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip) throws VoteManagerException;
 	
 	/**
 	 * 投票

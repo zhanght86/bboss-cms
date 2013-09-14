@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
+
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.common.poolman.SQLParams;
@@ -97,13 +100,25 @@ public class SynUtil {
 	
 	public static void main(String[] args) throws SQLException
 	{
-		initMasterData() ;
+//		BaseApplicationContext context = DefaultApplicationContext.getApplicationContext("bboss-masterdata-humanResource.xml");
+//		HrSyncTask task = context.getTBeanObject("masterdata.hrSyncTask", HrSyncTask.class);
+//		task.syncAllData();
+//		initMasterData() ;
+		initMasterData();
 	}
 	
 	public static void initMasterData() throws SQLException
 	{
-		  HrSyncTask task = new HrSyncTask();
-		  task.initialData();
+//		  HrSyncTask task = new HrSyncTask();
+//		  task.syncAllData();
+		BaseApplicationContext context = DefaultApplicationContext.getApplicationContext("bboss-masterdata-humanResource.xml");
+		HrSyncTask task = context.getTBeanObject("masterdata.hrSyncTask", HrSyncTask.class);
+		com.sany.masterdata.hr.sync.SyncUserInfo user = context.getTBeanObject("masterdata.hr.syncUserInfo", SyncUserInfo.class);
+		com.sany.masterdata.hr.sync.SyncOrganizationInfo org = context.getTBeanObject("masterdata.hr.syncOrganizationInfo", SyncOrganizationInfo.class);
+		
+//		org.syncAllData();//同步组织和岗位
+//		task.syncAllData();//同步所有数据
+		user.syncAllData();//同步用户数据
 		
 	}
 }

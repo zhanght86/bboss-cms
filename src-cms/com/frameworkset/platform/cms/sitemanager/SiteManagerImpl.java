@@ -128,7 +128,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request,response);
 			String operContent="";        
-	        String operSource=request.getRemoteAddr();
+	        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
 	        String openModle="站点管理";
 	        String userName = control.getUserName();
 	        String description="";
@@ -574,7 +574,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request,response);
 			String operContent="";        
-	        String operSource=request.getRemoteAddr();
+	        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
 	        String openModle="站点管理";
 	        String userName = control.getUserName();
 	        String description="";
@@ -742,7 +742,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request,response);
 			String operContent="";        
-	        String operSource=request.getRemoteAddr();
+	        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
 	        String openModle="站点管理";
 	        String userName = control.getUserName();
 	        String description="";
@@ -872,7 +872,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request,response);
 			String operContent="";        
-	        String operSource=request.getRemoteAddr();
+	        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
 	        String openModle="站点管理";
 	        String userName = control.getUserName();
 	        String description="";

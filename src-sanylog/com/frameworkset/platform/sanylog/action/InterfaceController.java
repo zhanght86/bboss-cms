@@ -49,7 +49,7 @@ public class InterfaceController {
 		Module module = configManager.checkAppModule(paramCounter.getAppName(), paramCounter.getModuleName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
 		paramCounter.setAppId(Integer.parseInt(module.getAppId()));
 		paramCounter.setModuleId(Integer.parseInt(module.getModuleId()));
-		paramCounter.setOperateIp(request.getRemoteAddr());
+		paramCounter.setOperateIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setPageURL(paramCounter.getPageURL());
 //设置浏览器类型
 		String userAgent = request.getHeader("User-Agent");
@@ -78,6 +78,8 @@ public class InterfaceController {
 			tm.release();
 		}
 	}
+	
+	
 	/**
 	 * 浏览器计数
 	 * @param paramCounter 计数器参数
@@ -110,22 +112,46 @@ public class InterfaceController {
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : channelName);
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : docName);
 		System.out.println(paramCounter.getSiteName()+"---------------------------"+paramCounter.getChannelName());
-		Module module = configManager.checkAppModule(paramCounter.getSiteName(), paramCounter.getChannelName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
+		//判断channelname是否为空，不为空才执行下面的check语句
+		Module module = new Module();
+		if(null==channelName||"".equals(channelName)){//如果为空则直接不执行
+			return 1;
+		}
+		if("sanydp".equals(siteName)&&!channelName.contains("menuid")){
+			return 1;
+		}else if("sanydp".equals(siteName)&&channelName.contains("#")){
+			paramCounter.setChannelName(channelName.replace("#", ""));
+		}else if("sany-mms".equals(siteName)&&channelName.contains("menuid")){//辅料不需要包含menuid
+			return 1;
+		}else if("sany-mms".equals(siteName)&&channelName.contains("#")){//辅料不要包含#
+			paramCounter.setChannelName(channelName.replace("#", ""));
+		}
+		/*else if("GSP".equals(siteName)&&!channelName.contains("act")){//GSP的url路径里面不包含act参数的话，则不记录日志
+			return 1;
+		}
+		else if("GSP".equals(siteName)&&channelName.contains("&")){//GSP的sitename里面还带有除了act以外的其它参数的则去掉后面的参数
+			paramCounter.setChannelName(channelName.split("&")[0]);
+		}*/
 		
+		 module = configManager.checkAppModule(paramCounter.getSiteName(), paramCounter.getChannelName(),paramCounter.getModuleCode(),paramCounter.getModulePath());//检查 appId  moduleId
+
 		paramCounter.setSiteId(Integer.parseInt(module.getAppId()));
 		paramCounter.setChannelId(Integer.parseInt(module.getModuleId()));
-		paramCounter.setBrowserIp(request.getRemoteAddr());
+		paramCounter.setBrowserIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setPageURL(paramCounter.getPageURL());
 //设置浏览器类型
 		String userAgent = request.getHeader("User-Agent");
-		for (String agent : userAgent.split(";")) {
-			for (String browser : browserTypeSet) {
-				if (agent.indexOf(browser) > 0) {
-					paramCounter.setBrowserType(agent.substring(agent.indexOf(browser)).replaceAll("/", " "));
-					break;
+		if(null!=userAgent){
+			for (String agent : userAgent.split(";")) {
+				for (String browser : browserTypeSet) {
+					if (agent.indexOf(browser) > 0) {
+						paramCounter.setBrowserType(agent.substring(agent.indexOf(browser)).replaceAll("/", " "));
+						break;
+					}
 				}
 			}
 		}
+		
 		//设置访问来源的url
 		paramCounter.setReferer(request.getHeader("Referer"));
 //事务提交代码
@@ -133,9 +159,10 @@ public class InterfaceController {
 		try {
 			tm.begin(TransactionManager.RW_TRANSACTION);
 			counterManager.incrementBrowserCounter(paramCounter);//新增一条记录在基础计数表中
+			
 			long ret = 0;
 			if (enable) {
-				ret = counterManager.getBrowserCount(paramCounter.getSiteId());
+				ret = 2;//counterManager.getBrowserCount(paramCounter.getSiteId());
 			}
 			tm.commit();
 			return ret;

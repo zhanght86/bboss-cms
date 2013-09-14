@@ -23,6 +23,18 @@ public class ChannelInfoTag extends CMSBaseTag {
 	protected String linktype = null;
 
 	protected String imagestyle = null;
+	/**
+	 * 图片扩展脚步
+	 */
+	protected String imageextend;
+
+	public String getImageextend() {
+		return imageextend;
+	}
+
+	public void setImageextend(String imageextend) {
+		this.imageextend = imageextend;
+	}
 
 	protected String target = "_self";
 
@@ -87,6 +99,8 @@ public class ChannelInfoTag extends CMSBaseTag {
 					IMG img = new IMG();
 					img.setSrc(CMSTagUtil.getPublishedLinkPath(context,
 							outputStrng.toString()));
+					if(imageextend != null)
+						img.setExtend(imageextend);
 					if (imagestyle != null)
 						img.setStyle(imagestyle);
 					outputStrng = new StringBuffer(img.toString());
@@ -141,7 +155,8 @@ public class ChannelInfoTag extends CMSBaseTag {
 					IMG img = new IMG();
 					img.setSrc(CMSTagUtil.getPublishedLinkPath(context,
 							outputStrng.toString()));
-
+					if(imageextend != null)
+						img.setExtend(imageextend);
 					if (imagestyle != null)
 						img.setStyle(imagestyle);
 					a.setTagText(img.toString());
@@ -212,6 +227,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 		site = null;
 		linktype = null;
 		imagestyle = null;
+		imageextend = null;
 		return ret;
 	}
 

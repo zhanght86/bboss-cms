@@ -17,5 +17,33 @@
 			<property value="com/sany/masterdata/hr/dao/HumanDataSql.xml" />
 		</construction>
 	</property>
-
+	
+	<property name="mdmService" factory-class="com.caucho.hessian.client.HessianProxyFactory" factory-method="create">
+		<construction>
+			<property value="com.sany.greatwall.MdmService"/>		
+			<property><![CDATA[http://gwall.sany.com.cn/sany-greatwall-web/mdmservice]]></property>	
+		</construction>
+	</property>			
+	
+	<property name="masterdata.hr.syncOrganizationInfo"
+		f:executor="attr:masterdata.hr.configSqlExecutor"	
+		f:mdmService="attr:mdmService"
+		class="com.sany.masterdata.hr.sync.SyncOrganizationInfo"/>
+	
+	<property name="masterdata.hr.syncJobInfo"
+		f:executor="attr:masterdata.hr.configSqlExecutor"	
+		f:mdmService="attr:mdmService"
+		class="com.sany.masterdata.hr.sync.SyncJobInfo"/>
+	
+	<property name="masterdata.hr.syncUserInfo"
+		f:executor="attr:masterdata.hr.configSqlExecutor"	
+		f:mdmService="attr:mdmService"
+		class="com.sany.masterdata.hr.sync.SyncUserInfo"/>
+	
+	<property name="masterdata.hrSyncTask"
+		f:syncUserInfo="attr:masterdata.hr.syncUserInfo"	
+		f:syncOrganizationInfo="attr:masterdata.hr.syncOrganizationInfo"	
+		f:syncJobInfo="attr:masterdata.hr.syncJobInfo"	
+		class="com.sany.masterdata.task.HrSyncTask"/>
+	
 </properties>

@@ -1,5 +1,6 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
+import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.annotations.ResponseBody;
 
 import com.frameworkset.common.poolman.DBUtil;
@@ -57,9 +58,23 @@ public  class CacheController {
 		ret.append("<br/>").append(clearCMSPublishCache());
 		ret.append("<br/>").append(clearUserCache());
 		ret.append("<br/>").append(this.clearDBMetaCache());
+		ret.append("<br/>").append(clearParamsHandlerCache());
+		
 		
 		return ret.toString();
 		
+	}
+	public @ResponseBody String clearParamsHandlerCache()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try{
+			ParamsHandler.cleanAllCache();
+		}catch(Exception e){
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除ParamHandler缓存成功");
+		return errorMessage.toString();
 	}
 	public @ResponseBody String clearOrg()
 	{

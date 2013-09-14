@@ -74,6 +74,7 @@ import com.frameworkset.platform.security.authorization.AuthPrincipal;
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.AuthUser;
 import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
+import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
 import com.frameworkset.platform.security.context.AppAccessContext;
 import com.frameworkset.platform.security.util.CookieUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -594,13 +595,20 @@ public class AccessControl {
 
 	protected AccessControl() {
 
-		loginPage = ConfigManager.getInstance().getLoginPage();
-
-		if (loginPage == null || loginPage.trim().equals("")) {
-			loginPage = "hnu_main.jsp";
+		try
+		{
+			loginPage = ConfigManager.getInstance().getLoginPage();
+	
+			if (loginPage == null || loginPage.trim().equals("")) {
+				loginPage = "hnu_main.jsp";
+			}
+			authorfailedPage = ConfigManager.getInstance().getAuthorfailedDirect();
+			moduleName = ConfigManager.getInstance().getModuleName();
 		}
-		authorfailedPage = ConfigManager.getInstance().getAuthorfailedDirect();
-		moduleName = ConfigManager.getInstance().getModuleName();
+		catch(Exception e)
+		{
+			log.error("", e);
+		}
 	}
 	
 	
@@ -677,7 +685,7 @@ public class AccessControl {
 	public String getSubSystemLogoutRedirect() {
 		String systemid = this.getCurrentSystemID();
 		
-			return getSubSystemLogoutRedirect(request,systemid,true) ;
+			return getSubSystemLogoutRedirect(request,systemid,false) ;
 		
 	}
 	
@@ -802,7 +810,7 @@ public class AccessControl {
 	 * @return
 	 */
 	public static String getSubSystemLogoutRedirect(HttpServletRequest request) {
-		return getSubSystemLogoutRedirect(request,null,true);
+		return getSubSystemLogoutRedirect(request,null,false);
 		
 	}
 
@@ -1048,7 +1056,7 @@ public class AccessControl {
 	private void guestlogin()
 	{
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
-				"guest___", "123456",null,request);
+				BaseAuthorizationTable.guest, BaseAuthorizationTable.password,null,request);
 		
 		try {
 			credentialIndexs = new HashMap();
@@ -2270,13 +2278,13 @@ public class AccessControl {
 				}
 				
 				
-				{
-					MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-					if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
-					{
-						url.append("&").append(MemTokenManager.temptoken_param_name).append("=").append(memTokenManager.buildDToken(request));
-					}
-				}
+//				{
+//					MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
+//					if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+//					{
+//						url.append("&").append(MemTokenManager.temptoken_param_name).append("=").append(memTokenManager.buildDToken(request));
+//					}
+//				}
 				response.sendRedirect(url.toString());
 
 			}

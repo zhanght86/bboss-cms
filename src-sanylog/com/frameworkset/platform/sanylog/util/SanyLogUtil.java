@@ -24,15 +24,18 @@ import org.frameworkset.util.ClassUtil;
 import org.frameworkset.util.ClassUtil.ClassInfo;
 
 import com.frameworkset.platform.sanylog.bean.FunctionList;
+import com.frameworkset.platform.sanylog.bean.PageList;
 import com.frameworkset.platform.security.AccessControl;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.frameworkset.platform.sanylog.dictionary.Dictionary;
 import com.frameworkset.platform.sanylog.service.FunctionListManager;
 import org.frameworkset.util.ClassWrapper;
+import com.frameworkset.platform.sanylog.service.PageListManager;
 
 
 public class SanyLogUtil {
 	private FunctionListManager functionListManager;
+	private PageListManager pageListManager;
 	
 	private String check (List<?> datas,String className,String []values,String []infos)throws Exception{
 		StringBuffer messages = new StringBuffer();
@@ -336,7 +339,45 @@ public class SanyLogUtil {
 		}
 		return "";
 	}
-	
+	public Map batchImportPageList(String filePath, String fileName,String fileNameOrig,String appId) throws Exception{
+		Map<String, Object> ret = new HashMap<String, Object>();
+		List<PageList> dataGroupList = new ArrayList<PageList>();
+		try {
+			StringBuffer error = new StringBuffer();
+			List<Map<String,String>> excelList = readExcel(filePath + fileName,Dictionary.PageListExcelNum);
+			for(int j =0;j<excelList.size();j++){
+				PageList subject = (PageList)copyMap(excelList.get(j),j,Dictionary.PageList,Dictionary.PageListExcelKeys,Dictionary.PageListExcelValues,Dictionary.PageListExcelInfos);
+				if(null!=subject.getError()&&!"".equals(subject.getError())){
+					error.append(subject.getError());
+					
+				}
+				dataGroupList.add(subject);
+			}
+            
+			if (dataGroupList .size()==0) {
+				ret.put("msg", "读取EXCEL为空");
+				return ret;
+			}
+			
+			if(null!=error.toString()&&!"".equals(error.toString())){
+				ret.put("msg", "读取EXCEL报错"+error.toString());
+				return ret;
+			}
+			String errorMessage = check(dataGroupList,Dictionary.PageList,Dictionary.PageListSubjectExcelNotNullValues,Dictionary.PageListSubjectExcelNotNullInfos);
+			if(null!=errorMessage && !"".equals(errorMessage)){
+				ret.put("msg", "导入失败："+errorMessage);
+				return ret;
+			}else{
+				pageListManager.updateBatchPageList(dataGroupList,appId);
+				ret.put("msg", "导入成功!");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
 		
 
 }

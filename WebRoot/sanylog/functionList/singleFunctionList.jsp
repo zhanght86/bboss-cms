@@ -95,7 +95,8 @@ var api = frameElement.api, W = api.opener;
    		   </tr>
    		   <tr>
    		   <td>应用名称</td>
-   		        <td><input type="text" id="appName" class="required" value="<pg:cell colName="appName"/>">&nbsp;&nbsp;<font color="red">*</font></td>
+   		        <%-- <td><input type="text" id="appName" class="required" value="<pg:cell colName="appName"/>">&nbsp;&nbsp;<font color="red">*</font></td> --%>
+   		        <td><pg:cell colName="appName"/></td>
    		   </tr>
    		   <tr>     
    		   <td>功能名称</td>

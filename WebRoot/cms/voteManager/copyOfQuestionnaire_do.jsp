@@ -73,7 +73,7 @@
     			oneTitle.setTimeGap(Integer.parseInt((String)request.getParameter("selectGap")));
     		}
     			oneTitle.setFounderID(Integer.parseInt(accessControl.getUserID()));
-    			if(voteMgr.insertSurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr())==1){
+    			if(voteMgr.insertSurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
     				%>alert("增添问卷成功！");
     				  returnValue="ok";<%
     			}else{

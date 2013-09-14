@@ -86,7 +86,10 @@
 				class：登录模块实现类
 				registTable:配置用户注册表，目前提供LDAP和DB两种方式，缺省为DB方式
 			-->
-			<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" />
+			<!-- 域账号登陆 -->
+
+		<!-- <loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.ldap.LdapLoginModule" />-->
+					<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" />
 		</authenticate>
 		<!--
 			事件激发器工厂类

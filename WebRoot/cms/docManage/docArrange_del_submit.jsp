@@ -49,7 +49,7 @@
 	boolean b = dm.delArrangeDoc(docids);
 	//记录操作日志
 	LogManager logManager = SecurityDatabase.getLogManager();
-	logManager.log(accesscontroler.getUserAccount(),"取消置顶文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doctitles.toString(),"文档管理",request.getRemoteAddr(),"");
+	logManager.log(accesscontroler.getUserAccount(),"取消置顶文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doctitles.toString(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 	/*
 	try
 	{

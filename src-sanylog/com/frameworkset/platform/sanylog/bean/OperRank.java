@@ -8,28 +8,21 @@ private String moduleName;
 private String vtime;
 private String vcount;
 private String vcountUser;
-private String a;
-private String b;
-private String c;
+private String functionCode;
+private String functionName;
+public String getFunctionCode() {
+	return functionCode;
+}
+public void setFunctionCode(String functionCode) {
+	this.functionCode = functionCode;
+}
+public String getFunctionName() {
+	return functionName;
+}
+public void setFunctionName(String functionName) {
+	this.functionName = functionName;
+}
 
-public String getC() {
-	return c;
-}
-public void setC(String c) {
-	this.c = c;
-}
-public String getA() {
-	return a;
-}
-public void setA(String a) {
-	this.a = a;
-}
-public String getB() {
-	return b;
-}
-public void setB(String b) {
-	this.b = b;
-}
 public String getVcountUser() {
 	return vcountUser;
 }

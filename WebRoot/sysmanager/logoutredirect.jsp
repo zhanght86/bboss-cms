@@ -16,11 +16,12 @@
 		if(redirect == null || redirect.trim().equals(""))
 			redirect = request.getContextPath() + "/login.jsp";
 	}
+	/**
 	MemTokenManager memTokenManager = MemTokenManagerFactory.getMemTokenManagerNoexception();
 	if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 	{
 		redirect = memTokenManager.appendDTokenToURL(request,redirect);
-	}
+	}*/
 	String target = request.getParameter("_redirecttarget");
 	if(target == null || target.trim().equals(""))
 		target = "top";

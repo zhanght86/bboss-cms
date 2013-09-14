@@ -15,7 +15,7 @@
       <userTask id="usertask2" name="应用部审核" activiti:candidateUsers="${usertask2user}"></userTask>
       <scriptTask id="scripttask1" name="自动脚本处理" scriptFormat="javascript">
         <script>var scriptVar = "test123";
-execution.setVariable("usertask2user", scriptVar);
+execution.setVariable("mailtitle", scriptVar);
 </script>
       </scriptTask>
       <sequenceFlow id="flow4" sourceRef="parallelgateway1" targetRef="usertask2"></sequenceFlow>
@@ -26,7 +26,7 @@ execution.setVariable("usertask2user", scriptVar);
     </subProcess>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="subprocess1" cancelActivity="true">
       <timerEventDefinition>
-        <timeDuration>PT4H</timeDuration>
+        <timeDuration>PT4M</timeDuration>
       </timerEventDefinition>
     </boundaryEvent>
     <sequenceFlow id="flow7" sourceRef="boundarytimer1" targetRef="servicetask1"></sequenceFlow>

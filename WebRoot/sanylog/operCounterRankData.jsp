@@ -20,20 +20,14 @@
        		<th>模块名称</th>
        		<th>访问量</th>
        		<th>用户量</th>
-       		<th>耗费工时</th>
-       		<th>预计访问量</th>
-       		<th>预计用户量</th>
        	</pg:header>	
 
       <pg:list autosort="false">
    		<tr>
                 <td><pg:cell colName="appName"/></td>    
                 <td><pg:cell colName="moduleName"/></td> 
-                <td><pg:cell colName="vcount"/>&nbsp;&nbsp;次/周</td>
-                <td><pg:cell colName="vcountUser"/>&nbsp;&nbsp;人/周</td>
-                <td><pg:cell colName="a"/></td>
-                <td><pg:cell colName="c"/>&nbsp;&nbsp;次/周</td>
-                <td><pg:cell colName="b"/>&nbsp;&nbsp;人/周</td>    
+                <td><pg:cell colName="vcount"/></td>
+                <td><pg:cell colName="vcountUser"/></td>
         </tr>
 	 </pg:list>
     </table>

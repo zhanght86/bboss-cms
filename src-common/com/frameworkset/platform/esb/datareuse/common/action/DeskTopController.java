@@ -28,9 +28,11 @@ import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
 import com.frameworkset.platform.framework.MenuHelper;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.StringUtil;
+
 
 public class DeskTopController {
-
+	public static final String isany_personcenter_menuid = "isany_personcenter";
 	DeskTopMenuShorcutManager deskTopMenuShorcutManager;
 	public @ResponseBody String cleardeskmenu()
 	{
@@ -39,6 +41,21 @@ public class DeskTopController {
 		try
 		{
 			deskTopMenuShorcutManager.cleardeskmenu( control.getUserID(), control.getCurrentSystemID());
+		}
+		catch (Exception e)
+		{
+			return e.getMessage();
+		}
+		return "ok";
+	}
+	
+	public @ResponseBody String cleardefaultdeskmenu()
+	{
+		
+		AccessControl control = AccessControl.getAccessControl();
+		try
+		{
+			deskTopMenuShorcutManager.cleardeskmenu( "-1", control.getCurrentSystemID());
 		}
 		catch (Exception e)
 		{
@@ -94,6 +111,83 @@ public class DeskTopController {
 		view.addObject("menulist", listreturn);
 		return view;
 	}
+	
+	private String parserID(String path)
+	{
+		//dp::menu://sysmenu$root/products$module/xxxx$item
+		String menuid = "://sysmenu$root/";
+		
+		int start = path.indexOf(menuid)+menuid.length();
+		int end = path.indexOf('$', start);
+		if(path.charAt(end + 1) == 'i')
+		{
+			return isany_personcenter_menuid;
+		}
+		else
+		{
+			return path.substring(start,end);
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+		String path ="dp::menu://sysmenu$root/products$module/xxxx$item";
+				String menuid = "://sysmenu$root/";
+				
+				int start = path.indexOf(menuid)+menuid.length();
+				int end = path.indexOf('$', start);
+				
+				
+				System.out.println(path.substring(start,end));
+	}
+	
+	public @ResponseBody(datatype="json") List<MenuItemU> getCustomMenus(HttpServletRequest request,String urltype) throws Exception
+	{
+		AccessControl control = AccessControl.getAccessControl();
+		List<DeskTopMenuBean> list = deskTopMenuShorcutManager.getUserDeskMenus(control.getUserID(),control.getCurrentSystemID());
+		if(list == null || list.size() == 0)
+		{
+			list = deskTopMenuShorcutManager.getUserDeskMenus("-1",control.getCurrentSystemID());
+		}
+		List<MenuItemU> listreturn=new ArrayList<MenuItemU>();
+		DeskTopMenuBean deskTopMenuBean = null;
+		
+		Framework frame = Framework.getInstance(control.getCurrentSystemID()); 
+		
+		if (list != null && list.size() > 0) {
+			for(int i=0;i<list.size();i++){
+				MenuItemU mb=new MenuItemU();
+				Item item=frame.getItem(list.get(i).getMenupath());
+				deskTopMenuBean = list.get(i);
+				if(item == null)
+				{
+					
+					continue;
+				}
+				if(!control.checkPermission(item.getId(), "visible", "column"))
+					continue;
+				mb.setId(item.getId());
+				mb.setName(item.getName(request));
+				String contextPath = request.getContextPath();
+				if(urltype == null || urltype.equals("1"))
+				{
+					String url = contextPath+"/sanydesktop/frame.page?sany_menupath="+item.getPath();
+					mb.setPathU(url);
+				}
+				else
+				{
+					String url = contextPath+"/sanydesktop/index.page?sany_menupath="+item.getPath() + "&sanyselectedmodule="+parserID(item.getPath());
+					mb.setPathU(url);
+				}
+				mb.setImageUrl(StringUtil.getRealPath(contextPath, item.getMouseclickimg(request)));
+				//判断表里面是否有自定义窗口大小数据，如果有就取该数据，如果无，就使用默认的数据
+				mb.setDesktop_width((deskTopMenuBean.getWidth()!= null&&!deskTopMenuBean.getWidth().equals(""))? deskTopMenuBean.getWidth():item.getDesktop_width());
+				mb.setDesktop_height((deskTopMenuBean.getHeight() != null&&!deskTopMenuBean.getHeight().equals(""))? deskTopMenuBean.getHeight():item.getDesktop_height());
+				listreturn.add(mb);
+			}
+		}
+		return listreturn;
+	}
 	/**
 	 * 桌面主页
 	 * 
@@ -142,9 +236,14 @@ public class DeskTopController {
 		
 		
 		DeskTopMenuBean bean = new DeskTopMenuBean();
+		
 		bean.setUserid(control.getUserID());
 		bean.setSubsystem(control.getCurrentSystemID());
 		List<DeskTopMenuBean> list = deskTopMenuShorcutManager.getUserDeskMenus(bean);
+		if(list == null || list.size() == 0)
+		{
+			list = deskTopMenuShorcutManager.getUserDeskMenus("-1",control.getCurrentSystemID());
+		}
 		List<MenuItemU> listreturn=new ArrayList<MenuItemU>();
 		DeskTopMenuBean deskTopMenuBean = null;
 		
@@ -256,7 +355,16 @@ public class DeskTopController {
 		return "ok";
 	}
 	
-	public ModelAndView desktopsort(HttpServletRequest request) throws Exception {
+	public @ResponseBody String updatedefaultdeskmenu(List<DeskTopMenuBean> list,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		AccessControl control = AccessControl.getAccessControl();
+		deskTopMenuShorcutManager.update(list, "-1", control.getCurrentSystemID());
+		return "ok";
+	}
+	
+	public ModelAndView desktopsort(HttpServletRequest request,boolean isdefault) throws Exception {
 		ModelAndView view = new ModelAndView("path:sort");
 		AccessControl control = AccessControl.getAccessControl();
 		
@@ -264,7 +372,10 @@ public class DeskTopController {
 		
 		
 		DeskTopMenuBean bean = new DeskTopMenuBean();
-		bean.setUserid(control.getUserID());
+		if(!isdefault)
+			bean.setUserid(control.getUserID());
+		else
+			bean.setUserid("-1");
 		bean.setSubsystem(control.getCurrentSystemID());
 		List<DeskTopMenuBean> list = deskTopMenuShorcutManager.getUserDeskMenus(bean);
 //		List<MenuItemU> listreturn=new ArrayList<MenuItemU>();

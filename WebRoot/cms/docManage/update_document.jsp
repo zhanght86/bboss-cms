@@ -190,7 +190,7 @@
 			doc.setContent(content);//
 			b = dmi.updateDoc(doc);
 			logManager = SecurityDatabase.getLogManager();
-			logManager.log(accesscontroler.getUserAccount(),"修改文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+			logManager.log(accesscontroler.getUserAccount(),"修改文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 			CmsLinkTable linktable = processor.getExternalPageLinkTable();
 			Iterator it = linktable.iterator();
 			while(it.hasNext())
@@ -226,7 +226,7 @@
 		doc.setContent(request.getParameter("content")==null?"":request.getParameter("content"));
 		b = dmi.updateDoc(doc);
 		logManager = SecurityDatabase.getLogManager();
-		logManager.log(accesscontroler.getUserAccount(),"修改文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",request.getRemoteAddr(),"");
+		logManager.log(accesscontroler.getUserAccount(),"修改文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 	}
 
 	//更新文档的相关文档 start

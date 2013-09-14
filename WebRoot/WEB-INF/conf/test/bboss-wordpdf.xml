@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding='gb2312'?>
+<!-- 
+bboss-wordpdf.xml
+描述：wordpdf插件演示demo
+-->
+<properties>
+    <property name="/wordpdf/*.page"    		
+		f:flashpaperWorkDir="D:\FlashPaper2.2\"   
+		f:swftoolWorkDir="C:\Program Files\SWFTools\" 		
+    		class="com.sany.demo.action.NewPrinterController"/>
+</properties>

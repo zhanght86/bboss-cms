@@ -39,7 +39,7 @@
 		for (int j=0;items!=null&&j<items.length;j++){
 			if (strOptionID.indexOf(items[j]+";")>0)
 				continue;
-			flag = voteMgr.canVote(Integer.parseInt(array[i].substring(7)),request.getRemoteAddr());
+			flag = voteMgr.canVote(Integer.parseInt(array[i].substring(7)),com.frameworkset.util.StringUtil.getClientIP(request));
 			if (flag==2){
 				%><script language='javascript'>alert("不在投票时间段！感谢您的支持！");</script><%
 				break;
@@ -67,7 +67,7 @@
 		for (int i=0;array!=null&&i<array.length;i++){
 			String id = array[i].substring(8);
 			String content = request.getParameter(array[i]);
-			flag = voteMgr.canVote(Integer.parseInt(id),request.getRemoteAddr());
+			flag = voteMgr.canVote(Integer.parseInt(id),com.frameworkset.util.StringUtil.getClientIP(request));
 			if (flag==2){
 				%><script language='javascript'>alert("不在投票时间段！感谢您的支持！");</script><%
 				break;
@@ -83,7 +83,7 @@
 			flag = 0;
 			
 			sessionArray[Integer.parseInt(id)][100]=content;
-			sessionArray[Integer.parseInt(id)][101]=request.getRemoteAddr();
+			sessionArray[Integer.parseInt(id)][101]=com.frameworkset.util.StringUtil.getClientIP(request);
 			flag=1;
 			//if (!"".equals(content.replaceAll(" ",""))){
 			//	flag = voteMgr.doAnswer(Integer.parseInt(id),content,request.getRemoteAddr());

@@ -48,7 +48,6 @@ public class VoteFormTag extends CMSBaseTag {
 	}
 	
 	public int doEndTag() throws JspException {
-		int ret = super.doEndTag();
 		String str = "</form>";
 		
 		try{
@@ -57,6 +56,8 @@ public class VoteFormTag extends CMSBaseTag {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
+		int ret = super.doEndTag();
+		
 		 
 		return ret;
 	}

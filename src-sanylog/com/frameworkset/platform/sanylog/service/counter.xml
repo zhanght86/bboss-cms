@@ -2,6 +2,95 @@
 
 <properties>
 
+<!-- 操作统计新报表 -->
+
+<property name="getModuleNodes">
+		<![CDATA[
+		select distinct(t1.module_name)  
+		from $tableName t1 
+		where 1=1 
+		    #if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($startTime&& !$startTime.equals("") && $endTime&& !$endTime.equals(""))
+				and t1.vtime >= #[startTime] and t1.vtime <= #[endTime]
+			#elseif ($startTime&& !$startTime.equals(""))
+				and t1.vtime >= #[startTime]
+			#elseif ($endTime&& !$endTime.equals(""))
+				and t1.vtime <= #[endTime]
+			#end
+		
+		]]>
+	</property>
+<property name="getTimeNodes">
+		<![CDATA[
+		select distinct(t1.vtime)
+		from $tableName t1 
+		where 1=1 
+			#if ($startTime&& !$startTime.equals("") && $endTime&& !$endTime.equals(""))
+				and t1.vtime >= #[startTime] and t1.vtime <= #[endTime]
+			#elseif ($startTime&& !$startTime.equals(""))
+				and t1.vtime >= #[startTime]
+			#elseif ($endTime&& !$endTime.equals(""))
+				and t1.vtime <= #[endTime]
+			#end
+		order by t1.vtime
+		
+		]]>
+	</property>
+<property name="getOperRankForCompare">
+		<![CDATA[
+		select t1.app_id appId,t1.app_name appName,t1.MODULE_ID module_id,t1.module_name moduleName,t1.vcountuser vcountUser ,t1.vtime vtime,t1.vcount vcount
+		from $tableName t1 
+		where 1=1 
+		    #if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($startTime&& !$startTime.equals("") && $endTime&& !$endTime.equals(""))
+				and t1.vtime >= #[startTime] and t1.vtime <= #[endTime]
+			#elseif ($startTime&& !$startTime.equals(""))
+				and t1.vtime >= #[startTime]
+			#elseif ($endTime&& !$endTime.equals(""))
+				and t1.vtime <= #[endTime]
+			#end
+		order by t1.vtime
+		
+		]]>
+	</property>
+<property name="getOperChartUser">
+		<![CDATA[
+		select t1.app_id appId,t1.app_name appName,t1.MODULE_ID module_id,t1.module_name moduleName,t1.vcountuser vcountUser ,round(t2.estimate_user/'$divisor',0) estimateUser
+		from $tableName t1 left join TD_LOG_FUNCTIONLIST t2 on
+		t1.app_id = t2.app_id and t1.function_code = t2.function_code
+		where 1=1 
+		#if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and t1.vtime = #[time]
+			#end
+			
+		
+		
+		]]>
+	</property>
+<property name="getOperChartCount">
+		<![CDATA[
+		select t1.app_id appId,t1.app_name appName,t1.MODULE_ID module_id,t1.module_name moduleName,t1.vcount vcount ,round(t2.estimate_oper/'$divisor',0) estimateOper
+		from $tableName t1 left join TD_LOG_FUNCTIONLIST t2 on
+		t1.app_id = t2.app_id and t1.function_code = t2.function_code
+		where 1=1 
+		#if ($appId && !$appId.equals(""))
+				and t1.app_id = #[appId]
+			#end
+			#if ($time && !$time.equals(""))
+				and t1.vtime = #[time]
+			#end
+			
+		
+		
+		]]>
+	</property>
 	<!-- added by qingl 2012-09-20 -->
 	
 	<property name="getExcelDatas">
@@ -65,51 +154,68 @@
 	<property name="staticOperCounterByWeek">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYWEEK 
-      		  select  app_id,  app_name, module_id, module_name, '$Time' vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
-      		  (select operate_id, app_id,app_name,module_id,module_name,operator
+      		  select  app_id,  app_name, module_id, module_name, '$Time' vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser,module_code  
+      		  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,module_code
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
 			  #if ($startTime && $todayTime)
 				and to_char(t.oper_time, 'yyyy-mm-dd') >= #[startTime] and to_char(t.oper_time, 'yyyy-mm-dd') <= #[todayTime]
 				#end
-     	      ) group by app_id,  app_name, module_id, module_name
+     	      ) group by app_id,  app_name, module_id, module_name,module_code
 		]]>
 	</property>	
 	<property name="statisticOperCounterByDay">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYDAY 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser from
-      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
-      		  to_char(oper_time, 'yyyy-mm-dd') vtime
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser ,module_code
+      		  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,module_code , to_char(oper_time, 'yyyy-mm-dd') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
            	  #if ($Time && !$Time.equals(""))
 			  	and to_char(t.oper_time, 'yyyy-mm-dd') = #[Time]
 			  #end
 			  
-     	      ) group by app_id,  app_name, module_id, module_name, vtime
+     	      ) group by app_id,  app_name, module_id, module_name, vtime,module_code
 		]]>
 	</property>
 	<property name="statisticOperCounterByMonth">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYMONTH 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
-      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
-      		  to_char(oper_time, 'yyyy-mm') vtime
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser ,module_code
+      		  from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,module_code, to_char(oper_time, 'yyyy-mm') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
            	  #if ($Time && !$Time.equals(""))
 			  	and to_char(t.oper_time, 'yyyy-mm') = #[Time]
 			  #end
 			  
-     	      ) group by app_id,  app_name, module_id, module_name, vtime
+     	      ) group by app_id,  app_name, module_id, module_name, vtime,module_code
 		]]>
 	</property>
-	<property name="statisticOperCounterByYear">
+	
+	
+<property name="statisticOperCounterByYear">
 		<![CDATA[
 			  insert into TD_LOG_OPERSTATIC_BYYEAR 
-      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser  from
-      		  (select operate_id, app_id,app_name,module_id,module_name,operator,
+      		  select app_id,app_name,module_id,module_name ,'$Time' vtime,sum(vcount) vcount,sum(vcountuser) vcountuser,function_code from td_log_operstatic_bymonth
+
+             where vtime like '%'||#[Time]||'%'
+
+             group by app_id,app_name,module_id,module_name ,function_code
+
+             order by app_id
+		]]>
+	</property>
+	<!-- <property name="statisticOperCounterByYear">
+		<![CDATA[
+			  insert into TD_LOG_OPERSTATIC_BYYEAR 
+      		  select  app_id,  app_name, module_id, module_name, vtime , count(operate_id) vcount ,count(distinct(operator)) vcountuser ,
+      		   module_code function_code,module_path function_name
+      		   from
+      		  (select operate_id, app_id,app_name,module_id,module_name,operator,module_code,module_path,
       		  to_char(oper_time, 'yyyy') vtime
       		  from TD_LOG_OPERATE_COUNTS t
       		   where 1 = 1
@@ -117,12 +223,12 @@
 			  	and to_char(t.oper_time, 'yyyy') = #[Time]
 			  #end
 			  
-     	      ) group by app_id,  app_name, module_id, module_name, vtime
+     	      ) group by app_id,  app_name, module_id, module_name, vtime,module_code,module_path
 		]]>
-	</property>
+	</property> -->
 	<property name="getOperCounterRankByWeek">
 		<![CDATA[
-			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser,tmp.vcountuser||'小时' a,tmp.vcountuser b,tmp.vcount c
+			select tmp.app_name appName,tmp.module_name moduleName,tmp.vcount vcount,tmp.vcountuser vcountUser
 			from TD_LOG_OPERSTATIC_BYWEEK tmp
 			where 1 = 1
 			#if ($appId)

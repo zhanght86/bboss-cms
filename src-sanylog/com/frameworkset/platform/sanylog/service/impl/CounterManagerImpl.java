@@ -29,6 +29,7 @@ import com.frameworkset.platform.sanylog.bean.BrowserCounter;
 import com.frameworkset.platform.sanylog.bean.BrowserVisitInfo;
 import com.frameworkset.platform.sanylog.bean.DownLoadCounter;
 import com.frameworkset.platform.sanylog.bean.Module;
+import com.frameworkset.platform.sanylog.bean.OperChart;
 import com.frameworkset.platform.sanylog.bean.OperRank;
 import com.frameworkset.platform.sanylog.bean.VideoHitsCounter;
 import com.frameworkset.platform.sanylog.bean.OperateCounter;
@@ -36,7 +37,7 @@ import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
 /**
- * @author gw_hel
+ * @author qingl2
  *
  */
 public class CounterManagerImpl implements CounterManager {
@@ -698,6 +699,64 @@ public class CounterManagerImpl implements CounterManager {
 		paramMap.put("type", type);
 		paramMap.put("appId", appId);
 		List<OperRank> datas = executor.queryListBean(OperRank.class, "getExcelDatas", paramMap);
+		return datas;
+	}
+	/**操作统计新报表
+	 * @author qingl2
+	*/
+	@Override
+	public List<OperChart> getOperChartCount(String appId, String time,
+			String tableName,float divisor) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("time", time);
+		paramMap.put("appId", appId);
+		paramMap.put("divisor", divisor);
+		List<OperChart> datas = executor.queryListBean(OperChart.class, "getOperChartCount", paramMap);
+		return datas;
+	}
+	@Override
+	public List<OperChart> getOperChartUser(String appId, String time,
+			String tableName, float divisor) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("time", time);
+		paramMap.put("appId", appId);
+		paramMap.put("divisor", divisor);
+		List<OperChart> datas = executor.queryListBean(OperChart.class, "getOperChartUser", paramMap);
+		return datas;
+	}
+	@Override
+	public List<OperRank> getOperRankForCompareByDay(String appId,
+			String startTime, String endTime, String tableName)
+			throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("startTime", startTime);
+		paramMap.put("appId", appId);
+		paramMap.put("endTime", endTime);
+		List<OperRank> datas = executor.queryListBean(OperRank.class, "getOperRankForCompare", paramMap);
+		return datas;
+	}
+	@Override
+	public List<String> getTimeNodes(String startTime, String endTime,
+			String tableName) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("startTime", startTime);
+		paramMap.put("endTime", endTime);
+		List<String> datas = executor.queryListBean(String.class, "getTimeNodes", paramMap);
+		return datas;
+	}
+	@Override
+	public List<String> getModuleNodes(String appId, String startTime,
+			String endTime, String tableName) throws SQLException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("tableName", tableName);
+		paramMap.put("startTime", startTime);
+		paramMap.put("appId", appId);
+		paramMap.put("endTime", endTime);
+		List<String> datas = executor.queryListBean(String.class, "getModuleNodes", paramMap);
 		return datas;
 	}
 

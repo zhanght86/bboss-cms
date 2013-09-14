@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.authenticate.LoginUtil"%>
 <%@page import="com.frameworkset.platform.framework.MenuHelper"%>
 <%@page import="com.frameworkset.platform.framework.ModuleQueue"%>
 <%@page import="com.frameworkset.platform.framework.Module"%>
@@ -13,16 +14,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><%=accesscontroler.getCurrentSystemName() %></title>
+<%  String userName = AccessControl.getAccessControl().getUserAccount();
+ String appName = accesscontroler.getCurrentSystemID();
+ String specialuser = LoginUtil.isSpesialUser(request);
+%>
 <pg:config enablecontextmenu="false"/>
 <link href="../html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?skin=sany"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
-<script type="text/javascript" src="../html/js/menu.js"></script>
+<script type="text/javascript" src="../html/js/menu.js?userName=<%= appName%>&appName =<%=userName %>&selecemenu=${selectedmenuid}"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
-
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/log.js"></script>
 <script type="text/javascript">
-
 function logout()
 {
 	$.dialog.confirm("<pg:message code='sany.pdp.index.check.signout'/>",
@@ -46,7 +49,18 @@ html{ padding:0; _padding:75px 0 44px 0; width:100%;  overflow:hidden;}
 body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
 .l_top { position:absolute; top:0; width:100%; height:75px;z-index: 100}
 .l_body { position: absolute; _position: relative; top:75px; _top:0; bottom:44px; width:100%; height:auto; _height:100%;}
-.l_bottom { position:absolute; bottom:0; width:100%; height:44px; }
+/*.l_bottom 
+{
+position:absolute; 
+bottom:0; 
+width:100%; 
+height:44px;
+
+    
+
+	
+}
+*/
 .l_main { height:100%; float:left;}
 .l_content { position:absolute; _position:relative; width:auto; left:0; top:0; bottom:0; _left:0; right:0; height:auto; _height:100%; overflow:auto;}
 </style>
@@ -57,13 +71,15 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
     <div class="logo_top"><img src="${logoimage}" width="300" height="31" /></div>
     <div class="log_message">系统切换
     <span class="blue1"> <select onchange="javascript:switchsystem()" id="switchsystem">
-    
+    <option value="sanylog" <pg:equal actual="${selected}" value="sanylog">selected</pg:equal>>WEB日志统计分析平台</option>
     	<option value="module" <pg:equal actual="${selected}" value="module">selected</pg:equal>>应用台账管理</option>
     	<option value="esb" <pg:equal actual="${selected}" value="esb">selected</pg:equal>>请求服务平台</option>
-    	<option value="sanylog" <pg:equal actual="${selected}" value="sanylog">selected</pg:equal>>WEB日志统计分析平台</option></select></span>
+    	</select></span>
 	<span class="blue1"> <sany:accesscontrol userattribute="userAccount"/></span>，<pg:message code="sany.pdp.module.welcome"></pg:message>　
 		<pg:false actual="${fromwebseal}">
-			<a href="#" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
+			<pg:empty actual="<%=specialuser %>">
+				<a href="#" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
+			</pg:empty>
 		</pg:false>
 		</div>
 	</div>
@@ -84,7 +100,7 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
 	</div>
 </div>
 
-<div class="l_bottom">
+<!--<div class="l_bottom">-->
     <div class="footer">
       <div class="left_footer"><a href="http://www.sany.com.cn" target="ablank"><pg:message code="sany.pdp.common.sanygroup"/></a> | <a href="#"><pg:message code="sany.pdp.common.contact"/></a> | <br />
         <script type="text/javascript"> 
@@ -94,8 +110,8 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
     </script>
     <pg:message code="sany.pdp.common.copyright"></pg:message>
     </div>
-    </div>
-</div>
+  </div>
+<!--</div>-->
 </body>
 </html>
 

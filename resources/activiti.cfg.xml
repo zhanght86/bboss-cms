@@ -28,5 +28,11 @@
     <property name="beanFactory" 
 			  factory-class="org.frameworkset.web.servlet.support.WebApplicationContextUtils" 
 			  factory-method="getWebApplicationContext"/>
+<!--<property name="beanFactory" factory-class="org.frameworkset.spi.DefaultApplicationContext" 
+			  factory-method="getApplicationContext">
+			  <construction>
+			  <property value="beans.xml"/>
+			  </construction>
+	</property>		-->	  
   
 </properties>

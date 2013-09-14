@@ -17,5 +17,10 @@
 		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.PasswordController" >
 	</property>
 	
+	<property name="/accessmanager/*.page"		
+		class="com.frameworkset.platform.cms.security.SecurityManagerController" >
+	</property>
+	
+	
 	
 </properties>

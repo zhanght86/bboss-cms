@@ -1,5 +1,5 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
-
+<%@ include file="/common/jsp/importtaglib.jsp"%>
 
 <%String userName = request.getParameter("userName");
  String ip = request.getParameter("ip");

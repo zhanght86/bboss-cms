@@ -9,12 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.frameworkset.util.CollectionUtils;
+
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.container.Container;
+import com.frameworkset.platform.cms.container.ContainerImpl;
 import com.frameworkset.platform.cms.docCommentManager.docCommentDictManager.DocCommentDict;
+import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.mailmanager.EMailImpl;
 import com.frameworkset.platform.cms.mailmanager.EMailInterface;
 import com.frameworkset.util.ListInfo;
@@ -182,7 +187,35 @@ public class DocCommentManagerImpl implements DocCommentManager {
 					+ e.getMessage());
 		}
 	}
-
+	public int getSiteCommentPublishedCount()
+			throws DocCommentManagerException {
+		DBUtil db = new DBUtil();
+		String sql = "select comment_id from td_cms_doc_comment where status = 1 ";
+		try {
+			db.executeSelect(sql);
+			return db.size();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DocCommentManagerException("统计站点的评论总数失败！"
+					+ e.getMessage());
+		}
+	}
+	public int getChannelCommentPublishedCount(String channel) 
+			throws DocCommentManagerException{
+		DBUtil db = new DBUtil();
+		String sql = "select comment_id from td_cms_doc_comment where status = 1 and doc_id in "
+				+" ( select  document_id from td_cms_document where channel_id in  "
+				+" ( select  channel_id From td_cms_channel where display_name =' "
+				+ channel+"'))";
+		try {
+			db.executeSelect(sql);
+			return db.size();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DocCommentManagerException("统计指定频道的评论总数失败！"
+					+ e.getMessage());
+		}
+	}
 	public ListInfo getCommnetList(int docId, int offset, int maxItem)
 			throws SQLException {
 		// TODO Auto-generated method stub
@@ -222,7 +255,77 @@ public class DocCommentManagerImpl implements DocCommentManager {
 			tm.releasenolog();
 		}
 	}
-
+	/**
+	 * 获取站点评论 前n条数据
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
+	public NComentList getSiteCommnetList(int n)
+			throws Exception{
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		//paramMap.put("docId", docId);
+		paramMap.put("n", n+1);
+		TransactionManager tm = new TransactionManager(); 
+		try
+		{
+			tm.begin(tm.RW_TRANSACTION);
+			NComentList nComentList = new NComentList();
+			nComentList.setComments(executor.queryListBean(DocComment.class, "getSiteCommnetNList",paramMap));
+		
+			
+			nComentList.setTotal(getSiteCommentPublishedCount());
+			return nComentList;
+		} catch (SQLException e) {
+			throw e;
+		
+		} catch (Exception e) {
+			throw e;
+		}		
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
+	/**
+	 * 获取频道评论 前n条数据
+	 * @param n
+	 * @return
+	 * @throws SQLException
+	 */
+	public NComentList getChannelCommnetList(String channel,int n)
+			throws Exception{
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("channel", channel);
+		paramMap.put("n", n+1);
+		TransactionManager tm = new TransactionManager(); 
+		try
+		{
+			tm.begin(tm.RW_TRANSACTION);
+			NComentList nComentList = new NComentList();
+			nComentList.setComments(executor.queryListBean(DocComment.class, "getChannelCommnetNList",paramMap));
+			//Container container = new ContainerImpl();
+			//container.in
+/*			if (!CollectionUtils.isEmpty(nComentList.getComments())) {
+				for (DocComment docComment : nComentList.getComments()) {
+					String documentUrl= container.getPublishedDocumentUrl(new Integer(docComment.getDocId()).toString());
+					docComment.setDocUrl(documentUrl);
+				}
+			}*/
+			nComentList.setTotal(getChannelCommentPublishedCount(channel));
+			return nComentList;
+		} catch (SQLException e) {
+			throw e;
+		
+		} catch (Exception e) {
+			throw e;
+		}		
+		finally
+		{
+			tm.releasenolog();
+		}
+	}
+	
 	public int getTotalCommnet(int docId)
 			throws SQLException {
 		

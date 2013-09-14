@@ -108,9 +108,9 @@
 		//标识增量发布，还是完全发布
 		publishForm.increament.value = "";
 		if(publishForm.increamentall.checked)
-			publishForm.increament.value = "false" + ",";
+			publishForm.increament.value = "false" ;
 		if(publishForm.increamentno.checked)
-			publishForm.increament.value = "true" + ",";
+			publishForm.increament.value = "true";
 
 		var distributeManners = publishForm.distributeManners.value;
 		if(distributeManners==null||distributeManners=="")

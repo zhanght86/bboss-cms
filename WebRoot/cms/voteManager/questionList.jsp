@@ -25,12 +25,12 @@
   			}
   		}
   		if ("active".equals(request.getParameter("actionType"))){
-  			if(voteMgr.activateQuestions(request.getParameter("qids"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),request.getRemoteAddr())==1){
+  			if(voteMgr.activateQuestions(request.getParameter("qids"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
   				%><script language="javascript">alert("审核成功!");</script><%
   			}
   		}
   		if ("unactive".equals(request.getParameter("actionType"))){
-  			if(voteMgr.unactivateQuestions(request.getParameter("qids"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),request.getRemoteAddr())==1){
+  			if(voteMgr.unactivateQuestions(request.getParameter("qids"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
   				%><script language="javascript">alert("取消审核成功!");</script><%
   			}
   		}

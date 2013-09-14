@@ -2,7 +2,7 @@
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.channelmanager.*"%>
 <%@ include file="/sysmanager/include/global1.jsp"%>
-<%@ include file="/sysmanager/base/scripts/panes.jsp"%>
+
 <%@ page import="com.frameworkset.platform.cms.customform.*"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.ContextMenuTag"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.ContextMenu"%>
@@ -71,13 +71,23 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="<%=request.getContextPath()%>/cms/inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
+		<pg:config enablecontextmenu="true" enabletree="false"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
+				
+		<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 		<script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
-		<script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/include/pager.js" type="text/javascript"></script>
+
 		<script language="javascript"> 	
 	//新增文档
-	function adddoc() {
-		form1.action="<%=rootpath%>/cms/docManage/doc_gather.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>";
-		form1.submit();
+	function adddoc(url, channelName,height,width) {
+		
+		$.dialog({ title:"新增文档-"+channelName,width:width,height:600, content:'url:'+url,lock: true,maxState:true}); 	
+		
+	}
+	function modifyQueryData()
+	{
+		window.location.reload();
 	}
 	//送审、提交发布、归档、撤销送审操作，传来的参数分别为送审、提交发布、归档、撤销送审(针对单个文档操作)
 	function operateDoc(operType,docId){
@@ -584,7 +594,7 @@
 						<%if(accesscontroler.checkPermission(channelId,AccessControl.CHANNEL_ADDDOC_PERMISSION,AccessControl.CHANNELDOC_RESOURCE)
 							|| accesscontroler.checkPermission(siteid,AccessControl.CHANNEL_ADDDOC_PERMISSION,AccessControl.SITEDOC_RESOURCE)
 						){%>
-						<a style="cursor:hand" onClick="window.open('<%=rootpath%><%=addpath%>?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>','_blank','height='+screen.height+',width='+screen.width+',toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, status=no')"><div class="DocumentOper"><img 
+						<a style="cursor:hand" onClick="javascript:adddoc('<%=rootpath%><%=addpath%>?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>','<%=channelName%>',screen.height,screen.width)"><div class="DocumentOper"><img 
 									src="../images/new_doc.gif" class="operStyle">内容采集</div></a>
 						<%}if(accesscontroler.checkPermission(channelId,AccessControl.DELIVER_PERMISSION,AccessControl.CHANNELDOC_RESOURCE)
 							|| accesscontroler.checkPermission(siteid,

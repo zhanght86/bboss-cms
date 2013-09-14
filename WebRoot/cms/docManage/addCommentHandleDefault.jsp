@@ -28,7 +28,7 @@
 		DocCommentManager idm = new DocCommentManagerImpl();
 		DocumentManager dm = new DocumentManagerImpl();
 		String docTitle = dm.getDoc(docId.trim()).getSubtitle();
-		String commenterIP =request.getRemoteAddr();
+		String commenterIP =com.frameworkset.util.StringUtil.getClientIP(request);
 		
 		DocComment docComment = new DocComment();
 		docComment.setComment(request.getParameter("docComment"));

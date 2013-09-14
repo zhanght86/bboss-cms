@@ -127,5 +127,12 @@ value:http://localhost:8081/SanyPDP
         <column name="VDATE" size="10" type="VARCHAR"/>
         <column name="SITEID" size="10" type="DECIMAL"/> 
     </table>
+    <table name="TD_COMM_EMAIL_DISPOSEDEP">
+        <column name="ID" primaryKey="true" required="true"
+            size="50" type="VARCHAR"/>      
+        <column name="DISPOSEDEP" size="500" type="VARCHAR"/>
+       
+    </table>
+    
     
 </database>

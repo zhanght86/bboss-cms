@@ -162,26 +162,41 @@ public class SmsNewOperatoraddsubCodeServiceLocator extends
         setEndpointAddress(portName.getLocalPart(), address);
     }
 
-    public static String sendSms(String content,String tel) {
+    public static String sendSms(String content,String tel) throws Exception {
+       
+           
+            // 参数itsm_sms itsm_sms831
+
+            String account = new String(SMSSender.config.getUser()); // 接口账号用户名
+            String password = new String(MD5.crypt(SMSSender.config.getPassword()));// 接口密码
+
+            String orgeh_level1 = SMSSender.config.getFirstDeptId();
+            String firstDeptId = orgeh_level1; // 一级部门编码 IT总部 50109849
+            String secondDeptId = SMSSender.config.getSecondDeptId(); // 二级部门编码
+            String thirdDeptId = SMSSender.config.getThirdDeptId(); // 三级部门编码
+
+           
+            String subCode = new String(SMSSender.config.getSMS_SUBCODE());
+
+          return sendSms( account,  password,  firstDeptId,  secondDeptId,
+          		 thirdDeptId, content, tel, subCode );
+    }
+    
+    public static String sendSms(String account, String password, String firstDeptId, String secondDeptId,
+    		String thirdDeptId,String content,String tel,String subCode ) throws Exception {
         try {
             SmsNewOperatoraddsubCodeServiceLocator locator = new SmsNewOperatoraddsubCodeServiceLocator();
             SmsNewOperatoraddsubCode_PortType pt = locator
                     .getSmsNewOperatoraddsubCode();
             // 参数itsm_sms itsm_sms831
 
-            String account = new String(SMSSender.config.getUser()); // 接口账号用户名
-            String password = new String(MD5.crypt(SMSSender.config.getPassword()));// 接口密码
-
-            String orgeh_level1 = SMSSender.config.getORGEH_CODE();
-            String firstDeptId = new String(orgeh_level1); // 一级部门编码 IT总部 50109849
-            String secondDeptId = new String(""); // 二级部门编码
-            String thirdDeptId = new String(""); // 三级部门编码
+          
 
             MtNewMessage message = new MtNewMessage();
             message.setContent(content); // 短信内容
             message.setPhoneNumber(tel); // 接受短信的号码
 
-            String subCode = new String(SMSSender.config.getSMS_SUBCODE());
+           
 
             StringHolder sendResMsg = new StringHolder();
             StringHolder errMsg = new StringHolder();
@@ -191,16 +206,14 @@ public class SmsNewOperatoraddsubCodeServiceLocator extends
                 pt.sendSms(account, password, firstDeptId, secondDeptId,
                         thirdDeptId, message, subCode, sendResMsg, errMsg);
             } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw e;
             }
             // 获取回复短信
             try {
                 pt.getSms(account, password, firstDeptId, secondDeptId,
                         thirdDeptId, sendResMsg, errMsg);
             } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            	  throw e;
             }
 
             if (errMsg.value.length() == 0 && sendResMsg != null
@@ -226,78 +239,79 @@ public class SmsNewOperatoraddsubCodeServiceLocator extends
                 return "提交号码数量超过最大限制";
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
+        	  throw e;
         }
         return "success";
     }
     
-    public static void main(String[] args) {
-        try {
-            SmsNewOperatoraddsubCodeServiceLocator locator = new SmsNewOperatoraddsubCodeServiceLocator();
-            SmsNewOperatoraddsubCode_PortType pt = locator
-                    .getSmsNewOperatoraddsubCode();
-            // 参数itsm_sms itsm_sms831
-
-            String account = new String("itsm_sms"); // 接口账号用户名
-            String password = new String(MD5.crypt("itsm_sms831"));// 接口密码
-
-            String firstDeptId = new String("50020097"); // 一级部门编码 IT总部 50109849
-            String secondDeptId = new String(""); // 二级部门编码
-            String thirdDeptId = new String(""); // 三级部门编码
-
-            MtNewMessage message = new MtNewMessage();
-            message.setContent("短信内容++"); // 短信内容
-            message.setPhoneNumber("15974253547"); // 接受短信的号码
-
-            String subCode = new String("18");
-
-            StringHolder sendResMsg = new StringHolder();
-            StringHolder errMsg = new StringHolder();
-
-            // 发送短信
-            try {
-                pt.sendSms(account, password, firstDeptId, secondDeptId,
-                        thirdDeptId, message, subCode, sendResMsg, errMsg);
-            } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            // 获取回复短信
-            try {
-                pt.getSms(account, password, firstDeptId, secondDeptId,
-                        thirdDeptId, sendResMsg, errMsg);
-            } catch (RemoteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            if (errMsg.value.length() == 0 && sendResMsg != null
-                    && sendResMsg.value != null)
-                System.out.println("sendResMsg:" + sendResMsg.value);
-            else if (errMsg.value.equalsIgnoreCase("-1")) {
-                System.out.println("输入参数不正确，请检查账户，密码，等输入参数是否为空");
-            } else if (errMsg.value.equalsIgnoreCase("-2")) {
-                System.out.println("请检查用户名，密码是否正确及部门名称是否与短信平台匹配");
-            } else if (errMsg.value.equalsIgnoreCase("-3")) {
-                System.out.println("账户已经超过每日发送短信限制数量（当账户被限制每日发送量时有用）");
-            } else if (errMsg.value.equalsIgnoreCase("-4")) {
-                System.out.println("客户端ip地址不正确（当需要ip校验时）");
-            } else if (errMsg.value.equalsIgnoreCase("-5")) {
-                System.out.println("smsId与数据库重复（下发短信时，如果smsId 由客户端传入，该参数不能重复）");
-            } else if (errMsg.value.equalsIgnoreCase("-6")) {
-                System.out.println("内容含有非法关键字，请检查下发内容");
-            } else if (errMsg.value.equalsIgnoreCase("-7")) {
-                System.out.println("对应的号码下发失败，下发号码为空或其他错误，导致该号码发送失败");
-            } else if (errMsg.value.equalsIgnoreCase("-8")) {
-                System.out.println("访问频率过快");
-            } else if (errMsg.value.equalsIgnoreCase("-9")) {
-                System.out.println("提交号码数量超过最大限制");
-            }
-
-        } catch (ServiceException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    
+    public static void main(String[] args) throws Exception {
+    	sendSms("短信内容++","13319589069");
+//        try {
+//            SmsNewOperatoraddsubCodeServiceLocator locator = new SmsNewOperatoraddsubCodeServiceLocator();
+//            SmsNewOperatoraddsubCode_PortType pt = locator
+//                    .getSmsNewOperatoraddsubCode();
+//            // 参数itsm_sms itsm_sms831
+//
+//            String account = new String("itsm_sms"); // 接口账号用户名
+//            String password = new String(MD5.crypt("itsm_sms831"));// 接口密码
+//
+//            String firstDeptId = new String("50020097"); // 一级部门编码 IT总部 50109849
+//            String secondDeptId = new String(""); // 二级部门编码
+//            String thirdDeptId = new String(""); // 三级部门编码
+//
+//            MtNewMessage message = new MtNewMessage();
+//            message.setContent("短信内容++"); // 短信内容
+//            message.setPhoneNumber("13319589069"); // 接受短信的号码
+//
+//            String subCode = new String("18");
+//
+//            StringHolder sendResMsg = new StringHolder();
+//            StringHolder errMsg = new StringHolder();
+//
+//            // 发送短信
+//            try {
+//                pt.sendSms(account, password, firstDeptId, secondDeptId,
+//                        thirdDeptId, message, subCode, sendResMsg, errMsg);
+//            } catch (RemoteException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//            // 获取回复短信
+//            try {
+//                pt.getSms(account, password, firstDeptId, secondDeptId,
+//                        thirdDeptId, sendResMsg, errMsg);
+//            } catch (RemoteException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+//
+//            if (errMsg.value.length() == 0 && sendResMsg != null
+//                    && sendResMsg.value != null)
+//                System.out.println("sendResMsg:" + sendResMsg.value);
+//            else if (errMsg.value.equalsIgnoreCase("-1")) {
+//                System.out.println("输入参数不正确，请检查账户，密码，等输入参数是否为空");
+//            } else if (errMsg.value.equalsIgnoreCase("-2")) {
+//                System.out.println("请检查用户名，密码是否正确及部门名称是否与短信平台匹配");
+//            } else if (errMsg.value.equalsIgnoreCase("-3")) {
+//                System.out.println("账户已经超过每日发送短信限制数量（当账户被限制每日发送量时有用）");
+//            } else if (errMsg.value.equalsIgnoreCase("-4")) {
+//                System.out.println("客户端ip地址不正确（当需要ip校验时）");
+//            } else if (errMsg.value.equalsIgnoreCase("-5")) {
+//                System.out.println("smsId与数据库重复（下发短信时，如果smsId 由客户端传入，该参数不能重复）");
+//            } else if (errMsg.value.equalsIgnoreCase("-6")) {
+//                System.out.println("内容含有非法关键字，请检查下发内容");
+//            } else if (errMsg.value.equalsIgnoreCase("-7")) {
+//                System.out.println("对应的号码下发失败，下发号码为空或其他错误，导致该号码发送失败");
+//            } else if (errMsg.value.equalsIgnoreCase("-8")) {
+//                System.out.println("访问频率过快");
+//            } else if (errMsg.value.equalsIgnoreCase("-9")) {
+//                System.out.println("提交号码数量超过最大限制");
+//            }
+//
+//        } catch (ServiceException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 }

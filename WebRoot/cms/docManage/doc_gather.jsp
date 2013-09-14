@@ -101,6 +101,9 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
    
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<pg:config enablecontextmenu="false" enabletree="false"/>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
 <link href="<%=request.getContextPath()%>/cms/inc/css/cms.css" rel="stylesheet" type="text/css">
 <script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
 <script src="<%=request.getContextPath()%>/cms/inc/js/killerror.js"></script>
@@ -133,13 +136,14 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 </head>
 
 <script language="javascript">
-    
+	var api = frameElement.api, W = api.opener;
 	//动画窗口对象
 	var win = null;
 	//关闭动画窗口
 	function closewin()
 	{
-		win.close();
+		//W.modifyQueryData();
+		api.close();
 	}
 	//字符转换
 	function HTMLEncodeCMS(text){
@@ -374,30 +378,83 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			}
 			document.all('specialsiteid').value=specialsite;
 			document.all('sepcialchannelid').value=specialchannelid;
-			//新加的专题报道结束
+			var url = "${pageContext.request.contextPath}/document/addDocument.page?flag=" + closeFlag;
 			if(closeFlag==5)
 			{
-				myform.target = "addgather";
-				myform.action="<%=request.getContextPath()%>/cms/docManage/previewDoc.jsp";
-				//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+				url = "${pageContext.request.contextPath}/document/previewDoc.page";
 			}
-			else
-			{
-				myform.target = "addgather";
-				myform.action = "<%=request.getContextPath()%>/cms/docManage/add_document.jsp?flag=" + closeFlag;
-				//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
-			}
+			$.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#myform"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      		eWebEditor1.setHTML(tempcontent);
+
+							 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						if(closeFlag!=5)
+						{
+							if(responseText=="success"){
+								
+								$.dialog.alert("操作文档成功",function(){	
+										W.modifyQueryData();
+										api.close();
+								},api);													
+							}else{
+								$.dialog.alert("操作文档出错",function(){},api);
+							}
+						}
+						else
+						{
+							if(responseText=="fail"){
+								
+								$.dialog.alert("预览文档出错，可能当前频道未设置细览模板或者模板文件不存在",function(){},api);
+											 
+																					
+							}else{
+								//$.dialog({ title:"新增文档-<%=channelname%>",width:800,height:600, content:'url:'+responseText,lock: false,maxState:true});
+								window.open(responseText);
+							}
+						}
+						
+						
+						
+					}
+				  });
+			//新加的专题报道结束
 			
-			myform.submit();
+			//if(closeFlag==5)
+			//{
+			//	myform.target = "addgather";
+			//	myform.action="<%=request.getContextPath()%>/cms/docManage/previewDoc.jsp";
+				
+				//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+			//}
+			//else
+			//{
+			//	myform.target = "addgather";
+			//	myform.action = "<%=request.getContextPath()%>/cms/docManage/add_document.jsp?flag=" + closeFlag;
+				//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+			//}
+			
+			//myform.submit();
 			//eWebEditor1.eWebEditor.document.body.innerHTML = tempcontent;
 			//主要是用静态分页
-			eWebEditor1.setHTML(tempcontent);
+			//eWebEditor1.setHTML(tempcontent);
 
-			var buttons = document.getElementsByTagName("input");
-			for(var i=0;i<buttons.length;i++)
-			{
-				buttons[i].disabled = true;
-			}
+			//var buttons = document.getElementsByTagName("input");
+			//for(var i=0;i<buttons.length;i++)
+			//{
+			//	buttons[i].disabled = true;
+			//}
 			
 			
 			
@@ -405,7 +462,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 	}
 	//返回
 	function back() {
-		window.close();
+		api.close();
 	}
 	
 	function isnum()
@@ -436,6 +493,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==2){
 			document.activeElement.blur();
@@ -453,6 +511,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==3){
 			document.activeElement.blur();
@@ -470,6 +529,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab3.style.color = "#FF6600";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==4){
 			document.activeElement.blur();
@@ -487,6 +547,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "#FF6600";
 			document.all.tab5.style.color = "";
+			document.all.tab6.style.color = "";
 		}
 		if(i==5){
 			document.activeElement.blur();
@@ -504,6 +565,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
 			document.all.tab5.style.color = "#FF6600";
+			document.all.tab6.style.color = "";
 		}
 		if(i==6){
 			document.activeElement.blur();
@@ -520,7 +582,7 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			document.all.tab2.style.color = "";
 			document.all.tab3.style.color = "";
 			document.all.tab4.style.color = "";
-			document.all.tab5.style.color = "#FF6600";
+			document.all.tab6.style.color = "#FF6600";
 		}
 	}
 	//响应rodio事件
@@ -563,10 +625,56 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 			return false;
 		}	
 		var re = showModalDialog("add_one_doctpl.jsp",window,"dialogWidth:350px;dialogHeight:300px;help:no;scroll:auto;status:no");
-		if(re == "cf"){
-			myform.action = "doc_tpl_handle.jsp?action=add&closeRefresh=0";
-			myform.target = "addgather";
-			myform.submit();
+		if(re == "cf"){  
+			//myform.action = "doc_tpl_handle.jsp?action=add&closeRefresh=0";
+			//myform.target = "addgather";
+			//myform.submit();
+			
+			var url = "${pageContext.request.contextPath}/document/addDocTPL.page?action=add&closeRefresh=0";
+			var closeRefresh = "0";
+			var closeWinFlag = "0"
+			$.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#myform"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      				 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						if(responseText=="success"){
+							
+							$.dialog.alert("文档模板操作成功！",function(){	
+								if(closeRefresh=="1"){
+									if(closeWinFlag=="1"){
+										window.close();
+										window.returnValue="cf";	
+									} else {
+										var str = document.location.href;
+										var end = str.indexOf("?");
+										var strArray;
+										if(end != -1)
+											strArray= str.slice(0,end);
+										else
+											strArray = str;
+										document.location.href = strArray+"?"+document.all.queryString.value;
+									}
+								}
+							},api);													
+						}else{
+							$.dialog.alert("文档模板保存失败!",function(){},api);
+						}
+						
+						
+						
+					}
+				  });
 		}
 	}
 	
@@ -725,7 +833,7 @@ else
 	<marquee direction="left" width="250" behavior="alternate"><span class=STYLE1>正在发布中，请稍等……</span></marquee>
 </div>
 
-<form target="addgather" name="myform" method="post">
+<form target="addgather" id="myform" name="myform" method="post">
 	<!--文档送审和提交时审核人发布人列表，回填-->
 	<div id="auditorDiv" name="auditorDiv" style="display:none;"></div>
 	<div id="publisherDiv" name="publisherDiv" style="display:none;"></div>
@@ -1019,17 +1127,17 @@ else
 						<td height="26">&nbsp;</td>
 						<td height="23" colspan="2">
 							<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-edit.gif" width=14 >
-							<a id=tab1 href="#" onclick=tabClick(1) ><u>[内容编辑]</u></a>&nbsp;&nbsp; 
+							<a id=tab1 href="javascript:void(0)" onclick=tabClick(1) ><u>[内容编辑]</u></a>&nbsp;&nbsp; 
 							<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-correlated.gif" width=14 >
-							<a id=tab2 href="#" onclick=tabClick(2) ><u>[相关文档]</u></a>&nbsp;&nbsp;
+							<a id=tab2 href="javascript:void(0)" onclick=tabClick(2) ><u>[相关文档]</u></a>&nbsp;&nbsp;
 							<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-addons.gif" width=14 >
-							<a id=tab3 href="#" onclick=tabClick(3) ><u>[文档附件]</u></a>&nbsp;&nbsp;
+							<a id=tab3 href="javascript:void(0)" onclick=tabClick(3) ><u>[文档附件]</u></a>&nbsp;&nbsp;
 							<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-img.gif" width=14 >
-							<a id=tab4 href="#" onclick=tabClick(4) ><u>[文档图片]</u></a>&nbsp;&nbsp;
+							<a id=tab4 href="javascript:void(0)" onclick=tabClick(4) ><u>[文档图片]</u></a>&nbsp;&nbsp;
 							<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
-							<a id=tab5 href="#" onclick=tabClick(5) ><u>[扩展字段]</u></a>&nbsp;&nbsp;
+							<a id=tab5 href="javascript:void(0)" onclick=tabClick(5) ><u>[扩展字段]</u></a>&nbsp;&nbsp;
 							<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
-							<a id=tab5 href="#" onclick=tabClick(6) ><u>[专题报道]</u></a>
+							<a id=tab6 href="javascript:void(0)" onclick=tabClick(6) ><u>[专题报道]</u></a>
 						</td>
 						<td width="30%" height="23" colspan="1">
 							<div align="center">

@@ -40,9 +40,17 @@ public class Title {
 	private String depart_id;
 	private int islook;
 	private String depart_name;
+	private String endTime;
+	
+	
+	public String getEndTime() {
+		return endTime;
+	}
 
-	
-	
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
 	public int getIslook() {
 		return islook;
 	}

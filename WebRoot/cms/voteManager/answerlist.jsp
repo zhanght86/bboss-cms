@@ -46,7 +46,7 @@
 		if (request.getParameter("answerIDs")!=null&&!"".equals(request.getParameter("answerIDs"))){
     	VoteManager voteMgr  = new VoteManagerImpl();
   		if ("delete".equals(request.getParameter("actionType"))){
-  			if(voteMgr.delAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),request.getRemoteAddr())==1){
+  			if(voteMgr.delAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
   				%><script language="javascript">alert("删除成功!");</script><%
   			}
   		}
@@ -55,7 +55,7 @@
   	if (request.getParameter("answerIDs")!=null&&!"".equals(request.getParameter("answerIDs"))){
     	VoteManager voteMgr  = new VoteManagerImpl();
   		if ("pass".equals(request.getParameter("actionType"))){
-  			if(voteMgr.passAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),request.getRemoteAddr())==1){
+  			if(voteMgr.passAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
   				%><script language="javascript">alert("审核成功!");</script><%
   			}
   		}
@@ -66,7 +66,7 @@
   	<input name="actionType" type="hidden" />
   	<input name="answerIDs" type="hidden" />
    <table width="100%" border="0" cellpadding="5" cellspacing="0" class="Datalisttable"><!--分页显示开始,分页标签初始化-->
-         				<pg:listdata dataInfo="Answerlist" keyName="Answerlist" />
+         				<pg:listdata dataInfo="com.frameworkset.platform.cms.votemanager.Answerlist" keyName="Answerlist" />
 						
 						<pg:pager maxPageItems="20" scope="request" data="Answerlist" isList="false">
 							<!--检测当前页面是否有记录--><!--list标签循环输出每条记录-->

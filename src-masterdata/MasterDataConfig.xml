@@ -20,4 +20,14 @@
 		f:nameSpace="http://service.sany.com"
 		f:pageSize="2000"/>
 		
+	<property name="mdmservice" factory-class="com.caucho.hessian.client.HessianProxyFactory" factory-method="create">
+		<construction>
+			<property value="com.sany.greatwall.MdmService"/>		
+			<property><![CDATA[http://gwall.sany.com.cn/sany-greatwall-web/mdmservice]]></property>	
+		</construction>
+	</property>			
+	
+	
+	<property name="masterdata.hr.syncOrganizationInfo"	class="com.sany.masterdata.hr.sync.SyncOrganizationInfo">
+	</property>
 </properties>

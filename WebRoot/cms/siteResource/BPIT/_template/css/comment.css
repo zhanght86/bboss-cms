@@ -1,0 +1,175 @@
+@charset "utf-8";
+
+*{ margin:0; padding:0;}
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: "宋体", arial, helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 24px;
+	color: #515151;
+}
+td,th{
+	font-family:12px/24px  "宋体", arial, helvetica, sans-serif;
+}
+a{
+	color: #515151;
+	text-decoration: none;
+}
+a:link{text-decoration: none;	color: #515151;}
+a:visited{text-decoration: none;	color: #515151;}
+a:hover {
+	text-decoration:underline;
+	color: #515151;
+}
+ul {
+	list-style-type: none
+}
+li {
+	list-style-type: none
+}
+.clear {
+	line-height: 0px; height: 0px; clear: both; font-size: 1px
+}
+p {
+	text-indent: 26px;
+}
+
+.comment_box {
+	border: 1px solid #CCCCCC;
+	margin:10px 5px;
+}
+.comment_box .comment_title {
+	background-color: #EBEBEB;
+	font-size: 14px;
+	font-weight: bold;
+	background-image: url(../images/comment.gif);
+	background-repeat: no-repeat;
+	background-position: 4px 5px;
+	padding-left: 26px;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+}
+.comment_box .comment_content {
+}
+
+.comment_box .comment_content li {
+	border-top: 1px dashed #CCCCCC; padding:5px;
+}
+
+.comment_box .comment_title .comment_num {
+	float: right;
+	width: 150px;
+	text-align: right;
+	font-weight: normal;
+	font-size: 12px;
+}
+.comment_box .comment_title .comment_num .red_num {
+	color: #E71F21;
+	padding: 2px;
+}
+.comment_box .comment_content {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #CCCCCC;
+}
+.comment_box .comment_content .comment_user {
+	color: #000000;
+	float: left;
+	width: 100px;
+}
+.comment_box .comment_content .comment {
+	margin-left: 110px;
+	font-size: 14px;
+}
+.comment_box .comment_content .comment .comment_date {
+	float: left;
+	width: 320px;
+	font-size: 12px;
+	color: #757575;
+}
+.comment_box .comment_content .comment .operation {
+	text-align: right;
+	padding-right: 5px;
+	font-size: 12px;
+}
+.comment_box .comment_content .comment .operation a:link,.comment_box .comment_content .comment .operation a:visited {
+	color: #000099;
+}
+.comment_box .comment_content .comment .operation a:hover{
+	color: #E71F21;
+}.comment_box .comment_more {
+	font-size: 14px;
+	text-align: center;
+	border-top-width: 1px;
+	border-top-style: dashed;
+	border-top-color: #CCCCCC;
+	padding: 8px;
+}
+.comment_box .comment_more .red_num {
+	color: #E71F21;
+	padding: 2px;
+}
+.comment_box .comment_1 {
+	background-color: #F5F5F5;
+	border-top: 1px solid #CCCCCC;
+}
+.comment_box .comment_1 .comment_title1 {
+	font-size: 14px;
+	font-weight: bold;
+	background-image: url(../images/comment.gif);
+	background-repeat: no-repeat;
+	background-position: 4px -25px;
+	padding-left: 30px;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+	margin-bottom: 6px;
+}
+.comment_box .comment_content .select_comment {
+	background-color: #F2F9FF;
+}
+.comment_box .comment_content .comment_2 {
+	background-color: #f9f9f9;
+}
+
+
+.bt_position {
+	text-align:center;
+	padding:10px 18px; 
+}
+
+.input1 {
+
+	padding: 2px;
+	height: 18px;
+	width: 300px;
+	border: #a7a6aa 1px solid;
+	line-height:14px;
+	background: #fff url(../images/input-bg.png) no-repeat 0px 0px;
+}
+.textarea1 {
+
+	padding: 3px;
+	height: 80px;
+	width:97%;
+	border: #a7a6aa 1px solid;
+	line-height:14px;
+	background: #fff url(../images/input-bg.png) no-repeat 0px 0px;
+}
+a.bt_1{ margin:0 3px; cursor:hand;}
+a.bt_1,a.bt_1 span,a.bt_1:hover,a.bt_1:hover span{ background:url(../images/bt_1.gif) no-repeat top left; padding-left:15px; height:23px; display:inline-block; text-indent:0; line-height:23px; color:#FFF;}
+a.bt_1 span{background-position:top right; padding:0; padding-right:12px;}
+a.bt_1:hover{background-position:bottom left; text-decoration:none; color:#000000;}
+a.bt_1:hover span{background-position:bottom right; padding:0; padding-right:12px;}
+.page{
+	padding:5px 0;margin-left:190px;
+	text-align:left;
+	background-color:#F3F3F3;
+	font-weight: bold;
+	font-size: 10px;
+}
+.page a,.page .current{ margin:0 5px;}
+.page a{ color:#515151;}
+.page a:hover{ text-decoration:underline;}	

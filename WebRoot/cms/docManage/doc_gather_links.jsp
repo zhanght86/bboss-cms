@@ -70,9 +70,15 @@
 			
 %>
 <html xmlns="http://www.w3.org/1999/xhtml">
+<pg:config enablecontextmenu="false" enabletree="false"/>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
 	<link href="<%=request.getContextPath()%>/cms/inc/css/cms.css" rel="stylesheet" type="text/css">
 	<script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
 	<script src="<%=request.getContextPath()%>/cms/inc/js/killerror.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
+	
 	<script type="text/javascript" src="<%=request.getContextPath()%>/public/datetime/calender.js" language="javascript"></script>
 	<style type="text/css">
 	<!--
@@ -94,6 +100,7 @@
 		<title>CMS 文档管理</title>
 	</head>
 	<script language="javascript">
+	var api = frameElement.api, W = api.opener;
 	//动画窗口对象
 	var win = null;
 	//关闭动画窗口
@@ -147,18 +154,51 @@
 				document.all.isnewdocsource.value="1";
 			}
 			
-			myform.method="post";
-			myform.target = "addlinks";
+		    var url = "${pageContext.request.contextPath}/document/addDocument.page?flag=" + closeFlag;
+			
+			$.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#myform"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      				 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						if(responseText=="success"){
+							
+							$.dialog.alert("操作文档成功",function(){	
+									W.modifyQueryData();
+									api.close();
+							},api);													
+						}else{
+							$.dialog.alert("操作文档出错",function(){},api);
+						}
+						
+						
+						
+						
+					}
+				  });
+			
+			//myform.method="post";
+			//myform.target = "addlinks";
 			
 			
-			myform.action="<%=request.getContextPath()%>/cms/docManage/add_document.jsp?flag=" + closeFlag;
-			win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
-			myform.submit();
-			var buttons = document.getElementsByTagName("input");
-			for(var i=0;i<buttons.length;i++)
-			{
-				buttons[i].disabled = true;
-			}
+			//myform.action="<%=request.getContextPath()%>/cms/docManage/add_document.jsp?flag=" + closeFlag;
+			//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+			//myform.submit();
+			//var buttons = document.getElementsByTagName("input");
+			//for(var i=0;i<buttons.length;i++)
+			//{
+			//	buttons[i].disabled = true;
+			//}
 		}
 	}
 	//返回
@@ -400,7 +440,7 @@ else
 			</marquee>
 		</div>
 
-		<form target="addlinks" name="myform">
+		<form target="addlinks" id="myform" name="myform">
 			<div id="auditorDiv" name="auditorDiv" style="display:none;"></div>
 			<div id="publisherDiv" name="publisherDiv" style="display:none;"></div>
 			<input name="doctype" value="1" type=hidden>
@@ -698,7 +738,7 @@ else
 				<!--来源于别的网站才有父站点-->
 			</table>
 			<script type="text/javascript">
-  document.all.inputdocsource.value=document.all.docsource_id.options(document.all.docsource_id.selectedIndex).text;
+ // document.all.inputdocsource.value=document.all.docsource_id.options(document.all.docsource_id.selectedIndex).text;
   </script>
 		</form>
 		<div style="display:none">

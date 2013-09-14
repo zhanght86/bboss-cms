@@ -28,7 +28,9 @@ public class Config {
 	private String user;
 	private String password;
 	private String smsurl;
-	private String ORGEH_CODE;
+	private String firstDeptId;
+	private String secondDeptId;
+	private String thirdDeptId;
 	private String SMS_SUBCODE;
 	public String getUser() {
 		return user;
@@ -48,17 +50,31 @@ public class Config {
 	public void setSmsurl(String smsurl) {
 		this.smsurl = smsurl;
 	}
-	public String getORGEH_CODE() {
-		return ORGEH_CODE;
-	}
-	public void setORGEH_CODE(String oRGEH_CODE) {
-		ORGEH_CODE = oRGEH_CODE;
-	}
+	
 	public String getSMS_SUBCODE() {
 		return SMS_SUBCODE;
 	}
 	public void setSMS_SUBCODE(String sMS_SUBCODE) {
 		SMS_SUBCODE = sMS_SUBCODE;
+	}
+	public String getFirstDeptId() {
+		return firstDeptId;
+	}
+	
+	public void setFirstDeptId(String firstDeptId) {
+		this.firstDeptId = firstDeptId;
+	}
+	public String getSecondDeptId() {
+		return secondDeptId;
+	}
+	public void setSecondDeptId(String secondDeptId) {
+		this.secondDeptId = secondDeptId;
+	}
+	public String getThirdDeptId() {
+		return thirdDeptId;
+	}
+	public void setThirdDeptId(String thirdDeptId) {
+		this.thirdDeptId = thirdDeptId;
 	}
 
 }

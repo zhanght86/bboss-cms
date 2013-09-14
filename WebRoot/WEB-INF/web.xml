@@ -152,7 +152,7 @@
 		<!-- 防止跨站请求过滤器相关参数结束 -->   
 		<init-param>
 			<param-name>enablePermissionCheck</param-name>
-			<param-value>true</param-value>
+			<param-value>false</param-value>
 		</init-param>
 		 
 		
@@ -418,5 +418,7 @@
 	<login-config>
 		<auth-method>BASIC</auth-method>
 	</login-config>
-  
+	<session-config>
+		<session-timeout>-1</session-timeout>
+	</session-config>  
 </web-app>

@@ -1,7 +1,7 @@
 <%@ page language="java"  pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 
-<div id="customContent">
+<div id="customContent"  style="overflow:auto;height:100%">
 <pg:equal actual="${browserCounterDataList.totalSize}" value="0" >
 	<div class="nodata">
 	<img src="${pageContext.request.contextPath}/html/images/no_data.jpg"/></div>
@@ -15,14 +15,14 @@
 	<pg:param name="browserIp"/>
 	<pg:param name="startTime"/>
 	<pg:param name="endTime"/>
-	
+	<pg:param name="browserUser"/>
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<!-- <span class="toolTip" title="<pg:cell colName="pageURL"/>"><pg:cell colName="pageURL" maxlength="100" replace="..."/></span> -->
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
         	<th>应用名称</th> 	
-       		<th >功能路径</th>
+       		<th >菜单路径</th>
        		<th style="display: none">页面名称</th>
        		<th>浏览页面地址</th>
        		<th>浏览来源地址</th>

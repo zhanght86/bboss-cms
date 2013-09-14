@@ -153,7 +153,13 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 	 */
 	public void initScriptlet() throws PublishException {
 		ChannelContext channelContext = (ChannelContext)this.context;
+		if( channelContext.isCustomPageType() 
+				|| channelContext.isRefchannelType() 
+				|| channelContext.isDocDetailPageType())
+			return ;
 		Template indexTemplate = channelContext.getOutlineTemplate();
+		if(indexTemplate == null )
+			return;
 		this.script = ScriptletUtil.createScriptlet(context,indexTemplate);
 		
 		
@@ -485,7 +491,10 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 			{
 				if(publishScope[i] == PublishObject.PUBLISH_CHANNEL_RECINDEX
 						|| publishScope[i] == PublishObject.PUBLISH_CHANNEL_INDEX)
+				{
 					return true;
+					
+				}
 				
 			}
 		}
@@ -513,7 +522,7 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 		{
 			publishSubChannels();
 		}
-		
+		  
 		if(needPublishChannelIndex())
 		{
 			ChannelContext channelContext = (ChannelContext)this.context;
@@ -523,7 +532,7 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 			 * 2.指定自定义的页面生成首页
 			 * 3.指定文档的细览页面作为频道的首页
 			 */
-			if(channelContext.isTemplateType())
+			if(channelContext.isTemplateType())   
 			{
 				publishOutlineTemplate();
 			}

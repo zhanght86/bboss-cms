@@ -39,6 +39,12 @@ function setFrame5(){
 		document.getElementById("frame5").src="operateCounterStaticByYearQuery.jsp?siteId="+${param.siteId};
 	}
 }
+function setFrame6(){
+	var src = document.getElementById("frame6").src;
+	if(null==src||""==src){
+		document.getElementById("frame6").src="operateCounterHistoryCompare.jsp?siteId="+${param.siteId};
+	}
+}
 </script>
 </head>
 <body>
@@ -51,8 +57,7 @@ function setFrame5(){
 				  <li><a href="javascript:void(0)" onclick="setFrame3();setTab(2,2)"><span>模块操作量本周统计排名</span></a></li>
 				<li><a href="javascript:void(0)"  onclick="setFrame4();setTab(2,3)"><span>模块操作量月统计排名</span></a></li>
 				<li><a href="javascript:void(0)"  onclick="setFrame5();setTab(2,4)"><span>模块操作量年统计排名</span></a></li> 
-				<!-- <li><a href="javascript:void(0)"  onclick="setTab(2,4)"><span>模块操作量月统计</span></a></li>   -->
-				 
+				 <li><a href="javascript:void(0)"  onclick="setFrame6();setTab(2,5)"><span>历史数据比较</span></a></li> 
 			</ul>
 		</div>
 		<div id="main2">
@@ -62,18 +67,20 @@ function setFrame5(){
 			</ul>
 			 
 			 <ul id="tab2" style="display: none;">
-				<iframe id="frame2" src=""  frameborder="0" width="100%"  height="630" ></iframe>
+				<iframe id="frame2"   frameborder="0" width="100%"  height="630" ></iframe>
 			</ul>
 			<ul id="tab3" style="display: none;">
-				<iframe id="frame3" src=""  frameborder="0" width="100%"  height="630" ></iframe>
+				<iframe id="frame3"   frameborder="0" width="100%"  height="630" ></iframe>
 			</ul>
 			 <ul id="tab4" style="display: none;">
-			 <iframe id="frame4" src=""  frameborder="0" width="100%"  height="630" ></iframe>
+			 <iframe id="frame4"  frameborder="0" width="100%"  height="630" ></iframe>
 			</ul>
 			<ul id="tab5" style="display: none;">
-			<iframe id="frame5" src=""  frameborder="0" width="100%"  height="630" ></iframe>
+			<iframe id="frame5"   frameborder="0" width="100%"  height="630" ></iframe>
 			</ul>
-			 
+			 <ul id="tab5" style="display: none;">
+			<iframe id="frame6"   frameborder="0" width="100%"  height="630" ></iframe>
+			</ul>
 		</div>
 	</div>
 </body>

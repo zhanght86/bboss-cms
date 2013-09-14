@@ -1,6 +1,6 @@
 <properties>
 	
-	<property name="/document/*.freepage" class="com.frameworkset.platform.cms.documentmanager.action.DocumentController" singlable="true"
+	<property name="/document/*.freepage,/document/*.page" class="com.frameworkset.platform.cms.documentmanager.action.DocumentController" singlable="true"
 		f:documentManager="attr:documentManager"
 		path:showNewsList="/cms/docManage/showNewsList.jsp"
 		path:showReportsList="/cms/docManage/showReportsList.jsp"

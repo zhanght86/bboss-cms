@@ -13,13 +13,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>三一集团开发平台</title>
+<%  String userName = AccessControl.getAccessControl().getUserAccount();
+ String appName = accesscontroler.getCurrentSystemID();
+%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 <style>
 html,body{ height:100%;}
 </style>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/menu.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/menu.js?userName=<%= appName%>&appName =<%=userName %>"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/log.js"></script>
 <script>
 $(document).ready(function(){ 
 	$(".left_menu li > a").click(function(){ 		
@@ -56,6 +60,7 @@ $(document).ready(function(){
   </div>
 </body>
 <script type="text/javascript">
+
 function getobj(menu)
 {
 return (navigator.appName == "Microsoft Internet Explorer")?this[menu]:document.getElementById(menu);

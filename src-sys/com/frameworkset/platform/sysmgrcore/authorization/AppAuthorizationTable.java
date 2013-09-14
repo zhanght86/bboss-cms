@@ -289,20 +289,20 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 
 		} catch (SecurityException e) {
 			//throw e;
-			e.printStackTrace();
+			log.error("", e);
 			//add by 20080721 gao.tang 抛出SecurityException(e)
 			throw e;
 		} catch (SPIException e) {
 			throw new SecurityException("Get AllRoleOfPrincipal error:"
 					+ e.getMessage());
 		} catch (ManagerException e) {
-			e.printStackTrace();
+			log.error("", e);
 			throw new SecurityException("Get AllRoleOfPrincipal error:"
 					+ e.getMessage());
 		}
 		//add by 20080721 gao.tang 添加Exception
 		catch(Exception e){
-			e.printStackTrace();
+			log.error("", e);
 			throw new SecurityException(e);
 		}
 		finally

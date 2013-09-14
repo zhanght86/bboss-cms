@@ -19,7 +19,7 @@
 	accesscontroler.checkAccess(request,response);
     if (request.getParameter("answerIDs")!=null&&!"".equals(request.getParameter("answerIDs"))){
     	VoteManager voteMgr  = new VoteManagerImpl();
-  		if(voteMgr.passAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),request.getRemoteAddr())==1){
+  		if(voteMgr.passAnswers(request.getParameter("answerIDs"),accesscontroler.getUserAccount(),accesscontroler.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
   				%><script language="javascript">alert("审核成功!");</script><%
   			}
   	}

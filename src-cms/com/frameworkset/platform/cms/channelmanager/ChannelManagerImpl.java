@@ -20,6 +20,7 @@ import org.frameworkset.event.EventImpl;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.SQLParams.clobfile;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.bean.ChannelCondition;
 import com.frameworkset.platform.cms.container.Template;
@@ -99,7 +100,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request, response);
 			String operContent = "";
-			String operSource = request.getRemoteAddr();
+			String operSource = com.frameworkset.util.StringUtil.getClientIP(request);
 			String openModle = "频道管理";
 			// String userName = control.getUserName();
 			String description = "";
@@ -486,7 +487,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			AccessControl control = AccessControl.getInstance();
 			control.checkAccess(request, response);
 			String operContent = "";
-			String operSource = request.getRemoteAddr();
+			String operSource = com.frameworkset.util.StringUtil.getClientIP(request);
 			String openModle = "频道管理";
 			// String userName = control.getUserName();
 			String description = "";
@@ -1160,7 +1161,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				AccessControl control = AccessControl.getAccessControl();
 				
 				String operContent = "";
-				String operSource = request.getRemoteAddr();
+				String operSource = com.frameworkset.util.StringUtil.getClientIP(request);
 				String openModle = "频道管理";
 				// String userName = control.getUserName();
 				String description = "";

@@ -15,12 +15,15 @@
 package com.frameworkset.platform.sanylog.task;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.tools.ant.util.DateUtils;
 
 import com.frameworkset.platform.sanylog.bean.App;
+import com.frameworkset.platform.sanylog.bean.FunctionList;
 import com.frameworkset.platform.sanylog.bean.SpentTime;
 import com.frameworkset.platform.sanylog.service.CounterManager;
 import com.frameworkset.platform.sanylog.service.FunctionListManager;
@@ -39,6 +42,7 @@ public class SpentTimeStaticTask {
 	 * @throws Exception
 	 */
 	public void autoStaticSpentTimeJob() throws Exception {
+
 		try{
 			/**
 			 * 1.在日志系统库中找到所有的项目名称
@@ -49,10 +53,41 @@ public class SpentTimeStaticTask {
 			for(App bean:datas){
 				String appName = bean.getAppName();
 				String appId = bean.getAppId();
-				List<SpentTime> sysSpentTime = functionListManager.staticSpentTimeByAppName(appName,appId);
+				List<FunctionList> sysSpentTime = functionListManager.staticSpentTimeByAppName(appName,appId);
 				if(null!=sysSpentTime&&sysSpentTime.size()>0){
-					functionListManager.deleteSysSpentTime(appId);
-					functionListManager.insertSysSpentTime(sysSpentTime);
+					//functionListManager.deleteSysSpentTime(appId);
+					//functionListManager.insertSysSpentTime(sysSpentTime);
+					for(FunctionList sysTime:sysSpentTime){
+						sysTime.setId(UUID.randomUUID().toString());
+					}
+					List<FunctionList> datasInDB = functionListManager.getFunctionList(appId);
+					if(datasInDB.size()>0){
+						List<FunctionList> datasForInsert = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面没有的
+						List<FunctionList> datasForUpdate = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面有，但是时间更新了的
+						for(FunctionList sysTime:sysSpentTime){
+							String status = "notequal";
+							for(FunctionList beanInDB:datasInDB){
+								String result = sysTime.equal(beanInDB);
+								if("notequal".equals(result)){
+									
+								}else if("timediff".equals(result)){
+									 datasForUpdate.add(beanInDB);
+									 status = "timediff";
+									 break;
+								}else if("equal".equals(result)){
+									status = "equal";
+									 break;
+								}
+							}
+							if("notequal".equals(status)){
+								datasForInsert.add(sysTime);
+							}
+						}
+						functionListManager.insertSysTime(datasForInsert);
+						functionListManager.updateSysTime(datasForUpdate);
+					}else{
+						functionListManager.insertSysTime(sysSpentTime);
+					}
 				}
 				
 			}
@@ -61,5 +96,49 @@ public class SpentTimeStaticTask {
 			System.out.println("统计失败"+e.getMessage());
 		}
 		
+	
 	}
 }
+/*
+		try{
+			
+			List<App> datas = functionListManager.getAllApp();
+			for(App bean:datas){
+				String appName = bean.getAppName();
+				String appId = bean.getAppId();
+				List<FunctionList> sysSpentTime = functionListManager.staticSpentTimeByAppName(appName,appId);
+				if(null!=sysSpentTime&&sysSpentTime.size()>0){
+					//functionListManager.deleteSysSpentTime(appId);
+					//functionListManager.insertSysSpentTime(sysSpentTime);
+					for(FunctionList sysTime:sysSpentTime){
+						sysTime.setId(UUID.randomUUID().toString());
+					}
+					List<FunctionList> datasInDB = functionListManager.getFunctionList(appId);
+					if(datasInDB.size()>0){
+						List<FunctionList> datasForInsert = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面没有的
+						List<FunctionList> datasForUpdate = new ArrayList<FunctionList> ();//存放td_log_functionlist表里面有，但是时间更新了的
+						for(FunctionList sysTime:sysSpentTime){
+							for(FunctionList beanInDB:datasInDB){
+								String result = sysTime.equal(beanInDB);
+								if("notequal".equals(result)){
+									datasForInsert.add(sysTime);
+								}else if("timediff".equals(result)){
+									 datasForUpdate.add(beanInDB);
+								}
+							}
+						}
+						functionListManager.insertSysTime(datasForInsert);
+						functionListManager.updateSysTime(datasForUpdate);
+					}else{
+						functionListManager.insertSysTime(sysSpentTime);
+					}
+				}
+				
+			}
+			System.out.println("统计成功");
+		}catch(SQLException e){
+			System.out.println("统计失败"+e.getMessage());
+		}
+		
+	
+*/

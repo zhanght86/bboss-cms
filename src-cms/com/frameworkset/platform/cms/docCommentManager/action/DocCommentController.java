@@ -19,6 +19,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 
@@ -183,8 +184,67 @@ public class DocCommentController {
 		}	
 		
 	}
-	
+	/**
+	 * 查询站点前n条评论和评论总数
+	 * 
+	 * @param sortKey 排序关键字
+	 * @param desc 排序方式	 
+	 * @param docId 文档ID
+	 * @param HttpServletRequest request
+	 * @return String
+	 * @throws Exception Exception
+	 */
+	public @ResponseBody(datatype="jsonp") NComentList getSiteCommentNList(String site,int n,
+			HttpServletRequest request,HttpServletResponse response) {
 
+		
+		try {
+			Container container = new ContainerImpl();
+//			
+			NComentList docCommentList = docCommentManager.getSiteCommnetList(n);
+			container.init(site, request, request.getSession(), response);
+			if (!CollectionUtils.isEmpty(docCommentList.getComments())) {
+				for (DocComment docComment : docCommentList.getComments()) {
+					String documentUrl= container.getPublishedDocumentUrl(new Integer(docComment.getDocId()).toString());
+					docComment.setDocUrl(documentUrl);
+				}
+			}
+			return docCommentList;
+		} catch (Exception e) {
+			return null;
+		}	
+		
+	}
+	/**
+	 * 查询频道前n条评论和评论总数
+	 * 
+	 * @param sortKey 排序关键字
+	 * @param desc 排序方式	 
+	 * @param docId 文档ID
+	 * @param HttpServletRequest request
+	 * @return String
+	 * @throws Exception Exception
+	 */
+	public @ResponseBody(datatype="jsonp") NComentList getChannelCommentNList(String site,String channel,int n,
+			HttpServletRequest request,HttpServletResponse response) {
+
+		
+		try {
+			Container container = new ContainerImpl();
+			container.init(site, request, request.getSession(), response);
+			NComentList docCommentList = docCommentManager.getChannelCommnetList(channel,n);
+			if (!CollectionUtils.isEmpty(docCommentList.getComments())) {
+				for (DocComment docComment : docCommentList.getComments()) {
+					String documentUrl= container.getPublishedDocumentUrl(new Integer(docComment.getDocId()).toString());
+					docComment.setDocUrl(documentUrl);
+				}
+			}
+			return docCommentList;
+		} catch (Exception e) {
+			return null;
+		}	
+		
+	}
 	/**
 	 * 展示所有该文档的评论
 	 * @param sortKey
@@ -241,7 +301,7 @@ public class DocCommentController {
 			docCommentBean.setDocComment(URLDecoder.decode(docComment, "UTF-8"));
 		}
 
-		docCommentBean.setUserIP(request.getRemoteAddr());
+		docCommentBean.setUserIP(com.frameworkset.util.StringUtil.getClientIP(request));
 		
 		//默认即可发布
 		int status = 1;

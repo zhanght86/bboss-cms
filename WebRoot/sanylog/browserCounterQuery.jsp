@@ -102,7 +102,7 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>功能路径：</th>
+										<th>菜单路径：</th>
 										<td>
 											<select id="channelId" name="channelId"  maxlength="40"><!-- class="w120" -->
 												<option value="">无限制</option>

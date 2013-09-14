@@ -241,7 +241,7 @@
 					dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.Org_UserListSn"
 					keyName="UserListSn" />
 				<!--分页显示开始,分页标签初始化-->
-				<pg:pager maxPageItems="10" scope="request" data="UserListSn"
+				<pg:pager maxPageItems="5" scope="request" data="UserListSn"
 					isList="false">
 						<pg:param name="orgId" />
 					<pg:param name="userName" />
@@ -716,7 +716,7 @@
 							scope="request" />
 	</table>
 		</div>
-						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5"/></div>
 						
 						
 					</pg:notequal>	

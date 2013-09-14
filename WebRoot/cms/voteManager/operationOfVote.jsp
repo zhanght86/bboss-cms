@@ -21,7 +21,7 @@
     	VoteManagerImpl voteMgr  = new VoteManagerImpl();
 		if (!("search".equals((String)request.getParameter("actionType")))){
     	if ("delete".equals((String)request.getParameter("actionType"))){
-    		if(voteMgr.deleteSurveyBy((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr())==1){
+    		if(voteMgr.deleteSurveyBy((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
     			%><SCRIPT language="javascript">alert("删除成功！");
     			 returnValue="ok";
     			 window.close();
@@ -32,7 +32,7 @@
     		<%}
     	}
     	if ("settop".equals((String)request.getParameter("actionType"))){
-    	    int flag = voteMgr.setSurveyTop((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+    	    int flag = voteMgr.setSurveyTop((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
     	    
     		if(flag==1){
     			%><SCRIPT language="javascript">alert("置顶成功！");
@@ -50,7 +50,7 @@
     		}
     	}
     	if ("canceltop".equals((String)request.getParameter("actionType"))){
-    	  int flag = voteMgr.cancelSurveyTop((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+    	  int flag = voteMgr.cancelSurveyTop((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
     	   if(flag!=1){
     	     if(flag==2){
     			%><SCRIPT language="javascript">alert("您所选调查已经取消了置顶，请重新选择！");
@@ -66,7 +66,7 @@
     		<%}
     	}
   		if ("unactive".equals(request.getParameter("actionType"))){
-  		  int flag = voteMgr.unactivateSurveys(request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+  		  int flag = voteMgr.unactivateSurveys(request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
   			if(flag==1){
   				%><script language="javascript">alert("取消审核成功!");
   				returnValue="ok";
@@ -81,7 +81,7 @@
     		}
   		}
     	if ("active".equals((String)request.getParameter("actionType"))){
-    	int flag = voteMgr.activateSurveys((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+    	int flag = voteMgr.activateSurveys((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
     		if(flag==1){
     			%><SCRIPT language="javascript">alert("审核成功！");
     			returnValue="ok";
@@ -97,7 +97,7 @@
     		}
     	}
     	if ("cancellook".equals((String)request.getParameter("actionType"))){
-    	int flag = voteMgr.cancelSurveysLook((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+    	int flag = voteMgr.cancelSurveysLook((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
     		if(flag==1){
     			%><SCRIPT language="javascript">alert("取消查看成功！");
     			returnValue="ok";
@@ -113,7 +113,7 @@
     		}
     	}
     	if ("look".equals((String)request.getParameter("actionType"))){
-    	int flag = voteMgr.setSurveysLook((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr());
+    	int flag = voteMgr.setSurveysLook((String)request.getParameter("sids"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request));
     		if(flag==1){
     			%><SCRIPT language="javascript">alert("恢复查看成功！");
     			returnValue="ok";
@@ -129,7 +129,7 @@
     		}
     	}
     	if ("clearvote".equals((String)request.getParameter("actionType"))){
-    		if(voteMgr.clearVote((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),request.getRemoteAddr())==1){
+    		if(voteMgr.clearVote((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
     			%><SCRIPT language="javascript">alert("投票结果清零成功！");
     			returnValue="ok";
     			window.close();</script><%

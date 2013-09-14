@@ -44,7 +44,7 @@
   	function maintain()
 	{
   		var url="<%=request.getContextPath()%>/cms/maintainInfo.jsp?userId=<%=userId%>";
-	 	 $.dialog({title:'onlineUser',width:screen.availWidth,height:650, content:'url:'+url});  
+	 	 $.dialog({title:'系统维护',width:screen.availWidth,height:650, content:'url:'+url});  
 		
 	 	 //window.open('../cms/maintainInfo.jsp?userId=<%=userId%>','onlineUser','menubar=no,status=no,toolbar=no,left=0,top=0,width='+ screen.availWidth +',height=650');
   	}

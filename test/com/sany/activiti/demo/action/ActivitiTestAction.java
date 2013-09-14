@@ -1,5 +1,6 @@
 package com.sany.activiti.demo.action;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.RollbackException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -77,17 +78,20 @@ public class ActivitiTestAction {
 		TransactionManager tm = new TransactionManager();  
 		try
 		{
-			tm.begin();
-			List list = new ArrayList();
-			list.add("admin");
+//			tm.begin();
+//			List list = new ArrayList();
+//			list.add("admin");
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("usertask3_users_list", list);
-			processInstance = activitiService.startProcDefLoadCandidate(map, PROCESS_KEY,"50020021",WorkFlowConstant.BUSINESS_TYPE_ORG,materiel.getApply_name());
+//			map.put("usertask6_users", list);
+		
+//			processInstance = activitiService.startProcDefLoadCandidate(map, PROCESS_KEY,"50020021",WorkFlowConstant.BUSINESS_TYPE_ORG,materiel.getApply_name());
+			processInstance = activitiService.startProcDefLoadCandidate(map, PROCESS_KEY,"",WorkFlowConstant.BUSINESS_TYPE_COMMON,materiel.getApply_name());
 			materiel.setProcess_instance_id(processInstance.getId());
 			activitiTestService.applyMateriel(materiel);
 		
-			List<Task> taskList = activitiService.listTaskByUser(materiel
+			List<Task> taskList = activitiService.listTaskByUser(PROCESS_KEY, materiel
 					.getApply_name());
+			map = new HashMap<String, Object>();
 			map.put("isPass", true);
 			for (int i = 0; i < taskList.size(); i++) {
 				if(taskList.get(i).getProcessInstanceId().equals(processInstance.getId())){
@@ -95,7 +99,7 @@ public class ActivitiTestAction {
 							materiel.getApply_name(), map);
 				}
 			}
-			tm.commit();
+//			tm.commit();
 		}
 		catch(Throwable e)
 		{
@@ -134,6 +138,27 @@ public class ActivitiTestAction {
 		model.addAttribute("username", username);
 		model.addAttribute("isDetail", "true");
 		return "path:task_tasklist";
+	}
+	
+	/**
+	 * 根据流程key获取流程的最新版本流程图
+	 * @param process_key
+	 * @param response
+	 * @throws IOException
+	 */
+	public void getPic(String process_key,HttpServletResponse response) throws IOException
+	{
+		this.activitiService.getProccessPicByProcessKey(process_key, response.getOutputStream());
+	}
+	/**
+	 * 根据流程定义id获取对应版本的流程图
+	 * @param process_defid
+	 * @param response
+	 * @throws IOException
+	 */
+	public void getPicByProceccDefid(String process_defid,HttpServletResponse response) throws IOException
+	{
+		this.activitiService.getProccessPic(process_defid, response.getOutputStream());
 	}
 	
 	/**
@@ -214,11 +239,10 @@ public class ActivitiTestAction {
 	 * @return
 	 */
 	public String toOperateTask(String taskId,String username,String isDetail,ModelMap model){
-		Task task = activitiService.getTaskById(taskId);
+		Task task = activitiService.getTaskById(taskId);		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		MaterielTest object = activitiTestService.queryMaterielTestByProcessId(task.getProcessInstanceId());
-		ActivityImpl activityImpl = activitiService.traceProcess(task.getExecutionId(), PROCESS_KEY);
-		
+		ActivityImpl activityImpl = activitiService.getActivityImplByDefId(task.getTaskDefinitionKey(),task.getProcessDefinitionId());
 		List<TaskInfo> taskInfoList = activitiTestService.queryTaskInfoByProcessId(task.getProcessInstanceId());
 		
 		model.addAttribute("coordinateObj", activityImpl);
@@ -228,18 +252,22 @@ public class ActivitiTestAction {
 		model.addAttribute("username", username);
 		model.addAttribute("taskInfoList", taskInfoList);
 		model.addAttribute("isDetail", isDetail);
-		model.addAttribute("process_key", PROCESS_KEY);
+		model.addAttribute("process_defid", activityImpl.getProcessDefinition().getId());
 		return "path:task_main";
 	}
 	
+	
+	
 	public String toHisTask(String taskId,String isDetail,ModelMap model){
 		HistoricTaskInstance hisTask = activitiService.getHisTaskById(taskId);
+		
+		ActivityImpl activityImpl = activitiService.getActivityImplByDefId(hisTask.getTaskDefinitionKey(),hisTask.getProcessDefinitionId());
 		MaterielTest object = activitiTestService.queryMaterielTestByProcessId(hisTask.getProcessInstanceId());
 		List<TaskInfo> taskInfoList = activitiTestService.queryTaskInfoByProcessId(hisTask.getProcessInstanceId());
-		if(hisTask.getExecutionId()!=null){
-			ActivityImpl activityImpl = activitiService.traceProcess(hisTask.getExecutionId(), PROCESS_KEY);
+		
 			model.addAttribute("coordinateObj", activityImpl);
-		}
+			model.addAttribute("process_defid", activityImpl.getProcessDefinition().getId());
+		
 		model.addAttribute("object", object);
 		model.addAttribute("taskInfoList", taskInfoList);
 		model.addAttribute("isDetail", isDetail);

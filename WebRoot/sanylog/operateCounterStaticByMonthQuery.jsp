@@ -13,6 +13,9 @@
 <head>
 <title>浏览统计数据</title>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<script language="JavaScript" src="fusion/FusionCharts.js"></script>
+<script type="text/javascript" src="fusion/prettify.js"></script>
+<script type="text/javascript" src="fusion/json2.js"></script>
 <script type="text/javascript">
 	
 	//页面加载时查询列表数据
@@ -23,8 +26,13 @@
 	//查询浏览统计列表数据(页面加载时会加载这个方法，页面调用查询时也会调用)
 	 function queryList1() {	
 		   var appId = "${param.siteId}";
-			var year = $("#year").val();
-			var month = $("#month").val();
+			/* var year = $("#year").val();
+			var month = $("#month").val(); */
+			
+			var time = $("#year-month").val();
+			var year = time.substring(0,4);
+			var month = time.substring(5,7);
+			
 		   	$("#custombackContainer").load("showOperCounterRankByMonth.page #customContent", { appId:appId, year:year,month:month}, function(){loadjs()});
 	}
 	//查询相应的模块
@@ -90,7 +98,11 @@
 								<table width="100%" border="0" cellpadding="0" cellspacing="0"
 									class="table2">
 									<tr>
-										<th>年份：</th>
+									<th>请选择时间：</th>
+										<td>
+											<td><input  id="year-month"  name="year-month" class="Wdate" type="text" onclick="WdatePicker({dateFmt:'yyyy-MM'})" /></td> 	
+										</td>
+										<!-- <th>年份：</th>
 										<td>
 											<select id="year" name="year" class="w120">
 												<option value="2012">2012</option>
@@ -117,7 +129,7 @@
 												<option value="11">11</option>
 												<option value="12">12</option>
 											<select>
-										</td>
+										</td> -->
 									 <td><a href="javascript:void(0)" class="bt_1"
 											id="queryButton" onclick="queryList1()"><span>查询</span> </a> <a
 											href="javascript:void(0)" class="bt_2" id="resetButton"
@@ -138,6 +150,28 @@
 		 <div class="title_box">
 			<strong>操作月统计数据</strong>
 		</div> 
+		<table width="100%" border="0">
+			<tr>
+				<td align="center" colspan="2">
+					<div id="operCountCompare"></div>
+					<script type="text/javascript">
+					    var time = $("#year-month").val();
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operCountCompare.page?type=month&appId=${param.siteId}&time="+time);
+	    				chart.render("operCountCompare");
+					</script>
+				</td>
+				<td align="center">
+					<div id="operUserCompare"></div>
+					<script type="text/javascript">
+					    var time = $("#year-month").val();
+						var chart = new FusionCharts("fusion/MSColumn2D.swf", "ChartId", "600", "250", "0", "0");
+	    				chart.setXMLUrl("<%=request.getContextPath()%>/sanylog/operUserCompare.page?type=month&appId=${param.siteId}&time="+time);
+	    				chart.render("operUserCompare");
+					</script>
+				<td>
+			</tr>
+		</table>
 		<div id="custombackContainer"></div>
 	</div>
 </body>

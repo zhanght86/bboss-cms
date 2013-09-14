@@ -78,7 +78,7 @@ public class CounterController {
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
 
-		paramCounter.setHitIP(request.getRemoteAddr());
+		paramCounter.setHitIP(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setHitUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setReferer(request.getHeader("Referer"));
 
@@ -119,7 +119,7 @@ public class CounterController {
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
 
-		paramCounter.setBrowserIp(request.getRemoteAddr());
+		paramCounter.setBrowserIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setBrowserUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setPageURL(paramCounter.getPageURL());
 
@@ -175,7 +175,7 @@ public class CounterController {
 		paramCounter.setChannelName(StringUtil.isEmpty(channelName) ? null : URLDecoder.decode(channelName, "UTF-8"));
 		paramCounter.setDocName(StringUtil.isEmpty(docName) ? null : URLDecoder.decode(docName, "UTF-8"));
 
-		paramCounter.setBrowserIp(request.getRemoteAddr());
+		paramCounter.setBrowserIp(com.frameworkset.util.StringUtil.getClientIP(request));
 		paramCounter.setBrowserUser(AccessControl.getAccessControl().getUserAccount());
 		paramCounter.setPageURL(paramCounter.getPageURL());
 
