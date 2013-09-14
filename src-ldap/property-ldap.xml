@@ -4,21 +4,21 @@
 	<property name="default" class="com.sany.ldap.LdapBean"
 		f:url="172.16.9.133"
 		f:port="389"
-		f:securityId="cn=ldapsa,cn=USERS,dc=sany,dc=com,dc=cn"
-		f:securityPsw="44e0aa5d2d46ae9cabc2deee6b3cdc19"
-		f:searchDc="DC=sany,DC=com,DC=cn"
-		f:searchObjectCategory="CN=Person,CN=Schema,CN=Configuration,DC=sany,DC=com,DC=cn"/>
+		f:securityId="cn=ldapsa,cn=USERS,dc=xny,dc=com,dc=cn"
+		f:securityPsw="333"
+		f:searchDc="DC=xany,DC=com,DC=cn"
+		f:searchObjectCategory="CN=Person,CN=Schema,CN=Configuration,DC=xny,DC=com,DC=cn"/>
 		
 	<property name="authetication" class="com.sany.ldap.Authetication"
 		f:searchDc="DC=sany,DC=com,DC=cn"
-		f:searchBase="cn=USERS,dc=sany,dc=com,dc=cn"
+		f:searchBase="cn=USERS,dc=33ny,dc=com,dc=cn"
 		f:ldapManagerFactory="attr:ldapManagerFactory"
-		f:searchObjectCategory="CN=Person,CN=Schema,CN=Configuration,DC=sany,DC=com,DC=cn"/>
+		f:searchObjectCategory="CN=Person,CN=Schema,CN=Configuration,DC=xxny,DC=com,DC=cn"/>
 	<property name="ldapManagerFactory" class="com.sany.ldap.LdapManagerFactory"
 		f:initial_context_factory="com.sun.jndi.ldap.LdapCtxFactory"
-		f:provider_url="ldap://172.16.9.133:389"
-		f:security_user="cn=ldapsa,cn=USERS,dc=sany,dc=com,dc=cn"
-		f:security_password="b23b9112ad5b60215fd1d24a8e5ac502"
+		f:provider_url="ldap://32.36.9.133:389"
+		f:security_user="cn=ldapsa,cn=USERS,dc=3ny,dc=com,dc=cn"
+		f:security_password="3333"
 		f:security_authentication="simple"
 		/>	
 </properties>		

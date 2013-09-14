@@ -8,6 +8,6 @@
 		f:secondDeptId=""
 		f:thirdDeptId=""
 	    f:SMS_SUBCODE="18"
-		f:smsurl="http://sms.sany.com.cn/sms/services/SmsNewOperatoraddsubCode"/>
+		f:smsurl="http://sms.xxx.com.cn/sms/services/SmsNewOperatoraddsubCode"/>
 
 </properties>
