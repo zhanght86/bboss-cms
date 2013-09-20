@@ -140,10 +140,7 @@
 	<!-- portal相关配置文件 -->
 	<managerimport file="properties-portal.xml" />	
 	
-	<!-- 
-		远程服务（RPC）组件框架配置
-	 -->
-	<managerimport file="org/frameworkset/spi/manager-rpc-service.xml" />
+	
 	
 	<!-- 监控中心相关配置文件 -->
 	<!-- 

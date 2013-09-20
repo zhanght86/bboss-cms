@@ -80,5 +80,7 @@ public class DemoServiceImpl {
 		conditions.put("desc", desc);
 		return executor.queryListInfoBean(Demo.class, "queryDemos", offset, pagesize, conditions);
 	}
+	
+	
 
 }

@@ -386,4 +386,9 @@ public class AppBomServiceImpl {
 			com.frameworkset.common.poolman.ConfigSQLExecutor executor) {
 		this.executor = executor;
 	}
+	
+	public String sayMvsHello(String duoduo)
+	{
+		return "Hello,"+duoduo;
+	}
 }

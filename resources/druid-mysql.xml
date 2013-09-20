@@ -1,7 +1,7 @@
 <property id="datasource" class="com.alibaba.druid.pool.DruidDataSource"
 	init-method="init" destroy-method="close"><!-- 这里不需要配置destroy-method，因为bboss持久层在jvm退出时会自动调用数据源的close方法 -->
 	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-	<property name="url" value="jdbc:mysql://10.0.15.134:3306/testmaster">
+	<property name="url" value="jdbc:mysql://localhost:3306/cim">
 		<!-- 如果数据库url是加密的，则需要配置解密的编辑器 -->
 		<!--<editor clazz="com.frameworkset.common.poolman.security.DecryptEditor"/> -->
 	</property>
