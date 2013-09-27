@@ -597,7 +597,7 @@ function updateTemplete(e){
 									<tr>
 										<td width="123" height="24" align="right" nowrap>设置频道首页:	</td>
 										<td height="24">
-											<input name="chnlIndexPage" type="text" class="cms_text" id="chnlIndexPage" style="width:200px"  value="<%=pageflag == 1?indexpagepath:""%>" maxlength="111"  <%=pageflag == 1?"":"disabled"%>/> 
+											<input name="chnlIndexPage" type="text" class="cms_text" id="chnlIndexPage" style="width:200px"  value="<%=pageflag == 1?indexpagepath:""%>" maxlength="500"  <%=pageflag == 1?"":"disabled"%>/> 
 											<input class="Channel_5wordsBtn" name="setChnlIndexPage" id="setChnlIndexPage" type="button" onClick="chooseChnlIndexPage('chnlIndexPage')" value="选 择" <%=pageflag == 1?"":"disabled"%>>
 										</td>	
 									</tr> 

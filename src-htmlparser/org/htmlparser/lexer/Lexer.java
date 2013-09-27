@@ -322,6 +322,54 @@ public class Lexer
                 else
                     ret = parseString (start, quotesmart);
                 break;
+            case '[':
+                ch = mPage.getCharacter (mCursor);
+                if (Page.EOF == ch)
+                {
+                    ret = makeString (start, mCursor.getPosition ());
+                    //ret.setResource(true);
+                }
+                else if ('/' == ch ||Character.isLetter (ch))
+                {
+                    mCursor.retreat ();
+                    ret = parseTag (start);
+                    ret.setResource(true);
+                }
+                else if ('!' == ch)
+                {
+                    ch = mPage.getCharacter (mCursor);
+                    if (Page.EOF == ch)
+                    {
+                        ret = makeString (start, mCursor.getPosition ());
+                        //ret.setResource(true);
+                    }
+                    else
+                    {
+                        if (']' == ch) // handle [!]
+                        {
+                            ret = makeRemark (start, mCursor.getPosition ());
+                            ret.setResource(true);
+                        }
+                        else
+                        {
+                            mCursor.retreat (); // remark/tag need this char
+                            if ('-' == ch)
+                            {
+                                ret = parseRemark (start, quotesmart);
+                                ret.setResource(true);
+                            }
+                            else
+                            {
+                                mCursor.retreat (); // tag needs prior one too
+                                ret = parseTag (start);
+                                ret.setResource(true);
+                            }
+                        }
+                    }
+                }
+                else
+                    ret = parseString (start, quotesmart);
+                break;    
             default:
                 mCursor.retreat (); // string needs to see leading foreslash
                 ret = parseString (start, quotesmart);
@@ -467,24 +515,46 @@ public class Lexer
                 else
                     mCursor.retreat ();
             }
-            else if ((0 == quote) && ('<' == ch))
+            else if ((0 == quote) )
             {
-                ch = mPage.getCharacter (mCursor);
-                if (Page.EOF == ch)
-                    done = true;
-                // the order of these tests might be optimized for speed:
-                else if ('/' == ch || Character.isLetter (ch)
-                    || '!' == ch || '%' == ch)
-                {
-                    done = true;
-                    mCursor.retreat ();
-                    mCursor.retreat ();
-                }
-                else
-                {
-                    // it's not a tag, so keep going, but check for quotes
-                    mCursor.retreat ();
-                }
+            	if('<' == ch)
+            	{
+	                ch = mPage.getCharacter (mCursor);
+	                if (Page.EOF == ch)
+	                    done = true;
+	                // the order of these tests might be optimized for speed:
+	                else if ('/' == ch || Character.isLetter (ch)
+	                    || '!' == ch || '%' == ch)
+	                {
+	                    done = true;
+	                    mCursor.retreat ();
+	                    mCursor.retreat ();
+	                }
+	                else
+	                {
+	                    // it's not a tag, so keep going, but check for quotes
+	                    mCursor.retreat ();
+	                }
+            	}
+            	else if('[' == ch)
+            	{
+	                ch = mPage.getCharacter (mCursor);
+	                if (Page.EOF == ch)
+	                    done = true;
+	                // the order of these tests might be optimized for speed:
+	                else if ('/' == ch || Character.isLetter (ch)
+	                    || '!' == ch )
+	                {
+	                    done = true;
+	                    mCursor.retreat ();
+	                    mCursor.retreat ();
+	                }
+	                else
+	                {
+	                    // it's not a tag, so keep going, but check for quotes
+	                    mCursor.retreat ();
+	                }
+            	}
             }
         }
 
@@ -674,9 +744,31 @@ public class Lexer
             switch (state)
             {
                 case 0: // outside of any attribute
-                    if ((Page.EOF == ch) || ('>' == ch) || ('<' == ch))
+                	if(Page.EOF == ch) 
+                	{
+                		if ('<' == ch || '[' == ch)
+                        {
+                            // don't consume the opening angle
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
+                        }
+                        whitespace (attributes, bookmarks);
+                        done = true;
+                	}
+                	else if ( ('>' == ch) || ('<' == ch))
                     {
                         if ('<' == ch)
+                        {
+                            // don't consume the opening angle
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
+                        }
+                        whitespace (attributes, bookmarks);
+                        done = true;
+                    }
+                    else if((']' == ch) || ('[' == ch))
+                    {
+                    	if ('[' == ch)
                         {
                             // don't consume the opening angle
                             mCursor.retreat ();
@@ -692,9 +784,31 @@ public class Lexer
                     }
                     break;
                 case 1: // within attribute name
-                    if ((Page.EOF == ch) || ('>' == ch) || ('<' == ch))
+                	if ((Page.EOF == ch))
+                	{
+                		if ('<' == ch || '[' == ch)
+                        {
+                            // don't consume the opening angle
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
+                        }
+                        standalone (attributes, bookmarks);
+                        done = true;
+                	}
+                	else if (('>' == ch) || ('<' == ch))
                     {
                         if ('<' == ch)
+                        {
+                            // don't consume the opening angle
+                            mCursor.retreat ();
+                            bookmarks[state + 1] = mCursor.getPosition ();
+                        }
+                        standalone (attributes, bookmarks);
+                        done = true;
+                    }
+                	else if ((']' == ch) || ('[' == ch))
+                    {
+                        if ('[' == ch)
                         {
                             // don't consume the opening angle
                             mCursor.retreat ();
@@ -714,7 +828,7 @@ public class Lexer
                         state = 2;
                     break;
                 case 2: // equals hit
-                    if ((Page.EOF == ch) || ('>' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch) || (']' == ch))
                     {
                         empty (attributes, bookmarks);
                         done = true;
@@ -739,7 +853,7 @@ public class Lexer
                         state = 3;
                     break;
                 case 3: // within naked attribute value
-                    if ((Page.EOF == ch) || ('>' == ch))
+                    if ((Page.EOF == ch) || ('>' == ch) ||  (']' == ch))
                     {
                         naked (attributes, bookmarks);
                         done = true;
@@ -911,7 +1025,7 @@ public class Lexer
                 switch (state)
                 {
                     case 0: // prior to the first open delimiter
-                        if ('>' == ch)
+                        if ('>' == ch || ']' == ch)
                             done = true;
                         if ('-' == ch)
                             state = 1;
@@ -925,7 +1039,7 @@ public class Lexer
                             ch = mPage.getCharacter (mCursor);
                             if (Page.EOF == ch)
                                 done = true;
-                            else if ('>' == ch)
+                            else if ('>' == ch  || ']' == ch)
                                 done = true;
                             else
                             {
@@ -949,7 +1063,7 @@ public class Lexer
                             state = 2;
                         break;
                     case 4: // prior to the terminating >
-                        if ('>' == ch)
+                        if ('>' == ch  || ']' == ch)
                             done = true;
                         else if (('!' == ch) || ('-' == ch) || Character.isWhitespace (ch))
                         {
@@ -1258,6 +1372,15 @@ public class Lexer
                             else
                                 state = 1;
                             break;
+                        case '[':
+                            if (quotesmart)
+                            {
+                                if (0 == quote)
+                                    state = 1;
+                            }
+                            else
+                                state = 1;
+                            break;    
                         default:
                             break;
                     }
@@ -1284,7 +1407,7 @@ public class Lexer
                     {
                     	StringBuffer script = new StringBuffer();
                     	script.append(ch);
-                     	for(int cor = 0; cor < 6; cor ++)
+                     	for(int cor = 0; cor < length; cor ++)
                      	{
                      		ch = mPage.getCharacter (mCursor);
 	                        if (Page.EOF == ch)
@@ -1475,6 +1598,15 @@ public class Lexer
                             else
                                 state = 1;
                             break;
+                        case '[':
+                            if (quotesmart)
+                            {
+                                if (0 == quote)
+                                    state = 1;
+                            }
+                            else
+                                state = 1;
+                            break;    
                         default:
                             break;
                     }

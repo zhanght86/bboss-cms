@@ -2,7 +2,7 @@
 
 <properties>
 	
-	<property name="queryNewsByPublishTimeAndKeywords">
+	<!--<property name="queryNewsByPublishTimeAndKeywords">
 		<![CDATA[
 			select nvl(arrange.order_no,-1) order_no_nvl,doc.document_id, doc.channel_id as chanel_id, doc.title, doc.publishtime,doc.docwtime, ds.srcname as docsource_name, 
 			doc.docabstract, doc.pic_path as picPath, site.second_name as siteName
@@ -22,7 +22,7 @@
 				and doc.publishtime <= to_date(#[endTime], 'yyyy-mm-dd')
 			#end
 			#if ($keywords && !$keywords.equals(""))
-				and doc.keywords like #[keywords]
+				and doc.title like #[keywords]
 			#end
 			#if ($channelId)
 				and doc.channel_id = #[channelId]
@@ -31,6 +31,165 @@
 				and site.site_id = #[siteId]
 			#end
 			 order by order_no_nvl desc, doc.ordertime desc
+		]]>
+	</property>
+	-->
+	
+	<property name="queryNewsByPublishTimeAndKeywords">
+		<![CDATA[
+			SELECT   t.document_id AS document_id, title, subtitle, author,
+                 channel_id, keywords, docabstract, doctype, docwtime,
+                 titlecolor, createtime, createuser, t.docsource_id,
+                 NVL (ds.srcname, '未知') AS source_name, detailtemplate_id,
+                 linktarget, flow_id, doc_level, doc_kind, parent_detail_tpl,
+                 publishtime,
+                 CASE
+                    WHEN doctype = 1
+                       THEN t.content
+                    ELSE NULL
+                 END linkfile, pic_path, mediapath, publishfilename,
+                 commentswitch, secondtitle, isnew, newpic_path,
+                 NVL (a.order_no, -1) AS order_no, 1 AS ordersq, ordertime,
+                 seq, -1 site_id, ext_wh, ext_class, ext_index, ext_org,
+                 ext_djh
+            FROM td_cms_document t
+                 LEFT OUTER JOIN
+                 (SELECT *
+                    FROM td_cms_doc_arrange a
+                   WHERE TO_DATE (a.start_time, 'yyyy-mm-dd hh24:mi:ss') <= sysdate
+                     AND TO_DATE (a.end_time, 'yyyy-mm-dd hh24:mi:ss') >=
+                            sysdate) a ON t.document_id = a.document_id
+                 INNER JOIN td_cms_docsource ds
+                 ON t.docsource_id = ds.docsource_id
+           WHERE status IN (5, 10)
+             AND isdeleted = 0
+             AND t.document_id NOT IN (SELECT c.id_by_aggr
+                                         FROM td_cms_doc_aggregation c INNER JOIN td_cms_document z1
+                                              ON c.id_by_aggr = z1.document_id
+                                              INNER JOIN td_cms_channel z2
+                                              ON z1.channel_id = z2.channel_id
+                                        WHERE z1.channel_id = #[channelId])
+             AND channel_id = #[channelId]
+			
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and t.docwtime >= to_date(#[startTime], 'yyyy-mm-dd') and t.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#elseif ($startTime && !$startTime.equals(""))
+				and t.docwtime >= to_date(#[startTime], 'yyyy-mm-dd')
+			#elseif ($endTime && !$endTime.equals(""))
+				and t.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#end
+			#if ($keywords && !$keywords.equals(""))
+				and t.title like #[keywords]
+			#end
+			#if ($docType && !$docType.equals(""))
+			    and t.doc_class = #[docType]
+			#end
+        UNION ALL
+        SELECT   c.document_id AS document_id, title, subtitle, author,
+                 channel_id, keywords, docabstract, doctype, docwtime,
+                 titlecolor, createtime, createuser, c.docsource_id,
+                 NVL (ds.srcname, '未知') AS source_name, detailtemplate_id,
+                 linktarget, flow_id, doc_level, doc_kind, parent_detail_tpl,
+                 publishtime,
+                 CASE
+                    WHEN doctype = 1
+                       THEN content
+                    ELSE NULL
+                 END linkfile, pic_path, mediapath, publishfilename,
+                 commentswitch, secondtitle, isnew, newpic_path,
+                 NVL (e.order_no, -1) AS order_no, 2 AS ordersq, ordertime,
+                 seq, d.site_id, ext_wh, ext_class, ext_index, ext_org,
+                 ext_djh
+            FROM td_cms_document c, td_cms_docsource ds, td_cms_chnl_ref_doc d
+                 LEFT OUTER JOIN
+                 (SELECT *
+                    FROM td_cms_doc_arrange a
+                   WHERE TO_DATE (a.start_time, 'yyyy-mm-dd hh24:mi:ss') <= sysdate
+                     AND TO_DATE (a.end_time, 'yyyy-mm-dd hh24:mi:ss') >=sysdate) e ON d.doc_id = e.document_id
+           WHERE c.docsource_id = ds.docsource_id
+             AND d.citetype = 0
+             AND c.document_id = d.doc_id
+             AND status IN (5, 10)
+             AND isdeleted = 0
+             AND d.doc_id NOT IN (SELECT c.id_by_aggr
+                                    FROM td_cms_doc_aggregation c INNER JOIN td_cms_document z1
+                                         ON c.id_by_aggr = z1.document_id
+                                         INNER JOIN td_cms_channel z2
+                                         ON z1.channel_id = z2.channel_id
+                                   WHERE z1.channel_id = #[channelId])
+             AND d.chnl_id = #[channelId]
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and c.docwtime >= to_date(#[startTime], 'yyyy-mm-dd') and c.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#elseif ($startTime && !$startTime.equals(""))
+				and c.docwtime >= to_date(#[startTime], 'yyyy-mm-dd')
+			#elseif ($endTime && !$endTime.equals(""))
+				and c.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#end
+			#if ($keywords && !$keywords.equals(""))
+				and c.title like #[keywords]
+			#end
+			#if ($docType && !$docType.equals(""))
+			    and c.doc_class = #[docType]
+			#end
+        UNION ALL
+        SELECT   t.document_id AS document_id, title, subtitle, author,
+                 channel_id, keywords, docabstract, doctype, docwtime,
+                 titlecolor, createtime, createuser, t.docsource_id,
+                 NVL (ds.srcname, '未知') AS source_name, detailtemplate_id,
+                 linktarget, flow_id, doc_level, doc_kind, parent_detail_tpl,
+                 publishtime,
+                 CASE
+                    WHEN doctype = 1
+                       THEN t.content
+                    ELSE NULL
+                 END linkfile, pic_path, mediapath, publishfilename,
+                 commentswitch, secondtitle, isnew, newpic_path,
+                 NVL (a.order_no, -1) AS order_no, 1 AS ordersq, ordertime,
+                 seq, -1 site_id, ext_wh, ext_class, ext_index, ext_org,
+                 ext_djh
+            FROM td_cms_document t
+                 LEFT OUTER JOIN
+                 (SELECT *
+                    FROM td_cms_doc_arrange a
+                   WHERE TO_DATE (a.start_time, 'yyyy-mm-dd hh24:mi:ss') <=sysdate
+                     AND TO_DATE (a.end_time, 'yyyy-mm-dd hh24:mi:ss') >=sysdate) a ON t.document_id = a.document_id
+                 INNER JOIN td_cms_docsource ds
+                 ON t.docsource_id = ds.docsource_id
+           WHERE (status = 5 OR status = 10)
+             AND isdeleted = 0
+             AND t.document_id NOT IN (
+                             SELECT c.id_by_aggr
+                               FROM td_cms_doc_aggregation c INNER JOIN td_cms_document z1
+                                    ON c.id_by_aggr = z1.document_id
+                                    INNER JOIN td_cms_channel z2
+                                    ON z1.channel_id = z2.channel_id
+                              WHERE z1.channel_id IN (
+                                                      SELECT doc_id
+                                                        FROM td_cms_chnl_ref_doc
+                                                       WHERE chnl_id = #[channelId]))
+             AND channel_id IN (SELECT doc_id
+                                  FROM td_cms_chnl_ref_doc
+                                 WHERE chnl_id = #[channelId])
+			#if ($startTime && !$startTime.equals("") && $endTime && !$endTime.equals(""))
+				and t.docwtime >= to_date(#[startTime], 'yyyy-mm-dd') and t.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#elseif ($startTime && !$startTime.equals(""))
+				and t.docwtime >= to_date(#[startTime], 'yyyy-mm-dd')
+			#elseif ($endTime && !$endTime.equals(""))
+				and t.docwtime <= to_date(#[endTime], 'yyyy-mm-dd')
+			#end
+			#if ($keywords && !$keywords.equals(""))
+				and t.title like #[keywords]
+			#end
+			#if ($docType && !$docType.equals(""))
+			    and t.doc_class = #[docType]
+			#end
+        ORDER BY ordersq,
+                 order_no DESC,
+                 seq,
+                 ordertime DESC,
+                 docwtime DESC,
+                 publishtime DESC,
+                 document_id DESC
 		]]>
 	</property>
 	

@@ -614,7 +614,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				// error.append("以下文档不能删除：\\n");
 				newdocids = new int[docids.length - db.size()];
 				for (int i = 0; i < db.size(); i++) {
-					list.remove(db.getInt(i, "document_id") + "");
+					list.remove(db.getInt(i,"document_id") + "");
 					error.append("文档[" + db.getString(i, "subtitle") + "]被频道").append(
 							"[" + db.getString(i, "display_name") + "]的首页引用\\n");
 				}
@@ -1139,7 +1139,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setCommentswitch(db.getInt(0, "commentswitch"));
 				document.setDoc_class(db.getString(0, "doc_class"));
 				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(db));
+				document.setExtColumn(extManager.getExtColumnInfo(0,db));
 
 				// String str ="select SRCNAME from TD_CMS_DOCSOURCE where
 				// DOCSOURCE_ID ="+ db.getInt(0,"DOCSOURCE_ID") +"";
@@ -1223,7 +1223,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setCommentswitch(db.getInt(0, "commentswitch"));
 				document.setDoc_class(db.getString(0, "doc_class"));
 				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(db));
+				document.setExtColumn(extManager.getExtColumnInfo(0,db));
 
 				// String str ="select SRCNAME from TD_CMS_DOCSOURCE where
 				// DOCSOURCE_ID ="+ db.getInt(0,"DOCSOURCE_ID") +"";
@@ -1323,7 +1323,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setChannelName(db.getString(0, "channelname"));
 
 				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(db));
+				document.setExtColumn(extManager.getExtColumnInfo(0,db));
 
 				document.setDocsource_name(db.getString(0, "SRCNAME"));
 
@@ -1405,7 +1405,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setOrdertime(db.getDate(i, "ordertime"));
 				document.setSiteid(db.getInt(i, "site_id"));
 				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(db));
+				document.setExtColumn(extManager.getExtColumnInfo(i,db));
 				document.setDocsource_name(db.getString(i, "SRCNAME"));
 				document.setDetailtemplate_name(db.getString(i, "NAME"));
 				list.add(document);
@@ -1948,7 +1948,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setOrdertime(db.getDate(0, "ordertime"));
 				document.setDoc_class(db.getString(0, "doc_class"));
 				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(db));
+				document.setExtColumn(extManager.getExtColumnInfo(0,db));
 				String str = "select SRCNAME from TD_CMS_DOCSOURCE where DOCSOURCE_ID =" + db.getInt(0, "DOCSOURCE_ID")
 						+ "";
 
@@ -4849,7 +4849,7 @@ public class DocumentManagerImpl implements DocumentManager {
 					doc.setPublishfilename(db.getString(i, "PUBLISHFILENAME"));
 					doc.setSecondtitle(db.getString(i, "secondtitle"));
 					/* 装载扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 
 					list.add(doc);
 				}
@@ -5332,7 +5332,7 @@ public class DocumentManagerImpl implements DocumentManager {
 					doc.setPublishTime(db.getDate(i, "PUBLISHTIME"));
 					doc.setPublishfilename(db.getString(i, "PUBLISHFILENAME"));
 					doc.setSecondtitle(db.getString(i, "secondtitle"));
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 
 					list.add(doc);
 				}
@@ -5521,7 +5521,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						Map docExtField = getDocExtFieldMap(document.getDocument_id() + "");
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						list.add(document);
 					}
 
@@ -5607,7 +5607,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						Map docExtField = getDocExtFieldMap(document.getDocument_id() + "");
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						list.add(document);
 					}
 
@@ -5979,7 +5979,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						Map docExtField = getDocExtFieldMap(docid);
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						list.add(document);
 					}
 
@@ -6793,7 +6793,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setNewPicPath(db.getString(i, "newpic_path"));
 						document.setOrdertime(db.getDate(i, "ordertime"));
 						/* 装载扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						document.setDocsource_name(db.getString(i, "SRCNAME"));
 						document.setDetailtemplate_name(db.getString(i, "NAME"));
 						list.add(document);
@@ -6913,7 +6913,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setNewPicPath(db.getString(i, "newpic_path"));
 						document.setOrdertime(db.getDate(i, "ordertime"));
 						/* 装载扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						document.setDocsource_name(db.getString(i, "SRCNAME"));
 						document.setDetailtemplate_name(db.getString(i, "NAME"));
 						list.add(document);
@@ -7033,7 +7033,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setNewPicPath(db.getString(i, "newpic_path"));
 						document.setOrdertime(db.getDate(i, "ordertime"));
 						/* 装载扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						document.setDocsource_name(db.getString(i, "SRCNAME"));
 						document.setDetailtemplate_name(db.getString(i, "NAME"));
 						list.add(document);
@@ -7291,7 +7291,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setOrdertime(db.getDate(i, "ordertime"));
 
 						/* 装载扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						document.setDocsource_name(db.getString(i, "SRCNAME"));
 						document.setDetailtemplate_name(db.getString(i, "NAME"));
 						list.add(document);
@@ -7401,7 +7401,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setOrdertime(db.getDate(i, "ordertime"));
 
 						/* 装载扩展字段数据 */
-						document.setExtColumn(extManager.getExtColumnInfo(db));
+						document.setExtColumn(extManager.getExtColumnInfo(i,db));
 						document.setDocsource_name(db.getString(i, "SRCNAME"));
 						document.setDetailtemplate_name(db.getString(i, "NAME"));
 						list.add(document);
@@ -7675,8 +7675,84 @@ public class DocumentManagerImpl implements DocumentManager {
 		if (!StringUtil.isEmpty(condition.getKeywords())) {
 			condition.setKeywords("%" + condition.getKeywords() + "%");
 		}
-		return executor.queryListInfoBean(Document.class, "queryNewsByPublishTimeAndKeywords", offset, pagesize,
+		final DocumentExtColumnManager extManager = new DocumentExtColumnManager();
+		final List list = new ArrayList();
+		ListInfo listInfo = executor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+
+			@Override
+			public void handleRow(Record db) throws Exception {
+				Document doc = new Document();
+				if (db.getInt("DOCTYPE") == Document.DOCUMENT_CHANNEL) {
+					String channelid = String.valueOf(db.getLong("DOCUMENT_ID"));
+					Channel refChannel = new ChannelManagerImpl().getChannelInfo(channelid);
+					list.add(refChannel);
+					// doc.setRefChannel(refChannel);
+					// doc.setDoctype(Document.DOCUMENT_CHANNEL);
+				} else {
+					doc.setDocument_id(db.getInt("DOCUMENT_ID"));
+					doc.setTitle(db.getString("TITLE"));
+					doc.setSubtitle(db.getString("SUBTITLE"));
+					doc.setAuthor(db.getString("AUTHOR"));
+					doc.setChanel_id(db.getInt("CHANNEL_ID"));
+					doc.setKeywords(db.getString("KEYWORDS"));
+					doc.setDocabstract(db.getString("DOCABSTRACT"));
+					doc.setDoctype(db.getInt("DOCTYPE"));
+					doc.setDocwtime(db.getDate("DOCWTIME"));
+					doc.setTitlecolor(db.getString("TITLECOLOR"));
+					doc.setCreateTime(db.getDate("CREATETIME"));
+					doc.setCreateUser(db.getInt("CREATEUSER"));
+					doc.setDocsource_id(db.getInt("DOCSOURCE_ID"));
+					doc.setDetailtemplate_id(db.getInt("DETAILTEMPLATE_ID"));
+					doc.setLinktarget(db.getString("LINKTARGET"));
+					doc.setLinkfile(db.getString("linkfile"));
+					doc.setFlowId(db.getInt("FLOW_ID"));
+					doc.setDoc_level(db.getInt("DOC_LEVEL"));
+					doc.setDoc_kind(db.getInt("DOC_KIND"));
+					doc.setParentDetailTpl(db.getString("PARENT_DETAIL_TPL"));
+					doc.setPublishTime(db.getDate("publishtime"));
+					doc.setPicPath(db.getString("pic_path"));
+
+					doc.setMediapath(db.getString("mediapath"));
+					doc.setPublishfilename(db.getString("publishfilename"));
+					// doc.setc(db.getString(i,"commentswitch"));
+					doc.setSecondtitle(db.getString("secondtitle"));
+					doc.setIsNew(db.getInt("isnew"));
+					doc.setNewPicPath(db.getString("newpic_path"));
+
+					doc.setSiteid(db.getInt("site_id"));
+					// new
+					doc.setExt_class(db.getString("ext_class"));
+					doc.setExt_djh(db.getString("ext_djh"));
+					doc.setExt_index(db.getString("ext_index"));
+					doc.setExt_org(db.getString("ext_org"));
+					doc.setExt_wh(db.getString("ext_wh"));
+					// new
+
+					// String str = "select SRCNAME from TD_CMS_DOCSOURCE where DOCSOURCE_ID ="
+					// + db.getInt("DOCSOURCE_ID") + "";
+					//
+					// db1.executeSelect(str);
+					// if (db1.size() > 0) {
+					doc.setDocsource_name(db.getString("source_name"));
+					// }
+					int isref = db.getInt("ordersq");
+					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
+					/* 装载扩展字段数据 */
+//					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+//					doc.setDocExtField(docExtField);
+					/* 装载系统扩展字段数据 */
+//					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setOrdertime(db.getDate( "ordertime"));
+					
+					list.add(doc);
+				}
+				
+			}
+			
+		}, "queryNewsByPublishTimeAndKeywords", offset, pagesize,
 				condition);
+		listInfo.setDatas(list);
+		return listInfo;
 	}
 
 	/*

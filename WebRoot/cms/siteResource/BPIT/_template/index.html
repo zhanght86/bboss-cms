@@ -9,6 +9,7 @@
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="js/bbscomment.js"></script>	
 <script type="text/javascript" src="js/until.js"></script>	
+<cms:distribute dir="images/tougao.jpg" />
 <script>
 
 	var commentlisturl = "<cms:siteparam name="appcontext"/>/comment/getChannelCommentNList.freepage?jsonp_callback=?";
@@ -28,7 +29,7 @@
             function(data) {   
                  
             });
-		showbbscomment(commentlisturl,'<cms:siteinfo property="secondName"/>','employeebbs',n);
+		//showbbscomment(commentlisturl,'<cms:siteinfo property="secondName"/>','employeebbs',n);
 	 });
 	
 	
@@ -102,7 +103,7 @@
                           				} else {
                           					document.write('<div style="display: none;" id="top_picture_title_'+i+'" class="dis">');
                           				}
-                          				document.write('<a title="'+tarr[i]+'" target="_blank" href="'+slink[i]+'">&nbsp;&nbsp;&nbsp;'+tarr[i]+'</a>');
+                          				document.write('<a title="'+tarr[i]+'" target="_blank" href="'+slink[i]+'">'+tarr[i]+'</a>');
                           				document.write('</div>');
                           			}
                                 	</SCRIPT>
@@ -179,7 +180,7 @@
           <div class="box_2">
           	<h1><div class="more"><cms:more channel="news" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="news" property="name"/></h1>
             <ul>
-            	<cms:outline channel="news"  count="3">
+            	<cms:outline channel="news"  count="6">
                   <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
                   <cms:link 
 					target="_blank" 
@@ -195,7 +196,7 @@
              <cms:channel displayname="hotnews" property="name"/>
             </h1>
               <ul>
-             <cms:outline channel="hotnews"  count="3">
+             <cms:outline channel="hotnews"  count="5">
                   <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
                   <cms:link 
 					target="_blank" 
@@ -211,7 +212,17 @@
        <div class="lc box_2 h287 wid2 mt10" >
         <h1><div class="more"><cms:more channel="knowleage" target="_blank" moretext="更多 >>"/></div>
         <cms:channel displayname="knowleage" property="name"/></h1>
-        
+          <ul>
+             <cms:outline channel="knowleage"  count="8">
+                  <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="18"
+					replace=""
+					useTitle="false" /></li></cms:outline> 
+             </ul>
+		   <!--
         <cms:outline channel="knowleage"  count="3">
         <div class="block">
         	<table width="100%" border="0" cellpadding="0" cellspacing="0" height="96">
@@ -242,6 +253,7 @@
 
         </div>
         </cms:outline>
+		-->
 
       </div>
       
@@ -249,7 +261,18 @@
        <div class="lc box_2 h287 wid2 mt10 mr" >
         <h1><div class="more"><cms:more channel="tszs" target="_blank" moretext="更多 >>"/></div>
         <cms:channel displayname="tszs" property="name"/></h1>
-                <cms:outline channel="tszs"  count="3">
+		       <ul>
+             <cms:outline channel="tszs"  count="8">
+                  <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="18"
+					replace=""
+					useTitle="false"/></li></cms:outline> 
+             </ul>
+		   <!--  
+         <cms:outline channel="tszs"  count="3">
         <div class="block">
         	<table width="100%" border="0" cellpadding="0" cellspacing="0" height="96">
 			  <tr>
@@ -281,8 +304,29 @@
 
         </div>
         </cms:outline>
+			   -->
       </div>
-      
+			
+	<div class="lc box_2 h287 wid2 mt10 mr" >
+        <h1><div class="more"><cms:more channel="specialtrain" target="_blank" moretext="更多 >>"/></div>
+        <cms:channel displayname="specialtrain" property="name"/></h1>
+		       <ul>
+             <cms:outline channel="specialtrain"  count="4">
+                  <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
+                  <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="18"
+					replace=""
+					useTitle="false"/></li></cms:outline> 
+			<div class="video">
+	          <div><cms:channel displayname="specialtrain" linktype="image" imageextend=" width='180' height='95'"/> <a href="javascript:void(0);"><img  style="width:100px;height:95px;" src="images\tougao.jpg"/></a> </div>
+					   
+	        </div>
+			
+	         </ul>
+	</div>
+      <!--
        <div class="rc mt10">
       <div class="box_2">
         <h1> <div class="more"><cms:more channel="specialtrain" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="specialtrain" property="name"/></h1>
@@ -297,13 +341,9 @@
 		<ul  id = "scrollbox">
 		</ul>	  
         </div>
- 
-     
-    </div>
-      
-        
+   		 </div>
         </div>
-      
+      -->
          
    
   </div>

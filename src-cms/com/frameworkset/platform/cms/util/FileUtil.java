@@ -871,7 +871,7 @@ public class FileUtil implements java.io.Serializable {
 		File[] subFiles = file.listFiles(new FileFilter()
 				{
 					public boolean accept(File pathname) {
-						if(pathname.getName().endsWith(".svn"))
+						if(pathname.getName().endsWith(".svn") || pathname.getName().endsWith(".db"))
 							return false;
 						if(pathname.isFile())
 							return true;

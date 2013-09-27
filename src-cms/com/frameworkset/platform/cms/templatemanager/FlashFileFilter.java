@@ -13,7 +13,7 @@ public class FlashFileFilter implements FileFilter,java.io.Serializable{
 		if(pathname.isDirectory())
 			return false;
 		String lowerName = pathname.getName().toLowerCase();
-		if(lowerName.endsWith(".swf") )
+		if(lowerName.endsWith(".swf") || lowerName.endsWith(".flv"))
 			return true;
 		return false;
 	}

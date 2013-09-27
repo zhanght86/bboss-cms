@@ -56,7 +56,22 @@ public class DocAggregation implements java.io.Serializable {
 	 * add by xinwang.jiao 2007.09.19
 	 */
 	private String newPicPath;
+	
+	/*
+	 * 文档发布路径
+	 * 
+	 */
+	private String docpuburl;
 	  
+
+	public String getDocpuburl() {
+		return docpuburl;
+	}
+
+	public void setDocpuburl(String docpuburl) {
+		this.docpuburl = docpuburl;
+	}
+
 	public int getIsNew() {
 		return isNew;
 	}

@@ -447,7 +447,7 @@ function choosepic(obj,fname)
 	<tr onselectstart="return false" style="cursor:hand;height:25px"  class="cms_data_tr">
 		<td  onclick="high(this,'<%=docId%>')" name="picName" onmouseover="big('<%=docId%>')" onmouseout="small('<%=docId%>')" id="opdoc_<%=i%>"  width="80%">
 		    <%=docId%>
-		    <div id="<%=docId%>" STYLE="position:absolute;display:none;z-index:100;top:150px;left:120px;background: #fff; width:200px; height:200px"><image src="/cms/siteResource/<%=siteSecondName%>/_webprj/<%=(uri==null?"/":uri).replace('\\','/')%><%=docId%>" width="200" height="200"/></div>
+		    <div id="<%=docId%>" STYLE="position:absolute;display:none;z-index:100;top:150px;left:120px;background: #fff; width:200px; height:200px"><image src="<%=rootpath%>/cms/siteResource/<%=siteSecondName%>/_webprj/<%=(uri==null?"/":uri).replace('\\','/')%><%=docId%>" width="200" height="200"/></div>
 		</td>
 		
 		<%

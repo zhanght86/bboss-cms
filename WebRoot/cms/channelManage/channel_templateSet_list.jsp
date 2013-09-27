@@ -24,6 +24,8 @@
 	String channelId = request.getParameter("channelId");
 	//System.out.println("List: "+channelId);
 	String tId = request.getParameter("tId");
+	if(tId != null)
+		tId = tId.trim();
 	//System.out.println("------tid------"+tId);
 %>
 <html>
@@ -133,7 +135,7 @@
 						<tr class="cms_data_tr" id="<pg:cell colName="documentId" defaultValue=""/>">
 							<td class="tablecells" align=center height='30' width="5%">
 								<input name="templateId" value="<pg:cell colName="templateId" defaultValue=""/>" type=hidden>
-								<input <pg:equal colName="templateId" value="<%=tId%>">checked</pg:equal>
+								<input <pg:notempty actual="<%=tId%>"><pg:equal colName="templateId" value="<%=tId%>">checked</pg:equal></pg:notempty>
 								 class="checkbox" hideFocus type="radio" name="checkedID" 
 									value='<pg:cell colName="templateId" defaultValue=""/>|<pg:cell colName="name" defaultValue="" />' />
 							</td>

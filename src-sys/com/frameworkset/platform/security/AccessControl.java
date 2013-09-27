@@ -635,7 +635,7 @@ public class AccessControl {
 			return ;
 		String logoutredirect = AccessControl.getSubSystemLogoutRedirect(request, subsystem_id,false);
 		if(logoutredirect == null )
-			logoutredirect = StringUtil.getRealPath(request.getContextPath(),"login.jsp");
+			logoutredirect = StringUtil.getRealPath(request.getContextPath(),"login.jsp",true);
 		
 		AccessControl.addCookieValue(request, response, current_logoutredirect_cookie, logoutredirect);
 	}
@@ -758,7 +758,7 @@ public class AccessControl {
 		String ret = null;
 		if(systemid == null)
 		{
-			String defaultvalue = StringUtil.getRealPath(request.getContextPath(),"/login.jsp");
+			String defaultvalue = StringUtil.getRealPath(request.getContextPath(),"/login.jsp",true);
 			ret = AccessControl.getCookieValue(request, current_logoutredirect_cookie);
 			if(!StringUtil.isEmpty(ret))
 			{
@@ -788,7 +788,7 @@ public class AccessControl {
 				systemid = subsystem.getLogoutredirect();
 				if(systemid != null )
 				{
-					ret = StringUtil.getRealPath(request.getContextPath(), systemid);
+					ret = StringUtil.getRealPath(request.getContextPath(), systemid,true);
 				}
 			}
 			if(ret != null && appendToken)

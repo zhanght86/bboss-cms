@@ -142,7 +142,7 @@ p {
 	bottom:0px;
 	color: #868686;
 	position: relative;
-	margin-top: -56px;
+	margin-top: -36px;
 	clear:both;
 }
  .footer .isany {
@@ -182,7 +182,7 @@ p {
 	padding-top: 10px;
 }
 .container { }
-.container .lc{width:375px; float:left;}
+.container .lc{width:300px; float:left;}
 .container .mc{ float:left; width:380px; margin-left:18px;}
 .container .rc{ float:right; width:190px;}
 
@@ -190,7 +190,7 @@ p {
 .container .rightcontent{ margin-left:190px; height:auto;}
 .mr{margin-left:0px;}
 .top_content{width:975px;}
-.bottom_content{padding-bottom:20px; height:370px; overflow:hidden}
+.bottom_content{padding-bottom:20px; height:298px; overflow:hidden}
 .box_1{float:left; width:554px;margin-right:18px;}
 .box_1 .box_content {
 	padding: 8px;
@@ -260,7 +260,7 @@ p {
 .box_2 .block{ margin-top:8px; border-bottom:1px dashed #ccc;padding-bottom:8px;}
 .box_2 .block a{ margin:0 8px;}
 .box_2 .block div{ line-height:24px;}
-.h287{ height:348px;}
+.h287{ height:308px;}
 .red{ color:black;}
 
 .box_2 .block2{margin-top:8px;}
@@ -460,7 +460,7 @@ p {
 }
 
 .container {
-	margin: 0px 0px 10px 0px; padding-bottom:54px;
+	margin: 0px 0px 10px 0px; padding-bottom:4px;
 }
 
 html, body, #wrapper {height: 100%;}
@@ -596,7 +596,7 @@ visibility: hidden;}
 	color: #FFFFFF;
 	text-align: right;
 }
-.vote{margin-top:15px;margin-left:670px}
+.vote{margin-top:15px;margin-left:10px}
 .vote_title {
 	font-size: 12px;
 	font-weight: bold;
@@ -613,11 +613,11 @@ visibility: hidden;}
 .vote span.c2{color:#e71f21}
 .vote .vote_content{ text-indent:24px;line-height:26px;padding:10px 0px}
 .detail .vote_p,.vote .vote_p{padding:5px 0px}
-.detail .vote_p ul{width:295px;}
-.vote .vote_p ul{width:295px;}
+.detail .vote_p ul{width:955px;}
+.vote .vote_p ul{width:955px;}
 .detail .vote_p  li,.vote .vote_p  li{float:left;margin-right:15px;}
 .detail .vote_p  li img,.vote .vote_p  li img{ vertical-align:middle}
-.detail .vote_p .btn,.vote .vote_p .btn{ text-align:center;padding:10px 0px}
+.detail .vote_p .btn,.vote .vote_p .btn{ text-align:left;padding:10px 0px}
 .vote .vote_list{margin-top:10px;}
 .vote .vote_list ul li a:hover{}
 .vote .vote_list ul li.select { background-color:#efefef; text-decoration:none}

@@ -22,7 +22,7 @@ public class MediaFileFilter implements FileFilter,java.io.Serializable
 				|| lowerName.endsWith(".mid") || lowerName.endsWith(".midi") || lowerName.endsWith(".ra")
 				|| lowerName.endsWith(".avi") || lowerName.endsWith(".mpg") || lowerName.endsWith(".mpeg")
 				|| lowerName.endsWith(".asf") || lowerName.endsWith(".asx") || lowerName.endsWith(".wma")
-				|| lowerName.endsWith(".mov") || lowerName.endsWith(".wmv") || lowerName.endsWith(".rmvb"))
+				|| lowerName.endsWith(".mov") || lowerName.endsWith(".wmv") || lowerName.endsWith(".rmvb") || lowerName.endsWith(".flv"))
 			return true;
 		return false;
 	}

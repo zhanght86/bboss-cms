@@ -1,10 +1,22 @@
-mysql 5.6版本中timestamp时间字段处理报以下异常：
-Data truncation: Incorrect datetime value: '' for column xxxxx
-解决办法：
-更新最新的mysql connector驱动程序mysql-connector-java-5.1.25-bin.jar，下载地址：
-http://downloads.mysql.com/archives/mysql-connector-java-5.1/mysql-connector-java-5.1.25.zip
+1.内容管理中文档正文增加以下自定义标签：
+[file][/file]
+[flashplayer][/flashplayer]
+[img][/img]
+用来支持在文档正文中任意放置文件下载，电影播放，图片展示信息
 
-http://localhost:8080/SanyPDP/appbom/index.page
+flash播放
+缓存资源管理
+
+
+口令失效控制相关开关	
+	<!-- 密码过期时间，大于0时有效，小于等于0时无效  ，默认全局配置-->
+	<property name="password_dualtime" value="90"/>
+	
+	<!-- 是否启用登录验证码  -->
+	<property name="enable_login_validatecode" value="true"/>
+	<!-- 是否启用用户级的口令过期时间 ，如果启用用户级，默认全局配置失效 -->
+	<property name="enableUserScopePasswordExpiredDays" value="true"/>
+
 1.登录页增加校验码功能
 2.增加登录密码过期检查功能，并提供过期密码修改功能，修改密码时记录历史密码，密码不能重复
 3.权限管理和用户查询及离散用户列表中增加密码过期时间属性的展示
@@ -23,9 +35,7 @@ CREATE TABLE TD_SM_PASSWORDHIS
 9.增加密码过期策略
 用户密码有效时间大于0则启用
 是否启用每个用户独立设置密码有效期开关
-PASSWORD_DUALTIME
-ALTER TABLE MICROCREDIT.TD_SM_USER
- ADD (PASSWORD_DUALTIME  INTEGER);
+
 增加用户缓冲信息获取标签和缓冲数据刷新功能：
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 

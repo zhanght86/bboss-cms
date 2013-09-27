@@ -19,20 +19,20 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.ecs.xhtml.script;
-import org.apache.ecs.xhtml.var;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.util.io.Resource;
 import org.frameworkset.util.io.UrlResource;
 
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
@@ -52,15 +52,20 @@ import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
 import com.frameworkset.platform.cms.documentmanager.bean.DocTemplate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocumentCondition;
+import com.frameworkset.platform.cms.driver.context.Context;
+import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkTable;
 import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
+import com.frameworkset.platform.cms.driver.jsp.InternalImplConverter;
 import com.frameworkset.platform.cms.driver.publish.PublishCallBack;
 import com.frameworkset.platform.cms.driver.publish.impl.PublishCallBackImpl;
 import com.frameworkset.platform.cms.driver.publish.impl.WEBPublish;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteManager;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
+import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
@@ -101,18 +106,30 @@ public class DocumentController {
 
 		ListInfo newsList = documentManager.queryDocumentsByPublishTimeAndKeywords(condition, offset, pagesize);
 
+		Site site = CMSUtil.getSite(condition.getSiteId()+"");
 		if (!CollectionUtils.isEmpty(newsList.getDatas())) {
 			Container container = new ContainerImpl();
-			String siteName = ((Document) newsList.getDatas().get(0)).getSiteName();
+			String siteName = site.getSecondName();
 			container.init(siteName, request, request.getSession(), response);
 
 			for (Object obj : newsList.getDatas()) {
 				Document document = (Document) obj;
-				String docpuburl = container.getPublishedDocumentUrl(document);
-				document.setDocpuburl(docpuburl);
+				if(document.getDoctype()==Document.DOCUMENT_AGGRATION){
+					List compositeDocs=documentManager.getPubAggrDocList(document.getDocument_id()+"");
+					for(int i =0;i<compositeDocs.size();i++){
+						DocAggregation docAggregation = (DocAggregation)compositeDocs.get(i);
+						String docpuburl = container.getPublishedDocumentUrl(docAggregation.getIdbyaggr()+"");
+						docAggregation.setDocpuburl(docpuburl);
+					}
+					document.setCompositeDocs(compositeDocs);
+					
+				}else{
+					String docpuburl = container.getPublishedDocumentUrl(document);
+					document.setDocpuburl(docpuburl);
+				}
 			}
 		}
-
+		request.setAttribute("DOCUMENT_AGGRATION",Document.DOCUMENT_AGGRATION);
 		request.setAttribute("newsList", newsList);
 
 		return "path:showNewsList";

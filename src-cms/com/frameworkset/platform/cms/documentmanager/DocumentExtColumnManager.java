@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 import com.frameworkset.common.poolman.sql.TableMetaData;
 import com.frameworkset.orm.engine.model.SchemaType;
@@ -417,14 +418,37 @@ public class DocumentExtColumnManager implements java.io.Serializable {
 	 * 获取该文档库扩展字段特定字段对象
 	 * tableName:TD_CMS_DOCUMENT
 	 */
-	public HashMap getExtColumnInfo(DBUtil db){
+	public HashMap getExtColumnInfo(int j,DBUtil db){
 		HashMap map = new HashMap();	
 //		List list = getTableColumnsInfo_oracle("TD_CMS_DOCUMENT");		
 		for(int i=0;i<extColumns.size();i++){
 			ColumnMetaData str = (ColumnMetaData)extColumns.get(i);
 			String column_names = str.getColumnName().toLowerCase();
 			try {
-				Object value = db.getObject(0,column_names);
+				Object value = db.getObject(j,column_names);
+				if(value != null)
+					map.put(column_names,value);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+			}
+		}	
+		return map;
+	}
+	
+	/**
+	 * 根据已经查询出来的数据,把扩展字段装载到文档对象
+	 * 获取该文档库扩展字段特定字段对象
+	 * tableName:TD_CMS_DOCUMENT
+	 */
+	public HashMap getExtColumnInfo(Record db){
+		HashMap map = new HashMap();	
+//		List list = getTableColumnsInfo_oracle("TD_CMS_DOCUMENT");		
+		for(int i=0;i<extColumns.size();i++){
+			ColumnMetaData str = (ColumnMetaData)extColumns.get(i);
+			String column_names = str.getColumnName().toLowerCase();
+			try {
+				Object value = db.getObject(column_names);
 				if(value != null)
 					map.put(column_names,value);
 			} catch (SQLException e) {

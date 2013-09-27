@@ -34,9 +34,9 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.htmlparser.lexer.Page;
-import org.htmlparser.nodes.TextNode;
 import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.nodes.TagNode;
+import org.htmlparser.nodes.TextNode;
 import org.htmlparser.tags.AppletTag;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.BodyTag;
@@ -57,6 +57,7 @@ import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.MetaTag;
 import org.htmlparser.tags.ObjectTag;
 import org.htmlparser.tags.OptionTag;
+import org.htmlparser.tags.ResourceTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.SelectTag;
 import org.htmlparser.tags.Span;
@@ -324,6 +325,7 @@ public class PrototypicalNodeFactory
         registerTag (new BodyTag ());
         registerTag (new HeadTag ());
         registerTag (new Html ());
+        registerTag (new ResourceTag ());
 
         return (this);
     }

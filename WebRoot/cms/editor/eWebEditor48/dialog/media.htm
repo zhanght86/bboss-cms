@@ -8,127 +8,138 @@
 <TITLE>媒体文件属性</TITLE>
 
 <script language="javascript">
-
-var bAllowUpload = ((parseFloat(config.AllowMediaSize)>0) ? true : false);
-
-//add by xinwang.jiao 2007-9-18
-function setImage(uri){
-	if(uri == "")
-	{
+	
+	var bAllowUpload = ((parseFloat(config.AllowMediaSize)>0) ? true : false);
+	
+	//add by xinwang.jiao 2007-9-18
+	function setImage(uri){
+		if(uri == "")
+		{
+			document.all("d_fromurl").value = uri;
+			return ;
+		}
+		var cusdir = config.CusDir;
+		if(cusdir.indexOf("/") != -1)
+			cusdir = cusdir.substring(0,cusdir.indexOf("/"));
+		//uri = getCmsRootPath() + "/" + config.StyleUploadDir + cusdir + "/_template/" + uri;
 		document.all("d_fromurl").value = uri;
-		return ;
 	}
-	var cusdir = config.CusDir;
-	if(cusdir.indexOf("/") != -1)
-		cusdir = cusdir.substring(0,cusdir.indexOf("/"));
-	uri = getCmsRootPath() + "/" + config.StyleUploadDir + cusdir + "/_template/" + uri;
-	document.all("d_fromurl").value = uri;
-}
-//选择服务器已有file
-function xuanze()
-{
-	openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=media",700,580);
-}
-
-function RadioClick(what){
-	if (what=="url"){
-		d_fromurl.disabled=false;
-		if (config.AllowBrowse=="1"){
-			d_browse.disabled=false;
+	//选择服务器已有file
+	var choosetype = 1;
+	function xuanze()
+	{
+		choosetype = 2;
+		openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=media",700,580);
+	}
+	
+	function RadioClick(what){
+		if (what=="url"){
+			choosetype = 2;
+			d_fromurl.disabled=false;
+			if (config.AllowBrowse=="1"){
+				d_browse.disabled=false;
+			}
+			d_checkfromurl.checked=true;
+			if (bAllowUpload){
+				d_checkfromfile.checked=false;
+				d_file.myform.uploadfile.disabled=true;
+			}
+	
+		}else{
+			choosetype = 1;
+			d_checkfromurl.checked=false;
+			d_file.myform.uploadfile.disabled=false;
+			d_checkfromfile.checked=true;
+			d_fromurl.disabled=true;
+			if (config.AllowBrowse=="1"){
+				d_browse.disabled=true;
+			}
 		}
-		d_checkfromurl.checked=true;
-		if (bAllowUpload){
-			d_checkfromfile.checked=false;
-			d_file.myform.uploadfile.disabled=true;
+	}
+	
+	function UploadLoaded(){
+		RadioClick('file');
+	}
+	
+	function UploadError(sErrDesc){
+		AbleItems();
+		RadioClick('file');
+		divProcessing.style.display="none";
+		try {
+			BaseAlert(d_file.myform.uploadfile,sErrDesc);
 		}
-
-	}else{
-		d_checkfromurl.checked=false;
-		d_file.myform.uploadfile.disabled=false;
-		d_checkfromfile.checked=true;
+		catch(e){}
+	}
+	
+	function UploadSaved(sPathFileName){
+		d_fromurl.value = sPathFileName;
+		ReturnValue();
+	}
+	
+	function ReturnValue(){
+		var sFromUrl = d_fromurl.value;
+		var sWidth = d_width.value;
+		var sHeight = d_height.value;
+		if(choosetype == 1)
+		{
+			var sHTML = '<EMBED src="' + sFromUrl + '" width="' + sWidth + '" height="' + sHeight + '" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"></EMBED>';
+			dialogArguments.insertHTML(sHTML);
+		}
+		else
+		{
+			var sHTML = '[cmedia src="' + sFromUrl + '" width="' + sWidth + '" height="' + sHeight + '" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"][/cmedia]';
+			dialogArguments.insertHTML(sHTML);
+		}
+	
+		window.returnValue = null;
+		window.close();
+	}
+	
+	function ok(){
+		d_width.value=ToInt(d_width.value);
+		d_height.value=ToInt(d_height.value);
+	
+		if (d_checkfromurl.checked){
+			ReturnValue();
+		}else{
+			if (!d_file.CheckUploadForm()) return false;
+			DisableItems();
+			divProcessing.style.display="";
+			d_file.myform.submit();
+		}
+	}
+	
+	function DisableItems(){
+		d_checkfromfile.disabled=true;
+		d_checkfromurl.disabled=true;
 		d_fromurl.disabled=true;
 		if (config.AllowBrowse=="1"){
 			d_browse.disabled=true;
 		}
-	}
-}
-
-function UploadLoaded(){
-	RadioClick('file');
-}
-
-function UploadError(sErrDesc){
-	AbleItems();
-	RadioClick('file');
-	divProcessing.style.display="none";
-	try {
-		BaseAlert(d_file.myform.uploadfile,sErrDesc);
-	}
-	catch(e){}
-}
-
-function UploadSaved(sPathFileName){
-	d_fromurl.value = sPathFileName;
-	ReturnValue();
-}
-
-function ReturnValue(){
-	var sFromUrl = d_fromurl.value;
-	var sWidth = d_width.value;
-	var sHeight = d_height.value;
-
-	var sHTML = '<EMBED src="' + sFromUrl + '" width="' + sWidth + '" height="' + sHeight + '" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"></EMBED>';
-	dialogArguments.insertHTML(sHTML);
-
-	window.returnValue = null;
-	window.close();
-}
-
-function ok(){
-	d_width.value=ToInt(d_width.value);
-	d_height.value=ToInt(d_height.value);
-
-	if (d_checkfromurl.checked){
-		ReturnValue();
-	}else{
-		if (!d_file.CheckUploadForm()) return false;
-		DisableItems();
-		divProcessing.style.display="";
-		d_file.myform.submit();
-	}
-}
-
-function DisableItems(){
-	d_checkfromfile.disabled=true;
-	d_checkfromurl.disabled=true;
-	d_fromurl.disabled=true;
-	if (config.AllowBrowse=="1"){
-		d_browse.disabled=true;
-	}
-	d_width.disabled=true;
-	d_height.disabled=true;
-	Ok.disabled=true;
-}
-
-function AbleItems(){
-	d_checkfromfile.disabled=false;
-	d_checkfromurl.disabled=false;
-	d_fromurl.disabled=false;
-	if (config.AllowBrowse=="1"){
-		d_browse.disabled=false;
-	}
-	d_width.disabled=false;
-	d_height.disabled=false;
-	Ok.disabled=false;
-}
-
-function InitDocument(){
-	if (!bAllowUpload){
-		RadioClick("url");
+		d_width.disabled=true;
+		d_height.disabled=true;
+		Ok.disabled=true;
 	}
 	
-	adjustDialog();
-}
+	function AbleItems(){
+		d_checkfromfile.disabled=false;
+		d_checkfromurl.disabled=false;
+		d_fromurl.disabled=false;
+		if (config.AllowBrowse=="1"){
+			d_browse.disabled=false;
+		}
+		d_width.disabled=false;
+		d_height.disabled=false;
+		Ok.disabled=false;
+	}
+	
+	function InitDocument(){
+		if (!bAllowUpload){
+			RadioClick("url");
+		}
+		
+		adjustDialog();
+	}
 </script>
 </HEAD>
 

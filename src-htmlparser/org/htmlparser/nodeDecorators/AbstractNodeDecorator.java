@@ -263,4 +263,13 @@ public abstract class AbstractNodeDecorator implements Text
     public void doSemanticAction () throws ParserException {
         delegate.doSemanticAction ();
     }
+    
+    public boolean isResource()
+    {
+    	return delegate.isResource();
+    }
+    public void setResource(boolean isresource)
+    {
+    	this.delegate.setResource(isresource);
+    }
 }

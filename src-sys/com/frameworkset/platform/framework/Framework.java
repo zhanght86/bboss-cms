@@ -1009,7 +1009,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			framesetAttributeOfItem.put(item.getPath(), framesetAttribute_t);
 		}
 		HttpSession session = request.getSession(false);
-		
+		String contextpath = request.getContextPath();
 		String sessionid = null;
 		if(session != null)
 			sessionid = session.getId();
@@ -1055,7 +1055,7 @@ public class Framework implements ResourceInitial,MessageSource {
 						top = getTop(item, control);
 					}
 					url.append(
-							getUrl(StringUtil.getRealPath(request, top),sessionid)).append(Framework.MENU_PATH)
+							getUrl(StringUtil.getRealPath(request, top,true),sessionid)).append(Framework.MENU_PATH)
 							.append("=").append(
 									StringUtil.encode(item.getPath(), null))
 							.append("&").append(Framework.MENU_TYPE)
@@ -1075,7 +1075,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				context.put("frameset_rows", framesetAttribute_t
 						.getFRAMEWORKSET_ROWS());
 
-				String url = MenuHelper.getMainUrl(null, item.getPath(),
+				String url = MenuHelper.getMainUrl(contextpath, item.getPath(),
 						external_params, subsystem,sessionid);
 				url += "&__directitem=true";
 				context.put("perspective_main_url", url);
@@ -1122,7 +1122,7 @@ public class Framework implements ResourceInitial,MessageSource {
 						left = getLeft(item, control);
 					}
 					perspective_toolbar_leftsideurl.append(getUrl(StringUtil
-							.getRealPath(request, left),sessionid))
+							.getRealPath(request, left,true),sessionid))
 							.append( Framework.MENU_PATH)
 							.append( "=")
 							.append( StringUtil.encode(item.getPath(), null))
@@ -1141,7 +1141,7 @@ public class Framework implements ResourceInitial,MessageSource {
 							perspective_toolbar_leftsideurl.toString());
 
 					String perspective_content_url = MenuHelper
-							.getPerspectiveContentUrl(null, item.getPath(),
+							.getPerspectiveContentUrl(contextpath, item.getPath(),
 									external_params, subsystem);
 					perspective_content_url += "&__directitem=true";
 					context.put("perspective_content_url",
@@ -1152,7 +1152,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				} else {
 					context.put("perspective_toolbar_leftside", "");
 					String perspective_content_url = MenuHelper
-							.getPerspectiveContentUrl(null, item.getPath(),
+							.getPerspectiveContentUrl(contextpath, item.getPath(),
 									external_params, subsystem);
 					perspective_content_url += "&__directitem=true";
 					context.put("perspective_content_url",
@@ -1204,7 +1204,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					context.put("base_navigator_container_url", "");
 				} else {
 					String base_navigator_container_url = MenuHelper
-							.getNavigatorContainerUrl(null, item.getPath(),
+							.getNavigatorContainerUrl(contextpath, item.getPath(),
 									external_params, subsystem);
 					base_navigator_container_url += "&__directitem=true";
 					context.put("base_navigator_container_url",
@@ -1215,7 +1215,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				}
 
 				String base_actions_container_url = MenuHelper
-						.getActionContainerUrl(null, item.getPath(),
+						.getActionContainerUrl(contextpath, item.getPath(),
 								external_params, subsystem);
 				base_actions_container_url += "&__directitem=true";
 				context.put("base_actions_container_url",
@@ -1265,7 +1265,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					}
 					
 					base_navigator_toolbar_url.append(getUrl(StringUtil
-							.getRealPath(request, NavigatorToolbar),sessionid))
+							.getRealPath(request, NavigatorToolbar,true),sessionid))
 							.append( Framework.MENU_PATH)
 							.append( "=")
 							.append(StringUtil.encode(item.getPath(), null))
@@ -1300,7 +1300,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					navigatorContent = getNavigatorContent(item, control);
 				}
 				base_navigator_content_url.append(getUrl(StringUtil
-						.getRealPath(request, navigatorContent),sessionid))
+						.getRealPath(request, navigatorContent,true),sessionid))
 						.append(Framework.MENU_PATH)
 						.append("=")
 						.append(StringUtil.encode(item.getPath(), null))
@@ -1332,7 +1332,7 @@ public class Framework implements ResourceInitial,MessageSource {
 						.getTemplate(ACTION_CONTAINER_VM);
 				VelocityContext context = new VelocityContext();
 				String base_properties_container_url = MenuHelper
-						.getWorkspaceUrl(null, item.getPath(), external_params,
+						.getWorkspaceUrl(contextpath, item.getPath(), external_params,
 								subsystem);
 				base_properties_container_url += "&__directitem=true";
 				context.put("base_properties_container_url",
@@ -1347,7 +1347,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					context.put("base_status_container_url", "");
 				} else {
 					String base_status_container_url = MenuHelper.getStatusUrl(
-							null, item.getPath(), external_params, subsystem,sessionid);
+							contextpath, item.getPath(), external_params, subsystem,sessionid);
 					base_status_container_url += "&__directitem=true";
 					context.put("base_status_container_url",
 							base_status_container_url);
@@ -1390,7 +1390,7 @@ public class Framework implements ResourceInitial,MessageSource {
 						workspaceToolbar =getWorkspaceToolbar(item, control);
 					}
 					base_properties_toolbar_url.append(getUrl(StringUtil
-							.getRealPath(request, workspaceToolbar),sessionid))
+							.getRealPath(request, workspaceToolbar,true),sessionid))
 							.append(Framework.MENU_PATH)
 							.append( "=")
 							.append(StringUtil.encode(item.getPath(), null))
@@ -1422,7 +1422,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	            	workspaceContent = Framework.getWorkspaceContent(item,control);
 	            }
 				base_properties_content_url.append(getUrl(StringUtil
-						.getRealPath(request, workspaceContent),sessionid))
+						.getRealPath(request, workspaceContent,true),sessionid))
 						.append( Framework.MENU_PATH)
 						.append("=")
 						.append( StringUtil.encode(item.getPath(), null))
@@ -1470,7 +1470,7 @@ public class Framework implements ResourceInitial,MessageSource {
 						statusToolbar = getStatusToolbar(item, control);
 					}
 					base_status_toolbar_url.append(getUrl(StringUtil
-							.getRealPath(request, statusToolbar),sessionid))
+							.getRealPath(request, statusToolbar,true),sessionid))
 							.append( Framework.MENU_PATH)
 							.append( "=")
 							.append(StringUtil.encode(item.getPath(), null))
@@ -1498,7 +1498,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					statusContent = getStatusContent(item, control);
 				}
 				base_status_content_url.append(getUrl(StringUtil.getRealPath(
-						request, statusContent),sessionid))
+						request, statusContent,true),sessionid))
 						.append(Framework.MENU_PATH)
 						.append("=")
 						.append(StringUtil.encode(item.getPath(), null))

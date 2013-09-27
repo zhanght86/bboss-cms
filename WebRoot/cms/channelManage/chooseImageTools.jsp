@@ -88,13 +88,13 @@ function send(){
 	}
 	if(fileFlag == "" || fileFlag == "media")//多媒体文件
 	{
-		pattern=/\.(rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb)$/i;
+		pattern=/\.(rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb|flv)$/i;
 		if(filename.search(/\S/)==-1){
 			alert("请选择一个多媒体文件!");
 			return;
 		}
 		if(!pattern.test(filename)){
-			alert("这里只能上传后缀名为rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb的多媒体文件!");
+			alert("这里只能上传后缀名为rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb|flv的多媒体文件!");
 			return;
 		}
 	}
@@ -112,13 +112,13 @@ function send(){
 	}
 	if(fileFlag == "" || fileFlag == "flash")//Flash动画文件
 	{
-		pattern=/\.(swf)$/i;
+		pattern=/\.(swf|flv)$/i;
 		if(filename.search(/\S/)==-1){
-			alert("请选择一个Flash动画文件!");
+			alert("请选择一个swf或者flv文件!");
 			return;
 		}
 		if(!pattern.test(filename)){
-			alert("这里只能上传后缀名为swf的Flash动画文件!");
+			alert("这里只能上传swf和flv文件!");
 			return;
 		}
 	}
@@ -126,20 +126,20 @@ function send(){
 	if(fileFlag == "" || fileFlag == "picOrFlash")//图片或Flash动画文件
 	{
 		var pattern1=/\.(bmp|gif|jpeg|jpg|png)$/i;
-		var pattern2=/\.(swf)$/i;
+		var pattern2=/\.(swf|flv)$/i;
 		
 		if(filename.search(/\S/)==-1){
 			alert("请选择一个图片或Flash动画文件!");
 			return;
 		}
 		if(!pattern1.test(filename)&&!pattern2.test(filename)){
-			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg,.png图片或后缀名为swf的Flash动画文件!");
+			alert("这里只能上传后缀名为.gif,.bmp,.jpeg,.jpg,.png图片或后缀名为swf|flv的Flash动画文件!");
 			return;
 		}
 	}
 	parent.ImageListFrm.document.getElementById("divProcessing").style.display="block";
 	//document.all.form1.action="uploadImageFile_do.jsp?coverflag="+document.all.coverFlag.checked+"&uri="+parent.ImageListFrm.uri;
-	document.all.form1.action="<%=request.getContextPath()%>/cms/upload/uploadImageFile_do.page?coverflag="+document.all.coverFlag.checked+"&uri="+parent.ImageListFrm.uri;
+	document.all.form1.action="<%=request.getContextPath()%>/cms/upload/uploadImageFile_do.page?fileFlag=<%=fileFlag%>&coverflag="+document.all.coverFlag.checked+"&uri="+parent.ImageListFrm.uri;
 	document.all.form1.submit();
 }
 var selectedFileName = null;
@@ -162,6 +162,7 @@ function sub(){
 		alert(alertvalue);
 		return;
 	}
+	
 	parent.ImageListFrm.setImage(selectedFileName);
 }
 //清空选项

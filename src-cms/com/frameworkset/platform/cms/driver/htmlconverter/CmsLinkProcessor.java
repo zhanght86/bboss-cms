@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +19,7 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.tags.JspTag;
 import org.htmlparser.tags.LinkTag;
 import org.htmlparser.tags.ObjectTag;
+import org.htmlparser.tags.ResourceTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.StyleTag;
 import org.htmlparser.util.ParserException;
@@ -45,6 +48,10 @@ import com.frameworkset.util.StringUtil;
 public class CmsLinkProcessor extends CmsHtmlParser {
 
 	protected CmsLinkTable m_linkTable;
+	/**
+	 * 当执行文档内容处理时，记录被处理过的_templates目录相关的资源
+	 */
+	protected CmsLinkTable m_templateLinkTable;
 	
 	
 	/**
@@ -267,7 +274,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		super(true);
 		this.m_encoding = CmsEncoder.ENCODING_UTF_8;
 		this.m_mode = REPLACE_LINKS;
-		
+		this.m_templateLinkTable = new CmsLinkTable();
 		this.m_linkTable = new CmsLinkTable();
 		this.m_relativePath = m_relativePath;
 		this.sitedir = sitedir;
@@ -382,6 +389,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		this.m_mode = m_mode;
 		this.context = context;
 		this.m_linkTable = new CmsLinkTable();
+		this.m_templateLinkTable = new CmsLinkTable();
 		m_relativePath = context.getRendPath();
 		serverPort = context.getRequestContext()
 				.getRequest().getServerPort();
@@ -418,6 +426,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		this.m_mode = m_mode;
 		this.context = context;
 		this.m_linkTable = new CmsLinkTable();
+		this.m_templateLinkTable = new CmsLinkTable();
 		this.m_relativePath = m_relativePath;
 		serverPort = context.getRequestContext()
 				.getRequest().getServerPort();
@@ -601,7 +610,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		return process(content, m_encoding);
 	}
 
-
+	
 	/**
 	 * Visitor method to process a tag (start).
 	 * <p>
@@ -616,6 +625,40 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		{
 			processHrefTag((LinkTag) tag);
 		} 
+		else if(tag instanceof ResourceTag)
+		{
+			if(this.handletype == PROCESS_CONTENT)
+			{
+				try
+				{
+					isdistributeTag = true;	
+					ResourceTag rtag = (ResourceTag)tag;
+					rtag.setShouldRecurseChildren(false);
+					this.handletype = PROCESS_TEMPLATE;
+					
+					if(tagname.equals("CIMAGE"))
+					{
+						this.processCImageTag(rtag);
+					}
+					else if(tagname.equals("CFILE"))
+					{
+						this.processCFileTag(rtag);
+					}
+					else if(tagname.equals("CFLASHPLAYER"))
+					{
+						this.processCFlashplayerTag(rtag);
+					}
+					else if(tagname.equals("CMEDIA"))
+					{
+						this.processCMediaTag(rtag);
+					}
+				}
+				finally
+				{
+					this.handletype = PROCESS_CONTENT;
+				}
+			}
+		}
 		
 		else if (tag instanceof ImageTag) 
 		{
@@ -2322,6 +2365,47 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 			this.origineTemplateLinkTable.addLink(link,context);
 		}
 	}
+	
+	/**
+	 * 记录执行jsp标签处理过程中分析出来的超链接
+	 */
+	protected void recordContentTemplateLink(CMSLink link)
+	{
+		
+		if(link.isJavaScript())
+			return;
+		if(!link.isParserAndDistribute())//属于带变量的地址，忽略记录跟踪
+		{
+			this.context.getPublishMonitor().addSuccessMessage("页面中带变量或者标签的地址，忽略记录分发:" + link.getOriginHref(),context.getPublisher());
+			return ;
+		}
+		if(link.isDirectory())
+		{
+			/**
+			 * 普通目录无需进行发布分析过程，直接拷贝文件就可以了
+			 */
+			if(context.getPublishMonitor() != null && !context.getPublishMonitor().containDistributePage(context.getSiteID(),link.getHref()))
+				context.addTemplateLink(link);
+		}
+		else if(link.getRelativeFilePathType() == CMSLink.TYPE_STATIC_PAGE)
+		{
+			if(context.getPublishMonitor() != null && !context.getPublishMonitor().containDistributePage(context.getSiteID(),link.getRelativeFilePath(),false))
+				context.addStaticTemplateLink(link);
+		}
+		else if(link.getRelativeFilePathType() == CMSLink.TYPE_DYNAMIC_PAGE)
+		{
+			if(context.getPublishMonitor() != null && !context.getPublishMonitor().containDistributePage(context.getSiteID(),link.getRelativeFilePath(),false))
+				context.addDynamicTemplateLink(link);
+		}
+		else	
+		{
+			/**
+			 * 普通链接无需进行发布分析过程，直接拷贝文件就可以了
+			 */
+			if(context.getPublishMonitor() != null && !context.getPublishMonitor().containDistributePage(context.getSiteID(),link.getRelativeFilePath()))
+				context.addTemplateLink(link);
+		}
+	}
 	/**需要处理地址并且分发资源标识*/
 	public static final int LINK_PARSER_DISTRIBUTE = 0;
 	/**1 需要处理地址，不需要分发资源 */
@@ -2566,6 +2650,267 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 			}
 		}
 	}
+	
+	/**
+	 * Process a Resource tags.
+	 * <p>
+	 *  [cimage src="uploadfiles/201309/20130916033550921.jpg"][/cimage]		
+
+	 * </p>
+	 * 
+	 * @param tag
+	 *            the tag to process
+	 */
+	protected void processCImageTag(ResourceTag tag) {
+		String href_ = tag.getAttribute("src");
+		String ff = processStringLink(href_);
+		if(ff != null)
+			tag.setAttribute("src", ff);
+		this.m_result.append("<img ");
+		Hashtable attrs = tag.getAttributes();
+		Set set = attrs.entrySet();
+		Iterator itr = set.iterator();
+		
+		while(itr.hasNext())
+		{
+			
+			Map.Entry entry = (Map.Entry)itr.next();
+			String key = (String)entry.getKey(); 
+			if(key.startsWith("$"))
+				continue;
+			this.m_result.append(" ").append(key).append("='").append(entry.getValue()).append("'");
+		}
+		this.m_result.append(">");
+	}
+	
+	/**
+	 * Process a Resource tags.
+	 * <p>
+	 *  		
+		[cmedia src="uploadfiles/201309/flash.flv" width="200" height="200" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"][/cmedia]
+		
+		
+
+	 * </p>
+	 * 
+	 * @param tag
+	 *            the tag to process
+	 */
+	protected void processCMediaTag(ResourceTag tag) {
+		String href_ = tag.getAttribute("src");
+		String ff = processStringLink(href_);
+		if(ff != null)
+			tag.setAttribute("src", ff);
+		//'<EMBED src="' + sFromUrl + '" width="' + sWidth + '" height="' + sHeight + '" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"></EMBED>';
+		this.m_result.append("<EMBED  ");
+		Hashtable attrs = tag.getAttributes();
+		Set set = attrs.entrySet();
+		Iterator itr = set.iterator();
+		
+		while(itr.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)itr.next();
+			String key = (String)entry.getKey(); 
+			if(key.startsWith("$"))
+				continue;
+			this.m_result.append(" ").append(key).append("='").append(entry.getValue()).append("'");
+		}
+		this.m_result.append("></EMBED>");
+	}
+	/**
+	 * Process a Resource tags.
+	 * <p>
+		[cfile]uploadfiles/201309/flash.flv[/cfile]
+
+	 * </p>
+	 * 
+	 * @param tag
+	 *            the tag to process
+	 */
+	protected void processCFileTag(ResourceTag tag) {
+		String href_ = tag.getStringText();
+		String ff = processStringLink(href_);
+		if(ff != null)
+			tag.setResourceText(ff);
+		this.m_result.append("<a  ");
+		Hashtable attrs = tag.getAttributes();
+		Set set = attrs.entrySet();
+		Iterator itr = set.iterator();
+		String filename = tag.getAttribute("filename");
+		while(itr.hasNext())
+		{
+			Map.Entry entry = (Map.Entry)itr.next();
+			String key = (String)entry.getKey(); 
+			if(key.startsWith("$"))
+				continue;
+			if(!key.equals("filename"))
+			{
+				this.m_result.append(" ").append(key).append("='").append(entry.getValue()).append("'");
+			}
+		}
+		this.m_result.append(" href='").append(ff).append("'");
+		this.m_result.append(">").append(filename).append("</a>");
+		
+	}
+	
+	/**
+	 * Process a Resource tags.
+	 * <p>
+	 *  [cflashplayer pic='uploadfiles/201309/20130916033550921.jpg']uploadfiles/201309/flash.flv[/cflashplayer]
+	 * </p>
+	 * 
+	 * @param tag
+	 *            the tag to process
+	 */
+	protected void processCFlashplayerTag(ResourceTag tag) {
+		String href_ = tag.getStringText();
+		String flv = processStringLink(href_);
+		 
+		if(flv == null)
+		{	
+			flv = href_;
+		}
+		else
+			flv = "../"+flv;
+		href_ = tag.getAttribute("pic");
+		String pic = processStringLink(href_);
+		if(pic == null)
+			pic = href_;
+		href_ = tag.getAttribute("flyplayer");
+		if(href_ == null)
+		{
+			href_ = "components/flash/flvplayer.swf";
+		}
+		String flyplayer = processStringLink(href_);
+		if(flyplayer == null)
+//			tag.setAttribute("flyplayer",ff);
+			flyplayer = href_;
+		String width = tag.getAttribute("width");
+		if(width == null)
+		{
+			width = "200";
+		}
+		String height = tag.getAttribute("height");
+		if(height == null)
+		{
+			height = "200";
+		}
+		/**
+		 * <script type="text/javascript"> 
+    	    var s5 = new SWFObject('../../flvplayer.swf',"mediaplayer","540","400","9");
+	    	s5.addParam("allowfullscreen","true");
+	    	s5.addVariable("image",'../../uploadfiles/201308/20130814053703512.jpg');
+	    	s5.addVariable("file",'http://ippresource.sany.com.cn/videos/201308/syyydj.flv');
+	    	s5.addVariable("backcolor","ffffff");    
+	    	s5.addVariable("frontcolor","0xE2F0FE");
+	    	s5.write("videoFlv");
+		 *  </script>
+		 */
+		String uuid = java.util.UUID.randomUUID().toString();
+		uuid = uuid.replace('-', '_');
+		String object = "s"+uuid;
+		String pid = "p"+uuid;
+		this.m_result.append("<div id='").append(pid).append("'></div>\r\n");
+		this.m_result.append("<script type=\"text/javascript\"> \r\n");
+		this.m_result.append("var ").append(object).append(" = new SWFObject('").append(flyplayer).append("',\"mediaplayer\",\"")
+		.append(width).append("\",\"").append(height).append("\",\"9\");\r\n");
+		this.m_result.append(object).append(".addParam(\"allowfullscreen\",\"true\");\r\n");
+		this.m_result.append(object).append(".addVariable(\"image\",'").append(pic).append("');\r\n");
+		this.m_result.append(object).append(".addVariable(\"file\",'").append(flv).append("');\r\n");
+		this.m_result.append(object).append(".addVariable(\"backcolor\",\"ffffff\");\r\n");
+		this.m_result.append(object).append(".addVariable(\"frontcolor\",\"0xE2F0FE\");\r\n");
+		this.m_result.append(object).append(".write(\"").append(pid).append("\");\r\n");
+		this.m_result.append("</script>");
+		
+	}
+	
+	protected String processStringLink(String href_)
+	{
+		int linkhandletype=needProcess(href_);
+		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
+			
+
+			// href attribute is required
+			LinkParser parser;
+
+			CMSLink link;
+				
+			// links are replaced with macros
+
+			String targetUri = href_;
+
+			link = this.m_templateLinkTable.getLink(targetUri);
+			if (link != null) {
+				// tag.setLink(escapeLink(link.getHref()));
+				return link.getHref();
+			} else {
+				if (this.baseUrl != null)
+					link = new CMSLink(baseUrl, targetUri,linkhandletype);
+				else
+					link = new CMSLink(targetUri,linkhandletype);
+				parser = new LinkParser(link);
+				link = parser.getResult();
+				this.m_templateLinkTable.addLink(link);
+				/*
+				 * 发布时，记录内部模板附件路径，以便后续得附件分发
+				 */
+				if (this.isTemplateProcess() && link.isInternal()) {
+
+					recordContentTemplateLink( link);
+				}
+				
+				
+				if(this.handletype == PROCESS_EDITCONTENT 
+					|| this.handletype == PROCESS_EDITTEMPLATE)
+				{
+					if(link.isInternal() )
+					{
+//								this.innerPageLinkTable.addLink(link);
+					}
+					else
+					{
+						//记录外部链接
+						if(!link.isJavaScript)
+						{
+							if(link.needdownload())
+								this.externalPageLinkTable.addLink(link);
+						}
+					}
+				}
+				
+				if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+				{						
+					if(link.isInternal())
+					{
+						if(CMSUtil.isBinaryFile(link.getRelativeFilePath()))
+							((ContentContext)this.context).addLink(link);
+					}
+				}
+				/*
+				 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
+				 */
+				if((this.handletype == PROCESS_BACKUPCONTENT 
+						|| this.handletype == PROCESS_BACKUPTEMPLATE) )
+				{
+					if(link.isInternal())
+						this.recordContentTemplateLink(link);
+				}
+				
+				
+				/*
+				 * 除了备份文档或模版外，其他情况都需要修改链接文档中的链接
+				 */
+				else
+				{
+					return link.getHref();
+				}
+
+			}
+				
+		}
+		return null;
+	}
+	
 	
 
 	/**
@@ -2853,7 +3198,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	/**
 	 * 分析纯域名的的链接，并且提取域名 xxxx.xxxx.xxxx:端口
 	 */
-	public static final String domainpattern = "http://([a-zA-Z0-9]+\\.)+[a-zA-Z0-9]+/?";
+	public static final String domainpattern = "(http|https|ftp|tps)://([a-zA-Z0-9]+\\.)+[a-zA-Z0-9]+/?";
 
 	/**
 	 * 分析带绝对uri的链接，提取uri串 /xxx/xxxx等等
@@ -5017,7 +5362,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		 * 目前处理发布时文档附件暂时没有考虑文档引用的相关附件，直接从数据库中记录的信息获取需要发布的文档附件
 		 * 以后将改为从文档正文中扫描出来进行发布
 		 */
-		if (this.handletype == PROCESS_TEMPLATE 
+		if (this.handletype == PROCESS_TEMPLATE || this.handletype == PROCESS_CONTENT  
 				|| this.handletype == PROCESS_BACKUPCONTENT 
 				|| handletype == PROCESS_BACKUPTEMPLATE)
 		{

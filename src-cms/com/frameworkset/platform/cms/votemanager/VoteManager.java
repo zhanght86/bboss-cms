@@ -40,6 +40,7 @@ public interface VoteManager {
 	public List getQstionsOfServey(int titleID) throws VoteManagerException;
 	
 
+
 	/**
 	 * 取得问题答案
 	 * @param titleID
@@ -89,6 +90,10 @@ public interface VoteManager {
 	 */
 	public Question getQuestionBy(int qID) throws VoteManagerException ;
 	
+	/*
+	 * 取得纯问题，不包括答案
+	 */
+	public Question getPureQuestionBy(int qID) throws VoteManagerException ;
 	/**
 	 * 投票
 	 * 
@@ -335,6 +340,13 @@ public interface VoteManager {
 	 * 通过部门id获取调查id
 	 */
 	public String getVoteIdByDepartId(String depart_id);
+
+	/**
+	 * 分页查找答案记录
+	 * @param
+	 * @return
+	 */
+	public List getAnswersOfQstionListInfo(int questionID,long offset, int pagesize ) throws VoteManagerException;
 
 }
 	

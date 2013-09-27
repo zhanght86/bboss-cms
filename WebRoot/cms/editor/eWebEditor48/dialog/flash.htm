@@ -10,29 +10,48 @@
 <script language="javascript">
 
 var bAllowUpload = ((parseFloat(config.AllowFlashSize)>0) ? true : false);
-
+var bchoosetype = 1;
 //add by xinwang.jiao 2007-9-18
 function setImage(uri){
 	if(uri == "")
 	{
-		document.all("d_fromurl").value = uri;
+		if(bchoosetype == 1)
+			document.all("d_fromurl").value = uri;
+		else
+			document.all("d_fromurlimage").value = uri;
 		return ;
 	}
 	var cusdir = config.CusDir;
 	if(cusdir.indexOf("/") != -1)
 		cusdir = cusdir.substring(0,cusdir.indexOf("/"));
-	uri = getCmsRootPath() + "/" + config.StyleUploadDir + cusdir + "/_template/" + uri;
-	document.all("d_fromurl").value = uri;
+	//alert("/" + config.StyleUploadDir + cusdir + "/_template/" + uri);
+	//uri = getCmsRootPath() + "/" + config.StyleUploadDir + cusdir + "/_template/" + uri;
+	if(bchoosetype == 1)
+		document.all("d_fromurl").value = uri;
+	else
+		document.all("d_fromurlimage").value = uri;
 }
 //选择服务器已有file
-function xuanze()
+function xuanze(type)
 {
-	openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=flash",700,580);
+	if(type == 1)
+	{
+		bchoosetype = 1;
+		openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=flash",700,580);
+	}
+	else
+	{
+		bchoosetype = 2;
+		openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=pic",700,580);
+	}
 }
 
 function RadioClick(what){
 	if (what=="url"){
 		d_fromurl.disabled=false;
+		d_browse.disabled=false;
+		//i_browse.disabled=false;
+		//d_fromurlimage.disabled=false;
 		if (config.AllowBrowse=="1"){
 			d_browse.disabled=false;
 		}
@@ -46,6 +65,9 @@ function RadioClick(what){
 		d_file.myform.uploadfile.disabled=false;
 		d_checkfromfile.checked=true;
 		d_fromurl.disabled=true;
+		d_browse.disabled=true;
+		//i_browse.disabled=true;
+		//d_fromurlimage.disabled=true;
 		if (config.AllowBrowse=="1"){
 			d_browse.disabled=true;
 		}
@@ -73,24 +95,32 @@ function UploadSaved(sPathFileName){
 
 function ReturnValue(){
 	var sFromUrl = d_fromurl.value;
+	var sFromUrlimage = d_fromurlimage.value;
 	var sWidth = d_width.value;
+	if(sWidth == '')
+		sWidth = '540';
+	
 	var sHeight = d_height.value;
+	if(sHeight == '')
+		sHeight = '400';
 	var idx = sFromUrl.indexOf(".flv");
 	var sHTML = "";
 	if(idx > 0)
 	{
-		sHTML = "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" width=\"480\" height=\"400\">";
-		sHTML += "<param name=\"movie\" value=\"/ewebeditor/plugin/flvplayer.swf\">";
-		sHTML += "<param name=\"FlashVars\" value=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\">";
-		sHTML += "<param name=\"quality\" value=\"high\">";
-		sHTML += "<param name=\"allowfullscreen\" value=\"true\"><embed type=\"application/x-shockwave-flash\" src=\"/ewebeditor/plugin/flvplayer.swf\" width=\"480\" height=\"400\" flashvars=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\" quality=\"high\" allowfullscreen=\"true\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed></object>";
+		//sHTML = "<object classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\" width=\"480\" height=\"400\">";
+		//sHTML += "<param name=\"movie\" value=\"/ewebeditor/plugin/flvplayer.swf\">";
+		//sHTML += "<param name=\"FlashVars\" value=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\">";
+		//sHTML += "<param name=\"quality\" value=\"high\">";
+		//sHTML += "<param name=\"allowfullscreen\" value=\"true\"><embed type=\"application/x-shockwave-flash\" src=\"/ewebeditor/plugin/flvplayer.swf\" width=\"480\" height=\"400\" flashvars=\"file=/uploads/20120919/20120919172353484.flv&autostart=true\" quality=\"high\" allowfullscreen=\"true\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></embed></object>";
+	 	 sHTML="[cflashplayer width='"+sWidth+"' height='"+sHeight+"' flyplayer='components/flash/flvplayer.swf' pic='"+sFromUrlimage+"']"+sFromUrl+"[/cflashplayer]" ;
 	}
 	else
 	{
 		sHTML = "<embed type=\"application/x-shockwave-flash\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" " ;
 		if (sWidth!="") sHTML+=" width=\""+sWidth + "\"";
 		if (sHeight!="") sHTML+=" height=\""+sHeight+ "\"";
-		sHTML +=" src=\""+ sFromUrl +"\" loop=\"true\" play=\"true\" quality=\"high\"></embed>";	
+		sHTML +=" src=\""+ sFromUrl +"\" loop=\"true\" play=\"true\" quality=\"high\"></embed>";
+	   
 	}
 	
 	//var sHTML = "<OBJECT codeBase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'";
@@ -125,6 +155,9 @@ function DisableItems(){
 	d_checkfromfile.disabled=true;
 	d_checkfromurl.disabled=true;
 	d_fromurl.disabled=true;
+	d_browse.disabled=true;
+		//i_browse.disabled=true;
+	//d_fromurlimage.disabled=true;
 	if (config.AllowBrowse=="1"){
 		d_browse.disabled=true;
 	}
@@ -137,6 +170,9 @@ function AbleItems(){
 	d_checkfromfile.disabled=false;
 	d_checkfromurl.disabled=false;
 	d_fromurl.disabled=false;
+	d_browse.disabled=false;
+		//i_browse.disabled=false;
+	//d_fromurlimage.disabled=false;
 	if (config.AllowBrowse=="1"){
 		d_browse.disabled=false;
 	}
@@ -183,19 +219,35 @@ function InitDocument(){
 				document.write("</tr>");
 			}
 			</script>
+				
+				
 		<tr>
 			<td noWrap width="20%"><input type=radio id="d_checkfromurl" value="1" onclick="RadioClick('url')"><label for=d_checkfromurl>网络</label>:</td>
 			<td noWrap width="80%">
 				<script language="javascript">
 				if (config.AllowBrowse=="1"){
 					//document.write("<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td width='100%'><input type=text id='d_fromurl' style='width:100%' size=10 value='http://'></td><td><input style='width:63px;height:18px;margin-left:2px;padding-top:0px;' type=button id='d_browse' onclick=\"SelectBrowse('flash','fromurl')\" value='浏览...' align=absmiddle></td></tr></table>");
-					document.write("<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td width='100%'><input type=text id='d_fromurl' style='width:100%' size=10 value='http://'></td><td><input style='width:63px;height:18px;margin-left:2px;padding-top:0px;' type=button id='d_browse' onclick=\"xuanze()\" value='浏览...' align=absmiddle></td></tr></table>");
+					document.write("<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td width='100%'><input type=text id='d_fromurl' style='width:100%' size=10 value='http://'></td><td><input style='width:63px;height:18px;margin-left:2px;padding-top:0px;' type=button id='d_browse' onclick=\"xuanze(1)\" value='浏览...' align=absmiddle></td></tr></table>");
 				} else {
 					document.write("<input type=text id='d_fromurl' style='width:100%' size=10 value='http://'>");
 				}
 				</script>
 			</td>
 		</tr>
+		<tr>
+			<td noWrap width="20%"><label for=d_checkfromurlimage>播放图片(flv播放器)</label>:</td>
+			<td noWrap width="80%">
+				<script language="javascript">
+				if (config.AllowBrowse=="1"){
+					
+					document.write("<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td width='100%'><input type=text id='d_fromurlimage' style='width:100%' size=10 value=''></td><td><input style='width:63px;height:18px;margin-left:2px;padding-top:0px;' type=button id='i_browse' onclick=\"xuanze(2)\" value='浏览...' align=absmiddle></td></tr></table>");
+				} else {
+					document.write("<input type=text id='d_fromurlimage' style='width:100%' size=10 value=''>");
+				}
+				</script>
+			</td>
+		</tr>			
+       					
 		</table>
 
 	</td></tr>

@@ -43,6 +43,7 @@ import org.htmlparser.visitors.NodeVisitor;
  */
 public abstract class AbstractNode implements Node, Serializable
 {
+	protected boolean isresource = false;
     /**
      * The page this node came from.
      */
@@ -181,6 +182,15 @@ public abstract class AbstractNode implements Node, Serializable
     public Page getPage ()
     {
         return (mPage);
+    }
+    
+    public boolean isResource()
+    {
+    	return this.isresource;
+    }
+    public void setResource(boolean isresource)
+    {
+    	this.isresource = isresource;
     }
 
     /**

@@ -48,7 +48,7 @@
 						includeRootNode="false"
 						href="file_ListFrameset.jsp"
 						target="base_properties_content" 
-						dynamic="false"> 
+						mode="static-dynamic"> 
 							<tree:treedata treetype="TemplateFolderTree"
 								scope="request"
 								rootid="//theRoot"  

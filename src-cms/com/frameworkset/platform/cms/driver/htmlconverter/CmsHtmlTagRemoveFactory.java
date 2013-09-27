@@ -493,6 +493,18 @@ public final class CmsHtmlTagRemoveFactory extends PrototypicalNodeFactory imple
             return m_decorated.toString();
         }
 
+		@Override
+		public boolean isResource() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public void setResource(boolean isresource) {
+			// TODO Auto-generated method stub
+			
+		}
+
     }
 
     /** The log object for this class. */

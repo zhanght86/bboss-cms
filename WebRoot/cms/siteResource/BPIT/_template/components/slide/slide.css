@@ -15,7 +15,7 @@
 .pic .dis A {DISPLAY: block; font-size: 26px; vertical-align: middle; overflow: hidden; width: 540px; FONT-FAMILY: Arial; height: 300px; TEXT-ALIGN: left;}
 .pic .dis A:hover {text-decoration: underline;}
 .pic .dis a img { width:540px; height:300px; vertical-align:middle;;border:0px}
-#font_hd TD A {FONT-SIZE: 12px; width: 420px; LINE-height: 25px; height: 25px}
+#font_hd TD A {FONT-SIZE: 12px; width: 420px; LINE-height: 25px; height: 25px;MARGIN-left: 10px;}
 #top_pictures {height: 300px; width: 540px; position: relative;}
 #top_pictures .dis {position: absolute; top: 0; left: 0;}
 div#simg-wrap {width: auto; background: transparent; float: right; padding-right: 10px;}

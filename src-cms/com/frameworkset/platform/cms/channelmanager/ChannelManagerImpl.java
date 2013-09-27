@@ -2472,7 +2472,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					list.add(doc);
 				}
 
@@ -2747,8 +2747,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append("FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,case when DOCTYPE=1 then t.content else null end linkfile,pic_path,")
 					.append("mediapath,publishfilename,commentswitch,secondtitle,isnew,newpic_path,nvl(a.order_no,-1) as order_no,1 as ordersq,ordertime,seq,-1 site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append("from td_cms_document t  left outer join (select * from td_cms_doc_arrange a  ")
-					.append("where to_date(a.start_time,'yyyy-mm-dd hh24:mi:ss')<=TO_DATE('24-07-2008 08:29:34', 'DD-MM-YYYY HH24:MI:SS') ")
-					.append("and to_date(a.end_time,'yyyy-mm-dd hh24:mi:ss')>=TO_DATE('24-07-2008 08:29:34', 'DD-MM-YYYY HH24:MI:SS')) a  ")
+					.append("where to_date(a.start_time,'yyyy-mm-dd hh24:mi:ss')<=sysdate ")
+					.append("and to_date(a.end_time,'yyyy-mm-dd hh24:mi:ss')>=sysdate) a  ")
 					.append("on t.document_id = a.document_id inner join TD_CMS_DOCSOURCE ds on t.DOCSOURCE_ID = ds.DOCSOURCE_ID where (STATUS = 5 or STATUS = 10)")
 					.append("  and ISDELETED = 0 and t.document_id not  in(select c.id_by_aggr from td_cms_doc_aggregation c  inner join td_cms_document z1 on ")
 					.append("  c.id_by_aggr = z1.document_id  inner join td_cms_channel z2 on z1.channel_id = z2.channel_id where z1.channel_id  in(select doc_id from td_cms_chnl_ref_doc where chnl_id="
@@ -2831,7 +2831,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					doc.setOrdertime(db.getDate(i, "ordertime"));
 					if(loaddocrelatepic)
 					{
@@ -3271,7 +3271,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					datas.add(doc);
 				}
 
@@ -3433,7 +3433,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					datas.add(doc);
 				}
 
@@ -3837,7 +3837,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					doc.setOrdertime(db.getDate(i, "ordertime"));
 					
 					datas.add(doc);
@@ -4039,7 +4039,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					datas.add(doc);
 				}
 
@@ -4813,7 +4813,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 						/* 装载扩展字段数据 */
 
 						doc.setOrdertime(db.getDate(i, "ordertime"));
-						doc.setExtColumn(extManager.getExtColumnInfo(db));
+						doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 						list.add(doc);
 					}
 
@@ -4969,7 +4969,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 						doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 						/* 装载扩展字段数据 */
 						doc.setOrdertime(db.getDate(i, "ordertime"));
-						doc.setExtColumn(extManager.getExtColumnInfo(db));
+						doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 						list.add(doc);
 					}
 
@@ -5303,7 +5303,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					DocumentExtColumnManager extManager = new DocumentExtColumnManager();
-					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
 					list.add(doc);
 				}
 

@@ -104,7 +104,7 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 		try{
 		
 			
-		 	 
+			String fileFlag = request.getParameter("fileFlag");
 			CMSManager cmsmanager = new CMSManager();
 			cmsmanager.init(request,request.getSession(false),response,AccessControl.getAccessControl());
 	
@@ -124,8 +124,16 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 				return "path:uploadImageFile_do";
 			}
 			String uri = request.getParameter("uri");
-			if(uri.equals("/"))
-				uri = "uploadfiles/"+(String)date.Time_YMD().substring(0,6)+"/";
+			if(fileFlag!=null && fileFlag.equals("1"))//上传首页文件，路径不需要修改，文件名称也不需要修改
+			{
+				
+			}
+			else
+			{
+				if(uri.equals("/"))
+					uri = "uploadfiles/"+(String)date.Time_YMD().substring(0,6)+"/";
+			}
+			
 			String coverFlag = request.getParameter("coverflag");
 			File parentFolder = null;
 			if(uri!=null && uri.trim().length()!=0){
@@ -143,9 +151,20 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 				MultipartFile file_ = (MultipartFile)file[i];				
 				flag++;				
 				//建个文件用来获取名字
-				String FileName=(String)date.Time_Stamp();				
-				String fileBottom = CMSUtil.getFileExt(file_.getContentType());				
-				File tempFile = new File(FileName +"."+ fileBottom);				
+				String FileName= null;	
+//				if(fileFlag!=null && (fileFlag.equals("1") || fileFlag.equals("flash")))//上传首页文件，路径不需要修改，文件名称也不需要修改
+				{
+					FileName = file_.getOriginalFilename();
+				}
+//				else
+//				{
+//					String fileBottom = CMSUtil.getFileExt(file_.getContentType());	
+//					FileName=(String)date.Time_Stamp();
+//					FileName = FileName+"."+ fileBottom;
+//				}
+				
+							
+				File tempFile = new File(FileName );				
 				fileName = tempFile.getName() ;
 				
 				File f = new File(parentFolder.getAbsoluteFile(),fileName);
@@ -154,7 +173,8 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 					request.setAttribute("errorMsg", errorMsg)	;
 					return "path:uploadImageFile_do";
 				}
-				f.getParentFile().mkdirs();
+				if(!f.getParentFile().exists())
+					f.getParentFile().mkdirs();
 				f.createNewFile();
 				file_.transferTo(f);
 				request.setAttribute("fileName", fileName);

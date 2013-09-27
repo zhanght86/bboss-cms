@@ -210,10 +210,12 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 			             		if(data)
 			             		{
 				             		for (var i=0; i<data.length; i++) {
-					             		comm = comm +"<li>";
-					             		comm = comm +"<a href='javascript:void(0);' onclick='getbbsvoteDetail("+data[i].id+")'>"+(i+1)+":"+data[i].name+" ["+data[i].foundDate+"]";
-					             		comm = comm +"</a>";
-					             		comm = comm + "  <div class=\"vote_1\" style=\"float:left;\"id=\"vote_"+data[i].id+"\"> </div> " ;
+					             		comm = comm +"<li style='padding-top:8px;'>";
+					             		comm = comm +"<div style='background-color: #f2f2f2;' onclick='getbbsvoteDetail("+data[i].id+")'>";
+					             		comm = comm +"<a href='javascript:void(0);' onclick='getbbsvoteDetail("+data[i].id+")' >"+(i+1)+":"+data[i].name+" ["+data[i].foundDate+"]";
+					             		comm = comm +"</a><div  style='padding-left:900px;margin-top: -5px;'><img class='c_1' style='width:10px;height:10px;' id='c_"+data[i].id+"' src='../images/cdown.jpg' /></div> ";
+					             		comm = comm +"</div>";
+					             		comm = comm + "<div   class=\"vote_1\" style=\"background-color: #FFFFFF;\"id=\"vote_"+data[i].id+"\"> </div> " ;
 					             		comm = comm +"</li>";
 				             		}
 			             		}
@@ -246,7 +248,7 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 				             			//<li><a href="#">洋奶粉VS国产奶粉，你选择哪个？</a></li>
 					             		//comm = comm +"<h1>"+data.name+"</h1>";
 					             		comm = comm + " <p>离投票结束还有：<span class=\"c1\">"+data.endTime+"</span> | 发起者：<span class=\"c2\">"+data.foundername+"</span>	</p> ";
-					             		comm = comm + " <div class=\"vote_content\">"+data.content+"</div>";
+					             		comm = comm + " <div class=\"vote_content\" style='width:85%;'>"+data.content+"</div>";
 					             		comm = comm + " 	 <div class=\"vote_p\"> ";
 					             		
 					             		if(data.questions && data.questions.length >0 ){
@@ -256,7 +258,7 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 					             				if(data.questions[q].style=="0"){
 						             				for(var i=0;i<data.questions[q].items.length;i++){
 						             					comm = comm + " <ul> ";
-						             					comm = comm + "  <li><input type=\"radio\" name=\"RadioGroup"+titleId+"_"+q+"\" value="+data.questions[q].items[i].id+"  />"+data.questions[q].items[i].options+"</li> ";
+						             					comm = comm + "  <li style=\"width:120px;\"><input type=\"radio\" name=\"RadioGroup"+titleId+"_"+q+"\" value="+data.questions[q].items[i].id+"  />"+data.questions[q].items[i].options+"</li> ";
 									             		comm = comm + "  <li>"+data.questions[q].items[i].score +"</li> ";
 									             		comm = comm + "   <li>"+data.questions[q].items[i].count +" 票</li> ";
 									             		comm = comm + "  </ul>  <br/>  ";
@@ -264,15 +266,16 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 					             				}else if(data.questions[q].style=="1"){
 					             					for(var i=0;i<data.questions[q].items.length;i++){
 						             					comm = comm + " <ul> ";
-						             					comm = comm + "  <li><input type=\"checkbox\" name=\"checkboxGroup"+titleId+"_"+q+"\" value="+data.questions[q].items[i].id+"  />"+data.questions[q].items[i].options+"</li> ";
+						             					comm = comm + "  <li style=\"width:120px;\"><input type=\"checkbox\" name=\"checkboxGroup"+titleId+"_"+q+"\" value="+data.questions[q].items[i].id+"  />"+data.questions[q].items[i].options+"</li> ";
 									             		comm = comm + "  <li>"+data.questions[q].items[i].score +"</li> ";
 									             		comm = comm + "   <li>"+data.questions[q].items[i].count + " 票</li> ";
 									             		comm = comm + "  </ul>  <br/>  ";
-						             				}
+						             				} 
 					             				}else if(data.questions[q].style=="2"){
-					             					comm = comm + " <ul> ";
-					             					comm = comm + "  <li><textarea  name=\"text"+titleId+"_"+q+"\" id=questionId"+data.questions[q].id+" rows=6 style=\"width:220px;height:120px;\" ></textarea>"+"</li> ";
-								             		comm = comm + "  </ul>  <br/>  ";
+					             					comm = comm +" <a herf='javascript:void(0);' onclick='openFreeAnswersPage("+data.questions[q].id+")')>自由答案</a>";
+					             					comm = comm + "  ";
+					             					comm = comm + "<br/>  <textarea  name=\"text"+titleId+"_"+q+"\" id=questionId"+data.questions[q].id+" rows=6 style=\"width:220px;height:120px;\" ></textarea>";
+								             		comm = comm + "    <br/>  ";
 					             				}
 					             			}
 					             		}

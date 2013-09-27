@@ -30,15 +30,8 @@ import java.util.Vector;
 
 import org.htmlparser.Attribute;
 import org.htmlparser.Node;
-import org.htmlparser.NodeFactory;
-import org.htmlparser.PrototypicalNodeFactory;
-import org.htmlparser.Remark;
 import org.htmlparser.Tag;
-import org.htmlparser.Text;
-import org.htmlparser.lexer.Cursor;
 import org.htmlparser.lexer.Lexer;
-import org.htmlparser.lexer.Page;
-import org.htmlparser.scanners.ScriptDecoder;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;

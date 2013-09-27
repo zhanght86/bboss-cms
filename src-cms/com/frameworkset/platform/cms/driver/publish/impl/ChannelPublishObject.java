@@ -538,11 +538,14 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 			}
 			else if(channelContext.isCustomPageType())
 			{
-//				CMSUtil.getPublishedLinkPath(this.context,channelContext.getChannel().getIndexpagepath());
-				PagePublishObject pagePublishObject = new PagePublishObject(this.requestContext,new String[] {channelContext.getChannel().getIndexpagepath(),
-						  CMSUtil.getPageType(channelContext.getChannel().getIndexpagepath()) + ""},
-						  this.context);
-				this.context.getDriverConfiguration().getPublishEngine().publish(pagePublishObject);
+				if(!CMSUtil.isOtherDomain(channelContext.getChannel().getIndexpagepath(), requestContext.getRequest()))
+				{
+	//				CMSUtil.getPublishedLinkPath(this.context,channelContext.getChannel().getIndexpagepath());
+					PagePublishObject pagePublishObject = new PagePublishObject(this.requestContext,new String[] {channelContext.getChannel().getIndexpagepath(),
+							  CMSUtil.getPageType(channelContext.getChannel().getIndexpagepath()) + ""},
+							  this.context);
+					this.context.getDriverConfiguration().getPublishEngine().publish(pagePublishObject);
+				}
 			}
 			else if(channelContext.isDocDetailPageType())
 			{

@@ -117,6 +117,40 @@ public class VoteManagerImpl implements VoteManager {
 
 		}
 	}
+	
+	/**
+	 * 取得问题
+	 * 
+	 * @param titleID
+	 * @return
+	 */
+	public Question getPureQuestionBy(int qID) throws VoteManagerException {
+		try {
+			DBUtil dbUtil = new DBUtil();
+			
+			String sql = "select * from td_cms_vote_questions where  ID=" + qID;
+			dbUtil.executeSelect(sql);
+
+			Question item = null;
+			if (dbUtil.size() > 0) {
+				item = new Question();
+				item.setId(dbUtil.getInt(0, "id"));
+				item.setStyle(dbUtil.getInt(0, "style"));
+				item.setTitle(dbUtil.getString(0, "title"));
+				//item.setAnswers(getAnswersOfQstion(qID));
+				item.setActive(dbUtil.getInt(0, "active"));
+				item.setItems(getItemsOfQstion(qID));
+				item.setVotecount(dbUtil.getInt(0, "votecount"));
+				item.setIsTop(dbUtil.getInt(0, "istop"));
+			}
+
+			return item;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new VoteManagerException(e.getMessage());
+
+		}
+	}
 
 	/**
 	 * 取得问题选项
@@ -264,7 +298,39 @@ public class VoteManagerImpl implements VoteManager {
 
 		}
 	}
+	/**
+	 * 分页查找记录
+	 * @param
+	 * @return
+	 */
+	public List getAnswersOfQstionListInfo(int questionID,long offset, int pagesize ) throws VoteManagerException{
+		List res = new ArrayList();
+		try{
+			DBUtil dbUtil = new DBUtil();
+			StringBuffer sql=new StringBuffer("select * from TD_CMS_VOTE_ANSWER  where  QID=").append(questionID).append(" order by anser_id desc");
+			dbUtil.executeSelect(sql.toString(), offset, pagesize);
 
+			Answer item ;
+			for (int i = 0; dbUtil.size() > 0 && i < dbUtil.size(); i++) {
+				item = new Answer();
+				item.setAnswer(dbUtil.getString(i, "ANSWER"));
+				item.setAnswerID(dbUtil.getInt(i, "ANSER_ID"));
+				item.setIsBigTitle(dbUtil.getInt(i, "ISBIGTITLE"));
+				item.setItemId(dbUtil.getInt(i, "ITEM_ID"));
+				item.setQid(dbUtil.getInt(i, "QID"));
+				item.setType(dbUtil.getInt(i, "TYPE"));
+				item.setWhen(dbUtil.getString(i, "WHEN"));
+				item.setWhoIp(dbUtil.getString(i, "WHO_IP"));
+				item.setState(dbUtil.getInt(i,"state"));
+				res.add(item);
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new VoteManagerException(e.getMessage());
+		}
+		return res;
+	}
 	/**
 	 * 取得问卷的IP限制段
 	 * 

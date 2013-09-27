@@ -21,8 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
+
+import com.frameworkset.util.ListInfo;
 
 /**
  * @author xusy3
@@ -146,5 +150,50 @@ public class VoteController {
 			return null;
 		}	
 		
+	}
+	
+	/**
+	 * 根据问题号取得分页答案列表
+	 * 
+	 * @param questionID 问题ID
+	 * @param HttpServletRequest request
+	 * @return String
+	 * @throws Exception Exception
+	 */
+	public @ResponseBody(datatype="jsonp") List<Title> getAnswersOfQstionListInfo(int questionID,long offset, int pagesize) {
+		try {
+			voteManager  = new VoteManagerImpl();
+			List answersList = voteManager.getAnswersOfQstionListInfo( questionID, offset,pagesize);
+			return answersList;
+		} catch (Exception e) {
+			return null;
+		}	
+		
+	}
+	/**
+	 * 展示该自由问题答案(逐步展开)
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param docId
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public String showVoteFreeAnswersList(int pagesize, int questionID,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		voteManager  = new VoteManagerImpl();
+		//List answersList  = voteManager.getAnswersOfQstionListInfo(questionID, (int)offset, pagesize);
+		Question question=voteManager.getPureQuestionBy(questionID);
+		
+		//request.setAttribute("answersList", answersList);
+		request.setAttribute("questionID", questionID);
+		request.setAttribute("question", question);
+		request.setAttribute("pagesize",pagesize);
+		request.setAttribute("votecount", question.getVotecount());
+
+		return "path:showVoteFreeAnswersList";
 	}
 }

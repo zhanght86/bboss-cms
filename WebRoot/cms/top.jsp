@@ -22,7 +22,7 @@
     String subsystem = FrameworkServlet.getSubSystem(request,response,accesscontroler.getUserAccount());
     MenuHelper menuHelper =  new MenuHelper(subsystem,accesscontroler);
     Item publicitem = menuHelper.getPublicItem();
-    welcomepath = MenuHelper.getMainUrl(publicitem);
+    welcomepath = MenuHelper.getMainUrl(request.getContextPath(),publicitem);
     
     String viewPath = "cms::menu://sysmenu$root/viewManager$module";
     ItemQueue views = menuHelper.getSubItems(viewPath);
@@ -125,7 +125,7 @@ body{ font-family: Verdana, "宋体", Vrinda, serif}
 								<%for(int i = 0; views != null && i < views.size(); i ++)
 								{
 									Item view = views.getItem(i);
-									String viewUrl = menuHelper.getMainUrl(view);
+									String viewUrl = menuHelper.getMainUrl(request.getContextPath(),view);
 								%>
 								<option value="<%=viewUrl%>" <%if(modulePath.equals(view.getPath()))out.print("selected");%>><%=view.getName()%>								</option>
 								<%}%>

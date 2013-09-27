@@ -270,10 +270,11 @@ public class MenuHelper  {
     public static String getMainUrl(String context, String menuPath, Map externalparams, String subsystem,
                                     String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.MAIN_CONTAINER);
         String external_params = getExternalQueryString(externalparams);
@@ -324,10 +325,11 @@ public class MenuHelper  {
     public static String getPerspectiveContentUrl(String context, String menuPath, Map externalparams,
                                                   String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.CONTENT_CONTAINER);
 
@@ -378,10 +380,11 @@ public class MenuHelper  {
     public static String getActionContainerUrl(String context, String menuPath, Map externalparams,
                                                String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.ACTION_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -430,10 +433,11 @@ public class MenuHelper  {
     public static String getWorkspaceUrl(String context, String menuPath, Map externalparams,
                                          String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid))
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid),true);
+        url.append(murl)
             .append(Framework.MENU_PATH).append("=").append(StringUtil.encode(menuPath)).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.PROPERTIES_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -482,10 +486,11 @@ public class MenuHelper  {
     public static String getStatusUrl(String context, String menuPath, Map externalparams, String subsystem,
                                       String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.STATUS_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -561,10 +566,11 @@ public class MenuHelper  {
                                     String sessionid) {
 
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.MAIN_CONTAINER);
         if (externalparams != null && !externalparams.equals("")) {
@@ -589,10 +595,11 @@ public class MenuHelper  {
     public static String getPerspectiveContentUrl(String context, String menuPath, String externalparams,
                                                   String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.CONTENT_CONTAINER);
 
@@ -703,10 +710,11 @@ public class MenuHelper  {
                                                   String subsystem, String sessionid) {
 
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.NAVIGATOR_CONTAINER_URL, sessionid))
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.NAVIGATOR_CONTAINER_URL, sessionid),true);
+        url.append(murl)
             .append(Framework.MENU_PATH).append("=").append(StringUtil.encode(menuPath)).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.NAVIGATOR_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -757,10 +765,11 @@ public class MenuHelper  {
     public static String getActionContainerUrl(String context, String menuPath, String externalparams,
                                                String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.ACTION_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -812,10 +821,11 @@ public class MenuHelper  {
     public static String getWorkspaceUrl(String context, String menuPath, String externalparams,
                                          String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid))
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid),true);
+        url.append(murl)
             .append(Framework.MENU_PATH).append("=").append(StringUtil.encode(menuPath)).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.PROPERTIES_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -867,10 +877,11 @@ public class MenuHelper  {
     public static String getStatusUrl(String context, String menuPath, String externalparams,
                                       String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menuPath)).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.STATUS_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -911,6 +922,10 @@ public class MenuHelper  {
     public static String getMainUrl(MenuItem menu) {
         return getMainUrl(null, menu, (Map)null);
     }
+    
+    public static String getMainUrl(String contextpath,MenuItem menu) {
+        return getMainUrl(contextpath, menu, (Map)null);
+    }
 
     public static String getMainUrl(String menuPath) {
 
@@ -947,9 +962,11 @@ public class MenuHelper  {
 	    	}
     	}    		
     		
-        if(url.startsWith("http://") || url.startsWith("https://"))
-            return url;
-        return StringUtil.getRealPath(context, url);
+//        if(url.startsWith("http://") || url.startsWith("https://") ||url.startsWith("ftp://") || url.startsWith("tps://"))
+//            return url;
+    	if(StringUtil.isHttpUrl(url))
+    		return url;
+        return StringUtil.getRealPath(context, url,true);
         
     }
 
@@ -987,10 +1004,16 @@ public class MenuHelper  {
                                     String sessionid) {
 
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+        String murl = Framework.getUrl(Framework.MAIN_CONTAINER_URL, sessionid);
+        murl = StringUtil.getRealPath(context, murl, true);
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+//        else
+//        {
+//        	
+//        }
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menu.getPath(), null)).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.MAIN_CONTAINER);
         String external_params = getExternalQueryString(externalparams);
@@ -1042,10 +1065,11 @@ public class MenuHelper  {
                                                   String subsystem, String sessionid) {
 
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.CONTENT_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menu.getPath())).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.CONTENT_CONTAINER);
 
@@ -1097,10 +1121,11 @@ public class MenuHelper  {
     public static String getActionContainerUrl(String context, MenuItem menu, Map externalparams,
                                                String subsystem, String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.ACTION_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menu.getPath())).append("&").append(Framework.MENU_TYPE)
             .append("=").append(Framework.ACTION_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -1149,10 +1174,11 @@ public class MenuHelper  {
     public static String getWorkspaceUrl(String context, MenuItem menu, Map externalparams, String subsystem,
                                          String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid))
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.PROPERTIES_CONTAINER_URL, sessionid),true);
+        url.append(murl)
             .append(Framework.MENU_PATH).append("=").append(StringUtil.encode(menu.getPath())).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.PROPERTIES_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="
@@ -1201,10 +1227,11 @@ public class MenuHelper  {
     public static String getStatusUrl(String context, MenuItem menu, Map externalparams, String subsystem,
                                       String sessionid) {
         StringBuffer url = new StringBuffer();
-        if (context != null && !"".equals(context)) {
-            url.append(context).append("/");
-        }
-        url.append(Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid)).append(Framework.MENU_PATH)
+//        if (context != null && !"".equals(context)) {
+//            url.append(context).append("/");
+//        }
+        String murl = StringUtil.getRealPath(context,Framework.getUrl(Framework.STATUS_CONTAINER_URL, sessionid),true);
+        url.append(murl).append(Framework.MENU_PATH)
             .append("=").append(StringUtil.encode(menu.getPath(), null)).append("&")
             .append(Framework.MENU_TYPE).append("=").append(Framework.STATUS_CONTAINER);
         // 外部参数，可以传递到各框架中,"external_params="

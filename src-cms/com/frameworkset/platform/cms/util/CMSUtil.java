@@ -69,6 +69,7 @@ import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
 import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.util.RegexUtil;
 import com.frameworkset.util.VelocityUtil;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
@@ -300,6 +301,19 @@ public class CMSUtil{
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	/**
+	 * 识别地址是否是外部地址
+	 * @param path
+	 * @param request
+	 * @return
+	 */
+	public static boolean isOtherDomain(String path,HttpServletRequest request)
+	{
+		String contextPath = request.getContextPath();
+		String domainpattern = "(http|https|ftp|tps)://([a-zA-Z0-9]+\\.)+[a-zA-Z0-9]+/?.*";//http://bbs.sany.com.cn/forums/show/23.page
+		return RegexUtil.isMatch(path,domainpattern) || path.startsWith(contextPath);
+		
 	}
 
 	/**

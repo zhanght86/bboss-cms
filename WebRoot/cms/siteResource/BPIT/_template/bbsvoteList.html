@@ -6,10 +6,13 @@
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <link href="css/foot2.css" rel="stylesheet" type="text/css" />
 <cms:distribute dir="images/no_data.jpg" />
+<cms:distribute dir="images/ctop.jpg" />
+<cms:distribute dir="images/cdown.jpg" />
 <cms:distribute dir="components/score/gifs" />
 <script type="text/javascript" src="js/nav.js"></script>
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
-<script type="text/javascript" src="js/bbscomment.js"></script>		
+<script type="text/javascript" src="js/bbscomment.js"></script>	
+<script type="text/javascript" src="js/until.js"></script>			
 <script type="text/javascript">
 
 	var commentlisturl = "<cms:siteparam name="appcontext"/>/vote/getTitleNList.freepage?jsonp_callback=?";		
@@ -46,7 +49,11 @@
 	 });
 	var votedetailurl = "<cms:siteparam name="appcontext"/>/vote/getSurveyBy.freepage?jsonp_callback=?";		
 	function getbbsvoteDetail(titleId){
+		$(".vote_1").hide();
 		  showbbsvoteDetail(votedetailurl,'<cms:siteinfo property="siteId"/>','employeebbs',titleId,'<cms:uri link="components/score/gifs/rb_{0}.gif"/>');
+		$("#vote_"+titleId).show();
+		$(".c_1").attr("src","../images/cdown.jpg");
+		$("#c_"+titleId).attr("src","../images/ctop.jpg");
 	}
 	var dovoteurl= "<cms:siteparam name="appcontext"/>/vote/doVote.freepage?jsonp_callback=?";
 function doVote(titleId,len){
@@ -101,6 +108,12 @@ function doVote(titleId,len){
 					);
 		
 		}
+	var freeAnswersurl=	"<cms:siteparam name="appcontext"/>/vote/showVoteFreeAnswersList.freepage?";
+	var pagesize=10;
+	function openFreeAnswersPage(questionId){
+		var siteId = '<cms:siteinfo property="siteId"/>';
+		window.open(freeAnswersurl+"siteId="+siteId+"&questionID="+questionId+"&pagesize="+pagesize);
+	}	
 </script>
 </head>
 <body>
@@ -114,7 +127,7 @@ function doVote(titleId,len){
     <div class="clear"></div>
   </div>
   <div class="container">
-   
+   <!--
      
    	    <div class="titleMenu">
    	      <div class="path"><cms:position/></div><span class="title"><cms:channel property="name"/> </span></div>
@@ -127,18 +140,18 @@ function doVote(titleId,len){
           </div>
           
         </div>
-         
-         
+        
            <div class="vote">
      
        <div class="vote_title">我要投票</div>
      
       </div>
+		-->	 
 	  <div class="vote">
 	      <div class="vote_list" id="vote_list">
 	          <ul>
 	      
-	            </ul> 
+	           </ul> 
 	       </div>  
 		</div>	  
     </div>

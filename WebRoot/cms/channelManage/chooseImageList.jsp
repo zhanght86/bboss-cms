@@ -32,12 +32,22 @@
 	String fileName = request.getParameter("fileName");
 	fileName = fileName == null ? "" : fileName ;
 	
-	
+	String fileFlag = request.getParameter("fileFlag");
 	String uri = request.getParameter("uri");
-    uri = uri==null?"uploadfiles/"+(String)date.Time_YMD().substring(0,6)+"/":uri;
+	if(uri != null && !uri.endsWith("/")&&!uri.endsWith("\\")){
+		uri += "/";
+	}
+	if(fileFlag!=null && fileFlag.equals("1"))
+	{
+    	uri = uri==null?"/":uri;
+	}
+	else
+	{
+		uri = uri==null?"uploadfiles/"+(String)date.Time_YMD().substring(0,6)+"/":uri;
+	}
     uri = uri.replaceAll("\\\\","/");
 	//fileFlag为"1"表示首页文件的选择，为null或""表示为图片的选择
-	String fileFlag = request.getParameter("fileFlag");
+	
 	//fileFlag = fileFlag == null?"pic":fileFlag;//默认为选择图片
 	//图片浏览视图：list，列表；ppt，幻灯片；thumbnail，缩略图
 	//session设置来自点击视图切换的页面chooseImageTools.jsp
@@ -139,6 +149,7 @@ function high(ob,fileName){
 	}
 	ob.bgColor="#242464";
 	parent.ToolsFrm.selectedFileName=fileName;
+	
 }
 //用于幻灯片和缩略图模式
 function highOther(ob,fileName){

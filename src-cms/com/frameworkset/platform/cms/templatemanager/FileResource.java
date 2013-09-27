@@ -9,11 +9,13 @@ import com.frameworkset.platform.cms.container.Template;
  */
 public class FileResource implements java.io.Serializable {
 	private String uri;
+	private long size;
 	private String name;
 	private boolean isDirectory;
 	private boolean isTemplate;
 	private String templateId;
 	private Template template;
+	private Date modifyTime;
 	
 	
 	private boolean isLock;
@@ -164,5 +166,21 @@ public class FileResource implements java.io.Serializable {
 
 	public void setCheckoutUserName(String checkoutUserName) {
 		this.checkoutUserName = checkoutUserName;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public void setSize(long size) {
+		this.size = size;
+	}
+
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
 	}
 }

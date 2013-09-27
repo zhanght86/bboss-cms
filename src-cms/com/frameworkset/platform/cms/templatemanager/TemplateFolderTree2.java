@@ -3,17 +3,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.jsp.PageContext;
+
 import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.common.tag.tree.COMTree;
 import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class TemplateFolderTree2 extends COMTree implements java.io.Serializable{
 	private String rootPath;
 	private String siteId;
-
+	private String rooturi = "/uploadfiles";
 	
 	private void setRootPath()throws TemplateManagerException{
 		if(rootPath == null || rootPath.trim().length()==0||siteId==null||siteId.trim().length()==0){
@@ -56,51 +59,49 @@ public class TemplateFolderTree2 extends COMTree implements java.io.Serializable
 		//图片浏览视图：list，列表；ppt，幻灯片；thumbnail，缩略图
 		//String viewertype = request.getParameter("viewertype");
 		List fileresources = null;
-		if(father.isRoot())
-			father.setNodeLink("chooseImageList.jsp?fileFlag=" + request.getParameter("fileFlag"));   
+		String parentPath = "";
 		try {
 			this.setRootPath();
-			fileresources = (new FileManagerImpl()).getDirectoryResource(siteId,father.getId());
+			//添加顶级站点
+			
+				
+			parentPath = father.getId();
+			
+			if(father.isRoot())
+				father.setNodeLink("chooseImageList.jsp?fileFlag=" + request.getParameter("fileFlag") + "&uri="+ rooturi);
+			
+			
+			fileresources = (new FileManagerImpl()).getDirectoryResource(siteId,parentPath);
 		} catch (TemplateManagerException e) {
 			e.printStackTrace();
 		}
 		
 		for(int i=0;fileresources!=null&&i<fileresources.size();i++){
 			FileResource fr = (FileResource)fileresources.get(i);
+			if(fr.isDirectory()){
+				Map params = new HashMap();
+				String uri = fr.getUri();
 			
-			if(father.isRoot()){
-				String name = fr.getName() ;
-				if("uploadfiles".equals(name)){
-					if(fr.isDirectory()){
-						Map params = new HashMap();
-						String uri = fr.getUri();
-						if(!uri.endsWith("/")&&!uri.endsWith("\\")){
-							uri += "/";
-						}
-						params.put("uri",uri);
-						//params.put("fileFlag",request.getParameter("fileFlag"));
-						//params.put("viewertype",viewertype);
-						addNode(father,uri,fr.getName(),"folder",
-								true, curLevel, (String)null,(String)null,(String)null,params);
-						
-					}
-				}
-			}else{
-				if(fr.isDirectory()){
-					Map params = new HashMap();
-					String uri = fr.getUri();
-					if(!uri.endsWith("/")&&!uri.endsWith("\\")){
-						uri += "/";
-					}
-					params.put("uri",uri);
-					//params.put("fileFlag",request.getParameter("fileFlag"));
-					//params.put("viewertype",viewertype);
-					addNode(father,uri,fr.getName(),"folder",
-							true, curLevel, (String)null,(String)null,(String)null,params);
-					
-				}
+				params.put("uri",uri);
+				addNode(father,uri,fr.getName(),"folder",
+						true, curLevel, (String)null,(String)null,(String)null,params);
+				
 			}
 		}
+		
 		return true;
+	}
+
+	@Override
+	public void setPageContext(PageContext pageContext) {
+		// TODO Auto-generated method stub
+		super.setPageContext(pageContext);
+		String fileFlag = request.getParameter("fileFlag");
+		if(fileFlag!=null && fileFlag.equals("1"))
+		{
+			
+			rooturi = "";
+		}
+		
 	}
 }

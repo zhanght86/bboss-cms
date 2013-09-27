@@ -27,7 +27,40 @@
 				  <pg:list autosort="false">
 				     	<li>
 				     		<pg:cell colName="docsource_name"/>：</span>
-				           	<a title='<pg:cell colName="title"/>' target='_blank' href='<pg:cell colName="docpuburl"/>' class='linkTagClass '><pg:cell colName="title"/></a>
+				     		<pg:notequal colName="doctype" value="${DOCUMENT_AGGRATION}">
+				           	<a title='<pg:cell colName="title"/>' target='_blank' href='<pg:cell colName="docpuburl"/>' class='linkTagClass '>
+				           	<pg:equal colName='titlecolor' value='#000000'>
+				           		<pg:cell colName="title"/>
+				           	</pg:equal>
+				           	<pg:notequal colName='titlecolor' value='#000000'>
+				           		<font color="<pg:cell colName='titlecolor'/>"><pg:cell colName="title"/></font>
+				           	</pg:notequal>
+				           	<pg:equal colName="isNew" value="1">
+				           		<pg:notequal colName="newPicPath" value="">
+				           			<img border="0" src="<pg:sitedomain/>/<pg:cell colName='newPicPath'/>"/>
+				           		</pg:notequal>
+				           	</pg:equal>
+				           	</a>
+				           	</pg:notequal>
+				           	<pg:equal colName="doctype" value="${DOCUMENT_AGGRATION}">
+				           		<Strong><pg:cell colName="title"/>:</Strong>
+				     			<pg:list colName="compositeDocs" >
+				     			  <a title='<pg:cell colName="title"/>' target='_blank' href='<pg:cell colName="docpuburl"/>' class='linkTagClass '>
+						           	<pg:equal colName='titlecolor' value='#000000'>
+						           		<pg:cell colName="title"/>
+						           	</pg:equal>
+						           	<pg:notequal colName='titlecolor' value='#000000'>
+						           		<font color="<pg:cell colName='titlecolor'/>"><pg:cell colName="title"/></font>
+						           	</pg:notequal>
+						           	<pg:equal colName="isNew" value="1">
+						           		<pg:notequal colName="newPicPath" value="">
+						           			<img border="0" src="<pg:sitedomain/>/<pg:cell colName='newPicPath'/>"/>
+						           		</pg:notequal>
+						           	</pg:equal>
+						           	</a>
+				     			</pg:list>
+				     		</pg:equal>
+				     		
 				       		<pg:cell colName="docwtime" dateformat="yyyy-MM-dd"/>
 				       </li>
 				 </pg:list>

@@ -9,22 +9,24 @@ function showcomment(url,docId,n)
              		var comm = "<div class=\"comment_title\">";
              		comm = comm + "<div class=\"comment_num\"><a href=\"#\">已有<span class=\"red_num\">";
              		comm = comm +data.total
-             		comm = comm +"</span></a>条评论</div>视频评论</div>";
+             		comm = comm +"</span></a>条评论</div>评论</div>";
              		comm = comm +"<ul class=\"comment_content\">";
              		try
              		{
 	             		if(data.comments)
 	             		{
 		             		for (var i=0; i<data.comments.length; i++) {
-			             		comm = comm +"<li>";
+		             			comm = comm +"<li>";
 			             		comm = comm +"<div class=\"comment_user\">";
-			             		comm = comm +data.comments[i].userName
+			             		if(data.comments[i].userName=="__quest"){
+			             			comm = comm + "匿名用户";
+			             		}else{
+			             			comm = comm +data.comments[i].userName;
+			             		}
+			             		comm = comm +"<br/> "+data.comments[i].str_subTime.substring(0,16);
 			             		comm = comm +"</div>";
 			             		comm = comm +"<div class=\"comment\">";
-			             		comm = comm +data.comments[i].docComment
-			             		comm = comm +"<div class=\"comment_date\" >";
-			             		comm = comm +data.comments[i].str_subTime
-			             		comm = comm +"</div>";
+			             		comm = comm +data.comments[i].docComment;
 			             		comm = comm +"<div class=\"operation\"><a href=\"javascript:void(0)\" onclick=\"document.getElementById('docComment').focus()\">评论</a></div>";			             		
 			             		comm = comm +"</div>"
 			             		comm = comm +"</li>";

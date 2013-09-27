@@ -99,6 +99,7 @@ function RadioClick(what){
 			d_checkfromfile.checked=false;
 			d_fromlocal.disabled=false;
 			d_fromurl.disabled=true;
+			d_fromurlbutton.disabled=true;
 			d_checkfromlocal.checked=true;
 			d_file.myform.uploadfile.disabled=true;
 			d_fromlocalbutton.disabled=false;
@@ -106,6 +107,7 @@ function RadioClick(what){
 			d_checkfromfile.checked=false;
 			d_checkfromlocal.checked=false;
 			d_fromurl.disabled=false;
+			d_fromurlbutton.disabled=false;
 			d_checkfromurl.checked=true;
 			d_file.myform.uploadfile.disabled=true;
 			d_fromlocal.disabled=true;
@@ -116,6 +118,7 @@ function RadioClick(what){
 			d_file.myform.uploadfile.disabled=false;
 			d_checkfromfile.checked=true;
 			d_fromurl.disabled=true;
+			d_fromurlbutton.disabled=true;
 			d_fromlocal.disabled=true;
 			d_fromlocalbutton.disabled=true;
 		}
@@ -148,6 +151,7 @@ function UploadSaved(sFileName,width,height){
 
 // 本窗口返回值
 function ReturnValue(type){
+	
 	sFromUrl = d_fromurl.value;
 	if(type == "local")
 	{
@@ -156,6 +160,11 @@ function ReturnValue(type){
 		var sitedir = parent.dialogArguments.document.all("cusdir").value;
 		sFromUrl = sURL + "cms/siteResource/" + sitedir.substring(0,sitedir.indexOf("/")) + "/_webprj/" + d_fromlocal.value;
 	}
+	else if(type == 'url')
+	{
+		
+	}
+	
 	sAlt = d_alt.value;
 	sBorder = d_border.value;
 	sBorderColor = d_bordercolor.value;
@@ -167,6 +176,7 @@ function ReturnValue(type){
 	sHSpace = d_hspace.value;
 
 	if (sAction == "MODI") {
+		
 		oControl.src = sFromUrl;
 		oControl.alt = sAlt;
 		oControl.border = sBorder;
@@ -178,44 +188,108 @@ function ReturnValue(type){
 		oControl.vspace = sVSpace;
 		oControl.hspace = sHSpace;
 	}else{
+		
 		var sHTML = '';
-		if (sFilter!=""){
-			sHTML=sHTML+'filter:"'+sFilter+';';
+		if(!type || type == "local")
+		{
+			if (sFilter!=""){
+				sHTML=sHTML+'filter:"'+sFilter+';';
+			}
+			if (sBorderColor!=""){
+				sHTML=sHTML+'border-color:"'+sBorderColor+';';
+			}
+			if (sHTML!=""){
+				sHTML=' style="'+sHTML+'"';
+			}
+			//modify by ge.tao
+			//date 2007-08-04
+			
+			if(document.all("isZoom")){
+				if(document.all("isZoom").checked==true){
+					
+					var jsStr = "var zoom=parseInt(this.style.zoom, 10)||100; zoom+=event.wheelDelta/12;  if (zoom>0) this.style.zoom=zoom+'%'; return false;"
+					sHTML = '<img style="cursor:hand" onmousewheel="'+jsStr+'" name=imgs src="'+sFromUrl+'"';
+				}
+				else
+				{
+					sHTML = '<img '+sHTML+'  name=imgs src="'+sFromUrl+'"';
+				}
+					
+			}	
+			else
+			{
+				sHTML = '<img '+sHTML+'  name=imgs src="'+sFromUrl+'"';	
+			}	
+			if (sAlt!=""){
+				sHTML=sHTML+' alt"'+sAlt+'"';
+			}
+			if (sAlign!=""){
+				sHTML=sHTML+' align="'+sAlign+'"';
+			}
+			if (sWidth!=""){
+				sHTML=sHTML+' width="'+sWidth+'"';
+			}
+			if (sHeight!=""){
+				sHTML=sHTML+' height="'+sHeight+'"';
+			}
+			if (sVSpace!=""){
+				sHTML=sHTML+' vspace="'+sVSpace+'"';
+			}
+			if (sHSpace!=""){
+				sHTML=sHTML+' hspace="'+sHSpace+'"';
+			}
+			sHTML=sHTML+'>';
 		}
-		if (sBorderColor!=""){
-			sHTML=sHTML+'border-color:"'+sBorderColor+';';
+		else
+		{
+			if (sFilter!=""){
+				sHTML=sHTML+'filter:"'+sFilter+';';
+			}
+			if (sBorderColor!=""){
+				sHTML=sHTML+'border-color:"'+sBorderColor+';';
+			}
+			if (sHTML!=""){
+				sHTML=' style="'+sHTML+'"';
+			}
+			//modify by ge.tao
+			//date 2007-08-04
+			if(document.all("isZoom")){
+				if(document.all("isZoom").checked==true){
+					
+					var jsStr = "var zoom=parseInt(this.style.zoom, 10)||100; zoom+=event.wheelDelta/12;  if (zoom>0) this.style.zoom=zoom+'%'; return false;"
+					sHTML = '[cimage style="cursor:hand" onmousewheel="'+jsStr+'" name=imgs src="'+sFromUrl+'"';
+				}
+				else
+				{
+					sHTML = '[cimage '+sHTML+'  src="'+sFromUrl+'"';
+				}
+					
+			}	
+			else
+			{
+				sHTML = '[cimage '+sHTML+'  src="'+sFromUrl+'"';	
+			}		
+			if (sAlt!=""){
+				sHTML=sHTML+' alt"'+sAlt+'"';
+			}
+			if (sAlign!=""){
+				sHTML=sHTML+' align="'+sAlign+'"';
+			}
+			if (sWidth!=""){
+				sHTML=sHTML+' width="'+sWidth+'"';
+			}
+			if (sHeight!=""){
+				sHTML=sHTML+' height="'+sHeight+'"';
+			}
+			if (sVSpace!=""){
+				sHTML=sHTML+' vspace="'+sVSpace+'"';
+			}
+			if (sHSpace!=""){
+				sHTML=sHTML+' hspace="'+sHSpace+'"';
+			}
+			sHTML=sHTML+'][/cimage]';
+
 		}
-		if (sHTML!=""){
-			sHTML=' style="'+sHTML+'"';
-		}
-		//modify by ge.tao
-		//date 2007-08-04
-		sHTML = '<img style="cursor:hand"  name=imgs src="'+sFromUrl+'"';
-		if(document.all("isZoom")){
-		    if(document.all("isZoom").checked==true){
-		        var jsStr = "var zoom=parseInt(this.style.zoom, 10)||100; zoom+=event.wheelDelta/12;  if (zoom>0) this.style.zoom=zoom+'%'; return false;"
-		        sHTML = '<img style="cursor:hand" onmousewheel="'+jsStr+'" name=imgs src="'+sFromUrl+'"';
-		    }
-		}		
-		if (sAlt!=""){
-			sHTML=sHTML+' alt"'+sAlt+'"';
-		}
-		if (sAlign!=""){
-			sHTML=sHTML+' align="'+sAlign+'"';
-		}
-		if (sWidth!=""){
-			sHTML=sHTML+' width="'+sWidth+'"';
-		}
-		if (sHeight!=""){
-			sHTML=sHTML+' height="'+sHeight+'"';
-		}
-		if (sVSpace!=""){
-			sHTML=sHTML+' vspace="'+sVSpace+'"';
-		}
-		if (sHSpace!=""){
-			sHTML=sHTML+' hspace="'+sHSpace+'"';
-		}
-		sHTML=sHTML+'>';
 		dialogArguments.insertHTML(sHTML);
 		//alert(dialogArguments.parent.document.all("ss").value);
 		//dialogArguments.parent.document.all("pics").value += sFromUrl + "№";
@@ -315,6 +389,7 @@ function DisableItems(){
 	d_checkfromfile.disabled=true;
 	d_checkfromurl.disabled=true;
 	d_fromurl.disabled=true;
+	d_fromurlbutton.disabled=true;
 	d_alt.disabled=true;
 	d_border.disabled=true;
 	d_bordercolor.disabled=true;
@@ -332,6 +407,7 @@ function AbleItems(){
 	d_checkfromfile.disabled=false;
 	d_checkfromurl.disabled=false;
 	d_fromurl.disabled=false;
+	d_fromurlbutton.disabled=false;
 	d_alt.disabled=false;
 	d_border.disabled=false;
 	d_bordercolor.disabled=false;
@@ -345,16 +421,34 @@ function AbleItems(){
 }
 var iswaterpic = "";
 function setImage(uri){
+	
 	if(iswaterpic == "")
-		document.all("d_fromlocal").value = uri;
+	{
+		if(choosetype == 1)
+			document.all("d_fromlocal").value = uri;
+		else
+			document.all("d_fromurl").value = uri;
+	}
 	if(iswaterpic == "waterimage")
 		document.all("waterimage").value = uri;
 }
 //选择服务器已有图片
-function xuanze()
+var choosetype = 1; 
+function xuanze(type)
 {
+	
 	iswaterpic = "";
-	openWin("../../../channelManage/chooseWebprjImageFrameset.jsp?fileFlag=pic",700,580);
+	if(type == 1)
+	{	
+		choosetype = 1; 
+		openWin("../../../channelManage/chooseWebprjImageFrameset.jsp?fileFlag=pic",700,580);
+	}
+	else
+	{
+		choosetype = 2; 
+		openWin("../../../channelManage/chooseImageFrameset.jsp?fileFlag=pic",700,580);
+	}
+	
 }
 //
 function xuanzeWatepic()
@@ -390,7 +484,7 @@ function xuanzeWatepic()
 		<td width=7></td>
 		<td width=54 align=right onclick="RadioClick('url')"><input type=radio id="d_checkfromurl" value="1" onclick="RadioClick('url')">网络:</td>
 		<td width=5></td>
-		<td colspan=5><input type=text id="d_fromurl" style="width:243px" size=30 value=""></td>
+		<td colspan=5><input type=text id="d_fromurl" style="width:243px" size=30 value=""><input type=button id="d_fromurlbutton" onclick="xuanze(2)" value="选择" disabled="true"/></td>
 		<td width=7></td>
 	</tr>
 	<tr><td colspan=9 height=5></td></tr>
@@ -400,7 +494,7 @@ function xuanzeWatepic()
 		<td width=5></td>
 		<td colspan=5>
 		<input type=text id="d_fromlocal" style="width:188px" readonly size=30 value="">
-		<input type=button id="d_fromlocalbutton" onclick="xuanze()" value="选择" disabled="true"/>
+		<input type=button id="d_fromlocalbutton" onclick="xuanze(1)" value="选择" disabled="true"/>
 		</td>
 		<td width=7></td>
 	</tr>

@@ -89,6 +89,7 @@ public class StyleScanner extends CompositeTagScanner
         if (null != content)
         {
             tag.setChildren (new NodeList (content));
+            System.out.println(content.getText());
             content.setParent (tag);
         }
         node.setParent (tag);

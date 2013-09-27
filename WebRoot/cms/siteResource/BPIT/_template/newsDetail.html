@@ -6,27 +6,30 @@
 <link href="css/main.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="js/nav.js"></script>
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/comment.js"></script>
+<script language=javascript src="components/flash/flash.js" type="text/javascript"></script>
+<script type="text/javascript" src="components/flash/swfobject.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
- 
- 		var siteId = '<cms:siteinfo property="siteId"/>';
-		var channelId = '<cms:channel  property="channelId" />';
-		var docId = '<cms:cell colName="document_id"/>';
- 		var pageURL = window.location.href;
 
-		var siteName = '<cms:siteinfo property="name"/>';
- 		var channelName = '<cms:channel property="name"/>';
-		var docName = '<cms:cell colName="title"/>';
+var commentlisturl = "<cms:siteparam name="appcontext"/>/comment/getDocumentCommentNList.freepage?jsonp_callback=?";
+var n = 5;
+var commentposturl =  '<cms:siteparam name="appcontext"/>/comment/addNewComment.freepage?jsonp_callback=?';
+var siteId = '<cms:siteinfo property="siteId"/>';
+var channelId = '<cms:channel  property="channelId" />';
+var docId = '<cms:cell colName="document_id"/>';
+var siteName = '<cms:siteinfo property="name"/>';
+var channelName = '<cms:channel property="name"/>';
+var docName = '<cms:cell colName="title"/>';
+			
+$(document).ready(function() {
+ 		var pageURL = window.location.href;
  		var docrefer = document.referrer;
- 
 		var url =  '<cms:siteparam name="staticcontext"/>/counter/browserCounter.freepage?jsonp_callback=?';
-		
 		$.getJSON(url, { siteId:siteId, channelId:channelId, docId:docId, pageURL:pageURL,referer:docrefer, siteName:encodeURIComponent(siteName), 
 		channelName:encodeURIComponent(channelName), docName:encodeURIComponent(docName) },
             function(data) {   
                  
             });
-	
 	   var videourl =  '<cms:siteparam name="staticcontext"/>/counter/videoHitsCount.freepage?jsonp_callback=?';
 
 			$.getJSON(videourl, { siteId:siteId, siteName:encodeURIComponent(siteName), channelId:channelId, channelName:encodeURIComponent(channelName), docId:docId, docName:encodeURIComponent(docName), videoPath:pageURL, enable:true },
@@ -35,7 +38,7 @@ $(document).ready(function() {
             	//$("#playedCount").empty(); 
              	//	$("#playedCount").append(data); 
             });
-		
+		showcomment(commentlisturl,docId,n);
 	 });
 </script>
 
@@ -64,7 +67,38 @@ $(document).ready(function() {
             </div>
         </div>
    	    <br clear="left"/>
+		
+		<div class="comment_box" >
+		<div id="comments"></div>
+
+       <div class="page" style="margin-left:0px;">
+         <div align="center"><a target="_blank" href="<cms:siteparam name="appcontext"/>/comment/showAllComments.freepage?siteId=<cms:siteinfo property="siteId"/>&channelId=<cms:channel property="channelId"/>&docId=<cms:cell colName="document_id"/>">查看所有评论</a></div>
+       </div>
+        <div class="comment_1">
+          <div class="comment_title1">我要评论</div>
+          <table width="100%" border="0" cellspacing="3" cellpadding="0">
+            <tr>
+              <td width="12%"><div align="right">用户名：</div></td>
+              <td width="88%"><input id="commentUser" class="input1" type="text" name="commentUser" />
+                <input id="isGuest" type="checkbox" checked="checked" value="true" name="isGuest" />
+                匿名</td>
+            </tr>
+            <tr>
+              <td valign="top"><div align="right">评论内容：</div></td>
+              <td><textarea name="docComment" id="docComment" class="textarea1"></textarea></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td class="bt_position"><a class="bt_1" onclick="sub(commentposturl,docId,channelId,commentlisturl,n)" href="javascript:void(0)"><span>评论</span></a></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <br clear="all" />
+		  
     </div>
+	  
+	      
   </div>
 </div>   
   <div class="footer">

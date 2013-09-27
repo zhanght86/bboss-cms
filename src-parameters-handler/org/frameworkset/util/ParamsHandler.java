@@ -16,16 +16,12 @@
 
 package org.frameworkset.util;
 
-import java.beans.BeanInfo;
-import java.beans.Introspector;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyDescriptor;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,6 +40,8 @@ import org.frameworkset.spi.BaseSPIManager;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
 import org.frameworkset.spi.assemble.ProMap;
+import org.frameworkset.util.ClassUtil.ClassInfo;
+import org.frameworkset.util.ClassUtil.PropertieDescription;
 import org.frameworkset.util.beans.PropertyAccessException;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -598,12 +596,11 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		if(params == null)
 			return null;
 		
-		BeanInfo beanInfo = null;
+		ClassInfo beanInfo = null;
 		try {
-			beanInfo = Introspector.getBeanInfo(dataBean);
+			beanInfo = ClassUtil.getClassInfo(dataBean);
 		} catch (Exception e) {
-			throw new PropertyAccessException(new PropertyChangeEvent(dataBean, "",
-				     null, null),"获取bean 信息失败",e);
+			throw new PropertyAccessException( "获取bean ["+dataBean.getName()+"]信息失败",e);
 		}
 		
 		String name = null;
@@ -618,23 +615,20 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		} catch (IllegalAccessException e1) {
 			throw new RuntimeException("参数转对象错误,实例化对象失败 ",e1);
 		}
-		PropertyDescriptor[] attributes = beanInfo.getPropertyDescriptors();
-		for(PropertyDescriptor property:attributes)
+		List<PropertieDescription> attributes = beanInfo.getPropertyDescriptors();
+		for(PropertieDescription property:attributes)
 		{
 			if(property.getName().equals("class"))
 				continue;
-			type = property.getPropertyType();
+			
 			try {
 				name = property.getName();
-				type = property.getPropertyType();
-				Method writeMethod = property.getWriteMethod();
-				if(writeMethod == null)
-					continue;
 				
+				type = property.getPropertyType();
 				value =  params.getAttributeObject(name);
 				value = ValueObjectUtil.typeCast(value, type);
+				property.setValue(obj, value);
 				
-				writeMethod.invoke(obj, value);
 				
 			} catch (SecurityException e) {
 				log.error("参数转对象属性设置失败:bean class["+ dataBean.getCanonicalName() +"],param info["+ params.getMetaString()+ "]",e );

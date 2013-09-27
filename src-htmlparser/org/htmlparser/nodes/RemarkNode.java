@@ -127,7 +127,16 @@ public class RemarkNode
         String ret;
         
         if (null == mText)
-            ret = mPage.getText (getStartPosition (), getEndPosition ());
+        {
+        	if(!this.isresource)
+        		ret = mPage.getText (getStartPosition (), getEndPosition ());
+        	else
+        	{
+        		buffer = new StringBuffer();
+        		buffer.append("<").append(mPage.getText (getStartPosition ()+1, getEndPosition () -1)).append(">");
+        		ret = buffer.toString();
+        	}
+        }
         else
         {
             buffer = new StringBuffer (mText.length () + 7);

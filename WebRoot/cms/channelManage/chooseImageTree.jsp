@@ -18,9 +18,11 @@
 	//图片浏览视图：list，列表；ppt，幻灯片；thumbnail，缩略图
 	//String viewertype = request.getParameter("viewertype");
 	String rootName = "选择图片";
+	String rootid = "/uploadfiles";
 	if(fileFlag!=null && fileFlag.equals("1"))
 	{
 		rootName = "选择首页文件";
+		rootid = "/";
 	}
 	if(fileFlag!=null && fileFlag.equals("media"))
 	{
@@ -69,22 +71,22 @@ body {
 						<tree:tree tree="filesystem_tree"
 						node="filesystem_tree.node"
 						imageFolder="/cms/images/tree_images/"
-						collapse="false"
+						collapse="true"
 						includeRootNode="true"
 						href="<%=urlstr%>"
 						target="ImageListFrm" 
-						dynamic="false"> 
+						mode="static-dynamic"> 
 						
 						<tree:param name="fileFlag"/>
 
 							<tree:treedata treetype="TemplateFolderTree2"
 								scope="request"
-								rootid="/"  
+								rootid="<%=rootid %>"  
 								rootName="<%=rootName%>"
 								expandLevel="1"
 								showRootHref="true"
 								needObserver="false"
-								enablecontextmenu="true"
+								enablecontextmenu="false"
 								/>      
 						</tree:tree>
 					</td>	

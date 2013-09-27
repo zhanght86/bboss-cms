@@ -302,4 +302,7 @@ public interface Node
     Object clone ()
         throws
             CloneNotSupportedException;
+    boolean isResource();
+    void setResource(boolean isresource);
+    
 }

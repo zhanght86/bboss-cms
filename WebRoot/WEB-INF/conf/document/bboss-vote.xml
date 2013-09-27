@@ -1,6 +1,7 @@
 <properties>
 	
 	<property name="/vote/*.freepage" class="com.frameworkset.platform.cms.votemanager.VoteController" singlable="true"
+		path:showVoteFreeAnswersList="/cms/voteManager/showVoteFreeAnswersList.jsp"
 		/>
 		<!--
 	<property name="voteManager"

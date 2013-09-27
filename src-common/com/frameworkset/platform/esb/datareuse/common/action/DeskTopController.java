@@ -179,7 +179,7 @@ public class DeskTopController {
 					String url = contextPath+"/sanydesktop/index.page?sany_menupath="+item.getPath() + "&sanyselectedmodule="+parserID(item.getPath());
 					mb.setPathU(url);
 				}
-				mb.setImageUrl(StringUtil.getRealPath(contextPath, item.getMouseclickimg(request)));
+				mb.setImageUrl(StringUtil.getRealPath(contextPath, item.getMouseclickimg(request),true));
 				//判断表里面是否有自定义窗口大小数据，如果有就取该数据，如果无，就使用默认的数据
 				mb.setDesktop_width((deskTopMenuBean.getWidth()!= null&&!deskTopMenuBean.getWidth().equals(""))? deskTopMenuBean.getWidth():item.getDesktop_width());
 				mb.setDesktop_height((deskTopMenuBean.getHeight() != null&&!deskTopMenuBean.getHeight().equals(""))? deskTopMenuBean.getHeight():item.getDesktop_height());

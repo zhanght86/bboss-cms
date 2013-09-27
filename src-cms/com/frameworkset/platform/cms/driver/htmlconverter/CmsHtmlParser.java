@@ -18,9 +18,11 @@ import org.htmlparser.Text;
 import org.htmlparser.lexer.JspTagAware;
 import org.htmlparser.lexer.Lexer;
 import org.htmlparser.lexer.Page;
+import org.htmlparser.nodes.RemarkNode;
 import org.htmlparser.tags.BaseHrefTag;
 import org.htmlparser.tags.Div;
 import org.htmlparser.tags.LinkTag;
+import org.htmlparser.tags.ResourceTag;
 import org.htmlparser.tags.ScriptTag;
 import org.htmlparser.tags.StyleTag;
 import org.htmlparser.util.ParserException;
@@ -187,9 +189,38 @@ public class CmsHtmlParser extends NodeVisitor implements I_CmsHtmlNodeVisitor,J
 
         StringBuffer result = new StringBuffer(32);
         String text = tag.getText();
-        result.append('<');
-        result.append(text);
-        result.append('>');
+        if(!tag.isResource())
+        {
+        	if(tag.isEndTag() && 
+        			(tag.getParent() != null 
+        			&& tag.getParent().isResource()))
+        	{
+		        result.append('[');
+		        result.append(text);
+		        result.append(']');
+        	}
+        	else
+        	{
+        		result.append('<');
+		        result.append(text);
+		        result.append('>');
+        	}
+        }
+        else 
+        {
+        	if(tag instanceof RemarkNode)
+        	{
+        		result.append('<');
+		        result.append(text);
+		        result.append('>');
+        	}
+        	else
+        	{	
+	        	result.append('[');
+		        result.append(text);
+		        result.append(']');
+        	}
+        }
         return result.toString();
     }
 
@@ -338,6 +369,15 @@ public class CmsHtmlParser extends NodeVisitor implements I_CmsHtmlNodeVisitor,J
         		StyleTag style = (StyleTag)text.getParent();
         		if(style.changed())
         			m_result.append(style.getStyleCode());
+        		else
+        			m_result.append(text.getText());
+        	}
+        	else if(text.getParent() instanceof ResourceTag)
+        	{
+        		
+        		ResourceTag style = (ResourceTag)text.getParent();
+        		if(style.isChanged())
+        			m_result.append(style.getResourceText());
         		else
         			m_result.append(text.getText());
         	}
