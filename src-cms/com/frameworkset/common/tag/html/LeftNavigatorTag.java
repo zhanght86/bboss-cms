@@ -5,13 +5,13 @@ import java.util.List;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
-import com.frameworkset.platform.cms.channelmanager.Channel;
-import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
 import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.channelmanager.Channel;
+import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
 
 public class LeftNavigatorTag extends CMSBaseTag{
 	private ChannelManagerImpl impl = new ChannelManagerImpl();

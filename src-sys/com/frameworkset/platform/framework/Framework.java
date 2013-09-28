@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager;
 import org.frameworkset.spi.support.MessageSource;
@@ -26,6 +24,9 @@ import org.frameworkset.spi.support.MessageSourceResolvable;
 import org.frameworkset.spi.support.NoSuchMessageException;
 import org.frameworkset.web.servlet.i18n.WebMessageSourceUtil;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
+
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
 
 import com.frameworkset.platform.framework.Item.ItemUrlStruction;
 import com.frameworkset.platform.framework.Item.Variable;
@@ -38,6 +39,7 @@ import com.frameworkset.util.FileUtil;
 import com.frameworkset.util.ResourceInitial;
 import com.frameworkset.util.StringUtil;
 import com.frameworkset.util.VelocityUtil;
+import com.frameworkset.velocity.BBossVelocityUtil;
 
 /**
  * <p>

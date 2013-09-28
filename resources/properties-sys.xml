@@ -10,7 +10,7 @@
 			    获取方法：
 			    String approot = ConfigManager.getInstance().getConfigValue("approot");
 				-->
-			<property name="approot" value="D:/workspace/SanyPDP/WebRoot" />
+			<property name="approot" value="D:/d/workspace/bboss-cms/WebRoot" />
 		
 			<!--
 				是否允许用户作为一种用户类型的角色，如果为true则将用户帐号作为用户固有的一种用户类型角色

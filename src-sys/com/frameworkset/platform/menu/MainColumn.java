@@ -12,11 +12,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
+
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;

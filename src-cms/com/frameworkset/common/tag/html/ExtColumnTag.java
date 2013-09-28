@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
-import com.frameworkset.platform.cms.documentmanager.DocumentExtColumnManager;
 import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.documentmanager.DocumentExtColumnManager;
 
 public class ExtColumnTag extends CMSBaseTag{
 	private DocumentExtColumnManager docUtil = new DocumentExtColumnManager();

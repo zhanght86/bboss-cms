@@ -1,16 +1,20 @@
 package com.frameworkset.common.tag.html;
 
 import java.io.IOException;
+
 import javax.servlet.jsp.JspException;
+
 import org.apache.ecs.html.A;
 import org.apache.ecs.html.IMG;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
+
+import com.frameworkset.common.tag.BaseCellTag;
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.BaseCellTag;
-import com.frameworkset.common.tag.CMSTagUtil; 
 
 /**
  * 图片新闻链接标签，针对主题图片的链接标签,如果是外部链接，直接输出外部链接和主题图片，如果是普通

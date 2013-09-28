@@ -29,10 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.Template;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.codehaus.swizzle.stream.StringTemplate;
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
@@ -40,6 +36,11 @@ import org.frameworkset.util.ParamsHandler.Params;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
 import org.safehaus.uuid.UUID;
 import org.safehaus.uuid.UUIDGenerator;
+
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelCacheManager;
@@ -2243,7 +2244,7 @@ public class CMSUtil{
 	 * @param vcontext
 	 */
 	public static String loadTemplate(String templateUrl,
-			org.apache.velocity.context.Context vcontext) {
+			bboss.org.apache.velocity.context.Context vcontext) {
 		StringWriter writer = new StringWriter();
 		Template template = VelocityUtil.getTemplate(templateUrl);
 		try {

@@ -9,12 +9,13 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.util.Date;
 
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.htmlparser.util.ParserException;
+
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
@@ -247,7 +248,7 @@ public class Scriptlet {
 	public void addJspHeader(Writer fileWriter)
 	{
 		Template template = VelocityUtil.getTemplate("publish/jsp_header.vm");
-		org.apache.velocity.context.Context vcontext = new VelocityContext();
+		bboss.org.apache.velocity.context.Context vcontext = new VelocityContext();
 		vcontext.put("mimetype",context.getMimeType());
 		vcontext.put("charset",context.getCharset());
 		try {
@@ -297,7 +298,7 @@ public class Scriptlet {
 												 String after)
 	{
 		Template template = VelocityUtil.getTemplate("publish/jsp_generator.vm");
-		org.apache.velocity.context.Context vcontext = this.buildVelocityContext( header,pre ,content,after);
+		bboss.org.apache.velocity.context.Context vcontext = this.buildVelocityContext( header,pre ,content,after);
 		try {
 			template.merge(vcontext,fileWriter);
 		} catch (ResourceNotFoundException e) {
@@ -883,9 +884,9 @@ lable1:			if(contentctx != null)
 	}
 	
 	
-	private org.apache.velocity.context.Context buildVelocityContext(String header,String pre,String content,String after)
+	private bboss.org.apache.velocity.context.Context buildVelocityContext(String header,String pre,String content,String after)
 	{
-		org.apache.velocity.context.Context vcontext = new VelocityContext();
+		bboss.org.apache.velocity.context.Context vcontext = new VelocityContext();
 		String endcoder = context.getSite().getEncoding();
 		
 		if(!(this.context instanceof PageContext))

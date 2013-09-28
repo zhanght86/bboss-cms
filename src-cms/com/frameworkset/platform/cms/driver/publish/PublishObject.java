@@ -15,12 +15,13 @@ import java.util.Set;
 import javax.servlet.RequestDispatcher;
 
 import org.apache.log4j.Logger;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.htmlparser.util.ParserException;
+
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
@@ -574,7 +575,7 @@ public abstract class PublishObject implements java.io.Serializable
 
 			Template template = VelocityUtil
 					.getTemplate("publish/html_generator.vm");
-			org.apache.velocity.context.Context vcontext = new VelocityContext();
+			bboss.org.apache.velocity.context.Context vcontext = new VelocityContext();
 			vcontext.put("htmlcontent", script.getContent());
 			template.merge(vcontext, fileWriter);
 			fileWriter.flush();

@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE></TITLE>
-<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
 <META content="MSHTML 6.00.2800.1522" name=GENERATOR></HEAD>
 <FRAMESET border=0 frameSpacing=0 rows="${navigator_container_rows}" frameBorder=0 name="navigator_container">
     <FRAME name=base_navigator_toolbar marginWidth=0 marginHeight=0 src="${base_navigator_toolbar_url}" frameBorder=0 noResize 

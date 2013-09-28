@@ -1,5 +1,5 @@
 <HTML><HEAD><TITLE></TITLE>
-<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META http-equiv=Content-Type content="text/html; charset=UTF-8">
 <SCRIPT language=Javascript>
 function refresh_content() {
      base_status_content.location.href='${base_status_content_url}';

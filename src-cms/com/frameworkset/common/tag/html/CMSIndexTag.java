@@ -1,7 +1,6 @@
 package com.frameworkset.common.tag.html;
 
 import java.io.File;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,12 +8,12 @@ import java.io.StringWriter;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
-import com.frameworkset.platform.cms.driver.context.PagineContext;
 import com.frameworkset.common.tag.CMSSupportTag;
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.driver.context.PagineContext;
 
 /**
  * 生成概览翻页和文档分页索引的标签
