@@ -13,7 +13,6 @@ import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.documentmanager.Attachment;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerException;
-import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.platform.cms.driver.config.DocumentStatus;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.BatchContext;
@@ -29,7 +28,9 @@ import com.frameworkset.platform.cms.driver.distribute.DistributeException;
 import com.frameworkset.platform.cms.driver.distribute.IndexObject;
 import com.frameworkset.platform.cms.driver.htmlconverter.CMSTemplateLinkTable;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.CMSLink;
+import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.LinkTimestamp;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkTable;
+import com.frameworkset.platform.cms.driver.htmlconverter.LinkCache;
 import com.frameworkset.platform.cms.driver.publish.PublishObject;
 import com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor;
 import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
@@ -454,6 +455,7 @@ public class HTMLDistribute extends Distribute  {
 		/**
 		 * 分发模板附件,发布过程当中通过接口或者标签记录的模板链接，静态的链接
 		 */		
+		LinkCache linkCache = CMSUtil.getLinkCache(context.getSite().getSecondName());
 		CmsLinkTable linkTable = null;
 		if(context.getTemplateLinkTable() != null)
 			linkTable = context.getTemplateLinkTable().getTemplateLinkTable();
@@ -485,9 +487,14 @@ public class HTMLDistribute extends Distribute  {
 								/**
 								 * 这里判断缓存没有任何意义，因为动态记录的文件没有进行缓存处理，暂时注销
 								 */
-								/**
+								
 								long lastModified = source.lastModified();
-								boolean isModified = link.isModified(lastModified);
+								LinkTimestamp linkTimestamp = linkCache.cachTemplateLink(link, lastModified);
+								boolean isModified = true;
+								if(linkTimestamp != null )
+								{
+									isModified = linkTimestamp.isModified(lastModified);
+								}
 								if(!isModified ) //如果文件没有修改过
 								{
 									if(!context.forcepublishLinks(link))
@@ -495,19 +502,30 @@ public class HTMLDistribute extends Distribute  {
 										continue;
 									}
 								}
-								**/
+								
 								destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath() + "/" + context.getSiteDir() ,link.getRelativeFilePath());
+								try {
+									FileUtil.copy(sourcepath, destinction);
+									if(isModified )
+									{
+										if(linkTimestamp != null)
+											linkTimestamp.setLastModifiedTime(lastModified);
+									}
+								} catch (IOException e) {
+									context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
+								}
 							}
 							else
 							{
 								destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),
 										   link.getRelativeFilePath());
+								try {
+									FileUtil.copy(sourcepath, destinction);
+								} catch (IOException e) {
+									context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
+								}
 							}
-							try {
-								FileUtil.copy(sourcepath, destinction);
-							} catch (IOException e) {
-								context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
-							}
+							
 						default:
 							break;
 					}
@@ -542,28 +560,45 @@ public class HTMLDistribute extends Distribute  {
 						/**
 						 * 这里判断缓存没有任何意义，因为动态内容中引用的文件没有进行缓存处理，暂时注销
 						 */
-						/**
+						
 						long lastModified = source.lastModified();
-						boolean isModified = link.isModified(lastModified);
+						LinkTimestamp linkTimestamp = linkCache.cachContentLink(link, lastModified);
+						boolean isModified = true;
+						if(linkTimestamp != null )
+						{
+							isModified = linkTimestamp.isModified(lastModified);
+						}
 						if(!isModified ) //如果文件没有修改过
 						{
 							if(!context.forcepublishLinks(link))
 							{
 								continue;
 							}
-						}*/
+						}
 						destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath()  + "/" + context.getSiteDir() ,link.getRelativeFilePath());
+						try {
+							FileUtil.copy(sourcepath, destinction);
+							if(isModified )
+							{
+								if(linkTimestamp != null)
+									linkTimestamp.setLastModifiedTime(lastModified);
+							}
+						} catch (IOException e) {
+							context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
+							
+						}
 					}
 					else
 					{
 						destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),link.getRelativeFilePath());
+						try {
+							FileUtil.copy(sourcepath, destinction);
+						} catch (IOException e) {
+							context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
+							
+						}
 					}
-					try {
-						FileUtil.copy(sourcepath, destinction);
-					} catch (IOException e) {
-						context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
-						
-					}
+					
 				}
 			}
 		}

@@ -63,6 +63,7 @@ import com.frameworkset.platform.cms.driver.dataloader.CMSDataLoaderManager;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.CMSLink;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsTagLinkProcessor;
+import com.frameworkset.platform.cms.driver.htmlconverter.LinkCache;
 import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 import com.frameworkset.platform.cms.driver.publish.PublishEngine;
 import com.frameworkset.platform.cms.driver.publish.PublishMode;
@@ -619,6 +620,11 @@ public class CMSUtil{
 			return parent + "/" + subpath;
 		}
 		//		return parent + subpath;
+	}
+	
+	public static LinkCache getLinkCache(String siteName)
+	{
+		return SiteCacheManager.getInstance().getSiteLinkCache(siteName);
 	}
 
 	/**

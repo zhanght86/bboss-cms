@@ -3220,7 +3220,48 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 * 内容管理系统
 	 */
 	public static final String cmstag_pattern = "<cms:[^/^>]+/?>.*";
+	/**
+	 * 记录文件的最后修改时间，用来识别文件是否需要发布
+	 * @author yinbp
+	 *
+	 */
+	public static class LinkTimestamp
+	{
+		private String filepath;
+		private long lastmodifiedTime = -1;
+		public LinkTimestamp(String filepath,long lastmodifiedTime)
+		{
+			this.filepath = filepath;
+			this.lastmodifiedTime = lastmodifiedTime;
+		}
+		public synchronized boolean isModified(long time)
+		{
+			if(this.lastmodifiedTime != time)
+			{
+				
+				return true;
+			}
+			return false;
+		}
+		
+		public synchronized boolean setLastModifiedTime(long time)
+		{
+			if(this.lastmodifiedTime < time)
+			{
+				this.lastmodifiedTime = time;
+				return true;
+			}
+			return false;
+		}
 
+		public String getFilepath() {
+			return filepath;
+		}
+
+		
+
+		
+	}
 	/**
 	 * 内容管理link信息
 	 * 

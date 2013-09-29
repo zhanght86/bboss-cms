@@ -45,7 +45,7 @@ public class CMSLinkTag extends BaseCellTag {
 	 */
 	private String link;
 	private String target;
-	private boolean setcolor = false;
+	private boolean setcolor = true;
 	/**
 	 * 定义样式
 	 */ 
@@ -98,8 +98,11 @@ public class CMSLinkTag extends BaseCellTag {
 					if(this.isSetcolor())
 					{
 						String color = this.dataSet.getString("titlecolor");
-						if(color != null)
+						
+						if(color != null && !color.equals("#000000"))
 						{
+							if(color.startsWith("#FF"))
+								System.out.println();
 							Font font = new Font();
 							font.setColor(color);
 							font.setTagText(outStr);
@@ -406,7 +409,7 @@ public class CMSLinkTag extends BaseCellTag {
 	public int doEndTag() throws JspException {
 		link = null;
 		target = null;
-		setcolor = false;
+		setcolor = true;
 		 
 		style = null;
 		classname = null;

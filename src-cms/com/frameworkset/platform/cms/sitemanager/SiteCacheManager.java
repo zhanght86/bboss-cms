@@ -12,6 +12,7 @@ import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 
 import com.frameworkset.platform.cms.channelmanager.ChannelCacheManager;
+import com.frameworkset.platform.cms.driver.htmlconverter.LinkCache;
 import com.frameworkset.platform.cms.event.CMSEventType;
 
 
@@ -22,6 +23,8 @@ import com.frameworkset.platform.cms.event.CMSEventType;
  * 
  */
 public class SiteCacheManager implements Listener {
+	private Map<String,LinkCache> siteLinkCache = new HashMap<String,LinkCache>();
+	
 	/** 站点缓冲器 */
 	Map siteMap;
 	
@@ -84,6 +87,22 @@ public class SiteCacheManager implements Listener {
 		return (ChannelCacheManager)siteChannelCacheManagersByEname.get(eName);
 	}
 	
+	public LinkCache getSiteLinkCache(String siteName)
+	{
+		LinkCache cache = this.siteLinkCache.get(siteName) ;
+		if(cache != null)
+			return cache;
+		synchronized(this.siteLinkCache)
+		{
+			cache = this.siteLinkCache.get(siteName) ;
+			if(cache != null)
+				return cache;
+			cache = new LinkCache();
+			this.siteLinkCache.put(siteName, cache);
+		}
+		return cache;
+	}
+	
 
 	/**
 	 * 重新加载
@@ -102,6 +121,8 @@ public class SiteCacheManager implements Listener {
 			siteEnameMap = null;
 			instance.loadSite(siteroot);
 		}
+		
+		this.siteLinkCache.clear();
 	}
 	
 	/**
