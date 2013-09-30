@@ -3596,6 +3596,11 @@
 			<name>setcolor</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<!-- trim:true false default false -->
+		<attribute>
+			<name>trim</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- url标签：输出文档、频道首页链接 -->
 	<tag>
@@ -4464,7 +4469,11 @@
 			<name>expression</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-		
+		<!-- trim:true false default false -->
+		<attribute>
+			<name>trim</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		
 	</tag>
 	<!-- 网上调查投票标签 -->
