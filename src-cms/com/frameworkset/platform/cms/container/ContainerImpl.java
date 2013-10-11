@@ -356,6 +356,52 @@ public class ContainerImpl implements Container{
 	
 	
 	/**
+	 * 通过站点名称获取站点的域名
+	 * @param siteName
+	 * @return
+	 * @throws ContainerException 
+	 */
+	public String getPulishedSiteDomainBySiteName(String siteName) throws ContainerException
+	{
+		this.check();
+		try
+		{
+			Context ctx = new DefaultContextImpl(siteName,request,response);
+			
+			
+			return CMSUtil.getPublishedSitePath(ctx,null);
+		}
+		catch(Exception e)
+		{
+			throw new ContainerException(e);
+		}
+	}
+	
+	/**
+	 * 通过站点id获取站点的域名
+	 * @param siteID
+	 * @return
+	 * @throws ContainerException 
+	 */
+	public String getPulishedSiteDomainBySiteID(String siteID) throws ContainerException
+	{
+		this.check();
+		try
+		{
+			Site site = CMSUtil.getSiteCacheManager().getSite(siteID);
+			Context ctx = new DefaultContextImpl(site.getSecondName(),request,response);
+			
+			
+			return CMSUtil.getPublishedSitePath(ctx,null);
+		}
+		catch(Exception e)
+		{
+			throw new ContainerException(e);
+		}
+	}
+	
+	
+	/**
 	 * 通过频道id获频道信息
 	 * @param siteID
 	 * @return

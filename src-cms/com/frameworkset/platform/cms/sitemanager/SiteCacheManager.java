@@ -34,10 +34,10 @@ public class SiteCacheManager implements Listener {
 	static SiteCacheManager instance;
 	
 	/** 通过站点id ，站点频道缓冲*/
-	Map siteChannelCacheManagers;
+	Map<String,ChannelCacheManager> siteChannelCacheManagers;
 	
 	/** 通过站点第二名称， 站点频道缓冲*/
-	Map siteChannelCacheManagersByEname;
+	Map<String,ChannelCacheManager> siteChannelCacheManagersByEname;
 	
 	Site siteroot; 
 	
@@ -132,9 +132,9 @@ public class SiteCacheManager implements Listener {
 	private void loadChannelCacheOfSite(Site siteid)
 	{
 		if(siteChannelCacheManagers == null)
-			siteChannelCacheManagers = new HashMap();
+			siteChannelCacheManagers = new HashMap<String,ChannelCacheManager>();
 		if(siteChannelCacheManagersByEname == null)
-			siteChannelCacheManagersByEname = new HashMap();
+			siteChannelCacheManagersByEname = new HashMap<String,ChannelCacheManager>();
 		
 		ChannelCacheManager temp = new ChannelCacheManager(siteid);
 		temp.init();
@@ -144,7 +144,7 @@ public class SiteCacheManager implements Listener {
 		eventTypes.add(CMSEventType.EVENT_CHANNEL_UPDATE);
 		NotifiableFactory.getNotifiable().addListener(temp,eventTypes);
 		siteChannelCacheManagers.put(siteid.getSiteId()+ "",temp);
-		siteChannelCacheManagersByEname.put(siteid.getSecondName(),siteid);
+		siteChannelCacheManagersByEname.put(siteid.getSecondName(),temp);
 	}
 	
 	/**

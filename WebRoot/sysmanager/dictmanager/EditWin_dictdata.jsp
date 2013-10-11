@@ -163,6 +163,10 @@
 	    	name = checkValues[1];
 	    	primaryCondition = checkValues[2];
 	    }
+    	if(value != null)
+    	{
+    		value = URLDecoder.decode(value, "UTF-8");
+    	}
     }
     //字典对应的主键条件
     //System.out.println("primaryCondition = " + primaryCondition);

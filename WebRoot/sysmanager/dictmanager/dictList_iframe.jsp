@@ -291,7 +291,7 @@
 								}   
 							%>
 							<td class="td_center">
-								<input type="checkBox" <%=checkboxDisableFlag%> name="dictDataId" onClick="checkOne('checkBoxAll','dictDataId')" value="<pg:cell colName='value' defaultValue='' />:<pg:cell colName='name' defaultValue='' /><%if(primaryCondition != null && !"".equals(primaryCondition)) {%>:<%=primaryCondition %><%} %>" >
+								<input type="checkBox" <%=checkboxDisableFlag%> name="dictDataId" onClick="checkOne('checkBoxAll','dictDataId')" value="<pg:cell colName='value' defaultValue='' encode="true"/>:<pg:cell colName='name' defaultValue='' encode="true" /><%if(primaryCondition != null && !"".equals(primaryCondition)) {%>:<%=primaryCondition %><%} %>" >
 							</td>							
 							<td>
 								<pg:cell colName="name" defaultValue="" />

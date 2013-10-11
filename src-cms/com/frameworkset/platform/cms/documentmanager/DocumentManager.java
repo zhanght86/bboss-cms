@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.documentmanager.bean.ArrangeDoc;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
-import com.frameworkset.platform.cms.documentmanager.bean.DocClass;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
 import com.frameworkset.platform.cms.documentmanager.bean.DocTemplate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocumentCondition;
+import com.frameworkset.platform.cms.documentmanager.bean.NewsCondition;
 import com.frameworkset.platform.cms.documentmanager.bean.TaskDocument;
 import com.frameworkset.platform.cms.driver.config.DocumentStatus;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
@@ -1338,6 +1338,15 @@ public interface DocumentManager extends java.io.Serializable
 	 * @throws SQLException
 	 */
 	public ListInfo queryDocumentsByPublishTimeAndKeywords(DocumentCondition condition, long offset, int pagesize) throws SQLException;
+	
+	
+	/**
+	 * 根据发布时间(开始时间~结束时间)和关键字(匹配标题)查询新闻列表
+	 * @param condition 查询条件	 
+	 * @return 获取给定条数的新闻
+	 * @throws SQLException
+	 */
+	public List<Document> queryDocumentsByPublishTimeAndKeywords(NewsCondition condition) throws SQLException;
 	
 	/**
 	 * 根据视频类别和排序类别(最新发布，最多播放，最多评论)查询视频列表

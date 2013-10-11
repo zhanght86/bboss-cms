@@ -2368,6 +2368,11 @@ public class CMSUtil{
 		// TODO Auto-generated method stub
 		return getSiteCacheManager().getChannelCacheManager(siteid);
 	}
+	
+	public static ChannelCacheManager getChannelCacheManagerBySiteName(String site) {
+		// TODO Auto-generated method stub
+		return getSiteCacheManager().getChannelCacheManagerByEname(site);
+	}
 
 	/**
 	 * 获取系统的全局唯一吗

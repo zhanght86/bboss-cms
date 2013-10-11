@@ -41,13 +41,13 @@ import com.frameworkset.platform.cms.documentmanager.bean.ArrangeDoc;
 import com.frameworkset.platform.cms.documentmanager.bean.CitedDocSrcChannel;
 import com.frameworkset.platform.cms.documentmanager.bean.CitedDocument;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
-import com.frameworkset.platform.cms.documentmanager.bean.DocClass;
 import com.frameworkset.platform.cms.documentmanager.bean.DocHistoryOperate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocLevel;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
 import com.frameworkset.platform.cms.documentmanager.bean.DocTemplate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocumentCondition;
 import com.frameworkset.platform.cms.documentmanager.bean.Extvaluescope;
+import com.frameworkset.platform.cms.documentmanager.bean.NewsCondition;
 import com.frameworkset.platform.cms.documentmanager.bean.TaskDocument;
 import com.frameworkset.platform.cms.driver.config.DocumentStatus;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
@@ -4966,16 +4966,23 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 根据文档ID获取文档聚合中所有已经发布的被聚合的文档 那些没发布的被聚合文档不取进来 param String docId return List<DocAggregation>
 	 */
 	public List getPubAggrDocList(String docId) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		List list = new ArrayList();
 		StringBuffer sql = new StringBuffer();
-		sql.append("select a.*,b.subtitle,b.channel_id,b.isnew,b.newpic_path ")
-				.append("from TD_CMS_DOC_AGGREGATION a inner join td_cms_document b")
-				.append(" on a.id_by_aggr = b.document_id ").append(" where b.STATUS in ( ")
-				.append(DocumentStatus.PUBLISHED.getStatus()).append(",").append(DocumentStatus.PUBLISHING.getStatus())
-				.append(") and b.isdeleted = '0' and a.AGGR_DOC_ID = ").append(docId).append(" order by a.seq");
+//		sql.append("select a.*,b.subtitle,b.channel_id,b.isnew,b.newpic_path,b.titlecolor ")
+//				.append("from TD_CMS_DOC_AGGREGATION a inner join td_cms_document b")
+//				.append(" on a.id_by_aggr = b.document_id ").append(" where b.STATUS in ( ")
+//				.append(DocumentStatus.PUBLISHED.getStatus()).append(",").append(DocumentStatus.PUBLISHING.getStatus())
+//				.append(") and b.isdeleted = '0' and a.AGGR_DOC_ID = ").append(docId).append(" order by a.seq");
+		sql.append("select a.*,b.subtitle,b.channel_id,b.isnew,b.newpic_path,b.titlecolor ")
+		.append("from TD_CMS_DOC_AGGREGATION a inner join td_cms_document b")
+		.append(" on a.id_by_aggr = b.document_id ").append(" where b.STATUS in ( ?,?) and b.isdeleted = '0' and a.AGGR_DOC_ID = ? order by a.seq");
 		try {
-			db.executeSelect(sql.toString());
+			db.preparedSelect(sql.toString());
+			db.setString(1, DocumentStatus.PUBLISHED.getStatus());
+			db.setString(2, DocumentStatus.PUBLISHING.getStatus());
+			db.setString(3, docId);
+			db.executePrepared();
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocAggregation dagg = new DocAggregation();
@@ -4987,6 +4994,7 @@ public class DocumentManagerImpl implements DocumentManager {
 					dagg.setChlId(String.valueOf(db.getInt(i, "channel_id")));
 					dagg.setIsNew(db.getInt(i, "isnew"));
 					dagg.setNewPicPath(db.getString(i, "newpic_path"));
+					dagg.setTitlecolor(db.getString(i, "titlecolor"));
 
 					list.add(dagg);
 				}
@@ -7753,6 +7761,103 @@ public class DocumentManagerImpl implements DocumentManager {
 				condition);
 		listInfo.setDatas(list);
 		return listInfo;
+	}
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.frameworkset.platform.cms.documentmanager.DocumentManager#queryNewsByPublishTimeAndKeywords(java.util.Date,
+	 * java.util.Date, java.lang.String, long, int)
+	 */
+	@Override
+	public List<Document> queryDocumentsByPublishTimeAndKeywords(NewsCondition condition)
+			throws SQLException {
+		if (!StringUtil.isEmpty(condition.getKeywords())) {
+			condition.setKeywords("%" + condition.getKeywords() + "%");
+		}
+		
+		final DocumentExtColumnManager extManager = new DocumentExtColumnManager();
+		final List<Document> list = new ArrayList<Document>();
+		executor.queryBeanByNullRowHandler(new NullRowHandler(){
+
+			@Override
+			public void handleRow(Record db) throws Exception {
+				Document doc = new Document();
+//				if (db.getInt("DOCTYPE") == Document.DOCUMENT_CHANNEL) {
+//					String channelid = String.valueOf(db.getLong("DOCUMENT_ID"));
+//					Channel refChannel = new ChannelManagerImpl().getChannelInfo(channelid);
+//					list.add(refChannel);
+//					// doc.setRefChannel(refChannel);
+//					// doc.setDoctype(Document.DOCUMENT_CHANNEL);
+//				}
+//				else 
+				{
+					doc.setDocument_id(db.getInt("DOCUMENT_ID"));
+					doc.setTitle(db.getString("TITLE"));
+					doc.setSubtitle(db.getString("SUBTITLE"));
+					doc.setAuthor(db.getString("AUTHOR"));
+					doc.setChanel_id(db.getInt("CHANNEL_ID"));
+					doc.setKeywords(db.getString("KEYWORDS"));
+					doc.setDocabstract(db.getString("DOCABSTRACT"));
+					doc.setDoctype(db.getInt("DOCTYPE"));
+					doc.setDocwtime(db.getDate("DOCWTIME"));
+					doc.setTitlecolor(db.getString("TITLECOLOR"));
+					doc.setCreateTime(db.getDate("CREATETIME"));
+					doc.setCreateUser(db.getInt("CREATEUSER"));
+					doc.setDocsource_id(db.getInt("DOCSOURCE_ID"));
+					doc.setDetailtemplate_id(db.getInt("DETAILTEMPLATE_ID"));
+					doc.setLinktarget(db.getString("LINKTARGET"));
+					doc.setLinkfile(db.getString("linkfile"));
+					doc.setFlowId(db.getInt("FLOW_ID"));
+					doc.setDoc_level(db.getInt("DOC_LEVEL"));
+					doc.setDoc_kind(db.getInt("DOC_KIND"));
+					doc.setParentDetailTpl(db.getString("PARENT_DETAIL_TPL"));
+					doc.setPublishTime(db.getDate("publishtime"));
+					doc.setPicPath(db.getString("pic_path"));
+
+					doc.setMediapath(db.getString("mediapath"));
+					doc.setPublishfilename(db.getString("publishfilename"));
+					// doc.setc(db.getString(i,"commentswitch"));
+					doc.setSecondtitle(db.getString("secondtitle"));
+					doc.setIsNew(db.getInt("isnew"));
+					doc.setNewPicPath(db.getString("newpic_path"));
+
+					doc.setSiteid(db.getInt("site_id"));
+					// new
+					doc.setExt_class(db.getString("ext_class"));
+					doc.setExt_djh(db.getString("ext_djh"));
+					doc.setExt_index(db.getString("ext_index"));
+					doc.setExt_org(db.getString("ext_org"));
+					doc.setExt_wh(db.getString("ext_wh"));
+					// new
+
+					// String str = "select SRCNAME from TD_CMS_DOCSOURCE where DOCSOURCE_ID ="
+					// + db.getInt("DOCSOURCE_ID") + "";
+					//
+					// db1.executeSelect(str);
+					// if (db1.size() > 0) {
+					doc.setDocsource_name(db.getString("source_name"));
+					// }
+					int isref = db.getInt("ordersq");
+					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
+					/* 装载扩展字段数据 */
+//					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+//					doc.setDocExtField(docExtField);
+					/* 装载系统扩展字段数据 */
+//					doc.setExtColumn(extManager.getExtColumnInfo(db));
+					doc.setOrdertime(db.getDate( "ordertime"));
+					
+					list.add(doc);
+				}
+				
+			}
+			
+		}, "queryNewsByPublishTimeAndKeywordsWithMore",
+				condition);
+		
+		return list;
 	}
 
 	/*

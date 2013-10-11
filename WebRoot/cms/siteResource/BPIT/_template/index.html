@@ -10,6 +10,7 @@
 <script type="text/javascript" src="js/bbscomment.js"></script>	
 <script type="text/javascript" src="js/until.js"></script>	
 <cms:distribute dir="images/tougao.jpg" />
+<cms:distribute dir="components/slide/slide-small.css" />
 <script>
 
 	var commentlisturl = "<cms:siteparam name="appcontext"/>/comment/getChannelCommentNList.freepage?jsonp_callback=?";
@@ -320,7 +321,9 @@
 					replace=""
 					useTitle="false"/></li></cms:outline> 
 			<div class="video">
-	          <div><cms:channel displayname="specialtrain" linktype="image" imageextend=" width='180' height='95'"/> <a href="javascript:void(0);"><img  style="width:100px;height:95px;" src="images\tougao.jpg"/></a> </div>
+	          <div><cms:channel displayname="specialtrain" linktype="image" imageextend=" width='180' height='95'"/> 
+				  <a href="mailto:<cms:siteparam name="tougaoEmail"/>"><img  style="width:100px;height:95px;" src="images\tougao.jpg"/></a>
+				 </div>
 					   
 	        </div>
 			

@@ -483,6 +483,21 @@
 			</authoration>
 		</item>
 		
+		
+		<item name="数据库管理" id="dbmanager_" i18n:en_US="DB Manager">
+			<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+			<top>perspective_toolbar.jsp</top>
+			<left>perspective_outlookbar.jsp</left>
+			<navigator></navigator>
+			<workspace>
+				<content>sysmanager/dbmanager/tablesmanager.jsp</content>
+			</workspace>
+			<authoration>				 
+				 <url>sysmanager/dbmanager/*.jsp</url>
+				<url>sysmanager/dbmanager/tableinfo/*.jsp</url>
+			</authoration>
+		</item>
+		
 		<item name="缓存管理" id="cachemonitor" i18n:en_US="Cache Monitor">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<workspace>

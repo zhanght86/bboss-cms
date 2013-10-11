@@ -157,27 +157,34 @@ public class DefaultContextImpl extends BaseContextImpl {
 	 */
 	public String getPublishedLinkPath(String linkPath)
 	{
-		if(linkPath.toLowerCase().startsWith("http://") || linkPath.toLowerCase().startsWith("https://")
-				|| linkPath.toLowerCase().startsWith("ftp://"))
-			return linkPath;
-		if(siteinfo.getPublishDestination() == 0 || siteinfo.getPublishDestination() == 2)//本地发布
+		if(linkPath != null)
 		{
-			//System.out.println("siteinfo.getWebHttp():"+siteinfo.getWebHttp());
-			boolean a = siteinfo.getLocalPublishPath() == null || siteinfo.getLocalPublishPath().equals("");
-			boolean b = this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
-			|| this.siteinfo.getWebHttp().equals("http://");
-			if(a && b)
+			if(linkPath.toLowerCase().startsWith("http://") || linkPath.toLowerCase().startsWith("https://")
+					|| linkPath.toLowerCase().startsWith("ftp://"))
+				return linkPath;
+			if(siteinfo.getPublishDestination() == 0 || siteinfo.getPublishDestination() == 2)//本地发布
 			{
-				if( this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
-						|| this.siteinfo.getWebHttp().equals("http://"))
+				//System.out.println("siteinfo.getWebHttp():"+siteinfo.getWebHttp());
+				boolean a = siteinfo.getLocalPublishPath() == null || siteinfo.getLocalPublishPath().equals("");
+				boolean b = this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
+				|| this.siteinfo.getWebHttp().equals("http://");
+				if(a && b)
 				{
-					if(request != null)
+					if( this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
+							|| this.siteinfo.getWebHttp().equals("http://"))
 					{
-						return CMSUtil.getPath(this.request.getContextPath() + "/sitepublish/" + this.siteinfo.getSiteDir(),linkPath);
+						if(request != null)
+						{
+							return CMSUtil.getPath(this.request.getContextPath() + "/sitepublish/" + this.siteinfo.getSiteDir(),linkPath);
+						}
+						else
+						{
+							return CMSUtil.getPath("/sitepublish/" + this.siteinfo.getSiteDir(),linkPath);
+						}
 					}
 					else
 					{
-						return CMSUtil.getPath("/sitepublish/" + this.siteinfo.getSiteDir(),linkPath);
+						return CMSUtil.getPath(this.siteinfo.getWebHttp(),linkPath);
 					}
 				}
 				else
@@ -185,15 +192,50 @@ public class DefaultContextImpl extends BaseContextImpl {
 					return CMSUtil.getPath(this.siteinfo.getWebHttp(),linkPath);
 				}
 			}
+			
 			else
 			{
 				return CMSUtil.getPath(this.siteinfo.getWebHttp(),linkPath);
 			}
 		}
-		
 		else
 		{
-			return CMSUtil.getPath(this.siteinfo.getWebHttp(),linkPath);
+			
+			if(siteinfo.getPublishDestination() == 0 || siteinfo.getPublishDestination() == 2)//本地发布
+			{
+				//System.out.println("siteinfo.getWebHttp():"+siteinfo.getWebHttp());
+				boolean a = siteinfo.getLocalPublishPath() == null || siteinfo.getLocalPublishPath().equals("");
+				boolean b = this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
+				|| this.siteinfo.getWebHttp().equals("http://");
+				if(a && b)
+				{
+					if( this.siteinfo.getWebHttp() == null || this.siteinfo.getWebHttp().equals("")
+							|| this.siteinfo.getWebHttp().equals("http://"))
+					{
+						if(request != null)
+						{
+							return this.request.getContextPath() + "/sitepublish/" + this.siteinfo.getSiteDir();
+						}
+						else
+						{
+							return "/sitepublish/" + this.siteinfo.getSiteDir();
+						}
+					}
+					else
+					{
+						return this.siteinfo.getWebHttp();
+					}
+				}
+				else
+				{
+					return this.siteinfo.getWebHttp();
+				}
+			}
+			
+			else
+			{
+				return this.siteinfo.getWebHttp();
+			}
 		}
 	}
 	

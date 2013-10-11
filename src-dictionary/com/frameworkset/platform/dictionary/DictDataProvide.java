@@ -663,11 +663,24 @@ public class DictDataProvide implements DataManager,Listener {
 							subItems.add(old_dictdate);
 							
 						}else{
-							old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
-							//修改了名称
-							old_dictdate.setName(dictdata.getName());
-							old_dictdate.setDataOrg(dictdata.getDataOrg());
-							old_dictdate.setDataValidate(dictdata.getDataValidate());
+							try {
+								old_dictdate = (Item)old_dicttype.getItemByName(dictdata.getName());
+//								old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
+							} catch (Exception e1) {
+								try {
+									old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
+								} catch (Exception e2) {
+									
+								}
+							}
+							if(old_dictdate != null)
+							{
+								//修改了名称
+								old_dictdate.setName(dictdata.getName());
+								old_dictdate.setValue(dictdata.getValue());
+								old_dictdate.setDataOrg(dictdata.getDataOrg());
+								old_dictdate.setDataValidate(dictdata.getDataValidate());
+							}
 						}
 						//....
 						

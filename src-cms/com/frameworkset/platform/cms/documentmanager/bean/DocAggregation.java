@@ -62,6 +62,8 @@ public class DocAggregation implements java.io.Serializable {
 	 * 
 	 */
 	private String docpuburl;
+	
+	private String titlecolor;
 	  
 
 	public String getDocpuburl() {
@@ -162,6 +164,14 @@ public class DocAggregation implements java.io.Serializable {
 
 	public void setChlName(String chlName) {
 		this.chlName = chlName;
+	}
+
+	public String getTitlecolor() {
+		return titlecolor;
+	}
+
+	public void setTitlecolor(String titlecolor) {
+		this.titlecolor = titlecolor;
 	}
 	 
 }

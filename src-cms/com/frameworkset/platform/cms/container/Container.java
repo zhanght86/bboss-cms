@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.driver.context.Context;
+import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
 
@@ -133,6 +134,22 @@ public interface Container extends java.io.Serializable {
 	 * @throws ContainerException 
 	 */
 	public String getPulishedSiteIndexUrlBySiteName(String siteName) throws ContainerException;
+	
+	/**
+	 * 通过站点名称获取站点的域名
+	 * @param siteName
+	 * @return
+	 * @throws ContainerException 
+	 */
+	public String getPulishedSiteDomainBySiteName(String siteName) throws ContainerException;
+	
+	/**
+	 * 通过站点id获取站点的域名
+	 * @param siteID
+	 * @return
+	 * @throws ContainerException 
+	 */
+	public String getPulishedSiteDomainBySiteID(String siteID) throws ContainerException;
 	
 	/**
 	 * 通过站点id获取站点的首页地址

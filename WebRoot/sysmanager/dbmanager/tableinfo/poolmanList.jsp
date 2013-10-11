@@ -17,14 +17,13 @@
 		<%@ include file="/include/css.jsp"%>
 		<link rel="stylesheet" type="text/css" href="../../css/contentpage.css">
 		<link rel="stylesheet" type="text/css" href="../../css/tab.winclassic.css">
-		<script language="JavaScript" src="../../include/pager.js" type="text/javascript"></script>
+		
 		<script language="javascript" type="text/javascript">
 			function lookInfo(name)
 			{
 				if(name != "")
 				{
-					winuser = window.showModalDialog("poolmanInfo.jsp?ds="+name,
-										 window,"dialogWidth:"+(550)+"px;dialogHeight:"+(650)+"px;help:no;scroll:auto;status:no");
+					window.open("${pageContext.request.contextPath}/monitor/dbmonitor_.jsp?ds="+name);
 				}
 			}
 		</script>
