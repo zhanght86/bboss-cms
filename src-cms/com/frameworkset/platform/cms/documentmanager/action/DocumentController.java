@@ -100,6 +100,8 @@ public class DocumentController {
 			return null;
 		ChannelNews news = new ChannelNews();
 		Channel ch = CMSUtil.getChannelCacheManagerBySiteName(condition.getSite()).getChannelByDisplayName(condition.getChannel());
+		if(ch == null)
+			return null;
 		condition.setChannelId((int)ch.getChannelId());
 		if (!StringUtil.isEmpty(condition.getKeywords())) {
 			condition.setKeywords(URLDecoder.decode(condition.getKeywords(), "UTF-8"));
