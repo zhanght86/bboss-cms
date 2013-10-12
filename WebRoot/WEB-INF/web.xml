@@ -68,7 +68,7 @@
 	    </init-param>
 	    <init-param>
 	      <param-name>wallfilterrules</param-name>
-	      <param-value><![CDATA[><,%3E%3C,<iframe,%3Ciframe,<script,%3Cscript,script,<img,%3Cimg,alert(,alert%28,eval(,eval%28,style=,style%3D,javascript,update ,drop ,delete ,insert ,create ,select ,truncate ]]>
+	      <param-value><![CDATA[><,%3E%3C,<iframe,%3Ciframe,<script,%3Cscript,<img,%3Cimg,alert(,alert%28,eval(,eval%28,style=,style%3D]]>
 	      </param-value>
 	      
 	    </init-param>
