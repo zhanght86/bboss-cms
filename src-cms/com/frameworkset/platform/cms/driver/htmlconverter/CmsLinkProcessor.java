@@ -2360,9 +2360,10 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 			else	
 				this.origineTemplateLinkTable.addLink(link,context);
 		}
-		else
+		else 
 		{
-			this.origineTemplateLinkTable.addLink(link,context);
+			if(origineTemplateLinkTable != null)
+				this.origineTemplateLinkTable.addLink(link,context);
 		}
 	}
 	
