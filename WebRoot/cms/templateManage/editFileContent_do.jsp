@@ -87,7 +87,7 @@
 			String remoteAddr = link.getOrigineLink().getHref();
 			String contentPath = link.getRelativeFilePath();
 			String localPath = config.getServletContext().getRealPath("/") + "cms/siteResource/" + sitedir + "/_template/" + contentPath;
-			System.out.println("1"+localPath);
+			
 			try {
 				//远程信息本地化
 				RemoteFileHandle rf = new RemoteFileHandle(remoteAddr,localPath);

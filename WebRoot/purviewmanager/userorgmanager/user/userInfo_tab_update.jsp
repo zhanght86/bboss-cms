@@ -120,7 +120,7 @@ api = parent.frameElement.api, W = api.opener;
 }
 var renewPwdState = "<%=renewPwdState%>";
 if(renewPwdState=="true"){
-	W.$.dialog.alert("<pg:message code='sany.pdp.reset.password.success'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+	$.dialog.alert("<pg:message code='sany.pdp.reset.password.success'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 }
 function trim(string){
   var temp="";
@@ -138,20 +138,20 @@ function storeUser()
 	{
 		var userName= document.forms[0].userName.value;
 		if (trim(userName).length == 0 ){
-			W.$.dialog.alert("<pg:message code='sany.pdp.input.username'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			$.dialog.alert("<pg:message code='sany.pdp.input.username'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
     		return false;
     	}
 		
 		var userRealname = document.getElementById("userRealname").value;
 		if(userRealname == "" || userRealname.length<1 || userRealname.replace(/\s/g,"")=="")
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.input.realname'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			$.dialog.alert("<pg:message code='sany.pdp.input.realname'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			return false;
 		}
 		var re =  /^[A-Za-z0-9\u4e00-\u9fa5]+$/; 
 		if(!re.test(userRealname))
 		{
-		W.$.dialog.alert("<pg:message code='sany.pdp.check.realname'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		$.dialog.alert("<pg:message code='sany.pdp.check.realname'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 		return false; 
 		}
 		

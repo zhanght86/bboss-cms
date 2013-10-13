@@ -710,8 +710,11 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 		}
 		else if(tag.getTagName().equalsIgnoreCase("cms:distribute"))
 		{
-			isdistributeTag = true;
-			this.processDir(tag, LINK_PARSER_DISTRIBUTE);
+			if(this.handletype == CmsLinkProcessor.PROCESS_TEMPLATE)//只有在发布的时候需要处理cms:distribute标签
+			{
+				isdistributeTag = true;
+				this.processDir(tag, LINK_PARSER_DISTRIBUTE);
+			}
 		}
 		
 		
@@ -841,7 +844,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processSrcOfTag(Tag tag) {
 		String src = tag.getAttribute("src");
-		int linkhandletype = needProcess(src); 
+		int linkhandletype = needProcess(src,false); 
 		if( linkhandletype == LINK_NO_PARSER_NO_DISTRIBUTE)
 		{
 			return;
@@ -986,7 +989,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 
 		
 		
-		int linkhandletype = needProcess(background); 	
+		int linkhandletype = needProcess(background,false); 	
 		if(linkhandletype == this.LINK_NO_PARSER_NO_DISTRIBUTE)
 		{
 			return;
@@ -1129,7 +1132,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processEmbedTag(Tag tag) {
 		String scriptsrc = tag.getAttribute("src");
-		int linkhandletype = needProcess(scriptsrc);
+		int linkhandletype = needProcess(scriptsrc,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			// href attribute is required
@@ -1286,7 +1289,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 //		tag.removeAttribute("movie");
 		Hashtable parameters = tag.getObjectParams();
 //		tag.setObjectParams(parameters);
-		int linkhandletype = needProcess(scriptsrc);
+		int linkhandletype = needProcess(scriptsrc,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			// href attribute is required
@@ -1449,7 +1452,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processScriptTag(ScriptTag tag) {
 		String scriptsrc = tag.getAttribute("src");
-		int linkhandletype = needProcess(scriptsrc);
+		int linkhandletype = needProcess(scriptsrc,false);
 		if (linkhandletype != this.LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			// href attribute is required
@@ -1629,7 +1632,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	protected void processStyleTag(StyleTag tag) {
 		
 		String stylesrc = tag.getAttribute("src");
-		int linkhandletype = needProcess(stylesrc); 
+		int linkhandletype = needProcess(stylesrc,false); 
 		if (linkhandletype != this.LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			// href attribute is required
@@ -1886,7 +1889,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processFrameTag(FrameTag tag) {
 		String framesrc = tag.getAttribute("src");
-		int linkhandletype = needProcess(framesrc);
+		int linkhandletype = needProcess(framesrc,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			// href attribute is required
@@ -2035,7 +2038,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	protected void processImageTag(ImageTag tag) {
 
 		String href_ = tag.getAttribute("src");
-		int linkhandletype = needProcess(href_);
+		int linkhandletype = needProcess(href_,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
 			
 
@@ -2182,7 +2185,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 *            the tag to process
 	 */
 	protected CMSLink processLink(String linkurl) {
-		int linkhandletype = needProcess(linkurl); 
+		int linkhandletype = needProcess(linkurl,false); 
 		if (linkhandletype != this.LINK_NO_PARSER_NO_DISTRIBUTE) {
 
 			CMSLink link = null;
@@ -2433,13 +2436,30 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 * @param link
 	 * @return 0  需要处理地址并且分发资源，1 需要处理地址，不需要分发资源 2 不需要处理地址 不需要分发资源
 	 */
-	protected int needProcess(String link)
+	protected int needProcess(String link,boolean ishref)
 	{
-		if(link == null || link.trim().equals("") || link.equals("#") || link.equals("..") || link.trim().startsWith("<"))
+		if(link == null || link.trim().equals("") || link.equals("#") 
+				|| link.equals("..") || link.trim().startsWith("<") || link.contains("<cms:"))
+		{
 			return 2;
+			
+		}
+		
 		else if(RegexUtil.isContain(link,Lexer.jsp_custom_tag_pattern) || RegexUtil.isContain(link,PATTERN_JSPCODE_BLOCK) )
 		{
 			return 1;
+		}
+		else if(CMSUtil.isExternalUrl(link))
+		{
+			if(this.handletype != PROCESS_EDITCONTENT)
+				return 2;
+			else
+			{
+				if(ishref)
+					return 2;
+				else 
+					return 0;
+			}
 		}
 		else
 			return 0;
@@ -2495,7 +2515,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processHrefTag(LinkTag tag) {
 		String href_ = tag.getAttribute("href");
-		int linkhandletype=needProcess(href_);
+		int linkhandletype=needProcess(href_,true);
 		if (linkhandletype != this.LINK_NO_PARSER_NO_DISTRIBUTE) {
 			
 
@@ -2827,7 +2847,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	
 	protected String processStringLink(String href_)
 	{
-		int linkhandletype=needProcess(href_);
+		int linkhandletype=needProcess(href_,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
 			
 
@@ -2924,7 +2944,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	protected void processLinkTag(Tag tag) {
 
 		String href_ = tag.getAttribute("href");
-		int linkhandletype = needProcess(href_);
+		int linkhandletype = needProcess(href_,false);
 		if (linkhandletype != this.LINK_NO_PARSER_NO_DISTRIBUTE) {
 			
 			// href attribute is required
@@ -3199,7 +3219,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	/**
 	 * 分析纯域名的的链接，并且提取域名 xxxx.xxxx.xxxx:端口
 	 */
-	public static final String domainpattern = "(http|https|ftp|tps)://([a-zA-Z0-9]+\\.)+[a-zA-Z0-9]+/?";
+	public static final String domainpattern = "(http|https|ftp|tps|mailto)://([a-zA-Z0-9]+\\.)+[a-zA-Z0-9]+/?";
 
 	/**
 	 * 分析带绝对uri的链接，提取uri串 /xxx/xxxx等等

@@ -1600,6 +1600,8 @@ public class CMSUtil{
 		if(url.toLowerCase().startsWith("http://") 
 				|| url.toLowerCase().startsWith("https://") 
 				|| url.toLowerCase().startsWith("ftp://")
+				|| url.toLowerCase().startsWith("mailto:") 
+				|| url.toLowerCase().startsWith("tps://")
 				|| url.startsWith("/"))
 			return true;
 		else
