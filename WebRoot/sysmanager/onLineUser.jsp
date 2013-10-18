@@ -27,6 +27,8 @@
 		<title>当前在线用户查看</title>
 		
 		<%@ include file="/include/css.jsp"%>
+		
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/contentpage.css">
 		<link rel="stylesheet" type="text/css" href="css/tab.winclassic.css">
 <base target="_self">		
@@ -64,9 +66,14 @@ function removeUser(delState){
 			state = true;
 	}
 	if(state){
-		document.ListForm.target = "hiddenIframe";
-		document.ListForm.action = "onLineUser_do.jsp?delState="+delState;
-		document.ListForm.submit();
+		//document.ListForm.target = "hiddenIframe";
+		//document.ListForm.action = "onLineUser_do.jsp?delState="+delState;
+		//document.ListForm.submit();
+		
+		$.secutiry.dosubmit("ListForm",
+						"onLineUser_do.jsp?delState="+delState,
+								"hiddenIframe",
+								"${pageContext.request.contextPath}");
 	}
 }
 
@@ -76,6 +83,10 @@ function resetwindow()
 	document.ListForm.target = "";
 	
 	document.ListForm.submit();
+		$.secutiry.dosubmit("ListForm",
+						window.location.href,
+								"",
+								"${pageContext.request.contextPath}");
 	
 }
 
@@ -107,7 +118,7 @@ function enterKeydowngo(){
 </script>
 	<body class="contentbodymargin" scroll="no" onunload="window.returnValue='ok';">
 		<div id="contentborder" align="center">
-			<form name="ListForm" action="" method="post">
+			<form id="ListForm" name="ListForm" action="" method="post">
 				<table width="100%" border="0"  cellpadding="0" cellspacing="1" class="thin">
 				
 					<tr valign='top'>

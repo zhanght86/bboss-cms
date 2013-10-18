@@ -31,6 +31,8 @@
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
 	<script language="javascript" src="../inc/js/func.js"></script>
+	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 	<script language="javascript">
 		//批量发布
@@ -69,24 +71,37 @@
 				}
 			}
 			if(haveSelect('ID')){
-				form1.action="docGarbageHandle.jsp?docidStr="+docidStr;
-				form1.target="pubIframe";
-				form1.submit();
+				//form1.action="docGarbageHandle.jsp?docidStr="+docidStr;
+				//form1.target="pubIframe";
+				//form1.submit();
+				$.secutiry.dosubmit("form1",
+						"docGarbageHandle.jsp?docidStr="+docidStr,
+								"pubIframe",
+								"${pageContext.request.contextPath}");
 			}else{
 		    	alert("请至少要选择一篇文档！");
 		   	}
 		}
 		//预览要发布的文档
 		function preview(docId){
-			form1.action="previewPubDocHandle.jsp?docId="+docId;
-			form1.target="pubIframe";
-			form1.submit();
+			//form1.action="previewPubDocHandle.jsp?docId="+docId;
+			//form1.target="pubIframe";
+			//form1.submit();
+			
+			$.secutiry.dosubmit("form1",
+					"previewPubDocHandle.jsp?docId="+docId,
+							"pubIframe",
+							"${pageContext.request.contextPath}");
 		}
 		//退回，给提交人发布人一个返工文档的任务
 		function withdraw(docId,taskid){
-			form1.action="pubWithdrawHandle.jsp?docId="+docId+"&taskId="+taskid;
-			form1.target="pubIframe";
-			form1.submit();
+			//form1.action="pubWithdrawHandle.jsp?docId="+docId+"&taskId="+taskid;
+			//form1.target="pubIframe";
+			//form1.submit();
+			$.secutiry.dosubmit("form1",
+					"pubWithdrawHandle.jsp?docId="+docId+"&taskId="+taskid,
+							"pubIframe",
+							"${pageContext.request.contextPath}");
 		}
         function closeSubWindow(){ 
             winOpen.close();
@@ -127,7 +142,8 @@
 			background-color:#F0f0f0;layer-background-color:#F0f0f0;left:22%;top:80%;display:none;"  class="font">   
 	    <marquee direction="left" width="250" behavior="alternate"><span class=STYLE1>正在发布中，请稍等……</span></marquee>
     </div>
-    <form name="form1" action="" method="post" >
+    <form name="form1" id="form1" action="" method="post" >
+   
         <input type="hidden" name="uuid" value="<%=uuid%>">
         <input type="hidden" name="isRecordValue">
         <input type="hidden" name="recursionPublish">

@@ -699,6 +699,19 @@ function previewChnl(){
 									是
 								</td>
 							</tr>
+							<tr>
+								<td width="130" height="24" align="right" nowrap>频道打开模式</td>
+								<td height="24">
+									<input type="radio" id="openTarget" name="openTarget" value="_self"   checked>
+									_self
+									<input  id="openTarget" name="openTarget" type="radio" value="_blank" >
+									_blank
+									<input  id="openTarget" name="openTarget" type="radio" value="_parent" >
+									_parent
+									<input  id="openTarget" name="openTarget" type="radio" value="_top" >
+									_top
+								</td>
+							</tr>
 							<tr id="navigatorMoreInfo1">
 								<td width="130" height="24" align="right" nowrap>频道导航级别</td>
 								<td height="24"><input name="navigatorlevel" type="text" id="navigatorlevel" size="10" class="cms_text"></td>

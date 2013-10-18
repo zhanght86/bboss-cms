@@ -206,12 +206,12 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		sqlBuffer
 				.append("CHNL_OUTLINE_PROTECT, DOC_PROTECT,WORKFLOW,PARENT_WORKFLOW,pub_file_name,"
 						+ "ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE,MOUSEOUTIMAGE,MOUSECLICKIMAGE,MOUSEUPIMAGE,"
-						+ "outlinePicture,pageflag,indexpagepath,commentswitch,comment_template_id,commentpagepath,specialflag,channel_id,channel_desc ");
+						+ "outlinePicture,pageflag,indexpagepath,commentswitch,comment_template_id,commentpagepath,specialflag,channel_id,channel_desc,openTarget ");
 		sqlBuffer.append(")values(");
 		sqlBuffer.append("?,?,?,");
 		sqlBuffer.append("?,?,?,?,");
 		sqlBuffer.append("?,?,?,?,");
-		sqlBuffer.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		sqlBuffer.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		PreparedDBUtil conn = new PreparedDBUtil();
 		try {
@@ -310,6 +310,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			
 			conn.setString(32,channelId) ;
 			conn.setString(33, channel.getChannel_desc());
+			conn.setString(34, channel.getOpenTarget());
 			conn.executePrepared();
 
 			channel.setChannelId(Integer.parseInt(channelId));// 由于后面要用到该频道对象
@@ -770,7 +771,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					+ "CHNL_OUTLINE_DYNAMIC, DOC_DYNAMIC, CHNL_OUTLINE_PROTECT, "
 					+ "DOC_PROTECT, PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE, "
 					+ "MOUSECLICKIMAGE, MOUSEUPIMAGE, OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, "
-					+ " COMMENT_TEMPLATE_ID, COMMENTPAGEPATH  from td_cms_channel " + "start with channel_id='"
+					+ " COMMENT_TEMPLATE_ID, COMMENTPAGEPATH, openTarget  from td_cms_channel " + "start with channel_id='"
 					+ channelId + "' and status='0' " + "connect by prior channel_id = parent_id and status='0' "
 					+ "order by order_no,channel_id) b where b.channel_id<>'" + channelId + "'";
 			db.executeSelect(sql);
@@ -806,6 +807,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setIndexpagepath(db.getString(i, "INDEXPAGEPATH"));
 				channel.setCommentTemplateId(db.getInt(i, "COMMENT_TEMPLATE_ID"));
 				channel.setCommentPagePath(db.getString(i, "COMMENTPAGEPATH"));
+				channel.setOpenTarget(db.getString(i, "openTarget"));
 				channels.add(channel);
 			}
 			return channels;
@@ -823,16 +825,18 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有提供频道id,无法返回频道信息.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select CHANNEL_ID,NAME,DISPLAY_NAME,PARENT_ID,"
 					+ "CHNL_PATH,CREATEUSER,CREATETIME,ORDER_NO,SITE_ID,"
 					+ "STATUS,OUTLINE_TPL_ID,DETAIL_TPL_ID, CHANNEL_FLOW_ID(channel_id) WORKFLOW,"
 					+ "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC,CHNL_OUTLINE_PROTECT,"
 					+ "DOC_PROTECT,PARENT_WORKFLOW,pub_file_name,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, "
 					+ "MOUSEOUTIMAGE, MOUSECLICKIMAGE, MOUSEUPIMAGE,OUTLINEPICTURE,"
-					+ "PAGEFLAG,INDEXPAGEPATH,comment_template_id,commentpagepath ,specialflag,channel_desc "
-					+ "from TD_CMS_CHANNEL " + "where status=0 and CHANNEL_ID = '" + channelId + "'";
-			db.executeSelect(sql);
+					+ "PAGEFLAG,INDEXPAGEPATH,comment_template_id,commentpagepath ,specialflag,channel_desc,openTarget "
+					+ "from TD_CMS_CHANNEL " + "where status=0 and CHANNEL_ID = ?";
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(channelId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				Channel channel = new Channel();
 				channel.setChannelId(db.getLong(0, "CHANNEL_ID"));
@@ -868,7 +872,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setCommentTemplateId(db.getInt(0, "comment_template_id"));
 				channel.setCommentPagePath(db.getString(0, "commentpagepath"));
 				channel.setSpecialflag(db.getInt(0, "specialflag"));
-				channel.setChannel_desc(db.getString(0,"channel_desc"));				
+				channel.setChannel_desc(db.getString(0,"channel_desc"));	
+				channel.setOpenTarget(db.getString(0, "openTarget"));
 				return channel;
 			}
 			return null;
@@ -890,7 +895,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					+ "CHNL_OUTLINE_PROTECT, DOC_PROTECT,"
 					+ "PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE,"
 					+ " MOUSECLICKIMAGE, MOUSEUPIMAGE, OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, "
-					+ " COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,channel_desc"
+					+ " COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,channel_desc ,openTarget "
 					+ " from TD_CMS_CHANNEL where PARENT_ID!=0 and PARENT_ID is not null and status=0 and PARENT_ID="
 					+ channelId + " order by order_no,channel_id";
 			// System.out.println("sql=" + sql);
@@ -930,7 +935,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setIndexpagepath(db.getString(i, "INDEXPAGEPATH"));
 				channel.setCommentTemplateId(db.getInt(i, "COMMENT_TEMPLATE_ID"));
 				channel.setCommentPagePath(db.getString(i, "COMMENTPAGEPATH"));
-				channel.setChannel_desc(db.getString(i,"channel_desc"));		
+				channel.setChannel_desc(db.getString(i,"channel_desc"));	
+				channel.setOpenTarget(db.getString(i, "openTarget"));
 				channels.add(channel);
 			}
 			return channels;
@@ -1224,7 +1230,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			sqlBuffer.append("comment_template_id = ?, ");
 			sqlBuffer.append("commentpagepath = ?, ");
 			sqlBuffer.append("specialflag = ? ,");
-			sqlBuffer.append("channel_desc = ? ");
+			sqlBuffer.append("channel_desc = ?, ");
+			sqlBuffer.append("openTarget = ? ");
 			sqlBuffer.append("where CHANNEL_ID = ?");
 
 			conn.preparedUpdate(sqlBuffer.toString());
@@ -1292,7 +1299,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			conn.setString(23, channel.getCommentPagePath());
 			conn.setInt(24, channel.getSpecialflag());
 			conn.setString(25, channel.getChannel_desc());
-			conn.setLong(26, channelId);
+			conn.setString(26,channel.getOpenTarget());
+			conn.setLong(27, channelId);
 			conn.executePrepared();
 			Event event = new EventImpl(channel, CMSEventType.EVENT_CHANNEL_UPDATE);
 			super.change(event, true);
@@ -1503,17 +1511,19 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		String sql = "";
 		if (type == '1') {
 			sql = "select a.* from td_cms_template a inner join td_cms_channel b "
-					+ "on a.TEMPLATE_ID = b.DETAIL_TPL_ID " + "where CHANNEL_ID = '" + channelId + "'";
+					+ "on a.TEMPLATE_ID = b.DETAIL_TPL_ID " + "where CHANNEL_ID = ?";
 		} else if (type == '2') {
 			sql = "select a.* from td_cms_template a inner join td_cms_channel b "
-					+ "on a.TEMPLATE_ID = b.OUTLINE_TPL_ID " + "where CHANNEL_ID = '" + channelId + "'";
+					+ "on a.TEMPLATE_ID = b.OUTLINE_TPL_ID " + "where CHANNEL_ID = ?";
 
 		} else {
 			throw new ChannelManagerException("不知道要取概览模板还是细览模板");
 		}
 		try {
-			DBUtil db = new DBUtil();
-			db.executeSelect(sql);
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(channelId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				Template t = new Template();
 				t.setTemplateId(db.getInt(0, "TEMPLATE_ID"));

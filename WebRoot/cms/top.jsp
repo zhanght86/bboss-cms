@@ -4,8 +4,11 @@
 <%@page  import="com.frameworkset.platform.cms.sitemanager.SiteManager,com.frameworkset.platform.cms.sitemanager.SiteManagerImpl"%>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <link href="inc/css/cms.css" rel="stylesheet" type="text/css">
+
+		
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<script src="${pageContext.request.contextPath}/include/security.js"></script>
 <%
     AccessControl accesscontroler = AccessControl.getAccessControl();
    
@@ -59,8 +62,12 @@
 		{
 			document.forms[0].site_id.disabled = false;
 			var siteid = document.all.item("site_id").value;
-			document.forms[0].action="<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=";
-			document.forms[0].submit();
+			//document.forms[0].action="<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=";
+			//document.forms[0].submit();
+			$.secutiry.dosubmit("Form1",
+						"<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=",
+								"site",
+								"<%=request.getContextPath()%>");
 		}
 	}
 	function block1(selObj,restore)
@@ -68,8 +75,12 @@
 		var siteid = document.all.item("site_id").value;
 		if(document.forms[0].modulepath.value.indexOf("siteManageItem")==-1)
 		{
-			document.forms[0].action="<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=";
-			document.forms[0].submit();
+			//document.forms[0].action="<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=";
+			//document.forms[0].submit();
+			$.secutiry.dosubmit("Form1",
+						"<%=request.getContextPath()%>/cms/frame_bridge.jsp?siteid="+siteid + "&selObj=",
+								"site",
+								"<%=request.getContextPath()%>");
 		}
 	}
 	function init()
@@ -90,8 +101,8 @@ body{ font-family: Verdana, "宋体", Vrinda, serif}
 <title>三一集团内容管理系统</title>
 </head>
 
-<body leftmargin="0" topmargin="0" rightmargin="0" onLoad="init()" scroll=no>
-<form target="site" name="Form1" action="" method="post" >
+<body leftmargin="0" topmargin="0" rightmargin="0" onLoad="init()" scroll=no><pg:dtoken cache="false"/>
+<form target="site" name="Form1" id="Form1" action="" method="post" >
 <table width="100%" height="58"  cellpadding="0" cellspacing="0"  border="0">
 <input type="hidden" name="userId" value="<%=userId%>" />
   <tr>

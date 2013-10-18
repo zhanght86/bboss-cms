@@ -100,6 +100,7 @@
         <column name="COMMENT_TEMPLATE_ID" size="22" type="DECIMAL"/>
         <column name="COMMENTPAGEPATH" size="200" type="VARCHAR"/>
         <column default="0" name="SPECIALFLAG" size="1" type="DECIMAL"/>
+		<column default="_self" name="OPENTARGET" size="32" type="VARCHAR"/>
         <!-- 频道评论审核开关：
         0：评论无需审核
         1：评论需要审核

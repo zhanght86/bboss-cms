@@ -117,6 +117,16 @@ public class Channel implements Comparable,java.io.Serializable{
     
     private String channelpuburl;
     
+    private String openTarget;
+    
+	public String getOpenTarget() {
+		return openTarget;
+	}
+
+	public void setOpenTarget(String openTarget) {
+		this.openTarget = openTarget;
+	}
+
 	/**
 	 * @return Returns the specialflag.
 	 */

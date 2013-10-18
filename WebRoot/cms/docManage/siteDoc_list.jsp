@@ -65,6 +65,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="<%=request.getContextPath()%>/cms/inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
+		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 		<script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
 		<script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/include/pager.js" type="text/javascript"></script>
 		<script language="javascript"> 	
@@ -90,9 +92,14 @@
 	}
 	//发布预览
 	function publishPreview(docId){
-		form1.action = "<%=request.getContextPath()%>/cms/docManage/previewPubDocHandle.jsp?docId="+docId;
-		form1.target = "operIframe";
-		form1.submit();
+		//form1.action = "<%=request.getContextPath()%>/cms/docManage/previewPubDocHandle.jsp?docId="+docId;
+		//form1.target = "operIframe";
+		//form1.submit();
+		
+		$.secutiry.dosubmit("form1",
+						"<%=request.getContextPath()%>/cms/docManage/previewPubDocHandle.jsp?docId="+docId,
+								"operIframe",
+								"<%=rootpath%>");
 	}
 	//文档浏览
     function docUrlView(siteid,channelid,docId){

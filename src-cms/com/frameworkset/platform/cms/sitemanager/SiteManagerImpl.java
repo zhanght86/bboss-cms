@@ -16,6 +16,9 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
@@ -42,8 +45,6 @@ import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
 
 /**
  * 站点管理
@@ -1010,7 +1011,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		}
 
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select a.SITE_ID, a.NAME, a.SECOND_NAME, "
 					+ "a.MAINSITE_ID, a.SITEDESC, a.DBNAME, a.SITEDIR,"
 					+ "a.STATUS, a.FTPIP, a.FTPPORT, a.FTPUSER, "
@@ -1019,10 +1020,11 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
 					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS from td_cms_site a "
 //					+ "where (a.status=0 or a.status=1) and a.SITE_ID ='"
-					+ "where a.SITE_ID ='"
-					+ siteId + "'";
+					+ "where a.SITE_ID =?";
 
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(siteId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				Site site = new Site();
 				fillSiteInfo(site, 0, db);
@@ -1399,7 +1401,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			throw new SiteManagerException("没有提供站点id,无法返回频道信息.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql;
 			if (type == 1) {
 				sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, a.ISNAVIGATOR,a.PUB_FILE_NAME, "
@@ -1408,10 +1410,10 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 						+ "a.DETAIL_TPL_ID, CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, "
 						+ "a.DOC_DYNAMIC, a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
-						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH " +
+						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,openTarget " +
 								"from TD_CMS_CHANNEL a "
 						+ "where (a.PARENT_ID=0 or a.PARENT_ID is null) and a.status=0 "
-						+ "and a.site_id=" + siteId + " order by order_no,channel_id";
+						+ "and a.site_id=? order by order_no,channel_id";
 			} else if (type == 2) {
 				sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, a.PARENT_ID,  a.ISNAVIGATOR, a.PUB_FILE_NAME,"
 						+ "a.CHNL_PATH, a.CREATEUSER, a.CREATETIME, a.ORDER_NO,"
@@ -1419,14 +1421,16 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 						+ "CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC,"
 						+ "a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
-						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH " +
+						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH,openTarget " +
 								"from TD_CMS_CHANNEL a where a.status=0 "
-						+ "and a.site_id=" + siteId +" order by order_no,channel_id";
+						+ "and a.site_id=? order by order_no,channel_id";
 			} else {
 				throw new SiteManagerException("无法确认是取站点的顶级频道,还是取站点的所有频道.");
 			}
 //			System.out.println("获取频道时的sql语句=" + sql);
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1,Integer.parseInt(siteId));
+			db.executePrepared();
 			List channels = new ArrayList();
 			for (int i = 0; i < db.size(); i++) {
 				Channel channel = new Channel();
@@ -1462,6 +1466,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				channel.setIndexpagepath(db.getString(i,"INDEXPAGEPATH"));
 				channel.setCommentTemplateId(db.getInt(i,"COMMENT_TEMPLATE_ID"));
 				channel.setCommentPagePath(db.getString(i,"COMMENTPAGEPATH"));
+				channel.setOpenTarget(db.getString(i,"openTarget"));
 				channels.add(channel);
 			}
 			return channels;
@@ -1825,33 +1830,59 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 	 * 保存用户登陆默认站点
 	 */
 	public void defaultSite(String siteId,String userId) throws SiteManagerException{
-		DBUtil db = new DBUtil();
-		String sql = "insert into td_cms_siteuser(site_Id,user_Id) values("+siteId+","+userId+")";
+		
+		String sql = "insert into td_cms_siteuser(site_Id,user_Id) values(?,?)";
 		String sqlselect = "select count(*) from td_cms_siteuser where " +
-						   " user_id="+userId+"";
-		String sqldel ="delete from td_cms_siteuser where  user_id="+userId+"";
+						   " user_id=?";
+		String sqldel ="delete from td_cms_siteuser where  user_id=?";
+		
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			if(siteId.equals(""))
 			{
-				db.executeDelete(sqldel);
+				PreparedDBUtil db = new PreparedDBUtil();
+				db.preparedDelete(sqldel);
+				db.setInt(1, Integer.parseInt(userId));
+				db.executePrepared();
 			}
 			else
 			{
-				db.executeSelect(sqlselect);
+				PreparedDBUtil db = new PreparedDBUtil();
+				db.preparedSelect(sqlselect);
+				db.setInt(1, Integer.parseInt(userId));
+				db.executePrepared();
 				if(db.getInt(0,0)>0){
-					db.executeDelete(sqldel);
-					db.executeInsert(sql);
+					PreparedDBUtil dbdel = new PreparedDBUtil();
+					dbdel.preparedDelete(sqldel);
+					dbdel.setInt(1, Integer.parseInt(userId));
+					dbdel.executePrepared();
+					
+					PreparedDBUtil dbinsert = new PreparedDBUtil();
+					dbinsert.preparedInsert(sql);
+					dbinsert.setInt(1, Integer.parseInt(siteId));
+					dbinsert.setInt(2, Integer.parseInt(userId));
+					dbinsert.executePrepared();
 				}
 				else
 				{
-					db.executeInsert(sql);
+					PreparedDBUtil dbinsert = new PreparedDBUtil();
+					dbinsert.preparedInsert(sql);
+					dbinsert.setInt(1, Integer.parseInt(siteId));
+					dbinsert.setInt(2, Integer.parseInt(userId));
+					dbinsert.executePrepared();
 				}
 			}
+			tm.commit();
 		
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			
-			e.printStackTrace();
-			throw new SiteManagerException(e.getMessage());
+			log.error("保存用户默认站点失败", e);
+//			throw new SiteManagerException(e.getMessage());
+		}
+		finally
+		{
+			tm.releasenolog();
 		}
 		
 	}
@@ -1862,11 +1893,13 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		if(userId == null || userId.equals(""))
 			return "";
 		String siteId ="";
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		String sqlselect = "select site_id from td_cms_siteuser where " +
-						   " user_id="+userId+"";
+						   " user_id=?";
 		try {
-			db.executeSelect(sqlselect);
+			db.preparedSelect(sqlselect);
+			db.setInt(1, Integer.parseInt(userId));
+			db.executePrepared();
 			if(db.size()>0){
 				siteId = db.getInt(0,"site_id")+"";
 			}

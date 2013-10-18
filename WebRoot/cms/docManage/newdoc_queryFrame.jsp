@@ -15,6 +15,8 @@
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 <title>内容管理主框架</title>
 <script src="../inc/js/func.js"></script>
+<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 <script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 <script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 <script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
@@ -22,16 +24,25 @@
 <script language="javascript">
 	function queryUser(){	
 		//查询
-		form1.action="newdoc_list.jsp?flag=query"
-		form1.target="forDocList";
-		form1.submit();	
+		//form1.action="newdoc_list.jsp?flag=query"
+		//form1.target="forDocList";
+		//form1.submit();
+		$.secutiry.dosubmit("form1",
+						"newdoc_list.jsp?flag=query",
+								"forDocList",
+								"${pageContext.request.contextPath}");	
 	}
 	function queryUserAll()
 	{	//查询所有
-		form1.action="newdoc_list.jsp"
-		form1.target="forDocList";
-		form1.submit();	
-		form1.reset();
+		//form1.action="newdoc_list.jsp"
+		//form1.target="forDocList";
+		//form1.submit();	
+		//form1.reset();
+		
+		$.secutiry.dosubmitwithreset("form1",
+						"newdoc_list.jsp",
+								"forDocList",
+								"${pageContext.request.contextPath}");	
 	}
 	//默认光标停留在文档标题输入框
 	function document.onreadystatechange(){
@@ -40,9 +51,13 @@
 		document.all.form1.title.focus();
 	}
 	function advancedQuery(){
-		form1.action="newdoc_advancedQueryFrame.jsp"
-		form1.target="forQuery";
-		form1.submit();	
+		//form1.action="newdoc_advancedQueryFrame.jsp"
+		//form1.target="forQuery";
+		//form1.submit();	
+		$.secutiry.dosubmit("form1",
+						"newdoc_advancedQueryFrame.jsp",
+								"forQuery",
+								"${pageContext.request.contextPath}");	
 	} 
 	function selChnl(){
 		var reVlaue = openWin("multi_channel_select_frame.jsp?taskType=audit&siteid=",400,500);	

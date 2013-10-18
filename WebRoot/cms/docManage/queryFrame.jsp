@@ -29,22 +29,32 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
+		<script src="<%=rootpath%>/include/jquery-1.4.2.min.js"></script>
+		<script src="<%=rootpath%>/include/security.js"></script>
 		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+		
 		<script language="javascript">
 	function queryUser()
 	{	
 		//查询
-		form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-		form1.target="forDocList";
-		form1.submit();	
+		$.secutiry.dosubmit("form1",
+				"<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+						"forDocList",
+						"<%=rootpath%>");
+		//form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
+		//form1.target="forDocList";
+		//form1.submit();	
 	}
 	function queryUserAll()
 	{	//查询所有
-		form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-		form1.target="forDocList";
-		form1.submit();
-		form1.reset();
+		//form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
+		//form1.target="forDocList";
+		//form1.submit();
+		$.secutiry.dosubmitwithreset("form1",
+				"<%=rootpath%>/cms/docManage/doc_list.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+						"forDocList",
+						"<%=rootpath%>");
+		//form1.reset();
 	}
 	//默认光标停留在文档标题输入框
 	function document.onreadystatechange(){
@@ -52,9 +62,13 @@
 		document.all.form1.title.focus();
 	}
 	function advancedQuery(){
-		form1.action="<%=rootpath%>/cms/docManage/advancedQueryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-		form1.target="forQuery";
-		form1.submit();	
+		$.secutiry.dosubmit("form1",
+				"<%=rootpath%>/cms/docManage/advancedQueryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+						"forQuery",
+						"<%=rootpath%>");
+		//form1.action="<%=rootpath%>/cms/docManage/advancedQueryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
+		//form1.target="forQuery";
+		//form1.submit();	
 	} 
 </script>
 		<style type="text/css">

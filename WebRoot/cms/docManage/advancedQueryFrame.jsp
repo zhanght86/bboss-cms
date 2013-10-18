@@ -21,6 +21,9 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
 		<script src="../inc/js/func.js"></script>
+		<script src="<%=rootpath%>/include/jquery-1.4.2.min.js"></script>
+		<script src="<%=rootpath%>/include/security.js"></script>
+		
 		<script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
@@ -29,16 +32,22 @@
 		{	
 			//查询
 			if(validate()){
-				form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-				form1.target="forDocList";
-				form1.submit();	
+				
+				
+				$.secutiry.dosubmit("form1",
+						"<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+						"forDocList",
+						"<%=rootpath%>");
+				
 			}
 		}
 		function queryUserAll()
 		{	//查询所有
-			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-			form1.target="forDocList";
-			form1.submit();	
+			$.secutiry.dosubmit("form1",
+					"<%=rootpath%>/cms/docManage/doc_list.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+					"forDocList",
+					"<%=rootpath%>");
+		
 		}
 		//默认光标停留在文档标题输入框
 		function document.onreadystatechange(){
@@ -53,9 +62,11 @@
 			return true;
 		}
 		function commonQuery(){	
-			form1.action="<%=rootpath%>/cms/docManage/queryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>"
-			form1.target="forQuery";
-			form1.submit();	
+			$.secutiry.dosubmit("form1",
+					"<%=rootpath%>/cms/docManage/queryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",
+					"forQuery",
+					"<%=rootpath%>");
+			
 		}
 --></script>
 		<style type="text/css">
@@ -77,6 +88,7 @@
 	</head>
 	<body leftmargin="0" topmargin="0" rightmargin="0">
 		<form id="form1" name="form1" method="post" action="">
+		
 			<table width="100%" height="100%" border="0" cellpadding="0" align="center" cellspacing="0">
 				<tr>
 				  <td width="5" valign="top" bgcolor="#ffffff"><img src="../images/querybox_left.gif" width="5" height="62"></td>

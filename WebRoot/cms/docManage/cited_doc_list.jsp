@@ -108,6 +108,7 @@
 	</head>
 	<body topmargin="2" scroll=no leftmargin="0">
 		<form name="citeDocForm" method="post">
+		<pg:dtoken/>
 			<table width="99%" border="0" align="center" cellpadding="3" cellspacing="0" class="Datalisttable">
 				<tr>
 					<td colspan=9  height="25" background="../images/data_list_tHeadbg.jpg" style="text-align:left; background:url(../images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7"><div class="DocumentOperT">操作：</div>

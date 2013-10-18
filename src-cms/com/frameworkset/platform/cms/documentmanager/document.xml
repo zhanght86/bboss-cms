@@ -35,6 +35,36 @@
 	</property>
 	-->
 	
+	<property name="getCitedDocList">
+		<![CDATA[
+			
+				#if($queryFlag.equals("part"))
+					select distinct a.* from td_cms_chnl_ref_doc a,td_cms_document b,td_cms_channel c 
+								where a.chnl_id = #[channelid]
+					#if($docName && !$docName.equals(""))
+						 and b.isdeleted!=1 and a.doc_id=b.document_id and b.subtitle like #[docName]
+					#end		
+					#if($chnlName && !$chnlName.equals(""))						
+						 and c.status = 0 and a.doc_id = c.channel_id and c.display_name like  #[chnlName]						
+					#end		
+					#if($citeUserid && !$citeUserid.equals(""))		
+						 and a.op_user_id =#[citeUserid]
+					#end	
+					#if($srcChnlid && !$srcChnlid.equals(""))	
+						 and b.isdeleted!=1 and a.doc_id=b.document_id and b.channel_id = #[srcChnlid]
+					#end
+					#if($citeTimeBgin && !$citeTimeBgin.equals(""))	
+						 and a.op_time >=to_date(#[citeTimeBgin],'yyyy-mm-dd')
+					#end
+					#if($citeTimeEnd && !$citeTimeEnd.equals(""))	
+						 and a.op_time < to_date(#[citeTimeEnd],'yyyy-mm-dd')+1
+					#end
+				#else
+					select a.* from td_cms_chnl_ref_doc a where a.chnl_id = #[channelid]	
+				#end
+				order by a.op_time desc
+		]]>
+	</property>
 	<property name="queryNewsByPublishTimeAndKeywords">
 		<![CDATA[
 			SELECT   t.document_id AS document_id, title, subtitle, author,
@@ -382,6 +412,25 @@
 			  #if ($orderByComment && !$orderByComment.equals(""))
 			 	order by order_no_nvl desc,cmCount desc, playedCount desc 
 			 #end
+		]]>
+	</property>
+	
+	<property name="queryDocCountsByIds">
+		<![CDATA[
+		select doc_id as docid ,count(1) as cnt From td_cms_browser_counts
+		where 1=1
+		#if($countids)
+				 and doc_id in (
+				 #foreach($countid in $countids)
+							#if($velocityCount == 0)
+								#[countids[$velocityCount]]
+							#else
+								,#[countids[$velocityCount]]
+							#end
+						#end
+					)
+			#end 
+		group by doc_id	
 		]]>
 	</property>
 	

@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" isErrorPage="true" contentType="text/html; charset=UTF-8"%>
 
 <%@page import="org.frameworkset.spi.remote.RemoteException"%>
@@ -52,7 +53,10 @@ function showT(){
 		
 		<pre>
 			<%
-				exception.printStackTrace(new java.io.PrintWriter(out));			 	
+				//String error = StringUtil.HTMLEncode(StringUtil.exceptionToString(exception));
+				String error = "出错了!";
+				//exception.printStackTrace(new java.io.PrintWriter(out));
+				out.print(error);
 			%>
 		</pre>		
 	</div>

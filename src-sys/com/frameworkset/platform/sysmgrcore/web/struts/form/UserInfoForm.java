@@ -8,12 +8,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 import java.io.Serializable;
 import java.sql.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 /** 
  * MyEclipse Struts
  * Creation date: 03-09-2006
@@ -45,6 +39,9 @@ public class UserInfoForm  implements Serializable {
     private String ou;//机构名字
     private String orgId;//机构ID
     private String postalCode;
+    private String advQuery;//查询相关字段，需要排除绑定
+    private boolean admin;
+    private int curUserId;
     //add by 
     /**
 	 * 工号
@@ -317,30 +314,7 @@ public class UserInfoForm  implements Serializable {
 
 	// --------------------------------------------------------- Methods
 
-	/** 
-	 * Method validate
-	 * @param mapping
-	 * @param request
-	 * @return ActionErrors
-	 */
-	public ActionErrors validate(
-		ActionMapping mapping,
-		HttpServletRequest request) {
 
-        ActionErrors errors = new ActionErrors();
-        return errors;
-	}
-
-	/** 
-	 * Method reset
-	 * @param mapping
-	 * @param request
-	 */
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-
-		//throw new UnsupportedOperationException(
-		//	"Generated method 'reset(...)' not implemented.");
-	}
 
 	/**
 	 * @return 返回 homePhone。
@@ -633,5 +607,23 @@ public class UserInfoForm  implements Serializable {
 	}
 	public void setIstaxmanager(int istaxmanager) {
 		this.istaxmanager = istaxmanager;
+	}
+	public String getAdvQuery() {
+		return advQuery;
+	}
+	public void setAdvQuery(String advQuery) {
+		this.advQuery = advQuery;
+	}
+	public boolean isAdmin() {
+		return admin;
+	}
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
+	}
+	public int getCurUserId() {
+		return curUserId;
+	}
+	public void setCurUserId(int curUserId) {
+		this.curUserId = curUserId;
 	}
 }

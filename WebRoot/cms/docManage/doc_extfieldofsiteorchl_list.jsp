@@ -123,6 +123,7 @@
 
 	<body topmargin="2" rightmargin="0">
 		<form target="allextfieldlist" name="allextfieldlistform" action="" method="post">
+		<pg:dtoken/>
 			<table width="100%" border="1" align=center cellpadding="3" cellspacing="0" bgcolor="#FFFFFF" id="docVerListTable" class="Datalisttable">
 				<tr >
 					<td colspan="6" background="../images/data_list_tHeadbg.jpg" style="text-align:left; background:url(../images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7"><div class="DocumentOperT">扩展字段管理：</div>

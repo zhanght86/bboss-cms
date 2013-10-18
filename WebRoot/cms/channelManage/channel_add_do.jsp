@@ -194,6 +194,7 @@ try{
 	{
 	chnlobj.setSpecialflag(1);
 	}
+	chnlobj.setOpenTarget(request.getParameter("openTarget"));
 	smi.logCreateChannel(chnlobj,request,response);
 %>
 	<script language="javascript">

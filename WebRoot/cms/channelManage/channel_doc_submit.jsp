@@ -220,6 +220,7 @@
 </head>
 <body>
 	<form name="myform" method="post">
+	<pg:dtoken/>
 		<table align="center">
 			<tr>
 				<td>&nbsp;</td>

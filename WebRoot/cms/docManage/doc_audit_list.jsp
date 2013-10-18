@@ -26,6 +26,8 @@
 		已审文档列表
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
+	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 	<script language="javascript" src="../inc/js/func.js"></script>
 	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 	<script language="javascript">
@@ -57,8 +59,12 @@
 			}
 		}
 		function subQuery(){
-			toAuditDocListForm.action="<%=rootpath%>/cms/docManage/docAudit.jsp";
-			toAuditDocListForm.submit();
+			$.secutiry.dosubmit("toAuditDocListForm",
+					"<%=rootpath%>/cms/docManage/docAudit.jsp",
+							null,
+							"${pageContext.request.contextPath}");
+			//toAuditDocListForm.action="<%=rootpath%>/cms/docManage/docAudit.jsp";
+			//toAuditDocListForm.submit();
 		}
 		function garbage(){
 			//将选中的文档id拼成字符串
@@ -70,9 +76,14 @@
 				}
 			}
 			if(haveSelect('ID')){
-				toAuditDocListForm.action = "docGarbageHandle.jsp?docidStr="+docidStr;
-				toAuditDocListForm.target = "agreeFrame";
-				toAuditDocListForm.submit();
+				//toAuditDocListForm.action = "docGarbageHandle.jsp?docidStr="+docidStr;
+				//toAuditDocListForm.target = "agreeFrame";
+				//toAuditDocListForm.submit();
+				
+				$.secutiry.dosubmit("toAuditDocListForm",
+						"docGarbageHandle.jsp?docidStr="+docidStr,
+						"agreeFrame",
+								"${pageContext.request.contextPath}");
 				return true;
 			}else{
 		    	alert("请至少要选择一篇文档！");
@@ -87,7 +98,8 @@
 	</style>
 </head>
 <body topmargin="2" rightmargin="0" scroll=no leftmargin="1" righttmargin="1">
-	<form name="toAuditDocListForm" action="" method="post" >
+	<form name="toAuditDocListForm" id="toAuditDocListForm" action="" method="post" >
+	
 		<table width="100%" border="1"  cellpadding="3" cellspacing="0" bordercolor="#B7CBE4"  class="Datalisttable">
 <!--		 	<tr>-->
 <!--				<td height='30' colspan="9" nowrap align="left" valign='middle' class="cms_title_blue">-->

@@ -32,6 +32,8 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
 		<script src="../inc/js/func.js"></script>
+		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 		<script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
@@ -40,16 +42,25 @@
 		{	
 			//查询
 			if(validate()){
-				form1.action="<%=rootpath%>/cms/docManage/siteDoc_list.jsp?flag=query&siteid=<%=siteid%>"
-				form1.target="sitedocList";
-				form1.submit();	
+				//form1.action="<%=rootpath%>/cms/docManage/siteDoc_list.jsp?flag=query&siteid=<%=siteid%>"
+				//form1.target="sitedocList";
+			//	form1.submit();	
+				
+					$.secutiry.dosubmit("form1",
+						"<%=rootpath%>/cms/docManage/siteDoc_list.jsp?flag=query&siteid=<%=siteid%>",
+								"sitedocList",
+								"<%=rootpath%>");
 			}
 		}
 		function queryUserAll()
 		{	//查询所有
-			form1.action="<%=rootpath%>/cms/docManage/siteDoc_list.jsp?siteid=<%=siteid%>"
-			form1.target="sitedocList";
-			form1.submit();	
+			//form1.action="<%=rootpath%>/cms/docManage/siteDoc_list.jsp?siteid=<%=siteid%>"
+			//form1.target="sitedocList";
+			//form1.submit();	
+			$.secutiry.dosubmit("form1",
+						"<%=rootpath%>/cms/docManage/siteDoc_list.jsp?siteid=<%=siteid%>",
+								"sitedocList",
+								"<%=rootpath%>");
 		}
 		//默认光标停留在文档标题输入框
 		function document.onreadystatechange(){
@@ -64,9 +75,13 @@
 			return true;
 		}
 		function commonQuery(){	
-			form1.action="<%=rootpath%>/cms/docManage/queryFrame.jsp?siteid=<%=siteid%>"
-			form1.target="forQuery";
-			form1.submit();	
+			//form1.action="<%=rootpath%>/cms/docManage/queryFrame.jsp?siteid=<%=siteid%>"
+			//form1.target="forQuery";
+			//form1.submit();	
+			$.secutiry.dosubmit("form1",
+						"<%=rootpath%>/cms/docManage/queryFrame.jsp?siteid=<%=siteid%>",
+								"forQuery",
+								"<%=rootpath%>");
 		}
 --></script>
 		<style type="text/css">

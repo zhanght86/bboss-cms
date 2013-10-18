@@ -1,283 +1,283 @@
-Sat Sep 28 21:45:12 CST 2013  [debug] AvalonLogChute initialized using file 'velocity.log'
-Sat Sep 28 21:45:12 CST 2013  [trace] *******************************************************************
-Sat Sep 28 21:45:12 CST 2013  [debug] Starting Apache Velocity v1.5 (compiled: 2007-02-22 08:52:29)
-Sat Sep 28 21:45:12 CST 2013  [trace] RuntimeInstance initializing.
-Sat Sep 28 21:45:12 CST 2013  [debug] Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
-Sat Sep 28 21:45:12 CST 2013  [debug] Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
-Sat Sep 28 21:45:12 CST 2013  [debug] Using logger class org.apache.velocity.runtime.log.AvalonLogChute
-Sat Sep 28 21:45:12 CST 2013  [debug] Default ResourceManager initializing. (class org.apache.velocity.runtime.resource.ResourceManagerImpl)
-Sat Sep 28 21:45:12 CST 2013  [trace] FileResourceLoader : initialization starting.
-Sat Sep 28 21:45:12 CST 2013  [debug] Do unicode file recognition:  false
-Sat Sep 28 21:45:12 CST 2013   [info] FileResourceLoader : adding path 'D:\d\workspace\bboss-cms\dbinit-system\templates'
-Sat Sep 28 21:45:12 CST 2013  [trace] FileResourceLoader : initialization complete.
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl)
-Sat Sep 28 21:45:12 CST 2013  [trace] Default ResourceManager initialization complete.
-Sat Sep 28 21:45:12 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Literal
-Sat Sep 28 21:45:12 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Macro
-Sat Sep 28 21:45:12 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Parse
-Sat Sep 28 21:45:12 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Include
-Sat Sep 28 21:45:12 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
-Sat Sep 28 21:45:12 CST 2013  [debug] Created '20' parsers.
-Sat Sep 28 21:45:12 CST 2013  [trace] Velocimacro : initialization starting.
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : Default library not found.
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : allowInline = true : VMs can be defined inline in templates
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
-Sat Sep 28 21:45:12 CST 2013  [debug] Velocimacro : autoload off : VM system will not automatically reload global library macros
-Sat Sep 28 21:45:12 CST 2013  [trace] Velocimacro : Velocimacro : initialization complete.
-Sat Sep 28 21:45:12 CST 2013  [trace] RuntimeInstance successfully initialized.
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/Control.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
-Sat Sep 28 21:45:12 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] AvalonLogChute initialized using file 'velocity.log'
+Wed Sep 04 15:50:24 CST 2013  [trace] *******************************************************************
+Wed Sep 04 15:50:24 CST 2013  [debug] Starting Apache Velocity v1.5 (compiled: 2007-02-22 08:52:29)
+Wed Sep 04 15:50:24 CST 2013  [trace] RuntimeInstance initializing.
+Wed Sep 04 15:50:24 CST 2013  [debug] Default Properties File: org\apache\velocity\runtime\defaults\velocity.properties
+Wed Sep 04 15:50:24 CST 2013  [debug] Trying to use logger class org.apache.velocity.runtime.log.AvalonLogChute
+Wed Sep 04 15:50:24 CST 2013  [debug] Using logger class org.apache.velocity.runtime.log.AvalonLogChute
+Wed Sep 04 15:50:24 CST 2013  [debug] Default ResourceManager initializing. (class org.apache.velocity.runtime.resource.ResourceManagerImpl)
+Wed Sep 04 15:50:24 CST 2013  [trace] FileResourceLoader : initialization starting.
+Wed Sep 04 15:50:24 CST 2013  [debug] Do unicode file recognition:  false
+Wed Sep 04 15:50:24 CST 2013   [info] FileResourceLoader : adding path 'D:\workspace\SanyPDP\dbinit-system\templates'
+Wed Sep 04 15:50:24 CST 2013  [trace] FileResourceLoader : initialization complete.
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceCache: initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl)
+Wed Sep 04 15:50:24 CST 2013  [trace] Default ResourceManager initialization complete.
+Wed Sep 04 15:50:24 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Literal
+Wed Sep 04 15:50:24 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Macro
+Wed Sep 04 15:50:24 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Parse
+Wed Sep 04 15:50:24 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Include
+Wed Sep 04 15:50:24 CST 2013  [debug] Loaded System Directive: org.apache.velocity.runtime.directive.Foreach
+Wed Sep 04 15:50:24 CST 2013  [debug] Created '20' parsers.
+Wed Sep 04 15:50:24 CST 2013  [trace] Velocimacro : initialization starting.
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : "velocimacro.library" is not set.  Trying default library: VM_global_library.vm
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : Default library not found.
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : allowInline = true : VMs can be defined inline in templates
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : allowInlineToOverride = false : VMs defined inline may NOT replace previous VM definitions
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : allowInlineLocal = false : VMs defined inline will be global in scope if allowed.
+Wed Sep 04 15:50:24 CST 2013  [debug] Velocimacro : autoload off : VM system will not automatically reload global library macros
+Wed Sep 04 15:50:24 CST 2013  [trace] Velocimacro : Velocimacro : initialization complete.
+Wed Sep 04 15:50:24 CST 2013  [trace] RuntimeInstance successfully initialized.
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/Control.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/droptablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/dropforeignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/table.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/drop.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/columns.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/unique.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/primarykey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/index.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/sequence.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/comment.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($table.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 17, column 35]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [error] Left side ($col.description.length()) of '>' operation has null value. Operation not possible. sql/base/oracle/comment.vm [line 22, column 33]
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/tablefk.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl
+Wed Sep 04 15:50:24 CST 2013  [debug] ResourceManager : found sql/base/oracle/foreignkey.vm with loader org.apache.velocity.runtime.resource.ResourceCacheImpl

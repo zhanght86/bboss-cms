@@ -52,11 +52,11 @@ $(document).ready(function() {
     <div class="clear"></div>
   </div>
   <div class="container">
-  	  <cms:sanyleftnav />
+  	 <!--  <cms:sanyleftnav />  -->
       <div class="rightcontent">
    	    <div class="titleMenu"><div class="path"><cms:position/></div><span class="title"><cms:channel property="name"/> </span></div>
         <div class="searchbox">
-   	  	  <h1 class="title">检索 新闻动态</h1>
+   	  	  <h1 class="title">检索 <cms:channel property="name"/></h1>
   	  <table border="0" cellspacing="6" width="100%">
       	  	        <tr>
       	  	          <td height="28">发布日期 :
@@ -73,7 +73,7 @@ $(document).ready(function() {
   	      </table>       
           </div>
           <div class="ulList">
-          	<h1 class="title">所有 新闻动态</h1>
+          	<h1 class="title">所有 <cms:channel property="name"/></h1>
           	<br/>
             <ul>
             	<iframe id="newsList"  src="<cms:siteparam name='appcontext'/>/document/showNewsList.freepage?siteId=<cms:siteinfo property='siteId'/>&channelId=<cms:channel property='channelId'/>" scrolling="auto" width="100%" height="500px" frameborder="0"></iframe>

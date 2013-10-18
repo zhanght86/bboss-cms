@@ -16,21 +16,32 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
 		<script src="../inc/js/func.js"></script>
+		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 		<script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
 		<script language="javascript">
 			function subQuery(){
-				form1.action = "doc_rebound_list.jsp?flag=query";
-				form1.target = "reboundDocListF";
-				form1.submit();
+				$.secutiry.dosubmit("form1",
+						"doc_rebound_list.jsp?flag=query",
+								"reboundDocListF",
+								"<%=rootpath%>");
+				
+				//form1.action = "doc_rebound_list.jsp?flag=query";
+				//form1.target = "reboundDocListF";
+				//form1.submit();
 			}
 			function dispalyAll(){
-				form1.action = "doc_rebound_list.jsp?flag=all";
-				form1.target = "reboundDocListF";
-				form1.submit();
-				form1.reset();
+				//form1.action = "doc_rebound_list.jsp?flag=all";
+				//form1.target = "reboundDocListF";
+				//form1.submit();
+				//form1.reset();
+				$.secutiry.dosubmitwithreset("form1",
+						"doc_rebound_list.jsp?flag=all",
+								"reboundDocListF",
+								"<%=rootpath%>");
 			}
 			function selChnl(){
 				var reVlaue = openWin("multi_channel_select_frame.jsp?taskType=deliver&siteid=",400,500);	

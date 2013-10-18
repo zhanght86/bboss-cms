@@ -360,7 +360,7 @@ public class Document implements java.io.Serializable
 	 * 文档点击数
 	 * @return
 	 */
-	private int count;
+	private long count;
 	
 	/**
 	 * 信息文号
@@ -1240,11 +1240,11 @@ public class Document implements java.io.Serializable
 		this.commentswitch = commentswitch;
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 

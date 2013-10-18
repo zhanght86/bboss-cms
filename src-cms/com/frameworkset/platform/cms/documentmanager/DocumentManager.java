@@ -2,6 +2,7 @@
 package com.frameworkset.platform.cms.documentmanager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -870,6 +871,11 @@ public interface DocumentManager extends java.io.Serializable
 	 * return List<DocAggregation>
 	 */
 	public List getPubAggrDocList(String docId) throws DocumentManagerException;
+	
+	/**
+	 * 获取文档的点级数
+	 */
+	public void putDocCount(List<Integer> countids ,Map<Integer,Object> idx) throws DocumentManagerException;
 	/**
 	 * get 聚合文档List2Str
 	 * param String docId

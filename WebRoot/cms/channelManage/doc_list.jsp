@@ -109,6 +109,7 @@
 
 	<body leftmargin="0" topmargin="2" rightmargin="0">
 		<form name="form1" target="listdoc" action="" method="post">
+		<pg:dtoken/>
 			<input type="hidden" name="chlName" value="<%=channelName%>"/>
 			<table width="100%" border="0" align=center cellpadding="3" cellspacing="0" id="docListTable" class="Datalisttable">
 				

@@ -35,11 +35,16 @@ $(document).ready(function() {
 			$.getJSON(videourl, { siteId:siteId, siteName:encodeURIComponent(siteName), channelId:channelId, channelName:encodeURIComponent(channelName), docId:docId, docName:encodeURIComponent(docName), videoPath:pageURL, enable:true },
             function(data) {   
             	//document.getElementById("playedCount").innerText = data;
-            	//$("#playedCount").empty(); 
-             	//	$("#playedCount").append(data); 
+            	$("#playedCount").empty(); 
+             	$("#playedCount").append(data); 
             });
+            	    
 		showcomment(commentlisturl,docId,n);
 	 });
+	 
+	 document.oncontextmenu=function() {return false;}
+	 document.onselectstart = function() {return false;}
+
 </script>
 
 </head>
@@ -50,10 +55,11 @@ $(document).ready(function() {
   </div>
   <div class="daohang">
     <cms:sanynav/>
+    
     <div class="clear"></div>
   </div>
   <div class="container">   
-      <cms:sanyleftnav />
+  <!--     <cms:sanyleftnav />  -->
       <div class="rightcontent">
    	    <div class="titleMenu">
 			   <div class="path"><cms:position/></div>
@@ -61,7 +67,7 @@ $(document).ready(function() {
 		</div>
         <div class="detail">
         	<h1><cms:cell colName="title"/></h1>
-            <div class="detail_about">所属类别：<cms:cell colName="docsource_name"/>&nbsp;&nbsp;&nbsp;&nbsp;发布日期：<cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div>
+            <div class="detail_about">所属类别：<cms:cell colName="docsource_name"/>&nbsp;&nbsp;&nbsp;&nbsp;发布日期：<cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/>&nbsp;&nbsp;&nbsp;&nbsp;阅读次数：<font id="playedCount"></font>次</div>
             <div class="detail_content">
                <cms:cell colName="content"/>
             </div>

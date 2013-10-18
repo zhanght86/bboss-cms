@@ -30,7 +30,7 @@
 				     		<pg:notequal colName="doctype" value="${DOCUMENT_AGGRATION}">
 				           	<a title='<pg:cell colName="title"/>' target='_blank' href='<pg:cell colName="docpuburl"/>' class='linkTagClass '>
 				           	<pg:equal colName='titlecolor' value='#000000'>
-				           		<pg:cell colName="title"/>
+				           		<pg:cell colName="title"/> 
 				           	</pg:equal>
 				           	<pg:notequal colName='titlecolor' value='#000000'>
 				           		<font color="<pg:cell colName='titlecolor'/>"><pg:cell colName="title"/></font>
@@ -41,6 +41,7 @@
 				           		</pg:notequal>
 				           	</pg:equal>
 				           	</a>
+				           	&nbsp;<font color="blue">点击数：<pg:cell colName='count'/></font>
 				           	</pg:notequal>
 				           	<pg:equal colName="doctype" value="${DOCUMENT_AGGRATION}">
 				           		<Strong><pg:cell colName="title"/>:</Strong>
@@ -58,10 +59,11 @@
 						           		</pg:notequal>
 						           	</pg:equal>
 						           	</a>
+						           	&nbsp;<font color="blue">点击数：<pg:cell colName='count'/></font>
 				     			</pg:list>
 				     		</pg:equal>
 				     		
-				       		<pg:cell colName="docwtime" dateformat="yyyy-MM-dd"/>
+				       		&nbsp;&nbsp;&nbsp;&nbsp;<pg:cell colName="docwtime" dateformat="yyyy-MM-dd"/>
 				       </li>
 				 </pg:list>
 				 <br/>

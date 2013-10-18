@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%
 try {
 	AccessControl control = AccessControl.getInstance();
@@ -23,6 +24,7 @@ try {
 	//parent.updateParentForm();
 	parent.close();
 </script>
+<pg:dtoken cache="false"/>
 <%}catch (SiteManagerException e) {
 		e.printStackTrace();
 		throw new SiteManagerException(e.getMessage());

@@ -2719,6 +2719,7 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processCMediaTag(ResourceTag tag) {
 		String href_ = tag.getAttribute("src");
+		href_ = StringUtil.HTMLEncodej(href_);
 		String ff = processStringLink(href_);
 		if(ff != null)
 			tag.setAttribute("src", ff);
@@ -2785,23 +2786,46 @@ public class CmsLinkProcessor extends CmsHtmlParser {
 	 */
 	protected void processCFlashplayerTag(ResourceTag tag) {
 		String href_ = tag.getStringText();
+		href_ = StringUtil.HTMLEncodej(href_);
 		String flv = processStringLink(href_);
-		 
+		String flyplayer_ = tag.getAttribute("flyplayer");
+		if(flyplayer_ == null)
+		{
+			flyplayer_ = "components/flash/flvplayer.swf";
+		}
+		else
+		{
+			flyplayer_ = StringUtil.HTMLEncodej(flyplayer_);
+		}
 		if(flv == null)
 		{	
 			flv = href_;
 		}
-		else
-			flv = "../"+flv;
+		else//flv电影处理比较特别，真实地址只需要计算和components/flash/flvplayer.swf文件所在的相对地址即可
+		{
+			int idx = flyplayer_.lastIndexOf("/");
+			if(idx > 0)
+			{
+				flv = CMSUtil.getSimplePathFromfullPath(flyplayer_.substring(0,idx), href_);
+			}
+			else
+			{
+				if(!href_.startsWith("/"))
+					flv = "../../"+href_;
+				else
+					flv = "../.."+href_;
+				
+			}
+			
+			
+		}
 		href_ = tag.getAttribute("pic");
+		href_ = StringUtil.HTMLEncodej(href_);
 		String pic = processStringLink(href_);
 		if(pic == null)
 			pic = href_;
-		href_ = tag.getAttribute("flyplayer");
-		if(href_ == null)
-		{
-			href_ = "components/flash/flvplayer.swf";
-		}
+		href_ = flyplayer_;
+		
 		String flyplayer = processStringLink(href_);
 		if(flyplayer == null)
 //			tag.setAttribute("flyplayer",ff);

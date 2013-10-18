@@ -104,7 +104,7 @@
     //add by ge.tao
     //判断频道下是否有文档
     boolean hasOldDocument = dm.channelHasDoc(channelId);
-    
+    String openTarget =chnl.getOpenTarget();
     
 %>
 <html>
@@ -747,6 +747,19 @@ function updateTemplete(e){
 										不是
 										<input name="isnavigator" type="radio" value="1" <%=isNav?"checked":""%> onClick="shownavigatorMoreInfo(true)">
 										是
+									</td>
+								</tr>
+								<tr>
+									<td width="130" height="24" align="right" nowrap>频道打开模式</td>
+									<td height="24">
+										<input type="radio" id="openTarget" name="openTarget" value="_self" <%="_self".equals(openTarget)?"checked":""%> >
+										_self
+										<input  id="openTarget" name="openTarget" type="radio" value="_blank" <%="_blank".equals(openTarget)?"checked":""%> >
+										_blank
+										<input  id="openTarget" name="openTarget" type="radio" value="_parent" <%="_parent".equals(openTarget)?"checked":""%> >
+										_parent
+										<input  id="openTarget" name="openTarget" type="radio" value="_top" <%="_top".equals(openTarget)?"checked":""%> >
+										_top
 									</td>
 								</tr>
 								<tr id="navigatorMoreInfo1" <%=isNav?"":"style='display:none'" %>>

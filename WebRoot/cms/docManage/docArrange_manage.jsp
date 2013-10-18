@@ -23,6 +23,8 @@
 		<base target=_self><!-- use for submit to self-->
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
+		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 		<title>.::::::::::文档置顶管理:::::::::::::::::::::::::::::::::::::..</title>
 		<script src="../inc/js/func.js"></script>
 		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
@@ -112,9 +114,14 @@
 		if(haveSelect('ID')){
 			if(window.confirm("您确定要取消该文档的置顶吗？"))
 			{
-				document.forms[0].action = "<%=rootpath%>/cms/docManage/docArrange_del_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid;
-				document.forms[0].target = "managedocarrange";
-				document.forms[0].submit();
+				//document.forms[0].action = "<%=rootpath%>/cms/docManage/docArrange_del_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid;
+				//document.forms[0].target = "managedocarrange";
+				//document.forms[0].submit();
+				
+				$.secutiry.dosubmit("manageDocVerform",
+						"<%=rootpath%>/cms/docManage/docArrange_del_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid,
+								"managedocarrange",
+								"<%=rootpath%>");
 			}
 		}else{
 			alert("请选择要取消置顶的文档！");
@@ -266,9 +273,14 @@
 			alert("该频道暂时没有置顶文档！");
 			return false;
 		}
-		document.forms[0].action = "<%=rootpath%>/cms/docManage/docArrange_no_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid;
-		document.forms[0].target = "managedocarrange";
-		document.forms[0].submit();
+		//document.forms[0].action = "<%=rootpath%>/cms/docManage/docArrange_no_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid;
+		//document.forms[0].target = "managedocarrange";
+		//document.forms[0].submit();
+		
+		$.secutiry.dosubmit("manageDocVerform",
+						"<%=rootpath%>/cms/docManage/docArrange_no_submit.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&docid=" + docid,
+								"managedocarrange",
+								"<%=rootpath%>");
 	}
 	</script>
 	
@@ -277,7 +289,7 @@
 		document.write("<a id='reload' href='" + document.location.href + "' style='display:none'>reload...</a>");
 	</script>
 	<body topmargin="2" rightmargin="0">
-		<form target="managedocarrange" name="manageDocVerform" action="" method="post">
+		<form target="managedocarrange" name="manageDocVerform" id="manageDocVerform" action="" method="post">
 			<table width="100%" border="1" align=center cellpadding="3" cellspacing="0" bgcolor="#FFFFFF" id="docArrangeListTable"  class="Datalisttable">
 				<tr>
 					<td height='25' colspan="7" background="<%=request.getContextPath()%>/cms/images/data_list_tHeadbg.jpg" style="text-align:left; background:url(<%=request.getContextPath()%>/cms/images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7">

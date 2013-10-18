@@ -99,6 +99,10 @@
     <filter-name>CharsetEncoding</filter-name>
     <url-pattern>*.freepage</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>CharsetEncoding</filter-name>
+    <url-pattern>/cxfservices/*</url-pattern>
+  </filter-mapping>
   
   <filter>
     <filter-name>securityFilter</filter-name>

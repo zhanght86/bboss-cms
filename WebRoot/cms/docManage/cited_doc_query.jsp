@@ -19,20 +19,26 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
 		<script src="../inc/js/func.js"></script>
+		<script src="<%=rootpath%>/include/jquery-1.4.2.min.js"></script>
+		<script src="<%=rootpath%>/include/security.js"></script>
 		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 		<script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
 		<script language="javascript">
 			function queryCitedDoc(queryFlag){
-				queryForm.action = "<%=rootpath%>/cms/docManage/cited_doc_list.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&queryFlag=" + queryFlag;
-				queryForm.target = "citedDocListF";
-				queryForm.submit();
+				$.secutiry.dosubmit("queryForm",
+						"<%=rootpath%>/cms/docManage/cited_doc_list.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&queryFlag=" + queryFlag,
+								"citedDocListF",
+								"<%=rootpath%>");
+				//queryForm.action = "<%=rootpath%>/cms/docManage/cited_doc_list.jsp?siteid=<%=siteid%>&channelid=<%=channelid%>&queryFlag=" + queryFlag;
+				//queryForm.target = "citedDocListF";
+				//queryForm.submit();
 			}
 		</script>
 	</head>
 	<body leftmargin="0" topmargin="0">
-	 <form name="queryForm" method="post">
+	 <form name="queryForm" id="queryForm" method="post">
 		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td width="5" valign="top"><img src="../images/querybox_left.gif" width="5" height="62"></td>

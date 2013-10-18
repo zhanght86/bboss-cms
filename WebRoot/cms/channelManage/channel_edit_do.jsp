@@ -174,7 +174,8 @@ try{
 				chnlobj.setIndexpagepath(chnlId);
 		}
 	}
-	
+	String openTarget = request.getParameter("openTarget");
+	chnlobj.setOpenTarget(openTarget);
 	ChannelManager smi=new ChannelManagerImpl();
 	SiteManager sm = new SiteManagerImpl();
 	Site site = sm.getSiteInfo(request.getParameter("siteId")) ;

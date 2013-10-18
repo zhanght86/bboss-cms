@@ -12,23 +12,34 @@
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 <title></title>
 <script src="../inc/js/func.js"></script>
+<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 <script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 <script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 <script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 <script language="javascript">
 function queryUser(){	
 	if(validate()){
-		form1.action="newdoc_list.jsp?flag=query";
-		form1.target="forDocList";
-		form1.submit();	
+		$.secutiry.dosubmit("form1",
+						"newdoc_list.jsp?flag=query",
+								"forDocList",
+								"${pageContext.request.contextPath}");
+		//form1.action="newdoc_list.jsp?flag=query";
+		//form1.target="forDocList";
+		//form1.submit();	
 	}
 }
 
 //查询所有
 function queryUserAll(){
-	form1.action="newdoc_list.jsp";
-	form1.target="forDocList";
-	form1.submit();	
+	//form1.action="newdoc_list.jsp";
+	//form1.target="forDocList";
+	//form1.submit();	
+	
+	$.secutiry.dosubmit("form1",
+						"newdoc_list.jsp",
+								"forDocList",
+								"<%=rootpath%>");
 }
 
 //默认光标停留在文档标题输入框
@@ -45,9 +56,13 @@ function validate(){
 	return true;
 }
 function commonQuery(){	
-	form1.action="newdoc_queryFrame.jsp";
-	form1.target="forQuery";
-	form1.submit();	
+	//form1.action="newdoc_queryFrame.jsp";
+	//form1.target="forQuery";
+	//form1.submit();	
+	$.secutiry.dosubmit("form1",
+						"newdoc_queryFrame.jsp",
+								"forQuery",
+								"<%=rootpath%>");
 }
 </script>
 </head>

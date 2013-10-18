@@ -514,12 +514,14 @@ public class TemplateManagerImpl implements TemplateManager{
     public Template getTemplateInfo(String templateid) throws TemplateManagerException
     {
 // 	   List   Templatelist = null;
- 	   DBUtil conn = new DBUtil(); 
+ 	   PreparedDBUtil conn = new PreparedDBUtil(); 
  	   String  sql = "";	   
  	   try {
  		
- 		 sql = "select a.*,b.user_name from td_cms_template a inner join  td_sm_user b on a.createuser = b.user_id and template_id="+templateid;
- 		 conn.executeSelect(sql);
+ 		 sql = "select a.*,b.user_name from td_cms_template a inner join  td_sm_user b on a.createuser = b.user_id and template_id=?";
+ 		 conn.preparedSelect(sql);
+ 		 conn.setInt(1, Integer.parseInt(templateid));
+ 		 conn.executePrepared();
  		 if (conn.size()>0){
  		     Template templateobj=new Template();
    		     templateobj.setName     (conn.getString(0,"name"));       //模板名称

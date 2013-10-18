@@ -23,6 +23,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
+<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 <title>:::::批量导入文档::::::::::::::::::::::.</title>
 <style type="text/css">
 	.STYLE1 {color: #0000FF}
@@ -54,8 +56,12 @@
 			return false;
 		}
 
-		uploadform.action = "doc_import.jsp?siteid=<%=siteid%>&channelId=<%=channelId%>";
-		uploadform.submit();
+		$.secutiry.dosubmit("uploadform",
+				"doc_import.jsp?siteid=<%=siteid%>&channelId=<%=channelId%>",
+						"uploaddoc",
+						"<%=rootpath%>");
+		//uploadform.action = "doc_import.jsp?siteid=<%=siteid%>&channelId=<%=channelId%>";
+		//uploadform.submit();
 		document.all.divProcessing.style.display = "";
 	}
 	function UploadLoaded(count)
@@ -92,7 +98,7 @@
 </SCRIPT>
 </head>
 <body bgcolor="#F7F8FC" onload="RadioClick('file')">
-	<form target="uploaddoc" method="post" name="uploadform" enctype="multipart/form-data">
+	<form target="uploaddoc" method="post" id="uploadform" name="uploadform" enctype="multipart/form-data">
 		<input type="hidden" name="fname" value="">
 		<table border=0 cellpadding=0 cellspacing=5 id=tabDialogSize>
 			<tr>

@@ -17,6 +17,7 @@ package com.frameworkset.platform.cms.documentmanager.action;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.util.io.Resource;
 import org.frameworkset.util.io.UrlResource;
 
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
@@ -106,35 +108,48 @@ public class DocumentController {
 		if (!StringUtil.isEmpty(condition.getKeywords())) {
 			condition.setKeywords(URLDecoder.decode(condition.getKeywords(), "UTF-8"));
 		}
-
-		List<Document> newsList = documentManager.queryDocumentsByPublishTimeAndKeywords(condition);
-
-		news.setNews(newsList);
-		Container container = new ContainerImpl();
-//		String siteName = site.getSecondName();
-		container.init(condition.getSite(), request, request.getSession(), response);
-		news.setChannelIndex(container.getPublishedChannelUrlByDisplayName(condition.getChannel()));
-		news.setSiteIndex(container.getPulishedSiteIndexUrlBySiteName(condition.getSite()));
-		news.setSitedomain(container.getPulishedSiteDomainBySiteName(condition.getSite()));
-		if (!CollectionUtils.isEmpty(newsList)) {
-			
-
-			for (Document document : newsList) {
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			List<Document> newsList = documentManager.queryDocumentsByPublishTimeAndKeywords(condition);
+	
+			news.setNews(newsList);
+			Container container = new ContainerImpl();
+	//		String siteName = site.getSecondName();
+			container.init(condition.getSite(), request, request.getSession(), response);
+			news.setChannelIndex(container.getPublishedChannelUrlByDisplayName(condition.getChannel()));
+			news.setSiteIndex(container.getPulishedSiteIndexUrlBySiteName(condition.getSite()));
+			news.setSitedomain(container.getPulishedSiteDomainBySiteName(condition.getSite()));
+			if (!CollectionUtils.isEmpty(newsList)) {
 				
-				if(document.getDoctype()==Document.DOCUMENT_AGGRATION){
-					List compositeDocs=documentManager.getPubAggrDocList(document.getDocument_id()+"");
-					for(int i =0;i<compositeDocs.size();i++){
-						DocAggregation docAggregation = (DocAggregation)compositeDocs.get(i);
-						String docpuburl = container.getPublishedDocumentUrl(docAggregation.getIdbyaggr()+"");
-						docAggregation.setDocpuburl(docpuburl);
-					}
-					document.setCompositeDocs(compositeDocs);
+	
+				for (Document document : newsList) {
 					
-				}else{
-					String docpuburl = container.getPublishedDocumentUrl(document);
-					document.setDocpuburl(docpuburl);
+					if(document.getDoctype()==Document.DOCUMENT_AGGRATION){
+						List compositeDocs=documentManager.getPubAggrDocList(document.getDocument_id()+"");
+						for(int i =0;i<compositeDocs.size();i++){
+							DocAggregation docAggregation = (DocAggregation)compositeDocs.get(i);
+							String docpuburl = container.getPublishedDocumentUrl(docAggregation.getIdbyaggr()+"");
+							docAggregation.setDocpuburl(docpuburl);
+						}
+						document.setCompositeDocs(compositeDocs);
+						
+					}else{
+						String docpuburl = container.getPublishedDocumentUrl(document);
+						document.setDocpuburl(docpuburl);
+					}
 				}
 			}
+			tm.commit();
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			tm.release();
 		}
 
 		return news;
@@ -161,34 +176,57 @@ public class DocumentController {
 		if (!StringUtil.isEmpty(condition.getKeywords())) {
 			condition.setKeywords(URLDecoder.decode(condition.getKeywords(), "UTF-8"));
 		}
-
-		ListInfo newsList = documentManager.queryDocumentsByPublishTimeAndKeywords(condition, offset, pagesize);
-
-		Site site = CMSUtil.getSite(condition.getSiteId()+"");
-		if (!CollectionUtils.isEmpty(newsList.getDatas())) {
-			Container container = new ContainerImpl();
-			String siteName = site.getSecondName();
-			container.init(siteName, request, request.getSession(), response);
-
-			for (Object obj : newsList.getDatas()) {
-				Document document = (Document) obj;
-				if(document.getDoctype()==Document.DOCUMENT_AGGRATION){
-					List compositeDocs=documentManager.getPubAggrDocList(document.getDocument_id()+"");
-					for(int i =0;i<compositeDocs.size();i++){
-						DocAggregation docAggregation = (DocAggregation)compositeDocs.get(i);
-						String docpuburl = container.getPublishedDocumentUrl(docAggregation.getIdbyaggr()+"");
-						docAggregation.setDocpuburl(docpuburl);
-					}
-					document.setCompositeDocs(compositeDocs);
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			ListInfo newsList = documentManager.queryDocumentsByPublishTimeAndKeywords(condition, offset, pagesize);
+	
+			Site site = CMSUtil.getSite(condition.getSiteId()+"");
+			if (!CollectionUtils.isEmpty(newsList.getDatas())) {
+				List<Integer> countids = new ArrayList<Integer>();
+				Map<Integer,Object> idx = new HashMap<Integer,Object>();
+				Container container = new ContainerImpl();
+				String siteName = site.getSecondName();
+				container.init(siteName, request, request.getSession(), response);
+	
+				for (Object obj : newsList.getDatas()) {
+					Document document = (Document) obj;
 					
-				}else{
-					String docpuburl = container.getPublishedDocumentUrl(document);
-					document.setDocpuburl(docpuburl);
+					if(document.getDoctype()==Document.DOCUMENT_AGGRATION){
+						List compositeDocs=documentManager.getPubAggrDocList(document.getDocument_id()+"");
+						for(int i =0;i<compositeDocs.size();i++){
+							DocAggregation docAggregation = (DocAggregation)compositeDocs.get(i);
+							String docpuburl = container.getPublishedDocumentUrl(docAggregation.getIdbyaggr()+"");
+							docAggregation.setDocpuburl(docpuburl);
+							countids.add(docAggregation.getAggrdocid());
+							idx.put(docAggregation.getAggrdocid(), docAggregation);
+						}
+						document.setCompositeDocs(compositeDocs);
+						
+					}else{
+						countids.add(document.getDocument_id());
+						idx.put(document.getDocument_id(), document);
+						String docpuburl = container.getPublishedDocumentUrl(document);
+						document.setDocpuburl(docpuburl);
+					}
 				}
+				documentManager.putDocCount(countids, idx);
 			}
+			request.setAttribute("DOCUMENT_AGGRATION",Document.DOCUMENT_AGGRATION);
+			request.setAttribute("newsList", newsList);
+			tm.commit();
 		}
-		request.setAttribute("DOCUMENT_AGGRATION",Document.DOCUMENT_AGGRATION);
-		request.setAttribute("newsList", newsList);
+		catch(Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			tm.release();
+		}
+
+		
 
 		return "path:showNewsList";
 	}
@@ -592,10 +630,10 @@ public class DocumentController {
 	{
 		
 
-			response.setHeader("Cache-Control", "no-cache"); 
-			response.setHeader("Pragma", "no-cache"); 
-			response.setDateHeader("Expires", -1);  
-			response.setDateHeader("max-age", 0);
+//			response.setHeader("Cache-Control", "no-cache"); 
+//			response.setHeader("Pragma", "no-cache"); 
+//			response.setDateHeader("Expires", -1);  
+//			response.setDateHeader("max-age", 0);
 			
 			AccessControl accesscontroler = AccessControl.getAccessControl();		    
 		    String userId = accesscontroler.getUserID();

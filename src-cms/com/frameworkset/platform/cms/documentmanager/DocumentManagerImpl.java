@@ -1573,12 +1573,14 @@ public class DocumentManagerImpl implements DocumentManager {
 	// 根据频道id获取这个频道所有引用文档的引用人
 	public List getCiteUserList(String channelid) throws DocumentManagerException {
 		List distributeList = new ArrayList();
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
 			sql = "select user_id,user_realname from TD_sm_user where user_id "
-					+ " in(select op_user_id from td_cms_chnl_ref_doc where chnl_id =" + channelid + ") ";
-			dbUtil.executeSelect(sql);
+					+ " in(select op_user_id from td_cms_chnl_ref_doc where chnl_id =?) ";
+			dbUtil.preparedSelect(sql);
+			dbUtil.setInt(1, Integer.parseInt(channelid));
+			dbUtil.executePrepared();
 			if (dbUtil.size() > 0) {
 				for (int i = 0; i < dbUtil.size(); i++) {
 					DistributeUser du = new DistributeUser();
@@ -1620,14 +1622,16 @@ public class DocumentManagerImpl implements DocumentManager {
 	// 根据频道id获取这个频道所有引用文档的所在原频道列表
 	public List getCiteSrcChnlList(String channelid) throws DocumentManagerException {
 		List distributeList = new ArrayList();
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
 			sql = "select distinct b.channel_id as channelid,b.name as channelName from "
-					+ "td_cms_document a,td_cms_channel b,td_cms_chnl_ref_doc c " + "where c.chnl_id = " + channelid
+					+ "td_cms_document a,td_cms_channel b,td_cms_chnl_ref_doc c " + "where c.chnl_id = ?"
 					+ " and " + "c.doc_id = a.document_id and a.channel_id = b.channel_id";
 
-			dbUtil.executeSelect(sql);
+			dbUtil.preparedSelect(sql);
+			dbUtil.setInt(1, Integer.parseInt(channelid));
+			dbUtil.executePrepared();
 			if (dbUtil.size() > 0) {
 				for (int i = 0; i < dbUtil.size(); i++) {
 					CitedDocSrcChannel du = new CitedDocSrcChannel();
@@ -7761,6 +7765,39 @@ public class DocumentManagerImpl implements DocumentManager {
 				condition);
 		listInfo.setDatas(list);
 		return listInfo;
+	}
+	
+	/**
+	 * 获取文档的点级数
+	 */
+	public void putDocCount(List<Integer> countids ,final Map<Integer,Object> idx) throws DocumentManagerException
+	{
+
+		if(countids== null ||  countids.size()==0)return ;
+		final Map<Integer,String> datas=new HashMap<Integer,String>();
+		Map<String,List> params = new HashMap<String,List>();
+		params.put("countids", countids);
+		try{
+			executor.queryBeanByNullRowHandler(new NullRowHandler() {
+
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					Object obj = idx.get(origine.getInt("docid"));
+					long num = origine.getLong("cnt");
+					if(obj instanceof DocAggregation){
+						DocAggregation docAggregation =(DocAggregation)obj;
+						docAggregation.setCount(num);
+					}else if(obj instanceof Document){
+						Document doc=(Document)obj;
+						doc.setCount(num);
+					}
+
+				}
+			}, "queryDocCountsByIds",params);
+		}catch(Exception e){
+			
+		}
+			
 	}
 	
 	

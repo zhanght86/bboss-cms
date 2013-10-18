@@ -149,10 +149,19 @@ tabdropdown.init("bluemenu")
 		/* 页面初始化完成 */
 		List subList = null;
 		Channel level1channel = null;
+		
 		for(int i=0;i<list.size();i++){				
 			level1channel = (Channel)list.get(i);
 			String linkPath = CMSTagUtil.getPublishedChannelPath(context,level1channel);
 			String linkName = level1channel.getName();
+			String openTarget= level1channel.getOpenTarget();
+			if(! (openTarget==null||"".equals(openTarget))){
+				target_str="target=\"" + openTarget + "\"";;
+			}
+			else
+			{
+				target_str="target=\"_self\"";
+			}
 			subList = impl.getNavigatChannel(site_id,level1channel.getDisplayName());
 			boolean hasson = subList != null && subList.size() > 0;
 			if(hasson)
@@ -170,6 +179,14 @@ tabdropdown.init("bluemenu")
 					level2channel = (Channel)subList.get(j);
 					String linkPath_ = CMSTagUtil.getPublishedChannelPath(context,level2channel);
 					String linkName_ = level2channel.getName();
+					openTarget = level2channel.getOpenTarget();
+					if(! (openTarget==null||"".equals(openTarget))){
+						target_str="target=\"" + openTarget + "\"";
+					}
+					else
+					{
+						target_str="target=\"_self\"";
+					}
 					sb.append("<a ").append(target_str).append(" href=\"").append(linkPath_).append("\">").append(linkName_).append("</a>");
 				}
 				sb.append("</div>");

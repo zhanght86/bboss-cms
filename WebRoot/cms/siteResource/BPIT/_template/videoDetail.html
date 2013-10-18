@@ -68,7 +68,7 @@
     <div class="clear"></div>
   </div>
   <div class="container">
-    <cms:sanyleftnav />
+   <!-- <cms:sanyleftnav /> -->
     <div class="rightcontent">
       <div class="titleMenu">
         <div class="path"><cms:position/></div><span class="title"><cms:channel property="name"/> </span></div>
@@ -127,8 +127,8 @@
  <script type="text/javascript">
     	    var s5 = new SWFObject('<cms:uri link="components/flash/flvplayer.swf"/>',"mediaplayer","540","400","9");
 	    	s5.addParam("allowfullscreen","true");
-	    	s5.addVariable("image",'<cms:uri colName="picPath"/>');
-	    	s5.addVariable("file",'<cms:uri colName="mediapath"/>');
+	    	s5.addVariable("image",'<cms:uri trim="true" colName="picPath"/>');
+	    	s5.addVariable("file",'<cms:uri trim="true" colName="mediapath"/>');
 	    	s5.addVariable("backcolor","ffffff");    
 	    	s5.addVariable("frontcolor","0xE2F0FE");
 	    	s5.write("videoFlv");

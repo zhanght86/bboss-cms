@@ -181,7 +181,7 @@ function openChoose(){
              name="backgroundDealFrame" noResize scrolling="auto" vspale="0" width="0" height="0"
              src="" memo="本页面需要隐式的执行一些页面，为了不新开浏览窗口，所有隐式执行的页面都在此处执行">
 </iframe>
-	<%@ include file="../sysMsg.jsp"%>
+	
 </body>
 </html>
 

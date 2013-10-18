@@ -160,7 +160,7 @@
 	</table>
 </div>
 </body>
-<iframe name="orgjoblist" src="../sysmanager/user/org_job.jsp?" width=0 height=0></iframe>
+<iframe name="orgjoblist" src="../sysmanager/user/org_job.jsp?<pg:dtoken element="param"/>" width=0 height=0></iframe>
 <iframe name="hiddenFrame" width=0 height=0></iframe>
 </html>
 

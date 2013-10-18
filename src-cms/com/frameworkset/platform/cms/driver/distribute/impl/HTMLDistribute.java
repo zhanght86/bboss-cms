@@ -285,7 +285,8 @@ public class HTMLDistribute extends Distribute  {
 						case CMSLink.TYPE_STYLE:
 							;
 						case CMSLink.TYPE_TEMPLATE:
-							String sourcepath = CMSUtil.getPath(templateRootPath ,link.getRelativeFilePath());
+							String realpath = this.removeParam(link.getRelativeFilePath());
+							String sourcepath = CMSUtil.getPath(templateRootPath ,realpath);
 							if(sourcepath.endsWith("Thumbs.db"))
 								continue;
 							String destinction = "";
@@ -304,12 +305,12 @@ public class HTMLDistribute extends Distribute  {
 									}
 								}
 								destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath() + "/" + context.getSiteDir(),
-																   link.getRelativeFilePath());
+										realpath);
 							}
 							else
 							{
 								destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),
-										   link.getRelativeFilePath());
+										realpath);
 							}
 							try {							
 								FileUtil.copy(source, destinction);
@@ -449,7 +450,17 @@ public class HTMLDistribute extends Distribute  {
 			context.getPublishMonitor().addFailedMessage(StringUtil.exceptionToString(e), context.getPublisher());
 		}
 	}
-	
+	private String removeParam(String path)
+	{
+		if(path == null)
+			return path;
+		int idx = path.lastIndexOf("?");
+		if(idx < 0)
+			return path;
+		else
+			return path.substring(0,idx);
+			
+	}
 	private void distributeContextAttacthments()
 	{
 		/**
@@ -477,7 +488,8 @@ public class HTMLDistribute extends Distribute  {
 						case CMSLink.TYPE_STYLE:
 							;
 						case CMSLink.TYPE_TEMPLATE:
-							String sourcepath = CMSUtil.getPath(templateRootPath ,link.getRelativeFilePath());
+							String realpath = removeParam(link.getRelativeFilePath());
+							String sourcepath = CMSUtil.getPath(templateRootPath ,realpath);
 							String destinction = "";
 							if(context.getActionType() == PublishObject.ACTIONTYPE_PUBLISH)
 							{
@@ -503,7 +515,7 @@ public class HTMLDistribute extends Distribute  {
 									}
 								}
 								
-								destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath() + "/" + context.getSiteDir() ,link.getRelativeFilePath());
+								destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath() + "/" + context.getSiteDir() ,realpath);
 								try {
 									FileUtil.copy(sourcepath, destinction);
 									if(isModified )
@@ -518,7 +530,7 @@ public class HTMLDistribute extends Distribute  {
 							else
 							{
 								destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),
-										   link.getRelativeFilePath());
+										realpath);
 								try {
 									FileUtil.copy(sourcepath, destinction);
 								} catch (IOException e) {
@@ -549,8 +561,8 @@ public class HTMLDistribute extends Distribute  {
 				String projectRootPath = context.getRealProjectRootPath();
 				while (links.hasNext()) {
 					CMSLink link = (CMSLink) links.next();
-
-					String sourcepath = CMSUtil.getPath(projectRootPath ,link.getRelativeFilePath());
+					String realpath  = this.removeParam(link.getRelativeFilePath());
+					String sourcepath = CMSUtil.getPath(projectRootPath ,realpath);
 					String destinction = "";
 					if(context.getActionType() == PublishObject.ACTIONTYPE_PUBLISH)
 					{
@@ -575,7 +587,7 @@ public class HTMLDistribute extends Distribute  {
 								continue;
 							}
 						}
-						destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath()  + "/" + context.getSiteDir() ,link.getRelativeFilePath());
+						destinction = CMSUtil.getDirectroy(this.context.getPublishTemppath()  + "/" + context.getSiteDir() ,realpath);
 						try {
 							FileUtil.copy(sourcepath, destinction);
 							if(isModified )
@@ -590,7 +602,7 @@ public class HTMLDistribute extends Distribute  {
 					}
 					else
 					{
-						destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),link.getRelativeFilePath());
+						destinction = CMSUtil.getDirectroy(this.context.getPreviewRootPath(),realpath);
 						try {
 							FileUtil.copy(sourcepath, destinction);
 						} catch (IOException e) {
@@ -817,7 +829,7 @@ public class HTMLDistribute extends Distribute  {
 					docattachements.add(url);
 					
 					FileUtil.copy(srcpath
-							+ attachment.getUrl(), destinction);
+							+ this.removeParam(attachment.getUrl()), destinction);
 				}
 				
 				//文档的相关附件
@@ -831,7 +843,7 @@ public class HTMLDistribute extends Distribute  {
 					// + url;
 					url = CMSUtil.getPath(CMSUtil.getPath(relativePath, "content_files"), url);
 					docattachements.add(url);
-					FileUtil.copy(srcpath + attachment.getUrl(), destinction);
+					FileUtil.copy(srcpath + this.removeParam(attachment.getUrl()), destinction);
 				}
 //              在distributeContextAttacthments方法中会发布文档内容附件，在此处先注销	，避免重复发布			
 //				//文档内容附件

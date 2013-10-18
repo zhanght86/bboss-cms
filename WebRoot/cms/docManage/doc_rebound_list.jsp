@@ -23,6 +23,8 @@
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
 	<script language="javascript" src="../inc/js/func.js"></script>
+	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<script src="${pageContext.request.contextPath}/include/security.js"></script>
 	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 	<script language="javascript">
 		function conDeliverDoc(channelId,docid,taskid){
@@ -30,8 +32,12 @@
 			openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=" + channelId + "&docid=" + docid + "&taskid=" + taskid);
 		}
 		function subQuery(){
-			toAuditDocListForm.action="<%=rootpath%>/cms/docManage/workAgain.jsp";
-			toAuditDocListForm.submit();
+			//toAuditDocListForm.action="<%=rootpath%>/cms/docManage/workAgain.jsp";
+			//toAuditDocListForm.submit();
+			$.secutiry.dosubmit("toAuditDocListForm",
+					"<%=rootpath%>/cms/docManage/workAgain.jsp",
+							null,
+							"${pageContext.request.contextPath}");
 		}
 		//function seeAdvice(channelId,docid,taskid){
 		//	openWin("<%=rootpath%>/cms/docManage/see_audit_advice.jsp?channelId=" + channelId + "&docid=" + docid + "&taskid=" + taskid,250,220);
@@ -41,9 +47,13 @@
 			if(window.confirm("您确定要回收吗？")){
 				//将选中的文档id拼成字符串
 				docidStr = ":" + docId + ";";
-				toAuditDocListForm.action="docGarbageHandle.jsp?docidStr="+docidStr;
-				toAuditDocListForm.target="reboundDocOperFrame";
-				toAuditDocListForm.submit();
+				//toAuditDocListForm.action="docGarbageHandle.jsp?docidStr="+docidStr;
+				//toAuditDocListForm.target="reboundDocOperFrame";
+				//toAuditDocListForm.submit();
+				$.secutiry.dosubmit("toAuditDocListForm",
+						"docGarbageHandle.jsp?docidStr="+docidStr,
+						"reboundDocOperFrame",
+								"${pageContext.request.contextPath}");
 			}
 		}
 		//批量回收
@@ -58,9 +68,14 @@
 			} 
 			if(haveSelect('ID')){
 				if(window.confirm("您确定要回收吗？")){
-					toAuditDocListForm.action="docGarbageHandle.jsp?docidStr="+docidStr;
-					toAuditDocListForm.target="reboundDocOperFrame";
-					toAuditDocListForm.submit();
+					//toAuditDocListForm.action="docGarbageHandle.jsp?docidStr="+docidStr;
+					//toAuditDocListForm.target="reboundDocOperFrame";
+					//toAuditDocListForm.submit();
+					
+					$.secutiry.dosubmit("toAuditDocListForm",
+							"docGarbageHandle.jsp?docidStr="+docidStr,
+							"reboundDocOperFrame",
+									"${pageContext.request.contextPath}");
 				}
 			}else{
 			    alert("请至少要选择一篇文档！");
@@ -71,9 +86,14 @@
 		if(confirm('您确定要删除编号为'+docId+'的文档吗？')){
 			docidStr = docId + ";";
 			docSiteid = docSiteid + ";";
-			toAuditDocListForm.action="document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + docSiteid;
-	  		toAuditDocListForm.target="reboundDocOperFrame";
-			toAuditDocListForm.submit();
+			//toAuditDocListForm.action="document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + docSiteid;
+	  		//toAuditDocListForm.target="reboundDocOperFrame";
+			//toAuditDocListForm.submit();
+			
+			$.secutiry.dosubmit("toAuditDocListForm",
+					"document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + docSiteid,
+					"reboundDocOperFrame",
+							"${pageContext.request.contextPath}");
 			}
 		}
 		function edit(docid,docTpye,docChannelName,docSiteid,docChannelid){
@@ -105,9 +125,13 @@
 			}
 			if(haveSelect('ID')){
 			if(confirm('您确定要删除所选文档吗？')){
-				toAuditDocListForm.action="document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + siteidStr;
-		        toAuditDocListForm.target="reboundDocOperFrame";
-				toAuditDocListForm.submit();
+				//toAuditDocListForm.action="document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + siteidStr;
+		        //toAuditDocListForm.target="reboundDocOperFrame";
+				//toAuditDocListForm.submit();
+				$.secutiry.dosubmit("toAuditDocListForm",
+						"document_del_submit.jsp?docidStr=" + docidStr + "&siteId=" + siteidStr,
+						"reboundDocOperFrame",
+								"${pageContext.request.contextPath}");
 				}else
 				{
 				return false;
@@ -125,7 +149,8 @@
 	</style>
 </head>
 <body topmargin="2" rightmargin="0" scroll=no leftmargin="1" righttmargin="1">
-	<form name="toAuditDocListForm" action="" method="post">
+	<form name="toAuditDocListForm" id="toAuditDocListForm" action="" method="post">
+	
 		<table width="100%" border="1"  cellpadding="3" cellspacing="0" bordercolor="#B7CBE4" class="Datalisttable">
 		 <tr>
 			<td height="25"  colspan=7  background="../images/data_list_tHeadbg.jpg" style="text-align:left; background:url(../images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7">

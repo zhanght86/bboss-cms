@@ -25,13 +25,13 @@
 		//刷新频道数
 		function refresh()
 		{
-			window.open("navigator_content.jsp","perspective_toolbar");
-			parent.parent.window.open("../top.jsp","perspective_topbar");
+			window.open("navigator_content.jsp?<pg:dtoken element="param"/>","perspective_toolbar");
+			parent.parent.window.open("../top.jsp?<pg:dtoken element="param"/>","perspective_topbar");
 		}
 		//站内文档查询
 		function serchSiteDoc()
 		{
-			var url = "../docManage/siteDoc_frames.jsp";
+			var url = "../docManage/siteDoc_frames.jsp?<pg:dtoken element="param"/>";
 			parent.window.open(url,"base_properties_content");
 		}
 		//-->
@@ -39,7 +39,7 @@
 	</head>
 
 <body class=""  scroll="auto">
-
+<pg:dtoken cache="false"/>
 <table width="182" border="0"  background="../images/left_bg.jpg"  cellpadding="0" cellspacing="0" class="table" >
 	<tr>
 		<td height="115" style="padding-top:80px;" align="left">

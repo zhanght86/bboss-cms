@@ -34,6 +34,8 @@
 	新文档列表
 </title>
 <link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
+<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+<script src="${pageContext.request.contextPath}/include/security.js"></script>
 <script language="javascript" src="../inc/js/func.js"></script>
 <script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -41,17 +43,27 @@
 
 //operType为:送审、提交发布、归档、撤销送审(针对单个文档操作)
 function operateDoc(operType,docId,channelId,siteId,channelName){
-    form1.action = "operate_doc.jsp?siteid="+siteId+"&channelName="+channelName+"&channelId="+channelId+"&operType="+operType+"&docId="+docId;
-    form1.target="operIframe";
-	form1.submit();
+    //form1.action = "operate_doc.jsp?siteid="+siteId+"&channelName="+channelName+"&channelId="+channelId+"&operType="+operType+"&docId="+docId;
+   // form1.target="operIframe";
+	  //form1.submit();
+	  
+	  $.secutiry.dosubmit("form1",
+						"operate_doc.jsp?siteid="+siteId+"&channelName="+channelName+"&channelId="+channelId+"&operType="+operType+"&docId="+docId,
+								"operIframe",
+								"<%=rootpath%>");
 }
 
 //回收一篇文章
 function garbageOneDoc(docId){
 	if(window.confirm("您确定要回收吗？")){
-		form1.action="docGarbageHandle.jsp?docidStr=:" + docId + ";";
-		form1.target="operIframe";
-		form1.submit();
+		//form1.action="docGarbageHandle.jsp?docidStr=:" + docId + ";";
+		//form1.target="operIframe";
+		//form1.submit();
+		
+		$.secutiry.dosubmit("form1",
+						"docGarbageHandle.jsp?docidStr=:" + docId + ";",
+								"operIframe",
+								"<%=rootpath%>");
 	}
 }
 
@@ -59,9 +71,13 @@ function garbageOneDoc(docId){
 function delOneDoc(docId,siteId){
    if(confirm('您确定要删除编号为'+docId+'的文档吗？'))
    {
-	form1.action="document_del_submit.jsp?siteId=" + siteId + "&docidStr="+docId+";";
-	form1.target="operIframe";
-	form1.submit();
+	//form1.action="document_del_submit.jsp?siteId=" + siteId + "&docidStr="+docId+";";
+	//form1.target="operIframe";
+	//form1.submit();
+	$.secutiry.dosubmit("form1",
+						"document_del_submit.jsp?siteId=" + siteId + "&docidStr="+docId+";",
+								"operIframe",
+								"<%=rootpath%>");
 	}
 }
 
@@ -84,9 +100,14 @@ function adddoc(siteId,channelId,channelName){
 		} 
 		if(haveSelect('ID')){
 			if(window.confirm("您确定要回收吗？")){
-				form1.action="docGarbageHandle.jsp?docidStr="+docidStr;
-				form1.target="operIframe";
-				form1.submit();
+				//form1.action="docGarbageHandle.jsp?docidStr="+docidStr;
+				//form1.target="operIframe";
+				//form1.submit();
+				
+				$.secutiry.dosubmit("form1",
+						"docGarbageHandle.jsp?docidStr="+docidStr,
+								"operIframe",
+								"<%=rootpath%>");
 			}
 		}else{
 		    alert("请至少要选择一篇文档！");
@@ -199,9 +220,13 @@ function adddoc(siteId,channelId,channelName){
 	{
 		//将选中的文档id拼成字符串
 		var docidStr=docId + ",";
-		form1.action="doc_export.jsp?siteid="+siteId+"&docids=" + docidStr;
-	    form1.target="operIframe";
-		form1.submit();
+		//form1.action="doc_export.jsp?siteid="+siteId+"&docids=" + docidStr;
+	  //  form1.target="operIframe";
+		//form1.submit();
+		$.secutiry.dosubmit("form1",
+						"doc_export.jsp?siteid="+siteId+"&docids=" + docidStr,
+								"operIframe",
+								"<%=rootpath%>");
 		//打开模态窗口选择目的频道
 		//window.open("doc_export.jsp?siteid="+siteId+"&docids=" + docidStr,"newwin","");
 	}
@@ -232,9 +257,13 @@ function adddoc(siteId,channelId,channelName){
 			}
 		}
 		if(haveSelect('ID')){
-			form1.action="document_del_submit.jsp?docidStr=" + docidStr;
-	        form1.target="operIframe";
-			form1.submit();
+			//form1.action="document_del_submit.jsp?docidStr=" + docidStr;
+	    //    form1.target="operIframe";
+			//form1.submit();
+			$.secutiry.dosubmit("form1",
+						"document_del_submit.jsp?docidStr=" + docidStr,
+								"operIframe",
+								"<%=rootpath%>");
 		}else{
 	    	alert("请选择要求删除的文档！");
 	    	return false;
@@ -250,23 +279,38 @@ function adddoc(siteId,channelId,channelName){
 		var addComment = window.confirm("要增加审核意见吗？");
 		if(addComment==false){
 			//参数auditFlag为审核意见，0表不同意，1表同意
-			form1.action = "auditDocHandle.jsp?idStr=" + idStr + "&auditFlag=0";
-			form1.target = "operIframe";
-			form1.submit();
+			//form1.action = "auditDocHandle.jsp?idStr=" + idStr + "&auditFlag=0";
+			//form1.target = "operIframe";
+			//form1.submit();
+			
+			$.secutiry.dosubmit("form1",
+						"auditDocHandle.jsp?idStr=" + idStr + "&auditFlag=0",
+								"operIframe",
+								"<%=rootpath%>");
 		}
 		else{
 			openWin("audit_add_comment.jsp?idStr=" + idStr + "&auditFlag=0",300,300);
 		}	
 	}
 	function publishDoc(docId){
-		form1.action = "publishDocHandle.jsp?flag=3&docId="+docId;
-		form1.target = "operIframe";
-		form1.submit();
+		//form1.action = "publishDocHandle.jsp?flag=3&docId="+docId;
+		//form1.target = "operIframe";
+		//form1.submit();
+		
+		$.secutiry.dosubmit("form1",
+						"publishDocHandle.jsp?flag=3&docId="+docId,
+								"operIframe",
+								"<%=rootpath%>");
 	}
 	function publishPreview(docId){
-		form1.action = "previewPubDocHandle.jsp?docId="+docId;
-		form1.target = "operIframe";
-		form1.submit();
+		//form1.action = "previewPubDocHandle.jsp?docId="+docId;
+		//form1.target = "operIframe";
+		//form1.submit();
+		
+		$.secutiry.dosubmit("form1",
+						"previewPubDocHandle.jsp?docId="+docId,
+								"operIframe",
+								"<%=rootpath%>");
 	}
 	function edit(editLink,docid,siteid,channelName,channelId){
 			openWin(editLink + "?docid=" + docid + "&siteid=" + siteid + "&channelName=" + channelName + "&channelId=" + channelId, screen.availWidth-20,screen.availHeight-50);

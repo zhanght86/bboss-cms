@@ -64,8 +64,16 @@ public class DocAggregation implements java.io.Serializable {
 	private String docpuburl;
 	
 	private String titlecolor;
-	  
+	 
+	private long count;
 
+	public long getCount(){
+		return count;
+		
+	}
+	public void setCount(long count){
+		this.count=count;
+	}
 	public String getDocpuburl() {
 		return docpuburl;
 	}

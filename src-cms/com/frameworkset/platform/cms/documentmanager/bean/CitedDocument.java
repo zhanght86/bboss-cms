@@ -115,5 +115,20 @@ public class CitedDocument implements java.io.Serializable {
 	public void setSrcSiteId(int srcSiteId) {
 		this.srcSiteId = srcSiteId;
 	}
+	private int curChannelId ;
+	private int userId ;
+	public int getCurChannelId() {
+		return curChannelId;
+	}
+	public void setCurChannelId(int curChannelId) {
+		this.curChannelId = curChannelId;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
 	
 }

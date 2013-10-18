@@ -1,0 +1,364 @@
+<properties>
+<property name="usersearchlist_sortUser_simple">
+	
+		<![CDATA[
+			select 
+				t.*, us.org_id, org.org_sn 
+			from 
+				td_sm_user t, td_sm_userjoborg us, td_sm_organization org 
+			where 
+				us.user_id=t.user_id and org.org_id=us.org_id 
+		#if($advQuery.equals("1"))
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 			  and t.user_realname like #[userRealname]
+			 #end
+			 #if($userWorktel && !$userWorktel.equals(""))	
+			 			  and t.USER_WORKTEL like #[userWorktel]
+			 #end			
+			 #if($userSex && !$userSex.equals("") && !$userSex.equals("-100"))	
+			 			   and t.USER_SEX = #[userSex]
+			 #end		
+			 #if($homePhone && !$homePhone.equals(""))	
+			 			 and t.USER_HOMETEL like #[homePhone] 
+			 #end				
+			 #if($mail && !$mail.equals(""))	
+			 			and t.USER_EMAIL like #[mail] 
+			 #end
+			 
+			 #if($mobile && !$mobile.equals(""))	
+			 		and t.USER_MOBILETEL1 like #[mobile] 
+			 #end	
+			 
+			  #if($userPinyin && !$userPinyin.equals(""))	
+			 		and t.USER_PINYIN like #[userPinyin] 
+			 #end			
+			#if($userMobiletel2 && !$userMobiletel2.equals(""))	
+			 		and t.USER_MOBILETEL2 like #[userMobiletel2] 
+			 #end		
+			#if($userType && !$userType.equals("") && !$userType.equals("-100"))	
+			 		and t.USER_TYPE = #[userType] 
+			 #end	
+			#if($postalCode && !$postalCode.equals(""))	
+			 		and t.USER_POSTALCODE like #[postalCode] 
+			 #end			
+			#if($userFax && !$userFax.equals(""))	
+			 		 and t.USER_FAX like #[userFax] 
+			 #end				
+			#if($userOicq && !$userOicq.equals(""))	
+			 		 and t.USER_OICQ  like #[userOicq] 
+			 #end				
+			#if($userBirthday && !$userBirthday.equals(""))	
+			 		 and t.USER_BIRTHDAY = to_date(#[userBirthday] ,'YYYY-MM-DD')
+			 #end			
+			#if($userAddress && !$userAddress.equals(""))	
+			 		and t.USER_ADDRESS like #[userAddress]
+			 #end				
+			#if($userLogincount && !$userLogincount.equals(""))	
+			 		 and t.USER_LOGINCOUNT = #[userLogincount]
+			 #end	
+			#if($userIsvalid !=-100)	
+			 		  and t.USER_ISVALID = #[userIsvalid]
+			 #end			
+			#if($userRegdate && !$userRegdate.equals(""))	
+			 		 and t.USER_REGDATE = to_date(#[userRegdate],'YYYY-MM-DD')
+			 #end		
+			#if($shortMobile && !$shortMobile.equals(""))	
+			 		 and t.REMARK2 like  #[shortMobile]
+			 #end		
+		#else
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 		and t.user_realname like #[userRealname]
+			 #end
+		#end	
+    
+		]]>
+</property>
+<property name="usersearchlist_sortUser1">
+	
+		<![CDATA[select bb.same_job_user_sn,
+       t.*,
+       a.org_id,
+       a.org_sn
+  from (select org_sn, a.org_id
+          from td_sm_organization a where a.org_id in          
+             (select t.org_id from td_sm_organization t where t.org_tree_level like concat('0', '%'))             
+              order by a.org_sn asc) a,              
+
+       (select min(tmp.same_job_user_sn) as same_job_user_sn,
+               tmp.org_id,
+               tmp.user_id
+          from ((select ujo.*
+                   from td_sm_userjoborg ujo, TD_SM_ORGUSER ou
+                  where ou.org_id = ujo.org_id
+                    and ou.user_id = ujo.user_id)) tmp
+         group by tmp.user_id, tmp.org_id) bb,
+       td_sm_user t
+ where a.org_id = bb.org_id
+ 		#if(!$admin)		
+			 and a.org_id in
+			(select distinct t.org_id from td_sm_organization t where t.org_tree_level like 
+			(select 
+			 org_tree_level || '|%' 
+			 from TD_SM_ORGANIZATION where org_id =
+			(select c.org_id from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id =#[curUserId])
+			)
+			 or t.org_id in
+			(select c.org_id from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id =#[curUserId])
+		#end
+		and bb.user_id=t.user_id 
+		#if($advQuery.equals("1"))
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 			  and t.user_realname like #[userRealname]
+			 #end
+			 #if($userWorktel && !$userWorktel.equals(""))	
+			 			  and t.USER_WORKTEL like #[userWorktel]
+			 #end			
+			 #if($userSex && !$userSex.equals("") && !$userSex.equals("-100"))	
+			 			   and t.USER_SEX = #[userSex]
+			 #end		
+			 #if($homePhone && !$homePhone.equals(""))	
+			 			 and t.USER_HOMETEL like #[homePhone] 
+			 #end				
+			 #if($mail && !$mail.equals(""))	
+			 			and t.USER_EMAIL like #[mail] 
+			 #end
+			 
+			 #if($mobile && !$mobile.equals(""))	
+			 		and t.USER_MOBILETEL1 like #[mobile] 
+			 #end	
+			 
+			  #if($userPinyin && !$userPinyin.equals(""))	
+			 		and t.USER_PINYIN like #[userPinyin] 
+			 #end			
+			#if($userMobiletel2 && !$userMobiletel2.equals(""))	
+			 		and t.USER_MOBILETEL2 like #[userMobiletel2] 
+			 #end		
+			#if($userType && !$userType.equals("") && !$userType.equals("-100"))	
+			 		and t.USER_TYPE = #[userType] 
+			 #end	
+			#if($postalCode && !$postalCode.equals(""))	
+			 		and t.USER_POSTALCODE like #[postalCode] 
+			 #end			
+			#if($userFax && !$userFax.equals(""))	
+			 		 and t.USER_FAX like #[userFax] 
+			 #end				
+			#if($userOicq && !$userOicq.equals(""))	
+			 		 and t.USER_OICQ  like #[userOicq] 
+			 #end				
+			#if($userBirthday && !$userBirthday.equals(""))	
+			 		 and t.USER_BIRTHDAY = to_date(#[userBirthday] ,'YYYY-MM-DD')
+			 #end			
+			#if($userAddress && !$userAddress.equals(""))	
+			 		and t.USER_ADDRESS like #[userAddress]
+			 #end				
+			#if($userLogincount && !$userLogincount.equals(""))	
+			 		 and t.USER_LOGINCOUNT = #[userLogincount]
+			 #end	
+			#if($userIsvalid !=-100)	
+			 		  and t.USER_ISVALID = #[userIsvalid]
+			 #end			
+			#if($userRegdate && !$userRegdate.equals(""))	
+			 		 and t.USER_REGDATE = to_date(#[userRegdate],'YYYY-MM-DD')
+			 #end		
+			#if($shortMobile && !$shortMobile.equals(""))	
+			 		 and t.REMARK2 like  #[shortMobile]
+			 #end		
+		#else
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 		and t.user_realname like #[userRealname]
+			 #end
+		#end
+		order by bb.same_job_user_sn,t.user_id 
+		]]>
+</property>
+<property name="usersearchlist_sortUser1-mysql">
+		<![CDATA[select bb.same_job_user_sn,
+       t.*,
+       a.org_id,
+       a.org_sn
+  from (select org_sn, a.org_id
+          from td_sm_organization a where a.org_id in          
+             (select t.org_id from td_sm_organization t where t.org_tree_level like concat('0', '%'))             
+              order by a.org_sn asc) a,              
+
+       (select min(tmp.same_job_user_sn) as same_job_user_sn,
+               tmp.org_id,
+               tmp.user_id
+          from ((select ujo.*
+                   from td_sm_userjoborg ujo, TD_SM_ORGUSER ou
+                  where ou.org_id = ujo.org_id
+                    and ou.user_id = ujo.user_id)) tmp
+         group by tmp.user_id, tmp.org_id) bb,
+       td_sm_user t
+ where a.org_id = bb.org_id
+ 		#if(!$admin)		
+			 and a.org_id in
+			(select distinct t.org_id from td_sm_organization t where t.org_tree_level like 
+			(select 
+			 concat(org_tree_level , '|%') 
+			 from TD_SM_ORGANIZATION where org_id =
+			(select c.org_id from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id =#[curUserId])
+			)
+			 or t.org_id in
+			(select c.org_id from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id =#[curUserId])
+		#end
+		and bb.user_id=t.user_id 
+		#if($advQuery.equals("1"))
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 			  and t.user_realname like #[userRealname]
+			 #end
+			 #if($userWorktel && !$userWorktel.equals(""))	
+			 			  and t.USER_WORKTEL like #[userWorktel]
+			 #end			
+			 #if($userSex && !$userSex.equals("") && !$userSex.equals("-100"))	
+			 			   and t.USER_SEX = #[userSex]
+			 #end		
+			 #if($homePhone && !$homePhone.equals(""))	
+			 			 and t.USER_HOMETEL like #[homePhone] 
+			 #end				
+			 #if($mail && !$mail.equals(""))	
+			 			and t.USER_EMAIL like #[mail] 
+			 #end
+			 
+			 #if($mobile && !$mobile.equals(""))	
+			 		and t.USER_MOBILETEL1 like #[mobile] 
+			 #end	
+			 
+			  #if($userPinyin && !$userPinyin.equals(""))	
+			 		and t.USER_PINYIN like #[userPinyin] 
+			 #end			
+			#if($userMobiletel2 && !$userMobiletel2.equals(""))	
+			 		and t.USER_MOBILETEL2 like #[userMobiletel2] 
+			 #end		
+			#if($userType && !$userType.equals("") && !$userType.equals("-100"))	
+			 		and t.USER_TYPE = #[userType] 
+			 #end	
+			#if($postalCode && !$postalCode.equals(""))	
+			 		and t.USER_POSTALCODE like #[postalCode] 
+			 #end			
+			#if($userFax && !$userFax.equals(""))	
+			 		 and t.USER_FAX like #[userFax] 
+			 #end				
+			#if($userOicq && !$userOicq.equals(""))	
+			 		 and t.USER_OICQ  like #[userOicq] 
+			 #end				
+			#if($userBirthday && !$userBirthday.equals(""))	
+			 		 and t.USER_BIRTHDAY = to_date(#[userBirthday] ,'YYYY-MM-DD')
+			 #end			
+			#if($userAddress && !$userAddress.equals(""))	
+			 		and t.USER_ADDRESS like #[userAddress]
+			 #end				
+			#if($userLogincount && !$userLogincount.equals(""))	
+			 		 and t.USER_LOGINCOUNT = #[userLogincount]
+			 #end	
+			#if($userIsvalid !=-100)	
+			 		  and t.USER_ISVALID = #[userIsvalid]
+			 #end			
+			#if($userRegdate && !$userRegdate.equals(""))	
+			 		 and t.USER_REGDATE = to_date(#[userRegdate],'YYYY-MM-DD')
+			 #end		
+			#if($shortMobile && !$shortMobile.equals(""))	
+			 		 and t.REMARK2 like  #[shortMobile]
+			 #end		
+		#else
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 		and t.user_realname like #[userRealname]
+			 #end
+		#end
+		order by bb.same_job_user_sn,t.user_id 
+		]]>
+</property>
+<property name="disusers">
+<![CDATA[
+select user_id,user_name,user_realname,USER_MOBILETEL1,password_updatetime,Password_DualTime from td_sm_user  t where 1=1 
+					#if($advQuery.equals("1"))
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 			  and t.user_realname like #[userRealname]
+			 #end
+			 #if($userWorktel && !$userWorktel.equals(""))	
+			 			  and t.USER_WORKTEL like #[userWorktel]
+			 #end			
+			 #if($userSex && !$userSex.equals("") && !$userSex.equals("-100"))	
+			 			   and t.USER_SEX = #[userSex]
+			 #end		
+			 #if($homePhone && !$homePhone.equals(""))	
+			 			 and t.USER_HOMETEL like #[homePhone] 
+			 #end				
+			 #if($mail && !$mail.equals(""))	
+			 			and t.USER_EMAIL like #[mail] 
+			 #end
+			 
+			 #if($mobile && !$mobile.equals(""))	
+			 		and t.USER_MOBILETEL1 like #[mobile] 
+			 #end	
+			 
+			  #if($userPinyin && !$userPinyin.equals(""))	
+			 		and t.USER_PINYIN like #[userPinyin] 
+			 #end			
+			#if($userMobiletel2 && !$userMobiletel2.equals(""))	
+			 		and t.USER_MOBILETEL2 like #[userMobiletel2] 
+			 #end		
+			#if($userType && !$userType.equals("") && !$userType.equals("-100"))	
+			 		and t.USER_TYPE = #[userType] 
+			 #end	
+			#if($postalCode && !$postalCode.equals(""))	
+			 		and t.USER_POSTALCODE like #[postalCode] 
+			 #end			
+			#if($userFax && !$userFax.equals(""))	
+			 		 and t.USER_FAX like #[userFax] 
+			 #end				
+			#if($userOicq && !$userOicq.equals(""))	
+			 		 and t.USER_OICQ  like #[userOicq] 
+			 #end				
+			#if($userBirthday && !$userBirthday.equals(""))	
+			 		 and t.USER_BIRTHDAY = to_date(#[userBirthday] ,'YYYY-MM-DD')
+			 #end			
+			#if($userAddress && !$userAddress.equals(""))	
+			 		and t.USER_ADDRESS like #[userAddress]
+			 #end				
+			#if($userLogincount && !$userLogincount.equals(""))	
+			 		 and t.USER_LOGINCOUNT = #[userLogincount]
+			 #end	
+			#if($userIsvalid !=-100)	
+			 		  and t.USER_ISVALID = #[userIsvalid]
+			 #end			
+			#if($userRegdate && !$userRegdate.equals(""))	
+			 		 and t.USER_REGDATE = to_date(#[userRegdate],'YYYY-MM-DD')
+			 #end		
+			#if($shortMobile && !$shortMobile.equals(""))	
+			 		 and t.REMARK2 like  #[shortMobile]
+			 #end		
+		#else
+			 #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))	
+			 		and t.user_realname like #[userRealname]
+			 #end
+		#end
+					and t.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( 
+					select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_ where user1_.USER_ID= userjoborg1_.user_id)) order by user_id
+]]>					
+</property>					
+</properties>	   

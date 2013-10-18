@@ -6,15 +6,16 @@
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
-<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.common.poolman.DBUtil" %>
+<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.common.poolman.DBUtil,com.frameworkset.common.poolman.PreparedDBUtil" %>
 <%@ page import="com.frameworkset.platform.config.ConfigManager" %>
 
 <%
  			AccessControl accesscontroler = AccessControl.getInstance();
 	        accesscontroler.checkAccess(request, response);
 	        String userId = accesscontroler.getUserID();
-	        DBUtil db = new DBUtil();
-		    db.executeSelect("select count(user_id) from td_sm_user");
+	        PreparedDBUtil db = new PreparedDBUtil();
+		    db.preparedSelect("select count(1) from td_sm_user");
+		    db.executePrepared();
 		    String usercount = String.valueOf(db.getInt(0,0));
 		    
 		    String userOrgType = (String)request.getParameter("userOrgType");
@@ -49,7 +50,8 @@
 		<title>属性容器</title>
 		
 	<script language="JavaScript" src="common.js" type="text/javascript"></script>
-	
+	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/include/security.js"></script>
 	<SCRIPT language="javascript">	
 	var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");
 	
@@ -125,8 +127,12 @@
 		
 		
 		var userOrgType = document.all("userOrgType").value;
-		userList.action="../user/userquery_content_tab.jsp?userOrgType="+userOrgType+"&userId=<%=userId%>";
-		userList.submit();	
+		$.secutiry.dosubmit("userList",
+				"../user/userquery_content_tab.jsp?userOrgType="+userOrgType+"&userId=<%=userId%>",
+						null,
+						"${pageContext.request.contextPath}");
+		//userList.action="../user/userquery_content_tab.jsp?userOrgType="+userOrgType+"&userId=<%=userId%>";
+		//userList.submit();	
 	}
 		
 	function queryUserInfo(){
@@ -145,8 +151,13 @@
 	function query_User()
 	{	
 		
-		user_List.action="../user/userquery_content_tab.jsp"
-		user_List.submit();	
+		//user_List.action="../user/userquery_content_tab.jsp"
+		//user_List.submit();	
+		
+		$.secutiry.dosubmit("user_List",
+				"../user/userquery_content_tab.jsp",
+						null,
+						"${pageContext.request.contextPath}");
 	}
 	
 	function cleanAll(){
@@ -166,7 +177,7 @@
 	    		<div class="left_top"></div>
      		</div>
      		<div class="search_box">
-     			<form name="userList" method="post" >
+     			<form name="userList" id="userList" method="post" >
      				<table width="98.5%" border="0" cellspacing="0" cellpadding="0">
      					<tr>
 	      					<td class="left_box"></td>
