@@ -141,7 +141,7 @@ public class AppBomServiceImpl {
 	public ListInfo queryListInfoBean(long offset, int pagesize, AppBomCondition appcondition ){
 		ListInfo datas=null;
 		try{
-			datas=executor.queryListInfoBean(AppBom.class,"queryListAppBom", offset, pagesize, appcondition);
+			datas=executor.moreListInfoBean(AppBom.class,"queryListAppBom", offset, pagesize, appcondition);
 		}catch(SQLException e){
 			e.printStackTrace();
 		}

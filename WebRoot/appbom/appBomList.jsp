@@ -9,11 +9,11 @@
  --%>	
 
 <div id="customContent">
-<pg:equal actual="${datas.totalSize}" value="0" >
+<pg:empty actual="${datas}" >
 	<div class="nodata">
 	<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-</pg:equal> 
-<pg:notequal actual="${datas.totalSize}"  value="0">
+</pg:empty> 
+<pg:notempty actual="${datas}">
    <pg:pager scope="request"  data="datas" desc="false" isList="false" containerid="custombackContainer" selector="customContent">
 	<pg:param name="bm"/>
 	<pg:param name="app_name_en"/>
@@ -83,8 +83,8 @@
 	 </pg:list>
     </table>
     </div>
-	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="10" sizescope="5,10,20,50,100"/></div>
 
     </pg:pager>
-    </pg:notequal>
+    </pg:notempty>
 </div>		

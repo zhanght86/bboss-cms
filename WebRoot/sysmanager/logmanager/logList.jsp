@@ -140,7 +140,7 @@
 	<body>
 		<div id="changeColor">
 			<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.LogSearchList" keyName="LogSearchList" />
-			<pg:pager maxPageItems="12" scope="request" data="LogSearchList" isList="false">
+			<pg:pager maxPageItems="10" scope="request" data="LogSearchList" isList="false">
 				<pg:param name="operUser"/>
 				<pg:param name="logModuel"/>
 				<pg:param name="type"/>
@@ -226,7 +226,7 @@
 						request.setAttribute("opuser",contextmenu);
 					%>
 					<pg:contextmenu enablecontextmenu="true" context="opuser" scope="request"/> 
-					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="10" sizescope="5,10,20,50,100"/></div>
 				</pg:notequal>
 			</pg:pager>
 		</div>
