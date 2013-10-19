@@ -112,6 +112,47 @@ public class AppBomServiceImpl {
 		}
 		return true;
 	}
+	
+	/**
+	 * 修改记录（先删后增），测试事务失败处理行为
+	 * @param bean
+	 * @return
+	 */
+	public boolean updateFaultTest(AppBom bean) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			String uuid=null;
+			if(bean.getId()==null||"".equals(bean.getId())){
+				return false;
+			}
+			uuid=bean.getId();
+			tm.begin();
+			String bim = bean.getBm();
+			bean.setBm(bean.getBm()+bean.getBm() + "+bean.getBm()+bean.getBm()+bean.getBm()+bean.getBm()+bean.getBm()");
+			try {
+				executor.updateBean("update", bean);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+//			
+			bean.setBm(bim);
+//			uuid=java.util.UUID.randomUUID().toString();
+//			bean.setId(uuid);			
+			executor.deleteBean("deleteByKeys", bean);
+			executor.insertBean("batchsave", bean);
+			tm.commit();
+			
+		} catch (Throwable e) {
+			e.printStackTrace();
+			return false;
+		}
+		finally
+		{
+			tm.release();
+		}
+		return true;
+	}
 	/**
 	 * 增加台账
 	 * @param bean

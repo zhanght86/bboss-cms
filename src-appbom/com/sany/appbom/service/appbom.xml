@@ -35,6 +35,13 @@ values
 		]]>
 	</property>
 	
+	
+	<property name="update">
+		<![CDATA[
+			update td_app_bom set bm=#[bm] where id=#[id]
+		]]>
+	</property>
+	
 	<property name="deleteByKeys">
 		<![CDATA[
 			delete from TD_APP_BOM where id=#[id]
