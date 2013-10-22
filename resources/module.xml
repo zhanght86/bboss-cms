@@ -67,11 +67,11 @@
 
 			</workspace>
 			<authoration>				 
-				 	<url>/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
+				 	<!--<url>/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
 				 		 	
 				 	<url>/sysmanager/resmanager/delRedundance.jsp</url>
 				 	<url>/sysmanager/user/userres_querylist.jsp</url>
-				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>				 
+				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>-->				 
 			</authoration>
 		</publicitem>
 
@@ -442,7 +442,10 @@
 				<content>person/personinfo.jsp</content>
 			</workspace>
 			<authoration>				 
-				 	<url>/person/*.jsp,/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
+				 	<url>/person/*.jsp,/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>	 	
+				 	<url>/sysmanager/resmanager/delRedundance.jsp</url>
+				 	<url>/sysmanager/user/userres_querylist.jsp</url>
+				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>
 			</authoration>
 		</item>
 		<item name="系统帐户修改" id="sysuserpassword" i18n:en_US="System Infomation Modification">

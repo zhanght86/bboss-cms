@@ -142,7 +142,7 @@ var sany_old_menuid = "anchor_publicitem";
 
 function navto_sany_MenuItem(tokenurl,menuId,url,target)
 {
-	pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
+	//pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
 	$.ajax({url:tokenurl, 
 		type: "POST",
 		success : function(token){
@@ -213,7 +213,7 @@ function navto_sany_MenuItem_window(tokenurl,menutitle,menuId,menupath,contextpa
 
 function leftnavto_sany_MenuItem(tokenurl,url,target)
 {
-	pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
+	//pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
 	//"../token/getToken.freepage"
 	$.ajax({url:tokenurl, //指定申请令牌的url
 			type: "POST",

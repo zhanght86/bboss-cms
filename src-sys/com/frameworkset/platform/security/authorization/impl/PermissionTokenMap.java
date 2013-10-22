@@ -17,10 +17,13 @@ package com.frameworkset.platform.security.authorization.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.platform.security.AccessControl;
 
 /**
  * <p>Title: PermissionTokenMap.java</p>
@@ -35,16 +38,26 @@ import com.frameworkset.platform.config.ConfigManager;
  * @version 1.0
  */
 public class PermissionTokenMap {
-	private List<RID> allrids;
+	
 	/**
 	 * Map<String,        PermissionTokenRegion>
 	 *     resourceType(资源类型划分)       资源权限区域
 	 */
 	private Map<String,PermissionTokenRegion> resourcTokenMap;
+	
+	/**
+	 * 与url相关的系统中所有资源操作许可
+	 * 当进行权限检测时，首先检测url相关的所有资源许可中的任何一个有操作权限，则说明用户有权限访问相应的资源
+	 */
+	private Map<String,LinkPermissionToken> allURLLinkPermissions;
+	
+	
 	public PermissionTokenMap ()
 	{
 		resourcTokenMap = new HashMap<String,PermissionTokenRegion>();
-		allrids = new ArrayList<RID>();
+		
+		allURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		
 	}
 	public void addPermissionToken(String url,PermissionToken token)
 	{
@@ -109,37 +122,54 @@ public class PermissionTokenMap {
 	{
 		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
 		if(resourceTokens != null)
+		{
 			resourceTokens.resetPermission( );
+			clearAllURLLinkPermissions();
+		}
 	}
 	
 	public void resetPermissionByRegion(String resourctType,String region)
 	{
 		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
 		if(resourceTokens != null)
-			resourceTokens.resetPermissionByRegion(  region);
-	}
-	
-	/**
-	 * 判断url资源是否有访问权限
-	 * @param url
-	 * @param resourceType
-	 * @return
-	 */
-	public boolean checkUrlPermission(String url,String resourceType)
-	{
-		if (!ConfigManager.getInstance().securityEnabled() )
-			return true;
-		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourceType);
-		if(resourceTokens == null)
 		{
-			if (BaseAccessManager._allowIfNoRequiredRoles(resourceType))
-				return true;
-			return true;
+			resourceTokens.resetPermissionByRegion(  region);
+			clearAllURLLinkPermissions();
 		}
-		return resourceTokens.checkUrlPermission(url,resourceType);
+	}
+	/**
+	 * 如果有修改，需要重新加载每个url的相关权限许可，只要资源定义有调整就需要需要调用这个方法
+	 */
+	private void clearAllURLLinkPermissions()
+	{
+		synchronized(this.scanlock)//如果有修改，需要重新加载每个url的相关权限许可，只要资源定义有调整就需要需要调用这个方法
+		{
+			this.allURLLinkPermissions.clear();
+		}
 	}
 	
 	
+//	/**
+//	 * 判断url资源是否有访问权限
+//	 * @param url
+//	 * @param resourceType 优先检测给定类型的包含url相关的资源权限
+//	 * @return
+//	 */
+//	public boolean checkUrlPermission(String url,String resourceType)
+//	{
+//		if (!ConfigManager.getInstance().securityEnabled() )
+//			return true;
+//		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourceType);
+//		if(resourceTokens == null)
+//		{
+//			if (BaseAccessManager._allowIfNoRequiredRoles(resourceType))
+//				return true;
+//			return true;
+//		}
+//		return resourceTokens.checkUrlPermission(url,resourceType);
+//	}
+	
+	private LinkPermissionToken NULL_PERMISSIONTOKENS = new LinkPermissionToken();
 	
 	/**
 	 * 判断url资源是否有访问权限
@@ -149,7 +179,132 @@ public class PermissionTokenMap {
 	 */
 	public boolean checkUrlPermission(String url)
 	{
-		return checkUrlPermission(url,"column");		
+		if (!ConfigManager.getInstance().securityEnabled() )
+			return true;
+		if(AccessControl.getAccessControl().isAdmin())
+			return true;
+		LinkPermissionToken ptokens = scanUrlPermissionTokens(url);
+		
+		if(NULL_PERMISSIONTOKENS == ptokens || ptokens.isUnprotected())
+			return true;
+		else
+		{
+			boolean successed = false;
+			for(PermissionToken token:ptokens.getPermissionTokens())
+			{
+				if(AccessControl.getAccessControl().checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
+				{
+					successed = true;
+					break;
+				}
+			}
+			return successed;
+		}
+		
+				
+	}
+	private Object scanlock = new Object();
+	/**
+	 * 扫描系统中和url相关的所有url资源
+	 * @param url
+	 */
+	private LinkPermissionToken scanUrlPermissionTokens(String url) {
+		LinkPermissionToken ptokens = this.allURLLinkPermissions.get(url);
+		
+		if(ptokens != null)
+		{
+			return ptokens;
+		}
+		else
+		{
+			RID id = new RID(url);
+			synchronized(scanlock)
+			{
+				ptokens = this.allURLLinkPermissions.get(url);
+				if(ptokens != null)
+				{
+					return ptokens;
+				}
+				Iterator<Entry<String, PermissionTokenRegion>> resources = this.resourcTokenMap.entrySet().iterator();
+				//首先进行url的未受保护资源扫描
+				while(resources.hasNext())
+				{
+					Entry<String, PermissionTokenRegion> entry = resources.next();
+					PermissionTokenRegion region = entry.getValue();
+					if(region.isUnprotectedURL(id))
+					{
+						ptokens = new LinkPermissionToken(url,true,null);
+						allURLLinkPermissions.put(url, ptokens);
+						break;
+					}
+						
+				}
+				if(ptokens == null )//如果不是未受保护资源，则扫描所有区域的相关资源
+				{
+					resources = this.resourcTokenMap.entrySet().iterator();
+					List<PermissionToken> tokes = new ArrayList<PermissionToken>();
+					while(resources.hasNext())
+					{
+						Entry<String, PermissionTokenRegion> entry = resources.next();
+						PermissionTokenRegion region = entry.getValue();
+						List<PermissionToken> rtokens = region.getAllURLToken(id);
+						if(rtokens != null && rtokens.size() > 0)
+						{
+							tokes.addAll(rtokens);
+						}
+							
+					}
+					if(tokes.size() == 0)
+					{
+						ptokens = NULL_PERMISSIONTOKENS;
+					}
+					else
+					{
+						removeSamePermissions(tokes );
+						ptokens = new LinkPermissionToken(url,false,tokes);
+					}
+					allURLLinkPermissions.put(url, ptokens);
+				}
+			}
+			return ptokens;
+		}		
+	}
+	/**
+	 * 资源去重
+	 * @param tokes
+	 */
+	private void removeSamePermissions(List<PermissionToken> tokes )
+	{
+		if(tokes.size() == 1)
+			return ;
+		
+		List<PermissionToken> removePermissionTokens = new ArrayList<PermissionToken>();
+		for(int i = 0; i < tokes.size(); i ++)
+		{
+			PermissionToken first = tokes.get(i);
+			if(removePermissionTokens.contains(first))
+				continue;
+			for(int j = i + 1; j < tokes.size(); j ++)
+			{	
+				PermissionToken second = tokes.get(j);
+				if(removePermissionTokens.contains(second))
+					continue;
+				
+				if(first.getOperation().equals(second.getOperation()) 
+						&& first.getResourcedID().equals(second.getResourcedID())
+						&& first.getResourceType().equals(second.getResourceType()))
+				{	
+					removePermissionTokens.add(second);
+				}
+			}
+			
+		}
+		for(PermissionToken first:removePermissionTokens)
+		{
+			tokes.remove(first);
+		}
+		
+		
 	}
 
 }

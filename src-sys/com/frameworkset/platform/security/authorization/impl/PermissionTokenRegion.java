@@ -159,7 +159,7 @@ public class PermissionTokenRegion {
 			resourceTokens.clear();
 	}
 	
-	private boolean isUnprotectedURL(RID rid)
+	public boolean isUnprotectedURL(RID rid)
 	{
 		boolean successed = false;
 		if(resourcUnprotectedTokenMap.size() > 0 && this.resourcUnprotectedTokenMap.containsKey(rid))
@@ -332,6 +332,47 @@ label:	while(entries.hasNext())
 		}
 		this.resourcUnprotectedTokenMap.put(new RID(url,true), dual);
 		
+	}
+	
+	public List<PermissionToken> getAllURLToken(RID rid) {
+		List<PermissionToken> ptokens = new ArrayList<PermissionToken>();
+		if(resourcTokenMap.size() > 0)
+		{
+			List<PermissionToken> tokens = new ArrayList<PermissionToken>();
+			Iterator<Entry<RID, List<PermissionToken>>> resources = resourcTokenMap.entrySet().iterator();
+			while(resources.hasNext())
+			{
+				Entry<RID, List<PermissionToken>> entry = resources.next();
+				if(entry.getKey().match(rid))
+					tokens.addAll(entry.getValue());
+			}
+			if(tokens.size() > 0)
+			{
+				ptokens.addAll(tokens);
+				
+			}
+		}
+		if((this.regionResourcTokenMap == null || this.regionResourcTokenMap.size() == 0))
+			return ptokens;
+		Iterator<Entry<String, Map<RID, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();		
+		while(entries.hasNext())
+		{
+			Entry<String, Map<RID, List<PermissionToken>>> entry = entries.next();
+			Map<RID, List<PermissionToken>> resourceTokens_ = entry.getValue();
+			List<PermissionToken> tokens = new ArrayList<PermissionToken>();
+			Iterator<Entry<RID, List<PermissionToken>>> resources = resourceTokens_.entrySet().iterator();
+			while(resources.hasNext())
+			{
+				Entry<RID, List<PermissionToken>> entry_= resources.next();
+				if(entry_.getKey().match(rid))
+					tokens.addAll(entry_.getValue());
+			}
+			if(tokens.size() > 0)
+			{
+				ptokens.addAll(tokens);				
+			}
+		}
+		return ptokens;
 	}
 
 

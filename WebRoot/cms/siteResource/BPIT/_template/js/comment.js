@@ -5,7 +5,12 @@ function showcomment(url,docId,n)
              	if (data == null) {
              		
              	} else {
-             		
+             		var commentCountE = document.getElementById("commentCount");
+             		if(commentCountE)
+             		{
+             			$("#commentCount").empty(); 
+             		    $("#commentCount").append(data.total+"");
+             		}
              		var comm = "<div class=\"comment_title\">";
              		comm = comm + "<div class=\"comment_num\"><a href=\"#\">已有<span class=\"red_num\">";
              		comm = comm +data.total

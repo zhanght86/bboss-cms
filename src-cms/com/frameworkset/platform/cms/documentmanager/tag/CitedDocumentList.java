@@ -140,7 +140,8 @@ public class CitedDocumentList extends DataInfoImpl implements java.io.Serializa
 								int docId = db.getInt( "doc_id"); // 此docId可能为文档id，也可能为频道id，由citeType决定
 								int srcSiteId = db.getInt( "site_id");
 								citedDoc.setUserId(userId);
-								citedDoc.setCurChannelId(curChannelId);
+								
+								citedDoc.setCurChannelid(curChannelId);
 								citedDoc.setDocid(docId);
 								citedDoc.setCiteTime(db.getDate( "op_time"));
 								citedDoc.setCiteType(citeType);

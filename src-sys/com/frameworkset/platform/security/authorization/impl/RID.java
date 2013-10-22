@@ -31,7 +31,7 @@ import org.frameworkset.util.PathMatcher;
  * @version 1.0
  */
 public class RID {
-	private boolean isKey = false;
+	private boolean key = false;
 	private static PathMatcher pathMatcher = new AntPathMatcher();
 	public RID(String url) {
 		super();
@@ -41,30 +41,54 @@ public class RID {
 	public RID(String url,boolean isKey) {
 		super();
 		this.url = url;
-		this.isKey = isKey;
+		this.key = isKey;
 		
 	}
 
 	private String url;
+	
+	public boolean isKey()
+	{
+		return this.key;
+	}
 
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub
-		return 0;
+		return url.hashCode();
 	}
 
+//	@Override
+//	public boolean equals(Object obj) {
+//		if(obj == null )
+//			return false;
+//		RID other = (RID)obj;
+//		if((this.isKey && other.isKey) || (!this.isKey && !other.isKey) )
+//			return url.equals(other.url);
+//		if(this.isKey)
+//		
+//			return pathMatcher.match(this.url, other.url);
+//		else
+//			return pathMatcher.match(other.url, this.url);
+////		return url.equals(other.url);
+//	}
+	
+	public boolean match(RID url)
+	{
+		return pathMatcher.match(this.url, url.url);
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null )
 			return false;
 		RID other = (RID)obj;
-		if((this.isKey && other.isKey) || (!this.isKey && !other.isKey) )
-			return url.equals(other.url);
-		if(this.isKey)
-		
-			return pathMatcher.match(this.url, other.url);
-		else
-			return pathMatcher.match(other.url, this.url);
+//		if((this.isKey && other.isKey) || (!this.isKey && !other.isKey) )
+		return url.equals(other.url);
+//		if(this.isKey)
+//		
+//			return pathMatcher.match(this.url, other.url);
+//		else
+//			return pathMatcher.match(other.url, this.url);
 //		return url.equals(other.url);
 	}
 	
