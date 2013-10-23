@@ -440,10 +440,7 @@ function checkBM(){
 }
    function dosubmit()
    {
-   		if(!checkBM()){
-			W.$.dialog.alert("编码已存在，请重新录入!",function(){},api);
-			return;
-		}
+   		
 		$.ajax({
 		   type: "POST",
 			url : "update.page",
