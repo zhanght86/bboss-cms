@@ -1,11 +1,12 @@
 package com.frameworkset.platform.cms;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.frameworkset.security.AccessControlInf;
 
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteManager;
@@ -31,7 +32,7 @@ public final class CMSManager {
 	
 
 	HttpServletResponse response;
-	AccessControl accessControl;
+	AccessControlInf accessControl;
 	
 	public static final String SESSION_SITEINFO_KEY = "SESSION_SITEINFO_KEY";
 	public static final String COOKIE_SITEINFO_KEY = "COOKIE_SITEINFO_KEY";
@@ -44,7 +45,7 @@ public final class CMSManager {
 	 */
 	public void init(HttpServletRequest request,
 					 HttpSession session,
-					 HttpServletResponse response,AccessControl accessControl)
+					 HttpServletResponse response,AccessControlInf accessControl)
 	{
 		this.request = request;
 		this.session = session;
@@ -60,7 +61,7 @@ public final class CMSManager {
 	 */
 	public void init(HttpServletRequest request,
 					 HttpSession session,
-					 AccessControl accessControl)
+					 AccessControlInf accessControl)
 	{
 		this.request = request;
 		this.session = session;

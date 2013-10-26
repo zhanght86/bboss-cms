@@ -57,7 +57,7 @@ public class MenuResTree extends COMTree implements Serializable{
         //是否批量权限授予
 		String isBatch = request.getParameter("isBatch"); 
         if(isBatch.equals("false") && roleTypeId.equals("user")){
-        	permissionsSource = super.accessControl.getSourceUserRes_Role(currOrgId, roleId, resTypeId, "visible");
+        	permissionsSource = ((AccessControl)accessControl).getSourceUserRes_Role(currOrgId, roleId, resTypeId, "visible");
         }
         if(menuHelpers == null )
         {

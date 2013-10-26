@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.security.AccessControlInf;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager;
 import org.frameworkset.spi.support.MessageSource;
@@ -39,7 +40,6 @@ import com.frameworkset.util.FileUtil;
 import com.frameworkset.util.ResourceInitial;
 import com.frameworkset.util.StringUtil;
 import com.frameworkset.util.VelocityUtil;
-import com.frameworkset.velocity.BBossVelocityUtil;
 
 /**
  * <p>
@@ -926,7 +926,7 @@ public class Framework implements ResourceInitial,MessageSource {
 		}
 	}
 	
-	public static String getWorkspaceContent(Item item,AccessControl control) {
+	public static String getWorkspaceContent(Item item,AccessControlInf control) {
 		if(!item.hasWorkspaceContentVariables())
 			return item.getWorkspaceContent();
 		else
@@ -945,7 +945,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	}
 	
 	public static String combinationItemUrlStruction(
-			ItemUrlStruction itemUrlStruction,AccessControl control) {
+			ItemUrlStruction itemUrlStruction,AccessControlInf control) {
 
 		StringBuffer url = new StringBuffer();
 		List<String> tokens = itemUrlStruction.getTokens();

@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
+import org.frameworkset.security.AccessControlInf;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -1711,7 +1712,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 	}
 	
 	
-	public List getSiteAllRuningList(AccessControl accessControl)
+	public List getSiteAllRuningList(AccessControlInf accessControl)
 	{
 		DBUtil db = new DBUtil();
 		

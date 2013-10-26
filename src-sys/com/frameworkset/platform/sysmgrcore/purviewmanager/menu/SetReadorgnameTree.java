@@ -51,8 +51,8 @@ public class SetReadorgnameTree extends COMTree implements Serializable {
 		String isBatch = request.getParameter("isBatch");
 		if("false".equals(isBatch) && "user".equals(roleTypeId))
 		{
-			this.checks = super.accessControl.getRoleSelfResource(roleId, resTypeId, roleTypeId,"readorgname");
-			permissionsSource = super.accessControl.getSourceUserRes_Role(currOrgId, roleId, resTypeId, "readorgname");
+			this.checks = ((AccessControl)accessControl).getRoleSelfResource(roleId, resTypeId, roleTypeId,"readorgname");
+			permissionsSource = ((AccessControl)accessControl).getSourceUserRes_Role(currOrgId, roleId, resTypeId, "readorgname");
 			
 		}
 //		if(!super.accessControl.isAdmin())

@@ -69,7 +69,7 @@ public class ContainerImpl implements Container{
 		this.cmsrequest = InternalImplConverter.getInternalRequest(request);
 		this.cmsresponse = InternalImplConverter.getInternalResponse(response);		
 		if(cmsrequest != null)
-			context = cmsrequest.getContext();
+			context = (Context)cmsrequest.getContext();
 		if(context == null)
 			throw new ContainerException("获取上下文异常，请检查是否在发布上下文中使用容器，如果不是请调用方法[init(String site, HttpServletRequest request, HttpSession session, HttpServletResponse response)]");
 	}
@@ -286,7 +286,7 @@ public class ContainerImpl implements Container{
 		this.cmsrequest = InternalImplConverter.getInternalRequest(request);
 		this.cmsresponse = InternalImplConverter.getInternalResponse(response);		
 		if(cmsrequest != null)
-			context = cmsrequest.getContext();
+			context =  (Context)cmsrequest.getContext();
 		if(site == null)
 			throw new ContainerException("站点英文名称不能为空");
 		if(context == null)

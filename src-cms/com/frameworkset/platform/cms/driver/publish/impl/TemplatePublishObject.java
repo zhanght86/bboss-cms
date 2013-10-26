@@ -16,6 +16,7 @@ import com.frameworkset.platform.cms.driver.distribute.Distribute;
 import com.frameworkset.platform.cms.driver.distribute.DistributeException;
 import com.frameworkset.platform.cms.driver.distribute.DistributeWraper;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletRequestImpl;
 import com.frameworkset.platform.cms.driver.jsp.JspFile;
 import com.frameworkset.platform.cms.driver.jsp.JspletWindow;
 import com.frameworkset.platform.cms.driver.jsp.JspletWindowImpl;
@@ -108,13 +109,13 @@ public class TemplatePublishObject extends PublishObject implements java.io.Seri
 		String uri = jspFile.getUri();
 		JspletWindow jspWindow = new JspletWindowImpl(context,jspFile);
 		RequestDispatcher dispatcher = this.cmsRequest.getRequestDispatcher(uri);
-		CMSServletRequest request = new CMSServletRequest(this.cmsRequest,requestContext.getPageContext(),jspWindow,this.context);
+		CMSServletRequest request = new CMSServletRequestImpl(this.cmsRequest,requestContext.getPageContext(),jspWindow,this.context);
 		/**
 		 * 使用模版标签传递过来的response
 		 */
 
         try {
-			dispatcher.include(request, this.templateResponse);
+			dispatcher.include((CMSServletRequestImpl)request, this.templateResponse);
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_COMPLETED);
 			context.getPublishMonitor().addSuccessMessage("发布模版-templateid=".concat(params[0]).concat(",viewid=").concat(params[1]).concat("结束"),
 					  new Date(),

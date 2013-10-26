@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-html,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -57,7 +57,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-sany-html,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -67,7 +67,7 @@
 	</target>-->
 	
 
-	<target name="compile-all"  depends="jar-sany-html" description="compile the compile-all source ">
+	<target name="compile-all" description="compile the compile-all source ">
 		<echo>compile the compile-all source ...</echo>
 		<javac encoding="UTF-8" destdir="classes-all" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 			<src path="${source}/src-cms" />
@@ -372,39 +372,7 @@
 			
 	</target>
 	
-	<target name="compile-sany-html" depends="init" description="compile the sany source ">
-					<echo>compile the compile-all source ...</echo>
-					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
-						<src path="${source}/src-htmlparser" />				
-						<classpath id="cp-cms_baseline">
-							<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
-							<fileset dir="${source}/lib" includes="*.jar *.zip" />
-							<fileset dir="${distrib}" includes="*.jar *.zip" />
-							
-						</classpath>
-					</javac>
-				<copy todir="classes-sonar">
-					<fileset dir="classes-sany" includes="**/*.*"/>
-				</copy>
-			
-		</target>
-		
-		<target name="jar-sany-html" depends="compile-sany-html" description="generate htmlparser-1.5-20050925.jar">
-					<echo>Generate the cms html parser library htmlparser-1.5-20050925.jar ...</echo>
-					<jar jarfile="${distrib}/htmlparser-1.5-20050925.jar" basedir="classes-sany" includes="**/*">
-						<manifest>
-							<attribute name="Implementation-Version" value="${impl.version}" />
-							<attribute name="Specification-Version" value="${revision}" />
-							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
-							<attribute name="Implementation-ProductID" value="${impl.productID}" />
-							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
-							<attribute name="Compile-User" value="${username}" />
-						</manifest>
-					</jar>
-				 <delete dir="classes-sany"/>
-				 <mkdir dir="classes-sany"/>	
-				
-		</target>
+	
 	
 	<!--<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>

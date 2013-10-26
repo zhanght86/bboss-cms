@@ -6,7 +6,6 @@
 	<classpathentry kind="src" path="src-demo"/>
 	<classpathentry kind="src" path="src-sanylog"/>
 	<classpathentry kind="src" path="src-parameters-handler"/>
-	<classpathentry kind="src" path="src-htmlparser"/>
 	<classpathentry kind="src" path="src-masterdata"/>
 	<classpathentry kind="src" path="src-workflow"/>
 	<classpathentry kind="src" path="src-mail"/>
@@ -138,7 +137,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.7-20101029.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/uim_user_validate.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar" sourcepath="/bboss-tablib"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ldap.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-email-1.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.4.jar"/>
@@ -186,5 +184,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/woodstox-core-asl-4.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wsdl4j-1.6.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xmlschema-core-2.0.3.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

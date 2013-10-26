@@ -42,7 +42,9 @@ import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcher;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcherImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletRequestImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponse;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletResponseImpl;
 import com.frameworkset.platform.cms.driver.jsp.JspFile;
 import com.frameworkset.platform.cms.driver.jsp.JspletWindow;
 import com.frameworkset.platform.cms.driver.jsp.JspletWindowImpl;
@@ -433,9 +435,9 @@ public abstract class PublishObject implements java.io.Serializable
 			RequestDispatcher dispatcher = requestContext.getRequest()
 					.getRequestDispatcher(uri);
 			CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-			CMSServletRequest request = new CMSServletRequest(requestContext
+			CMSServletRequest request = new CMSServletRequestImpl(requestContext
 					.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
-			CMSServletResponse response = new CMSServletResponse(requestContext
+			CMSServletResponse response = new CMSServletResponseImpl(requestContext
 					.getResponse(),context);
 			
 			

@@ -12,6 +12,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CMSTemplateLinkTable;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.CMSLink;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkTable;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
+import com.frameworkset.platform.cms.driver.jsp.ContextInf;
 import com.frameworkset.platform.cms.driver.publish.PubObjectReference;
 import com.frameworkset.platform.cms.driver.publish.PublishMode;
 import com.frameworkset.platform.cms.driver.publish.PublishObject;
@@ -31,7 +32,7 @@ import com.frameworkset.platform.cms.sitemanager.Site;
  * @author biaoping.yin
  * @version 1.0
  */
-public interface Context extends java.io.Serializable {
+public interface Context extends java.io.Serializable,ContextInf {
 	
 	/**
 	 * 获取发布的文件存放的相对物理目录

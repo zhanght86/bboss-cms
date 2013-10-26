@@ -48,7 +48,7 @@ public class TemplateTag extends BaseTag implements java.io.Serializable {
 		/**
 		 * 获取模版引用标签所在的模版的context
 		 */
-		context = cmsRequest.getContext();
+		context = (Context)cmsRequest.getContext();
 		CMSServletResponse cmsResponse = (CMSServletResponse)super.response;
 		TemplateServletResponse tplResponse = new TemplateServletResponse(cmsResponse,cmsRequest);
 		try {

@@ -108,7 +108,7 @@ public class CMSListTag extends PagerDataSet {
 		cmsresponse = InternalImplConverter.getInternalResponse(this.response);
 		if(cmsrequest != null)
 		{
-			this.context = this.cmsrequest.getContext();
+			this.context = (Context)this.cmsrequest.getContext();
 		}
 		
 		if(context == null)

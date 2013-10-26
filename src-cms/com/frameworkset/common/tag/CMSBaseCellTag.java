@@ -47,7 +47,7 @@ public class CMSBaseCellTag extends BaseCellTag{
 		cmsresponse = InternalImplConverter.getInternalResponse(this.response);
 		if(cmsrequest != null)
 		{
-			this.context = this.cmsrequest.getContext();
+			this.context = (Context)this.cmsrequest.getContext();
 		}
 		
 

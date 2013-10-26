@@ -9,6 +9,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.frameworkset.security.AccessControlInf;
+
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
 
@@ -41,7 +43,7 @@ public class MenuHelper  {
     private Principal principal;
 
     private Map permissionMenuIndex;
-    private AccessControl control;
+    private AccessControlInf control;
     private ModuleQueue modules;
     private ItemQueue items;
     private List menuQueue;
@@ -86,7 +88,7 @@ public class MenuHelper  {
         MenuHelper menuHelper = new MenuHelper("5", principal);
     }
     
-    public MenuHelper(List menuQueue, AccessControl control, Map permissionIndexs, String subsystem) {
+    public MenuHelper(List menuQueue, AccessControlInf control, Map permissionIndexs, String subsystem) {
         this.subsystem = subsystem;
         framework = Framework.getInstance(subsystem);
         this.menuQueue = menuQueue;
@@ -99,11 +101,11 @@ public class MenuHelper  {
         permissionMenuIndex = new HashMap();
     }
 
-    public MenuHelper(List menuQueue, AccessControl control, Map permissionIndexs) {
+    public MenuHelper(List menuQueue, AccessControlInf control, Map permissionIndexs) {
         this(menuQueue, control, permissionIndexs, "");
     }
 
-    public MenuHelper(String subsystem, AccessControl control) {
+    public MenuHelper(String subsystem, AccessControlInf control) {
         this.subsystem = subsystem;
         framework = Framework.getInstance(subsystem);
         this.permissionIndexs = new HashMap();
@@ -114,7 +116,7 @@ public class MenuHelper  {
     }
   
 
-    public MenuHelper(AccessControl control) {
+    public MenuHelper(AccessControlInf control) {
         this("", control);
     }
 
@@ -1242,7 +1244,7 @@ public class MenuHelper  {
         return url.toString();
     }
 
-    public void resetControl(AccessControl control) {
+    public void resetControl(AccessControlInf control) {
         this.control = control;
         this.permissionIndexs = new HashMap();
         menuitemQueue = new AuthMenuItemQueue(null);

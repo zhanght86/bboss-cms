@@ -6,9 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.frameworkset.event.Notifiable;
+import org.frameworkset.security.AccessControlInf;
 
 import com.frameworkset.platform.cms.container.Template;
-import com.frameworkset.platform.security.AccessControl;
 
 public interface SiteManager extends Notifiable,java.io.Serializable{
 	
@@ -246,6 +246,6 @@ public interface SiteManager extends Notifiable,java.io.Serializable{
 	 */
 	public Site getSiteInfoBySiteName(String siteName) throws SiteManagerException;
 
-	public List getSiteAllRuningList(AccessControl accessControl);
+	public List getSiteAllRuningList(AccessControlInf accessControl);
 	
 }

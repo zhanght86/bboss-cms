@@ -61,7 +61,7 @@ public abstract class CMSBaseListData extends DataInfoImpl  {
 //		cmsresponse = InternalImplConverter.getInternalResponse(this.response);
 		if(cmsrequest != null)
 		{
-			this.context = this.cmsrequest.getContext();
+			this.context =  (Context)this.cmsrequest.getContext();
 		}
 		
 		

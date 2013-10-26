@@ -45,7 +45,7 @@ import com.frameworkset.util.StringUtil;
  * 
  * @since 6.0.0
  */
-public class CmsLinkProcessor extends CmsHtmlParser {
+public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorInf {
 
 	protected CmsLinkTable m_linkTable;
 	/**

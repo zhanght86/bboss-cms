@@ -19,7 +19,9 @@ import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcher;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcherImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletRequestImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponse;
+import com.frameworkset.platform.cms.driver.jsp.CMSServletResponseImpl;
 import com.frameworkset.platform.cms.driver.publish.NotSupportPublishTypeException;
 import com.frameworkset.platform.cms.driver.publish.PublishCallBack;
 import com.frameworkset.platform.cms.driver.publish.PublishEngine;
@@ -1416,9 +1418,9 @@ public class APPPublish {
 		RequestDispatcher dispatcher = requestContext.getRequest()
 		.getRequestDispatcher(jspurl);
 		CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-		CMSServletRequest request = new CMSServletRequest(requestContext
+		CMSServletRequest request = new CMSServletRequestImpl(requestContext
 				.getRequest(), requestContext.getPageContext());
-		CMSServletResponse response = new CMSServletResponse(requestContext
+		CMSServletResponse response = new CMSServletResponseImpl(requestContext
 				.getResponse());
 		
 		try {
@@ -1451,9 +1453,9 @@ public class APPPublish {
 		RequestDispatcher dispatcher = requestContext.getRequest()
 		.getRequestDispatcher(jspurl);
 		CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-		CMSServletRequest request = new CMSServletRequest(requestContext
+		CMSServletRequest request = new CMSServletRequestImpl(requestContext
 				.getRequest(), requestContext.getPageContext());
-		CMSServletResponse response = new CMSServletResponse(requestContext
+		CMSServletResponse response = new CMSServletResponseImpl(requestContext
 				.getResponse());
 		
 		try {

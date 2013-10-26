@@ -162,10 +162,10 @@ public class PurviewManagerOrgTree extends COMTree implements Serializable{
 		                			
 		                			//过虑自己所属机构
 		                			List orgs = new ArrayList();
-		                			Organization main = accessControl.getChargeOrg();
+		                			Organization main = ((AccessControl)accessControl).getChargeOrg();
 		                			if(main != null)
 		                				orgs.add(main);
-		                			orgs.addAll(accessControl.getAllOrgListExcludeCharge());
+		                			orgs.addAll(((AccessControl)accessControl).getAllOrgListExcludeCharge());
 	//	                			accessControl.getChargeOrg();
 	//	                			accessControl.getAllOrgListExcludeCharge();
 	//	                			List orgs = orgManager.getOrgListOfUser(accessControl.getUserID());

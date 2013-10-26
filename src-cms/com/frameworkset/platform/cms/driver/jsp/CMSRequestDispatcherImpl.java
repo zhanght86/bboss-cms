@@ -9,13 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.frameworkset.common.tag.pager.tags.LoadDataException;
+import com.frameworkset.common.tag.pager.tags.PagerDataSet;
 import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
+import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.dataloader.CMSDetailDataLoader;
 import com.frameworkset.platform.cms.driver.dataloader.DefaultDetailDataLoader;
-import com.frameworkset.common.tag.pager.tags.LoadDataException;
-import com.frameworkset.common.tag.pager.tags.PagerDataSet;
 
 /**
  * <p>Title: CMSRequestDispatcherImpl</p>
@@ -92,8 +93,8 @@ public class CMSRequestDispatcherImpl implements CMSRequestDispatcher {
         
         boolean isIncluded = (internalRequest.isIncluded()
         		|| internalResponse.isIncluded());
-        String pagerContextid = "pagerContext." + internalRequest.getContext().getID();
-        String objectid =  "dataset." + internalRequest.getContext().getID();
+        String pagerContextid = "pagerContext." + ((Context)internalRequest.getContext()).getID();
+        String objectid =  "dataset." + ((Context)internalRequest.getContext()).getID();
         PagerDataSet dataSet = null;
         boolean flag = false;
         try {
@@ -105,7 +106,7 @@ public class CMSRequestDispatcherImpl implements CMSRequestDispatcher {
 
         	if(internalRequest.getContext() instanceof ContentContext)
         	{	      
-        		dataLoader = internalRequest.getContext().getCMSDetailDataLoader();
+        		dataLoader =  ((Context)internalRequest.getContext()).getCMSDetailDataLoader();
         		if(dataLoader == null)
         			dataLoader = new DefaultDetailDataLoader();
         		
@@ -124,10 +125,10 @@ public class CMSRequestDispatcherImpl implements CMSRequestDispatcher {
 
         	if(dataLoader != null)
         	{
-        		internalRequest.getContext().setCMSDetailDataLoader(dataLoader);
+        		 ((Context)internalRequest.getContext()).setCMSDetailDataLoader(dataLoader);
         		
         		this.oldPagerContext = internalRequest.getAttribute(pagerContextid);
-        		dataSet = new PagerDataSet(internalRequest,internalResponse,internalRequest.getPageContext());
+        		dataSet = new PagerDataSet((CMSServletRequestImpl)internalRequest,(CMSServletResponseImpl)internalResponse,internalRequest.getPageContext());
 //            	dataSet.setPageContext(internalRequest.getPageContext());
 //            	dataSet.origineTag = this;
         		

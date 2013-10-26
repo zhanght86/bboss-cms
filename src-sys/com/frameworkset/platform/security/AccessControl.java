@@ -52,6 +52,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.security.AccessControlInf;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.web.token.MemTokenManager;
 
@@ -97,7 +98,7 @@ import com.frameworkset.util.StringUtil;
 /**
  * @author biaoping.yin created on 2005-9-29 version 1.0
  */
-public class AccessControl {
+public class AccessControl implements AccessControlInf{
 	private static final Logger log = Logger.getLogger(AccessControl.class);
 
 	// public static final String LOGINCONTEXT_CACHE_KEY = "LOGIN_CONTEXT";

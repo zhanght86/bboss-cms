@@ -64,7 +64,7 @@ public class ResJobTree extends COMTree implements Serializable{
 	                //res_id:restype_id:res_name
 	                String ckeckVal = jobId+"#"+resTypeId+"#"+jobName;
 	              //已经授权的复选框显示选中状态
-                    String ms = accessControl.getSourceUserRes_jobRoleandRoleandSelf(currOrgId,roleId,jobName,resTypeId,jobId,"jobset");
+                    String ms = ((AccessControl)accessControl).getSourceUserRes_jobRoleandRoleandSelf(currOrgId,roleId,jobName,resTypeId,jobId,"jobset");
                     //System.out.println("ms = " + ms);
                     if(!"".equals(ms) && ms != null){
                     	ms = "-->资源来源：" + ms;

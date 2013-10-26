@@ -42,7 +42,7 @@ public abstract class BaseCellTag extends CellTag {
 			CMSServletRequest cmsrequest = InternalImplConverter.getInternalRequest(this.request);
 			if(cmsrequest != null)
 			{
-				this.context = cmsrequest.getContext();
+				this.context = (Context)cmsrequest.getContext();
 			}
 			
 	

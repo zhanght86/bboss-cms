@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.LineUser;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
@@ -20,7 +21,7 @@ public class OnlineList extends DataInfoImpl implements Serializable{
 		ListInfo listInfo = new ListInfo();
 		String userName = request.getParameter("userName");
 		//判断是否是部门管理员或admin
-		boolean state = (super.accessControl.isAdmin() || accessControl.isOrgManager(accessControl.getUserAccount()));
+		boolean state = (super.accessControl.isAdmin() || ((AccessControl)accessControl).isOrgManager(accessControl.getUserAccount()));
 		if(!state){
 			userName = accessControl.getUserAccount(); 
 		}
@@ -28,13 +29,13 @@ public class OnlineList extends DataInfoImpl implements Serializable{
 			List temp = new ArrayList();
 			//如果查询条件不为空
 			if(userName != null && !"".equals(userName)){
-				LineUser onLineUser = accessControl.getLineUser(userName);
+				LineUser onLineUser = ((AccessControl)accessControl).getLineUser(userName);
 				if(onLineUser != null)
 				{
 					temp.add(onLineUser);
 				}
 			}else{
-				Collection users = super.accessControl.getLoginUsers();
+				Collection users = ((AccessControl)accessControl).getLoginUsers();
 			
 				temp = new ArrayList(users);
 			}
