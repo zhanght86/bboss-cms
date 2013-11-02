@@ -170,7 +170,20 @@ public class DictDataProvide implements DataManager,Listener {
 		return null;
 	}
 	
-	
+	public Data refreshDataByID(String dictionaryID)
+	{
+		
+		
+		try {
+			removeDictFromCacheByID(dictionaryID);			
+			return getDataByID( dictionaryID);
+		} catch (Exception e) {
+			
+			logger.error("",e);
+		}
+		return null;
+	}
+	private static Object lock = new Object();
 	/**
 	 * 根据字典类型ID,获取字典类型对象 
 	 */
@@ -183,14 +196,21 @@ public class DictDataProvide implements DataManager,Listener {
 			{
 				return data;
 			}
-			
-			data = dictMgr.getDicttypeById(dictionaryID);
-			if(data != null)
-			{   //字典类型的顶级数据项对象(Item)
-				 
-				List items = dictMgr.getDictdataList(data.getDataId());
-				
-				loadData(data, items);
+			synchronized(lock)
+			{
+				data = (Data)this.datasbyid.get(dictionaryID);
+				if(data != null)
+				{
+					return data;
+				}
+				data = dictMgr.getDicttypeById(dictionaryID);
+				if(data != null)
+				{   //字典类型的顶级数据项对象(Item)
+					 
+					List items = dictMgr.getDictdataList(data.getDataId());
+					
+					loadData(data, items);
+				}
 			}
 			return data;
 		} catch (ManagerException e1) {
@@ -601,6 +621,11 @@ public class DictDataProvide implements DataManager,Listener {
 					Data old_dicttype = null;
 					try {
 						//树形字典数据存在parentId变化
+						old_dicttype = (Data)this.datasbyid.get(dictdata.getDataId());
+						if(old_dicttype == null)
+						{
+							return;
+						}
 						old_dicttype = this.getDataByID(dictdata.getDataId());
 						String parentId = dictdata.getParentId();
 						String oldParentId = dictdata.getOldParentId();
@@ -663,24 +688,26 @@ public class DictDataProvide implements DataManager,Listener {
 							subItems.add(old_dictdate);
 							
 						}else{
-							try {
-								old_dictdate = (Item)old_dicttype.getItemByName(dictdata.getName());
-//								old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
-							} catch (Exception e1) {
-								try {
-									old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
-								} catch (Exception e2) {
-									
-								}
-							}
-							if(old_dictdate != null)
-							{
-								//修改了名称
-								old_dictdate.setName(dictdata.getName());
-								old_dictdate.setValue(dictdata.getValue());
-								old_dictdate.setDataOrg(dictdata.getDataOrg());
-								old_dictdate.setDataValidate(dictdata.getDataValidate());
-							}
+//							try {
+//								old_dictdate = (Item)old_dicttype.getItemByName(dictdata.getName());
+////								old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
+//							} catch (Exception e1) {
+//								try {
+//									old_dictdate = (Item)old_dicttype.getItemByValue(dictdata.getValue());
+//								} catch (Exception e2) {
+//									
+//								}
+//							}
+//							if(old_dictdate != null)
+//							{
+//								//修改了名称
+//								old_dictdate.setName(dictdata.getName());
+//								old_dictdate.setValue(dictdata.getValue());
+//								old_dictdate.setDataOrg(dictdata.getDataOrg());
+//								old_dictdate.setDataValidate(dictdata.getDataValidate());
+//							}
+							this.refreshDataByID(old_dicttype.getDataId());
+							
 						}
 						//....
 						

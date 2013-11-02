@@ -1,0 +1,420 @@
+body{font-size:12px; font-family:"宋体";margin:0px auto;}
+ul,ol,li{padding:0px; margin:0px; border:0px;}
+li{list-style:none;}
+.clear{clear:both;line-height:0px; height:0px; font-size:0px;}
+/*连接*/
+.upload a.uploacphoto,
+{
+   color:#6c6c6c;
+   text-decoration:none;
+}
+.upload a.uploacphoto:linked
+{
+   color:#6c6c6c;
+   text-decoration:none;
+}
+.upload a.uploacphoto:hover
+{
+   color:#0085e6;
+   text-decoration:none;
+}
+.upload a.uploacphoto:visited
+{
+   color:#6c6c6c;
+   text-decoration:none;
+}
+/*button*/
+.bts,.bts2,.bts3
+{
+	text-align:center;
+	height:28px;
+	line-height:28px;
+	overflow:hidden;
+	margin-bottom:10px;
+	font-size:12px;
+	font-weight:100;
+}
+.bts3
+{
+	text-align:left;
+	position:relative;
+	top:10px;
+	left:50%;
+	margin-left:-20%;!important
+	_margin-left:-26%;
+	*margin-left:-26%;
+}
+a.person_bt,a.person_bt span,a.person_bt:hover,a.person_bt:hover span,
+a.person_bt2,a.person_bt2 span,a.person_bt2:hover,a.person_bt2:hover span,
+a.person_bt3,a.person_bt3 span,a.person_bt3:hover,a.person_bt3:hover span
+{background:url(../images/person_bt1.jpg) no-repeat top left;height:28px; display:inline-block;  text-indent:0; line-height:28px; color:#333333; padding-left:10px;text-decoration:none;}
+a.person_bt span{background:url(../images/person_bt1.jpg)  no-repeat top right;cursor:pointer; text-align:right;padding-right:20px; }
+a.person_bt:hover{background:url(../images/person_bt1.jpg)  no-repeat bottom left; text-decoration:none; }
+a.person_bt:hover span{background:url(../images/person_bt1.jpg) no-repeat  bottom right; cursor:pointer; text-align:right;text-decoration:none; }
+
+a.person_bt2{background:url(../images/person_bt2.jpg) no-repeat top left;}
+a.person_bt2 span{ background:url(../images/person_bt2.jpg) no-repeat top right;cursor:pointer; text-align:right;padding-right:20px;  color:#fff;}
+a.person_bt2:hover{background:url(../images/person_bt2.jpg) no-repeat bottom left;text-decoration:none;}
+a.person_bt2:hover span{background:url(../images/person_bt2.jpg) no-repeat bottom right; cursor:pointer; text-align:right;text-decoration:none; color:#fff;}
+
+a.person_bt3,a.person_bt3 span,a.person_bt3:hover,a.person_bt3:hover span
+{background:url(../images/person_bt3.jpg) no-repeat top left;height:21px;  line-height:21px; color:#333333; vertical-align:top}
+a.person_bt3{background:url(../images/person_bt3.jpg) no-repeat top left;}
+a.person_bt3 span{ background:url(../images/person_bt3.jpg) no-repeat top right;cursor:pointer; text-align:right;padding-right:20px;}
+a.person_bt3:hover{background:url(../images/person_bt3.jpg) no-repeat bottom left;text-decoration:none;}
+a.person_bt3:hover span{background:url(../images/person_bt3.jpg) no-repeat bottom right; cursor:pointer; text-align:right;text-decoration:none;}
+/*input*/
+.input2,.input3,.input4,.input5,.input6,.input7
+{
+    width:70px;
+	height:14px;
+	padding:3px 0 2px 3px;
+	font-size:12px;
+	border: #a7a6aa 1px solid;
+	line-height:14px;
+	background: #fff url(../images/input-bg.png) no-repeat 0px 0px;
+}
+.input3{width:120px;}
+.input6{width:60px;}
+.input4{width:200px;}
+.input5{width:323px;}
+.input7{width:140px;}
+textarea ,.reason
+{
+  width:100%;
+  height:55px;
+  word-break: break-all; 
+  word-wrap:break-word;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  border:1px solid #cccccc;
+  padding:3px 0 2px 3px;
+  background: #fff url(../images/input-bg.png) no-repeat 0px 0px;
+}
+.reason
+{
+  width:628px;
+  height:71px;
+  margin-top:3px;
+  margin-bottom:3px;
+}
+
+/*文本*/
+span.c1
+{
+  color:#333333;
+  display:inline;
+  line-height:26px;
+  text-align:left
+}
+span.c2
+{
+  color:#6c6c6c;
+  display:inline;
+  
+}
+span.c3
+{
+  color:#ea0000;
+  line-height:26px; 
+}
+span.c4
+{
+  color:#0085e6; 
+  line-height:26px; 
+}
+/*margin*/
+input.margin
+{
+  margin-right:5px;
+}
+.m1{margin-left:36px;}
+.m2{margin-left:24px;}
+.m3{margin-left:6px;margin-right:6px;}
+
+/*personinfo*/
+#person_info_title
+{
+  width:100%;
+  height:23px; 
+  line-height:23px;
+  border-bottom:1px solid #cccccc;
+  font-size:12px;
+  font-weight:bold;
+  color:#333333;  
+  padding-top:2px;
+}
+img{ border:none}
+#person_info_title img
+{
+   vertical-align:middle;
+   float:left;
+   width:15px;
+   height:15px;
+   margin-top:3px;
+   margin-right:6px;
+}
+#person_info_title a.contract{ background: url(../images/Expand2.gif) no-repeat 0 3px; height:25px; line-height:25px; font-size:12px; font-weight:normal; float:right; text-indent:15px; color:#333333; margin-right:10px;display:inline; text-decoration:none}
+#person_info_title a.contract:hover{color:#0085e6;; text-decoration:none }
+#person_info_title a.contract01{ background: url(../images/shrink2.gif) no-repeat 0 3px; height:25px; line-height:25px; font-size:12px; font-weight:normal; float:right; text-indent:15px; color:#333333; margin-right:10px;display:inline; text-decoration:none}
+#person_info_title a.contract01:hover{color:#0085e6;; text-decoration:none }
+
+#person_info_content
+{
+  
+  height:auto;
+  line-height:26px;
+  font-size:12px;
+  color:#333333;
+  padding-left:40px;
+  padding-top:3px;
+}
+
+#person_info_content .right
+{
+  float:right;
+  margin-right:10px;
+  display:inline;
+  width:105px;
+  height:150px;
+  padding:2px;
+  border:1px solid #d5d5d5;
+  margin-top:10px;
+}
+
+#person_exp,#person_entry
+{
+  margin-top:10px;
+  margin-left:5px;
+  height:329px;
+  border:1px solid #cccccc;
+  margin-right:20px;  
+}
+#person_entry
+{height:270px;}
+.tabs
+{
+	padding: 0px;
+	
+}
+.indentmenu{
+	width: 108px; float:left;
+}
+.num 
+ {
+	padding: 0px 0px 0px 3px;
+}
+.indentmenu ul
+{
+    
+	width: 108px;
+	background-color:#f4f3f4;
+	height: 314px;
+	list-style-type: none;
+	margin:0px;
+	padding:0px;
+	padding-top: 10px;
+	background-image: url(../images/tab_line.jpg);
+	background-repeat: repeat-y;
+	background-position: right top;
+	padding-bottom:5px;
+}
+.indentmenu ul li{
+    padding:0px;
+	text-align: right;
+	float: left;
+	line-height:20px;
+	width:108px;
+}
+
+.indentmenu ul li a{
+	color: black; 
+	text-decoration: none;
+	display: block;
+	width:88px;
+	padding: 3px 17px 3px 3px;
+	float: left;
+}
+
+.indentmenu ul li a:visited{
+color: black;
+}
+
+.indentmenu ul li a.selected{
+color: #0066CC!important;
+font-weight:bold;
+border-top:1px solid #ccc;
+border-bottom:1px solid #ccc;
+background-color:#FFFFFF;
+}
+#petsdivcontainer {
+	height: 329px;
+	margin-left: 118px;	
+}
+#person_exp .content
+{
+float:left;
+	
+}
+.exp_title,.mes_title
+{
+  text-align:center;
+  line-height:25px;
+  font-size:12px;
+  font-weight:bold;
+  color:#2576e1;
+  padding-top:10px;
+}
+.exp_content
+{
+   margin-right:20px;
+}
+.mes_title
+{
+  width:80%;
+  text-align:left;
+}
+hr
+{
+  padding:0px;
+  line-height:0px;
+  height:0px;
+  font-size:0px;
+  margin:0px;
+  border-bottom:1px solid #000;
+  list-style:none; 
+}
+span.c
+{
+   line-height:26px;
+   text-indent:24px;
+   padding:0px;
+   margin:0px;
+}
+/*personentry*/
+th.fright
+{
+  text-align:right;
+}
+#person_entry_content
+{
+  height:auto;
+  line-height:26px;
+  font-size:12px;
+  color:#333333;
+  padding-left:10px;
+  padding-top:3px;
+  
+}
+#person_info_content .right01
+{
+  float:right;
+  margin-right:10px;
+  margin-top:10px;
+  width:109px;
+  height:154px;
+  display:inline;
+}
+.right2
+{
+  padding:2px;
+  width:105px;
+  height:150px;
+  border:1px solid #d5d5d5;
+  margin-top:10px; 
+}
+.upload
+{
+  width:109px;
+  height:20px;
+  line-height:20px;
+  margin-right:20px;
+  text-align:center
+}
+.table4 th
+{
+  color:#333333;
+  line-height:26px;
+  text-align:right;
+  line-height:28px;
+}
+
+.deal
+{ 
+  width:100%;
+  margin-top:10px;
+}
+.deal ul
+{
+  line-height:26px;
+  clear:both;
+  margin-left:10px;
+  
+}
+.deal ul li
+{
+  float:left;
+}
+textarea 
+{
+  width:100%;
+  height:55px;
+  word-break: break-all; 
+  word-wrap:break-word;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  border:1px solid #cccccc;
+}
+ul .margin2
+{margin-left:30px;
+display:inline;
+}
+/*becomes——转正*/
+.meg
+{
+  width:100%;
+  padding-top:7px;
+  padding-left:20px;
+}
+.meg ul{clear:both}
+.meg ul li
+{
+  float:left;
+}
+select
+{
+  width:174px;
+  font-size:12px;
+  line-height:18px;
+  height:18px;
+  vertical-align: middle
+}
+.al_title
+{
+  float:left;
+  height:25px;
+  line-height:25px;
+  padding-top:6px;
+  color:#0085e6;
+}
+.title_bt
+{
+  float:right;
+  height:28px;
+  font-weight:100;
+  vertical-align:middle;
+ margin:0px;
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+

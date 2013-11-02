@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+body{font-size:12px; font-family:Arial, Helvetica, sans-serif;; margin:0px; padding:0px;}
+.clear:after{ content:"."; display:block; height:0; clear:both; visibility:hidden;}
+.Zclear { clear:both; line-height:1px; visibility:hidden;}
+
+#error_bg{
+	width:100%;
+	zoom:1;
+	height:100%;
+}
+.c-err { height:100%; position:absolute; left:0; top:0; z-index:10; width:100%;}
+.c-errWrapper {
+	position:absolute;
+	height:100%;
+	width:100%;
+	text-align:center;
+	overflow:auto;
+	background-image: url(../images/error_bg.png);
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.c-errHeight { height:100%; display:inline-block; *display:inline; zoom:1; width:1px; margin-left:-1px; vertical-align:middle;}
+#error_bg .c-err .c-errWrapper .c-errContent .c-err_min {
+	padding-bottom: 175px;
+	padding-left: 320px;
+}
+#error_bg .c-err .c-errWrapper .c-errContent .c-err_min a {
+	color: #000000;
+	text-decoration: none;
+	padding: 8px;
+}
+#error_bg .c-err .c-errWrapper .c-errContent .c-err_min a:hover {
+	color: #0066CC;
+	text-decoration: underline;
+}
+.c-errContent { display:inline-block; *display:inline; zoom:1; width:460px;vertical-align:middle;margin:auto;}

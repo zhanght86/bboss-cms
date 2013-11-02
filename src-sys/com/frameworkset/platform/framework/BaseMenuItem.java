@@ -23,7 +23,15 @@ public abstract class BaseMenuItem implements MenuItem {
 	protected Map<Locale, String> localeMouseupimgs;
 	/** outlookbar图标头部分 */
 	protected String headimg;
+	/**
+	 * 展示模式，true-弹出窗口
+	 * false 不弹出窗口
+	 * 默认为false
+	 * 可以在item和module上面设置popup属性
+	 */
+	protected String option ="{}";
 
+	
 	protected Map<Locale, String> localeHeadimgs;
 	protected String title;
 	protected Map<Locale, String> localeTitles;
@@ -311,6 +319,12 @@ public abstract class BaseMenuItem implements MenuItem {
 	}
 	public List<String> getAuthorResources() {
 		return authorResources;
+	}
+	public String getOption() {
+		return option;
+	}
+	public void setOption(String option) {
+		this.option = option;
 	}
 	
 	

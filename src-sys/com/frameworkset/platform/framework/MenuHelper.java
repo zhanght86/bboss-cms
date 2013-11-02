@@ -1608,7 +1608,10 @@ public class MenuHelper  {
         public AuthorModule(Module module) {
             this.module = module;
         }
-
+        public String getOption() {
+    		return module.getOption();
+    	}
+    	
         public MenuItem getParent() {
         	return getCurrentSystemMenu(this.module.getParent());
 //            return this.module.getParent();
@@ -1783,7 +1786,9 @@ public class MenuHelper  {
         public String getId() {
             return item.getId();
         }
-
+        public String getOption() {
+    		return item.getOption();
+    	}
         public String getLeft() {
             return item.getLeft();
         }
@@ -2136,6 +2141,7 @@ public class MenuHelper  {
 	{
 		return getItemUrl(subitem,contextpath,framepath,(String)null,control);
 	}
+	
 	public static String getItemUrl(Item subitem,String contextpath,String framepath,String selecturl,AccessControl control)
 	{
 		String area = subitem.getArea();
@@ -2195,6 +2201,14 @@ public class MenuHelper  {
 						 .append(selecturl).toString();
 			}
 		}
+		return url;
+	}
+	
+	public static String getModuleUrl(Module subitem,String contextpath,AccessControl control)
+	{
+		String url = subitem.getUrl();
+		url = MenuHelper.getRealUrl(contextpath, 
+							url,sanymenupath_menuid,subitem.getId());
 		return url;
 	}
 	

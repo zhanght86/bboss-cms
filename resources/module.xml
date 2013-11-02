@@ -115,7 +115,7 @@
 					<content>appbom/index.page</content>
 				</workspace>
 			</item>
-			<item name="工单管理" id="docManage" i18n:en_US="Invoices Manage" >
+			<item name="工单管理" id="docManage" i18n:en_US="Invoices Manage" option="{popup:true}" >
 				<mouseclickimg>html/images/salary.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -124,7 +124,7 @@
 				</workspace>
 			</item>
 			
-			<item name="台账查询" id="materailQuery" i18n:en_US="Query">
+			<item name="台账查询" id="materailQuery" i18n:en_US="Query" option="{popup:true}">
 				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -138,7 +138,7 @@
 
 
 
-			<module name="应用台账1" id="appbommanagermodule1" used="true" i18n:en_US="App Bom">
+			<module name="应用台账1" id="appbommanagermodule1" used="true" i18n:en_US="App Bom" url="html/tab_edit.html" showleftmenu="true" popup="true">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<description>应用台账</description>
 				<item name="标签页效果" id="appbommanager1" i18n:en_US="Label Page Demo">
@@ -157,6 +157,39 @@
 						<content>html/table2.html</content>
 					</workspace>
 				</item>
+				<item name="固定列表格控件" id="tablegrid" i18n:en_US="tablegrid">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>demo/tablegrid/SuperTables3.html</content>
+					</workspace>
+				</item>
+				<item name="下拉多选控件" id="selectgrid" i18n:en_US="selectgrid">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>demo/selectgrid/selectedlist.htm</content>
+					</workspace>
+				</item>
+				<item name="报错页面" id="error" i18n:en_US="error">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>demo/error/error.html</content>
+					</workspace>
+				</item>
+				<item name="分页控件" id="page" i18n:en_US="page">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>demo/page/index.html</content>
+					</workspace>
+				</item>
+				
 
 			</module>
 

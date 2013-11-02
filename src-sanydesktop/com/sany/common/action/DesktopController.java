@@ -497,6 +497,20 @@ public class DesktopController {
 					}
 					useModuleUrl = true;
 				}
+				else
+				{
+					if(sany_selecturl == null || sany_selecturl.equals(""))
+					{
+//						selectUrl = MenuHelper.getRealUrl(contextpath,temp_m.getUrl(),MenuHelper.sanymenupath_menuid,temp_m.getId());
+					}
+					else
+					{
+						selectUrl = MenuHelper.getRealUrl(contextpath, 
+								sany_selecturl,MenuHelper.sanymenupath_menuid,temp_m.getId());
+						useModuleUrl = true;
+					}
+					
+				}
 				isroot = menu.getParent() instanceof Root;
 				if(isroot)
 				{						

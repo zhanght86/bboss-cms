@@ -1,0 +1,110 @@
+body {
+	font:12px/18px "宋体", Arial, Helvetica, sans-serif;padding:0px;margin:0px; color:#000
+}
+
+td,th {
+	font:12px/18px "宋体", Arial, Helvetica, sans-serif;
+}
+.top {
+	padding: 3px;
+	background-image: url(../images/top_right.jpg);
+	background-repeat: no-repeat;
+	background-position: right top;
+	height: 28px;
+	text-align: right;
+}
+
+a:link {
+	color: #333333;
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+	color: #333333;
+}
+a:hover {
+	text-decoration: none;
+	color: #2879E2;
+}
+a:active {
+	text-decoration: none;
+}
+
+.top .logo_top {
+	float: left;
+	width: 340px;
+}
+.top .log_message {
+	line-height: 20px;
+	padding-top: 8px;
+	padding-right: 5px;
+}
+.name_red {
+	color: #FE171F;
+}
+.right_contain .title {
+	font-size: 14px;
+	line-height: 24px;
+	font-weight: bold;
+	color: #333333;
+	border-bottom: 2px solid #CCCCCC;
+	margin-bottom: 10px;
+	background: url(../images/001_54.gif) no-repeat left 3px;
+	padding-left: 25px;
+}
+.right_contain .title { clear:both; overflow:hidden;_zoom:1;}
+.fleft { float:left;}
+.fright { float:right;}
+.right_contain .title { clear:both; overflow:hidden;_zoom:1;}
+.location{ background:url(../images/ico_location.gif) no-repeat 0 6px; height:24px; line-height:24px; font-size:12px; font-weight:normal; float:right; text-indent:15px; color:#999999;}
+.location a:link { color:#999999}
+.location a:visited {color:#999999}	
+.location a:hover {color:#4f8af6}	
+.location a:active {color:#999999}	
+.right_contain {
+	padding: 8px;
+}
+
+/*
+ .menu {
+	background: url(../images/menu_bg.jpg) repeat-x left top;
+	height: 29px;
+}
+ .menu ul {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+ .menu li {
+	display: list-item;
+	float: left;
+	padding:0px;
+	line-height: 29px;
+	background: url(../images/menu_line.jpg) no-repeat right top;
+	width: 95px;
+	text-align: center;
+	margin: 0px;
+}
+ .menu .left_link {
+	background-image: none;
+}
+
+ .menu .select {
+	font-weight: bold;
+	color: #fff;
+	background: url(../images/select_menu.jpg) repeat-x left top;
+}
+.menu .select a:link,.menu .select a:visited {
+	color: #FFFFFF;
+}
+.menu .select a:hover {
+	color: #FFff00;
+}
+.menu a:link,.menu a:visited {
+	color: #1f1f1f;
+	
+}
+.menu a:hover{color:#0033CC;}
+
+
+/*菜单结束*/

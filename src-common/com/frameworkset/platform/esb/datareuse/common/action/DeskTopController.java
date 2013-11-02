@@ -168,6 +168,7 @@ public class DeskTopController {
 					continue;
 				mb.setId(item.getId());
 				mb.setName(item.getName(request));
+				mb.setOption(item.getOption());
 				String contextPath = request.getContextPath();
 				if(urltype == null || urltype.equals("1"))
 				{

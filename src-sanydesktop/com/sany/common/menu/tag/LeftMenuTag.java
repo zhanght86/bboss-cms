@@ -347,15 +347,17 @@ public class LeftMenuTag extends BaseTag{
 			{
 				url = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(subitem,control),MenuHelper.sanymenupath_menuid,subitem.getId());
 			}
+			 String mname = subitem.getName(request);
 			 if(selectItem != null && subitem.getPath().equals(selectItem))
 			 {
+				
 				 datas.append("<li  class=\"select_links\"><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
-				.append("','").append(url).append("','").append(target).append("')\">").append(subitem.getName(request)).append("</a></li>");
+				.append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">").append(mname).append("</a></li>");
 			 }
 			 else
 			 {
 				 datas.append("<li><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
-				.append("','").append(url).append("','").append(target).append("')\">").append(subitem.getName(request)).append("</a></li>");
+				.append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">").append(mname).append("</a></li>");
 			 }
 		 }  
 	     datas.append("</ul>");

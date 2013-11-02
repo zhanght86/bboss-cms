@@ -5,6 +5,7 @@
 @import  url("sheet.css");
 @import  url("menu_left.css");
 
+
 fieldset, fieldset.collapsible {
 	padding: 5px;
 	border: 1px solid #CCCCCC;

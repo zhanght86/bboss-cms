@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript" src="jquery-1.5.1.min.js"></script>
+<script type="text/javascript">
+$(function(){	
+	//获取要定位元素距离浏览器顶部的距离
+	var navH = $(".nav").offset().top;
+	//滚动条事件
+	$(window).scroll(function(){
+		//获取滚动条的滑动距离
+		var scroH = $(this).scrollTop();
+		//滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+		if(scroH>=navH){
+			$(".nav").css({"position":"fixed","top":0,"left":"50%","margin-left":"-200px"});
+		}else if(scroH<navH){
+			$(".nav").css({"position":"static","margin":"0 auto"});
+		}
+		console.log(scroH==navH);
+	})
+})
+</script>
+<style type="text/css">
+*{ margin:0px; padding:0px;}
+
+.top{
+	height:900px;
+	background:#009999;
+}
+	
+.nav{
+	width:400px;
+	margin:0 auto;
+	border-bottom:1px solid #F00;
+}
+	
+.nav ul:after{
+	clear:both;
+	content:"";
+	display:table;}
+	
+.nav ul li{
+	background:#FFFFFF;
+	float:left;
+	width:70px;
+	border:2px solid #06F;
+	text-align:center;
+	height:28px;
+	line-height:28px;}
+	
+.cl01,.cl02,.cl03,.cl04,.cl05,.cl06,.cl07,.cl08{
+	height:300px;}
+	
+.cl01{
+	background:#333;}
+	
+.cl02{
+	background:#F00;}
+.cl03{
+	background:#FFFF00;}
+	
+.cl04{
+	background:#0FF;}
+	
+.cl05{
+	background:#030;}
+.cl06{
+	background:#006699;}
+.cl07{
+	background:#930;}
+.cl08{
+	background:#969;}
+
+</style>
+</head>
+<body>
+<div class="top"></div>
+<div class="nav">
+	<ul>
+		<li>测试1</li>
+		<li>测试2</li>
+		<li>测试3</li>
+		<li>测试4</li>
+	</ul>
+</div>
+<div class="cl01"></div>
+<div class="cl02"></div>
+<div class="cl03"></div>
+<div class="cl04"></div>
+<div class="cl05"></div>
+<div class="cl06"></div>
+<div class="cl07"></div>
+<div class="cl08"></div>
+</body>
+</html>

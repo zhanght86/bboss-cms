@@ -1,0 +1,128 @@
+body {
+	font:12px "ËÎÌו", Arial, Helvetica, sans-serif;
+	color: #666666; background-color:#FFFFFF;
+}
+body,#menubar div,#menubar ul,#menubar li{margin:0;padding:0} 
+#menubar {
+	background: url(../images/menu_bg.jpg) repeat-x left top;
+	height: 29px;
+}
+#menuba ul.menus{list-style-type: none;}
+#menubar ul.menus li {
+	list-style-type: none;
+	display: list-item;
+	float: left;	
+	line-height: 29px;
+	background: url(../images/menu_line.jpg) no-repeat right top;
+}
+#menubar ul.menus li a {
+	padding:0px;
+	width:100px;
+	text-align:center;
+	display:block;
+	font-size:12px;
+	color:#1F1F1F; 
+	text-decoration:none; 
+}
+#menubar ul.menus li a:hover{display: block;color: #2C7BE2; text-decoration:none; font-weight:bold;}
+#menubar ul.menus li a.current {	
+	background:url(../images/ndot.gif) 95% center no-repeat;	
+	display: block;
+	color: #FFFFFF; 
+	background-color:#71A3E4; 
+	text-decoration:none;
+}
+#menubar ul.menus li a.current span{		
+	background:url(../images/mdot2.jpg) center center no-repeat;	
+}
+#menubar ul.menus li a.select:hover{		
+	color: #FFFFFF; 	
+}
+#menubar ul.menus li a.fcurrent {	
+	font-weight: bold;
+	color: #fff;
+	background: url(../images/select_menu.jpg) no-repeat right top;
+}
+#menubar ul.menus li a.fcurrent:hover {	
+	font-weight: bold;
+	color: #fff;
+	text-decoration:none;
+	background: url(../images/select_menu.jpg) no-repeat right top;
+}
+#menubar ul.second,#menubar ul.third {	
+	padding:0;z-index:99;
+	margin:0;
+	POSITION: absolute;
+	left:2px; 
+	display: block; 
+	VISIBILITY: hidden;	
+}
+#menubar ul.third {		
+	border-top:1px solid #80AAE1; 
+}
+#menubar ul.second li {
+	float:none; 
+	margin:0;
+	padding:0;
+	line-height: 30px;
+	display:inline; 	
+}
+#menubar ul.third li {
+	float:none;
+	margin:0;
+	padding:0;
+	line-height: 23px;
+	display:inline;	
+}
+
+#menubar ul.second li a,#menubar ul.third li a{
+    width:110px;
+	font-size:12px;
+	font-weight:normal; line-height:20px;
+	text-align:left;
+	display: block;padding-left:5px;
+	color:#082B57;	
+	background-color:#BFDBFF;
+	border:1px solid #80AAE1;
+	border-top:1px solid #D3E6FF;
+}
+
+
+#menubar ul .second div{}
+#menubar ul .second .third a{}
+#menubar ul.second li a:hover span,#menubar ul.third li a:hover span{ 
+	background:url(../images/mdot2.jpg) center center no-repeat;
+}
+#menubar ul.second li a:hover,#menubar ul.third li a:hover{	
+	color: #ffffff; 
+	display: block;
+	font-weight:normal;
+	background-color:#71A3E4; 
+	text-decoration:none;
+}
+#menubar ul.second li a.subtitle {		
+	display: block;
+	background:#BFDBFF url(../images/ndot1.gif) 95% center no-repeat;
+}
+
+#menubar ul.second li a.subtitle:hover{
+	background:#ffffff url(../images/ndot.gif) 95% center no-repeat;	
+	display: block;
+	color: #FFFFFF; 
+	text-decoration:none;
+}
+
+#menubar ul.menus li a.select{
+	font-weight: bold;
+	color: #fff;
+	background: url(../images/select_menu.jpg) no-repeat right top;
+}
+
+#menubar ul.second li a div{
+	line-height:23px;
+	padding-top:3px;	
+	height:auto !important;
+	height:27px; 
+	min-height:27px;
+	cursor:pointer;
+} 

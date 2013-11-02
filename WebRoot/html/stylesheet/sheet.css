@@ -70,10 +70,10 @@
 }
 .table2 th {
 	text-align: right;
-	padding: 3px;
+	padding: 2px 3px;
 }
 .table2 td {
-	padding: 3px;
+	padding: 2px 3px;
 	 height:24px;
 }
 .table2 img{ cursor:pointer;}
@@ -199,7 +199,7 @@
 .stable th {
 	line-height: 18px;
 	font-weight: bold;
-	padding:7px 4px;
+	padding:4px 4px;
 	border-bottom: 1px solid #CBC8C8;
 	border-right: 1px solid #CBC8C8;
 	background: #E8E8E8 url(../images/th_bg.jpg) repeat-x left top;
@@ -209,7 +209,7 @@
 }
 .stable td {
 	line-height: 18px;
-	padding:4px 5px 4px 5px;
+	padding:3px 5px;
 	border-bottom: 1px solid #D2D0D1;
 	border-right: 1px solid #D2D0D1;
 	text-align: center;
@@ -240,12 +240,12 @@
 .btnarea a{ margin:0 10px;}
 
 a.bt_1,a.bt_2{ margin:0 3px; cursor:hand;}
-a.bt_1,a.bt_1 span,a.bt_1:hover,a.bt_1:hover span,a.bt_2,a.bt_2 span,a.bt_2:hover,a.bt_2:hover span{ background:url(../images/bt_1.gif) no-repeat top left; padding-left:15px; height:23px; display:inline-block; text-indent:0; line-height:23px; color:#FFF;}
+a.bt_1,a.bt_1 span,a.bt_1:hover,a.bt_1:hover span,a.bt_2,a.bt_2 span,a.bt_2:hover,a.bt_2:hover span{ background:url(../images/bt_1.gif) no-repeat top left; padding-left:12px; height:21px; display:inline-block; text-indent:0; line-height:21px; color:#FFF;}
 a.bt_2,a.bt_2 span,a.bt_2:hover,a.bt_2:hover span{ background:url(../images/bt_2.gif) no-repeat top left; color:#000;}
 
-a.bt_1 span,a.bt_2 span,a.handle_bt span{background-position:top right; padding:0; padding-right:12px;}
+a.bt_1 span,a.bt_2 span,a.handle_bt span{background-position:top right; padding:0; padding-right:9px;}
 a.bt_1:hover,a.bt_2:hover,a.handle_bt:hover{background-position:bottom left; text-decoration:none; color:#000000;}
-a.bt_1:hover span,a.bt_2:hover span,a.handle_bt:hover span{background-position:bottom right; padding:0; padding-right:12px;}
+a.bt_1:hover span,a.bt_2:hover span,a.handle_bt:hover span{background-position:bottom right; padding:0; padding-right:9px;}
 
 
 
@@ -285,7 +285,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	line-height:24px;
 	overflow:hidden;
 	border-bottom:2px solid #ccc;
-	margin-bottom:10px;
+	margin-bottom:6px;
 	padding-left:20px;
 	background:url(../images/ico_location.gif) no-repeat  left center; 
 }
@@ -293,7 +293,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 <!--搜索框-->
 #searchblock{ clear:both;}
 #searchblock .search_top {
-	height: 10px;
+	height: 6px;
 	background-image: url(../images/bg_search.jpg);
 	background-repeat: repeat-x;
 	background-position: left top;
@@ -305,7 +305,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	background-position: right top;
 	float: right;
 	width: 8px;
-	height: 10px;
+	height: 6px;
 }
 #searchblock .search_top .left_top {
 	background-image: url(../images/left_search.jpg);
@@ -313,7 +313,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	background-position: left top;
 	float: left;
 	width: 10px;
-	height: 10px;
+	height: 6px;
 }
 #searchblock .search_box {
 	background-image: url(../images/bg_search.jpg);
@@ -343,7 +343,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	background-image: url(../images/bg_search.jpg);
 	background-repeat: repeat-x;
 	background-position: left bottom;
-	margin-bottom:10px;margin-top:-4px;
+	margin-bottom:6px;margin-top:-4px;
 }
 
 #searchblock .search_bottom .right_bottom {
@@ -363,7 +363,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	height: 10px;
 }
 
-.title_box{ background:url(../images/title_bg.gif) repeat-x; height:28px; border:1px #c8c2c2 solid; margin-bottom:10px; overflow:hidden; line-height:28px;text-align: left;}
+.title_box{ background:url(../images/title_bg.gif) repeat-x; height:28px; border:1px #c8c2c2 solid; margin-bottom:6px; overflow:hidden; line-height:28px;text-align: left;}
 .title_box strong{ font-size:12px; margin-left:10px;}
 .title_box .rightbtn{float: right;margin-right: 2px;}
 .title_box .rightbtn a{line-height:28px;margin-top: 3px;}

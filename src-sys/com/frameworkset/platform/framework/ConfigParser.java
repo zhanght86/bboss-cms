@@ -65,6 +65,7 @@ public class ConfigParser extends I18nXMLParser  {
      * 一级items是否显示左侧菜单，true显示，false不显示
      */
     private boolean showrootleftmenu = false;
+    
 
     private Item publicItem;
 
@@ -218,6 +219,7 @@ public class ConfigParser extends I18nXMLParser  {
             module.setSubSystem(ownersubsystem);
             Object obuj = traceStack.peek();
             String showleftmenu = null;
+            String option = null;
             if(attributes != null)
             {
                 module.setName(attributes.getValue("name"));
@@ -231,6 +233,11 @@ public class ConfigParser extends I18nXMLParser  {
                 module.setUrl(attributes.getValue("url"));
                 if(showleftmenu != null && showleftmenu.equals("true"))
                 	module.setShowleftmenu(true);
+                option = attributes.getValue("option");
+                if(option != null && !option.equals(""))
+                	module.setOption(option);
+                else
+                	module.setOption("{}");
             }
             if(obuj == null)
             {
@@ -275,6 +282,8 @@ public class ConfigParser extends I18nXMLParser  {
                 module.setPath(parent + "/" + module.getId() + "$module");
                 if(showleftmenu == null)
                 	module.setShowleftmenu(item.isShowleftmenu());
+//                if(popup == null)
+//                	module.setPopup(item.isPopup());
                 this.indexs.put(module.getPath(),module);
                 this.indexByIds.put(module.getId(), module);
                 item.addSubModule(module);
@@ -320,6 +329,7 @@ public class ConfigParser extends I18nXMLParser  {
             Item item = new Item();
             item.setSubSystem(ownersubsystem);
             String showleftmenu = null;
+            String option = null;
             if(attributes != null)
             {
             	String desktop_width=attributes.getValue("desktop_width");
@@ -347,6 +357,11 @@ public class ConfigParser extends I18nXMLParser  {
                 showleftmenu = attributes.getValue("showleftmenu");
                 if(showleftmenu != null && showleftmenu.equals("true"))
                 	item.setShowleftmenu(true);
+                option = attributes.getValue("option");
+                if(option != null && !option.equals(""))
+                	item.setOption(option);
+                else
+                	item.setOption("{}");
                 item.setLocaleNames(this.convertI18n(attributes, item.getName(), item.getId(), "module"));
                 item.setExtendAttributes(this.evalExtendAttribute(attributes));
             }
@@ -359,6 +374,8 @@ public class ConfigParser extends I18nXMLParser  {
                 parentPath = obuj.getPath();
                 if(showleftmenu == null )
                 	item.setShowleftmenu(obuj.isShowleftmenu());
+//                if(popup == null )
+//                	item.setPopup(obuj.isPopup());
                 	
                 if(obuj.getCode() == 0)
                 	item.setCode(2);
@@ -383,6 +400,8 @@ public class ConfigParser extends I18nXMLParser  {
                 this.items.addItem(item);
                 if(showleftmenu == null )
                 	item.setShowleftmenu(showrootleftmenu);
+//                if(popup == null )
+//                	item.setPopup(popuprootleftmenu);
                 item.setCode(2);
             }
             item.setParentPath(parentPath);

@@ -18,6 +18,8 @@
 %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 <style>
 html,body{ height:100%;}

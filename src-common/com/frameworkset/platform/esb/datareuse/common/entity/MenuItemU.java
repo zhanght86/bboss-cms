@@ -17,6 +17,7 @@ public class MenuItemU {
 	private String type;
 	private String desktop_width;
 	private String desktop_height;
+	private String option;
 	
 	private boolean hasSon;
 	public String getId() {
@@ -66,6 +67,12 @@ public class MenuItemU {
 	}
 	public void setDesktop_height(String desktop_height) {
 		this.desktop_height = desktop_height;
+	}
+	public String getOption() {
+		return option;
+	}
+	public void setOption(String option) {
+		this.option = option;
 	}
 	
 	

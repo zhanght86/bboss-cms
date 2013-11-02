@@ -7,6 +7,7 @@ body {
 	font-size: 12px;
 	color: #666666;
 	background-color:#FFFFFF;
+	
 }
 /*.top {
  	padding: 3px;
@@ -32,6 +33,7 @@ body {
     _position:absolute;
     _bottom:auto;
     _top:expression(eval(document.documentElement.scrollTop));
+    min-width:1003px;
 }
 *html{ 
     background-image:url(about:blank);
@@ -64,6 +66,7 @@ body {
     _bottom:auto;
     _top:expression(eval(document.documentElement.scrollTop));
 	_margin-top:34px;
+	min-width:1003px
 }
 .ddsmoothmenu ul {
 	z-index:100;

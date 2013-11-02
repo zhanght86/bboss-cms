@@ -167,6 +167,10 @@
     	{
     		value = URLDecoder.decode(value, "UTF-8");
     	}
+    	if(name != null)
+    	{
+    		name = URLDecoder.decode(name, "UTF-8");
+    	}
     }
     //字典对应的主键条件
     //System.out.println("primaryCondition = " + primaryCondition);

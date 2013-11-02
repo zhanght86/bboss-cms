@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery MultiSelect Widget Demo</title>
+<link rel="stylesheet" type="text/css" href="styleSheet/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="styleSheet/prettify.css" />
+<!--<link rel="stylesheet" type="text/css" href="styleSheet/jquery-ui.css" />-->
+<link rel="stylesheet" type="text/css" href="styleSheet/style.css" />
+<script type="text/javascript" src="Script/jquery.js"></script>
+<script type="text/javascript" src="Script/jquery-ui.min.js"></script>
+<script type="text/javascript" src="Script/jquery.multiselect.js"></script>
+<!--<script type="text/javascript" src="assets/prettify.js"></script>-->
+<script type="text/javascript">
+$(function(){
+//jquery ui 的动画效果有   
+//'blind', 'bounce', 'clip', 'drop', 'explode', 'fold', 'highlight', 'puff', 'pulsate', 'scale', 'shake', 'size', 'slide', 'transfer'.
+	$("#s1").multiselect({
+		selectedList: 3,
+		show: ["blind", 200],
+		hide: ["blind", 200]
+
+		
+	});
+	
+	$("#s2").multiselect({
+		selectedList: '',
+		show: ["blind", 200],
+		hide: ["blind", 200]
+
+		
+	});
+	
+});
+</script>
+
+</head>
+<body >
+<form>
+	<p style="float:left">
+    
+		<select name="example-list" multiple="multiple" style="width:125px" id="s1">
+		<option value="option1">中国</option>
+		<option value="option2">美国</option>
+		<option value="option3">澳大利亚</option>
+		<option value="option4">日本</option>
+		<option value="option5">新西兰</option>
+		<option value="option6">尼日利亚</option>
+		</select>
+    
+	</p>
+    
+    <p  style="float:right">
+		<select name="example-list" multiple="multiple" style="width:460px" id="s2">
+		<option value="option1">中国</option>
+		<option value="option2">美国</option>
+		<option value="option3">澳大利亚</option>
+		<option value="option4">日本</option>
+		<option value="option5">新西兰</option>
+		<option value="option6">尼日利亚</option>
+		<option value="option7">埃尔及利亚</option>
+        <option value="option1">中国</option>
+		<option value="option2">美国</option>
+		<option value="option3">澳大利亚</option>
+		<option value="option4">日本</option>
+		<option value="option5">新西兰</option>
+		<option value="option6">尼日利亚</option>
+		<option value="option7">埃尔及利亚</option>
+        <option value="option1">中国</option>
+		<option value="option2">美国</option>
+		<option value="option3">澳大利亚</option>
+		<option value="option4">日本</option>
+		<option value="option5">新西兰</option>
+		<option value="option6">尼日利亚</option>
+		</select>
+	</p>
+    
+    
+</form>
+
+
+
+
+
+
+
+</body>
+</html>

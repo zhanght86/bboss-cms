@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UI</title>
+<style type="text/css"> 
+<!--
+body,td,th {
+	font: 12px/24px "宋体";
+}.pages {
+	text-align: right;
+	margin: 5px 0px; margin: 5px 0px;padding-bottom:2px;
+}
+.pages .current {
+	color: #0066CC;
+}
+.pages .Total {
+	font-weight: bold;
+	padding-right: 4px;
+	padding-left: 4px;
+	color: #000000;
+}
+ 
+ 
+.pages .page_input {
+	height: 12px;
+	width: 20px;
+	border: 1px solid #CCCCCC;
+	padding-right: 4px;
+	padding-left: 4px;
+}
+.pages a:link,.pages a:visited,.pages a:hover {
+	background-color: #FFFFFF;
+	padding:2px 5px 1px 5px;
+	color: #1F1F1F;
+	line-height:14px;
+	text-decoration: none;
+}
+.pages a:hover{
+	color:#0066FF;
+	background-color: #BFDBFF;
+}
+.pages .current_page a:link,.pages .current_page a:visited {
+	color: #FFFFFF;
+	background-color: #3080E3;
+}
+.pages.current_page a:hover {
+	color: #99CCFF; background-color: #3080E3;
+}
+.pages .go_button {
+	background: url(../images/go.jpg) no-repeat left top;
+	height: 16px;
+	width: 18px;
+	border-style: none;
+	margin:2px 6px 0px 0px;
+}
+.pages .next {
+	padding: 1px;margin-right:5px;border:1px solid #ccc; 
+}
+.pages .next a:link,.pages .next a:visited {
+	color: #313131;
+}
+.pages .next a:hover {
+	color: #fff;background-color:#3080E3;
+}
+.pages2 {
+	text-align: right;
+	margin: 5px 0px;padding-bottom:2px;
+}
+.pages2 .current {
+	color: #ff0000;
+}
+.pages2 .Total {
+	font-weight: bold;
+	padding-right: 4px;
+	padding-left: 4px;
+	color: #000000;
+}
+ 
+ 
+.pages2 .page_input {
+	height: 12px;
+	width: 20px;
+	border: 1px solid #CCCCCC;
+	padding-right: 4px;
+	padding-left: 4px;
+}
+.pages2 a:link,.pages2 a:visited,.pages2 a:hover {
+	background-color: #FFFFFF;
+	padding:2px 5px 1px 5px;
+	color: #990000 ;
+	line-height:14px;
+	text-decoration: none;
+}
+.pages2 a:hover{
+	color:#990000;
+	background-color: #FFE6D9;
+}
+.pages2 .current_page a:link,.pages2 .current_page a:visited {
+	color: #FFFFFF;
+	background-color: #FF0000;
+}
+.pages2.current_page a:hover {
+	color: #99CCFF; background-color: #3080E3;
+}
+.pages2 .go_button {
+	background: url(../images/go.jpg) no-repeat left top;
+	height: 16px;
+	width: 18px;
+	border-style: none;
+	margin:2px 6px 0px 0px;
+}
+.pages2 .next {
+	padding: 1px;margin-right:5px;border:1px solid #ccc; 
+}
+.pages2 .next a:link,.pages2 .next a:visited {
+	color: #313131;
+}
+.pages2 .next a:hover {
+	color: #fff;background-color:#ff0000;
+}
+-->
+</style>
+<link href="../stylesheet/ui_style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="content_ui">
+<div class="title_ui">应用系统分页：</div>
+<div class="pages">一页显示
+  <select name="select">
+    <option>10</option>
+    <option>20</option>
+    <option>50</option>
+    <option>100</option>
+    <option>全部</option>
+  </select>
+  条 总计<span class="Total">12</span>条 <span class="current">1</span>/3 页 <span class="next "><a href="#">上一页</a></span><span class="current_page"><a href="pending2.html">1</a></span><span class="page1"><a href="pending21.html">2</a><a href="pending22.html">3</a></span> <span class="next"><a href="#">下一页</a></span>跳转至
+  <input type="text" name="textfield"  class="page_input"/>
+  页
+  <input type="submit" name="Submit" value=" " class="go_button" style="background:url(../images/go.jpg)" />
+</div>
+<div class="title_ui">门户系统分页：</div>
+<div class="pages2"><span class="pages">一页显示
+    <select name="select2">
+      <option>10</option>
+      <option>20</option>
+      <option>50</option>
+      <option>100</option>
+      <option>全部</option>
+    </select>
+条</span> 总计<span class="Total">12</span>条 <span class="current">1</span>/3 页 <span class="next "><a href="#">上一页</a></span><span class="current_page"><a href="pending2.html">1</a></span><span class="page1"><a href="pending21.html">2</a><a href="pending22.html">3</a></span> <span class="next"><a href="#">下一页</a></span>跳转至
+  <input type="text" name="textfield"  class="page_input"/>
+  页
+  <input type="submit" name="Submit" value=" " class="go_button" style="background:url(../images/go.jpg)" />
+</div>
+</div> 
+</body>
+</html>
+

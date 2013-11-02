@@ -34,6 +34,9 @@ import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 import com.frameworkset.common.poolman.sql.PrimaryKey;
 import com.frameworkset.common.poolman.sql.PrimaryKeyCacheManager;
@@ -321,50 +324,74 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String addDicttype(Data dicttype)throws ManagerException{
 		if(dicttype == null) return "";
-		DBUtil judge = new DBUtil();
-		DBUtil typeJudge = new DBUtil();
+		
+		TransactionManager tm = new TransactionManager();
 		try{			
+			tm.begin();
 			//判断是否有同名记录
-			String isRepeat_sql = "select count(*) as num from TD_SM_DICTTYPE where DICTTYPE_NAME='"+
-				dicttype.getName()+"' ";
-			judge.executeSelect(isRepeat_sql);
-			if(judge.size()>0){//有重复记录
-				if(judge.getInt(0,"num")>0) return "-1";
+			String isRepeat_sql = "select count(1) as num from TD_SM_DICTTYPE where DICTTYPE_NAME=?";
+//			judge.executeSelect(isRepeat_sql);
+			int dictnum = SQLExecutor.queryObject(int.class, isRepeat_sql, dicttype.getName());
+			if(dictnum>0){//有重复记录
+				return "-1";
 			}
 
 			//判断字典类型映射的表, 是否被其他字典映射, 并且这个字典是否指定了字典类型. 
 			//(1)如果这个字典没有指定类型字段, 表被改字典独占, 选表的时候做了过滤 这里不用考虑
 			//(2)如果这个字典指定了类型字段, 表可以被共享, 但是这个字典也必须指定类型字段
 			StringBuffer needTypeColumn_sql = new StringBuffer().append("select * from TD_SM_DICTTYPE ")
-			.append(" where upper(DATA_DBNAME)='").append(dicttype.getDataDBName().toUpperCase()).append("' and upper(DATA_TABLE_NAME)='")
-			.append(dicttype.getDataTableName().toUpperCase()).append("' and (DATA_TYPEID_FIELD is null or DATA_TYPEID_FIELD='')");
+			.append(" where upper(DATA_DBNAME)=? and upper(DATA_TABLE_NAME)=? and (DATA_TYPEID_FIELD is null or DATA_TYPEID_FIELD='')");
 			//.append(" and dicttype_id <> '").append(dicttype.getDataId()).append("'");
-			typeJudge.executeSelect(needTypeColumn_sql.toString());
-			if(typeJudge.size()>0){
-				//表被使用，并且没有设置类型字段，不允许共享字典 独占
-				StringBuffer infos = new StringBuffer();
-				infos.setLength(0);
-				for(int i = 0; i < typeJudge.size(); i ++){
-					if(infos.length()==0){
-						infos.append(typeJudge.getString(i,"DATA_TABLE_NAME"));
-					}else{
-						infos.append(",").append(typeJudge.getString(i,"DATA_TABLE_NAME"));
-					}
-				}	
-				infos.setLength(0);
+			final 	StringBuffer infos = new StringBuffer();
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record typeJudge) throws Exception {
+					
+						if(infos.length()==0){
+							infos.append(typeJudge.getString("DATA_TABLE_NAME"));
+						}else{
+							infos.append(",").append(typeJudge.getString("DATA_TABLE_NAME"));
+						}
+					}	
+					
+				}
+				
+			, needTypeColumn_sql.toString(), dicttype.getDataDBName().toUpperCase(),dicttype.getDataTableName().toUpperCase());
+//			typeJudge.executeSelect(needTypeColumn_sql.toString());
+			if(infos.length()>0){
+				
+				
 				return "-4:" + infos.toString();
 			}
 			needTypeColumn_sql.setLength(0);
 			needTypeColumn_sql = new StringBuffer().append("select DATA_TYPEID_FIELD from TD_SM_DICTTYPE ")
-			.append(" where upper(DATA_DBNAME)='").append(dicttype.getDataDBName().toUpperCase()).append("' and upper(DATA_TABLE_NAME)='")
-			.append(dicttype.getDataTableName().toUpperCase()).append("' and DATA_TYPEID_FIELD is not null");
+			.append(" where upper(DATA_DBNAME)=? and upper(DATA_TABLE_NAME)=? and DATA_TYPEID_FIELD is not null");
 			//.append(" and dicttype_id <> '").append(dicttype.getDataId()).append("'");
-			typeJudge.executeSelect(needTypeColumn_sql.toString());
-			if(typeJudge.size()>0 ){//要和其他表共享表, 必须指定字典类型字段. 否则返回-2 提示要指定字典类型字段.
+//			typeJudge.executeSelect(needTypeColumn_sql.toString());
+			infos.setLength(0);
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record typeJudge) throws Exception {
+					
+						if(infos.length()==0){
+							infos.append(typeJudge.getString("DATA_TYPEID_FIELD"));
+						}
+					}	
+					
+				}
+				
+			, needTypeColumn_sql.toString(), dicttype.getDataDBName().toUpperCase(),dicttype.getDataTableName().toUpperCase());
+			//标识字典表是否已经被其他字典使用
+			boolean tablemultiDict = false;
+			if(infos.length()>0 ){//要和其他表共享表, 必须指定字典类型字段. 否则返回-2 提示要指定字典类型字段.
+				String fff = infos.toString();
+				tablemultiDict = true;
 				if(this.strIsNull(dicttype.getDataTypeIdField())){//必须要指定字典类型字段
 					return "-2";
-				}else if(!dicttype.getDataTypeIdField().equals(typeJudge.getString(0,"DATA_TYPEID_FIELD"))){//必须指定相同的类型字段
-					String dataTypeIdFieldName = typeJudge.getString(0,"DATA_TYPEID_FIELD");
+				}else if(!dicttype.getDataTypeIdField().equals(fff)){//必须指定相同的类型字段
+					String dataTypeIdFieldName = fff;
 					return "-3:" + dataTypeIdFieldName;
 				}
 			}
@@ -451,25 +478,31 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			String dicttype_keyId = String.valueOf(dicttype_id);
 			//设置对象的属性,为发event准备
 			dicttype.setDataId(dicttype_keyId);	
-			if(dicttype.getUpdate_dcitData_typeId()==UPDATE_DICTDATA_TYPEID){
+			if(dicttype.getUpdate_dcitData_typeId()==UPDATE_DICTDATA_TYPEID){//禁用字典数据更新功能
 				//不能做成事务, 因为字典类型表 和 字典数据表可能在不同的数据库中 
 				//更新数据表的 类型ID字段
-				StringBuffer update_dictdata = new StringBuffer()
-					.append("update ").append(dicttype.getDataTableName()).append(" set ")
-					.append(dicttype.getDataTypeIdField()).append("='").append(dicttype_keyId).append("' ");
-				DBUtil db = new DBUtil();
-				db.executeUpdate(dicttype.getDataDBName(),update_dictdata.toString());
+//				StringBuffer update_dictdata = new StringBuffer()
+//					.append("update ").append(dicttype.getDataTableName()).append(" set ")
+//					.append(dicttype.getDataTypeIdField()).append("='").append(dicttype_keyId).append("' ");
+//				DBUtil db = new DBUtil();
+//				db.executeUpdate(dicttype.getDataDBName(),update_dictdata.toString());
 			}
+			String ret = this.getUnableNullColumnNames(dicttype);
 			//发送事件
+			tm.commit();
 			Event event = new EventImpl(dicttype, DictionaryChangeEvent.DICTIONARY_ADD);
 			super.change(event,true);		
 
 
 			//检测是否要强制添加附加字段,检测当前表是否有不能为空的字段;			
-			return this.getUnableNullColumnNames(dicttype);
+			return ret;
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
+		}
+		finally
+		{
+			tm.releasenolog();
 		}
 
 		return "";
@@ -487,8 +520,10 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		//update前的类型名称重名检查
 		StringBuffer isRepeat = new StringBuffer()
 			.append("select count(*) as num from TD_SM_DICTTYPE where DICTTYPE_NAME='").append(dicttype.getName())
-			.append("' and DICTTYPE_ID !=").append(dicttype.getDataId());	
+			.append("' and DICTTYPE_ID !=").append(dicttype.getDataId());
+		TransactionManager tm = new TransactionManager();
 		try{
+			tm.begin();
 			judge.executeSelect(isRepeat.toString());
 			if(judge.size()>0 && judge.getInt(0,"num")>0){
 				return "-1";
@@ -607,18 +642,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			dbUtil.setString(19,dicttype.getDataId());
 
 			dbUtil.executePrepared();	
-			if(dicttype.getUpdate_dcitData_typeId()==UPDATE_DICTDATA_TYPEID){
+			if(dicttype.getUpdate_dcitData_typeId()==UPDATE_DICTDATA_TYPEID){//禁用字典数据更新功能
 				//更新数据表的 类型ID字段的数据 值为当前类型ID 
-				StringBuffer update_dictdata = new StringBuffer()
-				.append("update ").append(dicttype.getDataTableName()).append(" set ")
-				.append(dicttype.getDataTypeIdField()).append("='").append(dicttype.getDataId()).append("' ");
-				DBUtil db = new DBUtil();
-				db.executeUpdate(dicttype.getDataDBName(),update_dictdata.toString());
+//				StringBuffer update_dictdata = new StringBuffer()
+//				.append("update ").append(dicttype.getDataTableName()).append(" set ")
+//				.append(dicttype.getDataTypeIdField()).append("='").append(dicttype.getDataId()).append("' ");
+//				DBUtil db = new DBUtil();
+//				db.executeUpdate(dicttype.getDataDBName(),update_dictdata.toString());
 			}
-			//发送事件
-			Event event = new EventImpl(dicttype, DictionaryChangeEvent.DICTIONARY_INFO_UPDATE);
-			super.change(event,true);			
-
 			//检测是否要强制添加附加字段,检测当前表是否有不能为空的字段;
 			String unableNullColumnNames = "";
 			List unableNullColumns = this.getUnableNullColumns(dicttype.getDataDBName(),dicttype.getDataTableName());
@@ -632,11 +663,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					}
 				}
 			}
-
+			tm.commit();
+			//发送事件
+			Event event = new EventImpl(dicttype, DictionaryChangeEvent.DICTIONARY_INFO_UPDATE);
+			super.change(event,true);
 			return unableNullColumnNames;
 		}catch(Exception e){
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
+		}
+		finally
+		{
+			tm.releasenolog();
 		}
 		return "";
 	}

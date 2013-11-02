@@ -60,5 +60,8 @@ public interface MenuItem  {
 	public void setShowleftmenu(boolean showleftmenu) ;
 	public Map<String, String> getExtendAttributes() ;
 	public void setExtendAttributes(Map<String, String> extendAttributes) ;
+	
+	public String getOption();
+	public void setOption(String option);
 
 }
