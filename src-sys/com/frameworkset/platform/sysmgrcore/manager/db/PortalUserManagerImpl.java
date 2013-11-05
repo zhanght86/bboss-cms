@@ -9,6 +9,7 @@ import javax.transaction.RollbackException;
 
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.spi.SPIException;
+import org.frameworkset.util.MoreListInfo;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
@@ -1037,6 +1038,19 @@ public class PortalUserManagerImpl extends EventHandle implements UserManager {
 	@Override
 	public Date getPasswordExpiredTimeByUserAccount(String userAccount)
 			throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getUsers(String username) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MoreListInfo getMoreUsers(String username, long offset, int pagesize)
+			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

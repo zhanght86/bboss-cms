@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.frameworkset.spi.Provider;
 import org.frameworkset.spi.SPIException;
+import org.frameworkset.util.MoreListInfo;
 
-import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -38,6 +38,15 @@ import com.frameworkset.util.ListInfo;
  */
 public interface UserManager extends Provider, Serializable {
 	public void loadUsers(UserCacheManager userCache) throws ManagerException;
+	/**
+	 * 根据传入的名称对用户安装用户账号，用户工号，用户真实名称进行组合
+	 * @param username
+	 * @return
+	 * @throws Exception
+	 */
+	public List<User> getUsers(String username) throws Exception;
+	
+	public MoreListInfo getMoreUsers(String username,long offset,int pagesize) throws Exception;
 	/**
 	 * 用户所对应的“用户岗位机构”关系对象集合的名称 userjoborgSet
 	 */

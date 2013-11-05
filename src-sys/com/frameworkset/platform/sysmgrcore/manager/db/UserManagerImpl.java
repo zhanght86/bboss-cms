@@ -20,6 +20,7 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.SPIException;
+import org.frameworkset.util.MoreListInfo;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -1747,7 +1748,109 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		}
 		return user;
 	}
-
+	/**
+	 * 根据传入的名称对用户安装用户账号，用户工号，用户真实名称进行组合
+	 * @param username
+	 * @return
+	 * @throws Exception
+	 */
+	public List<User> getUsers(String username) throws Exception
+	{
+		if(username == null || username.equals(""))
+		{
+			return new ArrayList<User>();
+		}
+		username = username + "%";
+		
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			List<User> users = SQLExecutor.queryListByRowHandler(new RowHandler<User>(){
+	
+				@Override
+				public void handleRow(User rowValue, Record record)
+						throws Exception {
+					
+					getUser( rowValue,record) ;
+				}
+				
+			}, User.class, "select * from td_sm_user where USER_NAME like ? or USER_REALNAME like ? or USER_WORKNUMBER like ? order by USER_NAME", username ,username,"%"+username);
+			for(User user :users)
+			{
+				String orgjob = FunctionDB.getUserorgjobinfos(user.getUserId());
+				if(orgjob.endsWith(","))
+				{
+					orgjob = orgjob.substring(0, orgjob.length() - 1);
+				}
+				user.setOrgName(orgjob);
+			}
+			tm.commit();
+			return users;
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			tm.release();
+		}
+		return new ArrayList<User>();
+		
+		
+	}
+	
+	@Override
+	public MoreListInfo getMoreUsers(String username, long offset, int pagesize)
+			throws Exception {
+		if(username == null || username.equals(""))
+		{
+			return new MoreListInfo();
+		}
+		username = username + "%";
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			tm.begin();
+			
+			ListInfo listInfo = SQLExecutor.moreListInfoByRowHandler(new RowHandler<User>(){
+	
+				@Override
+				public void handleRow(User rowValue, Record record)
+						throws Exception {
+					
+					getUser( rowValue,record) ;
+				}
+				
+			}, User.class, "select * from td_sm_user where USER_NAME like ? or USER_REALNAME like ? or USER_WORKNUMBER like ? order by USER_NAME desc", offset,pagesize,username ,username,"%"+username);
+			List<User> users = listInfo.getDatas();
+			if(users != null && users.size() > 0)
+			{
+				for(User user :users)
+				{
+					String orgjob = FunctionDB.getUserorgjobinfos(user.getUserId());
+					if(orgjob.endsWith(","))
+					{
+						orgjob = orgjob.substring(0, orgjob.length() - 1);
+					}
+					user.setOrgName(orgjob);
+				}
+			}
+			tm.commit();
+			MoreListInfo moredata = listInfo.getMoreListInfo();
+			return moredata;
+		}
+		catch(Exception e)
+		{
+			
+		}
+		finally
+		{
+			tm.release();
+		}
+		return new MoreListInfo();
+	}
 	public User getUserByName(String userName) throws ManagerException {
 		User user = null;
 		try {
@@ -5800,4 +5903,5 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		}
 		
 	}
+	
 }

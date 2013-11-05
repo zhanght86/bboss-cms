@@ -11,6 +11,9 @@
 		path:cache_console="/monitor/cache_console.jsp"
 		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.CacheController" >
 	</property>
+	<property name="/sysmanager/user/*.freepage"
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.QueryUserController" >
+	</property>
 	
 	<property name="/passward/*.page"
 		
