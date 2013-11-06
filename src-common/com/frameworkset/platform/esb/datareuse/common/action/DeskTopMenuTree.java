@@ -152,7 +152,8 @@ public class DeskTopMenuTree extends COMTree {
             params.put("columnID",treeid);
             params.put("resId",submodule.getId());
            	params.put("resName",submodule.getName(request));
-           	
+           	radioValue = treeid;
+           	checkboxValue = treeid;
             showHref = true;
             if(submodule.isUsed())
             {

@@ -79,8 +79,8 @@
 
 		<module name="应用台账模块"
 				i18n:en_US="App Bom module" 
-				id="appbommanagermodule" used="true" showleftmenu="true"
-				url="appbom/index.page"
+				id="appbommanagermodule" used="true" showleftmenu="false"
+				url="appbom/index.page" option="{popup:true}"
 				>
 			
 			<description i18n:en_US="App Bom" >应用台账</description>

@@ -23,6 +23,7 @@ import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopMenuBean;
 import com.frameworkset.platform.esb.datareuse.common.entity.ItemMenuCustom;
 import com.frameworkset.platform.esb.datareuse.common.entity.MenuItemU;
 import com.frameworkset.platform.esb.datareuse.common.service.DeskTopMenuShorcutManager;
+import com.frameworkset.platform.framework.BaseMenuItem;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
@@ -157,7 +158,7 @@ public class DeskTopController {
 		if (list != null && list.size() > 0) {
 			for(int i=0;i<list.size();i++){
 				MenuItemU mb=new MenuItemU();
-				Item item=frame.getItem(list.get(i).getMenupath());
+				BaseMenuItem item=(BaseMenuItem)frame.getMenuByPath(list.get(i).getMenupath());
 				deskTopMenuBean = list.get(i);
 				if(item == null)
 				{
@@ -170,16 +171,19 @@ public class DeskTopController {
 				mb.setName(item.getName(request));
 				mb.setOption(item.getOption());
 				String contextPath = request.getContextPath();
-				if(urltype == null || urltype.equals("1"))
-				{
-					String url = contextPath+"/sanydesktop/frame.page?sany_menupath="+item.getPath();
-					mb.setPathU(url);
-				}
-				else
-				{
-					String url = contextPath+"/sanydesktop/index.page?sany_menupath="+item.getPath() + "&sanyselectedmodule="+parserID(item.getPath());
-					mb.setPathU(url);
-				}
+//				if(urltype == null || urltype.equals("1"))
+				String url = contextPath+"/sanydesktop/frame.page?sany_menupath="+item.getPath();
+				mb.setPathPopu(url);
+			
+			
+				url = contextPath+"/sanydesktop/index.page?sany_menupath="+item.getPath() + "&sanyselectedmodule="+parserID(item.getPath());
+				mb.setPathU(url);
+				
+				
+//				else
+				
+				
+				
 				mb.setImageUrl(StringUtil.getRealPath(contextPath, item.getMouseclickimg(request),true));
 				//判断表里面是否有自定义窗口大小数据，如果有就取该数据，如果无，就使用默认的数据
 				mb.setDesktop_width((deskTopMenuBean.getWidth()!= null&&!deskTopMenuBean.getWidth().equals(""))? deskTopMenuBean.getWidth():item.getDesktop_width());

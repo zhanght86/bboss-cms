@@ -14,11 +14,11 @@ public class MenuItemU {
 	private String name;
 	private String imageUrl;
 	private String pathU;
+	private String pathPopu;
 	private String type;
 	private String desktop_width;
 	private String desktop_height;
 	private String option;
-	
 	private boolean hasSon;
 	public String getId() {
 		return id;
@@ -68,11 +68,18 @@ public class MenuItemU {
 	public void setDesktop_height(String desktop_height) {
 		this.desktop_height = desktop_height;
 	}
+	public void setOption(String option) {
+		this.option = option;
+		
+	}
 	public String getOption() {
 		return option;
 	}
-	public void setOption(String option) {
-		this.option = option;
+	public String getPathPopu() {
+		return pathPopu;
+	}
+	public void setPathPopu(String pathPopu) {
+		this.pathPopu = pathPopu;
 	}
 	
 	

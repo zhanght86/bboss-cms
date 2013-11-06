@@ -1311,6 +1311,42 @@ public class MenuHelper  {
         }
 
     }
+    
+    public MenuItem getMenuItem(String path) {
+    	MenuItem m = (MenuItem)this.permissionMenuIndex.get(path);
+        if (m != null)
+            return m;
+        else {
+            m = framework.getModule(path);
+            if(m == null)
+            	return null;
+            else if(control.checkPermission(m.getId(), AccessControl.VISIBLE_PERMISSION,
+                    AccessControl.COLUMN_RESOURCE))
+            {
+            	
+            	if(m instanceof Module)
+            	{
+		            m = new AuthorModule((Module)m);
+		            this.permissionMenuIndex.put(path, m);
+		            return m;
+            	}
+            	else if(m instanceof Item)
+            	{
+		            m = new AuthorItem((Item)m);
+		            this.permissionMenuIndex.put(path, m);
+		            return m;
+            	}
+            	else
+            		throw new java.lang.IllegalArgumentException(path+":不支持的菜单对象类型"+m.getClass().getCanonicalName());
+            }
+            else
+            {
+            	return null;
+            }
+        }
+       
+
+    }
 
     public Item getItem(String path) {
         Item item = (Item)this.permissionMenuIndex.get(path);
@@ -1767,6 +1803,19 @@ public class MenuHelper  {
 		public String getStringExtendAttribute(String name, String defaultValue) {
 			// TODO Auto-generated method stub
 			return module.getStringExtendAttribute(name, defaultValue);
+		}
+		private boolean inited = false;
+		private boolean hasSon = false;
+		public boolean hasSonOfModule()
+		{
+			if(inited)
+				return hasSon;
+			
+			hasSon = (getSubModules() != null && getSubModules().size() > 0) ||
+					(getItems() != null && getItems().size() > 0);
+			inited = true;
+			return hasSon;
+					
 		}
 
     }

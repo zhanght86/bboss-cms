@@ -118,7 +118,8 @@ mypets.init()
 					var comm = "";
 					for (var i=0; i<data.length; i++) {
 						var d = data[i];
-						comm = comm +" <li><a href=\"javascript:void(0)\" onclick=\"opencustom('"+d.pathU+"',"+d.desktop_width+","+d.desktop_height+",'"+d.name+"','"+urltype+"',eval('("+d.option+")'))\"><img src=\""+d.imageUrl+"\" width=\"45\" height=\"45\" /><br />"+d.name+"</a></li>";
+						
+						comm = comm +" <li><a href=\"javascript:void(0)\" onclick=\"opencustom('"+d.pathU+"','"+d.pathPopu+"',"+d.desktop_width+","+d.desktop_height+",'"+d.name+"','"+urltype+"',"+d.option+")\"><img src=\""+d.imageUrl+"\" width=\"45\" height=\"45\" /><br />"+d.name+"</a></li>";
 						
 					}
 					$("#custommenus").empty(); 
@@ -343,12 +344,16 @@ mypets.init()
 	 
 	 
 
-	 function opencustom(url,width,height,title,urltype,options)
+	 function opencustom(url,popurl,width,height,title,urltype,options)
 	 {
+		 
 		 var ppup = options?options.popup:false;
-		 var maxstate = options.maxstate?options.maxstate:true;
+		 var maxstate = options ?(options.maxstate === true || options.maxstate === false?options.maxstate :true):true;
+		 var width = options && options.width ?options.width:777;
+		 var height = options && options.height ?options.height:500;
+		
 		 if(ppup)
-			$.dialog({ title:title,width:width,height:height, content:'url:'+url,lock: true,maxState:maxstate}); 	
+			$.dialog({ title:title,width:width,height:height, content:'url:'+popurl,lock: true,maxState:maxstate}); 	
 		 else
 		 {
 			 top.location.href = url;

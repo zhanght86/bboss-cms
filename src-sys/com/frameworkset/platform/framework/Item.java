@@ -39,7 +39,7 @@ public class Item extends BaseMenuItem {
 	private String left_cols = "30";
 	
 	
-	private boolean showleftmenu = false; 
+	
 	private String navigatorToolbar;
 	private String navigatorContent;
 
@@ -69,8 +69,7 @@ public class Item extends BaseMenuItem {
 
 	private String showhidden;
 	
-	private String desktop_width ="777";
-	private String desktop_height ="500";
+	
 	/**用来识别区域信息，符合三一风格*/
 	private String area;
 	
@@ -705,21 +704,7 @@ public class Item extends BaseMenuItem {
 		return leftItemUrlStruction;
 	}
 
-	public String getDesktop_width() {
-		return desktop_width;
-	}
-
-	public void setDesktop_width(String desktop_width) {
-		this.desktop_width = desktop_width;
-	}
-
-	public String getDesktop_height() {
-		return desktop_height;
-	}
-
-	public void setDesktop_height(String desktop_height) {
-		this.desktop_height = desktop_height;
-	}
+	
 	
 	  public String getArea()
 	  {
@@ -753,13 +738,7 @@ public class Item extends BaseMenuItem {
 		this.workspacecontentExtendAttribute = workspacecontentExtendAttribute;
 	}
 
-	public boolean isShowleftmenu() {
-		return showleftmenu;
-	}
-
-	public void setShowleftmenu(boolean showleftmenu) {
-		this.showleftmenu = showleftmenu;
-	}
+	
 
 	public Map<Locale, String> getLocalLogoimages() {
 		return localLogoimages;

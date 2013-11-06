@@ -269,7 +269,7 @@ public class MenuTag extends BaseTag {
 				String target = module.getTarget() == null ?"mainFrame":module.getTarget();
 				if(target.equals("mainFrame"))
 				{
-					boolean hasson = hasSonOfModule(module);
+					boolean hasson = module.hasSonOfModule();
 					String mname = module.getName(request);
 					if(hasson)
 					{
@@ -472,14 +472,7 @@ public class MenuTag extends BaseTag {
 		return ret;
 	}
 	
-	private boolean hasSonOfModule(Module module)
-	{
-		if(module == null)
-			return false;
-		return (module.getSubModules() != null && module.getSubModules().size() > 0) ||
-				(module.getItems() != null && module.getItems().size() > 0);
-				
-	}
+	
 	
 	private void renderSubMenus(Module module,StringBuffer datas,String contextpath,String target,AccessControl control,String selectedID,String framepath,int current_level,String tokenurl)
 	{
@@ -512,7 +505,7 @@ public class MenuTag extends BaseTag {
 		{
 			if(target.equals("mainFrame"))
 			{
-				boolean hasson = hasSonOfModule(module);
+				boolean hasson = module.hasSonOfModule();
 				String mname = module.getName(request);
 				if(hasson)
 				{

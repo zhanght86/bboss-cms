@@ -14,7 +14,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><%=accesscontroler.getCurrentSystemName() %></title>
-<%  String userName = AccessControl.getAccessControl().getUserAccount();
+<% String userName = AccessControl.getAccessControl().getUserAccount();
  String appName = accesscontroler.getCurrentSystemID();
  String specialuser = LoginUtil.isSpesialUser(request);
 %>
@@ -45,10 +45,10 @@ function switchsystem()
 </script>
 <style type="text/css">
 *{ margin:0; padding:0;}
-html{ padding:0; _padding:75px 0 44px 0; width:100%;  overflow:hidden;}
+html{ padding:0; _padding:64px 0 44px 0; width:100%;  overflow:hidden;}
 body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
-.l_top { position:absolute; top:0; width:100%; height:75px;z-index: 100}
-.l_body { position: absolute; _position: relative; top:75px; _top:0; bottom:44px; width:100%; height:auto; _height:100%;}
+.l_top { position:absolute; top:0; width:100%; height:64px;z-index: 100}
+.l_body { position: absolute; _position: relative; top:64px; _top:0; bottom:44px; width:100%; height:auto; _height:100%;}
 /*.l_bottom 
 {
 position:absolute; 

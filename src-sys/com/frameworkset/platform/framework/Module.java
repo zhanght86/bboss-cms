@@ -134,14 +134,7 @@ public class Module extends BaseMenuItem{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	private boolean showleftmenu = false; 
-	public boolean isShowleftmenu() {
-		return showleftmenu;
-	}
-
-	public void setShowleftmenu(boolean showleftmenu) {
-		this.showleftmenu = showleftmenu;
-	}
+	
 
 	public Map<Locale, String> getLocaleDescriptions() {
 		return localeDescriptions;
@@ -157,6 +150,14 @@ public class Module extends BaseMenuItem{
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public boolean hasSonOfModule()
+	{
+		
+		return (getSubModules() != null && getSubModules().size() > 0) ||
+				(getItems() != null && getItems().size() > 0);
+				
 	}
 
 }

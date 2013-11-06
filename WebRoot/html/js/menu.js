@@ -143,6 +143,10 @@ var sany_old_menuid = "anchor_publicitem";
 function navto_sany_MenuItem(tokenurl,menuId,url,target,options,title)
 {
 	var ppup = options?options.popup:false;
+	var maxstate = options ?(options.maxstate === true || options.maxstate === false?options.maxstate :true):true;
+	var width = options && options.width ?options.width:777;
+	var height = options && options.height ?options.height:500;
+	
 	//pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
 	$.ajax({url:tokenurl, 
 		type: "POST",
@@ -167,7 +171,7 @@ function navto_sany_MenuItem(tokenurl,menuId,url,target,options,title)
 			}
 			else
 			{
-				$.dialog({ maxState:true,title:title,width:options.width,height:options.height, content:'url:'+url,lock: true}); 
+				$.dialog({ maxState:maxstate,title:title,width:width ,height:height, content:'url:'+url,lock: true}); 
 			}
 			
 			
@@ -223,7 +227,9 @@ function navto_sany_MenuItem_window(tokenurl,menutitle,menuId,menupath,contextpa
 function leftnavto_sany_MenuItem(tokenurl,url,target,options,title)
 {
 	var ppup = options?options.popup:false;
-	var maxstate = options.maxstate?options.maxstate:true;
+	var maxstate = options ?(options.maxstate === true || options.maxstate === false?options.maxstate :true):true;
+	var width = options && options.width ?options.width:777;
+	var height = options && options.height ?options.height:500;
 	//pageCounterDetail(appName_log,url.split('?')[0],userName_log,"");//参数：1.系统名称，2.功能的url，3.用户名，4.功能编码
 	//"../token/getToken.freepage"
 	$.ajax({url:tokenurl, //指定申请令牌的url
@@ -246,7 +252,7 @@ function leftnavto_sany_MenuItem(tokenurl,url,target,options,title)
 				}
 				else
 				{
-					$.dialog({ title:title,width:options.width,height:options.height, content:'url:'+url,lock: true,maxState:maxstate}); 
+					$.dialog({ title:title,width:width,height:height, content:'url:'+url,lock: true,maxState:maxstate}); 
 				}
 			}
 	});

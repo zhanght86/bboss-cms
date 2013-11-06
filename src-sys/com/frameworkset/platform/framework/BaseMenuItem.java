@@ -21,6 +21,8 @@ public abstract class BaseMenuItem implements MenuItem {
 	protected Map<Locale, String> localeMouseclickimgs;
 	protected String mouseupimg;
 	protected Map<Locale, String> localeMouseupimgs;
+	private String desktop_width ="777";
+	private String desktop_height ="500";
 	/** outlookbar图标头部分 */
 	protected String headimg;
 	/**
@@ -327,6 +329,29 @@ public abstract class BaseMenuItem implements MenuItem {
 		this.option = option;
 	}
 	
+	public String getDesktop_width() {
+		return desktop_width;
+	}
+
+	public void setDesktop_width(String desktop_width) {
+		this.desktop_width = desktop_width;
+	}
+
+	public String getDesktop_height() {
+		return desktop_height;
+	}
+
+	public void setDesktop_height(String desktop_height) {
+		this.desktop_height = desktop_height;
+	}	
 	
+	private boolean showleftmenu = false; 
+	public boolean isShowleftmenu() {
+		return showleftmenu;
+	}
+
+	public void setShowleftmenu(boolean showleftmenu) {
+		this.showleftmenu = showleftmenu;
+	}
 
 }

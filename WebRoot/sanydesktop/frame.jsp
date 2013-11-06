@@ -44,7 +44,7 @@ $(document).ready(function(){
 </head>
 <body>
   <div class="main_contain" style="height:100%">
-    <table width="100%"  height="100%" border="0" cellpadding="0" cellspacing="0">
+    <table width="100%"  height="99%" border="0" cellpadding="0" cellspacing="0" style="padding-top:6px;">
       <tr>
         <td width="170" valign="top" id="Tbasic2" height="100%">
         <sany:leftmenu target="left_rightFrame"/>        

@@ -17,6 +17,13 @@
 	
 <%@ page import="java.util.*"%>
 <%
+	//AccessControl context_ = AccessControl.getInstance();
+	//boolean success = context_.checkAccess(request, response,false);
+	//if(success)
+	//{
+	//	out.println("对不起！用户"+context_.getUserAccount() + "("+context_.getUserName()+")已经登录系统，请注销后再重新登录系统!");
+	//	return;
+	//}
 	String u = "", p = "", ck = "";
 
 	String successRedirect = request.getParameter("successRedirect");

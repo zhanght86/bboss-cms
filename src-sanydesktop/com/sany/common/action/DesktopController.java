@@ -340,6 +340,83 @@ public class DesktopController {
 	{
 		return _frame(sany_menupath, sany_selecturl,request,model,true);
 	}
+	
+	private String specialModuleHandle(Module module,String sany_selecturl,AccessControl control)
+	{
+		String ret = null;
+		if(!module.isShowleftmenu())
+		{
+			if(module.getUrl() == null)
+			{
+				if(sany_selecturl != null && !sany_selecturl.equals(""))
+					ret = MenuHelper.getRealUrl(null, 
+							sany_selecturl,MenuHelper.sanymenupath_menuid,module.getId());
+//				datas.append("<li><a id=\"anchor_").append(module.getId()).append("\"  ").append(selectedclass).append(" href=\"#\">").append(module.getName(request)).append("</a>");
+			}
+			else
+			{
+				if(sany_selecturl != null && !sany_selecturl.equals(""))
+					ret = MenuHelper.getRealUrl(null, 
+							sany_selecturl,MenuHelper.sanymenupath_menuid,module.getId());
+				else
+					ret = MenuHelper.getModuleUrl(module, null,  control);
+							
+			}
+		}
+		else
+		{
+			
+			
+			boolean hasson = module.hasSonOfModule();
+			if(hasson)
+			{
+				
+			}
+			else
+			{
+				if(module.getUrl() == null)
+				{
+					if(sany_selecturl != null && !sany_selecturl.equals(""))
+						ret = MenuHelper.getRealUrl(null, 
+								sany_selecturl,MenuHelper.sanymenupath_menuid,module.getId());
+				}
+				else
+				{
+					if(sany_selecturl != null && !sany_selecturl.equals(""))
+						ret = MenuHelper.getRealUrl(null, 
+								sany_selecturl,MenuHelper.sanymenupath_menuid,module.getId());
+					else
+						ret = MenuHelper.getModuleUrl(module, null,  control);
+					
+				}
+			}
+			
+			
+		}
+		if(ret != null && !ret.startsWith("redirect:"))
+			ret = "redirect:"+ret;
+		return ret;
+	}
+	
+	private String specialItemHandle(Item module,String sany_selecturl,AccessControl control)
+	{
+		String ret = null;
+		if(!module.isShowleftmenu())
+		{
+			if(sany_selecturl != null && !sany_selecturl.equals(""))
+				ret = MenuHelper.getRealUrl(null, 
+						sany_selecturl,MenuHelper.sanymenupath_menuid,module.getId());
+			else
+				ret = MenuHelper.getRealUrl(null, 
+					Framework.getWorkspaceContent(module,control),MenuHelper.sanymenupath_menuid,module.getId());
+		}
+		
+		if(ret != null && !ret.startsWith("redirect:"))
+		{
+			ret = "redirect:"+ret;
+		}
+		return ret;
+	}
 	/**
 	 * 带左侧菜单的主页面
 	 * @param response
@@ -368,6 +445,7 @@ public class DesktopController {
 			Item item = iq.size() > 0?iq.getItem(0):null; 			
 			if(item != null)
 			{
+				
 				selectItem = item.getPath();
 				String area = item.getArea();
 				
@@ -389,6 +467,9 @@ public class DesktopController {
 				}
 				else
 				{
+					String special = specialItemHandle(item,sany_selecturl,control);
+					if(special != null)
+						return special;
 					if(sany_selecturl == null || sany_selecturl.equals(""))
 					{
 						selectUrl = MenuHelper.getRealUrl(contextpath, 
@@ -423,6 +504,9 @@ public class DesktopController {
 			boolean isroot = false;
 			if(menu instanceof Item )
 			{
+				String special = specialItemHandle((Item )menu,sany_selecturl,control);
+				if(special != null)
+					return special;
 				selectItem = menu.getPath();
 				String area = menu.getArea();
 				if(area != null && area.equals("main"))
@@ -481,8 +565,13 @@ public class DesktopController {
 			}
 			else
 			{
-				temp_m = (Module)menu;
 				
+				temp_m = (Module)menu;
+				String specialurl = specialModuleHandle(temp_m,sany_selecturl,control);
+				if(specialurl != null)
+				{
+					return specialurl;
+				}
 				if(temp_m.getUrl() != null)
 				{
 					

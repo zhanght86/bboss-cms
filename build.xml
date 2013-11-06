@@ -57,7 +57,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -561,7 +561,7 @@
 	<target name="jar-cms" depends="compile-all" description="generate the cms library cms.jar">
 		<echo>Generate the cms library cms.jar ...</echo>
 		<jar jarfile="${distrib}/cms.jar" basedir="classes-all" 
-			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/* com/frameworkset/platform/security/AccessControl*.class">
+			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/*">
 			<manifest>
 				
 				<attribute name="Implementation-Version" value="${impl.version}" />
@@ -575,7 +575,6 @@
 		
 		<delete dir="classes-all/com/frameworkset/platform/cms/"/>
 		<delete dir="classes-all/com/frameworkset/common/tag/"/>
-		<delete file="classes-all/com/frameworkset/platform/security/AccessControl*.class"/>
 		<delete dir="classes-all/org/"/>
 	</target>
 	<target name="compile-mq" depends="jar-cms" description="compile the compile-all source ">
