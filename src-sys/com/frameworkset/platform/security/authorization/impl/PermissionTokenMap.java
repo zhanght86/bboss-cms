@@ -49,14 +49,52 @@ public class PermissionTokenMap {
 	 * 与url相关的系统中所有资源操作许可
 	 * 当进行权限检测时，首先检测url相关的所有资源许可中的任何一个有操作权限，则说明用户有权限访问相应的资源
 	 */
-	private Map<String,LinkPermissionToken> allURLLinkPermissions;
+	private Map<String,LinkPermissionToken> protectedURLLinkPermissions;
 	
+	/**
+	 * 与url相关的系统中所有资源操作许可
+	 * 当进行权限检测时，首先检测url相关的所有资源许可中的任何一个有操作权限，则说明用户有权限访问相应的资源
+	 */
+	private Map<String,LinkPermissionToken> nullURLLinkPermissions;
+	
+	/**
+	 * 与url相关的系统中所有资源操作许可
+	 * 当进行权限检测时，首先检测url相关的所有资源许可中的任何一个有操作权限，则说明用户有权限访问相应的资源
+	 */
+	private Map<String,LinkPermissionToken> unprotectedURLLinkPermissions;
+	/**
+	 * 受保护url缓存区大小，超过大小时protectedURLLinkPermissions将被重置
+	 */
+	private int protectedURLLinkPermissionLimit = 100000;
+	
+	
+	/**
+	 * 不受保护url缓存区大小，超过大小时unprotectedURLLinkPermissions将被重置
+	 */
+	private int unprotectedURLLinkPermissionLimit = 200000;
+	/**
+	 *非配置url权限缓存区大小，超过大小时nullURLLinkPermissions将被重置
+	 */
+	private int nullURLLinkPermissionLimit = 200000;
 	
 	public PermissionTokenMap ()
 	{
 		resourcTokenMap = new HashMap<String,PermissionTokenRegion>();
 		
-		allURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		protectedURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		unprotectedURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		nullURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		
+	}
+	public PermissionTokenMap (int protectedURLLinkPermissionLimit,int unprotectedURLLinkPermissionLimit,int nullURLLinkPermissionLimit)
+	{
+		resourcTokenMap = new HashMap<String,PermissionTokenRegion>();
+		
+		protectedURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		unprotectedURLLinkPermissions = new HashMap<String,LinkPermissionToken>();
+		this.protectedURLLinkPermissionLimit = protectedURLLinkPermissionLimit;
+		this.unprotectedURLLinkPermissionLimit = unprotectedURLLinkPermissionLimit;
+		this.nullURLLinkPermissionLimit = nullURLLinkPermissionLimit;
 		
 	}
 	public void addPermissionToken(String url,PermissionToken token)
@@ -144,7 +182,9 @@ public class PermissionTokenMap {
 	{
 		synchronized(this.scanlock)//如果有修改，需要重新加载每个url的相关权限许可，只要资源定义有调整就需要需要调用这个方法
 		{
-			this.allURLLinkPermissions.clear();
+			this.protectedURLLinkPermissions.clear();
+			this.unprotectedURLLinkPermissions.clear();
+			this.nullURLLinkPermissions.clear();
 		}
 	}
 	
@@ -203,13 +243,17 @@ public class PermissionTokenMap {
 		
 				
 	}
-	private Object scanlock = new Object();
-	/**
-	 * 扫描系统中和url相关的所有url资源
-	 * @param url
-	 */
-	private LinkPermissionToken scanUrlPermissionTokens(String url) {
-		LinkPermissionToken ptokens = this.allURLLinkPermissions.get(url);
+	private LinkPermissionToken _getToken(String url)
+	{
+		LinkPermissionToken ptokens = this.protectedURLLinkPermissions.get(url);
+		if(ptokens != null)
+		{
+			return ptokens;
+		}
+		else
+		{
+			ptokens = this.unprotectedURLLinkPermissions.get(url);
+		}
 		
 		if(ptokens != null)
 		{
@@ -217,10 +261,30 @@ public class PermissionTokenMap {
 		}
 		else
 		{
+			ptokens = this.nullURLLinkPermissions.get(url);
+		}
+		return ptokens;
+		
+	}
+	private Object scanlock = new Object();
+	/**
+	 * 扫描系统中和url相关的所有url资源
+	 * @param url
+	 */
+	private LinkPermissionToken scanUrlPermissionTokens(String url) {
+		LinkPermissionToken ptokens = _getToken(url);
+		
+		
+		if(ptokens != null)
+		{
+			return ptokens;
+		}	
+		else
+		{
 			RID id = new RID(url);
 			synchronized(scanlock)
 			{
-				ptokens = this.allURLLinkPermissions.get(url);
+				ptokens = _getToken(url);
 				if(ptokens != null)
 				{
 					return ptokens;
@@ -234,7 +298,11 @@ public class PermissionTokenMap {
 					if(region.isUnprotectedURL(id))
 					{
 						ptokens = new LinkPermissionToken(url,true,null);
-						allURLLinkPermissions.put(url, ptokens);
+						if(unprotectedURLLinkPermissionLimit > 0 && this.unprotectedURLLinkPermissions.size() > this.unprotectedURLLinkPermissionLimit)
+						{
+							this.unprotectedURLLinkPermissions.clear();
+						}
+						this.unprotectedURLLinkPermissions.put(url, ptokens);
 						break;
 					}
 						
@@ -256,14 +324,25 @@ public class PermissionTokenMap {
 					}
 					if(tokes.size() == 0)
 					{
+						if(nullURLLinkPermissionLimit > 0 && this.nullURLLinkPermissions.size() > this.nullURLLinkPermissionLimit)
+						{
+							this.nullURLLinkPermissions.clear();
+						}
 						ptokens = NULL_PERMISSIONTOKENS;
+						nullURLLinkPermissions.put(url, ptokens);
 					}
 					else
 					{
 						removeSamePermissions(tokes );
 						ptokens = new LinkPermissionToken(url,false,tokes);
+						if(protectedURLLinkPermissionLimit > 0 && this.protectedURLLinkPermissions.size() > this.protectedURLLinkPermissionLimit)
+						{
+							this.protectedURLLinkPermissions.clear();
+						}
+						protectedURLLinkPermissions.put(url, ptokens);
+						
 					}
-					allURLLinkPermissions.put(url, ptokens);
+					
 				}
 			}
 			return ptokens;

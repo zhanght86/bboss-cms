@@ -74,7 +74,12 @@
 				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>-->				 
 			</authoration>
 		</publicitem>
-
+			<module name="排队信息显示" 
+		             i18n:en_US="Line Information Query" 
+		            id="veh_line_query" used="true"
+		           option="{popup:true,width:700,height:500,maxstate:false}"
+		             url="appbom/index.page">		
+		</module>	
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
 
 		<module name="应用台账模块"

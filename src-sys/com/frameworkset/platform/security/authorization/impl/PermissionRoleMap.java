@@ -1,13 +1,10 @@
 package com.frameworkset.platform.security.authorization.impl;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
@@ -28,7 +25,7 @@ import com.frameworkset.platform.security.event.ACLEventType;
  * @author biaoping.yin
  * @version 1.0
  */
-public abstract class PermissionRoleMap implements Listener,Serializable {
+public abstract class PermissionRoleMap implements Listener {
     private static Logger log = Logger.getLogger(PermissionRoleMap.class);
     public static AuthRole NO_REQUIRED_ROLES[] = new AuthRole[0];
     public static AuthRole EMPTY_REQUIRED_ROLES[] = new AuthRole[0];

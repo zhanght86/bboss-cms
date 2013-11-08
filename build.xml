@@ -574,7 +574,7 @@
 		</jar>
 		
 		<delete dir="classes-all/com/frameworkset/platform/cms/"/>
-		<delete dir="classes-all/com/frameworkset/common/tag/"/>
+		<delete dir="classes-all/com/frameworkset/common/tag/"/>		
 		<delete dir="classes-all/org/"/>
 	</target>
 	<target name="compile-mq" depends="jar-cms" description="compile the compile-all source ">

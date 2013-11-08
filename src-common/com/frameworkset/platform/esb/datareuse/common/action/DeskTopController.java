@@ -28,6 +28,7 @@ import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
 import com.frameworkset.platform.framework.MenuHelper;
+import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
 
@@ -88,7 +89,7 @@ public class DeskTopController {
 			for(int i=0;i<list.size();i++){
 				mb=new MenuItemU();
 				deskTopMenuBean = list.get(i);
-				Item item=frame.getItem(deskTopMenuBean.getMenupath());
+				BaseMenuItem item=(BaseMenuItem)frame.getMenuByPath(deskTopMenuBean.getMenupath());
 				if(item == null)
 				{
 					System.out.println("deskTopMenuBean.getMenupath():>>>>>>>>>>>>>>>>>>>>>>>>"+deskTopMenuBean.getMenupath());
@@ -255,7 +256,8 @@ public class DeskTopController {
 		if (list != null && list.size() > 0) {
 			for(int i=0;i<list.size();i++){
 				MenuItemU mb=new MenuItemU();
-				Item item=frame.getItem(list.get(i).getMenupath());
+				BaseMenuItem item=(BaseMenuItem)frame.getMenuByPath(list.get(i).getMenupath());
+//				Item item=frame.getItem(list.get(i).getMenupath());
 				deskTopMenuBean = list.get(i);
 				if(item == null)
 				{
@@ -387,7 +389,7 @@ public class DeskTopController {
 		if (list != null && list.size() > 0) {
 			for(int i=0;i<list.size();i++){
 //				MenuItemU mb=new MenuItemU();
-				Item item=frame.getItem(list.get(i).getMenupath());
+				MenuItem item=frame.getMenuByPath(list.get(i).getMenupath());
 				if(item == null)
 				{
 					System.out.println("list.get(i).getMenupath():>>>>>>>>>>>>>>>>>>>>>>>>"+list.get(i).getMenupath());
@@ -434,7 +436,8 @@ public class DeskTopController {
 		String[] arr = new String[list.size()];
 		if (list != null && list.size() > 0) {
 			for(int i=0;i<list.size();i++){
-				Item item=frame.getItem(list.get(i).getMenupath());
+				BaseMenuItem item=(BaseMenuItem)frame.getMenuByPath(list.get(i).getMenupath());
+//				Item item=frame.getItem(list.get(i).getMenupath());
 				if(item == null)
 				{
 					System.out.println("list.get(i).getMenupath():>>>>>>>>>>>>>>>>>>>>>>>>"+list.get(i).getMenupath());
@@ -485,7 +488,8 @@ public class DeskTopController {
 		AccessControl control = AccessControl.getAccessControl();
 		Framework frame = Framework.getInstance(control.getCurrentSystemID()); 
 		
-		Item item=frame.getItem(columnID);
+//		Item item=frame.getItem(columnID);
+		BaseMenuItem item=(BaseMenuItem)frame.getMenuByID(columnID);
 		
 		ItemMenuCustom imc = new ItemMenuCustom();
 		imc.setUserid(control.getUserID());
