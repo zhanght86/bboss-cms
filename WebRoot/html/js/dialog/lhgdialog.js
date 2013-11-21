@@ -436,7 +436,8 @@ lhgdialog.fn = lhgdialog.prototype =
 		if( top || top === 0 )
 		{
 			that._top = top.toString().indexOf('%') !== -1 ? top : null;
-			top = that._toNumber(top, wh - oh);
+			if(wh != undefined && oh != undefined)
+				top = that._toNumber(top, wh - oh);
 			
 			if(typeof top === 'number')
 			{
