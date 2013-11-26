@@ -53,8 +53,8 @@ function showT(){
 		
 		<pre>
 			<%
-				//String error = StringUtil.HTMLEncode(StringUtil.exceptionToString(exception));
-				String error = "出错了!";
+				String error = StringUtil.HTMLEncode(StringUtil.exceptionToString(exception));
+				//String error = "出错了!";
 				//exception.printStackTrace(new java.io.PrintWriter(out));
 				out.print(error);
 			%>

@@ -436,12 +436,13 @@ lhgdialog.fn = lhgdialog.prototype =
 		if( top || top === 0 )
 		{
 			that._top = top.toString().indexOf('%') !== -1 ? top : null;
-			if(wh != undefined && oh != undefined)
+			if(wh != undefined)
 				top = that._toNumber(top, wh - oh);
 			
 			if(typeof top === 'number')
 			{
 				top = ie6Fixed ? (top += docTop) : top + dt;
+				
 				style.top = Math.max(top,dt) + 'px';
 			}
 			else if(typeof top === 'string')

@@ -1,13 +1,10 @@
 package com.sany.sap.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.junit.Test;
+
+import com.sany.sap.connection.SapResult;
 
 
 public class SapConnTest {
@@ -45,9 +42,11 @@ public class SapConnTest {
 //		kstar.add(map1);
 //		kstar.add(map2);
 //		kstar.add(map3);
-//		
-//		
-////		List sapres = util.getSapFytj(ksh,kstar,"2010-01-01","2012-08-07");
+		SapResult r = util.test();
+		System.out.println();
+		
+		
+//		List sapres = util.getSapFytj(ksh,kstar,"2010-01-01","2012-08-07");
 //		util.getSapOracleDateTime();
 		
 

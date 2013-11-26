@@ -124,7 +124,7 @@
 		   /sysmanager/password/modifyExpiredUserPWD.jsp,
 		  /passward/modifyExpiredPassword.page,
 		  /passward/generateImageCode.page,
-		  /common/jsp/tokenfail.jsp
+		  /common/jsp/tokenfail.jsp,/mobile/login.jsp
 		  
     	   </param-value>
     </init-param>

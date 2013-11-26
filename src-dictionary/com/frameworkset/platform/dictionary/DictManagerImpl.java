@@ -1,5 +1,6 @@
 package com.frameworkset.platform.dictionary;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -4155,24 +4156,43 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public boolean deletedictdatas(String dicttypeId, String[] dictdataInfos) throws ManagerException {
 		boolean state = false;
+		
 		for(int i=0;i<dictdataInfos.length;i++){
 			if(dictdataInfos[i]==null || dictdataInfos[i].trim().length()==0){
 				continue;
 			}
-			String[] info = dictdataInfos[i].split(":");
+			String[] info = null;
+			try {
+				info = java.net.URLDecoder.decode(dictdataInfos[i],"UTF-8").split(":");
+			} catch (UnsupportedEncodingException e) {
+				throw new ManagerException(e);
+			}
 			if(info.length>0){
 				String dictdataValue = "";
 				String dictdataName = "";
 				String primaryCondition = "";
 				if(info.length==1){
-					dictdataValue = info[0];
+					try {
+						dictdataValue = java.net.URLDecoder.decode(info[0],"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new ManagerException(e);
+					}
 				}else if(info.length==2){
-					dictdataValue = info[0];
-					dictdataName = info[1];
+					
+					try {
+						dictdataValue = java.net.URLDecoder.decode(info[0],"UTF-8");
+						dictdataName = java.net.URLDecoder.decode(info[1],"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new ManagerException(e);
+					}
 
 				}else if(info.length==3){
-					dictdataValue = info[0];
-					dictdataName = info[1];
+					try {
+						dictdataValue = java.net.URLDecoder.decode(info[0],"UTF-8");
+						dictdataName = java.net.URLDecoder.decode(info[1],"UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new ManagerException(e);
+					}
 					primaryCondition = info[2];
 				} 
 				primaryCondition = primaryCondition.replace("a.", "");

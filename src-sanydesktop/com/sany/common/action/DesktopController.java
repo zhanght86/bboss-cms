@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.frameworkset.web.servlet.ModelMap;
+import org.frameworkset.web.servlet.support.RequestContextUtils;
 import org.frameworkset.web.token.MemTokenManager;
 import org.frameworkset.web.token.MemTokenManagerFactory;
 
@@ -21,9 +22,10 @@ import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.Root;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.util.StringUtil;
+import common.Logger;
 
 public class DesktopController {
+	private static Logger log = Logger.getLogger(DesktopController.class);
 	public String products()
 	{
 		return "path:products";
@@ -33,7 +35,23 @@ public class DesktopController {
 	
 		
 		
-		StringUtil.addCookieValue(request, response, "cookie.localkey", language, 3600 * 24);
+//		StringUtil.addCookieValue(request, response, "cookie.localkey", language, 3600 * 24);
+//		
+//		
+//		if(language.equals("en_US"))
+//		{
+//			request.getSession().setAttribute("session.localkey",java.util.Locale.US);
+//		}
+//		else
+//		{
+//			request.getSession().setAttribute("session.localkey",java.util.Locale.CHINA);
+//		}
+		
+		try {
+			RequestContextUtils.getLocaleResolver(request).setLocale(request, response, language);
+		} catch (Exception e) {
+			log.error("",e);
+		}
 //			loginPathCookie.setPath(request.getContextPath());
 		
 		return "path:login";

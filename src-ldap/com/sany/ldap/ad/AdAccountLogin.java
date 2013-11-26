@@ -61,7 +61,8 @@ public class AdAccountLogin {
             }
 
         } catch (Exception e) {
-            logger.debug("validate user error", e);
+        	if(!userId.equals("admin"))
+        		logger.debug("validate user error", e);
             
             response.put("successFlag", "0");
             if (e.getMessage().contains("52e")) { response.put("errMessage", "Invalid credentials"); }

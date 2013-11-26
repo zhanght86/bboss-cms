@@ -44,7 +44,11 @@
         <property name="useCodeAsDefaultMessage" value="true"/>
     </property>
     
-     <property name="localeResolver" class="org.frameworkset.web.servlet.i18n.CookieLocaleResolver"
+<!--      <property name="localeResolver" class="org.frameworkset.web.servlet.i18n.SessionLocalResolver"
+     f:sessionlocalkey="session.localkey"  
+     />-->
+     
+    <property name="localeResolver" class="org.frameworkset.web.servlet.i18n.CookieLocaleResolver"
      f:cookielocalkey="cookie.localkey"  
      />
      

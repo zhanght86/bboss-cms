@@ -175,8 +175,9 @@
 	    for (var i=0;i<arr.length;i++) {
 			if (arr[i].checked){
 		       	isSelect=true;
-		       	if(selecet_value=="") selecet_value = selecet_value + arr[i].value; 
-		       	else selecet_value = selecet_value + "," + arr[i].value;
+
+		       	if(selecet_value=="") selecet_value = selecet_value + encodeURIComponent(encodeURIComponent(arr[i].value)); 
+		       	else selecet_value = selecet_value + "," + encodeURIComponent(encodeURIComponent(arr[i].value));
 			}
 	    }
 	    if (isSelect){

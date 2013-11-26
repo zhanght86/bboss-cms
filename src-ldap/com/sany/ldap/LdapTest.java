@@ -66,5 +66,13 @@ public class LdapTest {
 		login.validateUser("marc", "mrc@368.com", null);
 		System.out.println();
 	}
+	
+	@Test
+	public void decrpt() throws Exception
+	{
+		com.frameworkset.common.poolman.security.DESCipher s = new com.frameworkset.common.poolman.security.DESCipher();
+		 
+		System.out.println(s.decrypt("b23b9112ad5b60215fd1d24a8e5ac502"));
+	}
 
 }

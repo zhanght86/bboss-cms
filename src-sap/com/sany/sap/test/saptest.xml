@@ -10,7 +10,7 @@
 			  	
 <property name="sap.sapconffactory" factory-bean="sap.applicationcontext" factory-method="getBeanObject">
 		<construction>
-			<property value="sapconffactory" />
+			<property value="sapconffactorydev" />
 		</construction>
 	</property>			  	
  <property name="sapoperationutil" class="com.sany.sap.test.SFASAPUtil"

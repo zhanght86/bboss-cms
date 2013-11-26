@@ -504,4 +504,127 @@ public class SFASAPUtil {
 
         return sapResult;
     }
+    
+    /**
+     * 
+
+     */
+
+    public SapResult test() {
+
+        SapResult sapResult = null;
+        JCoDestination destination = null;
+        try {
+            destination = sapConnectFactory.begin();
+//
+//            String[] inParamsTableNames = new String[] { "FBRA_INPUT" };
+//            
+//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+//            List<Map<String, Object>> inTableValue = new ArrayList<Map<String, Object>>();
+//            for (ClearAccount temp : billList) {
+//                Map<String, Object> row = new HashMap<String, Object>();
+//                row.put("BELNR", temp.getDocno());
+//                row.put("BUKRS", temp.getCompcode());
+//                row.put("GJAHR", temp.getAccountyear());
+//                row.put("STGRD", temp.getReason());
+//                if (temp.getAccountdate() != null) {
+//                    row.put("BUDAT", dateFormat.format(temp.getAccountdate()));
+//                }
+//                row.put("FUNKY", temp.getFunc());
+//                inTableValue.add(row);
+//            }
+//           
+//            List<Map<String, Object>>[] inParamsTableValues = new List[] { inTableValue };
+//            
+//            String[] returnParamsTableNames = new String[] { "FBRA_OUTPUT" };
+//            
+//            List<String>[] returnTableColumns = new List[1];
+//            returnTableColumns[0] = new ArrayList<String>();
+//            returnTableColumns[0].add("REF_DOC_NO");
+//            returnTableColumns[0].add("STATUS");
+//            returnTableColumns[0].add("AC_DOC_NO");
+//            returnTableColumns[0].add("ERROR_MESSAGE");
+//            
+          String rfcName = "ZRFC_MM_DDXD";
+//			Map<String, Object> inParams, String[] returnParameterColumns,
+//			String[] returnTableNames, List<String>[] returnTableColumns
+            Map<String, Object> inParams = new HashMap<String,Object>();
+            inParams.put("I_GETALL", "X");
+            inParams.put("I_LOW", 1);
+            inParams.put("I_HIGH", 2);
+            
+            String[] inParamsTableNames = {"IT_DATE"};
+            List<Map<String, Object>> inTableValue = new ArrayList<Map<String, Object>>();
+	         
+	              Map<String, Object> row = new HashMap<String, Object>();
+	              row.put("LOW", "2013-11-18");
+//	              row.put("HIGH", "2013-11-18");	             
+	              inTableValue.add(row);
+	        
+			List<Map<String, Object>>[] inParamsTableValues = new List[]{inTableValue};
+			String[] returnParameterColumns = null;
+			String[] returnTableNames = {"OT_DDXD"};
+			
+			List<String>[] returnTableColumns = new List[1];
+			returnTableColumns[0] = new ArrayList<String>();
+	          returnTableColumns[0].add("EBELN");
+	          returnTableColumns[0].add("EBELP");
+	          returnTableColumns[0].add("AEDAT");
+	          returnTableColumns[0].add("UTIME");
+	          returnTableColumns[0].add("MATNR");
+	          returnTableColumns[0].add("WERKS");
+	          returnTableColumns[0].add("LIFNR");
+	          returnTableColumns[0].add("MENGE");
+	          returnTableColumns[0].add("MEINS");
+	          returnTableColumns[0].add("LMENG");
+	          returnTableColumns[0].add("LMEIN");
+	          returnTableColumns[0].add("STPRS");
+	          
+	  
+	          returnTableColumns[0].add("BRTWR");
+	        returnTableColumns[0].add("WAERS");
+	        returnTableColumns[0].add("LOEKZ");
+	        returnTableColumns[0].add("FRGRL");
+	        returnTableColumns[0].add("FRGKE");
+	        returnTableColumns[0].add("BUKRS");
+
+//			String[] returnParamsStructureNames = {"E_RETURN"};
+//			List<String>[] returnParamsStructureColumns = new List[1];
+//			returnParamsStructureColumns[0] = new ArrayList<String>();
+//			returnParamsStructureColumns[0].add("ZTYPE");
+//			returnParamsStructureColumns[0].add("ZMESG");
+	        String[] returnParamsStructureNames = null;
+			List<String>[] returnParamsStructureColumns = null;
+			
+
+			
+			String[] inParamsStructureNames = null; Map<String, Object>[] inParamsStructureValues = null;
+            sapResult = sapConnectFactory.callFunctionForParameterInTableAndStructure(rfcName, inParams, inParamsStructureNames, inParamsStructureValues, 
+            		inParamsTableNames, inParamsTableValues, returnParameterColumns, 
+            		returnParamsStructureNames, returnParamsStructureColumns,
+            		returnTableNames, returnTableColumns);
+//            orParameterInTableAndStructure(null,rfcName,
+//        			inParams, null,
+//        			null,
+//        			inParamsTableNames,
+//        			inParamsTableValues,
+//        			null,
+//        			returnParamsStructureNames,
+//        			returnParamsStructureColumns,
+//        			returnTableNames, returnTableColumns);
+//        			callFunctionForParameterAndTable(rfcName, inParams, 
+//            		inParamsTableNames, 
+//            		inParamsTableValues, 
+//            		returnParameterColumns,
+//            		returnTableNames,
+//            		returnTableColumns);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sapConnectFactory.end(destination);
+        }
+
+        return sapResult;
+    }
 }

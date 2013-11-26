@@ -324,7 +324,7 @@
         <column name="JP" size="40" type="VARCHAR"/>
         <column name="QP" size="40" type="VARCHAR"/>
         <column name="CREATINGTIME" type="DATE"/>
-        <column default="1&#xa;&#xa;&#xa;" name="CREATOR" size="100" type="VARCHAR"/>
+        <column default="1" name="CREATOR" size="100" type="VARCHAR"/>
         <column name="ORGNUMBER" size="100" type="VARCHAR"/>
         <column name="ORGDESC" size="300" type="VARCHAR"/>
         <column name="REMARK1" size="100" type="VARCHAR"/>
@@ -488,8 +488,8 @@
         <column name="TYPE_DESC" size="500" type="VARCHAR"/>
         <column name="TYPE_ID" primaryKey="true" required="true"
             size="22" type="DECIMAL"/>
-        <column default="1&#xa;&#xa;" name="CREATOR_USER_ID" size="20" type="VARCHAR"/>
-        <column default="1&#xa;&#xa;" name="CREATOR_ORG_ID" size="20" type="VARCHAR"/>
+        <column default="1" name="CREATOR_USER_ID" size="20" type="VARCHAR"/>
+        <column default="1" name="CREATOR_ORG_ID" size="20" type="VARCHAR"/>
     </table>
     <table name="TD_SM_TAXCODE_ORGANIZATION">
         <column name="ORG_ID" primaryKey="true" required="true"

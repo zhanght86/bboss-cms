@@ -4,7 +4,7 @@
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page session="true" language="java"
 	contentType="text/html; charset=utf-8"%>
-<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.config.ConfigManager,com.liferay.portlet.iframe.action.SSOUserMapping"%>
+<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.config.ConfigManager,com.liferay.portlet.iframe.action.SSOUserMapping,org.frameworkset.web.servlet.support.RequestContextUtils"%>
 <%@ page import="com.frameworkset.platform.ca.CaProperties"%>
 <%@ page import="com.frameworkset.platform.ca.CAManager"%>
 <%@ page import="com.frameworkset.platform.ca.CookieProperties"%>
@@ -45,8 +45,10 @@
 	String loginStyle = null;
 	String system_id = null;
 	if(language==null){
-		language = StringUtil.getCookieValue(request, "cookie.localkey", "zh_CN");
+		language = RequestContextUtils.getLocaleResolver(request).resolveLocaleCode(request);
+		
 	}
+	
 		
 	/* if(language.equals("zh_CN")){
 	 	request.getSession().setAttribute("languageKey", java.util.Locale.CHINA);

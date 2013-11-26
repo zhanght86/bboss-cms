@@ -1,13 +1,7 @@
-弹出菜单变更程序：
-/resources/module.xml
-/WebRoot/html/main.jsp
-/src-common/com/frameworkset/platform/esb/datareuse/common/action/DeskTopController.java
-/WebRoot/html/js/menu.js
-/src-sanydesktop/com/sany/common/menu/tag/MenuTag.java
-/src-sanydesktop/com/sany/common/menu/tag/LeftMenuTag.java
-
 url权限控制：
 url控制原理：将url对应的相关的菜单与角色的关系转换为url与角色的关系，将url相关的所有菜单
+1.在模板视图中编辑模板时，distribute标签丢失
+
 1.内容管理中文档正文增加以下自定义标签：
 [file][/file]
 [flashplayer][/flashplayer]
