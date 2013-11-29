@@ -3,7 +3,7 @@
 <%@page import="java.util.*" %>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
+
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@ page import="com.frameworkset.platform.config.ConfigManager,
 				com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl,

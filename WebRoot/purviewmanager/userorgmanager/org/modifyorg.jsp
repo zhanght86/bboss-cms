@@ -254,64 +254,64 @@
 		//var org_xzqm_obj = form2.org_xzqm;
 		
 		if (trim(orgnumber).length == 0 ){
-	    W.$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.number.invalid'/>！"); 
+	    $.dialog.alert("<pg:message code='sany.pdp.role.check.organization.number.invalid'/>！"); 
 		return false;
 		}
 		if(orgnumber.search(/[^0-9A-Za-z]/g) !=-1){
-		W.$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.name.invalid'/>!");
+		$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.name.invalid'/>!");
 		form2.orgnumber.focus();
 		return false;
 		}
 		if (trim(orgName).length == 0 ){
-	    W.$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.name.invalid'/>！"); 
+	    $.dialog.alert("<pg:message code='sany.pdp.role.check.organization.name.invalid'/>！"); 
 		return false;
 		} 
 		if (trim(orgSn).length == 0 ){
-	    W.$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.sort.number.invalid'/>！"); 
+	    $.dialog.alert("<pg:message code='sany.pdp.role.check.organization.sort.number.invalid'/>！"); 
 		return false;
 		}
 		if(orgSn.search(/[^0-9]/g) !=-1){
-		W.$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.sort.number.invalid'/>!");
+		$.dialog.alert("<pg:message code='sany.pdp.role.check.organization.sort.number.invalid'/>!");
 		form2.orgSn.focus();
 		return false;
 		}
 		if (trim(remark5).length == 0 ){
-	    W.$.dialog.alert("<pg:message code='sany.pdp.check.organization.show.name.invalid'/>"); 
+	    $.dialog.alert("<pg:message code='sany.pdp.check.organization.show.name.invalid'/>"); 
 		return false;
 		}
 		if(jp.search(/[^A-Za-z]/g) !=-1){
-		W.$.dialog.alert("<pg:message code='sany.pdp.check.organization.simple.spell.invalid'/>!");
+		$.dialog.alert("<pg:message code='sany.pdp.check.organization.simple.spell.invalid'/>!");
 		form2.jp.focus();
 		return false;
 		}
 		if(qp.search(/[^A-Za-z]/g) !=-1){
-		W.$.dialog.alert("<pg:message code='sany.pdp.check.organization.complete.spell.invalid'/>!");
+		$.dialog.alert("<pg:message code='sany.pdp.check.organization.complete.spell.invalid'/>!");
 		form2.qp.focus();
 		return false;
 		}   
 		if(orgnumber.length>100)
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.organiztion.number.long'/>!");
+			$.dialog.alert("<pg:message code='sany.pdp.organiztion.number.long'/>!");
 			return;
 		}
 		if(orgName.length>40)
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.organization.name.long'/>!");
+			$.dialog.alert("<pg:message code='sany.pdp.organization.name.long'/>!");
 			return;
 		}
 		if(orgdesc.length>300)
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.organiztion.number.long'/>!");
+			$.dialog.alert("<pg:message code='sany.pdp.organiztion.number.long'/>!");
 			return;
 		}
 		if(jp.length>40)
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.simple.spell.long'/>!");
+			$.dialog.alert("<pg:message code='sany.pdp.simple.spell.long'/>!");
 			return;
 		}
 		if(qp.length>40)
 		{
-			W.$.dialog.alert("<pg:message code='sany.pdp.complete.spell.long'/>!");
+			$.dialog.alert("<pg:message code='sany.pdp.complete.spell.long'/>!");
 			return;
 		}
 		
@@ -349,13 +349,13 @@
 		var maxLength = "<%=maxOrgNumberLength%>";
 		var subOrg = val.substring(0,<%=parentOrgNumberLength%>);
 		if(subOrg != "<%=parentOrgNumber%>"){
-			W.$.dialog.alert("机构编码前几位必须与父机构编码相同\n父机构编码为：<%=parentOrgNumber%>");
+			$.dialog.alert("机构编码前几位必须与父机构编码相同\n父机构编码为：<%=parentOrgNumber%>");
 			obj.value = "<%=orgnumber%>";
 			obj.focus();
 			return;
 		}
 		if(cruLength != maxLength){
-			W.$.dialog.alert("机构编码长度只能是父机构编码长度加<%=len%>位！\n该机构编码长度只能是"+maxLength+"位数字");
+			$.dialog.alert("机构编码长度只能是父机构编码长度加<%=len%>位！\n该机构编码长度只能是"+maxLength+"位数字");
 			obj.value = val.substring(0,maxLength);
 			obj.focus();
 			return;

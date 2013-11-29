@@ -317,6 +317,35 @@
 			order by n.order_num
 		]]>
 	</property>
+	
+	<property name="queryProcessNodesCandidates">
+		<![CDATA[
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			from td_wf_activiti_node_info n 
+			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
+			#if($bussinessid && !$bussinessid.equals(""))
+				and t.business_id = #[bussinessid]
+			#end
+				
+				and t.business_type = #[business_type]
+			 where n.process_key = #[process_key]
+			order by n.order_num
+		]]>
+	</property>
+	<property name="queryProcessNodeCandidates">
+		<![CDATA[
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			from td_wf_activiti_node_info n 
+			left join td_wf_activiti_node_candidate t on t.node_id=n.id 				
+			#if($business_id && !$business_id.equals(""))
+				and t.business_id = #[business_id]
+			#end
+				and t.business_type = #[business_type]
+			 where n.process_key = #[process_key]
+			 and n.node_key=#[node_key];
+			order by n.order_num
+		]]>
+	</property>
 	<property name="queryActivitiNodeWithCommonCandidate">
 		<![CDATA[
 			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
@@ -356,6 +385,17 @@
 				and business_id=#[business_id] 
 			#end
 			and business_type=#[business_type]
+		]]>
+	</property>
+	
+	<property name="deleteActivitiNodeCandidate">
+		<![CDATA[
+			delete from  td_wf_activiti_node_candidate where 1=1  
+			#if($business_type && !$business_type.equals("0"))
+				and business_id=#[business_id] 
+			#end
+			and business_type=#[business_type]
+			and NODE_ID in (select NODE_ID from td_wf_activiti_node_info where PROCESS_KEY=#[process_key])
 		]]>
 	</property>
 	
@@ -417,8 +457,11 @@
 	<property name="batchDeleteNodeVariable">
 		<![CDATA[
 			delete from td_wf_nodevariable t
-			where node_id in (select id from td_wf_activiti_node_info where process_key=?)
-			and t.business_id=? and t.business_type=?
+			where node_id in (select id from td_wf_activiti_node_info where process_key=#[process_key])
+			#if($business_type && !$business_type.equals("0"))
+				and t.business_id=#[business_id] 
+			#end			
+			and t.business_type=#[business_type]
 		]]>
 	</property>
 	

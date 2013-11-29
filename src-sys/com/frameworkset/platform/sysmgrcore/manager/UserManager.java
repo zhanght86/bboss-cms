@@ -37,7 +37,10 @@ import com.frameworkset.util.ListInfo;
  * @author 
  */
 public interface UserManager extends Provider, Serializable {
+	public boolean deleteBatchUserRes(String userIds[],boolean broadcastevent) throws ManagerException;
 	public void loadUsers(UserCacheManager userCache) throws ManagerException;
+	
+	public void fixuserorg(String[] userId, String orgid);
 	/**
 	 * 根据传入的名称对用户安装用户账号，用户工号，用户真实名称进行组合
 	 * @param username
@@ -1046,6 +1049,9 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public boolean addUserOrg(String[] userIds, String orgId, String classType) throws ManagerException;
 	
+	public boolean addUserOrg(String[] userIds, String orgId, String classType,boolean broadcastevent)
+			throws ManagerException ;
+	
 	/**
 	 * 保存用户 用户组关系
 	 * @param usergroup
@@ -1125,6 +1131,7 @@ public interface UserManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds, boolean isInsert) throws ManagerException;
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds, boolean isInsert,boolean broadcastevent) throws ManagerException;
 	
 	/**
 	 * 删除离散用户与主机构的关系表

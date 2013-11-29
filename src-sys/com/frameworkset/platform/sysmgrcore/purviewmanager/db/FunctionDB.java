@@ -8,6 +8,7 @@ import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 
 public class FunctionDB {
@@ -72,7 +73,7 @@ public class FunctionDB {
 		
 	}
 
-	private static void buildOrg(StringBuffer temp, Organization org) {
+	public static void buildOrg(StringBuffer temp, Organization org) {
 	    
 	    if (org!= null) {
     	    if (org.getParentId() != null && !org.getParentId().equals("0")) {
@@ -80,9 +81,36 @@ public class FunctionDB {
     	        temp.append(">");
     	    } 
     	    temp.append(org.getRemark5());
-	    } else {
-	        System.out.println(1);
-	    }
+	    } 
+	}
+	
+	
+	public static void buildOrg(StringBuffer temp, String orgid) throws ManagerException {
+	    
+		if(orgid == null)
+			return; 
+		Organization org = OrgCacheManager.getInstance().getOrganization(orgid);
+	    if (org!= null) {
+    	    if (org.getParentId() != null && !org.getParentId().equals("0")) {
+    	        buildOrg(temp, org.getParentOrg());
+    	        temp.append(">");
+    	    } 
+    	    temp.append(org.getRemark5());
+	    } 
+	}
+	
+	public static String buildOrgPath(String orgid) throws ManagerException {
+		StringBuffer temp = new StringBuffer();
+		buildOrg(temp, orgid);
+//		Organization org = OrgCacheManager.getInstance().getOrganization(orgid);
+//	    if (org!= null) {
+//    	    if (org.getParentId() != null && !org.getParentId().equals("0")) {
+//    	        buildOrg(temp, org.getParentOrg());
+//    	        temp.append(">");
+//    	    } 
+//    	    temp.append(org.getRemark5());
+//	    } 
+		return temp.toString();
 	}
 	
 	public static String getUserjobinfos(final int user_id, final String org_id) {

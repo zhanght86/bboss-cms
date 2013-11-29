@@ -14,8 +14,10 @@
  */
 package com.sany.masterdata.hr.sync;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -23,6 +25,7 @@ import org.apache.log4j.Logger;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmOrg;
 import com.sany.masterdata.utils.MDPropertiesUtil;
@@ -45,6 +48,7 @@ public class SyncOrganizationInfo {
     private MdmService mdmService;
     
     private ConfigSQLExecutor executor;
+    private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
     
     /**
      * 同步所有机构数据
@@ -56,6 +60,9 @@ public class SyncOrganizationInfo {
             
            
             Set<String> orgKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmOrgKey"));
+            Map<String,String> fixedorginfos = userOrgParamManager.getFixedOrgInfos();
+            if(fixedorginfos == null)
+            	fixedorginfos = new HashMap<String,String>();
             
             TransactionManager tm = new TransactionManager();
             PreparedDBUtil savePre = new PreparedDBUtil();
@@ -70,7 +77,7 @@ public class SyncOrganizationInfo {
                 for (MdmOrg temp : orgList) {
                     if (orgKeySet.contains(temp.getOrgId())) {
                         updateSize ++;
-                        addPreBatch(updatePre, temp);
+                        addPreBatch(updatePre, temp,fixedorginfos);
                         if (saveSize > BATCH_LIMIT) {
                             updateSize = 0;
                             updatePre.executePreparedBatch();
@@ -79,7 +86,7 @@ public class SyncOrganizationInfo {
                         }
                     } else {
                         saveSize ++;
-                        addPreBatch(savePre, temp);
+                        addPreBatch(savePre, temp,fixedorginfos);
                         if (saveSize > BATCH_LIMIT) {
                             saveSize = 0;
                             savePre.executePreparedBatch();
@@ -111,7 +118,7 @@ public class SyncOrganizationInfo {
         logger.info("Sync org info finished...");
     }
     
-    private void addPreBatch(PreparedDBUtil pre, MdmOrg temp) throws Exception {
+    private void addPreBatch(PreparedDBUtil pre, MdmOrg temp,Map<String,String> fixedorginfos) throws Exception {
 //        if (temp.getOrgRank() != null) {
 //            pre.setString(1, temp.getOrgId());
 //        } else {
@@ -120,10 +127,28 @@ public class SyncOrganizationInfo {
        
         if (temp.getOrgText() == null || temp.getOrgText().trim().equals("三一集团")) {
             pre.setString(2, "未指定");
-            pre.setString(3, "0");
+            String parentOrgid = fixedorginfos.get(temp.getOrgId());
+            if(parentOrgid == null)
+            {
+            	pre.setString(3, "0");
+            }
+            else
+            {
+            	pre.setString(3, parentOrgid);
+            }
         } else {
+        	
             pre.setString(2, temp.getOrgText());
-            pre.setString(3, temp.getFatherId());
+            String parentOrgid = fixedorginfos.get(temp.getOrgId());
+            if(parentOrgid == null)
+            {
+            	pre.setString(3, temp.getFatherId());
+            }
+            else
+            {
+            	pre.setString(3, parentOrgid);
+            }
+           
         }
         pre.setString(4, temp.getOrgId());
         pre.setString(5, temp.getUseFlag());

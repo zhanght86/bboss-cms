@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%
 /*
  * <p>Title: 用户调入下的保存数据的处理页面</p>
@@ -22,7 +23,7 @@
 				 com.frameworkset.platform.sysmgrcore.manager.OrgManager,
 				 com.frameworkset.platform.config.ConfigManager,
 				 com.frameworkset.platform.sysmgrcore.purviewmanager.db.PurviewManagerImpl,
-				 java.util.List"%>
+				 java.util.List,org.frameworkset.event.*,com.frameworkset.platform.security.event.*"%>
 				 
 				 
 <%
@@ -50,73 +51,90 @@
 		//符合条件的userid串
 		String userIdsStr = "";
 		String classType = request.getParameter("classType");
-		for(int u = 0; u < folduserIds.length; u++){
-			List list = PurviewManagerImpl.getBussinessCheck().userMoveCheck(control,folduserIds[u]);
-			
-		    String userOrgInfoMsg = PurviewManagerImpl.buildMessage(list);
-			if(!"".equals(userOrgInfoMsg) && !classType.equals("lisan")){
-			    //如果返回值！= "" ， 累加提示信息
-			    User user = userManager.getUserById(folduserIds[u]);
-				if(userReturnInfo.equals("")){
-					userReturnInfo = user.getUserRealname()+"("+user.getUserName()+"):"+userOrgInfoMsg;
+		TransactionManager tm = new TransactionManager();
+		String[] userIds = null;
+		try
+		{
+			tm.begin();
+			for(int u = 0; u < folduserIds.length; u++){
+				List list = PurviewManagerImpl.getBussinessCheck().userMoveCheck(control,folduserIds[u]);
+				
+			    String userOrgInfoMsg = PurviewManagerImpl.buildMessage(list);
+				if(!"".equals(userOrgInfoMsg) && !classType.equals("lisan")){
+				    //如果返回值！= "" ， 累加提示信息
+				    User user = userManager.getUserById(folduserIds[u]);
+					if(userReturnInfo.equals("")){
+						userReturnInfo = user.getUserRealname()+"("+user.getUserName()+"):"+userOrgInfoMsg;
+					}else{
+						userReturnInfo += "\\n" + user.getUserRealname()+"("+user.getUserName()+"):" + userOrgInfoMsg;
+					}
 				}else{
-					userReturnInfo += "\\n" + user.getUserRealname()+"("+user.getUserName()+"):" + userOrgInfoMsg;
-				}
-			}else{
-			    //符合调动条件的userid
-				if(userIdsStr.equals("")){
-					userIdsStr = folduserIds[u];
-				}else{
-					userIdsStr += "," + folduserIds[u];
+				    //符合调动条件的userid
+					if(userIdsStr.equals("")){
+						userIdsStr = folduserIds[u];
+					}else{
+						userIdsStr += "," + folduserIds[u];
+					}
 				}
 			}
-		}
-		
-		// 保存符合条件的userid
-		String[] userIds = userIdsStr.split(",");
-		
-		String orgId = request.getParameter("orgId");
-		String flag = request.getParameter("flag");
-		
-		String orgName_log = LogGetNameById.getOrgNameByOrgId(orgId);	
-		
-		//一系列的调动处理
-		
-		if(!"".equals(userId) && userIds.length>0 && !"".equals(userIds[0]) ){
-			if(flag.equals("1")){
-			    
-				for(int i = 0; i < userIds.length; i++){
-					User user = userManager.getUserById(userIds[i]);
-					operContent=userName + " 把用户:["+user.getUserName()+"] 调入到 ["+ orgName_log+"] 机构下面"; 						
-					logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);    
+			
+			// 保存符合条件的userid
+			 userIds = userIdsStr.split(",");
+			
+			String orgId = request.getParameter("orgId");
+			String flag = request.getParameter("flag");
+			
+			String orgName_log = LogGetNameById.getOrgNameByOrgId(orgId);	
+			
+			//一系列的调动处理
+			
+			if(!"".equals(userId) && userIds.length>0 && !"".equals(userIds[0]) ){
+				if(flag.equals("1")){
+				    
+					for(int i = 0; i < userIds.length; i++){
+						User user = userManager.getUserById(userIds[i]);
+						operContent=userName + " 把用户:["+user.getUserName()+"] 调入到 ["+ orgName_log+"] 机构下面"; 						
+						logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);    
+					}
+					
+					if(!ConfigManager.getInstance().getConfigBooleanValue("sys.user.enablemutiorg", true)){
+					//调入多个机构开关，如果sys.user.enablemutiorg为false则执行下列语句
+						if(!classType.equals("lisan")){//不为离散用户调入时执行下列语句
+							//先删除用户主机构关系和机构岗位关系
+							boolean state2 = false;
+							if(ConfigManager.getInstance().getConfigBooleanValue("isdelUserRes", true)){//调离用户时删除用户所有资源
+								orgManager.deleteOrg_UserJob(CurorgId, userIds);
+								state2 = userManager.deleteBatchUserRes(userIds,false);
+							}else{
+								state2 = orgManager.deleteOrg_UserJob(CurorgId, userIds);
+							}
+							if(state2){	
+								//然后添加用户主机构关系和机构岗位关系
+								userManager.addUserOrg(userIds, orgId, "lisan",false);
+							}
+						}else{
+							//是离散用户时直接添加用户主机构和机构岗位关系
+							userManager.addUserOrg(userIds, orgId, classType,false);	
+						}
+					}else{//调入多个机构开关，如果sys.user.enablemutiorg为true则执行下列语句
+						userManager.addUserOrg(userIds, orgId, classType,false);
+					}
 				}
 				
-				if(!ConfigManager.getInstance().getConfigBooleanValue("sys.user.enablemutiorg", true)){
-				//调入多个机构开关，如果sys.user.enablemutiorg为false则执行下列语句
-					if(!classType.equals("lisan")){//不为离散用户调入时执行下列语句
-						//先删除用户主机构关系和机构岗位关系
-						boolean state2 = false;
-						if(ConfigManager.getInstance().getConfigBooleanValue("isdelUserRes", true)){//调离用户时删除用户所有资源
-							orgManager.deleteOrg_UserJob(CurorgId, userIds);
-							state2 = userManager.deleteBatchUserRes(userIds);
-						}else{
-							state2 = orgManager.deleteOrg_UserJob(CurorgId, userIds);
-						}
-						if(state2){	
-							//然后添加用户主机构关系和机构岗位关系
-							userManager.addUserOrg(userIds, orgId, "lisan");
-						}
-					}else{
-						//是离散用户时直接添加用户主机构和机构岗位关系
-						userManager.addUserOrg(userIds, orgId, classType);	
-					}
-				}else{//调入多个机构开关，如果sys.user.enablemutiorg为true则执行下列语句
-					userManager.addUserOrg(userIds, orgId, classType);
-				}
 			}
-			if(flag.equals("0")){		
-				System.out.println("删除操作！");
-			}
+			tm.commit();
+			Event eventUSER_INFO_DELETE = new EventImpl(userIds,
+					ACLEventType.USER_INFO_DELETE);
+			Event eventUSER_INFO_CHANGE = new EventImpl("", ACLEventType.USER_INFO_CHANGE);
+			
+			EventHandle.getInstance().change(eventUSER_INFO_DELETE);
+			EventHandle.getInstance().change(eventUSER_INFO_CHANGE);
+			Event eventORGUNIT_INFO_CHANGE = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
+			EventHandle.getInstance().change(eventORGUNIT_INFO_CHANGE,true);
+		}
+		finally
+		{
+			tm.release();
 		}
 		
 		//处理不符合调动的用户。
@@ -128,7 +146,8 @@
 				var api = parent.parent.frameElement.api, W = api.opener;
 			    var msg = "以下用户调入失败。"
 			    msg += "\n<%=userReturnInfo%>";
-			    W.$.dialog.alert(msg,function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			    
+			    parent.alertfun(msg,"<pg:message code='sany.pdp.common.alert'/>");
 				parent.document.all.divProcessing.style.display = "none";
 				parent.document.all.button1.disabled = false;
 				parent.document.all.button2.disabled = false;
@@ -139,7 +158,8 @@
 %>
 		<script language="javascript">
 			var api = parent.parent.frameElement.api, W = api.opener;
-			W.$.dialog.alert("<pg:message code='sany.pdp.common.operation.success'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			parent.alertfun("<pg:message code='sany.pdp.common.operation.success'/>","<pg:message code='sany.pdp.common.alert'/>");
+			
 			//parent.document.all.divProcessing.style.display = "none";
 			//parent.document.all.button1.disabled = false;
 			//parent.document.all.button2.disabled = false;

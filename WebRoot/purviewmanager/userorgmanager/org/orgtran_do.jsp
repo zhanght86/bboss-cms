@@ -1,5 +1,8 @@
-
-<%@page import="com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager"%><%
+<%@page import="com.frameworkset.common.poolman.SQLExecutor"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
+<%
 /**
  * <p>Title: 机构转移页面</p>
  * <p>Description: 机构转移处理页面</p>
@@ -41,9 +44,9 @@
 		OrgManager orgManger = SecurityDatabase.getOrgManager();
 		//机构转移时判断是否有显示名称同名的机构
 		//baowen.liu
-		DBUtil db=new DBUtil();
-		db.executeSelect("select remark5 from TD_SM_ORGANIZATION org where PARENT_ID='"+parentId+"' and remark5='"+remark5+"'");
-		if( db.size()> 0 ){
+		
+		int size = SQLExecutor.queryObject(int.class,"select count(remark5) from TD_SM_ORGANIZATION org where PARENT_ID=? and remark5=?",parentId,remark5);
+		if( size> 0 ){
 		  notice = RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.name.exist", request);
 		  flag=false;
 		}
@@ -73,7 +76,7 @@
 		{
 			%>
 			<script>
-			    W.$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.org.transfer.to.self.no"/>');
+			    parent.alertfun('<pg:message code="sany.pdp.userorgmanager.org.transfer.to.self.no"/>');
 			</script>
 			<%
 		}
@@ -81,7 +84,7 @@
 		{
 		%>
 			<script>
-			    W.$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.org.transfer.success"/>');
+			parent.alertfun('<pg:message code="sany.pdp.userorgmanager.org.transfer.success"/>');
 			    //parent.flashSelf("<%=orgId%>","<%=parentId%>");
 			</script>
 		<%
@@ -90,14 +93,9 @@
 		{
 		%>
 			<script>
-			    W.$.dialog.alert("<%=notice%>");
+			parent.alertfun("<%=notice%>");
 			</script>
 		<%
 		}
 	%>
-<script>
-    window.onload = function prompt(){
-		//parent.document.getElementById("tranSaveButton").disabled = false;
-		//parent.document.getElementById("tranBackButton").disabled = false;
-    }
-</script>
+

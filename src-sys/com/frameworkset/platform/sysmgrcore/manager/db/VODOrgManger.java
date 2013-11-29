@@ -18,11 +18,12 @@ import com.frameworkset.platform.sysmgrcore.entity.Orgrole;
 import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.AbsttractOrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.tag.pager.ListInfo;
   
-public class VODOrgManger extends EventHandle implements OrgManager { 
+public class VODOrgManger extends AbsttractOrgManager implements OrgManager { 
   	    
 	public boolean storeOrg(Organization org) throws ManagerException {
 		boolean r = false;
@@ -557,6 +558,13 @@ public class VODOrgManger extends EventHandle implements OrgManager {
 	}
 
 	public void loadOrganization(Map orgMap, Organization root) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addMainOrgnazitionOfUser(String userID, String orgID,
+			boolean broadcastevent) throws ManagerException {
 		// TODO Auto-generated method stub
 		
 	}

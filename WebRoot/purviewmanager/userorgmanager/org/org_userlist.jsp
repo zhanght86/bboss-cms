@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB"%>
 <%
 /*
  * <p>Title: 机构下的用户的操作主页面</p>
@@ -17,7 +18,7 @@
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%
 	
@@ -28,11 +29,12 @@
 	ResourceManager resManager = new ResourceManager();
     String resId = resManager.getGlobalResourceid(AccessControl.ORGUNIT_RESOURCE);
 	String curOrgId = request.getParameter("orgId");
-	
+	 
 	if(curOrgId == null)
 	{
 		curOrgId = (String)request.getAttribute("orgId");
 	}
+	String orgpath =  FunctionDB.buildOrgPath(curOrgId);
 	
 	String reFlush = "false";
 	if (request.getAttribute("reFlush") != null) 
@@ -438,7 +440,7 @@
 				var win;
 				//调入用户
 				var url = "${pageContext.request.contextPath}/purviewmanager/userorgmanager/org/folduser_frame.jsp?orgId=<%=curOrgId%>";
-				$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.move.in.user"/>',width:760,height:560, content:'url:'+url,lock: true});
+				$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.move.in.user.alert" arguments="<%=orgpath%>"/>',width:760,height:560, content:'url:'+url,lock: true});
 			}
 			
 			function addorg(dealType) 
@@ -449,7 +451,7 @@
 			   var obj=window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
 			    if(obj.length==0)
 			    {
-			    	$.dialog.alert("<pg:message code='sany.pdp.no.user.to.move.out'/>！");
+			    	$.dialog.alert("<pg:message code='sany.pdp.no.user.to.move.out' />");
 			    	return;
 			    }
 			    for(var j=0; j < obj.length; j++)
@@ -473,7 +475,7 @@
 				    {
 						var winaddorg;
 						var url = "${pageContext.request.contextPath}/purviewmanager/userorgmanager/org/userChangeOrg.jsp?checkBoxOne="+checks + "&orgId=<%=curOrgId%>";
-						$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.move.out.user"/>',width:760,height:560, content:'url:'+url,lock: true});
+						$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.move.out.user.alert" arguments="<%=orgpath%>"/>',width:760,height:560, content:'url:'+url,lock: true});
 					}
 				}
 				else
@@ -529,6 +531,9 @@
 			}
 			</SCRIPT>		
 			<body >
+			<div class="titlebox">
+					<SPAN class=location>当前机构：<A href="javascript:void"><%=orgpath %></A></SPAN>
+			</div>
 			<div class="mcontent">
 			
 			<form name="userList" method="post" >

@@ -16,7 +16,6 @@ import javax.naming.directory.SearchResult;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
-import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.MoreListInfo;
@@ -42,6 +41,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
 import com.frameworkset.platform.sysmgrcore.entity.Userresop;
 import com.frameworkset.platform.sysmgrcore.entity.Userrole;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.BaseUserManager;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
@@ -56,7 +56,7 @@ import com.frameworkset.util.ListInfo;
  *  
  * @author    
  */    
-public class UserManagerImpl extends EventHandle implements UserManager {
+public class UserManagerImpl extends BaseUserManager {
      
 	private Logger logger = Logger.getLogger(UserManagerImpl.class.getName());
 
@@ -1922,6 +1922,27 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean deleteBatchUserRes(String[] userIds, boolean broadcastevent)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addUserOrg(String[] userIds, String orgId, String classType,
+			boolean broadcastevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds,
+			boolean isInsert, boolean broadcastevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

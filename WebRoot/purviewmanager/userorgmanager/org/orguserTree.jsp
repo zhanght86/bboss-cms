@@ -37,7 +37,7 @@
 		<title>系统管理</title>
 		<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
 	</head>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" scroll="auto">
 		<div>
 		    <table >
 		    	<tr class="tr">

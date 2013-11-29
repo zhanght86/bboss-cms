@@ -11,7 +11,6 @@ import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
-import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.SPIException;
@@ -38,11 +37,14 @@ import com.frameworkset.platform.sysmgrcore.entity.Orgrole;
 import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.AbsttractOrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.JobManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.OrgQuery;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
+
 
 /**
  * 项目：SysMgrCore <br>
@@ -51,10 +53,10 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.db.OrgQuery;
  * 
  * @author 
  */
-public class OrgManagerImpl extends EventHandle implements OrgManager  {
+public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	
 	private  SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
-
+	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 
 	private static Logger logger = Logger.getLogger(OrgManagerImpl.class
 			.getName());
@@ -104,7 +106,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 		
 		
 		
-		System.out.println(str.toString());
+	
 		
 //	   System.out.println(str.toString());
 //		删除机构表的基本数据
@@ -1012,30 +1014,33 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 	}
 	public static synchronized String getMaxSN(String parentid) throws SQLException
 	{
-		String sqlMaxSn = "select max(org_sn) from td_sm_organization where parent_id='"+parentid+"'";
-		DBUtil db = new DBUtil();
-		db.executeSelect(sqlMaxSn);
-		String orgSn = String.valueOf(db.getInt(0, 0) + 1);	
+		String sqlMaxSn = "select max(org_sn) from td_sm_organization where parent_id=?";
+//		DBUtil db = new DBUtil();
+//		db.executeSelect(sqlMaxSn);
+		int sn = SQLExecutor.queryObject(int.class, sqlMaxSn, parentid);
+		String orgSn = String.valueOf(sn + 1);	
 		return orgSn;
 	}
 	
 	public static String getorgSN(String org_id) throws SQLException
 	{
-		String sqlMaxSn = "select org_sn from td_sm_organization where org_id='"+org_id+"'";
-		DBUtil db = new DBUtil();
-		db.executeSelect(sqlMaxSn);
-		String orgSn = String.valueOf(db.getInt(0, 0));	
+		String sqlMaxSn = "select org_sn from td_sm_organization where org_id=?";
+//		DBUtil db = new DBUtil();
+//		db.executeSelect(sqlMaxSn);
+		int sn = SQLExecutor.queryObject(int.class, sqlMaxSn, org_id);
+		String orgSn = String.valueOf(sn);	
 		return orgSn;
 	}
 	
 	public static String getParentOrgTreeLevel(String parentid) throws SQLException
 	{
-		String sqlMaxSn = "select org_tree_level from td_sm_organization where org_id='"+parentid+"'";
+		String sqlMaxSn = "select org_tree_level from td_sm_organization where org_id=?";
 		if(parentid == null || parentid.equals("") || parentid.equals("0") || parentid.equals("null"))
 			return "0";
-		DBUtil db = new DBUtil();
-		db.executeSelect(sqlMaxSn);
-		return db.getString(0,"org_tree_level");	
+//		DBUtil db = new DBUtil();
+//		db.executeSelect(sqlMaxSn);
+		String org_tree_level = SQLExecutor.queryObject(String.class, sqlMaxSn, parentid);
+		return org_tree_level;	
 		
 	}
 	
@@ -2249,37 +2254,76 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 //		}
 //	}
 	
+//	public void addMainOrgnazitionOfUser(String userID, String orgID)
+//	throws ManagerException {
+//		if(orgID==null || orgID.equals("null")) return; 
+//		DBUtil db = new DBUtil();
+//		DBUtil exe = new DBUtil();
+//		StringBuffer isexist = new StringBuffer();
+//		StringBuffer executesql = new StringBuffer();
+//		isexist.append("SELECT count(*) counts FROM td_sm_orguser ");
+//		isexist.append("WHERE user_id = ").append(userID);
+//		try {
+//			 db.executeSelect(isexist.toString());
+//			 if(db.size()>0){
+//				 if(db.getInt(0, "counts")>0){//update
+//					 executesql.append("update td_sm_orguser set org_id='").append(orgID).append("' ")
+//					 .append(" where user_id=").append(userID);
+//					 exe.execute(executesql.toString());
+//				 }else{//insert
+//					 executesql.append("INSERT into td_sm_orguser (org_id, user_id)")
+//					 .append("VALUES ('").append(orgID).append("', ").append(userID).append(") ");
+//					 exe.execute(executesql.toString());
+//				 }
+//			 }				 
+//			 
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		Event event = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
+//		super.change(event,true);
+//		
+//	}
 	public void addMainOrgnazitionOfUser(String userID, String orgID)
-	throws ManagerException {
-		if(orgID==null || orgID.equals("null")) return; 
-		DBUtil db = new DBUtil();
-		DBUtil exe = new DBUtil();
-		StringBuffer isexist = new StringBuffer();
-		StringBuffer executesql = new StringBuffer();
-		isexist.append("SELECT count(*) counts FROM td_sm_orguser ");
-		isexist.append("WHERE user_id = ").append(userID);
-		try {
-			 db.executeSelect(isexist.toString());
-			 if(db.size()>0){
-				 if(db.getInt(0, "counts")>0){//update
-					 executesql.append("update td_sm_orguser set org_id='").append(orgID).append("' ")
-					 .append(" where user_id=").append(userID);
-					 exe.execute(executesql.toString());
-				 }else{//insert
-					 executesql.append("INSERT into td_sm_orguser (org_id, user_id)")
-					 .append("VALUES ('").append(orgID).append("', ").append(userID).append(") ");
-					 exe.execute(executesql.toString());
-				 }
-			 }				 
-			 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Event event = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
-		super.change(event,true);
-		
-	}
+			throws ManagerException
+			{
+				addMainOrgnazitionOfUser(userID, orgID,true);
+			}
+	public void addMainOrgnazitionOfUser(String userID, String orgID,boolean broadcastevent)
+			throws ManagerException {
+				if(orgID==null || orgID.equals("null")) return; 
+				DBUtil db = new DBUtil();
+				DBUtil exe = new DBUtil();
+				StringBuffer isexist = new StringBuffer();
+				StringBuffer executesql = new StringBuffer();
+				isexist.append("SELECT count(*) counts FROM td_sm_orguser ");
+				isexist.append("WHERE user_id = ").append(userID);
+				try {
+					 db.executeSelect(isexist.toString());
+					 if(db.size()>0){
+						 if(db.getInt(0, "counts")>0){//update
+							 executesql.append("update td_sm_orguser set org_id='").append(orgID).append("' ")
+							 .append(" where user_id=").append(userID);
+							 exe.execute(executesql.toString());
+						 }else{//insert
+							 executesql.append("INSERT into td_sm_orguser (org_id, user_id)")
+							 .append("VALUES ('").append(orgID).append("', ").append(userID).append(") ");
+							 exe.execute(executesql.toString());
+						 }
+					 }				 
+					 
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(broadcastevent)
+				{
+					Event event = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
+					super.change(event,true);
+				}
+				
+			}
 
 	/**
 	 * 删除用户的主管机构
@@ -3221,6 +3265,51 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 		return null;
 	}
 	
+	private String getRealOrgid(String orgid,String userid) throws Exception
+	{
+		String realorgID = orgid;
+		String sql = "select org_id from TD_SM_USERJOBORG where user_id = ?";
+		final List<String> ids = new ArrayList<String>();
+		SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+			@Override
+			public void handleRow(Record origine) throws Exception {
+				ids.add(origine.getString("org_id"));
+				
+			}
+			
+		}, sql, userid);
+		for(String id:ids)
+		{
+			if(!realorgID.equals(id))
+			{
+				realorgID = id;
+				break;
+			}
+			
+		}
+		return realorgID;
+	}
+	
+	public List<String> getAllRealOrgid(String userid) throws Exception
+	{
+		
+		String sql = "select org_id from TD_SM_USERJOBORG where user_id = ?";
+		final List<String> ids = new ArrayList<String>();
+		SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+			@Override
+			public void handleRow(Record origine) throws Exception {
+				String id = origine.getString("org_id");
+				if(!ids.contains(id))
+					ids.add(id);
+				
+			}
+			
+		}, sql, userid);
+		
+		return ids;
+	}
 	/**
 	 * 将用户调离机构，调入到其他机构时，删除用户关联的td_sm_orguser与td_sm_userjoborg表
 	 * 	该方法与UserManager中的addUserOrg(String[] userIds, String orgId, String classType) 
@@ -3243,7 +3332,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 	 * @return
 	 * @throws ManagerException
 	 */
-	public boolean deleteOrg_UserJob(String orgId, String userIds[]) throws ManagerException {
+	public boolean deleteOrg_UserJob(String orgId_, String userIds[]) throws ManagerException {
 		boolean state = false;
 		DBUtil dbUtil = new DBUtil();
 		DBUtil db = new DBUtil();
@@ -3256,6 +3345,7 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 		try {
 			tm.begin();
 			for(int i = 0; i < userIds.length; i++){
+				String orgId = this.getRealOrgid(orgId_, userIds[i]);
 				//删除用户主管机构
 				if(!"all".equals(ConfigManager.getInstance().getConfigValue("enableorgadminall"))){
 					delete_orgmanager.append("delete from td_sm_orgmanager where org_id='").append(orgId).append("' ")
@@ -3328,6 +3418,109 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 			e.printStackTrace();
 		}finally{
 			dbUtil.resetBatch();
+			delete_orgmanager = null;
+			delete_orguser = null;
+			delete_userjoborg = null;
+		}
+		return state;
+	}
+	
+	
+	public boolean deleteAllOrg_UserJob( String userIds[]) throws ManagerException {
+		boolean state = false;
+		
+		StringBuffer delete_orgmanager = new StringBuffer();
+		StringBuffer delete_orguser = new StringBuffer();
+		StringBuffer delete_userjoborg = new StringBuffer();
+		TransactionManager tm = new TransactionManager();
+		StringBuffer sql1 = new StringBuffer();
+		StringBuffer sql2 = new StringBuffer();
+		try {
+			tm.begin();
+			for(int i = 0; i < userIds.length; i++){
+				List<String> allorgids = getAllRealOrgid(userIds[i]);
+				if(allorgids != null && allorgids .size() > 0)
+				{
+					for(String orgId:allorgids)
+					{
+						DBUtil dbUtil = new DBUtil();
+						DBUtil db = new DBUtil();
+						//删除用户主管机构
+						if(!"all".equals(ConfigManager.getInstance().getConfigValue("enableorgadminall"))){
+							delete_orgmanager.append("delete from td_sm_orgmanager where org_id='").append(orgId).append("' ")
+								.append("and user_id='").append(userIds[i]).append("' ");
+							dbUtil.addBatch(delete_orgmanager.toString());
+							delete_orgmanager.setLength(0);
+						}
+						
+						//删除用户主机构
+						delete_orguser.append("delete from td_sm_orguser where org_id='").append(orgId).append("' ")
+							.append("and user_id='").append(userIds[i]).append("'");
+						dbUtil.addBatch(delete_orguser.toString());
+						delete_orguser.setLength(0);
+						
+						//删除用户机构岗位
+						delete_userjoborg.append("delete from td_sm_userjoborg where org_id='").append(orgId).append("' ")
+							.append("and user_id='").append(userIds[i]).append("'");
+						dbUtil.addBatch(delete_userjoborg.toString());
+						delete_userjoborg.setLength(0);
+						
+						//记录用户所在机构时的职位记录
+						sql1.append("SELECT a.*, b.job_name as jobname, o.remark5 as remark5 ")
+							.append("FROM td_sm_userjoborg a LEFT JOIN td_sm_job b ON a.job_id = b.job_id ")
+							.append("LEFT JOIN td_sm_organization o ON a.org_id = o.org_id where a.org_id = '")
+							.append(orgId).append("' and a.user_id =")
+							.append(userIds[i]);
+						db.executeSelect(sql1.toString());
+						sql1.setLength(0);
+						// 存数据到历史表TD_SM_USERJOBORG_HISTORY
+						for (int j = 0; j < db.size(); j++) {
+							int userid = db.getInt(j, "user_id");
+							String jid = db.getString(j, "JOB_ID");
+							String oid = db.getString(j, "ORG_ID");
+							Date starttime = db.getDate(j, "JOB_STARTTIME");
+							String jobName = db.getString(j, "jobname");
+							String orgName = db.getString(j, "remark5");
+			
+							sql2.append("insert into TD_SM_USERJOBORG_HISTORY(USER_ID,JOB_ID,job_name,org_id,")
+								.append("org_name,JOB_STARTTIME,JOB_QUASHTIME,JOB_FETTLE) values(")
+								.append(userid).append(",'").append(jid).append("','").append(jobName).append("','")
+								.append(oid).append("','").append(orgName).append("',").append(DBUtil.getDBDate(starttime))
+								.append(",").append(DBUtil.getDBAdapter().to_date(new Date())).append(",0)");
+							dbUtil.addBatch(sql2.toString());
+							sql2.setLength(0);
+						}
+						dbUtil.executeBatch();
+						dbUtil.resetBatch();
+						//删除用户的机构管理员信息
+		//				delete_userjoborg.append("delete td_sm_orgmanager where org_id='").append(orgId).append("' ")
+		//				.append("and user_id='").append(userIds[i]).append("'");
+		//				dbUtil.addBatch(delete_userjoborg.toString());
+		//				delete_userjoborg.setLength(0);
+					}
+					
+					
+				}
+				
+			}
+			tm.commit();
+			state = true;
+		} catch (SQLException e) {
+			try {
+				tm.rollback();
+			} catch (RollbackException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} catch (Exception e) {
+			try {
+				tm.rollback();
+			} catch (RollbackException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}finally{
+			
 			delete_orgmanager = null;
 			delete_orguser = null;
 			delete_userjoborg = null;
@@ -3511,7 +3704,77 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 		to.setIsjichaparty(from.getIsjichaparty());
 		to.setIsdirectguanhu(from.getIsdirectguanhu());
 	}
-	
+	public static void run(String parentID,String parentOrgtreelevel) throws Exception
+    {
+    	
+			
+		TransactionManager tm = new TransactionManager();
+	        
+        try {
+            tm.begin();
+            _run(parentID,parentOrgtreelevel);
+            tm.commit();
+            
+        } catch (Exception e) {
+           
+            throw e;
+        }
+        finally
+        {
+        	tm.release();
+        }
+			
+			
+    }
+	 static class org
+	    {
+	    	String org_id;
+	    	String org_sn;
+	    	String orgtreelevel;
+	    }
+    private static void _run(String parentID,String parentOrgtreelevel) throws Exception
+    {
+    	String sql =  "select org_id,org_sn from td_sm_organization where parent_id=?";
+    	try {
+    		final List<org> orgs = new ArrayList<org> ();
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					// TODO Auto-generated method stub
+					org orgtree = new org();
+					orgtree.org_id = origine.getString("org_id");
+					orgtree.org_sn = origine.getString("org_sn"); 
+					orgs.add(orgtree);
+				}
+				
+			}, sql, parentID);
+			
+			
+	        PreparedDBUtil pre = new PreparedDBUtil();
+            pre.setBatchOptimize(true);
+            pre.preparedUpdate("update td_sm_organization set org_tree_level=? where org_id=?");
+            for(int i = 0; i < orgs.size(); i ++)
+            {
+            	org orgtree = orgs.get(i);
+            	String orgtreelevel = parentOrgtreelevel + "|" + orgtree.org_sn;
+            	orgtree.orgtreelevel = orgtreelevel;
+                pre.setString(1, orgtreelevel);
+                pre.setString(2, orgtree.org_id);
+                pre.addPreparedBatch();
+            }
+            pre.executePreparedBatch();
+            for(int i = 0; i < orgs.size(); i ++)
+            {
+            	org orgtree = orgs.get(i);
+            	_run(orgtree.org_id,orgtree.orgtreelevel);
+            }
+            
+			
+		} catch (Exception e) {
+			throw e;
+		}
+    }
 	/**
 	 * 机构转移
 	 * @param orgId			需要转移的机构ID
@@ -3520,25 +3783,37 @@ public class OrgManagerImpl extends EventHandle implements OrgManager  {
 	 */
 	public boolean tranOrg(String orgId,String tranToOrgId){
 		boolean state = false;
-		DBUtil db = new DBUtil();
+//		DBUtil db = new DBUtil();
 		
-		
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
 //			String levelSn = this.getMaxSN(tranToOrgId);
-			String org_sn = OrgManagerImpl.getMaxSN(tranToOrgId);
+			String org_sn = OrgCacheManager.getInstance().getOrganization(orgId).getOrgSn();
 			String org_level = OrgManagerImpl.getOrgTreeLevel(tranToOrgId, org_sn);
-			StringBuffer sql = new StringBuffer()
-			.append("update td_sm_organization set parent_id='")
-			.append(tranToOrgId).append("',org_tree_level='").append(org_level)
-			.append("' where org_id='")
-			.append(orgId).append("'");
-			db.executeUpdate(sql.toString());
+			
+			String sql = "update td_sm_organization set parent_id=?,org_tree_level=? where org_id=?";
+			
+//			SQLExecutor.update("update td_sm_organization set parent_id=?,org_tree_level=? where org_tree_level like ?",org_level + "|") ;
+//			db.executeUpdate(sql.toString());
+			SQLExecutor.update(sql, tranToOrgId,org_level,orgId);
+			run(orgId, org_level);
+			userOrgParamManager.fixorg(orgId, tranToOrgId);//人工维护关系固化，以免被自动同步程序重置
+			tm.commit();
 			state = true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally
+		{
+			tm.release();
+		}
+		if(state)
+		{
 			Event event = new EventImpl(new String[]{orgId,tranToOrgId},
 					ACLEventType.ORGUNIT_INFO_TRAN);
 			super.change(event,true);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 		return state;
 	}

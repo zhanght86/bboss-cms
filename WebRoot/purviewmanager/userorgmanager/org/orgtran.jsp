@@ -19,7 +19,7 @@
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%
@@ -44,14 +44,21 @@ var api = frameElement.api, W = api.opener;
 function okadd(){	
  if(selectNode==null)
  {
- 	W.$.dialog.alert('<pg:message code="sany.pdp.to.choose.organization"/>'); return;
+ 	$.dialog.alert('<pg:message code="sany.pdp.to.choose.organization"/>'); return;
  }  
  //document.all.divProcessing.style.display = "block";
  //document.getElementById("tranSaveButton").disabled = true;
  //document.getElementById("tranBackButton").disabled = true;
+
  document.Form1.action = "orgtran_do.jsp?orgId=<%=orgId%>&remark5=<%=remark5%>&parentId="+selectNode;
  document.Form1.target = "hiddenFrame";
  document.Form1.submit();          
+}
+
+function alertfun(msg)
+{
+	
+	$.dialog.alert(msg);
 }
 </SCRIPT>
 <html>
@@ -59,7 +66,7 @@ function okadd(){
 		<title>机构转移</title>
 		<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
 	</head>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" scroll="auto">
 		<div id="" align="center">
 			<form name="Form1" action="" method="post">			
 				<table>

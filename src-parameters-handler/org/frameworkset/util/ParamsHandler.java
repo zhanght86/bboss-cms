@@ -46,9 +46,11 @@ import org.frameworkset.util.beans.PropertyAccessException;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.ValueObjectUtil;
 
 /**
@@ -336,6 +338,44 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		List<Param> getParams() {
 			return params;
 		}
+		/**
+		 * 在内存中更新给定名称的参数值
+		 * @param param
+		 * @return true 有更新，false为插入参数
+		 */
+		public boolean updateParam(Param param)
+		{
+			if(this.params == null)
+			{
+				params = new ArrayList<Param>();
+				params.add(param);
+				return false;
+			}
+			else if(this.params.size() == 0)
+			{
+				params.add(param);
+				return false;
+			}
+			else
+			{
+				int i = 0;
+				for(Param param_:params)
+				{
+					if(param_.getName().equals(param.getName()))
+					{
+						params.remove(i);
+						params.add(param);
+						return true;
+						
+					}
+					i ++;
+				}
+				
+				params.add(param);	
+				return false;
+			}
+			
+		}
 
 		public static Boolean convertStringToBoolean(String string) {
 			if (isEmpty(string))
@@ -461,19 +501,30 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			for (Param param : paramList) {
-				String key = param.getParamid() + "^^" + param.getParam_type();
-				if (trace.containsKey(key))
-					continue;
+			if(SimpleStringUtil.isEmpty(params.getParamId() )|| SimpleStringUtil.isEmpty(params.getParamType()))
+			{
+				for (Param param : paramList) {
+					String key = param.getParamid() + "^^" + param.getParam_type();
+					if (trace.containsKey(key))
+						continue;
+					dbutil.preparedDelete(this.getDbname(), sql_del.toString());
+					dbutil.setString(1, param.getParamid());
+					dbutil.setString(2, param.getParam_type());
+					dbutil.addPreparedBatch();
+					trace.put(key, t);
+	
+				}
+			}
+			else
+			{
 				dbutil.preparedDelete(this.getDbname(), sql_del.toString());
-				dbutil.setString(1, param.getParamid());
-				dbutil.setString(2, param.getParam_type());
+				dbutil.setString(1, params.getParamId());
+				dbutil.setString(2, params.getParamType());
 				dbutil.addPreparedBatch();
-				trace.put(key, t);
-
 			}
 			for (Param param : paramList) {
-
+				if(SimpleStringUtil.isEmpty(param.getName()))
+					continue;
 				dbutil.preparedInsert(this.getDbname(), sql_in.toString());
 				dbutil.setString(1, param.getParamid());
 				dbutil.setString(2, param.getName());
@@ -1546,5 +1597,31 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	public static void resetParams(String factoryId, String properMapname,
 			String paramshandler) throws ParamException {
 		resetParams(factoryId, properMapname, paramshandler, null);
+	}
+	/**
+	 * 获取所有对应类型的参数名称为paramName的值，以nodeid为key的map对象
+	 * @param paramType
+	 * @return
+	 */
+	public Map<String,String> getStringParamMap(String paramType,String paramName) throws ParamException
+	{
+		StringBuilder sql_query = new StringBuilder();
+		sql_query.append("select * from ").append(tableName).append(
+				" where param_type= ? and NAME=? order by rn asc");
+		final Map<String,String> params = new HashMap<String,String>();
+		try {
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					
+					params.put(origine.getString("NODE_ID"), origine.getString("VALUE"));
+				}
+				
+			}, sql_query.toString(), paramType,paramName);
+			return params;
+		} catch (Exception e) {
+			throw new ParamException(e);
+		}
 	}
 }

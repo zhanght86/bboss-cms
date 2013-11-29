@@ -14,6 +14,7 @@
  */
 package com.sany.masterdata.hr.sync;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -22,6 +23,9 @@ import javax.transaction.RollbackException;
 import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.sany.masterdata.hr.dao.TdSmOrganizationDao;
 import com.sany.masterdata.hr.entity.TdSmOrganization;
@@ -117,8 +121,12 @@ public class OrgTreeLevel {
         }
         
     }
+   
+    
     
     public static void main(String[] args) {
         OrgTreeLevel.run();
     }
+    
+    
 }

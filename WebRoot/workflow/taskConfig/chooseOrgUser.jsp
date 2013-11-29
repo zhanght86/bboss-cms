@@ -123,7 +123,7 @@ var api = frameElement.api, W = api.opener;
 	<input type="hidden" value="${node_key }" name="node_key" id="node_key"/>
 	<input type="hidden" value="${user_realnames }" name="user_realnames" id="user_realnames"/>
 	<div region="west" split="true" title="组织结构"
-		style="width: 200px; height: 150px; padding1: 1px; overflow: hidden;" id="org_tree">
+		style="width: 200px; height: 150px; padding1: 1px; overflow: auto;" id="org_tree">
 	</div>
 	<div region="center" title="用户列表" split="true"
 		style="height: 800px; padding: 10px; background: #efefef;">

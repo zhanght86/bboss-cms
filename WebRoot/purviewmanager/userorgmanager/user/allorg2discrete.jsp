@@ -52,6 +52,7 @@
 %>
 
 <script language="javascript">
+var api = frameElement.api;
 function addorg(){
    var orgValues="";
    var state = false;
@@ -97,6 +98,17 @@ function clears(){
 
 if("<%=isDelete%>"=="true"){
 	$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.user.redundance.delete.success"/>',function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+}
+
+function alertfun(msg1,msg2)
+{
+	$.dialog.alert(msg1,function(){
+		W = api.opener; 
+		W.reloadusers();
+		 api.close();
+		 
+	},null,msg2);
+	
 }
 </script>
 </head> 

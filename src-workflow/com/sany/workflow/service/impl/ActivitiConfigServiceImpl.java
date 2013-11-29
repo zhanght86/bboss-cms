@@ -313,21 +313,30 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		TransactionManager tm = new TransactionManager();
 		try{
 			tm.begin();
-			executor.deleteBeans("deleteActivitiNodeCandidateByNodeId", activitiNodeCandidates);
-			for(ActivitiNodeCandidate activitiNodeCandidate: activitiNodeCandidates)
+			if(activitiNodeCandidates != null && activitiNodeCandidates.size() > 0)
 			{
-				activitiNodeCandidate.setId(java.util.UUID.randomUUID().toString());
+				String processKey = activitiNodeCandidates.get(activitiNodeCandidates.size() -1).getProcess_key();
+				String bussinesstype = activitiNodeCandidates.get(activitiNodeCandidates.size() -1).getBusiness_type();
+				String bussinessId = activitiNodeCandidates.get(activitiNodeCandidates.size() -1).getBusiness_id();
+				Map<String,String> params = new HashMap<String,String>();
+				params.put("business_type", bussinesstype);
+				params.put("business_id", bussinessId);
+				params.put("process_key", processKey);
+				executor.deleteBean("deleteActivitiNodeCandidate", params);
+				for(ActivitiNodeCandidate activitiNodeCandidate: activitiNodeCandidates)
+				{
+					activitiNodeCandidate.setId(java.util.UUID.randomUUID().toString());
+				}
+				executor.insertBeans("insertActivitiNodeCandidate", activitiNodeCandidates);
 			}
-			executor.insertBeans("insertActivitiNodeCandidate", activitiNodeCandidates);
 			tm.commit();
 		}catch(Throwable e){
-			try {
-				
-				tm.rollback();
-			} catch (RollbackException e1) {
-				e1.printStackTrace();
-			}
+			
 			throw new ActivitiConfigException(e);
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 	
@@ -398,7 +407,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		TransactionManager tm = new TransactionManager();
 		try{
 			tm.begin();
-			executor.delete("batchDeleteNodeVariable", process_key,business_id,business_type);
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("process_key", process_key);
+			params.put("business_id", business_id);
+			params.put("business_type", business_type);
+			
+			executor.deleteBean("batchDeleteNodeVariable", params);
 			for(int ii=0;ii<nodevariableList.size();ii++){
 				Nodevariable b = nodevariableList.get(ii);
 				if(b!=null&&b.getNode_id()!=null){
@@ -508,6 +522,27 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		}
 		return null;
 	}
+	/**
+	 * 获取给定流程所有节点信息已经每个节点对应的业务处理人信息
+	 * @param bussinessType
+	 * @param bussinessid
+	 * @param process_key
+	 * @return
+	 */
+	@Override
+	public List<ActivitiNodeCandidate> queryActivitiNodesCandidates(String bussinessType,String bussinessid,String process_key){
+		try{
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("process_key", process_key);
+			params.put("business_type", bussinessType);
+			params.put("bussinessid", bussinessid);
+			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryProcessNodesCandidates", params);
+			return list;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	/*@Override
 	public ActivitiNodeCandidate queryActivitiNodeCandidate(String process_key,
@@ -524,7 +559,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			params.put("node_key", activityKey);
 			params.put("business_id", business_id);
 			params.put("business_type", business_type);
-			ActivitiNodeCandidate activitiNodeCandidate= executor.queryObjectBean(ActivitiNodeCandidate.class, "queryActivitiNodeCandidate", params);
+			ActivitiNodeCandidate activitiNodeCandidate= executor.queryObjectBean(ActivitiNodeCandidate.class, "queryProcessNodeCandidates", params);
 			return activitiNodeCandidate;
 		}catch(Exception e){
 			e.printStackTrace();

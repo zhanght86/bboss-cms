@@ -13,7 +13,7 @@ import com.sany.workflow.entity.User;
 import com.sany.workflow.entity.VariableResource;
 
 public interface ActivitiConfigService {
-
+	public List<ActivitiNodeCandidate> queryActivitiNodesCandidates(String bussinessType,String bussinessid,String process_key);
 	/**
 	 * 查询组织机构
 	 * @param parentId 父组织结构ID

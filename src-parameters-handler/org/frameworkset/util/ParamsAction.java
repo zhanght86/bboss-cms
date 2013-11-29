@@ -37,11 +37,12 @@ public class ParamsAction {
 	 */
 	public String showParams(String paramId, String paramType, String handler, ModelMap model) {
 
-		List<Param> paramsList = ParamsHandler.getParamsHandler(handler).getParams(paramId, paramType).getParams();
+		List<Param> paramsList = ParamsHandler.getParamsHandler(handler)._getParams(paramId, paramType).getParams();
 
 		model.addAttribute("paramsList", paramsList);
 		model.addAttribute("paramId", paramId);
 		model.addAttribute("paramType", paramType);
+		model.addAttribute("handler", handler);
 
 		return "path:showParams";
 	}
@@ -53,9 +54,11 @@ public class ParamsAction {
 	 * @return String
 	 */
 	public @ResponseBody
-	String saveParams(List<Param> paramsList, String handler) {
+	String saveParams(List<Param> paramsList, String nodeId,String nodeType,String handler) {
 		Params params = new Params();
 		params.setParams(paramsList);
+		params.setParamId(nodeId);
+		params.setParamType(nodeType);
 		return ParamsHandler.getParamsHandler(handler).saveParams(params) ? "success" : "fail";
 	}
 }

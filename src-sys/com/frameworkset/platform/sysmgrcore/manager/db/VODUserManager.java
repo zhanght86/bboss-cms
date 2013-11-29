@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 import org.frameworkset.event.Event;
-import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.MoreListInfo;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.Accredit;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -29,14 +30,13 @@ import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
 import com.frameworkset.platform.sysmgrcore.entity.Userresop;
 import com.frameworkset.platform.sysmgrcore.entity.Userrole;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.BaseUserManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.util.ListInfo;
     
-public class VODUserManager extends EventHandle implements UserManager {
+public class VODUserManager extends BaseUserManager {
   	  
         
 	public boolean storeUser(User user) throws ManagerException {
@@ -1148,6 +1148,27 @@ public class VODUserManager extends EventHandle implements UserManager {
 			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean deleteBatchUserRes(String[] userIds, boolean broadcastevent)
+			throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addUserOrg(String[] userIds, String orgId, String classType,
+			boolean broadcastevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds,
+			boolean isInsert, boolean broadcastevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

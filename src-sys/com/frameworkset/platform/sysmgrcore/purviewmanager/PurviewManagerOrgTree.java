@@ -20,6 +20,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 
 public class PurviewManagerOrgTree extends COMTree implements Serializable{
 	
@@ -94,7 +95,7 @@ public class PurviewManagerOrgTree extends COMTree implements Serializable{
 	                		Menu orgmenu = new Menu();
 	                		
 		        	        orgmenu.setIdentity(orgId);
-		        	        	
+		        	        
 		                	Menu.ContextMenuItem sitemenuitem1 = new Menu.ContextMenuItem();
 		        			sitemenuitem1.setName(RequestContextUtils.getI18nMessage("sany.pdp.sys.info.view", request));
 		        			sitemenuitem1.setLink("javascript:checkOrgInfo('" + orgId + "','" + sonorg.getParentId() + "');");
@@ -107,13 +108,21 @@ public class PurviewManagerOrgTree extends COMTree implements Serializable{
 		                            "orgupdate", AccessControl.ORGUNIT_RESOURCE))
 	                		{
 		        	        	orgmenu.setIdentity(orgId);
-		        	        	
+		        	        	String orgpath =  FunctionDB.buildOrgPath(orgId);	
 		                		Menu.ContextMenuItem sitemenuitem2 = new Menu.ContextMenuItem();
 		        				sitemenuitem2.setName(RequestContextUtils.getI18nMessage("sany.pdp.sys.info.modfiy", request));
 		        				sitemenuitem2.setLink("javascript:modifyOrgInfo('" + orgId + "','" + sonorg.getParentId() + "');");
 		        				sitemenuitem2.setIcon(request.getContextPath()
 		        								+ "/sysmanager/images/icons/task-edit.gif");
 		        				orgmenu.addContextMenuItem(sitemenuitem2);
+		        				
+		        				
+		        				Menu.ContextMenuItem orgattrmenuitem = new Menu.ContextMenuItem();
+		        				orgattrmenuitem.setName(RequestContextUtils.getI18nMessage("sany.pdp.purviewmanager.user.attrs", request));
+		        				orgattrmenuitem.setLink("javascript:orgAttrs('" + orgId + "','" + orgpath + "');");
+		        				orgattrmenuitem.setIcon(request.getContextPath()
+		        								+ "/sysmanager/images/icons/task-edit.gif");
+		        				orgmenu.addContextMenuItem(orgattrmenuitem);
 		                	   
 	                		}
 	                		

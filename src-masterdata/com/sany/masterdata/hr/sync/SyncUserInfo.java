@@ -29,6 +29,7 @@ import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmUser;
 import com.sany.masterdata.utils.MDPropertiesUtil;
@@ -56,7 +57,7 @@ public class SyncUserInfo {
     private static final String USER_PS = EncrpyPwd.encodePassword("123456");
     
     private static Logger logger = Logger.getLogger(SyncUserInfo.class);
-
+    private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
     private MdmService mdmService;
     
     private ConfigSQLExecutor executor;
@@ -70,6 +71,9 @@ public class SyncUserInfo {
             List<MdmUser> userList = mdmService.getUserList("19000101", "99000101", "1", "99999999");
             if(userList == null || userList.size() == 0)
             	return;
+            Map<String,String> fixeduserorginfos = userOrgParamManager.getFixedUserOrgInfos();
+            if(fixeduserorginfos == null)
+            	fixeduserorginfos = new HashMap<String,String>();
             //用户主键索引
             Set<String> userKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmUserKey"));
 //            //用户机构关系索引
@@ -123,7 +127,7 @@ public class SyncUserInfo {
             	  MdmUser temp = getUser(users);
                     if (userKeySet.contains(exchange(temp.getUserNo()))) {
                         updateSize ++;
-                        addPreBatch(userUpdatePre, userOrgUpdatePre, userJobOrgUpdatePre,temp,newUsers);
+                        addPreBatch(userUpdatePre, userOrgUpdatePre, userJobOrgUpdatePre,temp,newUsers,fixeduserorginfos);
                         if (updateSize > BATCH_LIMIT) {
                             updateSize = 0;
                             userUpdatePre.executePreparedBatch();
@@ -193,7 +197,7 @@ public class SyncUserInfo {
 //                        }
                         
                     	saveSize ++;
-                    	addPreBatch(userSavePre, userOrgSavePre, userJobOrgSavePre, temp, newUsers);
+                    	addPreBatch(userSavePre, userOrgSavePre, userJobOrgSavePre, temp, newUsers,fixeduserorginfos);
                         if (saveSize > BATCH_LIMIT) {
                             saveSize = 0;
                             userSavePre.executePreparedBatch();
@@ -254,10 +258,9 @@ public class SyncUserInfo {
 		}
 		return users.get(0);
 	}
-	private Map<String,String> orguserinsert = new HashMap<String,String>();
-    private Map<String,String> orgjobuserinsert = new HashMap<String,String>();
-    private String v = "v";
-    private void addPreBatch(PreparedDBUtil userPre, PreparedDBUtil userOrgPre, PreparedDBUtil userJobOrgPre, MdmUser temp,Map<String,Object> newUsers) throws Exception {
+
+    private void addPreBatch(PreparedDBUtil userPre, PreparedDBUtil userOrgPre, PreparedDBUtil userJobOrgPre, 
+    		MdmUser temp,Map<String,Object> newUsers,Map<String,String> fixeduserorginfos) throws Exception {
         String userNo = exchange(temp.getUserNo());
         userPre.setString(1, userNo);
         if (temp.getUserId() == null || temp.getUserId().equals("")) {
@@ -312,11 +315,15 @@ public class SyncUserInfo {
 //        		}
 //        		else
         		{
-        			SQLExecutor.delete(exist_org_user, userNo);
-        			//userOrgPre.preparedInsert(USERORG_SAVE_SQL);
-	        		userOrgPre.setString(1, temp.getOrg());
-		            userOrgPre.setString(2, temp.getUserNo());
-		            userOrgPre.addPreparedBatch();
+        			String orgid = fixeduserorginfos.get(userNo);
+        			if(orgid == null)
+        			{
+	        			SQLExecutor.delete(exist_org_user, userNo);
+	        			//userOrgPre.preparedInsert(USERORG_SAVE_SQL);
+		        		userOrgPre.setString(1, temp.getOrg());
+			            userOrgPre.setString(2, temp.getUserNo());
+			            userOrgPre.addPreparedBatch();
+        			}
         		}
 	           
         	}
@@ -346,12 +353,18 @@ public class SyncUserInfo {
 //	        		}
 //	        		else
 	        		{
-	        			SQLExecutor.delete(exist_org_job_user, userNo);
+	        			
 //	            		userJobOrgPre.preparedInsert(USERORGJOB_SAVE_SQL);
-	            		userJobOrgPre.setString(1, temp.getOrg());
-		                userJobOrgPre.setString(2, temp.getPosition());
-		                userJobOrgPre.setString(3, temp.getUserNo());
-		                userJobOrgPre.addPreparedBatch();
+	        			String orgid = fixeduserorginfos.get(userNo);
+	        			if(orgid == null)
+	        			{
+	        				SQLExecutor.delete(exist_org_job_user, userNo);
+		            		userJobOrgPre.setString(1, temp.getOrg());
+			                userJobOrgPre.setString(2, temp.getPosition());
+			                userJobOrgPre.setString(3, temp.getUserNo());
+			                userJobOrgPre.addPreparedBatch();
+	        			}
+	        			
 	        		}
             	}
               

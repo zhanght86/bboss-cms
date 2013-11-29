@@ -29,6 +29,7 @@
 											<th>操作</th>
 										</pg:header>
 										<pg:list autosort="false" requestKey="activitiNodeCandidateList">
+										<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
 											<input type="hidden"
 												id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
 												value="<pg:cell colName='candidate_users_id'></pg:cell>" />

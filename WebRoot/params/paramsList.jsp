@@ -73,8 +73,9 @@
 		  </table>
 		  
 		   <form id="paramForm" name="paramForm">
-			<input id="handler" name="handler" type="hidden" value="cms.siteparamshandler"/>
-			
+			<input id="handler" name="handler" type="hidden" value="${handler}"/>
+			<input id="nodeId" name="nodeId" type="hidden" value="${paramId}"/>
+			<input id="nodeType" name="nodeType" type="hidden" value="${paramType}"/>
 			<div id="changeColor">
 			 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 		        <tr>

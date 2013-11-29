@@ -1,3 +1,42 @@
+补丁脚本：
+
+CREATE TABLE TD_SM_ORGPARAMETERS
+(
+  PARAM_TYPE  VARCHAR2(50 BYTE)                 NOT NULL,
+  NODE_ID     VARCHAR2(50 BYTE)                 NOT NULL,
+  NAME        VARCHAR2(50 BYTE)                 NOT NULL,
+  RN          NUMBER(10)                        NOT NULL,
+  VALUE       VARCHAR2(200 BYTE),
+  ISBIGDATA   NUMBER(1),
+  BIGDATA     BLOB
+);
+
+
+ALTER TABLE TD_SM_ORGPARAMETERS ADD (
+  CONSTRAINT TD_SM_ORGPARAMETERS_PK
+ PRIMARY KEY
+ (PARAM_TYPE, NODE_ID, NAME, RN));
+ 
+ CREATE TABLE TD_SM_USERPARAMETERS
+(
+  PARAM_TYPE  VARCHAR2(50 BYTE)                 NOT NULL,
+  NODE_ID     VARCHAR2(50 BYTE)                 NOT NULL,
+  NAME        VARCHAR2(50 BYTE)                 NOT NULL,
+  RN          NUMBER(10)                        NOT NULL,
+  VALUE       VARCHAR2(200 BYTE),
+  ISBIGDATA   NUMBER(1),
+  BIGDATA     BLOB
+);
+
+
+ALTER TABLE TD_SM_USERPARAMETERS ADD (
+  CONSTRAINT TD_SM_USERPARAMETERS_PK
+ PRIMARY KEY
+ (PARAM_TYPE, NODE_ID, NAME, RN));
+
+
+
+
 url权限控制：
 url控制原理：将url对应的相关的菜单与角色的关系转换为url与角色的关系，将url相关的所有菜单
 1.在模板视图中编辑模板时，distribute标签丢失

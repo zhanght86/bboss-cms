@@ -59,6 +59,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.PurviewManagerImpl;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
@@ -73,7 +74,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	
 	private SQLUtil sqlUtil = SQLUtil.getInstance("org/frameworkset/insert.xml");
 
-	
+	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 
 	private static Logger logger = Logger.getLogger(UserManagerImpl.class
 			.getName());
@@ -829,6 +830,13 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	 * 批量删除用户资源时改为批出理，gao.tang 修改
 	 */
 	public boolean deleteBatchUserRes(String userIds[]) throws ManagerException {
+		return deleteBatchUserRes(userIds,true);
+	}
+	
+	/**
+	 * 批量删除用户资源时改为批出理，gao.tang 修改
+	 */
+	public boolean deleteBatchUserRes(String userIds[],boolean broadcastevent) throws ManagerException {
 		boolean r = false;
 		DBUtil dbUtil = null;
 		TransactionManager tm = new TransactionManager();
@@ -873,9 +881,12 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				dbUtil.executeBatch();
 				tm.commit();
 //				 触发删除缓冲中用户的事件
-				Event event = new EventImpl(userIds,
-						ACLEventType.USER_INFO_DELETE);
-				super.change(event);
+				if(broadcastevent)
+				{
+					Event event = new EventImpl(userIds,
+							ACLEventType.USER_INFO_DELETE);
+					super.change(event);
+				}
 				r = true;
 				
 			} catch (SQLException e) {
@@ -5540,11 +5551,14 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //		}
 //		return state;
 //	}
-
 	public boolean addUserOrg(String[] userIds, String orgId, String classType)
 			throws ManagerException {
+		return addUserOrg(userIds, orgId, classType,true);
+	}
+	public boolean addUserOrg(String[] userIds, String orgId, String classType,boolean broadcastevent)
+			throws ManagerException {
 		boolean state = false;
-		DBUtil db = new DBUtil();
+//		DBUtil db = new DBUtil();
 		int samesn = 1;
 		if ("lisan".equals(classType)) {
 			try {
@@ -5552,14 +5566,13 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				OrgManager orgmanager = SecurityDatabase.getOrgManager();
 
 				for (int i = 0; i < userIds.length; i++) {
-					DBUtil dbUtil = new DBUtil();
-					String mainsql = "select * from td_sm_orguser where org_Id='"
-							+ orgId + "' and user_id=" + userIds[i];
-					dbUtil.executeSelect(mainsql);
-					if (dbUtil.size() > 0) {
+//					DBUtil dbUtil = new DBUtil();
+					int size = SQLExecutor.queryObject(int.class,"select count(1) from td_sm_orguser where org_Id=? and user_id=?",orgId ,userIds[i]);
+//					dbUtil.executeSelect(mainsql);
+					if (size > 0) {
 						continue;
 					} else {
-						orgmanager.addMainOrgnazitionOfUser(userIds[i], orgId);
+						orgmanager.addMainOrgnazitionOfUser(userIds[i], orgId,broadcastevent);
 					}
 				}
 			} catch (SPIException e) {
@@ -5571,19 +5584,17 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		// 往td_sm_userjoborg表中插入记录
 		try {
 			for (int j = 0; j < userIds.length; j++) {
-				String sqlsn = "select max(same_job_user_sn) as sn from  td_sm_userjoborg"
-						+ " where  org_id ='" + orgId + "'";
-				String sql2 = "select * from td_sm_userjoborg where user_id="
-						+ userIds[j] + " and org_id='" + orgId
-						+ "' and job_id='1'";
-				db.executeSelect(sql2);
-				DBUtil dbutil = new DBUtil();
-				dbutil.executeSelect(sqlsn);
-				if (db.size() > 0) {
+				int sn = SQLExecutor.queryObject(int.class,"select max(same_job_user_sn) as sn from  td_sm_userjoborg"
+						+ " where  org_id =?",orgId);
+				int dbsize = SQLExecutor.queryObject(int.class, "select count(1) from td_sm_userjoborg where user_id=? and org_id=? and job_id='1'",userIds[j] ,orgId);
+//				db.executeSelect(sql2);
+//				DBUtil dbutil = new DBUtil();
+//				dbutil.executeSelect(sqlsn);
+				if (dbsize > 0) {
 					continue;
 				} else {
-					if (dbutil != null && dbutil.getInt(0, 0) > 0) {
-						samesn = dbutil.getInt(0, "sn") + 1;
+					if (sn > 0) {
+						samesn = sn + 1;
 //						String sql = "insert into td_sm_userjoborg"
 //								+ " (user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)"
 //								+ " values(" + userIds[j] + ",'" + 1 + "','"
@@ -5619,17 +5630,33 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						prepareddbutil_.setInt(3,samesn );
 						prepareddbutil_.executePrepared();
 					}
+					this.userOrgParamManager.fixuserorg(userIds[j] ,orgId);
 				}
 			}
-			Event event = new EventImpl("", ACLEventType.USER_INFO_CHANGE);
-			super.change(event);
+			if(broadcastevent)
+			{
+				Event event = new EventImpl("", ACLEventType.USER_INFO_CHANGE);
+				super.change(event);
+			}
 			state = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return state;
 	}
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds, boolean isInsert) throws ManagerException
+	{
+		return storeBatchUserOrg(userIds, orgIds, isInsert,true);
+	}
 	
+	public void fixuserorg(String[] userIds, String orgid)
+	{
+		for(int i = 0;  userIds != null && i < userIds.length; i ++)
+		{
+			String userId = userIds[i];
+			this.userOrgParamManager.fixuserorg(userId, orgid);
+		}
+	}
 	/**
 	 * 批量插入用户主管机构与用户机构岗位
 	 * @param userIds
@@ -5638,7 +5665,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	 * @return
 	 * @throws ManagerException
 	 */
-	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds, boolean isInsert) throws ManagerException{
+	public boolean storeBatchUserOrg(String[] userIds, String[] orgIds, boolean isInsert,boolean broadcastevent) throws ManagerException{
 		boolean state = false;
 //		StringBuffer sql;
 		String sql;
@@ -5690,14 +5717,21 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						.append(orgIds[i]).append("',")
 						.append(999).append(",").append(1).append(",")
 						.append(DBUtil.getDBAdapter().to_date(new Date())).append(",1)");
-					
+					if(i == 0)
+					{
+						this.userOrgParamManager.fixuserorg(userIds[j], orgIds[i]);
+					}
 					dbUtil.addBatch(sql2.toString());
 				}
 			}
 			dbUtil.executeBatch();
+			
 			tm.commit();
-			Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
-			super.change(event);
+			if(broadcastevent)
+			{
+				Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
+				super.change(event);
+			}
 			state = true;
 		} catch (SQLException e) {
 			try {

@@ -140,6 +140,12 @@
 			
 		}
 		
+		function userAttrs(userId,userName,userRealName)
+		{
+			var url="${pageContext.request.contextPath}/params/showParams.page?paramId="+userId+"&paramType=user&handler=sys.user.paramshandler";
+			$.dialog({title:'<pg:message code="sany.pdp.purviewmanager.user.attrs" />-'+userName+'('+userRealName+')',width:760,height:560, content:'url:'+url,lock: true});
+		}
+		
 		function userInfoupdate(userId){ 
 			//用户基本信息修改 userInfo_tab.jsp
 			var url="${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/userInfo_tab_update.jsp?orgId=<%=curOrgId%>&userId="+userId;
@@ -289,6 +295,7 @@
 								int userId = dataSet.getInt("userId");
 								String userIdStr = String.valueOf(userId);
 								String userName = dataSet.getString("userName");
+								String userRealname = dataSet.getString("userRealname");
 								String org_id = dataSet.getString("orgId");
 								//System.out.println("orgId = " + org_id);
 								//是否是管理员
@@ -321,7 +328,11 @@
 								menuitemquery.setLink("javascript:userInfoquery("+userId+")");
 								menuitemquery.setIcon("../../../sysmanager/images/issue/status_reopened.gif");
 								menu.addContextMenuItem(menuitemquery);
-								
+								Menu.ContextMenuItem menuitemattr = new Menu.ContextMenuItem();
+								menuitemattr.setName(messageSource.getMessage("sany.pdp.purviewmanager.user.attrs",RequestContextUtils.getRequestContextLocal(request)));
+								menuitemattr.setLink("javascript:userAttrs('"+userId+"','"+userName+"','"+userRealname+"')");
+								menuitemattr.setIcon("../../../sysmanager/images/issue/priority_blocker.gif");
+								menu.addContextMenuItem(menuitemattr);
 								if(CaProperties.CA_LOGIN_SERVER){
 									//使用数字认证中心，重置key的序列号
 									Menu.ContextMenuItem menuitemca = new Menu.ContextMenuItem();

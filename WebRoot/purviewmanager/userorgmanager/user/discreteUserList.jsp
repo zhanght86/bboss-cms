@@ -165,7 +165,7 @@ function addorg(dealType) {
 				var winaddorg;
 				var url = "../purviewmanager/userorgmanager/user/allorg2discrete.jsp?checkBoxOne="+checks;
 				//window.open(url);
-				parent.$.dialog({title:'<pg:message code="sany.pdp.userorgmanager.user.transfer.org.in"/>',width:760,height:560, content:'url:'+url,lock: true});
+				$.dialog({title:'<pg:message code="sany.pdp.userorgmanager.user.transfer.org.in"/>',width:760,height:560, content:'url:'+url,lock: true});
 				
  			}else{
  				$.dialog.alert("<pg:message code='sany.pdp.userorgmanager.user.transfer.in.null'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
@@ -185,10 +185,14 @@ function userInfo(userId){
 		
 	var winbasic;
 	var url="../purviewmanager/userorgmanager/user/userInfo_lisan.jsp?userId="+userId;
-	parent.parent.$.dialog({title:'<pg:message code="sany.pdp.sys.info.view"/>',width:760,height:560, content:'url:'+url,lock: true});
+	$.dialog({title:'<pg:message code="sany.pdp.sys.info.view"/>',width:760,height:560, content:'url:'+url,lock: true});
 
 
 	
+}
+function reloadusers()
+{
+	document.location.href = document.location.href;
 }
 
 </SCRIPT>		

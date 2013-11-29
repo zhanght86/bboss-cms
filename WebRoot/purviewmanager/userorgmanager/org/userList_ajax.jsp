@@ -12,7 +12,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-
+<%@page import="com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB"%>
 
 <%@ page
 	import="com.frameworkset.platform.security.AccessControl,
@@ -42,6 +42,8 @@
 		allUser = userManager.getOrgUserList(orgId);
 		request.setAttribute("allUser", allUser);
 	}
+	String orgpath =  orgId == null ?"请选择调动用户所在机构":"调动用户所在机构:"+FunctionDB.buildOrgPath(orgId);
+	
 	//离散用户
 	if("lisan".equals(request.getParameter("classType"))){
 		List allUser = userManager.getDicList();
@@ -51,7 +53,7 @@
 <html>
 <head>
 	<title>属性容器</title>
-	<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+	<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	<script language="javascript">
 	var api = parent.frameElement.api, W = api.opener;
 	function addone(name,value,n){
@@ -79,7 +81,7 @@
 		}
 		
 		if(document.all("allist").options.length < 1){
-			W.$.dialog.alert("<pg:message code='sany.pdp.no.chooseuser'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			$.dialog.alert("<pg:message code='sany.pdp.no.chooseuser'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			return;
 		}
 		var orgId = "<%=oid%>";
@@ -100,7 +102,7 @@
 		var flag1 = false;
 		
 		if(document.all("allist").options.length < 1){
-			W.$.dialog.alert("<pg:message code='sany.pdp.no.chooseuser'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+			$.dialog.alert("<pg:message code='sany.pdp.no.chooseuser'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			return;
 		}
 		
@@ -127,17 +129,21 @@
 		document.OrgUserForm.action="../user/saveOrgUser.jsp?userId=" + userIds + "&orgId=" + orgId + "&flag=" + flag + "&classType=" + classType +"&CurorgId=<%=orgId%>";
 		document.OrgUserForm.submit();
 	}
+	function alertfun(msg1,msg2)
+	{
+		$.dialog.alert(msg1,function(){},null,msg2);
+	}
 	
 	function deleteall(){
-		W.$.dialog.alert("<pg:message code='sany.pdp.delete.user'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		$.dialog.alert("<pg:message code='sany.pdp.delete.user'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	}
 	
 	function deleteuser(){
-		W.$.dialog.alert("<pg:message code='sany.pdp.delete.user'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		$.dialog.alert("<pg:message code='sany.pdp.delete.user'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	}
 	
 	function okadd(){
-		W.$.dialog.alert("<pg:message code='sany.pdp.common.success'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		$.dialog.alert("<pg:message code='sany.pdp.common.success'/>！",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 		window.returnValue = "ok";
 		parent.window.close();
 	}
@@ -145,6 +151,9 @@
 </head>
 		
 <body class="contentbodymargin" onunload="window.returnValue = 'ok'">
+	<div class="titlebox">
+					<SPAN class=location><A href="javascript:void"><%=orgpath %></A></SPAN>
+	</div>
 	<div id="" align="center">
 		<center>
 			<form name="OrgUserForm" action="" method="post">

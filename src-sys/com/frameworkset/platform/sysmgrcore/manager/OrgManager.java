@@ -1,11 +1,11 @@
 package com.frameworkset.platform.sysmgrcore.manager;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import org.frameworkset.spi.Provider;
 
+import com.frameworkset.common.tag.pager.ListInfo;
 import com.frameworkset.platform.sysmgrcore.entity.ChargeOrg;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -16,7 +16,6 @@ import com.frameworkset.platform.sysmgrcore.entity.Orgrole;
 import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
-import com.frameworkset.common.tag.pager.ListInfo;
 
 /**
  * 项目：SysMgrCore <br>
@@ -25,7 +24,7 @@ import com.frameworkset.common.tag.pager.ListInfo;
  * 
  * @author 
  */
-public interface OrgManager extends Provider, Serializable {
+public interface OrgManager extends Provider {
 
 	/**
 	 * 机构所对应的“用户岗位机构”关系对象集合的名称 userjoborgSet
@@ -466,6 +465,11 @@ public interface OrgManager extends Provider, Serializable {
 	 */
 	public void addMainOrgnazitionOfUser(String userID,String orgID)  throws ManagerException;
 	
+	
+	
+	public void addMainOrgnazitionOfUser(String userID, String orgID,boolean broadcastevent)
+			throws ManagerException;
+	
 	/**
 	 * 删除用户的隶属单位（所在主单位）
 	 * @param userID
@@ -750,7 +754,7 @@ public interface OrgManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public boolean deleteOrg_UserJob(String orgId, String userIds[]) throws ManagerException ;
-	
+	public boolean deleteAllOrg_UserJob( String userIds[]) throws ManagerException;
 	/**
 	 * 得到用户可管理的所有机构
 	 * @param userId

@@ -20,4 +20,11 @@
    <property name="cms.siteparamshandler" class="org.frameworkset.util.ParamsHandler" >
 		<property name="tableName" value="TD_CMS_SITEPARAMETERS" />
 	</property>
+	
+   <property name="sys.org.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_ORGPARAMETERS" />
+	</property>
+	<property name="sys.user.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_USERPARAMETERS" />
+	</property>
 </manager-config>

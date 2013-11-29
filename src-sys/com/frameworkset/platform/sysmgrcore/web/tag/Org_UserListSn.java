@@ -26,7 +26,7 @@ import com.frameworkset.util.ListInfo;
  */
 public class Org_UserListSn extends DataInfoImpl {
 
-    private static final long serialVersionUID = 2039375573696168970L;
+   
 
     private Logger log = Logger.getLogger(UserListSn.class);
 

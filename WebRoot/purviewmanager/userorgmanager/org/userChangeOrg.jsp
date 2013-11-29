@@ -23,7 +23,7 @@
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree" %>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@page import="com.frameworkset.platform.security.AccessControl,
 				com.frameworkset.platform.config.ConfigManager,
 				 com.frameworkset.platform.sysmgrcore.purviewmanager.db.PurviewManagerImpl,
@@ -85,7 +85,7 @@ function addorg(){
 		  			var orgValue = document.all.orgIdName[i].value;
 		  			var orgValueId = orgValue.split(";");
 		  			if(orgold==orgValueId[0]){
-		  				W.$.dialog.alert("<pg:message code='sany.pdp.user.has.exist'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+		  				$.dialog.alert("<pg:message code='sany.pdp.user.has.exist'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 		  				return;
 		  			}
 		  			if(state){
@@ -123,10 +123,15 @@ function addorg(){
 			  	document.OrgJobForm.submit();		  	
 		  	}
 	  	}else{
-	  		W.$.dialog.alert("<pg:message code='sany.pdp.choose.move.in.organization'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+	  		$.dialog.alert("<pg:message code='sany.pdp.choose.move.in.organization'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			return;
 	  	}
   	<%}%>
+}
+
+function alertfun(msg1,msg2)
+{
+	$.dialog.alert(msg1,function(){},null,msg2);
 }
 
 </script>

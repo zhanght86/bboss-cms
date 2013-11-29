@@ -131,6 +131,12 @@ function deleteOrg(orgId,orgName)
 		document.forms[0].submit();
 	});
 }
+//机构属性管理
+function orgAttrs(orgId,orgName)
+{
+	var url="${pageContext.request.contextPath}/params/showParams.page?paramId="+orgId+"&paramType=org&handler=sys.org.paramshandler";
+	$.dialog({title:'<pg:message code="sany.pdp.purviewmanager.user.attrs" />-'+orgName,width:760,height:560, content:'url:'+url,lock: true});
+}
 
 //机构转移
 //修改传入的参数,加入OrgName
