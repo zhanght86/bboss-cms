@@ -83,6 +83,7 @@
 									onClick="checkAll('CKA','CK')"></th>
 		       		<th>参数名称</th>
 		       		<th>参数值</th>
+		       		
 		       	</tr>	
 		       	
 		
@@ -91,6 +92,7 @@
 		   		    <td class="td_center"><input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="paramid" />"/></td>
 		        	<td><input id="name" name="name" type="text" value="<pg:cell colName='name' />" class="W120" style="width:100%"/></td>  
 		        	<td><input id="value" name="value" type="text" value="<pg:cell colName='value' />" class="W120" style="width:100%" /></td> 
+		        	<input id="rn" name="rn" type="hidden" value="<pg:cell colName='rn' />" />
 		        	<input id="paramid" name="paramid" type="hidden" value="<pg:cell colName='paramid' />"/> 
 		        	<input id="param_type" name="param_type" type="hidden" value="<pg:cell colName='param_type' />"/>
 		        </tr>

@@ -477,6 +477,28 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		
 		
 	}
+	
+	private void rnParams(List<Param> paramList )
+	{
+		if(paramList == null || paramList.size() == 0)
+			return ;
+		Map<String,Integer> rns = new HashMap<String,Integer>();
+		for(Param param:paramList)
+		{
+			String name = param.getName();
+			Integer rn = rns.get(name);
+			if(rn == null)
+			{
+				rns.put(name,new Integer(0));
+			}
+			else
+			{
+				int newrn = rn.intValue()+1;
+				param.setRn(newrn);
+				rns.put(name,new Integer(newrn));
+			}
+		}
+	}
 	/**
 	 * 自定义参数存储
 	 * 
@@ -494,6 +516,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 				"(NODE_ID,NAME,VALUE,RN,PARAM_TYPE,BIGDATA,ISBIGDATA) values(?,?,?,?,?,?,?)");
 
 		List<Param> paramList = params.getParams();
+		
 		PreparedDBUtil dbutil = new PreparedDBUtil();
 		Object t = new Object();
 		Map<String, Object> trace = new HashMap<String, Object>();
@@ -517,6 +540,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			}
 			else
 			{
+				rnParams(paramList );
 				dbutil.preparedDelete(this.getDbname(), sql_del.toString());
 				dbutil.setString(1, params.getParamId());
 				dbutil.setString(2, params.getParamType());

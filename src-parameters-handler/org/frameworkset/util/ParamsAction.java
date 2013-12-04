@@ -36,8 +36,10 @@ public class ParamsAction {
 	 * @return String
 	 */
 	public String showParams(String paramId, String paramType, String handler, ModelMap model) {
-
-		List<Param> paramsList = ParamsHandler.getParamsHandler(handler)._getParams(paramId, paramType).getParams();
+		ParamsHandler phandler = ParamsHandler.getParamsHandler(handler);
+		if(phandler == null)
+			return "path:showParams";
+		List<Param> paramsList = phandler._getParams(paramId, paramType).getParams();
 
 		model.addAttribute("paramsList", paramsList);
 		model.addAttribute("paramId", paramId);
