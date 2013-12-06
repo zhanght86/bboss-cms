@@ -83,7 +83,9 @@
 									onClick="checkAll('CKA','CK')"></th>
 		       		<th>参数名称</th>
 		       		<th>参数值</th>
-		       		
+		       		<input id="rn" name="rn" type="hidden" value="0" />
+		        	<input id="paramid" name="paramid" type="hidden" value="${paramId}"/> 
+		        	<input id="param_type" name="param_type" type="hidden" value="${paramType}"/>
 		       	</tr>	
 		       	
 		

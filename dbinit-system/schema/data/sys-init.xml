@@ -1689,7 +1689,7 @@ nocache
 									values
 									  ('51',
 									   3,
-									   '非三一域用户',
+									   '非域用户',
 									   '2',
 									   2)]]></property>
 								<property index="24"><![CDATA[insert into td_sm_dictdata
@@ -1701,7 +1701,7 @@ nocache
 									values
 									  ('52',
 									   3,
-									   '三一域用户',
+									   '域用户',
 									   '1',
 									   1)]]></property>
 								<property index="25"><![CDATA[insert into td_sm_dictdata
@@ -2548,7 +2548,7 @@ nocache
   				WORKLENGTH,POLITICS,ISTAXMANAGER,LOGON_IP,CERT_SN)
 				values
   				(1,1,'admin','0a989ebc4a77b56a6e2bb7b19d995d185ce44090c13e2984b7ecc6d446d4b61ea9991b76a4c2f04b1b4d244841449454','系统管理员',' ','M',' ',
-  				' ',' ',' ',' ',' ',' ',null,
+  				' ','1',' ',' ',' ',' ',null,
   				' ',' ',' ',' ',2,null,null,
   				'0',' ',' ',' ',' ',' ',null,' ',null,
   				' ',' ',null,' ',' ')]]></property>

@@ -82,50 +82,45 @@ public class LdapLoginModule extends UserPasswordLoginModule{
             if (!enableusertype(user.getUserType()))
                 throw new LoginException("用户[" + userName + "]的类型无法登录本系统:需要的类型为[userType=" + this.userTypes
                         + "],请与系统管理员联系");
-            ;
-
-            AdAccountLogin test = new AdAccountLogin();
-            Map<String, String> loginRes = test.validateUser(userName, password, null);
-           
-            	
           
-           
-            
-            if (loginRes.get("successFlag").equals("0")) {
-            
-            	 if(userName.equals("admin"))
-                 {
-                     /**
-                      * 是否启用了单点登录功能,如果启用了单点登录功能，cas服务端会传给子应用用户名称，
-                      * 然后我们根据用户名称去数据库直接获取真实密码,然后用真实密码进行登录系统，所以不必要再进行加密登录
-                      */
-                     boolean isCasServer = ConfigManager.getInstance().getConfigBooleanValue("isCasServer", false);
-                     boolean CA_LOGIN_SERVER = CaProperties.CA_LOGIN_SERVER;
-                     if (!isCasServer || !CA_LOGIN_SERVER) {
-                         password = EncrpyPwd.encodePassword(password);
-                     }
-                     if(user.getUserPassword().equals(password))
-                     {
-                    	 OrgManager orgManager = SecurityDatabase.getOrgManager();
-                         Organization org = orgManager.getMainOrganizationOfUser(userName);
-                    	 buildCallback( checkCallBack,user ,userName,password,password_i,org);
-                    	 return true;
-                     }
-                     else
-                     {
-                    	 return false;
-                     }
+            if(user.getUserType().equals("1"))
+            {
+	            AdAccountLogin test = new AdAccountLogin();
+	            Map<String, String> loginRes = test.validateUser(userName, password, null);	            
+	            if (loginRes.get("successFlag").equals("0")) {
+	            	 throw new LoginException(loginRes.get("errorMsg"));	            
+	            } else {
+		        	 OrgManager orgManager = SecurityDatabase.getOrgManager();
+		             Organization org = orgManager.getMainOrganizationOfUser(userName);
+	            	buildCallback( checkCallBack,user ,userName,password,password_i,org);
+	                return true;
+	            }
+            }
+            else
+            {
+            	 
+                
+                 /**
+                  * 是否启用了单点登录功能,如果启用了单点登录功能，cas服务端会传给子应用用户名称，
+                  * 然后我们根据用户名称去数据库直接获取真实密码,然后用真实密码进行登录系统，所以不必要再进行加密登录
+                  */
+                 boolean isCasServer = ConfigManager.getInstance().getConfigBooleanValue("isCasServer", false);
+                 boolean CA_LOGIN_SERVER = CaProperties.CA_LOGIN_SERVER;
+                 if (!isCasServer || !CA_LOGIN_SERVER) {
+                     password = EncrpyPwd.encodePassword(password);
                  }
-            	 else
-            	 {
-            		 throw new LoginException(loginRes.get("errorMsg"));
-            	 }
-            
-            } else {
-	        	 OrgManager orgManager = SecurityDatabase.getOrgManager();
-	             Organization org = orgManager.getMainOrganizationOfUser(userName);
-            	buildCallback( checkCallBack,user ,userName,password,password_i,org);
-                return true;
+                 if(user.getUserPassword().equals(password))
+                 {
+                	 OrgManager orgManager = SecurityDatabase.getOrgManager();
+                     Organization org = orgManager.getMainOrganizationOfUser(userName);
+                	 buildCallback( checkCallBack,user ,userName,password,password_i,org);
+                	 return true;
+                 }
+                 else
+                 {
+                	 return false;
+                 }
+                
             }
 
         } catch (ManagerException ex) {

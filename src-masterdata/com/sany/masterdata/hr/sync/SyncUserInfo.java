@@ -59,8 +59,19 @@ public class SyncUserInfo {
     private static Logger logger = Logger.getLogger(SyncUserInfo.class);
     private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
     private MdmService mdmService;
+    /**
+     * 是否启用用户调整和组织机构调整功能，启用后一旦管理员手动调整用户和机构关系、组织之间的关系后
+     * 将不会自动同步这些关系，以手工调整后的关系为准，默认为开启true，false不开启
+     */
+    private boolean enablecustom = true;
     
-    private ConfigSQLExecutor executor;
+    public boolean isEnablecustom() {
+		return enablecustom;
+	}
+	public void setEnablecustom(boolean enablecustom) {
+		this.enablecustom = enablecustom;
+	}
+	private ConfigSQLExecutor executor;
     
     /**
      * 同步所有机构数据
@@ -71,7 +82,7 @@ public class SyncUserInfo {
             List<MdmUser> userList = mdmService.getUserList("19000101", "99000101", "1", "99999999");
             if(userList == null || userList.size() == 0)
             	return;
-            Map<String,String> fixeduserorginfos = userOrgParamManager.getFixedUserOrgInfos();
+            Map<String,String> fixeduserorginfos = enablecustom ?userOrgParamManager.getFixedUserOrgInfos():null;
             if(fixeduserorginfos == null)
             	fixeduserorginfos = new HashMap<String,String>();
             //用户主键索引
@@ -262,9 +273,11 @@ public class SyncUserInfo {
     private void addPreBatch(PreparedDBUtil userPre, PreparedDBUtil userOrgPre, PreparedDBUtil userJobOrgPre, 
     		MdmUser temp,Map<String,Object> newUsers,Map<String,String> fixeduserorginfos) throws Exception {
         String userNo = exchange(temp.getUserNo());
+        String userType = "1";
         userPre.setString(1, userNo);
         if (temp.getUserId() == null || temp.getUserId().equals("")) {
             userPre.setString(2, temp.getUserNo());
+            userType = "2";
         } else {
             userPre.setString(2, temp.getUserId());
         }
@@ -286,7 +299,7 @@ public class SyncUserInfo {
         }
         userPre.setString(10, temp.getIdCard());
         userPre.setInt(11, 2);
-        userPre.setString(12, "1");
+        userPre.setString(12, userType);
         userPre.setString(13, temp.getUserNo());
         
         userPre.addPreparedBatch();
