@@ -204,7 +204,7 @@ public class UserPasswordLoginModule extends ACLLoginModule
             String orgpath =  FunctionDB.getUserorgjobinfos( user.getUserId());
             checkCallBack.setUserAttribute("orgjob", orgpath);
         }
-        String orgpath =  FunctionDB.buildOrgPath(org.getOrgId());
+        
 //        // 获取当前登陆用户所在机构列表，不包含主机构************
 //        String orgname = orgManager.getSecondOrganizations(userName);
 //        if (orgname == null || orgname.equals("")) {
@@ -217,7 +217,7 @@ public class UserPasswordLoginModule extends ACLLoginModule
 //        List secondOrgs = orgManager.getSecondOrganizationsOfUser(userName);
 //        checkCallBack.setUserAttribute("secondOrgs", secondOrgs);
         
-        checkCallBack.setUserAttribute("CHARGEORGID", org);
+       
 
         if (user.getUserLogincount() != null) {
             user.setUserLogincount(new Integer(user.getUserLogincount().intValue() + 1));
