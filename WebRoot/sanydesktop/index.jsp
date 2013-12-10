@@ -75,7 +75,7 @@ height:44px;
     	<option value="module" <pg:equal actual="${selected}" value="module">selected</pg:equal>>应用台账管理</option>
     	<option value="esb" <pg:equal actual="${selected}" value="esb">selected</pg:equal>>请求服务平台</option>
     	</select></span>
-	<span class="blue1"> <sany:accesscontrol userattribute="userAccount"/></span>，<pg:message code="sany.pdp.module.welcome"></pg:message>　
+	<span class="blue1"><sany:accesscontrol userattribute="userName"/><sany:accesscontrol userattribute="userAccount"/>[<sany:accesscontrol userattribute="orgjob"/>]</span>，<pg:message code="sany.pdp.module.welcome"/>　
 		<pg:false actual="${fromwebseal}">
 			<pg:empty actual="<%=specialuser %>">
 				<a href="#" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>

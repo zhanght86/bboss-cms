@@ -21,6 +21,7 @@ import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.util.StringUtil;
 
 
@@ -197,9 +198,13 @@ public class UserPasswordLoginModule extends ACLLoginModule
        
         if (org == null || org.getOrgName() == null) {
             checkCallBack.setUserAttribute("CHARGEORGID", (Organization) null);
+            checkCallBack.setUserAttribute("orgjob", "");
         } else {
             checkCallBack.setUserAttribute("CHARGEORGID", org);
+            String orgpath =  FunctionDB.getUserorgjobinfos( user.getUserId());
+            checkCallBack.setUserAttribute("orgjob", orgpath);
         }
+        String orgpath =  FunctionDB.buildOrgPath(org.getOrgId());
 //        // 获取当前登陆用户所在机构列表，不包含主机构************
 //        String orgname = orgManager.getSecondOrganizations(userName);
 //        if (orgname == null || orgname.equals("")) {
@@ -211,6 +216,8 @@ public class UserPasswordLoginModule extends ACLLoginModule
 //        // 获取当前登陆用户所在机构列表，不包含主机构************
 //        List secondOrgs = orgManager.getSecondOrganizationsOfUser(userName);
 //        checkCallBack.setUserAttribute("secondOrgs", secondOrgs);
+        
+        checkCallBack.setUserAttribute("CHARGEORGID", org);
 
         if (user.getUserLogincount() != null) {
             user.setUserLogincount(new Integer(user.getUserLogincount().intValue() + 1));
