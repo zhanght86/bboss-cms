@@ -7,8 +7,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.frameworkset.util.I18NUtil;
 import org.frameworkset.web.servlet.ModelMap;
-import org.frameworkset.web.servlet.support.RequestContextUtils;
 import org.frameworkset.web.token.MemTokenManager;
 import org.frameworkset.web.token.MemTokenManagerFactory;
 
@@ -48,7 +48,7 @@ public class DesktopController {
 //		}
 		
 		try {
-			RequestContextUtils.getLocaleResolver(request).setLocale(request, response, language);
+			I18NUtil.setLocale(request, response, language);
 		} catch (Exception e) {
 			log.error("",e);
 		}
