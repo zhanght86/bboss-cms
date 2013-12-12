@@ -19,7 +19,7 @@
 	<!-- 频道概览数据接口 一级栏目引用二级栏目下的文档接口，递归发布待考虑 -->
 	<dataloader name="reference" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSLatestDocOfSubChnlsLstDt" single="false"/>
 	<!-- 获取文档的相关文档数据接口，递归发布待考虑，只能在细览模板中使用 -->
-	<dataloader name="related" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSRelatedDocListData" single="false"/>	
+	<dataloader name="related" recursive="false" type="com.frameworkset.platform.cms.driver.dataloader.CMSRelatedDocListData" single="false"/>	
 	<!-- 问卷问题接口 -->
 	<dataloader name="questions" type="com.frameworkset.platform.cms.driver.dataloader.CMSQuestionListData" single="false"/>	
 	<!-- 频道问卷概览接口 -->
@@ -61,6 +61,6 @@
 		 获取文档相关图片列表数据加载器
 		 只能在细览模板中使用
 	-->
-	<dataloader name="relatepic" recursive="true" type="com.frameworkset.platform.cms.driver.dataloader.CMSDocRelatePicList" single="false"/>
+	<dataloader name="relatepic" recursive="false" type="com.frameworkset.platform.cms.driver.dataloader.CMSDocRelatePicList" single="false"/>
 	
 </dataloaders>

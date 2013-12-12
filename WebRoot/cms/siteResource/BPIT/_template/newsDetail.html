@@ -70,6 +70,36 @@ $(document).ready(function() {
             <div class="detail_about">文档来源：<cms:cell colName="docsource_name"/>&nbsp;&nbsp;&nbsp;&nbsp;作者：<cms:cell colName="author"/>&nbsp;&nbsp;&nbsp;&nbsp;发布日期：<cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/>&nbsp;&nbsp;&nbsp;&nbsp;阅读次数：<font id="playedCount" color="blue">0</font>&nbsp;次&nbsp;&nbsp;&nbsp;&nbsp;评论数：<font id="commentCount" color="blue"></font>&nbsp;条</div>
             <div class="detail_content">
                <cms:cell colName="content"/>
+              相关附件：
+<cms:outline datatype="attach">
+
+<cms:attachment />
+
+
+</cms:outline>
+ 相关图片：
+<cms:outline datatype="relatepic">
+
+<img src="<cms:attachmenturl />" border="0"/>
+
+
+</cms:outline>
+
+ 相关文档：
+ <ul>
+<cms:outline datatype="related">
+<li>
+ <cms:link 
+					target="_blank" 
+					colName="title" 
+					maxlength="25"
+					replace="..."
+					useTitle="false"/></li>
+
+
+</cms:outline>
+</ul>
+               
             </div>
         </div>
    	    <br clear="left"/>
