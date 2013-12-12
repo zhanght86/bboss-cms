@@ -26,6 +26,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
+import common.Logger;
 
 /**
  * <p>
@@ -49,7 +50,7 @@ import com.frameworkset.util.StringUtil;
  * @version 1.0.0
  */
 public class FileUpload implements org.frameworkset.spi.InitializingBean{
-	
+	private static Logger log = Logger.getLogger(FileUpload.class);
 	/**
 	 * 文档附件上传
 	 * @param UploadFileName
@@ -85,8 +86,10 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 				myFile.transferTo(new File(approot + path));
 				model.addAttribute("fileAllName", fileAllName);
 			} catch (IllegalStateException e) {
+				log.error("",e);
 				model.addAttribute("errormessage", StringUtil.exceptionToString(e));
 			} catch (IOException e) {
+				log.error("",e);
 				model.addAttribute("errormessage", StringUtil.exceptionToString(e));
 			}
 			
