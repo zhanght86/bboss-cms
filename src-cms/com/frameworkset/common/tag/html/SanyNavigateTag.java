@@ -85,7 +85,7 @@ tabdropdown.init("bluemenu")
 		String channelName = "";
 		String currentchannelName = "";
 		/* 加载外部模板 */
-		StringBuffer sb = new StringBuffer();		
+		StringBuffer sb = new StringBuffer();	//定义输出串对象	
 		sb.append(NAV_HEADER);
 		
 		if(context!=null){	
@@ -118,11 +118,11 @@ tabdropdown.init("bluemenu")
 			}
 		}
 		if("root".equalsIgnoreCase(channelName)) channelName = "";
-		List list = impl.getNavigatChannel(site_id,channelName);
+		List list = impl.getNavigatChannel(site_id,channelName);//获取频道下的导航列表或者站点下的一级导航
 		Channel topChannel = null; 
 		/* 获得首页链接地址 未指定频道 首页是站点地址*/
 		String indexURL = context.getSite().getIndexFileName();
-		indexURL = CMSTagUtil.getPublishedSitePath(context,indexURL);
+		indexURL = CMSTagUtil.getPublishedSitePath(context,indexURL);//首页地址
 		/* 指定了频道 首页是频道地址 */
 		if(this.channel != null && this.channel.length()>0 && !"root".equalsIgnoreCase(this.channel)){
 			topChannel = impl.getChannelInfoByDisplayName(site_id,this.channel);
@@ -144,13 +144,13 @@ tabdropdown.init("bluemenu")
 			inedxStr = siteName + this.homePageStr;
 		}
 		sb.append(inedxStr)
-		  .append("</a></li>");
+		  .append("</a></li>");//输出首页元素
 		
 		/* 页面初始化完成 */
 		List subList = null;
 		Channel level1channel = null;
 		
-		for(int i=0;i<list.size();i++){				
+		for(int i=0;i<list.size();i++){	//遍历一级导航			
 			level1channel = (Channel)list.get(i);
 			String linkPath = CMSTagUtil.getPublishedChannelPath(context,level1channel);
 			String linkName = level1channel.getName();
@@ -162,7 +162,7 @@ tabdropdown.init("bluemenu")
 			{
 				target_str="target=\"_self\"";
 			}
-			subList = impl.getNavigatChannel(site_id,level1channel.getDisplayName());
+			subList = impl.getNavigatChannel(site_id,level1channel.getDisplayName());//获取频道子导航列表
 			boolean hasson = subList != null && subList.size() > 0;
 			if(hasson)
 				sb.append("<li><a ").append(target_str).append(" href=\"").append(linkPath).append("\" rel=\"dropmenu1_").append(level1channel.getChannelId()).append("\">").append(linkName).append("</a>");
@@ -174,7 +174,7 @@ tabdropdown.init("bluemenu")
 			{
 				Channel level2channel = null;
 				sb.append("<div id=\"dropmenu1_").append(level1channel.getChannelId()).append("\" class=\"dropmenudiv_b\">");
-				for(int j = 0; j < subList.size(); j++)
+				for(int j = 0; j < subList.size(); j++)//遍历子导航列表
 				{
 					level2channel = (Channel)subList.get(j);
 					String linkPath_ = CMSTagUtil.getPublishedChannelPath(context,level2channel);
