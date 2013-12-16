@@ -1,6 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,17 +15,16 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.assemble.Pro;
 
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.entity.Log;
-import com.frameworkset.platform.sysmgrcore.entity.LogDetail;
-import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
-import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.adapter.DB;
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.util.StringUtil;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.entity.LogDetail;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 
 /**
  * <p>
@@ -400,12 +400,13 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 
 			PreparedDBUtil preparedDBUtil = new PreparedDBUtil();
 			StringBuffer sql = new StringBuffer();
+			
 			sql
 					.append(
 							" INSERT INTO TD_SM_LOG(LOG_ID,LOG_OPERUSER,OP_ORGID,OPER_MODULE,")
 					.append(
 							" LOG_VISITORIAL,LOG_OPERTIME,LOG_CONTENT,REMARK1,OPER_TYPE)")
-					.append(" VALUES(?,?,?,?,?,SYSDATE,?,?,?)");
+					.append(" VALUES(?,?,?,?,?,?,?,?,?)");
 
 			preparedDBUtil.preparedInsert(sql.toString());
 			preparedDBUtil.setString(1, logId);
@@ -416,11 +417,12 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 			preparedDBUtil.setString(4, logmodule == null ? "" : logmodule);
 			preparedDBUtil.setString(5, log.getVisitorial() == null ? "" : log
 					.getVisitorial());
-			preparedDBUtil.setString(6, log.getOper() == null ? "" : log
+			preparedDBUtil.setTimestamp(6, new Timestamp(new Date().getTime()));
+			preparedDBUtil.setString(7, log.getOper() == null ? "" : log
 					.getOper());
-			preparedDBUtil.setString(7, log.getRemark1() == null ? "" : log
+			preparedDBUtil.setString(8, log.getRemark1() == null ? "" : log
 					.getRemark1());
-			preparedDBUtil.setInt(8, log.getOperType());
+			preparedDBUtil.setInt(9, log.getOperType());
 			preparedDBUtil.addPreparedBatch();
 
 			StringBuffer sql_detail = new StringBuffer();
@@ -761,10 +763,10 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 		// .append(" LOG_VISITORIAL,LOG_OPERTIME,LOG_CONTENT,REMARK1,OPER_TYPE)")
 		// .append(" VALUES(?,?,?,?,?,SYSDATE,?,?,?)");
 
-		String sql_ = sqlUtilInsert.getSQL("LogManagerImpl_log");
-		Map<String, String> variablevalues = new HashMap<String, String>();
-        variablevalues.put("date", DBUtil.getDBAdapter().to_date(new Date()));
-        String sql =  sqlUtilInsert.evaluateSQL("inserttdsmlog", sql_, variablevalues);
+		String sql = sqlUtilInsert.getSQL("LogManagerImpl_log");
+//		Map<String, String> variablevalues = new HashMap<String, String>();
+//        variablevalues.put("date", DBUtil.getDBAdapter().to_date(new Date()));
+//        String sql =  sqlUtilInsert.evaluateSQL("inserttdsmlog", sql_, variablevalues);
       
 
 		try {
@@ -775,9 +777,10 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 			preparedDBUtil.setString(3, operOrg == null ? "" : operOrg);
 			preparedDBUtil.setString(4, logModule == null ? "" : logModule);
 			preparedDBUtil.setString(5, visitorial == null ? "" : visitorial);
-			preparedDBUtil.setString(6, operContent == null ? "" : operContent);
-			preparedDBUtil.setString(7, remark1 == null ? "" : remark1);
-			preparedDBUtil.setInt(8, operType);
+			preparedDBUtil.setTimestamp(6, new Timestamp(new Date().getTime()));
+			preparedDBUtil.setString(7, operContent == null ? "" : operContent);
+			preparedDBUtil.setString(8, remark1 == null ? "" : remark1);
+			preparedDBUtil.setInt(9, operType);
 			preparedDBUtil.executePrepared();
 			return logId;
 		} catch (Exception e1) {
