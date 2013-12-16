@@ -19,17 +19,18 @@
 	<div class="mcontent">
 		<div class="tabbox" >
 			<ul class="tab" id="menu2">
-				<li><a href="javascript:void(0)" onclick="setTab(2,0)"><span>站点访问记录</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(2,1)"><span>站点访问页面汇总</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(2,0,{frameid:"tab0iframe",framesrc:"browserCounterQuery.jsp?siteId=${param.siteId}"})'><span>站点访问记录</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(2,1,{frameid:"tab2iframe",framesrc:"browserCounterGatherQuery.jsp?siteId=${param.siteId}"})'><span>站点访问页面汇总</span></a></li>
 				<li><a href="javascript:void(0)" class="current" onclick="setTab(2,2)"><span>站点访问概况</span></a></li>
 			</ul>
 		</div>
 		<div id="main2">
 			<ul  id="tab1" style="display:none;">
-				<jsp:include page="browserCounterQuery.jsp?siteId=${param.siteId}"  flush="true"/>
+				<iframe id="tab0iframe"  frameborder="0" width="100%"  height="630" ></iframe>
+				
 			</ul>
 			<ul id="tab2" style="display: none;">
-				<iframe src="browserCounterGatherQuery.jsp?siteId=${param.siteId}"  frameborder="0" width="100%"  height="630" ></iframe>
+				<iframe id="tab2iframe"  frameborder="0" width="100%"  height="630" ></iframe>
 			</ul>
 			<ul id="tab3" style="display: block;">
 				<jsp:include page="browserCounterView.jsp?siteId=${param.siteId}"  flush="true"/>

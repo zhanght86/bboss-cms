@@ -141,11 +141,28 @@ function closeDlg(){
 	this.frameElement.api.close();
 }
 //标签页效果
-function setTab(m,n){
+function setTab(m,n,options){
+	
  var lit = document.getElementById("menu"+m).getElementsByTagName("a");
  var lim = document.getElementById("main"+m).getElementsByTagName("ul");
  for (i=0;i<lit.length;i++){
- lit[i].className=i==n?"current":"";
- lim[i].style.display=i==n?"block":"none";
+	 
+	 lit[i].className=i==n?"current":"";
+	 
+	 if(options )
+	 {
+		 
+		 		
+		 if(options.framesrc && options.framesrc != "")
+		 {
+			
+			if(document.getElementById(options.frameid).src == null ||  document.getElementById(options.frameid).src == "")
+			 {
+				document.getElementById(options.frameid).src = options.framesrc;
+				
+			 }
+		 }
+	 }
+	lim[i].style.display=i==n?"block":"none";
  }
 }

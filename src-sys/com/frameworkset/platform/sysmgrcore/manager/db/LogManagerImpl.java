@@ -466,7 +466,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 			} catch (RollbackException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
+		
 			logger.error("LogManagerImpl::log()->\n" + insertLogSql, e);
 			throw new ManagerException(e.getMessage());
 		} finally {

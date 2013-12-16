@@ -31,11 +31,11 @@
 		<div class="tabbox" >
 			<ul class="tab" id="menu1">
 				<li><a href="javascript:void(0)" class="current" onclick="setTab(1,0)" id="span1"><span>今日</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(1,1)"><span>昨日</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(1,2)"><span>本周</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(1,3)"><span>最近7天</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(1,4)"><span>本月</span></a></li>
-				<li><a href="javascript:void(0)" onclick="setTab(1,5)"><span>最近30天</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(1,1,{frameid:"mm.frame2",framesrc:"showBrowserCounterDistribute.freepage?type=yesterday&siteId=${param.siteId}"})'><span>昨日</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(1,2,{frameid:"mm.frame3",framesrc:"showBrowserCounterDistribute.freepage?type=week&siteId=${param.siteId}"})'><span>本周</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(1,3,{frameid:"mm.frame4",framesrc:"showBrowserCounterDistribute.freepage?type=7days&siteId=${param.siteId}"})'><span>最近7天</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(1,4,{frameid:"mm.frame5",framesrc:"showBrowserCounterDistribute.freepage?type=month&siteId=${param.siteId}"})'><span>本月</span></a></li>
+				<li><a href="javascript:void(0)" onclick='setTab(1,5,{frameid:"mm.frame6",framesrc:"showBrowserCounterDistribute.freepage?type=30days&siteId=${param.siteId}"})'><span>最近30天</span></a></li>
 			</ul>
 		</div>
 		<div style="height: 26px">
@@ -45,22 +45,22 @@
 		</div>
 		<div id="main1">
 			<ul  id="tab1" style="display:block;">
-				<iframe id="frame1" src="showBrowserCounterDistribute.freepage?type=today&siteId=${param.siteId}"  frameborder="0" width="100%"  height="900" ></iframe>
+				<iframe id="mm.frame1" src="showBrowserCounterDistribute.freepage?type=today&siteId=${param.siteId}"  frameborder="0" width="100%"  height="900" ></iframe>
 			</ul>
 			<ul id="tab2" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=yesterday&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="mm.frame2" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab3" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=week&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="mm.frame3" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab4" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=7days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="mm.frame4" frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab5" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=month&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="mm.frame5"  frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 			<ul id="tab6" style="display: none;">
-				<iframe src="showBrowserCounterDistribute.freepage?type=30days&siteId=${param.siteId}"  frameborder="0" width="100%" height="900" ></iframe>
+				<iframe id="mm.frame6"   frameborder="0" width="100%" height="900" ></iframe>
 			</ul>
 		</div>
 </body>
