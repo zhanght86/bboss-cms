@@ -66,7 +66,7 @@
 				</pg:beaninfo>
 			</div>
 			<div region="south" split="true" style="height: 400px;">
-				<div id="nodeconfig">
+				<div id="nodeconfig1">
 					<pg:beaninfo requestKey="processDef">
 						<fieldset>
 							<legend>流程信息</legend>
@@ -107,6 +107,8 @@
 							</table>
 						</fieldset>
 					</pg:beaninfo>
+				</div>
+				<div id="nodeconfig">
 				</div>
 			</div>
 		</div>

@@ -11,6 +11,7 @@ public class ActivitiNodeInfo {
 	private String node_name;
 	
 	private int order_num;
+	private String node_type;
 
 	public String getId() {
 		return id;
@@ -50,5 +51,13 @@ public class ActivitiNodeInfo {
 
 	public void setOrder_num(int order_num) {
 		this.order_num = order_num;
+	}
+
+	public String getNode_type() {
+		return node_type;
+	}
+
+	public void setNode_type(String node_type) {
+		this.node_type = node_type;
 	}
 }

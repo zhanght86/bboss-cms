@@ -1,6 +1,7 @@
 package com.sany.workflow.service.impl;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.UUID;
 import javax.transaction.RollbackException;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.repository.DeploymentBuilder;
 import org.frameworkset.spi.SOAApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
@@ -270,29 +273,35 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	}
 	
 	/**
-	 * 保存流程节点基本信息
+	 * 保存流程节点基本信息，清除重置待办人和变量
 	 * @param processKey
 	 */
 	public void addActivitiNodeInfo(String processKey) throws ActivitiConfigException{
 		TransactionManager tm = new TransactionManager();
-		ActivitiNodeInfo aNode = new ActivitiNodeInfo();
-		aNode.setProcess_key(processKey);
+		
 		try {
 			tm.begin();
-			executor.deleteBean("deleteActivitiNodeCandidataByKey", aNode);
-			executor.deleteBean("deleteNodevariableByKey", aNode);
-			executor.deleteBean("deleteActivitiNodeInfoByKey", aNode);
+			Map param = new HashMap();
+			param.put("process_key", processKey);
+			executor.deleteBean("deleteActivitiNodeCandidataByKey", param);
+			executor.deleteBean("deleteNodevariableByKey", param);
+			executor.deleteBean("deleteActivitiNodeInfoByKey", param);
 			List<ActivityImpl> aList = activitiService
 					.getActivitImplListByProcessKey(processKey);
 			for(int i=0;i<aList.size();i++){
+				ActivitiNodeInfo aNode = new ActivitiNodeInfo();
+				aNode.setProcess_key(processKey);
 				ActivityImpl actImpl = aList.get(i);
-				if (actImpl.getProperty("type").toString().equals("userTask")) {
-					aNode.setId(java.util.UUID.randomUUID().toString());
-					aNode.setNode_key(actImpl.getId());
-					aNode.setNode_name(actImpl.getProperty("name").toString());
-					aNode.setOrder_num(i);
-					executor.insertBean("insertActivitiNodeInfo", aNode);
-				}
+				String node_type = actImpl.getProperty("type").toString();
+//				if (actImpl.getProperty("type").toString().equals("userTask")) {
+//					
+//				}
+				aNode.setNode_type(node_type);
+				aNode.setId(java.util.UUID.randomUUID().toString());
+				aNode.setNode_key(actImpl.getId());
+				aNode.setNode_name(actImpl.getProperty("name").toString());
+				aNode.setOrder_num(i);
+				executor.insertBean("insertActivitiNodeInfo", aNode);
 			}
 			tm.commit();
 		} catch (Exception e) {
@@ -302,6 +311,75 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			} catch (RollbackException e1) {
 				throw new ActivitiConfigException(e);
 			}
+		}
+	}
+	
+	/**
+	 * 部署流程时，更新旧版流程节点基本信息，保留原有节点的待办人和变量
+	 * @param processKey
+	 */
+	public void updateActivitiNodeInfo(String processKey,int deploypolicy) throws ActivitiConfigException{
+		TransactionManager tm = new TransactionManager();
+//		ActivitiNodeInfo aNode = new ActivitiNodeInfo();
+//		aNode.setProcess_key(processKey);
+		try {
+			tm.begin();
+			
+			
+//			executor.deleteBean("deleteActivitiNodeCandidataByKey", aNode);
+//			executor.deleteBean("deleteNodevariableByKey", aNode);
+			
+			List<ActivityImpl> aList = activitiService
+					.getActivitImplListByProcessKey(processKey);
+			List<String> nodekey = new ArrayList<String>();//节点新的nodekey,根据新key清除旧key的配置信息
+			
+			for(int i=0;i<aList.size();i++){//添加新的节点信息
+				ActivityImpl actImpl = aList.get(i);
+				String type = actImpl.getProperty("type").toString();
+//				if (actImpl.getProperty("type").toString().equals("userTask")) {
+//					
+//				}
+				int exist = executor.queryObject(int.class, "existNodeinfo",processKey,actImpl.getId());
+				if(exist == 0)
+				{
+					ActivitiNodeInfo aNode = new ActivitiNodeInfo();
+					aNode.setProcess_key(processKey);
+					aNode.setNode_type(type);
+					aNode.setId(java.util.UUID.randomUUID().toString());
+					aNode.setNode_key(actImpl.getId());					
+					aNode.setNode_name(actImpl.getProperty("name").toString());
+					aNode.setOrder_num(i);
+					executor.insertBean("insertActivitiNodeInfo", aNode);
+					
+				}
+				nodekey.add(actImpl.getId());
+			}
+			if(deploypolicy != DeploymentBuilder.Deploy_policy_default )
+			{
+				Map deleteparams = new HashMap();
+				deleteparams.put("nodekey", nodekey);
+				deleteparams.put("process_key", processKey);
+				
+				
+				/**
+				 * 清理垃圾数据
+				 */
+				executor.deleteBean("deleteNotexistNodevariableByKey", deleteparams);
+				executor.deleteBean("deleteNotexistActivitiNodeCandidataByKey", deleteparams);
+			}
+			
+			
+			
+			tm.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				tm.rollback();
+				throw new ActivitiConfigException(e);
+			} catch (RollbackException e1) {
+				throw new ActivitiConfigException(e);
+			}
+			
 		}
 	}
 	
@@ -406,13 +484,27 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	public String saveNodevariable(List<Nodevariable> nodevariableList,String business_id,String business_type,String process_key){
 		TransactionManager tm = new TransactionManager();
 		try{
+			for(int ii=0;nodevariableList != null && ii<nodevariableList.size();ii++){
+				Nodevariable b = nodevariableList.get(ii);
+				b.setRowno_(ii);
+				if(b!=null&&b.getNode_id()!=null){
+					if(b.getParam_name()==null||b.getParam_name().isEmpty()){
+						
+						return "参数名称不能为空";
+					}
+
+				}
+			}
 			tm.begin();
+			
+
 			Map<String,String> params = new HashMap<String,String>();
 			params.put("process_key", process_key);
 			params.put("business_id", business_id);
 			params.put("business_type", business_type);
 			
 			executor.deleteBean("batchDeleteNodeVariable", params);
+			
 			for(int ii=0;ii<nodevariableList.size();ii++){
 				Nodevariable b = nodevariableList.get(ii);
 				if(b!=null&&b.getNode_id()!=null){
@@ -420,12 +512,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 						tm.rollback();
 						return "参数名称不能为空";
 					}
-					for(int i=0;i<nodevariableList.size();i++){
-						if(ii!=i&&b.getParam_name().equals(nodevariableList.get(i).getParam_name())){
-							tm.rollback();
-							return "存在重复的参数名称";
-						}
-					}
+//					for(int i=0;i<nodevariableList.size();i++){
+//						if(ii!=i&&b.getParam_name().equals(nodevariableList.get(i).getParam_name())){
+//							tm.rollback();
+//							return "存在重复的参数名称";
+//						}
+//					}
 					b.setId(UUID.randomUUID().toString());
 					b.setBusiness_id(business_id);
 					b.setBusiness_type(business_type);
@@ -433,15 +525,15 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 				}
 			}
 			tm.commit();
-			return "參數配置保存成功";
+			return "参数配置保存成功";
 		}catch(Exception e){
 			try {
 				tm.rollback();
 			} catch (RollbackException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
-			return e.getMessage();
+			
+			return StringUtil.exceptionToString(e);
 		}
 		
 	}
@@ -516,6 +608,20 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			params.put("process_key", process_key);
 			params.put("business_type", "0");
 			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryActivitiNodeCandidate", params);
+			return list;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
+	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key){
+		try{
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("process_key", process_key);
+			
+			List<ActivitiNodeInfo> list = executor.queryListBean(ActivitiNodeInfo.class, "queryAllActivitiNodes", params);
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();

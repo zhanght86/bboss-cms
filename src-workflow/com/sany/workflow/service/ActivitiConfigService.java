@@ -13,6 +13,8 @@ import com.sany.workflow.entity.User;
 import com.sany.workflow.entity.VariableResource;
 
 public interface ActivitiConfigService {
+	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key);
+	public void updateActivitiNodeInfo(String processKey,int deploypolicy) throws ActivitiConfigException;
 	public List<ActivitiNodeCandidate> queryActivitiNodesCandidates(String bussinessType,String bussinessid,String process_key);
 	/**
 	 * 查询组织机构

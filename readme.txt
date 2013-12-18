@@ -1,3 +1,12 @@
+ALTER TABLE TD_WF_NODEVARIABLE
+ ADD (ROWNO_  NUMBER                                DEFAULT 0);
+
+ALTER TABLE TD_WF_ACTIVITI_NODE_INFO
+ ADD (node_type  VARCHAR2(100)                      DEFAULT 'userTask');
+
+
+
+
 补丁脚本：
 
 CREATE TABLE TD_SM_ORGPARAMETERS

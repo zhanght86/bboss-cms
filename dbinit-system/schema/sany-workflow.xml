@@ -58,7 +58,7 @@
         <column name="PROCESS_KEY" size="255" type="VARCHAR"/>
         <column name="NODE_KEY" size="100" type="VARCHAR"/>
         <column name="NODE_NAME" size="100" type="VARCHAR"/>
-       
+        <column name="NODE_TYPE" size="100" type="VARCHAR" default="userTask"/>
         <column name="ORDER_NUM" size="4" type="DECIMAL"/>
         
     </table>
@@ -83,6 +83,7 @@
         <column name="PARAM_TYPE" size="100" type="VARCHAR"/>
         <column name="BUSINESS_TYPE" size="100" type="VARCHAR"/>
         <column name="IS_EDIT_PARAM" type="DECIMAL"/>
+        <column name="ROWNO_" type="DECIMAL"/>
     </table>
     
     <table name="TD_WF_PRO_BUSINESSTYPE">

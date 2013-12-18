@@ -15,33 +15,28 @@
 package com.sany.workflow.action;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.frameworkset.spi.SOAApplicationContext;
-import org.frameworkset.spi.assemble.Pro;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 import org.frameworkset.web.servlet.mvc.MultiActionController;
 
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessDeployment;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
-import com.sany.workflow.util.WorkFlowConstant;
 
 /**
  * @author yinbp
@@ -66,7 +61,9 @@ public class ActivitiRepositoryAction extends MultiActionController {
 	public @ResponseBody
 	String deployProcess(ProcessDeployment processDeployment,String needConfig) {
 		String result="success";
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
 			Deployment deployment = null;
 			if (processDeployment.getProcessDef().getContentType().contains(FILE_TYPE_ZIP)) {
 				deployment = activitiService.deployProcDefByZip(processDeployment.getNAME_(), new ZipInputStream(processDeployment
@@ -80,6 +77,8 @@ public class ActivitiRepositoryAction extends MultiActionController {
 				if(needConfig.equals("1")){
 					activitiConfigService.addActivitiNodeInfo(activitiService.getPorcessKeyByDeployMentId(deployment.getId()));
 				}
+				else
+					activitiConfigService.updateActivitiNodeInfo(activitiService.getPorcessKeyByDeployMentId(deployment.getId()),processDeployment.getUpgradepolicy());
 				if(!processDeployment.getParamFile().isEmpty()){
 					result = activitiConfigService.addNodeParams(processDeployment.getParamFile().getInputStream(),pd.getKEY_());
 				}
@@ -87,10 +86,15 @@ public class ActivitiRepositoryAction extends MultiActionController {
 					activitiConfigService.addProBusinessType(pd.getKEY_(), processDeployment.getBusinessTypeId());
 				}
 			}
+			tm.commit();
 			return result;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return e.getMessage();
+			
+			return StringUtil.exceptionToString(e);
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 

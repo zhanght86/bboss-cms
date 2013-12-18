@@ -38,6 +38,7 @@ public class Nodevariable {
 	private String node_name;
 	
 	private int is_edit_param;
+	private int rowno_;
 	
 	
 	public String getId() {
@@ -176,6 +177,14 @@ public class Nodevariable {
 
 	public void setIs_edit_param(int is_edit_param) {
 		this.is_edit_param = is_edit_param;
+	}
+
+	public int getRowno_() {
+		return rowno_;
+	}
+
+	public void setRowno_(int rowno_) {
+		this.rowno_ = rowno_;
 	}
 	
 	

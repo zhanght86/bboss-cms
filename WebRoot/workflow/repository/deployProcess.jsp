@@ -11,7 +11,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title></title>
-		<%@ include file="/common/jsp/css.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	</head>
 	<body>
 		<div class="form">
@@ -53,11 +53,12 @@
 					</tr>
 					<tr>
 						<th width="110px">
-							<pg:message code="sany.pdp.workflow.operation.config.task.again"/>：
+							<!--pg:message code="sany.pdp.workflow.operation.config.task.again"/-->
+							清除待办处理人和节点参数：
 						</th>
 						<td>
-							<input type="checkbox" name="needConfigCheckbox" id="needConfigCheckbox" checked/>
-							<input type="hidden" name="needConfig" id="needConfig" value="1"/>
+							<input type="checkbox" name="needConfigCheckbox" id="needConfigCheckbox" />
+							<input type="hidden" name="needConfig" id="needConfig" value="0"/>
 						</td>
 					</tr>
 					

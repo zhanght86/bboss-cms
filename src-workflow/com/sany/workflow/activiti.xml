@@ -161,6 +161,12 @@
 		]]>
 	</property>
 	
+	<property name="existNodeinfo">
+		<![CDATA[
+			select count(1) from td_wf_activiti_node_info where process_key=? and node_key=?
+		]]>
+	</property>
+	
 	<property name="selectActivitiNodeCandidateByNodeId">
 		<![CDATA[
 			select * from td_wf_activiti_node_candidate where node_id=#[node_id] and org_id=#[org_id]
@@ -254,9 +260,9 @@
         PROCESS_KEY,
         NODE_KEY,
         NODE_NAME,
-       
+        NODE_TYPE,
         ORDER_NUM
-    ) values(#[id],#[process_key],#[node_key],#[node_name],#[order_num])
+    ) values(#[id],#[process_key],#[node_key],#[node_name],#[node_type],#[order_num])
 		]]>
 	</property>
 	
@@ -272,11 +278,43 @@
                   (select id from td_wf_activiti_node_info where process_key=#[process_key])
 		]]>
 	</property>
+	<!-- 清理冗余的流程节点配置 -->
+	<property name="deleteNotexistActivitiNodeCandidataByKey">
+		<![CDATA[
+			 delete from td_wf_activiti_node_candidate where node_id in 
+                  (select id from td_wf_activiti_node_info where process_key=#[process_key] and node_key not in (
+                  	#foreach($key in $nodekey)  
+                            #if($velocityCount == 0)  
+                              #[nodekey[$velocityCount]]  
+                            #else  
+                               ,#[nodekey[$velocityCount]]  
+                           #end  
+                        #end  
+                  	
+                  ))
+		]]>
+	</property>
 	
 	<property name="deleteNodevariableByKey">
 		<![CDATA[
 			 delete from td_wf_nodevariable where node_id in 
                   (select id from td_wf_activiti_node_info where process_key=#[process_key])
+		]]>
+	</property>
+	
+	<property name="deleteNotexistNodevariableByKey">
+		<![CDATA[
+			 delete from td_wf_nodevariable where node_id in 
+                  (select id from td_wf_activiti_node_info where process_key=#[process_key]  and node_key not in (
+                  	#foreach($key in $nodekey)  
+                            #if($velocityCount == 0)  
+                              #[nodekey[$velocityCount]]  
+                            #else  
+                               ,#[nodekey[$velocityCount]]  
+                           #end  
+                        #end  
+                  	
+                  ))
 		]]>
 	</property>
 	
@@ -314,6 +352,7 @@
 			#if($node_key && !$node_key.equals(""))
 				and n.node_key = #[node_key]
 			#end
+			and n.node_type = 'userTask'
 			order by n.order_num
 		]]>
 	</property>
@@ -328,10 +367,18 @@
 			#end
 				
 				and t.business_type = #[business_type]
+			 where n.process_key = #[process_key] and n.node_type = 'userTask'
+			order by n.order_num
+		]]>
+	</property>
+	<property name="queryAllActivitiNodes">
+		<![CDATA[
+			select n.* from td_wf_activiti_node_info n
 			 where n.process_key = #[process_key]
 			order by n.order_num
 		]]>
 	</property>
+	
 	<property name="queryProcessNodeCandidates">
 		<![CDATA[
 			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
@@ -342,7 +389,7 @@
 			#end
 				and t.business_type = #[business_type]
 			 where n.process_key = #[process_key]
-			 and n.node_key=#[node_key];
+			 and n.node_key=#[node_key] and n.node_type = 'userTask'
 			order by n.order_num
 		]]>
 	</property>
@@ -365,6 +412,7 @@
 			#if($node_key && !$node_key.equals(""))
 				and n.node_key = #[node_key]
 			#end
+			and n.node_type = 'userTask'
 			order by n.order_num
 		]]>
 	</property>
@@ -401,8 +449,8 @@
 	
 	<property name="addNodevariable">
 		<![CDATA[
-			insert into td_wf_nodevariable (id,business_id,business_type,node_id,param_name,param_value,param_type,param_des,is_edit_param) 
-			values(#[id],#[business_id],#[business_type],#[node_id],#[param_name],#[param_value],#[param_type],#[param_des],#[is_edit_param])
+			insert into td_wf_nodevariable (id,business_id,business_type,node_id,param_name,param_value,param_type,param_des,is_edit_param,rowno_) 
+			values(#[id],#[business_id],#[business_type],#[node_id],#[param_name],#[param_value],#[param_type],#[param_des],#[is_edit_param],#[rowno_])
 		]]>
 	</property>
 	
@@ -469,7 +517,7 @@
 	<property name="queryNodevariableByParamName">
 		<![CDATA[
 			select * from  td_wf_nodevariable t
-			where t.param_name=#[param_name] and node_id=#[node_id] 
+			where t.param_name=#[param_name] and node_id=#[node_id]
 		]]>
 	</property>
 	
@@ -492,7 +540,7 @@
 			#if($node_key && !$node_key.equals(""))
 				and t.node_key = #[node_key]
 			#end
-			order by n.order_num
+			order by n.order_num,  t.rowno_
 		]]>
 	</property>
 	

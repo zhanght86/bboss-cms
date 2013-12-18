@@ -17,6 +17,7 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
+import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.OrganizationDTO;
@@ -169,7 +170,7 @@ public class ActivitiTaskConfigAction {
 		model.addAttribute("business_id", business_id);
 		model.addAttribute("business_type", business_type);
 		model.addAttribute("process_key", processKey);
-		List<ActivitiNodeCandidate> nodeInfoList = activitiConfigService.queryActivitiNodeInfo(processKey);
+		List<ActivitiNodeInfo> nodeInfoList = activitiConfigService.queryAllActivitiNodeInfo(processKey);
 		model.addAttribute("nodeInfoList", nodeInfoList);
 		if(nodevariableList==null||nodevariableList.isEmpty()){
 			model.addAttribute("loadvariableresource","true");
