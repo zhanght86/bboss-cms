@@ -1,0 +1,88 @@
+1.配置mongodb
+10.0.15.38
+编辑文件/etc/mongodb.conf，内容如下：
+port = 27017
+bind_ip = 10.0.15.38
+dbpath = /data/db0/
+fork = true
+replSet = rs0
+logpath = /data/logs/db0.log
+增加abr节点：
+vi /etc/mongoabr.conf
+
+port = 30000
+bind_ip = 10.0.15.38
+dbpath = /data/abr/
+fork = true
+replSet = rs0
+logpath = /data/logs/abr.log
+
+./mongod --config /etc/mongoabr.conf
+在主节点shell执行一下指令，添加abr
+rs.addArb("10.0.15.38:30000")
+
+2.启动mongodb
+10.0.15.134
+./mongod --config /etc/mongodb.conf
+./mongod --config /etc/mongodb1.conf
+10.0.15.38
+./mongod --config /etc/mongodb.conf
+
+说明：./mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --logpath /data/logs/db0.log --fork true
+
+
+3.客户端连接mongodb
+./mongo --host 10.0.15.134 --port 27017
+./mongo --host 10.0.15.134 --port 27018
+./mongo --host 10.0.15.38 --port 27017
+
+4.配置并初始化复制服务器群
+10.0.15.134：27017为主服务器
+连接
+./mongo --host 10.0.15.134 --port 27017
+提示符下输入以下配置：
+config = {_id: 'rs0', members: [
+{_id: 0, host: '10.0.15.38:27017'},
+{_id: 1, host: '10.0.15.134:27017'},
+{_id: 2, host: '10.0.15.134:27018'}]
+}
+然后执行以下指令即可
+rs.initiate(config)
+最后分别连入各客户端，执行：
+rs.slaveOk()
+
+5.使用mongodb
+use mydb
+j = { name : "mongo" }
+k = { x : 3 }
+
+db.testData.insert( j )
+db.testData.insert( k )
+
+关闭mongodb
+db.adminCommand({shutdown : 1, force : true})
+
+39部署mongodb
+
+
+vi /etc/mongodb.conf输入以下内容：
+
+port = 27017
+bind_ip = 10.0.15.39
+dbpath = /dataDisk/mongodb/db0/
+fork = true
+replSet = rs0
+logpath = /dataDisk/mongodb/logs/db0.log
+
+
+mkdir /dataDisk/mongodb
+mkdir /dataDisk/mongodb/db0
+mkdir /dataDisk/mongodb/logs
+
+解压安装mongodb
+tar -xvf mongodb-linux-x86_64-2.4.8.tar 
+
+开通防火墙端口：
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 28017 -j ACCEPT
+rs.add("10.0.15.39:27017")
