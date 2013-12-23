@@ -102,7 +102,57 @@
             order by CREATE_TIME_ desc
 		]]>
 	</property>
-	
+	<property name="listTaskAndVarsByUserWithStates">
+		<![CDATA[ select var.*,user1.USER_REALNAME name_,
+            user2.USER_REALNAME SenderName,user3.USER_REALNAME mainSenderName from (
+            select 
+                max(il.USER_ID_)  user_id_,
+                il.task_id_,max(task.CREATE_TIME_) CREATE_TIME_,
+                max(task.TASK_DEF_KEY_) TASK_DEF_KEY_,max(exec.BUSINESS_KEY_) business_key_,
+                max(var.EXECUTION_ID_) EXECUTION_ID_,max(case when var.NAME_ = CONCAT(task.TASK_DEF_KEY_,'Url') then var.TEXT_ else null end)  url
+                                ,max(case when var.NAME_ = CONCAT(task.TASK_DEF_KEY_,'User') then var.TEXT_ else null end)  variable_user
+                                ,max(case when var.NAME_ = CONCAT(task.TASK_DEF_KEY_,'Sender')  then var.TEXT_ else null end)  sender
+                                ,max(case when var.NAME_ = CONCAT(task.TASK_DEF_KEY_,'Title')  then var.TEXT_ else null end)  title
+                                ,max(case when var.NAME_ = 'state' then var.TEXT_ else null end)  state
+                from
+                act_ru_identitylink il
+                left join act_ru_task task on il.TASK_ID_ = task.ID_
+                left join act_ru_variable var on task.PROC_INST_ID_ = var.PROC_INST_ID_
+                left join act_ru_execution exec on task.PROC_INST_ID_ = exec.PROC_INST_ID_
+                where il.USER_ID_=#[userAccount] 
+                and EXISTS (select 1 from act_ru_variable b
+                                    where b.PROC_INST_ID_ = var.PROC_INST_ID_ and b.NAME_='state' 
+                                    #if($states && !$states.equals(""))
+					                   and b.TEXT_ in(
+					                   #foreach($state in $states)
+					                       #if($velocityCount == 0)
+					                          #[states[$velocityCount]]
+					                       #else
+					                          , #[states[$velocityCount]]
+					                       #end
+					                   #end
+					                   )
+					                #end
+                            )
+                #if($processkeys && !$processkeys.equals(""))
+                   and (substr(task.PROC_DEF_ID_, 0, instr(task.PROC_DEF_ID_, ':')-1) in(
+                   #foreach($processkey in $processkeys)
+                       #if($velocityCount == 0)
+                          #[processkeys[$velocityCount]]
+                       #else
+                          , #[processkeys[$velocityCount]]
+                       #end
+                   #end
+                   )
+                #end
+                )
+                group by il.TASK_ID_)  var 
+            left join td_sm_user user1 on var.user_id_=user1.USER_NAME 
+            left join td_sm_user user2 on var.sender=user2.USER_NAME
+            left join td_sm_user user3 on var.sender=user3.USER_NAME 
+            order by CREATE_TIME_ desc
+		]]>
+	</property>
 	<property name="countlistTaskAndVarsByUserWithState">
 		<![CDATA[ 
            select 
@@ -118,6 +168,48 @@
                        where b.PROC_INST_ID_ = task.PROC_INST_ID_ and b.NAME_='state' and b.TEXT_=#[state])
                 and INSTR(task.PROC_DEF_ID_ ,#[processkey]) > 0 
                )
+		]]>
+	</property>
+	
+	<property name="countlistTaskAndVarsByUserWithStates">
+		<![CDATA[ 
+           select 
+                count(1)
+                from
+                (
+	                select il.*
+	                from
+	                act_ru_identitylink il
+	                left join act_ru_task task on il.TASK_ID_ = task.ID_
+	                where il.USER_ID_=#[userAccount] 
+	                and EXISTS (
+	                    select 1 from act_ru_variable b
+	                         where b.PROC_INST_ID_ = task.PROC_INST_ID_ and b.NAME_='state'
+	                               #if($states && !$states.equals(""))
+				                   and b.TEXT_ in(
+				                   #foreach($state in $states)
+				                       #if($velocityCount == 0)
+				                          #[states[$velocityCount]]
+				                       #else
+				                          , #[states[$velocityCount]]
+				                       #end
+				                   #end
+				                   )
+				                #end
+	                     )
+	                #if($processkeys && !$processkeys.equals(""))
+	                   and (substr(task.PROC_DEF_ID_, 0, instr(task.PROC_DEF_ID_, ':')-1) in(
+	                   #foreach($processkey in $processkeys)
+	                       #if($velocityCount == 0)
+	                          #[processkeys[$velocityCount]]
+	                       #else
+	                          , #[processkeys[$velocityCount]]
+	                       #end
+	                   #end
+	                   )
+	                #end
+	                )
+            )
 		]]>
 	</property>
 	

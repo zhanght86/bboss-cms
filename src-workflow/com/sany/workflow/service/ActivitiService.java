@@ -3,6 +3,7 @@ package com.sany.workflow.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
@@ -969,4 +970,8 @@ public interface ActivitiService {
 	public ListInfo listTaskAndVarsByUserWithState(Class clazz,String processkey,String state,String userAccount,long offset,int pagesize);
 	public int countTasksByUserWithState(String processkey,String state,String userAccount);
 	public List<Task> listTaskByProcessInstanceId(String processInstanceId) ;
+	
+	public int countTasksByUserWithStates(List<String> processkeys, List<String> states, String userAccount);
+	
+	 public ListInfo listTaskAndVarsByUserWithStates(Class paramClass, List<String> processkeys, List<String> states, String userAccount, long offset, int pagesize);
 }

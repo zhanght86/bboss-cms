@@ -1806,14 +1806,14 @@ public class AccessControl implements AccessControlInf{
 //			System.err.println(date + "===============================================");
 //			Exception e = new Exception("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
 //			e.printStackTrace();
-			System.err.println("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
+			log.debug("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
 //			System.err.println(date +"================================================");
 		}
 		else
 		{
 //			System.err.println(date + "===============================================");
 			Exception e = new Exception("date["+ date +"] [remoteip=null] " +msg);
-			e.printStackTrace();
+			log.error("",e);
 //			System.err.println("date["+ date +"] [remoteip=null] " +msg);
 //			System.err.println(date +"================================================");
 		}
@@ -1829,7 +1829,7 @@ public class AccessControl implements AccessControlInf{
 //			System.err.println(date + "===============================================");
 //			Exception e = new Exception("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
 //			e.printStackTrace();
-			System.err.println("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
+			log.debug("date["+ date +"] [remoteip=" + remoteip + "] " +msg);
 //			System.err.println(date +"================================================");
 		}
 		else
@@ -1837,7 +1837,7 @@ public class AccessControl implements AccessControlInf{
 //			System.err.println(date + "===============================================");
 //			Exception e = new Exception("date["+ date +"] [remoteip=null] " +msg);
 //			e.printStackTrace();
-			System.err.println("date["+ date +"] [remoteip=null] " +msg);
+			log.debug("date["+ date +"] [remoteip=null] " +msg);
 //			System.err.println(date +"================================================");
 		}
 	}
@@ -4352,7 +4352,7 @@ public class AccessControl implements AccessControlInf{
 				.append(" union ").append(sql_jobRole.toString())
 				.append(" union ").append(sql_org.toString())
 				.append(" union ").append(sql_group.toString());
-		System.out.println(sql.toString());
+//		System.out.println(sql.toString());
 		final Map opMap = new HashMap();
 		PreparedDBUtil pe = new PreparedDBUtil();
 		try {

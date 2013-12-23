@@ -1630,6 +1630,39 @@ public void rejecttoPreTask(String taskId,String username){
 					+",userAccount="+userAccount,e);
 		}
 	}
+	
+	public int countTasksByUserWithStates(List<String> processkeys, List<String> states, String userAccount)
+	  {
+	    try
+	    {
+	      Map map = new HashMap();
+	      map.put("userAccount", userAccount);
+	      map.put("states", states);
+	      map.put("processkeys", processkeys);
+
+	      return ((Integer)this.executor.queryObjectBean(Integer.class, "countlistTaskAndVarsByUserWithStates", map)).intValue();
+	    } catch (Exception e) {
+	    	throw new ProcessException("获取待办任务数失败：processkeys=" + processkeys.toString() + ",states=" + states.toString() + ",userAccount=" + userAccount, e);
+	    }
+	    
+	  }
+	
+	 public ListInfo listTaskAndVarsByUserWithStates(Class paramClass, List<String> processkeys, List<String> states, String userAccount, long offset, int pagesize)
+	  {
+	    ListInfo listInfo = null;
+	    try {
+	      Map map = new HashMap();
+	      map.put("userAccount", userAccount);
+	      map.put("states", states);
+	      map.put("processkeys", processkeys);
+	      listInfo = this.executor.queryListInfoBean(paramClass, "listTaskAndVarsByUserWithStates", offset, pagesize, map);
+	    }
+	    catch (Exception e)
+	    {
+	      throw new ProcessException("获取待办任务失败：processkeys=" + processkeys.toString() + ",states=" + states.toString() + ",userAccount=" + userAccount + ",offset=" + offset + ",pagesize=" + pagesize, e);
+	    }
+	    return listInfo;
+	  }
 
 	/**
 	 * 根据用户名,流程KEY数组查询待办任务
