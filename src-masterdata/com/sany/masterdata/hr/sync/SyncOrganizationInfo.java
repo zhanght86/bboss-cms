@@ -136,7 +136,7 @@ public class SyncOrganizationInfo {
             pre.setString(1, temp.getOrgId());
 //        }
        
-        if (temp.getOrgText() == null || temp.getOrgText().trim().equals("三一集团")) {
+        if (temp.getOrgText() == null) {
             pre.setString(2, "未指定");
             String parentOrgid = fixedorginfos.get(temp.getOrgId());
             if(parentOrgid == null)
@@ -147,7 +147,20 @@ public class SyncOrganizationInfo {
             {
             	pre.setString(3, parentOrgid);
             }
-        } else {
+        }
+        else if (temp.getOrgText().trim().equals("三一集团")) {
+            pre.setString(2, temp.getOrgText().trim());
+            String parentOrgid = fixedorginfos.get(temp.getOrgId());
+            if(parentOrgid == null)
+            {
+            	pre.setString(3, "0");
+            }
+            else
+            {
+            	pre.setString(3, parentOrgid);
+            }
+        }
+        else {
         	
             pre.setString(2, temp.getOrgText());
             String parentOrgid = fixedorginfos.get(temp.getOrgId());

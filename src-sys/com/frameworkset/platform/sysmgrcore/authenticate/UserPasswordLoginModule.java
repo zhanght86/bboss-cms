@@ -202,7 +202,20 @@ public class UserPasswordLoginModule extends ACLLoginModule
         } else {
             checkCallBack.setUserAttribute("CHARGEORGID", org);
             String orgpath =  FunctionDB.getUserorgjobinfos( user.getUserId());
-            checkCallBack.setUserAttribute("orgjob", orgpath);
+            checkCallBack.setUserAttribute("fullorgjob", orgpath);
+            
+            if(orgpath != null)
+            {
+            	int idx =orgpath.lastIndexOf(">");
+            	if(idx  > 0)
+            	{
+            		checkCallBack.setUserAttribute("orgjob", orgpath.substring(idx + 1));
+            	}
+            	else
+            	{
+            		checkCallBack.setUserAttribute("orgjob", orgpath);
+            	}
+            }
         }
         
 //        // 获取当前登陆用户所在机构列表，不包含主机构************
