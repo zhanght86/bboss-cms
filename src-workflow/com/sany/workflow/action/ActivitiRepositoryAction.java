@@ -17,7 +17,9 @@ package com.sany.workflow.action;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +34,7 @@ import org.frameworkset.web.servlet.mvc.MultiActionController;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
+import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessDeployment;
@@ -119,15 +122,15 @@ public class ActivitiRepositoryAction extends MultiActionController {
 			// 获取流程部署信息集合
 			ListInfo listInfo = activitiService.queryProcessDefs(offset,
 					pagesize, processDefCondition);
-			if(listInfo!=null){
-				List<ProcessDef> list = listInfo.getDatas();
-				for (int i = 0; list!=null&&i < list.size(); i++) {
-					list.get(i).setBusiness_name(
-							activitiConfigService.queryBusinessName(list.get(i)
-									.getKEY_()));
-				}
-				listInfo.setDatas(list);
-			}
+//			if(listInfo!=null){
+//				List<ProcessDef> list = listInfo.getDatas();
+//				for (int i = 0; list!=null&&i < list.size(); i++) {
+//					list.get(i).setBusiness_name(
+//							activitiConfigService.queryBusinessName(list.get(i)
+//									.getKEY_()));
+//				}
+//				listInfo.setDatas(list);
+//			}
 			
 			model.addAttribute("processDefs", listInfo);
 		} catch (Exception e) {
@@ -190,6 +193,41 @@ public class ActivitiRepositoryAction extends MultiActionController {
 			return "success";
 		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+
+	/**
+	 * 装载未装载的流程信息，主要是一些未经过流程管理部署的流程信息的装载
+	 * 
+	 * @param processId
+	 * @return
+	 */
+	public String getUnloadProcesses(ModelMap model)
+	{
+		List<ProcessDef> unloadProcesses = activitiService.getUnloadProcesses();
+		model.addAttribute("unloadProcesses", unloadProcesses);
+		return "path:getUnloadProcesses";
+	}
+	/**
+	 * 装载未装载的流程信息，主要是一些未经过流程管理部署的流程信息的装载
+	 * 
+	 * @param processId
+	 * @return
+	 */
+	public @ResponseBody
+	Map loadProcess(List<LoadProcess> unloadProcess) {
+		try {
+			String message = activitiService.loadProcess(unloadProcess);
+			Map<String,Object> data = new HashMap<String,Object>();
+			data.put("success", true);
+			data.put("message", message);
+			return data;
+		} catch (Exception e) {
+			Map<String,Object> data = new HashMap<String,Object>();
+			data.put("success", false);
+			data.put("message", StringUtil.formatBRException(e));
+			return data;
 		}
 	}
 

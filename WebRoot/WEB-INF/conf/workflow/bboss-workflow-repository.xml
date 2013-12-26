@@ -18,6 +18,7 @@
 		path:viewHisProcessInfo = "/workflow/repository/viewHisProcessInfo.jsp"
 		path:deployProcess="/workflow/repository/deployProcess.jsp"
 		path:viewBom="/workflow/repository/processDefView.jsp"
+		path:getUnloadProcesses="/workflow/repository/unloadedProcess.jsp"
 		f:activitiService="attr:activitiService"
 		f:activitiConfigService="attr:activitiConfigService"
 		class="com.sany.workflow.action.ActivitiRepositoryAction" >

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +28,6 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.engine.impl.persistence.deploy.DeploymentManager;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -46,6 +46,7 @@ import org.frameworkset.util.CollectionUtils;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
+import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
@@ -1381,6 +1382,7 @@ public void rejecttoPreTask(String taskId,String username){
 				try {
 					repositoryService.deleteDeployment(
 							pd.getDeploymentId(), true);
+					this.activitiConfigService.deleteActivitiNodeInfo(pd.getKey());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -2303,6 +2305,48 @@ public void rejecttoPreTask(String taskId,String username){
 	public List<Task> listTaskByProcessInstanceId(String processInstanceId) {
     	return taskService.createTaskQuery().processInstanceId(processInstanceId).list();
     }
+	
+	public List<ProcessDef> getUnloadProcesses()
+	{
+		
+		try {
+			return executor.queryList(ProcessDef.class, "getUnloadProcesses");
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public String loadProcess(List<LoadProcess> loadprocesses) {
+		if(loadprocesses == null || loadprocesses.size() == 0)
+			return "没有待装载的流程信息";
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			StringBuffer ret = new StringBuffer();
+			tm.begin();
+			ret.append("成功装载以下流程：<br>");
+			for(int i =0 ; i < loadprocesses.size(); i ++)
+			{
+				
+				LoadProcess LoadProcess = loadprocesses.get(i);
+				ret.append(LoadProcess.getProcessKey()).append("->").append(LoadProcess.getProcessName()).append("<br>");
+				activitiConfigService.addActivitiNodeInfo(LoadProcess.getProcessKey());	
+				activitiConfigService.addProBusinessType(LoadProcess.getProcessKey(), LoadProcess.getBusinessType());
+			}
+			tm.commit();
+			return ret.toString();
+		}
+		catch(Exception e)
+		{
+			throw new ProcessException(e); 
+		}
+		finally
+		{
+			tm.release();
+		}
+		
+	}
 
 
 }

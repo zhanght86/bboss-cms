@@ -271,7 +271,28 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		}
 		return null;
 	}
-	
+	public void deleteActivitiNodeInfo(String processKey) throws ActivitiConfigException
+	{
+		TransactionManager tm = new TransactionManager();
+		
+		try {
+			tm.begin();
+			Map param = new HashMap();
+			param.put("process_key", processKey);
+			executor.deleteBean("deleteActivitiNodeCandidataByKey", param);
+			executor.deleteBean("deleteNodevariableByKey", param);
+			executor.deleteBean("deleteActivitiNodeInfoByKey", param);
+			executor.deleteBean("deleteProBusinessByKey", param);
+			tm.commit();
+		} catch (Exception e) {
+			try {
+				tm.rollback();
+				throw new ActivitiConfigException(e);
+			} catch (RollbackException e1) {
+				throw new ActivitiConfigException(e);
+			}
+		}
+	}
 	/**
 	 * 保存流程节点基本信息，清除重置待办人和变量
 	 * @param processKey
@@ -858,6 +879,10 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	@Override
 	public void addProBusinessType(String processKey,String businessTypeId) throws ActivitiConfigException{
 		try{
+			if(businessTypeId == null || businessTypeId.equals(""))
+			{
+				throw new ActivitiConfigException("保存流程业务类型失败：processKey="+processKey+",没有指定businessTypeId.");
+			}
 			ProBusinessType bpt = new ProBusinessType();
 			bpt.setBusinessType_id(businessTypeId);
 			bpt.setProcess_key(processKey);

@@ -3,7 +3,6 @@ package com.sany.workflow.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
@@ -19,8 +18,6 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -29,6 +26,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 
@@ -974,4 +972,7 @@ public interface ActivitiService {
 	public int countTasksByUserWithStates(List<String> processkeys, List<String> states, String userAccount);
 	
 	 public ListInfo listTaskAndVarsByUserWithStates(Class paramClass, List<String> processkeys, List<String> states, String userAccount, long offset, int pagesize);
+
+	String loadProcess(List<LoadProcess> loadprocesses);
+	public List<ProcessDef> getUnloadProcesses();
 }

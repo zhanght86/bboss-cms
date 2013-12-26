@@ -30,8 +30,8 @@
        		<th><pg:message code="sany.pdp.workflow.process.key"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.version"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.name"/></th>
-       		<th><pg:message code="sany.pdp.workflow.deploy.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.time"/></th>
+       		<th><pg:message code="sany.pdp.workflow.picture.resource.path"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.business.type"/></th>
        		<th><pg:message code="sany.pdp.common.status"/></th>

@@ -28,7 +28,12 @@
            $('#addButton').click(function() {  
          	 var url="<%=request.getContextPath()%>/workflow/repository/deployProcess.jsp";
 		 	 $.dialog({ id:'iframeNewId', title:'流程部署',width:600,height:330, content:'url:'+url});   			 		  
-           });      
+           }); 
+           
+           
+           $('#loadButton').click(function() {  
+        	   loadProcess();
+             }); 
            
            $("#businessType").combotree({
        		url:"../businesstype/showComboxBusinessTree.page"
@@ -95,6 +100,12 @@
 	function modifyQueryData()
 	{
 		$("#custombackContainer").load("queryProcessDefs.page?"+$("#querystring").val()+" #customContent",function(){loadjs()});
+	}
+	
+	function loadProcess() {
+		var url="<%=request.getContextPath()%>/workflow/repository/getUnloadProcesses.page";
+	 	 $.dialog({ id:'iframeNewId', title:'待装载流程信息',width:740,height:560, content:'url:'+url});  
+		
 	}
 	
 	function activateProcess(id) {
@@ -270,6 +281,7 @@
 				<div class="rightbtn">
 				<a href="#" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.add"/></span></a>
 				<a href="#" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
+				<a href="#" class="bt_small" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
 				<!--  <a href="#" class="bt_small" id="exportButton"><span>导出</span></a>
 				<!--<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>-->

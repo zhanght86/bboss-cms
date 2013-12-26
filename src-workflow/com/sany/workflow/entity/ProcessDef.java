@@ -55,6 +55,7 @@ public class ProcessDef {
 	private String DEPLOYMENT_TIME_STRING_;
 	
 	private String business_name;
+	private String business_id;
 	
 	public int getREV_() {
 		return REV_;
@@ -174,6 +175,15 @@ public class ProcessDef {
 
 	public void setBusiness_name(String business_name) {
 		this.business_name = business_name;
+	}
+
+	
+	public String getBusiness_id() {
+		return business_id;
+	}
+
+	public void setBusiness_id(String business_id) {
+		this.business_id = business_id;
 	}
 
 

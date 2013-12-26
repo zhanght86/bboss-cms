@@ -65,17 +65,22 @@ var api = frameElement.api, W = api.opener;
 	 
 	/* 添加选择的项 */
 	function move(ObjSource, ObjTarget) {
+		var sourceName =ObjSource.attr("id");
+		
 		if (ObjSource.val() == null)
 			return;
 		try{
 			$.each(ObjSource.find('option:selected'), function(i, n) {
 				
-					if(SelectIsExitItem(ObjTarget,n.value)){
+					if(SelectIsExitItem(ObjTarget,n.value) ){
+						if(sourceName != 'select2')
 							throw "已选列表中已存在  "+n.innerHTML;
-						
-					};
-				
-				ObjTarget.append(n);
+									
+					}
+					else
+					{						
+						ObjTarget.append(n);		
+				    };
 			});
 			ObjSource.find('option:selected').remove();
 		}catch(e) {    
@@ -86,13 +91,20 @@ var api = frameElement.api, W = api.opener;
 	/* 添加全部 */
 	function moveAll(ObjSource, ObjTarget) {
 		try{
+			var sourceName =ObjSource.attr("id");
 			$.each(ObjSource.find('option'), function(i, m) {		
-					if(SelectIsExitItem(ObjTarget,m.value)){
+					if(SelectIsExitItem(ObjTarget,m.value) ){
+						 if( sourceName != 'select2')
 							throw "已选列表中已存在  "+n.innerHTML;
 						
-					};		
+					}
+					else
+					{
+						ObjTarget.append(m);
+					}
 			});
-			ObjTarget.append(ObjSource.html());
+			
+			//ObjTarget.append(ObjSource.html());
 			ObjSource.empty();
 		}catch(e) {    
 		    alert(e);    

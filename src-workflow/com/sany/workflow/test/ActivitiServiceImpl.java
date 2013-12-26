@@ -1,5 +1,7 @@
 package com.sany.workflow.test;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,10 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipInputStream;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -28,7 +30,7 @@ import org.activiti.engine.impl.pvm.process.TransitionImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task; 
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
 
 import com.sany.workflow.entity.ProcessDef;
@@ -210,6 +212,23 @@ public class ActivitiServiceImpl {
 
 		Deployment deploy = repositoryService.createDeployment()
 				.name(deploymentName).addClasspathResource(xmlPath).deploy();
+		// .addClasspathResource(jpgPath).deploy();
+
+		return deploy;
+	}
+	
+	/**
+	 * 部署流程
+	 * 
+	 * @return
+	 * @throws FileNotFoundException 
+	 */
+	public Deployment deployProcDefByPath(String deploymentName,
+			String zip) throws FileNotFoundException {
+
+		InputStream in = Deployment.class.getResourceAsStream(zip);
+		Deployment deploy = repositoryService.createDeployment()
+				.name(deploymentName).addZipInputStream(new ZipInputStream(in)).deploy();
 		// .addClasspathResource(jpgPath).deploy();
 
 		return deploy;

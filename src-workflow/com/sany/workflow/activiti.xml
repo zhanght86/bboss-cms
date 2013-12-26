@@ -5,10 +5,10 @@
 	<property name="queryProdef">
 		<![CDATA[
 			select p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
-			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
-			left join td_wf_pro_businesstype b on p.key_=b.process_key
+			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
 			where p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
 			#if($processKey && !$processKey.equals(""))
 				and p.key_ like #[processKey]
@@ -23,6 +23,18 @@
 				and d.id_ = #[deploymentId]
 			#end
 			
+		]]>
+	</property>
+	
+	
+	<property name="getUnloadProcesses">
+		<![CDATA[
+			select p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_
+			from act_re_procdef p
+			join act_re_deployment d on p.deployment_id_=d.id_
+			left join td_wf_pro_businesstype b on p.key_=b.process_key
+			where p.key_ not in (select process_key from td_wf_pro_businesstype)			
 		]]>
 	</property>
 
@@ -675,6 +687,13 @@
 			select id from td_wf_pro_businesstype where process_key=#[process_key]
 		]]>
 	</property>
+	
+	<property name="deleteProBusinessByKey">
+		<![CDATA[
+			delete from td_wf_pro_businesstype where process_key=#[process_key]
+		]]>
+	</property>
+	
 	
 	<property name="queryBusinessNameByProKey">
 		<![CDATA[

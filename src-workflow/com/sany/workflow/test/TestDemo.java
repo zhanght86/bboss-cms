@@ -1,5 +1,6 @@
 package com.sany.workflow.test;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,15 +28,28 @@ public class TestDemo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-				deployment("demo1", "com/sany/workflow/test/demo1.bpmn", "");
+//				deployment("demo1", "com/sany/workflow/test/demo1.bpmn", "");
 //		checkOne();
-				testinitor();
+//				testinitor();
 //				deployment("demo1", "com/sany/workflow/test/demo1.bpmn", "");
 //				huiqianparraleltosequential();
 //		huiqianparralelt2ndsequentialswitch();
 //		deployment("dddd", "RefundProcess.bpmn20.xml", "");
 		//deployment("fff", "com/sany/workflow/test/EndorseProcess.bpmn20.xml", "");
 		
+		 deploytest();
+		
+	}
+	
+	public static void deploytest()
+	{
+		com.sany.workflow.test.ActivitiServiceImpl service = new com.sany.workflow.test.ActivitiServiceImpl("activiti.cfg.xml");
+		try {
+			service.deployProcDefByPath("测试", "/com/sany/activiti/demo/diagrams/mms.get.zip");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void testinitor()

@@ -3,9 +3,7 @@
 <select name="select1" size="15" multiple="multiple" id="select1" onclick="showOrgInfo()"
 	style="width: 220px; height: 400px">
 	<pg:list requestKey="userList">
-		<option value="<pg:cell colName='user_name'/>">
-			<pg:cell colName="user_realname" />
-		</option>
+		<option value="<pg:cell colName='user_name'/>"><pg:cell colName="user_realname" /></option>
 	</pg:list>
 </select>
 <pg:list requestKey="userList">
