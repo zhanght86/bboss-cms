@@ -54,14 +54,7 @@
 			}
 		}
 		
-		function setTab(m, n) {
-			 var lit = document.getElementById("menu"+m).getElementsByTagName("a");
-			 var lim = document.getElementById("main"+m).getElementsByTagName("ul");
-			 for (i=0;i<lit.length;i++) {
-				 lit[i].className=i==n?"current":"";
-				 lim[i].style.display=i==n?"block":"none";
-			 }
-		}
+		
 		</script>
 	</head>
 	<body>
@@ -70,6 +63,7 @@
 		<ul class="tab" id="menu1">
 			     <li><a href="javascript:void(0)" class="current" onclick="setTab(1,0)"><span><pg:message code="sany.pdp.workflow.detail.info"/></span></a></li>
 			     <li><a href="javascript:void(0)" onclick="setTab(1,1)"><span><pg:message code="sany.pdp.workflow.history.info"/></span></a></li>
+			     <li><a href="javascript:void(0)" onclick='setTab(1,2,{frameid:"tab2iframe",framesrc:"getProccessXMLByKey.page?processKey=${processDef.KEY_}"})'><span><pg:message code="sany.pdp.workflow.process.xml"/></span></a></li>
 		</ul>
 		</div>
 		<div id="main1">
@@ -131,9 +125,7 @@
 					</div>		
 		</ul>
 		<ul id="tab3" style="display: none;">
-					<pg:beaninfo requestKey="processDef">
-					<%@ include file="viewProcessPic.jsp"%>	
-					</pg:beaninfo>
+				<iframe id="tab2iframe"  frameborder="0" width="100%"  height="630" ></iframe>
 		</ul>
 		<div class="btnarea" >
 				<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>

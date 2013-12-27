@@ -142,7 +142,7 @@ function closeDlg(){
 }
 //标签页效果
 function setTab(m,n,options){
-	
+
  var lit = document.getElementById("menu"+m).getElementsByTagName("a");
  var lim = document.getElementById("main"+m).getElementsByTagName("ul");
  for (i=0;i<lit.length;i++){

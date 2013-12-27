@@ -122,6 +122,7 @@
 <!--     		<property class="org.frameworkset.http.converter.FormHttpMessageConverter"/>-->
 <!--     		<property class="org.frameworkset.http.converter.ResourceHttpMessageConverter"/>-->
      			<property class="org.frameworkset.http.converter.FileMessageConvertor"/>
+     			<property class="org.frameworkset.http.converter.XMLHttpMessageConverter"/>
 	     		<property class="org.frameworkset.http.converter.StringHttpMessageConverter" f:responseCharset="UTF-8"/>
      		
      	</list>        

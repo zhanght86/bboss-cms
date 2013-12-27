@@ -17,6 +17,7 @@ package com.sany.workflow.action;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,11 +287,35 @@ public class ActivitiRepositoryAction extends MultiActionController {
 		}
 	}
 	
-	public String getProccessXML(String processId) throws IOException {
+	public @ResponseBody(datatype="xml") String getProccessXML(String processId) throws IOException {
 		if(processId!=null&&!processId.equals("")){
 			
 			return activitiService.getProccessXML(processId);
 		}
 		return null;
 	}
+	public @ResponseBody(datatype="xml") String getProccessXMLByKey(String processKey) throws IOException {
+		
+		if(processKey!=null&&!processKey.equals("")){
+			
+			return activitiService.getProccessXMLByKey(processKey);
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param processKey
+	 * @return
+	 * @throws IOException
+	 */
+	
+	public @ResponseBody(datatype="xml") List testList(String processKey) throws IOException {
+		
+		
+		List data =  new ArrayList();
+		data.add(1);
+		data.add(2);
+		return data;
+	}
+	
 }
