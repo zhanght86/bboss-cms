@@ -34,7 +34,7 @@
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
 			left join td_wf_pro_businesstype b on p.key_=b.process_key
-			where p.key_ not in (select process_key from td_wf_pro_businesstype)			
+			where p.key_ not in (select process_key from td_wf_pro_businesstype) and p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)			
 		]]>
 	</property>
 
