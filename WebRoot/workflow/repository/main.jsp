@@ -158,9 +158,9 @@
 		$.dialog({ title:'历史版本信息',width:740,height:560, content:'url:'+url});   		
 	}
 	
-	function viewProcessInfo(deploymentId) {
-		var url="<%=request.getContextPath()%>/workflow/repository/viewProcessInfo.page?deploymentId="+deploymentId;
-		$.dialog({ title:'查看流程信息',width:1100,height:620, content:'url:'+url});   
+	function viewProcessInfo(processKey) {
+		var url="<%=request.getContextPath()%>/workflow/repository/viewProcessInfo.page?processKey="+processKey;
+		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
 	}
 	
 	   function doreset(){
@@ -290,7 +290,7 @@
 				<strong><pg:message code="sany.pdp.workflow.manage"/></strong>
 				<img id="wait" src="../common/images/wait.gif" />				
 			</div>
-			<div id="custombackContainer" >
+			<div id="custombackContainer"  style="overflow:auto">
 			
 			</div>
 		</div>

@@ -46,7 +46,7 @@ import com.sany.workflow.service.ActivitiService;
  * @author yinbp
  * @since 2012-3-22 下午6:03:09
  */
-public class ActivitiRepositoryAction extends MultiActionController {
+public class ActivitiRepositoryAction {
 
 	private static final String FILE_TYPE_ZIP = "zip";
 
@@ -141,16 +141,16 @@ public class ActivitiRepositoryAction extends MultiActionController {
 		return "path:queryProcessDefs";
 	}
 
-	public String queryProcessHisVer(
-			@PagerParam(name = PagerParam.SORT, defaultvalue = "resourceName") String sortKey,
-			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
-			@PagerParam(name = PagerParam.OFFSET) long offset,
-			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-			ProcessDefCondition processDefCondition, ModelMap model) {
+	public String queryProcessHisVer(String processKey,String version, ModelMap model) {
 		try {
-			ListInfo listInfo = activitiService.queryProcessDefs(offset,
-					pagesize, processDefCondition);
+			List listInfo = activitiService.queryProdefHisVersion(processKey);
 			model.addAttribute("processDefs", listInfo);
+			if(StringUtil.isEmpty(version))
+			{
+				model.addAttribute("currentVersion", version);
+			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -249,10 +249,10 @@ public class ActivitiRepositoryAction extends MultiActionController {
 		}
 	}
 
-	public String viewProcessInfo(String deploymentId, ModelMap model) {
-		model.addAttribute("processDef", activitiService.getProcessDefByDeploymentId(deploymentId));
+	public String viewProcessInfo(String processKey,String version, ModelMap model) {
+		model.addAttribute("processDef", activitiService.queryProdefByKey(processKey,version));
 		List<ActivityImpl> aList = activitiService
-				.getActivitImplListByProcessKey(activitiService.getPorcessKeyByDeployMentId(deploymentId));
+				.getActivitImplListByProcessKey(processKey);
 		for(int i=0;i<aList.size();i++){
 			if(!aList.get(i).getProperty("type").equals("userTask")){
 				aList.remove(i);
@@ -280,25 +280,25 @@ public class ActivitiRepositoryAction extends MultiActionController {
 		return "path:index";
 	}
 
-	public void getProccessPic(String processId, HttpServletResponse response) throws IOException {
+	public void getProccessPic(String processId,HttpServletResponse response) throws IOException {
 		if(processId!=null&&!processId.equals("")){
 			OutputStream out = response.getOutputStream();
 			activitiService.getProccessPic(processId, out);
 		}
 	}
 	
-	public @ResponseBody(datatype="xml") String getProccessXML(String processId) throws IOException {
+	public @ResponseBody() String getProccessXML(String processId) throws IOException {
 		if(processId!=null&&!processId.equals("")){
 			
 			return activitiService.getProccessXML(processId);
 		}
 		return null;
 	}
-	public @ResponseBody(datatype="xml") String getProccessXMLByKey(String processKey) throws IOException {
+	public @ResponseBody(datatype="xml") String getProccessXMLByKey(String processKey,String version) throws IOException {
 		
 		if(processKey!=null&&!processKey.equals("")){
 			
-			return activitiService.getProccessXMLByKey(processKey);
+			return activitiService.getProccessXMLByKey(processKey, version,"UTF-8");
 		}
 		return null;
 	}

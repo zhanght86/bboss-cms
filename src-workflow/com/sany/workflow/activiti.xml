@@ -4,7 +4,7 @@
 
 	<property name="queryProdef">
 		<![CDATA[
-			select p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
 			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
@@ -26,10 +26,51 @@
 		]]>
 	</property>
 	
+	<property name="queryProdefByKey">
+		<![CDATA[
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
+			from act_re_procdef p
+			join act_re_deployment d on p.deployment_id_=d.id_
+			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
+			where p.key_ = ? and p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
+				
+			
+			
+		]]>
+	</property>
+	
+	<property name="queryProdefByKeywithVersion">
+		<![CDATA[
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
+			from act_re_procdef p
+			join act_re_deployment d on p.deployment_id_=d.id_
+			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
+			where p.key_ = ? and p.version_ = ?
+				
+			
+			
+		]]>
+	</property>
+	
+	<property name="queryProdefHisVersion">
+		<![CDATA[
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
+			from act_re_procdef p
+			join act_re_deployment d on p.deployment_id_=d.id_
+			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
+			where p.key_ = ? 
+			order by p.version_ desc]]>
+	</property>
+	
+	
+	
 	
 	<property name="getUnloadProcesses">
 		<![CDATA[
-			select p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
 			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_

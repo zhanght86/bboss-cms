@@ -308,7 +308,7 @@
 				<strong><pg:message code="sany.appbom.appBom"/> <pg:message code="sany.pdp.common.data.list"/></strong>
 				<img id="wait" src="../common/images/wait.gif" />				
 			</div>
-			<div id="custombackContainer">
+			<div id="custombackContainer" style="overflow:auto">
 			
 			</div>
 		</div>

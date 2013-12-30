@@ -45,7 +45,8 @@ public class TestDemo {
 	{
 		com.sany.workflow.test.ActivitiServiceImpl service = new com.sany.workflow.test.ActivitiServiceImpl("activiti.cfg.xml");
 		try {
-			service.deployProcDefByPath("测试", "/com/sany/activiti/demo/diagrams/mms.get.zip");
+			service.deployProcDefByPath("测试1", "/com/sany/activiti/demo/diagrams/mms.get.zip");
+			service.deployProcDefByPath("测试2", "/com/sany/activiti/demo/diagrams/diagrams1.zip");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

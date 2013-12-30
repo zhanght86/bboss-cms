@@ -31,7 +31,8 @@ import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 
 public interface ActivitiService {
-
+	  public ProcessDef queryProdefByKey(String processKey,String version) ;
+	  public ProcessDef queryProdefByKey(String processKey) ;
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
 	   * @param taskId
@@ -746,7 +747,16 @@ public interface ActivitiService {
 	 */
 	public Deployment deployProcDefByInputStream(String deploymentName,
 			String xmlPath, InputStream processDef,int upgradepolicy);
-
+	
+	/**
+	 * 获取流程历史版本信息
+	 * 
+	 * @param offset
+	 * @param pagesize
+	 * @param 
+	 * @return
+	 */
+	public List<ProcessDef> queryProdefHisVersion(String processKey);
 	/**
 	 * 根据条件查询流程定义清单
 	 * 
@@ -822,7 +832,7 @@ public interface ActivitiService {
 	 * @throws IOException
 	 */
 	public String getProccessXML(String processId) throws IOException ;
-	public String getProccessXMLByKey(String processKey,String encode) throws IOException ;
+	public String getProccessXMLByKey(String processKey,String version,String encode) throws IOException ;
 	public String getProccessXMLByKey(String processKey) throws IOException; 
 	/**
 	 * 根据流程定义id获取对应版本的流程图

@@ -34,6 +34,11 @@
 		  $("#bussinesstree").load("../businesstype/businessTypeTree.jsp");
 	});
 	
+	function viewProcessInfo(processKey) {
+		var url="<%=request.getContextPath()%>/workflow/repository/viewProcessInfo.page?processKey="+processKey;
+		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
+	}
+	
 </script>
 </head>
 <body>
@@ -69,7 +74,8 @@
 				<div id="nodeconfig1">
 					<pg:beaninfo requestKey="processDef">
 						<fieldset>
-							<legend>流程信息</legend>
+							<legend>流程信息<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="viewProcessInfo('<pg:cell colName="KEY_" />')"><span>查看详情</span>
+												</a></legend>
 							<table border="0" cellpadding="0" cellspacing="0" class="table4">
 								<tr height="25px">
 									<th width=85px>部署ID：</th>
@@ -103,6 +109,7 @@
 									<th width=85px>图片资源名称：</th>
 									<td id="DGRM_RESOURCE_NAME_"><pg:cell
 											colName="DGRM_RESOURCE_NAME_" /></td>
+											
 								</tr>
 							</table>
 						</fieldset>

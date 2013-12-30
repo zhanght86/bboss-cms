@@ -9,10 +9,8 @@
 日期：2012-02-08
  --%>	
 
-<div id="customContent">
-   <pg:pager scope="request"  data="processDefs" desc="true" isList="false" containerid="custombackContainer" selector="customContent">
-	
-	<pg:param name="processName"/>
+<div id="customContent"  style="overflow:auto">
+  
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
@@ -28,32 +26,35 @@
        		<th><pg:message code="sany.pdp.workflow.deploy.time"/></th>
        		<th><pg:message code="sany.pdp.workflow.resource.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
+       		<th>查看</th>
        	</pg:header>	
 
 
- <pg:notify  >
 
+<pg:empty actual="${processDefs }">
 <tr><td colspan=15  style="text-align:center;" ><img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></td></tr>
-</pg:notify>
-      <pg:list autosort="false">
+</pg:empty>
+<pg:notempty actual="${processDefs }">
+      <pg:list requestKey="processDefs">
 
    		<tr onDblClick="processDefs('<pg:cell colName="ID_" />')">
    		        <td class="td_center">
                     <input id="CK" type="checkbox"  name="CK" onClick="checkOne('CKA','CK'), makeOneCheck(this), viewProcessInfo('<pg:cell colName="DEPLOYMENT_ID_" />')" value="<pg:cell colName="ID_" />"/>
                     <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
-                <td><span class="toolTip" title="<pg:cell colName="CATEGORY_"/>"><pg:cell colName="CATEGORY_" maxlength="10" replace="..."/></span></td>
+                <td><span class="toolTip" title="<pg:cell colName="CATEGORY_"/>"><pg:cell colName="CATEGORY_" /></span></td>
                 <td><pg:cell colName="NAME_" maxlength="8" replace="..."/></td>
         		<td><pg:cell colName="KEY_" /></td>       
-                <td><span class="toolTip" title="<pg:cell colName="VERSION_"/>"><pg:cell colName="VERSION_" maxlength="8" replace="..."/></span></td>  
+                <td><pg:cell colName="VERSION_"/></td>  
            		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   
            		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd hh:mm:ss"/></td>
            		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
            		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>	   	  
+           		<td><a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="viewProcessInfo('<pg:cell colName="KEY_" />','<pg:cell colName="VERSION_" />')"><span>查看详情</span></a></td>
         </tr>
 	 </pg:list>
+	 </pg:notempty>
     </table>
     </div>
-	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
-
-    </pg:pager>
+	
+   
 </div>		

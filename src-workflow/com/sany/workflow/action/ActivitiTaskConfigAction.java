@@ -32,12 +32,11 @@ public class ActivitiTaskConfigAction {
 
 	private ActivitiService activitiService;
 
-	public String taskConfigMain(String deploymentId, ModelMap model) {
+	public String taskConfigMain(String processKey,String deploymentId, ModelMap model) {
 		model.addAttribute("processDef",
-				activitiService.getProcessDefByDeploymentId(deploymentId));
+				activitiService.queryProdefByKey(processKey,null));
 		List<ActivityImpl> aList = activitiService
-				.getActivitImplListByProcessKey(activitiService
-						.getPorcessKeyByDeployMentId(deploymentId));
+				.getActivitImplListByProcessKey(processKey);
 		for (int i = 0; i < aList.size(); i++) {
 			if (!aList.get(i).getProperty("type").equals("userTask")) {
 				aList.remove(i);

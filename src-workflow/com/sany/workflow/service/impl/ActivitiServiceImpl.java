@@ -44,6 +44,7 @@ import org.activiti.engine.task.Task;
 import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.LoadProcess;
@@ -1538,6 +1539,8 @@ public void rejecttoPreTask(String taskId,String username){
 				.singleResult();// 最近版本的流程实例
 		return processDefinition;
 	}
+	
+	
 
 	/**
 	 * 根据部署ID查询部署的流程
@@ -2182,7 +2185,7 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public String getProccessXMLByKey(String processKey) throws IOException 
 	{
-		return getProccessXMLByKey(processKey,"UTF-8");
+		return getProccessXMLByKey(processKey,null,"UTF-8");
 	}
 	
 	/**
@@ -2191,17 +2194,17 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @return
 	 * @throws IOException
 	 */
-	public String getProccessXMLByKey(String processKey,String encode) throws IOException 
+	public String getProccessXMLByKey(String processKey,String version,String encode) throws IOException 
 	{
 		ByteArrayOutputStream out = null;
 		InputStream is = null;
 		try
 		{
 			if(processKey!=null&&!processKey.equals("")){
-				ProcessDefinition processDefinition = this.getProcessDefinitionByKey(processKey);
-				String diagramResourceName = processDefinition.getResourceName();
+				ProcessDef processDefinition = this.queryProdefByKey(processKey, version);
+				String diagramResourceName = processDefinition.getRESOURCE_NAME_();
 				
-				is = getResourceAsStream(processDefinition.getDeploymentId(),
+				is = getResourceAsStream(processDefinition.getDEPLOYMENT_ID_(),
 						diagramResourceName);
 				
 				byte[] b = new byte[1024];
@@ -2248,6 +2251,31 @@ public void rejecttoPreTask(String taskId,String username){
 			}
 		}).get(0);
 	}
+	public ProcessDef queryProdefByKey(String processKey,String version) {
+		try {
+			if(StringUtil.isEmpty(version))
+			{
+				return this.executor.queryObject(ProcessDef.class, "queryProdefByKey", processKey);
+			}
+			else
+			{
+				return this.executor.queryObject(ProcessDef.class, "queryProdefByKeywithVersion", processKey,version);
+				
+			}
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	public ProcessDef queryProdefByKey(String processKey) {
+		try {
+			return this.executor.queryObject(ProcessDef.class, "queryProdefByKey", processKey);
+			
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+	
 	
 	
 
@@ -2344,6 +2372,24 @@ public void rejecttoPreTask(String taskId,String username){
 		finally
 		{
 			tm.release();
+		}
+		
+	}
+
+	@Override
+	public List<ProcessDef> queryProdefHisVersion(
+			String processKey) {
+		try {
+			
+			{
+				return this.executor.queryList(ProcessDef.class,"queryProdefHisVersion",processKey);
+			}
+//			else
+//			{
+//				return this.executor.queryList(ProcessDef.class,"queryProdefHisVersionWithCurrentVersion",processKey,version);
+//			}
+		} catch (Exception e) {
+			throw new ProcessException(e); 
 		}
 		
 	}

@@ -6,17 +6,17 @@
 	<head>
 		<title>查看流程信息</title>
 		<%@ include file="/common/jsp/css.jsp"%>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
 		<script type="text/javascript">
 		var api = frameElement.api,W = api.opener;
 
 		$(document).ready(function() {
-			var name = "${processDef.NAME_}";
-	    	 $("#custombackContainer").load("queryProcessHisVer.page #customContent", {processName:name}); 
+			
+	    	 $("#custombackContainer").load("queryProcessHisVer.page #customContent", {processKey:'${processDef.KEY_}',version:'${processDef.VERSION_}'}); 
 	       });
-		
-		function viewProcessInfo(deploymentId) {
-			var url="<%=request.getContextPath()%>/workflow/repository/viewHisProcessInfo.page?deploymentId="+deploymentId;
-			W.$.dialog({ title:'查看历史流程信息',width:1100,height:560, content:'url:'+url,parent:api,currentwindow:this});   
+		function viewProcessInfo(processKey,version) {
+			var url="<%=request.getContextPath()%>/workflow/repository/viewProcessInfo.page?processKey="+processKey + "&version="+version;
+			$.dialog({ title:'查看流程信息-'+processKey+'-v' + version,width:1100,height:620, content:'url:'+url});   
 		}
 		
 		function refeProcessInfo(DEPLOYMENT_ID_) {
@@ -62,8 +62,8 @@
 		<div class="tabbox">
 		<ul class="tab" id="menu1">
 			     <li><a href="javascript:void(0)" class="current" onclick="setTab(1,0)"><span><pg:message code="sany.pdp.workflow.detail.info"/></span></a></li>
-			     <li><a href="javascript:void(0)" onclick="setTab(1,1)"><span><pg:message code="sany.pdp.workflow.history.info"/></span></a></li>
-			     <li><a href="javascript:void(0)" onclick='setTab(1,2,{frameid:"tab2iframe",framesrc:"getProccessXMLByKey.page?processKey=${processDef.KEY_}"})'><span><pg:message code="sany.pdp.workflow.process.xml"/></span></a></li>
+			     <li><a href="javascript:void(0)" onclick="setTab(1,1)"><span>版本信息</span></a></li>
+			     <li><a href="javascript:void(0)" onclick='setTab(1,2,{frameid:"tab2iframe",framesrc:"getProccessXMLByKey.page?processKey=${processDef.KEY_}&version=${processDef.VERSION_}"})'><span><pg:message code="sany.pdp.workflow.process.xml"/></span></a></li>
 		</ul>
 		</div>
 		<div id="main1">
