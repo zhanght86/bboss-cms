@@ -1,9 +1,7 @@
-<%@ include file="../include/global1.jsp"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ taglib uri='/WEB-INF/dictionary.tld' prefix='dict'%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
+
 <%@ page import="com.frameworkset.dictionary.Data" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityConstants" %>
@@ -123,6 +121,8 @@
 <html>
     <head>
     <title>字典【<%=desc%>】添加数据项</title>
+    <script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+    	<%@ include file="/common/jsp/css-lhgdialog.jsp"%>	
         <script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
         <script language="javascript" src="../scripts/selectTime.js"></script>
         <script language="javascript" src="js/checkUnique.js"></script>
@@ -162,19 +162,31 @@
 			    afterAddRefresh();
 			}
 			
-			function orgSelectFinal(obj){
-				var valueWin = window.showModalDialog("orgSelectTree.jsp?orgNames="+obj.value,window,"dialogWidth:"+(400)+"px;dialogHeight:"+(600)+"px;help:no;scroll:auto;status:no");
-				if(valueWin!=null){
-					obj.value = valueWin.split("^")[0];
-					if(document.all.dictDataValueOrg){
-						document.all.dictDataValueOrg.value = valueWin.split("^")[1];
-					}
+			function orgSelectFinal(ifid,windowname,fieldName,isUnique,fileTextName,oldValue){
+				var url = "${pageContext.request.contextPath}/sysmanager/dictmanager/orgSelectTree.jsp?orgNames="+$("#"+fileTextName).val()
+									+ "&fieldName="+fieldName  + "&isUnique="+isUnique  + "&fileTextName="+fileTextName + "&oldValue="+oldValue;
+				 $.dialog({ id:ifid, title:windowname,width:740,height:560, content:'url:'+url});
+				//var valueWin = window.showModalDialog("orgSelectTree.jsp?orgNames="+obj.value,window,"dialogWidth:"+(400)+"px;dialogHeight:"+(600)+"px;help:no;scroll:auto;status:no");
+				
+			}
+			
+			function setSelectOrg(valueWin,fieldName,fileTextName,isUnique,oldValue)
+			{
+				var restr = valueWin;
+				
+				var tokens = valueWin.split('^');
+				$("#"+fileTextName).val(tokens[0]);
+				$("#"+fieldName).val(tokens[1]);
+					
+				if(isUnique){
+					if(valueWin && oldValue!=tokens[0])
+						send_request_name(document.getElementById(fieldName),document.getElementById(fileTextName),'<%=dicttypeId%>');
 				}
 			}
 	</SCRIPT>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
+	
 		<script language="JavaScript" src="../user/common.js" type="text/javascript"></script>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
+		
 		<SCRIPT language="JavaScript" SRC="../user/validateForm.js"></SCRIPT>
     </head>
     <body> 

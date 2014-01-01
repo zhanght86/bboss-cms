@@ -7,24 +7,28 @@
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>选择机构</title>
 <%
-	AccessControl control = AccessControl.getInstance();
-	control.checkAccess(request,response);
+	AccessControl control = AccessControl.getAccessControl();
 	String orgNames = request.getParameter("orgNames");
-
+	String fieldName = request.getParameter("fieldName");
+	String isUnique=request.getParameter("isUnique");
+	String fileTextName=request.getParameter("fileTextName");
+	String oldValue=request.getParameter("oldValue");
 %>
 
 <%
 	request.setAttribute("rootName", RequestContextUtils.getI18nMessage("sany.pdp.organization.tree.name", request));
 %>
-
+    <script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <script language="javascript">
 var api = frameElement.api, W = api.opener;
 
@@ -79,7 +83,7 @@ function addorg(){
   		$.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.org.select.null"/>');
   		return;
   	}
-	
+	/**
 	W.document.getElementById("${param.tag1}").value = orgValues;
 	W.document.getElementById("${param.tag2}").value = orgIds;
 	
@@ -89,8 +93,10 @@ function addorg(){
 		win.document.getElementById("${param.tag2}").value= orgIds;
 	}
 	
-	api.close();
-    
+	api.close();*/
+
+  W.setSelectOrg(orgValues + "^" + orgIds,'<%=fieldName%>','<%=fileTextName%>',<%=isUnique%>,'<%=oldValue%>');  
+  api.close();
   	//window.returnValue=orgValues + "^" + orgIds;
   	//window.close();
 }

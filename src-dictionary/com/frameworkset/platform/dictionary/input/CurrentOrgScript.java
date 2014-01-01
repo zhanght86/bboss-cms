@@ -117,8 +117,7 @@ public class CurrentOrgScript  extends BaseInputTypeScript{
 	public String getEditExtendHtmlContent(HttpServletRequest request, HttpServletResponse response, Map keyWords) {
 		String defaultValue = "";
 		String defaultName = "";
-		AccessControl accesscontroler = AccessControl.getInstance();
-		accesscontroler.checkAccess(request, response);
+		AccessControl accesscontroler = AccessControl.getAccessControl();
 		
 		//ID值
 		defaultValue = accesscontroler.getChargeOrgId()==null?"0":accesscontroler.getChargeOrgId();
@@ -167,9 +166,7 @@ public class CurrentOrgScript  extends BaseInputTypeScript{
 	public String getNewExtendHtmlContent(HttpServletRequest request, HttpServletResponse response) {
 		String defaultValue = "";
 		String defaultName = "";
-		AccessControl accesscontroler = AccessControl.getInstance();
-		accesscontroler.checkAccess(request, response);
-		
+		AccessControl accesscontroler = AccessControl.getAccessControl();
 		//ID值
 		defaultValue = accesscontroler.getChargeOrgId()==null?"0":accesscontroler.getChargeOrgId();
 		if(dictatt.getFieldValue()!=null && !"".equals(dictatt.getFieldValue().trim())){

@@ -3,7 +3,7 @@
 <script language="javascript">
   function getActionsContainerFrameset()
   {   
-    return perspectiveContent.frames["base_actions_container"].document.getElementsByTagName("frameset").item(0);
+    return perspectiveContent.frames["base_actions_container"].document.getElementsByTagName("frameset").item[0];
   }
 
   function processFramesetSizes(framesetSizesForm)

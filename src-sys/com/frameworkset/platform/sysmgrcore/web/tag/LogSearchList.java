@@ -82,9 +82,9 @@ public class LogSearchList  extends DataInfoImpl implements Serializable{
 	            	//是系统管理员就全部查出来
 	            	if(super.accessControl.isAdmin()){
 	            		if(opOrgid != null && !opOrgid.equals("")){//如果查询条件中有机构条件则不查未知机构的日志记录
-	            			sql.append("from ").append(table).append(" log, td_sm_organization org where 1 = 1 and trim(log.OP_ORGID)=org.org_id ");
+	            			sql.append("from ").append(table).append(" log, td_sm_organization org where 1 = 1 and log.OP_ORGID=org.org_id ");
 	            		}else{
-	            			sql.append("from ").append(table).append(" log left join td_sm_organization org on trim(log.OP_ORGID)=org.org_id where 1 = 1  ");
+	            			sql.append("from ").append(table).append(" log left join td_sm_organization org on log.OP_ORGID=org.org_id where 1 = 1  ");
 	            		}
 	            	}else if(isOrgmanager){
 	            		String concat_ = DBUtil.getDBAdapter().concat(" org_tree_level","'|%' ");
@@ -105,7 +105,7 @@ public class LogSearchList  extends DataInfoImpl implements Serializable{
 //		    				.append(" connect by prior org.org_id = org.parent_id) ");
 //	            		if(opOrgid != null && !opOrgid.equals("")){//如果查询条件中有机构条件则不查未知机构的日志记录
 	            			sql.append("from ").append(table).append(" log ,(").append(all_orgs).append(") org where 1 = 1  ")
-	            				.append(" and org.org_id=TRIM(log.OP_ORGID) ");
+	            				.append(" and org.org_id=log.OP_ORGID ");
 //	            		}else{
 //		            		sql.append("from ").append(table).append(" log left join (").append(all_orgs).append(") org on ")
 //		            			.append(" org.org_id=TRIM(log.OP_ORGID) ");
@@ -122,7 +122,7 @@ public class LogSearchList  extends DataInfoImpl implements Serializable{
 	            		sql.append(" from ").append(table).append(" log,td_sm_organization org where (trim(log.log_operuser) = '")
 	            			.append(curUserName).append("' or trim(log.log_operuser) = '")
 	            			.append(curUserName+":"+curRealuserName).append("') and  ")
-	            			.append(" trim(log.OP_ORGID)=org.org_id ");
+	            			.append(" log.OP_ORGID=org.org_id ");
 	            	}
 	            		
 //	            	sql.append("order by log.log_operTime desc");	                

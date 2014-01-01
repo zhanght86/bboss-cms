@@ -1856,6 +1856,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		map.put(data_name_filed.toLowerCase(), null);
 		map.put(data_value_field.toLowerCase(), null);
 		map.put(data_org.toLowerCase(), null);
+		List dictatts = getDictdataAttachFieldList(dicttypeid,-1);
+		for(int i = 0;dictatts != null && i < dictatts.size(); i ++)
+		{
+			DictAttachField df = (DictAttachField)dictatts.get(i);
+			map.put(df.getTable_column().toLowerCase(), null);
+		}
 		String primaryColumnNames = getPrimaryColumnNames(data_table_name, map);
 
 		if(DICTDATA_IS_TREE==is_tree){//树形,根节点取出一级数据项,其他节点,取出其对应的子数据项
@@ -2133,6 +2139,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		map.put(data_name_filed.toLowerCase(), null);
 		map.put(data_value_field.toLowerCase(), null);
 		map.put(data_org.toLowerCase(), null);
+		List dictatts = getDictdataAttachFieldList(dicttypeid,-1);
+		for(int i = 0;dictatts != null && i < dictatts.size(); i ++)
+		{
+			DictAttachField df = (DictAttachField)dictatts.get(i);
+			map.put(df.getTable_column().toLowerCase(), null);
+		}
 		String primaryColumnNames = getPrimaryColumnNames(data_table_name, map);
 
 		if(DICTDATA_IS_TREE==is_tree){//树形,根节点取出一级数据项,其他节点,取出其对应的子数据项
@@ -2262,7 +2274,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			if(!this.strIsNull(data_org)){
 				sql.append(",nvl(a.").append(data_org).append(",'机构ID为空')||' '||nvl(tt.remark5,'机构名称为空') as ").append(data_org);
 			}
-			List dictatts = getDictdataAttachFieldList(dicttype.getDataId(),-1);
+			
 			 for(int z=0;dictatts!= null && z<dictatts.size();z++){
 			        DictAttachField dictatt = (DictAttachField)dictatts.get(z);
 				//InputType inputType = dictatt.getInputType();	
@@ -4276,14 +4288,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public List getDictdataAttachFieldList(String dicttypeId,int count) {
 		List list = new ArrayList();
 		if(this.strIsNull(dicttypeId)) return null;
-		DBUtil dbUtil = new DBUtil();
+		
 		StringBuffer sql = new StringBuffer();	
 		sql.append("select t.DICTTYPE_ID,t.FIELD_NAME,t.LABEL,t.INPUT_TYPE_ID as INPUT_TYPE_ID,t.TABLE_COLUMN, ")
 		   .append("t.ISNULLABLE,t.ISUNIQUE, b.SCRIPT ,b.INPUT_TYPE_NAME, t.DATEFORMAT ")
 		   .append("from TD_SM_DICATTACHFIELD t,TB_SM_INPUTTYPE b where t.INPUT_TYPE_ID=b.INPUT_TYPE_ID ")
-		   .append("and t.DICTTYPE_ID='").append(dicttypeId).append("'");
+		   .append("and t.DICTTYPE_ID=?");
 		if(count != -1){
-			sql.append(" and rownum<=").append(count);
+			sql.append(" and rownum<=?");
 		}
 		//高级字段排序
 		sql.append(" order by t.SN");
@@ -4291,8 +4303,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			Data dicttype = this.getDicttypeById(dicttypeId);
 			String dbName = dicttype.getDataDBName();
 			String tableName = dicttype.getDataTableName();
-
-			dbUtil.executeSelect(sql.toString());
+			PreparedDBUtil dbUtil = new PreparedDBUtil ();
+			dbUtil.preparedSelect(sql.toString());
+			dbUtil.setString(1, dicttypeId);
+			if(count != -1){
+				dbUtil.setInt(2, count);
+			}
+			
+			dbUtil.executePrepared();
 			for(int i= 0;i < dbUtil.size();i++){
 				DictAttachField dictatt = new DictAttachField();
 //				InputType inputType = new InputType();
@@ -4404,19 +4422,21 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	public List getAllDictdataAttachFieldList(String dicttypeId,String nameKey,String valueKey) {
 		List list = new ArrayList();
 		if(this.strIsNull(dicttypeId)) return null;
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		StringBuffer sql = new StringBuffer();	
 		sql.append("select t.DICTTYPE_ID,t.FIELD_NAME,t.LABEL,to_char(t.INPUT_TYPE_ID) as INPUT_TYPE_ID,t.TABLE_COLUMN, ")
 		   .append("t.ISNULLABLE,t.ISUNIQUE ,b.SCRIPT ,b.INPUT_TYPE_NAME,t.dateformat ")
 		   .append("from TD_SM_DICATTACHFIELD t,TB_SM_INPUTTYPE b where t.INPUT_TYPE_ID=b.INPUT_TYPE_ID ")
-		   .append("and t.DICTTYPE_ID='").append(dicttypeId).append("'");
+		   .append("and t.DICTTYPE_ID=?");
 
 		try {	
 			Data dicttype = this.getDicttypeById(dicttypeId);
 			String dbName = dicttype.getDataDBName();
 			String tableName = dicttype.getDataTableName();
 
-			dbUtil.executeSelect(sql.toString());
+			dbUtil.preparedSelect(sql.toString());
+			dbUtil.setString(1, dicttypeId);
+			dbUtil.executePrepared();
 			BaseInputTypeScript typeScript = null;
 			for(int i= 0;i < dbUtil.size();i++){
 				StringBuffer fileValueSql = new StringBuffer();

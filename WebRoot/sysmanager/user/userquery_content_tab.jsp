@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl"%>
-<%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
-<%@ include file="../include/global1.jsp"%>
-<%@ include file="../base/scripts/panes.jsp"%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
+
+
+
+
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.common.poolman.DBUtil,com.frameworkset.common.poolman.PreparedDBUtil" %>
 <%@ page import="com.frameworkset.platform.config.ConfigManager" %>
@@ -48,9 +48,11 @@
 <head>				
 	<tab:tabConfig/>
 		<title>属性容器</title>
-		
+		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	<script language="JavaScript" src="common.js" type="text/javascript"></script>
-	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+	
+
 	<script src="${pageContext.request.contextPath}/include/security.js"></script>
 	<SCRIPT language="javascript">	
 	var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");

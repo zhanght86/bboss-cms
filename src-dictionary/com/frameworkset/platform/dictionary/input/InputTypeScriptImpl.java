@@ -90,7 +90,8 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 			isUniqueCheckStr = " <span style='color:red'>自动去重校验</span>";
 		}
 			
-		html.append("<input type='hidden' name='").append(dictatt.getTable_column().toLowerCase())
+		html.append("<input type='hidden' id='").append(dictatt.getTable_column().toLowerCase())
+			.append("' name='").append(dictatt.getTable_column().toLowerCase())
 			.append("' value='").append(dictatt.getFieldValue()).append("' ");
 		html.append("> ");
 		String orgoruserName = "";
@@ -107,15 +108,21 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 				e.printStackTrace();
 			}
 			
-			html.append("<input type='text' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
+			html.append("<input type='text' id='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
 			.append("value='").append(orgoruserName).append("'  maxlength=100 ")
 			.append(" validator='").append(dictatt.getFieldValidType())
 			.append("'  cnname='")
 			.append(dictatt.getDictFieldName()).append("' ");
 			
 			
-			html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);' readonly='true' style='width:200px' ")
-				.append("/>");
+//			html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);' readonly='true' style='width:200px' ")
+//				.append("/>");
+			//orgSelectFinal(ifid,windowname,fieldName,isUnique,fileTextName)
+			html.append(" onClick='orgSelectFinal(\"iframe_").append(dictatt.getTable_column()).append("\",\"选择机构\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
+			.append(isUnique)
+			.append(",\"")
+			.append(dictatt.getTable_column().toLowerCase()).append("_name\")' readonly='true' style='width:200px' ")
+			.append("/>");
 		}
 		if(dictatt.getInputTypeName().equals("选择人员")){
 			//String userName = "";
@@ -131,7 +138,7 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 				e.printStackTrace();
 			}
 			
-			html.append("<input type='text' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
+			html.append("<input type='text' id='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
 			.append("value='").append(orgoruserName).append("'  maxlength=100 ")
 			.append(" validator='").append(dictatt.getFieldValidType())
 			.append("'  cnname='")
@@ -141,7 +148,7 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 		}
 		html.append(isNullStr).append(isUniqueCheckStr);
 		//html.append(this.getFunctionContent(dictatt.getTable_column(),dictatt.getInputTypeName(),dictatt.getFieldValue(),dictatt.getMaxLength(),isUnique,dictatt.getDicttypeId()));
-		html.append(getFunctionContent(orgoruserName,isUnique));
+//		html.append(getFunctionContent(orgoruserName,isUnique));
 		//System.out.println(html.toString());
 		return html.toString();
 	}

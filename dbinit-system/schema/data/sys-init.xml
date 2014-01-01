@@ -2575,7 +2575,7 @@ nocache
 					</map>
 
 				</property>
-				
+				 
 				<property name="addtd_sm_res">
 					<map>
 						<property name="default">
@@ -2616,7 +2616,18 @@ nocache
 					</map>
 
 				</property>
+				<property name="create_index">
+					<map>
+						<property name="default">
 
+							<list>
+								<property index="0"><![CDATA[create index op_org_idx on TD_SM_LOG (OP_ORGID)]]></property>
+
+							</list>
+						</property>
+					</map>
+
+				</property>
 			
 			
 

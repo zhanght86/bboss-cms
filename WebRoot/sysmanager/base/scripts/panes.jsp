@@ -143,7 +143,7 @@
 	  		{		
 	  			
 	  			
-	  	 		var temp_frameset = temps(i);
+	  	 		var temp_frameset = temps[i];
 	  	 		
 	  	 		
 	  	 		if(temp_frameset.name == container_name)
@@ -157,9 +157,9 @@
 	  	 		var sub_frameset = temp_frameset.frames;
 	  	 		for(var j = 0; sub_frameset && j < sub_frameset.length; j ++)
 	  	 		{
-	  	 			if(sub_frameset(j).name == curwindow.name)
+	  	 			if(sub_frameset[j].name == curwindow.name)
 	  	 				continue;
-	  	 			ret = searchContainer(sub_frameset(j),container_name)
+	  	 			ret = searchContainer(sub_frameset[j],container_name)
 	  	 			if(ret)
 	  	 			{
 	  	 				containerok = true;
@@ -217,7 +217,7 @@
  		{		
  			
  			
- 	 		var temp_frameset = t_frames(i);
+ 	 		var temp_frameset = t_frames[i];
  	 		
  	 		
  	 		if(temp_frameset.name == container_name)
