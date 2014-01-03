@@ -993,7 +993,7 @@
 				<strong><pg:message code="sany.pdp.dictmanager.data.list"/></strong>
 			</div>
 			
-			<iframe name="dictListIframe" src="dictList_iframe.jsp?did=<%=did%>" style="width:100%" height="100%" scrolling="yes" frameborder="0" marginwidth="1" marginheight="1"></iframe>
+			<iframe name="dictListIframe" src="dictList_iframe.jsp?did=<%=did%>" style="width:100%" height="800px" scrolling="auto" frameborder="0" marginwidth="1" marginheight="1"></iframe>
 			
 		</div>
 		

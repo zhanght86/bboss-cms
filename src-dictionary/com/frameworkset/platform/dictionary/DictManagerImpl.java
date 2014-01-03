@@ -18,6 +18,20 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
+import com.frameworkset.common.poolman.sql.ColumnMetaData;
+import com.frameworkset.common.poolman.sql.PrimaryKey;
+import com.frameworkset.common.poolman.sql.PrimaryKeyCacheManager;
+import com.frameworkset.common.poolman.sql.PrimaryKeyMetaData;
+import com.frameworkset.dictionary.Data;
+import com.frameworkset.dictionary.DataManager;
+import com.frameworkset.dictionary.Item;
+import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.dictionary.input.BaseInputTypeScript;
 import com.frameworkset.platform.dictionary.input.CurrentOrgScript;
 import com.frameworkset.platform.dictionary.input.CurrentTimeScript;
@@ -33,19 +47,6 @@ import com.frameworkset.platform.dictionary.input.TextTypeScript;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.poolman.Record;
-import com.frameworkset.common.poolman.SQLExecutor;
-import com.frameworkset.common.poolman.handle.NullRowHandler;
-import com.frameworkset.common.poolman.sql.ColumnMetaData;
-import com.frameworkset.common.poolman.sql.PrimaryKey;
-import com.frameworkset.common.poolman.sql.PrimaryKeyCacheManager;
-import com.frameworkset.common.poolman.sql.PrimaryKeyMetaData;
-import com.frameworkset.dictionary.Data;
-import com.frameworkset.dictionary.DataManager;
-import com.frameworkset.dictionary.Item;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 
 public class DictManagerImpl extends EventHandle implements DictManager  {
@@ -62,8 +63,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 
 		this.request = request;
 		this.response = response; 
-		accessControl = AccessControl.getInstance();
-		accessControl.checkAccess(request, response);
+		accessControl = AccessControl.getAccessControl();
 	}
 
 	private static Logger logger = Logger.getLogger(DictManagerImpl.class.getName());
@@ -5943,6 +5943,94 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		return "";
 	}
 
+	public String getOrgNames(String orgids) throws Exception
+	{
+		if(!StringUtil.isEmpty(orgids))
+		{
+			
+			StringBuffer orgsql = new StringBuffer("select org_id ||' '|| remark5 as orgname from td_sm_organization where org_id in (");
+			String[] array = orgids.split(",");
+			for(int i = 0; i < array.length; i ++){
+				if(i == 0)
+					orgsql.append("?");
+				else 
+					orgsql.append(",?");
+			}
+			orgsql.append(")");
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect(orgsql.toString());
+			for(int i = 0; i < array.length; i ++){
+				db.setString(i+1, array[i]);
+			}
+			final StringBuffer temp = new StringBuffer();
+			db.executePreparedWithRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine)
+						throws Exception {
+					if(temp.length() == 0)
+					{
+						temp.append(origine.get("ORGNAME"));
+					}
+					else
+						temp.append(",").append(origine.get("ORGNAME"));
+					
+				}
+				
+			});
+			orgids = temp.toString();
+			
+		}
+		else
+			orgids = "";
+		return orgids;
+	}
+	
+	
+	public String getUserNames(String userids) throws Exception
+	{
+		if(!StringUtil.isEmpty(userids))
+		{
+			
+			StringBuffer orgsql = new StringBuffer("select (u.user_id ||' '||u.USER_REALNAME) as username from TD_SM_USER u where u.user_id in (");
+			String[] array = userids.split(",");
+			for(int i = 0; i < array.length; i ++){
+				if(i == 0)
+					orgsql.append("?");
+				else 
+					orgsql.append(",?");
+			}
+			orgsql.append(")");
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect(orgsql.toString());
+			for(int i = 0; i < array.length; i ++){
+				db.setString(i+1, array[i]);
+			}
+			final StringBuffer temp = new StringBuffer();
+			db.executePreparedWithRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine)
+						throws Exception {
+					if(temp.length() == 0)
+					{
+						temp.append(origine.get("USERNAME"));
+					}
+					else
+						temp.append(",").append(origine.get("USERNAME"));
+					
+				}
+				
+			});
+			userids = temp.toString();
+			
+		}
+		else
+			userids = "";
+		return userids;
+	}
+	
+	
 	/**
 	 * 得附字段值
 	 * @param dicttypeId
@@ -5955,7 +6043,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 	 */
 	public String getAttachValue(String dicttypeId, String name, String value, String attachField,Map primarykeys) throws ManagerException{
 		String attachFieldValue = "";
-		DBUtil dbUtil_attachTypeName = new DBUtil();
+		PreparedDBUtil dbUtil_attachTypeName = new PreparedDBUtil();
 		DBUtil dbUtil = new DBUtil();
 		Data data = this.getDicttypeById(dicttypeId);
 		String data_table_name = data.getDataTableName();
@@ -5973,16 +6061,18 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		StringBuffer sql_attachTypeName = new StringBuffer()
 			.append("select tt.input_type_name from tb_sm_inputtype tt ")
 			.append("where tt.input_type_id in (select t.input_type_id from td_sm_dicattachfield t ")
-			.append("where t.dicttype_id = '").append(dicttypeId).append("' ")
-			.append("and t.table_column = '").append(tableColumn).append("') ");
+			.append("where t.dicttype_id = ? ")
+			.append("and t.table_column = ?) ");
 		StringBuffer sql = new StringBuffer();
 		try{
-			dbUtil_attachTypeName.executeSelect(sql_attachTypeName.toString());
+			dbUtil_attachTypeName.preparedSelect(sql_attachTypeName.toString());
+			dbUtil_attachTypeName.setString(1, dicttypeId);
+			dbUtil_attachTypeName.setString(2, tableColumn);
+			dbUtil_attachTypeName.executePrepared();
 			if(dbUtil_attachTypeName.getString(0,"input_type_name").equals("选择人员") ||
 					dbUtil_attachTypeName.getString(0,"input_type_name").equals("当前用户")){
-				sql.append("select a.").append(tableColumn).append("||' '||USER_NAME as ").append(tableColumn)
-					.append(" from ").append(data_table_name)
-					.append(" a, TD_SM_USER where ");
+				sql.append("select a.").append(tableColumn).append(" as username  from ").append(data_table_name)
+					.append(" a where ");
 //					.append(data_name_filed).append(" ='").append(name)
 //					.append("' and a.").append(data_value_field).append("='").append(value)
 				if(name == null || name.equals("")){
@@ -5997,13 +6087,22 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else{
 					sql.append(" and a.").append(data_value_field).append("='").append(value).append("'");
 				}
-				sql.append(" and USER_ID=a.").append(tableColumn);
+				
+				sql.append(condition);
+				//System.out.println(sql.toString());
+			
+				dbUtil.executeSelect(data.getDataDBName(),sql.toString());
+				if(dbUtil.size() > 0){
+					attachFieldValue = dbUtil.getString(0, "username");
+					attachFieldValue = this.getUserNames(attachFieldValue);
+				}
+						
+				
 				//dbUtil.executeSelect(sql.toString());
 			}else if(dbUtil_attachTypeName.getString(0,"input_type_name").equals("选择机构") ||
 					dbUtil_attachTypeName.getString(0,"input_type_name").equals("当前机构")){
-				sql.append("select a.").append(tableColumn).append("||' '||remark5 as ").append(tableColumn)
-					.append(" from ").append(data_table_name)
-					.append(" a, td_sm_organization tt where ");
+				sql.append("select a.").append(tableColumn).append(" from ").append(data_table_name)
+					.append(" a where ");
 //					.append(data_name_filed).append(" ='").append(name)
 //					.append("' and a.").append(data_value_field).append("='").append(value)
 				if(name == null || name.equals("")){
@@ -6018,7 +6117,13 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else{
 					sql.append(" and a.").append(data_value_field).append("='").append(value).append("'");
 				}
-				sql.append(" and tt.ORG_ID=a.").append(tableColumn);
+				sql.append(condition);
+				//System.out.println(sql.toString());
+				dbUtil.executeSelect(data.getDataDBName(),sql.toString());
+				if(dbUtil.size() > 0){
+					attachFieldValue = dbUtil.getString(0, tableColumn);
+					attachFieldValue = this.getOrgNames(attachFieldValue);
+				}
 			//dbUtil.executeSelect(sql.toString());
 			}else if(dbUtil_attachTypeName.getString(0,"input_type_name").equals("选择时间") ||
 					dbUtil_attachTypeName.getString(0,"input_type_name").equals("当前时间")){
@@ -6040,6 +6145,12 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 				}else{
 					sql.append(" and a.").append(data_value_field).append("='").append(value).append("'");
 				}
+				sql.append(condition);
+				//System.out.println(sql.toString());
+				dbUtil.executeSelect(data.getDataDBName(),sql.toString());
+				if(dbUtil.size() > 0){
+					attachFieldValue = dbUtil.getString(0, tableColumn);
+				}
 				//dbUtil.executeSelect(sql.toString());
 			}else{
 				sql.append("select a.").append(tableColumn).append("  from ").append(data_table_name)
@@ -6057,13 +6168,14 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 					sql.append(" and a.").append(data_value_field).append("='").append(value).append("'");
 				}
 			//dbUtil.executeSelect(sql.toString());
+				sql.append(condition);
+				//System.out.println(sql.toString());
+				dbUtil.executeSelect(data.getDataDBName(),sql.toString());
+				if(dbUtil.size() > 0){
+					attachFieldValue = dbUtil.getString(0, tableColumn);
+				}
 			}
-			sql.append(condition);
-			//System.out.println(sql.toString());
-			dbUtil.executeSelect(data.getDataDBName(),sql.toString());
-			if(dbUtil.size() > 0){
-				attachFieldValue = dbUtil.getString(0, tableColumn);
-			}
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			attachFieldValue = "无效ID";

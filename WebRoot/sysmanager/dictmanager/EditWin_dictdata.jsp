@@ -7,8 +7,8 @@
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri='/WEB-INF/dictionary.tld' prefix='dict'%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
+
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@ page import="com.frameworkset.dictionary.Data" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
@@ -198,6 +198,8 @@
 <html>
     <head>
     <title>基础字典数据采集</title>
+    <script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+    	<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
         <script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
         <script language="javascript" src="../scripts/selectTime.js"></script>
         <script language="javascript" src="js/checkUnique.js"></script>
@@ -249,6 +251,7 @@
 			
 	</SCRIPT>
 		<script language="JavaScript" src="../user/common.js" type="text/javascript"></script>
+		 <script language="javascript" src="js/dictionary.js"></script>
     </head>
     <body> 
     	<div style="height: 10px">&nbsp;</div>

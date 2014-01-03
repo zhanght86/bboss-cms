@@ -1,4 +1,5 @@
 
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
@@ -193,6 +194,11 @@
 	}
 	//System.out.println("attachFieldSql = " + attachFieldSql.toString());
 	request.setAttribute("attachFieldSql",attachFieldSql.toString());
+	TransactionManager tm = new TransactionManager();
+	try
+	{
+		
+		tm.begin();
 	//处理高级字段查询条件 end --highLevelColumni--advancedvaluei
 %>
 <html>
@@ -208,7 +214,7 @@
 			src="<%=request.getContextPath()%>/public/datetime/calender_date.js"></script>
 </head>
 <body>
-	<div id="changeColor">
+	<div id="changeColor" style="overflow:auto">
 		<pg:listdata dataInfo="com.frameworkset.platform.dictionary.tag.DictList" keyName="DictList" />
 		<pg:pager maxPageItems="13" scope="request" data="DictList" isList="false">
 			<pg:param name="did" />
@@ -339,6 +345,13 @@
 			</pg:notequal>
 		</pg:pager>
 	</div>
-	
+	<%
+	tm.commit();
+	}
+	finally
+	{
+		tm.release();
+	}
+	%>
 </body>
 </html>

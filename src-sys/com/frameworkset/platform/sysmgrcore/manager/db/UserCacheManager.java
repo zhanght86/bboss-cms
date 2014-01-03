@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.spi.BaseApplicationContext;
 
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
@@ -70,6 +71,32 @@ public class UserCacheManager {
 			hasloadUsers = false;
 		} catch (NoSuchMethodException e) {
 			hasloadUsers = false;
+		}
+		
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			@Override
+			public void run() {
+				destroy();
+				
+			}
+			
+		});
+	}
+	
+	void _destory()
+	{
+		users.clear();
+		usersByID.clear();
+		
+	}
+	
+	public static void destroy()
+	{
+		if(instance != null)
+		{
+			instance._destory();
+			
 		}
 	}
 	

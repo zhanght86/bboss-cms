@@ -29,6 +29,8 @@ public abstract class BaseInputTypeScript implements InputTypeScript {
 	 */
 	protected boolean isReadOnly(Map keyWords)
 	{
+		if(keyWords == null)
+			return false;
 		KeyWord key = (KeyWord)keyWords.get(dictatt.getTable_column().toUpperCase());
 		if(key != null)
 			return true;

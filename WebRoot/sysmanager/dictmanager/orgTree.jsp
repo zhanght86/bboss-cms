@@ -27,7 +27,7 @@
 							
 							<tree:tree tree="role_org_tree" node="role_org_tree.node" 
 							imageFolder="../images/tree_images/" collapse="true" includeRootNode="false" 
-							href="<%=href%>" target="frame_bridge"  dynamic="false">
+							href="<%=href%>" target="frame_bridge"   mode="static-dynamic">
 						
 							
 								<tree:treedata treetype="com.frameworkset.platform.dictionary.DictOrgUserTree" 

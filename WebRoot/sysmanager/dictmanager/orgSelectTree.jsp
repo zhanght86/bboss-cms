@@ -11,17 +11,14 @@
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 <title>选择机构</title>
 <%
 	AccessControl control = AccessControl.getAccessControl();
+	control.checkAccess(request,response);
 	String orgNames = request.getParameter("orgNames");
-	String fieldName = request.getParameter("fieldName");
-	String isUnique=request.getParameter("isUnique");
-	String fileTextName=request.getParameter("fileTextName");
-	String oldValue=request.getParameter("oldValue");
+
 %>
 
 <%
@@ -83,7 +80,7 @@ function addorg(){
   		$.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.org.select.null"/>');
   		return;
   	}
-	/**
+	
 	W.document.getElementById("${param.tag1}").value = orgValues;
 	W.document.getElementById("${param.tag2}").value = orgIds;
 	
@@ -93,10 +90,8 @@ function addorg(){
 		win.document.getElementById("${param.tag2}").value= orgIds;
 	}
 	
-	api.close();*/
-
-  W.setSelectOrg(orgValues + "^" + orgIds,'<%=fieldName%>','<%=fileTextName%>',<%=isUnique%>,'<%=oldValue%>');  
-  api.close();
+	api.close();
+    
   	//window.returnValue=orgValues + "^" + orgIds;
   	//window.close();
 }

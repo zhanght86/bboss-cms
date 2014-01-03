@@ -1733,6 +1733,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	}
 	
 	public User getUserById(String userId)  throws ManagerException {
+		if(StringUtil.isEmpty(userId))
+			return null;
 		User user = null;
 		try {
 			PreparedDBUtil db = new PreparedDBUtil();

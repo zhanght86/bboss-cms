@@ -8,7 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.frameworkset.spi.Provider;
 
+import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 import com.frameworkset.dictionary.Data;
 import com.frameworkset.dictionary.Item;
@@ -22,7 +26,10 @@ import com.frameworkset.util.ListInfo;
  * @author 
  */
 public interface DictManager extends Provider {
+	public String getOrgNames(String orgids) throws Exception;
 	
+	
+	public String getUserNames(String userids) throws Exception;
 	/**
 	 * 字典数据,缺省存放的'数据源'名称
 	 */

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
+import org.frameworkset.spi.BaseApplicationContext;
 
 import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
 
@@ -41,6 +42,18 @@ public class OrgAdminCache implements Listener, Serializable{
 	 */
 	Map usermanagerOrgsMap = new ConcurrentHashMap();
 	static OrgAdminCache instance = new OrgAdminCache();
+	static 
+	{
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			@Override
+			public void run() {
+				destroy();
+				
+			}
+			
+		});
+	}
 	
 	
 	
@@ -170,8 +183,26 @@ public class OrgAdminCache implements Listener, Serializable{
 			orgmanagersMap.clear();
 			usermanagerOrgsMap.clear();
 		}
+		
+	}
+	void _destroy()
+	{
+		orgmanagersMap.clear();
+		usermanagerOrgsMap.clear();
+		orgmanagersMap = null;
+		usermanagerOrgsMap = null;
+		inited = false;
 	}
 	
+	
+	public static void destroy()
+	{
+		if(instance != null)
+		{
+			instance._destroy();
+			instance = null;
+		}
+	}
 	
 
 }

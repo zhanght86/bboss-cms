@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.remote.RPCHelper;
 
 import com.frameworkset.platform.config.BaseSystemInit;
@@ -53,6 +54,7 @@ public class SysmanagerInit extends BaseSystemInit implements Serializable {
 		try
 		{
 			OrgCacheManager.init();
+			
 		}
 		catch(Exception e)
 		{

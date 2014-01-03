@@ -8,6 +8,7 @@ import java.util.Map;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.SPIException;
 
 import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
@@ -33,9 +34,9 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  */
 public class RoleCacheManager implements Listener, Serializable {
 	
-	private static final Map rolesById = new ConcurrentHashMap();
-	private static final Map rolesByName = new ConcurrentHashMap();
-	private static final RoleCacheManager instance = new RoleCacheManager();
+	private static  Map rolesById = new ConcurrentHashMap();
+	private static  Map rolesByName = new ConcurrentHashMap();
+	private static  RoleCacheManager instance = new RoleCacheManager();
 	
 	private static boolean inited = false;
 	static
@@ -51,6 +52,24 @@ public class RoleCacheManager implements Listener, Serializable {
 	                .addListener(instance,eventTypes);
 			inited = true;
 		}
+		
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			@Override
+			public void run() {
+				destroy();
+				
+			}
+			
+		});
+	}
+	
+	public static void destroy()
+	{
+		inited = false;
+		rolesById.clear();
+		rolesByName.clear();
+		instance = null;
 	}
 	
 	/**

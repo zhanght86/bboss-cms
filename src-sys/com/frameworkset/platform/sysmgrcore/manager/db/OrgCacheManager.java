@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.orm.annotation.TransactionType;
@@ -45,7 +46,18 @@ public class OrgCacheManager implements Listener, Serializable{
 	
 	 private static boolean inited = false;
 	
-	
+	static 
+	{
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			@Override
+			public void run() {
+				OrgCacheManager.destroy();
+				
+			}
+			
+		});
+	}
 	
 	
 	
@@ -239,12 +251,29 @@ public class OrgCacheManager implements Listener, Serializable{
 		return instance;
 	}
 	
-	public void destroy()
+	public void _destroy()
 	{
+		if(this.orgMap != null)
+		{
+			this.orgMap.clear();
+		}
 		this.orgMap = null;
+		
+		root = null;
+		orgManager = null;
+		initing = false; 
+		inited = false;
 //		this.inited = false;
 //		this.initing = false;
 		
+	}
+	public static void destroy()
+	{
+		if(instance != null)
+		{
+			instance._destroy();
+			instance = null;
+		}
 	}
 	
 	public void handle(Event e) {

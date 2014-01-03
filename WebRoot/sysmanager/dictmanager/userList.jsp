@@ -12,18 +12,13 @@
 			String displayValueInput = request.getParameter("displayValueInput");
 			//被选中的用户
 			String userNames = request.getParameter("userNames")==null?"":request.getParameter("userNames");
-			String[] infos =  userNames.trim().split(" ");
-			String userId = "";	
-			if(infos.length>0){
-			    userId = infos[0];	
-			}	
+			String[] infos =  userNames.trim().split(",");
+			
 %>
 <html>
 	<head>
 		<title>属性容器</title>
-		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../css/contentpage.css">
-		<link rel="stylesheet" type="text/css" href="../css/tab.winclassic.css">
+		
 	<%@ include file="/include/css.jsp"%>
 		<link rel="stylesheet" type="text/css" href="../sysmanager/css/contentpage.css">
 		<link rel="stylesheet" type="text/css" href="../sysmanager/css/tab.winclassic.css">
@@ -111,7 +106,7 @@ function okadd(){
         
      }
          
-		if(flag)	
+		/**if(flag)	
 		{
 	         window.returnValue=names + "^" + ids;
 	     }
@@ -119,7 +114,17 @@ function okadd(){
 	     {
 		     window.returnValue="";
 	     }
-         parent.window.close();
+	     */
+	    if(flag)	
+		{
+	         parent.setUser(names + "^" + ids);  
+	     }
+	     else
+	     {
+		     parent.setUser("");  
+	     } 
+	    
+      parent.api.close();
 
          
 }
@@ -217,19 +222,25 @@ function getFrame_bridge()
 }
 
 window.onload = function autoRun(){
-	//回填选中的人
-	//add by ge.tao
-	var selectedText = "<%=userNames%>"
-	var selectedValue = "<%=userId%>"
+	//1 系统管理员,20696 蒋之春,10006888 qiangW
+	var selectedText = "";
+	var selectedValue = "";
+	<%
+	for(int i =0;i < infos.length;i ++)
+	{
+	  String user[] = infos[i].split(" ");
+	%>
+	 selectedText = "<%=infos[i]%>"
+	 selectedValue = "<%=user[0]%>"
 	if(selectedText.length>0 && selectedValue.length>0){
 	    addone("userIds",selectedText,selectedValue);
 	} 
-
+	<%}%>
 }
 </SCRIPT>
 
 
-	<body class="contentbodymargin" scroll="no" oncontextmenu="return false;">
+	<body class="contentbodymargin" scroll="no" >
 		<div id="contentborder">
 
 			<form name="OrgJobForm" action="" method="post">
@@ -370,7 +381,7 @@ window.onload = function autoRun(){
 						<tr class="tr">
 							<td colspan="3" class="td" align="center">
 								<input name="add" type="button" class="input" value="确定" onclick="okadd()">
-								<input name="add" type="button" class="input" value="放弃" onclick="parent.window.close();">
+								<input name="add" type="button" class="input" value="放弃" onclick="parent.api.close();">
 
 							</td>
 						</tr>

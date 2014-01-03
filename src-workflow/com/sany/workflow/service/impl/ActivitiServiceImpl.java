@@ -58,7 +58,7 @@ import com.sany.workflow.util.WorkFlowConstant;
 
 
 
-public class ActivitiServiceImpl implements ActivitiService {
+public class ActivitiServiceImpl implements ActivitiService ,org.frameworkset.spi.DisposableBean{
 
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
@@ -2390,6 +2390,15 @@ public void rejecttoPreTask(String taskId,String username){
 //			}
 		} catch (Exception e) {
 			throw new ProcessException(e); 
+		}
+		
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		if(processEngine != null)
+		{
+			processEngine.close();
 		}
 		
 	}

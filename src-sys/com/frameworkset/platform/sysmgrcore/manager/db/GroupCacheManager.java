@@ -8,6 +8,7 @@ import java.util.Map;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.SPIException;
 
 import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
@@ -33,9 +34,9 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  */
 public class GroupCacheManager implements Listener, Serializable {
 	
-	private static final Map groupsById = new ConcurrentHashMap();
-	private static final Map groupsByName = new ConcurrentHashMap();
-	private static final GroupCacheManager instance = new GroupCacheManager();
+	private static  Map groupsById = new ConcurrentHashMap();
+	private static  Map groupsByName = new ConcurrentHashMap();
+	private static  GroupCacheManager instance = new GroupCacheManager();
 	
 	private static boolean inited = false;
 	static
@@ -51,6 +52,16 @@ public class GroupCacheManager implements Listener, Serializable {
 	                .addListener(instance,eventTypes);
 			inited = true;
 		}
+	
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			@Override
+			public void run() {
+				destroy();
+				
+			}
+			
+		});
 	}
 	
 	/**
@@ -89,6 +100,20 @@ public class GroupCacheManager implements Listener, Serializable {
 			groupsById.clear();
 			groupsByName.clear();
 			init();		
+		}
+	}
+	void _destory()
+	{
+		groupsById.clear();
+		groupsByName.clear();
+		inited = false;
+	}
+	public static void destroy()
+	{
+		if(instance != null)
+		{
+			instance._destory();
+			instance = null;
 		}
 	}
 	public void handle(Event e) {

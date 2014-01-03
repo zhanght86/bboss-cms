@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.frameworkset.platform.dictionary.DictAttachField;
+import com.frameworkset.platform.dictionary.DictManager;
+import com.frameworkset.platform.dictionary.DictManagerImpl;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
@@ -26,6 +28,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl;
  */
 public class InputTypeScriptImpl extends BaseInputTypeScript {
 
+	
 	public InputTypeScriptImpl(DictAttachField dictatt) {
 		super(dictatt);
 	}
@@ -118,7 +121,7 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 //			html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);' readonly='true' style='width:200px' ")
 //				.append("/>");
 			//orgSelectFinal(ifid,windowname,fieldName,isUnique,fileTextName)
-			html.append(" onClick='orgSelectFinal(\"iframe_").append(dictatt.getTable_column()).append("\",\"选择机构\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
+			html.append(" onClick='$.dictionary.orgSelectFinal(\"").append(request.getContextPath()).append("\",\"iframe_").append(dictatt.getTable_column()).append("\",\"选择机构\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
 			.append(isUnique)
 			.append(",\"")
 			.append(dictatt.getTable_column().toLowerCase()).append("_name\")' readonly='true' style='width:200px' ")
@@ -143,7 +146,10 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 			.append(" validator='").append(dictatt.getFieldValidType())
 			.append("'  cnname='")
 			.append(dictatt.getDictFieldName()).append("' ");
-			html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);' readonly='true' style='width:200px' ")
+			html.append(" onClick='$.dictionary.userSelectFinal(\"").append(request.getContextPath()).append("\",\"iframe_").append(dictatt.getTable_column()).append("\",\"选择人员\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
+			.append(isUnique)
+			.append(",\"")
+			.append(dictatt.getTable_column().toLowerCase()).append("_name\")' readonly='true' style='width:200px' ")
 				.append("/>");
 		}
 		html.append(isNullStr).append(isUniqueCheckStr);
@@ -162,6 +168,7 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 		String isNullStr = "";
 		String isUniqueCheckStr = "";
 		boolean readonly = this.isReadOnly(keyWords); 
+		DictManager dictManager = new DictManagerImpl();
 		if(dictatt.getIsnullable()==DictAttachField.NOTNULLABLE){
 			isNullStr = "<span style='color:red'>必填</span>";
 		}
@@ -170,30 +177,39 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 		if(isUnique){
 			isUniqueCheckStr = " <span style='color:red'>自动去重校验</span>";
 		}	
-		html.append("<input type='hidden' name='").append(dictatt.getTable_column().toLowerCase())
+		html.append("<input type='hidden' id='").append(dictatt.getTable_column().toLowerCase()).append("'  name='").append(dictatt.getTable_column().toLowerCase())
 			.append("' value='").append(dictatt.getFieldValue()).append("'>");
 		
 		String orgoruserName = "";
 		if(dictatt.getInputTypeName().equals("选择机构")){
 			//String orgName = "";
 			String orgId = dictatt.getFieldValue();
-			Organization organization = null;
+//			Organization organization = null;
+//			try {
+//				organization = OrgCacheManager.getInstance().getOrganization(orgId);
+//				if(organization!=null){
+//					orgoruserName = orgId + " " + organization.getRemark5();
+//				}
+//			} catch (ManagerException e) {
+//				e.printStackTrace();
+//			}
 			try {
-				organization = OrgCacheManager.getInstance().getOrganization(orgId);
-				if(organization!=null){
-					orgoruserName = orgId + " " + organization.getRemark5();
-				}
-			} catch (ManagerException e) {
+				orgoruserName = dictManager.getOrgNames(orgId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			html.append("<input type='text' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
+			html.append("<input type='text' id='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("'  name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
 			.append("value='").append(orgoruserName).append("'  maxlength=100 ")
 			.append(" validator='").append(dictatt.getFieldValidType())
 			.append("'  cnname='")
 			.append(dictatt.getDictFieldName()).append("' ");
 			if(!readonly){
-				html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);'");
+				html.append(" onClick='$.dictionary.orgSelectFinal(\"").append(request.getContextPath()).append("\",\"iframe_").append(dictatt.getTable_column()).append("\",\"选择机构\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
+				.append(isUnique)
+				.append(",\"")
+				.append(dictatt.getTable_column().toLowerCase()).append("_name\")'");
 			}
 			html.append(" readonly='true' style='width:200px' ")
 			.append("/>");
@@ -201,30 +217,39 @@ public class InputTypeScriptImpl extends BaseInputTypeScript {
 		if(dictatt.getInputTypeName().equals("选择人员")){
 			//String userName = "";
 			String userId = dictatt.getFieldValue();
-			User user = null;
-			UserManagerImpl userImpl = new UserManagerImpl();
-			try {				
-				user = userImpl.getUserById(userId);
-				if(user != null){
-					orgoruserName = userId + " " + user.getUserRealname();
-				}
-			} catch (ManagerException e) {
+//			User user = null;
+//			UserManagerImpl userImpl = new UserManagerImpl();
+//			try {				
+//				user = userImpl.getUserById(userId);
+//				if(user != null){
+//					orgoruserName = userId + " " + user.getUserRealname();
+//				}
+//			} catch (ManagerException e) {
+//				e.printStackTrace();
+//			}
+			try {
+				orgoruserName = dictManager.getUserNames(userId);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			html.append("<input type='text' name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
+			html.append("<input type='text' id='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("'  name='").append(dictatt.getTable_column().toLowerCase()).append("_name").append("' ")
 			.append("value='").append(orgoruserName).append("'  maxlength=100 ")
 			.append(" validator='").append(dictatt.getFieldValidType())
 			.append("'  cnname='")
 			.append(dictatt.getDictFieldName()).append("' ");
 			if(!readonly){
-				html.append(" onClick='").append(dictatt.getTable_column().toLowerCase()).append("_(this);'");
+				html.append(" onClick='$.dictionary.userSelectFinal(\"").append(request.getContextPath()).append("\",\"iframe_").append(dictatt.getTable_column()).append("\",\"选择人员\",\"").append(dictatt.getTable_column().toLowerCase()).append("\",")
+			.append(isUnique)
+			.append(",\"")
+			.append(dictatt.getTable_column().toLowerCase()).append("_name\")' ");
 			}
 			html.append(" readonly='true' style='width:200px' ")
 				.append("/>");
 		}
 		html.append(isNullStr).append(isUniqueCheckStr);
-		html.append(getFunctionContent(orgoruserName,isUnique));
+//		html.append(getFunctionContent(orgoruserName,isUnique));
 		return html.toString();
 	}
 }
