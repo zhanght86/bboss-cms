@@ -499,7 +499,19 @@ public abstract class PermissionRoleMap implements Listener {
         resourceRoleMaps.clear();
     }
     
-    
+    public void destroy()
+    {
+    	resourceMap.clear();
+        prMap.clear();
+//        role_resourceMap.clear();
+        resourceRoleMaps.clear();
+        resourceMap = null;
+        prMap = null;
+//        role_resourceMap.clear();
+        resourceRoleMaps = null;
+        this.inited = false;
+        this.context = null;
+    }
     public static void main()
     {
     	

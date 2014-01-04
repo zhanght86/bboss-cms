@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.spi.BaseApplicationContext;
 
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
@@ -37,8 +38,29 @@ public class AppSecurityCollaborator extends SecurityCollaborator
 	static 
 	{
 		AppSecurityCollaborator.getInstance();
-	}
+		BaseApplicationContext.addShutdownHook(new Runnable(){
 
+			@Override
+			public void run() {
+				destroy();
+				
+			}
+			
+		});
+	}
+	
+	public void _destory()
+	{
+		super._destory();
+	}
+	static void destroy()
+	{
+		if(securityCollaboratorInstance != null)
+		{
+			securityCollaboratorInstance._destory();
+			securityCollaboratorInstance = null;
+		}
+	}
 	/**
 	 * @since 2004.12.15
 	 */
@@ -71,6 +93,8 @@ public class AppSecurityCollaborator extends SecurityCollaborator
 		}
 		return securityCollaboratorInstance;
 	}
+	
+	
 
 	/**
 	 * 判断资源是否是未受保护的资源

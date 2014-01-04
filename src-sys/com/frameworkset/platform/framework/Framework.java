@@ -62,6 +62,24 @@ import com.frameworkset.util.VelocityUtil;
  * @version 1.0
  */
 public class Framework implements ResourceInitial,MessageSource {
+	static{
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+
+			public void run() {
+				
+				 destroy();
+				
+			}});
+	}
+	static void destroy()
+	{
+		if(listen != null)
+			listen.stopped();
+		if(init != null)
+		{
+			init._destroy();
+		}
+	}
 	private boolean monitered = false;
 	private ServletContext servletContext;
 	private static Logger log = Logger.getLogger(Framework.class);
@@ -392,13 +410,7 @@ public class Framework implements ResourceInitial,MessageSource {
 					{
 						listen = new DaemonThread(5000,"sysmenu refresh thread");
 						listen.start();
-						BaseApplicationContext.addShutdownHook(new Runnable(){
-
-							public void run() {
-								if(listen != null)
-									listen.stopped();
-								
-							}});
+						
 					}
 					
 				}
@@ -1997,7 +2009,28 @@ public class Framework implements ResourceInitial,MessageSource {
 		return showhidden;
 	}
 
-	public void destroy() {
+	public void _destroy() {
+		if(this.indexByIds != null)
+		{
+			indexByIds.clear();
+			indexByIds = null;
+			
+		}
+		this.framesetAttributeOfItem = null;
+		this.frameworkmeta = null;
+		this.indexs = null;
+		this.items = null;
+		this.languages = null;
+		this.localeDescriptions = null;
+		this.messagesource = null;
+		this.modules =null;
+		this.publicItem = null;
+		this.root = null;
+		this.servletContext = null;
+		this.subsystemFrameworks = null;
+		this.subsystems = null;
+		
+		
 
 	}
 

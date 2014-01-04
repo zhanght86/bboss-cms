@@ -62,7 +62,13 @@ public class ConfigManager implements ResourceInitial,Runnable {
     private static Logger log = Logger.getLogger(ConfigManager.class);
     private static ConfigManager instance;    
     private boolean inited = false;
-   
+    public static void destory()
+    {
+    	if(instance != null)
+    		instance = null;
+    }
+    
+  
     public synchronized void init()
     { 
     	if(inited )

@@ -83,7 +83,7 @@ public abstract class BaseAuthorizationTable implements AuthorizationTable,
         this.context = context;
         init();
     }
-
+    
 
     public BaseAuthorizationTable() {
     }
@@ -599,6 +599,19 @@ public abstract class BaseAuthorizationTable implements AuthorizationTable,
        //gao.tang 2008-12-11 没有被使用的缓冲
 //         roleUser_cache.clear();
          permission_users.clear();
+    }
+    public void destroy()
+    {
+    	 authorizationTable.clear();
+         everyOneGrantedRole.clear();
+       //gao.tang 2008-12-11 没有被使用的缓冲
+//         roleUser_cache.clear();
+         permission_users.clear();
+         authorizationTable = null;
+         everyOneGrantedRole = null;
+       //gao.tang 2008-12-11 没有被使用的缓冲
+//         roleUser_cache.clear();
+         permission_users = null;
     }
 
     public AuthorTableInfo getAuthorTableInfo() {

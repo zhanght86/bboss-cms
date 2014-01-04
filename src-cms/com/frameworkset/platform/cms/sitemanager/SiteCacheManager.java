@@ -43,8 +43,10 @@ public class SiteCacheManager implements Listener {
 	
 	private static boolean inited = false;
 	
-	static 
+	static synchronized void init()
 	{
+		if(instance != null)
+			return ;
 		instance = new SiteCacheManager();
 		
 		instance.siteroot = new Site();
@@ -66,6 +68,31 @@ public class SiteCacheManager implements Listener {
 		
 		inited = true;
 		
+	}
+	void _destory()
+	{
+		
+		{
+			inited = false;
+			siteroot = null;
+			
+			siteMap = null;
+			siteEnameMap = null;
+			this.siteChannelCacheManagers = null;
+			this.siteChannelCacheManagersByEname = null;
+		}
+		
+		this.siteLinkCache = null;
+		
+	}
+	public static void destroy()
+	{
+		if(instance != null)
+		{
+			instance._destory();
+			instance = null;
+			inited = false;
+		}
 	}
 	/**
 	 * 通过站点id获取该站点下频道缓冲类的引用
@@ -270,6 +297,7 @@ public class SiteCacheManager implements Listener {
 	 * @return SiteCacheManager
 	 */
 	public static SiteCacheManager getInstance() {
+		init();
 		return instance;
 	}
 

@@ -1,11 +1,31 @@
 package com.frameworkset.dictionary;
 
-import java.io.Serializable;
+import org.frameworkset.spi.BaseApplicationContext;
 
 import com.frameworkset.platform.config.ConfigManager;
 
 
-public class DataManagerFactory implements Serializable{
+public class DataManagerFactory{
+	static
+	{
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+	
+			@Override
+			public void run() {
+				
+				destroy();
+			}
+			
+		});
+	}
+	static void destroy()
+	{
+		if(dataManager != null)
+		{
+			dataManager.destory();
+			dataManager = null;
+		}
+	}
 	private static DataManager dataManager;
 	public static DataManager getDataManager()
 	{
@@ -27,6 +47,8 @@ public class DataManagerFactory implements Serializable{
 			dataManager.init();
 //			CommonDataManager dataManager1 = new CommonDataManager(dataManager);
 //			dataManager1.init();
+
+			
 			return dataManager;
 		} catch (InstantiationException e1) {
 			

@@ -4,6 +4,7 @@ package com.frameworkset.platform.security.authorization.impl;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -32,19 +33,30 @@ public abstract class BaseAccessManager implements AccessManager {
      * 变量pluggableAuthTable和pluggableAuthzTableName为了与websphere4.0兼容而定义
      */
     
-
-    private Map pluggableAuthTableIdx;
-    private static boolean ignoreCase = false;
-    private static boolean isLDAPRegistry = false;
-
-    private static boolean filledAccessIDs = false;
+	public void destory()
+	{
+		if(pluggableAuthTableIdx != null)
+		{
+			Iterator<Map.Entry<String,AuthorizationTable>> it = this.pluggableAuthTableIdx.entrySet().iterator();
+			while(it.hasNext())
+			{
+				Map.Entry<String,AuthorizationTable> entry = it.next();
+				entry.getValue().destroy();
+				
+			}
+			pluggableAuthTableIdx.clear();
+			pluggableAuthTableIdx = null;
+		}
+	}
+    private Map<String,AuthorizationTable> pluggableAuthTableIdx;
+   
     private static final Logger log = Logger.getLogger(BaseAccessManager.class);
 
     /**
      * @since 2004.12.15
      */
     public BaseAccessManager() {
-        pluggableAuthTableIdx = new HashMap();
+        pluggableAuthTableIdx = new HashMap<String,AuthorizationTable>();
 //        pluggableAuthTable = ConfigManager.getInstance().getAuthorTable();
 //        
 //        pluggableAuthTableIdx.put(ConfigManager.getInstance().getAppName()

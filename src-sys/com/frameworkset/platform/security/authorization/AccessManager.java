@@ -17,7 +17,8 @@ import com.frameworkset.platform.security.context.AccessContext;
  * @author not attributable
  * @version 1.0
  */
-public interface AccessManager extends Serializable{
+public interface AccessManager {
+	public void destory();
     public void checkAccess(
             AccessContext accesscontext,
             java.security.Principal principal,

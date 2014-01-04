@@ -1,6 +1,5 @@
 package com.frameworkset.platform.security.authorization;
 
-import java.io.Serializable;
 import java.security.Principal;
 
 import com.frameworkset.platform.security.authorization.impl.SecurityException;
@@ -18,7 +17,7 @@ import com.frameworkset.platform.security.context.AccessContext;
  * @author not attributable
  * @version 1.0
  */
-public interface AuthorizationTable extends Serializable {
+public interface AuthorizationTable {
     /**
      * isEveryoneGranted
      *
@@ -87,4 +86,5 @@ public interface AuthorizationTable extends Serializable {
     													   String resourceType) 
     throws SecurityException;
     public void reset();
+    public void destroy();
 }

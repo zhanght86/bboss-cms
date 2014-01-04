@@ -424,4 +424,11 @@ class ProfessionDataManager implements ResourceInitial,DataManager {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
+	@Override
+	public void destory() {
+		this.reset();
+		
+	}
 }

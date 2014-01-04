@@ -30,6 +30,7 @@ import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 import org.codehaus.swizzle.stream.StringTemplate;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
 import org.frameworkset.util.ParamsHandler.Params;
@@ -67,6 +68,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.LinkCache;
 import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 import com.frameworkset.platform.cms.driver.publish.PublishEngine;
 import com.frameworkset.platform.cms.driver.publish.PublishMode;
+import com.frameworkset.platform.cms.driver.publish.impl.ScriptletUtil;
 import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
@@ -108,6 +110,30 @@ public class CMSUtil{
 	 * 分页文档的每页之间的分割符
 	 */
 	private static final String pagintionToken = "##########$$$$$$$$$$$";
+	static
+	{
+		BaseApplicationContext.addShutdownHook(new Runnable(){
+			
+			@Override
+			public void run() {
+				
+				destroy();
+			}
+			
+		});
+	}
+	
+	static void destroy()
+	{
+		SiteCacheManager.destroy();
+		if(driverConfiguration != null)
+		{
+			driverConfiguration.getPublishEngine().clearTasks();
+			driverConfiguration = null;
+		}
+		ScriptletUtil.destroy();
+		
+	}
 	
 	/**
 	 * da.wei,200710171648

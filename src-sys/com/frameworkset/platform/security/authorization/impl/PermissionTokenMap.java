@@ -385,5 +385,28 @@ public class PermissionTokenMap {
 		
 		
 	}
+	public void destory() {
+		if(nullURLLinkPermissions != null)
+		{
+			this.nullURLLinkPermissions.clear();
+			nullURLLinkPermissions = null;
+		}
+		if(protectedURLLinkPermissions != null)
+		{
+			this.protectedURLLinkPermissions.clear();
+			protectedURLLinkPermissions = null;
+		}
+		if(resourcTokenMap != null)
+		{
+			this.resourcTokenMap.clear();
+			resourcTokenMap = null;
+		}
+		if(unprotectedURLLinkPermissions != null)
+		{
+			this.unprotectedURLLinkPermissions.clear();
+			unprotectedURLLinkPermissions = null;
+		}
+		
+	}
 
 }

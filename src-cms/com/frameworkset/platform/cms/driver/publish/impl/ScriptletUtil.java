@@ -36,7 +36,7 @@ import com.frameworkset.util.StringUtil;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ScriptletUtil implements java.io.Serializable {
+public class ScriptletUtil  {
 
 	/**
 	 * 创建文件类型模版对应的脚本
@@ -70,6 +70,14 @@ public class ScriptletUtil implements java.io.Serializable {
 	public static void resetCache()
 	{
 		metas.clear();
+	}
+	public static void destroy()
+	{
+		if(metas != null)
+		{
+			metas.clear();
+			metas = null;
+		}
 	}
 	/**
 	 * 根据路径获取缓冲中存在的模板文件信息，暂时不考虑并发同步控制问题

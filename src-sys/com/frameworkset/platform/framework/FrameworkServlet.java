@@ -11,9 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.JspFactory;
-import javax.servlet.jsp.JspWriter;
-import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.task.TaskService;
@@ -789,6 +786,12 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 	public static void main(String[] a)
 	{
 		Framework.getInstance();
+	}
+
+	@Override
+	public void destroy() {
+		ConfigManager.destory();
+		super.destroy();
 	}
 
 }

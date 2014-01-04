@@ -75,7 +75,17 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	
 	private static final Logger log = Logger.getLogger(ParamsHandler.class);
 	private static Map<String,ParamsHandler> handlers = new HashMap<String,ParamsHandler>();
-	
+	static{
+	 BaseApplicationContext.addShutdownHook(new Runnable() {
+			
+			public void run()
+			{
+		
+				destory();
+				
+			}
+		});
+	}
 	/**
 	 * 缓存参数数据
 	 * paramType:paramID:Params
@@ -451,6 +461,11 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		this.cache.clear();
 		return true;
 	}
+	public void _destory()
+	{
+		this.cache.clear();
+		cache = null;
+	}
 	
 	public static boolean cleanAllCache()
 	{
@@ -463,6 +478,29 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		}
 		return true;
 	}
+	
+	public static void destory()
+	{
+		loaded = false;
+		if(handlers != null)
+		{
+			Iterator<Map.Entry<String, ParamsHandler>> it = handlers.entrySet().iterator();
+			while(it.hasNext())
+			{
+				ParamsHandler handler = it.next().getValue();
+				handler._destory();
+			}
+			handlers.clear();
+			handlers = null;
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
 	public boolean cleanCaches(Map<String,Object> keys)
 	{
 		if(keys == null || keys.size() == 0) return false;

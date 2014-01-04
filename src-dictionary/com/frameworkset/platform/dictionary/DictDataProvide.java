@@ -380,6 +380,8 @@ public class DictDataProvide implements DataManager,Listener {
 //        version = null;
 //        datas = null;
     }
+    
+   
 
 	public  void handle(Event e) {
 		Object source = e.getSource();
@@ -860,6 +862,19 @@ public class DictDataProvide implements DataManager,Listener {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void destory() {
+		 datas.clear();   
+	     this.datasbyid.clear();
+	     this.expSelf_taxcodeOrgs.clear();
+	     this.taxcodeOrgs.clear();
+	     
+	     datas = null;   
+	     this.datasbyid = null;
+	     this.expSelf_taxcodeOrgs = null;
+	     this.taxcodeOrgs = null;
 	}
 
 	

@@ -95,7 +95,7 @@ public interface DataManager extends Serializable{
 	
 	public void init()  throws ProfessionDataManagerException;
 	public void reinit();
-	
+	public void destory();
 	public boolean removeDictFromCacheByID(String dictionaryID) throws ProfessionDataManagerException;
 
 }

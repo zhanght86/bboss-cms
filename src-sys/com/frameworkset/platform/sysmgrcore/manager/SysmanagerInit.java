@@ -72,9 +72,7 @@ public class SysmanagerInit extends BaseSystemInit implements Serializable {
 	public void destroy() throws DestroyException {
 		
 		try {
-			OrgCacheManager cach = OrgCacheManager.getInstance();
-			if(cach != null)
-				cach.destroy();
+			 OrgCacheManager.destroy();
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

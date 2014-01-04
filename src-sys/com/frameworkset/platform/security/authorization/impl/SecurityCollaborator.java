@@ -5,6 +5,7 @@ package com.frameworkset.platform.security.authorization.impl;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -14,6 +15,7 @@ import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.platform.security.authorization.AccessManager;
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.AuthUser;
+import com.frameworkset.platform.security.authorization.AuthorizationTable;
 import com.frameworkset.platform.security.context.AccessContext;
 import com.frameworkset.platform.security.context.AppAccessContext;
 
@@ -26,13 +28,41 @@ import com.frameworkset.platform.security.context.AppAccessContext;
  * @author biaoping.yin 
  * @version 1.0
  */
-public abstract class SecurityCollaborator implements Serializable{
+public abstract class SecurityCollaborator{
     private static Logger log  = Logger.getLogger(SecurityCollaborator.class);
     protected static boolean securityEnabled;
     protected static AccessManager appAccessManager;
     protected PermissionTokenMap permissionTokenMap;
-    protected Map permissionMapIndex = new HashMap();
-
+    protected Map<String,PermissionRoleMap> permissionMapIndex = new HashMap<String,PermissionRoleMap>();
+    public void _destory()
+    {
+    	if(permissionTokenMap != null)
+    	{
+	    	permissionTokenMap.destory();
+	    	permissionTokenMap = null;
+    	}
+    	if(appAccessManager != null)
+    	{
+    		appAccessManager.destory();
+    		appAccessManager = null;
+    	}
+    	if(permissionMapIndex != null)
+    	{
+    		
+    		
+    			Iterator<Map.Entry<String,PermissionRoleMap>> it = this.permissionMapIndex.entrySet().iterator();
+    			while(it.hasNext())
+    			{
+    				Map.Entry<String,PermissionRoleMap> entry = it.next();
+    				entry.getValue().destroy();
+    				
+    			}
+    			
+    		permissionMapIndex.clear();
+    		permissionMapIndex = null;
+    	}
+    	
+    }
 
     /**
      * 定义未受保护的资源
