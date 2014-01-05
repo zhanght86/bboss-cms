@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
  * @author biaoping.yin
  * @version 1.0
  */
-public interface SystemInit extends java.io.Serializable {
+public interface SystemInit  {
 	/**
 	 * 初始化上下文
 	 * @param context

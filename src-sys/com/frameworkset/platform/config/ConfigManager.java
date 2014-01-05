@@ -17,8 +17,6 @@ import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Notifiable;
 import org.frameworkset.event.NotifiableFactory;
-import org.frameworkset.persitent.util.SQLUtil;
-import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager;
 import org.frameworkset.spi.assemble.LinkConfigFile;
 import org.frameworkset.spi.assemble.ProviderInfoQueue;
@@ -58,14 +56,18 @@ import com.frameworkset.util.ResourceInitial;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ConfigManager implements ResourceInitial,Runnable {
+public class ConfigManager implements ResourceInitial {
     private static Logger log = Logger.getLogger(ConfigManager.class);
     private static ConfigManager instance;    
     private boolean inited = false;
-    public static void destory()
+    
+    public static void destroy()
     {
     	if(instance != null)
+    	{
+    		instance._destroy();
     		instance = null;
+    	}
     }
     
   
@@ -81,7 +83,7 @@ public class ConfigManager implements ResourceInitial,Runnable {
     		 startSystems();
     		
 //    		 String userNamelength = ConfigManager.getInstance().getConfigValue("userNameLength");
-    		 BaseApplicationContext.addShutdownHook(this);
+    		
     		 log.debug("装载系统配置文件config-manager.xml.....结束");
     		 
          } catch (Exception ex) {
@@ -1022,14 +1024,17 @@ public class ConfigManager implements ResourceInitial,Runnable {
 //		return communicationInfo.getSMSService();
 //	}
 
-	public void destroy() {
+	public void _destroy() {
 
     	this.shutdownsystems();
-    	try {
-			SQLUtil.stopmonitor();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+    	this.systemInits = null;
+    	this.ApplicationInfos = null;
+    	this.context = null;
+    	this.dataSourceConfig = null;
+    	this.defaultApplicationInfo = null;
+    	this.taskServiceInfo = null;
+    	
+//    	
 		
 	}
 
@@ -1042,9 +1047,5 @@ public class ConfigManager implements ResourceInitial,Runnable {
 		return EventHandle.getInstance();
 	}
 
-	@Override
-	public void run() {
-		this.destroy();
-		
-	}
+	
 }

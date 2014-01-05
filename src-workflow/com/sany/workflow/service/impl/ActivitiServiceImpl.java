@@ -2396,10 +2396,7 @@ public void rejecttoPreTask(String taskId,String username){
 
 	@Override
 	public void destroy() throws Exception {
-		if(processEngine != null)
-		{
-			processEngine.close();
-		}
+		
 		
 	}
 

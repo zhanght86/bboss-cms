@@ -790,7 +790,8 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 
 	@Override
 	public void destroy() {
-		ConfigManager.destory();
+		ConfigManager.destroy();
+		
 		super.destroy();
 	}
 

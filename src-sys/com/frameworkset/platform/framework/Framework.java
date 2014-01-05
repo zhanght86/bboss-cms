@@ -74,10 +74,15 @@ public class Framework implements ResourceInitial,MessageSource {
 	static void destroy()
 	{
 		if(listen != null)
+		{
 			listen.stopped();
+			listen = null;
+		}
 		if(init != null)
 		{
 			init._destroy();
+			init = null;
+//			
 		}
 	}
 	private boolean monitered = false;
@@ -2029,9 +2034,6 @@ public class Framework implements ResourceInitial,MessageSource {
 		this.servletContext = null;
 		this.subsystemFrameworks = null;
 		this.subsystems = null;
-		
-		
-
 	}
 
 	public String getConfigFile() {

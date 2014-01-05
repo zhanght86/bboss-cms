@@ -78,22 +78,18 @@ public class SysmanagerInit extends BaseSystemInit implements Serializable {
 			e2.printStackTrace();
 		}
 		try {
-			RPCHelper instance = RPCHelper.getRPCHelperInstance();
-			if(instance != null)
-				instance.stopRPCServices();
+			RPCHelper.destroy();
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		try 
-		{
-			SQLManager instance = SQLManager.getInstance();
-			if(instance != null)
-				instance.destroyPools();	
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try 
+//		{
+//			SQLManager.destroy();	
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		try {
 			EventHandle.shutdown();
 		} catch (Exception e) {
