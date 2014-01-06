@@ -1,13 +1,13 @@
-1.ÅäÖÃmongodb
+1.é…ç½®mongodb
 10.0.15.38
-±à¼­ÎÄ¼ş/etc/mongodb.conf£¬ÄÚÈİÈçÏÂ£º
+ç¼–è¾‘æ–‡ä»¶/etc/mongodb.confï¼Œå†…å®¹å¦‚ä¸‹ï¼š
 port = 27017
 bind_ip = 10.0.15.38
 dbpath = /data/db0/
 fork = true
 replSet = rs0
 logpath = /data/logs/db0.log
-Ôö¼Óabr½Úµã£º
+å¢åŠ abrèŠ‚ç‚¹ï¼š
 vi /etc/mongoabr.conf
 
 port = 30000
@@ -18,40 +18,40 @@ replSet = rs0
 logpath = /data/logs/abr.log
 
 ./mongod --config /etc/mongoabr.conf
-ÔÚÖ÷½ÚµãshellÖ´ĞĞÒ»ÏÂÖ¸Áî£¬Ìí¼Óabr
+åœ¨ä¸»èŠ‚ç‚¹shellæ‰§è¡Œä¸€ä¸‹æŒ‡ä»¤ï¼Œæ·»åŠ abr
 rs.addArb("10.0.15.38:30000")
 
-2.Æô¶¯mongodb
+2.å¯åŠ¨mongodb
 10.0.15.134
 ./mongod --config /etc/mongodb.conf
 ./mongod --config /etc/mongodb1.conf
 10.0.15.38
 ./mongod --config /etc/mongodb.conf
 
-ËµÃ÷£º./mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --logpath /data/logs/db0.log --fork true
+è¯´æ˜ï¼š./mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --logpath /data/logs/db0.log --fork true
 
 
-3.¿Í»§¶ËÁ¬½Ómongodb
+3.å®¢æˆ·ç«¯è¿æ¥mongodb
 ./mongo --host 10.0.15.134 --port 27017
 ./mongo --host 10.0.15.134 --port 27018
 ./mongo --host 10.0.15.38 --port 27017
 
-4.ÅäÖÃ²¢³õÊ¼»¯¸´ÖÆ·şÎñÆ÷Èº
-10.0.15.134£º27017ÎªÖ÷·şÎñÆ÷
-Á¬½Ó
+4.é…ç½®å¹¶åˆå§‹åŒ–å¤åˆ¶æœåŠ¡å™¨ç¾¤
+10.0.15.134ï¼š27017ä¸ºä¸»æœåŠ¡å™¨
+è¿æ¥
 ./mongo --host 10.0.15.134 --port 27017
-ÌáÊ¾·ûÏÂÊäÈëÒÔÏÂÅäÖÃ£º
+æç¤ºç¬¦ä¸‹è¾“å…¥ä»¥ä¸‹é…ç½®ï¼š
 config = {_id: 'rs0', members: [
 {_id: 0, host: '10.0.15.38:27017'},
 {_id: 1, host: '10.0.15.134:27017'},
 {_id: 2, host: '10.0.15.134:27018'}]
 }
-È»ºóÖ´ĞĞÒÔÏÂÖ¸Áî¼´¿É
+ç„¶åæ‰§è¡Œä»¥ä¸‹æŒ‡ä»¤å³å¯
 rs.initiate(config)
-×îºó·Ö±ğÁ¬Èë¸÷¿Í»§¶Ë£¬Ö´ĞĞ£º
+æœ€ååˆ†åˆ«è¿å…¥å„å®¢æˆ·ç«¯ï¼Œæ‰§è¡Œï¼š
 rs.slaveOk()
 
-5.Ê¹ÓÃmongodb
+5.ä½¿ç”¨mongodb
 use mydb
 j = { name : "mongo" }
 k = { x : 3 }
@@ -59,13 +59,13 @@ k = { x : 3 }
 db.testData.insert( j )
 db.testData.insert( k )
 
-¹Ø±Õmongodb
+å…³é—­mongodb
 db.adminCommand({shutdown : 1, force : true})
 
-39²¿Êğmongodb
+39éƒ¨ç½²mongodb
 
 
-vi /etc/mongodb.confÊäÈëÒÔÏÂÄÚÈİ£º
+vi /etc/mongodb.confè¾“å…¥ä»¥ä¸‹å†…å®¹ï¼š
 
 port = 27017
 bind_ip = 10.0.15.39
@@ -79,10 +79,10 @@ mkdir /dataDisk/mongodb
 mkdir /dataDisk/mongodb/db0
 mkdir /dataDisk/mongodb/logs
 
-½âÑ¹°²×°mongodb
+è§£å‹å®‰è£…mongodb
 tar -xvf mongodb-linux-x86_64-2.4.8.tar 
 
-¿ªÍ¨·À»ğÇ½¶Ë¿Ú£º
+å¼€é€šé˜²ç«å¢™ç«¯å£ï¼š
 -A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
 -A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 28017 -j ACCEPT
 rs.add("10.0.15.39:27017")
