@@ -3780,9 +3780,10 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 //				sql.append(" and t.doc_kind = ").append(docType);// 关联文档类型
 				sql.append(" and t.doc_class = '").append(docType).append("'");// 关联文档类型
 			}
-			sql.append(" order by ordersq,order_no desc,seq,ordertime desc,docwtime desc,publishtime desc,DOCUMENT_ID desc) p ");// 如果count为-1默认查询所有的记录
+			/*sql.append(" order by ordersq,order_no desc,seq,ordertime desc,docwtime desc,publishtime desc,DOCUMENT_ID desc) p ");// 如果count为-1默认查询所有的记录*/
+			sql.append(" ) p ORDER BY p.ordersq, p.order_no DESC, p.seq,  p.ordertime DESC,  p.docwtime DESC,  p.publishtime DESC,  p.DOCUMENT_ID DESC");
 //			System.out.println("=======================" + sql);
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin();
 			db.executeSelect(sql.toString(), offset, maxItem);
 			Document doc;
 			List datas = new ArrayList();
@@ -3862,7 +3863,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			}
 			tm.commit();
 			list.setDatas(datas);
-			list.setTotalSize(db.getTotalSize());
+			list.setTotalSize(db.getLongTotalSize());
 			// }
 		} catch (Exception e) {
 			e.printStackTrace();
