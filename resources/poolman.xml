@@ -6,7 +6,7 @@
 		<jndiName>druid_datasource_jndiname</jndiName>
 		<datasourceFile>druid.xml</datasourceFile>
 		<autoprimarykey>false</autoprimarykey>
-		<showsql>false</showsql>
+		<showsql>true</showsql>
 		<keygenerate>composite</keygenerate>
 	</datasource>
   

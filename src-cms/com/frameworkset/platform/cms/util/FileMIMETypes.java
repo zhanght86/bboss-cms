@@ -94,7 +94,10 @@ public class FileMIMETypes extends ListResourceBundle implements java.io.Seriali
 			{ "z", "application/octet-stream" }, { "zip", "application/zip" },
 			{ "rar", "application/rar" }, { "xls", "application/msexcel" },
 			{ "ppt", "application/vnd.ms-powerpoint" },
-			{ "doc", "application/msword" }, { "wmv", "video/x-msvideo" } };
+			{ "doc", "application/msword" }, { "wmv", "video/x-msvideo" }, 
+			{ "docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },			
+			{ "pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+			{ "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" } };
 	
 	
 }

@@ -73,15 +73,25 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 			
 			FileName = (String)date.Time_Stamp();
 			FileExt = CMSUtil.getFileExt(myFile.getContentType());
+			if(StringUtil.isEmpty(FileExt))
+			{
+				String oname = myFile.getOriginalFilename();
+				int idx = oname.lastIndexOf(".");
+				if(idx >=0)
+				{
+					FileExt = oname.substring(idx);
+				}
+			}
 			fileAllName = FileName + "." + FileExt;
 			String path = "/cms/siteResource/" + docpath + "/" + fileAllName;
-//				String parentPath = approot + "/cms/siteResource/"+docpath;
-//				java.io.File parentFile = new java.io.File(parentPath);
-			/*
+			
+			String parentPath = approot + "/cms/siteResource/"+docpath;
+			java.io.File parentFile = new java.io.File(parentPath);
+			
 			if(!parentFile.exists())
 			{
 				parentFile.mkdirs();
-			}*/
+			}
 			try {
 				myFile.transferTo(new File(approot + path));
 				model.addAttribute("fileAllName", fileAllName);
@@ -519,6 +529,15 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 						isold = true;
 					}
 					String fileExt = CMSUtil.getFileExt(myFile.getContentType());
+					if(StringUtil.isEmpty(fileExt))
+					{
+						
+						int idx = sOriginalFileName.lastIndexOf(".");
+						if(idx >=0)
+						{
+							fileExt = sOriginalFileName.substring(idx);
+						}
+					}
 					String path = "/cms/siteResource/"+docpath+"/"+FileName+"."+fileExt;
 					String parentPath = approot + "/cms/siteResource/"+docpath;
 					parentFile = new File(parentPath);

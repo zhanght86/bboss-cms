@@ -449,6 +449,7 @@ public class CMSUtil{
 	 * @return
 	 */
 	public static String getFileExt(String mimetype) {
+		
 		Enumeration keys = mimeTypes.getKeys();
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement().toString();
