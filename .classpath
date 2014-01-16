@@ -186,11 +186,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xmlschema-core-2.0.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3.jar" sourcepath="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
