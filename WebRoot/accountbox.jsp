@@ -11,7 +11,7 @@
   		title = "会话信息管理";
   	}
 %>
-<script language="javascript">
+<script language="javascript">  
 
 
 var http_request_account = false;
