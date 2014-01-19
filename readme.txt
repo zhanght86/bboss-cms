@@ -1,3 +1,8 @@
+内容管理需要实现的功能：
+1.文档模板引用功能完善
+2.文档内容可以在首页和概览首页上发布，为更加灵活的内容发布奠定基础
+3.站内检索
+
 ALTER TABLE TD_WF_NODEVARIABLE
  ADD (ROWNO_  NUMBER                                DEFAULT 0);
 

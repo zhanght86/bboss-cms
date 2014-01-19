@@ -550,8 +550,10 @@ public interface Context extends java.io.Serializable,ContextInf {
 	public boolean isClearFileCache();	
 
 	public void setClearFileCache(boolean clearFileCache) ;
-	public String getJspFileName();	
-	
+	public String getJspFileName();
+	public void setContentOrigineTemplateLinkTable(
+			CMSTemplateLinkTable origineTemplateLinkTable);	
+	public CMSTemplateLinkTable getContentOrigineTemplateLinkTable();
 	
 	
 	

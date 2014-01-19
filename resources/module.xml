@@ -201,18 +201,7 @@
 
 
 		</module>
-		<module name="应用监控" id="appmonitormodule" used="true" i18n:en_US="App Monitoring">
-				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-			<description>应用监控</description>
-			<item name="PORTAL监控" id="portalmonitor" i18n:en_US="Portal Monitor" >
-					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<workspace>
-					<content>appmonitor/index.page</content>
-				</workspace>
-			</item>
-		</module>
+		
 		
 
 		<module name="系统管理" id="sysmanager" used="true" showleftmenu="true"  i18n:en_US="System Manage">

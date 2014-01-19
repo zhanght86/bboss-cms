@@ -774,19 +774,6 @@ public class ContentContextImpl extends PagineContextImpl implements
 		return ret.toString();
 
 	}
-	protected CMSTemplateLinkTable contentOrigineTemplateLinkTable;
-
-	@Override
-	public CMSTemplateLinkTable getContentOrigineTemplateLinkTable() {
-		// TODO Auto-generated method stub
-		return contentOrigineTemplateLinkTable;
-	}
-
-	@Override
-	public void setContentOrigineTemplateLinkTable(
-			CMSTemplateLinkTable linktable) {
-		
-		this.contentOrigineTemplateLinkTable = linktable;
-	}
+	
 
 }

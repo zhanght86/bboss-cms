@@ -7,7 +7,11 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 
+import org.htmlparser.util.ParserException;
+
 import com.frameworkset.common.tag.BaseCellTag;
+import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
+import com.frameworkset.platform.cms.util.StringUtil;
 
 /**
  * 
@@ -24,6 +28,12 @@ import com.frameworkset.common.tag.BaseCellTag;
  */
 public class ColumnExtendTag extends BaseCellTag {
 	protected String field = null;
+	/**
+	 * 标识是否对扩展字段的内容进行发布处理
+	 * true:处理
+	 * false:不处理
+	 */
+	protected boolean process = false;
 	protected Map extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
@@ -48,8 +58,31 @@ public class ColumnExtendTag extends BaseCellTag {
 				outStr = URLEncoder.encode(outStr);
 			if(getDecode() != null && getDecode().equals("true"))
 				outStr = URLDecoder.decode(outStr);
+			
 		}
+		if(StringUtil.isEmpty(outStr))
+		{
+			return this.SKIP_BODY;
+		}
+		
 		try { 
+			if(this.process)
+			{
+				String encoding = super.context.getSite().getEncoding();
+				
+				CmsLinkProcessor processor = new CmsLinkProcessor(context,
+																  CmsLinkProcessor.REPLACE_LINKS,
+																  encoding);
+				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+				try {
+					outStr = processor.process(outStr,encoding);
+					this.context.setContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+					
+				} catch (ParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			if(this.maxlength > 0 && outStr != null && outStr.length() > maxlength)
 			{
 				outStr = outStr.substring(0,this.maxlength);
@@ -106,6 +139,16 @@ public class ColumnExtendTag extends BaseCellTag {
 		int ret = super.doEndTag();
 		this.extenddatas = null;
 		return ret;
+	}
+
+
+	public boolean isProcess() {
+		return process;
+	}
+
+
+	public void setProcess(boolean process) {
+		this.process = process;
 	}
 
 }

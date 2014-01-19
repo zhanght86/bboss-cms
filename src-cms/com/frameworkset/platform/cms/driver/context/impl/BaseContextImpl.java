@@ -1488,5 +1488,18 @@ public abstract class BaseContextImpl implements Context {
 		return jspFileName;
 	}
 	
-	
+	protected CMSTemplateLinkTable contentOrigineTemplateLinkTable;
+
+	@Override
+	public CMSTemplateLinkTable getContentOrigineTemplateLinkTable() {
+		// TODO Auto-generated method stub
+		return contentOrigineTemplateLinkTable;
+	}
+
+	@Override
+	public void setContentOrigineTemplateLinkTable(
+			CMSTemplateLinkTable linktable) {
+		
+		this.contentOrigineTemplateLinkTable = linktable;
+	}
 }
