@@ -8,11 +8,13 @@ import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
+import com.frameworkset.platform.cms.driver.context.ChannelContext;
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
 import com.frameworkset.platform.cms.driver.jsp.InternalImplConverter;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.util.StringUtil;
 
 /**
  * 单元格标签的公共基础类
@@ -31,8 +33,29 @@ public abstract class BaseCellTag extends CellTag {
 	protected Context context = null;
 
 	protected CMSListTag listTag;
+//	protected boolean isCurrentChanel()
+//	{
+//		if(context instanceof ChannelContext)
+//		{
+//			
+//		}
+//		else
+//		{
+//			return false;
+//		}
+//	}
 	
-	
+	protected String getCurrentChannelDir()
+	{
+		try {
+			String currentChannelDir = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannelByDisplayName(this.listTag.getChannel()).getChannelPath();
+			return currentChannelDir;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new IllegalArgumentException("获取[站点："+context.getSite().getName()+",频道："+this.listTag.getChannel()+"]当前文档隶属频道路径失败："+StringUtil.formatException(e));
+		}
+		
+	}
 	
 	private void setContext()
 	{

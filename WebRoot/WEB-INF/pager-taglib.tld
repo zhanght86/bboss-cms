@@ -4041,7 +4041,131 @@
 			<name>defaultValue</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		
+		<!-- 
+			标识是否处理文档内容，page，channel，site
+			true：处理，默认值
+			false:不处理
+		-->
+		<attribute>
+			<name>process</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
 	</tag>
+	
+	<tag>
+		<name>contentcell</name>
+		<tagclass>com.frameworkset.common.tag.html.CMSContentCellTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>content</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>colid</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			输出日期格式 dateformat; 输出数字格式 numerformat;
+		-->
+		<attribute>
+			<name>dateformat</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>numerformat</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			指定单元格输出的默认值
+			当前的值为null时，输出指定的默认值，
+			如果不指定默认值将直接输出null。
+		-->
+		<attribute>
+			<name>defaultValue</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>encode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>encodecount</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>decode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			求值表达式:如果设置表达式，将通过表达式求解cell标签的输出 表达式支持的基本操作有：冥，乘法，除法，求余，加/减，字符串的加操作
+			表达式支持的聚合操作有：求和，求平均值，计数 操作数：可以为变量，整数，小数，字符串
+			其中变量是指列表/分页/页面详细信息中的对象属性名称，为如下形式： {variable name} 表达式中用"{"和"}"来标识变量
+			例如： 2 * 2 2 + 2 * 3 2 - 2 / 3 2 - 3 % 2 2* {var1} / {var2}
+			sum({var1}) avg({var1}) count({var1}) 上述操作可以任意组合
+		-->
+		<attribute>
+			<name>expression</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			可根据maxlength截取字段进行输出
+			,同时对于截调的部分可以通过replace属性值进行替代
+		-->
+		<attribute>
+			<name>maxlength</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>replace</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			将html中标记语言字符转换为转义符 &->&amp; "->&quot; <->&lt; >->&gt; '->&#146; \
+			->&nbsp; \n-><br> \t->&nbsp;&nbsp;&nbsp;&nbsp;
+		-->
+		<attribute>
+			<name>htmlEncode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!--
+			将html转义的字符串还原 &amp;->& &quot;->\" &lt;->< &gt;->> &#146;->' &nbsp;->\
+			<br>->\n &nbsp;&nbsp;&nbsp;&nbsp;->\t
+		-->
+		<attribute>
+			<name>htmlDecode</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>actual</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!-- trim:true false default false -->
+		<attribute>
+			<name>trim</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+	
+	</tag>
+	
+	
 	<!-- 
 		文档扩展字段的值获取的标签
 	-->

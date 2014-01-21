@@ -29,6 +29,11 @@ public class CmsLinkTable {
 
         m_linkTable = new HashMap();
     }
+    
+    HashMap getMLinkTable()
+    {
+    	return this.m_linkTable;
+    }
 
     /**
      * Adds a new link with a given internal name and internal flag to the link table.<p>
@@ -113,5 +118,10 @@ public class CmsLinkTable {
 			m_linkTable.clear();
 			m_linkTable = null;
 		}
+	}
+
+	public void addLinks(CmsLinkTable templateLinkTable) {
+		this.m_linkTable.putAll(templateLinkTable.getMLinkTable());
+		
 	}
 }

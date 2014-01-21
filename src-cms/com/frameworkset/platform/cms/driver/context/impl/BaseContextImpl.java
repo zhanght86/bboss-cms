@@ -66,7 +66,11 @@ public abstract class BaseContextImpl implements Context {
 	protected CMSTemplateLinkTable templateLinkTable;
 	protected boolean clearFileCache = false;
 	protected boolean enableRecursive = true;
-	
+	/**
+	 * 文档对应的附件表
+	 */
+	protected CmsLinkTable contentLinkTable;
+
 	protected int currentPublishDepth;
 	protected int maxPublishDepth = -1;
 	
@@ -279,7 +283,8 @@ public abstract class BaseContextImpl implements Context {
 		}
 		this.publishScope = this.publishObject.getPublishScope();
 		
-		
+		contentLinkTable = new CmsLinkTable();
+		contentOrigineTemplateLinkTable = new CMSTemplateLinkTable(new CmsLinkTable());
 		this.templateLinkTable = new CMSTemplateLinkTable(new CmsLinkTable()); //发布存放文档、模版的附件地址
 		this.dynamicPageLinkTable = new CmsLinkTable();//发布时存放文档、模版的动态页面地址
 		this.staticPageLinkTable = new CmsLinkTable();//发布时存放文档、模版的静态页面地址
@@ -1446,7 +1451,16 @@ public abstract class BaseContextImpl implements Context {
 			this.dynamicPageLinkTable.destroy() ;
 			this.dynamicPageLinkTable = null;
 		}
-		
+		if(this.contentLinkTable != null)
+		{
+			this.contentLinkTable.destroy() ;
+			this.contentLinkTable = null;
+		}
+		if(this.contentOrigineTemplateLinkTable != null)
+		{
+			this.contentOrigineTemplateLinkTable.destroy() ;
+			this.contentOrigineTemplateLinkTable = null;
+		}
 	}
 	
 
@@ -1497,9 +1511,20 @@ public abstract class BaseContextImpl implements Context {
 	}
 
 	@Override
-	public void setContentOrigineTemplateLinkTable(
+	/**
+	 * 内容正文中解析出来的模板资源link到
+	 */
+	public void addContentOrigineTemplateLinkTable(
 			CMSTemplateLinkTable linktable) {
 		
-		this.contentOrigineTemplateLinkTable = linktable;
+		this.contentOrigineTemplateLinkTable.addLinks(linktable);
+	}
+	public CmsLinkTable getContentLinkTable() {
+		return contentLinkTable;
+	}
+
+	public void addLink(CMSLink link) {
+		this.contentLinkTable.addLink(link);
+
 	}
 }

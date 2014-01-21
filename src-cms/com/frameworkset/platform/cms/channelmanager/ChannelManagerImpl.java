@@ -2668,6 +2668,18 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	}
 	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,String docType,boolean loaddocrelatepic) throws ChannelManagerException
 	{
+		return getLatestPubDocListOrderByDocwtime(siteid,DisplayName,count,docType, loaddocrelatepic, false);
+	}
+	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,Map params) throws ChannelManagerException
+	{
+		boolean loaddocrelatepic = this.getBooleanParam(params,"loadrelatepic",false);
+		boolean loadcontent = this.getBooleanParam(params,"loadcontent",false);
+		String docType = params != null?(String)params.get("doctype"):null;
+		return getLatestPubDocListOrderByDocwtime(siteid,DisplayName,count,docType, loaddocrelatepic, loadcontent);
+	}
+	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,String docType,boolean loaddocrelatepic,boolean loadcontent) throws ChannelManagerException
+	
+	{
 		List list = new ArrayList();
 		DocumentExtColumnManager extManager = new DocumentExtColumnManager();
 		DBUtil db = new DBUtil();
@@ -2698,7 +2710,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append("DOCWTIME, TITLECOLOR, CREATETIME, CREATEUSER, t.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, ")
 					.append("LINKTARGET, FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,")
 					.append("case when DOCTYPE=1 ")
-					.append("then t.content else null end linkfile,pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
+					.append("then t.content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then t.content else null end content,":"null content,")					
+					.append("pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
 					.append("isnew,newpic_path,")
 					.append("nvl(a.order_no,-1) as order_no,1 as ordersq,ordertime,seq,-1 site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append(" from td_cms_document t ")
@@ -2727,7 +2741,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append("DOCWTIME, TITLECOLOR, CREATETIME, CREATEUSER, c.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, ")
 					.append("LINKTARGET, FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,")
 					.append("case when DOCTYPE=1 ")
-					.append("then content else null end linkfile,pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
+					.append("then content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then c.content else null end content,":"null content,")					
+					.append("pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
 					.append("isnew,newpic_path,")
 					.append("nvl(e.order_no,-1) as order_no,2 as ordersq,ordertime,seq,d.site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append(" from td_cms_document c,TD_CMS_DOCSOURCE ds , td_cms_chnl_ref_doc d ")
@@ -2754,7 +2770,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			sql.append(
 					" union all   select t.DOCUMENT_ID as document_id, TITLE, SUBTITLE, AUTHOR, CHANNEL_ID, KEYWORDS, DOCABSTRACT, DOCTYPE, DOCWTIME,")
 					.append("TITLECOLOR, CREATETIME, CREATEUSER, t.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, LINKTARGET,")
-					.append("FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,case when DOCTYPE=1 then t.content else null end linkfile,pic_path,")
+					.append("FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,case when DOCTYPE=1 then t.content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then t.content else null end content,":"null content,")					
+					.append("pic_path,")
 					.append("mediapath,publishfilename,commentswitch,secondtitle,isnew,newpic_path,nvl(a.order_no,-1) as order_no,1 as ordersq,ordertime,seq,-1 site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append("from td_cms_document t  left outer join (select * from td_cms_doc_arrange a  ")
 					.append("where to_date(a.start_time,'yyyy-mm-dd hh24:mi:ss')<=sysdate ")
@@ -2805,6 +2823,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					doc.setDetailtemplate_id(db.getInt(i, "DETAILTEMPLATE_ID"));
 					doc.setLinktarget(db.getString(i, "LINKTARGET"));
 					doc.setLinkfile(db.getString(i, "linkfile"));
+					doc.setContent(db.getString(i,"content"));
 					doc.setFlowId(db.getInt(i, "FLOW_ID"));
 					doc.setDoc_level(db.getInt(i, "DOC_LEVEL"));
 					doc.setDoc_kind(db.getInt(i, "DOC_KIND"));
@@ -3673,6 +3692,30 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		return getLatestPubDocListOrderByDocwtime(siteid, DisplayName, offset, maxItem,
 				doctype,false);
 	}
+	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid, String DisplayName, int offset, int maxItem,
+			String docType,boolean loaddocrelatepic) throws ChannelManagerException
+	{
+		return getLatestPubDocListOrderByDocwtime( siteid,  DisplayName,  offset,  maxItem,
+				 docType, loaddocrelatepic,false);
+	}
+	public boolean getBooleanParam(Map params,String key,boolean defaultValue)
+	{
+		if(params != null)
+		{
+			Boolean value = (Boolean)params.get(key);
+			if(value != null)
+				return value.booleanValue();
+			return defaultValue;
+		}
+		return defaultValue;
+	}
+	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int offset,int maxItem,String doctype,Map params) throws ChannelManagerException
+	{
+		boolean loaddocrelatepic = this.getBooleanParam(params,"loadrelatepic",false);
+		boolean loadcontent = this.getBooleanParam(params,"loadcontent",false);
+		return getLatestPubDocListOrderByDocwtime( siteid,  DisplayName,  offset,  maxItem,
+				doctype, loaddocrelatepic,loadcontent);
+	}
 	/**
 	 * 按 文档创建时间,发布时间,id 排序 翻页!!! 通过频道显示名称获取频道最近发布的相应数目的分页文档列表
 	 * (对于那些包含于聚合文档的文档不在其列) 最近发布的相应数目的文档列表规则：首先考虑是否是置顶，其次考虑发布时间
@@ -3687,7 +3730,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	 * @author: 陶格
 	 */
 	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid, String DisplayName, int offset, int maxItem,
-			String docType,boolean loaddocrelatepic) throws ChannelManagerException {
+			String docType,boolean loaddocrelatepic,boolean loadcontent) throws ChannelManagerException {
 		ListInfo list = new ListInfo();
 		DocumentExtColumnManager extManager = new DocumentExtColumnManager();
 		DBUtil db = new DBUtil();
@@ -3712,7 +3755,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append("DOCWTIME, TITLECOLOR, CREATETIME, CREATEUSER, t.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, ")
 					.append("LINKTARGET, FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,")
 					.append("case when DOCTYPE=1 ")
-					.append("then t.content else null end linkfile,pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
+					.append("then t.content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then t.content else null end content,":"null content,")					
+					.append("pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
 					.append("isnew,newpic_path,")
 					.append("nvl(a.order_no,-1) as order_no,1 as ordersq,ordertime,seq,-1 site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append(" from td_cms_document t ").append(" left outer join (select * from td_cms_doc_arrange a ")
@@ -3739,7 +3784,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append("DOCWTIME, TITLECOLOR, CREATETIME, CREATEUSER, c.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, ")
 					.append("LINKTARGET, FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,")
 					.append("case when DOCTYPE=1 ")
-					.append("then content else null end linkfile,pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
+					.append("then content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then c.content else null end content,":"null content,")					
+					.append("pic_path,mediapath,publishfilename,commentswitch,secondtitle,")
 					.append("isnew,newpic_path,")
 					.append("nvl(e.order_no,-1) as order_no,2 as ordersq,ordertime,seq,d.site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append(" from td_cms_document c, TD_CMS_DOCSOURCE ds, td_cms_chnl_ref_doc d ")
@@ -3766,7 +3813,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			sql.append(
 					" union all   select t.DOCUMENT_ID as document_id, TITLE, SUBTITLE, AUTHOR, CHANNEL_ID, KEYWORDS, DOCABSTRACT, DOCTYPE, DOCWTIME,")
 					.append("TITLECOLOR, CREATETIME, CREATEUSER, t.DOCSOURCE_ID,nvl(ds.srcname,'未知') as source_name, DETAILTEMPLATE_ID, LINKTARGET,")
-					.append("FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,case when DOCTYPE=1 then t.content else null end linkfile,pic_path,")
+					.append("FLOW_ID, DOC_LEVEL, DOC_KIND, PARENT_DETAIL_TPL,publishtime,case when DOCTYPE=1 then t.content else null end linkfile,")
+					.append(loadcontent?"case when DOCTYPE<>1 then t.content else null end content,":"null content,")					
+					.append("pic_path,")
 					.append("mediapath,publishfilename,commentswitch,secondtitle,isnew,newpic_path,nvl(a.order_no,-1) as order_no,1 as ordersq,ordertime,seq,-1 site_id,ext_wh,ext_class,ext_index,ext_org,ext_djh ")
 					.append("from td_cms_document t  left outer join (select * from td_cms_doc_arrange a  ")
 					.append("where to_date(a.start_time,'yyyy-mm-dd hh24:mi:ss')<=TO_DATE('24-07-2008 08:29:34', 'DD-MM-YYYY HH24:MI:SS') ")
@@ -3816,6 +3865,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					doc.setDetailtemplate_id(db.getInt(i, "DETAILTEMPLATE_ID"));
 					doc.setLinktarget(db.getString(i, "LINKTARGET"));
 					doc.setLinkfile(db.getString(i, "linkfile"));
+					doc.setContent(db.getString(i,"content"));
 					doc.setFlowId(db.getInt(i, "FLOW_ID"));
 					doc.setDoc_level(db.getInt(i, "DOC_LEVEL"));
 					doc.setDoc_kind(db.getInt(i, "DOC_KIND"));

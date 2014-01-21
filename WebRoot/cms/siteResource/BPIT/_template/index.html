@@ -179,16 +179,16 @@
 	      </div>
          <div style="width:400px; float:left">
           <div class="box_2">
-          	<h1><div class="more"><cms:more channel="news" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="news" property="name"/></h1>
+          	<h1><div class="more"><cms:more channel="hhnews" target="_blank" moretext="更多 >>"/></div><cms:channel displayname="hhnews" property="name"/></h1>
             <ul>
-            	<cms:outline channel="news"  count="6">
+            	<cms:outline channel="hhnews"  count="6" config="{'loadcontent':true}">
                   <li><div class="date"><cms:cell colName="docwtime" dateformat="yyyy-MM-dd"/></div> 
                   <cms:link 
 					target="_blank" 
 					colName="title" 
 					maxlength="25"
 					replace="..."
-					useTitle="false"/></li></cms:outline> 
+					useTitle="false"/>,内容：<cms:contentcell colName="content"/></li></cms:outline> 
             </ul>
           </div>
           <div class="box_2 mt20">

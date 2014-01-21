@@ -65,4 +65,10 @@ public class CMSTemplateLinkTable  {
 		return this.templateLinkTable.size();
 	}
 
+	public void addLinks(CMSTemplateLinkTable linktable) {
+		templateLinkTable.addLinks(linktable.getTemplateLinkTable());
+		
+		
+	}
+
 }

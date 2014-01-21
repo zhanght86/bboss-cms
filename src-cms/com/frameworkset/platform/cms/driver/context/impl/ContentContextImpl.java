@@ -77,11 +77,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 
 	private boolean isPreview = false;
 
-	/**
-	 * 文档对应的附件表
-	 */
-	protected CmsLinkTable contentLinkTable;
-
+	
 	public boolean hasDetailTemplate() {
 		return this.detailTemplate != null;
 	}
@@ -107,7 +103,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 		try {
 			this.setContentid(contentid);
 			this.setChannelid(channelid);
-			contentLinkTable = new CmsLinkTable();
+//			contentLinkTable = new CmsLinkTable();
 			document = this.getDriverConfiguration().getCMSService()
 					.getDocumentManager().getDoc(contentid);
 			this.keywords = document.getKeywords();
@@ -215,7 +211,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 
 		this.isPreview = isPreview;
 		try {
-			contentLinkTable = new CmsLinkTable();
+//			contentLinkTable = new CmsLinkTable();
 			this.document = document;
 			// document =
 			// this.getDriverConfiguration().getCMSService().getDocumentManager().getDoc(contentid);
@@ -548,14 +544,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 		return segments != null ? this.segments.length : 0;
 	}
 
-	public CmsLinkTable getContentLinkTable() {
-		return contentLinkTable;
-	}
-
-	public void addLink(CMSLink link) {
-		this.contentLinkTable.addLink(link);
-
-	}
+	
 
 	public Document getDocument() {
 		return document;

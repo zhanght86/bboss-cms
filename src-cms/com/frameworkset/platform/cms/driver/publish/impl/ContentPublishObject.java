@@ -438,7 +438,7 @@ public class ContentPublishObject extends PublishObject {
 		processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
 		try {
 			content = processor.process(content,encoding);
-			this.contentContext.setContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+			this.contentContext.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
 			if(processor.containSeparatorToken())
 			{	
 				String[] segments = StringUtil.split(content,CmsLinkProcessor.PAGE_TAG);

@@ -43,7 +43,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 						return CMSUtil.getCMSDriverConfiguration()
 									  .getCMSService()
 									  .getChannelManager()
-									  .getLatestPubDocListOrderByDocwtime(super.context.getSiteID(),channel,(int)offSet,pageItemsize,this.doctype,this.getBooleanParam("loadrelatepic",false));
+									  .getLatestPubDocListOrderByDocwtime(super.context.getSiteID(),channel,(int)offSet,pageItemsize,this.doctype,params);
 					}
 					else
 					{ 
@@ -51,7 +51,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 						return CMSUtil.getCMSDriverConfiguration()
 									  .getCMSService()
 									  .getChannelManager()
-									  .getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId()+"",channel,(int)offSet,pageItemsize,this.doctype,this.getBooleanParam("loadrelatepic",false));
+									  .getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId()+"",channel,(int)offSet,pageItemsize,this.doctype,params);
 					}
 				}
 				else
@@ -64,7 +64,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 					return CMSUtil.getCMSDriverConfiguration()
 					  .getCMSService()
 					  .getChannelManager()
-					  .getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId()+"",channel,(int)offSet,pageItemsize,this.doctype,this.getBooleanParam("loadrelatepic",false));
+					  .getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId()+"",channel,(int)offSet,pageItemsize,this.doctype,params);
 					
 					
 				}
@@ -101,7 +101,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 				{
 					if(this.site == null)
 					{
-						List published = CMSUtil.getCMSDriverConfiguration().getCMSService().getChannelManager().getLatestPubDocListOrderByDocwtime(context.getSiteID(),channel,count,this.doctype,this.getBooleanParam("loadrelatepic",false));
+						List published = CMSUtil.getCMSDriverConfiguration().getCMSService().getChannelManager().getLatestPubDocListOrderByDocwtime(context.getSiteID(),channel,count,params);
 						ListInfo listInfo = new ListInfo();
 						listInfo.setDatas(published);
 						return listInfo;
@@ -112,7 +112,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 						List published = CMSUtil.getCMSDriverConfiguration()
 												.getCMSService()
 												.getChannelManager()
-												.getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId() + "",channel,count,this.doctype,this.getBooleanParam("loadrelatepic",false));
+												.getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId() + "",channel,count,params);
 						ListInfo listInfo = new ListInfo();
 						listInfo.setDatas(published);
 						return listInfo;
@@ -124,7 +124,7 @@ public class CMSDefaultListData extends CMSBaseListData {
 					List published = CMSUtil.getCMSDriverConfiguration()
 											.getCMSService()
 											.getChannelManager()
-											.getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId() + "",channel,count,this.doctype,this.getBooleanParam("loadrelatepic",false));
+											.getLatestPubDocListOrderByDocwtime(siteinfo.getSiteId() + "",channel,count,params);
 					ListInfo listInfo = new ListInfo();
 					listInfo.setDatas(published);
 					return listInfo;

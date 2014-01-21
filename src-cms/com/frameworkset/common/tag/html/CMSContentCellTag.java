@@ -23,7 +23,6 @@ import org.htmlparser.util.ParserException;
 
 import com.frameworkset.common.tag.CMSBaseCellTag;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
-import com.frameworkset.util.StringUtil;
 
 /**
  * <p>CMSContentCellTag.java</p>
@@ -40,6 +39,8 @@ public class CMSContentCellTag extends CMSBaseCellTag{
 	public CMSContentCellTag() {
 		
 	}
+	
+	
 
 	@Override
 	public int doStartTag() throws JspException {
@@ -48,13 +49,23 @@ public class CMSContentCellTag extends CMSBaseCellTag{
 		String content = this.getOutStr();
 		String encoding = super.context.getSite().getEncoding();
 		
+		
+		
 		CmsLinkProcessor processor = new CmsLinkProcessor(context,
 														  CmsLinkProcessor.REPLACE_LINKS,
 														  encoding);
+		
+		String currentChannelDir = this.getCurrentChannelDir();
+		
+		processor.setCurrentChannelDir(currentChannelDir);
 		processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+		
 		try {
 			content = processor.process(content,encoding);
-			this.context.setContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+			/**暂时不需要考虑,内容的发布随内容的发布而发布
+			
+			*/
+			this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
 			out.print(content);
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block

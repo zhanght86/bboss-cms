@@ -33,7 +33,9 @@ import com.frameworkset.platform.cms.sitemanager.Site;
  * @version 1.0
  */
 public interface Context extends java.io.Serializable,ContextInf {
-	
+	public CmsLinkTable getContentLinkTable();
+
+	public void addLink(CMSLink link) ;
 	/**
 	 * 获取发布的文件存放的相对物理目录
 	 * @return
@@ -551,7 +553,7 @@ public interface Context extends java.io.Serializable,ContextInf {
 
 	public void setClearFileCache(boolean clearFileCache) ;
 	public String getJspFileName();
-	public void setContentOrigineTemplateLinkTable(
+	public void addContentOrigineTemplateLinkTable(
 			CMSTemplateLinkTable origineTemplateLinkTable);	
 	public CMSTemplateLinkTable getContentOrigineTemplateLinkTable();
 	

@@ -879,10 +879,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						this.origineTemplateLinkTable.addLink(link,context);
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							this.context.addLink(link);
 					}
 					if(this.handletype == PROCESS_EDITCONTENT 
 							|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -940,10 +940,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						this.origineTemplateLinkTable.addLink(link,context);
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					if(this.handletype == PROCESS_EDITCONTENT 
 							|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -1038,10 +1038,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								this.externalPageLinkTable.addLink(link);
 						}
 					}
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					/*
 					 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
@@ -1085,10 +1085,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						this.origineTemplateLinkTable.addLink(link,context);
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					if(this.handletype == PROCESS_EDITCONTENT 
 							|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -1165,10 +1165,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						
 						/*
@@ -1233,10 +1233,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						if(this.handletype == PROCESS_EDITCONTENT 
 								|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -1323,10 +1323,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						
 						/*
@@ -1390,10 +1390,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						if(this.handletype == PROCESS_EDITCONTENT 
 								|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -1484,10 +1484,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						/*
 						 * 记录编辑文档和模版时的外部链接地址和修改过的本地地址，保存时将远程地址保存为本地文件
@@ -1549,7 +1549,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							this.origineTemplateLinkTable.addLink(link,context);
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
 								((ContentContext)this.context).addLink(link);
@@ -1708,10 +1708,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						this.origineTemplateLinkTable.addLink(link,context);
 						handleStyleLink(link.getRelativeFilePath());
 					}
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					if(this.handletype == PROCESS_EDITCONTENT 
 							|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -1771,10 +1771,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						handleStyleLink(link.getRelativeFilePath());
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					if(this.handletype == PROCESS_EDITCONTENT 
 							|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -2083,10 +2083,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						}
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					/*
 					 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
@@ -2148,10 +2148,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								this.externalPageLinkTable.addLink(link);
 						}
 					}
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					/*
 					 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
@@ -2229,10 +2229,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 						}
 					}
 					
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					/*
 					 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
@@ -2295,10 +2295,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								this.externalPageLinkTable.addLink(link);
 						}
 					}
-					if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+					if(this.handletype == PROCESS_CONTENT)
 					{						
 						if(link.isInternal())
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 					/*
 					 * 备份文档或模版时，记录待备份的内部链接文件，不需要修改链接
@@ -2566,12 +2566,12 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							}
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
 							{
 								if(CMSUtil.isBinaryFile(link.getRelativeFilePath()))
-									((ContentContext)this.context).addLink(link);
+									(this.context).addLink(link);
 							}
 						}
 						/*
@@ -2637,12 +2637,12 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							}
 						}
 						
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT )
 						{						
 							if(link.isInternal())
 							{
 								if(CMSUtil.isBinaryFile(link.getRelativeFilePath()))
-									((ContentContext)this.context).addLink(link);
+									(this.context).addLink(link);
 							}
 						}
 						/*
@@ -2923,12 +2923,12 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 					}
 				}
 				
-				if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+				if(this.handletype == PROCESS_CONTENT)
 				{						
 					if(link.isInternal())
 					{
 						if(CMSUtil.isBinaryFile(link.getRelativeFilePath()))
-							((ContentContext)this.context).addLink(link);
+							(this.context).addLink(link);
 					}
 				}
 				/*
@@ -3004,10 +3004,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								handleStyleLink(link.getRelativeFilePath());
 							}
 						}
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						if(this.handletype == PROCESS_EDITCONTENT 
 								|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -3072,10 +3072,10 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								handleStyleLink(link.getRelativeFilePath());
 							}
 						}
-						if(this.handletype == PROCESS_CONTENT && context instanceof ContentContext)
+						if(this.handletype == PROCESS_CONTENT)
 						{						
 							if(link.isInternal())
-								((ContentContext)this.context).addLink(link);
+								(this.context).addLink(link);
 						}
 						if(this.handletype == PROCESS_EDITCONTENT 
 								|| this.handletype == PROCESS_EDITTEMPLATE)
@@ -5046,10 +5046,23 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 								// 待补充和处理
 
 								if (handletype == CmsLinkProcessor.PROCESS_CONTENT) {
-									String temppath = CMSUtil.getPathFromSimplePath(m_relativePath, originelink.getHref());
-									this.newLink = new CMSLink(originelink.getHref(),originelink.getLinkhandletype());
-									this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
-									this.newLink.setRelativeFilePath(temppath);
+									
+									
+									if(StringUtil.isEmpty(currentChannelDir))
+									{
+										String temppath = CMSUtil.getPathFromSimplePath(m_relativePath, originelink.getHref());
+										this.newLink = new CMSLink(originelink.getHref(),originelink.getLinkhandletype());
+										this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
+										this.newLink.setRelativeFilePath(temppath);
+									}
+									else//???妥否，需要验证
+									{
+										String temppath =  CMSUtil.getPathFromSimplePath(currentChannelDir,originelink.getHref());
+										String simplepath = CMSUtil.getSimplePathFromfullPath(m_relativePath, temppath);
+										newLink = new CMSLink(simplepath,originelink.getLinkhandletype());
+										this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
+										this.newLink.setRelativeFilePath(temppath);
+									}
 									
 								} 
 								else if (handletype == CmsLinkProcessor.PROCESS_TEMPLATE) {
@@ -5208,10 +5221,25 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 							{
 								//如果是处理文档内容
 								if (handletype == CmsLinkProcessor.PROCESS_CONTENT) {
-									newLink = new CMSLink(this.originelink.getHref(),originelink.getLinkhandletype());
-									String temppath = CMSUtil.getPath(m_relativePath, originelink.getHref());
-									this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
-									this.newLink.setRelativeFilePath(temppath);
+									
+									
+									if(StringUtil.isEmpty(currentChannelDir))
+									{
+										String temppath = null;
+										newLink = new CMSLink(this.originelink.getHref(),originelink.getLinkhandletype());
+										temppath = CMSUtil.getPath(m_relativePath, originelink.getHref());
+										this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
+										this.newLink.setRelativeFilePath(temppath);
+									}
+									else
+									{
+										String temppath = CMSUtil.getPath(currentChannelDir,originelink.getHref());
+										String simplepath = CMSUtil.getSimplePathFromfullPath(m_relativePath, temppath);
+										newLink = new CMSLink(simplepath,originelink.getLinkhandletype());
+										this.newLink.setRelativeFilePathType(CMSLink.TYPE_WEBPRJ);
+										this.newLink.setRelativeFilePath(temppath);
+									}
+									
 								} 
 								//如果是处理模版内容
 								else if (handletype == CmsLinkProcessor.PROCESS_TEMPLATE) 

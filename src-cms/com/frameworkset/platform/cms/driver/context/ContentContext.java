@@ -33,8 +33,7 @@ public interface ContentContext extends PagineContext{
 	
 	public String getChannelid();
 	
-	public CMSTemplateLinkTable getContentOrigineTemplateLinkTable();
-	public void setContentOrigineTemplateLinkTable(CMSTemplateLinkTable linktable);
+	
 	
 
 	

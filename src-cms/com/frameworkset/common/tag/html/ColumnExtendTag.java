@@ -33,7 +33,7 @@ public class ColumnExtendTag extends BaseCellTag {
 	 * true:处理
 	 * false:不处理
 	 */
-	protected boolean process = false;
+	protected boolean process = true;
 	protected Map extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
@@ -76,7 +76,7 @@ public class ColumnExtendTag extends BaseCellTag {
 				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
 				try {
 					outStr = processor.process(outStr,encoding);
-					this.context.setContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+					this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
 					
 				} catch (ParserException e) {
 					// TODO Auto-generated catch block
@@ -149,6 +149,14 @@ public class ColumnExtendTag extends BaseCellTag {
 
 	public void setProcess(boolean process) {
 		this.process = process;
+	}
+
+
+	@Override
+	public void doFinally() {
+		// TODO Auto-generated method stub
+		super.doFinally();
+		process = true;
 	}
 
 }

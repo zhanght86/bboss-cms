@@ -15,14 +15,14 @@ import org.htmlparser.util.ParserException;
  * 
  * 
  * 
- * @author Alexander Kandzior
+ * @author biaoping.yin
  * 
  * @version $Revision: 1.3 $
  * 
  * @since 6.1.3
  * 
  */
-public interface I_CmsHtmlNodeVisitor extends java.io.Serializable {
+public interface I_CmsHtmlNodeVisitor  {
 
     /**
      * Returns the configuartion String of this visitor or the empty String if was not provided

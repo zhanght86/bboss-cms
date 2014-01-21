@@ -2,6 +2,7 @@ package com.frameworkset.platform.cms.channelmanager;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -489,6 +490,7 @@ public interface ChannelManager extends Notifiable {
 	 */
 	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,String docType) throws ChannelManagerException;
 	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,String docType,boolean loaddocrelatepic) throws ChannelManagerException;
+	public List getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int count,Map params) throws ChannelManagerException;
 	/**
 	 * 按 文档创建时间 排序 翻页!!!
 	 * 通过频道显示名称获取频道最近发布的相应数目的分页文档列表
@@ -505,6 +507,8 @@ public interface ChannelManager extends Notifiable {
 	 */
 	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int offset,int maxItem,String doctype) throws ChannelManagerException;
 	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int offset,int maxItem,String doctype,boolean loaddocrelatepic) throws ChannelManagerException;
+	public ListInfo getLatestPubDocListOrderByDocwtime(String siteid,String DisplayName,int offset,int maxItem,String doctype,Map params) throws ChannelManagerException;
+
 	/**
 	 * 通过频道显示名称,获取兄弟频道列表 翻页
 	 * @param siteid

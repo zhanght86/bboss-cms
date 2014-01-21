@@ -41,7 +41,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * generated result is exactly identical to the input.
  * <p>
  * 
- * @author Alexander Kandzior
+ *
  * @author biaoping.yin
  * 
  * @version $Revision: 1.3 $
@@ -56,6 +56,7 @@ public class CmsHtmlParser extends NodeVisitor implements I_CmsHtmlNodeVisitor,J
 	 * 标识页面中是否包含jsp标签
 	 */
 	protected boolean containJspTag = false;
+	protected String currentChannelDir;
     /** The array of supported tag names. */
     // important: don't change the order of these tags in the source, subclasses may expect the tags
     // at the exact indices give here
@@ -517,5 +518,13 @@ public class CmsHtmlParser extends NodeVisitor implements I_CmsHtmlNodeVisitor,J
 	 */
 	public boolean containJspTag() {
 		return containJspTag;
+	}
+
+	public String getCurrentChannelDir() {
+		return currentChannelDir;
+	}
+
+	public void setCurrentChannelDir(String currentChannelDir) {
+		this.currentChannelDir = currentChannelDir;
 	}
 }

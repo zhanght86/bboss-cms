@@ -47,6 +47,7 @@ public class PageContextImpl extends PagineContextImpl implements PageContext {
 		this.pageDir = pageInfo[0];
 		this.publishPath = pageDir;
 		this.setNeedRecordRefObject(false);
+		this.evalFileName();
 //		if(!CMSUtil.pageExist(this.parentContext.getSiteID(),pagePath))
 		if(!CMSUtil.pageExist(this,siteid,pagePath))
 		{
@@ -76,7 +77,7 @@ public class PageContextImpl extends PagineContextImpl implements PageContext {
 		this.pageDir = pageInfo[0];
 		this.publishPath = pageDir;
 		this.setNeedRecordRefObject(false);
-
+		this.evalFileName();
 //		if(!CMSUtil.pageExist(this.parentContext.getSiteID(),pagePath))
 		if(!CMSUtil.pageExist(this,siteid,pagePath))
 		{
@@ -186,5 +187,11 @@ public class PageContextImpl extends PagineContextImpl implements PageContext {
             
         }
     }
+    
+    
+    private void evalFileName()
+	{		
+		this.jspFileName = CMSUtil.getJspFileName(this.fileName, "");
+	}
 
 }
