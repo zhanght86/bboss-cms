@@ -383,7 +383,7 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
   color:#333333;
   padding:20px 0;
 }
-
+/**
 .table4 input,.table2 input  {
 	-moz-box-sizing: border-box;-webkit-box-sizing: border-box;box-sizing: border-box; 
 	height: 20px; *height: 20px;	
@@ -394,6 +394,23 @@ a.bt_small:hover span{background-position:bottom right; padding:0; padding-right
 	*line-height:20px;
 	background: #fff url(../images/input-bg.png) no-repeat 0px 0px;
 }
+*/
+.table4 input,.table2 input  {
+
+       height: 20px; *height: 20px;       
+
+       padding:0 0 0 3px;
+
+       font-size:12px;
+
+       line-height:20px;
+
+       *line-height:20px;
+
+}
+
+
+
 input.Wdate{background:#fff url(../images/datePicker.gif) no-repeat right top;}
 input.noborder{ padding:0; border:none; background:none; margin:0;}
 

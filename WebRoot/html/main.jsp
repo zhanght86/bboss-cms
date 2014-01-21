@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../include/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="js/ajaxtabs.js"></script>
 <script type="text/javascript" src="../include/js/disablebaskspace.js"></script>
-<link id="slide" href="#" rel="stylesheet" type="text/css" />
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 </head>
@@ -106,7 +106,20 @@ mypets.init()
 
 
 			
-			
+	function addCssByLink(url){  
+	    var doc=document;  
+	    var link=doc.createElement("link");  
+	    link.setAttribute("rel", "stylesheet");  
+	    link.setAttribute("type", "text/css");  
+	    link.setAttribute("href", url);  
+	  
+	    var heads = doc.getElementsByTagName("head");  
+	    if(heads.length)  
+	        heads[0].appendChild(link);  
+	    else  
+	        doc.documentElement.appendChild(link);  
+	}  
+		
 				
     $(document).ready(function() {
 		var url =  '${pageContext.request.contextPath}/desktop/getCustomMenus.page';
@@ -224,7 +237,8 @@ mypets.init()
 				{
 					sitedomain = sitedomain + "/";
 				}
-				 $("#slide").attr("href",sitedomain + "components/slide/slide-small.css");				 
+				// $("#slide").attr("href",sitedomain + "components/slide/slide-small.css");
+				addCssByLink(sitedomain + "components/slide/slide-small.css");
 				
                	var arr=new Array();
 					var tarr=new Array();
