@@ -7,13 +7,11 @@
 <%@ page import="com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.customform.*"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.*"%>
-<%@ include file="/sysmanager/include/global1.jsp"%>
-<%@ include file="/sysmanager/base/scripts/panes.jsp"%>
+
 
 
 <%	
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String curUserid = accesscontroler.getUserID();
 	request.setAttribute("curUserid",curUserid);
 	String flag = request.getParameter("flag");
@@ -24,7 +22,7 @@
 	String docLevel = request.getParameter("docLevel");
 	String creatTime = request.getParameter("creatTime");
 	String channelIds = request.getParameter("channelIds");
-	
+	String rootpath = request.getContextPath();
 	//取频道所设定的自定义表单
 	CustomFormManager cfm = new CustomFormManagerImpl();
 %>
@@ -34,10 +32,13 @@
 	新文档列表
 </title>
 <link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
-<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+<pg:config enablecontextmenu="true" enabletree="false"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
+
 <script src="${pageContext.request.contextPath}/include/security.js"></script>
 <script language="javascript" src="../inc/js/func.js"></script>
-<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+
 <script type="text/javascript">
 /****************************************************************/
 
@@ -333,7 +334,7 @@ scrollbar-track-color: #E9EDF3;
 <body topmargin="2" rightmargin="0" leftmargin="1" righttmargin="1">
 <form name="form1" action="" method="post" >
 <table width="100%" border="0" align="left" cellpadding="3" cellspacing="0" bordercolor="#B7CBE4" class="Datalisttable" id="docListTable">
-<pg:listdata dataInfo="NewDocList" keyName="NewDocList" />
+<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.NewDocList" keyName="NewDocList" />
 <pg:pager maxPageItems="10" scope="request" data="NewDocList" isList="false">
 	<tr class="cms_report_tr">
 <!--		<td height='30' align=center style="width:5%">-->

@@ -139,7 +139,7 @@
 									class="operStyle" src="../../sysmanager/images/plan.gif">返回频道文档列表</u></a>-->
 					</td>
 				</tr>
-				<pg:listdata dataInfo="DocExtFieldOfSiteOrChlList" keyName="DocExtFieldOfSiteOrChlList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.customform.tag.DocExtFieldOfSiteOrChlList" keyName="DocExtFieldOfSiteOrChlList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="15" scope="request" data="DocExtFieldOfSiteOrChlList" isList="false">
 					<tr class="cms_report_tr">

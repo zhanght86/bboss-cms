@@ -1,15 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.List"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.*"%>
 <%@page import="com.frameworkset.platform.security.*"%>
-<%	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+<%	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String curUserid = accesscontroler.getUserID();
 	request.setAttribute("curUserid",curUserid);
-	
+	String rootpath = request.getContextPath();
 	String flag = request.getParameter("flag");
 	String docTitle = request.getParameter("docTitle");
 	String submitter = request.getParameter("submitter");
@@ -22,11 +20,18 @@
 		返工文档列表
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
+	<pg:config enablecontextmenu="true" enabletree="false"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 	<script language="javascript" src="../inc/js/func.js"></script>
-	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+	
 		<script src="${pageContext.request.contextPath}/include/security.js"></script>
-	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+	
 	<script language="javascript">
+		function modifyQueryData()
+		{
+			window.location.reload();
+		}
 		function conDeliverDoc(channelId,docid,taskid){
 			//flag为1表示新稿文档的称颂,为2表示返工文档的呈送
 			openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=" + channelId + "&docid=" + docid + "&taskid=" + taskid);
@@ -96,16 +101,16 @@
 							"${pageContext.request.contextPath}");
 			}
 		}
-		function edit(docid,docTpye,docChannelName,docSiteid,docChannelid){
+		function edit(docid,docTpye,docChannelName,docSiteid,docChannelid,docname){
 		if(confirm('您确定要编辑编号为'+docid+'的文档吗？')){
 			if(docTpye==0){
-				openWin("doc_gather_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50);
+				openDialog("<%=rootpath%>/cms/docManage/doc_gather_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50,docname);
 			}else if(docTpye==1){
-				openWin("doc_gather_links_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50);
+				openDialog("<%=rootpath%>/cms/docManage/doc_gather_links_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50,docname);
 			}else if(docTpye==2){
 				openWin("doc_gather_filedownload_update?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50);
 			}else if(docTpye==3){
-				openWin("doc_gather_aggr_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50);
+				openDialog("<%=rootpath%>/cms/docManage/doc_gather_aggr_update.jsp?flag=rebound&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid,screen.availWidth-20,screen.availHeight-50,docname);
 			}
 			}
 		}
@@ -158,7 +163,7 @@
 				<a style="cursor:hand" onClick="garbageDocs()"><div class="DocumentOper">回收</div></a> 
 				<a style="cursor:hand" onClick="delDocs()"><div class="DocumentOper">删除</div></a>		</div>	</td>
 		  </tr>
-		<pg:listdata dataInfo="ReboundDocList" keyName="ReboundDocList" />
+		<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.ReboundDocList" keyName="ReboundDocList" />
 				<!--分页显示开始,分页标签初始化-->
 		<pg:pager maxPageItems="10" scope="request" data="ReboundDocList" isList="false">
 		<tr class="cms_report_tr">
@@ -198,13 +203,13 @@
 			String docChannelName = dataSet.getString("docChannelName");
 			int docSiteid = dataSet.getInt("docSiteid");							
 			int siteid = docSiteid;
-			
+			String docName = dataSet.getString("docName");
 			Menu menu = new Menu();
 			menu.setIdentity("doc"+docid);
 								
 			Menu.ContextMenuItem menuitem1 = new Menu.ContextMenuItem();
 			menuitem1.setName("修改");
-			menuitem1.setLink("javascript:edit('" + docid +"','" + docTpye +"','" + docChannelName + "','" + docSiteid + "','" + docChannelid + "')");
+			menuitem1.setLink("javascript:edit('" + docid +"','" + docTpye +"','" + docChannelName + "','" + docSiteid + "','" + docChannelid + "','" + docName + "')");
 			menuitem1.setIcon(request.getContextPath() +"/sysmanager/images/rightMemu/doc_edit.gif");
 			menu.addContextMenuItem(menuitem1);
 

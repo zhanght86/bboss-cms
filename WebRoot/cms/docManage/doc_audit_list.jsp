@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.*"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.*"%>
@@ -10,6 +9,7 @@
 	AccessControl accesscontroler = AccessControl.getInstance();
 	accesscontroler.checkAccess(request, response);
 	String curUserid = accesscontroler.getUserID();
+	String rootpath = request.getContextPath();
 	request.setAttribute("curUserid",curUserid);
 	String flag = request.getParameter("flag");
 	String docTitle = request.getParameter("docTitle");
@@ -26,10 +26,13 @@
 		已审文档列表
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
-	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+	<pg:config enablecontextmenu="true" enabletree="false"/>
+			<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 		<script src="${pageContext.request.contextPath}/include/security.js"></script>
+
 	<script language="javascript" src="../inc/js/func.js"></script>
-	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+		
 	<script language="javascript">
 		//function agree(idStr){
 			//参数auditFlag为审核意见，0表不同意，1表同意
@@ -47,15 +50,20 @@
 				openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=" + idStr + "&auditFlag=0",400,550);
 			//}		
 		}
-		function audit(taskidStr,docTpye,docid,docChannelName,docSiteid,docChannelid,updatepath){
+		function modifyQueryData()
+		{
+			window.location.reload();
+		}
+		function audit(taskidStr,docTpye,docid,docChannelName,docSiteid,docChannelid,updatepath,docname){
+		
 			if(docTpye==0){
-				openWin(updatepath+"?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+				openDialog(updatepath+"?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docname);
 			}else if(docTpye==1){
-				openWin("doc_gather_links_update.jsp?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+				openDialog("<%=rootpath%>/cms/docManage/doc_gather_links_update.jsp?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docname);
 			}else if(docTpye==2){
-				openWin("doc_gather_filedownload_update?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+				openWin("<%=rootpath%>/cms/docManage/doc_gather_filedownload_update?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
 			}else if(docTpye==3){
-				openWin("doc_gather_aggr_update.jsp?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+				openDialog("<%=rootpath%>/cms/docManage/doc_gather_aggr_update.jsp?flag=audit&siteid=" + docSiteid + "&channelName=" + docChannelName + "&channelId=" + docChannelid + "&docid=" + docid + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docname);
 			}
 		}
 		function subQuery(){
@@ -108,7 +116,7 @@
 <!--							class="operStyle" src="../images/trash_small.gif">回收</u></a> -->
 <!--				</td>-->
 <!--			</tr>-->
-		<pg:listdata dataInfo="AuditDocList" keyName="AuditDocList" />
+		<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.AuditDocList" keyName="AuditDocList" />
 				<!--分页显示开始,分页标签初始化-->
 		<pg:pager maxPageItems="10" scope="request" data="AuditDocList" isList="false">
 		<tr class="cms_report_tr">
@@ -149,19 +157,19 @@
 			int docTpye = dataSet.getInt("docTpye");
 			String docChannelName = dataSet.getString("docChannelName");
 			int docSiteid = dataSet.getInt("docSiteid");							
-			
+			String docName = dataSet.getString("docName");
 			String updatepath = cfm.getCustomFormFilename(docChannelid+"","2","2");
 			if("doc_gather_update.jsp".equals(updatepath)||"".equals(updatepath))
-				updatepath = "/cms/docManage/doc_gather_update.jsp";
+				updatepath = rootpath+"/cms/docManage/doc_gather_update.jsp";
 			else
-				updatepath = updatepath;
+				updatepath = rootpath +updatepath;
 			
 			Menu menu = new Menu();
 			menu.setIdentity("doc"+docid);
 								
 			Menu.ContextMenuItem menuitem1 = new Menu.ContextMenuItem();
 			menuitem1.setName("审核");
-			menuitem1.setLink("javascript:audit('" + taskid + ":" + docid + ":" + docChannelid + "','" + docTpye +"','" + docid + "','" + docChannelName +"','" + docSiteid + "','" + docChannelid + "','"+updatepath+"')");
+			menuitem1.setLink("javascript:audit('" + taskid + ":" + docid + ":" + docChannelid + "','" + docTpye +"','" + docid + "','" + docChannelName +"','" + docSiteid + "','" + docChannelid + "','"+updatepath+"','"+docName+"')");
 			menuitem1.setIcon(request.getContextPath() +"/sysmanager/images/rightMemu/doc_sh.gif");
 			menu.addContextMenuItem(menuitem1);
 
@@ -211,7 +219,7 @@
 				</pg:equal>
 			</td>
 			<td id="doc<%=docid%>" class="tablecells" align="left" height="25" style="cursor:hand" 
-					onClick="audit('<%=taskid%>:<%=docid%>:<%=docChannelid%>','<%=docTpye%>','<%=docid%>','<%=docChannelName%>','<%=docSiteid%>','<%=docChannelid%>','<%=updatepath%>')">
+					onClick="audit('<%=taskid%>:<%=docid%>:<%=docChannelid%>','<%=docTpye%>','<%=docid%>','<%=docChannelName%>','<%=docSiteid%>','<%=docChannelid%>','<%=updatepath%>','<pg:cell colName="docName" defaultValue="" />')">
 				<pg:cell colName="docName" defaultValue="" />
 			</td>
 			<td class="tablecells" align="left" height="25">

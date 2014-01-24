@@ -34,7 +34,7 @@ public class GarbageDocList extends DataInfoImpl implements java.io.Serializable
 //				adminFlag = accesscontroler.isAdmin(user.getUserName());
 				
 				//取当前用户username
-				String curUser = accessControl.getUserName();
+				String curUser = accessControl.getUserAccount();
 				adminFlag = AccessControl.isAdmin(curUser);
 				
 				DocumentManager docManager = new DocumentManagerImpl();

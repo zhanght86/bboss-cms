@@ -7,6 +7,18 @@ function openWin(url,swidth,sheight){
 	 return w;
 }
 
+function openDialog(url,swidth,sheight,docname){
+     
+     $.dialog({ title:"编辑文档-"+docname,width:swidth,height:sheight, content:'url:'+url,lock: true,maxState:true});
+	
+}
+
+function openDialogNoargs(url,docname){
+     
+     $.dialog({ title:"编辑文档-"+docname,width:500,height:600, content:'url:'+url,lock: true,maxState:true});
+	
+}
+ 	
 function openWinCommon(url){
      window.open(url,"perspective_content");
 }

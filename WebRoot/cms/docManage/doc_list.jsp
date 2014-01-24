@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.*"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.channelmanager.*"%>
-<%@ include file="/sysmanager/include/global1.jsp"%>
+
 
 <%@ page import="com.frameworkset.platform.cms.customform.*"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.ContextMenuTag"%>
@@ -26,7 +26,7 @@
 	SiteManager siteManager = new SiteManagerImpl();
 	String sitename = siteManager.getSiteInfo(siteid).getName();
 	DocumentManager docManager = new DocumentManagerImpl();
-	
+	String rootpath = request.getContextPath();
 	CounterManager counterManager = (CounterManager)WebApplicationContextUtils.getWebApplicationContext().getBeanObject("counterManager");
 	VideoHitsCounter counter = new VideoHitsCounter();
 	counter.setSiteId(Integer.valueOf(siteid));
@@ -396,16 +396,16 @@
 			openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=" + idStr + "&auditFlag=0",300,300);
 		}	
 	}
-	function audit(docId,docTpye){
+	function audit(docId,docTpye,docName){
 		var taskidStr = ":" + docId + ":<%=channelId%>";
 		if(docTpye==0){
-			openWin("<%=request.getContextPath()+updatepath%>?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+			openDialog("<%=request.getContextPath()+updatepath%>?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docName);
 		}else if(docTpye==1){
-			openWin("<%=request.getContextPath()%>/cms/docManage/doc_gather_links_update.jsp?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+			openDialog("<%=request.getContextPath()%>/cms/docManage/doc_gather_links_update.jsp?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docName);
 		}else if(docTpye==2){
 			openWin("<%=request.getContextPath()%>/cms/docManage/doc_gather_filedownload_update?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
 		}else if(docTpye==3){
-			openWin("<%=request.getContextPath()%>/cms/docManage/doc_gather_aggr_update.jsp?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50);
+			openDialog("<%=request.getContextPath()%>/cms/docManage/doc_gather_aggr_update.jsp?flag=audit&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=" + docId + "&taskidStr=" + taskidStr,screen.availWidth-20,screen.availHeight-50,docName);
 		}
 	}
     var winOpen;
@@ -795,7 +795,7 @@
 						{
 							Menu.ContextMenuItem menuitem = new Menu.ContextMenuItem();
 							menuitem.setName("送审");
-							menuitem.setLink("javascript:operateDoc('送审','" + docId + "')");
+							menuitem.setLink("javascript:operateDoc('送审','" + docId + "','" + docName + "')");
 							menuitem.setIcon(request.getContextPath() +"/sysmanager/images/rightMemu/doc_ss.gif");
 							menu.addContextMenuItem(menuitem);
 						}
@@ -811,7 +811,7 @@
 						{
 							Menu.ContextMenuItem menuitem = new Menu.ContextMenuItem();
 							menuitem.setName("审核");
-							menuitem.setLink("javascript:audit('" + docId + "','" +docTypeFlag + "')");
+							menuitem.setLink("javascript:audit('" + docId + "','" +docTypeFlag + "','" + docName + "')");
 							menuitem.setIcon(request.getContextPath() +"/sysmanager/images/rightMemu/doc_sh.gif");
 							menu.addContextMenuItem(menuitem);
 						}
@@ -971,7 +971,7 @@
 							%>
 							<pg:equal colName="doctype" value="0">
 								<td id="opdoc_<%=docId%>" class="tablecells" style="cursor:hand" 
-									onclick="openWin('<%=rootpath%><%=updatepath%>?docid=<pg:cell colName="document_id" defaultValue=""/>&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>',screen.availWidth-20,screen.availHeight-50)">
+									onclick="openDialog('<%=rootpath%><%=updatepath%>?docid=<pg:cell colName="document_id" defaultValue=""/>&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>',screen.availWidth-20,screen.availHeight-50,'<pg:cell colName="subtitle" defaultValue=""/>')">
 								<pg:cell colName="subtitle" defaultValue="" />
 							</pg:equal>
 							<pg:equal colName="doctype" value="1">
@@ -979,7 +979,7 @@
 								if(docManager.ext_orgByDocId(docId+"").equals(""))
 								{
 							%>
-									<td id="opdoc_<%=docId%>" class="tablecells" style="cursor:hand" onclick=" openWin('<%=rootpath%>/cms/docManage/doc_gather_links_update.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=<pg:cell colName="document_id" defaultValue=""/>',screen.availWidth-20,screen.availHeight-50)">
+									<td id="opdoc_<%=docId%>" class="tablecells" style="cursor:hand" onclick=" openDialog('<%=rootpath%>/cms/docManage/doc_gather_links_update.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=<pg:cell colName="document_id" defaultValue=""/>',screen.availWidth-20,screen.availHeight-50,'<pg:cell colName="subtitle" defaultValue=""/>')">
 							<%
 								}
 								else
@@ -987,7 +987,7 @@
 							%>
 							<td id="opdoc_<%=docId%>" class="tablecells" style="cursor:hand" 
 									
-									onclick=" openWin('<%=rootpath%>/cms/zwgkml/doc_gather_links_update.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=<pg:cell colName="document_id" defaultValue=""/>',screen.availWidth-20,screen.availHeight-50)">
+									onclick=" openDialog('<%=rootpath%>/cms/zwgkml/doc_gather_links_update.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&docid=<pg:cell colName="document_id" defaultValue=""/>',screen.availWidth-20,screen.availHeight-50,'<pg:cell colName="subtitle" defaultValue=""/>')">
 							<%}%>
 								<pg:cell colName="subtitle" defaultValue="" />
 							</pg:equal>
@@ -1000,7 +1000,7 @@
 							<pg:equal colName="doctype" value="3">
 							<td id="opdoc_<%=docId%>" class="tablecells" style="cursor:hand" 
 									
-									onclick="openWin('<%=rootpath%>/cms/docManage/doc_gather_aggr_update.jsp?docid=<pg:cell colName="document_id" defaultValue=""/>&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>',screen.availWidth-20,screen.availHeight-50)">
+									onclick="openDialog('<%=rootpath%>/cms/docManage/doc_gather_aggr_update.jsp?docid=<pg:cell colName="document_id" defaultValue=""/>&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>',screen.availWidth-20,screen.availHeight-50,'<pg:cell colName="subtitle" defaultValue=""/>')">
 								<pg:cell colName="subtitle" defaultValue="" />
 							</pg:equal>
 							</td>

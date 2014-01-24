@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="../../WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="../../WEB-INF/dictionary.tld" prefix="dict"%>
 <html>
@@ -9,7 +8,7 @@
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 <title>稿源管理</title>
 <script src="../inc/js/func.js"></script>
-<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+
 <script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
 <script language="javascript" >
 function checkAll(totalCheck,checkName){//复选框全部选中
@@ -200,7 +199,7 @@ body {
 						<div class="DocumentOper">删除</div></a>
 					</td>
 				</tr>
- 				<pg:listdata dataInfo="DocsourceList" keyName="DocsourceList" />
+ 				<pg:listdata dataInfo="com.frameworkset.platform.cms.docsourcemanager.tag.DocsourceList" keyName="DocsourceList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="10" scope="request" data="DocsourceList" isList="false">
 				<tr class="cms_report_tr">

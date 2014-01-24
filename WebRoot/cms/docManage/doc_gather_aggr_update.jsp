@@ -4,9 +4,10 @@
 ,com.frameworkset.platform.cms.container.Template,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@page import="com.frameworkset.platform.security.AccessControl,java.util.List"%>
 <%@page import="com.frameworkset.platform.cms.channelmanager.*"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
+
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%
+  String rootpath = request.getContextPath();
 	response.setHeader("Cache-Control", "no-cache"); 
 	response.setHeader("Pragma", "no-cache"); 
 	response.setDateHeader("Expires", -1);  
@@ -157,15 +158,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>CMS 文档管理</title>
+<pg:config enablecontextmenu="false" enabletree="false"/>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/common/scripts/esbCommon.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 </head>
 <script language="javascript">
-	//动画窗口对象
-	var win = null;
-	//关闭动画窗口
-	function closewin()
-	{
-		win.close();
-	}
+	var api = frameElement.api, W = api.opener;
+//动画窗口对象
+var win = null;
+//关闭动画窗口
+function closewin()
+{
+	//W.modifyQueryData();
+	api.close();
+}
 	//选择new图标文件
 	function setImage(uri){
 		document.all("newpicpath").value  = uri;
@@ -217,21 +225,57 @@
 				myform.parentDetailTpl.value = "1";
 			else
 				myform.parentDetailTpl.value = "0";
-			myform.method="post";
-			myform.target = "updateaggr";
-			myform.action="<%=request.getContextPath()%>/cms/docManage/update_document.jsp?closeFlag=" + closeFlag;
-			win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
-			myform.submit();
-			var buttons = document.getElementsByTagName("input");
-			for(var i=0;i<buttons.length;i++)
-			{
-				buttons[i].disabled = true;
-			}
+			//myform.method="post";
+			//myform.target = "updateaggr";
+			//myform.action="<%=request.getContextPath()%>/cms/docManage/update_document.jsp?closeFlag=" + closeFlag;
+			//win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+			//myform.submit();
+			//var buttons = document.getElementsByTagName("input");
+			//for(var i=0;i<buttons.length;i++)
+			//{
+			//	buttons[i].disabled = true;
+			//}
+			var url = "<%=request.getContextPath()%>/document/updateDocument.page?closeFlag=" + closeFlag;
+			if(closeFlag == 100)
+				url =url +'&taskid=<%=taskid%>';
+			$.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#myform"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      		
+
+							 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						
+						if(responseText=="success"){
+								
+							$.dialog.alert("操作文档成功",function(){	
+										W.modifyQueryData();
+										api.close();
+								},api);
+						}else{
+							$.dialog.alert("操作文档出错",function(){},api);
+						}
+						
+						
+						
+						
+					}
+				  });
 		}
 	}	
 	//返回
 	function back() {
-		window.close();
+		closewin();
 	}
 	//焦点放在第一个text
 	function init(){
@@ -307,58 +351,63 @@
 		openWin("<%=rootpath%>/cms/docManage/see_audit_advice.jsp?channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>" ,400,550);
 	}
 	function delive(){
-		saveform("0");
+		//saveform("0");
 		//flag为1表示新稿文档的称颂,为2表示返工文档的呈送
-		openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>");
-		var str = window.dialogArguments.location.href;
-		var end = str.indexOf("?");
-		var strArray;
-		if(end != -1)
-			strArray= str.slice(0,end);
-		else
-			strArray = str;
-		window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-		window.close();
+		//openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>");
+		//var str = window.dialogArguments.location.href;
+		//var end = str.indexOf("?");
+		//var strArray;
+		//if(end != -1)
+		//	strArray= str.slice(0,end);
+		//else
+		//	strArray = str;
+		//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+		//window.close();
+		showModalDialog("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=44&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>",window,"dialogWidth:400px;dialogHeight:500px;help:no;scroll:auto;status:no");
 	}
 	function agree(){
 		var re;
 		//参数auditFlag为审核意见，0表不同意，1表同意
 		re = openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=<%=taskidStr%>&auditFlag=1",400,550);
 		if(re == "cf"){ 
-			var str = window.dialogArguments.location.href;
-			var end = str.indexOf("?");
-				var strArray;
-				if(end != -1)
-					strArray= str.slice(0,end);
-				else
-					strArray = str;
-			window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-			window.close();
+			//var str = window.dialogArguments.location.href;
+			//var end = str.indexOf("?");
+			//	var strArray;
+			//	if(end != -1)
+			//		strArray= str.slice(0,end);
+			//	else
+			//		strArray = str;
+			//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+			//window.close();
+			W.modifyQueryData();
+			api.close();
 		}
 	}
 	function disagree(){
 		var re;
-		var addComment = window.confirm("要增加审核意见吗？");
-		if(addComment==false){
-			re = "cf";
-			myform.method="post";
-			//参数auditFlag为审核意见，0表不同意，1表同意
-			myform.action = "<%=rootpath%>/cms/docManage/auditDocHandle.jsp?idStr=<%=taskidStr%>&auditFlag=0";
-			myform.submit();
-		}
-		else{
+		//var addComment = window.confirm("要增加审核意见吗？");
+		//if(addComment==false){
+		//	re = "cf";
+		//	myform.method="post";
+		//	//参数auditFlag为审核意见，0表不同意，1表同意
+		//	myform.action = "<%=rootpath%>/cms/docManage/auditDocHandle.jsp?idStr=<%=taskidStr%>&auditFlag=0";
+		//	myform.submit();
+		//}
+		//else{
 			re = openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=<%=taskidStr%>&auditFlag=0",400,550);
-		}
+		//}
 		if(re == "cf"){
-			var str = window.dialogArguments.location.href;
-			var end = str.indexOf("?");
-				var strArray;
-				if(end != -1)
-					strArray= str.slice(0,end);
-				else
-					strArray = str;
-			window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-			window.close();	
+			//var str = window.dialogArguments.location.href;
+			//var end = str.indexOf("?");
+			//	var strArray;
+			//	if(end != -1)
+			//		strArray= str.slice(0,end);
+			//	else
+			//		strArray = str;
+			//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+			//window.close();	
+			W.modifyQueryData();
+			api.close();
 		}
 	}
 	function changSelect(o)
@@ -526,7 +575,7 @@
 	document.write("<a id='reload' href='" + document.location.href + "' style='display:none'>reload...</a>");
 </script>
 <!--上面的代码 使得按 F5会刷新modal页面-->
-<form target="updatelinks" action="update_document.jsp" method="post"  name="myform">
+<form target="updatelinks" action="update_document.jsp" method="post"  id="myform" name="myform">
 	<input name="doctype" value="3" type=hidden><!--聚合文档-->
    	<input name="docid" value="<%=docid%>" type=hidden>
 	<input name="siteid" value="<%=siteid%>" type=hidden>
@@ -537,6 +586,7 @@
 	<input name="author" value="不详" type="hidden"/><!--作者-->
 	<input name="isnewdocsource" value="0" type="hidden"><!--是否新稿源-->
 	<!--input name="detailtemplate_id" type="hidden"/><!--发布模板-->
+	<div id="auditorDiv" name="auditorDiv" style="display:none;"></div><!--文档返工送审存放审核人-->
 	<input name="content" type="hidden"/><!--content-->
 	<!--  <input type="hidden" name="parentDetailTpl" value="1"/>-->
 	<input type="hidden" id="ischecksource">

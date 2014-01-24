@@ -11,9 +11,10 @@
 <%@ page import="com.frameworkset.platform.cms.container.Template" %>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
+
 
 <%
+String rootpath  = request.getContextPath();
 	response.setHeader("Cache-Control", "no-cache"); 
 	response.setHeader("Pragma", "no-cache"); 
 	response.setDateHeader("Expires", -1);  
@@ -196,6 +197,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/public/datetime/calender.js" language="javascript"></script>
+
 <style type="text/css">
 <!--
 .STYLE7 {color:#003398; font-size: 12px;}
@@ -216,13 +218,15 @@
 <title>CMS 文档管理</title>
 </head>
 <script language="javascript">
-	//动画窗口对象
-	var win = null;
-	//关闭动画窗口
-	function closewin()
-	{
-		win.close();
-	}
+var api = frameElement.api, W = api.opener;
+//动画窗口对象
+var win = null;
+//关闭动画窗口
+function closewin()
+{
+	//W.modifyQueryData();
+	api.close();
+}
 	//字符转换
 	function HTMLEncodeCMS(text){
 		//text = text.replace(/"/g, "&quot;");
@@ -444,33 +448,68 @@
 			}
 			myform.specialsiteid.value=specialsite;
 			myform.sepcialchannelid.value=specialchannelid;
-			//新加的专题报道结束
+			
+			var url = "${pageContext.request.contextPath}/document/updateDocument.page?closeFlag=" + closeFlag+"&detailtemplate_id="+myform.detailtemplate_id.value;
+			if(closeFlag == 100)
+				url =url +'&taskid=<%=taskid%>';
 			if(closeFlag==5)
 			{
-				myform.target = "updategather";
-				myform.action="<%=request.getContextPath()%>/cms/docManage/previewDoc.jsp";
-				win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+				url = "${pageContext.request.contextPath}/document/previewDoc.page";
 			}
-			else
-			{
-				myform.target = "updategather";
-				myform.action="<%=request.getContextPath()%>/cms/docManage/update_document.jsp?closeFlag=" + closeFlag+"&detailtemplate_id="+myform.detailtemplate_id.value;
-				win = window.open("<%=request.getContextPath()%>/cms/doing.html","doinghtml","height="+(screen.availHeight-200)+",width="+(screen.availWidth-300)+",top=100,left=150,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
-			}
-			myform.submit();
-			//eWebEditor1.eWebEditor.document.body.innerHTML = tempcontent;
-			//主要是用静态分页
-			eWebEditor1.setHTML(tempcontent);
-			var buttons = document.getElementsByTagName("input");
-			for(var i=0;i<buttons.length;i++)
-			{
-				buttons[i].disabled = true;
-			}
+			$.ajax({
+				   type: "POST",
+					url : url,
+					data :formToJson("#myform"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      		eWebEditor1.setHTML(tempcontent);
+
+							 	
+						},
+					success : function(responseText){
+						//去掉遮罩
+						unblockUI();
+						if(closeFlag!=5)
+						{
+							if(responseText=="success"){
+								
+								{							
+								
+									$.dialog.alert("操作文档成功",function(){	
+											W.modifyQueryData();
+											api.close();
+									},api);
+								}
+							}else{
+								$.dialog.alert("操作文档出错",function(){},api);
+							}
+						}
+						else
+						{
+							if(responseText=="fail"){
+								
+								$.dialog.alert("预览文档出错，可能当前频道未设置细览模板或者模板文件不存在",function(){},api);
+											 
+																					
+							}else{
+								//$.dialog({ title:"新增文档-<%=channelname%>",width:800,height:600, content:'url:'+responseText,lock: false,maxState:true});
+								window.open(responseText);
+							}
+						}
+						
+						
+						
+					}
+				  });
 		}
 	}
 	//返回
 	function back() {
-		window.close();
+		closewin();
 	}
 
 	//焦点放在第一个text
@@ -741,33 +780,36 @@
 		openWin("<%=rootpath%>/cms/docManage/see_audit_advice.jsp?channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>" ,400,550);
 	}
 	function delive(){
-		saveform("0");
+		//saveform("0");
 		//flag为1表示新稿文档的称颂,为2表示返工文档的呈送
-		openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>");
-		var str = window.dialogArguments.location.href;
-		var end = str.indexOf("?");
-		var strArray;
-		if(end != -1)
-			strArray= str.slice(0,end);
-		else
-			strArray = str;
-		window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-		window.close();
+		//openWin("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=2&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>");
+		//var str = window.dialogArguments.location.href;
+		//var end = str.indexOf("?");
+		//var strArray;
+		//if(end != -1)
+		//	strArray= str.slice(0,end);
+		//else
+		//	strArray = str;
+		//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+		//window.close();
+		showModalDialog("<%=rootpath%>/cms/docManage/doc_AuditorList.jsp?flag=44&channelId=<%=channelId%>&docid=<%=docid%>&taskid=<%=taskid%>",window,"dialogWidth:400px;dialogHeight:500px;help:no;scroll:auto;status:no");
 	}
 	function agree(){
 		var re;
 		//参数auditFlag为审核意见，0表不同意，1表同意
 		re = openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=<%=taskidStr%>&auditFlag=1",400,550);
 		if(re == "cf"){ 
-			var str = window.dialogArguments.location.href;
-			var end = str.indexOf("?");
-				var strArray;
-				if(end != -1)
-					strArray= str.slice(0,end);
-				else
-					strArray = str;
-			window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-			window.close();
+			//var str = window.dialogArguments.location.href;
+			//var end = str.indexOf("?");
+			//	var strArray;
+			//	if(end != -1)
+			//		strArray= str.slice(0,end);
+			//	else
+			//		strArray = str;
+			//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+			//window.close();
+			W.modifyQueryData();
+			api.close();
 		}
 	}
 	function disagree(){
@@ -784,15 +826,17 @@
 			re = openWin("<%=rootpath%>/cms/docManage/audit_add_comment.jsp?idStr=<%=taskidStr%>&auditFlag=0",400,550);
 		//}
 		if(re == "cf"){
-			var str = window.dialogArguments.location.href;
-			var end = str.indexOf("?");
-				var strArray;
-				if(end != -1)
-					strArray= str.slice(0,end);
-				else
-					strArray = str;
-			window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
-			window.close();	
+			//var str = window.dialogArguments.location.href;
+			//var end = str.indexOf("?");
+			//	var strArray;
+			//	if(end != -1)
+			//		strArray= str.slice(0,end);
+			//	else
+			//		strArray = str;
+			//window.dialogArguments.location.href = strArray+"?"+window.dialogArguments.document.all.queryString.value;
+			//window.close();	
+			W.modifyQueryData();
+			api.close();
 		}
 	}
 	function changSelect(o)
@@ -953,7 +997,7 @@ else
 	document.write("<a id='reload' href='" + document.location.href + "' style='display:none'>reload...</a>");
 </script>
 <!--上面的代码 使得按 F5会刷新modal页面-->
-	<form target="updategather" name="myform" >
+	<form target="updategather" name="myform" id="myform" >
 		<input name="userid" value="<%=document.getUser_id()%>" type=hidden>
 		<input name="doctype" value="0" type=hidden>
 	  	<input name="docid" value="<%=docid%>" type=hidden>
@@ -964,6 +1008,7 @@ else
 		<input name="filepaths" value="" type=hidden><!--文件的新增时间，作为文件名，拼成一个串-->
 		<input name="otherfilepaths" value="" type=hidden><!--用于维护更新remote图片的状态-->
 		<input name="ofilepaths" value="" type=hidden><!--原本的url-->
+		<div id="auditorDiv" name="auditorDiv" style="display:none;"></div><!--文档返工送审存放审核人-->
 		<input type="hidden" id="docsource_id" name="docsource_id" value="<%=docsource%>"><input type="hidden" id="ischecksource">
 		<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 	    	<tr>

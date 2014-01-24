@@ -38,6 +38,11 @@ public class DocExtField implements java.io.Serializable
 	 */
 	private String fieldType;
 	/**
+	 * '扩展字段类型文档和频道：0-频道 ，channel_id表示频道id 1-文档  channel_id表示文档id'
+'扩展字段类型文档和频道：0-频道 1-文档 '
+	 */
+	private int field_owner;
+	/**
 	 * 字段对应的输入框类型
 	 * 
 	 */
@@ -223,6 +228,14 @@ public class DocExtField implements java.io.Serializable
 
 	public void setEno(ArrayList eno) {
 		this.eno = eno;
+	}
+
+	public int getField_owner() {
+		return field_owner;
+	}
+
+	public void setField_owner(int field_owner) {
+		this.field_owner = field_owner;
 	}
 
 

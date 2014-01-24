@@ -1,5 +1,17 @@
+java.sql.SQLException: Generated keys not requested. You need to specify Statement.RETURN_GENERATED_KEYS to Statement.executeUpdate() or Connection.prepareStatement().
+下午03:16:55: 王胜利: 哎，这个问题原来 是jar包升级导致的
+下午03:17:07: 王胜利: mysql只能用老jar包
+
 后续要扩展的功能：
 扩展字段可以像新闻正文一样采集新闻内容（富媒体新闻）
+ALTER TABLE TD_CMS_CHANNELFIELD
+ADD (field_owner NUMBER(2) DEFAULT 0)
+
+COMMENT ON COLUMN 
+TD_CMS_CHANNELFIELD.field_owner IS 
+'扩展字段类型文档和频道：0-频道 ，channel_id表示频道id 1-文档  channel_id表示文档id'
+'扩展字段类型文档和频道：0-频道 1-文档 '
+
 1.解决问题：
 内容管理：普通页面发布因异常失败
 

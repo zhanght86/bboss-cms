@@ -1,13 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.List"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.platform.security.*"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String userId = accesscontroler.getUserID();
 	request.setAttribute("userId",userId);
 	
@@ -15,7 +13,7 @@
  	cmsManager.init(request,session,response,accesscontroler);
  	String currentSiteid = cmsManager.getSiteID();
  	request.setAttribute("currentSiteid",currentSiteid);
-	
+	String rootpath = request.getContextPath();
 	String preStatus = request.getParameter("preStatus");
 	String channelId = request.getParameter("channelId");
 	String flowId = request.getParameter("flowId");
@@ -29,7 +27,7 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>归档文档列表</title>
 		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+	
 		<script language="javascript">
 		function del(){
 			//将选中的文档id拼成字符串
@@ -105,7 +103,7 @@
 						<%}%>				
 					</td>
 				</tr>
-				<pg:listdata dataInfo="GarbageDocList" keyName="GarbageDocList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.GarbageDocList" keyName="GarbageDocList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="10" scope="request" data="GarbageDocList" isList="false">
 					<tr class="cms_report_tr">

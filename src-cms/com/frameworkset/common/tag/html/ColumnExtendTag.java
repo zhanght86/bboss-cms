@@ -73,6 +73,8 @@ public class ColumnExtendTag extends BaseCellTag {
 				CmsLinkProcessor processor = new CmsLinkProcessor(context,
 																  CmsLinkProcessor.REPLACE_LINKS,
 																  encoding);
+				String cchanneldir = getCurrentChannelDir();
+				processor.setCurrentChannelDir(cchanneldir);
 				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
 				try {
 					outStr = processor.process(outStr,encoding);

@@ -154,14 +154,14 @@
 	<body topmargin="2" rightmargin="0">
 	<br>
 		<table width="95%" cellpadding="3" cellspacing="0" border="0" class="Datalisttable" id="docextfieldlist">
-			<pg:listdata dataInfo="DocExtFieldOfSiteOrChlList" keyName="DocExtFieldOfSiteOrChlList" />
+			<pg:listdata dataInfo="com.frameworkset.platform.cms.customform.tag.DocExtFieldOfSiteOrChlList" keyName="DocExtFieldOfSiteOrChlList" />
 			<!--分页显示开始,分页标签初始化-->
 			<pg:pager scope="request" data="DocExtFieldOfSiteOrChlList" isList="true">
 				<tr class="cms_report_tr">
 					<!--设置分页表头-->
-					<!--<td width="10%" align="center" height='30'>
+					<td width="10%" align="center" height='30'>
 						字段名称
-					</td>-->
+					</td>
 					<td  width="20%" align="center" height='30'>
 						字段label
 					</td>
@@ -197,9 +197,9 @@
 						<input name="fieldId" value="<pg:cell colName="fieldId" defaultValue=""/>" type=hidden>
 						<input name="fieldName" value="<pg:cell colName="fieldName" defaultValue=""/>" type=hidden>
 						<input name="fieldType" value="<pg:cell colName="fieldType" defaultValue=""/>" type=hidden>
-						<!--<td class="tablecells" nowrap="nowrap" width="10%">
+						<td class="tablecells" nowrap="nowrap" width="10%">
 							<pg:cell colName="fieldName" defaultValue="" />
-						</td>-->
+						</td>
 						<td class="tablecells" nowrap="nowrap" width="10%">
 							<pg:cell colName="fieldLable" defaultValue="" />
 						</td>

@@ -1,14 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.List"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.common.tag.contextmenu.*"%>
 <%@ page import="com.frameworkset.platform.cms.util.CMSUtil,com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor"%>
 <%@ page import="com.frameworkset.platform.security.*"%>
 <%	
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String curUserid = accesscontroler.getUserID();
 	request.setAttribute("curUserid",curUserid);
 	String docTitle = request.getParameter("docTitle");
@@ -16,7 +14,7 @@
 	String docFlow = request.getParameter("docFlow");
 	String flag = request.getParameter("flag");
 	String submitter = request.getParameter("submitter");
-	String subTime =  request.getParameter("subTime");
+	String subTime =  request.getParameter("subTime");String rootpath = request.getContextPath();
 	//是否设有模板
 	String detailTemplateFlag = request.getParameter("detailTemplateFlag");
     //外部注入发布管理
@@ -30,10 +28,13 @@
 		已审文档列表
 	</title>
 	<link  href="../inc/css/cms.css" rel="stylesheet" type="text/css"></link>
+	<pg:config enablecontextmenu="true" enabletree="false"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 	<script language="javascript" src="../inc/js/func.js"></script>
-	<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
-		<script src="${pageContext.request.contextPath}/include/security.js"></script>
-	<script language="javascript" src=src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+	
+<script src="${pageContext.request.contextPath}/include/security.js"></script>
+	
 	<script language="javascript">
 		//批量发布
 		function batchPublish(){
@@ -156,7 +157,7 @@
 <!--				<a style="cursor:hand" onclick="garbage()"><div  class="DocumentOper"><img -->
 <!--					class="operStyle" src="../images/trash_small.gif">回收</u></a>  -->			</td>
 		 </tr>
-		<pg:listdata dataInfo="PublishDocList" keyName="PublishDocList" />
+		<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.PublishDocList" keyName="PublishDocList" />
 				<!--分页显示开始,分页标签初始化-->
 		<pg:pager maxPageItems="10" scope="request" data="PublishDocList" isList="false">
 		<tr class="cms_report_tr">

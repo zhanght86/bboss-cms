@@ -2394,10 +2394,11 @@ public class DocumentManagerImpl implements DocumentManager {
 				}
 
 				db.executeInsert(sqlInsert);
-				tm.commit();
+				
 			}
+			tm.commit();
 		} catch (Exception sqle) {
-
+			
 			throw new DocumentManagerException("插入历史记录时失败:" + sqle.getMessage());
 		} finally {
 			tm.release();
@@ -6369,17 +6370,21 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public List getAllDocTPLList(String chnlId) throws DocumentManagerException {
 		ArrayList list = new ArrayList();
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		// String sql = "select * from td_cms_doc_template where channel_id = "
 		// + chnlId;
-		String sql = "";
-		if ("".equals(chnlId)) {
-			sql = "select * from td_cms_doc_template";
-		} else {
-			sql = "select * from td_cms_doc_template where channel_id = " + chnlId;
-		}
+		
 		try {
-			db.executeSelect(sql);
+			String sql = "";
+			if ("".equals(chnlId)) {
+				sql = "select * from td_cms_doc_template";
+				db.preparedSelect(sql);
+			} else {
+				sql = "select * from td_cms_doc_template where channel_id = ?" ;
+				db.preparedSelect(sql);
+				db.setInt(1, Integer.parseInt(chnlId));
+			}
+			db.executePrepared();
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocTemplate docTPL = new DocTemplate();

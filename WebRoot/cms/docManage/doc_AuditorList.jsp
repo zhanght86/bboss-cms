@@ -71,7 +71,22 @@
 							window.dialogArguments.document.all.auditorDiv.innerHTML = temp;
 							window.dialogArguments.window.saveform(10);
 							window.close();
-						}else{			//送审处理
+						}
+						else if("<%=flag%>"=="44"){				//内容修改时直接送审，将审核人信息回填,flag 44等同于原来的flag 2
+							var temp = "";
+							//审核人
+							var checkBoxes  = document.getElementsByName("checkBoxOne");
+							for(var i=0;i<checkBoxes.length;i++){
+								if (checkBoxes[i].checked){
+									var auditor = checkBoxes[i].value;
+									temp = temp + "<input type='hidden' value=" + auditor +" id='auditor' name='auditor'>";
+								}
+							}
+							window.dialogArguments.document.all.auditorDiv.innerHTML = temp;
+							window.dialogArguments.window.saveform(100);
+							window.close();
+						}
+						else{			//送审处理
 							form1.action="<%=redict%>";
 							form1.target="deliverHandleFrame";
 							form1.submit();

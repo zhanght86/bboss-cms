@@ -6,6 +6,7 @@ import java.util.List;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.customform.CustomFormManagerException;
 import com.frameworkset.platform.cms.customform.DocExtField;
+import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
@@ -16,7 +17,7 @@ import com.frameworkset.util.ListInfo;
  *
  */
 
-public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.Serializable
+public class DocExtFieldOfSiteOrChlList extends DataInfoImpl
 {
 	/**
 	 * 
@@ -52,6 +53,7 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 				docExtField.setFieldType(dbUtil.getString(i,"fieldtype"));
 				docExtField.setMaxlen(dbUtil.getInt(i,"maxlen"));
 				docExtField.setInputType(dbUtil.getInt(i,"inputtype"));
+				docExtField.setField_owner(dbUtil.getInt(i, "field_owner"));
 				if(!"".equals(docid)&&docid!=null)
 				{
 					DBUtil db = new DBUtil();
@@ -104,7 +106,7 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 		TransactionManager tm = new TransactionManager(); 
 		try 
 		{
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin();
 			dbUtil.executeSelect(sql);
 			ListInfo listInfo = new ListInfo();
 			List list = new ArrayList();
@@ -122,6 +124,8 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 				docExtField.setFieldType(dbUtil.getString(i,"fieldtype"));
 				docExtField.setMaxlen(dbUtil.getInt(i,"maxlen"));
 				docExtField.setInputType(dbUtil.getInt(i,"inputtype"));
+				docExtField.setField_owner(dbUtil.getInt(i, "field_owner"));
+				
 				if(!"".equals(docid)&&docid!=null)
 				{
 					DBUtil db = new DBUtil();
@@ -179,9 +183,22 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 			sql = "select * from td_cms_extfield order by field_id asc";
 		//频道
 		if("2".equals(type))
-			sql = "select * from td_cms_extfield a where a.field_id " +
-					"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + ")" +
-					" order by a.field_id asc";
+		{
+			String docid = request.getParameter("docid");
+			if(StringUtil.isEmpty(docid))
+			{
+				sql = "select * from td_cms_extfield a where a.field_id " +
+						"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + ")" +
+						" order by a.field_id asc";
+			}
+			else
+			{
+				sql = "select * from td_cms_extfield a where a.field_id " +
+						"in (select b.field_id from td_cms_channelfield b where (b.channel_id = " + id + " and b.field_owner=0) or (b.channel_id = " + docid + " and b.field_owner=1) )" +
+						" order by a.field_id asc";
+			}
+			
+		}
 		try
 		{
 			listInfo = getDocExtFieldOfSiteOrChlList(sql,(int)offset,maxPagesize);
@@ -202,6 +219,7 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 		String type = request.getParameter("type");
 		//站点id or 频道id
 		String id = request.getParameter("id");
+		String docid = request.getParameter("docid");
 		
 		String sql = "";
 		//站点
@@ -209,9 +227,20 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl implements java.io.
 			sql = "select * from td_cms_extfield order by field_id asc";
 		//频道
 		if("2".equals(type))
-			sql = "select * from td_cms_extfield a where a.field_id " +
-					"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + ")" +
+		{
+			if(StringUtil.isEmpty(docid))
+			{
+				sql = "select * from td_cms_extfield a where a.field_id " +
+					"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + " and b.field_owner=0 )" +
 					" order by a.field_id asc";
+			}
+			else
+			{
+				sql = "select * from td_cms_extfield a where a.field_id " +
+						"in (select b.field_id from td_cms_channelfield b where (b.channel_id = " + id + " and b.field_owner=0) or (b.channel_id = " + docid + " and b.field_owner=1) )" +
+						" order by a.field_id asc";
+			}
+		}
 		try
 		{
 			listInfo = getDocExtFieldOfSiteOrChlList(sql);
