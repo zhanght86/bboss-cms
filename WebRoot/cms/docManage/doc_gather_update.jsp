@@ -146,45 +146,7 @@ String rootpath  = request.getContextPath();
    }
 	//文档来源结束
 %>
-<%!/**
-   * 针对HTML的特殊字符转义
-   * @param value String
-   * @return String
-   */
-  String filterStr(String value) {
-    if (value == null) {
-      return (null);
-    }
-    char content[] = new char[value.length()];
-    value.getChars(0, value.length(), content, 0);
-    StringBuffer result = new StringBuffer(content.length + 50);
-    for (int i = 0; i < content.length; i++) {
-      switch (content[i]) {
-        case '<':
-          result.append("&lt;");
-          break;
-        case '>':
-          result.append("&gt;");
-          break;
-        case '&':
-          result.append("&amp;");
-          break;
-        case '"':
-          result.append("&quot;");
-          break;
-        case '\'':
-          result.append("&#39;");
-          break;
-        /*case '\\':
-          result.append("\\\\");
-          break;*/
-        default:
-          result.append(content[i]);
-      }
-    }
-	return (result.toString());
-  }
-%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <pg:config enablecontextmenu="false" enabletree="false"/>
@@ -264,27 +226,7 @@ function closewin()
 		var tplId = myform.detailtemplate_id.value;
 		window.open("../templateManage/template_previewbyid.jsp?tplId=" + tplId + "&siteId=<%=siteid%>");
 	}
-	//静态分页置标
-	/**将图片转换成分页置标**/
-	function setPageTagNone(){
-		var arPageTags = eWebEditor1.eWebEditor.document.all("_CMSPage");
-		if(arPageTags == null)return;
-		if(arPageTags.length){
-			for(var i =arPageTags.length-1; i>=0; i--){
-				var objPageTag = arPageTags[i];
-				if(objPageTag == null)continue;
-
-				var pageTag = eWebEditor1.eWebEditor.document.createElement("CMS_PAGE_SEPARATOR");		
-				//pageTag.innerHTML = "TRS静态分页置标";
-				objPageTag.replaceNode(pageTag);
-			}
-		}else{
-			var pageTag = eWebEditor1.eWebEditor.document.createElement("CMS_PAGE_SEPARATOR");		
-			//pageTag.innerHTML = "TRS静态分页置标";
-			arPageTags.replaceNode(pageTag);
-		}
-
-	}
+	
 	//站点窗口输入参数校验
 	function saveform(closeFlag){
 		if(closeFlag != 5)
@@ -381,7 +323,7 @@ function closewin()
 				myform.url2.value += arr42[i].value + "№";
 			}
 			var tempcontent = eWebEditor1.eWebEditor.document.body.innerHTML;
-			setPageTagNone();
+			setPageTagNone("eWebEditor1");
 			myform.content.value = HTMLEncodeCMS(eWebEditor1.eWebEditor.document.body.innerHTML);
 			
 			if(myform.content.value=="")
@@ -642,8 +584,8 @@ function closewin()
 	function initRelatedDoc()
 	{
 		var part_id = "<%=partId%>";
-		var part_name = "<%=filterStr(partName)%>";
-		var part_ChlName = "<%=filterStr(partChlName)%>";
+		var part_name = "<%=CMSUtil.filterStr(partName)%>";
+		var part_ChlName = "<%=CMSUtil.filterStr(partChlName)%>";
 		
 		if(part_id!=""&&part_name!="")
 		{
@@ -1064,7 +1006,7 @@ else
 		                    <td width="43%">
 		                    	<span class="cms_title_blue">
 		                    		<label>
-		                    			<input name="title" type="text" class="cms_text" size="60" value="<%=filterStr(document.getTitle())%>" onFocus="focusend()">
+		                    			<input name="title" type="text" class="cms_text" size="60" value="<%=CMSUtil.filterStr(document.getTitle())%>" onFocus="focusend()">
 		                    		</label>
 		                  		</span>
 		                  		<span class="STYLE7">
@@ -1083,7 +1025,7 @@ else
 		                  	<td height="23">
 	                  	    <strong>显示标题:</strong></td>
 		                  	<td height="23">
-		                  		<input name="subtitle" type="text" class="cms_text" size="60" value="<%=filterStr(document.getSubtitle())%>" >
+		                  		<input name="subtitle" type="text" class="cms_text" size="60" value="<%=CMSUtil.filterStr(document.getSubtitle())%>" >
 						  		<span class="STYLE7">
 			                  		<label><span class="red_star">*</span></label>
 		                  		</span>
@@ -1318,7 +1260,7 @@ else
             <tr>
 				<td  width="95%" height="22" colspan="3"  align="center" valign="top">
 					<div>
-						<input type="hidden" name="content" value="<%=filterStr(document.getContent())%>">
+						<input type="hidden" name="content" value="<%=CMSUtil.filterStr(document.getContent())%>">
 						<input type="hidden" name="pics">
 						<input type="hidden" name="flashs">
 						<input type="hidden" name="medias">
@@ -1350,7 +1292,7 @@ else
 						<input type="hidden" name="extfieldvalues">
 						<input type="hidden" name="extfieldtypes">
 						<input type="hidden" name="extfieldnames">
-						<iframe id="docextfielslist" src="<%=request.getContextPath()%>/cms/docManage/doc_extfield_list.jsp?type=2&id=<%=channelId%>&docid=<%=docid%>" frameborder="0" scrolling="auto" width="0%" height="0%">
+						<iframe id="docextfielslist" src="<%=request.getContextPath()%>/cms/docManage/doc_extfield_list.jsp?cusdir=<%=docpath%>&sitedir=<%=sitedir %>&relativePath=<%=relativePath %>&type=2&id=<%=channelId%>&docid=<%=docid%>" frameborder="0" scrolling="auto" width="0%" height="0%">
 						</iframe>
 					</div>
 					<!-- 所属专题报道-->

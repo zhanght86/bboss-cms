@@ -4015,6 +4015,15 @@
 			<name>defaultValue</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<!-- 
+			标识是否处理文档内容，page，channel，site
+			true：处理
+			false:不处理,默认值
+		-->
+		<attribute>
+			<name>process</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	<!-- 
 		文档表扩展字段的值获取的标签
@@ -4044,8 +4053,8 @@
 		
 		<!-- 
 			标识是否处理文档内容，page，channel，site
-			true：处理，默认值
-			false:不处理
+			true：处理
+			false:不处理,默认值
 		-->
 		<attribute>
 			<name>process</name>

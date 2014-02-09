@@ -7,10 +7,10 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@page import="com.frameworkset.platform.security.*"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 
 	String name = request.getParameter("name");
+	String cusdir =  request.getParameter("cusdir");
 %>
 <html>
 <head>
@@ -23,7 +23,9 @@
 	//subform()
 	function subform()
 	{
-		window.dialogArguments.document.all(name).value = eWebEditor1.eWebEditor.document.body.innerHTML;
+		
+		setPageTagNone("eWebEditor1");
+		window.dialogArguments.document.all(name).value = document.getElementById("eWebEditor1").contentWindow.document.getElementById("eWebEditor").document.body.innerHTML;
 		window.close();
 	}
 	// 替换特殊字符
@@ -45,9 +47,9 @@
 	<td align="center">
 		<script language="javascript">
 		var content = window.dialogArguments.document.all(name).value;
-		document.write("<input type='hidden' name='content' value='" + HTMLEncode(content) + "'>");
+		document.write("<input type='hidden' name='content' value='" + content + "'>");
 		</script>
-		<iframe id="eWebEditor1" src="<%=request.getContextPath()%>/cms/editor/eWebeditor/eWebEditor.jsp?id=content&style=standard&edittype=self" frameborder="0" scrolling="no" width="100%" height="460">										
+		<iframe id="eWebEditor1" src="<%=request.getContextPath()%>/cms/editor/eWebEditor48/ewebeditor.htm?id=content&style=coolblue&cusdir=<%=cusdir %>" frameborder="0" scrolling="no" width="100%" height="460">										
 		</iframe>
 	</td>
 	</tr>

@@ -7,7 +7,10 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 
+import org.htmlparser.util.ParserException;
+
 import com.frameworkset.common.tag.BaseCellTag;
+import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 /**
  * 扩展字段显示标签
  * <p>Title: BaseExtendTag</p>
@@ -23,6 +26,21 @@ import com.frameworkset.common.tag.BaseCellTag;
  */
 public class BaseExtendTag extends BaseCellTag{
 	protected String field = null;
+	/**
+	 * 标识是否对扩展字段的内容进行发布处理
+	 * true:处理
+	 * false:不处理,默认值
+	 */
+	protected boolean process = false;
+	public boolean isProcess() {
+		return process;
+	}
+
+
+	public void setProcess(boolean process) {
+		this.process = process;
+	}
+
 	protected Map extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
@@ -49,6 +67,25 @@ public class BaseExtendTag extends BaseCellTag{
 				outStr = URLDecoder.decode(outStr);
 		}
 		try { 
+			if(this.process)
+			{
+				String encoding = super.context.getSite().getEncoding();
+				
+				CmsLinkProcessor processor = new CmsLinkProcessor(context,
+																  CmsLinkProcessor.REPLACE_LINKS,
+																  encoding);
+				String cchanneldir = getCurrentChannelDir();
+				processor.setCurrentChannelDir(cchanneldir);
+				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+				try {
+					outStr = processor.process(outStr,encoding);
+					this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+					
+				} catch (ParserException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			if(this.maxlength > 0 && outStr != null && outStr.length() > maxlength)
 			{
 				outStr = outStr.substring(0,this.maxlength);
@@ -104,6 +141,7 @@ public class BaseExtendTag extends BaseCellTag{
 	{
 		int ret = super.doEndTag();
 		this.extenddatas = null;
+		process = false;
 		return ret;
 	}
 

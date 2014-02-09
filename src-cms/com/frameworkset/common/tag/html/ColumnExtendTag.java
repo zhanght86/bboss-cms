@@ -31,9 +31,9 @@ public class ColumnExtendTag extends BaseCellTag {
 	/**
 	 * 标识是否对扩展字段的内容进行发布处理
 	 * true:处理
-	 * false:不处理
+	 * false:不处理,默认值
 	 */
-	protected boolean process = true;
+	protected boolean process = false;
 	protected Map extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
@@ -158,7 +158,7 @@ public class ColumnExtendTag extends BaseCellTag {
 	public void doFinally() {
 		// TODO Auto-generated method stub
 		super.doFinally();
-		process = true;
+		process = false;
 	}
 
 }

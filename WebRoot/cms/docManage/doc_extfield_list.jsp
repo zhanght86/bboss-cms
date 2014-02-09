@@ -6,18 +6,21 @@
 %>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*,com.frameworkset.common.poolman.DBUtil"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
+<%@page import="com.frameworkset.platform.cms.driver.htmlconverter.*,com.frameworkset.util.*,com.frameworkset.platform.cms.driver.i18n.*,com.frameworkset.platform.cms.util.CMSUtil"%>
 <%@page import="com.frameworkset.platform.security.*,java.util.List,com.frameworkset.platform.cms.documentmanager.bean.Extvaluescope"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 
 	String id = request.getParameter("id");
 	String docid =  request.getParameter("docid");
+	String sitedir = request.getParameter("sitedir");
+	String relativePath = request.getParameter("relativePath");
+	String cusdir =  request.getParameter("cusdir");
 %>
+
 <html>
 	<head>
 		<base target=_self><!-- use for submit to self-->
@@ -80,7 +83,7 @@
 	//open HTML编辑器
 	function openHtml(name)
 	{
-		openWin("doc_extfield_edithtml.jsp?name=" + name,700,580);
+		openWin("doc_extfield_edithtml.jsp?cusdir=<%=cusdir%>&name=" + name,700,580);
 	}
 	//检测是否输入的是数字
 	function checknum(cur)
@@ -231,8 +234,24 @@
 							<pg:equal colName="fieldType" value="3">
 								<!--<textarea name="<pg:cell colName="fieldId" defaultValue=""/>_value" cols="50" rows="5"><pg:cell colName="clobvalue" defaultValue="" /></textarea>
 								<br>-->
-								<input type="hidden" name="<pg:cell colName="fieldId" defaultValue=""/>_value" value="<pg:cell colName="clobvalue" defaultValue="" />"/>
-								<input type="button" name="edittext" value="文本编辑器" onclick="opentext('<pg:cell colName='fieldId' defaultValue=''/>_value');"/>
+								<%
+								//处理字段内容
+									CmsLinkProcessor processor = new CmsLinkProcessor(request,relativePath,sitedir);
+									processor.setHandletype(CmsLinkProcessor.PROCESS_READCONTENT);
+									String content = dataSet.getString("clobvalue");
+									try {
+										if(!StringUtil.isEmpty(content))
+										{
+											content = processor.process(content,CmsEncoder.ENCODING_UTF_8);
+											content = CMSUtil.filterStr(content);
+										}
+										
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								 %>
+								<input type="hidden" name="<pg:cell colName="fieldId" defaultValue=""/>_value" value="<%=content%>"/>
+								<!--<input type="button" name="edittext" value="文本编辑器" onclick="opentext('<pg:cell colName='fieldId' defaultValue=''/>_value');"/>-->
 								<input type="button" name="edithtml" value="HTML编辑器" onclick="openHtml('<pg:cell colName='fieldId' defaultValue=''/>_value');"/>
 							</pg:equal>
 							<pg:equal colName="fieldType" value="4">
