@@ -17,29 +17,21 @@
 <title>HTML编辑器</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
+<script src="../inc/js/func.js"></script>
 </head>
 <script language="javascript">
 	var name = "<%=name%>";
 	//subform()
 	function subform()
 	{
-		
+		//编辑器保持在设计模式
+		document.getElementById("eWebEditor1").contentWindow.setMode('EDIT');
 		setPageTagNone("eWebEditor1");
-		window.dialogArguments.document.all(name).value = document.getElementById("eWebEditor1").contentWindow.document.getElementById("eWebEditor").document.body.innerHTML;
+		window.dialogArguments.document.all(name).value = (document.getElementById("eWebEditor1").contentWindow.document.getElementById("eWebEditor").contentWindow.document.body.innerHTML);
+		
 		window.close();
 	}
-	// 替换特殊字符
-	function HTMLEncode(text){
-		text = text.replace(/&/g, "&amp;") ;
-		text = text.replace(/"/g, "&quot;") ;
-		text = text.replace(/</g, "&lt;") ;
-		text = text.replace(/>/g, "&gt;") ;
-		text = text.replace(/'/g, "&#146;") ;
-		text = text.replace(/\ /g,"&nbsp;");
-		text = text.replace(/\n/g,"<br>");
-		text = text.replace(/\t/g,"&nbsp;&nbsp;&nbsp;&nbsp;");
-		return text;
-	}
+	
 </script>
 <body >
 <table width="100%" border="0" align=center cellpadding="3" cellspacing="0" bordercolor="#B7CBE4">
@@ -47,7 +39,7 @@
 	<td align="center">
 		<script language="javascript">
 		var content = window.dialogArguments.document.all(name).value;
-		document.write("<input type='hidden' name='content' value='" + content + "'>");
+		document.write("<input type='hidden' name='content' value='" + (content) + "'>");
 		</script>
 		<iframe id="eWebEditor1" src="<%=request.getContextPath()%>/cms/editor/eWebEditor48/ewebeditor.htm?id=content&style=coolblue&cusdir=<%=cusdir %>" frameborder="0" scrolling="no" width="100%" height="460">										
 		</iframe>

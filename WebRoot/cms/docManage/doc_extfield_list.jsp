@@ -28,7 +28,7 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>.::::::::::文档扩展字段管理::::::::::::::::::::::::::::::::::::::::::::::::::::..</title>
 		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+		
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>
 		<script language="javascript">
  
@@ -244,6 +244,10 @@
 										{
 											content = processor.process(content,CmsEncoder.ENCODING_UTF_8);
 											content = CMSUtil.filterStr(content);
+										}
+										else
+										{
+											content = "";
 										}
 										
 									} catch (Exception e) {

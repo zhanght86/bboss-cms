@@ -71,7 +71,7 @@
 	    
 	    <init-param>
 	      <param-name>wallwhilelist</param-name>
-	      <param-value><![CDATA[content,fileContent]]>
+	      <param-value><![CDATA[content,fileContent,extfieldvalues]]>
 	      </param-value>
 	      
 	    </init-param>
