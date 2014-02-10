@@ -105,7 +105,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 			this.setChannelid(channelid);
 //			contentLinkTable = new CmsLinkTable();
 			document = this.getDriverConfiguration().getCMSService()
-					.getDocumentManager().getDoc(contentid);
+					.getDocumentManager().getDoc(contentid,true);
 			this.keywords = document.getKeywords();
 			
 			try {
@@ -388,7 +388,7 @@ public class ContentContextImpl extends PagineContextImpl implements
 		this.publishTime = new Date();
 		try {
 			document = this.getDriverConfiguration().getCMSService()
-					.getDocumentManager().getDoc(contentid);
+					.getDocumentManager().getDoc(contentid,true);
 			// if(this.parentContext instanceof ChannelContext)
 			// this.setChannelid(((ChannelContext)parentContext).getChannelID());
 

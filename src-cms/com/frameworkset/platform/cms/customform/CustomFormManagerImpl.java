@@ -1,6 +1,7 @@
 package com.frameworkset.platform.cms.customform;
 
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -442,9 +443,11 @@ public class CustomFormManagerImpl implements CustomFormManager
 	public boolean saveDocExtFieldValues(String docid,String[] ids,String[] values,String[] types) throws CustomFormManagerException
 	{
 		boolean flag = false;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try
 		{
+			int did = Integer.parseInt(docid);
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			for(int i=0;i<ids.length;i++)
 			{
 				if("".equals(ids[i])||ids[i]==null)
@@ -460,45 +463,126 @@ public class CustomFormManagerImpl implements CustomFormManager
 					continue;
 				
 				String sql = "";
-				String sqltemp = "select field_id from td_cms_extfieldvalue where field_id = " + ids[i] + " and document_id = " + docid;
-				
-				db.executeSelect(sqltemp);
+				String sqltemp = "select field_id from td_cms_extfieldvalue where field_id = ? and document_id = ?" ;
+				db.preparedSelect(sqltemp);
+				db.setInt(1, Integer.parseInt(ids[i]));
+				db.setInt(2, did);
+				db.executePrepared();
 				if(db.size()>0)
 				{
+					
 					if (types[i].equals("1")||types[i].equals("4"))
-						sql = "update td_cms_extfieldvalue set fieldvalue = '" + StringUtil.replaceAll(values[i],"'","''") + 
-							"' where field_id = " + ids[i] + " and document_id = " + docid;
+					{
+						
+						sql = "update td_cms_extfieldvalue set fieldvalue = ? where field_id = ? and document_id = ?" ;
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedUpdate(sql);
+						updatedb.setString(1, StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(2, Integer.parseInt(ids[i]));
+						updatedb.setInt(3, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("0"))
-						sql = "update td_cms_extfieldvalue set NUMBERVALUE ="+ values[i] + " where field_id = " + ids[i] + " and document_id = " + docid;
+					{
+						sql = "update td_cms_extfieldvalue set NUMBERVALUE =? where field_id = ? and document_id = ?" ;
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedUpdate(sql);
+						updatedb.setInt(1, Integer.parseInt(values[i]));
+						updatedb.setInt(2, Integer.parseInt(ids[i]));
+						updatedb.setInt(3, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("2"))
-						sql = "update td_cms_extfieldvalue set DATEVALUE =to_date('"+ values[i] + "','YYYY-MM-DD') where field_id = " + ids[i] + " and document_id = " + docid;
+					{
+						sql = "update td_cms_extfieldvalue set DATEVALUE =? where field_id = ? and document_id = ?";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedUpdate(sql);
+						updatedb.setDate(1, format.parse(values[i]));
+						updatedb.setInt(2, Integer.parseInt(ids[i]));
+						updatedb.setInt(3, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("3"))
-						sql = "update td_cms_extfieldvalue set CLOBVALUE = '" + StringUtil.replaceAll(values[i],"'","''") + 
-						"' where field_id = " + ids[i] + " and document_id = " + docid;
+					{
+						sql = "update td_cms_extfieldvalue set CLOBVALUE = ? where field_id = ? and document_id = ?";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedUpdate(sql);
+						updatedb.setClob(1,StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(2, Integer.parseInt(ids[i]));
+						updatedb.setInt(3, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("5")||types[i].equals("6"))
-						sql = "update td_cms_extfieldvalue set CLOBVALUE = '" + StringUtil.replaceAll(values[i],"'","''") + 
-						"' where field_id = " + ids[i] + " and document_id = " + docid;
-					db.executeUpdate(sql);
+					{
+						sql = "update td_cms_extfieldvalue set CLOBVALUE = ? where field_id = ? and document_id = ?";						
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedUpdate(sql);
+						updatedb.setClob(1,StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(2, Integer.parseInt(ids[i]));
+						updatedb.setInt(3, did);
+						updatedb.executePrepared();
+					}
+//					db.executeUpdate(sql);
 				}
 				else
 				{
 					if (types[i].equals("1")||types[i].equals("4"))
+					{
 						sql = "insert into td_cms_extfieldvalue (field_id,document_id,fieldvalue) " +
-							"values (" + ids[i] + "," + docid + ",'" + StringUtil.replaceAll(values[i],"'","''") + "')";
+							"values (?,?,?)";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedInsert(sql);
+						updatedb.setString(3, StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(1, Integer.parseInt(ids[i]));
+						updatedb.setInt(2, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("3"))
+					{
 						sql = "insert into td_cms_extfieldvalue (field_id,document_id,CLOBVALUE) " +
-							"values (" + ids[i] + "," + docid + ",'" + StringUtil.replaceAll(values[i],"'","''") + "')";
+							"values (?,?,?)";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedInsert(sql);
+						updatedb.setClob(3,StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(1, Integer.parseInt(ids[i]));
+						updatedb.setInt(2, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("0") && !values[i].equals(""))
+					{
 						sql = "insert into td_cms_extfieldvalue (field_id,document_id,NUMBERVALUE) " +
-							"values (" + ids[i] + "," + docid + ","+values[i]+")";
+							"values (?,?,?)";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedInsert(sql);
+						updatedb.setInt(3, Integer.parseInt(values[i]));
+						updatedb.setInt(1, Integer.parseInt(ids[i]));
+						updatedb.setInt(2, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("2"))
+					{
 						sql = "insert into td_cms_extfieldvalue (field_id,document_id,DATEVALUE) " +
-							"values (" + ids[i] + "," + docid + ",to_date('"+values[i]+"','YYYY-MM-DD'))";
+							"values (?,?,?)";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedInsert(sql);
+						updatedb.setDate(3, format.parse(values[i]));
+						updatedb.setInt(1, Integer.parseInt(ids[i]));
+						updatedb.setInt(2, did);
+						updatedb.executePrepared();
+					}
 					if (types[i].equals("5")||types[i].equals("6"))
+					{
 						sql = "insert into td_cms_extfieldvalue (field_id,document_id,CLOBVALUE) " +
-							"values (" + ids[i] + "," + docid + ",'" + StringUtil.replaceAll(values[i],"'","''") + "')";
+							"values (?,?,?)";
+						PreparedDBUtil updatedb = new PreparedDBUtil();
+						updatedb.preparedInsert(sql);
+						updatedb.setClob(3,StringUtil.replaceAll(values[i],"'","''"));
+						updatedb.setInt(1, Integer.parseInt(ids[i]));
+						updatedb.setInt(2, did);
+						updatedb.executePrepared();
+					}
 					
-					db.executeInsert(sql);
+					
 				}
 			}
 			flag = true;

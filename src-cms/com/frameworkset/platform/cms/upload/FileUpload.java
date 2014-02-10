@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.fiyu.edit.RemotePic;
 import net.fiyu.edit.UploadBean;
-import net.fiyu.edit.UploadWebHelper;
 
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.multipart.MultipartFile;
@@ -23,6 +22,7 @@ import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.imagemanager.ImageManagerImpl;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.platform.cms.util.CMSWebHelper;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
@@ -240,7 +240,7 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 		sStyleName=request.getParameter("style");
 		if (StringUtil.isEmpty(sStyleName))
 		{
-		  sStyleName="standard";
+		  sStyleName="blue";
 		}
 //		else
 //		sStyleName=request.getParameter("style").trim();
@@ -255,7 +255,7 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 	
 		
 		try{
-            
+			UploadBean bean = _CMSWebHelper.getUploadBean(sStyleName);
 			sUploadDir = bean.getSuploaddir();
 	        //System.out.println(sUploadDir);
 			if(sType.equalsIgnoreCase("remote"))
@@ -711,16 +711,19 @@ public class FileUpload implements org.frameworkset.spi.InitializingBean{
 		return out.toString();
 	}
 
-	UploadBean bean;
+	CMSWebHelper _CMSWebHelper;
 	String approot ;
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		approot = CMSUtil.getAppRootPath();
-		UploadWebHelper uw = new UploadWebHelper();
-		uw.filename = CMSUtil.getPath(approot,"cms/editor/eWebeditor/config/Style.xml");
+//		UploadWebHelper uw = new UploadWebHelper();
+//		uw.filename = CMSUtil.getPath(approot,"cms/editor/eWebeditor/config/Style.xml");
+//		
+//		uw.getInstance();
+//		bean = uw.InitPara();
+		_CMSWebHelper = new CMSWebHelper();
+		_CMSWebHelper.InitPara();
 		
-		uw.getInstance();
-		bean = uw.InitPara();
 		
 	}
 	

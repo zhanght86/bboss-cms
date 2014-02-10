@@ -83,7 +83,7 @@
 	//open HTML编辑器
 	function openHtml(name)
 	{
-		openWin("doc_extfield_edithtml.jsp?cusdir=<%=cusdir%>&name=" + name,700,580);
+		openWin("doc_extfield_edithtml.jsp?channelId=<%=id%>&cusdir=<%=cusdir%>&name=" + name,700,580);
 	}
 	//检测是否输入的是数字
 	function checknum(cur)

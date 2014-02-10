@@ -2479,7 +2479,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -2857,7 +2857,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -3011,7 +3011,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					doc.setPublishTime(db.getDate(i, "publishtime"));
 					doc.setPicPath(db.getString(i, "pic_path"));
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 
 					String str = "select SRCNAME from TD_CMS_DOCSOURCE where DOCSOURCE_ID ="
@@ -3142,7 +3142,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					doc.setPublishTime(db.getDate(i, "publishtime"));
 					doc.setPicPath(db.getString(i, "pic_path"));
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 
 					String str = "select SRCNAME from TD_CMS_DOCSOURCE where DOCSOURCE_ID ="
@@ -3297,7 +3297,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -3459,7 +3459,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -3895,7 +3895,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -4097,7 +4097,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					int isref = db.getInt(i, "ordersq");
 					doc.setRef(isref == 1 ? false : true);// 判断是否是引用的文档：true为是，flase为不是
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					doc.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -5360,7 +5360,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					}
 
 					/* 装载扩展字段数据 */
-					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMap(doc.getDocument_id() + "");
+					Map docExtField = (new DocumentManagerImpl()).getDocExtFieldMapBean(doc.getDocument_id() + "");
 					doc.setDocExtField(docExtField);
 					/* 装载系统扩展字段数据 */
 					DocumentExtColumnManager extManager = new DocumentExtColumnManager();

@@ -2,7 +2,9 @@
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.RequestDispatcher;
 
@@ -11,6 +13,7 @@ import org.htmlparser.util.ParserException;
 
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.documentmanager.Document;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.driver.config.DocumentStatus;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
@@ -19,6 +22,7 @@ import com.frameworkset.platform.cms.driver.context.impl.CMSContextImpl;
 import com.frameworkset.platform.cms.driver.context.impl.ContentContextImpl;
 import com.frameworkset.platform.cms.driver.distribute.IndexObject;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
+import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 import com.frameworkset.platform.cms.driver.jsp.CMSException;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcher;
@@ -459,6 +463,35 @@ public class ContentPublishObject extends PublishObject {
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		/**
+		 * 扩展字段解析发布
+		 */
+		if(contentContext.getDocument().getDocExtField() != null)
+		{
+			Iterator<Entry<String, DocExtValue>> fields = contentContext.getDocument().getDocExtField().entrySet().iterator();
+			while(fields.hasNext())
+			{
+				Entry<String, DocExtValue> f = fields.next();
+				
+				DocExtValue ev = f.getValue();
+				if(ev.getFieldtype().equals("3"))//clob类型
+				{
+					processor = new CmsLinkProcessor(contentContext,
+							  CmsLinkProcessor.REPLACE_LINKS,
+							  encoding);
+					processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+					try {
+						ev.setStringvalue(processor.process(ev.getStringvalue(),CmsEncoder.ENCODING_UTF_8));
+						this.contentContext.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+					}
+					catch(Exception e)
+					{
+						log.debug("", e);
+					}
+				}
+				
+			}
 		}
 		
 	}

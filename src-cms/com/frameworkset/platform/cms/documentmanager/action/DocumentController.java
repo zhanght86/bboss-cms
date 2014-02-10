@@ -17,6 +17,7 @@ package com.frameworkset.platform.cms.documentmanager.action;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,6 +53,7 @@ import com.frameworkset.platform.cms.documentmanager.DocumentManagerException;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.bean.ChannelNews;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
 import com.frameworkset.platform.cms.documentmanager.bean.DocTemplate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocumentCondition;
@@ -464,12 +466,23 @@ public class DocumentController {
 		String[] values = (request.getParameter("extfieldvalues")).split("№");
 		//String[] types = (request.getParameter("extfieldtypes")).split("№");
 		String[] names = (request.getParameter("extfieldnames")).split("№");
+		String[] types = (request.getParameter("extfieldtypes")).split("№");
 		Map map = new HashMap();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		for(int i=0;i<names.length;i++)
 		{
-			map.put(names[i],values[i]);
+			DocExtValue extvalue = new DocExtValue();
+			extvalue.setField(names[i]);
+			extvalue.setFieldtype(types[i]);
+			if(types[i].equals("0"))
+				extvalue.setIntvalue(Integer.parseInt(values[i]));
+			else if(types[i].equals("2"))
+				extvalue.setDatevalue(format.parse(values[i]));
+			else
+				extvalue.setStringvalue(values[i]);
+			map.put(names[i],extvalue);
 		}
-		doc.setDocExtField(map);System.out.println(cm.hasSetDetailTemplate(chnlId));
+		doc.setDocExtField(map);
 		if(cm.hasSetDetailTemplate(chnlId) && (Integer.parseInt(request.getParameter("doctype"))==0 || Integer.parseInt(request.getParameter("doctype"))==1)){		
 			WEBPublish publish = new WEBPublish();
 			publish.init(request,response,pageContext,accesscontroler);
@@ -947,6 +960,45 @@ public class DocumentController {
 						String[] ids = (request.getParameter("fieldids")).split("№");
 						String[] values = (request.getParameter("extfieldvalues")).split("№");
 						String[] types = (request.getParameter("extfieldtypes")).split("№");
+						for(int i = 0; types != null && i < types.length; i ++)
+						{
+							if(types[i].equals("3"))//clob类型字段
+							{
+								CmsLinkProcessor processor = new CmsLinkProcessor(request,relativePath,sitedir);
+								processor.setHandletype(CmsLinkProcessor.PROCESS_EDITCONTENT);
+								try {
+									values[i] = processor.process(values[i],CmsEncoder.ENCODING_UTF_8);
+									CmsLinkTable linktable = processor.getExternalPageLinkTable();
+									Iterator it = linktable.iterator();
+									while(it.hasNext())
+									{
+										CmsLinkProcessor.CMSLink link = (CmsLinkProcessor.CMSLink)it.next();
+										String remoteAddr = link.getOrigineLink().getHref();
+										String contentPath = link.getRelativeFilePath();
+										String localPath = pageContext.getServletContext().getRealPath("/") + "cms/siteResource/" + sitedir + "/_webprj/" + contentPath;
+										try {
+											RemoteFileHandle rf = new RemoteFileHandle(remoteAddr,localPath);
+											flag = rf.download();
+				
+											//Attachment attachment = new Attachment();
+												
+											//attachment.setDocumentId(b);
+											//attachment.setDescription(remoteAddr);
+											//attachment.setUrl(contentPath.substring(contentPath.lastIndexOf("/") + 1,contentPath.length()));
+											//attachment.setType(10);//文档内容中的图片等(remote的图片等)
+											//attachment.setOriginalFilename(remoteAddr);
+				
+											//flag = dmi.createAttachment(attachment);
+										} catch (Exception e) {
+											System.out.println("取远程图片时出错！");
+											e.printStackTrace();
+										}
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						}
 						CustomFormManager cf = new CustomFormManagerImpl();
 						flag = cf.saveDocExtFieldValues(String.valueOf(b),ids,values,types);
 					}
@@ -1420,6 +1472,45 @@ public class DocumentController {
 				String[] ids = (request.getParameter("fieldids")).split("№");
 				String[] values = (request.getParameter("extfieldvalues")).split("№");
 				String[] types = (request.getParameter("extfieldtypes")).split("№");
+				for(int i = 0; types != null && i < types.length; i ++)
+				{
+					if(types[i].equals("3"))//clob类型字段
+					{
+						CmsLinkProcessor processor = new CmsLinkProcessor(request,relativePath,sitedir);
+						processor.setHandletype(CmsLinkProcessor.PROCESS_EDITCONTENT);
+						try {
+							values[i] = processor.process(values[i],CmsEncoder.ENCODING_UTF_8);
+							CmsLinkTable linktable = processor.getExternalPageLinkTable();
+							Iterator it = linktable.iterator();
+							while(it.hasNext())
+							{
+								CmsLinkProcessor.CMSLink link = (CmsLinkProcessor.CMSLink)it.next();
+								String remoteAddr = link.getOrigineLink().getHref();
+								String contentPath = link.getRelativeFilePath();
+								String localPath = pageContext.getServletContext().getRealPath("/") + "cms/siteResource/" + sitedir + "/_webprj/" + contentPath;
+								try {
+									RemoteFileHandle rf = new RemoteFileHandle(remoteAddr,localPath);
+									flag = rf.download();
+			
+									Attachment attachment = new Attachment();
+										
+									attachment.setDocumentId(Integer.parseInt(docid));
+									attachment.setDescription(remoteAddr);
+									attachment.setUrl(contentPath.substring(contentPath.lastIndexOf("/") + 1,contentPath.length()));
+									attachment.setType(10);//文档内容中的图片等(remote的图片等)
+									attachment.setOriginalFilename(remoteAddr);
+			
+									flag = dmi.createAttachment(attachment);
+								} catch (Exception e) {
+									System.out.println("取远程图片时出错！");
+									e.printStackTrace();
+								}
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
 				CustomFormManager cf = new CustomFormManagerImpl();
 				flag = cf.saveDocExtFieldValues(docid,ids,values,types);
 			}

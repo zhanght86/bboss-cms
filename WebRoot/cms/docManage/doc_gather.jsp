@@ -53,6 +53,8 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 	//老方法
 	//String docpath = cm.getFilePath(channelId);
 	////根据频道id，站点id获取文档保存路径(新方法) 保存路径=站点路径+频道路径
+	String sitedir = siteManager.getSiteInfo(siteid).getSiteDir();//频道相对路径
+	String relativePath = cm.getChannelInfo(channelId).getChannelPath();//站点相对路径
 	String docpath = siteManager.getSiteInfo(siteid).getSiteDir() + "/_webprj/" + cm.getChannelInfo(channelId).getChannelPath() + "/content_files";
 	//System.out.println("jxw==="+docpath);
 	//文档来源的加载js数组
@@ -1203,7 +1205,7 @@ else
 					<input type="hidden" name="extfieldvalues">
 					<input type="hidden" name="extfieldtypes">
 					<input type="hidden" name="extfieldnames">
-					<iframe id="docextfielslist" src="<%=request.getContextPath()%>/cms/docManage/doc_extfield_list.jsp?type=2&id=<%=channelId%>" frameborder="0" scrolling="auto" width="0%" height="0%">
+					<iframe id="docextfielslist" src="<%=request.getContextPath()%>/cms/docManage/doc_extfield_list.jsp?cusdir=<%=docpath%>&sitedir=<%=sitedir %>&relativePath=<%=relativePath %>&type=2&id=<%=channelId%>" frameborder="0" scrolling="auto" width="0%" height="0%">
 					</iframe>
 				</div>
 				<!-- 所属专题报道-->

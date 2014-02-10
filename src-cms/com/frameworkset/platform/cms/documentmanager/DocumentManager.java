@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.documentmanager.bean.ArrangeDoc;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
 import com.frameworkset.platform.cms.documentmanager.bean.DocTemplate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocumentCondition;
@@ -234,6 +235,7 @@ public interface DocumentManager extends java.io.Serializable
 	 * @throws DocumentManagerException
 	 */
 	public Document getDoc(String docid) throws DocumentManagerException;
+	public Document getDoc(String docid,boolean loaddocextfield) throws DocumentManagerException;
 	public Document getDocWithNoContent(String docid) throws DocumentManagerException;
 	public String getContent(Document doc);
 	
@@ -941,7 +943,17 @@ public interface DocumentManager extends java.io.Serializable
 	 * 		Map对应的value：文档对应该扩展字段的内容
 	 * @throws DocumentManagerException
 	 */
-	public Map getDocExtFieldMap(String docid) throws DocumentManagerException;
+	public Map getDocExtFieldMap(String docid) throws DocumentManagerException; 
+	
+	/**
+	 * get文档的所有扩展字段信息的Map
+	 * 
+	 * @param String
+	 *            docid
+	 * @return Map Map对应的key：扩展字段的name Map对应的value：文档对应该扩展字段的内容
+	 * @throws DocumentManagerException
+	 */
+	public Map<String,DocExtValue> getDocExtFieldMapBean(String docid) throws DocumentManagerException ;
 	
 	/**
 	 * 根据频道id,扩展字段id获得当前文档枚举扩展字段的值

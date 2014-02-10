@@ -41,6 +41,7 @@ import com.frameworkset.platform.cms.documentmanager.bean.ArrangeDoc;
 import com.frameworkset.platform.cms.documentmanager.bean.CitedDocSrcChannel;
 import com.frameworkset.platform.cms.documentmanager.bean.CitedDocument;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.documentmanager.bean.DocHistoryOperate;
 import com.frameworkset.platform.cms.documentmanager.bean.DocLevel;
 import com.frameworkset.platform.cms.documentmanager.bean.DocRelated;
@@ -1167,11 +1168,14 @@ public class DocumentManagerImpl implements DocumentManager {
 
 		return document;
 	}
-
+	public Document getDoc(String docid) throws DocumentManagerException 
+	{
+		return getDoc(docid,false);
+	}
 	/**
 	 * modify by ge.tao 2007-09-17 合并SQL
 	 */
-	public Document getDoc(String docid) throws DocumentManagerException {
+	public Document getDoc(String docid,boolean loaddocextfield) throws DocumentManagerException {
 		DBUtil db = new DBUtil();
 		Document document = null;
 		DocumentExtColumnManager extManager = new DocumentExtColumnManager();
@@ -1222,8 +1226,10 @@ public class DocumentManagerImpl implements DocumentManager {
 				document.setSeq(db.getInt(0, "seq"));
 				document.setCommentswitch(db.getInt(0, "commentswitch"));
 				document.setDoc_class(db.getString(0, "doc_class"));
-				/* 装载扩展字段数据 */
+				/* 装载系统扩展字段数据 */
 				document.setExtColumn(extManager.getExtColumnInfo(0,db));
+				if(loaddocextfield)
+					document.setDocExtField(getDocExtFieldMapBean(docid));
 
 				// String str ="select SRCNAME from TD_CMS_DOCSOURCE where
 				// DOCSOURCE_ID ="+ db.getInt(0,"DOCSOURCE_ID") +"";
@@ -5274,7 +5280,7 @@ public class DocumentManagerImpl implements DocumentManager {
 			db.executeSelect(sql);
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
-					map.put(db.getString(i, "key"), db.getDate(i, "value").toString());
+					map.put(db.getString(i, "key"), db.getDate(i, "value"));
 				}
 			}
 			// checkbox类型
@@ -5297,6 +5303,132 @@ public class DocumentManagerImpl implements DocumentManager {
 							value += db2.getString(j, "value") + "&nbsp;";
 						}
 						map.put(key, value);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new DocumentManagerException(e.getMessage());
+		}
+		return map;
+	}
+	/**
+	 * get文档的所有扩展字段信息的Map
+	 * 
+	 * @param String
+	 *            docid
+	 * @return Map Map对应的key：扩展字段的name Map对应的value：文档对应该扩展字段的内容
+	 * @throws DocumentManagerException
+	 */
+	public Map<String,DocExtValue> getDocExtFieldMapBean(String docid) throws DocumentManagerException {
+		Map<String,DocExtValue> map = new HashMap<String,DocExtValue>();
+		PreparedDBUtil db = new PreparedDBUtil();
+		PreparedDBUtil db2 = new PreparedDBUtil();
+		String sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.fieldvalue as value "
+				+ "from td_cms_extfield a inner join td_cms_extfieldvalue b "
+				+ "on a.field_id = b.field_id where b.document_id = ? and a.fieldtype in ('1','4','5','6')";
+		try {
+			// varchar,file,select,radiobox类型
+			int id = Integer.parseInt(docid);
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
+			if (db.size() > 0) {
+				for (int i = 0; i < db.size(); i++) {
+					DocExtValue docvalue = new DocExtValue();
+					docvalue.setField(db.getString(i, "key"));
+					docvalue.setStringvalue(db.getString(i, "value"));
+					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					map.put(docvalue.getField(), docvalue);
+				}
+			}
+			// number类型
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.numbervalue as value "
+					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=0";
+			db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
+
+			if (db.size() > 0) {
+				for (int i = 0; i < db.size(); i++) {
+					DocExtValue docvalue = new DocExtValue();
+					docvalue.setField(db.getString(i, "key"));
+					docvalue.setIntvalue(db.getInt(i, "value"));
+					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					map.put(docvalue.getField(), docvalue);
+					
+				}
+			}
+			// clob类型
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.clobvalue as value "
+					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=3";
+			db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
+		
+			if (db.size() > 0) {
+				for (int i = 0; i < db.size(); i++) {
+					DocExtValue docvalue = new DocExtValue();
+					docvalue.setField(db.getString(i, "key"));
+					docvalue.setStringvalue(db.getString(i, "value"));
+					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					map.put(docvalue.getField(), docvalue);
+					
+				}
+			}
+			// date类型
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.datevalue as value "
+					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=2";
+			db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
+			if (db.size() > 0) {
+				for (int i = 0; i < db.size(); i++) {
+					DocExtValue docvalue = new DocExtValue();
+					docvalue.setField(db.getString(i, "key"));
+					docvalue.setDatevalue(db.getDate(i, "value"));
+					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					map.put(docvalue.getField(), docvalue);
+				}
+			}
+			// checkbox类型
+			sql = "select distinct a.field_id as id " + " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=7";
+			db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
+			if (db.size() > 0) {
+				for (int i = 0; i < db.size(); i++) {
+					int tempid = db.getInt(i, "id");
+					sql = "select a.fieldname as key,a.fieldtype as fieldtype,c.value as value "
+							+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+							+ " on a.field_id = b.field_id ,td_cms_extvaluescope c "
+							+ " where b.fieldvalue = c.id and b.document_id = ? and a.fieldtype=7 and a.field_id = ? order by c.id";
+					db2.preparedSelect(sql);
+					db2.setInt(1, id);
+					db2.setInt(2, tempid);
+					db2.executePrepared();
+					String key = db2.getString(0, "key");
+					String fieldtype = db2.getString(0, "fieldtype");
+					String value = "";
+					if (db2.size() > 0) {
+						for (int j = 0; j < db2.size(); j++) {
+							value += db2.getString(j, "value") + "&nbsp;";
+						}
+						DocExtValue docvalue = new DocExtValue();
+						docvalue.setField(key);
+						docvalue.setStringvalue(value);
+						docvalue.setFieldtype(fieldtype);
+						map.put(docvalue.getField(), docvalue);
+						
 					}
 				}
 			}
@@ -5531,7 +5663,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setSecondtitle(db.getString(i, "secondtitle"));
 						document.setOrdertime(db.getDate(i, "ordertime"));
 						/* 装载扩展字段数据 */
-						Map docExtField = getDocExtFieldMap(document.getDocument_id() + "");
+						Map docExtField = getDocExtFieldMapBean(document.getDocument_id() + "");
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
 						document.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -5617,7 +5749,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setSecondtitle(db.getString(i, "secondtitle"));
 						document.setOrdertime(db.getDate(i, "ordertime"));
 						/* 装载扩展字段数据 */
-						Map docExtField = getDocExtFieldMap(document.getDocument_id() + "");
+						Map docExtField = getDocExtFieldMapBean(document.getDocument_id() + "");
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
 						document.setExtColumn(extManager.getExtColumnInfo(i,db));
@@ -5989,7 +6121,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						document.setSecondtitle(db.getString(i, "secondtitle"));
 
 						/* 装载扩展字段数据 */
-						Map docExtField = getDocExtFieldMap(docid);
+						Map docExtField = getDocExtFieldMapBean(docid);
 						document.setDocExtField(docExtField);
 						/* 装载系统扩展字段数据 */
 						document.setExtColumn(extManager.getExtColumnInfo(i,db));

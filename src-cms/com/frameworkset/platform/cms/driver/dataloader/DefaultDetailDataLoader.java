@@ -44,9 +44,10 @@ public class DefaultDetailDataLoader extends CMSDetailDataLoader implements java
 		try {
 //			doc = contentcontext.getDriverConfiguration().getCMSService()
 //					.getDocumentManager().getDoc(contentcontext);
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin();
 			doc = contentcontext.getDocument();
-			
+			if(doc.getDocExtField() != null)
+				return doc;
 //			/*
 //			 * 处理文档内容中的链接和路径信息
 //			 */
@@ -97,7 +98,7 @@ public class DefaultDetailDataLoader extends CMSDetailDataLoader implements java
 				Map docExtField = contentcontext.getDriverConfiguration()
 												   .getCMSService()
 												   .getDocumentManager()
-												   .getDocExtFieldMap(doc.getDocument_id() + "");
+												   .getDocExtFieldMapBean(doc.getDocument_id() + "");
 				doc.setDocExtField(docExtField);
 			}
 			doc.setPublishTime(contentcontext.getPublishTime());

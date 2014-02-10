@@ -3,6 +3,7 @@ package com.frameworkset.common.tag.html;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
@@ -10,6 +11,7 @@ import javax.servlet.jsp.JspException;
 import org.htmlparser.util.ParserException;
 
 import com.frameworkset.common.tag.BaseCellTag;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 /**
  * 扩展字段显示标签
@@ -26,6 +28,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
  */
 public class BaseExtendTag extends BaseCellTag{
 	protected String field = null;
+	protected boolean isclob = false;
 	/**
 	 * 标识是否对扩展字段的内容进行发布处理
 	 * true:处理
@@ -41,7 +44,7 @@ public class BaseExtendTag extends BaseCellTag{
 		this.process = process;
 	}
 
-	protected Map extenddatas;
+	protected Map<String,DocExtValue> extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
 		if(super.dataSet != null)
@@ -56,8 +59,26 @@ public class BaseExtendTag extends BaseCellTag{
 			}
 			
 		}
-		String outStr = super.getOutStr();
-		
+		String outStr =getOut();
+		if(this.process || isclob)
+		{
+			String encoding = super.context.getSite().getEncoding();
+			
+			CmsLinkProcessor processor = new CmsLinkProcessor(context,
+															  CmsLinkProcessor.REPLACE_LINKS,
+															  encoding);
+			String cchanneldir = getCurrentChannelDir();
+			processor.setCurrentChannelDir(cchanneldir);
+			processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+			try {
+				outStr = processor.process(outStr,encoding);
+				this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+				
+			} catch (ParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		if(outStr != null)
 		{
@@ -67,25 +88,7 @@ public class BaseExtendTag extends BaseCellTag{
 				outStr = URLDecoder.decode(outStr);
 		}
 		try { 
-			if(this.process)
-			{
-				String encoding = super.context.getSite().getEncoding();
-				
-				CmsLinkProcessor processor = new CmsLinkProcessor(context,
-																  CmsLinkProcessor.REPLACE_LINKS,
-																  encoding);
-				String cchanneldir = getCurrentChannelDir();
-				processor.setCurrentChannelDir(cchanneldir);
-				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
-				try {
-					outStr = processor.process(outStr,encoding);
-					this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
-					
-				} catch (ParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
 			if(this.maxlength > 0 && outStr != null && outStr.length() > maxlength)
 			{
 				outStr = outStr.substring(0,this.maxlength);
@@ -114,9 +117,22 @@ public class BaseExtendTag extends BaseCellTag{
 	{
 		if(extenddatas != null)
 		{
-			Object value = extenddatas.get(field);
+			DocExtValue value = extenddatas.get(field);
 			if(value != null)
-				return value.toString();
+			{
+				if(value.getFieldtype().equals("0"))
+					return String.valueOf(value.getIntvalue());
+				else if(value.getFieldtype().equals("2"))
+				{
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					return format.format(value.getDatevalue());
+				}
+				else
+				{
+					isclob = value.getFieldtype().equals("3");
+					return value.getStringvalue();
+				}
+			}
 			else
 			{
 				if(this.defaultValue != null)
@@ -142,6 +158,7 @@ public class BaseExtendTag extends BaseCellTag{
 		int ret = super.doEndTag();
 		this.extenddatas = null;
 		process = false;
+		isclob = false;
 		return ret;
 	}
 

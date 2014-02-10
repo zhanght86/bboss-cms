@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.frameworkset.platform.cms.channelmanager.Channel;
+import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.task.PublishSchedular;
 
 /**
@@ -300,7 +301,7 @@ public class Document implements java.io.Serializable
     /**
      * 文档扩展字段
      */
-    private Map docExtField;
+    private Map<String,DocExtValue> docExtField;
     
     
     
@@ -1095,11 +1096,11 @@ public class Document implements java.io.Serializable
 		this.recycleTime = recycleTime;
 	}
 
-	public Map getDocExtField() {
+	public Map<String,DocExtValue> getDocExtField() {
 		return docExtField;
 	}
 
-	public void setDocExtField(Map docExtField) {
+	public void setDocExtField(Map<String,DocExtValue> docExtField) {
 		this.docExtField = docExtField;
 	}
 

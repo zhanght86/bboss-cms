@@ -361,7 +361,7 @@ function closewin()
 			}
 			//特殊要求(便于当值为空时java 的split（）方法)
 			myform.extfieldvalues.value += "null№";
-			alert(myform.extfieldvalues.value);
+			//alert(myform.extfieldvalues.value);
 			myform.method="post";
 			
 			//新加的专题报道

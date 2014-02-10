@@ -49,9 +49,27 @@ public class ColumnExtendTag extends BaseCellTag {
 			}
 			
 		}
-		String outStr = super.getOutStr();
+		String outStr =getOut();
 		
-		
+		if(this.process)
+		{
+			String encoding = super.context.getSite().getEncoding();
+			
+			CmsLinkProcessor processor = new CmsLinkProcessor(context,
+															  CmsLinkProcessor.REPLACE_LINKS,
+															  encoding);
+			String cchanneldir = getCurrentChannelDir();
+			processor.setCurrentChannelDir(cchanneldir);
+			processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+			try {
+				outStr = processor.process(outStr,encoding);
+				this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+				
+			} catch (ParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if(outStr != null)
 		{
 			if(getEncode() != null && getEncode().equals("true"))
@@ -66,25 +84,7 @@ public class ColumnExtendTag extends BaseCellTag {
 		}
 		
 		try { 
-			if(this.process)
-			{
-				String encoding = super.context.getSite().getEncoding();
-				
-				CmsLinkProcessor processor = new CmsLinkProcessor(context,
-																  CmsLinkProcessor.REPLACE_LINKS,
-																  encoding);
-				String cchanneldir = getCurrentChannelDir();
-				processor.setCurrentChannelDir(cchanneldir);
-				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
-				try {
-					outStr = processor.process(outStr,encoding);
-					this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
-					
-				} catch (ParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
 			if(this.maxlength > 0 && outStr != null && outStr.length() > maxlength)
 			{
 				outStr = outStr.substring(0,this.maxlength);

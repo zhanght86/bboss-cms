@@ -11,6 +11,7 @@
 
 	String name = request.getParameter("name");
 	String cusdir =  request.getParameter("cusdir");
+	String channelId = request.getParameter("channelId");
 %>
 <html>
 <head>
@@ -37,6 +38,8 @@
 <table width="100%" border="0" align=center cellpadding="3" cellspacing="0" bordercolor="#B7CBE4">
 	<tr width="100%">
 	<td align="center">
+		
+		<input type="hidden" name="channelId" value="<%=channelId%>"/>
 		<script language="javascript">
 		var content = window.dialogArguments.document.all(name).value;
 		document.write("<input type='hidden' name='content' value='" + (content) + "'>");

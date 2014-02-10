@@ -1,3 +1,8 @@
+1.扩展字段插入和修改完善，解决clob字段存储超出长度问题
+2.扩展字段读取完善：新增DocExtValue对象用来封装扩展字段信息和值，影响的功能：文档扩展标签，文档预览
+3.扩展字段发布：发布文档时，增加对扩展字段内容解析和发布
+4.修复扩展字段发布失效问题
+
 java.sql.SQLException: Generated keys not requested. You need to specify Statement.RETURN_GENERATED_KEYS to Statement.executeUpdate() or Connection.prepareStatement().
 下午03:16:55: 王胜利: 哎，这个问题原来 是jar包升级导致的
 下午03:17:07: 王胜利: mysql只能用老jar包
