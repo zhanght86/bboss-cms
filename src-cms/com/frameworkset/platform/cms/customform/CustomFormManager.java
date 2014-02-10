@@ -1,6 +1,7 @@
 package com.frameworkset.platform.cms.customform;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -11,6 +12,8 @@ import java.util.List;
 
 public interface CustomFormManager extends java.io.Serializable
 {
+	public List<DocExtField> getDataFieldList(String type,String id,String docid ) throws CustomFormManagerException ;
+	public Map<String,DocExtField> getDataFieldMap(String type,String id,String docid ) throws CustomFormManagerException ;
 	/**
 	 * 设置文档的各项自定义表单
 	 * @param TARGET_ID

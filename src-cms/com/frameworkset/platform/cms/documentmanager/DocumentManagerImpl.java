@@ -5325,7 +5325,7 @@ public class DocumentManagerImpl implements DocumentManager {
 		Map<String,DocExtValue> map = new HashMap<String,DocExtValue>();
 		PreparedDBUtil db = new PreparedDBUtil();
 		PreparedDBUtil db2 = new PreparedDBUtil();
-		String sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.fieldvalue as value "
+		String sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.fieldvalue as value "
 				+ "from td_cms_extfield a inner join td_cms_extfieldvalue b "
 				+ "on a.field_id = b.field_id where b.document_id = ? and a.fieldtype in ('1','4','5','6')";
 		try {
@@ -5340,11 +5340,12 @@ public class DocumentManagerImpl implements DocumentManager {
 					docvalue.setField(db.getString(i, "key"));
 					docvalue.setStringvalue(db.getString(i, "value"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 				}
 			}
 			// number类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.numbervalue as value "
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.numbervalue as value "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=0";
 			db = new PreparedDBUtil();
@@ -5358,12 +5359,13 @@ public class DocumentManagerImpl implements DocumentManager {
 					docvalue.setField(db.getString(i, "key"));
 					docvalue.setIntvalue(db.getInt(i, "value"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 					
 				}
 			}
 			// clob类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.clobvalue as value "
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.clobvalue as value "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=3";
 			db = new PreparedDBUtil();
@@ -5377,12 +5379,13 @@ public class DocumentManagerImpl implements DocumentManager {
 					docvalue.setField(db.getString(i, "key"));
 					docvalue.setStringvalue(db.getString(i, "value"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 					
 				}
 			}
 			// date类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,b.datevalue as value "
+			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.datevalue as value "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=2";
 			db = new PreparedDBUtil();
@@ -5395,11 +5398,12 @@ public class DocumentManagerImpl implements DocumentManager {
 					docvalue.setField(db.getString(i, "key"));
 					docvalue.setDatevalue(db.getDate(i, "value"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
+					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 				}
 			}
 			// checkbox类型
-			sql = "select distinct a.field_id as id " + " from td_cms_extfield a inner join td_cms_extfieldvalue b "
+			sql = "select distinct a.fieldname as key,a.field_id as id,a.FIELDLABEL as fieldlabel,a.fieldtype as fieldtype from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=7";
 			db = new PreparedDBUtil();
 			db.preparedSelect(sql);
@@ -5408,7 +5412,7 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					int tempid = db.getInt(i, "id");
-					sql = "select a.fieldname as key,a.fieldtype as fieldtype,c.value as value "
+					sql = "select a.fieldname as key,c.value as value "
 							+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 							+ " on a.field_id = b.field_id ,td_cms_extvaluescope c "
 							+ " where b.fieldvalue = c.id and b.document_id = ? and a.fieldtype=7 and a.field_id = ? order by c.id";
@@ -5416,8 +5420,10 @@ public class DocumentManagerImpl implements DocumentManager {
 					db2.setInt(1, id);
 					db2.setInt(2, tempid);
 					db2.executePrepared();
-					String key = db2.getString(0, "key");
-					String fieldtype = db2.getString(0, "fieldtype");
+					String key = db.getString(i, "key");
+					String fieldtype = db.getString(i, "fieldtype");
+					String label  = db.getString(i, "fieldlabel"); 
+					
 					String value = "";
 					if (db2.size() > 0) {
 						for (int j = 0; j < db2.size(); j++) {
@@ -5427,6 +5433,7 @@ public class DocumentManagerImpl implements DocumentManager {
 						docvalue.setField(key);
 						docvalue.setStringvalue(value);
 						docvalue.setFieldtype(fieldtype);
+						docvalue.setLabel(label);
 						map.put(docvalue.getField(), docvalue);
 						
 					}

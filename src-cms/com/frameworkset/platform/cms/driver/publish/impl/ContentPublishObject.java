@@ -483,6 +483,7 @@ public class ContentPublishObject extends PublishObject {
 					processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
 					try {
 						ev.setStringvalue(processor.process(ev.getStringvalue(),CmsEncoder.ENCODING_UTF_8));
+						ev.setProcessed(true);
 						this.contentContext.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
 					}
 					catch(Exception e)

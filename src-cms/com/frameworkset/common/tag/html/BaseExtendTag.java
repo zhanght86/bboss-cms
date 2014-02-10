@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 
-import org.htmlparser.util.ParserException;
-
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
@@ -29,6 +27,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 public class BaseExtendTag extends BaseCellTag{
 	protected String field = null;
 	protected boolean isclob = false;
+	protected DocExtValue docExtValue;
 	/**
 	 * 标识是否对扩展字段的内容进行发布处理
 	 * true:处理
@@ -47,36 +46,87 @@ public class BaseExtendTag extends BaseCellTag{
 	protected Map<String,DocExtValue> extenddatas;
 	public int doStartTag() throws JspException {
 		super.doStartTag();
-		if(super.dataSet != null)
+		DocExtends docExtends = (DocExtends) this.findAncestorWithClass(this, DocExtends.class);
+		if(docExtends == null)
 		{
-			if(this.getColName() != null)
+			this.doaloneTag();
+		}
+		else
+		{
+			doInnerTag(docExtends);
+		}
+		
+		String outStr =getOut(this.docExtValue);
+		if(this.process)
+		{
+			
+			if(!docExtValue.isProcessed())
 			{
-				extenddatas = dataSet.getMap(this.getColName());
-			}
-			else
-			{
-				extenddatas = dataSet.getMap("docExtField");
+				String encoding = super.context.getSite().getEncoding();
+				
+				CmsLinkProcessor processor = new CmsLinkProcessor(context,
+																  CmsLinkProcessor.REPLACE_LINKS,
+																  encoding);
+				String cchanneldir = null;
+				if(docExtends == null)
+				{
+					cchanneldir = getCurrentChannelDir();
+				}
+				else
+				{
+					cchanneldir = docExtends.getCurrentChannelDir();
+				}
+				
+				processor.setCurrentChannelDir(cchanneldir);
+				processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+				try {
+					outStr = processor.process(outStr,encoding);
+					this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+					this.docExtValue.setStringvalue(outStr);
+					this.docExtValue.setProcessed(true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		}
-		String outStr =getOut();
-		if(this.process || isclob)
+		else 
 		{
-			String encoding = super.context.getSite().getEncoding();
-			
-			CmsLinkProcessor processor = new CmsLinkProcessor(context,
-															  CmsLinkProcessor.REPLACE_LINKS,
-															  encoding);
-			String cchanneldir = getCurrentChannelDir();
-			processor.setCurrentChannelDir(cchanneldir);
-			processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
-			try {
-				outStr = processor.process(outStr,encoding);
-				this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+			if( !isclob)
+			{
 				
-			} catch (ParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}
+			else
+			{
+				if(!docExtValue.isProcessed())
+				{
+					String encoding = super.context.getSite().getEncoding();
+					
+					CmsLinkProcessor processor = new CmsLinkProcessor(context,
+																	  CmsLinkProcessor.REPLACE_LINKS,
+																	  encoding);
+					String cchanneldir = null;
+					if(docExtends == null)
+					{
+						cchanneldir = getCurrentChannelDir();
+					}
+					else
+					{
+						cchanneldir = docExtends.getCurrentChannelDir();
+					}
+					processor.setCurrentChannelDir(cchanneldir);
+					processor.setHandletype(CmsLinkProcessor.PROCESS_CONTENT);
+					try {
+						outStr = processor.process(outStr,encoding);
+						this.context.addContentOrigineTemplateLinkTable(processor.getOrigineTemplateLinkTable());
+						this.docExtValue.setStringvalue(outStr);
+						this.docExtValue.setProcessed(true);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 		
@@ -112,12 +162,39 @@ public class BaseExtendTag extends BaseCellTag{
 	
 	}
 	
-	
-	protected String getOut()
+	private void doaloneTag()
 	{
+		if(super.dataSet != null)
+		{
+			if(this.getColName() != null)
+			{
+				extenddatas = dataSet.getMap(this.getColName());
+			}
+			else
+			{
+				extenddatas = dataSet.getMap("docExtField");
+			}
+			
+		}
 		if(extenddatas != null)
 		{
 			DocExtValue value = extenddatas.get(field);
+			docExtValue = value;
+		}
+		
+	}
+	
+	private void doInnerTag(DocExtends docExtends)
+	{
+		this.docExtValue = docExtends.currentdocExtValue.getValue();
+		this.extenddatas = docExtends.extenddatas;
+		
+	}
+	
+	
+	protected String getOut(DocExtValue value)
+	{
+		
 			if(value != null)
 			{
 				if(value.getFieldtype().equals("0"))
@@ -130,6 +207,7 @@ public class BaseExtendTag extends BaseCellTag{
 				else
 				{
 					isclob = value.getFieldtype().equals("3");
+					
 					return value.getStringvalue();
 				}
 			}
@@ -138,7 +216,7 @@ public class BaseExtendTag extends BaseCellTag{
 				if(this.defaultValue != null)
 					return defaultValue.toString();
 			}
-		}
+		
 		return "";
 	}
 	
@@ -158,6 +236,7 @@ public class BaseExtendTag extends BaseCellTag{
 		int ret = super.doEndTag();
 		this.extenddatas = null;
 		process = false;
+		docExtValue = null;
 		isclob = false;
 		return ret;
 	}

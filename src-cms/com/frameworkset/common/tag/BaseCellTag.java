@@ -45,14 +45,22 @@ public abstract class BaseCellTag extends CellTag {
 //		}
 //	}
 	
-	protected String getCurrentChannelDir()
+	public String getCurrentChannelDir()
 	{
-		try {
-			String currentChannelDir = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannelByDisplayName(this.listTag.getChannel()).getChannelPath();
-			return currentChannelDir;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			throw new IllegalArgumentException("获取[站点："+context.getSite().getName()+",频道："+this.listTag.getChannel()+"]当前文档隶属频道路径失败："+StringUtil.formatException(e));
+		if(this.listTag != null)
+		{
+			try {
+				
+				String currentChannelDir = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannelByDisplayName(this.listTag.getChannel()).getChannelPath();
+				return currentChannelDir;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				throw new IllegalArgumentException("获取[站点："+context.getSite().getName()+",频道："+this.listTag.getChannel()+"]当前文档隶属频道路径失败："+StringUtil.formatException(e));
+			}
+		}
+		else
+		{
+			return context.getPublishPath();
 		}
 		
 	}

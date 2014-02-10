@@ -47,7 +47,10 @@ public class DefaultDetailDataLoader extends CMSDetailDataLoader implements java
 			tm.begin();
 			doc = contentcontext.getDocument();
 			if(doc.getDocExtField() != null)
+			{
+				tm.commit();
 				return doc;
+			}
 //			/*
 //			 * 处理文档内容中的链接和路径信息
 //			 */

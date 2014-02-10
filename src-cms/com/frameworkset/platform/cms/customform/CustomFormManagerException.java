@@ -8,6 +8,16 @@ package com.frameworkset.platform.cms.customform;
 
 public class CustomFormManagerException extends Exception implements java.io.Serializable
 {
+	public CustomFormManagerException(String message, Throwable cause) {
+		super(message, cause);
+		// TODO Auto-generated constructor stub
+	}
+
+	public CustomFormManagerException(Throwable cause) {
+		super(cause);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
      * @param errormessage
      */

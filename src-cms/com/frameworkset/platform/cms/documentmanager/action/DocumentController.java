@@ -44,6 +44,7 @@ import com.frameworkset.platform.cms.container.ContainerImpl;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.customform.CustomFormManager;
 import com.frameworkset.platform.cms.customform.CustomFormManagerImpl;
+import com.frameworkset.platform.cms.customform.DocExtField;
 import com.frameworkset.platform.cms.docsourcemanager.Docsource;
 import com.frameworkset.platform.cms.docsourcemanager.DocsourceManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.Attachment;
@@ -393,10 +394,10 @@ public class DocumentController {
 		Document doc= new Document();
 
 		ChannelManager cm = new ChannelManagerImpl();
-		
+		String docid = request.getParameter("docid");
 		String siteId= request.getParameter("siteid");
 		String chnlId = request.getParameter("channelId");
-
+		CustomFormManagerImpl ci = new CustomFormManagerImpl();
 		doc.setChanel_id(Integer.parseInt(request.getParameter("channelId")));
 		doc.setUser_id(Integer.parseInt(request.getParameter("userid")));
 		doc.setCreateUser(Integer.parseInt(request.getParameter("userid")));
@@ -469,11 +470,15 @@ public class DocumentController {
 		String[] types = (request.getParameter("extfieldtypes")).split("№");
 		Map map = new HashMap();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		Map<String,DocExtField> defs = ci.getDataFieldMap("2", chnlId, docid);
 		for(int i=0;i<names.length;i++)
 		{
 			DocExtValue extvalue = new DocExtValue();
 			extvalue.setField(names[i]);
 			extvalue.setFieldtype(types[i]);
+			DocExtField f = defs.get(names[i]);
+			if(f != null)
+				extvalue.setLabel(f.getFieldLable());
 			if(types[i].equals("0"))
 				extvalue.setIntvalue(Integer.parseInt(values[i]));
 			else if(types[i].equals("2"))

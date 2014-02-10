@@ -4025,6 +4025,57 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+	
+	<tag>
+		<name>extendlabel</name>
+		<tagclass>com.frameworkset.common.tag.html.ExtendLableTag</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<!-- 
+			扩展字段所属文档对象所处层级
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!-- 
+			扩展字段名称
+		-->
+		<attribute>
+			<name>field</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		
+	</tag>
+	<tag>
+		<name>extends</name>
+		<tagclass>com.frameworkset.common.tag.html.DocExtends</tagclass>
+		<bodycontent>JSP</bodycontent>
+		<!-- 
+			扩展字段所属文档对象所处层级
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<!-- 
+			扩展字段名称
+		-->
+		<attribute>
+			<name>field</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		
+	</tag>
 	<!-- 
 		文档表扩展字段的值获取的标签
 	-->

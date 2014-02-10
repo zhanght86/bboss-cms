@@ -3,7 +3,9 @@ package com.frameworkset.platform.cms.customform;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -688,5 +690,163 @@ public class CustomFormManagerImpl implements CustomFormManager
 		return flag;
 		
 	}
+	
+	/**
+	 * //站点or频道 1：站点 2：频道
+		String type = request.getParameter("type");
+		//站点id or 频道id
+		String id = request.getParameter("id");
+		String docid = request.getParameter("docid");
+	 * @throws CustomFormManagerException 
+	 */
+	public List<DocExtField> getDataFieldList(String type,String id,String docid ) throws CustomFormManagerException 
+	{
+		
+		
+//		//站点or频道 1：站点 2：频道
+//		String type = request.getParameter("type");
+//		//站点id or 频道id
+//		String id = request.getParameter("id");
+//		String docid = request.getParameter("docid");
+		
+		
+		
+			
+			
+			try 
+			{
+				DBUtil dbUtil = new DBUtil();
+				String sql = "";
+				//站点
+				if("1".equals(type))
+					sql = "select * from td_cms_extfield order by field_id asc";
+				//频道
+				if("2".equals(type))
+				{
+					if(StringUtil.isEmpty(docid))
+					{
+						sql = "select * from td_cms_extfield a where a.field_id " +
+							"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + " and b.field_owner=0 )" +
+							" order by a.field_id asc";
+					}
+					else
+					{
+						sql = "select * from td_cms_extfield a where a.field_id " +
+								"in (select b.field_id from td_cms_channelfield b where (b.channel_id = " + id + " and b.field_owner=0) or (b.channel_id = " + docid + " and b.field_owner=1) )" +
+								" order by a.field_id asc";
+					}
+				}
+				dbUtil.executeSelect(sql);
+				List<DocExtField> list = new ArrayList<DocExtField>();
+				
+				for (int i = 0; i < dbUtil.size(); i++) 
+				{
+					
+//					t.fieldname t.fieldlabel t.fielddesc t.fieldtype t.maxlen t.inputtype
+					DocExtField docExtField = new DocExtField();
+					
+					docExtField.setFieldId(dbUtil.getInt(i,"field_id"));
+					docExtField.setFieldName(dbUtil.getString(i,"fieldname"));
+					docExtField.setFieldLable(dbUtil.getString(i,"fieldlabel"));
+					docExtField.setFieldDesc(dbUtil.getString(i,"fielddesc"));
+					docExtField.setFieldType(dbUtil.getString(i,"fieldtype"));
+					docExtField.setMaxlen(dbUtil.getInt(i,"maxlen"));
+					docExtField.setInputType(dbUtil.getInt(i,"inputtype"));
+					docExtField.setField_owner(dbUtil.getInt(i, "field_owner"));
+					
+					
+					list.add(docExtField);
+				}
+				
+				return list;
+			}
+			catch (Exception e) 
+			{
+				
+				throw new CustomFormManagerException(e);
+			}
+		
+	
+	}
+	
+	/**
+	 * //站点or频道 1：站点 2：频道
+		String type = request.getParameter("type");
+		//站点id or 频道id
+		String id = request.getParameter("id");
+		String docid = request.getParameter("docid");
+	 * @throws CustomFormManagerException 
+	 */
+	public Map<String,DocExtField> getDataFieldMap(String type,String id,String docid ) throws CustomFormManagerException 
+	{
+		
+		
+//		//站点or频道 1：站点 2：频道
+//		String type = request.getParameter("type");
+//		//站点id or 频道id
+//		String id = request.getParameter("id");
+//		String docid = request.getParameter("docid");
+		
+		
+		
+			
+			
+			try 
+			{
+				DBUtil dbUtil = new DBUtil();
+				String sql = "";
+				//站点
+				if("1".equals(type))
+					sql = "select * from td_cms_extfield order by field_id asc";
+				//频道
+				if("2".equals(type))
+				{
+					if(StringUtil.isEmpty(docid))
+					{
+						sql = "select * from td_cms_extfield a where a.field_id " +
+							"in (select b.field_id from td_cms_channelfield b where b.channel_id = " + id + " and b.field_owner=0 )" +
+							" order by a.field_id asc";
+					}
+					else
+					{
+						sql = "select * from td_cms_extfield a where a.field_id " +
+								"in (select b.field_id from td_cms_channelfield b where (b.channel_id = " + id + " and b.field_owner=0) or (b.channel_id = " + docid + " and b.field_owner=1) )" +
+								" order by a.field_id asc";
+					}
+				}
+				dbUtil.executeSelect(sql);
+				 Map<String,DocExtField> list = new HashMap<String,DocExtField>();
+				
+				for (int i = 0; i < dbUtil.size(); i++) 
+				{
+					
+//					t.fieldname t.fieldlabel t.fielddesc t.fieldtype t.maxlen t.inputtype
+					DocExtField docExtField = new DocExtField();
+					
+					docExtField.setFieldId(dbUtil.getInt(i,"field_id"));
+					docExtField.setFieldName(dbUtil.getString(i,"fieldname"));
+					docExtField.setFieldLable(dbUtil.getString(i,"fieldlabel"));
+					docExtField.setFieldDesc(dbUtil.getString(i,"fielddesc"));
+					docExtField.setFieldType(dbUtil.getString(i,"fieldtype"));
+					docExtField.setMaxlen(dbUtil.getInt(i,"maxlen"));
+					docExtField.setInputType(dbUtil.getInt(i,"inputtype"));
+					docExtField.setField_owner(dbUtil.getInt(i, "field_owner"));
+					
+					
+					list.put(docExtField.getFieldName(),docExtField);
+				}
+				
+				return list;
+			}
+			catch (Exception e) 
+			{
+				
+				throw new CustomFormManagerException(e);
+			}
+		
+	
+	}
+	
+	
 
 }

@@ -8,6 +8,8 @@ import java.util.Date;
  */
 public class DocExtValue {
 	private String field;
+	private String label;
+	private boolean processed = false;
 	public String getField() {
 		return field;
 	}
@@ -49,5 +51,17 @@ public class DocExtValue {
 	private String stringvalue;
 	private String fieldtype;
 	private int intvalue;
+	public boolean isProcessed() {
+		return processed;
+	}
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
 }
