@@ -85,6 +85,11 @@
 		$.dialog({ title:"新增文档-"+channelName,width:width,height:600, content:'url:'+url,lock: true,maxState:true}); 	
 		
 	}
+	function maintainext(docid,docname)
+	{
+		
+		$.dialog({ title:"管理文档扩展字段-"+docname,width:800,height:600, content:'url:<%=request.getContextPath()%>/cms/docManage/doc_extfieldofsiteorchl_list.jsp?type=3&id='+docid,lock: true,maxState:true}); 	
+	}
 	function modifyQueryData()
 	{
 		window.location.reload();
@@ -918,7 +923,14 @@
 						menu.addContextMenuItem(menuitem10);
 						
 						
-						
+						if(docTypeFlag == 0)//管理文档扩展字段
+						{
+							Menu.ContextMenuItem menuitemext = new Menu.ContextMenuItem();
+							menuitemext.setName("扩展字段管理");
+							menuitemext.setLink("javascript:maintainext('" + docId + "','" + docName +"')");
+							menuitemext.setIcon(request.getContextPath() +"/sysmanager/images/rightMemu/doc_bbgl.gif");
+							menu.addContextMenuItem(menuitemext);
+						}
 						contextmenu.addContextMenu(menu);
                         int num = dataSet.getRowid();
                         
