@@ -13,10 +13,12 @@
 	String resTypeId2 = request.getParameter("resTypeId2");
 	String resTypeName = request.getParameter("resTypeName");
 	String title = request.getParameter("title");
+	String isGlobal=request.getParameter("isGlobal");
+	if(isGlobal == null) isGlobal = "false";
 %>
 <html>
 <head>
 <title>授予角色</title>
 </head>
-<iframe src="../../sysmanager/resmanager/hasPower_ajax.jsp?resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>"  border=0 scrolling="no" id="docVerListFrame" name="docVerListFrame" height="100%" width="100%"></iframe>
+<iframe src="../../sysmanager/resmanager/hasPower_ajax.jsp?isGlobal=<%=isGlobal%>&resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>"  border=0 scrolling="no" id="docVerListFrame" name="docVerListFrame" height="100%" width="100%"></iframe>
 </html>

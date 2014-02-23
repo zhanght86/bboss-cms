@@ -18,13 +18,15 @@
 	
 	String resName2 = request.getParameter("resName2");
 	String isBatch = request.getParameter("isBatch");
+	String isGlobal=request.getParameter("isGlobal");
+	if(isGlobal == null) isGlobal = "false";
 %>
 <html>
 <head>
 <title>授予组织</title>
 </head>
 	<frameset cols="25%,*" border=0>
-		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_org_tree" src="res_org_tree.jsp?resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName2 %>&isBatch=<%=isBatch %>">
+		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_org_tree" src="res_org_tree.jsp?isGlobal=<%=isGlobal%>&resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName2 %>&isBatch=<%=isBatch %>">
 		</frame>
 		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_org_list" src="../userorgmanager/org/properties_content.jsp">
 		</frame>

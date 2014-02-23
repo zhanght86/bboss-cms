@@ -1,5 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.annotations.ResponseBody;
 
@@ -16,6 +18,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.RoleCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.StringUtil;
+import com.frameworkset.util.ValueObjectUtil;
 
 /**
  * <p>
@@ -256,6 +259,29 @@ public  class CacheController {
 		
 		if(errorMessage.length() == 0)
 			errorMessage.append("清除数据库元数据缓存成功");
+		return errorMessage.toString();		
+		
+		
+		
+		
+		
+		
+	}
+	
+	public @ResponseBody String synAll()
+	{
+		StringBuffer errorMessage = new StringBuffer();
+		try {
+			BaseApplicationContext context = DefaultApplicationContext.getApplicationContext("bboss-masterdata-humanResource.xml");
+			Object task = context.getBeanObject("masterdata.hrSyncTask");
+			ValueObjectUtil.invoke(task, "syncAllData", null);
+//			task.syncAllData();//同步用户数据
+		} catch (Exception e) {
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		
+		if(errorMessage.length() == 0)
+			errorMessage.append("同步用户组织岗位数据成功");
 		return errorMessage.toString();		
 		
 		

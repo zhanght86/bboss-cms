@@ -1,7 +1,6 @@
 package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +13,8 @@ import org.apache.log4j.Logger;
 import org.frameworkset.persitent.util.SQLUtil;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
-import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
-import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -46,7 +43,7 @@ import com.frameworkset.util.ListInfo;
  * @author feng.jing
  * @version 1.0
  */
-public class UserSearchList extends DataInfoImpl implements Serializable{
+public class UserSearchList extends DataInfoImpl{
    
     private static final Logger log = Logger.getLogger(UserSearchList.class);
     static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml");
@@ -204,12 +201,12 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 //  		
 //  	}
 	
-	public static List<User> getSearchUser(HttpServletRequest request,String parent_id)
+	public static List<UserJobs> getSearchUser(HttpServletRequest request,String parent_id)
 	{
 		ListInfo listInfo = sortUser1(request,parent_id,-1,-1);
 		if(listInfo != null)
 			return listInfo.getDatas();
-		return new ArrayList<User>();
+		return new ArrayList<UserJobs>();
 	}
 	public static ListInfo sortUser1(HttpServletRequest request,String parent_id,long offset,
 			int maxPagesize) {
@@ -342,7 +339,9 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
             
            
             try {
-                listinfo = getUserList(userInfoForm,  offset, maxPagesize);
+            	String userMore = request.getParameter("userMore");
+            	boolean userMore_ = userMore != null && userMore.equals("true");
+                listinfo = getUserList(userInfoForm,  offset, maxPagesize,userMore_);
             } catch (ManagerException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -739,20 +738,27 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 		}
 		return null;
 	}
+	public static ListInfo getUserList(UserInfoForm userInfoForm, long offset, int maxItem)
+	throws ManagerException {
+		return getUserList(userInfoForm, offset, maxItem,false);
+		
+	}
 	/**
 	 * modify by ge.tao 2007-09-07 新增了 函数 getUserorginfos 用户管理 列表
 	 */
-	public static ListInfo getUserList(UserInfoForm userInfoForm, long offset, int maxItem)
+	public static ListInfo getUserList(UserInfoForm userInfoForm, long offset, int maxItem,boolean userMore)
 			throws ManagerException {
-	
+		
 		TransactionManager tm = new TransactionManager();
 		try {
 			 final UserManager userManager = SecurityDatabase.getUserManager();
-			tm.begin(TransactionManager.RW_TRANSACTION);
+			tm.begin();
+			
 			ListInfo listInfo = null;
 			if(offset < 0)
 			{
-				listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<UserJobs>(){
+				listInfo = new ListInfo(); 
+				List data = executor.queryListBeanByRowHandler(new RowHandler<UserJobs>(){
 
 					@Override
 					public void handleRow(UserJobs uj, Record record)
@@ -783,6 +789,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 						uj.setUserEmail(record.getString( "USER_EMAIL"));
 						uj.setUserSex(record.getString( "USER_SEX"));
 						uj.setUser_isvalid(record.getString( "USER_ISVALID"));
+						uj.setUSER_IDCARD(record.getString("USER_IDCARD"));
+						uj.setWorkNumber(record.getString("USER_WORKNUMBER"));
 						uj.setUser_regdate(record.getString("USER_REGDATE"));
 						uj.setDredge_time(record.getString( "DREDGE_TIME"));
 						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
@@ -803,7 +811,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 						
 					}
 					
-				}, UserJobs.class, "usersearchlist_sortUser_simple",0,100,userInfoForm);
+				}, UserJobs.class, "usersearchlist_sortUser_simple",userInfoForm);
+				listInfo.setDatas(data);
 //				listInfo = new ListInfo();
 //				listInfo.setDatas(list);
 //				listInfo.setTotalSize(list.size());
@@ -811,57 +820,118 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 			}
 			else
 			{
-				listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<UserJobs>(){
-
-					@Override
-					public void handleRow(UserJobs uj, Record record)
-							throws Exception {
-						int userid = record.getInt("user_id");
-//						String str = "select getuserorgjobinfos('" + userid
-//								+ "') as org from dual";
-//						db.executeSelect(str);
-//						if (db.size() > 0) {
-//							orgjob = db.getString(0, "org");
-//							if (orgjob.endsWith("、")) {
-//								orgjob = orgjob.substring(0, orgjob.length() - 1);
-//							}
-//						}
-
-						String orgjob = FunctionDB.getUserorgjobinfos(userid);
-						if(orgjob.endsWith("、"))
-						{
-							orgjob = orgjob.substring(0, orgjob.length() - 1);
+				if(!userMore)
+				{
+					listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<UserJobs>(){
+	
+						@Override
+						public void handleRow(UserJobs uj, Record record)
+								throws Exception {
+							int userid = record.getInt("user_id");
+	//						String str = "select getuserorgjobinfos('" + userid
+	//								+ "') as org from dual";
+	//						db.executeSelect(str);
+	//						if (db.size() > 0) {
+	//							orgjob = db.getString(0, "org");
+	//							if (orgjob.endsWith("、")) {
+	//								orgjob = orgjob.substring(0, orgjob.length() - 1);
+	//							}
+	//						}
+	
+							String orgjob = FunctionDB.getUserorgjobinfos(userid);
+							if(orgjob.endsWith("、"))
+							{
+								orgjob = orgjob.substring(0, orgjob.length() - 1);
+							}
+							
+							
+							uj.setUserId(new Integer(userid));
+							uj.setUserName(record.getString( "USER_NAME"));
+							uj.setUserRealname(record.getString( "USER_REALNAME"));
+							uj.setUserMobiletel1(record.getString( "USER_MOBILETEL1"));
+							uj.setUserType(record.getString("USER_TYPE"));
+							uj.setUserEmail(record.getString( "USER_EMAIL"));
+							uj.setUserSex(record.getString( "USER_SEX"));
+							uj.setUser_isvalid(record.getString( "USER_ISVALID"));
+							uj.setUser_regdate(record.getString("USER_REGDATE"));
+							uj.setDredge_time(record.getString( "DREDGE_TIME"));
+							uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
+							uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
+							uj.setPasswordDualedTime(record.getInt("Password_DualTime"));
+							uj.setUSER_IDCARD(record.getString("USER_IDCARD"));
+							uj.setWorkNumber(record.getString("USER_WORKNUMBER"));
+							uj.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(uj.getPasswordUpdatetime(),uj.getPasswordDualedTime()));
+	//						try{
+	//							orgjob = dbUtil.getString(i, "org_job");
+	//						}catch(Exception e){
+	//							orgjob = "";
+	//						}
+							uj.setOrgName(orgjob);
+							uj.setJobName(orgjob);
+							uj.setOrg_Name(orgjob);
+							//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
+							uj.setOrgId(record.getString( "org_id"));
+							
 						}
 						
+					},UserJobs.class, "usersearchlist_sortUser_simple", offset, maxItem,userInfoForm);
+				}
+				else
+				{
+					listInfo = executor.moreListInfoBeanByRowHandler(new RowHandler<UserJobs>(){
 						
-						uj.setUserId(new Integer(userid));
-						uj.setUserName(record.getString( "USER_NAME"));
-						uj.setUserRealname(record.getString( "USER_REALNAME"));
-						uj.setUserMobiletel1(record.getString( "USER_MOBILETEL1"));
-						uj.setUserType(record.getString("USER_TYPE"));
-						uj.setUserEmail(record.getString( "USER_EMAIL"));
-						uj.setUserSex(record.getString( "USER_SEX"));
-						uj.setUser_isvalid(record.getString( "USER_ISVALID"));
-						uj.setUser_regdate(record.getString("USER_REGDATE"));
-						uj.setDredge_time(record.getString( "DREDGE_TIME"));
-						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
-						uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
-						uj.setPasswordDualedTime(record.getInt("Password_DualTime"));
-						uj.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(uj.getPasswordUpdatetime(),uj.getPasswordDualedTime()));
-//						try{
-//							orgjob = dbUtil.getString(i, "org_job");
-//						}catch(Exception e){
-//							orgjob = "";
-//						}
-						uj.setOrgName(orgjob);
-						uj.setJobName(orgjob);
-						uj.setOrg_Name(orgjob);
-						//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
-						uj.setOrgId(record.getString( "org_id"));
+						@Override
+						public void handleRow(UserJobs uj, Record record)
+								throws Exception {
+							int userid = record.getInt("user_id");
+	//						String str = "select getuserorgjobinfos('" + userid
+	//								+ "') as org from dual";
+	//						db.executeSelect(str);
+	//						if (db.size() > 0) {
+	//							orgjob = db.getString(0, "org");
+	//							if (orgjob.endsWith("、")) {
+	//								orgjob = orgjob.substring(0, orgjob.length() - 1);
+	//							}
+	//						}
+	
+							String orgjob = FunctionDB.getUserorgjobinfos(userid);
+							if(orgjob.endsWith("、"))
+							{
+								orgjob = orgjob.substring(0, orgjob.length() - 1);
+							}
+							
+							
+							uj.setUserId(new Integer(userid));
+							uj.setUserName(record.getString( "USER_NAME"));
+							uj.setUserRealname(record.getString( "USER_REALNAME"));
+							uj.setUserMobiletel1(record.getString( "USER_MOBILETEL1"));
+							uj.setUserType(record.getString("USER_TYPE"));
+							uj.setUserEmail(record.getString( "USER_EMAIL"));
+							uj.setUserSex(record.getString( "USER_SEX"));
+							uj.setUser_isvalid(record.getString( "USER_ISVALID"));
+							uj.setUser_regdate(record.getString("USER_REGDATE"));
+							uj.setDredge_time(record.getString( "DREDGE_TIME"));
+							uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
+							uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
+							uj.setPasswordDualedTime(record.getInt("Password_DualTime"));
+							uj.setUSER_IDCARD(record.getString("USER_IDCARD"));
+							uj.setWorkNumber(record.getString("USER_WORKNUMBER"));
+							uj.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(uj.getPasswordUpdatetime(),uj.getPasswordDualedTime()));
+	//						try{
+	//							orgjob = dbUtil.getString(i, "org_job");
+	//						}catch(Exception e){
+	//							orgjob = "";
+	//						}
+							uj.setOrgName(orgjob);
+							uj.setJobName(orgjob);
+							uj.setOrg_Name(orgjob);
+							//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
+							uj.setOrgId(record.getString( "org_id"));
+							
+						}
 						
-					}
-					
-				},UserJobs.class, "usersearchlist_sortUser_simple", offset, maxItem,userInfoForm);
+					},UserJobs.class, "usersearchlist_sortUser_simple", offset, maxItem,userInfoForm);
+				}
 //				dbUtil.executeSelect(sql, offset, maxItem);
 			}
 				
@@ -957,7 +1027,8 @@ public class UserSearchList extends DataInfoImpl implements Serializable{
 	
 	
 	protected ListInfo getDataList(String arg0, boolean arg1) {
-		return null;
+		return sortUser1(request,"0", -1,
+   			 -1);
 	}
 	
 	/**

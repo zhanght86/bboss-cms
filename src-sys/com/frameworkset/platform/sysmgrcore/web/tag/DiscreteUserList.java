@@ -29,7 +29,7 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 		try {
 			String userName = request.getParameter("userName");
 			String userRealname = request.getParameter("userRealname");
-			StringBuffer hsql = new StringBuffer("select user_id,user_name,user_realname,user_type,user_email,PASSWORD_UPDATETIME from td_sm_user  user0_ where 1=1 ");
+			StringBuffer hsql = new StringBuffer("select user0_.* from td_sm_user  user0_ where 1=1 ");
 			if (userName != null && userName.length() > 0) {
 				hsql.append(" and user_name like '%" + userName + "%' ");
 			}
@@ -57,6 +57,9 @@ public class DiscreteUserList extends DataInfoImpl implements Serializable {
 				user.setUserRealname(dbUtil.getString(i, "user_realname"));
 				user.setUserType(dbUtil.getString(i, "user_type"));
 				user.setUserEmail(dbUtil.getString(i, "user_email"));
+				user.setUserIdcard(dbUtil.getString(i,"USER_IDCARD"));
+				user.setUserWorknumber(dbUtil.getString(i,"USER_WORKNUMBER"));
+				user.setUserMobiletel1(dbUtil.getString(i,"USER_MOBILETEL1"));
 				user.setPasswordUpdatetime(dbUtil.getTimestamp(i,"password_updatetime"));
 				user.setPasswordDualedTime(dbUtil.getInt(i, "Password_DualTime"));
 				user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));

@@ -38,7 +38,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mina.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mvc.jar" sourcepath="/bboss-mvc"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rmi.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-schedule.jar" sourcepath="/bbossaop"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-schedule.jar" sourcepath="/bboss-schedule"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-soa.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-tlq.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-ws.jar"/>
@@ -75,21 +75,17 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/icu4j-4_2_1.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/itext-2.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iTextAsian.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iWebFile2005.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaas.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-all-1.6.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-3.0.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasypt-1.6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javassist.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaxen.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcommon-1.0.13.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcs-1.0-dev.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/je.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.10.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgraph.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgroups.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jh.jar"/>
@@ -156,7 +152,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-velocity.jar" sourcepath="/bboss-velocity"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-wordpdf.jar" sourcepath="/bboss-plugin-wordpdf"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bsh-2.0b4.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-1.8.6.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-1.8.6.jar" sourcepath="F:/开源项目/quartz/quartz-1.8.6/quartz-1.8.6/quartz"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-hessian.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jodconverter-core.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.7.jar"/>
@@ -188,5 +184,12 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3.jar" sourcepath="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="C:/mobile/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-applet-5.5.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-fonts-5.5.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-javaflow-5.5.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcommon-1.0.15.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.12.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-2.1.7.js2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

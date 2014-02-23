@@ -577,6 +577,11 @@ public class AccessControl implements AccessControlInf{
 		}
 		
 	}
+	
+	public static AccessControl getGuest()
+	{
+		return guest;
+	}
 
 	/**
 	 * CS和BS单点登录参数

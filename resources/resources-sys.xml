@@ -24,14 +24,40 @@
 	</operations>
 	
 	<group id="testgroup" name="测试权限组" >
-        <operation id="read" priority="10" name="可读" />
+        <operation id="read" priority="10" name="可读">
+        	<authoration>		 	
+			 	<url>/test/testresopurlpermissionread.jsp</url>
+			</authoration>
+        </operation>
 		<operation id="write" priority="20" name="可写" />
 		<operation id="delete" priority="30" name="删除" />
 		<operation id="add" priority="30" name="添加" />
      </group>
+     <group id="globaltestgroup" name="全局测试权限组" >
+        <operation id="read" priority="10" name="可读" >
+        	<!-- 
+        		
+        	 -->
+        	<authoration>		 	
+			 	<url>/test/testopurlpermissionread.jsp</url>
+			</authoration>
+        </operation>
+		
+		<operation id="delete" priority="30" name="删除" >
+		    <!-- 
+        		只有全局操作才允许配置权限url
+        	 -->
+			<authoration>				 
+			 	<url>/test/testopurlpermissiondelete.jsp</url>
+			</authoration>
+		</operation>
+		
+     </group>
 	<resource id="testresource" name="测试资源" auto="false" system="cms,module,esb,dp,sanylog">
 	<!--定义资源操作组-->
-	<operationgroup groupid="testgroup"/>
+		<operationgroup groupid="testgroup"/>
+	<!-- 字典资源全局操作组 -->
+		<globaloperationgroup globalresourceid="globaltest" groupid="globaltestgroup"/>
 	</resource>
 
 	<resource id="dict" name="字典定义资源" i18n:en_US="Dictionary Resource" class="resDictTree.jsp" auto="true" system="module,dp,sanylog">

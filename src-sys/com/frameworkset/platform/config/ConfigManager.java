@@ -38,9 +38,15 @@ import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.config.model.Resources;
 import com.frameworkset.platform.config.model.ScheduleServiceInfo;
 import com.frameworkset.platform.config.model.TaskServiceInfo;
+import com.frameworkset.platform.security.AuthorResource;
+import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
 import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
 import com.frameworkset.platform.security.authorization.impl.PermissionRoleMap;
+import com.frameworkset.platform.security.authorization.impl.PermissionToken;
+import com.frameworkset.platform.security.authorization.impl.PermissionTokenMap;
 import com.frameworkset.platform.security.context.AccessContext;
+import com.frameworkset.platform.sysmgrcore.entity.Res;
+import com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl;
 import com.frameworkset.spi.assemble.CurrentlyInCreationException;
 import com.frameworkset.util.ResourceInitial;
 
@@ -128,11 +134,12 @@ public class ConfigManager implements ResourceInitial {
             return instance;
         }
         instance = new ConfigManager();
+        instance.init();
         return instance;
     }
 
     /**根据应用和应用模块建立的安全信息索引*/
-    private Map ApplicationInfos;
+    private Map<String,ApplicationInfo> ApplicationInfos;
 
     private ApplicationInfo defaultApplicationInfo;
 
@@ -262,13 +269,136 @@ public class ConfigManager implements ResourceInitial {
         this.systemInits = handler.getSystemInits();
         boolean enablejobfunction = ConfigManager.getInstance().getConfigBooleanValue("enablejobfunction",true);
         LinkConfigFile linkconfigFile = new LinkConfigFile(url,configFile,null);
-        
+       
         
         loadImportMangers(linkconfigFile);
         if(!enablejobfunction)
         	this.removeResourceInfoByType("job");
+        buildPermissionTokenMap();
 
     }
+    
+    private void  buildResourcePermissionTokenMap(String appName,String moduleName,ResourceInfo resource )
+    {	
+    	PermissionTokenMap permissionTokenMap = AppSecurityCollaborator.getInstance().getPermissionTokenMap();
+    	OperationQueue globalOperationQueue = resource.getGlobalOperationQueue();
+    	String resourceType = resource.getId();
+    	String region = appName+"_"+moduleName;
+    	if(globalOperationQueue != null && globalOperationQueue.size() > 0)
+    	{
+    		String gid = resource.getGlobalresourceid();
+    		for(int i = 0; i < globalOperationQueue.size(); i ++)
+    		{
+    			Operation op = globalOperationQueue.getOperation(i);
+    			AuthorResource ar = op.getAuthorResource();
+    			if(ar != null)
+    			{
+    				List<String> ars = ar.getAuthorResources();
+    				for(int j = 0; ars != null && j < ars.size(); j ++)
+    				{
+    					PermissionToken token = new PermissionToken(resourceType, gid,
+    							op.getId());
+    					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
+    				}
+    			}
+    		}
+    		
+    	}
+    	if(!resource.isAuto())//可维护资源
+    	{
+    		
+    		OperationQueue operationQueue = resource.getOperationQueue();
+    		List<Res> dbres = null;
+    		ResManagerImpl resManagerImpl = new ResManagerImpl();
+			try {
+				dbres = resManagerImpl.getChildResListByType(resourceType);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(dbres == null || dbres.size() == 0)
+				return ;
+    		if(operationQueue != null && operationQueue.size() > 0)
+    		{ 
+    			for(int i = 0; i < operationQueue.size(); i ++)
+    			{
+    				Operation op = operationQueue.getOperation(i);
+        			AuthorResource ar = op.getAuthorResource();
+        			if(ar != null)
+        			{
+        				List<String> ars = ar.getAuthorResources();
+        				
+        				for(int j = 0; ars != null && j < ars.size(); j ++)
+        				{
+        					for(int k = 0; dbres != null && k < dbres.size(); k ++)
+        					{
+        						Res dr = dbres.get(k);
+        						PermissionToken token = new PermissionToken(resourceType, dr.getTitle(),
+            							op.getId());
+            					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
+        					}
+        					
+        				}
+        			}
+    			}
+    		}
+    	}
+    }
+    private void  buildModulePermissionTokenMap(String appName,String moduleName,Resources resources )
+    {	
+    	if(resources == null)
+    		return ;
+    	ResourceInfoQueue rq = resources.getResourceQueue();
+    	for(int i = 0; rq != null && i < rq.size(); i ++)
+    	{
+    		if(i == 47)
+    		{
+    			System.out.println();
+    		}
+    		ResourceInfo res = rq.getResourceInfo(i);
+    		buildResourcePermissionTokenMap(appName, moduleName, res );
+    	}
+		
+		
+    }
+    
+    private void  buildAppPermissionTokenMap(String appName,ApplicationInfo applicationInfo )
+    {
+    	if(applicationInfo == null)
+    		return;
+    	Map<String,Resources> aa = applicationInfo.getResourcsIndexByModule();
+    	if(aa == null)
+    		return;
+    	Iterator<Map.Entry<String,Resources>> entrySet = aa.entrySet().iterator();
+		while(entrySet.hasNext())
+		{
+			Map.Entry<String,Resources> entry = entrySet.next();
+			Resources item = entry.getValue();
+			String moduleName = entry.getKey();
+			buildModulePermissionTokenMap( appName, moduleName, item );
+		}
+		
+    }
+    private PermissionTokenMap buildPermissionTokenMap()
+	{
+		PermissionTokenMap permissionTokenMap = AppSecurityCollaborator.getInstance().getPermissionTokenMap();
+	
+		if(this.ApplicationInfos != null && this.ApplicationInfos.size() > 0)
+		{
+//			permissionTokenMap.resetPermissionByRegion("column", this.getSystemid());
+			Iterator<Map.Entry<String,ApplicationInfo>> entrySet = ApplicationInfos.entrySet().iterator();
+			while(entrySet.hasNext())
+			{
+				Map.Entry<String,ApplicationInfo> entry = entrySet.next();
+				ApplicationInfo item = entry.getValue();
+				String appName = entry.getKey();
+				buildAppPermissionTokenMap( appName, item );
+			}
+				
+		}
+		return permissionTokenMap ;
+	}
 
     /**
      * 装载每个应用导入的管理服务

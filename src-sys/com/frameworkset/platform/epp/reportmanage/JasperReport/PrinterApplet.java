@@ -3,11 +3,15 @@ package com.frameworkset.platform.epp.reportmanage.JasperReport;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import javax.swing.JOptionPane;
 
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperPrintManager;
+import net.sf.jasperreports.engine.print.JRPrinterAWT;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 
@@ -93,11 +97,27 @@ public class PrinterApplet extends javax.swing.JApplet
 	}//GEN-END:initComponents
 
 	protected void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-		viewReport();
+		
+		AccessController.doPrivileged(
+			      new PrivilegedAction<Object>() {
+			          public JasperPrint run() {
+			        	  viewReport();
+			        	  return null;
+			          }
+			        }
+			     );
 	}//GEN-LAST:event_btnViewActionPerformed
 
 	protected void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-		printReport();
+		
+		AccessController.doPrivileged(
+			      new PrivilegedAction<Object>() {
+			          public JasperPrint run() {
+			        	  printReport();
+			        	  return null;
+			          }
+			        }
+			     );
 	}//GEN-LAST:event_btnPrintActionPerformed
 	
 	
@@ -106,9 +126,28 @@ public class PrinterApplet extends javax.swing.JApplet
 	private javax.swing.JButton btnView;
 	private javax.swing.JButton btnPrint;
 	// End of variables declaration//GEN-END:variables
-	
+	private JasperPrint getPrint()
+	{
+		JasperPrint jasperPrint = AccessController.doPrivileged(
+			      new PrivilegedAction<JasperPrint>() {
+			          public JasperPrint run() {
+			        	  JasperPrint jasperPrint = null;
+						try {
+							jasperPrint = (JasperPrint)JRLoader.loadObject(url);
+						} catch (JRException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+			        	  return jasperPrint;
+			          }
+			        }
+			     );
+		return jasperPrint;
+		
+	}
 	public void printReport()
 	{
+		
 		//Add your handling code here:
 		if (url != null)
 		{
@@ -116,7 +155,8 @@ public class PrinterApplet extends javax.swing.JApplet
 			{
 				try
 				{
-					jasperPrint = (JasperPrint)JRLoader.loadObject(url);
+//					jasperPrint = (JasperPrint)JRLoader.loadObject(url);
+					jasperPrint = getPrint();
 				}
 				catch (Exception e)
 				{
@@ -124,6 +164,7 @@ public class PrinterApplet extends javax.swing.JApplet
 					PrintWriter pwriter = new PrintWriter(swriter);
 					e.printStackTrace(pwriter);
 					e.printStackTrace();
+					swriter.write(url.getFile());
 					JOptionPane.showMessageDialog(this, swriter.toString());
 				}
 			}
@@ -131,7 +172,6 @@ public class PrinterApplet extends javax.swing.JApplet
 			if (jasperPrint != null)
 			{				
 				final JasperPrint print = jasperPrint;
-				
 				Thread thread = new Thread
 					(
 						new Runnable()
@@ -140,7 +180,20 @@ public class PrinterApplet extends javax.swing.JApplet
 							{
 								try 
 								{
-									JasperPrintManager.printReport(print, true);
+									
+									AccessController.doPrivileged(
+										      new PrivilegedAction<Object>() {
+										          public JasperPrint run() {
+										        	  try {
+														JasperPrintManager.printReport(print, true);
+													} catch (JRException e) {
+														// TODO Auto-generated catch block
+														e.printStackTrace();
+													}
+										        	  return null;
+										          }
+										        }
+										     );
 								}
 								catch (Exception e) 
 								{
@@ -175,7 +228,7 @@ public class PrinterApplet extends javax.swing.JApplet
 			{
 				if (jasperPrint == null)
 				{
-					jasperPrint = (JasperPrint)JRLoader.loadObject(url);
+					jasperPrint = getPrint();
 				}
 				if (jasperPrint != null)
 				{

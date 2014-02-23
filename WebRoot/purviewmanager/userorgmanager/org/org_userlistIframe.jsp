@@ -272,6 +272,9 @@
 							</th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.login.name"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.real.name"/></th>
+							<th onclick="sortBy('userName')">工号</th>
+							<th onclick="sortBy('userName')">身份证</th>
+							<th onclick="sortBy('userName')">电话</th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.sex"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.category"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.common.status"/></th>
@@ -682,6 +685,13 @@
 								<td id="opuser_<%=userId%>" bgcolor="#F6FFEF">
 									<pg:cell colName="userRealname" defaultValue="" /><%=isRoleAdminOrOrgManager %>
 								</td>
+								<td><pg:cell colName="workNumber"
+										defaultValue="" /></td>
+								<td><pg:cell colName="USER_IDCARD"
+										defaultValue="" /></td>
+								<td><pg:cell colName="userMobiletel1"
+										defaultValue="" /></td>										
+										
 								<td><dict:itemname type="sex"
 										expression="{userSex}" /></td>
 								<td><dict:itemname type="userType" expression="{userType}" />
@@ -709,6 +719,12 @@
 								<td id="opuser_<%=userId%>" bgcolor="#F6FFEF">
 									<font color="red"><pg:cell colName="userRealname" defaultValue="" /><%=isRoleAdminOrOrgManager%></font>
 								</td>
+								<td><pg:cell colName="workNumber"
+										defaultValue="" /></td>
+								<td><pg:cell colName="USER_IDCARD"
+										defaultValue="" /></td>
+								<td><pg:cell colName="userMobiletel1"
+										defaultValue="" /></td>		
 								<td><dict:itemname type="sex" expression="{userSex}" /></td>
 								<td><dict:itemname type="userType" expression="{userType}" /></td>
 								<td><dict:itemname type="isvalid" expression="{user_isvalid}" /></td>

@@ -14,6 +14,8 @@
  */
 package com.sany.masterdata.hr.sync;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +26,11 @@ import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.manager.LogManager;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmPosition;
 import com.sany.masterdata.utils.MDPropertiesUtil;
@@ -57,6 +64,56 @@ public class SyncJobInfo {
      */
     public void syncAllData() {
         logger.info("Sync job info started...");
+        String machinid = "";
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			 String ip=addr.getHostAddress().toString();//获得本机IP　　
+		     String address=addr.getHostName().toString();//获得本机名称
+		     machinid = ip + "-"+address;
+		     
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+       
+        try {
+			LogManager logMgr = SecurityDatabase.getLogManager();
+			
+//			String operContent = userName + "[" + userId + "] 退出["
+//					+ subsystem + "]";
+			// modified by hilary on 20101105,for fixing bug 13979,for logout's log  and login's log has same manner
+			AccessControl control = AccessControl.getAccessControl();
+			String userAccount = "";
+			String operContent = "";
+			String machineID = "";
+			String orgID = "";
+			if(control == AccessControl.getGuest())
+			{
+				userAccount = "Quartz定时任务";
+				operContent = userAccount + "同步岗位数据开始";
+				machineID = machinid;
+			}
+			else
+			{
+				userAccount = control.getUserAccount();
+				String userName = control.getUserName();
+				String subsystem = control.getCurrentSystemName();
+				machineID = control.getMachinedID();
+				operContent = userAccount + "(" + userName + ") 从[" + subsystem + "]同步岗位数据开始";
+			}
+			
+//			String operContent = userAccount + "(" + userName + ") 退出[" + subsystem + "]";
+			
+			String operSource = machineID;
+			String operModle = "主数据同步";
+			logMgr.log(userAccount,orgID,operModle,  operSource,
+					operContent ,"", Log.INSERT_OPER_TYPE);		
+			
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
+		boolean isfailed = false;
+		String error = "";
         try {
             List<MdmPosition> jobList = mdmService.getPositionList("19000101", "99000101", "1", "99999999");
             Set<String> orgKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmJobKey"));
@@ -116,7 +173,8 @@ public class SyncJobInfo {
                 tm.commit();
                 
             } catch (Throwable e) {
-               
+            	isfailed = true;
+                error = StringUtil.formatBRException(e);  
                 logger.error("initialData error", e);
             }
             finally
@@ -124,8 +182,57 @@ public class SyncJobInfo {
             	tm.release();
             }
         } catch (Exception e) {
+        	isfailed = true;
+            error = error + "<br>"+StringUtil.formatBRException(e);  
             logger.error("", e);
         }
+        try {
+			LogManager logMgr = SecurityDatabase.getLogManager();
+			
+//			String operContent = userName + "[" + userId + "] 退出["
+//					+ subsystem + "]";
+			// modified by hilary on 20101105,for fixing bug 13979,for logout's log  and login's log has same manner
+			AccessControl control = AccessControl.getAccessControl();
+			String userAccount = "";
+			String operContent = "";
+			String machineID = "";
+			String orgID = "";
+			if(control == AccessControl.getGuest())
+			{
+				machineID = machinid;
+				userAccount = "Quartz定时任务";
+				if(!isfailed)
+					operContent = userAccount + "同步岗位数据结束";
+				else
+					operContent = userAccount + "同步岗位数据失败： \r\n" + error;
+			}
+			else
+			{
+				userAccount = control.getUserAccount();
+				String userName = control.getUserName();
+				String subsystem = control.getCurrentSystemName();
+				machineID = control.getMachinedID();
+				if(!isfailed)
+				{
+					operContent = userAccount + "(" + userName + ") 从[" + subsystem + "]同步岗位数据结束";
+				}
+				else
+				{
+					operContent = userAccount + "(" + userName + ") 从[" + subsystem + "]同步岗位数据失败： \r\n" + error;
+				}
+					
+			}
+			
+//			String operContent = userAccount + "(" + userName + ") 退出[" + subsystem + "]";
+			
+			String operSource = machineID;
+			String operModle = "主数据同步";
+			logMgr.log(userAccount,orgID,operModle,  operSource,
+					operContent ,"", Log.INSERT_OPER_TYPE);		
+			
+		} catch (Exception e) {
+			//e.printStackTrace();
+		}
         logger.info("Sync job info finished...");
     }
     

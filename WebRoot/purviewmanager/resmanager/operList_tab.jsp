@@ -41,8 +41,9 @@
 	
 	OperManager operManager = SecurityDatabase.getOperManager();
 	ResourceManager resManager = new ResourceManager();
-
-	List list = resManager.getOperations(resTypeId);
+	String isGlobal=request.getParameter("isGlobal");
+	if(isGlobal == null) isGlobal = "false";
+	List list = isGlobal.equals("true")?resManager.getGlobalOperations(resTypeId):resManager.getOperations(resTypeId);
 	//List hasOper = operManager.getOperResRoleList(role_type,roleid,resid,resTypeId);
 	Map hasOper = operManager.getResOperMapOfRole(roleid,resid,resTypeId,"organization");
 	if(list == null){
@@ -56,6 +57,7 @@
 	String resName2 = request.getParameter("resName2");
 	//是否批量
 	String isBatch = request.getParameter("isBatch");
+	
 %>
 
 <html>

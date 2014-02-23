@@ -239,7 +239,7 @@ function reloadusers()
 				</div>
 				<strong><pg:message code="sany.pdp.workflow.user.list"/></strong>
 			</div>
-						<pg:listdata dataInfo="DiscreteUserList" keyName="DiscreteUserList" />
+						<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.DiscreteUserList" keyName="DiscreteUserList" />
 						<!--分页显示开始,分页标签初始化-->
 						<pg:pager maxPageItems="10" scope="request" data="DiscreteUserList" isList="false">
 						<pg:equal actual="${DiscreteUserList.itemCount}" value="0" >
@@ -255,6 +255,9 @@ function reloadusers()
 								</th>
 								<th><pg:message code="sany.pdp.user.login.name"/>	</th>
 								<th><pg:message code="sany.pdp.user.real.name"/></th>
+								<th onclick="sortBy('userName')">工号</th>
+								<th onclick="sortBy('userName')">身份证</th>
+								<th onclick="sortBy('userName')">电话</th>		
 								<th><pg:message code="sany.pdp.user.type"/></th>
 								<th><pg:message code="sany.pdp.email"/></th>
 								<th>密码过期时间</th>						
@@ -303,7 +306,13 @@ function reloadusers()
 									</td>
 									<td id="opuser_<%=userId%>" bgcolor="#F6FFEF">
 										<pg:cell colName="userRealname" defaultValue="" />
-									</td>									
+									</td>			
+									<td><pg:cell colName="userWorknumber"
+										defaultValue="" /></td>
+									<td><pg:cell colName="userIdcard"
+											defaultValue="" /></td>
+									<td><pg:cell colName="userMobiletel1"
+											defaultValue="" /></td>								
 									<td>
 										<dict:itemname type="userType" expression="{userType}" />
 									</td>
@@ -323,7 +332,13 @@ function reloadusers()
 									</td>
 									<td id="opuser_<%=userId%>"  bgcolor="#F6FFEF">
 										<pg:cell colName="userRealname" defaultValue="" />
-									</td>									
+									</td>	
+									<td><pg:cell colName="userWorknumber"
+										defaultValue="" /></td>
+									<td><pg:cell colName="userIdcard"
+											defaultValue="" /></td>
+									<td><pg:cell colName="userMobiletel1"
+											defaultValue="" /></td>											
 									<td>
 										<dict:itemname type="userType" expression="{userType}" />
 									</td>

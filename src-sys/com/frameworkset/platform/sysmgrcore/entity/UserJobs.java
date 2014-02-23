@@ -11,6 +11,23 @@ public class UserJobs implements Serializable{
 	String jobName;
 	String orgName;
 	Integer userId;
+	String USER_IDCARD;
+	String workNumber;
+	public String getWorkNumber() {
+		return workNumber;
+	}
+
+	public void setWorkNumber(String workNumber) {
+		this.workNumber = workNumber;
+	}
+
+	public String getUSER_IDCARD() {
+		return USER_IDCARD;
+	}
+
+	public void setUSER_IDCARD(String uSERIDCARD) {
+		USER_IDCARD = uSERIDCARD;
+	}
 	String userType;
 	String userEmail;
 	String org_Name;

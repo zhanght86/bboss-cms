@@ -27,7 +27,9 @@
 			}
 			OperManager operManager = SecurityDatabase.getOperManager();
 			ResourceManager resManager = new ResourceManager();
-			List operList = resManager.getOperations(resTypeId2);
+			 String isGlobal=request.getParameter("isGlobal");
+    	if(isGlobal == null) isGlobal = "false";
+			List list = isGlobal.equals("true")?resManager.getGlobalOperations(resTypeId2):resManager.getOperations(resTypeId2);
 			if (operList == null) {
 				operList = new ArrayList();
 			}

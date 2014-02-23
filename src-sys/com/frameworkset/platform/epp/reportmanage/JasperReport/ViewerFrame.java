@@ -26,13 +26,18 @@ package com.frameworkset.platform.epp.reportmanage.JasperReport;
  * San Francisco, CA 94107
  * http://www.jaspersoft.com
  */
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.view.*;
-
-import java.awt.BorderLayout;
 import java.applet.AppletContext;
-import java.net.*;
+import java.awt.BorderLayout;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.swing.JOptionPane;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPrintHyperlink;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
+import net.sf.jasperreports.view.JRHyperlinkListener;
 
 
 /**
@@ -64,14 +69,53 @@ public class ViewerFrame extends javax.swing.JFrame implements JRHyperlinkListen
 	}
 
 	
+//	/**
+//	 *
+//	 */
+//	public void gotoHyperlink(JRPrintHyperlink hyperlink)
+//	{
+//		switch(hyperlink.getHyperlinkType())
+//		{
+//			case JRHyperlink.HYPERLINK_TYPE_REFERENCE :
+//			{
+//				try
+//				{
+//					this.appletContext.showDocument(new URL(hyperlink.getHyperlinkReference()), "_blank");
+//				}
+//				catch (MalformedURLException e)
+//				{
+//					JOptionPane.showMessageDialog(this, e.getMessage());
+//				}
+//				break;
+//			}
+//			case JRHyperlink.HYPERLINK_TYPE_LOCAL_ANCHOR :
+//			case JRHyperlink.HYPERLINK_TYPE_LOCAL_PAGE :
+//			{
+//				break;
+//			}
+//			case JRHyperlink.HYPERLINK_TYPE_REMOTE_ANCHOR :
+//			case JRHyperlink.HYPERLINK_TYPE_REMOTE_PAGE :
+//			{
+//				JOptionPane.showMessageDialog(this, "Implement your own JRHyperlinkListener to manage this type of event.");
+//				break;
+//			}
+//			case JRHyperlink.HYPERLINK_TYPE_NONE :
+//			default :
+//			{
+//				break;
+//			}
+//		}
+//	}
+	
 	/**
 	 *
 	 */
 	public void gotoHyperlink(JRPrintHyperlink hyperlink)
 	{
-		switch(hyperlink.getHyperlinkType())
+		HyperlinkTypeEnum tv = hyperlink.getHyperlinkTypeValue();
+		if(tv == HyperlinkTypeEnum.REFERENCE)
 		{
-			case JRHyperlink.HYPERLINK_TYPE_REFERENCE :
+//			case HyperlinkTypeEnum.REFERENCE:
 			{
 				try
 				{
@@ -81,24 +125,29 @@ public class ViewerFrame extends javax.swing.JFrame implements JRHyperlinkListen
 				{
 					JOptionPane.showMessageDialog(this, e.getMessage());
 				}
-				break;
+//				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_ANCHOR :
-			case JRHyperlink.HYPERLINK_TYPE_LOCAL_PAGE :
+		}else if(tv == HyperlinkTypeEnum.LOCAL_ANCHOR ||tv ==  HyperlinkTypeEnum.LOCAL_PAGE )
 			{
-				break;
+//				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_ANCHOR :
-			case JRHyperlink.HYPERLINK_TYPE_REMOTE_PAGE :
+		else if(tv == HyperlinkTypeEnum.REMOTE_ANCHOR ||tv ==  HyperlinkTypeEnum.REMOTE_PAGE )
+		
 			{
 				JOptionPane.showMessageDialog(this, "Implement your own JRHyperlinkListener to manage this type of event.");
-				break;
+//				break;
 			}
-			case JRHyperlink.HYPERLINK_TYPE_NONE :
-			default :
-			{
-				break;
-			}
+		else  if(tv == HyperlinkTypeEnum.NONE )
+		{
+			
+		}
+		else
+		{
+			
+//			default :
+//			{
+//				break;
+//			}
 		}
 	}
 

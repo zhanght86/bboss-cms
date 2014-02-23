@@ -9,6 +9,8 @@
 <%@ page import="java.io.*" %>
 <%@ page import="java.sql.*"%>
 <%@page import="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"%>
+<%@page import="net.sf.jasperreports.engine.type.WhenNoDataTypeEnum"%>
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%
 	//获得报表文件的ID
 	String reportId = "queryUserInfo";
@@ -22,8 +24,9 @@
 	//重新加载时的参数
 	StringBuffer paraBufStr = new StringBuffer();
    
-
+	TransactionManager tm = new TransactionManager();
 	try{
+	tm.begin();
 	if(page_num!=null&&page_num.length()>0)
 	{
 		jasperPrint = (JasperPrint)session.getAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
@@ -52,7 +55,7 @@
 			    for (int i = 0; i < values.length; i++) {  
 			        valueStr = (i == values.length - 1) ? valueStr + values[i]: valueStr + values[i] + ",";  
 			    }  
-			    valueStr = new String(valueStr.getBytes("iso8859_1"),"UTF-8");     //转换字符集  
+			   // valueStr = new String(valueStr.getBytes("iso8859_1"),"UTF-8");     //转换字符集  
           
 			    params.put(name, valueStr);
 				paraBufStr.append("&").append(name+"=").append(valueStr);
@@ -61,12 +64,15 @@
 			//如果是一个不包含查询的报表，设置WhenNoDataType
 			if(jasperReport.getQuery()==null)
 			{
-				jasperReport.setWhenNoDataType(JasperReport.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL);
+				jasperReport.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
 			}
-		List<com.frameworkset.platform.sysmgrcore.entity.User> users = com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList.getSearchUser(request,"0");
+		//List<com.frameworkset.platform.sysmgrcore.entity.UserJobs> users = com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList.getSearchUser(request,"0");
 		
+        //jasperReport = (JasperReport)JRLoader.loadObject(strAbsPath +File.separator+ "queryUserInfo.jasper");
+        
         jasperReport = (JasperReport)JRLoader.loadObject(strAbsPath +File.separator+ "queryUserInfo.jasper");
-		jasperPrint =  JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(users));
+        
+		jasperPrint =  JasperFillManager.fillReport(jasperReport, parameters, new com.frameworkset.platform.sysmgrcore.web.report.DataInfoJRDataSource(com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList.class,200,request));
 			session.setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
 		}
 		jasperPrint.setName(reportName);
@@ -100,8 +106,11 @@
 		
 		exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 		exporter.setParameter(JRExporterParameter.OUTPUT_STRING_BUFFER, sbuffer);
+		exporter.setParameter(JRExporterParameter.OUTPUT_STRING_BUFFER, sbuffer);
 		exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, request.getContextPath()+"/jasperreport/image?image=");
 		exporter.setParameter(JRExporterParameter.PAGE_INDEX, new Integer(pageIndex));
+		
+		
 		exporter.setParameter(
 						JRHtmlExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
 						Boolean.TRUE); // 删除记录最下面的空行
@@ -112,12 +121,13 @@
 
         
 		exporter.exportReport();
-        sbuffer=new StringBuffer(sbuffer.toString().replace("style=\"width: 595px\"","style=\"width: 100%\""));
+		tm.commit();
+        //sbuffer=new StringBuffer(sbuffer.toString().replace("style=\"width: 595px\"","style=\"width: 100%\""));
 		   }catch(Exception e){
 		   		e.printStackTrace();
 		   }
 		  finally{
-        	 
+        	 tm.release();
          }
 	%>
 
@@ -137,12 +147,12 @@
 	    <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	      <tr>
 	        <td>
-	        	<OBJECT classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"  
+	       <OBJECT classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"  
 				    name="report" width="1px" height="1px"  codebase="http://java.sun.com/update/1.5.0/jinstall-1_5_0_06-windows-i586.cab#Version=5,0,60,5">  
 				       
 				    <PARAM NAME = "CODE" VALUE = "com.frameworkset.platform.epp.reportmanage.JasperReport.PrinterApplet" >  
 				    <PARAM NAME = "CODEBASE" VALUE = ".">
-				    <PARAM NAME = "ARCHIVE" VALUE  = "jasperprint.jar,jfreechart-1.0.10.jar,jasperreports-3.1.2-applet.jar,jcommon-1.0.13.jar" >  
+				     <PARAM NAME = "ARCHIVE" VALUE  = "jasperprint.jar,jasperreports-5.5.1.jar,jasperreports-applet-5.5.1.jar,commons-logging-1.1.1.jar,commons-collections-3.1.jar" > 
 				    <PARAM NAME = "type" VALUE ="application/x-java-applet;version=1.5.0"> 
 				    <PARAM NAME = "REPORT_URL" VALUE ="<%=request.getContextPath() %>/jasperreport/print">   
 				    <COMMENT>  
@@ -150,8 +160,8 @@
                                 type = "application/x-java-applet;version=1.5.0"    
 				                CODE = "com.frameworkset.platform.epp.reportmanage.JasperReport.PrinterApplet"    
 				                CODEBASE = "."  
-				                ARCHIVE = "jasperprint.jar,jfreechart-1.0.10.jar,jasperreports-3.1.2-applet.jar,jcommon-1.0.13.jar"
-				                REPORT_URL ="../servlets/jasperprint"
+				                 ARCHIVE = "jasperprint.jar,jasperreports-5.5.1.jar,jasperreports-applet-5.5.1.jar,commons-logging-1.1.1.jar,commons-collections-3.1.jar"
+				                REPORT_URL ="<%=request.getContextPath() %>/jasperreport/print"
 				                pluginspage = "http://java.sun.com/products/plugin/index.html#download" width="100%" height="100%">  
 				            <NOEMBED>  
 				            alt="Your browser understands the &lt;APPLET&gt; tag but isn't running the applet, for some reason."  
@@ -161,6 +171,7 @@
 				    </COMMENT>  
 				   
 				</OBJECT> 
+	        	
 	        </td>
 			<!--
 	        <td>
@@ -227,13 +238,15 @@
 	<tr>
 	  
 	  <td  align="center">
-		  <td  id="myTD" style="display:none"> <% out.println(sbuffer.toString()); %></td>
+		 
 
 	     <% 
 		   //sbuffer=new StringBuffer(sbuffer.toString().replace("style=\"width: 595px\"","style=\"width: 100%\""));
-		   out.println(sbuffer.toString()); 
+		  // out.println(sbuffer.toString()); 
+		  
 	
 		 %>	
+		 <%=sbuffer.toString()%>
 
 	  </td>
 	  

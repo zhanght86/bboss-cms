@@ -1,7 +1,10 @@
 package com.frameworkset.platform.config.model;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
+import com.frameworkset.platform.security.AuthorResource;
 import com.frameworkset.platform.util.I18nResource;
 
 /**
@@ -26,7 +29,21 @@ public class Operation extends I18nResource {
      */
     private boolean manager = true;
     private OperationGroup operationGroup;
-    public Operation()
+    private AuthorResource authorResource = new AuthorResource();
+    public AuthorResource getAuthorResource() {
+		return authorResource;
+	}
+    public void addAuthorResource(String authorResource)
+	{
+	
+		this.authorResource.addAuthorResource(authorResource);
+	}
+    
+    
+
+	
+
+	public Operation()
     {
     	
     }
@@ -172,6 +189,11 @@ public class Operation extends I18nResource {
 		String temp = super.getDescription(request);
     	return temp == null?description:temp;
 		
+	}
+	
+	public List<String> getAuthoresouresList()
+	{
+		return this.authorResource.getAuthorResources();
 	}
 
 

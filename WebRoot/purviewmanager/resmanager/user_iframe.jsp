@@ -19,7 +19,8 @@
 	
 	//是否批量授予资源
 	String isBatch = request.getParameter("isBatch");
-	
+	String isGlobal=request.getParameter("isGlobal");
+	if(isGlobal == null) isGlobal = "false";
 	//System.out.println(resId2);
 	//System.out.println(resTypeId2);
 	//System.out.println(resTypeName);
@@ -31,9 +32,9 @@
 </head>
 <!--iframe src="../../sysmanager/resmanager/hasPower_ajax.jsp?resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>"  border=0 scrolling="no" id="docVerListFrame" name="docVerListFrame" height="100%" width="100%"></iframe-->
 	<frameset cols="25%,*" border=0>
-		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_user_tree" src="res_user_tree.jsp?resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName %>&isBatch=<%=isBatch %>">
+		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_user_tree" src="res_user_tree.jsp?isGlobal=<%=isGlobal%>&resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName %>&isBatch=<%=isBatch %>">
 		</frame>
-		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_user_list" src="res_org_userlist.jsp?resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName %>&isBatch=<%=isBatch %>">
+		<frame frameborder=0  noResize scrolling="yes" marginWidth=0 name="res_user_list" src="res_org_userlist.jsp?isGlobal=<%=isGlobal%>&resId2=<%=resId2%>&resTypeId2=<%=resTypeId2%>&resTypeName=<%=resTypeName%>&title=<%=title%>&resName2=<%=resName %>&isBatch=<%=isBatch %>">
 		</frame>
 	</frameset>
 </html>

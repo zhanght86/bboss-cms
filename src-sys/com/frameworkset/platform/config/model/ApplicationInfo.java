@@ -89,7 +89,7 @@ public class ApplicationInfo implements java.io.Serializable {
 
     private PermissionRoleMapInfo defaultPermissionrolemapinfo;
     private Map permissionRoleMapInfoIdxs;
-    private Map resourcsIndexByModule;
+    private Map<String,Resources> resourcsIndexByModule;
     /**
           权限控制表
           cachable：可选属性，是否需要缓冲用户/角色之间的关系
@@ -210,7 +210,11 @@ public class ApplicationInfo implements java.io.Serializable {
     }
 
 
-    public boolean isCachable() {
+    public Map<String,Resources> getResourcsIndexByModule() {
+		return resourcsIndexByModule;
+	}
+
+	public boolean isCachable() {
         return cachable;
     }
 

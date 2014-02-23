@@ -1,8 +1,34 @@
 package com.frameworkset.platform.config;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.log4j.Logger;
+import org.frameworkset.spi.ApplicationContext;
+import org.frameworkset.spi.assemble.InterceptorInfo;
+import org.frameworkset.spi.assemble.ManagerImport;
+import org.frameworkset.spi.assemble.Param;
+import org.frameworkset.spi.assemble.ProviderManagerInfo;
+import org.frameworkset.spi.assemble.Reference;
+import org.frameworkset.spi.assemble.RollbackException;
+import org.frameworkset.spi.assemble.SecurityProviderInfo;
+import org.frameworkset.spi.assemble.SynchronizedMethod;
+import org.frameworkset.spi.assemble.Transactions;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
 import com.frameworkset.platform.config.model.ApplicationInfo;
 import com.frameworkset.platform.config.model.AuthorTableInfo;
-//import com.frameworkset.platform.config.model.CommunicationInfo;
 import com.frameworkset.platform.config.model.Context;
 import com.frameworkset.platform.config.model.DataSourceConfig;
 import com.frameworkset.platform.config.model.DatabaseConfig;
@@ -24,35 +50,6 @@ import com.frameworkset.platform.resource.UNProtectedResource;
 import com.frameworkset.platform.util.I18nXMLParser;
 import com.frameworkset.util.StringUtil;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.log4j.Logger;
-import org.frameworkset.spi.ApplicationContext;
-import org.frameworkset.spi.BaseSPIManager;
-import org.frameworkset.spi.assemble.InterceptorInfo;
-import org.frameworkset.spi.assemble.ManagerImport;
-import org.frameworkset.spi.assemble.Param;
-import org.frameworkset.spi.assemble.ProviderManagerInfo;
-import org.frameworkset.spi.assemble.Reference;
-import org.frameworkset.spi.assemble.RollbackException;
-import org.frameworkset.spi.assemble.SecurityProviderInfo;
-import org.frameworkset.spi.assemble.SynchronizedMethod;
-import org.frameworkset.spi.assemble.Transactions;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.helpers.DefaultHandler;
-
 /**
  * <p>Title: </p>
  *
@@ -69,7 +66,7 @@ public class ConfigParser extends I18nXMLParser  {
     private static Logger log = Logger.getLogger(ConfigParser.class) ;
     private Stack traceStack;
     private StringBuffer currentValue;
-    private Map applicationInfos;
+    private Map<String,ApplicationInfo> applicationInfos;
     private ApplicationInfo defaultApplicationInfo;
     private DataSourceConfig dataSourceConfig;
     private boolean sso= false;
@@ -387,6 +384,10 @@ public class ConfigParser extends I18nXMLParser  {
     	            }
     	            
     	        }
+    	        else if(name.toLowerCase().equals("url"))
+    	        {
+    	        	this.currentValue.setLength(0);
+    	        }
     	        else if(name.equals("description")){
     	        	Operation oper  = (Operation)traceStack.peek();
     	        	oper.setDescription(this.currentValue.toString());
@@ -454,6 +455,23 @@ public class ConfigParser extends I18nXMLParser  {
     	                this.traceStack.pop();
     	            }
     	        }  
+    	        else if(name.toLowerCase().equals("url"))
+    	        {
+    	        	Object obj = this.traceStack.peek();
+    	        	if(obj instanceof Operation)
+    	        	{
+    	        		Operation m = (Operation)obj;
+    	        		String url = this.currentValue.toString();
+    	        		String[] urls = url.split(",");
+    	        		for(int i = 0; i < urls.length; i ++)
+    	        		{
+    	        			m.addAuthorResource(urls[i].trim());
+    	        		}
+    	        		
+    	        	}
+    	        	this.currentValue.setLength(0);
+    	        }
+    	        
     	        else if(name.equals("description")){
     	        	Operation oper  = (Operation)traceStack.peek();
     	        	oper.setDescription(this.currentValue.toString());
@@ -1327,7 +1345,7 @@ public class ConfigParser extends I18nXMLParser  {
         }
     }
 
-    public Map getApplicationInfos() {
+    public Map<String,ApplicationInfo> getApplicationInfos() {
         return applicationInfos;
     }
 

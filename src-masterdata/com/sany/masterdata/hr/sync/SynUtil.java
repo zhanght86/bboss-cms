@@ -116,9 +116,9 @@ public class SynUtil {
 		com.sany.masterdata.hr.sync.SyncUserInfo user = context.getTBeanObject("masterdata.hr.syncUserInfo", SyncUserInfo.class);
 		com.sany.masterdata.hr.sync.SyncOrganizationInfo org = context.getTBeanObject("masterdata.hr.syncOrganizationInfo", SyncOrganizationInfo.class);
 		
-		org.syncAllData();//同步组织和岗位
+//		org.syncAllData();//同步组织和岗位
 //		task.syncAllData();//同步所有数据
-//		user.syncAllData();//同步用户数据
+		user.syncAllData();//同步用户数据
 		
 	}
 }

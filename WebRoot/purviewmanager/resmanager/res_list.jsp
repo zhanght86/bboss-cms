@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@page import="com.frameworkset.platform.config.ConfigManager"%>
+<%@page import="com.frameworkset.platform.config.ConfigManager,com.frameworkset.platform.config.model.*"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
-<%@ page import="com.frameworkset.platform.security.AccessControl"%>
+<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.resource.*"%>
 <%
 	response.setHeader("Cache-Control", "no-cache"); 
 	response.setHeader("Pragma", "no-cache"); 
@@ -18,7 +18,12 @@
 	String restype=(String)request.getParameter("restypeId");	
 	String restypeName=request.getParameter("restypeName");
 	String parent_resId = request.getParameter("parent_resId");
-	
+	ResourceManager resourceManager = new ResourceManager();
+	ResourceInfo resourceInfo =  resourceManager.getResourceInfoByType(restype);
+	if(resourceInfo != null)
+	{
+		restypeName = resourceInfo.getName();
+	}
 	String rootpath = request.getContextPath();
 	//是否可以设置机构资源
 	boolean isOrg = ConfigManager.getInstance().getConfigBooleanValue("enableorgrole");
@@ -280,20 +285,16 @@ function opernDlg(title,url){
 								 <%
 								}
 								%>
-         			<pg:listdata dataInfo="ResSearchList" keyName="ResSearchList" />
+         			<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.ResSearchList" keyName="ResSearchList" />
 						<!--分页显示开始,分页标签初始化-->
 						<pg:pager maxPageItems="10" scope="request" data="ResSearchList" isList="false">
-						<pg:equal actual="${ResSearchList.itemCount}" value="0" >
-						<div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:equal> 
-					<pg:notequal actual="${ResSearchList.itemCount}"  value="0">
+						
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 							<pg:header>
 								<!--设置分页表头-->
 								<th>
 									<input type="checkBox" name="checkBoxAll" onClick="checkAll('checkBoxAll','checkBoxOne')">
-								</td>
+								</th>
 								<input class="text" type="hidden" name="selectId">
 								<th><pg:message code="sany.pdp.resourcemanage.resource.type"/></th>
 								<th><pg:message code="sany.pdp.resourcemanage.resource.name"/></th>
@@ -312,7 +313,10 @@ function opernDlg(title,url){
 							<pg:param name="title" />
 							<pg:param name="path" />
 							<pg:param name="restypeName" />
-							
+							<pg:notify>
+								<tr ><td colspan="100">
+								<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></td></tr>
+							</pg:notify> 
 
 							<!--list标签循环输出每条记录-->
 							<pg:list>
@@ -361,14 +365,141 @@ function opernDlg(title,url){
 									
 								</tr>
 							</pg:list>
-						</tr>
+						
 							
 
 				  </table>
 				  <div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div>
-						</pg:notequal>
 						</pg:pager>
 				  </div>
+				  <br>
+				  <%
+						
+						
+						if(resourceInfo != null && resourceInfo.getGlobalresourceid() != null && !resourceInfo.getGlobalresourceid().equals(""))
+						{
+					 %>
+						  <div class="title_box">
+						  	<div class="rightbtn">		
+						  		<a href="#" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.user"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/user_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.user"/></span></a>
+				<a href="#" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.role"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/role_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.role"/></span></a>
+				<%
+									if(isOrg){
+				 					
+				            		%><a href="#" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.organization"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/org_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.organization"/></span></a>
+				            		<%
+									}
+									%>		
+									
+							
+							</div>		
+							<strong>[<%=restypeName%>][<%=restype%>]全局授权-<%=resourceInfo.getGlobalresourceid() %></strong>
+						</div>
+						<br>
+						<div class="title_box">
+						  	<div class="rightbtn">		
+						  	
+							</div>		
+							<strong>[<%=restypeName%>][<%=restype%>]全局操作-url映射</strong>							
+						</div>
+						 <%
+							OperationQueue goperationQueue = resourceInfo.getGlobalOperationQueue();
+							if(goperationQueue != null && goperationQueue.size() > 0)
+							{
+								request.setAttribute("goperationQueue",goperationQueue.getList());
+						 %>
+						 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
+							<tr>
+								<!--设置分页表头-->
+								
+								
+								<th>操作</th>
+								<th>url</th>
+								
+								
+							</tr>
+							
+
+							<!--list标签循环输出每条记录-->
+							<pg:list requestKey="goperationQueue">
+								<tr class="cms_data_tr" onMouseOver="high(this)" onMouseOut="unhigh(this)">
+									
+									<td class="tablecells" nowrap="nowrap" height='30'>
+										<pg:cell colName="id" defaultValue="" /> <pg:cell colName="name" defaultValue="" />
+									</td>
+									
+									<!-- 资源修改，只能是拥有超级管理员角色的用户能进行此项操作 --> 
+									<td class="tablecells" nowrap="nowrap" height='30'  bgcolor="#F6FFEF">
+										<ul>
+										<pg:list colName="authoresouresList">
+											<li><pg:cell/></li>
+										</pg:list>
+										</ul>
+									</td>
+									
+									
+								</tr>
+							
+						
+						</pg:list>	
+							
+						
+							
+
+				  </table>
+				  <%}%>
+						<br>
+						
+						<div class="title_box">
+						  	<div class="rightbtn">		
+						  	
+							</div>		
+							<strong>[<%=restypeName%>][<%=restype%>]资源操作-url映射</strong>
+						</div>
+						<%
+							OperationQueue operationQueue = resourceInfo.getOperationQueue();
+							if(operationQueue != null && operationQueue.size() > 0)
+							{
+								request.setAttribute("operationQueue",operationQueue.getList());
+						 %>
+						 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
+							<tr>
+								<!--设置分页表头-->
+								
+								
+								<th>操作</th>
+								<th>url</th>
+								
+								
+							</tr>
+							
+
+							<!--list标签循环输出每条记录-->
+							<pg:list requestKey="operationQueue">
+								<tr class="cms_data_tr" onMouseOver="high(this)" onMouseOut="unhigh(this)">
+									
+									<td class="tablecells" nowrap="nowrap" height='30'>
+										<pg:cell colName="id" defaultValue="" /> <pg:cell colName="name" defaultValue="" />
+									</td>
+									
+									<!-- 资源修改，只能是拥有超级管理员角色的用户能进行此项操作 --> 
+									<td class="tablecells" nowrap="nowrap" height='30'  bgcolor="#F6FFEF">
+										<ul>
+										<pg:list colName="authoresouresList">
+											<li><pg:cell/></li>
+										</pg:list>
+										</ul>
+									</td>
+									
+									
+								</tr>
+							
+						
+						</pg:list>	
+
+				  </table>
+						<%}
+					} %>
 				</form>
 				<div style="display:none">
 		<iframe name="delRes" width="0" height="0" ></iframe>

@@ -2912,7 +2912,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						uj.setDredge_time(record.getString( "DREDGE_TIME"));
 						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
 						uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
-						
+						uj.setUSER_IDCARD(record.getString("USER_IDCARD"));
+						uj.setWorkNumber(record.getString("USER_WORKNUMBER"));
 						uj.setPasswordDualedTime(record.getInt("Password_DualTime"));
 						uj.setPasswordExpiredTime((Timestamp)getPasswordExpiredTime(uj.getPasswordUpdatetime(),uj.getPasswordDualedTime()));
 //						try{
@@ -2972,6 +2973,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 						uj.setIstaxmanager(new Integer(record.getInt( "ISTAXMANAGER")));
 						uj.setPasswordUpdatetime(record.getTimestamp("password_updatetime"));
 						uj.setPasswordDualedTime(record.getInt("Password_DualTime"));
+						uj.setUSER_IDCARD(record.getString("USER_IDCARD"));
+						uj.setWorkNumber(record.getString("USER_WORKNUMBER"));
 						uj.setPasswordExpiredTime((Timestamp)getPasswordExpiredTime(uj.getPasswordUpdatetime(),uj.getPasswordDualedTime()));
 //						try{
 //							orgjob = dbUtil.getString(i, "org_job");

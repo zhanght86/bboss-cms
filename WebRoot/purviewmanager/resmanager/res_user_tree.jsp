@@ -62,9 +62,9 @@ function neworg()
 				   <tree:param name="title"/>
 				   <tree:param name="resName2"/>
 				   <tree:param name="isBatch"/>
-				   
+				    <tree:param name="isGlobal"/>
     			    
-    			   <tree:treedata treetype="CMSOrgChargeTree"
+    			   <tree:treedata treetype="com.frameworkset.platform.menu.CMSOrgChargeTree"
     	                   scope="request"
     	                   rootid="0"  
     	                   rootName="组织树"

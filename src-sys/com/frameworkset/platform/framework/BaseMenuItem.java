@@ -1,7 +1,5 @@
 package com.frameworkset.platform.framework;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -9,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.frameworkset.web.servlet.support.RequestContextUtils;
 
-public abstract class BaseMenuItem implements MenuItem {
+import com.frameworkset.platform.security.AuthorResource;
+
+public abstract class BaseMenuItem extends AuthorResource implements MenuItem {
 	protected String name;
 	protected Map<Locale, String> localeNames;
 	protected String id;
@@ -50,13 +50,7 @@ public abstract class BaseMenuItem implements MenuItem {
 	protected SubSystem subSystem;
 	protected boolean showpage = false;
 	protected Map<String,String> extendAttributes = null;
-	protected List<String> authorResources;
-	public void addAuthorResource(String authorResource)
-	{
-		if(authorResources == null)
-			authorResources = new ArrayList<String>();
-		this.authorResources.add(authorResource);
-	}
+	
 	public void addLocaleName(String locale,String name)
 	{
 		
@@ -319,9 +313,7 @@ public abstract class BaseMenuItem implements MenuItem {
 	public void setExtendAttributes(Map<String, String> extendAttributes) {
 		this.extendAttributes = extendAttributes;
 	}
-	public List<String> getAuthorResources() {
-		return authorResources;
-	}
+	
 	public String getOption() {
 		return option;
 	}

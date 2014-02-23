@@ -12,8 +12,11 @@ import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
-import org.frameworkset.spi.ApplicationContext;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.adapter.DB;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.config.ResourceInfoQueue;
@@ -36,22 +39,15 @@ import com.frameworkset.platform.sysmgrcore.entity.Restype;
 import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.Roleresop;
 import com.frameworkset.platform.sysmgrcore.entity.User;
-import com.frameworkset.platform.sysmgrcore.exception.ControlException;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.ResManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.poolman.Record;
-import com.frameworkset.common.poolman.handle.NullRowHandler;
-import com.frameworkset.orm.adapter.DB;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 
 /**
  * 项目：SysMgrCore <br>
  * 描述：资源管理接口 <br>
  * 版本：1.0 <br>
- * --没有被使用的类
+ * 
  * @author 
  */
 public class ResManagerImpl extends EventHandle implements ResManager {
@@ -678,11 +674,10 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 
 		return list;
 	}
-
 	/**
 	 * 去掉hibernate后的方法
 	 */
-	public List getChildResList(Res res) throws ManagerException {
+	public List getChildResListByType(String resType) throws ManagerException {
 		List list = new ArrayList();
 
 //		try {
@@ -695,16 +690,58 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 //			logger.error(e);
 //			throw new ManagerException(e.getMessage());
 //		}
-		String sql = "select * from td_sm_res where RESTYPE_ID='"+res.getRestypeId()+"'";
-		DBUtil db = new DBUtil();
+		String sql = "select * from td_sm_res where RESTYPE_ID=?";
+		
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setString(1, resType);
+			db.executePrepared();
 			list = getResList(db);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
 		return list;
+	}
+	
+	/**
+	 * 去掉hibernate后的方法
+	 */
+	public ListInfo getChildResListByType(String resType,long offset,int pageSize) throws ManagerException {
+		List list = new ArrayList();
+
+//		try {
+//			Parameter p = new Parameter();
+//			p.setCommand(Parameter.COMMAND_GET);
+//			p.setObject("from Res r where r.restypeId = '" + res.getRestypeId()
+//					+ "'");
+//			list = (List) cb.execute(p);
+//		} catch (ControlException e) {
+//			logger.error(e);
+//			throw new ManagerException(e.getMessage());
+//		}
+		String sql = "select * from td_sm_res where RESTYPE_ID=?";
+		ListInfo listInfo = new ListInfo();
+		PreparedDBUtil db = new PreparedDBUtil();
+		try {
+			db.preparedSelect(sql,offset,pageSize);
+			db.setString(1, resType);
+			db.executePrepared();
+			list = getResList(db);
+			listInfo.setDatas(list);
+			listInfo.setTotalSize(db.getTotalSize());
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listInfo;
+	}
+	/**
+	 * 去掉hibernate后的方法
+	 */
+	public List getChildResList(Res res) throws ManagerException {
+		return getChildResListByType(res.getRestypeId());
 	}
 
 	/**

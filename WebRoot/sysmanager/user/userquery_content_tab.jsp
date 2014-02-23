@@ -141,7 +141,7 @@
 		var userOrgType = document.all("userOrgType").value;
 		var userName = document.all("userName").value;
 		var userRealname = document.all("userRealname").value;
-		var url = "../user/ireport/showJasperReport.jsp?userOrgType="+userOrgType+"&userName="+userName+"&userRealname="+userRealname;
+		var url = "../user/ireport/showJasperReport.jsp?userMore=true&userOrgType="+userOrgType+"&userName="+userName+"&userRealname="+userRealname;
         window.open(url);
 		//window.showModalDialog(url,window,"dialogWidth:"+(620)+"px;dialogHeight:"+(600)+"px;help:no;scroll:auto;status:no");
 	}
@@ -241,20 +241,24 @@
 				<pg:param name="job_name"/>	
 				<pg:param name="userOrgType"/>		
 				
-				<pg:equal actual="${UserSearchList.itemCount}" value="0" >
-					<div class="nodata">
-					<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-				</pg:equal>
-				<pg:notequal actual="${UserSearchList.itemCount}"  value="0">
+				
+				
 					<table width="98.5%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 						<pg:header>
 							<th><pg:message code="sany.pdp.sysmanager.user.loginname"/></td>
-							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.realname"/></td>								
+							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.realname"/></td>	
+							<th onclick="sortBy('userName')">工号</th>
+							<th onclick="sortBy('userName')">身份证</th>
+							<th onclick="sortBy('userName')">电话</th>							
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.belongorg"/></td>
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.mobile"/></td>
 							<th>密码过期时间</th>	
 							<th >密码有效期</th>		
 						</pg:header>
+						<pg:notify>
+							<div class="nodata">
+							<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
+						</pg:notify>
 						<pg:list>
 							<tr onDBLclick=getUserInfo2(this,'<pg:cell colName="userId" defaultValue=""/>','<pg:querystring encode="true"/>') >
 								<td>
@@ -262,7 +266,13 @@
 								</td>
 								<td>
 									<pg:cell colName="userRealname" defaultValue="" />
-								</td>									
+								</td>
+								<td><pg:cell colName="workNumber"
+										defaultValue="" /></td>
+								<td><pg:cell colName="USER_IDCARD"
+										defaultValue="" /></td>
+								<td><pg:cell colName="userMobiletel1"
+										defaultValue="" /></td>											
 								<td>
 									<pg:cell colName="orgName" defaultValue="" />
 								</td>
@@ -280,7 +290,7 @@
 						</pg:list>
 					</table>
 					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
-				</pg:notequal>
+			
 			</pg:pager>
 		</div>
 	</div>

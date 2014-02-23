@@ -1,6 +1,5 @@
 package com.frameworkset.platform.resource;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,7 +25,7 @@ import com.frameworkset.platform.config.model.Resources;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ResourceManager implements Serializable{
+public class ResourceManager {
     private static Logger log = Logger.getLogger(ResourceManager.class);
     public ResourceInfo getResourceInfoByTypeOfModule(String module,
             String type) {

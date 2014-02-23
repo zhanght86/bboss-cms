@@ -6,11 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.entity.Organization;
-import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.common.tag.tree.COMTree;
 import com.frameworkset.common.tag.tree.itf.ITreeNode;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 
 public class CMSOrgChargeTree extends COMTree implements Serializable{
 	public boolean hasSon(ITreeNode father) {
@@ -36,7 +35,8 @@ public class CMSOrgChargeTree extends COMTree implements Serializable{
         String title = request.getParameter("title");
         String resName2 = request.getParameter("resName2");
         String isBatch = request.getParameter("isBatch");
-		
+        String isGlobal=request.getParameter("isGlobal");
+    	if(isGlobal == null) isGlobal = "false";
         try {
           
         	
@@ -65,6 +65,8 @@ public class CMSOrgChargeTree extends COMTree implements Serializable{
                 	map.put("title", title);
                 	map.put("resName2", resName2);
                 	map.put("isBatch", isBatch);
+                	map.put("isGlobal", isGlobal);
+                	
                 	
                 	if (accessControl.isOrganizationManager(sonorg.getOrgId()) ||
                 			accessControl.isAdmin()) {

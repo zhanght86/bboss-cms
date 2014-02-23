@@ -1,7 +1,16 @@
+用户查询jasperreport报表答应包签名方法
+//生成证书文件
+keytool -keypass idiots6 -storepass idiots6 -genkey -dname "OU=bpit, O=sany, L=changsha, ST=hunan, C=CN" -validity 55555 
+jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperprint.jar mykey 
+jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperreports-applet-5.5.1.jar mykey 
+jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\commons-logging-1.1.1.jar mykey 
+jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\commons-collections-3.1.jar mykey 
+jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperreports-5.5.1.jar mykey  
+jarsigner -verify -verbose F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperprint.jar 
+
 1.文档分页时需要增加显示全文按钮
 2.文档细览页面需要添加上一页和下一页导航（或者用文档标题做导航）
 3.文档可以维护扩展字段（文档扩展字段和频道扩展字段结合）
-
 
 1.扩展字段解析发布测试和bug修复
 2.增加扩展字段label展示字段

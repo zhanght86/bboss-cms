@@ -11,7 +11,7 @@ import com.frameworkset.platform.config.ConfigParser;
 import com.frameworkset.util.StringUtil;
 
 public class DataLoaderParser extends HandlerBase implements java.io.Serializable{
-	private static Logger log = Logger.getLogger(ConfigParser.class) ;
+	private static Logger log = Logger.getLogger(DataLoaderParser.class) ;
 //    private Stack traceStack;
     private StringBuffer currentValue;
     

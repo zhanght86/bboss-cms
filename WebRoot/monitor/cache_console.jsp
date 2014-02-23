@@ -22,6 +22,8 @@
 <dict:user userAccount="admin"  /></strong>
 			<a  href="javascript:void(0)" class="bt_1 sp"
 											id="queryButton" onclick="clearAll()"><span>全部清除</span> </a> 
+			<a  href="javascript:void(0)" class="bt_1 sp"
+											id="queryButton" onclick="synAll()"><span>手工同步人员组织岗位主数据</span> </a> 								
 		</div>
 		<div id="changeColor" style="width: 1150px; overflow: auto;">
 			<table width="100%" border="0" cellpadding="0" cellspacing="0"
@@ -144,6 +146,43 @@ function clearCMSPublishCache()
 					}
 				}
 			  });
+		
+	},
+	function()//取消按钮回调函数
+	{
+			
+	} ,
+	api);
+	
+		
+		
+}
+
+function synAll()
+{
+	$.dialog.confirm("是否手动同步人员组织岗位主数据",function()//确定按钮回调函数
+	{
+		$.ajax({
+			type: "POST",
+			url : "synAll.page",
+			data :{},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+					blockUI();	
+			      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(responseText){
+				//去掉遮罩	
+				unblockUI();
+				if(responseText=="success"){
+					$.dialog.alert("手动同步人员组织岗位主数据完成.",function(){},api);
+					
+				}else{
+					$.dialog.alert(responseText,function(){},api);
+				}
+			}
+		  });
 		
 	},
 	function()//取消按钮回调函数

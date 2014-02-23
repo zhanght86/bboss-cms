@@ -8,10 +8,12 @@
 	//if (!accesscontroler.checkAccess(request, response)){
 	//	return;
 	//}
-	boolean hasaddpermission = accesscontroler.checkPermission("test","add","testresource");
-	boolean hasupdatepermission = accesscontroler.checkPermission("test","write","testresource");
-	boolean hasdeletepermission = accesscontroler.checkPermission("test","delete","testresource");
-	boolean hasauditpermission = accesscontroler.checkPermission("test","read","testresource");
+	boolean hasaddpermission = accesscontroler.checkPermission("testid","add","testresource");
+	boolean hasupdatepermission = accesscontroler.checkPermission("testid","write","testresource");
+	boolean hasdeletepermission = accesscontroler.checkPermission("testid","delete","testresource");
+	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
+	boolean hasglobaltestreadpermission = accesscontroler.checkPermission("globaltest","read","testresource");
+	boolean hasglobaltestdeletepermission = accesscontroler.checkPermission("globaltest","delete","testresource");
 	
 %>
 
@@ -30,7 +32,7 @@
 					
 					<tr>
 						<th>
-							hasaddpermission：<%=hasaddpermission %>
+							has add testid permission：<%=hasaddpermission %>
 						</th>
 						
 					</tr>
@@ -39,20 +41,32 @@
 						
 						
 						<th>
-							hasupdatepermission：<%=hasupdatepermission %>
+						has update testid permission：<%=hasupdatepermission %>
 						</th>
 					</tr>
 		
 					<tr>
 						
 						<td colspan="7">
-							hasdeletepermission：<%=hasdeletepermission %>
+						has delete testid permission：<%=hasdeletepermission %>
 						</td>
 					</tr>
 				    <tr>
 						
 						<td colspan="7">
-							hasauditpermission：<%=hasauditpermission %>
+							has read testid permission：<%=hasreadpermission %> <a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp" target="_blank">测试url控制</a>
+						</td>
+					</tr>
+					<tr>
+						
+						<td colspan="7">
+							has globaltest read permission：<%=hasglobaltestreadpermission %> <a href="<%=request.getContextPath() %>/test/testopurlpermissionread.jsp" target="_blank">测试url控制</a>
+						</td>
+					</tr>
+				    <tr>
+						
+						<td colspan="7">
+							has globaltest delete permission：<%=hasglobaltestdeletepermission %> <a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp"  target="_blank">测试url控制</a>
 						</td>
 					</tr>
 				</table>

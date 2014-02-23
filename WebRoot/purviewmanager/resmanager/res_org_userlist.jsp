@@ -39,10 +39,13 @@
 	
 	ResourceManager resManager = new ResourceManager();
 	RoleManager roleManager = SecurityDatabase.getRoleManager();
-	List list = resManager.getOperations(resTypeId2);
+	 String isGlobal=request.getParameter("isGlobal");
+    	if(isGlobal == null) isGlobal = "false";
+	List list = isGlobal.equals("true")?resManager.getGlobalOperations(resTypeId2):resManager.getOperations(resTypeId2);
 	request.setAttribute("list",list);
 	
 	OperManager operManager = SecurityDatabase.getOperManager();
+	
 %>
 <html>
 <head>    

@@ -32,8 +32,9 @@ public class ResSearchList  extends DataInfoImpl implements Serializable{
 //			PageConfig pageConfig = resManager.getPageConfig();
 //			pageConfig.setPageSize(maxPagesize);
 //			pageConfig.setStartIndex((int) offset);
-
-			listInfo = getResList("select * from td_sm_Res r where r.restype_Id='" + restypeId + "' and r.parent_Id='-1'",offset,maxPagesize);
+			ResManagerImpl resManagerImpl = new ResManagerImpl();
+			listInfo = resManagerImpl.getChildResListByType(restypeId, offset, maxPagesize);
+//			listInfo = getResList("select * from td_sm_Res r where r.restype_Id='" + restypeId + "' and r.parent_Id='-1'",offset,maxPagesize);
 //			String restypeID = null;
 //			ResourceManager rm = new ResourceManager();			
 //			for(int i = 0; i < list.size();i ++)
@@ -81,5 +82,7 @@ public class ResSearchList  extends DataInfoImpl implements Serializable{
 		}
 		return listinfo;
 	}
+	
+	
 
 }
