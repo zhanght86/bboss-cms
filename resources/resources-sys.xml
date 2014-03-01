@@ -45,10 +45,17 @@
 		
 		<operation id="delete" priority="30" name="删除" >
 		    <!-- 
-        		只有全局操作才允许配置权限url
+        		url说明：
+        		
+        		地址分两部分：
+        		第一部分是url地址必选项/test/testopurlpermissiondelete.jsp				
+				第二部分是json格式的参数，其中资源操作参数resource，必选项参数，resource参数值对应一个request请求参数名称，
+				对应的request参数值匹配一个资源标识，匹配url的资源操作权限资源标识必须和其保持一致，
+				参数required标识resource是否必须false表示如果url /test/testopurlpermissiondelete.jsp可以带资源码参数，也可以不带，
+				如果带了则按照resource匹配规则来控制url访问权限，true标识必须带资源码，如果没带直接阻止url访问。
         	 -->
 			<authoration>				 
-			 	<url>/test/testopurlpermissiondelete.jsp</url>
+			 	<url><![CDATA[/test/testopurlpermissiondelete.jsp{"resource":"orgCode"|"required":true}]]></url>
 			</authoration>
 		</operation>
 		

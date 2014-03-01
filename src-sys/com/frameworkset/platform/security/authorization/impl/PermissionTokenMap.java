@@ -38,7 +38,7 @@ import com.frameworkset.platform.security.AccessControl;
  * @version 1.0
  */
 public class PermissionTokenMap {
-	
+	public static final String RESOURCE_PARAMNAME="resource";
 	/**
 	 * Map<String,        PermissionTokenRegion>
 	 *     resourceType(资源类型划分)       资源权限区域
@@ -120,7 +120,7 @@ public class PermissionTokenMap {
 		{
 			resourceTokens = new PermissionTokenRegion();
 			this.resourcTokenMap.put(resourctType, resourceTokens);
-		}
+		}		
 		resourceTokens.addPermissionToken(url, region,token);
 		
 		
@@ -230,12 +230,16 @@ public class PermissionTokenMap {
 		else
 		{
 			boolean successed = false;
+			AccessControl control = AccessControl.getAccessControl();
 			for(PermissionToken token:ptokens.getPermissionTokens())
 			{
-				if(AccessControl.getAccessControl().checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
+				if(control.checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
 				{
-					successed = true;
-					break;
+					if(control.evalResource(token))
+					{
+						successed = true;
+						break;
+					}
 				}
 			}
 			return successed;

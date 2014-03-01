@@ -66,7 +66,8 @@
 				    <tr>
 						
 						<td colspan="7">
-							has globaltest delete permission：<%=hasglobaltestdeletepermission %> <a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp"  target="_blank">测试url控制</a>
+							has globaltest delete permission：<%=hasglobaltestdeletepermission %> <a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp"  target="_blank">测试参数动态url权限控制（不传orgCode参数）</a>
+							<a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp?orgCode=globaltest"  target="_blank">测试参数动态url权限控制（传orgCode=globaltest参数）</a>
 						</td>
 					</tr>
 				</table>

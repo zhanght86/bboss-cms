@@ -294,11 +294,14 @@ public class ConfigManager implements ResourceInitial {
     			if(ar != null)
     			{
     				List<String> ars = ar.getAuthorResources();
-    				for(int j = 0; ars != null && j < ars.size(); j ++)
+    				if(ars != null)
     				{
-    					PermissionToken token = new PermissionToken(resourceType, gid,
-    							op.getId());
-    					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
+	    				for(int j = 0;  j < ars.size(); j ++)
+	    				{
+	    					PermissionToken token = new PermissionToken(resourceType, gid,
+	    							op.getId());
+	    					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
+	    				}
     				}
     			}
     		}
@@ -352,10 +355,7 @@ public class ConfigManager implements ResourceInitial {
     	ResourceInfoQueue rq = resources.getResourceQueue();
     	for(int i = 0; rq != null && i < rq.size(); i ++)
     	{
-    		if(i == 47)
-    		{
-    			System.out.println();
-    		}
+    		
     		ResourceInfo res = rq.getResourceInfo(i);
     		buildResourcePermissionTokenMap(appName, moduleName, res );
     	}

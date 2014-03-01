@@ -697,6 +697,10 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	public static Params getParams(String paramHandle,String paramid, String paramType) {
 		return getParamsHandler(paramHandle).getParams(paramid, paramType);
 	}
+	
+	public static String  getStringParam(String paramHandle,String paramid, String paramName,String paramType) {
+		return getParamsHandler(paramHandle).getParams(paramid, paramType).getAttributeString(paramName);
+	}
 
 	public static <T>  T getParams(String paramHandle,String paramid, String paramType,Class<T> dataBean) {
 		Params params = getParams( paramHandle, paramid,  paramType) ;

@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.StringUtil;
 
 /**
  * <p>Title: PermissionTokenRegion.java</p>
@@ -96,6 +97,19 @@ public class PermissionTokenRegion {
 		if(idx > 0)
 		{
 			url = url.substring(0,idx);
+		}
+		
+		idx = url.indexOf("{");
+		if(idx > 0)
+		{
+			String temp = url;
+			url = temp.substring(0,idx);
+			String condition = temp.substring(idx);
+			condition = condition.replace('|', ',');
+			HashMap map = StringUtil.json2Object(condition,HashMap.class);
+			if(map != null && map.size() > 0)
+				token.setConditions(map);
+			
 		}
 		Map<RID,List<PermissionToken>> resourceTokens = this.regionResourcTokenMap.get(region);
 		if(resourceTokens == null)

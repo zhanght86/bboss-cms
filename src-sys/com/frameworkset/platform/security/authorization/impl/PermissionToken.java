@@ -15,6 +15,8 @@
  */
 package com.frameworkset.platform.security.authorization.impl;
 
+import java.util.Map;
+
 
 /**
  * <p>Title: PermissionToken.java</p>
@@ -34,7 +36,46 @@ package com.frameworkset.platform.security.authorization.impl;
 public class PermissionToken {
 	private String resourceType;
 	private String resourcedID;
+	private Map<String,Object> conditions;
+	private String resouceAuthCodeParamName;
+	public String getResouceAuthCodeParamName() {
+		return resouceAuthCodeParamName;
+	}
+
+
+
+	public boolean isResouceAuthCodeRequired() {
+		return resouceAuthCodeRequired;
+	}
+	private boolean resouceAuthCodeRequired = true;
+	public void setConditions(Map<String, Object> conditions) {
+		this.conditions = conditions;
+		if(conditions != null)
+		{
+			this.resouceAuthCodeParamName = (String)this.conditions.get(PermissionTokenMap.RESOURCE_PARAMNAME);
+			Boolean temp = (Boolean)this.conditions.get("required");
+			if(temp != null)
+			{
+				this.resouceAuthCodeRequired = temp.booleanValue();
+			}
+		}
+	}
+
 	
+	
+	public Map<String, Object> getConditions() {
+		return conditions;
+	}
+	public String getCondition(String name) {
+		return (String)conditions.get(name);
+	}
+	public Boolean getBooleanCondition(String name) {
+		return (Boolean)conditions.get(name);
+	}
+	public boolean containCondition()
+	{
+		return conditions != null;
+	}
 	public PermissionToken(String resourceType, String resourcedID,
 			String operation) {
 		super();

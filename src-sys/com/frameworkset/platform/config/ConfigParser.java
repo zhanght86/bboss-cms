@@ -605,7 +605,7 @@ public class ConfigParser extends I18nXMLParser  {
             applicationInfo.setDefaultApplicationInfo(isdefault);
 
             //根据安全配置信息所属的应用和应用模块来缓冲安全配置信息
-            applicationInfos.put(app + "$$" + module,applicationInfo);
+//            applicationInfos.put(app + "$$" + module,applicationInfo);
             applicationInfos.put(app,applicationInfo);
             traceStack.push(applicationInfo);
 

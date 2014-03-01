@@ -76,6 +76,7 @@ import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.AuthUser;
 import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
 import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
+import com.frameworkset.platform.security.authorization.impl.PermissionToken;
 import com.frameworkset.platform.security.context.AppAccessContext;
 import com.frameworkset.platform.security.util.CookieUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -1717,8 +1718,8 @@ public class AccessControl implements AccessControlInf{
 				this.credential = (Credential) credentialIndexs
 						.get(this.moduleName);
 			}
-			String sessionid = (String)session.getAttribute(SESSIONID_CACHE_KEY);
-			Boolean fromclient =  (Boolean)session.getAttribute(SESSIONID_FROMCLIENT_KEY);
+//			String sessionid = (String)session.getAttribute(SESSIONID_CACHE_KEY);
+//			Boolean fromclient =  (Boolean)session.getAttribute(SESSIONID_FROMCLIENT_KEY);
 	//		if (principal != null
 	//				&& (fromclient == null && !onlineUser.existUser(principal.getName(), sessionid))) {
 	//			if(redirectPath == null || redirectPath.equals(""))
@@ -4665,6 +4666,49 @@ public class AccessControl implements AccessControlInf{
 			
 			FrameworkServlet.setSubSystemToCookie(response, getUserAccount(), subsystem_id);
 		}
+		
+	}
+
+
+	public boolean evalResource( PermissionToken token) {
+		return _evalResource( token,request);
+	}
+	public static boolean _evalResource( PermissionToken token,HttpServletRequest request) {
+		if(!token.containCondition())
+		{
+			return true;
+		}
+		else						
+		{
+			String resourceParamName = token.getResouceAuthCodeParamName();
+			if(resourceParamName == null || resourceParamName.equals(""))
+			{
+				if(token.isResouceAuthCodeRequired())
+				{
+					return false;
+				}
+				else
+					return true;
+			}
+			else
+			{
+				if(request != null)
+				{
+					String rid = request.getParameter(resourceParamName);
+					if(rid == null)
+					{
+						return false;
+					}
+					return token.getResourcedID().equals(rid);
+				}
+				else
+				{
+					
+				}
+				return false;
+			}
+		}
+		// TODO Auto-generated method stub
 		
 	}
 	
