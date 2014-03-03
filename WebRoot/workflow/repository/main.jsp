@@ -243,7 +243,7 @@
 											<td><input id="processKey" name="processKey" type="text"
 													value="" class="w120"/></td>
 											<th>
-												<pg:message code="sany.pdp.workflow.deploy.name"/>：
+												<pg:message code="sany.pdp.workflow.processdef.path"/>：
 											</th>
 											<td>
 												<input id="resourceName" name="resourceName" type="text"

@@ -34,5 +34,18 @@
 			  <property value="beans.xml"/>
 			  </construction>
 	</property>		-->	  
-  
+  <property name="deployPolicy">
+		<list>
+			<!-- 
+			指定流程实例升级到最新版本时需要更新的业务表及业务表中对应的流程定义id字段名称
+			可以通过property元素指定多个业务表 
+			-->
+<!--			<property table="tpp_plan" processdefcolumn="pd_id"/>-->
+			<!-- 
+			指定部署流程版本时，升级流程实例或者删除流程实例回调处理函数，可以与指定的表和表字段一起使用
+			可以指定多个回调处理函数
+			 -->
+			<property upgradecallback="com.sany.test.TestUpgradeCallback"/>			
+		</list>
+	</property>
 </properties>

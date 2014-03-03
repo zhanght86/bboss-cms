@@ -17,7 +17,7 @@
 				and p.resource_name_ like #[resourceName]
 			#end
 			#if($businesstype_id && !$businesstype_id.equals(""))
-				and b.businesstype_id = #[businesstype_id]
+				and b.business_id = #[businesstype_id]
 			#end
 			#if($deploymentId && !$deploymentId.equals(""))
 				and d.id_ = #[deploymentId]
@@ -649,12 +649,12 @@
 	
 	<property name="batchDeleteNodeVariable">
 		<![CDATA[
-			delete from td_wf_nodevariable t
+			delete from td_wf_nodevariable
 			where node_id in (select id from td_wf_activiti_node_info where process_key=#[process_key])
 			#if($business_type && !$business_type.equals("0"))
-				and t.business_id=#[business_id] 
+				and business_id=#[business_id] 
 			#end			
-			and t.business_type=#[business_type]
+			and business_type=#[business_type]
 		]]>
 	</property>
 	

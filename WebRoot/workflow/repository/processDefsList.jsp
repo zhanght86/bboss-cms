@@ -31,7 +31,7 @@
        		<th><pg:message code="sany.pdp.workflow.deploy.version"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.time"/></th>
-       		<th><pg:message code="sany.pdp.workflow.picture.resource.path"/></th>
+       		<th><pg:message code="sany.pdp.workflow.processdef.path"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.business.type"/></th>
        		<th><pg:message code="sany.pdp.common.status"/></th>
@@ -50,7 +50,7 @@
         		<td><pg:cell colName="KEY_" /></td>       
                 <td><span class="toolTip" title="<pg:cell colName="VERSION_"/>"><pg:cell colName="VERSION_" maxlength="8" replace="..."/></span></td>  
            		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   
-           		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd hh:mm:ss"/></td>
+           		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
            		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
            		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
            		<td><pg:cell colName="business_name"/></td>
