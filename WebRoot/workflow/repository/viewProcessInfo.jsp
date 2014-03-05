@@ -76,8 +76,8 @@
 				<legend><pg:message code="sany.pdp.workflow.operation.workflow.info"/></legend>
 					<table border="0" cellpadding="0" cellspacing="0" class="table4">
 						<tr height="25px">
-							<th width=85px ><pg:message code="sany.pdp.workflow.deploy.id"/>：</th>
-							<td width=140px id="DEPLOYMENT_ID_"><pg:cell colName="DEPLOYMENT_ID_"/></td>
+							<th width=85px >ID：</th>
+							<td width=140px id="DEPLOYMENT_ID_"><pg:cell colName="ID_"/></td>
 							<th width=85px ><pg:message code="sany.pdp.workflow.deploy.catalogue"/>：</th>
 							<td width=140px id="CATEGORY_">
 								<pg:cell colName="CATEGORY_"/>
@@ -90,7 +90,7 @@
 						<tr height="25px">	
 							<th ><pg:message code="sany.pdp.workflow.process.key"/>：</th>
 							<td id="KEY_">
-								<pg:cell colName="KEY_"/>
+								<pg:cell colName="KEY_"/> 
 							</td>
 
 							<th width=85px ><pg:message code="sany.pdp.workflow.deploy.version"/>：</th>
@@ -101,9 +101,9 @@
 						</tr>
 						<tr height="25px">	
 							<th ><pg:message code="sany.pdp.workflow.deploy.time"/>：</th>
-							<td id="DEPLOYMENT_TIME_"><pg:cell colName="DEPLOYMENT_TIME_" dateformat="yyyy-MM-dd hh:mm:ss"/></td>
+							<td id="DEPLOYMENT_TIME_"><pg:cell colName="DEPLOYMENT_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 
-							<th width=85px ><pg:message code="sany.pdp.workflow.resource.name"/>：</th>
+							<th width=85px ><pg:message code="sany.pdp.workflow.processdef.path"/>：</th>
 							<td id="RESOURCE_NAME_"><pg:cell colName="RESOURCE_NAME_"/></td>
 							
 							<th width=85px ><pg:message code="sany.pdp.workflow.picture.resource.name"/>：</th>

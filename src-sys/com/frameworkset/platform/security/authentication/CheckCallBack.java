@@ -24,8 +24,8 @@ public class CheckCallBack implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String loginModule;
-    private Map callBacks = new HashMap();
-    private AttributeQueue  list = new AttributeQueue();
+    private Map<String,Attribute> callBacks = new HashMap<String,Attribute>();
+//    private AttributeQueue  list = new AttributeQueue();
     public Object getUserAttribute(String userAttribute)
     {
     	Attribute attr = (Attribute)callBacks.get(userAttribute);
@@ -33,17 +33,21 @@ public class CheckCallBack implements Serializable{
     		return null;
         return attr.getValue();
     }
+    public Map<String,Attribute> getCallBacks()
+    {
+    	return this.callBacks;
+    }
     public void setUserAttribute(String userAttribute,Object value)
     {
         Attribute attribute = new Attribute(userAttribute,value);
-        this.list.add(attribute);
+//        this.list.add(attribute);
         callBacks.put(userAttribute,attribute);
     }
 
-    public AttributeQueue getAttributeQueue()
-    {
-        return this.list;
-    }
+//    public AttributeQueue getAttributeQueue()
+//    {
+//        return this.list;
+//    }
 
     public String getLoginModule() {
         return loginModule;

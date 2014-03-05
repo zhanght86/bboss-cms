@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
@@ -62,6 +63,7 @@ import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.security.DESCipher;
 import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.platform.config.LoginModuleInfoQueue;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
 import com.frameworkset.platform.framework.SubSystem;
@@ -70,6 +72,7 @@ import com.frameworkset.platform.security.authentication.Credential;
 import com.frameworkset.platform.security.authentication.LoginContext;
 import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.security.authentication.UsernamePasswordCallbackHandler;
+import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute;
 import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
 import com.frameworkset.platform.security.authorization.AuthRole;
@@ -1076,8 +1079,8 @@ public class AccessControl implements AccessControlInf{
 			for (; credentials.hasNext();) {
 				Credential credential = (Credential) credentials.next();
 				if (credential.isCurrent()) {
-					CheckCallBack.AttributeQueue attributeQueue = credential
-							.getCheckCallBack().getAttributeQueue();				
+//					CheckCallBack.AttributeQueue attributeQueue = credential
+//							.getCheckCallBack().getAttributeQueue();				
 					credentialIndexs.put(credential.getLoginModule(),
 							credential);					
 					if (credential.getLoginModule().equals(this.moduleName))
@@ -1170,11 +1173,12 @@ public class AccessControl implements AccessControlInf{
 		for (; credentials.hasNext();) {
 			Credential credential = (Credential) credentials.next();
 			if (credential.isCurrent()) {
-				CheckCallBack.AttributeQueue attributeQueue = credential
-						.getCheckCallBack().getAttributeQueue();
+//				CheckCallBack.AttributeQueue attributeQueue = credential
+//						.getCheckCallBack().getAttributeQueue();
+				Map<String,Attribute> callBacks = credential.getCheckCallBack().getCallBacks();
 				if(enablecookie)
 				{
-					if (attributeQueue.size() > 0) {
+					if (callBacks.size() > 0) {
 						if (!flag) {
 							flag = true;
 						} else {
@@ -1183,14 +1187,15 @@ public class AccessControl implements AccessControlInf{
 						credentialCookie.append(credential.getLoginModule())
 								.append(CREDENTIAL_ATTRIBUTE_SPLIT);
 						boolean _flag = false;
-						for (int i = 0; i < attributeQueue.size(); i++) {
+						Iterator<Entry<String, Attribute>>  it = callBacks.entrySet().iterator();
+						
+						while (it.hasNext()) {
 							if (!_flag) {
 								_flag = true;
 							} else {
 								credentialCookie.append(ATTRIBUTE_SPLIT);
 							}
-							CheckCallBack.Attribute attr = attributeQueue
-									.get(i);
+							CheckCallBack.Attribute attr = it.next().getValue();
 							credentialCookie.append(attr.getName()).append("=")
 									.append(attr.getValue());
 						}
@@ -1712,6 +1717,7 @@ public class AccessControl implements AccessControlInf{
 			credentialIndexs = (Map) session.getAttribute(CREDENTIAL_INDEXS);
 	
 			if (this.principalIndexs != null) {
+				current.set(this);
 				this.principal = (Principal) principalIndexs.get(moduleName);
 			}
 			if (this.credentialIndexs != null) {
@@ -1733,7 +1739,7 @@ public class AccessControl implements AccessControlInf{
 	//			}
 	//			return false;
 	//		}
-			current.set(this);
+			
 			
 	//		/**
 	//		 * 检查当前用户的类型是否在被允许的范围内，不允许则跳转到相应的页面
@@ -3522,6 +3528,35 @@ public class AccessControl implements AccessControlInf{
 			return value == null ? "" : value.toString();
 		} catch (Exception e) {
 			return "";
+		}
+	}
+	/**
+	 * 重置指定的用户属性值
+	 * @param userAttribute
+	 */
+	public void resetUserAttribute(String userAttribute) {
+		try {
+			
+			LoginContext.resetUserAttribute(request,credential.getCheckCallBack(), userAttribute);
+//			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+//			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 重置用户属性值
+	 */
+	public void resetUserAttributes() {
+		try {
+			
+			LoginContext.resetUserAttribute(request,credential.getCheckCallBack());
+//			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+//			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

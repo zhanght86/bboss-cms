@@ -17,14 +17,14 @@
         <pg:header>
             <th align=center><input id="CKA" name="CKA" type="checkbox" 
 							onClick="checkAll('CKA','CK')"></th>
-			
+			<th>ID</th>
        		<th><pg:message code="sany.pdp.workflow.deploy.catalogue"/></th>
        		<th><pg:message code="sany.pdp.common.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.process.key"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.version"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.time"/></th>
-       		<th><pg:message code="sany.pdp.workflow.resource.name"/></th>
+       		<th><pg:message code="sany.pdp.workflow.processdef.path"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
        		<th>查看</th>
        	</pg:header>	
@@ -41,12 +41,13 @@
    		        <td class="td_center">
                     <input id="CK" type="checkbox"  name="CK" onClick="checkOne('CKA','CK'), makeOneCheck(this), viewProcessInfo('<pg:cell colName="DEPLOYMENT_ID_" />')" value="<pg:cell colName="ID_" />"/>
                     <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
+                 <td><pg:cell colName="ID_" /></td>        
                 <td><span class="toolTip" title="<pg:cell colName="CATEGORY_"/>"><pg:cell colName="CATEGORY_" /></span></td>
                 <td><pg:cell colName="NAME_" maxlength="8" replace="..."/></td>
         		<td><pg:cell colName="KEY_" /></td>       
                 <td><pg:cell colName="VERSION_"/></td>  
            		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   
-           		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd hh:mm:ss"/></td>
+           		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
            		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
            		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>	   	  
            		<td><a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="viewProcessInfo('<pg:cell colName="KEY_" />','<pg:cell colName="VERSION_" />')"><span>查看详情</span></a></td>

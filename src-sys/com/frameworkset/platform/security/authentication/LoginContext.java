@@ -13,6 +13,7 @@ import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
@@ -1023,5 +1024,29 @@ public class LoginContext implements Serializable{
                 ("LoginModuleControlFlag: ") + controlFlag);
         }
     }
+    
+	public static void resetUserAttribute(HttpServletRequest request,
+			CheckCallBack checkCallBack, String userAttribute) {
+		LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+		int size = moduleQueue.getACLLoginModuleSize();
+		for(int i = 0; i < size;i ++)
+		{
+			ACLLoginModule aclLoginModule = moduleQueue.getACLLoginModule(i);
+			aclLoginModule.resetUserAttribute(request, checkCallBack, userAttribute);
+		}
+		
+	}
+	
+	public static void resetUserAttribute(HttpServletRequest request,
+			CheckCallBack checkCallBack) {
+		LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+		int size = moduleQueue.getACLLoginModuleSize();
+		for(int i = 0; i < size;i ++)
+		{
+			ACLLoginModule aclLoginModule = moduleQueue.getACLLoginModule(i);
+			aclLoginModule.resetUserAttributes(request, checkCallBack);
+		}
+		
+	}
 
 }

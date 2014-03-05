@@ -25,7 +25,7 @@
             <th align=center><input id="CKA" name="CKA" type="checkbox" 
 							onClick="checkAll('CKA','CK')"></th>
 			
-       		
+       		<th>ID</th>
        		<th><pg:message code="sany.pdp.common.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.process.key"/></th>
        		<th><pg:message code="sany.pdp.workflow.deploy.version"/></th>
@@ -46,7 +46,8 @@
                     <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="ID_" />"/>
                     <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
                     <input id="key" type="hidden" name="key" value="<pg:cell colName="KEY_" />"/></td>
-                <td><pg:cell colName="NAME_" maxlength="8" replace="..."/></td>
+                <td><pg:cell colName="ID_" /></td>    
+                <td><pg:cell colName="NAME_" /></td>
         		<td><pg:cell colName="KEY_" /></td>       
                 <td><span class="toolTip" title="<pg:cell colName="VERSION_"/>"><pg:cell colName="VERSION_" maxlength="8" replace="..."/></span></td>  
            		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   

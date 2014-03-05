@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.frameworkset.platform.config.model.LoginModuleInfo;
+import com.frameworkset.platform.security.authentication.ACLLoginModule;
 
 /**
  * <p>Title: </p>
@@ -20,13 +21,34 @@ import com.frameworkset.platform.config.model.LoginModuleInfo;
  */
 public class LoginModuleInfoQueue implements java.io.Serializable {
     private List loginModuleQueue = new ArrayList();
-    public static void main(String[] args) {
+    private List<ACLLoginModule> ACLLoginModules = new ArrayList<ACLLoginModule>();
+    public List<ACLLoginModule> getACLLoginModules() {
+		return ACLLoginModules;
+	}
+    public int getACLLoginModuleSize()
+    {
+    	return ACLLoginModules.size();
+    }
+    public ACLLoginModule getACLLoginModule(int i) {
+		return ACLLoginModules.get(i);
+	}
+
+	public static void main(String[] args) {
         LoginModuleInfoQueue loginmodulequeue = new LoginModuleInfoQueue();
     }
 
     public void addLoginModuleInfo(LoginModuleInfo loginModuleInfo)
     {
         this.loginModuleQueue.add(loginModuleInfo);
+        try
+        {
+        	ACLLoginModule aclLoginModule = (ACLLoginModule)(Class.forName(loginModuleInfo.getLoginModule()).newInstance());
+        	ACLLoginModules.add(aclLoginModule);
+        }
+        catch(Exception e)
+        {
+        	
+        }
     }
 
     public LoginModuleInfo getLoginModuleInfo(int i)

@@ -10,12 +10,17 @@
 <%@ page import="com.sany.webseal.LoginValidate.*"%>
 	
 <%@ page import="java.util.*"%>
+<%@page import="com.frameworkset.util.StringUtil"%>
+<%@page import="java.net.URLDecoder"%>
 <%
 
 	String u = "", p = "", ck = "";
 
 	String successRedirect = request.getParameter("successRedirect");
-	
+	if(!StringUtil.isEmpty(successRedirect))
+	{
+		successRedirect = StringUtil.getRealPath(request, successRedirect,true);
+	}
     String userName = request.getParameter("userId");
 	
 	String loginType = request.getParameter("loginType");
@@ -52,6 +57,7 @@
 			control.checkAccess(request, response, false);
 			String user = control.getUserAccount();		
 			 request.setAttribute("fromsso","true");
+			
 			if (user == null || "".equals(user) || !userName.equals(user)) {
 			 
              
@@ -64,8 +70,11 @@
 		             control.login(request,
 								response, userName, password);
 						
-					 Framework framework = Framework.getInstance(control.getCurrentSystemID());
-					 MenuItem menuitem = framework.getMenuByID(menuid);
+					
+					 if(StringUtil.isEmpty(successRedirect))
+					 {
+					 	 Framework framework = Framework.getInstance(control.getCurrentSystemID());
+					 	MenuItem menuitem = framework.getMenuByID(menuid);
 					 	if(menuitem instanceof Item)
 					 	{
 							
@@ -80,37 +89,49 @@
 							successRedirect = framepath;
 					 	}
 					 	AccessControl.recordIndexPage(request, successRedirect);
-					 	response.sendRedirect(successRedirect);
-						return;
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-						response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName + "&ip=" + ip);
-						return;
-					}	
+					 }
+					 else
+					 {
+					      successRedirect = URLDecoder.decode(successRedirect);
+					 }
+				 	response.sendRedirect(successRedirect);
+					return;
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName + "&ip=" + ip);
+					return;
+				}	
 	             
 	         
 	        
 	         
 			} else {
-				
-				Framework framework = Framework.getInstance(control.getCurrentSystemID());
-				MenuItem menuitem = framework.getMenuByID(menuid);
-			 	if(menuitem instanceof Item)
-			 	{
-					
-					Item menu = (Item)menuitem;
-					successRedirect = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(menu,control),MenuHelper.sanymenupath_menuid,menu.getId());
-			 	}
-			 	else
-			 	{
-			 	
-			 		Module menu = (Module)menuitem;
-			 		String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath + "=" + menu.getPath();
-					successRedirect = framepath;
-			 	}
-			 	AccessControl.recordIndexPage(request, successRedirect);
+				control.resetUserAttributes();
+				 if(StringUtil.isEmpty(successRedirect))
+				 {
+					Framework framework = Framework.getInstance(control.getCurrentSystemID());
+					MenuItem menuitem = framework.getMenuByID(menuid);
+				 	if(menuitem instanceof Item)
+				 	{
+						
+						Item menu = (Item)menuitem;
+						successRedirect = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(menu,control),MenuHelper.sanymenupath_menuid,menu.getId());
+				 	}
+				 	else
+				 	{
+				 	
+				 		Module menu = (Module)menuitem;
+				 		String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath + "=" + menu.getPath();
+						successRedirect = framepath;
+				 	}
+				 	AccessControl.recordIndexPage(request, successRedirect);
+				 }
+				 else
+				 {
+				 	successRedirect = URLDecoder.decode(successRedirect);
+				 }
 				response.sendRedirect(successRedirect);
 				return;
 			}
@@ -177,7 +198,8 @@
 	            	 request.setAttribute("fromsso","true");
 	            	 control.login(request,
 								response, userName, password);
-						
+					 if(StringUtil.isEmpty(successRedirect))
+					 {	
 					 	Framework framework = Framework.getInstance(control.getCurrentSystemID());
 					 	MenuItem menuitem = framework.getMenuByID(menuid);
 					 	if(menuitem instanceof Item)
@@ -194,34 +216,47 @@
 							successRedirect = framepath;
 					 	}
 					 	AccessControl.recordIndexPage(request, successRedirect);
-						response.sendRedirect(successRedirect);
-						return;
-					}
-					catch(Exception e)
-					{
-						e.printStackTrace();
-						response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName );
-						return;
-					}	
+					 }
+					 else
+					 {
+					 		successRedirect = URLDecoder.decode(successRedirect);
+					 }
+					response.sendRedirect(successRedirect);
+					return;
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+					response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName );
+					return;
+				}	
 	        
 	         
 			} else {
-				Framework framework = Framework.getInstance(control.getCurrentSystemID());
-				MenuItem menuitem = framework.getMenuByID(menuid);
-			 	if(menuitem instanceof Item)
-			 	{
-					
-					Item menu = (Item)menuitem;
-					successRedirect = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(menu,control),MenuHelper.sanymenupath_menuid,menu.getId());
-			 	}
-			 	else
-			 	{
-			 	
-			 		Module menu = (Module)menuitem;
-			 		String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath + "=" + menu.getPath();
-					successRedirect = framepath;
-			 	}
-			 	AccessControl.recordIndexPage(request, successRedirect);
+				control.resetUserAttributes();
+				 if(StringUtil.isEmpty(successRedirect))
+				 {
+					Framework framework = Framework.getInstance(control.getCurrentSystemID());
+					MenuItem menuitem = framework.getMenuByID(menuid);
+				 	if(menuitem instanceof Item)
+				 	{
+						
+						Item menu = (Item)menuitem;
+						successRedirect = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(menu,control),MenuHelper.sanymenupath_menuid,menu.getId());
+				 	}
+				 	else
+				 	{
+				 	
+				 		Module menu = (Module)menuitem;
+				 		String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath + "=" + menu.getPath();
+						successRedirect = framepath;
+				 	}
+				 	AccessControl.recordIndexPage(request, successRedirect);
+				 }
+				 else
+				 {
+				 	successRedirect = URLDecoder.decode(successRedirect);
+				 }
 				response.sendRedirect(successRedirect);
 				return;
 			}

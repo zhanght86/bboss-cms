@@ -290,4 +290,23 @@ public abstract class ACLLoginModule implements LoginModule,Serializable {
     public void setRegistTable(String registTable) {
         this.registTable = registTable;
     }
+    /**
+     * 重置指定的用户属性
+     * @param userAttribute
+     * @param value
+     */
+    public void resetUserAttribute(HttpServletRequest request,CheckCallBack checkCallBack,String userAttribute)
+    {
+    	
+    }
+    
+    /**
+     * 重置用户属性
+     * @param userAttribute
+     * @param value
+     */
+    public void resetUserAttributes(HttpServletRequest request,CheckCallBack checkCallBack)
+    {
+    	
+    }
 }

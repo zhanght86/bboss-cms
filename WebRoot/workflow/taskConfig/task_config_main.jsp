@@ -78,9 +78,9 @@
 												</a></legend>
 							<table border="0" cellpadding="0" cellspacing="0" class="table4">
 								<tr height="25px">
-									<th width=85px>部署ID：</th>
+									<th width=85px>ID：</th>
 									<td width=140px id="DEPLOYMENT_ID_"><pg:cell
-											colName="DEPLOYMENT_ID_" /></td>
+											colName="ID_" /></td>
 									<th width=85px>目录：</th>
 									<td width=140px id="CATEGORY_"><pg:cell
 											colName="CATEGORY_" /></td>
@@ -103,7 +103,7 @@
 									<td id="DEPLOYMENT_TIME_"><pg:cell
 											colName="DEPLOYMENT_TIME_" dateformat="yyyy-MM-dd hh:mm:ss" /></td>
 
-									<th width=85px>资源名称：</th>
+									<th width=85px><pg:message code="sany.pdp.workflow.processdef.path"/>：</th>
 									<td id="RESOURCE_NAME_"><pg:cell colName="RESOURCE_NAME_" /></td>
 
 									<th width=85px>图片资源名称：</th>
