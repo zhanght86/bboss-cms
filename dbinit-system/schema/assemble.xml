@@ -21,14 +21,14 @@
 		<property name="schemafiles">
 				<list>
 					<property dbname="bspf"><![CDATA[schema/tableinfo.xml,schema/sys.xml,schema/sany.xml,schema/sany-workflow.xml,schema/cms.xml,schema/cms-ext.xml,schema/sany-mms.xml,schema/sany-log.xml]]></property>
-				
+				<property dbname="datareuse"><![CDATA[schema/esb.xml]]></property>
 <!--					<property dbname="kettle"><![CDATA[schema/smc.xml]]></property>-->
 	  			</list>
 		</property>
 		<property name="executefiles">
 			<list>
 				<property dbname="bspf"><![CDATA[schema/data/mysql-sequence.xml,schema/data/sys-init.xml,schema/index/sys_index_init.xml,schema/data/cms-init.xml,schema/data/cms-init-1.xml,schema/data/sany-init.xml]]></property>
-			
+			<property dbname="datareuse"><![CDATA[schema/index/esb-index.xml,schema/data/esb-init.xml,schema/data/metadataset.xml,schema/data/metadata.xml]]></property>
 <!--				<property dbname="kettle"><![CDATA[schema/data/mysql-sequence.xml,schema/data/smc-init.xml]]></property>-->
   			</list>
 

@@ -1,3 +1,4 @@
+<poolman>
 <datasource>
 
 		<dbname>bspf</dbname>
@@ -9,4 +10,13 @@
 		<showsql>false</showsql>
 		<keygenerate>composite</keygenerate>
 	</datasource>
+	
+<datasource external="true">
+
+    <dbname>datareuse</dbname>
+    <externaljndiName>druid_datasource_jndiname</externaljndiName>
+	<showsql>true</showsql>
+
+  </datasource>
+</poolman>  
   

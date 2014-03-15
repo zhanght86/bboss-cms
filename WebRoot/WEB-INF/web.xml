@@ -124,8 +124,8 @@
 		   /sysmanager/password/modifyExpiredUserPWD.jsp,
 		  /passward/modifyExpiredPassword.page,
 		  /passward/generateImageCode.page,
-		  /common/jsp/tokenfail.jsp,/mobile/login.jsp
-		  
+		  /common/jsp/tokenfail.jsp,
+		  /sanymbp/login.page
     	   </param-value>
     </init-param>
     <init-param>
@@ -268,12 +268,16 @@
             /WEB-INF/conf/bboss-*.xml,
             /WEB-INF/conf/permission/bboss-*.xml,
             /WEB-INF/conf/sanylog/bboss-*.xml,
-            /WEB-INF/conf/dictionary/bboss-*.xml
+            /WEB-INF/conf/dictionary/bboss-*.xml,
+            /WEB-INF/conf/datareuse/bboss-*.xml,
+             
             </param-value>
         </init-param>
         <init-param>
 			<param-name>messagesources</param-name>
-			<param-value>/WEB-INF/messages_pdp,/WEB-INF/messages_pdp_common,/WEB-INF/conf/appbom/messages_appbom</param-value>
+			<param-value>/WEB-INF/messages_pdp,/WEB-INF/messages_pdp_common,
+			/WEB-INF/conf/appbom/messages_appbom
+			</param-value>
 		</init-param>
 		<init-param>
 			<param-name>useCodeAsDefaultMessage</param-name>
@@ -408,6 +412,14 @@
 		<load-on-startup>2</load-on-startup>
   	</servlet>
  -->
+	<servlet>
+		<servlet-name>HessionRemote</servlet-name>
+		<servlet-class>org.frameworkset.spi.remote.hession.HessionDispatchServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HessionRemote</servlet-name>
+		<url-pattern>/hessian</url-pattern>
+	</servlet-mapping>
   <welcome-file-list>
     <welcome-file>welcome.jsp</welcome-file>
   </welcome-file-list>

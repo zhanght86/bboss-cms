@@ -4,7 +4,8 @@
 <%
 DESCipher des = new DESCipher();
 //工号和账号加密方法
-String wn = des.encrypt("10006673");
+String wn = des.encrypt("admin");
+out.println(wn);
  %>
 <html>
 <body>

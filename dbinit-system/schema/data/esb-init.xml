@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+  	<property name="all_datas">
+			<list>
+			
+  <property name="td_esb_business_line">
+    <map>
+      <property name="default">
+        <list>
+          <property index="0"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('30', '政工', 13)]]></property>
+          <property index="1"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('40', '后勤', 13)]]></property>
+          <property index="2"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('50', '法制', 9)]]></property>
+          <property index="3"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('60', '外事', 6)]]></property>
+          <property index="4"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('70', '出入境管理', 5)]]></property>
+          <property index="5"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('80', '信息网络管理', 13)]]></property>
+          <property index="6"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('90', '信息通信', 0)]]></property>
+          <property index="7"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('A0', '科研', 27)]]></property>
+          <property index="8"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('B0', '国内安全保卫', 27)]]></property>
+          <property index="9"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('C0', '经文保', 27)]]></property>
+          <property index="10"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('D0', '治安', 1)]]></property>
+          <property index="11"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('E0', '户政', 2)]]></property>
+          <property index="12"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('F0', '监所管理', 7)]]></property>
+          <property index="13"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('G0', '刑事侦察', 3)]]></property>
+          <property index="14"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('H0', '技术侦察', 15)]]></property>
+          <property index="15"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('I0', '经济犯罪侦察', 17)]]></property>
+          <property index="16"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('J0', '禁毒', 10)]]></property>
+          <property index="17"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('K0', '交通', 4)]]></property>
+          <property index="18"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('L0', '派出所', 8)]]></property>
+          <property index="19"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('M0', '公安院校', 21)]]></property>
+          <property index="20"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('N0', '公安医院', 22)]]></property>
+          <property index="21"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('O0', '警卫局', 23)]]></property>
+          <property index="22"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('P0', '消防', 11)]]></property>
+          <property index="23"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('Q0', '边防', 27)]]></property>
+          <property index="24"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('Z0', '其它', 26)]]></property>
+          <property index="25"><![CDATA[insert into TD_ESB_BUSINESS_LINE (BUSINESS_LINE_CODE, BUSINESS_LINE_NAME, SEQ_)values ('20', '反邪教', 12)]]></property>
+        </list>
+      </property>
+	  	  
+    </map>
+  </property>
+	  
+	  <property name="td_esb_data_type">
+        <map>
+          <property name="default">
+            <list>
+              <property index="0"><![CDATA[insert into TD_ESB_DATA_TYPE (DATA_TYPE_CODE, DATA_TYPE_NAME, JAVA_CLASS, FORMAT_DB_FUNCTION, FORMAT_JAVA_CLASS, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME)values ('Decimal', '数字型', 'java.lang.Double', null, null, 'admin', null, 'admin', null)]]></property>
+              <property index="1"><![CDATA[insert into TD_ESB_DATA_TYPE (DATA_TYPE_CODE, DATA_TYPE_NAME, JAVA_CLASS, FORMAT_DB_FUNCTION, FORMAT_JAVA_CLASS, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME)values ('Datetime', '日期时间型', 'java.util.Date', null, null, 'admin', null, 'admin', null)]]></property>
+              <property index="2"><![CDATA[insert into TD_ESB_DATA_TYPE (DATA_TYPE_CODE, DATA_TYPE_NAME, JAVA_CLASS, FORMAT_DB_FUNCTION, FORMAT_JAVA_CLASS, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME)values ('Byte', '二进制', 'java.lang.Byte' ,null, null, 'admin', null, 'admin', null)]]></property>
+              <property index="3"><![CDATA[insert into TD_ESB_DATA_TYPE (DATA_TYPE_CODE, DATA_TYPE_NAME, JAVA_CLASS, FORMAT_DB_FUNCTION, FORMAT_JAVA_CLASS, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME)values ('Boolean', '布尔型', 'java.lang.Boolean', null, null, 'admin', null, 'admin', null)]]></property>
+              <property index="4"><![CDATA[insert into TD_ESB_DATA_TYPE (DATA_TYPE_CODE, DATA_TYPE_NAME, JAVA_CLASS, FORMAT_DB_FUNCTION, FORMAT_JAVA_CLASS, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME)values ('String', '字符型', 'java.lang.String', null, null, 'admin', null, 'admin', null)]]></property>
+            </list>
+          </property>
+        </map>
+      </property>
+	  
+	  <property name="td_esb_data_type">
+        <map>
+          <property name="default">
+            <list>
+            <property index="19"><![CDATA[
+									  insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'GROUP_ID' ,null ,'uuid' ,0 ,'TD_ESB_GROUP')
+									  ]]></property>
+
+									  <property index="20"><![CDATA[
+									  insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE_STATUS_LOG', 'ID', 1, 0, '', 'uuid', '')
+									  ]]></property>
+
+									  <property index="21"><![CDATA[
+									  insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE_METADATA', 'service_metadata_id', 1, 0, '', 'uuid', '')
+									  ]]></property>
+
+									  <property index="22"><![CDATA[
+									  insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE', 'service_id', 1, 0, '', 'uuid', '')
+									  ]]></property>
+
+									  <property index="23"><![CDATA[
+									  insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_RESOUCE_PERMISSION', 'resouce_permission_id', 1, 0, '', 'uuid', '')
+									  ]]></property>
+
+									  <property index="24"><![CDATA[
+									  insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'BUSINESS_LINE_ID' ,null ,'uuid' ,0 ,'TD_ESB_BUSINESS_LINE')
+									  ]]></property>
+									  
+									  <property index="25"><![CDATA[
+									 insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'PARAM_ID' ,null ,'uuid' ,0 ,'TD_ESB_GLOBAL_PARAM')
+									  ]]></property>
+									  
+									  <property index="19"><![CDATA[
+									   insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'METADATA_SET_ID' ,null ,'uuid' ,0 ,'TD_ESB_METADATA_SET')
+									   ]]></property>
+
+									    <property index="20"><![CDATA[
+										insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'METADATA_ID' ,null ,'uuid' ,0 ,'TD_ESB_METADATA')
+									   ]]></property>
+
+									    <property index="23"><![CDATA[
+										insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE_RES_STATUS_LOG', 'ID', 1, 0, '', 'uuid', '')
+									   ]]></property>
+
+									    <property index="24"><![CDATA[
+										insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE_RESOURCE_DETAIL', 'service_res_detail_id', 1, 0, '', 'uuid', '')
+									   ]]></property>
+
+									    <property index="25"><![CDATA[
+										insert into tableinfo (TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE, TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX)
+values ('TD_ESB_SERVICE_RESOURCE', 'id', 1, 0, '', 'uuid', '')
+									   ]]></property>
+
+									    <property index="26"><![CDATA[
+										insert into TABLEINFO(TABLE_ID_GENERATOR ,TABLE_ID_INCREMENT ,TABLE_ID_NAME ,TABLE_ID_PREFIX ,TABLE_ID_TYPE ,TABLE_ID_VALUE ,TABLE_NAME)
+ values(null ,1 ,'LOG_ID' ,null ,'uuid' ,0 ,'TD_ESB_SERVICE_RES_CALLED_LOG')
+									   ]]></property>
+            </list>
+          </property>
+        </map>
+      </property>
+  
+  		</list>
+		</property>
+	
+</manager-config>
+

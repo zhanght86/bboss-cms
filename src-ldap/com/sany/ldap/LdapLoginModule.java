@@ -124,13 +124,13 @@ public class LdapLoginModule extends UserPasswordLoginModule{
             }
 
         } catch (ManagerException ex) {
-            ex.printStackTrace();
+           
             throw new LoginException(ex.getMessage());
         } catch (SPIException ex) {
-            ex.printStackTrace();
+          
             throw new LoginException(ex.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+           
             logger.debug("未知错误:" + e.getClass() + "," + e.getMessage());
             throw new LoginException(e.getMessage());
         }

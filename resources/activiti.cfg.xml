@@ -14,7 +14,7 @@
     	</construction>
     </property>
     <!-- Database configurations -->
-    <property name="databaseSchemaUpdate" value="false" />
+    <property name="databaseSchemaUpdate" value="true" />
     
     <!-- job executor configurations -->
     <property name="jobExecutorActivate" value="false" />

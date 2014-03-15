@@ -691,10 +691,10 @@ DD_belatedPNG.fix('div');
 						请求服务平台
 					</option>
 					
-					<option value="dp"
-						<%if(system_id != null && system_id.equals("dp")){%>
+					<option value="mbp"
+						<%if(system_id != null && system_id.equals("mbp")){%>
 						selected <%}%>>
-						代理商门户
+						移动门户
 					</option>
 					
 					

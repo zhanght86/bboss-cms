@@ -1,3 +1,53 @@
+ip访问控制思路：
+CREATE TABLE TD_SM_IPCONTROL
+(
+  ID           VARCHAR2(100),
+  IP           VARCHAR2(1000),
+  CONTROLUSER  VARCHAR2(100),
+  FILTERTYPE   NUMBER(1),
+  IPDESC       VARCHAR2(2000)
+)
+
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+NOMONITORING;
+
+COMMENT ON TABLE PDPV108.TD_SM_IPCONTROL IS 'IP访问控制：
+对用户访问系统的来源IP进行控制，分为白名单和黑名单
+控制逻辑：
+1.查找用户是否有白名单和黑名单，判断用户是否属于白名单用户（在白名单中不在黑名单中，不在黑名单中，在白名单中）
+2.如果用户没有定义白名单，查找所有与用户无关白名单和黑名单，判断用户是否属于白名单用户（在白名单中不在黑名单中，不在黑名单中，在白名单中）
+人员选择可以使用工作流的人员选择功能：/SanyPDP/WebRoot/purviewmanager/common/selectuser.jsp?loginName=xxx&loginID=xxx
+获取客户端ip的方法：com.frameworkset.util.StringUtil.getClientIP(HttpServletRequest request)
+控制点：
+/SanyPDP/src-ldap/com/sany/ldap/LdapLoginModule.java
+/SanyPDP/src-sys/com/frameworkset/platform/sysmgrcore/authenticate/UserPasswordLoginModule.java
+如果不在白名单：
+ throw new LoginException("IPAccessFailed");
+
+
+';
+
+COMMENT ON COLUMN PDPV108.TD_SM_IPCONTROL.ID IS '自增序号（uuid）';
+
+COMMENT ON COLUMN PDPV108.TD_SM_IPCONTROL.IP IS '多个以逗号分隔，192.168.*.*,192.168.142.1,192.168.142.1-254';
+
+COMMENT ON COLUMN PDPV108.TD_SM_IPCONTROL.CONTROLUSER IS '可选，如果维护了用户，则表示对用户设置的规则，没有则是全局规则';
+
+COMMENT ON COLUMN PDPV108.TD_SM_IPCONTROL.FILTERTYPE IS '规则类型0白名单，1黑名单';
+
+COMMENT ON COLUMN PDPV108.TD_SM_IPCONTROL.IPDESC IS '备注';
+
+
+ALTER TABLE PDPV108.TD_SM_IPCONTROL ADD (
+  CONSTRAINT IPCONTROL_PK
+ PRIMARY KEY
+ (ID));
+
+
+
 用户查询jasperreport报表答应包签名方法
 //生成证书文件
 keytool -keypass idiots6 -storepass idiots6 -genkey -dname "OU=bpit, O=sany, L=changsha, ST=hunan, C=CN" -validity 55555 
@@ -7,10 +57,6 @@ jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspac
 jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\commons-collections-3.1.jar mykey 
 jarsigner -keystore c:\.keystore -keypass idiots6 -storepass idiots6 F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperreports-5.5.1.jar mykey  
 jarsigner -verify -verbose F:\workspace\bboss-cms\WebRoot\sysmanager\user\ireport\jasperprint.jar 
-
-1.文档分页时需要增加显示全文按钮
-2.文档细览页面需要添加上一页和下一页导航（或者用文档标题做导航）
-3.文档可以维护扩展字段（文档扩展字段和频道扩展字段结合）
 
 1.扩展字段解析发布测试和bug修复
 2.增加扩展字段label展示字段

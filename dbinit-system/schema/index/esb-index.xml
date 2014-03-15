@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+  <property name="all_datas">
+    <list>
+      <property name="esb-uddi">
+        <map>
+          <property name="default">
+            <list>
+              <property index="0"><![CDATA[create index TD_BUSINESS_LINE_INDEX_U on TD_ESB_BUSINESS_LINE (   BUSINESS_LINE_CODE ASC)]]></property>
+              <property index="1"><![CDATA[create unique index Index_TD_ESB_REQUESTER_U on TD_ESB_REQUESTER (   SERVICE_REQUESTER_ACCOUNT ASC)]]></property>
+              <property index="2"><![CDATA[create unique index Index_SERVICE_PERMISSION_U on TD_ESB_RESOUCE_PERMISSION (   GROUP_ID ASC,   SERVICE_ID ASC,   OPERATE_CODE ASC)]]></property>
+			  <property index="0"><![CDATA[create index TD_GLOBAL_PARAM_INDEX_U on TD_ESB_GLOBAL_PARAM (   PARAM_NAME ASC)]]></property>
+              <property index="2"><![CDATA[create unique index TD_METADATA_SET_INDEX_U on TD_ESB_METADATA_SET (   METADATA_SET_CODE ASC)]]></property>
+              <property index="3"><![CDATA[create unique index TD_PW_CODESET_INDEX_U on TD_ESB_CODESET (   OBJECT_CODE ASC)]]></property>
+              <property index="4"><![CDATA[create unique index TD_PW_CODESET_DETAIL_INDEX_U on TD_ESB_CODESET_DETAIL (   OBJECT_ID ASC,   COLUMN_CODE ASC)]]></property>
+              <property index="5"><![CDATA[create unique index Index_SERVICE_RES_DETAIL_UK_2 on TD_ESB_SERVICE_RESOURCE_DETAIL (   SERVICE_RES_DETAIL_ID ASC,   METADATA_ID ASC)]]></property>
+              <property index="6"><![CDATA[create unique index TD_METADATA_INDEX_U on TD_ESB_METADATA (   METADATA_SET_ID ASC,   METADATA_CODE ASC)]]></property>
+            </list>
+          </property>
+        </map>
+      </property>
+    </list>
+  </property>
+</manager-config>
+

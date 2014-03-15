@@ -48,7 +48,7 @@
 		</head>
 
 	<body class="contentbodymargin" onload="" scroll="no">
-	<div style="width:100%;height:100%;overflow:auto">
+	
 	<div align="right"><input type="button" class="input" value="刷新页面" onclick="flushBotton()"></div>
 	
 		
@@ -492,6 +492,6 @@
 	
 	</tab:tabContainer>
 
-	</div>
+	
 				</body>
 </html>

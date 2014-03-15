@@ -34,7 +34,9 @@ if(loginID == null)
 	function query(orgId){
 		$("a").removeClass("a_bg_color");
 		$("a[name='"+orgId+"']").addClass("a_bg_color"); 
-		$("#userlist").load("<%=request.getContextPath()%>/workflow/config/queryUsers.page?org_id="+orgId); 
+		$("#userlist").load("<%=request.getContextPath()%>/workflow/config/queryUsers.page?org_id="+orgId,function(){
+			$("#select1").css({"width":"100%"}); 
+		}); 
 	}
 	function queryList(){
 		var user_worknumber = $("#user_worknumber").val();
@@ -44,7 +46,9 @@ if(loginID == null)
 			alert("请输入查询条件");
 			return;
 		}
-		$("#userlist").load("<%=request.getContextPath()%>/workflow/config/queryUsers.page?user_worknumber="+user_worknumber+"&user_realname="+user_realname+"&user_name="+user_name); 
+		$("#userlist").load("<%=request.getContextPath()%>/workflow/config/queryUsers.page?user_worknumber="+user_worknumber+"&user_realname="+user_realname+"&user_name="+user_name,function(){
+			$("#select1").css({"width":"100%"}); 
+		}); 
 	}
 	
 	function submitData(){
@@ -127,13 +131,21 @@ if(loginID == null)
 	
 	$(document).ready(function() {
 		 $("#org_tree").load("orgtree.jsp");
+		 var win=api.config["currentwindow"];
+		
+		var chooseUserList = win.document.getElementById('<%=loginName%>').value;
+		
+		if(chooseUserList != undefined && chooseUserList != "")
+		{
+		
+			$("#chooseUsers").append(chooseUserList);
+				
+		}
 	});
 	
 </script>
 <body class="easyui-layout">
-	<input type="hidden" value="${usernames }" name="usernames" id="usernames"/>
-	<input type="hidden" value="${node_key }" name="node_key" id="node_key"/>
-	<input type="hidden" value="${user_realnames }" name="user_realnames" id="user_realnames"/>
+	
 	<div region="west" split="true" title="组织结构"
 		style="width: 350px; height: 150px; padding1: 1px; " id="org_tree">
 	</div>
@@ -194,13 +206,16 @@ if(loginID == null)
 					<table width="100%" border="0" cellspacing="0" cellpadding="0"
 						class="select_table">
 						<tr>
-							<th width="20%">用户</th>
+							<th width="100%" align="left">已选择用户:<span id="chooseUsers" style="color: blue"></span></th>
 						</tr>
 						<tr>
-							<td >
+							<th width="100%">用户</th>
+						</tr>
+						<tr>
+							<td width="100%">
 								<div id="userlist">
 									<select name="select1" size="25" multiple="multiple" id="select1"
-										style="width: 220px; height: 340px">
+										style="width: 100%; height: 340px">
 										<pg:list requestKey="userList">
 											<option value="<pg:cell colName='user_name'/>">
 												<pg:cell colName="user_realname" />(<pg:cell colName='user_worknumber'/>)
@@ -222,7 +237,7 @@ if(loginID == null)
 							
 						</tr>
 						<tr>
-							<td colspan="5"><div class="treesearch" id="selectDetail">工号:</br>登陆名:</br>组织机构:</div></td>
+							<td  width="100%"><div class="treesearch" id="selectDetail">工号:</br>登陆名:</br>组织机构:</div></td>
 						</tr>
 					
 					</table>

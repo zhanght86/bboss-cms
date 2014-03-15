@@ -1,0 +1,19 @@
+
+<!-- 
+  初始化菜单控制器，并初始化数据源控制器，将数据源的Dao和Service层注入到控制器中。
+    author：qian.wang
+    CopyRight：Chinacreator
+    Date:2011.4.12
+ -->
+<properties>
+	
+	<property name="/datareuse/datasource/*.page" class="org.frameworkset.esb.datareuse.datasource.web.DatasourceController" f:datasourceService="attr:datasourceService" />
+	<property name="datasourceService" class="org.frameworkset.esb.datareuse.datasource.service.impl.DatasourceServiceImpl" f:datasourceDao="attr:datasourceDao"/>
+	<property name="datasourceDao" class="org.frameworkset.esb.datareuse.datasource.dao.impl.DatasourceDaoImpl" f:executor="attr:datasourceDao.configexecutor"/>
+   
+    <property name="datasourceDao.configexecutor" class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="org/frameworkset/esb/datareuse/datasource/dao/impl/datasource-sql.xml"/>
+		</construction>
+     </property>               
+</properties>

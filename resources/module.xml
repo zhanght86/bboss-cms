@@ -14,7 +14,12 @@
 		baseuri="http://localhost:7000/creatorcms" />
 		<subsystem name="WEB应用统计平台" i18n:en_US="WEB应用统计平台" id="sanylog" module="module-sanylog.xml"
 	 	
-		baseuri="http://localhost:7000/creatorcms" />			
+		baseuri="http://localhost:7000/creatorcms" />		
+		
+<!-- 	<subsystem name="移动门户" i18n:en_US="移动门户" id="mbp" module="module-mbp.xml" -->
+<!-- 		baseuri="http://localhost:7000/creatorcms"  -->
+<!-- 		logoutredirect="/sanymbp/login.page"/> -->
+		
 	<!-- 
 		系统菜单国际化规范：
 		两种方式来实现菜单国际化
@@ -141,7 +146,18 @@
 			
 			
 
-
+<module name="应用台账11" id="appbommanagermodule1e" used="true" i18n:en_US="App Bome" url="html/tab_edit.html" showleftmenu="true" popup="true">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<description>应用台账ee</description>
+				<item name="标签页效果eee" id="appbommanager1eeee" i18n:en_US="Label Page Demo">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>html/tab_edit.html</content>
+					</workspace>
+				</item>
+				</module>
 
 			<module name="应用台账1" id="appbommanagermodule1" used="true" i18n:en_US="App Bom" url="html/tab_edit.html" showleftmenu="true" popup="true">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
@@ -154,7 +170,7 @@
 						<content>html/tab_edit.html</content>
 					</workspace>
 				</item>
-				<item name="左侧菜单效果" id="appbommanager11" i18n:en_US="Left Menu Demo">
+				<item name="列表页面" id="appbommanager11" i18n:en_US="Left Menu Demo">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -162,14 +178,31 @@
 						<content>html/table2.html</content>
 					</workspace>
 				</item>
-				<item name="固定列表格控件" id="tablegrid" i18n:en_US="tablegrid">
+				<item name="列表页面二" id="page" i18n:en_US="page">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
-						<content>demo/tablegrid/SuperTables3.html</content>
+						<content>html/table3.html</content>
 					</workspace>
 				</item>
+				<item name="列表页面三" id="page" i18n:en_US="page">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>html/table4.html</content>
+					</workspace>
+				</item>
+				<item name="列表页面四" id="page" i18n:en_US="page">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>html/table5.html</content>
+					</workspace>
+				</item>
+				
 				<item name="下拉多选控件" id="selectgrid" i18n:en_US="selectgrid">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
@@ -186,14 +219,11 @@
 						<content>demo/error/error.html</content>
 					</workspace>
 				</item>
-				<item name="分页控件" id="page" i18n:en_US="page">
-						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-					<top>header.page</top>
-					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-					<workspace>
-						<content>demo/page/index.html</content>
-					</workspace>
-				</item>
+				
+				
+				
+				
+				
 				
 
 			</module>
@@ -201,7 +231,7 @@
 
 
 		</module>
-		
+	
 		
 
 		<module name="系统管理" id="sysmanager" used="true" showleftmenu="true"  i18n:en_US="System Manage">
@@ -288,8 +318,18 @@
 			</item>
 
 		</module>
-
-
+		<module name="应用管理" id="wfappmanager" used="true" showleftmenu="true" i18n:en_US="Workflow App Manage">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+			<item name="数据源管理" id="appdatasourcMg">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content>/datareuse/datasource/main.page</content>
+				</workspace>
+			</item>
+		</module>
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<description>工作流管理</description>

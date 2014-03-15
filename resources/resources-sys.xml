@@ -60,14 +60,14 @@
 		</operation>
 		
      </group>
-	<resource id="testresource" name="测试资源" auto="false" system="cms,module,esb,dp,sanylog">
+	<resource id="testresource" name="测试资源" auto="false" system="cms,module,esb,mbp,sanylog">
 	<!--定义资源操作组-->
 		<operationgroup groupid="testgroup"/>
 	<!-- 字典资源全局操作组 -->
 		<globaloperationgroup globalresourceid="globaltest" groupid="globaltestgroup"/>
 	</resource>
 
-	<resource id="dict" name="字典定义资源" i18n:en_US="Dictionary Resource" class="resDictTree.jsp" auto="true" system="module,dp,sanylog">
+	<resource id="dict" name="字典定义资源" i18n:en_US="Dictionary Resource" class="resDictTree.jsp" auto="true" system="module,mbp,sanylog">
 		<!--定义非未受保护的特殊资源-->
 
                 <!--

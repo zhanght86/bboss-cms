@@ -20,7 +20,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>权限测试页面</title>
-		<%@ include file="/common/jsp/css.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+		<script language="javascript">
+		function selectUser()
+		{
+			var url="<%=request.getContextPath()%>/purviewmanager/common/selectuser.jsp?loginName=userName";
+			$.dialog({title:'<pg:message code="sany.pdp.personcenter.person.select"/>',width:1150,height:650, content:'url:'+url,currentwindow:this}); 
+		}
+		</script>
 	</head>
 	<body>
 		<div class="form_box">
@@ -68,6 +75,14 @@
 						<td colspan="7">
 							has globaltest delete permission：<%=hasglobaltestdeletepermission %> <a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp"  target="_blank">测试参数动态url权限控制（不传orgCode参数）</a>
 							<a href="<%=request.getContextPath() %>/test/testopurlpermissiondelete.jsp?orgCode=globaltest"  target="_blank">测试参数动态url权限控制（传orgCode=globaltest参数）</a>
+						</td>
+					</tr>
+					
+					<tr>
+						
+						<td colspan="7">
+							选择用户：<input type="text" value="yinbp" name="userName" id="userName"> 
+							<a href="#"  onclick="selectUser();">选择</a>
 						</td>
 					</tr>
 				</table>
