@@ -34,9 +34,11 @@ package com.frameworkset.platform.cms.searchmanager.extractors;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.poi.hwpf.extractor.WordExtractor;
 //import org.apache.poi.poifs.eventfilesystem.POIFSReader;
 import org.apache.poi.poifs.eventfilesystem.POIFSReader;
-import org.textmining.text.extraction.WordExtractor;
+import org.textmining.extraction.TextExtractor;
+import org.textmining.extraction.word.WordTextExtractorFactory;
 
 /**
  * Extracts the text form an MS Word document.<p>
@@ -76,8 +78,12 @@ public final class CmsExtractorMsWord extends A_CmsTextExtractorMsOfficeBase imp
     public I_CmsExtractionResult extractText(InputStream in, String encoding) throws Exception {
 
         // first extract the text using the text actraction libary
-        WordExtractor wordExtractor = new WordExtractor();
-        String result = wordExtractor.extractText(getStreamCopy(in));
+    	WordTextExtractorFactory factory = new WordTextExtractorFactory();
+    	
+        TextExtractor wordExtractor = factory.textExtractor(getStreamCopy(in));
+        
+        String result = wordExtractor.getText();
+//        String result = wordExtractor.extractText(getStreamCopy(in));
         result = removeControlChars(result);
 
      

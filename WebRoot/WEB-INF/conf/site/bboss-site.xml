@@ -1,8 +1,12 @@
 <properties>
 	
-	<property name="/site/*.freepage" class="com.frameworkset.platform.cms.sitemanager.action.SiteController" singlable="true"
+	<property name="/site/*.freepage" class="com.frameworkset.platform.cms.sitemanager.action.SiteController" 
 		f:siteManager="attr:siteManager"
 		/>
+	<property name="/searchmanage/*.freepage" class="com.frameworkset.platform.cms.searchmanager.action.CMSSearchControler"
+		path:searchIndex="/cms/searchManage/searchIndex.jsp"
+		path:searchresult="/cms/searchManage/result.jsp"
+		/>	
 		
 	<property name="siteManager"
 		class="com.frameworkset.platform.cms.sitemanager.SiteManagerImpl"

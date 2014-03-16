@@ -41,9 +41,11 @@ import com.frameworkset.platform.cms.searchmanager.handler.RTFHandler;
 import com.frameworkset.platform.cms.searchmanager.handler.WordHandler;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.util.FileUtil;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 import com.frameworkset.common.poolman.sql.TableMetaData;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 /**
  *  
@@ -59,7 +61,7 @@ import com.frameworkset.common.poolman.sql.TableMetaData;
  * @version 1.0
  */
 
-public class CMSCrawler implements java.io.Serializable { 
+public class CMSCrawler  { 
 	private static final Logger log = Logger.getLogger(CMSCrawler.class);
 	private CMSSearchIndex index;
 	private int searchType; 
@@ -70,6 +72,8 @@ public class CMSCrawler implements java.io.Serializable {
 	private String indexDirectory;			//索引文件绝对路径，也及当前index的索引文件库
 	private long lastModified;
 	private String currentURL;	//当前连接
+	private String contextpath;
+	private String currentURI;	//当前连接URI
 	/**
 	 * lucence 索引的唯一标识
 	 */
@@ -88,8 +92,9 @@ public class CMSCrawler implements java.io.Serializable {
     	
     }
     
-	public  CMSCrawler(CMSSearchIndex index){
+	public  CMSCrawler(CMSSearchIndex index,String contextpath){
 		this.index = index;
+		this.contextpath = contextpath;
 		searchType = index.getSearchType();
 		indexDirectory = index.getAbsoluteIndexPath();
 		if(searchType == 0){			//站内频道索引
@@ -219,8 +224,11 @@ public class CMSCrawler implements java.io.Serializable {
 			try
 			{
 				//获取访问地址
-				currentURL = new CMSSearchManager().
-										getPublishedFileUrl(srcfile.getAbsolutePath(),index.getSiteId() + "");
+//				currentURL = new CMSSearchManager().
+//										getPublishedFileUrl(srcfile.getAbsolutePath(),index.getSiteId() + "");
+				currentURL = CMSSearchManager.
+						getPublishedIndexFileUrl(srcfile.getAbsolutePath(),index.getSiteId() + "",contextpath);
+				this.currentURI = CMSSearchManager.getPublishedIndexFileUri(srcfile.getAbsolutePath(),index.getSiteId() + "");
 				this.uid = currentURL;
 			}
 			catch(Exception e)
@@ -517,8 +525,11 @@ public class CMSCrawler implements java.io.Serializable {
 			 handler = RTFHandler.getInstance();
 			 
 		 }
-		 
-		 handler.parse(new FileInputStream(srcfile));				//解析
+		 String content = FileUtil.getFileContent(srcfile, "UTF-8");
+		 byte[] bytes  = content.getBytes( );
+		
+		 handler.parse( new ByteInputStream(bytes,0,bytes.length));	
+//		 handler.parse(new FileInputStream(srcfile));				//解析
 		 
 		 System.out.println("解析正常！");
 		 
@@ -758,6 +769,9 @@ public class CMSCrawler implements java.io.Serializable {
             Document document = new Document();
             document.add(new Field("uid", uid, false, true, false));
             document.add(Field.Text("url", currentURL));
+            if(currentURI == null)
+            	currentURI = currentURL;
+            document.add(Field.Text("uri", currentURI));
             document.add(Field.Text("contentType", contentType));
             document.add(Field.Keyword("lastModified",
                                        DateField.timeToString(lastModified)));

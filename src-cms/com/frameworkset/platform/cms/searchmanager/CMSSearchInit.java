@@ -13,7 +13,7 @@ public class CMSSearchInit extends BaseSystemInit {
 	public void init() throws InitException {
 	      //定义并启动定时器
 	  	  Timer timer = new Timer();
-	  	  CMSSearchTask task=new CMSSearchTask();
+	  	  CMSSearchTask task=new CMSSearchTask(this.context.getContextPath());
 	  	  timer.schedule(task,new Date(),1*60*1000);
 	  	  System.out.println("搜索引擎定时器启动成功！");
 	}

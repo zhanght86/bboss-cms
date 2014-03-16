@@ -37,13 +37,14 @@
 		
 		<property name="schemafiles_patch">
 				<list>
-				<property	dbname="bspf"><![CDATA[schema/cms-ext.xml]]></property>
+				<!--<property	dbname="bspf"><![CDATA[schema/cms-ext.xml]]></property>-->
+					<property dbname="datareuse"><![CDATA[schema/esb.xml]]></property>
 	  			</list>
 		</property>
 		<property name="executefiles_patch">
 			<list>
 				
-			
+			<property dbname="datareuse"><![CDATA[schema/index/esb-index.xml,schema/data/esb-init.xml,schema/data/metadataset.xml,schema/data/metadata.xml]]></property>
   			</list>
 		</property>
 	</properties>

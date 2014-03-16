@@ -11,7 +11,13 @@ import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
  *
  */
 public class CMSSearchTask extends TimerTask implements java.io.Serializable {
-
+	private String contextpath;
+	public CMSSearchTask(String contextpath)
+	{
+		super();
+		this.contextpath = contextpath;
+		
+	}
 	public void run() {
 		CMSSearchManager searchManager = new CMSSearchManager();
 		try{
@@ -32,17 +38,17 @@ public class CMSSearchTask extends TimerTask implements java.io.Serializable {
 					switch(level){
 						case 0:			//每周一次
 							if(index.getDay() == curDayOfweek && index.getTime() == curHour){
-								new CMSCrawlerThread(index).start();
+								new CMSCrawlerThread(index,contextpath).start();
 							}
 							break;
 						case 1:			//每月一次
 							if(index.getDay() == curDayOfMonth && index.getTime() == curHour){
-								new CMSCrawlerThread(index).start();
+								new CMSCrawlerThread(index,contextpath).start();
 							}
 							break;
 						case 2:			//每天
 							if(index.getTime() == curHour){
-								new CMSCrawlerThread(index).start();
+								new CMSCrawlerThread(index,contextpath).start();
 							}
 							break;					
 					}					

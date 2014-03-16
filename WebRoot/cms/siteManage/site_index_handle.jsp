@@ -29,7 +29,7 @@
 				alertStr = "对不起，正在建索引中:" + cmsIndex.getIndexName() + "，请稍后重试！";
 			else
 				//启动线程检索对整站建立索引
-				new CMSCrawlerThread(cmsIndex).start();
+				new CMSCrawlerThread(cmsIndex,request.getContextPath()).start();
 		}else{
 			alertStr = "对不起，当前站点还没有整站索引记录，请先增加后再开始索引！";
 		}

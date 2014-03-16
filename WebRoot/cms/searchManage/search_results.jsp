@@ -189,7 +189,7 @@
         <%
 				}
 			%>
-        <input id="queryString" name="queryString2" value="&lt;pg:querystring/&gt;" type="hidden" />
+      
       </pg:pager>
     </table></td>
   </tr>  

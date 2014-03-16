@@ -7,25 +7,19 @@ package com.frameworkset.platform.cms.searchmanager.handler;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.text.html.parser.ParserDelegator;
-import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.html.HTML.Tag;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import javax.swing.text.html.HTML;
-
-import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
-import com.frameworkset.common.poolman.sql.ColumnMetaData;
-
-
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
+import javax.swing.text.html.HTML.Tag;
+import javax.swing.text.html.HTMLEditorKit.ParserCallback;
+import javax.swing.text.html.parser.ParserDelegator;
 
 /**
  * <p><code>HTMLHandler</code>
@@ -433,7 +427,7 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
     public static void main(String[] args){
     	 try {
 //             java.net.URL url = new java.net.URL("http://news.163.com/07/0711/15/3J4N3UG3000120GU.html");
-             java.net.URL url = new java.net.URL("http://localhost:8090/creatorcms/sitepublish/site200/top.htm");
+             java.net.URL url = new java.net.URL("http://localhost:8080/SanyPDP/sitepublish/BPIT/importantnews/content_3.html");
              java.net.HttpURLConnection con = (HttpURLConnection) url.openConnection();
              int rcode = con.getResponseCode();
              //System.out.println(con.getContentType());

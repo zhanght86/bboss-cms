@@ -52,7 +52,7 @@ public class CMSSearchManager {
 	/**类型-库表索引*/
 	public static final int SEARCHTYPE_DBTABLE = 4;
 	
-	public static float searchTime=0;    //记录检索时间
+//	public static float searchTime=0;    //记录检索时间
 	
 	/**
 	 * 获取站内搜索的索引列表，包括站内频道和整个站点索引
@@ -698,11 +698,11 @@ public class CMSSearchManager {
 	 * @param searchIndex
 	 * @throws Exception
 	 */
-	public static void startCrawler(CMSSearchIndex searchIndex) throws Exception{
+	public static void startCrawler(CMSSearchIndex searchIndex,String contextpath) throws Exception{
 		if((searchIndex.getSiteId() == null)||(searchIndex.getSiteId().equals(null))){
 			throw new Exception("站内索引，站点id不能为空！");
 		}
-		CMSCrawler crawler = new CMSCrawler(searchIndex);
+		CMSCrawler crawler = new CMSCrawler(searchIndex,contextpath);
 		crawler.crawl();
 	}
 	
@@ -1517,7 +1517,7 @@ public class CMSSearchManager {
 	 * @param multiSearcher
 	 * @return
 	 */
-	public List search(CMSMultiSearcher multiSearcher)
+	public HitResult search(CMSMultiSearcher multiSearcher)
 	{
 		 return multiSearcher.search();
 	}
@@ -1525,9 +1525,9 @@ public class CMSSearchManager {
 	 * 将利用lucene查询工具查询返回的Hits集合转化为List
 	 * @param hits
 	 */
-	public static List getSearchHitList(Hits hits) throws Exception
+	public static List<CMSSearchHit> getSearchHitList(Hits hits) throws Exception
 	{
-		List searchHitList = new ArrayList();
+		List<CMSSearchHit> searchHitList = new ArrayList<CMSSearchHit>();
 		for(int i=0;i<hits.length();i++){
 			
 			Document doc = hits.doc(i);
@@ -1548,6 +1548,7 @@ public class CMSSearchManager {
 			searchHit.setDescription(doc.get("description"));
 			String href = doc.get("href");
 			searchHit.setHref((href != null) ? href : doc.get("url"));
+			searchHit.setUri(doc.get("uri"));
 			searchHit.setKeywords(doc.get("keyword"));
 			String pulished = doc.get("published");
 			if(null == pulished || "".equals(pulished))
@@ -1966,11 +1967,42 @@ public class CMSSearchManager {
 	 * @param filePath  发布文件的绝对路径，如：D:\workspace\cms\creatorcms\sitepublish\site200\zjcz\content_33925.html
 	 * @return
 	 */
-	public String getPublishedFileUrl(String filePath,String siteId){
+	public static String getPublishedFileUrl(String filePath,String siteId){
 		String sitepubdir = CMSUtil.getSitePubDestinction(siteId);
 		String filePathTemp = filePath.substring(sitepubdir.length());
 		
 		return CMSUtil.getPath(CMSUtil.getPublishedSitePath(siteId),filePathTemp).replace('\\','/');
+	}
+	
+	/**
+	 * 获取发布文件的访问地址,如：http://localhost:8090/creatorcms/sitepublish/site200/zjcz/content_33925.html 
+	 * @param filePath  发布文件的绝对路径，如：D:\workspace\cms\creatorcms\sitepublish\site200\zjcz\content_33925.html
+	 * @return
+	 */
+	public static String getPublishedIndexFileUri(String filePath,String siteId){
+		String sitepubdir = CMSUtil.getSitePubDestinction(siteId);
+		String filePathTemp = filePath.substring(sitepubdir.length());
+		return filePathTemp.replace('\\','/');
+		
+	}
+	
+	/**
+	 * 获取发布文件的访问地址,如：http://localhost:8090/creatorcms/sitepublish/site200/zjcz/content_33925.html 
+	 * @param filePath  发布文件的绝对路径，如：D:\workspace\cms\creatorcms\sitepublish\site200\zjcz\content_33925.html
+	 * @return
+	 */
+	public static String getPublishedIndexFileUrl(String filePath,String siteId,String context){
+		String sitepubdir = CMSUtil.getSitePubDestinction(siteId);
+		String filePathTemp = filePath.substring(sitepubdir.length());
+		
+		Site site = CMSUtil.getSite(siteId);
+		String domain = site.getWebHttp();
+		if(domain == null || domain.equals("") || domain.equals("http://") || domain.equals("https://"))
+		{
+			domain =context;
+		}
+		
+		return domain + CMSUtil.getPath(CMSUtil.getPublishedSitePath(siteId),filePathTemp).replace('\\','/');
 	}
 	
 	/**

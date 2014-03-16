@@ -88,13 +88,21 @@ public class CurrentPosTag extends CMSBaseTag {
 				}
 			}
 			
-			outputStrng.insert(0,"<a style=\""+style+"\" href =\""+CMSTagUtil.getPublishedSitePath(context,site.getIndexFileName())+"\" >"+this.indexPrompt+"</a>>");
+			outputStrng.insert(0,getSitePosition(site));
 			
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private String getSitePosition(Site site)
+	{
+		
+		if(site == null)
+			return "";
+		return "<a style=\""+style+"\" href =\""+CMSTagUtil.getPublishedSitePath(context,site.getIndexFileName())+"\" >"+this.indexPrompt+"</a>>";
 	}
 	
 	private void docPos(StringBuffer outputStrng,String docID){
@@ -134,10 +142,16 @@ public class CurrentPosTag extends CMSBaseTag {
 			if (channel == null && this.content == null){
 				Channel chnl = CMSTagUtil.getCurrentChannel(context);
 				if(chnl == null)
-					return SKIP_BODY;
-				channel = String.valueOf(chnl.getDisplayName());
+				{
+					outputStrng.append(getSitePosition(context.getSite()));
+				}
+				else
+				{
+					channel = String.valueOf(chnl.getDisplayName());
+					channelPos(outputStrng,channel);
+				}
 //				ValueObjectUtil.getValue(channel,"");
-				channelPos(outputStrng,channel);
+				
 			}
 			else if(content != null){
 				docPos(outputStrng,content);

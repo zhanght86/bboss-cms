@@ -3,6 +3,7 @@ package com.frameworkset.platform.cms.searchmanager;
 import java.util.Date;
 import java.util.Timer;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,18 +30,25 @@ public class CMSSearchServlet extends HttpServlet implements java.io.Serializabl
 //        out.close();
     }
 
-    public void init() throws ServletException {
-    	  //定义并启动定时器
-    	  Timer timer = new Timer();
-    	  CMSSearchTask task=new CMSSearchTask();
-    	  timer.schedule(task,new Date(),1*60*1000);
-    	  System.out.println("定时器启动成功！");
-//        ServletContext servletContext = servletConfig.getServletContext();
-//        String conf = servletConfig.getInitParameter("configURI");
-//        String path = servletContext.getRealPath(conf).replace('\\','/');
-//        System.out.println("path="+path);
-//        Timer timer = new Timer();
-//        WebSearchTask task=new WebSearchTask(path);
-//        timer.scheduleAtFixedRate(task, new Date(), 1*60*1000);
-    }
+//    public void init() throws ServletException {
+//    	
+////        ServletContext servletContext = servletConfig.getServletContext();
+////        String conf = servletConfig.getInitParameter("configURI");
+////        String path = servletContext.getRealPath(conf).replace('\\','/');
+////        System.out.println("path="+path);
+////        Timer timer = new Timer();
+////        WebSearchTask task=new WebSearchTask(path);
+////        timer.scheduleAtFixedRate(task, new Date(), 1*60*1000);
+//    }
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		// TODO Auto-generated method stub
+		super.init(config);
+		  //定义并启动定时器
+  	  Timer timer = new Timer();
+  	  CMSSearchTask task=new CMSSearchTask(config.getServletContext().getContextPath());
+  	  timer.schedule(task,new Date(),1*60*1000);
+  	  System.out.println("定时器启动成功！");
+	}
 }

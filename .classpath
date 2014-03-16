@@ -115,7 +115,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/swizzle-stream.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/swtgraphics2d.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/testng.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/tm-extractors-0.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/trove.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/turbine-2.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xalan-2.4.0.jar"/>

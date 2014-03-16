@@ -19,15 +19,26 @@ public final class CMSSearchHit implements java.io.Serializable {
 	private String categories;
 	private String contentType;
 	private String href;
+	private String uri;
 	private String keywords;
 	private Date published;
 	private String title;
 	private float score;
 	
+	
 	private String description;
 	private String url;
 	private String content;
 	
+	private String contentTypeDes;
+	private String bgcolor;
+	
+	public String getContentTypeDes() {
+		return contentTypeDes;
+	}
+	public void setContentTypeDes(String contentTypeDes) {
+		this.contentTypeDes = contentTypeDes;
+	}
 	public String getCategories() {
 		return categories;
 	}
@@ -88,6 +99,18 @@ public final class CMSSearchHit implements java.io.Serializable {
 	}
 	public void setScore(float score) {
 		this.score = score;
+	}
+	public String getBgcolor() {
+		return bgcolor;
+	}
+	public void setBgcolor(String bgcolor) {
+		this.bgcolor = bgcolor;
+	}
+	public String getUri() {
+		return uri;
+	}
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
     
 }

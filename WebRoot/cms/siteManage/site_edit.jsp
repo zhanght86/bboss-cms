@@ -11,6 +11,7 @@
 <%@ page import="com.frameworkset.platform.cms.searchmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.searchmanager.bean.*"%>
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%
 	AccessControl control = AccessControl.getInstance();
 	control.checkAccess(request,response);
@@ -52,9 +53,11 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
+	<pg:config enablecontextmenu="false" enabletree="false"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
 	<script src="../inc/js/func.js"></script>
 	<tab:tabConfig/>
-	<title>编辑站点:<%=site.getName()%></title>
+	<title>编辑站点:<%=site.getName()+"-siteid["+site.getSiteId()+"]"%></title>
 <style type="text/css">
 	.topDIV {
 		background-image: url(../images/toolbar_common_func_site.jpg);
@@ -71,6 +74,12 @@
 	}
 </style>
 <script language="javascript">
+//检索
+function dosearch(siteid,siteName)
+{
+	var url = "<%=request.getContextPath()%>/searchmanage/searchIndex.freepage?siteId=<%=siteId%>";
+	$.dialog({ title:"检索站点内容-"+siteName,width:800,height:600, content:'url:'+url,lock: true,maxState:true}); 	
+}
 //ftp连接检测
 function testFtpLink(){
 	var siteForm = document.all.siteForm;
@@ -832,6 +841,7 @@ function templatePreview(obj){
 								<td align="left">
 									<INPUT name="button" type="button" class="cms_button" onClick="indexRebuild()"  value="开始索引">
 									<INPUT name="button" type="button" class="cms_button" onClick="indexDeleteFiles()"  value="删除文件">
+									<INPUT name="button" type="button" class="cms_button" onClick="dosearch('<%=siteId %>','<%=site.getName()+"-siteid["+site.getSiteId()+"]"%>')"  value="检索">
 								</td>
 							</tr>                   		
 						</table>

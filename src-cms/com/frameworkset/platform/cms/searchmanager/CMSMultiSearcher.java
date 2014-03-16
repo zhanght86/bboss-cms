@@ -15,6 +15,7 @@ import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 
+import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchHit;
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
 
 public class CMSMultiSearcher implements java.io.Serializable {
@@ -56,10 +57,10 @@ public class CMSMultiSearcher implements java.io.Serializable {
 	     }
 	  }
 		
-	public List search(){
+	public HitResult search(){
 		Hits hits;			//存放利用lucene的检索工具检索出来的结果
 		try{
-			
+			HitResult result = new HitResult();
 			int size=indexes.size();			//索引库数（每一个站外站点、频道都有单独的索引库）
 			Searchable[] searcher=new Searchable[size];		//每个索引库都对应一个检索工具对象
 			
@@ -124,10 +125,11 @@ public class CMSMultiSearcher implements java.io.Serializable {
 		          }
 	         }
 	         long endTime = new Date().getTime();
-	         float seconds = ((endTime - startTime)/(float)1000);
-	         CMSSearchManager.searchTime = seconds;
-	         return CMSSearchManager.getSearchHitList(hits);
-	          
+	         long seconds = ((endTime - startTime)/(long)1000);
+//	         CMSSearchManager.searchTime = seconds;
+	         result.setHits( CMSSearchManager.getSearchHitList(hits));
+	         result.setSearchTime(seconds);
+	          return result;
 		}catch(Exception e){
 			log.error("检索异常，请确认索引文件是否已经建立",e);
 //			e.printStackTrace();

@@ -11,19 +11,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.web.servlet.ModelMap;
 
+import com.frameworkset.platform.cms.searchmanager.CMSKeyWord;
 import com.frameworkset.platform.cms.searchmanager.CMSMultiSearcher;
 import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
+import com.frameworkset.platform.cms.searchmanager.HitResult;
+import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchHit;
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
 import com.frameworkset.platform.cms.searchmanager.handler.ContentHandler;
 import com.frameworkset.util.StringUtil;
 
 public class CMSSearchControler {
+	public String searchIndex()
+	{
+		return "path:searchIndex";
+	}
 	public String processSearch(@PagerParam(name = PagerParam.OFFSET) long offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "15") int hitsPerSet,HttpServletRequest request,ModelMap model)
 	{
 		String queryString = request.getParameter("queryString").trim();
 		String field = request.getParameter("field");
-
+		String key = queryString;
 		String siteId;
 		String chnlId;
 		String searchType;
@@ -244,8 +251,53 @@ public class CMSSearchControler {
 					keyWord = request.getAttribute("keyWord") + "&" + keyWord;
 				}
 				//执行查询动作
-				List searchhitList = cmsSm.search(cmsSearcher);
+				HitResult searchhit = cmsSm.search(cmsSearcher);
+				List<CMSSearchHit> searchhitList = searchhit.getHits();
+				for(int i = 0; searchhitList != null && i < searchhitList.size(); i ++)
+				{
+					CMSSearchHit hit = searchhitList.get(i);
+					String content = hit.getContent();
+					CMSKeyWord kw = new CMSKeyWord(keyWord);
+					String str1 = cmsSm.getInterceptContent(key,content);
+					String outString = kw.display(str1);
+					hit.setContent(outString);
+					String contentType = hit.getContentType();
+					String contentTypeDes = "[HTM]";
+				
+					if(ContentHandler.EXCEL_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[XLS]";
+					}
+					else if(ContentHandler.PDF_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[XLS]";
+					}
+					else if(ContentHandler.PPT_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[PPT]";
+					}
+					else if(ContentHandler.RTF_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[PPT]";
+					}
+					else if(ContentHandler.WORD_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[DOC]";
+					}
+					else if(ContentHandler.TEXT_HTML_FILEFOMAT.equals(contentType))
+					{
+						contentTypeDes = "[HTM]"; 
+					}
+					hit.setContentTypeDes(contentTypeDes);
+					int rank = i;					//编号
+					String bgcolor = (rank%2==0)?"#F3FBFB":"#EEF5FA";
+					hit.setBgcolor(bgcolor);
+					
+					
+				}
 				model.addAttribute("searchhitList", searchhitList);
+				model.addAttribute("searchTime", searchhit.getSearchTime());
+				model.addAttribute("rowcount", searchhitList.size());
 //				session.setAttribute("searchhitList", searchhitList);
 //				session.setAttribute("qStr", output);
 //				session.setAttribute("queryString", queryString);
