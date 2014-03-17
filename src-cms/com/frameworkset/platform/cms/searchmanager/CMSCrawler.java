@@ -1,22 +1,18 @@
 package com.frameworkset.platform.cms.searchmanager;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 
@@ -30,6 +26,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
 import com.frameworkset.platform.cms.searchmanager.handler.ContentHandler;
 import com.frameworkset.platform.cms.searchmanager.handler.DBHandler;
@@ -42,10 +39,6 @@ import com.frameworkset.platform.cms.searchmanager.handler.WordHandler;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.util.FileUtil;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.sql.ColumnMetaData;
-import com.frameworkset.common.poolman.sql.TableMetaData;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 
 /**
  *  
@@ -528,7 +521,7 @@ public class CMSCrawler  {
 		 String content = FileUtil.getFileContent(srcfile, "UTF-8");
 		 byte[] bytes  = content.getBytes( );
 		
-		 handler.parse( new ByteInputStream(bytes,0,bytes.length));	
+		 handler.parse( new ByteArrayInputStream(bytes,0,bytes.length));	
 //		 handler.parse(new FileInputStream(srcfile));				//解析
 		 
 		 System.out.println("解析正常！");

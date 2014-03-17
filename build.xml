@@ -82,6 +82,7 @@
 
 				<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 				<fileset dir="${source}/lib" includes="*.jar *.zip" />
+				<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 				<fileset dir="${distrib}" includes="*.jar *.zip" />
 			</classpath>
 		</javac>
@@ -104,6 +105,7 @@
 				<classpath id="cp-cms_baseline">
 					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 					<fileset dir="${distrib}" includes="*.jar *.zip" />
 					
 				</classpath>
@@ -142,6 +144,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -179,6 +182,7 @@
 				<classpath id="cp-cms_baseline">
 					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 					<fileset dir="${distrib}" includes="*.jar *.zip" />
 					
 				</classpath>
@@ -216,6 +220,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -253,7 +258,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
-						<fileset dir="${source}/lib-compile" includes="javaee.jar" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -307,6 +312,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -342,6 +348,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -380,6 +387,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -453,6 +461,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -491,6 +500,7 @@
 					<classpath id="cp-cms_baseline">
 						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 						<fileset dir="${source}/lib" includes="*.jar *.zip" />
+						<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 						<fileset dir="${distrib}" includes="*.jar *.zip" />
 						
 					</classpath>
@@ -558,6 +568,7 @@
 				<classpath id="cp-cms_baseline">
 					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 					<fileset dir="${distrib}" includes="*.jar *.zip" />
 				</classpath>
 			</javac>
@@ -623,6 +634,7 @@
 
 					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
 					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
 					
 				</classpath>
 			</javac>
