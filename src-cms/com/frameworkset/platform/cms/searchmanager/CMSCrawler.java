@@ -1,7 +1,7 @@
 package com.frameworkset.platform.cms.searchmanager;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -38,7 +38,7 @@ import com.frameworkset.platform.cms.searchmanager.handler.RTFHandler;
 import com.frameworkset.platform.cms.searchmanager.handler.WordHandler;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.util.FileUtil;
+
 
 /**
  *  
@@ -182,10 +182,27 @@ public class CMSCrawler  {
 				}
 		        System.out.println("建立索引完毕！");
 		        writer.optimize();								//优化索引文件（合并下文件），以便快速查询
-		        writer.close();									//关闭索引，不然锁不能正常释放
+		        							//关闭索引，不然锁不能正常释放
 		    }catch(Exception e){
 			    e.printStackTrace();
 		    }	    
+		    finally
+		    {
+		    	if(writer != null)
+		    	try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+				if(reader != null)
+			    	try {
+			    		reader.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}	
+		    }
 	}
 	
 	/**
@@ -518,11 +535,11 @@ public class CMSCrawler  {
 			 handler = RTFHandler.getInstance();
 			 
 		 }
-		 String content = FileUtil.getFileContent(srcfile, "UTF-8");
-		 byte[] bytes  = content.getBytes( );
-		
-		 handler.parse( new ByteArrayInputStream(bytes,0,bytes.length));	
-//		 handler.parse(new FileInputStream(srcfile));				//解析
+//		 String content = FileUtil.getFileContent(srcfile, "UTF-8");
+//		 byte[] bytes  = content.getBytes( );
+//		
+//		 handler.parse( new ByteArrayInputStream(bytes,0,bytes.length));	
+		 handler.parse(new FileInputStream(srcfile));				//解析
 		 
 		 System.out.println("解析正常！");
 		 

@@ -16,9 +16,9 @@
 	 	
 		baseuri="http://localhost:7000/creatorcms" />		
 		
-<!-- 	<subsystem name="移动门户" i18n:en_US="移动门户" id="mbp" module="module-mbp.xml" -->
-<!-- 		baseuri="http://localhost:7000/creatorcms"  -->
-<!-- 		logoutredirect="/sanymbp/login.page"/> -->
+	<subsystem name="移动门户" i18n:en_US="移动门户" id="mbp" module="module-mbp.xml"
+		baseuri="http://localhost:7000/creatorcms" 
+		logoutredirect="/sanymbp/login.page"/>
 		
 	<!-- 
 		系统菜单国际化规范：
@@ -317,6 +317,20 @@
 				
 			</item>
 
+			<item name="IP限制管理" id="ipcontrol" area="main" i18n:en_US="Ip Control">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> -->
+				<!-- <left>perspective_outlookbar.jsp</left> -->
+				<navigator></navigator>
+				<workspace>
+					<content>sysmanager/ipcontrol/index.page</content>
+				</workspace>
+				<authoration>				 
+				 	<url>/sysmanager/ipcontrol/*.page</url>
+				</authoration>
+				
+			</item>
 		</module>
 		<module name="应用管理" id="wfappmanager" used="true" showleftmenu="true" i18n:en_US="Workflow App Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>

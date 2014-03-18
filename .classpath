@@ -125,7 +125,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ant-1.5.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ant-optional-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib-compile/javaee.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-3.7-20101029.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-examples-3.7-20101029.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-3.7-20101029.jar"/>
@@ -184,12 +183,13 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3.jar" sourcepath="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="C:/mobile/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="F:/开源项目/报表/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-applet-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-fonts-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-javaflow-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcommon-1.0.15.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-2.1.7.js2.jar"/>
+	<classpathentry kind="lib" path="lib-compile/javaee.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

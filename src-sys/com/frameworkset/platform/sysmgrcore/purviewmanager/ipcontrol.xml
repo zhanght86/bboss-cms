@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+	<property name="querylist">
+		<![CDATA[
+			select * from TD_SM_IPCONTROL t where 1=1			
+			#if($controluser && !$controluser.equals("")) 
+					and  t.controluser  like #[controluser]
+			#end
+			#if($filtertype != 2) 
+					and  t.filtertype  = #[filtertype]
+			#end	
+		]]>
+	</property>
+	
+	<property name="addIpControl">
+		<![CDATA[
+			insert into TD_SM_IPCONTROL(ID,IP,CONTROLUSER,FILTERTYPE,IPDESC)values(
+			#[id],#[ip],#[controluser],#[filtertype],#[ipdesc])
+		]]>
+	</property>
+	
+	<property name="getIpControlById">
+		<![CDATA[
+			select t.id,t.ip,t.controluser,t.filtertype,t.ipdesc from TD_SM_IPCONTROL t where t.id=#[id]
+		]]>
+	</property>
+	
+	<property name="updateIpControl" >
+		<![CDATA[
+		        update TD_SM_IPCONTROL set 
+		        ip=#[ip],
+		        controluser=#[controluser],
+		        filtertype=#[filtertype],
+		        ipdesc=#[ipdesc]
+		        where id =#[id] 
+		]]>
+	</property>
+	
+	<property name="delteIpControl">
+		<![CDATA[
+		        delete TD_SM_IPCONTROL where id=#[id] 
+		]]>
+	</property>
+</properties>	

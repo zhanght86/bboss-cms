@@ -5,6 +5,7 @@ package com.frameworkset.platform.cms.searchmanager.handler;
  */
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +21,8 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import javax.swing.text.html.parser.ParserDelegator;
+
+import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 
 /**
  * <p><code>HTMLHandler</code>
@@ -371,13 +374,29 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
      * Parse Content.
      */
     public void parse(InputStream in) {
-
+    	BufferedReader reader = null;
         try {
             reset();
-
-            pd.parse(new BufferedReader(new InputStreamReader(in)), this, true);
+            reader = new BufferedReader(new InputStreamReader(in,CmsEncoder.ENCODING_UTF_8));
+            pd.parse(reader, this, true);
 
         } catch (Exception e) {e.printStackTrace();}
+        finally
+        {
+        	if(in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					
+				}
+				if(reader != null)
+					try {
+						reader.close();
+					} catch (IOException e) {
+						
+					}	
+        	
+        }
 
     }
 

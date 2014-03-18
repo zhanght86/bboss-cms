@@ -24,6 +24,23 @@
 		class="com.frameworkset.platform.cms.security.SecurityManagerController" >
 	</property>
 	
-	
+	<!-- ip限制控制 -->
+	<property name="/sysmanager/ipcontrol/*.page"	
+		path:index="/sysmanager/ipcontrol/ipcontrol_tab.jsp"
+		path:ipcontrol_list="/sysmanager/ipcontrol/ipcontrol_list.jsp"
+		path:updatePre="/sysmanager/ipcontrol/edit_ipcontrol.jsp"
+		f:service="attr:ipcontrolService"	
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.IpControlController" >
+	</property>
+	<property name="ipcontrolService"
+		f:executor="attr:ipcontrol.configsqlexecutor"
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.db.IpControlServiceImpl"
+		/>
+	<property name="ipcontrol.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/sysmgrcore/purviewmanager/ipcontrol.xml"/>
+		</construction>
+	</property>
 	
 </properties>
