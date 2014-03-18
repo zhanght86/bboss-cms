@@ -142,7 +142,7 @@
 			<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.LogSearchList" keyName="LogSearchList" />
 			<pg:pager maxPageItems="10" scope="request" data="LogSearchList" isList="false">
 				<pg:param name="operUser"/>
-				<pg:param name="logModuel"/>
+				<pg:param name="logModuel" encode="true"/>
 				<pg:param name="type"/>
 				<pg:param name="oper"/>
 				<pg:param name="logId"/>
