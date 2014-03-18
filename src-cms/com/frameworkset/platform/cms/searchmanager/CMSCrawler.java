@@ -19,9 +19,12 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.DateField;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -774,52 +777,57 @@ public class CMSCrawler  {
 	private void indexLucene() {
         try {
 
-            System.out.println("开始分析！");
+            log.debug("开始分析！");
         	
             Document document = new Document();
-            document.add(new Field("uid", uid, false, true, false));
-            document.add(Field.Text("url", currentURL));
+//            document.add(new StringField("uid", uid, Field.Store.YES));
+            FieldType fieldType = new FieldType();
+			fieldType.setStored(false);
+			fieldType.setIndexed(true);
+			fieldType.setStoreTermVectors(true);
+			document.add(new Field("uid",uid, fieldType));
+            document.add(new StringField("url", currentURL, Field.Store.YES));
             if(currentURI == null)
             	currentURI = currentURL;
-            document.add(Field.Text("uri", currentURI));
-            document.add(Field.Text("contentType", contentType));
-            document.add(Field.Keyword("lastModified",
-                                       DateField.timeToString(lastModified)));
+            document.add(new StringField("uri", currentURI, Field.Store.YES));
+            document.add(new StringField("contentType", contentType, Field.Store.YES));
+            document.add(new LongField("lastModified",
+                                      lastModified, Field.Store.NO));
 //            document.add(Field.Text("content", handler.getContents()));
             if (handler.getContents() != null) {
-            	document.add(Field.Text("content", handler.getContents()));
+            	document.add(new TextField("content", handler.getContents(), Field.Store.YES));
             }
             if (handler.getTitle() != null) {
-                document.add(Field.Text("title", handler.getTitle()));
+                document.add(new TextField("title", handler.getTitle(), Field.Store.YES));
             }
             if (handler.getKeywords() != null) {
-                document.add(Field.Text("keyword", handler.getKeywords()));
+                document.add(new TextField("keyword", handler.getKeywords(), Field.Store.YES));
             }
             if (handler.getDescription() != null) {
-                document.add(Field.Text("description", handler.getDescription()));
+                document.add(new TextField("description", handler.getDescription(), Field.Store.YES));
             }
             if (handler.getCategories() != null) {
-                document.add(Field.Text("categories", handler.getCategories()));
+                document.add(new TextField("categories", handler.getCategories(), Field.Store.YES));
             }
             if (handler.getPublished() != -1L) {
-                document.add(Field.Keyword("published",
-                                           DateField.timeToString(handler.
-                        getPublished())));
+                document.add(new LongField("published",
+                                           handler.
+                        getPublished(), Field.Store.NO));
             } else {
-                document.add(Field.Keyword("published",
-                                           DateField.timeToString(lastModified)));
+                document.add(new LongField("published",
+                                           lastModified, Field.Store.NO));
             }
             /**
              * 增加一个文件格式的域
              */
-            document.add(Field.Text("fileFormat",handler.getFileFormat()));
+            document.add(new StringField("fileFormat",handler.getFileFormat(), Field.Store.YES));
 
             if (handler.getHREF() != null) {
                 String s = handler.getHREF();
                 int i = s.indexOf("$link");
                 s = s.substring(0, i) + currentURL.toString() +
                     s.substring(i + 5, s.length());
-                document.add(Field.UnIndexed("href", s));
+                document.add(new StringField("href", s, Field.Store.YES));
             }
             
             /* meta
@@ -834,40 +842,40 @@ public class CMSCrawler  {
 			 * abstracts,摘要内容
 			 * */
             if (handler.getSite() != null) {
-            	document.add(Field.Text("site", handler.getSite()));
+            	document.add(new StringField("site", handler.getSite(), Field.Store.YES));
 	        }
             if (handler.getChannel() != null) {
-            	document.add(Field.Text("channel", handler.getChannel()));
+            	document.add(new StringField("channel", handler.getChannel(), Field.Store.YES));
 	        }
             if (handler.getDockind() != null) {
-            	document.add(Field.Text("dockind", handler.getDockind()));
+            	document.add(new StringField("dockind", handler.getDockind(), Field.Store.YES));
 	        }
             if (handler.getSubtitle() != null) {
-            	document.add(Field.Text("subtitle", handler.getSubtitle()));
+            	document.add(new StringField("subtitle", handler.getSubtitle(), Field.Store.YES));
 	        }
             if (handler.getAuthor() != null) {
-            	document.add(Field.Text("author", handler.getAuthor()));
+            	document.add(new StringField("author", handler.getAuthor(), Field.Store.YES));
 	        }
             if (handler.getAbstracts() != null) {
-            	document.add(Field.Text("abstracts", handler.getAbstracts()));
+            	document.add(new StringField("abstracts", handler.getAbstracts(), Field.Store.YES));
 	        }
             if (handler.getAbstracts() != null) {
-            	document.add(Field.Text("copyright", handler.getCopyright()));
+            	document.add(new StringField("copyright", handler.getCopyright(), Field.Store.YES));
 	        }
             if (handler.getDocwtime() != -1L) {
-                document.add(Field.Keyword("docwtime",
-                                           DateField.timeToString(handler.
-                                        		   getDocwtime())));
+                document.add(new LongField("docwtime",
+                                          handler.
+                                        		   getDocwtime(), Field.Store.YES));
             } else {
-                document.add(Field.Keyword("docwtime",
-                                           DateField.timeToString(lastModified)));
+                document.add(new LongField("docwtime",
+                                           lastModified, Field.Store.YES));
             }
             
             writer.addDocument(document);
-            System.out.println("插入索引记录成功！");
+            log.debug("插入索引记录成功！");
         } catch (Exception exception) {
-            System.out.println(exception.toString());
-            exception.printStackTrace();
+            
+        	log.error("", exception);
         }
     }
 	/**
@@ -884,43 +892,47 @@ public class CMSCrawler  {
 			Document document = new Document();
 			currentURL = currentURLStr;
 			uid = currentURLStr;
-			document.add(new Field("uid",currentURLStr, false, true, false));
-			document.add(Field.Text("url", currentURLStr));
-			document.add(Field.Text("contentType", contentType));
-			document.add(Field.Keyword("lastModified",
-			                           DateField.timeToString(lastModified)));
-			document.add(Field.Text("content", handler.getContents()));
+			FieldType fieldType = new FieldType();
+			fieldType.setStored(false);
+			fieldType.setIndexed(true);
+			fieldType.setStoreTermVectors(false);
+			document.add(new Field("uid",currentURLStr, fieldType));
+			document.add(new StringField("url", currentURLStr, Field.Store.YES));
+			document.add(new StringField("contentType", contentType, Field.Store.YES));
+			document.add(new LongField("lastModified",
+			                           lastModified, Field.Store.YES));
+			document.add(new TextField("content", handler.getContents(), Field.Store.YES));
 			if (handler.getTitle() != null) {
-			    document.add(Field.Text("title", handler.getTitle()));
+			    document.add(new TextField("title", handler.getTitle(), Field.Store.YES));
 			}
 			if (handler.getKeywords() != null) {
-			    document.add(Field.Text("keyword", handler.getKeywords()));
+			    document.add(new TextField("keyword", handler.getKeywords(), Field.Store.YES));
 			}
 			if (handler.getDescription() != null) {
-			    document.add(Field.Text("description", handler.getDescription()));
+			    document.add(new TextField("description", handler.getDescription(), Field.Store.YES));
 			}
 			if (handler.getCategories() != null) {
-			    document.add(Field.Text("categories", handler.getCategories()));
+			    document.add(new TextField("categories", handler.getCategories(), Field.Store.YES));
 			}
 			if (handler.getPublished() != -1L) {
-			    document.add(Field.Keyword("published",
-			                               DateField.timeToString(handler.
-			            getPublished())));
+			    document.add(new LongField("published",
+			                              handler.
+			            getPublished(), Field.Store.YES));
 			} else {
-			    document.add(Field.Keyword("published",
-			                               DateField.timeToString(lastModified)));
+			    document.add(new LongField("published",
+			                               lastModified, Field.Store.YES));
 			}
 			/**
 			 * 增加一个文件格式的域
 			 */
-			document.add(Field.Text("fileFormat",handler.getFileFormat()));
+			document.add(new StringField("fileFormat",handler.getFileFormat(), Field.Store.YES));
 			
 			if (handler.getHREF() != null) {
 			    String s = handler.getHREF();
 			    int i = s.indexOf("$link");
 			    s = s.substring(0, i) + currentURLStr.toString() +
 			        s.substring(i + 5, s.length());
-			    document.add(Field.UnIndexed("href", s));
+			    document.add(new StringField("href", s, Field.Store.YES));
 			}
 			
 			/* meta
@@ -935,40 +947,40 @@ public class CMSCrawler  {
 			 * abstracts,摘要内容
 			 * */
             if (handler.getSite() != null) {
-            	document.add(Field.Text("site", handler.getSite()));
+            	document.add(new StringField("site", handler.getSite(), Field.Store.YES));
 	        }
             if (handler.getChannel() != null) {
-            	document.add(Field.Text("channel", handler.getChannel()));
+            	document.add(new StringField("channel", handler.getChannel(), Field.Store.YES));
 	        }
             if (handler.getDockind() != null) {
-            	document.add(Field.Text("dockind", handler.getDockind()));
+            	document.add(new StringField("dockind", handler.getDockind(), Field.Store.YES));
 	        }
             if (handler.getSubtitle() != null) {
-            	document.add(Field.Text("subtitle", handler.getSubtitle()));
+            	document.add(new StringField("subtitle", handler.getSubtitle(), Field.Store.YES));
 	        }
             if (handler.getAuthor() != null) {
-            	document.add(Field.Text("author", handler.getAuthor()));
+            	document.add(new StringField("author", handler.getAuthor(), Field.Store.YES));
 	        }
             if (handler.getAbstracts() != null) {
-            	document.add(Field.Text("abstracts", handler.getAbstracts()));
+            	document.add(new StringField("abstracts", handler.getAbstracts(), Field.Store.YES));
 	        }
             if (handler.getAbstracts() != null) {
-            	document.add(Field.Text("copyright", handler.getCopyright()));
+            	document.add(new StringField("copyright", handler.getCopyright(), Field.Store.YES));
 	        }
             if (handler.getDocwtime() != -1L) {
-                document.add(Field.Keyword("docwtime",
-                                           DateField.timeToString(handler.
-                                        		   getDocwtime())));
+                document.add(new LongField("docwtime",
+                                           handler.
+                                        		   getDocwtime(), Field.Store.YES));
             } else {
-                document.add(Field.Keyword("docwtime",
-                                           DateField.timeToString(lastModified)));
+                document.add(new LongField("docwtime",
+                                           lastModified, Field.Store.YES));
             }
 			
 			writer.addDocument(document);
-			System.out.println("插入索引记录成功！");
+			log.debug("插入索引记录成功！");
 		} catch (Exception exception) {
-			System.out.println(exception.toString());
-			exception.printStackTrace();
+			
+			log.error("", exception);
 		}
 	}
 	

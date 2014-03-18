@@ -97,7 +97,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jtidy-r8-05102004.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jug-asl-2.0.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jxl.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-1.4-final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/msbase.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mssqlserver.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/msutil.jar"/>
@@ -191,5 +190,12 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-2.1.7.js2.jar"/>
 	<classpathentry kind="lib" path="lib-compile/javaee.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-analyzers-common-4.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-4.7.0.jar" sourcepath="D:/d/opensource/lucene/lucene-4.7.0-src"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-demo-4.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-facet-4.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-queries-4.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-queryparser-4.7.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-sandbox-4.7.0.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
