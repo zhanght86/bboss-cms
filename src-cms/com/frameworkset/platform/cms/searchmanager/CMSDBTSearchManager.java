@@ -45,7 +45,7 @@ public class CMSDBTSearchManager implements java.io.Serializable {
 			String absoluteIndexFilePath = searchManager.getAbsoluteIndexFilePath(searchManager.getIndexRootPath(),indexFileName,searchIndex.getSiteId());
 			File absoluteIndexFile = new File(absoluteIndexFilePath);
 			if(absoluteIndexFile.exists()){
-				if(!IndexReader.isLocked(absoluteIndexFilePath))
+				if(!CMSSearchManager.isIndexLocked(absoluteIndexFilePath))
 					searchManager.deleteFilesAndDirector(absoluteIndexFile);
 				else
 					throw new Exception("索引文件已经上锁，暂时无法删除：" + absoluteIndexFilePath);

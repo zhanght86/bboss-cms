@@ -25,9 +25,15 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
@@ -61,7 +67,7 @@ public class CMSCrawler  {
 	private static final Logger log = Logger.getLogger(CMSCrawler.class);
 	private CMSSearchIndex index;
 	private int searchType; 
-	private IndexReader reader;
+//	private IndexReader reader;
 	private IndexWriter writer;
 	private ContentHandler handler;
 	private String contentType;
@@ -70,6 +76,7 @@ public class CMSCrawler  {
 	private String currentURL;	//当前连接
 	private String contextpath;
 	private String currentURI;	//当前连接URI
+	private boolean create;
 	/**
 	 * lucence 索引的唯一标识
 	 */
@@ -88,7 +95,7 @@ public class CMSCrawler  {
     	
     }
     
-	public  CMSCrawler(CMSSearchIndex index,String contextpath){
+	public  CMSCrawler(CMSSearchIndex index,String contextpath,boolean create){
 		this.index = index;
 		this.contextpath = contextpath;
 		searchType = index.getSearchType();
@@ -140,23 +147,50 @@ public class CMSCrawler  {
 	}
 	public void crawl(){		
 			try{
-				File file = new File(indexDirectory);
-		        if (!file.exists()) {		//若索引文件库不已经存在，则建立索引文件库		        	
-		        	IndexWriter indexwriter = new IndexWriter(indexDirectory, new StandardAnalyzer(), true);						//将创建新的或者覆盖已有的索引文件
-		        	indexwriter.close();
-		        } else {					//若索引文件库已经存在，则删除所有索引文件
-		        	reader = IndexReader.open(indexDirectory);		        	
-		        	if(IndexReader.isLocked(indexDirectory))		//如有其它线程在追加索引，则不建索引（处理后台线程情况），直接返回				
-		        		return;		        		
-		            int k = reader.numDocs();
-		            for (int i = 0; i < k; i++) {
-		            	reader.delete(i);
-		            }		
-		            reader.close();
-		        }
-		        writer = new IndexWriter(indexDirectory,						//可以不断的往现有的索引文件中追加记录
-		                		new StandardAnalyzer(), false);
-		        writer.maxFieldLength = Integer.MAX_VALUE;      		        
+				File f = new File(indexDirectory);
+				if(!f.exists())
+					f.mkdirs();
+				Directory dir = FSDirectory.open(f);
+			      // :Post-Release-Update-Version.LUCENE_XY:
+			      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+			      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+
+			      if (create) {
+			        // Create a new index in the directory, removing any
+			        // previously indexed documents:
+			        iwc.setOpenMode(OpenMode.CREATE);
+			      } else {
+			        // Add new documents to an existing index:
+			        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+			      }
+
+			      // Optional: for better indexing performance, if you
+			      // are indexing many documents, increase the RAM
+			      // buffer.  But if you do this, increase the max heap
+			      // size to the JVM (eg add -Xmx512m or -Xmx1g):
+			      //
+			      // iwc.setRAMBufferSizeMB(256.0);
+			      
+			      IndexWriter writer = new IndexWriter(dir, iwc);
+				
+//-----------------
+//				File file = new File(indexDirectory);
+//		        if (!file.exists()) {		//若索引文件库不已经存在，则建立索引文件库		        	
+//		        	IndexWriter indexwriter = new IndexWriter(indexDirectory, new StandardAnalyzer(), true);						//将创建新的或者覆盖已有的索引文件
+//		        	indexwriter.close();
+//		        } else {					//若索引文件库已经存在，则删除所有索引文件
+//		        	reader = IndexReader.open(indexDirectory);		        	
+//		        	if(IndexReader.isLocked(indexDirectory))		//如有其它线程在追加索引，则不建索引（处理后台线程情况），直接返回				
+//		        		return;		        		
+//		            int k = reader.numDocs();
+//		            for (int i = 0; i < k; i++) {
+//		            	reader.delete(i);
+//		            }		
+//		            reader.close();
+//		        }
+//		        writer = new IndexWriter(indexDirectory,						//可以不断的往现有的索引文件中追加记录
+//		                		new StandardAnalyzer(), false);
+//		        writer.maxFieldLength = Integer.MAX_VALUE;      		        
 		        if(searchType == 0 || searchType == 2 || searchType == 3){			//站内频道或者整站索引或者站群索引
 		        	Site site = CMSUtil.getSiteCacheManager().getSite(index.getSiteId()+"");
 		        	if(site!=null && (site.getPublishDestination() == 0 || site.getPublishDestination() == 2)){		//本地检索
@@ -184,7 +218,7 @@ public class CMSCrawler  {
 					indexDBTable(index);
 				}
 		        System.out.println("建立索引完毕！");
-		        writer.optimize();								//优化索引文件（合并下文件），以便快速查询
+//		        writer.optimize();								//优化索引文件（合并下文件），以便快速查询
 		        							//关闭索引，不然锁不能正常释放
 		    }catch(Exception e){
 			    e.printStackTrace();
@@ -198,13 +232,13 @@ public class CMSCrawler  {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
-				if(reader != null)
-			    	try {
-			    		reader.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}	
+//				if(reader != null)
+//			    	try {
+//			    		reader.close();
+//					} catch (IOException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}	
 		    }
 	}
 	
@@ -871,7 +905,17 @@ public class CMSCrawler  {
                                            lastModified, Field.Store.YES));
             }
             
-            writer.addDocument(document);
+            if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
+                // New index, so we just add the document (no old document can be there):
+//                System.out.println("adding " + file);
+                writer.addDocument(document);
+              } else {
+                // Existing index (an old copy of this document may have been indexed) so 
+                // we use updateDocument instead to replace the old one matching the exact 
+                // path, if present:
+//                System.out.println("updating " + file);
+                writer.updateDocument(new Term("uid", uid), document);
+              }
             log.debug("插入索引记录成功！");
         } catch (Exception exception) {
             
@@ -976,7 +1020,17 @@ public class CMSCrawler  {
                                            lastModified, Field.Store.YES));
             }
 			
-			writer.addDocument(document);
+            if (writer.getConfig().getOpenMode() == OpenMode.CREATE) {
+                // New index, so we just add the document (no old document can be there):
+//                System.out.println("adding " + file);
+                writer.addDocument(document);
+              } else {
+                // Existing index (an old copy of this document may have been indexed) so 
+                // we use updateDocument instead to replace the old one matching the exact 
+                // path, if present:
+//                System.out.println("updating " + file);
+                writer.updateDocument(new Term("uid", uid), document);
+              }
 			log.debug("插入索引记录成功！");
 		} catch (Exception exception) {
 			
@@ -990,27 +1044,53 @@ public class CMSCrawler  {
 	 * */
 	public void deleteIndex(String indexbaseName,String uid )
 	{
-		CMSSearchManager sm = new CMSSearchManager();
 		CMSSearchIndex index = null;
+		IndexWriter writer = null;
 		try {
-			index = sm.getIndexIdByIndexName(indexbaseName);
-			String absoluteIndexFilePath = sm.getAbsoluteIndexFilePath(index);
-			if(new File(absoluteIndexFilePath).exists()){
-				IndexReader reader = IndexReader.open(absoluteIndexFilePath);
-				if(!sm.isIndexLocked(index)){
+			index = CMSSearchManager.getIndexIdByIndexName(indexbaseName);
+			String absoluteIndexFilePath = CMSSearchManager.getAbsoluteIndexFilePath(index);
+			File f = new File(absoluteIndexFilePath);
+			if(f.exists()){
+				Directory dir = FSDirectory.open(f);
+			      // :Post-Release-Update-Version.LUCENE_XY:
+			      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+			      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+
+			     
+			        // Add new documents to an existing index:
+			        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+			      
+			      
+
+			      // Optional: for better indexing performance, if you
+			      // are indexing many documents, increase the RAM
+			      // buffer.  But if you do this, increase the max heap
+			      // size to the JVM (eg add -Xmx512m or -Xmx1g):
+			      //
+			      // iwc.setRAMBufferSizeMB(256.0);
+			      
+			      writer = new IndexWriter(dir, iwc);
+				    
+				if(!CMSSearchManager.isIndexLocked(index)){
 					Term term = new Term("uid",uid);
-					reader.delete(term);
-					reader.close();
-					Analyzer luceneAnalyzer = new StandardAnalyzer();
-					IndexWriter writer = new IndexWriter(absoluteIndexFilePath, luceneAnalyzer, false);
-					writer.optimize();
-					writer.close();
+					writer.deleteDocuments(term);
+					
 				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}	
+		finally
+		{
+			if(writer != null)
+				try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
 	}
 
 	public void updateIndex(String indexbaseName, Object indexobject)

@@ -12,12 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.DateField;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.document.LongField;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -307,7 +312,7 @@ public class CMSSearchManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getIndexRootPath() throws Exception{
+	public static String getIndexRootPath() throws Exception{
 		
 		return ConfigManager.getInstance().
 									getConfigValue("cms.index.root.path","/WEB-INF/search/");
@@ -317,7 +322,7 @@ public class CMSSearchManager {
 	 * @param indexPath
 	 * @return
 	 */
-	public String getAbsoluteIndexRootPath(String indexPath) throws Exception{
+	public static String getAbsoluteIndexRootPath(String indexPath) throws Exception{
 		//web工程根目录
 		String appRootPath = CMSUtil.getAppRootPath();
 		
@@ -342,8 +347,8 @@ public class CMSSearchManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getAbsoluteIndexFilePath(String indexPath,String indexFileName,String siteId) throws Exception{
-		String indexFilePath = this.getAbsoluteIndexRootPath(indexPath);
+	public static String getAbsoluteIndexFilePath(String indexPath,String indexFileName,String siteId) throws Exception{
+		String indexFilePath = getAbsoluteIndexRootPath(indexPath);
 		if(siteId == null){			
 			indexFilePath = CMSUtil.getPath(indexFilePath,indexFileName);
 		}else{						
@@ -368,21 +373,21 @@ public class CMSSearchManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String getAbsoluteIndexFilePath(CMSSearchIndex index) throws Exception{
+	public static String getAbsoluteIndexFilePath(CMSSearchIndex index) throws Exception{
 		if(index.getSearchType() == CMSSearchManager.SEARCHTYPE_SITECHANNEL){   //站内频道搜索
-			return this.getAbsoluteIndexFilePath(index.getIndexPath(),
+			return getAbsoluteIndexFilePath(index.getIndexPath(),
 						"in_" + index.getIndexName(),index.getSiteId()+"");
 		}else if(index.getSearchType() == CMSSearchManager.SEARCHTYPE_EXTERNAL){			//站外搜索
-			return this.getAbsoluteIndexFilePath(index.getIndexPath(),
+			return getAbsoluteIndexFilePath(index.getIndexPath(),
 						"out_" + index.getIndexName(),index.getSiteId()+"");
 		}else if(index.getSearchType() == CMSSearchManager.SEARCHTYPE_SITES){			//站群索引搜索
-			return this.getAbsoluteIndexFilePath(index.getIndexPath(),
+			return getAbsoluteIndexFilePath(index.getIndexPath(),
 						"sites_" + index.getIndexName(),index.getSiteId()+"");
 		}else if(index.getSearchType() == CMSSearchManager.SEARCHTYPE_SITE){			//整站索引
-			return this.getAbsoluteIndexFilePath(index.getIndexPath(),
+			return getAbsoluteIndexFilePath(index.getIndexPath(),
 					"site_" + index.getIndexName(),index.getSiteId()+"");
 		}else {  																	//库表检索
-			return this.getAbsoluteIndexFilePath(index.getIndexPath(),
+			return getAbsoluteIndexFilePath(index.getIndexPath(),
 					"db_" + index.getIndexName(),index.getSiteId()+"");
 		}
 	}
@@ -466,13 +471,13 @@ public class CMSSearchManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public CMSSearchIndex getIndexIdByIndexName(String indexName) throws Exception{
+	public static CMSSearchIndex getIndexIdByIndexName(String indexName) throws Exception{
 		String sql = "select * from td_cms_site_search where name = '" + indexName + "'";
-		return this.getIndexBySQL(sql); 
+		return getIndexBySQL(sql); 
 	}
 	
 	
-	private CMSSearchIndex getIndexBySQL(String sql) throws Exception{
+	private static CMSSearchIndex getIndexBySQL(String sql) throws Exception{
 		DBUtil db = new DBUtil();
 		DBUtil db1 = new DBUtil();
 		DBUtil db2 = new DBUtil();
@@ -529,15 +534,15 @@ public class CMSSearchManager {
 	            	searchIndex.setChnlName(chnlNames);
 	            	//频道可以有多个,id改成了字符串,weida	            	
 					searchIndex.setAbsoluteIndexPath(
-							this.getAbsoluteIndexFilePath(indexPath,"in_" + indexName,siteId+""));
+							getAbsoluteIndexFilePath(indexPath,"in_" + indexName,siteId+""));
 				}else if(searchType==CMSSearchManager.SEARCHTYPE_EXTERNAL){					//站外搜索
 					searchIndex.setDomainUrl(db.getString(0,"chnl_or_domain"));
 					searchIndex.setStartUrl(db.getString(0,"start_url"));
 					searchIndex.setAbsoluteIndexPath(
-							this.getAbsoluteIndexFilePath(indexPath,"out_" + indexName,siteId+""));
+							getAbsoluteIndexFilePath(indexPath,"out_" + indexName,siteId+""));
 				}else if(searchType==CMSSearchManager.SEARCHTYPE_SITE)	{					//整站检索搜索
 					searchIndex.setAbsoluteIndexPath(
-							this.getAbsoluteIndexFilePath(indexPath,"site_" + indexName,siteId+""));
+							getAbsoluteIndexFilePath(indexPath,"site_" + indexName,siteId+""));
 				}else if(searchType==CMSSearchManager.SEARCHTYPE_SITES)	{					//站群检索搜索					
 					String sitesIds = db.getString(0,"site_ids");		
 					searchIndex.setSite_Ids(sitesIds);
@@ -561,7 +566,7 @@ public class CMSSearchManager {
 					}
 					searchIndex.setSiteNames(siteNames);					
 					searchIndex.setAbsoluteIndexPath(
-						this.getAbsoluteIndexFilePath(indexPath,"sites_" + indexName,siteId+""));
+						getAbsoluteIndexFilePath(indexPath,"sites_" + indexName,siteId+""));
 			}else if(searchType==CMSSearchManager.SEARCHTYPE_DBTABLE)	{					//库表检索搜索
 				String sql4 = "select * from td_cms_dbtsearch_detail t where t.id =" + db.getInt(0,"id");
 				db4.executeSelect(sql4);				
@@ -578,7 +583,7 @@ public class CMSSearchManager {
 				searchIndex.setContent_types(db4.getString(0,"CONTENT_TYPES"));
 				searchIndex.setContent_path(db4.getString(0,"CONTENT_PATH"));				
 				searchIndex.setAbsoluteIndexPath(
-						this.getAbsoluteIndexFilePath(indexPath,"db_" + indexName,siteId+""));
+						getAbsoluteIndexFilePath(indexPath,"db_" + indexName,siteId+""));
 			}
 				return searchIndex;
 			}
@@ -702,7 +707,7 @@ public class CMSSearchManager {
 		if((searchIndex.getSiteId() == null)||(searchIndex.getSiteId().equals(null))){
 			throw new Exception("站内索引，站点id不能为空！");
 		}
-		CMSCrawler crawler = new CMSCrawler(searchIndex,contextpath);
+		CMSCrawler crawler = new CMSCrawler(searchIndex,contextpath,false);
 		crawler.crawl();
 	}
 	
@@ -739,7 +744,7 @@ public class CMSSearchManager {
 			absoluteIndexFilePath = this.getAbsoluteIndexFilePath(this.getIndexRootPath(),indexFileName,db.getInt(0,"site_id")+"");
 			absoluteIndexFile = new File(absoluteIndexFilePath);
 			if(absoluteIndexFile.exists()){			//先删除物理文件
-				if(!IndexReader.isLocked(absoluteIndexFilePath))
+				if(!isIndexLocked(absoluteIndexFilePath))
 					this.deleteFilesAndDirector(absoluteIndexFile);
 				else
 					throw new Exception("索引文件已经上锁，暂时无法删除：" + absoluteIndexFilePath);
@@ -1525,12 +1530,12 @@ public class CMSSearchManager {
 	 * 将利用lucene查询工具查询返回的Hits集合转化为List
 	 * @param hits
 	 */
-	public static List<CMSSearchHit> getSearchHitList(Hits hits) throws Exception
+	public static List<CMSSearchHit> getSearchHitList(IndexSearcher searcher, ScoreDoc[] hits) throws Exception
 	{
 		List<CMSSearchHit> searchHitList = new ArrayList<CMSSearchHit>();
-		for(int i=0;i<hits.length();i++){
+		for(int i=0;i<hits.length;i++){
 			
-			Document doc = hits.doc(i);
+			Document doc = searcher.doc(hits[i].doc);
 			//过滤掉文件名前缀不为content的文件
 			//如果站点的内容文件命名不是以content为前缀的，则不能如此判断
 			String temp = doc.get("url");
@@ -1547,15 +1552,22 @@ public class CMSSearchManager {
 			searchHit.setContentType(doc.get("contentType"));
 			searchHit.setDescription(doc.get("description"));
 			String href = doc.get("href");
+			
 			searchHit.setHref((href != null) ? href : doc.get("url"));
 			searchHit.setUri(doc.get("uri"));
 			searchHit.setKeywords(doc.get("keyword"));
-			String pulished = doc.get("published");
-			if(null == pulished || "".equals(pulished))
-				pulished = doc.get("lastModified");
-			if(null != pulished && !"".equals(pulished))
-				searchHit.setPublished(DateField.stringToDate(pulished));
-			searchHit.setScore(getFloNum(hits.score(i)*100,2));		//相关度计算
+			LongField pfield = ((LongField)doc.getField("published"));
+//			long pulished = -1;
+//			String pulished = doc.get("published");
+			if(null == pfield )
+			{
+				pfield = ((LongField)doc.getField("lastModified"));
+			}
+//				pulished = doc.get("lastModified");
+			if(null != pfield)
+				searchHit.setPublished(new Date(pfield.numericValue().longValue()));
+			
+			searchHit.setScore(getFloNum(hits[i].score*100,2));		//相关度计算
 			searchHit.setTitle(doc.get("title"));
 			searchHit.setUrl(doc.get("url"));
 			searchHitList.add(searchHit);
@@ -1677,11 +1689,27 @@ public class CMSSearchManager {
 	 * 判断指定索引的索引文件库是否已经上锁（即正在建立索引）
 	 * @param cmsIndex
 	 */
-	public boolean isIndexLocked(CMSSearchIndex Index){
+	public static boolean isIndexLocked(CMSSearchIndex Index){
 		try {
-			String indexDirectory = this.getAbsoluteIndexFilePath(Index);
-			if(new File(indexDirectory).exists())
-				return IndexReader.isLocked(indexDirectory);
+			String indexDirectory = getAbsoluteIndexFilePath(Index);
+			return isIndexLocked(indexDirectory);
+		} catch (Exception e) {
+			return true;
+		}
+	}
+	
+	/**
+	 * 判断指定索引的索引文件库是否已经上锁（即正在建立索引）
+	 * @param cmsIndex
+	 */
+	public static boolean isIndexLocked(String indexDirectory){
+		try {
+//			String indexDirectory = getAbsoluteIndexFilePath(Index);
+			File f = new File(indexDirectory);
+			if(f.exists()){
+				Directory dir = FSDirectory.open(f);
+				return IndexWriter.isLocked(dir);
+			}
 			else return false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1775,38 +1803,67 @@ public class CMSSearchManager {
 				CMSSearchIndex  index = (CMSSearchIndex)indexList.get(i);
 				String absoluteIndexFilePath = this.getAbsoluteIndexFilePath(index);
 				//判断索引库是否存在
-				if(new File(absoluteIndexFilePath).exists()){
-					IndexReader reader = IndexReader.open(absoluteIndexFilePath);
-					//判断索引库是否被锁
-					if(!this.isIndexLocked(index)){
-						//逻辑删除
-						//Term term = new Term("uid","http://localhost:8090/creatorcms/sitepublish/site200/zjcz/content_33925.html");
-						Term term = new Term("uid",docUrl.toLowerCase());
-						reader.delete(term);	
-						log.debug("删除索引成功，文档:" + this.getDocPubDestinction(doc,siteId));					
-						//对每一个文档附件删除相应的索引记录
-						for(int j=0;j<attachmentList.size();j++){
-							//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
-							String relativePath = (String)attachmentList.get(j);
-							//获取站点的发布路径
-							String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
-							//获取附件发布后的绝对路径
-							String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
-							//获取附件访问地址
-							String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);						
-							Term attachTerm = new Term("uid",attachmentUrl.toLowerCase());
-							reader.delete(attachTerm);						
-							log.debug("删除索引成功，文档附件:" + attachmentPubDir);
-						}					
-						reader.close();					
-						//物理删除
-						Analyzer luceneAnalyzer = new StandardAnalyzer();
-						IndexWriter writer = new IndexWriter(absoluteIndexFilePath,luceneAnalyzer,false);
-						writer.optimize();
-						writer.close();					
-					}else{
-						log.debug(absoluteIndexFilePath + "已被锁，无法删除索引记录！");
-						throw new Exception(absoluteIndexFilePath + "已被锁，无法删除索引记录！"); 
+				File f = new File(absoluteIndexFilePath);
+				IndexWriter writer = null;
+				try
+				{
+					if(f.exists()){
+						Directory dir = FSDirectory.open(f);
+					      // :Post-Release-Update-Version.LUCENE_XY:
+					      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+					      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+	
+					     
+					        // Add new documents to an existing index:
+					        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+					      
+					      
+	
+					      // Optional: for better indexing performance, if you
+					      // are indexing many documents, increase the RAM
+					      // buffer.  But if you do this, increase the max heap
+					      // size to the JVM (eg add -Xmx512m or -Xmx1g):
+					      //
+					      // iwc.setRAMBufferSizeMB(256.0);
+					      
+					      writer = new IndexWriter(dir, iwc);
+						//判断索引库是否被锁
+						if(!this.isIndexLocked(index)){
+							//逻辑删除
+							//Term term = new Term("uid","http://localhost:8090/creatorcms/sitepublish/site200/zjcz/content_33925.html");
+							Term term = new Term("uid",docUrl.toLowerCase());
+							writer.deleteDocuments(term);	
+							log.debug("删除索引成功，文档:" + this.getDocPubDestinction(doc,siteId));					
+							//对每一个文档附件删除相应的索引记录
+							for(int j=0;j<attachmentList.size();j++){
+								//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
+								String relativePath = (String)attachmentList.get(j);
+								//获取站点的发布路径
+								String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
+								//获取附件发布后的绝对路径
+								String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
+								//获取附件访问地址
+								String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);						
+								Term attachTerm = new Term("uid",attachmentUrl.toLowerCase());
+								writer.deleteDocuments(attachTerm);						
+								log.debug("删除索引成功，文档附件:" + attachmentPubDir);
+							}					
+						}else{
+							log.debug(absoluteIndexFilePath + "已被锁，无法删除索引记录！");
+							throw new Exception(absoluteIndexFilePath + "已被锁，无法删除索引记录！"); 
+						}
+					}
+				}
+				finally
+				{
+					if(writer != null)
+					{
+						try {
+							writer.close();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -1893,64 +1950,96 @@ public class CMSSearchManager {
 				//得到索引记录
 				CMSSearchIndex  index = (CMSSearchIndex)indexList.get(i);
 				String absoluteIndexFilePath = this.getAbsoluteIndexFilePath(index);
-				
+				File f = new File(absoluteIndexFilePath);
 				//若索引库不存在无需追加索引记录
-				if(new File(absoluteIndexFilePath).exists()){
+				if(f.exists()){
 					
 					if(!this.isIndexLocked(index)){
 						//往现有的索引文件中追加记录
-						IndexWriter writer = new IndexWriter(absoluteIndexFilePath,						
-																	new StandardAnalyzer(), false); 
-						//对文档追加索引记录
-						crawler.indexLucene(writer,docHandler,docUrl,docContentType,lastModified);
-						
-						//对每一个文档附件追加索引记录
-						for(int j=0;j<attachmentList.size();j++){
-							//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
-							String relativePath = (String)attachmentList.get(j);
-							//获取站点的发布路径
-							String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
-							//获取附件发布后的绝对路径
-							String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
-							//获取附件访问地址
-							String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);
+						IndexWriter writer = null;
+						try
+						{
+//							writer = new IndexWriter(absoluteIndexFilePath,						
+//																		new StandardAnalyzer(), false); 
+							Directory dir = FSDirectory.open(f);
+						      // :Post-Release-Update-Version.LUCENE_XY:
+						      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+						      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+
+						     
+						        // Add new documents to an existing index:
+						        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+						      
+						      
+
+						      // Optional: for better indexing performance, if you
+						      // are indexing many documents, increase the RAM
+						      // buffer.  But if you do this, increase the max heap
+						      // size to the JVM (eg add -Xmx512m or -Xmx1g):
+						      //
+						      // iwc.setRAMBufferSizeMB(256.0);
+						      
+						      writer = new IndexWriter(dir, iwc);
+							//对文档追加索引记录
+							crawler.indexLucene(writer,docHandler,docUrl,docContentType,lastModified);
 							
-							//判断附件类型，选择文件解析器ContentHandle
-							if(attachmentUrl.endsWith(".doc")){
+							//对每一个文档附件追加索引记录
+							for(int j=0;j<attachmentList.size();j++){
+								//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
+								String relativePath = (String)attachmentList.get(j);
+								//获取站点的发布路径
+								String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
+								//获取附件发布后的绝对路径
+								String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
+								//获取附件访问地址
+								String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);
 								
-								String attachmentContentType = ContentHandler.WORD_FILEFOMAT;
-								ContentHandler attachmentHandler = crawler.
-																		handleLocalFile(new File(attachmentPubDir),attachmentContentType);
-								
-								//追加附件索引记录
-								crawler.indexLucene(writer,
-										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-								
-							}else if(attachmentUrl.endsWith(".pdf")){
-								
-								String attachmentContentType = ContentHandler.PDF_FILEFOMAT;
-								ContentHandler attachmentHandler = crawler.
-																		handleLocalFile(new File(attachmentPubDir),attachmentContentType);
-																		
-								//追加附件索引记录
-								crawler.indexLucene(writer,
-										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-							}else if(attachmentUrl.endsWith(".html") ||
-									attachmentUrl.endsWith(".htm") ||
-									attachmentUrl.endsWith(".txt") ){
-								
-								String attachmentContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
-								ContentHandler attachmentHandler = crawler.
-																		handleLocalFile(new File(attachmentPubDir),attachmentContentType);
-																		
-								//追加附件索引记录
-								crawler.indexLucene(writer,
-										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								//判断附件类型，选择文件解析器ContentHandle
+								if(attachmentUrl.endsWith(".doc")){
+									
+									String attachmentContentType = ContentHandler.WORD_FILEFOMAT;
+									ContentHandler attachmentHandler = crawler.
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+									
+									//追加附件索引记录
+									crawler.indexLucene(writer,
+											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+									
+								}else if(attachmentUrl.endsWith(".pdf")){
+									
+									String attachmentContentType = ContentHandler.PDF_FILEFOMAT;
+									ContentHandler attachmentHandler = crawler.
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+																			
+									//追加附件索引记录
+									crawler.indexLucene(writer,
+											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								}else if(attachmentUrl.endsWith(".html") ||
+										attachmentUrl.endsWith(".htm") ||
+										attachmentUrl.endsWith(".txt") ){
+									
+									String attachmentContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
+									ContentHandler attachmentHandler = crawler.
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+																			
+									//追加附件索引记录
+									crawler.indexLucene(writer,
+											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								}
+							}
+							
+							
+						}
+						finally
+						{
+							try {
+								if(writer != null)
+									writer.close();
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
-						
-						writer.optimize();
-						writer.close();
 					}else{
 						log.debug(absoluteIndexFilePath + "已被锁，无法追加索引记录！");
 						throw new Exception(absoluteIndexFilePath + "已被锁，无法追加索引记录！"); 
