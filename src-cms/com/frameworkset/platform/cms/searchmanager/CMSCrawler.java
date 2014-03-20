@@ -25,8 +25,6 @@ import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -171,7 +169,7 @@ public class CMSCrawler  {
 			      //
 			      // iwc.setRAMBufferSizeMB(256.0);
 			      
-			      IndexWriter writer = new IndexWriter(dir, iwc);
+			       writer = new IndexWriter(dir, iwc);
 				
 //-----------------
 //				File file = new File(indexDirectory);
