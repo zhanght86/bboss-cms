@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page session="true" language="java"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="java.net.URLEncoder,com.liferay.portlet.iframe.action.DESCipher"%>
@@ -5,7 +6,10 @@
 DESCipher des = new DESCipher();
 //工号和账号加密方法
 String wn = des.encrypt("admin");
-out.println(wn);
+
+out.println("isGuest:"+AccessControl.getAccessControl().isGuest());
+out.println("userAccount:"+AccessControl.getAccessControl().getUserAccount());
+out.println("密文："+wn);
  %>
 <html>
 <body>

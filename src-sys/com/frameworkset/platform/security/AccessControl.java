@@ -4746,5 +4746,14 @@ public class AccessControl implements AccessControlInf{
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+	@Override
+	public boolean isGuest() {
+		
+		return this.getUserAccount() == null || this.getUserAccount().equals("") 
+				|| this.getUserAccount().equals(BaseAuthorizationTable.guest);
+	}
 	
 }

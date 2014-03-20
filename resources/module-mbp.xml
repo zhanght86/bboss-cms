@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+	定义系统中的子系统功能模块
+	子元素：subsystem－对应不同的子系统，例如：内容管理和工作流			
+-->
+<system>
+	<sysmenu name="sanymbp" left_width="12%" top_height="70"
+		showhidden="true" showhidden_width="10" showrootleftmenu="true" messagesource="messages_module">
+		<description>移动平台</description>
+		<!--
+			公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目
+		-->
+		<publicitem name="系统首页" id="indexpage" main="true">
+			<!--<left>perspective_outlookbar.jsp</left>-->
+			<workspace>
+				<!--<content>detail.html</content>-->
+				<!-- <content isany="/sanymbp/mbpindex.page">/sanymbp/mbpindex.page</content> -->
+				<content isany="/html/main1.html"></content>
+			</workspace>
+		</publicitem>
+		
+		<item name="HRM人力资源系统" id="hrm">
+			<headimg>common/images/hrm.png</headimg>
+			<title>HRM人力资源系统</title>
+			<workspace>
+				<content>sanyhrm/workflow/task/index.page</content>
+			</workspace>
+		</item>
+		 <item name="销售意向审批1" id="VM350111">
+			<headimg>common/images/icon3.png</headimg>
+			<title>售意向审批待办222</title>
+			<workspace>
+				<content>sanyhrm/workflow/task/index.page</content>
+			</workspace>
+		</item>
+		<item name="GSP供应商门户" id="gsp">
+			<headimg>common/images/gsp.png</headimg>
+			<title>GSP供应商门户</title>
+			<workspace>
+				<content>sanygsp/showPendingList.page</content>
+			</workspace>
+		</item>
+		<item name="EMS费用商旅系统" id="ems">
+			<headimg>common/images/ems.png</headimg>
+			<title>EMS费用商旅系统</title>
+			<workspace>
+				<content>sanyems/showPendingList.page</content>
+			</workspace>
+		</item>
+		
+      	<item name="新增销售意向" id="VM350102">
+			<headimg>common/images/icon1.png</headimg>
+			<title>增加新的销售订单!</title>
+			<workspace>
+				<content>sanymbp/sales/addSaleInit.page</content>
+			</workspace>
+		</item>
+      	<item name="销售意向查询" id="VM350109">
+			<headimg>common/images/icon2.png</headimg>
+			<title>客户的意向查询!</title>
+			<workspace>
+				<content>sanymbp/sales/querysales.jsp</content>
+			</workspace>
+		</item>
+       <item name="销售意向审批" id="VM350110">
+			<headimg>common/images/icon3.png</headimg>
+			<title>售意向审批待办</title>
+			<workspace>
+				<content>sanymbp/sales/querySalesForTra.page</content>
+			</workspace>
+		</item>
+		
+		<item name="新增产品发货" id="VM350201">
+			<headimg>common/images/icon4.png</headimg>
+			<title>产品发货单新增</title>
+			<workspace>
+			<!-- <content>sales/delivery.jsp</content> -->
+				<content>sanymbp/consign/querySalesConsign.page</content>
+			</workspace>
+		</item>
+		<item name="产品发货查询" id="VM350202">
+			<headimg>common/images/icon5.png</headimg>
+			<title>产品发货单查询与编辑</title>
+			<workspace>
+				<content>sanymbp/consign/consignquery.jsp</content>
+			</workspace>
+		</item>
+		<item name="产品发货审批" id="VM350210">
+			<headimg>common/images/icon6.png</headimg>
+			<title>产品发货审批待办</title>
+			<workspace>
+				<content>sanymbp/consign/queryConsignTransact.page</content>
+			</workspace>
+		</item>
+		<item name="新增客户" id="VM350211">
+			<headimg>common/images/icon6.png</headimg>
+			<title>新增客户</title>
+			<workspace>
+				<content>sanymbp/customer/addCustomerInit.page</content>
+			</workspace>
+		</item>
+		<item name="客户查询" id="VM360101">
+			<headimg>common/images/icon6.png</headimg>
+			<title>客户查询</title>
+			<workspace>
+				<content>sanymbp/customer/customerquery.jsp</content>
+			</workspace>
+		</item>
+		<!--  
+		<item name="demo" id="mbpcustomermanage">
+			<headimg>common/images/icon1.gif</headimg>
+			<title>demo</title>
+			<workspace>
+				<content>customer/searchCust.page</content>
+			</workspace>
+		</item>
+		<item name="销售订单demo" id="mbpscent">
+			<headimg>common/images/icon5.gif</headimg>
+			<title>采购发货查询与编辑</title>
+			<workspace>
+				<content>demo/adddemo.jsp</content>
+			</workspace>
+		</item>
+-->
+		<module name="系统管理" id="sysmanager" used="true" showleftmenu="true">
+			<mouseupimg>sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
+			<mouseclickimg>sysmanager/itemicon/bbs_highlighted.gif
+			</mouseclickimg>
+			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
+			</mouseoverimg>
+			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
+			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			<description>系统管理</description>
+			<item name="权限管理" id="purviewmanager" default="true" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_08_a.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!--
+					<top>perspective_toolbar.jsp</top>
+					<left>perspective_outlookbar.jsp</left>
+				-->
+				<workspace>
+					<content>purviewmanager/main.jsp</content>
+				</workspace>
+			</item>
+
+			<item name="菜单管理" id="menumanage" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_messageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/icon_13.gif
+				</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_messageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_messageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_messageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!--				<top>perspective_toolbar.jsp</top>-->
+				<!--				<left>perspective_outlookbar.jsp</left>-->
+				<navigator>
+					<toolbar>sysmanager/menumanager/navigator_toolbar.jsp</toolbar>
+					<content>sysmanager/menumanager/resColumnTree.jsp</content>
+				</navigator>
+				<workspace>
+					<toolbar>sysmanager/menumanager/properties_toolbar.jsp</toolbar>
+					<content>sysmanager/menumanager/menuList.jsp</content>
+				</workspace>
+			</item>
+
+			<item name="用户查询" id="userquery" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/zjcx_d.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!--				<top>perspective_toolbar.jsp</top>-->
+				<!--				<left>perspective_outlookbar.jsp</left>-->
+				<navigator></navigator>
+				<workspace>
+					<toolbar>sysmanager/user/userquery_toolbar.jsp</toolbar>
+					<content>sysmanager/user/userquery_content_tab.jsp</content>
+				</workspace>
+			</item>
+			<item name="权限查询" id="resquery" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>common/ico/zjcx_d.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+				</headimg>
+				<top>header.page</top>
+				<!--				<top>perspective_toolbar.jsp</top>-->
+				<!--				<left>perspective_outlookbar.jsp</left>-->
+				<navigator></navigator>
+				<workspace>
+					<content>sysmanager/resmanager/resquery_tab.jsp</content>
+				</workspace>
+			</item>
+
+			<item name="日志查询" id="logquery" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_logquery_enabled.gif</mouseupimg>
+				<mouseclickimg>common/ico/icon_17.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_logquery_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_logquery_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_logquery_disabled.gif</headimg>
+				<top>header.page</top>
+				<!--				<top>perspective_toolbar.jsp</top>-->
+				<!--				<left>perspective_outlookbar.jsp</left>-->
+				<navigator></navigator>
+				<workspace>
+					<toolbar>sysmanager/logmanager/logquery_toolbar.jsp</toolbar>
+					<content>sysmanager/logmanager/logList_tab.jsp</content>
+				</workspace>
+			</item>
+
+			<item name="新闻公告" id="sanyra_newsList" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_logquery_enabled.gif</mouseupimg>
+				<mouseclickimg>common/ico/icon_17.gif</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_logquery_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_logquery_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_logquery_disabled.gif</headimg>
+				<top>header.page</top>
+				<!--				<top>perspective_toolbar.jsp</top>-->
+				<!--				<left>perspective_outlookbar.jsp</left>-->
+				<navigator></navigator>
+				<workspace>
+					<content>sanyra/news/main.page</content>
+				</workspace>
+			</item>
+
+		</module>
+
+
+		
+
+		<module name="字典管理" id="dictionarymanager" used="true">
+			<item name="字典定义" id="dictmanage_info" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
+				</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_content_0_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_content_0_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_dictmanage_content_0_disabled.gif
+				</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<navigator>
+					<toolbar>sysmanager/dictmanager/navigator_toolbar.jsp</toolbar>
+					<content>sysmanager/dictmanager/navigator_info_content.jsp
+					</content>
+				</navigator>
+
+				<workspace>
+					<toolbar>sysmanager/dictmanager/properties_info_toolbar.jsp
+					</toolbar>
+					<content>sysmanager/dictmanager/properties_content.jsp</content>
+				</workspace>
+			</item>
+
+			<item name="字典高级字段配置" id="dictAttachField" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
+				</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_info_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_info_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_dictmanage_info_disabled.gif
+				</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<navigator>
+					<toolbar>sysmanager/dictmanager/dictAttachField/navigator_toolbar.jsp
+					</toolbar>
+					<content>sysmanager/dictmanager/dictAttachField/navigator_content.jsp
+					</content>
+				</navigator>
+
+				<workspace>
+					<toolbar>sysmanager/dictmanager/dictAttachField/properties_toolbar.jsp
+					</toolbar>
+					<content>sysmanager/dictmanager/dictAttachField/properties_content.jsp
+					</content>
+				</workspace>
+			</item>
+
+			<item name="输入类型管理" id="inputtypemanage" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
+				</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_dictmanage_content_1_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_dictmanage_content_1_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_dictmanage_content_1_disabled.gif
+				</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<navigator></navigator>
+				<workspace>
+					<toolbar>sysmanager/inputtypemanager/inputtype_toolbar.jsp
+					</toolbar>
+					<content>sysmanager/inputtypemanager/inputTypeQuery.jsp</content>
+				</workspace>
+			</item>
+
+
+			<item name="基础字典数据采集" id="dictmanage_content_0" area="main">
+				<mouseupimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
+				</mouseupimg>
+				<mouseclickimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
+				</mouseclickimg>
+				<mouseoverimg>sysmanager/itemicon/tb_dictAttachField_enabled.gif
+				</mouseoverimg>
+				<mouseoutimg>sysmanager/itemicon/tb_dictAttachField_disabled.gif
+				</mouseoutimg>
+				<headimg>sysmanager/itemicon/tb_dictAttachField_disabled.gif
+				</headimg>
+				<top>perspective_toolbar.jsp</top>
+				<left>perspective_outlookbar.jsp</left>
+				<navigator>
+					<toolbar>sysmanager/dictmanager/navigator_toolbar.jsp?dicttype_type=0
+					</toolbar>
+					<content>sysmanager/dictmanager/navigator_content_content.jsp?dicttype_type=0
+					</content>
+				</navigator>
+
+				<workspace>
+					<toolbar>sysmanager/dictmanager/properties_content_toolbar.jsp
+					</toolbar>
+					<content>sysmanager/dictmanager/properties_content.jsp</content>
+				</workspace>
+			</item>
+		</module>
+		<!--
+			name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true
+		-->
+		<module name="个人中心" id="personelCenter" used="true"
+			showleftmenu="true">
+			<module name="个人应用" id="personelCenterManage" used="true">
+				<item name="个人信息修改" id="personuserinfomodify">
+					<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseupimg>
+					<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</mouseoutimg>
+					<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</headimg>
+					<top>perspective_toolbar.jsp</top>
+					<left>perspective_outlookbar.jsp</left>
+					<workspace>
+						<content>person/personinfo.jsp</content>
+					</workspace>
+				</item>
+				<item name="系统帐户修改" id="sysuserpassword">
+					<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseupimg>
+					<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</mouseoutimg>
+					<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</headimg>
+					<top>perspective_toolbar.jsp</top>
+					<left>perspective_outlookbar.jsp</left>
+					<workspace>
+						<content>sysmanager/password/modifyUserPWD.jsp</content>
+					</workspace>
+				</item>
+				<item name="个人密码修改" id="personsecretpassword">
+					<mouseupimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseupimg>
+					<mouseclickimg>common/ico/icon_02_a.gif</mouseclickimg>
+					<mouseoverimg>sysmanager/itemicon/tb_usermessageresourcemanager_enabled.gif
+					</mouseoverimg>
+					<mouseoutimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</mouseoutimg>
+					<headimg>sysmanager/itemicon/tb_usermessageresourcemanager_disabled.gif
+					</headimg>
+					<top>perspective_toolbar.jsp</top>
+					<left>perspective_outlookbar.jsp</left>
+					<workspace>
+						<content>sysmanager/password/modifySelfPassword.jsp</content>
+					</workspace>
+				</item>
+			</module>
+		</module>
+	</sysmenu>
+</system>
