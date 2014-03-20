@@ -37,8 +37,8 @@
 		
 		<property name="schemafiles_patch">
 				<list>
-				<!--<property	dbname="bspf"><![CDATA[schema/cms-ext.xml]]></property>-->
-					<property dbname="datareuse"><![CDATA[schema/esb.xml,schema/sys-ext.xml]]></property>
+				<property	dbname="bspf"><![CDATA[schema/sys-ext.xml]]></property>
+					<property dbname="datareuse"><![CDATA[schema/esb.xml]]></property>
 	  			</list>
 		</property>
 		<property name="executefiles_patch">
