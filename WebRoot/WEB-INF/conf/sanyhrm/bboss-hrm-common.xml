@@ -1,0 +1,20 @@
+<properties>
+	<!-- http://10.8.135.125:81/HRM/services/UniversalService -->
+	<!-- http://10.0.15.231:8080/HRM/services/UniversalService -->
+<!--	<property name="com.sany.hrm.modules.webService.support.WebServiceSupport"-->
+<!--		class="com.sany.hrm.modules.webService.support.DefaultWebServiceSupport"-->
+<!--		f:targetEndpointAddress="http://10.0.15.231:8080/HRM/services/UniversalService">-->
+<!--	</property>-->
+	
+	<property name="com.sany.hrm.common.service.LoginService"
+		class="com.sany.hrm.common.service.DefaultLoginService"
+		>
+	</property>
+	
+	<property name="/sanyhrm/*.page"
+		path:index="/sanyhrm/index.jsp"
+		f:loginService="attr:com.sany.hrm.common.service.LoginService"
+		f:workflowService="attr:com.sany.hrm.workflow.service.WorkflowService"
+		class="com.sany.hrm.IndexController" >
+	</property>
+</properties>

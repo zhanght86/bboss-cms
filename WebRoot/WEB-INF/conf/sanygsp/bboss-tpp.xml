@@ -1,0 +1,48 @@
+
+<properties>
+
+	<!-- 移动平台登录控制器
+
+	<property name="/sanymbp/login.page,/sanymbp/mbpindex.page,/sanymbp/returnpage.page,/sanymbp/chgPwd.page"
+		path:login="/sanymbp/login.jsp"
+		path:chgpwd="/sanymbp/chgUserPwd.jsp"
+		path:main="/sanymbp/main.jsp"
+		path:index="redirect:/sanymbp/mbpindex.page"
+		f:loginService="attr:sanymbp.LoginService"
+		class="com.sany.mbp.common.action.LoginController" >
+	</property>
+	<property name="sanymbp.LoginService"
+		f:executor="attr:sanymbp.loginsqlexecutor"
+		class="com.sany.mbp.common.service.LoginServiceImpl"
+		/>
+	<property name="sanymbp.loginsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/mbp/common/service/login.xml"/>
+		</construction>
+	</property>
+	
+	-->
+	<!-- 		<construction> -->
+<!-- 		<property  class=""/> -->
+<!-- 		<property  value=""/> -->
+<!-- 		<property  refid="attr:sanymbp.LoginService"/> -->
+<!-- 		</construction> -->
+<!-- 		
+		<property name="loginService" class=""/>
+		<property name="loginService" value=""/>
+		<property name="loginService" refid="attr:sanymbp.LoginService"/> -->
+
+
+	<property
+		name="/sanygsp/*.page"
+		path:main="/sanygsp/pendingList.jsp" 
+		path:digest="/sanygsp/pendingDigest.jsp"
+		path:approveView="/sanygsp/approveView.jsp" 
+		path:approve="redirect:/sanygsp/showPendingList.page"
+		path:detail="/sanygsp/detail.jsp" 
+		path:approveFlow="/sanygsp/approveFlow.jsp"
+		class="com.sany.gsp.pending.action.PendingListController">
+	</property>
+	
+</properties>
