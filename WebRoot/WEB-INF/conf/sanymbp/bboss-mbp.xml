@@ -1,0 +1,34 @@
+
+<properties>
+
+<!-- 移动平台登录控制器-->
+	<!-- 
+		描述:初始化一个控制器LoginController，并将所有关联的service注入到此控制器中。并以别名的形式定义好跳转页面。
+	    author:fudk
+		版本:1.0
+	    Date: 2012-04-26
+	-->
+	<property name="/sanymbp/login.page,/sanymbp/index.page"
+		path:login="/sanymbp/login.jsp"
+		path:index="/sanymbp/index.jsp"
+		path:main="redirect:/sanymbp/index.page"
+		class="com.sany.mbp.login.action.LoginController" >
+	</property>
+	
+	<property name="/sanymbp/ssoLogin.page"
+		path:login="/sanymbp/login.jsp"
+		path:index="redirect:/sanymbp/index.page"
+		f:clientLoginService="attr:sanymbp.clientLoginService"
+		class="com.sany.mbp.login.action.SsoController" >
+	</property>
+	
+	<property name="/sanymbp/*.page"
+		
+		class="com.sany.mbp.pending.action.PendingController" >
+	</property>
+	
+	
+	<property name="sanymbp.clientLoginService"
+		class="com.sany.mbp.login.service.ClientLoginService"/>
+		
+</properties>

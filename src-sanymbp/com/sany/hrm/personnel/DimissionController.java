@@ -15,11 +15,11 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.StringUtil;
 import com.sany.hrm.common.service.LoginService;
 import com.sany.hrm.personnel.service.PersonnelService;
 import com.sany.hrm.workflow.dto.WfNodeDto;
 import com.sany.hrm.workflow.service.WorkflowService;
-import com.sany.workflow.util.JsonBinder;
 
 /**
  * 离司
@@ -229,7 +229,7 @@ public class DimissionController {
 			jsonMap.put("message", e.getMessage());
 		}
 
-		String json = JsonBinder.buildNormalBinder().toJson(jsonMap);
+		String json = StringUtil.object2json(jsonMap);
 
 		return json;
 	}

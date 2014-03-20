@@ -6,8 +6,8 @@ import org.apache.axis.handlers.soap.SOAPService;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
 
+import com.frameworkset.util.StringUtil;
 import com.sany.hrm.modules.webService.dto.MessageDto;
-import com.sany.workflow.util.JsonBinder;
 
 /**
  * WebService工具类
@@ -144,8 +144,7 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = JsonBinder.buildNormalBinder().getMapper()
-				.readValue(returnJson, new TypeReference<MessageDto<T1>>() {
+		MessageDto<T1> returnMessageDto = StringUtil.json2Object(returnJson, new TypeReference<MessageDto<T1>>() {
 				});
 
 		return returnMessageDto;
@@ -175,7 +174,7 @@ public class WebServiceUtils {
 			String functionId, MessageDto<T2> messageDto) throws Exception {
 		Call call = WebServiceUtils.getCallExt(targetEndpointAddress, warrantId, operationName);
 
-		String json = com.sany.workflow.util.JsonBinder.buildNormalBinder().toJson(messageDto);
+		String json = StringUtil.object2json(messageDto);
 
 		String returnJson = (String) call.invoke(new Object[] { functionId, json });
 
@@ -183,8 +182,7 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = JsonBinder.buildNormalBinder().getMapper()
-				.readValue(returnJson, new TypeReference<MessageDto<T1>>() {
+		MessageDto<T1> returnMessageDto = StringUtil.json2Object(returnJson, new TypeReference<MessageDto<T1>>() {
 				});
 
 		return returnMessageDto;
