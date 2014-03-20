@@ -11,12 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.StoredField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -1538,14 +1540,14 @@ public class CMSSearchManager {
 			Document doc = searcher.doc(hits[i].doc);
 			//过滤掉文件名前缀不为content的文件
 			//如果站点的内容文件命名不是以content为前缀的，则不能如此判断
-			String temp = doc.get("url");
-			if(temp != null){
-				temp = temp.substring(temp.lastIndexOf("/")+1,temp.length());
-				temp = temp.substring(0,7);
-				if(!"content".equals(temp)){
-					continue;
-				}
-			}
+//			String temp = doc.get("url");
+//			if(temp != null){
+//				temp = temp.substring(temp.lastIndexOf("/")+1,temp.length());
+//				temp = temp.substring(0,7);
+//				if(!"content".equals(temp)){
+//					continue;
+//				}
+//			}
 			CMSSearchHit searchHit = new CMSSearchHit();
 			searchHit.setCategories(doc.get("categories"));
 			searchHit.setContent(doc.get("content"));
@@ -1556,12 +1558,14 @@ public class CMSSearchManager {
 			searchHit.setHref((href != null) ? href : doc.get("url"));
 			searchHit.setUri(doc.get("uri"));
 			searchHit.setKeywords(doc.get("keyword"));
-			LongField pfield = ((LongField)doc.getField("published"));
+			IndexableField temp_f = doc.getField("published");
+			
+			StoredField pfield = ((StoredField)temp_f);
 //			long pulished = -1;
 //			String pulished = doc.get("published");
 			if(null == pfield )
 			{
-				pfield = ((LongField)doc.getField("lastModified"));
+				pfield = ((StoredField)doc.getField("lastModified"));
 			}
 //				pulished = doc.get("lastModified");
 			if(null != pfield)
@@ -1810,7 +1814,7 @@ public class CMSSearchManager {
 					if(f.exists()){
 						Directory dir = FSDirectory.open(f);
 					      // :Post-Release-Update-Version.LUCENE_XY:
-					      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+					      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
 					      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 	
 					     
@@ -1963,7 +1967,7 @@ public class CMSSearchManager {
 //																		new StandardAnalyzer(), false); 
 							Directory dir = FSDirectory.open(f);
 						      // :Post-Release-Update-Version.LUCENE_XY:
-						      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+						      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
 						      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 
 						     

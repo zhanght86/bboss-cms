@@ -78,12 +78,15 @@ public final class CmsExtractorMsWord extends A_CmsTextExtractorMsOfficeBase imp
     public I_CmsExtractionResult extractText(InputStream in, String encoding) throws Exception {
 
         // first extract the text using the text actraction libary
-    	WordTextExtractorFactory factory = new WordTextExtractorFactory();
+//    	WordTextExtractorFactory factory = new WordTextExtractorFactory();
     	
-        TextExtractor wordExtractor = factory.textExtractor(getStreamCopy(in));
+//        TextExtractor wordExtractor = factory.textExtractor(getStreamCopy(in));
         
-        String result = wordExtractor.getText();
+
+//        String result = wordExtractor.getText();
 //        String result = wordExtractor.extractText(getStreamCopy(in));
+    	WordExtractor ex = new WordExtractor(getStreamCopy(in));   
+        String result = ex.getText();   
         result = removeControlChars(result);
 
      

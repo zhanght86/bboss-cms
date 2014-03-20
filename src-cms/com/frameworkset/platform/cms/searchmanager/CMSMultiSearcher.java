@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.MultiReader;
@@ -90,7 +91,7 @@ public class CMSMultiSearcher implements java.io.Serializable {
 			
 			 multiSearcher =  msearch();   //联合检索工具
 			 
-			 StandardAnalyzer  analyzer = new StandardAnalyzer(Version.LUCENE_47);	//解析器
+			 Analyzer  analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);	//解析器
 			 
 			 //查询条件
 			 BooleanQuery query = new BooleanQuery();
@@ -108,6 +109,9 @@ public class CMSMultiSearcher implements java.io.Serializable {
 				 fQuery.add(parser.parse(queryStr), BooleanClause.Occur.SHOULD);
 			 }
 	         query.add(fQuery, BooleanClause.Occur.MUST);
+//			 QueryParser parser = new QueryParser(Version.LUCENE_47, "content", analyzer);
+////			 query.add(parser.parse(queryStr), BooleanClause.Occur.SHOULD);
+//			 Query query = parser.parse(queryStr);
 	         
 	         //按照指定文件类型查询,"all"表示所有格式
 	         if(!fileFormat.equals("all")){
@@ -133,8 +137,7 @@ public class CMSMultiSearcher implements java.io.Serializable {
 	         if("time".equals(sort)){						//按时间排序
 		         if (dateFilter == null) {
 		        	
-		              hits = multiSearcher.search(query,1000,
-		            		  new Sort(new SortField[]{new SortField("published", SortField.Type.LONG,true)})).scoreDocs;
+		              hits = multiSearcher.search(query,1000).scoreDocs;
 		          } else {
 		              hits = multiSearcher.search(query,dateFilter,1000,
 		            		  new Sort(new SortField[]{new SortField("published", SortField.Type.LONG,true)})).scoreDocs;

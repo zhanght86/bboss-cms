@@ -18,7 +18,8 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
+//import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
@@ -74,7 +75,7 @@ public class CMSCrawler  {
 	private String currentURL;	//当前连接
 	private String contextpath;
 	private String currentURI;	//当前连接URI
-	private boolean create;
+	private boolean create = true;
 	/**
 	 * lucence 索引的唯一标识
 	 */
@@ -150,7 +151,7 @@ public class CMSCrawler  {
 					f.mkdirs();
 				Directory dir = FSDirectory.open(f);
 			      // :Post-Release-Update-Version.LUCENE_XY:
-			      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+			      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
 			      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 
 			      if (create) {
@@ -817,7 +818,7 @@ public class CMSCrawler  {
 			fieldType.setStored(false);
 			fieldType.setIndexed(true);
 			fieldType.setStoreTermVectors(true);
-			document.add(new Field("uid",uid, fieldType));
+			document.add(new StringField("uid",uid, Field.Store.YES));
             document.add(new StringField("url", currentURL, Field.Store.YES));
             if(currentURI == null)
             	currentURI = currentURL;
@@ -844,10 +845,10 @@ public class CMSCrawler  {
             if (handler.getPublished() != -1L) {
                 document.add(new LongField("published",
                                            handler.
-                        getPublished(), Field.Store.NO));
+                        getPublished(), Field.Store.YES));
             } else {
                 document.add(new LongField("published",
-                                           lastModified, Field.Store.NO));
+                                           lastModified, Field.Store.YES));
             }
             /**
              * 增加一个文件格式的域
@@ -1051,7 +1052,7 @@ public class CMSCrawler  {
 			if(f.exists()){
 				Directory dir = FSDirectory.open(f);
 			      // :Post-Release-Update-Version.LUCENE_XY:
-			      Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_47);
+			      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
 			      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 
 			     
