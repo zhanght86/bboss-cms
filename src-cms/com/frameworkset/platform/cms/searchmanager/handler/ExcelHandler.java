@@ -1,10 +1,7 @@
 package com.frameworkset.platform.cms.searchmanager.handler;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.util.List;
-import java.util.Map;
 
 import com.frameworkset.platform.cms.searchmanager.extractors.CmsExtractorMsExcel;
 import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsExtractionResult;
@@ -28,8 +25,7 @@ public class ExcelHandler extends ContentHandlerBase {
 	public void parse(InputStream in) {
 		try {
 			this.reset();
-			I_CmsTextExtractor xlsExtractor = CmsExtractorMsExcel.
-																getExtractor();
+			I_CmsTextExtractor xlsExtractor = new CmsExtractorMsExcel(version);
 			I_CmsExtractionResult er = xlsExtractor.extractText(in);
 			this.contents = new StringBuffer(er.getContent());
 			this.metoInfo = er.getMetaInfo();

@@ -28,7 +28,12 @@ public class CMSSearchControler {
 	public String processSearch(@PagerParam(name = PagerParam.OFFSET) long offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "15") int hitsPerSet,HttpServletRequest request,ModelMap model)
 	{
-		String queryString = request.getParameter("queryString").trim();
+		String queryString = request.getParameter("queryString");
+		if(queryString != null)
+		{
+			queryString = queryString.trim();
+		}
+		model.addAttribute("queryString", queryString);
 		String field = request.getParameter("field");
 		String key = queryString;
 		String siteId;

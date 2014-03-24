@@ -50,7 +50,7 @@ import javax.swing.text.rtf.RTFEditorKit;
 public final class CmsExtractorRtf extends A_CmsTextExtractor implements java.io.Serializable {
 
     /** Static member instance of the extractor. */
-    private static final CmsExtractorRtf INSTANCE = new CmsExtractorRtf();
+//    private static final CmsExtractorRtf INSTANCE = new CmsExtractorRtf();
 
     /** Pattern used to remove {\*\ts...} RTF keywords, which cause NPE in Java 1.4. */
     private static final Pattern TS_REMOVE_PATTERN = Pattern.compile("\\{\\\\\\*\\\\ts[^\\}]*\\}", Pattern.DOTALL);
@@ -58,20 +58,20 @@ public final class CmsExtractorRtf extends A_CmsTextExtractor implements java.io
     /**
      * Hide the public constructor.<p> 
      */
-    private CmsExtractorRtf() {
+    public CmsExtractorRtf() {
 
         // noop
     }
-
-    /**
-     * Returns an instance of this text extractor.<p> 
-     * 
-     * @return an instance of this text extractor
-     */
-    public static I_CmsTextExtractor getExtractor() {
-
-        return INSTANCE;
-    }
+//
+//    /**
+//     * Returns an instance of this text extractor.<p> 
+//     * 
+//     * @return an instance of this text extractor
+//     */
+//    public static I_CmsTextExtractor getExtractor() {
+//
+//        return INSTANCE;
+//    }
 
     /**
      * @see org.opencms.search.extractors.I_CmsTextExtractor#extractText(byte[], java.lang.String)

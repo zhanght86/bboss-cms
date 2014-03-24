@@ -312,7 +312,8 @@ public class CMSCrawler  {
 					//在建索引文件时过滤掉文件名前缀不为content的文件
 					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
 					//if(fileName != null && fileName.equals("content")){
-						this.handler = this.handleLocalFile(srcfile,contentType,filePath.endsWith(".doc")?);
+					
+						this.handler = this.handleLocalFile(srcfile,contentType,filePath.endsWith(".doc") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
 						indexLucene();
 						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
 					//}
@@ -325,7 +326,7 @@ public class CMSCrawler  {
 					//在建索引文件时过滤掉文件名前缀不为content的文件
 					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
 					//if(fileName != null && fileName.equals("content")){
-						this.handler = this.handleLocalFile(srcfile,contentType);
+						this.handler = this.handleLocalFile(srcfile,contentType,null);
 						indexLucene();
 						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
 					//}
@@ -338,7 +339,7 @@ public class CMSCrawler  {
 					//在建索引文件时过滤掉文件名前缀不为content的文件
 					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
 					//if(fileName != null && fileName.equals("content")){
-						this.handler = this.handleLocalFile(srcfile,contentType);
+						this.handler = this.handleLocalFile(srcfile,contentType,filePath.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
 						indexLucene();
 						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
 					//}
@@ -351,7 +352,7 @@ public class CMSCrawler  {
 					//在建索引文件时过滤掉文件名前缀不为content的文件
 					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
 					//if(fileName != null && fileName.equals("content")){
-						this.handler = this.handleLocalFile(srcfile,contentType);
+						this.handler = this.handleLocalFile(srcfile,contentType,filePath.endsWith(".ppt") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
 						indexLucene();
 						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
 					//}
@@ -364,7 +365,7 @@ public class CMSCrawler  {
 					//在建索引文件时过滤掉文件名前缀不为content的文件
 					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
 					//if(fileName != null && fileName.equals("content")){
-						this.handler = this.handleLocalFile(srcfile,contentType);
+						this.handler = this.handleLocalFile(srcfile,contentType,null);
 						indexLucene();
 						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
 					//}
@@ -734,11 +735,11 @@ public class CMSCrawler  {
 			 
 		 }else if(contentType.equals(ContentHandler.EXCEL_FILEFOMAT)){
 			 
-			 handler = new ExcelHandler();
+			 handler = new ExcelHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.PPT_FILEFOMAT)){
 			 
-			 handler = new PPTHandler();
+			 handler = new PPTHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.RTF_FILEFOMAT)){
 			 
@@ -854,21 +855,22 @@ public class CMSCrawler  {
 	                if(s.endsWith(".doc") ||s.endsWith(".docx")|| s.endsWith(".xlsx") ||s.endsWith(".xls") ||
 	                		s.endsWith(".ppt") ||s.endsWith(".pptx") || s.endsWith(".pdf") || s.endsWith(".rtf") || 
 	                		contentType.indexOf("text/html") != -1){
-	                	
+	                	String version = null;
 		                if(contentType.indexOf("text/html") != -1){
 		                	
 		                	contentType = ContentHandler.TEXT_HTML_FILEFOMAT;
 		                	
 		                }else if (s.endsWith(".doc") || s.endsWith(".docx")) {
+		                	version = s.endsWith(".doc") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007;
 		                	
 		                	contentType = ContentHandler.WORD_FILEFOMAT;
 		                    
 		                } else if(s.endsWith(".xls") || s.endsWith(".xlsx")){
-		                	
+		                	version = s.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007;
 		                	contentType = ContentHandler.EXCEL_FILEFOMAT;
 		                	
 		                }else if(s.endsWith(".ppt") || s.endsWith(".pptx")){
-
+		                	version = s.endsWith(".ppt") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007;
 		                	contentType = ContentHandler.PPT_FILEFOMAT;
 		                	
 		                }else if(s.endsWith(".pdf")){
@@ -882,7 +884,7 @@ public class CMSCrawler  {
 		                }
 		                
 		                lastModified = httpurlconnection.getLastModified();
-						this.handler = this.handWebFile(httpurlconnection,contentType);
+						this.handler = this.handWebFile(httpurlconnection,contentType,version);
 						
 						if(!contentType.equals(ContentHandler.TEXT_HTML_FILEFOMAT))
 							indexLucene();

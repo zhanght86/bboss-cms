@@ -22,7 +22,7 @@ public class PPTHandler extends ContentHandlerBase {
 		try {
 			this.reset();
 			
-			I_CmsTextExtractor pptExtractor = CmsExtractorMsPowerPoint.getExtractor();
+			I_CmsTextExtractor pptExtractor = new CmsExtractorMsPowerPoint(version);
 			I_CmsExtractionResult er = pptExtractor.extractText(in);
 			
 			this.contents = new StringBuffer(er.getContent());

@@ -32,20 +32,18 @@
 package com.frameworkset.platform.cms.searchmanager.extractors;
 
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.poi.hslf.HSLFSlideShow;
+import org.apache.poi.hslf.extractor.PowerPointExtractor;
 import org.apache.poi.hslf.model.Slide;
 import org.apache.poi.hslf.model.TextRun;
 import org.apache.poi.hslf.usermodel.SlideShow;
-import org.apache.poi.poifs.eventfilesystem.POIFSReader;
-import org.apache.poi.poifs.eventfilesystem.POIFSReaderEvent;
-import org.apache.poi.poifs.eventfilesystem.POIFSReaderListener;
-import org.apache.poi.poifs.filesystem.DocumentInputStream;
-import org.apache.poi.util.LittleEndian;
+import org.apache.poi.xslf.extractor.XSLFPowerPointExtractor;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
 
-import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
+import com.frameworkset.platform.cms.searchmanager.handler.ContentHandler;
 
 /**
  * Extracts the text form an MS PowerPoint document.<p>
@@ -61,20 +59,20 @@ public final class CmsExtractorMsPowerPoint extends A_CmsTextExtractorMsOfficeBa
     /**
      * Hide the public constructor.<p> 
      */
-    private CmsExtractorMsPowerPoint() {
-
+    public CmsExtractorMsPowerPoint(String version) {
+    	this.version = version; 
     }
 
-    /**
-     * Returns an instance of this text extractor.<p> 
-     * 
-     * @return an instance of this text extractor
-     */
-    public static I_CmsTextExtractor getExtractor() {
-
-        // since this extractor requires a member variable we have no static instance
-        return new CmsExtractorMsPowerPoint();
-    }
+//    /**
+//     * Returns an instance of this text extractor.<p> 
+//     * 
+//     * @return an instance of this text extractor
+//     */
+//    public static I_CmsTextExtractor getExtractor() {
+//
+//        // since this extractor requires a member variable we have no static instance
+//        return new CmsExtractorMsPowerPoint();
+//    }
 
     /** 
      * @see org.opencms.search.extractors.I_CmsTextExtractor#extractText(java.io.InputStream, java.lang.String)
@@ -82,14 +80,26 @@ public final class CmsExtractorMsPowerPoint extends A_CmsTextExtractorMsOfficeBa
     public I_CmsExtractionResult extractText(InputStream in, String encoding) throws Exception {
     	
     	//first extract the table content
-        String result = extractPPTContent(getStreamCopy(in));
-        result = removeControlChars(result);
-        
-        //now extract the meta information using POI 
-        POIFSReader reader = new POIFSReader();
-        reader.registerListener(this);
-        reader.read(getStreamCopy(in)); 
-        Map metaInfo = extractMetaInformation();
+//        String result = extractPPTContent(getStreamCopy(in));
+//        result = removeControlChars(result);
+//        
+//        //now extract the meta information using POI 
+//        POIFSReader reader = new POIFSReader();
+//        reader.registerListener(this);
+//        reader.read(getStreamCopy(in)); 
+//        Map metaInfo = extractMetaInformation();
+    	String result = null;
+    	 Map metaInfo = null;
+    	if(this.version.equals(ContentHandler.VERSION_2003))
+    	{
+    		result = readPowerPoint( in);
+    		metaInfo = extractMetaInformation();
+    	}
+    	else
+    	{
+    		readPowerPoint2007(in);
+    		metaInfo = extractMetaInformation();
+    	}
 
         //free some memory
         cleanup();
@@ -97,6 +107,63 @@ public final class CmsExtractorMsPowerPoint extends A_CmsTextExtractorMsOfficeBa
         // return the final result
         return new CmsExtractionResult(result, metaInfo);
     }
+    
+    /** 
+        * 处理ppt 
+          * @param path 
+          * @return 
+          */  
+        public  String readPowerPoint(InputStream in) {  
+            String content = null;  
+            try {  
+            	HSLFSlideShow slideShow = new HSLFSlideShow(in);
+            	org.apache.poi.hslf.extractor.PowerPointExtractor extractor = new PowerPointExtractor(slideShow);
+            	this.m_documentSummary = extractor.getDocSummaryInformation();
+            	this.m_summary = extractor.getSummaryInformation();
+            	content = extractor.getText();
+//                 SlideShow ss = new SlideShow(new HSLFSlideShow(in));// is  
+//                // 为文件的InputStream，建立SlideShow  
+//                Slide[] slides = ss.getSlides();// 获得每一张幻灯片  
+//                 for (int i = 0; i < slides.length; i++) {  
+//                    TextRun[] t = slides[i].getTextRuns();// 为了取得幻灯片的文字内容，建立TextRun  
+//                     for (int j = 0; j < t.length; j++) {  
+//                         content.append(t[j].getText());// 这里会将文字内容加到content中去  
+//                    }  
+//                 }  
+            } catch (Exception ex) {  
+               System.out.println(ex.toString());  
+             }  
+             return content;  
+        } 
+        
+        /** 
+         * 处理ppt 
+           * @param path 
+           * @return 
+           */  
+         public  String readPowerPoint2007(InputStream in) {  
+             String content = null;  
+             try {  
+            
+            	 XMLSlideShow xmlslideshow = new XMLSlideShow(in);
+             	org.apache.poi.xslf.extractor.XSLFPowerPointExtractor extractor = new XSLFPowerPointExtractor(xmlslideshow);
+             	this.cp = extractor.getCoreProperties();
+             	content = extractor.getText();
+//                  SlideShow ss = new SlideShow(new HSLFSlideShow(in));// is  
+//                 // 为文件的InputStream，建立SlideShow  
+//                 Slide[] slides = ss.getSlides();// 获得每一张幻灯片  
+//                  for (int i = 0; i < slides.length; i++) {  
+//                     TextRun[] t = slides[i].getTextRuns();// 为了取得幻灯片的文字内容，建立TextRun  
+//                      for (int j = 0; j < t.length; j++) {  
+//                          content.append(t[j].getText());// 这里会将文字内容加到content中去  
+//                     }  
+//                  }  
+             } catch (Exception ex) {  
+                System.out.println(ex.toString());  
+              }  
+              return content;  
+         } 
+
 
     protected String extractPPTContent(InputStream in) throws Exception{
     	SlideShow ppt = new SlideShow(in);

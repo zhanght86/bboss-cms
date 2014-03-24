@@ -34,11 +34,12 @@ package com.frameworkset.platform.cms.searchmanager.extractors;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.apache.poi.POIXMLProperties.CoreProperties;
 import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+
+import com.frameworkset.platform.cms.searchmanager.handler.ContentHandler;
 //import org.apache.poi.poifs.eventfilesystem.POIFSReader;
 
 /**
@@ -100,7 +101,7 @@ public final class CmsExtractorMsWord extends A_CmsTextExtractorMsOfficeBase imp
 //         }
     	 String result = null;
     	 Map metaInfo = null;
-    	if(version.equals("doc"))
+    	if(version.equals(ContentHandler.VERSION_2003))
     	{
     		WordExtractor ex  = new WordExtractor(in);
     		result = ex.getText();   

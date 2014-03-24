@@ -45,7 +45,7 @@ public class PDFHandler extends ContentHandlerBase {
     	try {
     		
 			this.reset();
-			I_CmsTextExtractor pptExtractor = CmsExtractorPdf.getExtractor();
+			I_CmsTextExtractor pptExtractor = new CmsExtractorPdf();
 			I_CmsExtractionResult er = pptExtractor.extractText(in);
 			
 			this.contents = new StringBuffer(er.getContent());

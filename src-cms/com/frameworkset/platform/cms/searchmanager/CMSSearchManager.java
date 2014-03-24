@@ -2025,7 +2025,7 @@ public class CMSSearchManager {
 									
 									String attachmentContentType = ContentHandler.PPT_FILEFOMAT;
 									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".ppt") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
 									
 									//追加附件索引记录
 									crawler.indexLucene(writer,

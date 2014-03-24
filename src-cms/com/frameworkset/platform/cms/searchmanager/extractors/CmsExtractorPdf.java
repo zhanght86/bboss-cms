@@ -55,25 +55,25 @@ import com.frameworkset.platform.cms.driver.util.CmsStringUtil;
 public final class CmsExtractorPdf extends A_CmsTextExtractor implements java.io.Serializable {
 
     /** Static member instance of the extractor. */
-    private static final CmsExtractorPdf INSTANCE = new CmsExtractorPdf();
+//    private static final CmsExtractorPdf INSTANCE = new CmsExtractorPdf();
 
     /**
      * Hide the public constructor.<p> 
      */
-    private CmsExtractorPdf() {
+    public CmsExtractorPdf() {
 
         // noop
     }
 
-    /**
-     * Returns an instance of this text extractor.<p> 
-     * 
-     * @return an instance of this text extractor
-     */
-    public static I_CmsTextExtractor getExtractor() {
-
-        return INSTANCE;
-    }
+//    /**
+//     * Returns an instance of this text extractor.<p> 
+//     * 
+//     * @return an instance of this text extractor
+//     */
+//    public static I_CmsTextExtractor getExtractor() {
+//
+//        return INSTANCE;
+//    }
 
     /**
      * @see org.opencms.search.extractors.I_CmsTextExtractor#extractText(java.io.InputStream, java.lang.String)

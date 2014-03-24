@@ -78,7 +78,7 @@ public abstract class A_CmsTextExtractorMsOfficeBase extends A_CmsTextExtractor 
     /** The summary of the POI document. */
     protected SummaryInformation m_summary;
     protected CoreProperties cp;
-
+    protected String version;
     /**
      * @see org.apache.poi.poifs.eventfilesystem.POIFSReaderListener#processPOIFSReaderEvent(org.apache.poi.poifs.eventfilesystem.POIFSReaderEvent)
      */

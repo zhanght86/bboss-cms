@@ -23,7 +23,7 @@ public class RTFHandler extends ContentHandlerBase {
     	try {
     		
 			this.reset();
-			I_CmsTextExtractor rtfExtractor = CmsExtractorRtf.getExtractor();
+			I_CmsTextExtractor rtfExtractor = new CmsExtractorRtf();
 			I_CmsExtractionResult er = rtfExtractor.extractText(in);
 			
 			this.contents = new StringBuffer(er.getContent());
