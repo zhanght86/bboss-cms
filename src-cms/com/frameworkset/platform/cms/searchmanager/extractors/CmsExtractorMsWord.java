@@ -34,11 +34,12 @@ package com.frameworkset.platform.cms.searchmanager.extractors;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.apache.poi.POIXMLProperties.CoreProperties;
+import org.apache.poi.hpsf.SummaryInformation;
 import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 //import org.apache.poi.poifs.eventfilesystem.POIFSReader;
-import org.apache.poi.poifs.eventfilesystem.POIFSReader;
-import org.textmining.extraction.TextExtractor;
-import org.textmining.extraction.word.WordTextExtractorFactory;
 
 /**
  * Extracts the text form an MS Word document.<p>
@@ -51,26 +52,27 @@ import org.textmining.extraction.word.WordTextExtractorFactory;
  */
 public final class CmsExtractorMsWord extends A_CmsTextExtractorMsOfficeBase implements java.io.Serializable {
 
+	private String version = "doc";//docx
     /** Static member instance of the extractor. */
-    private static final CmsExtractorMsWord INSTANCE = new CmsExtractorMsWord();
+//    private static final CmsExtractorMsWord INSTANCE = new CmsExtractorMsWord();
 
     /**
      * Hide the public constructor.<p> 
      */
-    private CmsExtractorMsWord() {
-
+    public CmsExtractorMsWord(String version) {
+    	this.version = version;
         // noop
     }
 
-    /**
-     * Returns an instance of this text extractor.<p> 
-     * 
-     * @return an instance of this text extractor
-     */
-    public static I_CmsTextExtractor getExtractor() {
-
-        return INSTANCE;
-    }
+//    /**
+//     * Returns an instance of this text extractor.<p> 
+//     * 
+//     * @return an instance of this text extractor
+//     */
+//    public static I_CmsTextExtractor getExtractor() {
+//
+//        return INSTANCE;
+//    }
 
     /** 
      * @see org.opencms.search.extractors.I_CmsTextExtractor#extractText(java.io.InputStream, java.lang.String)
@@ -85,16 +87,58 @@ public final class CmsExtractorMsWord extends A_CmsTextExtractorMsOfficeBase imp
 
 //        String result = wordExtractor.getText();
 //        String result = wordExtractor.extractText(getStreamCopy(in));
-    	WordExtractor ex = new WordExtractor(getStreamCopy(in));   
-        String result = ex.getText();   
-        result = removeControlChars(result);
+    	StringBuffer content = new StringBuffer();
+//    	org.apache.poi.hwpf
+    	
+    	
+//    	 HWPFDocument doc = new HWPFDocument(in);
+//         Range range = doc.getRange();
+//         int paragraphCount = range.numParagraphs();// 段落
+//         for (int i = 0; i < paragraphCount; i++) {// 遍历段落读取数据
+//             Paragraph pp = range.getParagraph(i);
+//             content.append(pp.text());
+//         }
+    	 String result = null;
+    	 Map metaInfo = null;
+    	if(version.equals("doc"))
+    	{
+    		WordExtractor ex  = new WordExtractor(in);
+    		result = ex.getText();   
+    		 SummaryInformation info = ex.getSummaryInformation();
+             this.m_summary = info;
+             this.m_documentSummary = ex.getDocSummaryInformation();
+             metaInfo = extractMetaInformation();
+    	}
+    	else
+    	{
+    		XWPFDocument doc = new XWPFDocument(in);
+    		XWPFWordExtractor ex = new XWPFWordExtractor(doc);
+    		result = ex.getText();
+    		cp = ex.getCoreProperties();
+    		 metaInfo = extractMetaInformation();
+//    		 SummaryInformation info = doc.getSummaryInformation();
+//             this.m_summary = info;
+//             this.m_documentSummary = doc.getDocSummaryInformation();
+    	}
+    	
+        
+         
+         
+         
+    	
+    	
+    	
+    	
+      
+//        result = removeControlChars(result);
 
-     
+//     String result = content.toString();
         // now extract the meta information using POI 
-        POIFSReader reader = new POIFSReader();
-        reader.registerListener(this);
-        reader.read(getStreamCopy(getStreamCopy(in)));
-        Map metaInfo = extractMetaInformation();
+//        POIFSReader reader = new POIFSReader();
+//        reader.registerListener(this);
+//        reader.read(getStreamCopy(getStreamCopy(in)));
+        
+       
 
         // free some memory
         cleanup();

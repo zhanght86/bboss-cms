@@ -41,15 +41,9 @@ import java.net.HttpURLConnection;
 
 public final class DBHandler extends ContentHandlerBase implements java.io.Serializable {
 	private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
-	private static final DBHandler instance = new DBHandler();
 
-	private DBHandler() {
-        reset();
+	public DBHandler() {
     }
-	public static DBHandler getInstance()
-	{
-		return instance;
-	}
 
     public void parse(Map map) {
         try {

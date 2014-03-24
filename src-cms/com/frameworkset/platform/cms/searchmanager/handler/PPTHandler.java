@@ -9,16 +9,11 @@ import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsTextExtractor
 
 public class PPTHandler extends ContentHandlerBase {
 	
-	private static final PPTHandler instance = new PPTHandler();
 	
-	private PPTHandler(){
-		
+	public PPTHandler(String version){
+		this.version = version;
 	}
 	
-	public static PPTHandler getInstance()
-	{
-		return instance;
-	}
 	
 	/**
 	 * parse content
@@ -49,7 +44,7 @@ public class PPTHandler extends ContentHandlerBase {
 //            InputStream in = con.getInputStream();
         	
             InputStream in = new FileInputStream("D:\\workspace\\cms\\gfsgfsgfs.ppt");
-            PPTHandler ppthandler = new PPTHandler();
+            PPTHandler ppthandler = new PPTHandler(ContentHandler.VERSION_2003);
             ppthandler.parse(in);
             System.out.println("title:" + ppthandler.getTitle() );
             System.out.println("Author:" + ppthandler.getAuthor() );

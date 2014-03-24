@@ -9,16 +9,11 @@ import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsExtractionRes
 import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsTextExtractor;
 
 public class RTFHandler extends ContentHandlerBase {
-	private static final RTFHandler instance = new RTFHandler();
 	
-	private RTFHandler(){
+	public RTFHandler(){
 		
 	}
 	
-	public static RTFHandler getInstance()
-	{
-		return instance;
-	}
 	
 	/**
      * Parse Content.

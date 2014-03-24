@@ -2,12 +2,8 @@ package com.frameworkset.platform.cms.searchmanager.handler;
 
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
-import com.frameworkset.common.poolman.sql.ColumnMetaData;
 
 /**
  * <p><code>ContentHandler</code>
@@ -25,7 +21,8 @@ public interface ContentHandler extends java.io.Serializable {
    static final String PPT_FILEFOMAT = "application/vnd.ms-powerpoint";
    static final String EXCEL_FILEFOMAT = "application/vnd.ms-excel";
    static final String RTF_FILEFOMAT = "application/rtf";
-   
+   public static final String VERSION_2003 = "2003";
+   public static final String VERSION_2007 = "2007";
    //库表类型
    static final String DBT_FILEFOMAT = "database/Table";
    

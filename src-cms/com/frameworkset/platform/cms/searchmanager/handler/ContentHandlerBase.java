@@ -11,7 +11,7 @@ import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsExtractionRes
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 
 public class ContentHandlerBase implements ContentHandler {
-
+	protected String version;
 	//	 Content
 	protected String title;
     protected String description;
@@ -23,7 +23,7 @@ public class ContentHandlerBase implements ContentHandler {
     protected StringBuffer contents;
     protected ArrayList links;
     protected String fileFormat;
-    
+   
     /*
      * meta
      * */
@@ -40,6 +40,8 @@ public class ContentHandlerBase implements ContentHandler {
     // Robot Instructions
     protected boolean robotIndex;
     protected boolean robotFollow;
+    
+    
     
     protected Map metoInfo;
     

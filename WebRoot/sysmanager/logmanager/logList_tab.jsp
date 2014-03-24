@@ -160,6 +160,13 @@ String rootpath = request.getContextPath();
 		 var url="<%=request.getContextPath()%>/sysmanager/logmanager/statLogmodule.jsp?isHis="+obj;
 		 $.dialog({title:'<pg:message code="sany.pdp.sysmanager.log.module.statistic"/>',width:800,height:600, content:'url:'+url});   			 
 	}
+	function logModuel_selectevent(obj)
+	{
+		var value = obj.value;
+		document.getElementById('logModuel').value = encodeURIComponent(value); 
+		
+		
+	}
 </script>
 <body>
 <sany:menupath menuid="logquery"/>
@@ -203,7 +210,8 @@ String rootpath = request.getContextPath();
 		      							<tr>
 		      								<th><pg:message code="sany.pdp.sysmanager.log.module"/>：</th>
 		      								<td>
-		      									<select name="logModuel" class="cms_select"  onChange=""  class="w120" >
+		      									<input name="logModuel" id="logModuel" value="" type="hidden"/>
+		      									<select name="logModuel_select" class="cms_select"  onChange="logModuel_selectevent(this)"  class="w120" >
 													<option value=""><pg:message code="sany.pdp.sysmanager.log.module.all"/></option>
 														<%
 														try {

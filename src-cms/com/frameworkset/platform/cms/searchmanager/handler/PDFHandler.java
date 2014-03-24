@@ -26,16 +26,16 @@ import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsTextExtractor
 
 public class PDFHandler extends ContentHandlerBase {
 	
-	private static final PDFHandler instance = new PDFHandler();
+//	private static final PDFHandler instance = new PDFHandler();
 	
-	private PDFHandler(){
+	public PDFHandler(){
 		
 	}
 	
-	public static PDFHandler getInstance()
-	{
-		return instance;
-	}
+//	public static PDFHandler getInstance()
+//	{
+//		return instance;
+//	}
 	
 	/**
      * Parse Content.

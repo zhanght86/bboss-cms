@@ -1,6 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,17 @@ public class LogSearchList  extends DataInfoImpl implements Serializable{
 	        //
 	        String type= request.getParameter("type");
 	        //日志模块
-	        String logModuel= request.getParameter("logModuel");	
+	        String logModuel= request.getParameter("logModuel");
+	        if(logModuel != null)
+	        {
+	        	try {
+					logModuel = java.net.URLDecoder.decode(logModuel,"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	        
 	        //操作起止时间
 	        String startDate = request.getParameter("startDate");
 	        String endDate = request.getParameter("endDate");

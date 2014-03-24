@@ -1943,7 +1943,7 @@ public class CMSSearchManager {
 			long lastModified = new Date().getTime();
 			String docContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
 			
-			ContentHandler docHandler = crawler.handleLocalFile(new File(this.getDocPubDestinction(doc,siteId)),docContentType);
+			ContentHandler docHandler = crawler.handleLocalFile(new File(this.getDocPubDestinction(doc,siteId)),docContentType,null);
 			
 			
 			
@@ -1999,21 +1999,44 @@ public class CMSSearchManager {
 								String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);
 								
 								//判断附件类型，选择文件解析器ContentHandle
-								if(attachmentUrl.endsWith(".doc")){
+								if(attachmentUrl.endsWith(".doc") || attachmentUrl.endsWith(".docx")){
 									
 									String attachmentContentType = ContentHandler.WORD_FILEFOMAT;
 									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".doc") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
 									
 									//追加附件索引记录
 									crawler.indexLucene(writer,
 											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
 									
-								}else if(attachmentUrl.endsWith(".pdf")){
+								}
+								else if(attachmentUrl.endsWith(".xls") || attachmentUrl.endsWith(".xlsx")){
+									
+									String attachmentContentType = ContentHandler.EXCEL_FILEFOMAT;
+									ContentHandler attachmentHandler = crawler.
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+									
+									//追加附件索引记录
+									crawler.indexLucene(writer,
+											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+									
+								}
+								else if(attachmentUrl.endsWith(".ppt") || attachmentUrl.endsWith(".pptx")){
+									
+									String attachmentContentType = ContentHandler.PPT_FILEFOMAT;
+									ContentHandler attachmentHandler = crawler.
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+									
+									//追加附件索引记录
+									crawler.indexLucene(writer,
+											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+									
+								}
+								else if(attachmentUrl.endsWith(".pdf")){
 									
 									String attachmentContentType = ContentHandler.PDF_FILEFOMAT;
 									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
 																			
 									//追加附件索引记录
 									crawler.indexLucene(writer,
@@ -2024,7 +2047,7 @@ public class CMSSearchManager {
 									
 									String attachmentContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
 									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType);
+																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
 																			
 									//追加附件索引记录
 									crawler.indexLucene(writer,

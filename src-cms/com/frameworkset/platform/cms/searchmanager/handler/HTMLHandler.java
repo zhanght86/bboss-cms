@@ -85,24 +85,24 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
 
 
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
-    private static ParserDelegator pd = new ParserDelegator();
+    private ParserDelegator pd = new ParserDelegator();
     
     
-    private static final HTMLHandler instance = new HTMLHandler();
+//    private static final HTMLHandler instance = new HTMLHandler();
 
     /**
      *		Constructor - initializes variables
      */
-    private HTMLHandler() {
+    public HTMLHandler() {
 
-        this.reset();
+//        this.reset();
 
     }
 	
-	public static HTMLHandler getInstance()
-	{
-		return instance;
-	}
+//	public static HTMLHandler getInstance()
+//	{
+//		return instance;
+//	}
     /**
      * Parse Content. [24] 320:1
      */

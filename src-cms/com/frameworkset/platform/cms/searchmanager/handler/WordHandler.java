@@ -23,16 +23,16 @@ import java.net.*;
  */
 public class WordHandler extends ContentHandlerBase {
 	
-	private static final WordHandler instance = new WordHandler();
-	
-	private WordHandler(){
-		
+//	private static final WordHandler instance = new WordHandler();
+	private String version = "doc";//docx
+	public WordHandler(String version){
+		this.version= version; 
 	}
 	
-	public static WordHandler getInstance()
-	{
-		return instance;
-	}
+//	public static WordHandler getInstance()
+//	{
+//		return instance;
+//	}
 	
     /**
      * Parse Content.
@@ -40,7 +40,7 @@ public class WordHandler extends ContentHandlerBase {
     public void parse(InputStream in) { 
     	try {
 			this.reset();
-			I_CmsTextExtractor wordExtractor = CmsExtractorMsWord.getExtractor();
+			I_CmsTextExtractor wordExtractor = new CmsExtractorMsWord(version);
 			I_CmsExtractionResult er = wordExtractor.extractText(in);
 			this.contents = new StringBuffer(er.getContent());
 			this.metoInfo = er.getMetaInfo();
@@ -60,7 +60,7 @@ public class WordHandler extends ContentHandlerBase {
 //            java.net.HttpURLConnection con = (HttpURLConnection) url.openConnection();
 //            InputStream in = con.getInputStream();
             InputStream in = new FileInputStream("D:\\workspace\\cms\\word测试.doc");
-            WordHandler wordhandler = new WordHandler();
+            WordHandler wordhandler = new WordHandler("doc");
             wordhandler.parse(in);
 //            System.out.println("contentType:" + con.getContentType());
             System.out.println("title:" + wordhandler.getTitle() );
@@ -68,7 +68,7 @@ public class WordHandler extends ContentHandlerBase {
             System.out.println("Contents:" + wordhandler.getContents());
             
             InputStream in2 = new FileInputStream("D:\\workspace\\cms\\20070709024320984.doc");
-            WordHandler wordhandler2 = new WordHandler();
+            WordHandler wordhandler2 = new WordHandler("doc");
             wordhandler2.parse(in2);
 //            System.out.println("contentType:" + con.getContentType());
             System.out.println("title:" + wordhandler2.getTitle() );

@@ -12,16 +12,16 @@ import com.frameworkset.platform.cms.searchmanager.extractors.I_CmsTextExtractor
 
 public class ExcelHandler extends ContentHandlerBase {
 	
-	private static final ExcelHandler instance = new ExcelHandler();
+//	private static final ExcelHandler instance = new ExcelHandler();
 	
-	private ExcelHandler(){
-		
+	public ExcelHandler(String version){
+		this.version = version;
 	}
 	
-	public static ExcelHandler getInstance()
-	{
-		return instance;
-	}
+//	public static ExcelHandler getInstance()
+//	{
+//		return instance;
+//	}
 	/**
 	 * parse content
 	 */
@@ -49,7 +49,7 @@ public class ExcelHandler extends ContentHandlerBase {
             java.net.HttpURLConnection con = (HttpURLConnection) url.openConnection();
             InputStream in = con.getInputStream();
 //            InputStream in = new FileInputStream("D:\\workspace\\cms\\测试excel.xls");
-            ExcelHandler xlshandler = new ExcelHandler();
+            ExcelHandler xlshandler = new ExcelHandler(ContentHandler.VERSION_2003);
             xlshandler.parse(in);
             System.out.println("contentType:" + con.getContentType());
             System.out.println("title:" + xlshandler.getTitle() );

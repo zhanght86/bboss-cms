@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.POIXMLProperties.CoreProperties;
 import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hpsf.PropertySetFactory;
 import org.apache.poi.hpsf.Section;
@@ -72,10 +73,11 @@ public abstract class A_CmsTextExtractorMsOfficeBase extends A_CmsTextExtractor 
     protected static final int PPT_TEXTCHAR_ATOM = 4000;
 
     /** The summary of the POI document. */
-    private DocumentSummaryInformation m_documentSummary;
+    protected DocumentSummaryInformation m_documentSummary;
 
     /** The summary of the POI document. */
-    private SummaryInformation m_summary;
+    protected SummaryInformation m_summary;
+    protected CoreProperties cp;
 
     /**
      * @see org.apache.poi.poifs.eventfilesystem.POIFSReaderListener#processPOIFSReaderEvent(org.apache.poi.poifs.eventfilesystem.POIFSReaderEvent)
@@ -106,67 +108,144 @@ public abstract class A_CmsTextExtractorMsOfficeBase extends A_CmsTextExtractor 
         m_documentSummary = null;
         this.m_inputBuffer = null;
     }
-
+    protected Map extractMetaInformation()
+    {
+    	if(cp == null)
+    		return extractMetaInformation2003();
+    	else
+    		return extractMetaInformation2007();
+    		
+    }
     /**
      * Returns a map with the extracted meta information from the document.<p>
      * 
      * @return a map with the extracted meta information from the document
      */
-    protected Map extractMetaInformation() {
+    protected Map extractMetaInformation2003() {
 
+    	
         Map metaInfo = new HashMap();
         String meta;
         if (m_summary != null) {
             // can't use convenience methods on summary since they can't deal with multiple sections
-            Section section = (Section)m_summary.getSections().get(0);
+//            Section section = (Section)m_summary.getSections().get(0);
 
-            meta = (String)section.getProperty(PropertyIDMap.PID_TITLE);
+            meta = m_summary.getTitle();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_TITLE, meta);
             }
-            meta = (String)section.getProperty(PropertyIDMap.PID_KEYWORDS);
+            meta = m_summary.getKeywords();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_KEYWORDS, meta);
             }
-            meta = (String)section.getProperty(PropertyIDMap.PID_SUBJECT);
+            meta = m_summary.getSubject();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_SUBJECT, meta);
             }
-            meta = (String)section.getProperty(PropertyIDMap.PID_COMMENTS);
+            meta = m_summary.getComments();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_COMMENTS, meta);
             }
             // extract other available meta information
-            meta = (String)section.getProperty(PropertyIDMap.PID_AUTHOR);
+            meta = m_summary.getAuthor();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_AUTHOR, meta);
             }
             Date date;
-            date = (Date)section.getProperty(PropertyIDMap.PID_CREATE_DTM);
+            date = m_summary.getCreateDateTime();
             if ((date != null) && (date.getTime() > 0)) {
                 // it's unlikley any PowerPoint documents where created before 1970, 
                 // and apparently POI contains an issue calculating the time correctly sometimes
                 metaInfo.put(I_CmsExtractionResult.META_DATE_CREATED, date);
             }
-            date = (Date)section.getProperty(PropertyIDMap.PID_LASTSAVE_DTM);
+            date = m_summary.getLastSaveDateTime();
             if ((date != null) && (date.getTime() > 0)) {
                 metaInfo.put(I_CmsExtractionResult.META_DATE_LASTMODIFIED, date);
             }
         }
         if (m_documentSummary != null) {
             // can't use convenience methods on document since they can't deal with multiple sections
-            Section section = (Section)m_documentSummary.getSections().get(0);
+//            Section section = (Section)m_documentSummary.getSections().get(0);
 
             // extract available meta information from document summary
-            meta = (String)section.getProperty(PropertyIDMap.PID_COMPANY);
+            meta =  m_documentSummary.getCompany();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_COMPANY, meta);
             }
-            meta = (String)section.getProperty(PropertyIDMap.PID_MANAGER);
+            meta =  m_documentSummary.getManager();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_MANAGER, meta);
             }
-            meta = (String)section.getProperty(PropertyIDMap.PID_CATEGORY);
+            meta =  m_documentSummary.getCategory();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_CATEGORY, meta);
+            }
+        }
+
+        return metaInfo;
+    }
+    
+    /**
+     * Returns a map with the extracted meta information from the document.<p>
+     * 
+     * @return a map with the extracted meta information from the document
+     */
+    protected Map extractMetaInformation2007() {
+
+    	
+        Map metaInfo = new HashMap();
+        String meta;
+        if (cp != null) {
+            // can't use convenience methods on summary since they can't deal with multiple sections
+//            Section section = (Section)m_summary.getSections().get(0);
+        	
+            meta = cp.getTitle();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_TITLE, meta);
+            }
+            meta = cp.getKeywords();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_KEYWORDS, meta);
+            }
+            meta = cp.getSubject();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_SUBJECT, meta);
+            }
+            meta = cp.getDescription();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_COMMENTS, meta);
+            }
+            // extract other available meta information
+            meta = cp.getCreator();
+            if (CmsStringUtil.isNotEmpty(meta)) {
+                metaInfo.put(I_CmsExtractionResult.META_AUTHOR, meta);
+            }
+            Date date;
+            date = cp.getCreated();
+            if ((date != null) && (date.getTime() > 0)) {
+                // it's unlikley any PowerPoint documents where created before 1970, 
+                // and apparently POI contains an issue calculating the time correctly sometimes
+                metaInfo.put(I_CmsExtractionResult.META_DATE_CREATED, date);
+            }
+            date = cp.getModified();
+            if ((date != null) && (date.getTime() > 0)) {
+                metaInfo.put(I_CmsExtractionResult.META_DATE_LASTMODIFIED, date);
+            }
+        }
+        if (cp != null) {
+            // can't use convenience methods on document since they can't deal with multiple sections
+//            Section section = (Section)m_documentSummary.getSections().get(0);
+
+            // extract available meta information from document summary
+//            meta =  cp.getUnderlyingProperties().getCompany();
+//            if (CmsStringUtil.isNotEmpty(meta)) {
+//                metaInfo.put(I_CmsExtractionResult.META_COMPANY, meta);
+//            }
+//            meta =  cp.getManager();
+//            if (CmsStringUtil.isNotEmpty(meta)) {
+//                metaInfo.put(I_CmsExtractionResult.META_MANAGER, meta);
+//            }
+            meta =  cp.getCategory();
             if (CmsStringUtil.isNotEmpty(meta)) {
                 metaInfo.put(I_CmsExtractionResult.META_CATEGORY, meta);
             }

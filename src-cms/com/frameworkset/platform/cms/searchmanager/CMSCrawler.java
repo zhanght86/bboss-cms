@@ -284,49 +284,94 @@ public class CMSCrawler  {
 			}
 			
 			String filePath = srcfile.getPath();
-			if(filePath.endsWith(".html") || filePath.endsWith(".htm") || 
-					filePath.endsWith(".txt") || filePath.endsWith(".pdf") ||
-					filePath.endsWith(".doc") || filePath.endsWith(".xls") ||
-					filePath.endsWith(".ppt") || filePath.endsWith(".rtf")){
+//			if(filePath.endsWith(".html") || filePath.endsWith(".htm") || 
+//					filePath.endsWith(".txt") || filePath.endsWith(".pdf") ||
+//					filePath.endsWith(".doc") || filePath.endsWith(".xls") ||
+//					filePath.endsWith(".ppt") || filePath.endsWith(".rtf")){
 				
 				if (filePath.endsWith(".html") || 	    	// index .html files
 						filePath.endsWith(".htm") || 	    	// index .htm files
 						filePath.endsWith(".txt")){			// index .txt files
 					
 					contentType = ContentHandler.TEXT_HTML_FILEFOMAT;
+					lastModified = srcfile.lastModified();
 					
-				}else if(filePath.endsWith(".doc")){		// index .doc files
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType,null);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
+					
+				}else if(filePath.endsWith(".doc") || filePath.endsWith(".docx")){		// index .doc files
 					
 					contentType = ContentHandler.WORD_FILEFOMAT;
+					lastModified = srcfile.lastModified();
+					
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType,filePath.endsWith(".doc")?);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
 					
 				}else if(filePath.endsWith(".pdf")) { 		// index .pdf files
 					
 					contentType = ContentHandler.PDF_FILEFOMAT;
+					lastModified = srcfile.lastModified();
 					
-				}else if(filePath.endsWith(".xls")) {
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
+					
+				}else if(filePath.endsWith(".xls") ||filePath.endsWith(".xlsx")) {
 					
 					contentType = ContentHandler.EXCEL_FILEFOMAT;
+					lastModified = srcfile.lastModified();
 					
-				}else if(filePath.endsWith(".ppt")) {
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
+					
+				}else if(filePath.endsWith(".ppt") || filePath.endsWith(".pptx")) {
 					
 					contentType = ContentHandler.PPT_FILEFOMAT;
+					lastModified = srcfile.lastModified();
+					
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
 					
 				}else if(filePath.endsWith(".rtf")) {
 					
 					contentType = ContentHandler.RTF_FILEFOMAT;
+					lastModified = srcfile.lastModified();
 					
+					//在建索引文件时过滤掉文件名前缀不为content的文件
+					//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
+					//if(fileName != null && fileName.equals("content")){
+						this.handler = this.handleLocalFile(srcfile,contentType);
+						indexLucene();
+						log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
+					//}
 				}
 				
-				lastModified = srcfile.lastModified();
 				
-				//在建索引文件时过滤掉文件名前缀不为content的文件
-				//String fileName = srcfile.getName().substring(0,srcfile.getName().indexOf("_"));
-				//if(fileName != null && fileName.equals("content")){
-					this.handler = this.handleLocalFile(srcfile,contentType);
-					indexLucene();
-					log.debug("建立文件[" + srcfile.getAbsolutePath() + "]下所有文件的索引结束.");
-				//}
-			}
+//			}
 		}
 		
 	}
@@ -435,53 +480,97 @@ public class CMSCrawler  {
 			        		log.debug("建立文件[" + file.getAbsolutePath() + "]的索引开始");
 			        		if(filePath.endsWith(".html") || filePath.endsWith(".htm") || 
 			        			filePath.endsWith(".txt") || filePath.endsWith(".pdf") ||
-			        			filePath.endsWith(".doc") || filePath.endsWith(".xls") ||
-			        			filePath.endsWith(".ppt") || filePath.endsWith(".rtf")){			        				
+			        			filePath.endsWith(".docx") || filePath.endsWith(".doc") || filePath.endsWith(".xls") || filePath.endsWith(".xlsx")||
+			        			filePath.endsWith(".ppt") || filePath.endsWith(".pptx") || filePath.endsWith(".rtf")){
+			        			String version = null;
 			        			if(filePath.endsWith(".html") || 	    	// index .html files
 			        					filePath.endsWith(".htm") || 	    	// index .htm files
 			        					filePath.endsWith(".txt")){			// index .txt files			        					
 			        				contentType = ContentHandler.TEXT_HTML_FILEFOMAT;			        					
-			        			}else if(filePath.endsWith(".doc")){		// index .doc files			        					
+			        			}else if(filePath.endsWith(".doc") ){	
+			        				// index .doc files
+			        				version = ContentHandler.VERSION_2003;
+			        				contentType = ContentHandler.WORD_FILEFOMAT;			        					
+			        			}else if(filePath.endsWith(".docx")){		// index .doc files
+			        				version = ContentHandler.VERSION_2007;
 			        				contentType = ContentHandler.WORD_FILEFOMAT;			        					
 			        			}else if(filePath.endsWith(".pdf")) { 		// index .pdf files			        					
 			        				contentType = ContentHandler.PDF_FILEFOMAT;			        					
-			        			}else if(filePath.endsWith(".xls")) {			        					
-			        				contentType = ContentHandler.EXCEL_FILEFOMAT;			        					
-			        			}else if(filePath.endsWith(".ppt")) {			        					
+			        			}else if(filePath.endsWith(".xls") ) {			        					
+			        				contentType = ContentHandler.EXCEL_FILEFOMAT;
+			        				version = ContentHandler.VERSION_2003;
+			        			}else if(filePath.endsWith(".xlsx")) {			        					
+			        				contentType = ContentHandler.EXCEL_FILEFOMAT;
+			        				version = ContentHandler.VERSION_2007;
+			        			}else if(filePath.endsWith(".ppt")) {
+			        				version = ContentHandler.VERSION_2003;
 			        				contentType = ContentHandler.PPT_FILEFOMAT;			        					
+			        			}else if(filePath.endsWith(".pptx")) {			        					
+			        				contentType = ContentHandler.PPT_FILEFOMAT;
+			        				version = ContentHandler.VERSION_2007;
 			        			}else if(filePath.endsWith(".rtf")) {			        					
 			        				contentType = ContentHandler.RTF_FILEFOMAT;			        					
 			        			}			        				
 			        			lastModified = file.lastModified();
-			        			this.handler = this.handleLocalFile(file,contentType);
+			        			this.handler = this.handleLocalFile(file,contentType,version);
 			        		}			        		
     					}
     				}else if(content_types.equals("blog") || content_types=="blog"){
     					ContentHandler handler = null;
     					if(fileType.indexOf(".html")>-1 || fileType.indexOf(".htm")>-1 || fileType.indexOf(".txt")>-1){
     						contentType = ContentHandler.TEXT_HTML_FILEFOMAT;
-    						handler = HTMLHandler.getInstance();
+    						handler = new HTMLHandler();
    						 	((HTMLHandler) handler).setFileType("notaspx");
-    					}    						
-    					if(fileType.indexOf(".doc")>-1){
-    						contentType = ContentHandler.WORD_FILEFOMAT;
-    						handler = PDFHandler.getInstance();
-    					}    						
+    					} 
+    					String version = null;
+    					if(fileType.endsWith(".doc") ){	
+	        				// index .doc files
+	        				version =ContentHandler.VERSION_2003;
+	        				contentType = ContentHandler.WORD_FILEFOMAT;	
+    						handler = new WordHandler(version);
+	        			}else if(fileType.endsWith(".docx")){		// index .doc files
+	        				version = ContentHandler.VERSION_2007;
+	        				contentType = ContentHandler.WORD_FILEFOMAT;	
+	        				handler = new WordHandler(version);
+	        			}
+//    					if(fileType.indexOf(".doc")>-1){
+//    						contentType = ContentHandler.WORD_FILEFOMAT;
+//    						handler = new PDFHandler();
+//    					}    						
     					if(fileType.indexOf(".pdf")>-1){
     						contentType = ContentHandler.PDF_FILEFOMAT;
-    						handler = WordHandler.getInstance();
-    					}    						
-    					if(fileType.indexOf(".xls")>-1){
-    						contentType = ContentHandler.EXCEL_FILEFOMAT;
-    						handler = ExcelHandler.getInstance();
-    					}    						
-    					if(fileType.indexOf(".ppt")>-1){
-    						contentType = ContentHandler.PPT_FILEFOMAT;
-    						handler = PPTHandler.getInstance();
-    					}    						
+    						handler = new PDFHandler();
+    					}    
+    					
+    					if(fileType.endsWith(".xls") ) {			        					
+	        				contentType = ContentHandler.EXCEL_FILEFOMAT;
+	        				version =ContentHandler.VERSION_2003;
+	        				handler = new ExcelHandler(version);
+	        			}else if(fileType.endsWith(".xlsx")) {			        					
+	        				contentType = ContentHandler.EXCEL_FILEFOMAT;
+	        				version = ContentHandler.VERSION_2007;
+	        				handler = new ExcelHandler(version);
+	        			}
+//    					if(fileType.indexOf(".xls")>-1){
+//    						contentType = ContentHandler.EXCEL_FILEFOMAT;
+//    						handler = new ExcelHandler();
+//    					}    						
+//    					if(fileType.indexOf(".ppt")>-1){
+//    						contentType = ContentHandler.PPT_FILEFOMAT;
+//    						handler = new PPTHandler();
+//    					} 
+    					if(filePath.endsWith(".ppt")) {
+	        				version = ContentHandler.VERSION_2003;
+	        				contentType = ContentHandler.PPT_FILEFOMAT;		
+	        				handler = new PPTHandler(version);
+	        			}else if(filePath.endsWith(".pptx")) {			        					
+	        				contentType = ContentHandler.PPT_FILEFOMAT;
+	        				version = ContentHandler.VERSION_2007;
+	        				handler = new PPTHandler(version);
+	        			}
     					if(fileType.indexOf(".rtf")>-1){
     						contentType = ContentHandler.RTF_FILEFOMAT;
-    						handler = RTFHandler.getInstance();
+    						handler = new RTFHandler();
     					}
     					InputStream in = db.getBinaryStream(i, fileContent);
     					handler.parse(in);
@@ -541,43 +630,60 @@ public class CMSCrawler  {
 	 * @param srcfile
 	 * @throws Exception
 	 */
-	public ContentHandler handleLocalFile(File srcfile,String contentType) throws Exception {
+	public ContentHandler handleLocalFile(File srcfile,String contentType,String version) throws Exception {
 		 System.out.println("扫描" + srcfile.getAbsolutePath() + "中...");
 		 
 		 ContentHandler handler = null;
 		 if(contentType.equals(ContentHandler.TEXT_HTML_FILEFOMAT)){
 			 
-			 handler = HTMLHandler.getInstance();
+			 handler = new HTMLHandler();
 			 ((HTMLHandler) handler).setFileType("notaspx");
 			 
 		 }else if(contentType.equals(ContentHandler.PDF_FILEFOMAT)){
 			 
-			 handler = PDFHandler.getInstance();
+			 handler = new PDFHandler();
 			 
 		 }else if(contentType.equals(ContentHandler.WORD_FILEFOMAT)){
 			 
-			 handler = WordHandler.getInstance();
+			 handler = new WordHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.EXCEL_FILEFOMAT)){
 			 
-			 handler = ExcelHandler.getInstance();
+			 handler = new ExcelHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.PPT_FILEFOMAT)){
 			 
-			 handler = PPTHandler.getInstance();
+			 handler = new PPTHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.RTF_FILEFOMAT)){
 			 
-			 handler = RTFHandler.getInstance();
+			 handler = new RTFHandler();
 			 
 		 }
 //		 String content = FileUtil.getFileContent(srcfile, "UTF-8");
 //		 byte[] bytes  = content.getBytes( );
 //		
-//		 handler.parse( new ByteArrayInputStream(bytes,0,bytes.length));	
-		 handler.parse(new FileInputStream(srcfile));				//解析
-		 
-		 System.out.println("解析正常！");
+//		 handler.parse( new ByteArrayInputStream(bytes,0,bytes.length));
+		 InputStream in = null;
+		 try
+		 {
+		
+			 in = new FileInputStream(srcfile);
+			 handler.parse(new FileInputStream(srcfile));				//解析
+			 
+			 System.out.println("解析正常！");
+		 }
+		 finally
+		 {
+			 if(in != null)
+			 {
+				 try {
+					in.close();
+				} catch (Exception e) {
+					
+				}
+			 }
+		 }
 		 
 		 return handler;
 	 }
@@ -590,7 +696,7 @@ public class CMSCrawler  {
 	public ContentHandler handleDBTable(Map map,String contentType) throws Exception {
 		 ContentHandler handler = null;
 		 if(contentType.equals(ContentHandler.DBT_FILEFOMAT)){			 
-			 handler = DBHandler.getInstance();			 
+			 handler = new DBHandler();			 
 		 }		 
 		 handler.parse(map);				//解析		 
 		 System.out.println("解析正常！");		 
@@ -600,13 +706,13 @@ public class CMSCrawler  {
 	/**
 	 * 处理网络文件，不为外部提供接口,因为handleLink处理结果并没有返回，而是直接对数据成员赋值了
 	 */
-	private ContentHandler handWebFile(HttpURLConnection httpurlconnection,String contentType) throws Exception{
+	private ContentHandler handWebFile(HttpURLConnection httpurlconnection,String contentType,String version) throws Exception{
 		 System.out.println("扫描网页" + httpurlconnection.getURL().toString() + "中...");
 		
 		 ContentHandler handler = null;
 		 if(contentType.equals(ContentHandler.TEXT_HTML_FILEFOMAT)){
 			 
-			 handler = HTMLHandler.getInstance();
+			 handler = new HTMLHandler();
 			 ((HTMLHandler) handler).setFileType("notaspx");
 			 
 			 //处理网页连接
@@ -620,23 +726,23 @@ public class CMSCrawler  {
 			 }
 		 }else if(contentType.equals(ContentHandler.PDF_FILEFOMAT)){
 			 
-			 handler = PDFHandler.getInstance();
+			 handler = new PDFHandler();
 			 
 		 }else if(contentType.equals(ContentHandler.WORD_FILEFOMAT)){
 			 
-			 handler = WordHandler.getInstance();
+			 handler = new WordHandler(version);
 			 
 		 }else if(contentType.equals(ContentHandler.EXCEL_FILEFOMAT)){
 			 
-			 handler = ExcelHandler.getInstance();
+			 handler = new ExcelHandler();
 			 
 		 }else if(contentType.equals(ContentHandler.PPT_FILEFOMAT)){
 			 
-			 handler = PPTHandler.getInstance();
+			 handler = new PPTHandler();
 			 
 		 }else if(contentType.equals(ContentHandler.RTF_FILEFOMAT)){
 			 
-			 handler = RTFHandler.getInstance();
+			 handler = new RTFHandler();
 			 
 		 }
 		 
@@ -745,23 +851,23 @@ public class CMSCrawler  {
 	            	this.uid = currentURL;
 	                //文件格式判断
 	                contentType = httpurlconnection.getContentType();
-	                if(s.endsWith(".doc") || s.endsWith(".xls") ||
-	                		s.endsWith(".ppt") || s.endsWith(".pdf") || s.endsWith(".rtf") || 
+	                if(s.endsWith(".doc") ||s.endsWith(".docx")|| s.endsWith(".xlsx") ||s.endsWith(".xls") ||
+	                		s.endsWith(".ppt") ||s.endsWith(".pptx") || s.endsWith(".pdf") || s.endsWith(".rtf") || 
 	                		contentType.indexOf("text/html") != -1){
 	                	
 		                if(contentType.indexOf("text/html") != -1){
 		                	
 		                	contentType = ContentHandler.TEXT_HTML_FILEFOMAT;
 		                	
-		                }else if (s.endsWith(".doc")) {
+		                }else if (s.endsWith(".doc") || s.endsWith(".docx")) {
 		                	
 		                	contentType = ContentHandler.WORD_FILEFOMAT;
 		                    
-		                } else if(s.endsWith(".xls")){
+		                } else if(s.endsWith(".xls") || s.endsWith(".xlsx")){
 		                	
 		                	contentType = ContentHandler.EXCEL_FILEFOMAT;
 		                	
-		                }else if(s.endsWith(".ppt")){
+		                }else if(s.endsWith(".ppt") || s.endsWith(".pptx")){
 
 		                	contentType = ContentHandler.PPT_FILEFOMAT;
 		                	
@@ -815,9 +921,9 @@ public class CMSCrawler  {
             Document document = new Document();
 //            document.add(new StringField("uid", uid, Field.Store.YES));
             FieldType fieldType = new FieldType();
-			fieldType.setStored(false);
-			fieldType.setIndexed(true);
-			fieldType.setStoreTermVectors(true);
+			fieldType.setStored(true);
+			fieldType.setIndexed(false);
+//			fieldType.setStoreTermVectors(true);
 			document.add(new StringField("uid",uid, Field.Store.YES));
             document.add(new StringField("url", currentURL, Field.Store.YES));
             if(currentURI == null)
@@ -827,7 +933,7 @@ public class CMSCrawler  {
             document.add(new LongField("lastModified",
                                       lastModified, Field.Store.NO));
 //            document.add(Field.Text("content", handler.getContents()));
-            if (handler.getContents() != null) {
+            if (handler.getContents() != null) {            	
             	document.add(new TextField("content", handler.getContents(), Field.Store.YES));
             }
             if (handler.getTitle() != null) {
