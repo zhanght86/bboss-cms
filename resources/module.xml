@@ -106,6 +106,19 @@
 				 	<url>appbom/*.page</url>				 
 				</authoration>
 			</item>
+			
+			<item name="应用台账固定列宽"
+			i18n:en_US="App Bom" id="appbommanagerfixed" >
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>appbom/indexFixed.page</content>
+				</workspace>
+				<authoration>				 
+				 	<url>appbom/*.page</url>				 
+				</authoration>
+			</item>
 		
 			
 			<item name="创建领料单" id="newGetDoc" i18n:en_US="Apply Materail">

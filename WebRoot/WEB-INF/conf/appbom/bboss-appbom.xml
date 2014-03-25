@@ -12,7 +12,9 @@
 
 	<property name="/appbom/*.page"
 		path:index="/appbom/main.jsp"
+		path:indexFixed="/appbom/mainFixed.jsp"
 		path:getAllListAppBom="/appbom/appBomList.jsp"
+		path:getAllListAppBomFixed="/appbom/appBomFixedList.jsp"
 		path:updatePre="/appbom/appBomEdit.jsp"
 		path:addPre="/appbom/appBomAdd.jsp"
 		path:viewBom="/appbom/appBomView.jsp"

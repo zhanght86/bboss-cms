@@ -51,6 +51,10 @@ public class AppBomController {
 	public String index(){
 		return "path:index";
 	}
+	
+	public String indexFixed(){
+		return "path:indexFixed";
+	}
 
 	public @ResponseBody String delete(AppBom bean,ModelMap model) {
 		service.delete(bean);
@@ -150,6 +154,31 @@ public class AppBomController {
 		datas=service.queryListInfoBean(offset, pagesize, appcondition);					
 		model.addAttribute("datas", datas);	
 		return "path:getAllListAppBom";
+	}
+	
+	public String queryListAppBomFixed(@PagerParam(name = PagerParam.SORT, defaultvalue = "bm") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			AppBomCondition appcondition, ModelMap model){
+		ListInfo datas=null;
+		String app_name=null,app_name_en=null,bm=null;
+	
+		if(appcondition!=null){
+			if(appcondition.getApp_name()!=null&&!"".equals(appcondition.getApp_name())){
+				app_name=appcondition.getApp_name();
+				appcondition.setApp_name("%"+appcondition.getApp_name()+"%");
+			}
+			if(appcondition.getApp_name_en()!=null&&!"".equals(appcondition.getApp_name_en())){
+				app_name_en=appcondition.getApp_name_en();
+				appcondition.setApp_name_en("%"+appcondition.getApp_name_en()+"%");
+			}
+			appcondition.setSortKey(sortKey);
+			appcondition.setSortDESC(desc);
+		}
+		datas=service.queryListInfoBean(offset, pagesize, appcondition);					
+		model.addAttribute("datas", datas);	
+		return "path:getAllListAppBomFixed";
 	}
 	/**
 	 * 判断Bm是否重复

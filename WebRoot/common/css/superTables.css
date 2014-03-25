@@ -1,0 +1,21 @@
+@charset "utf-8";
+.tableContainer
+  {padding: 0px;border: none;width:100%;_width:99%; height: 157px;overflow: hidden; border-bottom:1px solid #ccc; }
+.sBase{position:relative;width:100%;height:100%;overflow:hidden;background-color:#ffffff;}
+.sHeader{position:absolute;z-index:3;background-color:#ffffff;}
+.sHeaderInner{position:relative;}
+.sHeaderInner table{border-spacing:0px 0px !important;border-collapse:collapse !important;width:1px !important;table-layout:fixed !important;background-color:#ffffff; }
+.sFHeader{position:absolute;z-index:4;overflow:hidden;}
+.sFHeader table{border-spacing:0px 0px !important;border-collapse:collapse !important;width:1px !important;table-layout:fixed !important;background-color:#ffffff;}
+.sData{position:absolute;z-index:2;overflow:auto;background-color:#ffffff;}
+.sData table{border-spacing:0px 0px !important;border-collapse:collapse !important;width:1px !important;table-layout:fixed !important;}
+.sFData{position:absolute;z-index:1;background-color:#ffffff;}
+.sFDataInner{position:relative;}
+.sFData table{border-spacing:0px 0px !important;border-collapse:collapse !important;width:1px !important;table-layout:fixed !important;}
+.sDefault{margin:0px;padding:0px;border:1px solid #ccc;margin-top: -23px; margin-left: -99px;border-collapse:collapse;}
+.sDefault th, .sDefault td{border:1px solid #cccccc;border-collapse:collapse;padding:5px 3px 1px 3px;white-space:nowrap;}
+.sDefault th{ font-weight:bold;padding:3px 3px 4px 3px;font-size:1em;background:#e1e1e1 url(../images/sany_th2.jpg) repeat-x left top; border-bottom: 1px solid  #aaa;}
+.sDefault-Fixed{border-color:#c5c5c5;}
+.sDefault-Main{}
+.sDataTable{border:2px solid #336699;}
+
