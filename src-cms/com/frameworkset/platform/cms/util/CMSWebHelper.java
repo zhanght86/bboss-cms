@@ -9,7 +9,10 @@ import java.util.regex.Pattern;
 
 import net.fiyu.edit.UploadBean;
 
+import org.apache.log4j.Logger;
+
 public class CMSWebHelper {
+	private static Logger log = Logger.getLogger(CMSWebHelper.class);
 	private Map<String,UploadBean > styles = new HashMap<String,UploadBean >();
 	private String fileName;
 	public String getFileName() {
@@ -188,7 +191,14 @@ public class CMSWebHelper {
 			  String approot = CMSUtil.getAppRootPath();
 			  String eWebEditorPath=approot + "/cms/editor/eWebEditor48/";
 			  String sFileSeparator = File.separator;
-			  sConfig = ReadFile(eWebEditorPath+"jsp"+sFileSeparator+"config.jsp");
+			  String path = eWebEditorPath+"jsp"+sFileSeparator+"config.jsp";
+			  File f = new File(path);
+			  if(!f.exists())
+			  {
+				  log.debug("读取eWebEditor48 config.jsp文件失败：文件路径"+path+"不存在，请检查properties-sys.xml文件中的approot配置是否正确.");
+				  return;
+			  }
+			  sConfig = ReadFile(path);
 		  }
 		  else
 		  {
