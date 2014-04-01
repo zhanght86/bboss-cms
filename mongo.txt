@@ -1,5 +1,14 @@
-1.配置mongodb
+rep set:
+10.0.15.38:27017
+10.0.15.39:27017
+10.0.15.134:27017
+10.0.15.134:27018
+abr
+10.0.15.39:30000
+
+1.配置38 mongodb
 10.0.15.38
+安装目录：/home/bbossgroups/mongodb-linux-x86_64-2.4.8
 编辑文件/etc/mongodb.conf，内容如下：
 port = 27017
 bind_ip = 10.0.15.38
@@ -7,25 +16,95 @@ dbpath = /data/db0/
 fork = true
 replSet = rs0
 logpath = /data/logs/db0.log
-增加abr节点：
+
+2.配置134 mongodb
+10.0.15.134
+按照目录：
+/opt/mongodb/mongodb-linux-x86_64-2.4.8
+
+编辑文件/etc/mongodb.conf，内容如下：
+port = 27017
+bind_ip = 10.0.15.134
+dbpath = /data/db0/
+fork = true
+replSet = rs0
+logpath = /data/logs/db0.log
+
+编辑文件vi /etc/mongodb1.conf，内容如下：
+port = 27018
+bind_ip = 10.0.15.134
+dbpath = /data/db1/
+fork = true
+replSet = rs0
+logpath = /data/logs/db1.log
+开通防火墙端口：
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27018 -j ACCEPT
+在主节点将134添加到复制set
+rs.add("10.0.15.134:27017")
+rs.add("10.0.15.134:27018")
+3.配置39 mongodb
+按照目录：
+/opt/mongodb/mongodb-linux-x86_64-2.4.8
+39部署mongodb
+
+
+vi /etc/mongodb.conf输入以下内容：
+
+port = 27017
+bind_ip = 10.0.15.39
+dbpath = /dataDisk/mongodb/db0/
+fork = true
+replSet = rs0
+logpath = /dataDisk/mongodb/logs/db0.log
+
+
+mkdir /dataDisk/mongodb
+mkdir /dataDisk/mongodb/db0
+mkdir /dataDisk/mongodb/logs
+
+解压安装mongodb
+tar -xvf mongodb-linux-x86_64-2.4.8.tar 
+
+开通防火墙端口：
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27018 -j ACCEPT
+在主节点将39添加到复制set
+rs.add("10.0.15.39:27017")
+
+2.39增加abr节点：
+
 vi /etc/mongoabr.conf
 
 port = 30000
-bind_ip = 10.0.15.38
-dbpath = /data/abr/
+bind_ip = 10.0.15.39
+dbpath = /dataDisk/mongodb/abr/
 fork = true
 replSet = rs0
-logpath = /data/logs/abr.log
+logpath = /dataDisk/mongodb/logs/abr.log
 
 ./mongod --config /etc/mongoabr.conf
 在主节点shell执行一下指令，添加abr
-rs.addArb("10.0.15.38:30000")
+rs.addArb("10.0.15.39:30000")
+
+删除节点：
+先停止要删除的节点，
+1.To shut down the instance, connect using the mongo shell and the db.shutdownServer() method.
+2. Connect to the replica set’s current primary. To determine the current primary, use db.isMaster()
+(page 468) while connected to any member of the replica set.
+3. Use rs.remove() (page 471) in either of the following forms to remove the member:
+rs.remove("mongod3.example.net:27017")
+rs.remove("mongod3.example.net")
+
+rs.remove("10.0.15.38:30000")
 
 2.启动mongodb
 10.0.15.134
 ./mongod --config /etc/mongodb.conf
 ./mongod --config /etc/mongodb1.conf
 10.0.15.38
+./mongod --config /etc/mongodb.conf
+10.0.15.39
 ./mongod --config /etc/mongodb.conf
 
 说明：./mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --logpath /data/logs/db0.log --fork true
@@ -35,7 +114,8 @@ rs.addArb("10.0.15.38:30000")
 ./mongo --host 10.0.15.134 --port 27017
 ./mongo --host 10.0.15.134 --port 27018
 ./mongo --host 10.0.15.38 --port 27017
-
+./mongo --host 10.0.15.39 --port 27017
+./mongo --host 10.0.15.39 --port 30000
 4.配置并初始化复制服务器群
 10.0.15.134：27017为主服务器
 连接
@@ -62,27 +142,6 @@ db.testData.insert( k )
 关闭mongodb
 db.adminCommand({shutdown : 1, force : true})
 
-39部署mongodb
+6.java编程：
 
 
-vi /etc/mongodb.conf输入以下内容：
-
-port = 27017
-bind_ip = 10.0.15.39
-dbpath = /dataDisk/mongodb/db0/
-fork = true
-replSet = rs0
-logpath = /dataDisk/mongodb/logs/db0.log
-
-
-mkdir /dataDisk/mongodb
-mkdir /dataDisk/mongodb/db0
-mkdir /dataDisk/mongodb/logs
-
-解压安装mongodb
-tar -xvf mongodb-linux-x86_64-2.4.8.tar 
-
-开通防火墙端口：
--A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
--A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 28017 -j ACCEPT
-rs.add("10.0.15.39:27017")

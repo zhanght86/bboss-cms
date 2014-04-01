@@ -29,10 +29,32 @@
 <title>你的密码已过期，请修改密码-密码有效期为<%=expiredays%>天</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/WebDes.js"></script>
 <script language="javascript">
 	var api = frameElement.api, W = api.opener;
 function dosubmit()
 {
+	var oldpassword = document.getElementById('oldpassword').value;
+	var passWordConfirm = document.getElementById('passWordConfirm').value;
+	var passWord = document.getElementById('passWord').value;
+	var s = document.getElementById('loginName').value;
+	var p = document.getElementById('oldpassword').value;
+		 if(s!=""&&p!=""){
+ 			document.getElementById('oldpassword').value = strEnc(p,s, "", "");
+	    
+		 }
+		 
+		 p = document.getElementById('passWord').value;
+		 if(s!=""&&p!=""){
+ 			document.getElementById('passWord').value = strEnc(p,s, "", "");
+	    
+		 }
+		 
+		 p = document.getElementById('passWordConfirm').value;
+		 if(s!=""&&p!=""){
+ 			document.getElementById('passWordConfirm').value = strEnc(p,s, "", "");
+	    
+		 }
 		
 		$.ajax({
 		   type: "POST",
@@ -61,7 +83,11 @@ function dosubmit()
 							api.close();
 					},api);													
 				}else{
-					$.dialog.alert("设置密码出错:"+responseText,function(){},api);
+					$.dialog.alert("设置密码出错:"+responseText,function(){
+						  document.getElementById('oldpassword').value = oldpassword;
+						  document.getElementById('passWordConfirm').value = passWordConfirm;
+						  document.getElementById('passWord').value =passWord;						
+						},api);
 				}
 			}
 		  });
@@ -145,13 +171,13 @@ function openChoose(){
               		<tr>
               			<th width="40%">旧密码：</th>
               			<td width="60%">
-              				<input type="password" name="oldpassword"  validator="stringLegal" size="25"  class="w120"  />
+              				<input type="password" name="oldpassword" id="oldpassword" autocomplete = "off" validator="stringLegal" size="25"  class="w120"  />
               			</td>
               		</tr>
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.newpasword"/>：</th>
               			<td width="60%">
-              				<input type="password" name="passWord"  size="25" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginpassword'/>" minLength="6" maxlength="25"  class="w120" />
+              				<input type="password" name="passWord" id="passWord" autocomplete = "off"  size="25" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginpassword'/>" minLength="6" maxlength="25"  class="w120" />
               			</td>
               		</tr>
               		<tr id='genpwd'  style="display:none">
@@ -163,7 +189,7 @@ function openChoose(){
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.confirm.password"/>：</th>
               			<td width="60%">
-              				<input type="password" name="passWordConfirm"  size="25"  class="w120"  />
+              				<input type="password" name="passWordConfirm" id="passWordConfirm" autocomplete = "off"  size="25"  class="w120"  />
               			</td>
               		</tr>
               		

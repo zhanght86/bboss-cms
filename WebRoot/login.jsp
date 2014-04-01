@@ -662,7 +662,7 @@ DD_belatedPNG.fix('div');
                    } 
 		                  %>
 				<li><label><pg:message code="sany.pdp.user.login.name"/>：</label><input id="userName" name="userName" type="text" maxlength="<%=userNamelength%>"	 onkeydown="enterKeydowngoU(event)"  /></li>
-				<li><label><pg:message code="sany.pdp.login.password"/>：</label><input id="password" name="password" type="password" type="text"	onkeydown="enterKeydowngoP(event)" /></li>
+				<li><label><pg:message code="sany.pdp.login.password"/>：</label><input id="password" name="password" type="password" type="text"	onkeydown="enterKeydowngoP(event)" autocomplete = "off"/></li>
 				<%
 				if(enable_login_validatecode){
 				%><li><label>验证码：</label>

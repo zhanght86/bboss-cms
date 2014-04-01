@@ -53,8 +53,9 @@ public class SyncUserInfo {
     private static final String USER_SAVE_SQL = "insert into td_sm_user (user_sn, user_name, user_password, user_realname, user_sex, user_worktel, user_worknumber, user_mobiletel1, user_birthday, user_idcard, user_isvalid, user_type, user_id) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     private static final String USERORG_SAVE_SQL = "insert into td_sm_orguser (org_id, user_id) values (?,?)";
     private static final String USERORGJOB_SAVE_SQL = "insert into td_sm_userjoborg (org_id, job_id, user_id) values (?, ?, ?)";
-    private static final String USER_UPDATE_SQL_old = "update td_sm_user set user_sn=?, user_name=?, user_password=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
-    private static final String USER_UPDATE_SQL = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
+    private static final String USER_UPDATE_SQL_old_old = "update td_sm_user set user_sn=?, user_name=?, user_password=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
+    private static final String USER_UPDATE_SQL_old = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
+    private static final String USER_UPDATE_SQL = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=? where user_id=?";
     private static final String USERORG_UPDATE_SQL = "update td_sm_orguser set org_id=? where user_id=?";
     private static final String USERORGJOB_UPDATE_SQL = "update td_sm_userjoborg set org_id=?, job_id=?  where user_id=?";
     private static final String exist_org_user = "delete from td_sm_orguser where user_id=?";
@@ -434,9 +435,9 @@ public class SyncUserInfo {
 	            userPre.setNull(8, java.sql.Types.DATE);
 	        }
 	        userPre.setString(9, temp.getIdCard());
-	        userPre.setInt(10, 2);
-	        userPre.setString(11, userType);
-	        userPre.setString(12, temp.getUserNo());
+	        //userPre.setInt(10, 2);
+	        //userPre.setString(11, userType);
+	        userPre.setString(10, temp.getUserNo());
         }
         
         userPre.addPreparedBatch();

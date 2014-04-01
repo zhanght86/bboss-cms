@@ -29,6 +29,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.util.RandImgCreater;
 import com.frameworkset.util.StringUtil;
+import com.liferay.portlet.iframe.action.WebDes;
 
 /**
  * <p>Title: PasswordController.java</p> 
@@ -54,6 +55,13 @@ public class PasswordController {
 	public @ResponseBody String modifyExpiredPassword(String loginName,String oldpassword,String passWord,String passWordConfirm)
 	{
 		try {
+			WebDes wd = new WebDes();
+			if(oldpassword != null && !oldpassword.equals(""))
+				oldpassword = wd.strDec(oldpassword, loginName, "", "");
+			if(passWord != null && !passWord.equals(""))
+				passWord = wd.strDec(passWord, loginName, "", "");
+			if(passWordConfirm != null && !passWordConfirm.equals(""))
+				passWordConfirm = wd.strDec(passWordConfirm, loginName, "", "");
 			UserManager userManager = SecurityDatabase.getUserManager();       
 			User user = userManager.getUserByName(loginName);
 			if(user == null)

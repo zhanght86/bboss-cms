@@ -16,6 +16,7 @@
 <title>用户密码修改</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/WebDes.js"></script>
 <script language="javascript">
 	function validateInput(formObj){
             var loginName = formObj.loginName.value;
@@ -89,19 +90,19 @@ function openChoose(){
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.newpasword"/>：</th>
               			<td width="60%">
-              				<input type="password" name="passWord"  size="25" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginpassword'/>" minLength="6" maxlength="25"  class="w120" />
+              				<input type="password" name="passWord" autocomplete = "off" size="25" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginpassword'/>" minLength="6" maxlength="25"  class="w120" />
               			</td>
               		</tr>
               		<tr id='genpwd'  style="display:none">
               			<th width="40%">&nbsp;</th>
               			<td width="60%">
-              				<input type="text" name="generatepassword"  class="w120"  value="" /> 
+              				<input type="text" name="generatepassword" autocomplete = "off" class="w120"  value="" /> 
               			</td>
               		</tr>
               		<tr>
               			<th width="40%"><pg:message code="sany.pdp.personcenter.person.confirm.password"/>：</th>
               			<td width="60%">
-              				<input type="password" name="passWordConfirm"  size="25"  class="w120"  />
+              				<input type="password" name="passWordConfirm"  size="25"  class="w120" autocomplete = "off" />
               			</td>
               		</tr>
               </table>
