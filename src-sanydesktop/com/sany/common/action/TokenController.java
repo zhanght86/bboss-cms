@@ -1,5 +1,6 @@
 package com.sany.common.action;
 
+import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 
 import org.frameworkset.util.annotations.ResponseBody;
@@ -26,7 +27,8 @@ import org.frameworkset.web.token.MemTokenManager;
  * @author biaoping.yin
  * @version 1.0.0
  */
-public class TokenController {
+@WebService(name="TokenService",targetNamespace="com.sany.common.action.TokenService")
+public class TokenController implements TokenService {
 	/**
 	 * 获取令牌请求
 	 * @param request
@@ -38,6 +40,45 @@ public class TokenController {
 		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
 			return  memTokenManager.buildDToken(request);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * 获取令牌请求
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	public @ResponseBody String getAuthTempToken(String appid,String secret,String account) throws Exception
+	{
+		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
+		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+			return  memTokenManager.genAuthTempToken(appid, secret, account);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * 获取令牌请求
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	public @ResponseBody String genDualToken(String appid,String secret,String account) throws Exception
+	{
+		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
+		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+			long dualtime = 30l*24l*60l*60l*1000l;
+			return  memTokenManager.genDualToken(appid, secret, account,dualtime);
 		}
 		else
 		{

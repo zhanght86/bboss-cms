@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.fiyu.edit.RemotePic;
 import net.fiyu.edit.UploadBean;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.multipart.MultipartFile;
 import org.frameworkset.web.servlet.ModelMap;
@@ -26,7 +27,7 @@ import com.frameworkset.platform.cms.util.CMSWebHelper;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
-import common.Logger;
+
 
 /**
  * <p>

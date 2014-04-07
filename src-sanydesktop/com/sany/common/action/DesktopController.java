@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.util.I18NUtil;
 import org.frameworkset.web.servlet.ModelMap;
 import org.frameworkset.web.token.MemTokenManager;
@@ -22,7 +23,7 @@ import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.Root;
 import com.frameworkset.platform.security.AccessControl;
-import common.Logger;
+
 
 public class DesktopController {
 	private static Logger log = Logger.getLogger(DesktopController.class);

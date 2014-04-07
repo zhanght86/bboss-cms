@@ -554,6 +554,10 @@ public class ConfigParser extends I18nXMLParser  {
                 
             }
 		}
+        else if(name.equals("authoration") || name.equals("title"))
+        {
+        	
+        }
         else
         {
         	log.warn("解析文件时[" + this.file + "]遇到元素[" + name + "]，忽略处理。");

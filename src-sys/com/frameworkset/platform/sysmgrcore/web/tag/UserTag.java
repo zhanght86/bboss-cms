@@ -4,10 +4,11 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
+import org.apache.log4j.Logger;
+
 import com.frameworkset.common.tag.exception.FormulaException;
 import com.frameworkset.common.tag.pager.tags.CellTag;
 import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
-import common.Logger;
 
 public class UserTag extends CellTag {
 	private String user;

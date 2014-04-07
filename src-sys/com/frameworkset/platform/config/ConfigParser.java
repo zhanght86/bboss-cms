@@ -393,7 +393,10 @@ public class ConfigParser extends I18nXMLParser  {
     	        	oper.setDescription(this.currentValue.toString());
     	        	oper.setLocaleDescriptions(convertI18n(attributes, oper.getName(), oper.getId(), "description"));
     	        }
-    	        
+    	        else if(name.equals("authoration"))
+    	        {
+    	        	
+    	        }
     	        else
     	        {
     	        	log.warn("解析文件时[" + this.file + "]遇到元素[" + name + "]，忽略处理。");
@@ -523,6 +526,10 @@ public class ConfigParser extends I18nXMLParser  {
                 	handlePropertyFile(ApplicationInfo,propertiesfile);
                 }
             }
+            else if(name.equals("authoration"))
+	        {
+	        	
+	        }
             else
             {
             	log.warn("解析文件时[" + this.file + "]遇到元素[" + name + "]，忽略处理。");
@@ -1133,6 +1140,10 @@ public class ConfigParser extends I18nXMLParser  {
 					log.error("装载系统初始化程序信息异常：请检查[" + systemClass + "]是否存在,或者是否实现接口[com.frameworkset.platform.config.SystemInit]并且提供缺省的构造函数");
 				}
         	}
+        }
+        else if(name.equals("authoration"))
+        {
+        	
         }
         else
         {

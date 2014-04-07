@@ -97,7 +97,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jta.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jtidy-r8-05102004.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jug-asl-2.0.0.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jxl.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/msbase.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mssqlserver.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/msutil.jar"/>
