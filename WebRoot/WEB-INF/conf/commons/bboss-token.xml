@@ -4,5 +4,7 @@
     CopyRight：sany
     Date:2011.4.13
 	-->
-	<property name="/token/*.freepage" ws:servicePort="tokenService" class="com.sany.common.action.TokenController" />
+	<property name="/token/*.freepage" ws:servicePort="tokenService" 
+	hessian:servicePort="tokenService"
+	class="com.sany.common.action.TokenController" />
 </properties>

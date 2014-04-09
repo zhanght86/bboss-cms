@@ -35,7 +35,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-aop.jar" sourcepath="/bbossaop"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-camel.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-event.jar" sourcepath="/bbossevent"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-http.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-http.jar" sourcepath="/bbossaop"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jms.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mina.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mvc.jar" sourcepath="/bboss-mvc"/>

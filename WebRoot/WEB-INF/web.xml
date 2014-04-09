@@ -61,10 +61,15 @@
 	      <param-value>true</param-value>
 	      
 	    </init-param>
+	    <init-param>
+	      <param-name>refererDefender</param-name>
+	      <param-value>true</param-value>
+	      
+	    </init-param>
 	   
 	    <init-param>
 	      <param-name>wallfilterrules</param-name>
-	      <param-value><![CDATA[><,%3E%3C,<iframe,%3Ciframe,<script,%3Cscript,<img,%3Cimg,alert(,alert%28,eval(,eval%28,style=,style%3D,[window['location'],{valueOf:alert}]]>
+	      <param-value><![CDATA[><,%3E%3C,<iframe,%3Ciframe,<script,%3Cscript,<img,%3Cimg,alert(,alert%28,eval(,eval%28,style=,style%3D,[window['location'],{valueOf:alert},{toString:alert},[window["location"],new Function(]]>
 	      </param-value>
 	      
 	    </init-param>
@@ -117,6 +122,7 @@
     		/webseal/websealloginfail.jsp,
     		/webseal/message.jsp,
     		/test/testmmssso.jsp,
+    		/test/testssowithtoken.jsp,
     		/sso/login.jsp,
     		/sso/sso.page,
     		/sso/ssowithtoken.page,
@@ -261,6 +267,7 @@
             /WEB-INF/conf/commons/bboss-*.xml,
             /WEB-INF/conf/test/bboss-*.xml,
             /WEB-INF/conf/workflow/bboss-*.xml,
+			/WEB-INF/conf/workflow/appcreate/bboss-*.xml,
             /WEB-INF/conf/document/bboss-*.xml,
             /WEB-INF/conf/params/bboss-*.xml,
             /WEB-INF/conf/counter/bboss-*.xml,

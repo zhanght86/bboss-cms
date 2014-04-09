@@ -47,13 +47,26 @@ public class TokenController implements TokenService {
 		}
 	}
 	
+	public @ResponseBody String genTempToken() throws Exception
+	{
+		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
+		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+			return  memTokenManager.genTempToken();
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
 	/**
 	 * 获取令牌请求
 	 * @param request
 	 * @return
 	 * @throws Exception 
 	 */
-	public @ResponseBody String getAuthTempToken(String appid,String secret,String account) throws Exception
+	public @ResponseBody String genAuthTempToken(String appid,String secret,String account) throws Exception
 	{
 		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
 		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
@@ -79,6 +92,25 @@ public class TokenController implements TokenService {
 		{
 			long dualtime = 30l*24l*60l*60l*1000l;
 			return  memTokenManager.genDualToken(appid, secret, account,dualtime);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	/**
+	 * 获取应用公钥
+	 * @param appid
+	 * @param secret
+	 * @return
+	 * @throws Exception 
+	 */
+	public @ResponseBody String getPublicKey(String appid,String secret) throws Exception
+	{
+		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
+		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+			return  memTokenManager.getPublicKey(appid, secret);
 		}
 		else
 		{

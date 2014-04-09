@@ -18,7 +18,7 @@ import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
-import com.liferay.portlet.iframe.action.DESCipher;
+
 import com.liferay.portlet.iframe.action.SSOUserMapping;
 import com.sany.webseal.LoginValidate.CommonInfo;
 import com.sany.webseal.LoginValidate.UimUserInfo;
@@ -168,12 +168,10 @@ public class SSOControler {
 
 		else {
 			try {
-				String subsystem = "sany-mms";
 				AccessControl control = AccessControl.getInstance();
 				control.checkAccess(request, response, false);
 				String user = control.getUserAccount();
-				DESCipher des = new DESCipher();
-				userName = des.decrypt(userName);
+				
 				String worknumber = control.getUserAttribute("userWorknumber");
 				boolean issameuser = false;
 				if (loginType.equals("2")) {

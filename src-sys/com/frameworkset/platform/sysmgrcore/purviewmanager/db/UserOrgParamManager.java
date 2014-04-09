@@ -87,8 +87,8 @@ public class UserOrgParamManager {
 		try {
 			return paramHandler.getStringParamMap(orgparamType, "fixedparentorg");
 		} catch (ParamException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
+			
 		}
 	}
 	
@@ -100,8 +100,7 @@ public class UserOrgParamManager {
 		try {
 			return paramHandler.getStringParamMap(this.userparamType, "fixedorg");
 		} catch (ParamException e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 	}
 
