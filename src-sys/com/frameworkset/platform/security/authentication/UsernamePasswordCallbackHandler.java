@@ -75,7 +75,8 @@ public class UsernamePasswordCallbackHandler extends ACLCallbackHandler {
 //           System.out.flush();
 //           String password = new BufferedReader(
 //               new InputStreamReader(System.in)).readLine();
-                passwordCallback.setPassword(password.toCharArray());
+                if(password != null)
+                	passwordCallback.setPassword(password.toCharArray());
                 password = null;
                 //
                 // Other callback types are not handled here

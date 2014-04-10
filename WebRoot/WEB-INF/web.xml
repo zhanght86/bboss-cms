@@ -166,7 +166,10 @@
 			默认存储在session中 -->
 		<init-param>
 			<param-name>tokenstore</param-name>
-			<param-value>org.frameworkset.web.token.MongodbTokenStore</param-value>
+<!-- 			<param-value>org.frameworkset.web.token.MongodbTokenStore</param-value> -->
+				<param-value>org.frameworkset.web.token.DBTokenStore</param-value>
+<!-- 				<param-value>mem</param-value> -->
+
 		</init-param>
 
 		<!-- 内存令牌保留时间,默认为1小时（不检测），超过指定的时间，系统将自动清除超时的令牌，如果指定为-1将不检测 单位为毫秒 session中的令牌不受影响 -->

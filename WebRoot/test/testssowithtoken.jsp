@@ -20,15 +20,15 @@ String account = "yinbp";//如果使用工号则loginType为2，否则为1
 String tokenparamname = TokenStore.temptoken_param_name;
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
-//String url = "http://localhost:8081/context/hessian?service=tokenService";
-String url = "http://10.25.192.142:8081"+request.getContextPath()+"/hessian?service=tokenService";
+//String url = "http://10.25.192.142:8081/context/hessian?service=tokenService";
+String url = "http://192.168.1.101:8080"+request.getContextPath()+"/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 String token = tokenService.genAuthTempToken(appid, secret, account);
 //token = tokenService.genDualToken(appid, secret, account);
 /**
 * webservice方式申请token
 */
-url = "http://10.25.192.142:8081/SanyPDP/cxfservices/tokenService";
+url = "http://192.168.1.101:8080/SanyPDP/cxfservices/tokenService";
 JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
 WSServiceClientFactory.setAddress(url);
 WSServiceClientFactory.setServiceClass(TokenService.class);
@@ -38,7 +38,7 @@ token = tokenService.genAuthTempToken(appid, secret, account);
 /**
 * http请求方式申请令牌
 */
-url = "http://10.25.192.142:8081/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
+url = "http://192.168.1.101:8080/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 //url = "http://10.25.192.142:8081/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 
