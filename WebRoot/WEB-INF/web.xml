@@ -166,8 +166,8 @@
 			默认存储在session中 -->
 		<init-param>
 			<param-name>tokenstore</param-name>
-<!-- 			<param-value>org.frameworkset.web.token.MongodbTokenStore</param-value> -->
-				<param-value>org.frameworkset.web.token.DBTokenStore</param-value>
+ 			<param-value>org.frameworkset.web.token.MongodbTokenStore</param-value>
+				<!--<param-value>org.frameworkset.web.token.DBTokenStore</param-value> -->
 <!-- 				<param-value>mem</param-value> -->
 
 		</init-param>
@@ -181,7 +181,7 @@
 			如果需要检测，那么只要令牌持续时间超过tokendualtime 对应的令牌将会被清除 -->
 		<init-param>
 			<param-name>tokenscaninterval</param-name>
-			<param-value>1800000</param-value>
+			<param-value>300000</param-value>
 		</init-param>
 		<!-- 防止跨站请求过滤器相关参数结束 -->   
 		<init-param>
