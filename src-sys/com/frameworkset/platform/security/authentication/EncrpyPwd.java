@@ -47,6 +47,8 @@ public class EncrpyPwd implements Serializable{
 		//加密算法名称
 		String algorithm = manager.getConfigValue("passwordsEncryptionAlgorithm","NONE");
 		String encrypeType = ConfigManager.getInstance().getConfigValue("encrpytype", "NONE");
+		if(encrypeType.equals("NONE"))
+			return password;
 		return _encodePassword(password,algorithm, encrypeType);
 		
 		
