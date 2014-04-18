@@ -4,7 +4,8 @@ import javax.jws.WebService;
 import javax.servlet.http.HttpServletRequest;
 
 import org.frameworkset.util.annotations.ResponseBody;
-import org.frameworkset.web.token.MemTokenManager;
+import org.frameworkset.web.token.TokenException;
+import org.frameworkset.web.token.TokenHelper;
 
 /**
  * <p>
@@ -33,13 +34,13 @@ public class TokenController implements TokenService {
 	 * 获取令牌请求
 	 * @param request
 	 * @return
+	 * @throws TokenException 
 	 */
-	public @ResponseBody String getToken(HttpServletRequest request)
+	public @ResponseBody String getToken(HttpServletRequest request) throws TokenException
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.buildDToken(request);
+			return  TokenHelper.getTokenService().buildDToken(request);
 		}
 		else
 		{
@@ -49,10 +50,9 @@ public class TokenController implements TokenService {
 	
 	public @ResponseBody String genTempToken() throws Exception
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.genTempToken();
+			return  TokenHelper.getTokenService().genTempToken();
 		}
 		else
 		{
@@ -68,10 +68,9 @@ public class TokenController implements TokenService {
 	 */
 	public @ResponseBody String genAuthTempToken(String appid,String secret,String account) throws Exception
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.genAuthTempToken(appid, secret, account);
+			return  TokenHelper.getTokenService().genAuthTempToken(appid, secret, account);
 		}
 		else
 		{
@@ -87,11 +86,10 @@ public class TokenController implements TokenService {
 	 */
 	public @ResponseBody String genDualToken(String appid,String secret,String account) throws Exception
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
 			long dualtime = 30l*24l*60l*60l*1000l;
-			return  memTokenManager.genDualToken(appid, secret, account,dualtime);
+			return  TokenHelper.getTokenService().genDualToken(appid, secret, account,dualtime);
 		}
 		else
 		{
@@ -107,10 +105,9 @@ public class TokenController implements TokenService {
 	 */
 	public @ResponseBody String getPublicKey(String appid,String secret) throws Exception
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.getPublicKey(appid, secret);
+			return  TokenHelper.getTokenService().getPublicKey(appid, secret);
 		}
 		else
 		{
@@ -123,13 +120,24 @@ public class TokenController implements TokenService {
 	 * http://localhost:8081/SanyPDP/token/getParameterToken.freepage
 	 * @param request
 	 * @return
+	 * @throws TokenException 
 	 */
-	public @ResponseBody String getParameterToken(HttpServletRequest request)
+	public @ResponseBody String getParameterToken(HttpServletRequest request) throws TokenException
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.buildParameterDToken(request);
+			return  TokenHelper.getTokenService().buildParameterDToken(request);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	public @ResponseBody String genTicket(String account,String worknumber,String appid,String secret) throws TokenException
+	{
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+			return  TokenHelper.getTokenService().genTicket( account, worknumber, appid, secret);
 		}
 		else
 		{

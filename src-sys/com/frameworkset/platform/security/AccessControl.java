@@ -55,7 +55,8 @@ import javax.servlet.jsp.PageContext;
 import org.apache.log4j.Logger;
 import org.frameworkset.security.AccessControlInf;
 import org.frameworkset.spi.SPIException;
-import org.frameworkset.web.token.MemTokenManager;
+import org.frameworkset.web.token.TokenHelper;
+import org.frameworkset.web.token.TokenStore;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -63,16 +64,15 @@ import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.security.DESCipher;
 import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.config.LoginModuleInfoQueue;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
 import com.frameworkset.platform.framework.SubSystem;
 import com.frameworkset.platform.security.authentication.CheckCallBack;
+import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute;
 import com.frameworkset.platform.security.authentication.Credential;
 import com.frameworkset.platform.security.authentication.LoginContext;
 import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.security.authentication.UsernamePasswordCallbackHandler;
-import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute;
 import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
 import com.frameworkset.platform.security.authorization.AuthRole;
@@ -772,7 +772,7 @@ public class AccessControl implements AccessControlInf{
 			ret = AccessControl.getCookieValue(request, current_logoutredirect_cookie);
 			if(!StringUtil.isEmpty(ret))
 			{
-				 if(ret.indexOf(MemTokenManager.temptoken_param_name_word) > 0)
+				 if(ret.indexOf(TokenStore.temptoken_param_name_word) > 0)
 					 ret = defaultvalue;				 
 			}
 			else
@@ -782,10 +782,9 @@ public class AccessControl implements AccessControlInf{
 			if(ret != null && appendToken)
 			{
 				
-				MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-				if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+				if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 				{
-					ret = memTokenManager.appendDTokenToURL(request,ret);
+					ret = TokenHelper.getTokenService().appendDTokenToURL(request,ret);
 				}
 			}
 				
@@ -804,10 +803,9 @@ public class AccessControl implements AccessControlInf{
 			if(ret != null && appendToken)
 			{
 				
-				MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-				if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+				if(TokenHelper.getTokenService() != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 				{
-					ret = memTokenManager.appendDTokenToURL(request,ret);
+					ret = TokenHelper.getTokenService().appendDTokenToURL(request,ret);
 				}
 			}
 			

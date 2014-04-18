@@ -26,4 +26,10 @@ public interface TokenService {
 			@WebParam(name = "secret", partName = "partSecret") String secret)
 			throws Exception;
 	public @WebResult(name = "tempToken", partName = "partTempToken") String genTempToken() throws Exception;
+	public @WebResult(name = "ticket", partName = "partTicket")  
+	String genTicket(
+			@WebParam(name = "account", partName = "partAccount") String account,
+			@WebParam(name = "worknumber", partName = "partWorknumber") String worknumber,
+			@WebParam(name = "appid", partName = "partAppid") String appid,
+			@WebParam(name = "secret", partName = "partSecret") String secret)throws Exception;
 }

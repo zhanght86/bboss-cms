@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.frameworkset.util.I18NUtil;
 import org.frameworkset.web.servlet.ModelMap;
-import org.frameworkset.web.token.MemTokenManager;
-import org.frameworkset.web.token.MemTokenManagerFactory;
+import org.frameworkset.web.token.TokenHelper;
 
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
@@ -332,10 +331,9 @@ public class DesktopController {
 			model.addAttribute("selectItem", selectItem);
 		if(selectUrl != null)
 		{
-			MemTokenManager memtokenmanager = MemTokenManagerFactory.getMemTokenManagerNoexception();
-			if(memtokenmanager != null)
+			if(TokenHelper.isEnableToken())
 			{
-				selectUrl = memtokenmanager.appendDTokenToURL(request, selectUrl);
+				selectUrl = TokenHelper.getTokenService().appendDTokenToURL(request, selectUrl);
 			}
 			
 			model.addAttribute("selectUrl", selectUrl);
@@ -786,10 +784,9 @@ public class DesktopController {
 			model.addAttribute("selectItem", selectItem);
 		if(selectUrl != null)
 		{
-			MemTokenManager memtokenmanager = MemTokenManagerFactory.getMemTokenManagerNoexception();
-			if(memtokenmanager != null)
+			if(TokenHelper.isEnableToken())
 			{
-				selectUrl = memtokenmanager.appendDTokenToURL(request, selectUrl);
+				selectUrl = TokenHelper.getTokenService().appendDTokenToURL(request, selectUrl);
 			}
 			
 			model.addAttribute("selectUrl", selectUrl);

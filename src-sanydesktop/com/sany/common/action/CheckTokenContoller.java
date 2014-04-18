@@ -18,7 +18,8 @@ package com.sany.common.action;
 import javax.jws.WebService;
 
 import org.frameworkset.util.annotations.ResponseBody;
-import org.frameworkset.web.token.MemTokenManager;
+import org.frameworkset.web.token.TokenException;
+import org.frameworkset.web.token.TokenHelper;
 import org.frameworkset.web.token.TokenResult;
 import org.frameworkset.web.token.TokenStore;
 
@@ -34,24 +35,23 @@ import org.frameworkset.web.token.TokenStore;
 @WebService(name="CheckTokenService",targetNamespace="com.sany.common.action.CheckTokenService")
 public class CheckTokenContoller implements CheckTokenService{
 	
-	public @ResponseBody(datatype="json") TokenResult checkToken(String appid,String secret,String token)
+	public @ResponseBody(datatype="json") TokenResult checkToken(String appid,String secret,String token) throws TokenException
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.checkToken(appid,secret,token);
+			return  TokenHelper.getTokenService().checkToken(appid,secret,token);
 		}
 		else
 		{
 			return null;
 		}
 	}
-	public @ResponseBody Integer checkTempToken(String token)
+	public @ResponseBody Integer checkTempToken(String token) throws TokenException
 	{
-		MemTokenManager memTokenManager = org.frameworkset.web.token.MemTokenManagerFactory.getMemTokenManagerNoexception();
-		if(memTokenManager != null)//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  memTokenManager.checkTempToken(token);
+			return  TokenHelper.getTokenService().checkTempToken(token);
 		}
 		else
 		{
