@@ -449,7 +449,7 @@ DD_belatedPNG.fix('div');
 	function modifyExpiredPassword(){
 		
 		
-  		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?<%="userAccount="+userName%>&<pg:dtoken element="param"/>";
+  		var url="<%=request.getContextPath()%>/sysmanager/password/modifyExpiredUserPWD.jsp?<%="userAccount="+userName%>";
   		$.dialog({close:reloadhref,title:'对不起，<%=userName %>的密码已经失效（密码有效期为<%=expiredays%>天），过期时间为<%=expriedtime_%>!',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
   		
 		
@@ -624,7 +624,7 @@ DD_belatedPNG.fix('div');
 		}
 	}
 	function changeLan(){
-		window.location.href="<%=request.getContextPath()%>/sanydesktop/cookieLocale.page?language="+$('#language').val() + "&<pg:dtoken element="param"/>";
+		window.location.href="<%=request.getContextPath()%>/sanydesktop/cookieLocale.page?language="+$('#language').val() ;
 	}
 </script>
 </HEAD>

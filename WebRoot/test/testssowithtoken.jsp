@@ -6,6 +6,7 @@
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page session="true" language="java"
 	contentType="text/html; charset=utf-8"%>
+<%@page import="org.frameworkset.web.token.TokenHelper"%>
 
 <%
 /**
@@ -22,7 +23,7 @@ String tokenparamname = TokenStore.temptoken_param_name;
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
 //String url = "http://localhost:8081/context/hessian?service=tokenService";
-String url = "http://10.25.192.142:8081"+request.getContextPath()+"/hessian?service=tokenService";
+String url = "http://localhost:8088/SanySIM/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -32,7 +33,7 @@ String token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * webservice方式申请token
 */
-url = "http://10.25.192.142:8081/SanyPDP/cxfservices/tokenService";
+url = "http://localhost:8088/SanySIM/cxfservices/tokenService";
 JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
 WSServiceClientFactory.setAddress(url);
 WSServiceClientFactory.setServiceClass(TokenService.class);
@@ -44,12 +45,19 @@ token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * http请求方式申请令牌
 */
-url = "http://10.25.192.142:8081/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+url = "http://localhost:8088/SanySIM/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
 //url = "http://10.25.192.142:8081/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 //通过http根据账号或者工号获取ticket
 //url = "http://10.25.192.142:8081/SanyPDP/token/genTicket.freepage?appid="+appid + "&secret="+secret + "&account="+account + "&worknumber="+worknumber;
 //String ticket = = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
+
+org.frameworkset.web.servlet.context.WebApplicationContext  context = org.frameworkset.web.servlet.support.WebApplicationContextUtils.getWebApplicationContext();//获取实例
+
+//通过以下方式获取mvc容器中的组件实例方法
+tokenService = context.getTBeanObject("/token/*.freepage", TokenService.class);
+//String ticket = tokenService.genTicket(account, worknumber, appid, secret);
+token = tokenService.genAuthTempToken(appid, secret, ticket);
 
 out.println("<div>isGuest:"+AccessControl.getAccessControl().isGuest()+"</div>");
 out.println("<div>userAccount:"+AccessControl.getAccessControl().getUserAccount()+"</div>");

@@ -1,5 +1,3 @@
-<%@page import="org.frameworkset.web.token.MemTokenManagerFactory"%>
-<%@page import="org.frameworkset.web.token.MemTokenManager"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
