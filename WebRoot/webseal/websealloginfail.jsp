@@ -1,7 +1,14 @@
+<%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%String userName = request.getParameter("userName");
+String errormsg  = request.getParameter("errormsg");
  String ip = request.getParameter("ip");
+ if(ip == null)
+ {
+ 	ip = StringUtil.getClientIP(request);
+ }
+ String info = "用户["+userName +"]登录失败-Client IP["+ip+"],错误信息:"+errormsg ;
  %>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/sany-taglib.tld" prefix="sany"%>
@@ -10,11 +17,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户[<%=userName %>]登录失败-IP[<%=ip %>]</title>
+<title><%=info %></title>
 
 <link href="../html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 
-
+<script type="text/javascript">
+function logout()
+{
+	top.location='../logout.jsp';
+	flag = false;
+}
+</script>
 
 <style>
 html,body {
@@ -64,7 +77,7 @@ html,body {
 </div>
 
 <div id="dycontent">
-    <iframe frameborder="0" id="mainFrame" name="mainFrame" src="message.jsp?userName=<%=userName %>&ip=<%=ip %>" scrolling="auto" ></iframe>
+<%=info %>  <a href="#" class="zhuxiao" onclick="logout()">注销</a> 
 </div>
 
 <div id="dyfoot">

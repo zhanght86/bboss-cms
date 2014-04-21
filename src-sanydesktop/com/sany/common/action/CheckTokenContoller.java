@@ -40,6 +40,7 @@ public class CheckTokenContoller implements CheckTokenService{
 		
 		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
+			
 			return  TokenHelper.getTokenService().checkToken(appid,secret,token);
 		}
 		else

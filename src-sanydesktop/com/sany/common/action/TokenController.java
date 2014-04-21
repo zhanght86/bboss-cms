@@ -66,11 +66,11 @@ public class TokenController implements TokenService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public @ResponseBody String genAuthTempToken(String appid,String secret,String account) throws Exception
+	public @ResponseBody String genAuthTempToken(String appid,String secret,String ticket) throws Exception
 	{
 		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
-			return  TokenHelper.getTokenService().genAuthTempToken(appid, secret, account);
+			return  TokenHelper.getTokenService().genAuthTempToken(appid, secret, ticket);
 		}
 		else
 		{
@@ -84,12 +84,31 @@ public class TokenController implements TokenService {
 	 * @return
 	 * @throws Exception 
 	 */
-	public @ResponseBody String genDualToken(String appid,String secret,String account) throws Exception
+	public @ResponseBody String genDualToken(String appid,String secret,String ticket) throws Exception
 	{
 		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
 		{
 			long dualtime = 30l*24l*60l*60l*1000l;
-			return  TokenHelper.getTokenService().genDualToken(appid, secret, account,dualtime);
+			return  TokenHelper.getTokenService().genDualToken(appid, secret, ticket,dualtime);
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	/**
+	 * 获取令牌请求
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	public @ResponseBody String genDualTokenWithDefaultLiveTime(String appid,String secret,String ticket) throws Exception
+	{
+		if(TokenHelper.isEnableToken())//如果开启令牌机制就会存在memTokenManager对象，否则不存在
+		{
+
+			return  TokenHelper.getTokenService().genDualTokenWithDefaultLiveTime(appid, secret, ticket);
 		}
 		else
 		{

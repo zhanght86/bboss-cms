@@ -46,10 +46,15 @@ public class SSOControler {
 			successRedirect = StringUtil.getRealPath(request, successRedirect,
 					true);
 		}
-		String userName = (String)request.getAttribute(TokenStore.token_request_account_key);
+		String userName = (String)request.getAttribute(TokenStore.token_request_account_key);		
+		String worknumber = (String)request.getAttribute(TokenStore.token_request_worknumber_key);
+		String loginType = "1";
+		if(StringUtil.isEmpty(userName ))
+		{
+			userName = worknumber;
+			loginType = "2";
+		}
 		
-
-		String loginType = request.getParameter("loginType");
 		String loginMenu = request.getParameter("loginMenu");
 		String contextpath = request.getContextPath();
 		String menuid = "newGetDoc";
@@ -121,10 +126,10 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
-						e.printStackTrace();
+						
 						response.sendRedirect(contextpath
 								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName + "&ip=" + ip);
+								+ userName + "&ip=" + ip+ "&errormsg=" + java.net.URLEncoder.encode(e.getMessage(),"UTF-8"));
 						return;
 					}
 
@@ -172,7 +177,7 @@ public class SSOControler {
 				control.checkAccess(request, response, false);
 				String user = control.getUserAccount();
 				
-				String worknumber = control.getUserAttribute("userWorknumber");
+				worknumber = control.getUserAttribute("userWorknumber");
 				boolean issameuser = false;
 				if (loginType.equals("2")) {
 					if (worknumber != null && !worknumber.equals(""))
@@ -234,10 +239,10 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
-						e.printStackTrace();
+						
 						response.sendRedirect(contextpath
 								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName);
+								+ userName + "&errormsg=" + java.net.URLEncoder.encode(e.getMessage(),"UTF-8"));
 						return;
 					}
 
