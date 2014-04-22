@@ -39,7 +39,7 @@
                        sequence_cur_value bigint(20) unsigned DEFAULT 1, 
                        sequence_cycle boolean NOT NULL DEFAULT FALSE, 
                        PRIMARY KEY (sequence_name) 
-                       ) ENGINE=MyISAM;]]></property>
+                       ) ENGINE=InnoDB;]]></property>
 
 							<!--<property index="3" action="create"><![CDATA[
                  CREATE FUNCTION nextval(seq_name varchar(100)) 

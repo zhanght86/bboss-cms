@@ -1,6 +1,5 @@
 <!-- 令牌服务配置-->
-<property name="token.TokenService" class="org.frameworkset.web.token.TokenService"
-	destroy-method="destroy">
+<property name="token.TokenService" class="org.frameworkset.web.token.TokenService">
 	<construction>		
 		<property name="tokenstore" factory-class="com.caucho.hessian.client.HessianProxyFactory" factory-method="create">
 			<construction>

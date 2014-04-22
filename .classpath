@@ -198,5 +198,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/FlexiCoreProvider-1.7p7.signed.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/FlexiECProvider-1.7p7.signed.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/CoDec-build17-jdk13.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
