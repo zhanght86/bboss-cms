@@ -345,7 +345,7 @@
 				
 			</item>
 		</module>
-		<module name="应用管理" id="wfappmanager" used="true" showleftmenu="true" i18n:en_US="Workflow App Manage">
+		<module name="应用管理" id="wfappmanager" used="true" showleftmenu="true" i18n:en_US="App Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<item name="数据源管理" id="appdatasourcMg">
 				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
@@ -356,14 +356,50 @@
 					<content>/datareuse/datasource/main.page</content>
 				</workspace>
 			</item>
+			<item name="应用管理" id="app">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content>/workflow/appcreate/index.page</content>
+				</workspace>
+			</item>
 		</module>
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<description>工作流管理</description>
-			<item name="工作流管理" id="workflowmanager" i18n:en_US="Workflow Manage">
+			<item name="工作流管理新" area="main" id="workflowmanagernew" i18n:en_US="Workflow Manage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<!--
+				<navigator>
+					<content>workflow/repository/resColumnCmsTree.jsp</content>
+				</navigator>
+				<workspace>
+					<content>workflow/repository/menuList.jsp</content>
+				</workspace>
+				-->
+				<workspace>
+					<content>workflow/repository/workflowmanager.page</content>
+				</workspace>
+				<authoration>				 
+				 	<url>workflow/repository/*.page</url>
+				</authoration>
+			</item>
+			<item name="工作流管理" area="main" id="workflowmanager" i18n:en_US="Workflow Manage">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<!--
+				<navigator>
+					<content>workflow/repository/resColumnCmsTree.jsp</content>
+				</navigator>
+				<workspace>
+					<content>workflow/repository/menuList.jsp</content>
+				</workspace>
+				-->
 				<workspace>
 					<content>workflow/repository/index.page</content>
 				</workspace>

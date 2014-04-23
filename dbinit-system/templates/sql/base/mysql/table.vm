@@ -29,5 +29,5 @@ CREATE TABLE $table.Name
 #if($strings.allEmpty([$fk,$unique,$index]) && $pk.length()>0)$strings.chop($pk,2)#else$pk#end
 #if($strings.allEmpty([$index]) && $unique.length()>0)$strings.chop($unique,2)#else$unique#end
 #if($index.length() > 0)$strings.chop($index,2)#end
-);
+) ENGINE=InnoDB;
 
