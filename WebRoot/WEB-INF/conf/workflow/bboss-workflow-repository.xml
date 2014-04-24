@@ -12,6 +12,7 @@
 
 	<property name="/workflow/repository/*.page"
 		path:index="/workflow/repository/main.jsp"
+		path:workflowmanager="/workflow/repository/workflowmanager.jsp"
 		path:queryProcessDefs="/workflow/repository/processDefsList.jsp"	
 		path:queryProcessHisVer = "/workflow/repository/processDefHisList.jsp"
 		path:viewProcessInfo = "/workflow/repository/viewProcessInfo.jsp"
@@ -21,6 +22,8 @@
 		path:getUnloadProcesses="/workflow/repository/unloadedProcess.jsp"
 		f:activitiService="attr:activitiService"
 		f:activitiConfigService="attr:activitiConfigService"
+		f:appcreateService="attr:application.appcreateService"
+		f:activitiRelationService="attr:activitiRelationService"
 		class="com.sany.workflow.action.ActivitiRepositoryAction" >
 	</property>
 	

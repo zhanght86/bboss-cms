@@ -362,7 +362,7 @@
 				<top>header.page</top>
 				
 				<workspace>
-					<content>/workflow/appcreate/index.page</content>
+					<content>/application/index.page</content>
 				</workspace>
 			</item>
 		</module>

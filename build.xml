@@ -567,7 +567,7 @@
 			 <mkdir dir="classes-sany-ldap"/>	
 			
 	</target>
-	<target name="compile-sany-workflow" depends="jar-sany-mail" description="compile the sany appbom source ">
+	<target name="compile-sany-workflow" depends="jar-sany-application" description="compile the sany appbom source ">
 			<echo>compile the appbom source ...</echo>
 			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 				<src path="${source}/src-workflow" />				
@@ -588,6 +588,39 @@
 	<target name="jar-sany-workflow" depends="compile-sany-workflow" description="generate the sany-workflow-lib library sany-workflow.jar">
 			<echo>Generate the sany-workflow library sany-workflow.jar ...</echo>
 			<jar jarfile="${distrib}/sany-workflow.jar" basedir="classes-sany" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-sany"/>
+		  <mkdir dir="classes-sany"/>	
+		
+	</target>
+	
+	<target name="compile-sany-application" depends="jar-sany-mail" description="compile the sany application source ">
+			<echo>compile the application source ...</echo>
+			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-application" />				
+				<classpath id="cp-cms_baseline">
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+				</classpath>
+			</javac>
+		<copy todir="classes-sany">
+			<fileset dir="${source}/src-application" includes="**/*.xml"/>
+		</copy>
+	</target>
+	
+	<target name="jar-sany-application" depends="compile-sany-application" description="generate the sany-application library sany-application.jar">
+			<echo>Generate the sany-application library sany-application.jar ...</echo>
+			<jar jarfile="${distrib}/sany-application.jar" basedir="classes-sany" includes="**/*">
 				<manifest>
 					<attribute name="Implementation-Version" value="${impl.version}" />
 					<attribute name="Specification-Version" value="${revision}" />

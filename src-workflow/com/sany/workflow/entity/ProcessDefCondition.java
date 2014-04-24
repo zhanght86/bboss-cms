@@ -43,6 +43,12 @@ public class ProcessDefCondition {
 	private long offset;
 	
 	private String businesstype_id;
+	
+	private String wf_app_id;
+	
+	private String wf_app_name;
+	
+	private String wf_app_mode_type_nonexist;
 
 	public String getSortKey() {
 		return sortKey;
@@ -116,6 +122,30 @@ public class ProcessDefCondition {
 
 	public void setBusinesstype_id(String businesstype_id) {
 		this.businesstype_id = businesstype_id;
+	}
+	
+	public String getWf_app_id() {
+		return wf_app_id;
+	}
+
+	public void setWf_app_id(String wf_app_id) {
+		this.wf_app_id = wf_app_id;
+	}
+
+	public String getWf_app_name() {
+		return wf_app_name;
+	}
+
+	public void setWf_app_name(String wf_app_name) {
+		this.wf_app_name = wf_app_name;
+	}
+	
+	public String getWf_app_mode_type_nonexist() {
+		return wf_app_mode_type_nonexist;
+	}
+
+	public void setWf_app_mode_type_nonexist(String wf_app_mode_type_nonexist) {
+		this.wf_app_mode_type_nonexist = wf_app_mode_type_nonexist;
 	}
 	
 }

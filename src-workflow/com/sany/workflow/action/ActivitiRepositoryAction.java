@@ -24,22 +24,27 @@ import java.util.Map;
 import java.util.zip.ZipInputStream;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.RollbackException;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
-import org.frameworkset.web.servlet.mvc.MultiActionController;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
+import com.sany.application.entity.WfApp;
+import com.sany.application.service.AppcreateService;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessDeployment;
 import com.sany.workflow.service.ActivitiConfigService;
+import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 
 /**
@@ -47,12 +52,18 @@ import com.sany.workflow.service.ActivitiService;
  * @since 2012-3-22 下午6:03:09
  */
 public class ActivitiRepositoryAction {
+	
+	private static Log logger = LogFactory.getLog(ActivitiRepositoryAction.class);
 
 	private static final String FILE_TYPE_ZIP = "zip";
 
 	private ActivitiService activitiService;
 	
 	private ActivitiConfigService activitiConfigService;
+	
+	private AppcreateService appcreateService;
+	
+	private ActivitiRelationService activitiRelationService;
 	
 	//private ActivitiTestService activitiTestService;
 	
@@ -88,11 +99,21 @@ public class ActivitiRepositoryAction {
 				}
 				if(pd!=null){
 					activitiConfigService.addProBusinessType(pd.getKEY_(), processDeployment.getBusinessTypeId());
+					
+					activitiRelationService.addAppProcRelation(pd,processDeployment.getWf_app_id());
 				}
 			}
 			tm.commit();
 			return result;
 		} catch (Exception e) {
+			
+			logger.error(e);
+			try {
+				tm.rollback();
+			} catch (RollbackException e1) {
+				// TODO Auto-generated catch block
+				logger.error(e1);
+			}
 			
 			return StringUtil.exceptionToString(e);
 		}
@@ -121,6 +142,12 @@ public class ActivitiRepositoryAction {
 			ProcessDefCondition processDefCondition, ModelMap model) {
 		try {
 			// 获取流程部署信息集合
+			if(processDefCondition == null){
+				processDefCondition = new ProcessDefCondition();
+			}
+			
+			processDefCondition.setWf_app_mode_type_nonexist("第三方应用");
+			
 			ListInfo listInfo = activitiService.queryProcessDefs(offset,
 					pagesize, processDefCondition);
 //			if(listInfo!=null){
@@ -275,9 +302,22 @@ public class ActivitiRepositoryAction {
 		pd.setDEPLOYMENT_TIME_STRING_(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(pd.getDEPLOYMENT_TIME_()));
 		return pd;
 	}
+	
+	public @ResponseBody(datatype = "json")
+	List<WfApp> getWfAppData() {
+
+		List<WfApp> wfAppList = appcreateService.queryWfApp(new WfApp());
+		return wfAppList;
+	}
 
 	public String index() {
+		
 		return "path:index";
+	}
+	
+	public String workflowmanager(){
+		
+		return "path:workflowmanager";
 	}
 
 	public void getProccessPic(String processId,HttpServletResponse response) throws IOException {
@@ -287,7 +327,7 @@ public class ActivitiRepositoryAction {
 		}
 	}
 	
-	public @ResponseBody() String getProccessXML(String processId) throws IOException {
+	public @ResponseBody(datatype="xml") String getProccessXML(String processId) throws IOException {
 		if(processId!=null&&!processId.equals("")){
 			
 			return activitiService.getProccessXML(processId);

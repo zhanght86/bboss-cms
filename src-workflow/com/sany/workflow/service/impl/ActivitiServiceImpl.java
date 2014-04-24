@@ -41,6 +41,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang.StringUtils;
 import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -51,7 +52,9 @@ import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
+import com.sany.workflow.entity.WfAppProcdefRelation;
 import com.sany.workflow.service.ActivitiConfigService;
+import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
@@ -74,6 +77,7 @@ public class ActivitiServiceImpl implements ActivitiService ,org.frameworkset.sp
 	@SuppressWarnings("unused")
 	private ManagementService managementService;// 用于管理定时任务
 	private IdentityService identityService;// 用于管理组织结构
+	private ActivitiRelationService activitiRelationService;//应用管理
 
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
@@ -1384,6 +1388,11 @@ public void rejecttoPreTask(String taskId,String username){
 					repositoryService.deleteDeployment(
 							pd.getDeploymentId(), true);
 					this.activitiConfigService.deleteActivitiNodeInfo(pd.getKey());
+					
+					WfAppProcdefRelation relation = new WfAppProcdefRelation();
+					relation.setProcdef_id(pd.getId());
+					activitiRelationService.deleteAppProcRelation(relation);
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -1979,6 +1988,12 @@ public void rejecttoPreTask(String taskId,String username){
 			if(processDefCondition.getResourceName()!=null&&!processDefCondition.getResourceName().isEmpty()){
 				processDefCondition.setResourceName("%"+processDefCondition.getResourceName()+"%");
 			}
+			if(StringUtils.isNotEmpty(processDefCondition.getWf_app_name())){
+				processDefCondition.setWf_app_name("%"+processDefCondition.getWf_app_name()+"%");
+			}
+			if(StringUtils.isNotEmpty(processDefCondition.getWf_app_mode_type_nonexist())){
+				processDefCondition.setWf_app_mode_type_nonexist("%"+processDefCondition.getWf_app_mode_type_nonexist()+"%");
+			}
 			ListInfo listInfo = executor.queryListInfoBean(ProcessDef.class, "queryProdef", offset, pagesize, processDefCondition);
 			return listInfo;
 		}catch(Exception e){
@@ -2361,6 +2376,10 @@ public void rejecttoPreTask(String taskId,String username){
 				ret.append(LoadProcess.getProcessKey()).append("->").append(LoadProcess.getProcessName()).append("<br>");
 				activitiConfigService.addActivitiNodeInfo(LoadProcess.getProcessKey());	
 				activitiConfigService.addProBusinessType(LoadProcess.getProcessKey(), LoadProcess.getBusinessType());
+				ProcessDef proc = new ProcessDef();
+				proc.setID_(LoadProcess.getProcdef_id());
+				activitiRelationService.addAppProcRelation(proc, LoadProcess.getWf_app_id());
+				
 			}
 			tm.commit();
 			return ret.toString();

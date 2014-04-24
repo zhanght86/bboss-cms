@@ -270,7 +270,7 @@
             /WEB-INF/conf/commons/bboss-*.xml,
             /WEB-INF/conf/test/bboss-*.xml,
             /WEB-INF/conf/workflow/bboss-*.xml,
-			/WEB-INF/conf/workflow/appcreate/bboss-*.xml,
+			/WEB-INF/conf/application/bboss-*.xml,
             /WEB-INF/conf/document/bboss-*.xml,
             /WEB-INF/conf/params/bboss-*.xml,
             /WEB-INF/conf/counter/bboss-*.xml,

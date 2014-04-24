@@ -17,5 +17,7 @@
 			<property name="enableToken" value="true"/>
 		</construction>
 	</property>
-	<property name="tokenStoreService" class="org.frameworkset.web.token.MongodbTokenStore"/>
+	<property name="tokenStoreService" class="org.frameworkset.web.token.MongodbTokenStore">
+		<property name="validateApplication" class="com.sany.application.service.impl.SYSValidationApplication"/>
+	</property>
 </properties>

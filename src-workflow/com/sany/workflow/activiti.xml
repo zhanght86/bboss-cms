@@ -22,6 +22,15 @@
 			#if($deploymentId && !$deploymentId.equals(""))
 				and d.id_ = #[deploymentId]
 			#end
+			#if($wf_app_id && !$wf_app_id.equals(""))
+				and p.ID_ in (select procdef_id from td_wf_app_proc_relation where wf_app_id = #[wf_app_id])
+			#end
+			#if($wf_app_name && !$wf_app_name.equals(""))
+				and p.ID_ in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and (a.system_id like #[wf_app_name] or a.system_name like #[wf_app_name]))
+			#end
+			#if($wf_app_mode_type_nonexist && !$wf_app_mode_type_nonexist.equals(""))
+				and p.ID_ not in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and a.app_mode_type like #[wf_app_mode_type_nonexist])
+			#end
 			
 		]]>
 	</property>
@@ -741,4 +750,54 @@
 			select business_name from td_wf_businesstype where business_id = (select businesstype_id from td_wf_pro_businesstype where process_key=?)
 		]]>
 	</property>
+	
+	
+	<property name="insertAppProcdefRelation">
+		<![CDATA[
+			insert into td_wf_app_proc_relation 
+				(ID, WF_APP_ID, PROCDEF_ID) 
+			values
+				(#[id], #[wf_app_id], #[procdef_id])
+		]]>
+	</property>
+	
+	<property name="deleteAppProcdefRelation">
+		<![CDATA[
+			delete from td_wf_app_proc_relation  
+			where 1=1
+				#if($id && !$id.equals(""))
+					and id = #[id] 
+				#end
+				#if($wf_app_id && !$wf_app_id.equals(""))
+					and wf_app_id = #[wf_app_id] 
+				#end
+				#if($procdef_id && !$procdef_id.equals(""))
+					and procdef_id = #[procdef_id] 
+				#end
+		]]>
+	</property>	
+	
+	<property name="selectAppProcdefRelation">
+		<![CDATA[
+			select * from td_wf_app_proc_relation  
+			where 1=1
+				#if($id && !$id.equals(""))
+					and id = #[id] 
+				#end
+				#if($wf_app_id && !$wf_app_id.equals(""))
+					and wf_app_id = #[wf_app_id] 
+				#end
+				#if($procdef_id && !$procdef_id.equals(""))
+					and procdef_id = #[procdef_id] 
+				#end
+		]]>
+	</property>
+	<property name="updateAppProcdefRelation">
+		<![CDATA[
+			update td_wf_app_proc_relation  
+			       set id = #[id],wf_app_id=#[wf_app_id],procdef_id=#[procdef_id]
+			       where id=#[id]
+		]]>
+	</property>
+	
 </properties>

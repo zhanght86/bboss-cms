@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 
+		描述:应用创建模块
+	    author:liud44
+		CopyRight:sany
+		版本:1.0
+	    Date: 2014-03-28
+	-->
+
+	<property name="/application/*.page"
+		path:index="/application/index.jsp"
+		path:queryListPage="/application/queryListPage.jsp"
+		path:updateAppInfo="/application/updateAppInfo.jsp"
+		path:viewAppInfo="/application/appInfo.jsp"
+		
+		f:appcreateService="attr:application.appcreateService"
+		
+		class="com.sany.application.action.AppcreateAction" />
+	
+	<property name="application.appcreateService"
+		f:executor="attr:application.configsqlexecutor"
+		class="com.sany.application.service.impl.AppcreateServiceImpl" />
+	
+	
+	<property name="application.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/application/wfApp.xml"/>
+		</construction>
+	</property>
+	
+		
+</properties>

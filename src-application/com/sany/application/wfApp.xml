@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<property name="selectWfAppList">
+		<![CDATA[
+			select a.* from td_wf_app a
+			where 1=1
+				#if($id && !$id.equals(""))
+					and a.id = #[id] 
+				#end
+				#if($system_secret && !$system_secret.equals(""))
+					and a.system_secret = #[system_secret] 
+				#end
+				#if($system_id && !$system_id.equals(""))
+					and a.system_id like #[system_id] 
+				#end
+				#if($system_name && !$system_name.equals(""))
+					and a.system_name like #[system_name] 
+				#end
+				#if($app_mode_type && !$app_mode_type.equals(""))
+					and a.app_mode_type like #[app_mode_type] 
+				#end
+				#if($app_mode_type_nonexist && !$app_mode_type_nonexist.equals(""))
+					and a.app_mode_type not like #[app_mode_type_nonexist] 
+				#end
+		]]>
+	</property>
+	
+	<property name="deleteWfApp">
+		<![CDATA[
+			delete from td_wf_app  
+			where 1=1
+				#if($id && !$id.equals(""))
+					and id like #[id] 
+				#end
+				#if($system_id && !$system_id.equals(""))
+					and system_id like #[system_id] 
+				#end
+				#if($system_name && !$system_name.equals(""))
+					and system_name like #[system_name] 
+				#end
+				#if($app_mode_type && !$app_mode_type.equals(""))
+					and app_mode_type like #[app_mode_type] 
+				#end
+		]]>
+	</property>
+	
+	<property name="insertWfApp">
+		<![CDATA[
+			insert into td_wf_app 
+				(ID, SYSTEM_ID, SYSTEM_NAME, WF_PUBLISHED_URL, WF_MANAGE_URL, APP_MODE_TYPE, CREATOR, CREATE_DATE,
+			     TODO_URL, APP_URL, SYSTEM_SECRET, SYSTEM_SECRET_TEXT) 
+			values
+				(#[id], #[system_id], #[system_name], #[wf_published_url], #[wf_manage_url], #[app_mode_type],#[creator],#[create_date],
+			     #[todo_url], #[app_url], #[system_secret], #[system_secret_text])
+		]]>
+	</property>
+	
+	<property name="updateWfApp">
+		<![CDATA[
+			update td_wf_app
+			    set id=#[id],SYSTEM_ID=#[system_id],SYSTEM_NAME=#[system_name],APP_MODE_TYPE=#[app_mode_type],
+			    TODO_URL=#[todo_url],APP_URL=#[app_url],UPDATE_PERSON=#[update_person],UPDATE_DATE=#[update_date],
+			    SYSTEM_SECRET=#[system_secret],SYSTEM_SECRET_TEXT=#[system_secret_text]
+			    where id=#[id]
+				
+		]]>
+	</property>
+	
+	<property name="validateAppSecret">
+		<![CDATA[
+			select count(1) from td_wf_app where SYSTEM_ID=? and SYSTEM_SECRET=?
+		]]>
+	</property>
+	
+</properties>

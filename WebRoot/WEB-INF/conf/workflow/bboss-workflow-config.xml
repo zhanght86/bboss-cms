@@ -48,9 +48,17 @@
 		
 	</property>
 	
+	<property name="activitiRelationService">
+		f:executor="attr:activiti.configsqlexecutor"
+		<construction>
+			<property value="com/sany/workflow/activiti.xml"/>
+		</construction>
+	</property>
+	
 	<property name="activitiService"
 		f:executor="attr:activiti.configsqlexecutor"
 		f:activitiConfigService="attr:activitiConfigService"
+		f:activitiRelationService="attr:activitiRelationService"
 		class="com.sany.workflow.service.impl.ActivitiServiceImpl">
 		<construction>
 			<property value="activiti.cfg.xml"/>

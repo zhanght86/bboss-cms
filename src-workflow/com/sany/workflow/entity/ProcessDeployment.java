@@ -45,6 +45,9 @@ public class ProcessDeployment {
 	}
 
 	private String businessTypeId;
+	
+	private String wf_app_id; 
+	
 	public String getID_() {
 		return ID_;
 	}
@@ -93,5 +96,12 @@ public class ProcessDeployment {
 		this.businessTypeId = businessTypeId;
 	}
 
+	public String getWf_app_id() {
+		return wf_app_id;
+	}
+
+	public void setWf_app_id(String wf_app_id) {
+		this.wf_app_id = wf_app_id;
+	}
 	
 }

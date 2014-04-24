@@ -5,7 +5,7 @@
 			<construction>
 				<property value="org.frameworkset.web.token.TokenStore"/>		
 				<property>
-					<![CDATA[http://localhost:8081/bboss-mvc/hessian?service=tokenStoreService&container=tokenconf.xml]]>
+					<![CDATA[http://10.0.15.38:9081/SanyToken/hessian?service=tokenStoreService&container=tokenconf.xml]]>
 				</property>	
 			</construction>
 		</property>

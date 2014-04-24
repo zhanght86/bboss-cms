@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
-<%@ page import="com.frameworkset.platform.ftp.FtpUpfile" %>
+<%@ page import="com.frameworkset.platform.cms.util.FtpUpfile" %>
   <%
     //测试ftp联接  
 	
