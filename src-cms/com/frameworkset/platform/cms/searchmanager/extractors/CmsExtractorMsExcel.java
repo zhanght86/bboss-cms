@@ -87,12 +87,12 @@ public final class CmsExtractorMsExcel extends A_CmsTextExtractorMsOfficeBase im
     	Map metaInfo = null;
     	if(this.version == ContentHandler.VERSION_2003)
     	{
-    		 readExcel(in);
+    		result = this.readExcel(in);
     		 metaInfo = extractMetaInformation();
     	}
     	else
     	{
-    		readExcel2007(in);
+    		result = readExcel2007(in);
     		 metaInfo = extractMetaInformation();
     	}
 //        // now extract the meta information using POI 
