@@ -33,6 +33,6 @@
 	    window.location.href = wholePath;
 	}
 </script>
-<input type="text" name="jumpTo" style="width:40px" value=""> 
-<input type="button" value="${jumpToStr}"  onclick="jumpTo(document.all('jumpTo').value)">
+<input type="text" id="jumpTo" name="jumpTo" style="width:40px" value=""> 
+<input type="button" value="${jumpToStr}" style="height:40px;" onclick="jumpTo(document.getElementById('jumpTo').value)">
 </span></div>
