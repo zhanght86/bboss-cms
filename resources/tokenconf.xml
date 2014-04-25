@@ -7,7 +7,7 @@
 			<property name="temptokenlivetime" value="3600000"/>			
 			<property name="dualtokenlivetime" value="2592000000"/>
 			<property name="tokenscaninterval" value="1800000"/>
-			<property name="tokenstore" refid="attr:tokenStoreService"/>
+			<property name="tokenstore" value="mem"/>
 			
 			<!-- 
 			<property name="tokenstore" value="mongodb|org.frameworkset.web.token.MongodbTokenStore"/>

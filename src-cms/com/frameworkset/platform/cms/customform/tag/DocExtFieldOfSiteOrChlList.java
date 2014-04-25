@@ -182,7 +182,7 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl
 		if("1".equals(type))
 			sql = "select * from td_cms_extfield order by field_id asc";
 		//频道
-		if("2".equals(type))
+		else if("2".equals(type))
 		{
 			String docid = request.getParameter("docid");
 			if(StringUtil.isEmpty(docid))
@@ -197,6 +197,15 @@ public class DocExtFieldOfSiteOrChlList extends DataInfoImpl
 						"in (select b.field_id from td_cms_channelfield b where (b.channel_id = " + id + " and b.field_owner=0) or (b.channel_id = " + docid + " and b.field_owner=1) )" +
 						" order by a.field_id asc";
 			}
+			
+		}
+		else if("3".equals(type))
+		{
+			
+			
+			sql = "select * from td_cms_extfield a where a.field_id " +
+						"in (select b.field_id from td_cms_channelfield b where (b.channel_id = (select CHANNEL_ID from td_cms_document where DOCUMENT_ID=" + id + ") and b.field_owner=0) or (b.channel_id = " + id + " and b.field_owner=1) )" +
+						" order by a.field_id asc";
 			
 		}
 		try

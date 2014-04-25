@@ -122,16 +122,17 @@
         </foreign-key>
     </table>
     <table name="TD_CMS_CHANNELFIELD">
-        <column name="FIELD_ID" primaryKey="true" required="true"
+        <column name="FIELD_ID" required="true"
             size="10" type="DECIMAL"/>
-        <column name="CHANNEL_ID" primaryKey="true" required="true"
+        <column name="CHANNEL_ID"  required="true"
             size="10" type="DECIMAL"/>
+         <column name="field_owner" required="true"
+            size="2" type="DECIMAL" default="0"/>    
+            
         <foreign-key foreignTable="TD_CMS_EXTFIELD">
             <reference foreign="FIELD_ID" local="FIELD_ID"/>
         </foreign-key>
-        <foreign-key foreignTable="TD_CMS_CHANNEL">
-            <reference foreign="CHANNEL_ID" local="CHANNEL_ID"/>
-        </foreign-key>
+        
     </table>
     <table name="TD_CMS_CHANNEL_VOTE">
         <column name="CHANNEL_ID" primaryKey="true" required="true"
