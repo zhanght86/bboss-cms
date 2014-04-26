@@ -4,7 +4,8 @@
 <database name="bspf">
     <table name="authtemptokens">
         <column name="ID" primaryKey="true" required="true" size="100" type="VARCHAR"/>
-        <column name="token" size="500" type="VARCHAR"/>
+        <column name="token" size="100" type="VARCHAR"/>
+        <column name="signtoken" size="1000" type="VARCHAR"/>
         <column name="createTime" size="20" type="DECIMAL"/>
         <column name="lastVistTime" size="20" type="DECIMAL"/>
         <column name="livetime" size="20" type="DECIMAL"/>
@@ -14,7 +15,8 @@
     </table>
     <table name="dualtokens">
         <column name="ID" primaryKey="true" required="true" size="100" type="VARCHAR"/>
-        <column name="token" size="1000" type="VARCHAR"/>
+        <column name="token" size="100" type="VARCHAR"/>
+        <column name="signtoken" size="1000" type="VARCHAR"/>
         <column name="createTime" size="20" type="DECIMAL"/>
         <column name="lastVistTime" size="20" type="DECIMAL"/>
         <column name="livetime" size="20" type="DECIMAL"/>
@@ -34,5 +36,14 @@
         <column name="privateKey" size="500" type="VARCHAR"/>
         <column name="createTime" size="20" type="DECIMAL"/>
         <column name="publicKey" size="500" type="VARCHAR"/>
+    </table>
+    
+     <table name="tickets">
+        <column name="token" primaryKey="true" required="true" size="100" type="VARCHAR"/>
+        <column name="ticket" size="1000" type="VARCHAR"/>
+        <column name="createTime" size="20" type="DECIMAL"/>
+        <column name="livetime" size="20" type="DECIMAL"/>
+        <column name="appid" size="100" type="VARCHAR"/>
+         <column name="lastVistTime" size="20" type="DECIMAL"/>
     </table>
 </database> 

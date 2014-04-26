@@ -56,7 +56,7 @@ public class CheckTokenContoller implements CheckTokenService{
 		}
 		else
 		{
-			return TokenStore.temptoken_request_validateresult_notenabletoken;
+			return TokenStore.token_request_validateresult_notenabletoken;
 		}
 	}
 
