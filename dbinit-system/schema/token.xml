@@ -33,14 +33,14 @@
     </table>
      <table name="eckeypairs">
         <column name="appid" primaryKey="true" required="true" size="100" type="VARCHAR"/>
-        <column name="privateKey" size="500" type="VARCHAR"/>
+        <column name="privateKey" size="1500" type="VARCHAR"/>
         <column name="createTime" size="20" type="DECIMAL"/>
-        <column name="publicKey" size="500" type="VARCHAR"/>
+        <column name="publicKey" size="1500" type="VARCHAR"/>
     </table>
     
      <table name="tickets">
         <column name="token" primaryKey="true" required="true" size="100" type="VARCHAR"/>
-        <column name="ticket" size="1000" type="VARCHAR"/>
+        <column name="ticket" size="1500" type="VARCHAR"/>
         <column name="createTime" size="20" type="DECIMAL"/>
         <column name="livetime" size="20" type="DECIMAL"/>
         <column name="appid" size="100" type="VARCHAR"/>

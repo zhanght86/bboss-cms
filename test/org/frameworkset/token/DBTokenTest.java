@@ -3,35 +3,36 @@ package org.frameworkset.token;
 import org.frameworkset.security.ecc.ECCHelper;
 import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
-import org.frameworkset.web.token.NullValidateApplication;
 import org.frameworkset.web.token.TokenStore;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.sany.application.service.impl.SYSValidationApplication;
 
 public class DBTokenTest {
 	private static DBTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
 	private String appid = "sim";
-	private String secret = "xxxxxxxxxxxxxxxxxxxxxx";
+	private String secret = "A75399B0158B6A1AABBF8F7C3211EB13";
 	
 	@Before
 	public void init() throws Exception
 	{
 		mongodbTokenStore = new DBTokenStore();
 		mongodbTokenStore.setECCCoder(ECCHelper.getECCCoder());
-		mongodbTokenStore.setValidateApplication(new NullValidateApplication());
+		mongodbTokenStore.setValidateApplication(new SYSValidationApplication());
 		mongodbTokenStore.setTempTokendualtime(TokenStore.DEFAULT_TEMPTOKENLIVETIME);
 		mongodbTokenStore.setTicketdualtime(TokenStore.DEFAULT_TICKETTOKENLIVETIME);
 		mongodbTokenStore.setDualtokenlivetime(TokenStore.DEFAULT_DUALTOKENLIVETIME);
 		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
 		MemToken token = mongodbTokenStore.genDualToken(appid,ticket,secret,TokenStore.DEFAULT_DUALTOKENLIVETIME);
-		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getSigntoken()).getResult());
+		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 		token = mongodbTokenStore.genTempToken();
 		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(null,null,token.getToken()).getResult());
 		token = mongodbTokenStore.genAuthTempToken(appid,ticket,secret);
-		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getSigntoken()).getResult());
+		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 	}
 	@Test
 	public void genTemptokenAndValidate() throws Exception
@@ -50,7 +51,7 @@ public class DBTokenTest {
 		//long end = System.currentTimeMillis();
 		//System.out.println(end - start);
 		//start = System.currentTimeMillis();
-		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getSigntoken()).getResult());
+		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 		//end = System.currentTimeMillis();
 		//System.out.println(end - start);
 	}
@@ -61,7 +62,7 @@ public class DBTokenTest {
 	{
 		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
 		MemToken token = mongodbTokenStore.genAuthTempToken(appid,ticket,secret);
-		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getSigntoken()).getResult());
+		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 	}
 	@Test
 	public void livecheck() throws Exception

@@ -23,7 +23,7 @@ String tokenparamname = TokenStore.temptoken_param_name;
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
 //String url = "http://localhost:8081/context/hessian?service=tokenService";
-String url = "http://localhost:8081/SanyPDP/hessian?service=tokenService";
+String url = "http://localhost:8080/SanyPDP/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -33,7 +33,7 @@ String token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * webservice方式申请token
 */
-url = "http://localhost:8081/SanyPDP/cxfservices/tokenService";
+url = "http://localhost:8080/SanyPDP/cxfservices/tokenService";
 JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
 WSServiceClientFactory.setAddress(url);
 WSServiceClientFactory.setServiceClass(TokenService.class);
@@ -45,7 +45,7 @@ token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * http请求方式申请令牌
 */
-url = "http://localhost:8081/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+url = "http://localhost:8080/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
 //url = "http://10.25.192.142:8081/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 //通过http根据账号或者工号获取ticket
