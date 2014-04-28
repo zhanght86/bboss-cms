@@ -80,7 +80,7 @@
 				//去掉遮罩
 				unblockUI();
 				
-				if (responseText == "添加成功") {
+				if (responseText == "success") {
 					W.$.dialog.alert(responseText, function() {
 						W.queryList();
 						api.close();

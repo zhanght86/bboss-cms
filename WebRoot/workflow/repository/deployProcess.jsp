@@ -16,7 +16,8 @@
 	<body>
 		<div class="form">
 			<form id="deployProcessFrom" name="deployProcessFrom" method="post"  enctype="multipart/form-data">
-			<input type="hidden" id="businessTypeId" name="businessTypeId"/>
+				<input type="hidden" id="businessTypeId" name="businessTypeId"/>
+				<input type="hidden" id="wf_app_id" name="wf_app_id" />
 				<table border="0" cellpadding="0" cellspacing="0" class="table4">
 					<tr>
 						<th width=110px >
@@ -180,7 +181,7 @@ function checkBM(){
 				unblockUI();
 				if(responseText=="success"){
 					$.dialog.alert("新增记录成功",function(){	
-							W.modifyQueryData();
+							W.queryList();
 							api.close();
 					},api);													
 				}else{
@@ -193,9 +194,15 @@ function doreset(){
 	$("#reset").click();
 }
 
-$(document).ready(function() {	
+$(document).ready(function() {
+	
 	$("#businessType").combotree({
 		url:"../businesstype/showComboxBusinessTree.page"
 		});
+	
+	var wf_app_id = W.document.getElementById("wf_app_id").value;
+	
+	$("#wf_app_id").val(wf_app_id);
+
 });
 </script>

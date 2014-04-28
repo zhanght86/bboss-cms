@@ -39,6 +39,7 @@
 	       		<th><pg:message code="sany.pdp.workflow.picture.resource.path"/></th>
 	       		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
 	       		<th><pg:message code="sany.pdp.workflow.business.select"/></th>
+	       		<th>应用</th>
 	       		
 	       	</pg:header>	
 	
@@ -49,11 +50,10 @@
 			<pg:notempty actual="${unloadProcesses}" >
 			
 			      <pg:list actual="${unloadProcesses}">
-			   		<tr onDblClick="processDefs('<pg:cell colName="ID_" />')">
-			   		      
-			                   
+			   		<tr>
 			                    
 			                <td><pg:cell colName="NAME_" maxlength="8" replace="..."/><input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/>
+			                    <input id="procdef_id" type="hidden" name="procdef_id" value="<pg:cell colName="ID_" />"/>
 			                    <input id="processKey" type="hidden" name="processKey" value="<pg:cell colName="KEY_" />"/>
 			                    <input id="processName" type="hidden" name="processName" value="<pg:cell colName="NAME_" />"/></td>
 			        		<td><pg:cell colName="KEY_" /></td>       
@@ -64,7 +64,10 @@
 			           		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
 			           		<td><select class="easyui-combotree" id='businessType' name='businessType'
 												style="width: 120px;"></td>
-			           		
+							<td><select id='wf_app_id' name='wf_app_id'  
+												style="width: 120px;">
+								</select>
+							</td>
 			        </tr>
 				 </pg:list>
 				 </pg:notempty >
@@ -91,10 +94,55 @@ $(document).ready(function() {
  	
  	 $('#loadButton').click(function() {  
   	   loadProcess();
-       }); 
+       });
+ 	 
+ 	getTreeDate();
+ 	initWfAppSelect();
  	
 });
+
+var treeData = null;
+
+function getTreeDate(){
+	$.ajax({
+ 	 	type: "POST",
+		url : "getWfAppData.page",
+		dataType : 'json',
+		async:false,
+		beforeSend : function(XMLHttpRequest){
+			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+		success : function(data){
+			if (data) {
+				treeData = data;
+			} else {
+				$.dialog.alert('查询应用菜单异常');
+			}
+		}	
+	 });
+}
+
+function initWfAppSelect(){
+	if(treeData){
+		var treeModuleHtml = "<option value=''></option>";
+		var seq = 1;
+		for(var i=0; i<treeData.length; i++){
+			treeModuleHtml += "<option value='"+treeData[i].id+"'>"+treeData[i].system_id+" "+treeData[i].system_name+"</option>";
+		}
+		$("[id=wf_app_id]").each(
+	 			function(){ 
+			 		$(this).append(treeModuleHtml);
+	 			}
+	 		);
+	}
+}
+
 function loadProcess() {
+	
+	if($('#businessType').combotree('getValue')==''){
+		 alert("请选择所属业务类型");
+	  	return;
+	  }
 	
 	$.ajax({
  	 	type: "POST",
@@ -104,7 +152,7 @@ function loadProcess() {
 		async:false,
 		beforeSend: function(XMLHttpRequest){
 			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			 	blockUI('正在撞在流程信息...');
+			 	blockUI('正在装载流程信息...');
 			},
 		success : function(data){
 			unblockUI();

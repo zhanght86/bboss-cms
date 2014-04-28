@@ -53,7 +53,7 @@ public class AppcreateAction {
      */
     public String queryListPage(@PagerParam(name = PagerParam.OFFSET) long offset,
             @PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-            WfApp wfApp, ModelMap model) {
+            WfApp wfApp, ModelMap model) throws Exception {
     	
         ListInfo listInfo = appcreateService.findListPage(offset, pagesize, wfApp);
         
@@ -69,7 +69,7 @@ public class AppcreateAction {
      * @param model
      * @return
      */
-    public String updateAppInfo(String appInfoId, ModelMap model){
+    public String updateAppInfo(String appInfoId, ModelMap model) throws Exception {
     	
     	if(StringUtils.isNotEmpty(appInfoId)){
     		WfApp wfApp = appcreateService.queryWfAppById(appInfoId);
@@ -85,7 +85,7 @@ public class AppcreateAction {
      * @param model
      * @return
      */
-    public String viewAppInfo(String appInfoId, ModelMap model){
+    public String viewAppInfo(String appInfoId, ModelMap model) throws Exception {
     	
     	if(StringUtils.isNotEmpty(appInfoId)){
     		WfApp wfApp = appcreateService.queryWfAppById(appInfoId);
@@ -100,7 +100,7 @@ public class AppcreateAction {
      * @param wfApp
      * @return
      */
-    public @ResponseBody String validateWfApp(WfApp wfApp){
+    public @ResponseBody String validateWfApp(WfApp wfApp) throws Exception {
     	
     	String validateResult = "fail";
     	
@@ -182,7 +182,7 @@ public class AppcreateAction {
 		return "success";
 	}
 	
-	public @ResponseBody String deleteAppInfo(String appInfoId){
+	public @ResponseBody String deleteAppInfo(String appInfoId) throws Exception {
 		
 		String actionResult = "fail";
 		

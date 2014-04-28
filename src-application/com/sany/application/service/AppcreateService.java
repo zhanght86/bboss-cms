@@ -15,26 +15,26 @@ public interface AppcreateService {
      * @param condition
      * @return
      */
-    public ListInfo findListPage(long offset, int pagesize, WfApp condition);
+    public ListInfo findListPage(long offset, int pagesize, WfApp condition) throws Exception;
     
     /**
      * 根据ID加载应用
      * @param wfAppId
      * @return
      */
-    public WfApp queryWfAppById(String wfAppId);
+    public WfApp queryWfAppById(String wfAppId) throws Exception;
     
     /**
      * 查询应用列表
      * @param wfAppId
      * @return
      */
-    public List<WfApp> queryWfApp(WfApp wfApp);
+    public List<WfApp> queryWfApp(WfApp wfApp) throws Exception;
     
     /**
      * 验证应用口令
      */
-    public Boolean validateWfAppSecret(WfApp wfApp);
+    public Boolean validateWfAppSecret(WfApp wfApp) throws Exception;
     
     /**
      * 验证应用口令
@@ -45,7 +45,7 @@ public interface AppcreateService {
      * 删除应用
      * @param wfAppId
      */
-    public void deleteWfAppById(String wfAppId);
+    public void deleteWfAppById(String wfAppId) throws Exception;
     
     /**
      * 保存应用

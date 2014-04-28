@@ -260,14 +260,27 @@
     		for(var i=0; i<treeData.length; i++){
     			if(app_query!=null && app_query!=""){
     				if(treeData[i].system_id.toLowerCase().indexOf(app_query.toLowerCase()) >= 0 || treeData[i].system_name.toLowerCase().indexOf(app_query.toLowerCase()) >= 0){
-    					treeModuleHtml += 
-    						"<li id=\""+treeData[i].id+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"',this)\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
-    						seq++;
+    					if(treeData[i].sso_url != "" && treeData[i].sso_url != null){
+    						treeModuleHtml += 
+    	    					"<li id=\""+treeData[i].id+"\"><a target=\"_blank\" href=\""+treeData[i].sso_url+"\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
+    	    					seq++;
+    					}else{
+    						treeModuleHtml += 
+        						"<li id=\""+treeData[i].id+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"',this)\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
+        						seq++;	
+    					}
+    					
     				}
     			}else{
-    				treeModuleHtml += 
-    					"<li id=\""+treeData[i].id+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"',this)\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
-						seq++;
+    				if(treeData[i].sso_url != "" && treeData[i].sso_url != null){
+						treeModuleHtml += 
+	    					"<li id=\""+treeData[i].id+"\"><a target=\"_blank\" href=\""+treeData[i].sso_url+"\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
+	    					seq++;
+					}else{
+						treeModuleHtml += 
+    						"<li id=\""+treeData[i].id+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"',this)\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>";
+    						seq++;	
+					}
     			}
     		}
     	}
@@ -358,7 +371,7 @@
 														style="width: 120px;">
 											</td>
 											<th id="app_query_th">
-												应用:
+												<pg:message code="sany.pdp.workflow.processdef.application"/>:
 											</th>
 											<td id="wf_app_name_td">
 												<input id="wf_app_name" name="wf_app_name" type="text"

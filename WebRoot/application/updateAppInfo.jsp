@@ -8,9 +8,7 @@
 </head>
 <script type="text/javascript">
 function pageInit(){
-	//$("#app_mode_type").combotree({
-	//	url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
-	//});
+	
 	$("#app_mode_type").val($("#app_mode_type_hidden").val());
 	
 	if($("#old_system_secret_hidden").val() == ""){
@@ -19,74 +17,8 @@ function pageInit(){
 	}
 }
 
-function changeSystemSeqType(type_id){
-	if(type_id==1){
-		
-		var secret = $("#system_secret_text_hidden").val();
-
-		var secretHTML = "<input id=\"system_secret_text\" name=\"system_secret_text\" type=\"text\"\n" +
-			"\t\t\t\t\t\t\t class=\"w120 input_default easyui-validatebox\"\n" + 
-			"\t\t\t\t\t\t\trequired=\"true\" maxlength=\"100\" /><font color=\"red\">*</font><a href=\"javascript:void(0)\" class=\"bt_1\" id=\"changeButton\"\n" + 
-			"\t\t\t\t\tonclick=\"changeSystemSeqType(2);\"><span id=\"system_seq_span\">密文显示</span></a>" + 
-			"<input type=\"hidden\" id=\"system_secret_text_hidden\" name=\"system_secret_text_hidden\" />";
-			
-		$("#secret_td").html(secretHTML);
-		$("#old_secret_tr").remove();
-		$("#re_secret_tr").remove();
-		if($("#old_system_secret_hidden").val() != "" && false){
-			
-			var oldSecretHTML = "<tr id=\"old_secret_tr\">\n" +
-			"\t\t<th>原口令：</th>\n" + 
-			"\t\t<td style=\"width:220px;\"><input id=\"old_system_secret\" name=\"old_system_secret\" type=\"password\"\n" + 
-			"\t\t\t\tvalue=\"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-			"\t\t\t\trequired=\"true\" maxlength=\"100\" /><font id=\"re_secret_font\" color=\"red\">*</font></td>\n" + 
-			"</tr>";
-			
-			$("#secret_tr").before(oldSecretHTML);
-		}
-		
-		if(secret != null && secret != ""){
-			$("#system_secret_text").val(secret);
-			$("#system_secret_text_hidden").val(secret);
-		}
-		
-	}else{
-		var secret = $("#system_secret_text").val();
-		
-		var secretHTML = "<input id=\"system_secret\" name=\"system_secret\" type=\"password\"\n" +
-			"\t\t\t\t\t\t\t class=\"w120 input_default easyui-validatebox\"\n" + 
-			"\t\t\t\t\t\t\trequired=\"true\" maxlength=\"100\" /><font color=\"red\">*</font><a href=\"javascript:void(0)\" class=\"bt_1\" id=\"changeButton\"\n" + 
-			"\t\t\t\t\tonclick=\"changeSystemSeqType(1);\"><span id=\"system_seq_span\">明文显示</span></a>" + 
-			"<input type=\"hidden\" id=\"system_secret_text_hidden\" name=\"system_secret_text_hidden\" />";
-			
-		var oldSecretHTML = "<tr id=\"old_secret_tr\">\n" +
-							"\t\t<th>原口令：</th>\n" + 
-							"\t\t<td style=\"width:220px;\"><input id=\"old_system_secret\" name=\"old_system_secret\" type=\"password\"\n" + 
-							"\t\t\t\tvalue=\"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-							"\t\t\t\trequired=\"true\" maxlength=\"100\" /><font id=\"re_secret_font\" color=\"red\">*</font></td>\n" + 
-							"</tr>";
-							
-	    var reSecretHTML = "<tr id=\"re_secret_tr\">\n" +
-	    	               "\t\t<th>重复口令：</th>\n" + 
-	    	               "\t\t<td style=\"width:220px;\"><input id=\"re_system_secret\" name=\"re_system_secret\" type=\"password\"\n" + 
-	    	               "\t\t\t\tvalue=\"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-	    	               "\t\t\t\trequired=\"true\" maxlength=\"100\" /><font id=\"re_secret_font\" color=\"red\">*</font></td>\n" + 
-	    	               "</tr>";
-
-		$("#secret_td").html(secretHTML);
-		
-		$("#secret_tr").after(reSecretHTML);
-		
-		if(secret != null && secret != ""){
-			$("#system_secret").val(secret);
-			$("#system_secret_text_hidden").val(secret);
-		}
-	}
-}
-
 function initSystemSecret(){
 	var systemSecret = "<%=request.getRequestedSessionId() %>";
-	//changeSystemSeqType(1);
 	$("#system_secret").val(systemSecret);
 	$("#re_system_secret").val(systemSecret);
 }

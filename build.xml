@@ -98,7 +98,7 @@
 		
 	</target>
 	
-	<target name="compile-sany-desktop" depends="jar-system" description="compile the sany source ">
+	<target name="compile-sany-desktop" depends="jar-sany-application,jar-system" description="compile the sany source ">
 			<echo>compile the compile-all source ...</echo>
 			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 				<src path="${source}/src-sanydesktop" />				
@@ -602,7 +602,7 @@
 		
 	</target>
 	
-	<target name="compile-sany-application" depends="jar-sany-mail" description="compile the sany application source ">
+	<target name="compile-sany-application" depends="jar-sany-ldap,jar-sany-mail" description="compile the sany application source ">
 			<echo>compile the application source ...</echo>
 			<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
 				<src path="${source}/src-application" />				

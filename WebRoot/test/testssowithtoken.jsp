@@ -75,13 +75,13 @@ out.println("<div>userAccount:"+AccessControl.getAccessControl().getUserAccount(
 
 out.println("<div>账号token:"+tokenparamname + "=" + token+"</div>");
 
-String accounttokenrequest = tokenparamname + "=" + token + "&appid=" + appid + "&secret="+secret;
+String accounttokenrequest = "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
 //工号token
-account = "10006673";//如果使用工号则loginType为2，否则为1
+
 token = tokenService.genAuthTempToken(appid, secret, ticket);
 out.println("<div>工号token:"+tokenparamname + "=" + token+"</div>");
 
-String worknumbertokenrequest = tokenparamname + "=" + token + "&appid=" + appid + "&secret="+secret;
+String worknumbertokenrequest =  "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
  %>
 <html>
 <head>

@@ -16,13 +16,14 @@ package com.sany.workflow.action;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.RollbackException;
 
@@ -30,15 +31,20 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
+import org.frameworkset.web.token.TokenException;
+import org.frameworkset.web.token.TokenStore;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
+import com.sany.application.util.AppHelper;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
@@ -46,6 +52,7 @@ import com.sany.workflow.entity.ProcessDeployment;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
+import com.sany.workflow.util.WorkFlowConstant;
 
 /**
  * @author yinbp
@@ -65,11 +72,9 @@ public class ActivitiRepositoryAction {
 	
 	private ActivitiRelationService activitiRelationService;
 	
-	//private ActivitiTestService activitiTestService;
 	
 	/**
 	 * 部署流程
-	 * 
 	 * @param processDeployment
 	 * @return String
 	 */
@@ -146,7 +151,7 @@ public class ActivitiRepositoryAction {
 				processDefCondition = new ProcessDefCondition();
 			}
 			
-			processDefCondition.setWf_app_mode_type_nonexist("第三方应用");
+			processDefCondition.setWf_app_mode_type_nonexist(WorkFlowConstant.getApp_third_mode_type());
 			
 			ListInfo listInfo = activitiService.queryProcessDefs(offset,
 					pagesize, processDefCondition);
@@ -304,10 +309,68 @@ public class ActivitiRepositoryAction {
 	}
 	
 	public @ResponseBody(datatype = "json")
-	List<WfApp> getWfAppData() {
+	List<WfApp> getWfAppData(HttpServletRequest request) {
 
-		List<WfApp> wfAppList = appcreateService.queryWfApp(new WfApp());
-		return wfAppList;
+		try {
+			List<WfApp> wfAppList = appcreateService.queryWfApp(new WfApp());
+			
+			if(!CollectionUtils.isEmpty(wfAppList)){
+				
+				for(WfApp wfApp : wfAppList){
+						
+					if(WorkFlowConstant.getApp_sso_mode_type().equals(wfApp.getApp_mode_type())){
+						
+						String ssoUrl = request.getContextPath()+"/workflow/repository/appssowf.page?ssoAppId="+wfApp.getId();
+						
+						wfApp.setSso_url(ssoUrl);
+					}
+				}
+			}
+			
+			return wfAppList;
+		
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			logger.error(e);
+		} catch (TokenException e) {
+			// TODO Auto-generated catch block
+			logger.error(e);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 单点登陆地址
+	 * @param ssoAppId
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	public String appssowf(String ssoAppId, HttpServletRequest request) throws Exception
+	{
+			
+			WfApp wfApp = appcreateService.queryWfAppById(ssoAppId);
+			
+			AccessControl accesscontroler = AccessControl.getAccessControl();
+			
+			String tokenparamname = TokenStore.temptoken_param_name;
+			
+			String ticket = accesscontroler.getUserAttribute("ticket");
+			
+			String token = AppHelper.getToken(ticket);
+			
+			String[] appInfo = AppHelper.getAppInfo();
+			
+			String accounttokenrequest = tokenparamname + "=" + token + "&"+TokenStore.app_param_name+"=" + appInfo[0] + "&"+TokenStore.app_secret_param_name+"="+appInfo[1];
+					
+			String ssoUrl = "redirect:"+wfApp.getApp_url() + "/sso/ssowithtoken.page?"+accounttokenrequest+"&successRedirect=/workflow/repository/index.page";
+				
+			return ssoUrl;	
+		
 	}
 
 	public String index() {
@@ -342,20 +405,16 @@ public class ActivitiRepositoryAction {
 		}
 		return null;
 	}
-	/**
-	 * 
-	 * @param processKey
-	 * @return
-	 * @throws IOException
-	 */
 	
-	public @ResponseBody(datatype="xml") List testList(String processKey) throws IOException {
-		
-		
-		List data =  new ArrayList();
-		data.add(1);
-		data.add(2);
-		return data;
-	}
+	
 	
 }
+
+
+
+
+
+
+
+
+

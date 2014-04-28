@@ -104,7 +104,7 @@
 	
 	function loadProcess() {
 		var url="<%=request.getContextPath()%>/workflow/repository/getUnloadProcesses.page";
-	 	 $.dialog({ id:'iframeNewId', title:'待装载流程信息',width:740,height:560, content:'url:'+url});  
+	 	 $.dialog({ id:'iframeNewId', title:'待装载流程信息',width:850,height:560, content:'url:'+url});  
 		
 	}
 	
@@ -130,7 +130,7 @@
 	}
 	function nodelist(key){
  	   var url="<%=request.getContextPath()%>/test/showConfigActivitiNodeList.page?processKey="+key;
-	 	 $.dialog({ id:'iframeNewId', title:'节点配置',width:740,height:560, content:'url:'+url});   	
+	 	 $.dialog({ id:'iframeNewId', title:'节点配置',width:850,height:560, content:'url:'+url});   	
        };   
 	function suspendProcess(id) {
 		$.ajax({

@@ -32,6 +32,8 @@ public class WfApp {
 	
 	private String app_url;
 	
+	private String sso_url;
+	
 	private String system_secret;
 	
 	private String system_secret_text;
@@ -172,6 +174,14 @@ public class WfApp {
 
 	public void setApp_mode_type_nonexist(String app_mode_type_nonexist) {
 		this.app_mode_type_nonexist = app_mode_type_nonexist;
+	}
+	
+	public String getSso_url() {
+		return sso_url;
+	}
+
+	public void setSso_url(String sso_url) {
+		this.sso_url = sso_url;
 	}
 
 }

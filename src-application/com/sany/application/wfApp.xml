@@ -27,6 +27,12 @@
 		]]>
 	</property>
 	
+	<property name="selectWfApp">
+		<![CDATA[
+			select a.* from td_wf_app a where a.id = ?
+		]]>
+	</property>
+	
 	<property name="deleteWfApp">
 		<![CDATA[
 			delete from td_wf_app  

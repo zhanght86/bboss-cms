@@ -7,47 +7,6 @@
 <%@ include file="/common/jsp/css.jsp"%>
 </head>
 <script type="text/javascript">
-//function pageInit(){
-//	$("#app_mode_type").combotree({
-//		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
-//	});
-//}
-function changeSystemSeqType(type_id){
-	if(type_id==1){
-		var secret = $("#system_secret").val();
-		
-		var secretHTML = "<input id=\"system_secret_text\" name=\"system_secret_text\" type=\"text\"\n" +
-			"\t\t\t\t\t\t\tvalue=\""+secret+"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-			"\t\t\t\t\t\t\trequired=\"true\" maxlength=\"100\" /><font color=\"red\">*</font><a href=\"javascript:void(0)\" class=\"bt_1\" id=\"changeButton\"\n" + 
-			"\t\t\t\t\tonclick=\"changeSystemSeqType(2);\"><span id=\"system_seq_span\">密文显示</span></a>";
-			
-		$("#secret_td").html(secretHTML);
-		
-		if($("#re_secret_tr").length > 0){
-			
-			$("#re_secret_tr").remove();	
-		}
-		
-	}else{
-		var secret = $("#system_secret_text").val();
-		
-		var secretHTML = "<input id=\"system_secret\" name=\"system_secret\" type=\"password\"\n" +
-			"\t\t\t\t\t\t\tvalue=\""+secret+"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-			"\t\t\t\t\t\t\trequired=\"true\" maxlength=\"100\" /><font color=\"red\">*</font><a href=\"javascript:void(0)\" class=\"bt_1\" id=\"changeButton\"\n" + 
-			"\t\t\t\t\tonclick=\"changeSystemSeqType(1);\"><span id=\"system_seq_span\">明文显示</span></a>";
-		
-		var reSecretHTML = "<tr id=\"re_secret_tr\">\n" +
-			"<th>重复口令：</th>" +
-			"<td style=\"width:220px;\">" + 
-            "<input id=\"re_system_secret\" name=\"re_system_secret\" type=\"password\"\n" +
-		    "\t\t\t\t\t\t\tvalue=\"\" class=\"w120 input_default easyui-validatebox\"\n" + 
-		    "\t\t\t\t\t\t\trequired=\"true\" maxlength=\"100\" /><font id=\"re_secret_font\" color=\"red\">*</font></td>" + 
-		    "</tr>";
-			
-		$("#secret_td").html(secretHTML);
-		$("#secret_tr").after(reSecretHTML);
-	}
-}
 
 function initSystemSecret(){
 	var systemSecret = "<%=request.getRequestedSessionId() %>";

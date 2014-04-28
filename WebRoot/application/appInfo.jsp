@@ -7,14 +7,9 @@
 <%@ include file="/common/jsp/css.jsp"%>
 </head>
 <script type="text/javascript">
-function pageInit(){
-	//$("#app_mode_type").combotree({
-	//	url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
-	//});
-	//$("#app_mode_type").val($("#app_mode_type_hidden").val());
-}
+
 </script>
-<body onload="pageInit();">
+<body">
 	<div class="form_box">
 		<form id="addForm" name="addForm" method="post">
 			<fieldset>
