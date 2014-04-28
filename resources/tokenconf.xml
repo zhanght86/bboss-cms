@@ -3,10 +3,11 @@
 	<property name="token.TokenService" class="org.frameworkset.web.token.TokenService"
 		destroy-method="destroy">
 		<construction>
-			<property name="ticketdualtime" value="3600000"/>
+			<property name="ticketdualtime" value="172800000"/>
 			<property name="temptokenlivetime" value="3600000"/>			
 			<property name="dualtokenlivetime" value="2592000000"/>
 			<property name="tokenscaninterval" value="1800000"/>
+<!-- 			<property name="tokenstore" refid="attr:tokenStoreService"/> -->
 			<property name="tokenstore" value="mem"/>
 			
 			<!-- 
@@ -19,7 +20,7 @@
 			
 		</construction>
 	</property>
-	<property name="tokenStoreService" class="org.frameworkset.web.token.MongodbTokenStore">
+	<property name="tokenStoreService" class="org.frameworkset.web.token.DBTokenStore">
 		<property name="validateApplication" class="com.sany.application.service.impl.SYSValidationApplication"/>
 	</property>
 </properties>

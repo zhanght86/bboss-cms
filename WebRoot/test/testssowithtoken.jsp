@@ -16,14 +16,25 @@
 */
 String appid = "sim";
 String secret = "A75399B0158B6A1AABBF8F7C3211EB13";
-String account = "yinbp";//如果使用工号则loginType为2，否则为1
-String worknumber = "10006673";
+
+String account = "marc";//如果使用工号则loginType为2，否则为1
+account = request.getParameter("account");
+if(account == null)
+	account = "yinbp";//如果使用工号则loginType为2，否则为1
+String worknumber = "10006857";
+if(account .equals("yinbp"))
+	worknumber = "10006673";//如果使用工号则loginType为2，否则为1
+	
+//姓名	性别	工号	手机	办公电话	邮箱	一级部门	二级部门	三级部门	岗位
+//卿琳	男	21018433	13786144568	0731-85355081	qingl2@sany.com.cn	流程信息化总部	信息应用部	软件架构科	软件工程师	
+if(account .equals("qingl2"))
+	worknumber = "21018433";//如果使用工号则loginType为2，否则为1
 String tokenparamname = TokenStore.temptoken_param_name;
 
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
 //String url = "http://localhost:8081/context/hessian?service=tokenService";
-String url = "http://localhost:8080/SanyPDP/hessian?service=tokenService";
+String url = "http://localhost:8081/SanyPDP/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -33,7 +44,7 @@ String token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * webservice方式申请token
 */
-url = "http://localhost:8080/SanyPDP/cxfservices/tokenService";
+url = "http://localhost:8081/SanyPDP/cxfservices/tokenService";
 JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
 WSServiceClientFactory.setAddress(url);
 WSServiceClientFactory.setServiceClass(TokenService.class);
@@ -45,7 +56,7 @@ token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * http请求方式申请令牌
 */
-url = "http://localhost:8080/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+url = "http://localhost:8081/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
 //url = "http://10.25.192.142:8081/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 //通过http根据账号或者工号获取ticket
