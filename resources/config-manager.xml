@@ -88,8 +88,10 @@
 			-->
 			<!-- 域账号登陆 -->
 
-		<!-- <loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.ldap.LdapLoginModule" />-->
-					<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" />
+		<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.ldap.LdapLoginModule" />
+<!-- 		<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.application.util.TicketUserPasswordLoginModule" /> -->
+<!-- 		<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.application.util.TicketLDAPLoginModule" /> -->
+					<!--<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" />-->
 		</authenticate>
 		<!--
 			事件激发器工厂类

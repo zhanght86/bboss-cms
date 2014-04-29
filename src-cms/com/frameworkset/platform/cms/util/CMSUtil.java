@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,8 +36,6 @@ import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
 import org.frameworkset.util.ParamsHandler.Params;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
-import org.safehaus.uuid.UUID;
-import org.safehaus.uuid.UUIDGenerator;
 
 import bboss.org.apache.velocity.Template;
 import bboss.org.apache.velocity.exception.MethodInvocationException;
@@ -2408,8 +2407,8 @@ public class CMSUtil{
 	 * @return
 	 */
 	public static String getUUID() {
-		UUIDGenerator uuid_gen = UUIDGenerator.getInstance();
-		UUID uuid = uuid_gen.generateRandomBasedUUID();
+		
+		UUID uuid = UUID.randomUUID();
 		return uuid.toString();
 	}
 

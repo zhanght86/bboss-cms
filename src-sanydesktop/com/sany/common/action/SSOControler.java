@@ -17,8 +17,8 @@ import com.frameworkset.platform.framework.MenuHelper;
 import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.util.StringUtil;
-
 import com.liferay.portlet.iframe.action.SSOUserMapping;
 import com.sany.webseal.LoginValidate.CommonInfo;
 import com.sany.webseal.LoginValidate.UimUserInfo;
@@ -38,10 +38,11 @@ public class SSOControler {
 	public void ssowithtoken(HttpServletRequest request,
 			HttpServletResponse response) {
 		// return "path:sso";
-
+	
 		String u = "", p = "", ck = "";
 
 		String successRedirect = request.getParameter("successRedirect");
+		//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+successRedirect);
 		if (!StringUtil.isEmpty(successRedirect)) {
 			successRedirect = StringUtil.getRealPath(request, successRedirect,
 					true);
@@ -92,6 +93,8 @@ public class SSOControler {
 							control.resetSession(session);
 						String password = SSOUserMapping
 								.getUserPassword(userName);
+						if(password == null)
+							throw new AccessException("用户"+userName+"不存在。");
 						control = AccessControl.getInstance();
 						control.login(request, response, userName, password);
 
@@ -126,10 +129,11 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
-						
+						String msg = e.getMessage();
+						if(msg == null) msg = "";
 						response.sendRedirect(contextpath
 								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName + "&ip=" + ip+ "&errormsg=" + java.net.URLEncoder.encode(e.getMessage(),"UTF-8"));
+								+ userName + "&ip=" + ip+ "&errormsg=" + java.net.URLEncoder.encode(msg,"UTF-8"));
 						return;
 					}
 
@@ -166,7 +170,7 @@ public class SSOControler {
 
 			} catch (Exception e)// 检测失败,继续平台登录
 			{
-
+				e.printStackTrace();
 			}
 
 		}
@@ -199,14 +203,19 @@ public class SSOControler {
 						if (loginType.equals("1")) {
 
 							password = SSOUserMapping.getUserPassword(userName);
+							if(password == null)
+								throw new AccessException("用户"+userName+"不存在。");
 						} else {
 							java.util.Map data = SSOUserMapping
 									.getUserNameAndPasswordByWorknumber(userName);
+							if(data == null)
+								throw new AccessException("工号为"+userName+"的用户不存在。");
 							userName = (String) data.get("USER_NAME");
 							password = (String) data.get("USER_PASSWORD");
 						}
 						control = AccessControl.getInstance();
 						request.setAttribute("fromsso", "true");
+						//System.out.println("-----------userName="+userName+",password="+password);
 						control.login(request, response, userName, password);
 						if (StringUtil.isEmpty(successRedirect)) {
 							Framework framework = Framework.getInstance(control
@@ -239,10 +248,11 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
-						
+						String msg = e.getMessage();
+						if(msg == null) msg = "";
 						response.sendRedirect(contextpath
 								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName + "&errormsg=" + java.net.URLEncoder.encode(e.getMessage(),"UTF-8"));
+								+ userName + "&errormsg=" +java.net.URLEncoder.encode(msg,"UTF-8"));
 						return;
 					}
 
@@ -278,6 +288,7 @@ public class SSOControler {
 				}
 
 			} catch (Throwable ex) {
+				ex.printStackTrace();
 				String errorMessage = ex.getMessage();
 				if (errorMessage == null)
 					errorMessage = "";
