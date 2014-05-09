@@ -8,8 +8,8 @@
 		destroy-method="destroy">
 		<construction>
 			<property name="sessionTimeout" value="3600000"/>
-<!-- 			<property name="sessionstore" refid="attr:sessionstore"/> -->
-			<property name="sessionstore" value="session"/>
+			<property name="sessionstore" refid="attr:sessionstore"/> 
+			<!-- <property name="sessionstore" value="session"/>-->
 			<property name="sessionidcookiename" value="b_sessionid"/>			
 			<property name="sessionCookieHttpOnly" value="true"/>
 			<property name="cookieLiveTime" value="86400000"/>

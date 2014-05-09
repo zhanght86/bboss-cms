@@ -5,18 +5,14 @@
 		
 		<!-- 这里不需要配置destroy-method，因为bboss持久层在jvm退出时会自动调用数据源的close方法 -->
 		<property name="serverAddresses" >
-			192.168.1.101:27017
-			192.168.1.101:27018
-			192.168.1.101:27019
+			192.168.1.100:27016
 		</property>
-		<property name="option" >
-			QUERYOPTION_SLAVEOK
-		</property>
+		<property name="option" ></property>
 			
 		<!-- 连接数据库的用户名 -->
 		<property name="writeConcern" value="JOURNAL_SAFE"/>
 		<!-- 连接数据库的密码 -->
-		<property name="readPreference" value="NEAREST"/>		
+		<property name="readPreference" value=""/>		
 		
 		
 	</property>

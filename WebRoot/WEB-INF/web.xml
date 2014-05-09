@@ -148,18 +148,8 @@
       <param-name>preventDispatchLoop</param-name>
       <param-value>false</param-value>
     </init-param>	
-    <!-- 防止跨站请求过滤器相关参数开始 ，与安全认证过滤器结合使用 -->
-
-		<!-- 指定动态令牌校验失败跳转地址
-		如果没有指定直接采用redirecturl对应的地址作为跳转地址 -->
-		<init-param>
-		      <param-name>tokenfailpath</param-name>
-		      <param-value>/common/jsp/tokenfail.jsp</param-value>
-	    </init-param>
-
-
 	
-		<!-- 防止跨站请求过滤器相关参数结束 -->   
+		<!-- url权限控制开关-->   
 		<init-param>
 			<param-name>enablePermissionCheck</param-name>
 			<param-value>true</param-value>

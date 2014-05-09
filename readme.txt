@@ -1,3 +1,4 @@
+-Xms256m -Xmx1024m -XX:PermSize=256M -XX:MaxPermSize=512M -Dfile.encoding=UTF-8  -Dsun.jnu.encoding=UTF-8
 ip访问控制思路：
 CREATE TABLE TD_SM_IPCONTROL
 (
