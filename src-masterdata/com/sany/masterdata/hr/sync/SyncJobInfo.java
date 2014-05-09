@@ -14,7 +14,6 @@
  */
 package com.sany.masterdata.hr.sync;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +29,7 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.Log;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmPosition;
@@ -65,16 +65,10 @@ public class SyncJobInfo {
     public void syncAllData() {
         logger.info("Sync job info started...");
         String machinid = "";
-		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			 String ip=addr.getHostAddress().toString();//获得本机IP　　
-		     String address=addr.getHostName().toString();//获得本机名称
-		     machinid = ip + "-"+address;
+		
+        machinid = SimpleStringUtil.getHostIP();
 		     
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
        
         try {
 			LogManager logMgr = SecurityDatabase.getLogManager();

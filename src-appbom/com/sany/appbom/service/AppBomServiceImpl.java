@@ -75,9 +75,9 @@ public class AppBomServiceImpl {
 	 * @param idmap
 	 * @return
 	 */
-	public AppBom uniqueResult(Map idmap){
+	public AppBom uniqueResult(String id){
 		try{
-		AppBom bean=executor.queryObjectBean(AppBom.class, "selectByKeys", idmap);
+		AppBom bean=executor.queryObject(AppBom.class, "selectById", id);
 		return bean;
 		}catch(Throwable e){
 			

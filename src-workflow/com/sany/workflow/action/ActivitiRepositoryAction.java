@@ -320,9 +320,11 @@ public class ActivitiRepositoryAction {
 						
 					if(WorkFlowConstant.getApp_sso_mode_type().equals(wfApp.getApp_mode_type())){
 						
-						String ssoUrl = request.getContextPath()+"/workflow/repository/appssowf.page?ssoAppId="+wfApp.getId();
+						StringBuffer ssoUrl = new StringBuffer();
 						
-						wfApp.setSso_url(ssoUrl);
+						ssoUrl.append(request.getContextPath()).append("/workflow/repository/appssowf.page?ssoAppId=").append(wfApp.getId());
+						
+						wfApp.setSso_url(ssoUrl.toString());
 					}
 				}
 			}
@@ -365,11 +367,18 @@ public class ActivitiRepositoryAction {
 			
 			String[] appInfo = AppHelper.getAppInfo();
 			
-			String accounttokenrequest = tokenparamname + "=" + token + "&"+TokenStore.app_param_name+"=" + appInfo[0] + "&"+TokenStore.app_secret_param_name+"="+appInfo[1];
-					
-			String ssoUrl = "redirect:"+wfApp.getApp_url() + "/sso/ssowithtoken.page?"+accounttokenrequest+"&successRedirect=/workflow/repository/index.page";
+			StringBuffer accounttokenrequest = new StringBuffer();
+			
+			accounttokenrequest.append(tokenparamname).append("=").append(token).append("&")
+					.append(TokenStore.app_param_name).append("=").append(appInfo[0]).append("&")
+					.append(TokenStore.app_secret_param_name).append("=").append(appInfo[1]);
+			
+			StringBuffer ssoUrl = new StringBuffer();
+			
+			ssoUrl.append("redirect:").append(wfApp.getApp_url()).append("/sso/ssowithtoken.page?")
+				  .append(accounttokenrequest).append("&successRedirect=/workflow/repository/index.page");
 				
-			return ssoUrl;	
+			return ssoUrl.toString();	
 		
 	}
 

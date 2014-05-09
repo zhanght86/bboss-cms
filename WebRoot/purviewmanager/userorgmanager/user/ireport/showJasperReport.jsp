@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
-<%@ page errorPage="error.jsp" %>
+
 <%@ page import="net.sf.jasperreports.engine.*" %>
 <%@ page import="net.sf.jasperreports.engine.util.*" %>
 <%@ page import="net.sf.jasperreports.engine.export.*" %>
@@ -26,7 +26,7 @@
 	try{
 	if(page_num!=null&&page_num.length()>0)
 	{
-		jasperPrint = (JasperPrint)session.getAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
+		jasperPrint = (JasperPrint)session.getAttribute(com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
 	}
 	String strAbsPath = new File(request.getRealPath(request.getServletPath())).getParent();
 		strAbsPath = strAbsPath.replace('\\','/');
@@ -61,13 +61,13 @@
 			//如果是一个不包含查询的报表，设置WhenNoDataType
 			if(jasperReport.getQuery()==null)
 			{
-				jasperReport.setWhenNoDataType(JasperReport.WHEN_NO_DATA_TYPE_ALL_SECTIONS_NO_DETAIL);
+				jasperReport.setWhenNoDataType(JasperReport.PROPERTY_WHEN_NO_DATA_TYPE);
 			}
 		List<com.frameworkset.platform.sysmgrcore.entity.User> users = com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList.getSearchUser(request,"0");
 		
         jasperReport = (JasperReport)JRLoader.loadObject(strAbsPath +File.separator+ "queryUserInfo.jasper");
 		jasperPrint =  JasperFillManager.fillReport(jasperReport, parameters, new JRBeanCollectionDataSource(users));
-			session.setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
+			session.setAttribute(com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
 		}
 		jasperPrint.setName(reportName);
 		
@@ -142,7 +142,7 @@
 				       
 				    <PARAM NAME = "CODE" VALUE = "com.frameworkset.platform.epp.reportmanage.JasperReport.PrinterApplet" >  
 				    <PARAM NAME = "CODEBASE" VALUE = ".">
-				    <PARAM NAME = "ARCHIVE" VALUE  = "jasperprint.jar,jfreechart-1.0.10.jar,jasperreports-3.1.2-applet.jar,jcommon-1.0.13.jar" >  
+				    <PARAM NAME = "ARCHIVE" VALUE  = "jasperprint.jar,jfreechart-1.0.12.jar,jasperreports-applet-5.5.1.jar,jcommon-1.0.15.jar" >  
 				    <PARAM NAME = "type" VALUE ="application/x-java-applet;version=1.5.0"> 
 				    <PARAM NAME = "REPORT_URL" VALUE ="<%=request.getContextPath() %>/jasperreport/print">   
 				    <COMMENT>  
@@ -150,7 +150,7 @@
                                 type = "application/x-java-applet;version=1.5.0"    
 				                CODE = "com.frameworkset.platform.epp.reportmanage.JasperReport.PrinterApplet"    
 				                CODEBASE = "."  
-				                ARCHIVE = "jasperprint.jar,jfreechart-1.0.10.jar,jasperreports-3.1.2-applet.jar,jcommon-1.0.13.jar"
+				                ARCHIVE = "jasperprint.jar,jasperreports-applet-5.5.1.jar,commons-logging-1.1.1.jar,commons-collections-2.1.1.jar"
 				                REPORT_URL ="../servlets/jasperprint"
 				                pluginspage = "http://java.sun.com/products/plugin/index.html#download" width="100%" height="100%">  
 				            <NOEMBED>  

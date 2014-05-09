@@ -263,7 +263,18 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public ProcessInstance startProcDef(Map<String, Object> variableMap,
+			String process_key,String initor);
+	
+	/**
+	 * 启动流程
+	 * 
+	 * @param variableMap
+	 * @param process_key
+	 * @return
+	 */
+	public ProcessInstance startProcDef(Map<String, Object> variableMap,
 			String process_key);
+
 
 	/**
 	 * 启动流程

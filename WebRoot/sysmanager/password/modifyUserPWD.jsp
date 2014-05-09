@@ -60,12 +60,7 @@ function resetpwd(){
 function openChoose(){
 	
 	var url="<%=request.getContextPath()%>/purviewmanager/common/selectuser.jsp?loginName=loginName";
-	$.dialog({title:'<pg:message code="sany.pdp.personcenter.person.select"/>',width:1050,height:550, content:'url:'+url,currentwindow:this}); 
-	
-	//var v = window.showModalDialog("chooseOrgUser.jsp",window,"dialogWidth:900px;dialogHeight:550px;help:no;scroll:auto;status:no");
-	//if(v!="undefined" && v!=null){
-		//cacForm.loginName.value = v;
-	//}
+	$.dialog({title:'<pg:message code="sany.pdp.personcenter.person.select"/>',width:1050,height:550, content:'url:'+url,currentwindow:this}); 	
 	
 }
 </script>

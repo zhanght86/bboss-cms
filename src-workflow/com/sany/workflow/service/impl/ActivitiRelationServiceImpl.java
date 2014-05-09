@@ -10,8 +10,9 @@ import org.frameworkset.util.CollectionUtils;
 
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.WfAppProcdefRelation;
+import com.sany.workflow.service.ActivitiRelationService;
 
-public class ActivitiRelationServiceImpl {
+public class ActivitiRelationServiceImpl implements ActivitiRelationService {
 	
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 	

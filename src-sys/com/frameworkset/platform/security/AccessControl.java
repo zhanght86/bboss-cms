@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,6 +71,8 @@ import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute
 import com.frameworkset.platform.security.authentication.Credential;
 import com.frameworkset.platform.security.authentication.LoginContext;
 import com.frameworkset.platform.security.authentication.LoginException;
+import com.frameworkset.platform.security.authentication.SimpleLoginContext;
+import com.frameworkset.platform.security.authentication.Subject;
 import com.frameworkset.platform.security.authentication.UsernamePasswordCallbackHandler;
 import com.frameworkset.platform.security.authorization.AccessException;
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
@@ -630,7 +631,7 @@ public class AccessControl implements AccessControlInf{
 	public static AccessControl getInstance() {
 		return new AccessControl();
 	}
-	public static final String current_indexpage = "current.indexpage";
+	public static final String current_indexpage = "current_indexpage";
 	public static final String current_logoutredirect_cookie = "current.logoutredirect.cookie";
 	public static void recordIndexPage(HttpServletRequest request,String page)
 	{
@@ -985,6 +986,7 @@ public class AccessControl implements AccessControlInf{
 		 * 如果ie session相互干扰时需要给出提示,不允许用户登录
 		 */
 		session = request.getSession();
+		
 		Map temp = (Map)session.getAttribute(PRINCIPAL_INDEXS);
 		
 		 this.log("userAccount.login",request);
@@ -1069,11 +1071,11 @@ public class AccessControl implements AccessControlInf{
 		try {
 			credentialIndexs = new HashMap();
 			principalIndexs = new HashMap();
-			LoginContext loginContext = new LoginContext("base",
+			SimpleLoginContext loginContext = new SimpleLoginContext("base",
 					callbackHandler);
 			loginContext.login();
 			subject = loginContext.getSubject();
-			Iterator credentials = subject.getPublicCredentials().iterator();
+			Iterator credentials = subject.getCredentials().iterator();
 			for (; credentials.hasNext();) {
 				Credential credential = (Credential) credentials.next();
 				if (credential.isCurrent()) {
@@ -1123,7 +1125,7 @@ public class AccessControl implements AccessControlInf{
 			String userName,
 			boolean enablelog,boolean recordonlineuser) throws LoginException
 	{
-		LoginContext loginContext = new LoginContext("base",
+		SimpleLoginContext loginContext = new SimpleLoginContext("base",
 				callbackHandler);
 		loginContext.login();
 //		/**
@@ -1167,7 +1169,7 @@ public class AccessControl implements AccessControlInf{
 		StringBuffer credentialCookie = new StringBuffer();
 		boolean flag = false;
 		boolean enablecookie = this.enablecookie();
-		Iterator credentials = subject.getPublicCredentials().iterator();
+		Iterator credentials = subject.getCredentials().iterator();
 		for (; credentials.hasNext();) {
 			Credential credential = (Credential) credentials.next();
 			if (credential.isCurrent()) {
@@ -1757,6 +1759,7 @@ public class AccessControl implements AccessControlInf{
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 //			if(redirectPath == null || redirectPath.equals(""))
 //			{
 //				this.redirect();
@@ -2539,7 +2542,7 @@ public class AccessControl implements AccessControlInf{
 			String resourceID, String action, String resourceType) {
 		String useraccount = AccessControl.getUserAccountByUserID(userID);
 
-		Principal principal = new AuthPrincipal(useraccount, null, null,userID);
+		Principal principal = new AuthPrincipal(useraccount,  null,userID);
 		return checkPermission(principal,
 				 resourceID,  action,  resourceType);
 	}
@@ -2741,9 +2744,7 @@ public class AccessControl implements AccessControlInf{
 			}
 
 			log("Check page["+ request.getRequestURI() +"]: User[" + this.getUserAccount() + "] logout from cs client。session id is " + session.getId(),request);
-			Subject subject = ((AuthPrincipal) principal).getSubject();
-			LoginContext loginContext = new LoginContext(subject);
-			loginContext.logout();
+		
 			String userAccount = this.getUserAccount();
 			// 清除cookie;
 //			if (this.enablecookie()) {
@@ -2809,9 +2810,7 @@ public class AccessControl implements AccessControlInf{
 			// // 跳转到登录页面
 			// if (redirected)
 			// redirect();
-		} catch (LoginException ex) {
-			log.debug("Logout from dreamweaver client failed：" + ex.getMessage());
-		}
+		} 
 		 catch (Exception ex) {
 			log.debug("Logout from dreamweaver client failed：" + ex.getMessage());
 		}
@@ -2859,20 +2858,9 @@ public class AccessControl implements AccessControlInf{
 			AuthPrincipal principal_ = (AuthPrincipal) principalsIndexs
 					.get(ConfigManager.getInstance().getModuleName());
 			try {
-				Subject subject = principal_.getSubject();
-				String userName = null;
-				for (Iterator principals = subject.getPrincipals().iterator(); principals
-						.hasNext();) {
-					AuthPrincipal principal = (AuthPrincipal) principals.next();
-	
-					if (principal.getLoginModuleName().equals(
-							ConfigManager.getInstance().getModuleName())) {
-						userName = principal.getName();
-	
-						break;
-					}
-	
-				}
+				
+				String userName = principal_.getName();
+				
 //				LoginContext loginContext = new LoginContext(subject);
 //				loginContext.logout();
 				// session.removeAttribute(LOGINCONTEXT_CACHE_KEY);
@@ -2967,10 +2955,7 @@ public class AccessControl implements AccessControlInf{
 		return context;
 	}
 
-	public Subject getSubject() {
-		return ((AuthPrincipal) this.principal).getSubject();
-	}
-
+	
 	/**
 	 * 用户登录退出
 	 * 
@@ -3098,8 +3083,7 @@ public class AccessControl implements AccessControlInf{
 			log_info("Logout from page["+ request.getRequestURI() +"]: User["+ this.getUserAccount() + "," + getUserName() + "] logout.session id is " + session.getId(),request);
 			//log.debug("Logout from page["+ request.getRequestURI() +"]: \r\n\tUser["+ this.getUserAccount() + "," + getUserName() + "] logout.");
 			
-			LoginContext loginContext = new LoginContext(this.getSubject());
-			loginContext.logout();
+			
 			String userAccount = this.getUserAccount();
 			String subsystem = getCurrentSystemName();
 //			String subsystemcookieid = SUBSYSTEM_COOKIE + "_" + userAccount;
@@ -3207,10 +3191,7 @@ public class AccessControl implements AccessControlInf{
 					
 				}
 			}
-		} catch (LoginException ex) {
-			log("Unknown user Logout failed from system on " + new java.util.Date() + ". ",request);
-			log.debug("Logout failed：" + ex.getMessage());		
-		} catch (Exception ex) {
+		}  catch (Exception ex) {
 			//ex.printStackTrace();
 			//log("Unknown user Logout failed from system on " + new java.util.Date() + ". ",request);
 			log.debug("Logout failed：" + ex.getMessage());

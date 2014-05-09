@@ -4,7 +4,7 @@ import javax.security.auth.DestroyFailedException;
 import javax.security.auth.Destroyable;
 import javax.security.auth.RefreshFailedException;
 import javax.security.auth.Refreshable;
-import javax.security.auth.Subject;
+
 
 /**
  * <p>Title: </p>
@@ -19,14 +19,18 @@ import javax.security.auth.Subject;
  * @version 1.0
  */
 public class Credential implements Refreshable,Destroyable,java.io.Serializable{
-    private Subject subject;
+   
     private String loginModule;
     private CheckCallBack checkCallBack;
+    public Credential()
+    {
+    	
+    }
     public Credential(CheckCallBack checkCallBack,String loginModule,Subject subject)
     {
         this.checkCallBack = checkCallBack;
         this.loginModule = loginModule;
-        this.subject = subject;
+        
     }
 
     public void destroy() throws DestroyFailedException {
@@ -51,8 +55,6 @@ public class Credential implements Refreshable,Destroyable,java.io.Serializable{
         return loginModule;
     }
 
-    public Subject getSubject() {
-        return subject;
-    }
+   
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
@@ -15,8 +14,6 @@ import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
 
 public class AppcreateServiceImpl implements AppcreateService {
-	
-	private static Logger logger = Logger.getLogger(AppcreateServiceImpl.class);
 	
 	private ConfigSQLExecutor executor;
 

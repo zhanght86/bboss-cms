@@ -2,7 +2,8 @@ package com.frameworkset.platform.security.authorization;
 
 import java.security.Principal;
 
-import javax.security.auth.Subject;
+import com.frameworkset.platform.security.authentication.Subject;
+
 
 /**
  * <p>Title: </p>
@@ -17,7 +18,7 @@ import javax.security.auth.Subject;
  * @version 1.0
  */
 public class AuthPrincipal implements Principal,java.io.Serializable {
-    private Subject subject;
+   
     private String name;
     private String loginModuleName;
     private String userID;
@@ -31,26 +32,24 @@ public class AuthPrincipal implements Principal,java.io.Serializable {
         return name;
     }
 
-    public Subject getSubject()
-    {
-        return this.subject;
-    }
+   
 
     public String getLoginModuleName() {
         return loginModuleName;
     }
-
+    public AuthPrincipal()
+    {
+    	
+    }
     public AuthPrincipal(String name,Subject subject,String loginModuleName)
     {
         this.name = name;
-        this.subject = subject;
         this.loginModuleName = loginModuleName;
     }
     
     public AuthPrincipal(String name,Subject subject,String loginModuleName,String userID)
     {
         this.name = name;
-        this.subject = subject;
         this.loginModuleName = loginModuleName;
         this.userID = userID;
     }

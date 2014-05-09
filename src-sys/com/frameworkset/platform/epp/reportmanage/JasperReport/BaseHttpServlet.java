@@ -27,6 +27,9 @@
  */
 package com.frameworkset.platform.epp.reportmanage.JasperReport;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +50,8 @@ public abstract class BaseHttpServlet extends HttpServlet
 	/**
 	 *
 	 */
-	public static final String DEFAULT_JASPER_PRINT_LIST_SESSION_ATTRIBUTE = "net.sf.jasperreports.j2ee.jasper_print_list";
-	public static final String DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE = "net.sf.jasperreports.j2ee.jasper_print";
+	public static final String DEFAULT_JASPER_PRINT_LIST_SESSION_ATTRIBUTE = "net_sf_jasperreports_j2ee_jasper_print_list";
+	public static final String DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE = "net_sf_jasperreports_j2ee_jasper_print";
 
 	public static final String JASPER_PRINT_LIST_REQUEST_PARAMETER = "jrprintlist";
 	public static final String JASPER_PRINT_REQUEST_PARAMETER = "jrprint";
@@ -58,6 +61,88 @@ public abstract class BaseHttpServlet extends HttpServlet
 	public static final String REPORT_FILE_NAME="filename";
 	
 	protected  static final ThreadLocal THREAD_FILE_NAME=new ThreadLocal();
+	
+	public static void toSession(HttpServletRequest request,String key,JasperPrint jasperPrint) throws IOException
+	{
+		java.io.ByteArrayOutputStream out = null; 
+		java.io.ObjectOutputStream output = null;
+		try
+		{
+			out = new ByteArrayOutputStream(); 
+			output = new java.io.ObjectOutputStream(out); 
+			output.writeObject(jasperPrint);
+			output.flush();
+			request.getSession().setAttribute(key, out.toByteArray());
+		}
+		finally
+		{
+			try {
+				if(out != null)
+				{
+					out.close();
+					out = null;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				if(output != null)
+				{
+					output.close();
+					output = null;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static JasperPrint getJasperPrint(HttpServletRequest request,String key)
+	{
+		JasperPrint jasperPrint = null;
+	
+		java.io.ObjectInputStream output = null;
+		java.io.ByteArrayInputStream intput = null;
+		try
+		{
+			byte[] b = (byte[])request.getSession().getAttribute(key); 
+			intput = new ByteArrayInputStream(b);
+			output = new java.io.ObjectInputStream(intput); 
+			jasperPrint = (JasperPrint)output.readObject();
+			return jasperPrint;
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		finally
+		{
+			try {
+				if(intput != null)
+				{
+					intput.close();
+					intput = null;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				if(output != null)
+				{
+					output.close();
+					output = null;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 			
 	/**
 	 *
@@ -79,10 +164,12 @@ public abstract class BaseHttpServlet extends HttpServlet
 			jasperPrintSessionAttr = DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE;
 		}
 		
-		List jasperPrintList = (List)request.getSession().getAttribute(jasperPrintListSessionAttr);
+//		List jasperPrintList = (List)request.getSession().getAttribute(jasperPrintListSessionAttr);
+		List jasperPrintList = null;
 		if (jasperPrintList == null)
 		{
-			JasperPrint jasperPrint = (JasperPrint)request.getSession().getAttribute(jasperPrintSessionAttr);
+//			JasperPrint jasperPrint = (JasperPrint)request.getSession().getAttribute(jasperPrintSessionAttr);
+			JasperPrint jasperPrint = getJasperPrint(request,jasperPrintSessionAttr);
 			if (jasperPrint != null)
 			{
 				jasperPrintList = new ArrayList();

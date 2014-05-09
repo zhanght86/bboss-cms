@@ -55,6 +55,10 @@ public class CheckCallBack implements Serializable{
 
     public static class Attribute implements Serializable
     {
+    	public Attribute()
+    	{
+    		
+    	}
         public Attribute(String name,Object value)
         {
             this.name = name;

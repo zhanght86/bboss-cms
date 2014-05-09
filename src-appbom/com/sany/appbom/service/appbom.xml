@@ -59,6 +59,11 @@ values
 		]]>
 	</property>
 	<property name="selectByKeys" sqlfile="com/sany/appbom/service/appbom-1.xml" sqlname="selectByKeys"/>
+	<property name="selectById">
+		<![CDATA[
+			select * from TD_APP_BOM where id=?
+		]]>
+	</property>
 	<property name="CheckBmExist">
 		<![CDATA[
 			select count(1) from TD_APP_BOM where 1=1 and bm=#[bm]

@@ -88,7 +88,7 @@ public class CookieUtil implements Serializable{
         String t_principals = principals_credentials[0];
         String t_credentials = principals_credentials[1];
 
-        Subject subject = new Subject();
+       
         Map principalIdxs = new HashMap();
         Map credentialIdxs = new HashMap();
         String principals[] = StringUtil.split(t_principals,principalRegexExpress);
@@ -97,10 +97,10 @@ public class CookieUtil implements Serializable{
         for(int i = 0; principals != null && i < principals.length; i ++)
         {
             String identitys[] = StringUtil.split(principals[i],identityRegexExpress);
-            AuthPrincipal authPrincipal = new AuthPrincipal(identitys[1],
-                    subject, identitys[0]);
+            AuthPrincipal authPrincipal = new AuthPrincipal(identitys[1],null,
+                     identitys[0]);
             log.debug(authPrincipal);
-            subject.getPrincipals().add(authPrincipal);
+          
             principalIdxs.put(authPrincipal.getLoginModuleName(),
                               authPrincipal);
         }
@@ -118,11 +118,11 @@ public class CookieUtil implements Serializable{
                 checkCallBack.setUserAttribute(attribute[0],attribute[1]);
             }
 
-            Credential credential = new Credential(checkCallBack,c_messages[0],subject);
-            subject.getPublicCredentials().add(credential);
+            Credential credential = new Credential(checkCallBack,c_messages[0],null);
+          
             credentialIdxs.put(credential.getLoginModule(),credential);
         }
-        return new Object[] {principalIdxs,credentialIdxs,subject};
+        return new Object[] {principalIdxs,credentialIdxs};
     }
 
     /**

@@ -41,13 +41,13 @@
        		<th><pg:message code="sany.appbom.softTool"/></th>
        		<th><pg:message code="sany.pdp.common.operation"/></th>
        	</pg:header>	
-      <pg:list autosort="false">
+      <pg:list>
 
    		<tr onDblClick="viewBom('<pg:cell colName="id" />')">
    		        <td class="td_center">
                     <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="id" />"/>
                     <input id="id" type="hidden" name="id" value="<pg:cell colName="id" />"/></td>
-                <td><pg:cell colName="bm"/></td>
+                <td><pg:rowid increament="1" offset="false"/><pg:cell colName="bm"/></td>
                 <td><span class="toolTip" title="<pg:cell colName="app_name_en"/>"><pg:cell colName="app_name_en" maxlength="10" replace="..."/></span></td>
                 <td><a href="javascript:void(0)" onclick="viewBom('<pg:cell colName="id" />')"><pg:cell colName="app_name" maxlength="8" replace="..."/></a></td>
         		<td><pg:cell colName="apply_domain" /></td>       

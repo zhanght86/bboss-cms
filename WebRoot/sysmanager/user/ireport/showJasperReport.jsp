@@ -29,7 +29,10 @@
 	tm.begin();
 	if(page_num!=null&&page_num.length()>0)
 	{
-		jasperPrint = (JasperPrint)session.getAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
+		//com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.toSession(HttpServletRequest request,String key,JasperPrint jasperPrint)
+		//getJasperPrint(HttpServletRequest request,String key)
+		//jasperPrint = (JasperPrint)session.getAttribute(com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
+		jasperPrint = com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.getJasperPrint(request,com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE);
 	}
 	String strAbsPath = new File(request.getRealPath(request.getServletPath())).getParent();
 		strAbsPath = strAbsPath.replace('\\','/');
@@ -73,7 +76,8 @@
         jasperReport = (JasperReport)JRLoader.loadObject(strAbsPath +File.separator+ "queryUserInfo.jasper");
         
 		jasperPrint =  JasperFillManager.fillReport(jasperReport, parameters, new com.frameworkset.platform.sysmgrcore.web.report.DataInfoJRDataSource(com.frameworkset.platform.sysmgrcore.web.tag.UserSearchList.class,200,request));
-			session.setAttribute(ImageServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
+			//session.setAttribute(com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
+			com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.toSession(request,com.frameworkset.platform.epp.reportmanage.JasperReport.BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
 		}
 		jasperPrint.setName(reportName);
 		

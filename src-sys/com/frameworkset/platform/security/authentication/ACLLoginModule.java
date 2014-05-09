@@ -5,9 +5,7 @@ package com.frameworkset.platform.security.authentication;
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Map;
 
-import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
@@ -15,7 +13,6 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
-import javax.security.auth.spi.LoginModule;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -89,8 +86,7 @@ public abstract class ACLLoginModule implements LoginModule,Serializable {
      * @todo Implement this javax.security.auth.spi.LoginModule method
      * @roseuid 43FD4F86005D
      */
-    public void initialize(Subject subject, CallbackHandler callbackHandler,
-                           Map sharedState, Map options) {
+    public void initialize(Subject subject, CallbackHandler callbackHandler) {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.loginSuccess = false;
@@ -190,10 +186,10 @@ public abstract class ACLLoginModule implements LoginModule,Serializable {
         
         //往subject中添加用户身份
         if (!(subject.getPrincipals().contains(principal))) {
-            subject.getPrincipals().add(principal);
+            subject.addAuthPrincipal(principal);
         }
         //往subject中添加用户身份令牌
-        subject.getPublicCredentials().add(credential);
+        subject.addCredential(credential);
         log.debug( "" + this.getClass().getName() + " commit SUCCESS");
         return true;
 
@@ -239,7 +235,7 @@ public abstract class ACLLoginModule implements LoginModule,Serializable {
             subject.getPrincipals().remove(principal);
         }
         if(credential != null)
-            subject.getPublicCredentials().remove(this.credential);
+            subject.getCredentials().remove(this.credential);
         loginSuccess = false;
         username = null;
         principal = null;

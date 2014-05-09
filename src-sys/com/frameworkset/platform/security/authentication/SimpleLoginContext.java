@@ -1,3 +1,18 @@
+/*
+ *  Copyright 2008 bbossgroups
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package com.frameworkset.platform.security.authentication;
 
 import java.io.Serializable;
@@ -9,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.security.auth.AuthPermission;
-import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
@@ -17,122 +31,20 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-//import sun.security.util.ResourcesMgr;
-
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.config.LoginModuleInfoQueue;
 import com.frameworkset.platform.config.model.LoginModuleInfo;
 
-
-
 /**
- * <p> The <code>LoginContext</code> class describes the basic methods used
- * to authenticate Subjects and provides a way to develop an
- * application independent of the underlying authentication technology.
- * A <code>Configuration</code> specifies the authentication technology, or
- * <code>LoginModule</code>, to be used with a particular application.
- * Therefore, different LoginModules can be plugged in under an application
- * without requiring any modifications to the application itself.
- *
- * <p> In addition to supporting <i>pluggable</i> authentication, this class
- * also supports the notion of <i>stacked</i> authentication.  In other words,
- * an application may be configured to use more than one
- * <code>LoginModule</code>.  For example, one could
- * configure both a Kerberos <code>LoginModule</code> and a smart card
- * <code>LoginModule</code> under an application.
- *
- * <p> A typical caller instantiates this class and passes in
- * a <i>name</i> and a <code>CallbackHandler</code>.
- * <code>LoginContext</code> uses the <i>name</i> as the index into the
- * <code>Configuration</code> to determine which LoginModules should be used,
- * and which ones must succeed in order for the overall authentication to
- * succeed.  The <code>CallbackHandler</code> is passed to the underlying
- * LoginModules so they may communicate and interact with users
- * (prompting for a username and password via a graphical user interface,
- * for example).
- *
- * <p> Once the caller has instantiated a <code>LoginContext</code>,
- * it invokes the <code>login</code> method to authenticate
- * a <code>Subject</code>.  This <code>login</code> method invokes the
- * <code>login</code> method from each of the LoginModules configured for
- * the <i>name</i> specified by the caller.  Each <code>LoginModule</code>
- * then performs its respective type of authentication (username/password,
- * smart card pin verification, etc.).  Note that the LoginModules will not
- * attempt authentication retries or introduce delays if the authentication
- * fails.  Such tasks belong to the caller.
- *
- * <p> Regardless of whether or not the overall authentication succeeded,
- * this <code>login</code> method completes a 2-phase authentication process
- * by then calling either the <code>commit</code> method or the
- * <code>abort</code> method for each of the configured LoginModules.
- * The <code>commit</code> method for each <code>LoginModule</code>
- * gets invoked if the overall authentication succeeded,
- * whereas the <code>abort</code> method for each <code>LoginModule</code>
- * gets invoked if the overall authentication failed.
- * Each successful LoginModule's <code>commit</code>
- * method associates the relevant Principals (authenticated identities)
- * and Credentials (authentication data such as cryptographic keys)
- * with the <code>Subject</code>.  Each LoginModule's <code>abort</code>
- * method cleans up or removes/destroys any previously stored authentication
- * state.
- *
- * <p> If the <code>login</code> method returns without
- * throwing an exception, then the overall authentication succeeded.
- * The caller can then retrieve
- * the newly authenticated <code>Subject</code> by invoking the
- * <code>getSubject</code> method.  Principals and Credentials associated
- * with the <code>Subject</code> may be retrieved by invoking the Subject's
- * respective <code>getPrincipals</code>, <code>getPublicCredentials</code>,
- * and <code>getPrivateCredentials</code> methods.
- *
- * <p> To logout the <code>Subject</code>, the caller simply needs to
- * invoke the <code>logout</code> method.  As with the <code>login</code>
- * method, this <code>logout</code> method invokes the <code>logout</code>
- * method for each <code>LoginModule</code> configured for this
- * <code>LoginContext</code>.  Each LoginModule's <code>logout</code>
- * method cleans up state and removes/destroys Principals and Credentials
- * from the <code>Subject</code> as appropriate.
- *
- * <p> Each of the configured LoginModules invoked by the
- * <code>LoginContext</code> is initialized with a
- * <code>Subject</code> to be authenticated, a <code>CallbackHandler</code>
- * used to communicate with users, shared <code>LoginModule</code> state,
- * and LoginModule-specific options.  If the <code>LoginContext</code>
- * was not provided a <code>Subject</code> then it instantiates one itself.
- *
- * <p> Each <code>LoginModule</code>
- * which successfully authenticates a user updates the <code>Subject</code>
- * with the relevant user information (Principals and Credentials).
- * This <code>Subject</code> can then be returned via the
- * <code>getSubject</code> method from the <code>LoginContext</code> class
- * if the overall authentication succeeds.  Note that LoginModules are always
- * invoked from within an <code>AccessController.doPrivileged</code> call.
- * Therefore, although LoginModules that perform security-sensitive tasks
- * (such as connecting to remote hosts) need to be granted the relevant
- * Permissions in the security <code>Policy</code>, the callers of the
- * LoginModules do not require those Permissions.
- *
- * <p> A <code>LoginContext</code> supports authentication retries
- * by the calling application.  For example, a LoginContext's
- * <code>login</code> method may be invoked multiple times
- * if the user incorrectly types in a password.  However, a
- * <code>LoginContext</code> should not be used to authenticate
- * more than one <code>Subject</code>.  A separate <code>LoginContext</code>
- * should be used to authenticate each different <code>Subject</code>.
- *
- * <p> Multiple calls into the same <code>LoginContext</code>
- * do not affect the <code>LoginModule</code> state, or the
- * LoginModule-specific options.
- *
- * @version 1.94, 01/23/03
- * @see javax.security.auth.Subject
- * @see javax.security.auth.callback.CallbackHandler
- * @see javax.security.auth.login.Configuration
- * @see javax.security.auth.spi.LoginModule
+ * <p>Title: SimpleLoginContext.java</p> 
+ * <p>Description: </p>
+ * <p>bboss workgroup</p>
+ * <p>Copyright (c) 2008</p>
+ * @Date 2014年5月8日
  * @author biaoping.yin
+ * @version 3.8.0
  */
-public class LoginContext implements Serializable{
-   
+public class SimpleLoginContext {
 	/**
 	 * 
 	 */
@@ -304,7 +216,7 @@ public class LoginContext implements Serializable{
      *          for "<i>other</i>", or if the specified
      *		<code>callbackHandler</code> is <code>null</code>.
      */
-    public LoginContext(String name, CallbackHandler callbackHandler)
+    public SimpleLoginContext(String name, CallbackHandler callbackHandler)
     throws LoginException {
         init(name);
         if (callbackHandler == null)
@@ -373,106 +285,34 @@ public class LoginContext implements Serializable{
 
         loginSucceeded = false;
 
-        if (subject == null) {
-            subject = new Subject();
-        }
+        
 
         try {
             //执行第一阶段登录
-            invokeModule(LOGIN_METHOD);
+            this._invoke(LOGIN_METHOD);
             //执行第二阶段登录，提交整体登录信息
-            invokeModule(COMMIT_METHOD);
+            this._invoke(COMMIT_METHOD);
             loginSucceeded = true;
         } catch (LoginException le) {
 
             try {
                 //登录失败则退出登录
-                invokeModule(ABORT_METHOD);
+            	this._invoke(ABORT_METHOD);
             } catch (LoginException le2) {
                 throw le;
             }
             throw le;
         }
     }
+    
+    private void _invoke(String action) throws LoginException
+    {
+    	
 
-    /**
-     * Logout the <code>Subject</code>.
-     *
-     * <p> This method invokes the <code>logout</code> method for each
-     * <code>LoginModule</code> configured for this <code>LoginContext</code>.
-     * Each <code>LoginModule</code> performs its respective logout procedure
-     * which may include removing/destroying
-     * <code>Principal</code> and <code>Credential</code> information
-     * from the <code>Subject</code> and state cleanup.
-     *
-     * <p> Note that this method invokes all LoginModules configured for the
-     * specified application regardless of their respective
-     * <code>Configuration</code> flag parameters.  Essentially this means
-     * that <code>Requisite</code> and <code>Sufficient</code> semantics are
-     * ignored for this method.  This guarantees that proper cleanup
-     * and state restoration can take place.
-     *
-     * <p>
-     *
-     * @exception LoginException if the logout fails.
-     */
-    public void logout() throws LoginException {
         if (subject == null) {
-            throw new LoginException(ResourcesMgr.getString
-                ("null subject - logout called before login"));
+            subject = new Subject();
         }
-
-        invokeModule(LOGOUT_METHOD);
-    }
-
-    /**
-     * Return the authenticated Subject.
-     *
-     * <p>
-     *
-     * @return the authenticated Subject.  If authentication fails
-     *		and a Subject was not provided to this LoginContext's
-     *		constructor, this method returns <code>null</code>.
-     *		Otherwise, this method returns the provided Subject.
-     */
-    public Subject getSubject() {
-        if (!loginSucceeded && !subjectProvided)
-            return null;
-        return subject;
-    }
-
-    private void throwException(LoginException originalError, LoginException le)
-    throws LoginException {
-        LoginException error = (originalError != null) ? originalError : le;
-        throw error;
-    }
-
-    /**
-     * Invokes the login, commit, and logout methods
-     * from a LoginModule inside a doPrivileged block.
-     */
-    private void invokeModule(String methodName) throws LoginException {
-//        try {
-            final String finalName = methodName;
-//            java.security.AccessController.doPrivileged
-//                (new java.security.PrivilegedExceptionAction() {
-//                public Object run() throws LoginException {
-                    invoke(finalName);
-//                    return null;
-//                }
-//            });
-//        } catch (java.security.PrivilegedActionException pae) {
-//            throw (LoginException)pae.getException();
-//        }
-    }
-
-    /**
-     * 执行具体的方法：login(),logout(),commit(),abort()
-     * @param methodName String
-     * @throws LoginException
-     */
-    private void invoke(String methodName) throws LoginException {
-
+        
         LoginException firstError = null;
         LoginException firstRequiredError = null;
         boolean success = false;
@@ -485,7 +325,7 @@ public class LoginContext implements Serializable{
                 Method[] methods = null;
 
                 if (moduleStack[i].module != null) {//如果登录模块已经初始化，直接提取所有登录模块可访问方法
-                    methods = moduleStack[i].module.getClass().getMethods();
+                   
                 } else {//初始化登陆模块，提取所有登录模块可访问方法
 
                     // instantiate the LoginModule
@@ -500,7 +340,7 @@ public class LoginContext implements Serializable{
 
                     // allow any object to be a LoginModule
                     // as long as it conforms to the interface
-                    moduleStack[i].module = constructor.newInstance(args);
+                    moduleStack[i].module = (LoginModule)constructor.newInstance(args);
                     //检测登录模块是否是ACLLoginModule类型的模块，如果是设置登录模块的名称
                     if(moduleStack[i].module instanceof ACLLoginModule)
                     {
@@ -511,13 +351,7 @@ public class LoginContext implements Serializable{
 
                     }
 
-                    methods = moduleStack[i].module.getClass().getMethods();
-
-                    // 查找登录模块初始化方法并call the LoginModule's initialize method
-                    for (mIndex = 0; mIndex < methods.length; mIndex++) {
-                        if (methods[mIndex].getName().equals(INIT_METHOD))
-                            break;
-                    }
+                   
                     CallbackHandler handler = callbackHandler;
                     //如果登录模块指定了特定的回调函数，则使用特定的回调函数对登录模块进行初始化
                     if(moduleStack[i].getLoginModuleInfo().getCallBackHandler() != null
@@ -537,44 +371,52 @@ public class LoginContext implements Serializable{
                     }
 
                     Object[] initArgs = {subject,
-                                        handler,
-                                        state,
-                                        new HashMap().put("debug",new Boolean(moduleStack[i].getLoginModuleInfo().isDebug())) };//options(java.util.Map) is null
+                                        handler
+                                        };//options(java.util.Map) is null
                     // invoke the LoginModule initialize method
-                    methods[mIndex].invoke(moduleStack[i].module, initArgs);
+                    moduleStack[i].module.initialize(subject, handler);
+                   
                 }
 
-                // find the requested method in the LoginModule
-                for (mIndex = 0; mIndex < methods.length; mIndex++) {
-                    if (methods[mIndex].getName().equals(methodName))
-                        break;
-                }
+             
 
                 // set up the arguments to be passed to the LoginModule method
                 Object[] args = { };
-
+                boolean status = false;
                 // invoke the LoginModule method
-                boolean status = ((Boolean)methods[mIndex].invoke
-                                (moduleStack[i].module, args)).booleanValue();
+                if(action.equals(LOGIN_METHOD))
+                {
+                	status = moduleStack[i].module.login();
+                }
+                else if(action.equals(COMMIT_METHOD))
+                {
+                	status = moduleStack[i].module.commit();
+                }
+                else if(action.equals(ABORT_METHOD))
+                {
+                	status = moduleStack[i].module.abort();
+                }
+                else if(action.equals(LOGOUT_METHOD))
+                {
+                	status = moduleStack[i].module.logout();
+                }
 
                 //方法返回值为true,表示方法执行成功，做SUFFICIENT检查
                 if (status == true) {
 
                     // if SUFFICIENT, return if no prior REQUIRED errors
-                    if (!methodName.equals(ABORT_METHOD) &&
-                        !methodName.equals(LOGOUT_METHOD) &&
-                        moduleStack[i].getLoginModuleInfo().getControlFlag().equals(LoginModuleControlFlag.SUFFICIENT.controlFlag)
+                    if (moduleStack[i].getLoginModuleInfo().getControlFlag().equals(LoginModuleControlFlag.SUFFICIENT.controlFlag)
                      &&
                         firstRequiredError == null) {
 
                         //if (log != null)
-                            log.debug(methodName + " SUFFICIENT success");
+                            log.debug(action+" SUFFICIENT success");
                         return;
                     }
-                    log.debug(methodName + " success");
+                    log.debug(action+"  success");
                     success = true;
                 } else {
-                   log.debug(methodName + " ignored");
+                   log.debug(action+" failed.");
                 }
 
             } catch (NoSuchMethodException nsme) {
@@ -623,20 +465,21 @@ public class LoginContext implements Serializable{
                 if (moduleStack[i].entry.getControlFlag().equals(
                     LoginModuleControlFlag.REQUISITE.controlFlag)) {
 
-                    log.debug(methodName + " REQUISITE failure");
+                    log.debug(action+" REQUISITE failure");
 
                     // if REQUISITE, then immediately throw an exception
-                    if (methodName.equals(ABORT_METHOD) ||
-                        methodName.equals(LOGOUT_METHOD)) {
-                        if (firstRequiredError == null)
-                            firstRequiredError = le;
-                    } else {
+//                    if (methodName.equals(ABORT_METHOD) ||
+//                        methodName.equals(LOGOUT_METHOD)) {
+//                        if (firstRequiredError == null)
+//                            firstRequiredError = le;
+//                    } else 
+                    {
                         throwException(firstRequiredError, le);
                     }
 
                 } else if (moduleStack[i].entry.getControlFlag().equals(LoginModuleControlFlag.REQUIRED.controlFlag)) {
 
-                    log.debug(methodName + " REQUIRED failure");
+                    log.debug(action+" REQUIRED failure");
 
                     // mark down that a REQUIRED module failed
                     if (firstRequiredError == null)
@@ -644,32 +487,71 @@ public class LoginContext implements Serializable{
 
                 } else {
 
-                    log.debug(methodName + " OPTIONAL failure");
+                    log.debug(action+" OPTIONAL failure");
 
                     // mark down that an OPTIONAL module failed
                     if (firstError == null)
                         firstError = le;
                 }
-            }
-        }
-
-        // we went thru all the LoginModules.
-        if (firstRequiredError != null) {
-            // a REQUIRED module failed -- return the error
-            throwException(firstRequiredError, null);
-        } else if (success == false && firstError != null) {
-            // no module succeeded -- return the first error
-            throwException(firstError, null);
-        } else if (success == false) {
-            // no module succeeded -- all modules were IGNORED
-            throwException(new LoginException
-                (ResourcesMgr.getString("Login Failure: all modules ignored")),
-                null);
-        } else {
-            // success
-            return;
+            } catch (javax.security.auth.login.LoginException e) {
+				throw new LoginException(e);
+			}
         }
     }
+
+    /**
+     * Logout the <code>Subject</code>.
+     *
+     * <p> This method invokes the <code>logout</code> method for each
+     * <code>LoginModule</code> configured for this <code>LoginContext</code>.
+     * Each <code>LoginModule</code> performs its respective logout procedure
+     * which may include removing/destroying
+     * <code>Principal</code> and <code>Credential</code> information
+     * from the <code>Subject</code> and state cleanup.
+     *
+     * <p> Note that this method invokes all LoginModules configured for the
+     * specified application regardless of their respective
+     * <code>Configuration</code> flag parameters.  Essentially this means
+     * that <code>Requisite</code> and <code>Sufficient</code> semantics are
+     * ignored for this method.  This guarantees that proper cleanup
+     * and state restoration can take place.
+     *
+     * <p>
+     *
+     * @exception LoginException if the logout fails.
+     */
+    public void logout() throws LoginException {
+        if (subject == null) {
+            throw new LoginException(ResourcesMgr.getString
+                ("null subject - logout called before login"));
+        }
+
+        this._invoke(LOGOUT_METHOD);
+    }
+
+    /**
+     * Return the authenticated Subject.
+     *
+     * <p>
+     *
+     * @return the authenticated Subject.  If authentication fails
+     *		and a Subject was not provided to this LoginContext's
+     *		constructor, this method returns <code>null</code>.
+     *		Otherwise, this method returns the provided Subject.
+     */
+    public Subject getSubject() {
+        if (!loginSucceeded && !subjectProvided)
+            return null;
+        return subject;
+    }
+
+    private void throwException(LoginException originalError, LoginException le)
+    throws LoginException {
+        LoginException error = (originalError != null) ? originalError : le;
+        throw error;
+    }
+
+   
 
     /**
      * Wrap the application-provided CallbackHandler in our own
@@ -729,9 +611,9 @@ public class LoginContext implements Serializable{
 		 */
 		private static final long serialVersionUID = 1L;
 		LoginModuleInfo entry;
-        Object module;
+        LoginModule module;
 
-        ModuleInfo(LoginModuleInfo newEntry, Object newModule) {
+        ModuleInfo(LoginModuleInfo newEntry, LoginModule newModule) {
             this.entry = newEntry;
             this.module = newModule;
         }
@@ -740,7 +622,7 @@ public class LoginContext implements Serializable{
             return this.entry;
         }
 
-        public Object getModule() {
+        public LoginModule getModule() {
             return this.module;
         }
     }

@@ -32,6 +32,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Log;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
+import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmOrg;
@@ -74,16 +75,7 @@ public class SyncOrganizationInfo {
     public void syncAllData() {
         logger.info("Sync org info started...");
         String machinid = "";
-        try {
-			InetAddress addr = InetAddress.getLocalHost();
-			 String ip=addr.getHostAddress().toString();//获得本机IP　　
-		     String address=addr.getHostName().toString();//获得本机名称
-		     machinid = ip + "-"+address;
-		     
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        machinid = SimpleStringUtil.getHostIP();
         try {
 			LogManager logMgr = SecurityDatabase.getLogManager();
 			

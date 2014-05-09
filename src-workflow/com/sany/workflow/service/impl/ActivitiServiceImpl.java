@@ -1147,6 +1147,25 @@ public void rejecttoPreTask(String taskId,String username){
 	 * identityService.setAuthenticatedUserId(initor);
 	 * @return
 	 */
+	public ProcessInstance startProcDef(
+			Map<String, Object> map, String process_key,String initor)
+	{
+		identityService.setAuthenticatedUserId(initor);
+		ProcessInstance processInstance = runtimeService
+				.startProcessInstanceByKey(process_key,  map);
+		return processInstance;	
+	}
+	
+
+	/**
+	 * 启动流程
+	 * 
+	 * @param businessKey
+	 * @param variableMap
+	 * @param process_key
+	 * identityService.setAuthenticatedUserId(initor);
+	 * @return
+	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key,
 			Map<String, Object> map,String initor)
 	{
@@ -1155,6 +1174,7 @@ public void rejecttoPreTask(String taskId,String username){
 				.startProcessInstanceByKey(process_key, businessKey, map);
 		return processInstance;	
 	}
+	
 	
 	/**
 	 * 启动流程

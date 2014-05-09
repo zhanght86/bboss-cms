@@ -1,0 +1,74 @@
+<properties>
+<property name="getUserList_normal">	
+		<![CDATA[
+		select a.*,b.x,b.y,b.org_id from td_sm_user a 
+			inner join (
+			  select user_id,min(job_sn) x,min(same_job_user_sn) y,org_id from td_sm_userjoborg 
+			  where 1=1 
+			   #if($orgId && !$orgId.equals(""))				
+					 and org_id = #[orgId] 
+			   #end
+			   group by user_id,org_id) b 
+		   on a.user_id=b.user_id  
+		   order by y,b.user_id
+		]]>
+</property>
+<property name="getUserList">
+		<![CDATA[
+      select a.*,b.x,b.y,b.org_id from td_sm_user a 
+		inner join (
+			  select user_id,min(job_sn) x,min(same_job_user_sn) y,org_id from td_sm_userjoborg 
+			  where 1=1 
+			   #if($orgId && !$orgId.equals(""))				
+					 and org_id = #[orgId] 
+			   #end
+			   group by user_id,org_id) b 
+		  on a.user_id=b.user_id 
+		  #if($userName && !$userName.equals(""))				
+					 and a.user_name like #[userName] 
+		   #end
+		   #if($userRealname && !$userRealname.equals(""))				
+					 and a.user_realname like #[userRealname] 
+		   #end
+		   #if($taxmanager && !$taxmanager.equals("") && $taxmanager.equals("1"))	
+					 and a.istaxmanager='1'
+		   #elseif($taxmanager && !$taxmanager.equals("") && $taxmanager.equals("0"))
+		             and (a.istaxmanager is null or a.istaxmanager<>'1') 
+		   #end
+		  order by y,b.user_id
+		]]>
+</property>
+
+
+<property name="getUserList_recursion">
+		<![CDATA[
+		select  bb.same_job_user_sn, t.*, a.org_id,a.org_sn 
+		from
+		  (select rownum as num,org_sn, a.org_id  from td_sm_organization a start with 
+		  #if($orgId && !$orgId.equals(""))				
+				a.org_id = #[orgId] 
+		  #end
+	      connect by prior a.org_id = a.parent_id order siblings by a.org_sn
+	     ) a,
+           ( select min(tmp.same_job_user_sn) as same_job_user_sn,tmp.org_id,tmp.user_id 
+           from ( 
+           (select ujo.* from td_sm_userjoborg ujo where ujo.user_id  in (select ou.user_id from TD_SM_ORGUSER ou))
+            )tmp 
+            group by  tmp.user_id ,tmp.org_id
+         ) bb,td_sm_user t
+         where a.org_id=bb.org_id and bb.user_id=t.user_id 
+         #if($userName && !$userName.equals(""))				
+					 and t.user_name like #[userName] 
+		   #end
+		   #if($userRealname && !$userRealname.equals(""))				
+					 and t.user_realname like #[userRealname] 
+		   #end
+		   #if($taxmanager && !$taxmanager.equals("") && $taxmanager.equals("1"))	
+					 and t.istaxmanager='1'
+		   #elseif($taxmanager && !$taxmanager.equals("") && $taxmanager.equals("0"))
+		             and (t.istaxmanager is null or t.istaxmanager<>'1') 
+		   #end
+         order by a.num,bb.same_job_user_sn,t.user_id 
+		]]>
+</property>
+</properties>	   

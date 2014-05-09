@@ -18,11 +18,11 @@
 		path:updatePre="/appbom/appBomEdit.jsp"
 		path:addPre="/appbom/appBomAdd.jsp"
 		path:viewBom="/appbom/appBomView.jsp"
-		f:service="attr:appBomService"
+		f:service="attr:appbom.appBomService"
 		class="com.sany.appbom.action.AppBomController" >
 	</property>
 	
-	<property name="appBomService"
+	<property name="appbom.appBomService"
 		f:executor="attr:appbom.configsqlexecutor"
 		class="com.sany.appbom.service.AppBomServiceImpl"
 		/>

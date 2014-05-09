@@ -84,9 +84,8 @@ public class AppBomController {
 				model.addAttribute("errmsg", "没有选择需修改台账记录！");
 				return "path:updatePre";
 			}
-			Map idmap = new HashMap();
-			idmap.put("id", id);
-			AppBom bean=service.uniqueResult(idmap);
+			
+			AppBom bean=service.uniqueResult(id);
 			model.addAttribute("appbom", bean);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,9 +101,8 @@ public class AppBomController {
 				model.addAttribute("errmsg", "没有选择需查看的台账记录！");
 				return "path:viewBom";
 			}
-			Map idmap = new HashMap();
-			idmap.put("id", id);
-			AppBom bean=service.uniqueResult(idmap);
+			
+			AppBom bean=service.uniqueResult(id);
 			model.addAttribute("appbom", bean);
 		} catch (Exception e) {
 			e.printStackTrace();
