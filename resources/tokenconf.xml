@@ -16,7 +16,7 @@
 			<property name="tokenstore" value="mem|org.frameworkset.web.token.MemTokenStore"/>-->
 			
 			<property name="enableToken" value="true"/>
-<!-- 			<property name="ALGORITHM" value="ECIES"/> -->
+<!-- 			<property name="ALGORITHM" value="RSA"/> -->
 			<property name="tokenfailpath" value="/common/jsp/tokenfail.jsp"/>
 		</construction>
 	</property>
