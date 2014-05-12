@@ -38,39 +38,36 @@
        		<th><pg:message code="sany.pdp.common.operation"/></th>
        	</pg:header>	
 
-
-
       <pg:list >
    		<tr onDblClick="processDefs('<pg:cell colName="ID_" />')">
-   		        <td class="td_center">
-                    <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="ID_" />"/>
-                    <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
-                    <input id="key" type="hidden" name="key" value="<pg:cell colName="KEY_" />"/></td>
-                <td><pg:cell colName="ID_" /></td>    
-                <td><pg:cell colName="NAME_" /></td>
-        		<td><pg:cell colName="KEY_" /></td>       
-                <td><span class="toolTip" title="<pg:cell colName="VERSION_"/>"><pg:cell colName="VERSION_" maxlength="8" replace="..."/></span></td>  
-           		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   
-           		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
-           		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
-           		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
-           		<td><pg:cell colName="business_name"/></td>
-           		 <td>
-                	<pg:equal colName="SUSPENSION_STATE_" value="0"><pg:message code="sany.pdp.workflow.operation.open"/></pg:equal>
-                	<pg:equal colName="SUSPENSION_STATE_" value="1"><pg:message code="sany.pdp.workflow.operation.close"/></pg:equal>
-                </td>	   
-                <td class="td_center">
-                	<a href="javascript:void(0)" id="activateProcess" onclick="activateProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='0'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.open"/></a>
-                	<a href="javascript:void(0)" id="suspendProcess" onclick="suspendProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='1'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.close"/></a>|
-                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="viewProcessInfo('<pg:cell colName="KEY_" />')"><pg:message code="sany.pdp.workflow.operation.workflow.info"/></a>|
-                	<a href="<%=request.getContextPath()%>/workflow/config/taskConfigMain.page?processKey=<pg:cell colName="KEY_" />&deploymentId=<pg:cell colName='DEPLOYMENT_ID_' />" id="viewOrgProcessInfo"><pg:message code="sany.pdp.workflow.operation.workflow.config"/></a>
-                </td>    
+	        <td class="td_center">
+                <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="ID_" />"/>
+                <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
+                <input id="key" type="hidden" name="key" value="<pg:cell colName="KEY_" />"/></td>
+            <td><pg:cell colName="ID_" /></td>    
+            <td><pg:cell colName="NAME_" /></td>
+    		<td><pg:cell colName="KEY_" /></td>       
+            <td><span class="toolTip" title="<pg:cell colName="VERSION_"/>"><pg:cell colName="VERSION_" maxlength="8" replace="..."/></span></td>  
+       		<td><pg:cell colName="DEPLOYMENT_NAME_" /></td>   
+       		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
+       		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
+       		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
+       		<td><pg:cell colName="business_name"/></td>
+       		 <td>
+            	<pg:equal colName="SUSPENSION_STATE_" value="0"><pg:message code="sany.pdp.workflow.operation.open"/></pg:equal>
+            	<pg:equal colName="SUSPENSION_STATE_" value="1"><pg:message code="sany.pdp.workflow.operation.close"/></pg:equal>
+            </td>	   
+            <td class="td_center">
+            	<a href="javascript:void(0)" id="activateProcess" onclick="activateProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='0'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.open"/></a>
+            	<a href="javascript:void(0)" id="suspendProcess" onclick="suspendProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='1'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.close"/></a>|
+            	<a href="javascript:void(0)" id="viewProcessInfo" onclick="viewProcessInfo('<pg:cell colName="KEY_" />')"><pg:message code="sany.pdp.workflow.operation.workflow.info"/></a>|
+            	<a href="<%=request.getContextPath()%>/workflow/config/taskConfigMain.page?processKey=<pg:cell colName="KEY_" />&deploymentId=<pg:cell colName='DEPLOYMENT_ID_' />" id="viewOrgProcessInfo"><pg:message code="sany.pdp.workflow.operation.workflow.config"/></a>
+            </td>    
         </tr>
 	 </pg:list>
     </table>
     </div>
 	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
-
     </pg:pager>
     </pg:notequal >
 

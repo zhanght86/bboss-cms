@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<property name="selectEntrustList">
+		<![CDATA[
+			select a.* from TD_WF_ENTRUST a
+			where 1=1
+				#if($id && !$id.equals(""))
+					and a.id = #[id] 
+				#end
+				#if($entrust_user && !$entrust_user.equals(""))
+					and a.entrust_user like #[entrust_user] 
+				#end
+				#if($create_user && !$create_user.equals(""))
+					and a.create_user like #[create_user] 
+				#end
+				
+		]]>
+	</property>
+	
+	<property name="updateWfEntrust">
+		<![CDATA[
+			update TD_WF_ENTRUST
+			    set id=#[id],ENTRUST_USER=#[entrust_user],CREATE_USER=#[create_user],STS=#[sts],
+			    START_DATE=#[start_date],END_DATE=#[end_date],CREATE_DATE=#[create_date]
+			    where id=#[id]
+				
+		]]>
+	</property>
+	
+	<property name="insertWfEntrust">
+		<![CDATA[
+			insert into TD_WF_ENTRUST 
+				(ID, ENTRUST_USER, START_DATE, END_DATE, CREATE_DATE, CREATE_USER, STS) 
+			values
+				(#[id], #[entrust_user], #[start_date], #[end_date], #[create_date], #[create_user],#[sts])
+		]]>
+	</property>
+	
+	<property name="insertEntrustProcRelation">
+		<![CDATA[
+			insert into TD_WF_ENTRUST_PROC_RELATION 
+				(ID, ENTRUST_ID, PROCDEF_ID, ENTRUST_TYPE, ENTRUST_DESC) 
+			values
+				(#[id], #[entrust_id], #[procdef_id], #[entrust_type], #[entrust_desc])
+		]]>
+	</property>
+	
+	<property name="deleteWfEntrustById">
+		<![CDATA[
+			delete from TD_WF_ENTRUST where ID=?
+		]]>
+	</property>
+	
+	<property name="updateWfEntrustStsById">
+		<![CDATA[
+			update TD_WF_ENTRUST set STS=? where id=?
+				
+		]]>
+	</property>
+	
+	<property name="deleteEntrustProcRelationByEntrustId">
+		<![CDATA[
+			delete from TD_WF_ENTRUST_PROC_RELATION where ENTRUST_ID=?
+		]]>
+	</property>
+	
+	<property name="selectWfEntrust">
+		<![CDATA[
+			select * from TD_WF_ENTRUST where id = ?
+		]]>
+	</property>
+	
+	<property name="queryRelationByEntrustId">
+		<![CDATA[
+				select r.*,p.name_ as procdef_name,b.business_name,a.system_name as wf_app_name from TD_WF_ENTRUST_PROC_RELATION r
+					left join ACT_RE_PROCDEF p on p.id_ = r.procdef_id
+					left join TD_WF_PRO_BUSINESSTYPE pr on pr.process_key = p.key_
+					left join TD_WF_BUSINESSTYPE b on b.business_id = pr.businesstype_id
+					left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.id_
+					left join TD_WF_APP a on a.id = ar.wf_app_id
+				where ENTRUST_ID = ?
+			]]>
+	</property>
+	
+</properties>

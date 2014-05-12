@@ -2014,6 +2014,9 @@ public void rejecttoPreTask(String taskId,String username){
 			if(StringUtils.isNotEmpty(processDefCondition.getWf_app_mode_type_nonexist())){
 				processDefCondition.setWf_app_mode_type_nonexist("%"+processDefCondition.getWf_app_mode_type_nonexist()+"%");
 			}
+			if(StringUtils.isNotEmpty(processDefCondition.getProcessName())){
+				processDefCondition.setProcessName("%"+processDefCondition.getProcessName()+"%");
+			}
 			ListInfo listInfo = executor.queryListInfoBean(ProcessDef.class, "queryProdef", offset, pagesize, processDefCondition);
 			return listInfo;
 		}catch(Exception e){

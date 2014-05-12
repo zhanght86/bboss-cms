@@ -5,16 +5,22 @@
 	<property name="queryProdef">
 		<![CDATA[
 			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
-			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id
+			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id,
+			app.system_name as wf_app_name
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
 			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
+			left join td_wf_app_proc_relation pr on pr.procdef_id = p.ID_
+			left join td_wf_app app on app.id = pr.wf_app_id
 			where p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
 			#if($processKey && !$processKey.equals(""))
 				and p.key_ like #[processKey]
 			#end
 			#if($resourceName && !$resourceName.equals(""))
 				and p.resource_name_ like #[resourceName]
+			#end
+			#if($processName && !$processName.equals(""))
+				and p._ like #[processName]
 			#end
 			#if($businesstype_id && !$businesstype_id.equals(""))
 				and b.business_id = #[businesstype_id]

@@ -1,0 +1,32 @@
+
+<properties>
+
+	<!-- 
+		描述:委托待办管理模块
+		CopyRight:三一
+		版本:1.0
+	    Date: 2014-05-05
+	-->
+
+	<property name="/workflow/entrust/*.page"
+		path:index="/workflow/entrust/index.jsp"
+		path:queryListPage="/workflow/entrust/entrustList.jsp"
+		path:viewEntrustInfo="/workflow/entrust/entrustInfo.jsp"
+		path:modifyEntrustInfo="/workflow/entrust/entrustModify.jsp"
+		f:entrustService="attr:workflow.entrust.entrustService"
+		class="com.sany.workflow.entrust.action.EntrustAction" >
+	</property>
+	
+	<property name="workflow.entrust.entrustService"
+		f:executor="attr:workflow.entrust.configsqlexecutor"
+		class="com.sany.workflow.entrust.service.impl.EntrustServiceImpl" />
+	
+	
+	<property name="workflow.entrust.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/workflow/entrust/entrust.xml"/>
+		</construction>
+	</property>
+	
+</properties>

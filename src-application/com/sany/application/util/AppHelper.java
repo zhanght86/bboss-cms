@@ -2,9 +2,9 @@ package com.sany.application.util;
 
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Params;
+import org.frameworkset.web.token.ws.TokenService;
 
 import com.caucho.hessian.client.HessianProxyFactory;
-import com.sany.common.action.TokenService;
 
 public class AppHelper {
 	

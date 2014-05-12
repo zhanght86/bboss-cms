@@ -9,7 +9,7 @@
 <script type="text/javascript">
 
 </script>
-<body">
+<body>
 	<div class="form_box">
 		<form id="addForm" name="addForm" method="post">
 			<fieldset>

@@ -57,6 +57,8 @@ public class ProcessDef {
 	private String business_name;
 	private String business_id;
 	
+	private String wf_app_name;
+	
 	public int getREV_() {
 		return REV_;
 	}
@@ -186,7 +188,13 @@ public class ProcessDef {
 		this.business_id = business_id;
 	}
 
+	public String getWf_app_name() {
+		return wf_app_name;
+	}
 
+	public void setWf_app_name(String wf_app_name) {
+		this.wf_app_name = wf_app_name;
+	}
 	
 
 	

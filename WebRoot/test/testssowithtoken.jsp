@@ -1,6 +1,6 @@
 <%@page import="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"%>
 <%@page import="org.frameworkset.web.token.TokenStore"%>
-<%@page import="com.sany.common.action.TokenService"%>
+<%@page import="org.frameworkset.web.token.ws.TokenService"%>
 <%@page import="com.caucho.hessian.client.HessianProxyFactory"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
@@ -33,8 +33,8 @@ String tokenparamname = TokenStore.temptoken_param_name;
 
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
-//String url = "http://localhost:8081/context/hessian?service=tokenService";
-String url = "http://localhost:8081/SanyPDP/hessian?service=tokenService";
+//String url = "http://localhost:8080/context/hessian?service=tokenService";
+String url = "http://localhost:8080/SanyPDP/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -44,7 +44,7 @@ String token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * webservice方式申请token
 */
-url = "http://localhost:8081/SanyPDP/cxfservices/tokenService";
+url = "http://localhost:8080/SanyPDP/cxfservices/tokenService";
 JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
 WSServiceClientFactory.setAddress(url);
 WSServiceClientFactory.setServiceClass(TokenService.class);
@@ -56,11 +56,11 @@ token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * http请求方式申请令牌
 */
-url = "http://localhost:8081/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
-//url = "http://10.25.192.142:8081/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
+url = "http://localhost:8080/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+//url = "http://10.25.192.142:8080/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
 token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 //通过http根据账号或者工号获取ticket
-//url = "http://10.25.192.142:8081/SanyPDP/token/genTicket.freepage?appid="+appid + "&secret="+secret + "&account="+account + "&worknumber="+worknumber;
+//url = "http://10.25.192.142:8080/SanyPDP/token/genTicket.freepage?appid="+appid + "&secret="+secret + "&account="+account + "&worknumber="+worknumber;
 //String ticket = = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 
 org.frameworkset.web.servlet.context.WebApplicationContext  context = org.frameworkset.web.servlet.support.WebApplicationContextUtils.getWebApplicationContext();//获取实例

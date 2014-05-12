@@ -95,7 +95,7 @@
 		});
 	}
 	
-	//修改
+	//查看
 	function viewAppInfo() {
 		
 		var appInfoId = "";
@@ -103,7 +103,7 @@
 		if(appInfoRadio != null && appInfoRadio.length > 0){
 			appInfoId = $('input[name="appInfoRadio"]:checked').val();
 		}else{
-			alert("请先选择一条记录修改");
+			alert("请先选择一条记录查看");
 			return;
 		}
 		$.dialog({

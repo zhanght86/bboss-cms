@@ -38,7 +38,7 @@
 			delete from td_wf_app  
 			where 1=1
 				#if($id && !$id.equals(""))
-					and id like #[id] 
+					and id = #[id] 
 				#end
 				#if($system_id && !$system_id.equals(""))
 					and system_id like #[system_id] 

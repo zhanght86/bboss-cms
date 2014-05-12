@@ -144,7 +144,7 @@ public class ActivitiRepositoryAction {
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) long offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-			ProcessDefCondition processDefCondition, ModelMap model) {
+			ProcessDefCondition processDefCondition, String processChoose ,ModelMap model) {
 		try {
 			// 获取流程部署信息集合
 			if(processDefCondition == null){
@@ -169,7 +169,11 @@ public class ActivitiRepositoryAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		if("Y".equals(processChoose)){
+			
+			return "path:queryProcessDefsHelpChoose";
+		}
 		return "path:queryProcessDefs";
 	}
 

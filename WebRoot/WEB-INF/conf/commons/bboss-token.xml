@@ -6,11 +6,11 @@
 	-->
 	<property name="/token/*.freepage" ws:servicePort="tokenService" 
 	hessian:servicePort="tokenService"
-	class="com.sany.common.action.TokenController" />
+	class="org.frameworkset.web.token.ws.TokenController" />
 	<!-- 
 	校验令牌服务
 	-->
 	<property name="/checktoken/*.freepage" ws:servicePort="checktokenService" 
 	hessian:servicePort="checktokenService"
-	class="com.sany.common.action.CheckTokenContoller" />
+	class="org.frameworkset.web.token.ws.CheckTokenContoller" />
 </properties>
