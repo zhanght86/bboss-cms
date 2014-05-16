@@ -40,6 +40,10 @@ import com.frameworkset.platform.cms.driver.context.Context;
 
 public class PublishMonitor implements java.io.Serializable {
 	public final static Object traceObject = new Object();
+	private String uuid ;
+	private String pageUrl;
+	private String multidocspub;
+	
 
 	/**
 	 * 子监控器列表，封装派生的子发布任务的监控器
@@ -51,7 +55,7 @@ public class PublishMonitor implements java.io.Serializable {
 	private Map sitePageTemplate;
 
 	private PublishMonitor() {
-		this.tempMonitor = Collections.synchronizedList(new ArrayList());
+//		this.tempMonitor = Collections.synchronizedList(new ArrayList());
 		this.totalFailedMessage = Collections.synchronizedList(new ArrayList());
 		this.totalSuccessMessage = Collections
 				.synchronizedList(new ArrayList());
@@ -68,7 +72,7 @@ public class PublishMonitor implements java.io.Serializable {
 			List totalSuccessMessage, List totalMessages,
 			Map distributeTemplateIndexs, Map distributePageIndexs,
 			Map sitePageTemplate, Map tempFileOfPublishObject) {
-		this.tempMonitor = tempMonitor;
+//		this.tempMonitor = tempMonitor;
 		this.totalFailedMessage = totalFailedMessage;
 		this.totalSuccessMessage = totalSuccessMessage;
 		this.totalMessages = totalMessages;
@@ -179,10 +183,10 @@ public class PublishMonitor implements java.io.Serializable {
 	 */
 	private List totalMessages;
 
-	/**
-	 * 存储最新的发布监控信息
-	 */
-	private List tempMonitor = null;
+//	/**
+//	 * 存储最新的发布监控信息
+//	 */
+//	private List tempMonitor = null;
 
 	/**
 	 * 模版附件拷贝记录,模版发布到标识具体的频道下面时只需要拷贝一次模版的附件 Map<templateid+":"+identity,traceObject>
@@ -219,7 +223,7 @@ public class PublishMonitor implements java.io.Serializable {
 			PublishMessage message = new PublishMessage(msg, time, publisher);
 			this.totalSuccessMessage.add(message);
 			this.totalMessages.add(message);
-			tempMonitor.add(message);
+//			tempMonitor.add(message);
 		}
 	}
 
@@ -240,7 +244,7 @@ public class PublishMonitor implements java.io.Serializable {
 					publisher);
 			this.totalSuccessMessage.add(message);
 			this.totalMessages.add(message);
-			tempMonitor.add(message);
+//			tempMonitor.add(message);
 		}
 	}
 
@@ -287,7 +291,7 @@ public class PublishMonitor implements java.io.Serializable {
 			PublishMessage message = new PublishMessage(msg, time, publisher);
 			this.totalFailedMessage.add(message);
 			this.totalMessages.add(message);
-			tempMonitor.add(message);
+//			tempMonitor.add(message);
 		}
 	}
 
@@ -308,7 +312,7 @@ public class PublishMonitor implements java.io.Serializable {
 					publisher);
 			this.totalFailedMessage.add(message);
 			this.totalMessages.add(message);
-			tempMonitor.add(message);
+//			tempMonitor.add(message);
 		}
 	}
 
@@ -318,11 +322,12 @@ public class PublishMonitor implements java.io.Serializable {
 	 * @return List<PublishMessage>
 	 */
 	public List getNewestMessages() {
-		synchronized (tempMonitor) {
-			List newest = new ArrayList(this.tempMonitor);
-			this.tempMonitor.clear();
-			return newest;
-		}
+//		synchronized (tempMonitor) {
+//			List newest = new ArrayList(this.tempMonitor);
+//			this.tempMonitor.clear();
+//			return newest;
+//		}
+		return new ArrayList();
 	}
 
 	public static void main(String[] args) {
@@ -427,7 +432,7 @@ public class PublishMonitor implements java.io.Serializable {
 	}
 
 	public PublishMonitor createSubPublishMonitor() {
-		PublishMonitor monitor = new PublishMonitor(this.tempMonitor,
+		PublishMonitor monitor = new PublishMonitor(null,
 				this.totalFailedMessage, this.totalSuccessMessage,
 				this.totalMessages, this.distributeTemplateIndexs,
 				this.distributePageIndexs, sitePageTemplate,
@@ -669,9 +674,53 @@ public class PublishMonitor implements java.io.Serializable {
 	public boolean isNotRecordMsg() {
 		return notRecordMsg;
 	}
+	public void clearMSGS()
+	{
+		if(totalFailedMessage != null)
+		{
+			this.totalFailedMessage.clear();
+			totalFailedMessage = null;
+		}
+		if(totalSuccessMessage != null)
+		{
+			this.totalSuccessMessage.clear();
+			totalSuccessMessage = null;
+		}
+		if(totalMessages != null)
+		{
+			this.totalMessages.clear();
+			totalMessages = null;
+		}
+		
+		
+	}
 
 	public void setNotRecordMsg(boolean notRecordMsg) {
 		this.notRecordMsg = notRecordMsg;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getPageUrl() {
+		return pageUrl;
+	}
+
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
+	}
+
+	public String getMultidocspub() {
+		return multidocspub;
+	}
+
+	public void setMultidocspub(String multidocspub) {
+		this.multidocspub = multidocspub;
 	}
 
 	// /**

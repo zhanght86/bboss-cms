@@ -21,7 +21,7 @@ import com.frameworkset.platform.cms.driver.publish.PublishObject;
  * @author biaoping.yin
  * @version 1.0
  */ 
-public class BatchPublishObject extends PublishObject implements java.io.Serializable {
+public class BatchPublishObject extends PublishObject {
 	/**
 	 * 批量发布对象二维数组
 	 * 封装多个文档的站点，频道，和文档id信息
@@ -106,10 +106,22 @@ public class BatchPublishObject extends PublishObject implements java.io.Seriali
 		
 		
 	}
-
+	private String id;
 	protected String getId() {
+		if(id != null)
+			return id;
 		// TODO Auto-generated method stub
-		return this.batchObjects.toString();
+		StringBuffer ids = new StringBuffer();
+		for(int i = 0; i < this.batchObjects.length; i ++)
+		{
+			
+			String[] docinfo = this.batchObjects[i];
+			if(i != 0)
+				ids.append(",");
+			ids.append("site-").append(docinfo[0]).append("channel-").append(docinfo[1]).append("document-").append(docinfo[2]);
+		}
+		id = ids.toString();
+		return id;
 	}
 	
 	/**

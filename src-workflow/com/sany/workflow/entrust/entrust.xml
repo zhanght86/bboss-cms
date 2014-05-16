@@ -4,26 +4,49 @@
 
 	<property name="selectEntrustList">
 		<![CDATA[
-			select a.* from TD_WF_ENTRUST a
+			select a.*, (select distinct r.entrust_type from td_wf_entrust_proc_relation r where r.entrust_id = a.id) as wf_entrust_type from TD_WF_ENTRUST a
 			where 1=1
 				#if($id && !$id.equals(""))
 					and a.id = #[id] 
 				#end
 				#if($entrust_user && !$entrust_user.equals(""))
-					and a.entrust_user like #[entrust_user] 
+					and (a.entrust_user like #[entrust_user] or a.entrust_user_name like #[entrust_user])  
 				#end
 				#if($create_user && !$create_user.equals(""))
-					and a.create_user like #[create_user] 
+					and (a.create_user like #[create_user] or a.create_user_name like #[create_user])
+				#end
+				#if($sts && !$sts.equals(""))
+					and a.sts like #[sts]
 				#end
 				
+		]]>
+	</property>
+	
+	<property name="selectValidateEntrustList">
+		<![CDATA[
+			select * from td_wf_entrust 
+			where 1=1
+			   #if($create_user && !$create_user.equals(""))
+					and create_user = #[create_user] 
+			   #end
+			   #if($sts && !$sts.equals(""))
+					and sts = #[sts] 
+			   #end
+			   #if($start_date && $end_date)
+					and ( ( (start_date>=#[start_date] and start_date <= #[end_date] ) or start_date is null )
+			           or ( (end_date>=#[start_date] and end_date <= #[end_date] ) or end_date is null ) )   
+			   #end
+			   #if($id && !$id.equals(""))
+					and id <> #[id] 
+			   #end
 		]]>
 	</property>
 	
 	<property name="updateWfEntrust">
 		<![CDATA[
 			update TD_WF_ENTRUST
-			    set id=#[id],ENTRUST_USER=#[entrust_user],CREATE_USER=#[create_user],STS=#[sts],
-			    START_DATE=#[start_date],END_DATE=#[end_date],CREATE_DATE=#[create_date]
+			    set id=#[id],ENTRUST_USER=#[entrust_user],ENTRUST_USER_NAME=#[entrust_user_name],CREATE_USER=#[create_user],CREATE_USER_NAME=#[create_user_name],
+			    STS=#[sts],START_DATE=#[start_date],END_DATE=#[end_date],CREATE_DATE=#[create_date]
 			    where id=#[id]
 				
 		]]>
@@ -32,9 +55,9 @@
 	<property name="insertWfEntrust">
 		<![CDATA[
 			insert into TD_WF_ENTRUST 
-				(ID, ENTRUST_USER, START_DATE, END_DATE, CREATE_DATE, CREATE_USER, STS) 
+				(ID, ENTRUST_USER, ENTRUST_USER_NAME, START_DATE, END_DATE, CREATE_DATE, CREATE_USER, CREATE_USER_NAME, STS) 
 			values
-				(#[id], #[entrust_user], #[start_date], #[end_date], #[create_date], #[create_user],#[sts])
+				(#[id], #[entrust_user], #[entrust_user_name], #[start_date], #[end_date], #[create_date], #[create_user], #[create_user_name], #[sts])
 		]]>
 	</property>
 	
@@ -74,13 +97,41 @@
 	
 	<property name="queryRelationByEntrustId">
 		<![CDATA[
-				select r.*,p.name_ as procdef_name,b.business_name,a.system_name as wf_app_name from TD_WF_ENTRUST_PROC_RELATION r
+				select r.*,p.name_ as procdef_name,a.system_name as wf_app_name from TD_WF_ENTRUST_PROC_RELATION r
 					left join ACT_RE_PROCDEF p on p.id_ = r.procdef_id
-					left join TD_WF_PRO_BUSINESSTYPE pr on pr.process_key = p.key_
-					left join TD_WF_BUSINESSTYPE b on b.business_id = pr.businesstype_id
 					left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.id_
 					left join TD_WF_APP a on a.id = ar.wf_app_id
 				where ENTRUST_ID = ?
+			]]>
+	</property>
+	
+	<property name="selectValidateEntrustRelation">
+		<![CDATA[
+				select * from TD_WF_ENTRUST_PROC_RELATION r
+				where 1=1
+				#if($wfEntrustIdList && $wfEntrustIdList.size()>0)
+					and entrust_id in (
+			    	               #foreach($wfEntrustId in $wfEntrustIdList)
+			    	               #if($velocityCount == 0)
+			    	                   #[wfEntrustIdList[$velocityCount]]
+			    	               #else  
+			    	             		,#[wfEntrustIdList[$velocityCount]]  
+			    	               #end
+			    	               #end
+								 )
+				#end
+				#if($wfProcdefIdList && $wfProcdefIdList.size()>0)
+					and (procdef_id in (
+			    	               #foreach($wfProcdefId in $wfProcdefIdList)
+			    	               #if($velocityCount == 0)
+			    	                   #[wfProcdefIdList[$velocityCount]]
+			    	               #else  
+			    	             		,#[wfProcdefIdList[$velocityCount]]  
+			    	               #end
+			    	               #end
+								 )
+						or procdef_id is null)
+				#end
 			]]>
 	</property>
 	

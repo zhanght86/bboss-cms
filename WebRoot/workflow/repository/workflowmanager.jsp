@@ -193,6 +193,13 @@
 		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
 	}
 	
+	//特定流程的任务管理查看  add by tanx
+	function viewTaskInfo(processKey) {
+		
+		var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskInfo.page?processKey="+processKey;
+		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
+	}
+	
     function doreset(){
     	
 	   	$("#reset").click();

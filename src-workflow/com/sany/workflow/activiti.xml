@@ -41,6 +41,76 @@
 		]]>
 	</property>
 	
+	<property name="queryProInst">
+		<![CDATA[
+			SELECT A.ID_,
+		       A.PROC_INST_ID_,
+		       A.BUSINESS_KEY_,
+		       A.PROC_DEF_ID_,
+		       A.START_TIME_,
+		       A.END_TIME_,
+		       A.DURATION_,
+		       A.START_USER_ID_,
+		       A.START_ACT_ID_,
+		       A.END_ACT_ID_,
+		       A.SUPER_PROCESS_INSTANCE_ID_,
+		       A.DELETE_REASON_,
+		       B.VERSION_,
+		       C.NAME_,
+		       C.ASSIGNEE_,
+		       NVL2(END_TIME_,NVL2(A.DELETE_REASON_, A.DELETE_REASON_, '正常完成'),'') REMARK
+		  FROM ACT_HI_PROCINST A
+		  LEFT JOIN ACT_RU_TASK C ON A.PROC_INST_ID_ = C.PROC_INST_ID_
+		  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+		  
+			WHERE 1=1
+			
+			#if($wf_key && !$wf_key.equals(""))
+				AND B.KEY_ = #[wf_key]
+			#end
+			
+			#if($wf_Inst_Id && !$wf_Inst_Id.equals(""))
+				and A.PROC_INST_ID_ like #[wf_Inst_Id]
+			#end
+			
+			#if($wf_start_time1 && !$wf_start_time1.equals(""))
+				and A.START_TIME_ >= TO_TIMESTAMP(#[wf_start_time1], 'YYYY-MM-DD HH24:MI:SS')
+			#end
+			
+			#if($wf_start_time2 && !$wf_start_time2.equals(""))
+				and A.START_TIME_ <= TO_TIMESTAMP(#[wf_start_time2], 'YYYY-MM-DD HH24:MI:SS')
+			#end
+			
+			#if($wf_end_time1 && !$wf_end_time1.equals(""))
+				and A.END_TIME_ >= TO_TIMESTAMP(#[wf_end_time1], 'YYYY-MM-DD HH24:MI:SS')
+			#end
+			
+			#if($wf_end_time2 && !$wf_end_time2.equals(""))
+				and A.END_TIME_ <= TO_TIMESTAMP(#[wf_end_time2], 'YYYY-MM-DD HH24:MI:SS')
+			#end
+			
+			#if($wf_state && $wf_state.equals("3"))
+				AND A.END_TIME_ IS NOT NULL
+			#elseif ($wf_state && $wf_state.equals("1"))
+				AND A.END_TIME_ IS NULL
+			#end
+			
+			#if($wf_versions)
+      			AND B.VERSION_ IN ( 
+      				#foreach($wf_version in $wf_versions)
+						#if($velocityCount == 0)
+							#[wf_versions[$velocityCount]]
+						#else
+							,#[wf_versions[$velocityCount]]
+						#end
+					#end
+      			)
+			#end
+			
+			ORDER BY A.START_TIME_ DESC
+		]]>
+	</property>
+	
 	<property name="queryProdefByKey">
 		<![CDATA[
 			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
@@ -100,6 +170,75 @@
 			t.proc_def_id_ as processDefinitionId,t.name_ as name ,t.task_def_key_ as taskDefinitionKey  from act_ru_task t 
 			inner join act_ru_identitylink i on t.id_=i.task_id_ and i.user_id_ = ?
 			inner join act_re_procdef p on t.proc_def_id_ = p.id_ and p.key_= ?
+		]]>
+	</property>
+	
+	<!-- 工作流管理中查看任务列表  gw_tanx-->
+	<property name="selectTaskByUser_wf">
+		<![CDATA[
+			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
+				select distinct 1 as state,RES.*
+				  from ACT_RU_TASK RES
+				 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
+				 WHERE RES.ASSIGNEE_ is null
+				   and I.TYPE_ = 'candidate'
+				   
+				   #if($isAdmin == false)
+				   	and (I.USER_ID_ = #[assignee])
+				   #end
+				   
+				   #if($processIntsId && !$processIntsId.equals(""))
+				 	AND RES.PROC_INST_ID_ like #[processIntsId]
+			 	   #end
+			 	   
+			 	   #if($taskName && !$taskName.equals(""))
+				 	AND RES.NAME_ like #[taskName]
+			 	   #end
+				   
+				   #if($processKey && !$processKey.equals(""))
+					   AND EXISTS (SELECT 1 FROM ACT_RE_PROCDEF A
+       				   WHERE A.KEY_ = #[processKey] AND RES.PROC_DEF_ID_ = A.ID_)
+				   #end
+				   
+				   #if($taskId && !$taskId.equals(""))
+					   AND RES.ID_ like #[taskId]
+				   #end
+			#end
+			
+			#if($taskState && $taskState.equals("0"))
+			 	union 
+			#end
+			
+			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
+				select distinct 2 as state,a.*
+				  from ACT_RU_TASK a
+				  WHERE 1=1
+				  
+				  #if($isAdmin == false)
+				   	and a.ASSIGNEE_ = #[assignee]
+				  #else
+				    and a.ASSIGNEE_ is not null
+				  #end
+				  
+				  #if($processIntsId && !$processIntsId.equals(""))
+				 	AND a.PROC_INST_ID_ like #[processIntsId]
+			 	   #end
+			 	   
+			 	   #if($taskName && !$taskName.equals(""))
+				 	AND a.NAME_ like #[taskName]
+			 	   #end
+				  
+				  #if($processKey && !$processKey.equals(""))
+					  AND EXISTS (SELECT 1 FROM ACT_RE_PROCDEF b
+       				  WHERE b.KEY_ = #[processKey] AND a.PROC_DEF_ID_ = b.ID_)
+				  #end
+				  
+				  #if($taskId && !$taskId.equals(""))
+					  AND A.ID_ like #[taskId]
+				  #end
+			#end
+			
+			ORDER BY 15 DESC  
 		]]>
 	</property>
 	
@@ -300,6 +439,40 @@
 				)
 				)
 			#end
+		]]>
+	</property>
+	
+	<property name="queryHisTaskById">
+		<![CDATA[
+			SELECT T.ID_             AS ID,
+		           T.PROC_DEF_ID_    AS PROCESSDEFINITIONID,
+		           T.TASK_DEF_KEY_   AS TASKDEFINITIONKEY,
+		           T.PROC_INST_ID_   AS PROCESSINSTANCEID,
+		           T.EXECUTION_ID_   AS EXECUTIONID,
+		           T.PARENT_TASK_ID_ AS PARENTTASKID,
+		           T.NAME_           AS NAME,
+		           T.DESCRIPTION_    AS DESCRIPTION,
+		           T.OWNER_          AS OWNER,
+		           T.ASSIGNEE_       AS ASSIGNEE,
+		           T.START_TIME_     AS STARTTIME,
+		           T.END_TIME_       AS ENDTIME,
+		           T.DELETE_REASON_  AS DELETEREASON
+		      FROM ACT_HI_TASKINST T
+		     WHERE 1=1
+		     
+		     #if($processInstId && !$processInstId.equals(""))
+				 AND T.PROC_INST_ID_ = #[processInstId]
+			 #end
+			 
+			 #if($processDefId && !$processDefId.equals(""))
+				 AND T.PROC_DEF_ID_ = #[processDefId]
+			 #end
+			 
+			 #if($processKey && !$processKey.equals(""))
+				 AND EXISTS
+				 (SELECT 1 FROM ACT_RE_PROCDEF A WHERE A.KEY_ = #[processKey]
+				 AND T.PROC_DEF_ID_ = A.ID_)
+			 #end
 		]]>
 	</property>
 	

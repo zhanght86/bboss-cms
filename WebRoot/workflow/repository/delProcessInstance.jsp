@@ -1,0 +1,81 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ include file="/common/jsp/importtaglib.jsp"%>
+<%--
+描述：删除流程实例原因
+作者：谭湘
+版本：1.0
+日期：2014-05-09
+ --%>	
+ <%
+  request.setAttribute("ids", request.getParameter("ids"));
+ %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>删除流程实例信息</title>
+<%@ include file="/common/jsp/css.jsp"%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type="text/javascript">
+
+
+</script>
+</head>
+	
+<body>
+<div class="form">
+	<form id="delProcessInstFrom" name="delProcessInstFrom" method="post" >
+		
+		<table border="0" cellpadding="0" cellspacing="0" class="table4">
+			<tr>
+				<td width="140px">
+					<textarea rows="8" cols="50" id="deleteReason" name="deleteReason"  
+						class="w120" style="width: 280px;font-size: 12px;height:40px;" maxlength="200">
+					</textarea>
+				</td>
+			</tr>
+		</table>			
+		
+		<div class="btnarea" >
+			<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="dosubmit()"><span><pg:message code="sany.pdp.common.ok"/></span></a>
+			<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.close"/></span></a>
+			<input type="reset" id="reset" style="display: none;" />
+		</div>
+	</form>
+</div>
+</body>
+<script language="javascript">
+var api = frameElement.api, W = api.opener;
+function dosubmit(){
+	var deleteReason = $("#deleteReason").val();
+	
+	if(deleteReason ==''){
+		alert("请填写删除原因");
+		return;
+	}
+	 
+	$.dialog.confirm('确定要删除记录吗？删除后将不可恢复', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/repository/delPorcessInstance.page",
+			data :{"deleteReason":deleteReason,processInstIds:'${ids}'},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+			success : function(data){
+				if(data=="success"){
+					api.close();
+		 			W.modifyQueryData();
+				}else{
+					$.dialog.alert("部署异常--"+data,function(){},api);
+				}
+			}	
+		 });
+	},function(){});    
+}
+
+	
+</script>
+</html>

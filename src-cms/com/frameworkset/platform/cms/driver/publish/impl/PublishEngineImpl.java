@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
-
-import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
 
 import com.frameworkset.platform.cms.driver.publish.NestedPublishException;
 import com.frameworkset.platform.cms.driver.publish.PublishCallBack;
@@ -42,7 +41,25 @@ public class PublishEngineImpl implements PublishEngine {
 	 * 通过跟踪索引可以避免子任务的重复发布，同步发布时
 	 * Map<rootpubobjid,Map<pubobjid,Pubobject>>
 	 */
-	private Map currentTasktraceIndexs = new ConcurrentHashMap();	
+	private Map<String,Map<String,Object>> currentTasktraceIndexs = new ConcurrentHashMap<String,Map<String,Object>>();	
+	private Map<String,String> currentUUITaskIndexs = new HashMap<String,String>();
+	private Map<String,PublishMonitor> currentMonitorIndexs = new HashMap<String,PublishMonitor>();
+	public PublishMonitor getPublishMonitor(String uuid)
+	{
+		String jobid = currentUUITaskIndexs.get(uuid);
+		if(jobid == null)
+			return null;
+		Map obj = this.currentTasktraceIndexs.get(jobid);
+		if(obj == null)
+		{
+			currentMonitorIndexs.remove(jobid);
+			return null;
+		}
+		else
+		{
+			return currentMonitorIndexs.get(jobid);
+		}
+	}
 	
 	
 	
@@ -153,12 +170,18 @@ public class PublishEngineImpl implements PublishEngine {
 		{
 			PublishObject root = task.getContext().getRootContext().getPublishObject();
 			String rootid = root.getPublishObjectID();
-			Map map = (Map)this.currentTasktraceIndexs.get(rootid);
+			Map<String, Object> map = (Map<String, Object>)this.currentTasktraceIndexs.get(rootid);
 			if(map == null)
 			{
-				map = new HashMap();
+				map = new HashMap<String, Object>();
 				map.put(rootid,PublishMonitor.traceObject);
 				this.currentTasktraceIndexs.put(rootid,map);
+				if(root.getPublishMonitor() != null)
+				{
+					this.currentUUITaskIndexs.put(root.getPublishMonitor().getUuid(), rootid);
+					this.currentMonitorIndexs.put(rootid, root.getPublishMonitor());
+				}
+				
 				return false;
 			}
 			String taskid = task.getPublishObjectID();
@@ -197,16 +220,28 @@ public class PublishEngineImpl implements PublishEngine {
 	 */
 	public void removePublishedObject(PublishObject publishObject)
 	{
-		synchronized(currentTasktraceIndexs)
+//		synchronized(currentTasktraceIndexs)
+//		{
+//			if(publishObject.isRoot())
+//			{
+//				
+//				/**
+//				 * 清空当前任务的在全局任务中的索引
+//				 */
+//				currentTasktraceIndexs.remove(publishObject.getPublishObjectID());
+//			}
+//		}
+		if(publishObject.isRoot())
 		{
-			if(publishObject.isRoot())
-			{
-				
-				/**
-				 * 清空当前任务的在全局任务中的索引
-				 */
-				currentTasktraceIndexs.remove(publishObject.getPublishObjectID());
-			}
+			
+			/**
+			 * 清空当前任务的在全局任务中的索引
+			 */
+			String objid = publishObject.getPublishObjectID();
+			currentTasktraceIndexs.remove(objid);
+			PublishMonitor pm = this.currentMonitorIndexs.remove(objid);
+			if(pm != null)
+				this.currentUUITaskIndexs.remove(pm.getUuid());
 		}
 	}
 	
@@ -315,14 +350,17 @@ public class PublishEngineImpl implements PublishEngine {
 				currentPublishTask.publishObject.getPublishMonitor()
 				.setPublishStatus(PublishMonitor.ALL_FAILED);
 			}
-			
-			/**
-			 * 清空当前任务的在全局任务中的索引
-			 */
-			removePublishedObject(currentPublishTask.publishObject);
-			if(currentPublishTask.publishObject.isRoot())
+			finally
 			{
-				currentPublishTask.publishObject.destroy();
+			
+				/**
+				 * 清空当前任务的在全局任务中的索引
+				 */
+				removePublishedObject(currentPublishTask.publishObject);
+				if(currentPublishTask.publishObject.isRoot())
+				{
+					currentPublishTask.publishObject.destroy();
+				}
 			}
 //			if(currentPublishTask.publishObject.isRoot())
 //			{

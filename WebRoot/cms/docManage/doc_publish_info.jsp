@@ -1,12 +1,12 @@
+<%@page import="com.frameworkset.platform.cms.util.CMSUtil"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.*"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%@page import="com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor"%>
 <%@page import="com.frameworkset.platform.cms.driver.publish.impl.APPPublish"%>
 <%
-    AccessControl accesscontroler = AccessControl.getInstance();
-    accesscontroler.checkAccess(request, response);
-    String uuid = request.getParameter("uuid");
+    AccessControl accesscontroler = AccessControl.getAccessControl();
+    String uuid = CMSUtil.getUUID();
     String refresh = request.getParameter("refresh");
     refresh = refresh==null?"":refresh;
     //发布的重要参数
@@ -66,7 +66,7 @@
             <input hideFocus type="checkbox" id="isRecordMsg2" name="isRecordMsg2" value="true" onclick="document.all.isRecordMsg1.checked=false"/>记录
             <span id="infoMsg" style="display:none;">
                 <INPUT name="button" id="showinfo" type="button" class="cms_button" onClick="showMsg()" >
-                <INPUT  type="button" class="cms_button" value="刷新信息" onClick="updateMsg()" >
+                <!-- <INPUT  type="button" class="cms_button" value="刷新信息" onClick="updateMsg()" > -->
             </span>
         </td>
     </tr> 
@@ -100,8 +100,8 @@
 </div>
 
 
-<iframe name="info" src="" width="0" height="0"  style="display:none" ></iframe>
-<iframe name="publishFrame" src="" width="2" height="2"  ></iframe>
+
+<iframe name="publishFrame" src="#" width="2" height="2"  ></iframe>
     <div id="waiting" style="text-align:center;display:none">    
         <span>
             <textarea name="publish_info" style="width:400" rows="8"></textarea>
@@ -114,6 +114,7 @@
 </body>
 
 <script language="javascript">
+
     window.onunload = function setReturnStr(){        
         if("<%=refresh%>"!="false"){
             //alert("refresh parent window")
@@ -125,8 +126,8 @@
             window.returnValue = "close";
         }
         //清空session
-        var path = "../cleanSession.jsp?uuid=<%=uuid%>";
-        window.dialogArguments.document.all("cleanSession").src = path;
+       // var path = "../cleanSession.jsp?uuid=<%=uuid%>";
+       // window.dialogArguments.document.all("cleanSession").src = path;
     }
     function subform(){
         if(document.getElementById("publishButton"))
@@ -151,6 +152,8 @@
             isRecordValue = document.all("isRecordMsg2").value;
             
         window.dialogArguments.document.all("isRecordValue").value = isRecordValue;
+        window.dialogArguments.document.all("uuid").value = "<%=uuid%>";
+        
         //增加是否递归发布和是否清除缓存
         window.dialogArguments.document.all("recursionPublish").value = document.all("recursionPublish").value;
         window.dialogArguments.document.all("clearCache").value =document.all("clearCache").value;
@@ -158,9 +161,9 @@
         
         //提交父窗口
         window.dialogArguments.document.form1.submit();        
-        if(isRecordValue == "true"){
-            updateMsg();
-        }
+        //if(isRecordValue == "true"){
+        //    updateMsg();
+        //}
         
         var isRecordValue = "";
         if(document.all("isRecordMsg1").checked) 
@@ -171,15 +174,37 @@
         if(isRecordValue=="true"){    
             document.all.infoMsg.style.display = "";
             document.all("showinfo").value = "查看日志"
+           
         }else{
             document.all.waiting_marquee.style.display = "";
         }
         document.all.waiting_marquee.style.display = "";
     }
     //被list页面回调, 显示最新记录的发布日志内容
-    function updateMsg(){
+    function updateMsg(multipub,pageUrl){
+   
         document.all("publish_info").doScroll('down');
         document.all("info").src="publish_info.jsp?uuid=<%=uuid%>";
+         if(pageUrl != null && pageUrl.length > 0){
+            document.all("waiting_marquee").style.display = "none";
+             var isRecordValue = window.dialogArguments.document.all("isRecordValue").value;             
+             try{
+                 if(isRecordValue=="true"){
+                     var infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                     if(multipub != null && multipub=="mutipublish" ){
+                         infomsg = "批量发布,请逐一查看发布文档"
+                     }
+                     document.all("linkInfo").innerHTML = infomsg;
+                     alert("恭喜，发布成功！"); 
+                 }  
+                  setTimeout("clearTimer()",1000);  
+                 //window.clearInterval(timer1);
+                 
+             }catch(err){
+             	 setTimeout("clearTimer()",1000);  
+                 alert(err.description);
+             }   
+         }
     }
     //被list页面回调, 显示发布成功的提示
     //url 为空的时候 直接alert(msg)

@@ -1,7 +1,9 @@
 package com.sany.workflow.entrust.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +38,10 @@ public class EntrustServiceImpl implements EntrustService {
     	
         if (StringUtils.isNotEmpty(condition.getCreate_user())) {
             condition.setCreate_user("%" + condition.getCreate_user() + "%");
+        }
+        
+        if (StringUtils.isNotEmpty(condition.getSts())) {
+            condition.setSts("%" + condition.getSts() + "%");
         }
         
         listInfo = executor
@@ -165,6 +171,67 @@ public class EntrustServiceImpl implements EntrustService {
 		executor.insertBeans("insertEntrustProcRelation", entrustRelation);
 		
 	}
+	
+	/**
+     * 保存委托待办前验证委托流程信息
+     * @param wfEntrust
+     * @param entrust_type
+     * @param procdef_id
+     * @return
+     * @throws Exception
+     */
+    public Map<String,String> validateSaveWfEntrust(WfEntrust wfEntrust, String entrust_type, List<String> procdef_id) throws Exception{
+    	
+    	Map<String,String> validateMap = new HashMap<String,String>();
+    	
+    	validateMap.put("validateResult", "fail");
+    	
+    	validateMap.put("validateMsg", "fail");
+    	
+    	List<WfEntrust> validateList = executor.queryListBean(WfEntrust.class, "selectValidateEntrustList", wfEntrust);
+    	
+    	if(CollectionUtils.isEmpty(procdef_id)){
+    		
+    		if(CollectionUtils.isEmpty(validateList)){
+    			
+    			validateMap.put("validateResult", "success");
+    	    	
+    	    	validateMap.put("validateMsg", "success");
+    		}
+    		
+    	}else{
+    		
+    		if(CollectionUtils.isEmpty(validateList)){
+    			
+    			validateMap.put("validateResult", "success");
+    	    	
+    	    	validateMap.put("validateMsg", "success");
+    		}else{
+    			
+    			List<String> wfEntrustIdList = new ArrayList<String>();
+        		
+        		for(WfEntrust validateEntrust : validateList){
+        			
+        			wfEntrustIdList.add(validateEntrust.getId());
+        			
+        		}
+        		
+        		wfEntrust.setWfEntrustIdList(wfEntrustIdList);
+        		wfEntrust.setWfProcdefIdList(procdef_id);
+        		
+        		List<WfEntrustProcRelation> relationList = executor.queryListBean(WfEntrustProcRelation.class, "selectValidateEntrustRelation", wfEntrust);
+        		
+        		if(CollectionUtils.isEmpty(relationList)){
+        			validateMap.put("validateResult", "success");
+        	    	
+        	    	validateMap.put("validateMsg", "success");
+        		}
+    		}
+    	}
+    	
+    	return validateMap;
+    }
+    
 	
     /**
      * 根据ID加载委托待办信息

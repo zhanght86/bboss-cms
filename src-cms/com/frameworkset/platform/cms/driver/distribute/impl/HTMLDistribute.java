@@ -743,22 +743,7 @@ public class HTMLDistribute extends Distribute  {
 				if(contentContext.isAggregation() )
 						//|| contentContext.isPagintion())//为什么分页时不发布模板附件,yinbiaoping 注释于2008-1-17 下五17：48
 					return;
-				//将文档主题图片和多媒体文件添加到发布队列中，以便后续进行发布
-				String dicPath = contentContext.getDocument().getPicPath();
-				String newPicPath = contentContext.getDocument().getNewPicPath();
-				String mediaPath = contentContext.getDocument().getMediapath();
-				if(!StringUtil.isEmpty(dicPath))
-				{
-					CMSTagUtil.getPublishedLinkPath(contentContext,"",dicPath);
-				}
-				if(!StringUtil.isEmpty(newPicPath))
-				{
-					CMSTagUtil.getPublishedLinkPath(contentContext,"",newPicPath);
-				}
-				if(!StringUtil.isEmpty(mediaPath))
-				{
-					CMSTagUtil.getPublishedLinkPath(contentContext,"",mediaPath);
-				}
+				
 				
 				int contentid = Integer.parseInt(contentContext.getContentid());
 				// FileUtil.copy(this.file.getAttachementPath(),this.context.getPublishTemppath());

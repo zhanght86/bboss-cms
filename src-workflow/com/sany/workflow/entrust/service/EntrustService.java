@@ -1,6 +1,7 @@
 package com.sany.workflow.entrust.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entrust.entity.WfEntrust;
@@ -60,5 +61,15 @@ public interface EntrustService {
      * @throws Exception
      */
     public List<WfEntrustProcRelation> queryRelationByEntrustId(String wfEntrustId) throws Exception;
+    
+    /**
+     * 保存委托待办前验证委托流程信息
+     * @param wfEntrust
+     * @param entrust_type
+     * @param procdef_id
+     * @return
+     * @throws Exception
+     */
+    public Map<String,String> validateSaveWfEntrust(WfEntrust wfEntrust, String entrust_type, List<String> procdef_id) throws Exception;
     
 }

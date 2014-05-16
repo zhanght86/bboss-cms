@@ -2,7 +2,7 @@
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@page import="com.frameworkset.platform.cms.channelmanager.*,com.frameworkset.platform.cms.util.*"%>
 <%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@page import="com.frameworkset.platform.security.*"%>

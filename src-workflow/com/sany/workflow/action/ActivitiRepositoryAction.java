@@ -29,6 +29,7 @@ import javax.transaction.RollbackException;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.frameworkset.util.CollectionUtils;
@@ -45,14 +46,20 @@ import com.frameworkset.util.StringUtil;
 import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
 import com.sany.application.util.AppHelper;
+import com.sany.workflow.entity.ActivitiNodeCandidate;
+import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.LoadProcess;
+import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessDeployment;
+import com.sany.workflow.entity.ProcessInstCondition;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.util.WorkFlowConstant;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author yinbp
@@ -403,6 +410,19 @@ public class ActivitiRepositoryAction {
 		}
 	}
 	
+	/** 获取流程追踪图 gw_tanx
+	 * @param processId
+	 * @param response
+	 * @throws IOException
+	 * 2014年5月13日
+	 */
+	public void getProccessActivePic(String processInstId,HttpServletResponse response) throws IOException {
+		if(processInstId!=null&&!processInstId.equals("")){
+			OutputStream out = response.getOutputStream();
+			activitiService.getProccessActivePic(processInstId, out);
+		}
+	}
+	
 	public @ResponseBody(datatype="xml") String getProccessXML(String processId) throws IOException {
 		if(processId!=null&&!processId.equals("")){
 			
@@ -419,7 +439,160 @@ public class ActivitiRepositoryAction {
 		return null;
 	}
 	
+	/**
+	 * 跳转到流程实例页面 gw_tanx
+	 * 
+	 * @param processDefCondition
+	 * @param model
+	 * @return 2014年5月8日
+	 */
+	public String toProcessInstance(String processKey, ModelMap model) {
+		
+		// 根据流程key获取流程版本号
+		List<ProcessDefinition> defList = activitiService.activitiListByprocesskey(processKey);
+		
+		model.addAttribute("defList", defList);
+		model.addAttribute("processKey", processKey);
+		return "path:toProcessInstance";
+	}
+
+	/**
+	 * 根据流程定义key查询流程实例列表 gw_tanx
+	 * 
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param processDefCondition
+	 * @param model
+	 * @return 2014年5月8日
+	 */
+	public String queryProcessIntsByKey(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "START_TIME_") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "true") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			ProcessInstCondition processDefCondition, ModelMap model) {
+		try {
+
+			// 获取流程实例List
+			ListInfo listInfo = activitiService.queryProcessInsts(offset,
+					pagesize, processDefCondition);
+			// List<ProcessInstance> instanceList = activitiService
+			// .getRuntimeService().createProcessInstanceQuery()
+			// .processDefinitionKey(processDefCondition.getProcessKey())
+			// .list();
+
+			model.addAttribute("processInsts", listInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "path:queryProcessIntsByKey";
+	}
+	private List<String> parserData(String particate)
+	{
+		if(!StringUtil.isEmpty(particate  ))
+		{
+			String[] pts = particate.split(",");
+			
+			return Arrays.asList(pts);
+		}
+		return null;
+	}
+	/**
+	 * 开启流程实例 gw_tanx
+	 * 
+	 * @param processKey
+	 * @return 2014年5月8日
+	 */
+	public @ResponseBody
+	String startPorcessInstance(String processKey,List<ActivitiNodeCandidate> activitiNodeCandidateList,
+			List<Nodevariable> nodevariableList) {
+		try {
+			Map<String, Object> map = new HashMap<String, Object>();
+				
+			for (int i = 0; i < activitiNodeCandidateList.size();i++) {
+				
+				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i).getCandidate_users_id())) {
+					map.put(activitiNodeCandidateList.get(i).getNode_key()+"_users",
+							activitiNodeCandidateList.get(i).getCandidate_users_id());
+				}
+				
+				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i).getCandidate_groups_id())) {
+					map.put(activitiNodeCandidateList.get(i).getNode_key()+"_groups",
+							activitiNodeCandidateList.get(i).getCandidate_groups_id());
+				}
+				
+				if (!StringUtil.isEmpty(nodevariableList.get(i).getParam_name())) {
+					map.put(nodevariableList.get(i).getParam_name(),
+							nodevariableList.get(i).getParam_value());
+				}
+			}
+
+			activitiService.startProcDef(map, processKey, AccessControl
+					.getAccessControl().getUserAccount());
+			return "success";
+		} catch (Exception e) {
+			return "fail:" + e.getMessage();
+		}
+	}
 	
+	/** 跳转流程开启参数配置页面 gw_tanx
+	 * @param processKey
+	 * @param business_id
+	 * @param business_type
+	 * @param model
+	 * 2014年5月13日
+	 */
+	public String toStartProcessInst(String processKey,String business_id, 
+			String business_type, ModelMap model){
+		
+		List<ActivitiNodeCandidate> list = activitiConfigService.
+				queryActivitiNodesCandidates(business_type, business_id, processKey);
+		
+		model.addAttribute("activitiNodeCandidateList", list);
+		model.addAttribute("business_id", business_id);
+		model.addAttribute("business_type", business_type);
+		model.addAttribute("process_key", processKey);
+		List<ActivitiNodeInfo> nodeInfoList = activitiConfigService.queryAllActivitiNodeInfo(processKey);
+		model.addAttribute("nodeInfoList", nodeInfoList);
+		
+		return "path:startProcess";
+	}
+
+	/**
+	 * 删除流程实例 gw_tanx
+	 * 
+	 * @param processInstIds
+	 * @param deleteReason
+	 * @return 2014年5月9日
+	 */
+	public @ResponseBody
+	String delPorcessInstance(String[] processInstIds, String deleteReason) {
+		try {
+			activitiService.cancleProcessInstances(processInstIds, deleteReason);
+			return "success";
+		} catch (Exception e) {
+			return "fail:" + e.getMessage();
+		}
+	}
+	
+	/**
+	 * 升级流程 gw_tanx
+	 * 
+	 * @param processInstIds
+	 * @param deleteReason
+	 * @return 2014年5月9日
+	 */
+	public @ResponseBody
+	String upgradeInstances(String processKey) {
+		try {
+			activitiService.upgradeInstances(processKey);
+			return "success";
+		} catch (Exception e) {
+			return "fail:" + e.getMessage();
+		}
+	}
 	
 }
 

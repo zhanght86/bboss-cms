@@ -26,7 +26,13 @@
 	left:0px;
 	padding-left:20px;  	   
   }
-
+	
+  #wf_app_content_div a:link{
+  	color:#333333; 
+  }
+  #wf_app_content_div a:hover{
+  	color:#0066cc;
+  }
 -->
 </style>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
@@ -38,12 +44,7 @@
            	queryData();
            });
            
-           $("#businessType").combotree({
-       		url:"../businesstype/showComboxBusinessTree.page"
-       		});
-           
            getTreeDate();
-       	   initTreeModule("");
        	   initProcdefTable();
            
        });
@@ -52,15 +53,13 @@
 		//$("#custombackContainer").load("queryProcessDefs.page #customContent",function(){loadjs()});
 		var processKey = $("#processKey").val();
 		var resourceName = $("#resourceName").val();
-		var businesstype_id = $("#businessType").combotree('getValue');
-		var wf_app_id = $("#wf_app_id").val();
 		var processChoose = $("#processChoose").val();
 		var wf_app_name = "";
 		if($("#wf_app_name") && $("#wf_app_name").length > 0){
 			wf_app_name = $("#wf_app_name").val();
 		}
     	 $("#custombackContainer").load("queryProcessDefs.page #customContent", 
-    			 {processKey:processKey, resourceName:resourceName,businesstype_id:businesstype_id,wf_app_id:wf_app_id,wf_app_name:wf_app_name,processChoose:processChoose },
+    			 {processKey:processKey, resourceName:resourceName,wf_app_name:wf_app_name,processChoose:processChoose },
     			 function(){loadjs();});
 	}
 	 function exportExcel(){	 
@@ -209,23 +208,47 @@
 		 });
     }
     
-    function initTreeModule(app_query){
-    	var treeModuleHtml = "<option value=\"\">请选择</option>";
+    function initTreeModule(){
+    	
+    	var app_query = $("#wf_app_name").val();
+    	
+    	var treeModuleHtml = "";
     	if(treeData){
     		var seq = 1;
     		for(var i=0; i<treeData.length; i++){
-    			
-    			if(treeData[i].sso_url != "" && treeData[i].sso_url != null){
-					
-				}else{
-
-					treeModuleHtml += "<option value=\""+treeData[i].id+"\">"+treeData[i].system_name+"</option>";
-						seq++;	
-				}
+    			//控制弹出层数量
+    			if(seq>=15){
+    				continue;
+    			}
+    			if(app_query!=null && app_query!=""){
+    				if(treeData[i].system_id.toLowerCase().indexOf(app_query.toLowerCase()) >= 0 || treeData[i].system_name.toLowerCase().indexOf(app_query.toLowerCase()) >= 0){
+    					if(treeData[i].sso_url != "" && treeData[i].sso_url != null){
+    						continue;
+    					}else{
+    						treeModuleHtml += 
+    							"<ul>" +
+    							"<li id=\""+treeData[i].id+"\">&nbsp;&nbsp;<a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"','"+treeData[i].system_name+"')\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>" +
+    							"</ul>";
+        						
+        						seq++;	
+    					}
+    					
+    				}
+    			}else{
+    				if(treeData[i].sso_url != "" && treeData[i].sso_url != null){
+						continue;
+					}else{
+						treeModuleHtml += 
+							"<ul>" +
+							"<li id=\""+treeData[i].id+"\">&nbsp;&nbsp;<a href=\"#\" onclick=\"doClickTreeNode('"+treeData[i].id+"','"+treeData[i].system_name+"')\" >"+treeData[i].system_id+" "+treeData[i].system_name+"</a></li>" +
+							"</ul>";
+							seq++;	
+					}
+    			}
     		}
     	}
-    	
-    	$("#wf_app_id").html(treeModuleHtml);
+    	$("#wf_app_content_div").html(treeModuleHtml);
+    	$("#wf_app_main_div").show();
     }
     
     function sortAppTree(){
@@ -233,22 +256,11 @@
     	initTreeModule(app_query);
     }
     
-    function doClickTreeNode(app_id,selectedNode){
+    function doClickTreeNode(app_id,app_name){
     	
-    	$("#app_tree_module").find("li").removeAttr("class");
-    	$("#"+app_id).attr("class","select_links");
-    	if(app_id == "allAppIdLi"){
-    		$("#wf_app_id").val("");
-        	
-        	$("#app_query_th").html("应用:");
-        	$("#wf_app_name_td").html("<input id=\"wf_app_name\" name=\"wf_app_name\" type=\"text\" value=\"\" class=\"w120\" />");
-    	}else{
-    		$("#wf_app_id").val(app_id);
-        	
-    		$("#app_query_th").html("&nbsp;");
-        	$("#wf_app_name_td").html("&nbsp;");
-    	}
+    	$("#wf_app_name").val(app_name);
     	
+    	$("#wf_app_main_div").hide();
     	
     	queryList();
     }
@@ -321,7 +333,6 @@
 			"<tr>\n" +
 			"\t<td>"+addData.wf_app_name+"<input type='hidden' name='procdef_id' value='"+ addData.proc_id +"' /></td>\n" + 
 			"\t<td>"+addData.proc_name+"</td>\n" + 
-			"\t<td>"+addData.business_name+"</td>\n" + 
 			"\t<td><a href='#' onclick='delProcRow(this)' >删除</a></td>\n" + 
 			"</tr>";
 		$("#selectProcdefTable").append(addRow);
@@ -337,7 +348,6 @@
 			"<tr>\n" +
 			"\t<th>应用系统</th>\n" + 
 			"\t<th>流程名称</th>\n" + 
-			"\t<th>业务类型</th>\n" + 
 			"\t<th>操作</th>\n" + 
 			"</tr>";
 		$("#selectProcdefTable").html("");
@@ -362,9 +372,30 @@
 			}
 		}
 		
+		if(subData.length <= 0){
+			alert("未选择流程默认授权所有流程");
+		}
+		
 		W.chooseSelectedData(subData);
 		
 		api.close();
+	}
+	
+	var appSelectFlag = "N";
+	
+	function overAppMainDiv(){
+		appSelectFlag = "Y";
+	}
+	
+	function outAppMainDiv(){
+		appSelectFlag = "N";
+	}
+	
+	function outAppNameInput(){
+		if(appSelectFlag == "N"){
+			$("#wf_app_main_div").hide();
+			queryList();
+		}
 	}
 	
 </script>
@@ -387,6 +418,17 @@
 									<table width="100%" border="0" cellpadding="0" cellspacing="0"
 										class="table2">
 										<tr>
+										    <th id="app_query_th">
+												应用系统:
+											</th>
+											<td id="wf_app_name_td">
+											    <span class="combo" style="width: 122px; height: 20px;" sizset="true" >
+												<input id="wf_app_name" name="wf_app_name" type="text"
+													value="" class="combo-text validatebox-text" style="width: 100px;" 
+													onKeyUp="initTreeModule();" onclick="initTreeModule();" onblur="outAppNameInput();"  /><span class="combo-arrow" style="height: 20px;" 
+													onclick="javascript:$('#wf_app_name').focus();initTreeModule();" />
+											    </span>
+											</td>
 											<th>
 												流程名称：
 											</th>
@@ -394,22 +436,21 @@
 												<input id="resourceName" name="resourceName" type="text"
 													value="" class="w120" />
 											</td>
-											<th><pg:message code="sany.pdp.workflow.business.type"/>：</th>
-											<td>
-												<select class="easyui-combotree" id='businessType' name="businesstype_id" required="false"
-														style="width: 120px;">
-											</td>
 										</tr>
 										<tr>
-											<th id="app_query_th">
-												应用系统:
+											<th>
+												&nbsp;&nbsp;&nbsp;&nbsp;
 											</th>
-											<td id="wf_app_name_td">
-												<select id="wf_app_id" name="wf_app_id" type="text"
-													value="" class="w120" onchange="queryList();" />
+											<td >
+												&nbsp;&nbsp;&nbsp;&nbsp;
 											</td>
-											<td style="text-align:right">
+											<th>
+												&nbsp;&nbsp;&nbsp;&nbsp;
+											</th>
+											<td style="text-align:left">
 												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList();"><span><pg:message code="sany.pdp.common.operation.search"/></span>
+												</a>
+												<a href="javascript:void(0)" class="bt_1" id="resetButton" onclick="doreset();"><span><pg:message code="sany.pdp.common.operation.reset" /></span>
 												</a>
 												<input type="hidden" name="wf_app_id" id="wf_app_id" />
 												<input type="hidden" name="processChoose" id="processChoose" value="Y" />
@@ -436,7 +477,7 @@
 				<input  type="radio" name="excelType"  >2007</input>-->
 				</div>
 				
-				<strong><pg:message code="sany.pdp.workflow.manage"/></strong>			
+				<strong>流程列表</strong>			
 			</div>
 			<div id="custombackContainer"  style="overflow:auto">
 			
@@ -459,7 +500,6 @@
 						<tr>
 							<th>应用系统</th>
 							<th>流程名称</th>
-							<th>业务类型</th>
 							<th>操作</th>
 						</tr>
 						
@@ -469,6 +509,10 @@
 				
 			</div>
 			
+			</div>
+			<div id="wf_app_main_div" style="left: 97px; top: 32px; width: 120px; display: none; position: absolute; z-index: 9000;" >
+				<div id="wf_app_content_div" style="width: 120px;" class="combo-panel panel-body panel-body-noheader" title="" onmouseover="overAppMainDiv();" onmouseout="outAppMainDiv();" >
+				</div>
 			</div>
 		</div>
 	</body>

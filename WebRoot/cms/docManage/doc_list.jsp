@@ -17,8 +17,7 @@
 <%@ page import="com.frameworkset.platform.cms.countermanager.bean.VideoHitsCounter"%>
 
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String channelName = request.getParameter("channelName");
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
@@ -33,9 +32,9 @@
 	counter.setChannelId(Integer.valueOf(channelId));
 	
     //外部注入发布管理
-    String uuid = CMSUtil.getUUID();
-    PublishMonitor monitor = PublishMonitor.createPublishMonitor();
-    session.setAttribute(uuid,monitor);
+    //String uuid = CMSUtil.getUUID();
+    //PublishMonitor monitor = PublishMonitor.createPublishMonitor();
+    //session.setAttribute(uuid,monitor);
 	
 	String docsorid = request.getParameter("docsorid");
 	String title = request.getParameter("title");
@@ -437,7 +436,7 @@
 		form1.target = "operIframe";
         currentPageUrl();
 		//form1.submit();
-        var path = "doc_publish_info.jsp?uuid=<%=uuid%>&flag="+flag+"&docId="+docId;
+        var path = "doc_publish_info.jsp?flag="+flag+"&docId="+docId;
         var featrue = "dialogHeight:310px;dialogWidth:450px";
         winOpen = window.showModelessDialog(path,window,featrue);
 		//document.all.divProcessing.style.display="";
@@ -450,7 +449,7 @@
 			form1.target = "operIframe";
             currentPageUrl();
 			//form1.submit();    
-            var path = "doc_publish_info.jsp?uuid=<%=uuid%>";
+            var path = "doc_publish_info.jsp";
             var featrue = "dialogHeight:310px;dialogWidth:450px";            
             winOpen = window.showModelessDialog(path,window,featrue);
 			//document.all.divProcessing.style.display="";
@@ -509,14 +508,14 @@
        window.open("<%=rootpath%>/cms/docManage/doc_urlview.jsp?docid=" + docId + "&siteid=" + siteid + "&channelid=" + channelid,"_blank");
     }
     
-    function closeSubWindow(){ 
+    function closeSubWindow(uuid){ 
         winOpen.close();
-        document.all("cleanSession").src = "../cleanSession.jsp?uuid=<%=uuid%>";
+        document.all("cleanSession").src = "../cleanSession.jsp?uuid=" + uuid;
    
     }
     //调用发布主页面的函数
-    function lastRefreshSubPage(){        
-        winOpen.updateMsg();
+    function lastRefreshSubPage(multipub,pageurl){        
+        winOpen.updateMsg(multipub,pageurl);
     }
     //调用发布主页面的函数
     //url 为空的时候 直接alert(msg)
@@ -585,7 +584,7 @@
            
          
 		<form name="form1" action="" method="post">
-            <input type="hidden" name="uuid" value="<%=uuid%>">
+            <input type="hidden" name="uuid">
             <input type="hidden" name="isRecordValue">
             <input type="hidden" name="recursionPublish">
             <input type="hidden" name="clearCache">

@@ -29,6 +29,8 @@ import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
+import com.sany.workflow.entity.ProcessInstCondition;
+import com.sany.workflow.entity.TaskCondition;
 
 public interface ActivitiService {
 	  public ProcessDef queryProdefByKey(String processKey,String version) ;
@@ -409,6 +411,15 @@ public interface ActivitiService {
 	 * @param map
 	 */
 	public void completeTask(String taskId, Map<String, Object> map);
+	
+	/**
+	 * 完成任务(普通)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTask(String taskId);
+	
 	/**
 	 * 完成任务(普通)，并驳回到指定节点
 	 * 
@@ -638,6 +649,14 @@ public interface ActivitiService {
 	public void completeTaskByUser(String taskId, String username);
 	
 	/**
+	 * 签收任务 gw_tanx
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void signTaskByUser(String taskId, String username);
+	
+	/**
 	 * 完成任务(先领用再完成),并驳回到指定节点
 	 * 
 	 * @param taskId
@@ -677,6 +696,15 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public List<HistoricTaskInstance> getHisTaskByProcessId(String processId) ;
+	
+	/** 根据条件获取任务列表,分页展示 gw_tanx
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * 2014年5月14日
+	 */
+	public ListInfo queryTasks(TaskCondition task,long offset, int pagesize) ;
 
 	/**
 	 * 获得历史任务实例 by用户名
@@ -852,6 +880,13 @@ public interface ActivitiService {
 	 * @throws IOException
 	 */
 	public void getProccessPic(String processDefId, OutputStream out) throws IOException ;
+	/**根据流程实例id获取对应版本的流程图 gw_tanx
+	 * @param processInstId
+	 * @param out
+	 * @throws IOException
+	 * 2014年5月13日
+	 */
+	public void getProccessActivePic(String processInstId, OutputStream out) throws IOException ;
 	/**
 	 * 根据流程key获取流程的最新版本流程图
 	 * @param processKey
@@ -986,6 +1021,26 @@ public interface ActivitiService {
 	ProcessEngine getProcessEngine();
 	
 	void cancleProcessInstance(String processInstanceId, String deleteReason);
+	/**
+	 * 逻辑删除流程实例 gw_tanx
+	 * 
+	 * @param processInstanceIds
+	 * @param deleteReason
+	 *            2014年5月9日
+	 */
+	public void cancleProcessInstances(String[] processInstanceIds,
+			String deleteReason);
+	
+	/**
+	 * 物理删除流程实例 gw_tanx
+	 * 
+	 * @param processInstanceIds
+	 * @param deleteReason
+	 *            2014年5月9日
+	 */
+	public void delProcessInstances(String[] processInstanceIds,
+			String deleteReason);
+	
 	public ListInfo listTaskAndVarsByUserWithState(Class clazz,String processkey,String state,String userAccount,long offset,int pagesize);
 	public int countTasksByUserWithState(String processkey,String state,String userAccount);
 	public List<Task> listTaskByProcessInstanceId(String processInstanceId) ;
@@ -996,4 +1051,21 @@ public interface ActivitiService {
 
 	String loadProcess(List<LoadProcess> loadprocesses);
 	public List<ProcessDef> getUnloadProcesses();
+	
+	/**
+	 * 根据条件查询流程实例清单
+	 * 
+	 * @param offset
+	 * @param pagesize
+	 * @param processDefCondition
+	 * @return
+	 */
+	public ListInfo queryProcessInsts(long offset, int pagesize,
+			ProcessInstCondition processInstCondition);
+	/**
+	 * 将流程实例升级到最新版本
+	 * @param processKey
+	 * @throws Exception
+	 */
+	public void upgradeInstances(String processKey) throws Exception;
 }

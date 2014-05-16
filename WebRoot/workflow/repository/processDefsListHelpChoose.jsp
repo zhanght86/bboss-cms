@@ -27,7 +27,6 @@
 							onClick="checkAll('CKA','CK');selectedSel();"></th>
 			<th>应用系统</th>
        		<th>流程名称</th>
-       		<th><pg:message code="sany.pdp.workflow.business.type"/></th>
        	</pg:header>	
 
       <pg:list >
@@ -41,8 +40,7 @@
                 <input type="hidden" name="wf_app_name" value="<pg:cell colName="wf_app_name"/>" />
             </td>
             <td><pg:cell colName="wf_app_name"/></td>   
-            <td><pg:cell colName="NAME_" /></td>
-       		<td><pg:cell colName="business_name"/></td>	   
+            <td><pg:cell colName="NAME_" /></td>   
         </tr>
 	 </pg:list>
     </table>

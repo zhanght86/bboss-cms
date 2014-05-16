@@ -1,8 +1,10 @@
 package com.frameworkset.platform.cms.driver.publish;
 
+import com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor;
 
 
-public interface PublishEngine extends java.io.Serializable {
+
+public interface PublishEngine  {
 	
 	/**
 	 * 发布入口
@@ -22,6 +24,8 @@ public interface PublishEngine extends java.io.Serializable {
 	public void publish(PublishObject publishObject)  throws PublishException ;
 
 	public void clearTasks();	
+	
+	public PublishMonitor getPublishMonitor(String uuid);
 	
 	
 

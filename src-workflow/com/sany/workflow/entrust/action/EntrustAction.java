@@ -2,7 +2,9 @@ package com.sany.workflow.entrust.action;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -27,7 +29,7 @@ public class EntrustAction {
 	 * 首页
 	 * @return
 	 */
-	public String index(){
+	public String index(ModelMap model){
 		
 		return "path:index";
 		
@@ -50,6 +52,41 @@ public class EntrustAction {
         return "path:queryListPage";
         
     }
+    
+    /**
+	 * 验证保存委托待办
+	 * @param WfEntrust
+	 * @return
+	 */
+	public @ResponseBody (datatype = "json") Map<String,String> validateSaveWfEntrust(WfEntrust wfEntrust, String entrust_type, String entrust_desc, List<String> procdef_id){
+		
+		Map<String,String> validateMap = new HashMap<String,String>();
+		
+		validateMap.put("validateResult", "fail");
+		
+		try {
+			if(wfEntrust != null){
+				
+				validateMap = entrustService.validateSaveWfEntrust(wfEntrust, entrust_type, procdef_id);
+				
+			}else{
+				
+				validateMap.put("validateResult", "fail");
+				
+				validateMap.put("validateMsg", "validate data is null");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			logger.error(e);
+			
+			validateMap.put("validateResult", "fail");
+			
+			validateMap.put("validateMsg", e.getMessage());
+			
+		}
+		
+		return validateMap;
+	}
     
     /**
 	 * 保存委托待办

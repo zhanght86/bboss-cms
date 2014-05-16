@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -27,7 +28,9 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.activiti.engine.impl.db.upgrade.InstanceUpgrade;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -46,12 +49,17 @@ import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
+import com.sany.workflow.entity.ProcessInst;
+import com.sany.workflow.entity.ProcessInstCondition;
+import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entity.WfAppProcdefRelation;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
@@ -68,6 +76,7 @@ public class ActivitiServiceImpl implements ActivitiService ,org.frameworkset.sp
 	private ActivitiConfigService activitiConfigService;
 
 	private ProcessEngine processEngine;
+	private InstanceUpgrade instanceUpgrade;
 	private RepositoryService repositoryService;// 获得activiti服务
 	private RuntimeService runtimeService;// 用于管理运行时流程实例
 	private TaskService taskService;// 用于管理运行时任务
@@ -133,6 +142,7 @@ public void rejecttoPreTask(String taskId,String username){
 			this.identityService = this.processEngine.getIdentityService();
 			this.runtimeService = this.processEngine.getRuntimeService();
 			this.managementService = this.processEngine.getManagementService();
+			this.instanceUpgrade = config.getInstanceUpgrade();
 			tm.commit();
 		}
 		catch(Exception e)
@@ -315,6 +325,17 @@ public void rejecttoPreTask(String taskId,String username){
 	public void completeTask(String taskId, Map<String, Object> map) {
 //		taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map);
+	}
+	
+	/**
+	 * 完成任务(普通)
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTask(String taskId) {
+//		taskService = processEngine.getTaskService();
+		taskService.complete(taskId);
 	}
 	
 	/**
@@ -641,6 +662,26 @@ public void rejecttoPreTask(String taskId,String username){
 		taskService.claim(taskId, username);
 		taskService.complete(taskId, map, destinationTaskKey);
 	}
+	
+	/**
+	 * 签收任务 gw_tanx
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void signTaskByUser(String taskId, String username){
+		taskService.claim(taskId, username);
+	}
+	
+//	/**
+//	 * 完成任务 gw_tanx
+//	 * 
+//	 * @param taskId
+//	 * @param map
+//	 */
+//	public void completeTaskById(String taskId){
+//		taskService.complete(taskId);
+//	}
 	
 	
 	/**
@@ -1721,6 +1762,43 @@ public void rejecttoPreTask(String taskId,String username){
 		return list;
 	}
 	
+	/** 根据条件获取任务列表,分页展示 gw_tanx
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * 2014年5月14日
+	 */
+	public ListInfo queryTasks(TaskCondition task, long offset, int pagesize) {
+		ListInfo listInfo = null;
+		try {
+			// 数据查看权限管控
+			task.setAdmin(AccessControl.getAccessControl().isAdmin());
+			// 当前用户登录id
+			task.setAssignee(AccessControl.getAccessControl()
+					.getUserAccount());
+			
+			if(StringUtil.isNotEmpty(task.getProcessIntsId())){
+				task.setProcessIntsId("%"+task.getProcessIntsId()+"%");
+			}
+			
+			if(StringUtil.isNotEmpty(task.getTaskName())){
+				task.setTaskName("%"+task.getTaskName()+"%");
+			}
+			
+			if(StringUtil.isNotEmpty(task.getTaskId())){
+				task.setTaskId("%"+task.getTaskId()+"%");
+			}
+			
+			listInfo = executor.queryListInfoBean(TaskManager.class, 
+					"selectTaskByUser_wf",offset, pagesize, task);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return listInfo;
+	}
+	
 	/**
 	 * 根据用户名,流程KEY查询待办任务分页列表
 	 * 
@@ -2125,6 +2203,55 @@ public void rejecttoPreTask(String taskId,String username){
 		}
 	}
 	
+	/**根据流程实例id获取对应版本的流程图 gw_tanx
+	 * @param processInstId
+	 * @param out
+	 * @throws IOException
+	 * 2014年5月13日
+	 */
+	public void getProccessActivePic(String processInstId, OutputStream out) throws IOException {
+		InputStream is = null;
+		try
+		{
+			if(processInstId!=null&&!processInstId.equals("")){
+				//运行中的活动id集合
+				List<String> hightLightList = new ArrayList<String> ();
+				// 根据流程实例ID获取运行的实例
+				List<Execution> exectionList = runtimeService.createExecutionQuery().
+						processInstanceId(processInstId).list();
+				// 获取运行实例的运行活动节点
+				for (Execution execution : exectionList){
+					ExecutionEntity exeEntity = (ExecutionEntity)runtimeService.
+							createExecutionQuery().executionId(execution.getId()).singleResult();
+					String activitiId = exeEntity.getActivityId();
+					hightLightList.add(activitiId);
+				}
+				// 根据流程实例iD获取流程定义KEY
+				HistoricProcessInstance hiInstance = getHisProcessInstanceById(processInstId);
+				// 根据流程定义ID获取流程定义对应的实体对象
+				BpmnModel bpmnModel = repositoryService.getBpmnModel(hiInstance.getProcessDefinitionId());
+				
+				is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", hightLightList);
+				
+				byte[] b = new byte[1024];
+				int len = -1;
+				while ((len = is.read(b, 0, 1024)) != -1) {
+					out.write(b, 0, len);
+				}
+				out.flush();
+			}
+		}
+		finally
+		{
+			try {
+				if(is != null)
+					is.close();
+			} catch (Exception e) {
+				
+			}
+		}
+	}
+	
 	public void getProccessPicByProcessKey(String processKey, OutputStream out) throws IOException {
 		InputStream is = null;
 		try
@@ -2442,5 +2569,46 @@ public void rejecttoPreTask(String taskId,String username){
 		
 	}
 
+	@Override
+	public ListInfo queryProcessInsts(long offset, int pagesize,
+			ProcessInstCondition processInstCondition) {
+		try {
+			// 流程实例ID
+			if (processInstCondition.getWf_Inst_Id() != null
+					&& !processInstCondition.getWf_Inst_Id().isEmpty()) {
+				processInstCondition.setWf_Inst_Id("%"
+						+ processInstCondition.getWf_Inst_Id() + "%");
+			}
+			ListInfo listInfo = executor.queryListInfoBean(ProcessInst.class,
+					"queryProInst", offset, pagesize, processInstCondition);
+			return listInfo;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	public void cancleProcessInstances(String[] processInstids,
+			String deleteReason) {
+		processInstids = Arrays.toString(processInstids).replace("[", "")
+				.replace("]", "").split(",");
+		for (String processInstid : processInstids) {
+			this.runtimeService.deleteProcessInstance(processInstid,
+					deleteReason);
+		}
+	}
+
+	@Override
+	public void upgradeInstances(String processKey) throws Exception {
+		instanceUpgrade.upgradeInstances(processKey);
+		
+	}
+
+	@Override
+	public void delProcessInstances(String[] processInstanceIds,
+			String deleteReason) {
+		
+	}
 
 }

@@ -4,8 +4,7 @@
 <%@ page import="com.frameworkset.platform.cms.documentmanager.*"%>
 
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-    accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
     String curUserId = accesscontroler.getUserID();
     
     int length = 0;

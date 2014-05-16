@@ -1,18 +1,5 @@
-<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
-<%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.*"%>
-<%@ page import="com.frameworkset.platform.security.AccessControl"%>
-<%@ page import="com.frameworkset.platform.cms.documentmanager.*"%>
-<%@ page import="com.frameworkset.platform.cms.channelmanager.*"%>
-<%@ page import="com.frameworkset.platform.cms.sitemanager.*"%>
-<%@ page import="com.frameworkset.platform.cms.driver.publish.*"%>
-<%@ page import="com.frameworkset.platform.cms.driver.publish.impl.*"%>
-<%@ page import="com.frameworkset.platform.cms.*"%>
-<%@ page import="com.frameworkset.platform.cms.driver.context.impl.*"%>
-<%@ page import="com.frameworkset.platform.cms.driver.config.*"%>
-<script src="../inc/js/func.js"></script>
-<%
-	AccessControl accessControl = AccessControl.getInstance();
-	accessControl.checkAccess(request,response);
+<%@page import="com.frameworkset.platform.cms.util.CMSUtil"%><%@page import="com.frameworkset.orm.transaction.TransactionManager"%><%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.*"%><%@ page import="com.frameworkset.platform.security.AccessControl"%><%@ page import="com.frameworkset.platform.cms.documentmanager.*"%><%@ page import="com.frameworkset.platform.cms.channelmanager.*"%><%@ page import="com.frameworkset.platform.cms.sitemanager.*"%><%@ page import="com.frameworkset.platform.cms.driver.publish.*"%><%@ page import="com.frameworkset.platform.cms.driver.publish.impl.*"%><%@ page import="com.frameworkset.platform.cms.*"%><%@ page import="com.frameworkset.platform.cms.driver.context.impl.*"%><%@ page import="com.frameworkset.platform.cms.driver.config.*"%><%
+	AccessControl accessControl = AccessControl.getAccessControl();
 	String userId = accessControl.getUserID();
 	
 	
@@ -32,7 +19,9 @@
     boolean isClearCache = Boolean.parseBoolean(request.getParameter("clearCache"));
     
     
-    PublishMonitor monitor = (PublishMonitor)session.getAttribute(uuid);
+    //PublishMonitor monitor = (PublishMonitor)session.getAttribute(uuid);
+    PublishMonitor monitor = PublishMonitor.createPublishMonitor();
+    monitor.setUuid(uuid);
 	//文档发布处理
 	DocumentManager docManager = new DocumentManagerImpl();
 	SiteManager  siteManager = new SiteManagerImpl();
@@ -209,29 +198,64 @@
 		if(successFlag == true || pageUrl!=null && pageUrl.length()>0){
 			//pageUrl = request.getContextPath() + "/" + pageUrl;	
 			//flag=4 批量发布 pageUrl返回的首页URL, session保存为""	
+			StringBuffer msgs = new StringBuffer();
+			if(monitor != null && !monitor.isNotRecordMsg())
+		    {
+			    List newestMsg = monitor.getAllSuccessMessages();			  
+			    for(int i=0;newestMsg != null && i<newestMsg.size();i++){
+			    	String m = newestMsg.get(i).toString();
+			    	 m = m.replaceAll("\"","\'");
+					    m = m.replaceAll("“","\'");
+					    m = m.replaceAll("、",", "); 
+					    m = m.replaceAll("（"," ("); 
+					    m = m.replaceAll("）",") "); 
+					    m = m.replaceAll("\"","' ");
+			        msgs.append(m+"<br>");
+			   } 
+			    monitor.clearMSGS();
+		    }
+		   
+		   
 			if(flag.equals("4") || flag.equals("1")){
-                session.setAttribute("pageUrl"+uuid,"mutipublish");
+                //session.setAttribute("pageUrl"+uuid,"mutipublish");
+                monitor.setMultidocspub("mutipublish");
             }else{
-                session.setAttribute("pageUrl"+uuid,pageUrl);
+                //session.setAttribute("pageUrl"+uuid,pageUrl);
+            	 monitor.setPageUrl(pageUrl);
             }
-		%>
+		%>  
+		    <div id="msg"><%=msgs.toString() %></div>
 			<script language = "javascript">
 				//parent.document.all.divProcessing.style.display="none";
 				var con = true;
 				if("<%=(batchFlag==0 && !pageUrl.equals("PublishMode.MODE_ONLY_ATTACHMENT") && !pageUrl.equals("PublishMode.MODE_NO_ACTION"))%>" == "true"){ 
                    if("<%=isRecordValue%>" == "false"){
-                       //con = window.confirm("要查看发布文档吗？");
-                       //if(con){
-                       //     window.open("<%=pageUrl%>");
-                       // } 
+                       
                        window.parent.alertFun("要查看发布文档吗？","<%=pageUrl%>");     
                         try{                            
-                            window.parent.closeSubWindow();                            
+                            window.parent.closeSubWindow('<%=uuid%>');                            
                         }catch(err){
                             //alert(err.description)
                         }
                    }else{
-                       window.parent.lastRefreshSubPage();
+                       //window.parent.lastRefreshSubPage('<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>','<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>');
+                       if(window.parent.winOpen.document.all("publish_info") != null)
+                       		window.parent.winOpen.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+                      
+                       var multipub = '<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>';
+                       var pageUrl = '<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>';
+                       var infomsg = "";
+                       if(pageUrl != "")
+                    	{
+                    	   infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                    	}
+                       
+                      
+                       if(multipub != null && multipub=="mutipublish" ){
+                           infomsg = "批量发布,请逐一查看发布文档"
+                       }
+                       window.parent.winOpen.document.all("linkInfo").innerHTML = infomsg;
+                       window.parent.winOpen.document.all("waiting_marquee").style.display = "none";
                        //在publish_info.jsp提示
                        //alert("恭喜，发布成功！"); 
                    }                  
@@ -240,14 +264,31 @@
                         //alert("恭喜，发布成功！");                            
                         window.parent.alertFun("恭喜，发布成功！","");
                         try{                            
-                            window.parent.closeSubWindow();                            
+                            window.parent.closeSubWindow('<%=uuid%>');                            
                         }catch(err){
                             //alert(err.description)
                         }
                    }else{                       
-                       window.parent.lastRefreshSubPage();
+                       //window.parent.lastRefreshSubPage('<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>','<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>');
                        //alert("恭喜，发布成功！"); 
                        //在publish_info.jsp提示
+                	   if(window.parent.winOpen.document.all("publish_info") != null)
+                      		window.parent.winOpen.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+                     
+                      var multipub = '<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>';
+                      var pageUrl = '<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>';
+                      var infomsg = "";
+                      if(pageUrl != "")
+                   	{
+                   	   infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                   	}
+                      
+                     
+                      if(multipub != null && multipub=="mutipublish" ){
+                          infomsg = "批量发布,请逐一查看发布文档"
+                      }
+                      window.parent.winOpen.document.all("linkInfo").innerHTML = infomsg;
+                      window.parent.winOpen.document.all("waiting_marquee").style.display = "none";
                    }
 					//con = window.confirm("发布完成！要查看发布日志吗？");
 				}else{
@@ -255,14 +296,31 @@
                         //alert("恭喜，发布成功！");   
                         window.parent.alertFun("恭喜，发布成功！","");                         
                         try{                            
-                            window.parent.closeSubWindow();                            
+                            window.parent.closeSubWindow('<%=uuid%>');                            
                         }catch(err){
                             //alert(err.description)
                         }
                    }else{                       
-                       window.parent.lastRefreshSubPage();
+                      // window.parent.lastRefreshSubPage('<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>','<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>');
                        //alert("恭喜，发布成功！"); 
                        //在publish_info.jsp提示
+                	   if(window.parent.winOpen.document.all("publish_info") != null)
+                      		window.parent.winOpen.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+                     
+                      var multipub = '<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>';
+                      var pageUrl = '<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>';
+                      var infomsg = "";
+                      if(pageUrl != "")
+                   	{
+                   	   infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                   	}
+                      
+                     
+                      if(multipub != null && multipub=="mutipublish" ){
+                          infomsg = "批量发布,请逐一查看发布文档"
+                      }
+                      window.parent.winOpen.document.all("linkInfo").innerHTML = infomsg;
+                      window.parent.winOpen.document.all("waiting_marquee").style.display = "none";
                    }   
                 }
 				var str = parent.document.location.href;
@@ -294,7 +352,7 @@
 				<%}%>
                                
                 try{                            
-                    window.parent.closeSubWindow();                            
+                    window.parent.closeSubWindow('<%=uuid%>');                            
                 }catch(err){
                     //alert(err.description)
                 }
@@ -346,7 +404,7 @@
 				docManager.recordDocOperate(Integer.parseInt(docid),Integer.parseInt(userId),"发布",tranId2,"发布");
 				if(pageUrl!=null){
 					//pageUrl = request.getContextPath() + "/" + pageUrl;
-                    session.setAttribute("pageUrl"+uuid,pageUrl);
+                     monitor.setPageUrl(pageUrl);
 		 		%>
 		 		<script language = "javascript">
 		 			//parent.document.all.divProcessing.style.display="none";
@@ -358,27 +416,61 @@
                             //}
                             window.parent.alertFun("要查看发布文档吗？","<%=pageUrl%>");
                             try{                                
-                                window.parent.closeSubWindow();                                
+                                window.parent.closeSubWindow('<%=uuid%>');                                
                             }catch(err){
                                 //alert(err.description)
                             }
                         }else{ 
-                            window.parent.lastRefreshSubPage();
+                            //window.parent.lastRefreshSubPage('<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>','<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>');
                             //alert("恭喜，发布成功！"); 
                             //在publish_info.jsp提示
+                        	 if(window.parent.winOpen.document.all("publish_info") != null)
+                            		window.parent.winOpen.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+                           
+                            var multipub = '<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>';
+                            var pageUrl = '<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>';
+                            var infomsg = "";
+                            if(pageUrl != "")
+                         	{
+                         	   infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                         	}
+                            
+                           
+                            if(multipub != null && multipub=="mutipublish" ){
+                                infomsg = "批量发布,请逐一查看发布文档"
+                            }
+                            window.parent.winOpen.document.all("linkInfo").innerHTML = infomsg;
+                            window.parent.winOpen.document.all("waiting_marquee").style.display = "none";
                         }
 					}else{
                         if("<%=isRecordValue%>" == "false"){
                             //alert("恭喜，发布成功！");       
                             window.parent.alertFun("恭喜，发布成功！","");                     
                             try{                            
-                                window.parent.closeSubWindow();                            
+                                window.parent.closeSubWindow('<%=uuid%>');                            
                             }catch(err){
                                 //alert(err.description)
                             }
                        }else{                       
-                           window.parent.lastRefreshSubPage();
+                           //window.parent.lastRefreshSubPage('<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>','<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>');
                            //alert("恭喜，发布成功！"); 
+                    	   if(window.parent.winOpen.document.all("publish_info") != null)
+                          		window.parent.winOpen.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+                         
+                          var multipub = '<%=monitor.getMultidocspub() == null?"":monitor.getMultidocspub()%>';
+                          var pageUrl = '<%=monitor.getPageUrl() == null?"":monitor.getPageUrl()%>';
+                          var infomsg = "";
+                          if(pageUrl != "")
+                       	{
+                       	   infomsg = "<a href='"+pageUrl+"'>发布文档:"+pageUrl+"</a>";
+                       	}
+                          
+                         
+                          if(multipub != null && multipub=="mutipublish" ){
+                              infomsg = "批量发布,请逐一查看发布文档"
+                          }
+                          window.parent.winOpen.document.all("linkInfo").innerHTML = infomsg;
+                          window.parent.winOpen.document.all("waiting_marquee").style.display = "none";
                        }
                     } 
 						//alert("恭喜，发布成功！");
@@ -401,7 +493,7 @@
 					//parent.document.all.divProcessing.style.display="none";
 					window.parent.alertFun("审核成功，但发布失败，可能当前频道未设置细览模板或者模板文件不存在！！","");                
                     try{                            
-                        window.parent.closeSubWindow();                            
+                        window.parent.closeSubWindow('<%=uuid%>');                            
                     }catch(err){
                         //alert(err.description)
                     }
@@ -424,7 +516,7 @@
 						//parent.document.all.divProcessing.style.display="none";
 						window.parent.alertFun("操作失败，可能当前频道未设置细览模板或者模板文件不存在！！","");
                         try{                            
-                            window.parent.closeSubWindow();                            
+                            window.parent.closeSubWindow('<%=uuid%>');                            
                         }catch(err){
                             //alert(err.description)
                         }
@@ -439,7 +531,7 @@
 				//alert("操作失败，请检查所选文档能否进行审核!!");
 				window.parent.alertFun("操作失败，请检查所选文档能否进行审核!!","");
                 try{                            
-                    window.parent.closeSubWindow();                            
+                    window.parent.closeSubWindow('<%=uuid%>');                            
                 }catch(err){
                     //alert(err.description)
                 }
@@ -456,7 +548,7 @@
 			//parent.document.all.divProcessing.style.display="none";
 			window.parent.alertFun("数据库操作失败!!","");
 			try{                            
-                window.parent.closeSubWindow();                            
+                window.parent.closeSubWindow('<%=uuid%>');                            
             }catch(err){
                 //alert(err.description)
             }

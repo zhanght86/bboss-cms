@@ -1510,13 +1510,28 @@ public class AccessControl implements AccessControlInf{
 	 */
 	public boolean checkAccess(HttpServletRequest request,
 			HttpServletResponse response) {
-		boolean isLogin = checkAccess(request, response, null, true);
-		//modify by jianfeng 20090909
-//		if (!isLogin){			
-//			throw new SessionTimeoutExcetpion();
-//		}
-//		return true;
-		return isLogin;
+		AccessControl c = AccessControl.getAccessControl();
+		if(c.isGuest())
+			return false;
+		else
+		{
+			this.request = c.getRequest();
+			this.response = c.getResponse();		
+			this.session = c.getSession();			
+			this.principalIndexs = c.principalIndexs;
+			// 添加用户的所有属性到session中
+			this.credentialIndexs = this.principalIndexs;
+			this.principal = c.principal;
+			this.credential = c.credential;
+			return true;
+		}
+//		boolean isLogin = checkAccess(request, response, null, true);
+//		//modify by jianfeng 20090909
+////		if (!isLogin){			
+////			throw new SessionTimeoutExcetpion();
+////		}
+////		return true;
+//		return isLogin;
 	}
 	
 	/**
@@ -2360,7 +2375,8 @@ public class AccessControl implements AccessControlInf{
 	 * 
 	 */
 	public boolean checkAccess(PageContext pageContext) {
-		return this.checkAccess(pageContext, true);
+		return this.checkAccess((HttpServletRequest)pageContext.getRequest(), (HttpServletResponse)pageContext.getResponse());
+//		return this.checkAccess(pageContext, true);
 	}
 
 	/**
@@ -4733,6 +4749,12 @@ public class AccessControl implements AccessControlInf{
 		
 		return this.getUserAccount() == null || this.getUserAccount().equals("") 
 				|| this.getUserAccount().equals(BaseAuthorizationTable.guest);
+	}
+
+
+
+	public HttpServletResponse getResponse() {
+		return response;
 	}
 	
 }

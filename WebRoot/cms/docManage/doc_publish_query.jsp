@@ -1,13 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.List"%>
 <%@page import="com.frameworkset.platform.cms.flowmanager.*" %>
 <%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.platform.security.*,com.frameworkset.platform.cms.documentmanager.*,com.frameworkset.platform.cms.channelmanager.*"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String userid = accesscontroler.getUserID();
 %>
 <html>

@@ -11,6 +11,7 @@ import javax.servlet.RequestDispatcher;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
@@ -205,7 +206,13 @@ public class ContentPublishObject extends PublishObject {
 		if(contentContext.isAggregation())
 		{
 			this.context.getPublishMonitor().setPublishStatus(PublishMonitor.SCRIPT_INITFAILED);
-			context.getPublishMonitor().addFailedMessage("文档[" + contentContext + "]为聚合文档，发布任务忽略。",new Date(),context.getPublisher());
+			context.getPublishMonitor().addFailedMessage("文档[" + contentContext + "]为聚合文档，忽略生成 init Scriptlet。",new Date(),context.getPublisher());
+			return;
+		}
+		else if(contentContext.getDocument().getDoctype() == Document.DOCUMENT_OUTLINK)
+		{
+			this.context.getPublishMonitor().setPublishStatus(PublishMonitor.SCRIPT_INITFAILED);
+			context.getPublishMonitor().addFailedMessage("文档[" + contentContext + "]为外部链接，忽略生成 init Scriptlet。",new Date(),context.getPublisher());
 			return;
 		}
 		Template detailTemplate = contentContext.getDetailTemplate();
@@ -258,6 +265,7 @@ public class ContentPublishObject extends PublishObject {
 			{
 //				预处理待发布的文档,如果是分页文档,要进行特殊的处理
 				prehandleContent(contentContext);
+				
 				if(!this.contentContext.isPagintion())
 				{
 					super.runPage();
@@ -370,10 +378,27 @@ public class ContentPublishObject extends PublishObject {
 		 * 外部链接不需要发布
 		 */
 //		ContentContext contentContext = (ContentContext) this.context;
+		//将文档主题图片和多媒体文件添加到发布队列中，以便后续进行发布
+		String dicPath = contentContext.getDocument().getPicPath();
+		String newPicPath = contentContext.getDocument().getNewPicPath();
+		String mediaPath = contentContext.getDocument().getMediapath();
+		if(!StringUtil.isEmpty(dicPath))
+		{
+			CMSTagUtil.getPublishedLinkPath(contentContext,"",dicPath);
+		}
+		if(!StringUtil.isEmpty(newPicPath))
+		{
+			CMSTagUtil.getPublishedLinkPath(contentContext,"",newPicPath);
+		}
+		if(!StringUtil.isEmpty(mediaPath))
+		{
+			CMSTagUtil.getPublishedLinkPath(contentContext,"",mediaPath);
+		}
 		if(contentContext.isAggregation() 
 				|| contentContext.getDocument().getDoctype() == Document.DOCUMENT_OUTLINK)
 		{
 			contentContext.getPublishMonitor().setPublishStatus(PublishMonitor.DISTRIBUTE_COMPLETED);
+			
 			executeRecusive();
 			return;
 		}

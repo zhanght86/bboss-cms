@@ -20,7 +20,7 @@
 	<properties>
 		<property name="schemafiles">
 				<list>
-					<property dbname="bspf"><![CDATA[schema/tableinfo.xml,schema/sys.xml,schema/sany.xml,schema/sany-workflow.xml,schema/cms.xml,schema/cms-ext.xml,schema/sany-mms.xml,schema/sany-log.xml,schema/sys-ext.xml,schema/token.xml]]></property>
+					<property dbname="bspf"><![CDATA[schema/tableinfo.xml,schema/sys.xml,schema/sany.xml,schema/sany-workflow.xml,schema/cms.xml,schema/cms-ext.xml,schema/sany-mms.xml,schema/sany-log.xml,schema/sys-ext.xml,schema/token.xml,schema/sany-workflow_ext.xml]]></property>
 				<property dbname="datareuse"><![CDATA[schema/esb.xml]]></property>
 <!--					<property dbname="kettle"><![CDATA[schema/smc.xml]]></property>-->
 	  			</list>
@@ -37,7 +37,7 @@
 		
 		<property name="schemafiles_patch">
 				<list>
-				<property	dbname="bspf"><![CDATA[schema/token.xml]]></property> 
+				<property	dbname="bspf"><![CDATA[schema/token.xml,schema/sys-ext.xml,schema/sany-workflow_ext.xml]]></property> 
 <!-- 				<property	dbname="bspf"><![CDATA[schema/sys-ext.xml]]></property> -->
 <!-- 					<property dbname="datareuse"><![CDATA[schema/esb.xml]]></property> -->
 	  			</list>

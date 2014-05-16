@@ -1,6 +1,5 @@
 <%
-	com.frameworkset.platform.security.AccessControl accesscontroler_panes = com.frameworkset.platform.security.AccessControl.getInstance();
-  	accesscontroler_panes.checkAccess(request,response);
+	com.frameworkset.platform.security.AccessControl accesscontroler_panes = com.frameworkset.platform.security.AccessControl.getAccessControl();
     String menu_path = request.getParameter("menu_path");
     String subsystem = com.frameworkset.platform.framework.FrameworkServlet.getSubSystem(request,response,accesscontroler_panes.getUserAccount());
     com.frameworkset.platform.framework.Framework framework = com.frameworkset.platform.framework.Framework.getInstance(subsystem);

@@ -88,8 +88,8 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 	public static String getCurrentMenuPath(HttpServletRequest request,
 			HttpServletResponse response)
 	{
-		AccessControl control = AccessControl.getInstance();
-		if(!control.checkAccess(request, response))
+		AccessControl control = AccessControl.getAccessControl();
+		if(control.isGuest())
 			return null;
 		String path = request.getParameter(Framework.MENU_PATH);
 		
@@ -219,7 +219,7 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 //		System.out.println("Frameworkservlet:" + this);
 //		if(control == null)
 //		{
-		AccessControl control = AccessControl.getInstance();
+		AccessControl control = AccessControl.getAccessControl();
 //		JspFactory fac=JspFactory.getDefaultFactory();		
 //		PageContext pageContext=fac.getPageContext(this, req,resp, null, false, JspWriter.DEFAULT_BUFFER <= 0?8192:JspWriter.DEFAULT_BUFFER, true); 
 //		control.setPageContext(pageContext);
