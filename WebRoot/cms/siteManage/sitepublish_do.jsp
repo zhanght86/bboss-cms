@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
-<%@page import="com.frameworkset.platform.cms.driver.publish.*,
+<%@page import="com.frameworkset.platform.cms.driver.publish.*,java.util.List,
 				com.frameworkset.platform.cms.driver.publish.impl.*,
 				com.frameworkset.platform.cms.driver.distribute.DistributeManager,
 				com.frameworkset.platform.cms.sitemanager.*,
@@ -89,7 +89,8 @@
 	publish.setPublishCallBack(callback);
     
     //外部注入monitor
-    PublishMonitor monitor = (PublishMonitor)session.getAttribute(uuid);
+    PublishMonitor monitor = PublishMonitor.createPublishMonitor();
+    monitor.setUuid(uuid);
     //外部控制是否添加日志
     if("false".equalsIgnoreCase(isRecordValue)){
         monitor.setNotRecordMsg(true);
@@ -147,9 +148,26 @@
 		pageUrl = callback.getPageUrl();
 		successFlag = callback.getPublishMonitor().isAllFailed()==true?false:true;
 	}
+	StringBuffer msgs = new StringBuffer();
+	if(monitor != null && !monitor.isNotRecordMsg())
+    {
+	    List newestMsg = monitor.getAllSuccessMessages();			  
+	    for(int i=0;newestMsg != null && i<newestMsg.size();i++){
+	    	String m = newestMsg.get(i).toString();
+	    	 m = m.replaceAll("\"","\'");
+			    m = m.replaceAll("“","\'");
+			    m = m.replaceAll("、",", "); 
+			    m = m.replaceAll("（"," ("); 
+			    m = m.replaceAll("）",") "); 
+			    m = m.replaceAll("\"","' ");
+	        msgs.append(m+"<br>");
+	   } 
+	    monitor.clearMSGS();
+    }
 	if(successFlag==true){
-        session.setAttribute("pageUrl"+uuid,pageUrl);
+        //session.setAttribute("pageUrl"+uuid,pageUrl);
 	%>
+		<div id="msg"><%=msgs.toString() %></div>
 		<script language="javascript">
             hideMarquee();
             if("<%=isRecordValue%>"=="false"){
@@ -167,10 +185,12 @@
     			parent.window.close();
                 
             }else{
-                //alert("<%=alertmsg%>");
+               
+               
                 var infomsg = "<a href=<%=pageUrl%> onclick='window.close()'><%=typemsg%>首页:<%=pageUrl%></a>"
                 parent.document.all("linkInfo").innerHTML = infomsg;
                 parent.document.getElementById("closeButton").disabled="";
+                parent.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
             }
             
 		</script>
@@ -179,8 +199,12 @@
 	else
 	{
 		%>
+		<div id="msg"><%=msgs.toString() %></div>
 		<script language="javascript">
 			hideMarquee();            
+			if("<%=isRecordValue%>"=="true"){
+				parent.document.all("publish_info").innerText = document.getElementById('msg').innerText; 
+			}
 			alert("<%=typemsg%>发布失败！");
 		</script>
 		<%

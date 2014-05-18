@@ -12,8 +12,7 @@
 <%@page import="com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor,com.frameworkset.platform.cms.util.CMSUtil"%>
 
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-    accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 
 	response.setHeader("Cache-Control", "no-cache"); 
 	response.setHeader("Pragma", "no-cache"); 
@@ -43,8 +42,8 @@
 	}
     
     String uuid = CMSUtil.getUUID();
-    PublishMonitor monitor = PublishMonitor.createPublishMonitor();
-    session.setAttribute(uuid,monitor);
+    //PublishMonitor monitor = PublishMonitor.createPublishMonitor();
+    //session.setAttribute(uuid,monitor);
 
 	String local2ndRemote = String.valueOf(site.getPublishDestination());
 	String distributeManners = site.getDistributeManners();
@@ -71,8 +70,7 @@
 </style>
 <SCRIPT LANGUAGE="JavaScript">
 	//
-    var timer;
-    var timer1;
+    
 	function subform()
 	{
 		//发布范围数组
@@ -177,13 +175,11 @@
         //date 2007-07-23
         if(isRecordValue == "true")
         {
-        	updateMsg();
+        	//updateMsg();
         }		
         publishForm.submit();
 	}    
-    function updateMsg(){
-        document.all("info").src="publish_info.jsp?uuid=<%=uuid%>";
-    }
+    
     
     
 	//
@@ -230,7 +226,7 @@
         }
     }
     window.onunload = function clrSession(){
-        document.all("cleanSession").src = "../cleanSession.jsp?uuid=<%=uuid%>";            
+        //document.all("cleanSession").src = "../cleanSession.jsp?uuid=<%=uuid%>";            
     }
     window.onerror=function(){return true} 
 	
@@ -331,7 +327,7 @@
                             <input hideFocus type="checkbox" id="isRecordMsg2" name="isRecordMsg2" value="true" onclick="publishForm.isRecordMsg1.checked=false"/>记录
                             <span id="infoMsg" style="display:none;">
                                 <INPUT name="button" id="showinfo" type="button" class="cms_button" onClick="showMsg()" >
-                                <INPUT  type="button" class="cms_button" value="刷新信息" onClick="updateMsg()" >
+                                
                             </span>
                         </td>
                     </tr>
@@ -385,7 +381,7 @@
     
 </form>
 <iframe name="publishexeman" width="0" height="0" style="display:none"></iframe>
-<iframe name="cleanSession" width="0" height="0" style="display:none"></iframe>
+
 </body>
 
 </html>
