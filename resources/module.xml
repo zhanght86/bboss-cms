@@ -365,6 +365,24 @@
 					<content>/application/index.page</content>
 				</workspace>
 			</item>
+			<item name="参数管理" id="argsmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content><![CDATA[/params/showParams.page?paramId=Token&paramType=Token&handler=cms.siteparamshandler]]></content>
+				</workspace>
+			</item>
+			<item name="流程授权管理" id="entrustmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content>workflow/entrust/index.page</content>
+				</workspace>
+			</item>
 		</module>
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
@@ -451,8 +469,32 @@
 					<content>test/his_userlist.jsp</content>
 				</workspace>
 			</item>
+			<module name="任务管理" id="taskmanage" used="true" i18n:en_US="task manager" url="workflow/taskManage/ontimeTaskManager.page" showleftmenu="true" popup="true">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<description>任务管理</description>
+			
+				<item name="实时任务" id="ontime" i18n:en_US="ontime">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/taskManage/ontimeTaskManager.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/taskManage/*.page</url>
+					</authoration>
+				</item>
+				<item name="历史任务" id="historytime" i18n:en_US="historytime">
+						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/taskManage/historyTimeTaskManager.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/taskManage/*.page</url>
+					</authoration>
+				</item>
+			</module>
 		</module>
-
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">
 			<item name="站点浏览统计" id="browserCounter" i18n:en_US="BrowserCounter">
