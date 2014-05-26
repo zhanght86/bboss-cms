@@ -69,7 +69,7 @@
 		       D.SUSPENSION_STATE_
 		  FROM ACT_HI_PROCINST A
 		  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
-		  LEFT JOIN ACT_RU_EXECUTION D ON A.PROC_INST_ID_ = D.PROC_INST_ID_
+		  LEFT JOIN ACT_RU_EXECUTION D ON A.PROC_INST_ID_ = D.ID_
 		  
 			WHERE 1=1
 			
@@ -78,7 +78,7 @@
 			#end
 			
 			#if($wf_Inst_Id && !$wf_Inst_Id.equals(""))
-				and A.PROC_INST_ID_ like #[wf_Inst_Id]
+				and A.ID_ like #[wf_Inst_Id]
 			#end
 			
 			#if($wf_start_time1 && !$wf_start_time1.equals(""))
@@ -211,7 +211,7 @@
 		]]>
 	</property>
 	
-	<!-- 根据流程实例id获取任务信息  gw_tanx-->
+	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
 	<property name="getTaskInfoById_wf">
 		<![CDATA[
 			SELECT A.ID_,
@@ -811,7 +811,7 @@
 	<property name="queryAllActivitiNodes">
 		<![CDATA[
 			select n.* from td_wf_activiti_node_info n
-			 where n.process_key = #[process_key]
+			 where n.process_key = ?
 			order by n.order_num
 		]]>
 	</property>
@@ -1080,6 +1080,36 @@
 			update td_wf_app_proc_relation  
 			       set id = #[id],wf_app_id=#[wf_app_id],procdef_id=#[procdef_id]
 			       where id=#[id]
+		]]>
+	</property>
+	
+	<!-- 根据流程实例ID获取实例参数变量值 gw_tanx -->
+	<property name="getVariableListById_wf">
+		<![CDATA[
+			 SELECT B.ID_,
+		        B.REV_,
+		        B.TYPE_,
+		        B.NAME_,
+		        B.EXECUTION_ID_,
+		        B.PROC_INST_ID_,
+		        B.TASK_ID_,
+		        B.BYTEARRAY_ID_,
+		        B.DOUBLE_,
+		        B.LONG_,
+		        B.TEXT_,
+		        B.TEXT2_
+		   FROM ACT_RU_VARIABLE B
+		  WHERE B.PROC_INST_ID_ = ?
+		  ORDER BY B.NAME_
+		]]>
+	</property>
+	
+	<!-- 获取当前节点信息 gw_tanx -->
+	<property name="getCurrentNodeInfoById_wf">
+		<![CDATA[
+			  SELECT DISTINCT A.PROC_INST_ID_, A.TASK_DEF_KEY_
+			   FROM ACT_RU_TASK A
+			  WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
 	
