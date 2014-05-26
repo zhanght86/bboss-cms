@@ -28,11 +28,11 @@ $(document).ready(function() {
        
 //加载实时任务列表数据  
 function queryList(){
-	var processIntsId = $.trim($("#processIntsId").val());
-	var processKey = $.trim($("#processKey").val());
-	var taskState = $.trim($("#taskState").val());
-	var taskName = $.trim($("#taskName").val());
-	var taskId = $.trim($("#taskId").val());
+	var processIntsId = $("#processIntsId").val();
+	var processKey = $("#processKey").val();
+	var taskState = $("#taskState").val();
+	var taskName = $("#taskName").val();
+	var taskId = $("#taskId").val();
 	
     $("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page #customContent", 
     	{processIntsId:processIntsId, processKey:processKey,taskState:taskState,taskId:taskId,taskName:taskName},
@@ -40,7 +40,12 @@ function queryList(){
 }
 
 // 签收任务
-function signTask(taskId) {
+function signTask(taskId,SuspensionState) {
+	
+	if (SuspensionState == '2'){
+		alert("当前流程已被挂起,不能签收！");
+		return ;
+	}
 	
 	$.ajax({
  	 	type: "POST",
@@ -53,7 +58,7 @@ function signTask(taskId) {
 			},
 		success : function(data){
 			if (data != 'success') {
-				alert(data);
+				alert("流程实例签收出错："+data);
 			}else {
 				queryList();
 			}
@@ -62,7 +67,20 @@ function signTask(taskId) {
 }
 
 // 处理任务
-function doTask(taskId,taskState){
+function doTask(taskId,SuspensionState,taskState){
+	
+	if (SuspensionState == '2'){
+		alert("当前流程已被挂起,不能处理！");
+		return ;
+	}
+	
+	var processKey = $("#processKey").val();
+	
+	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey;
+	
+	$.dialog({ title:'任务处理',width:1100,height:620, content:'url:'+url});
+	
+	<%--
 	$.ajax({
  	 	type: "POST",
 		url : "<%=request.getContextPath()%>/workflow/taskManage/completeTask.page",
@@ -80,6 +98,7 @@ function doTask(taskId,taskState){
 			}
 		}	
 	 });
+	 --%>
 }
 
 //查看流程实例详情

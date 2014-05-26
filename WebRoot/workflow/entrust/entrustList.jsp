@@ -45,7 +45,7 @@
     		<td><pg:cell colName="create_date" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
     		<td>
     			<pg:equal colName="wf_entrust_type" value="选择流程委托"><a href="#" onclick="viewEntrustInfo('<pg:cell colName="id"/>');">部分委托</a></pg:equal>
-    			<pg:equal colName="wf_entrust_type" value="全部委托"><a href="#" onclick="viewEntrustInfo('<pg:cell colName="id"/>');">全部委托</a></pg:equal>
+    			<pg:equal colName="wf_entrust_type" value="全部委托">全部委托</pg:equal>
     		</td>    
        		<td><pg:cell colName="sts" /></td>
        		<td>

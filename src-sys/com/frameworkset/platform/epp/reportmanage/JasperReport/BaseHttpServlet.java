@@ -28,7 +28,6 @@
 package com.frameworkset.platform.epp.reportmanage.JasperReport;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,88 +59,91 @@ public abstract class BaseHttpServlet extends HttpServlet
 	
 	public static final String REPORT_FILE_NAME="filename";
 	
-	protected  static final ThreadLocal THREAD_FILE_NAME=new ThreadLocal();
+//	protected  static final ThreadLocal THREAD_FILE_NAME=new ThreadLocal();
 	
 	public static void toSession(HttpServletRequest request,String key,JasperPrint jasperPrint) throws IOException
 	{
-		java.io.ByteArrayOutputStream out = null; 
-		java.io.ObjectOutputStream output = null;
-		try
-		{
-			out = new ByteArrayOutputStream(); 
-			output = new java.io.ObjectOutputStream(out); 
-			output.writeObject(jasperPrint);
-			output.flush();
-			request.getSession().setAttribute(key, out.toByteArray());
-		}
-		finally
-		{
-			try {
-				if(out != null)
-				{
-					out.close();
-					out = null;
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				if(output != null)
-				{
-					output.close();
-					output = null;
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		request.getSession().setAttribute(key, jasperPrint);
+//		java.io.ByteArrayOutputStream out = null; 
+//		java.io.ObjectOutputStream output = null;
+//		try
+//		{
+//			out = new ByteArrayOutputStream(); 
+//			output = new java.io.ObjectOutputStream(out); 
+//			output.writeObject(jasperPrint);
+//			output.flush();
+//			request.getSession().setAttribute(key, out.toByteArray());
+//		}
+//		finally
+//		{
+//			try {
+//				if(out != null)
+//				{
+//					out.close();
+//					out = null;
+//				}
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				if(output != null)
+//				{
+//					output.close();
+//					output = null;
+//				}
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 	}
 	
 	public static JasperPrint getJasperPrint(HttpServletRequest request,String key)
 	{
-		JasperPrint jasperPrint = null;
-	
-		java.io.ObjectInputStream output = null;
-		java.io.ByteArrayInputStream intput = null;
-		try
-		{
-			byte[] b = (byte[])request.getSession().getAttribute(key); 
-			intput = new ByteArrayInputStream(b);
-			output = new java.io.ObjectInputStream(intput); 
-			jasperPrint = (JasperPrint)output.readObject();
-			return jasperPrint;
-			
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		finally
-		{
-			try {
-				if(intput != null)
-				{
-					intput.close();
-					intput = null;
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				if(output != null)
-				{
-					output.close();
-					output = null;
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		return (JasperPrint)request.getSession().getAttribute(key);
+//		JasperPrint jasperPrint = null;
+//	
+//		java.io.ObjectInputStream output = null;
+//		java.io.ByteArrayInputStream intput = null;
+//		try
+//		{
+//			byte[] b = (byte[])request.getSession().getAttribute(key); 
+//			intput = new ByteArrayInputStream(b);
+//			output = new java.io.ObjectInputStream(intput); 
+//			jasperPrint = (JasperPrint)output.readObject();
+//			return jasperPrint;
+//			
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//			return null;
+//		}
+//		finally
+//		{
+//			try {
+//				if(intput != null)
+//				{
+//					intput.close();
+//					intput = null;
+//				}
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				if(output != null)
+//				{
+//					output.close();
+//					output = null;
+//				}
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 			
 	/**
@@ -150,7 +152,7 @@ public abstract class BaseHttpServlet extends HttpServlet
 	public static List getJasperPrintList(HttpServletRequest request)
 	{
 		//通过参数获得文件名，绑定到该线程
-		THREAD_FILE_NAME.set(request.getParameter("filename"));
+//		THREAD_FILE_NAME.set(request.getParameter("filename"));
 		
 		String jasperPrintListSessionAttr = request.getParameter(JASPER_PRINT_LIST_REQUEST_PARAMETER);
 		if (jasperPrintListSessionAttr == null)

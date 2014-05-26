@@ -14,6 +14,8 @@
  */
 package com.sany.workflow.entity;
 
+import java.util.List;
+
 /**
  * @todo 对应activiti中的流程实例表中的数据
  * @author tanx
@@ -35,42 +37,14 @@ public class ProcessInst {
 	private String SUPER_PROCESS_INSTANCE_ID_;
 	private String DELETE_REASON_;//删除原因
 	
-	private String NAME_;//当前节点名称
-	private String ASSIGNEE_;//当前节点处理人
-	private String REMARK;//备注
 	private String VERSION_;//版本
+	private String KEY_;// 流程KEY
+	
+	private String NAME_;// 流程名称
+	private String SUSPENSION_STATE_;// 流程状态 1激活， 2挂起，空->流程结束
+	
+	private List<TaskManager> taskList;//任务集合
 
-	public String getVERSION_() {
-		return VERSION_;
-	}
-
-	public void setVERSION_(String vERSION_) {
-		VERSION_ = vERSION_;
-	}
-
-	public String getREMARK() {
-		return REMARK;
-	}
-
-	public void setREMARK(String rEMARK) {
-		REMARK = rEMARK;
-	}
-
-	public String getNAME_() {
-		return NAME_;
-	}
-
-	public void setNAME_(String nAME_) {
-		NAME_ = nAME_;
-	}
-
-	public String getASSIGNEE_() {
-		return ASSIGNEE_;
-	}
-
-	public void setASSIGNEE_(String aSSIGNEE_) {
-		ASSIGNEE_ = aSSIGNEE_;
-	}
 
 	public String getID_() {
 		return ID_;
@@ -166,6 +140,46 @@ public class ProcessInst {
 
 	public void setDELETE_REASON_(String dELETE_REASON_) {
 		DELETE_REASON_ = dELETE_REASON_;
+	}
+
+	public String getVERSION_() {
+		return VERSION_;
+	}
+
+	public void setVERSION_(String vERSION_) {
+		VERSION_ = vERSION_;
+	}
+
+	public String getKEY_() {
+		return KEY_;
+	}
+
+	public void setKEY_(String kEY_) {
+		KEY_ = kEY_;
+	}
+
+	public String getNAME_() {
+		return NAME_;
+	}
+
+	public void setNAME_(String nAME_) {
+		NAME_ = nAME_;
+	}
+
+	public String getSUSPENSION_STATE_() {
+		return SUSPENSION_STATE_;
+	}
+
+	public void setSUSPENSION_STATE_(String sUSPENSION_STATE_) {
+		SUSPENSION_STATE_ = sUSPENSION_STATE_;
+	}
+
+	public List<TaskManager> getTaskList() {
+		return taskList;
+	}
+
+	public void setTaskList(List<TaskManager> taskList) {
+		this.taskList = taskList;
 	}
 
 }

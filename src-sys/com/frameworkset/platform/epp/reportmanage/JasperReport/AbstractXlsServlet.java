@@ -25,7 +25,7 @@ public abstract class AbstractXlsServlet extends BaseHttpServlet
 		HttpServletResponse response
 		) throws IOException, ServletException
 	{
-		List jasperPrintList = BaseHttpServlet.getJasperPrintList(request);
+		List jasperPrintList = getJasperPrintList(request);
 
 		if (jasperPrintList == null)
 		{
@@ -50,7 +50,7 @@ public abstract class AbstractXlsServlet extends BaseHttpServlet
 				if (fbos.size()> 0)
 				{
 					response.setContentType("application/xls");
-					response.setHeader("Content-Disposition", "inline; filename="+THREAD_FILE_NAME.get()+".xls");
+					response.setHeader("Content-Disposition", "inline; filename="+request.getParameter("filename")+".xls");
 					response.setContentLength(fbos.size());
 					ServletOutputStream ouputStream = response.getOutputStream();
 					try
@@ -97,7 +97,7 @@ public abstract class AbstractXlsServlet extends BaseHttpServlet
 		else
 		{
 			response.setContentType("application/xls");
-			response.setHeader("Content-Disposition", "inline; filename="+THREAD_FILE_NAME.get()+".xls");
+			response.setHeader("Content-Disposition", "inline; filename="+request.getParameter("filename")+".xls");
 
 			JRXlsAbstractExporter exporter = getXlsExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);

@@ -374,6 +374,16 @@
 					<content><![CDATA[/params/showParams.page?paramId=Token&paramType=Token&handler=cms.siteparamshandler]]></content>
 				</workspace>
 			</item>
+			<item name="节假日管理" id="holidaymanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content><![CDATA[/sysmanager/holiday/setholiday.jsp]]></content>
+				</workspace>
+			</item>
+			
 			<item name="流程授权管理" id="entrustmanager">
 				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
 				
@@ -469,31 +479,16 @@
 					<content>test/his_userlist.jsp</content>
 				</workspace>
 			</item>
-			<module name="任务管理" id="taskmanage" used="true" i18n:en_US="task manager" url="workflow/taskManage/ontimeTaskManager.page" showleftmenu="true" popup="true">
-					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<description>任务管理</description>
-			
-				<item name="实时任务" id="ontime" i18n:en_US="ontime">
-						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-					<top>header.page</top>
-					<workspace>
-						<content>workflow/taskManage/ontimeTaskManager.page</content>
-					</workspace>
-					<authoration>				 
-					 	<url>workflow/taskManage/*.page</url>
-					</authoration>
-				</item>
-				<item name="历史任务" id="historytime" i18n:en_US="historytime">
-						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-					<top>header.page</top>
-					<workspace>
-						<content>workflow/taskManage/historyTimeTaskManager.page</content>
-					</workspace>
-					<authoration>				 
-					 	<url>workflow/taskManage/*.page</url>
-					</authoration>
-				</item>
-			</module>
+			<item name="任务管理" id="taskmanage" i18n:en_US="task manager">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<workspace>
+					<content>workflow/taskManage/ontimeTaskManager.page</content>
+				</workspace>
+				<authoration>				 
+					 <url>workflow/taskManage/*.page</url>
+				</authoration>
+			</item>
 		</module>
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">

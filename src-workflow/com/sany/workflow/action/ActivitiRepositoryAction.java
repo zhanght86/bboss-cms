@@ -57,9 +57,8 @@ import com.sany.workflow.entity.ProcessInstCondition;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
+import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * @author yinbp
@@ -209,10 +208,11 @@ public class ActivitiRepositoryAction {
 	 * @return
 	 */
 	public @ResponseBody
-	String deleteDeploymentCascade(String[] processDeploymentids, boolean[] cascades) {
+	String deleteDeploymentCascade(String processDeploymentids, boolean[] cascades) {
 		// processDef.getProcessDef();
+		String[] ids = processDeploymentids.split(",");
 		try {
-			activitiService.deleteDeploymentAllVersions(processDeploymentids);
+			activitiService.deleteDeploymentAllVersions(ids);
 
 			return "success";
 		} catch (Exception e) {
@@ -222,7 +222,7 @@ public class ActivitiRepositoryAction {
 		}
 
 	}
-
+	
 	/**
 	 * 启动流程
 	 * 
@@ -416,10 +416,16 @@ public class ActivitiRepositoryAction {
 	 * @throws IOException
 	 * 2014年5月13日
 	 */
-	public void getProccessActivePic(String processInstId,HttpServletResponse response) throws IOException {
-		if(processInstId!=null&&!processInstId.equals("")){
-			OutputStream out = response.getOutputStream();
-			activitiService.getProccessActivePic(processInstId, out);
+	public void getProccessActivePic(String processInstId,HttpServletResponse response) {
+		try {
+			
+			if(processInstId!=null&&!processInstId.equals("")){
+				OutputStream out = response.getOutputStream();
+				activitiService.getProccessActivePic(processInstId, out);
+			}
+			
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 	}
 	
@@ -447,13 +453,18 @@ public class ActivitiRepositoryAction {
 	 * @return 2014年5月8日
 	 */
 	public String toProcessInstance(String processKey, ModelMap model) {
-		
-		// 根据流程key获取流程版本号
-		List<ProcessDefinition> defList = activitiService.activitiListByprocesskey(processKey);
-		
-		model.addAttribute("defList", defList);
-		model.addAttribute("processKey", processKey);
-		return "path:toProcessInstance";
+		try {
+			// 根据流程key获取流程版本号
+			List<ProcessDefinition> defList = activitiService
+					.activitiListByprocesskey(processKey);
+
+			model.addAttribute("defList", defList);
+			model.addAttribute("processKey", processKey);
+			
+			return "path:toProcessInstance";
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
 	}
 
 	/**
@@ -474,66 +485,55 @@ public class ActivitiRepositoryAction {
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
 			ProcessInstCondition processDefCondition, ModelMap model) {
 		try {
-
 			// 获取流程实例List
 			ListInfo listInfo = activitiService.queryProcessInsts(offset,
 					pagesize, processDefCondition);
-			// List<ProcessInstance> instanceList = activitiService
-			// .getRuntimeService().createProcessInstanceQuery()
-			// .processDefinitionKey(processDefCondition.getProcessKey())
-			// .list();
 
 			model.addAttribute("processInsts", listInfo);
+			return "path:queryProcessIntsByKey";
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
-		return "path:queryProcessIntsByKey";
 	}
-	private List<String> parserData(String particate)
-	{
-		if(!StringUtil.isEmpty(particate  ))
-		{
-			String[] pts = particate.split(",");
-			
-			return Arrays.asList(pts);
-		}
-		return null;
-	}
-	/**
-	 * 开启流程实例 gw_tanx
-	 * 
+	
+	/**开启流程实例 gw_tanx
 	 * @param processKey
-	 * @return 2014年5月8日
+	 * @param businessKey
+	 * @param activitiNodeCandidateList
+	 * @param nodevariableList
+	 * @return
+	 * 2014年5月21日
 	 */
 	public @ResponseBody
-	String startPorcessInstance(String processKey,List<ActivitiNodeCandidate> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList) {
+	String startPorcessInstance(String processKey,String businessKey,
+			List<ActivitiNodeCandidate> activitiNodeCandidateList,List<Nodevariable> nodevariableList) {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 				
 			for (int i = 0; i < activitiNodeCandidateList.size();i++) {
-				
+				// 用户
 				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i).getCandidate_users_id())) {
 					map.put(activitiNodeCandidateList.get(i).getNode_key()+"_users",
 							activitiNodeCandidateList.get(i).getCandidate_users_id());
 				}
-				
+				// 组
 				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i).getCandidate_groups_id())) {
 					map.put(activitiNodeCandidateList.get(i).getNode_key()+"_groups",
 							activitiNodeCandidateList.get(i).getCandidate_groups_id());
 				}
-				
+				// 变量
 				if (!StringUtil.isEmpty(nodevariableList.get(i).getParam_name())) {
 					map.put(nodevariableList.get(i).getParam_name(),
 							nodevariableList.get(i).getParam_value());
 				}
 			}
 
-			activitiService.startProcDef(map, processKey, AccessControl
+			activitiService.startProcDef(businessKey, processKey, map,AccessControl
 					.getAccessControl().getUserAccount());
 			return "success";
 		} catch (Exception e) {
-			return "fail:" + e.getMessage();
+			throw new ProcessException(e);
 		}
 	}
 	
@@ -544,37 +544,55 @@ public class ActivitiRepositoryAction {
 	 * @param model
 	 * 2014年5月13日
 	 */
-	public String toStartProcessInst(String processKey,String business_id, 
-			String business_type, ModelMap model){
-		
-		List<ActivitiNodeCandidate> list = activitiConfigService.
-				queryActivitiNodesCandidates(business_type, business_id, processKey);
-		
-		model.addAttribute("activitiNodeCandidateList", list);
-		model.addAttribute("business_id", business_id);
-		model.addAttribute("business_type", business_type);
-		model.addAttribute("process_key", processKey);
-		List<ActivitiNodeInfo> nodeInfoList = activitiConfigService.queryAllActivitiNodeInfo(processKey);
-		model.addAttribute("nodeInfoList", nodeInfoList);
-		
-		return "path:startProcess";
+	public String toStartProcessInst(String processKey, String business_id,
+			String business_type, ModelMap model) {
+		try {
+			List<ActivitiNodeCandidate> list = activitiConfigService
+					.queryActivitiNodesCandidates(business_type, business_id,
+							processKey);
+
+			model.addAttribute("activitiNodeCandidateList", list);
+			model.addAttribute("business_id", business_id);
+			model.addAttribute("business_type", business_type);
+			model.addAttribute("process_key", processKey);
+			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
+					.queryAllActivitiNodeInfo(processKey);
+			model.addAttribute("nodeInfoList", nodeInfoList);
+
+			return "path:startProcess";
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
 	}
 
-	/**
-	 * 删除流程实例 gw_tanx
-	 * 
+	/**删除流程实例 gw_tanx
 	 * @param processInstIds
 	 * @param deleteReason
-	 * @return 2014年5月9日
+	 * @param delType
+	 * @return
+	 * 2014年5月16日
 	 */
 	public @ResponseBody
-	String delPorcessInstance(String[] processInstIds, String deleteReason) {
+	String delPorcessInstance(String processInstIds, String deleteReason,
+			String delType) {
+
 		try {
-			activitiService.cancleProcessInstances(processInstIds, deleteReason);
+			// 逻辑删除
+			if ("1".equals(delType)) {
+
+				activitiService.cancleProcessInstances(processInstIds,
+						deleteReason);
+			} else {// 物理删除
+
+				activitiService.delProcessInstances(processInstIds);
+
+			}
+			
 			return "success";
 		} catch (Exception e) {
-			return "fail:" + e.getMessage();
+			throw new ProcessException(e);
 		}
+
 	}
 	
 	/**
@@ -587,10 +605,44 @@ public class ActivitiRepositoryAction {
 	public @ResponseBody
 	String upgradeInstances(String processKey) {
 		try {
+			
 			activitiService.upgradeInstances(processKey);
+			
 			return "success";
 		} catch (Exception e) {
-			return "fail:" + e.getMessage();
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 挂起流程实例 gw_tanx
+	 * @param processInstId
+	 * @return
+	 * 2014年5月19日
+	 */
+	public @ResponseBody
+	String suspendProcessInst(String processInstId) {
+		try {
+			activitiService.suspendProcessInst(processInstId);
+			
+			return "success";
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 激活流程实例 gw_tanx
+	 * @param processInstId
+	 * @return
+	 * 2014年5月19日
+	 */
+	public @ResponseBody
+	String activateProcessInst(String processInstId) {
+		try {
+			activitiService.activateProcessInst(processInstId);
+			
+			return "success";
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 	}
 	

@@ -13,11 +13,11 @@
 	<property name="/workflow/taskManage/*.page"
 		path:ontimeTaskManager="/workflow/taskManage/ontimeTaskManager.jsp"
 		path:ontimeTaskList="/workflow/taskManage/ontimeTaskList.jsp"
-		path:historyTimeTaskManager="/workflow/taskManage/historyTimeTaskManager.jsp"
-		path:historyTimeTaskList="/workflow/taskManage/historyTimeTaskList.jsp"
 		path:viewTaskInfo="/workflow/repository/viewProcessInfo.jsp"
 		path:viewTaskDetailInfo="/workflow/taskManage/viewTaskDetailInfo.jsp"
+		path:dealTask="/workflow/taskManage/dealTask.jsp"
 		f:activitiService="attr:activitiService"
+		f:activitiConfigService="attr:activitiConfigService"
 		class="com.sany.workflow.action.ActivitiTaskManageAction" >
 	</property>
 	

@@ -41,7 +41,15 @@
 		]]>
 	</property>
 	
-	<property name="queryProInst">
+	<!-- 获取运行时流程实例信息  gw_tanx-->
+	<property name="queryProInstById_wf">
+		<![CDATA[
+			SELECT * FROM ACT_RU_EXECUTION A WHERE A.PROC_INST_ID_=?
+		]]>
+	</property>
+	
+	<!-- 流程实例列表数据  gw_tanx-->
+	<property name="queryProInst_wf">
 		<![CDATA[
 			SELECT A.ID_,
 		       A.PROC_INST_ID_,
@@ -55,13 +63,13 @@
 		       A.END_ACT_ID_,
 		       A.SUPER_PROCESS_INSTANCE_ID_,
 		       A.DELETE_REASON_,
+		       B.NAME_,
+       		   B.KEY_,
 		       B.VERSION_,
-		       C.NAME_,
-		       C.ASSIGNEE_,
-		       NVL2(END_TIME_,NVL2(A.DELETE_REASON_, A.DELETE_REASON_, '正常完成'),'') REMARK
+		       D.SUSPENSION_STATE_
 		  FROM ACT_HI_PROCINST A
-		  LEFT JOIN ACT_RU_TASK C ON A.PROC_INST_ID_ = C.PROC_INST_ID_
 		  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+		  LEFT JOIN ACT_RU_EXECUTION D ON A.PROC_INST_ID_ = D.PROC_INST_ID_
 		  
 			WHERE 1=1
 			
@@ -89,10 +97,13 @@
 				and A.END_TIME_ <= TO_TIMESTAMP(#[wf_end_time2], 'YYYY-MM-DD HH24:MI:SS')
 			#end
 			
+			--流程状态 1 激活 2 挂起 3 流程结束 
 			#if($wf_state && $wf_state.equals("3"))
-				AND A.END_TIME_ IS NOT NULL
+				AND D.SUSPENSION_STATE_ IS NULL
 			#elseif ($wf_state && $wf_state.equals("1"))
-				AND A.END_TIME_ IS NULL
+				AND D.SUSPENSION_STATE_ = 1
+			#elseif ($wf_state && $wf_state.equals("2"))
+				AND D.SUSPENSION_STATE_ = 2
 			#end
 			
 			#if($wf_versions)
@@ -105,6 +116,10 @@
 						#end
 					#end
       			)
+			#end
+			
+			#if($wf_business_key && !$wf_business_key.equals(""))
+				AND A.BUSINESS_KEY_ like #[wf_business_key]
 			#end
 			
 			ORDER BY A.START_TIME_ DESC
@@ -173,9 +188,97 @@
 		]]>
 	</property>
 	
+	<!-- 获取所有任务的未签收人员(处理人)  gw_tanx-->
+	<property name="getCandidatorList_wf">
+		<![CDATA[
+			SELECT I.USER_ID_, RES.ID_
+			  FROM ACT_RU_TASK RES
+			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
+			 WHERE RES.ASSIGNEE_ IS NULL
+			   AND I.TYPE_ = 'candidate'
+			   
+			   #if($wf_Inst_Id && !$wf_Inst_Id.equals(""))
+			   		AND RES.PROC_INST_ID_=#[wf_Inst_Id]
+			   #end
+			   
+			   #if($wf_key && !$wf_key.equals(""))
+					AND EXISTS (SELECT 1
+			          FROM ACT_RE_PROCDEF B
+			         WHERE B.KEY_ = #[wf_key]
+			           AND B.ID_ = RES.PROC_DEF_ID_)
+			   #end
+			   
+		]]>
+	</property>
+	
+	<!-- 根据流程实例id获取任务信息  gw_tanx-->
+	<property name="getTaskInfoById_wf">
+		<![CDATA[
+			SELECT A.ID_,
+		       A.REV_,
+		       A.EXECUTION_ID_,
+		       A.PROC_INST_ID_,
+		       A.PROC_DEF_ID_,
+		       A.NAME_,
+		       A.PARENT_TASK_ID_,
+		       A.DESCRIPTION_,
+		       A.TASK_DEF_KEY_,
+		       A.OWNER_,
+		       A.ASSIGNEE_,
+		       A.DELEGATION_,
+		       A.PRIORITY_,
+		       A.CREATE_TIME_,
+		       A.DUE_DATE_,
+		       A.SUSPENSION_STATE_
+		  FROM ACT_RU_TASK A
+		 WHERE A.PROC_INST_ID_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据任务id获取处理人列表  gw_tanx-->
+	<property name="getCandidatorOftask_wf">
+		<![CDATA[
+			SELECT I.USER_ID_,I.GROUP_ID_
+			  FROM ACT_RU_IDENTITYLINK I 
+			 WHERE 1=1
+			   and I.TYPE_ = 'candidate'
+			   and I.TASK_ID_=?
+		]]>
+	</property>
+	
+	<!-- 工作流管理中查看明细列表  gw_tanx-->
+	<property name="selectTaskHistorById_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       T.PROC_DEF_ID_,
+			       T.PROC_INST_ID_,
+			       T.EXECUTION_ID_,
+			       T.ACT_ID_,
+			       T.TASK_ID_,
+			       T.CALL_PROC_INST_ID_,
+			       T.ACT_NAME_,
+			       T.ACT_TYPE_,
+			       T.ASSIGNEE_,
+			       T.START_TIME_,
+			       A.CLAIM_TIME_,
+			       T.END_TIME_,
+			       A.DELETE_REASON_,
+			       T.DURATION_ 
+			  FROM ACT_HI_ACTINST T
+			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
+			  
+			 WHERE 1=1 
+			  
+			 AND T.PROC_INST_ID_ = ?
+			
+			ORDER BY T.START_TIME_ ,T.END_TIME_
+		]]>
+	</property>
+	
 	<!-- 工作流管理中查看任务列表  gw_tanx-->
 	<property name="selectTaskByUser_wf">
 		<![CDATA[
+		--taskState签收状态字段 0 所有 1 未签收 2 签收
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
 				select distinct 1 as state,RES.*
 				  from ACT_RU_TASK RES
@@ -238,6 +341,7 @@
 				  #end
 			#end
 			
+			--以CREATE_TIME_字段排序，不能直接写字段名， 字段列序号
 			ORDER BY 15 DESC  
 		]]>
 	</property>

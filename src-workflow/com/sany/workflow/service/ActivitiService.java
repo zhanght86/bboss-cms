@@ -29,8 +29,10 @@ import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
+import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.ProcessInstCondition;
 import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entity.TaskManager;
 
 public interface ActivitiService {
 	  public ProcessDef queryProdefByKey(String processKey,String version) ;
@@ -381,7 +383,15 @@ public interface ActivitiService {
 	public List<Task> listTaskByUser(String username);
 
 	public ProcessInstance getProcessInstanceById(String processInstanceId);
-
+	
+	/** 获取流程实例信息 gw_tanx
+	 * @param processInstId
+	 * @return
+	 * @throws Exception
+	 * 2014年5月19日
+	 */
+	public ProcessInst getProcessInstById(String processInstId) ;
+	
 	/**
 	 * 根据processInstanceId查询历史
 	 * 
@@ -705,6 +715,22 @@ public interface ActivitiService {
 	 * 2014年5月14日
 	 */
 	public ListInfo queryTasks(TaskCondition task,long offset, int pagesize) ;
+	
+	/** 获取历史任务 gw_tanx
+	 * @param task
+	 * @return
+	 * 2014年5月19日
+	 */
+	public List<TaskManager> queryHistorTasks(String processInstId);
+	
+	/** 获取历史任务，分页展示 gw_tanx
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * 2014年5月19日
+	 */
+	public ListInfo queryHistorTasks(TaskCondition task,long offset, int pagesize) ;
 
 	/**
 	 * 获得历史任务实例 by用户名
@@ -831,6 +857,12 @@ public interface ActivitiService {
 	 * @param processId
 	 */
 	public void activateProcess(String processId);
+	
+	/** 激活流程实例 gw_tanx
+	 * @param processInstId
+	 * 2014年5月19日
+	 */
+	public void activateProcessInst(String processInstId);
 
 	/**
 	 * 停用流程
@@ -838,6 +870,12 @@ public interface ActivitiService {
 	 * @param processId
 	 */
 	public void suspendProcess(String processId);
+	
+	/** 挂起流程实例 gw_tanx
+	 * @param processId
+	 * 2014年5月19日
+	 */
+	public void suspendProcessInst(String processInstId);
 
 	/**
 	 * 获得流程的所有节点
@@ -886,7 +924,7 @@ public interface ActivitiService {
 	 * @throws IOException
 	 * 2014年5月13日
 	 */
-	public void getProccessActivePic(String processInstId, OutputStream out) throws IOException ;
+	public void getProccessActivePic(String processInstId, OutputStream out) ;
 	/**
 	 * 根据流程key获取流程的最新版本流程图
 	 * @param processKey
@@ -1028,7 +1066,7 @@ public interface ActivitiService {
 	 * @param deleteReason
 	 *            2014年5月9日
 	 */
-	public void cancleProcessInstances(String[] processInstanceIds,
+	public void cancleProcessInstances(String processInstanceIds,
 			String deleteReason);
 	
 	/**
@@ -1038,8 +1076,7 @@ public interface ActivitiService {
 	 * @param deleteReason
 	 *            2014年5月9日
 	 */
-	public void delProcessInstances(String[] processInstanceIds,
-			String deleteReason);
+	public void delProcessInstances(String processInstanceIds) ;
 	
 	public ListInfo listTaskAndVarsByUserWithState(Class clazz,String processkey,String state,String userAccount,long offset,int pagesize);
 	public int countTasksByUserWithState(String processkey,String state,String userAccount);
@@ -1061,7 +1098,7 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public ListInfo queryProcessInsts(long offset, int pagesize,
-			ProcessInstCondition processInstCondition);
+			ProcessInstCondition processInstCondition) ;
 	/**
 	 * 将流程实例升级到最新版本
 	 * @param processKey

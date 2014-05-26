@@ -25,7 +25,9 @@
 	</div>
 	
 	<form name="submitForm" id="submitForm" method="post">
-	
+	业务主键：
+	<input type="text" id="businessKey" name="businessKey" value=""/>
+		
 	<div id="main0">
 		<ul id="tab1" style="display: block;">
 		<div>
@@ -146,9 +148,9 @@ function doCandidateSubmit(){
 		datatype:"json",			
 		success: function(data){
 			if (data != 'success') {
-				alert(data);
+				alert("流程实例开启出错："+data);
 			}else {
-				W.modifyQueryData();
+				W.queryList();
 				api.close();	
 			}
 		  }

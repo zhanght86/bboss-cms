@@ -56,7 +56,7 @@ public class RtfServlet extends BaseHttpServlet
 		HttpServletResponse response
 		) throws IOException, ServletException
 	{
-		List jasperPrintList = BaseHttpServlet.getJasperPrintList(request);
+		List jasperPrintList = getJasperPrintList(request);
 
 		if (jasperPrintList == null)
 		{
@@ -78,7 +78,7 @@ public class RtfServlet extends BaseHttpServlet
 			
 				if (fbos.size() > 0)
 				{
-					String  filename = (String)THREAD_FILE_NAME.get();
+					String  filename = request.getParameter("filename");
 					response.setContentType("application/rtf");
 					response.setHeader("Content-Disposition", "inline; filename=\""+filename+".doc\"");
 					response.setContentLength(fbos.size());
@@ -127,7 +127,7 @@ public class RtfServlet extends BaseHttpServlet
 		}
 		else
 		{
-			String filename = (String)THREAD_FILE_NAME.get();
+			String filename = request.getParameter("filename");
 			String isFillReport= (String)request.getSession().getAttribute("isFillReport");
 			if("true".equalsIgnoreCase(isFillReport)){
 				filename = URLEncoder.encode(filename, "UTF-8");

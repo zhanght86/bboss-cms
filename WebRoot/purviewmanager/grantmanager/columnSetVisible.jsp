@@ -111,7 +111,7 @@
 				                   <tree:param name="currOrgId"/>
 				                   <tree:param name="isBatch"/>
 				                   
-									<tree:checkbox recursive="true" partuprecursive="true" name="checkboxValue"  />
+									<tree:checkbox  name="checkboxValue"  />
 
 									<tree:treedata treetype="com.frameworkset.platform.sysmgrcore.purviewmanager.menu.MenuResTree" scope="request" rootid="0" rootName="${rootName}" expandLevel="1" showRootHref="false" 
 									needObserver="false" 

@@ -42,6 +42,17 @@ public class ProcessInstCondition {
 	private String wf_state;
 	// 流程版本
 	private String[] wf_versions;
+	
+	// 流程状态
+	private String wf_business_key;
+
+	public String getWf_business_key() {
+		return wf_business_key;
+	}
+
+	public void setWf_business_key(String wf_business_key) {
+		this.wf_business_key = wf_business_key;
+	}
 
 	public String[] getWf_versions() {
 		return wf_versions;

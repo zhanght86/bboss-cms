@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,7 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
 import org.frameworkset.util.CollectionUtils;
 
+import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
@@ -114,8 +117,19 @@ public class ActivitiServiceImpl implements ActivitiService ,org.frameworkset.sp
 	   */
 public void rejecttoPreTask(String taskId, String username,Map<String, Object> variables)
 {
-	   taskService.claim(taskId, username);
-	   this.taskService.rejecttoPreTask(taskId,variables);
+	TransactionManager tm = new TransactionManager();
+	try{
+		tm.begin();
+		
+		taskService.claim(taskId, username);
+		this.taskService.rejecttoPreTask(taskId,variables);
+	   
+		tm.commit();
+	}catch(Exception e){
+		throw new ProcessException(e);
+	}finally {
+		tm.release();
+	}
 }
 	  
 	  /**
@@ -123,8 +137,19 @@ public void rejecttoPreTask(String taskId, String username,Map<String, Object> v
 	   * @param taskId
 	   */
 public void rejecttoPreTask(String taskId,String username){
-	taskService.claim(taskId, username);
-	   this.taskService.rejecttoPreTask(taskId);
+	TransactionManager tm = new TransactionManager();
+	try{
+		tm.begin();
+		
+		taskService.claim(taskId, username);
+		this.taskService.rejecttoPreTask(taskId);
+		
+		tm.commit();
+	}catch(Exception e){
+		throw new ProcessException(e);
+	}finally {
+		tm.release();
+	}
 }
 	public ActivitiServiceImpl(String xmlPath) {
 		TransactionManager tm = new TransactionManager();
@@ -147,7 +172,7 @@ public void rejecttoPreTask(String taskId,String username){
 		}
 		catch(Exception e)
 		{
-			throw new java.lang.RuntimeException(e);
+			throw new ProcessException(e);
 		}
 		finally
 		{
@@ -645,9 +670,20 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
 //		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.complete(taskId, map);
+			taskService.claim(taskId, username);
+			taskService.complete(taskId, map);
+			
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 	
 	/**
@@ -658,9 +694,19 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey) {
-//		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.complete(taskId, map, destinationTaskKey);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+	//		taskService = processEngine.getTaskService();
+			taskService.claim(taskId, username);
+			taskService.complete(taskId, map, destinationTaskKey);
+		tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 	
 	/**
@@ -673,17 +719,6 @@ public void rejecttoPreTask(String taskId,String username){
 		taskService.claim(taskId, username);
 	}
 	
-//	/**
-//	 * 完成任务 gw_tanx
-//	 * 
-//	 * @param taskId
-//	 * @param map
-//	 */
-//	public void completeTaskById(String taskId){
-//		taskService.complete(taskId);
-//	}
-	
-	
 	/**
 	 * 完成任务(先领用再完成)
 	 * 
@@ -691,9 +726,20 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param map
 	 */
 	public void completeTaskByUser(String taskId, String username) {
-//		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.complete(taskId);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+	//		taskService = processEngine.getTaskService();
+			taskService.claim(taskId, username);
+			taskService.complete(taskId);
+			
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 	
 	/**
@@ -721,9 +767,20 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param map
 	 */
 	public void completeTaskByUserWithDest(String taskId, String username,String destinationTaskKey) {
-//		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.completeWithDest(taskId, destinationTaskKey);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+	//		taskService = processEngine.getTaskService();
+			taskService.claim(taskId, username);
+			taskService.completeWithDest(taskId, destinationTaskKey);
+		
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 	
 	/**
@@ -734,10 +791,21 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map) {
-//		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.setVariablesLocal(taskId, map);
-		taskService.complete(taskId);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+	//		taskService = processEngine.getTaskService();
+			taskService.claim(taskId, username);
+			taskService.setVariablesLocal(taskId, map);
+			taskService.complete(taskId);
+			
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 	
 	/**
@@ -748,10 +816,21 @@ public void rejecttoPreTask(String taskId,String username){
 	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey) {
-//		taskService = processEngine.getTaskService();
-		taskService.claim(taskId, username);
-		taskService.setVariablesLocal(taskId, map);
-		taskService.completeWithDest(taskId, destinationTaskKey);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+	//		taskService = processEngine.getTaskService();
+			taskService.claim(taskId, username);
+			taskService.setVariablesLocal(taskId, map);
+			taskService.completeWithDest(taskId, destinationTaskKey);
+			
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
 	}
 
 	/**
@@ -784,7 +863,7 @@ public void rejecttoPreTask(String taskId,String username){
 			List<HistoricTaskInstanceEntity> list = executor.queryListBean(HistoricTaskInstanceEntity.class, "queryHisTask",map);
 			historyTaskList.addAll(list);
 		}catch(Exception e){
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return historyTaskList;
 	}
@@ -803,8 +882,7 @@ public void rejecttoPreTask(String taskId,String username){
 			map.put("username", username);
 			listInfo = executor.queryListInfoBean(HistoricTaskInstanceEntity.class, "queryHisTask", offset, pagesize, map);
 		}catch(Exception e){
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
 		}
 		return listInfo;
 	}
@@ -825,7 +903,7 @@ public void rejecttoPreTask(String taskId,String username){
 			List<HistoricTaskInstanceEntity> list = executor.queryListBean(HistoricTaskInstanceEntity.class, "queryHisTask",map);
 			historyTaskList.addAll(list);
 		}catch(Exception e){
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return historyTaskList;
 	}
@@ -847,8 +925,7 @@ public void rejecttoPreTask(String taskId,String username){
 			map.put("processKeys", processKeys);
 			listInfo = executor.queryListInfoBean(HistoricTaskInstanceEntity.class, "queryHisTask", offset, pagesize, map);
 		}catch(Exception e){
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
 		}
 		return listInfo;
 	}
@@ -868,8 +945,7 @@ public void rejecttoPreTask(String taskId,String username){
 			map.put("processKeys", processKeys);
 			listInfo = executor.queryListInfoBean(HistoricTaskInstanceEntity.class, "queryHisTask", offset, pagesize, map);
 		}catch(Exception e){
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
 		}
 		return listInfo;
 	}
@@ -911,7 +987,7 @@ public void rejecttoPreTask(String taskId,String username){
 		try {
 			inputStream = new ZipInputStream(new FileInputStream(new File(zip)));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 
 		Deployment deploy = repositoryService.createDeployment()
@@ -961,7 +1037,7 @@ public void rejecttoPreTask(String taskId,String username){
 		try {
 			inputStream = new ZipInputStream(new FileInputStream(new File(zip)));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 
 		Deployment deploy = repositoryService.createDeployment()
@@ -1420,15 +1496,25 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @param process_key
 	 */
 	public void deleteProcDefByprocesskey(String process_key) {
-		List<ProcessDefinition> procDefList = this
-				.activitiListByprocesskey(process_key);
-		for (ProcessDefinition task : procDefList) {
-			List<Task> tasks = taskService.createTaskQuery()
-					.processDefinitionId(task.getId()).list();
-			for (Task t : tasks) {
-				taskService.deleteTask(t.getId());
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			List<ProcessDefinition> procDefList = this
+					.activitiListByprocesskey(process_key);
+			for (ProcessDefinition task : procDefList) {
+				List<Task> tasks = taskService.createTaskQuery()
+						.processDefinitionId(task.getId()).list();
+				for (Task t : tasks) {
+					taskService.deleteTask(t.getId());
+				}
+				repositoryService.deleteDeployment(task.getDeploymentId());
 			}
-			repositoryService.deleteDeployment(task.getDeploymentId());
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
 		}
 	}
 
@@ -1440,42 +1526,51 @@ public void rejecttoPreTask(String taskId,String username){
 	 * .lang.String)
 	 */
 	public void deleteProcDef(String key) {
-		List<ProcessDefinition> pdList = repositoryService
-				.createProcessDefinitionQuery().processDefinitionKey(key)
-				.list();
-		if (pdList != null && !pdList.isEmpty()) {
-			for (ProcessDefinition pd : pdList) {
-				try {
-					repositoryService.deleteDeployment(
-							pd.getDeploymentId(), true);
-					this.activitiConfigService.deleteActivitiNodeInfo(pd.getKey());
-					
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			
+			List<ProcessDefinition> pdList = repositoryService
+					.createProcessDefinitionQuery().processDefinitionKey(key)
+					.list();
+			if (pdList != null && !pdList.isEmpty()) {
+				for (ProcessDefinition pd : pdList) {
+					repositoryService.deleteDeployment(pd.getDeploymentId(),
+							true);
+					this.activitiConfigService.deleteActivitiNodeInfo(pd
+							.getKey());
+
 					WfAppProcdefRelation relation = new WfAppProcdefRelation();
 					relation.setProcdef_id(pd.getId());
 					activitiRelationService.deleteAppProcRelation(relation);
-					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
+			
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
 		}
 	}
 
 	public List<ProcessDefinition> findAllRemoveListByProcessDeploymentids(
 			String[] processDeploymentids) {
-		processDeploymentids = Arrays.toString(processDeploymentids)
-				.replace("[", "").replace("]", "").split(",");
+		
 		List<ProcessDefinition> removeList = new ArrayList<ProcessDefinition>();
 		for (String processDeploymentid : processDeploymentids) {
-			List<ProcessDefinition> pdList = processEngine
-					.getRepositoryService().createProcessDefinitionQuery()
-					.processDefinitionKey(processDeploymentid).list();
-			if (pdList != null && !pdList.isEmpty()) {
-				removeList.addAll(pdList);
+			
+			if (StringUtil.isNotEmpty(processDeploymentid)){
+				
+				List<ProcessDefinition> pdList = processEngine
+						.getRepositoryService().createProcessDefinitionQuery()
+						.processDefinitionKey(processDeploymentid).list();
+				if (pdList != null && !pdList.isEmpty()) {
+					removeList.addAll(pdList);
+				}
 			}
 		}
-
+		
 		return removeList;
 	}
 
@@ -1641,7 +1736,7 @@ public void rejecttoPreTask(String taskId,String username){
 					"selectAllTaskByUser", map);
 			list.addAll(userTaskList);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return list;
 	}
@@ -1662,7 +1757,7 @@ public void rejecttoPreTask(String taskId,String username){
 			listInfo = executor.queryListInfoBean(TaskEntity.class,
 					"selectAllTaskByUser",offset,pagesize, map);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return listInfo;
 	}
@@ -1757,7 +1852,7 @@ public void rejecttoPreTask(String taskId,String username){
 					"selectAllTaskByUser", map);
 			list.addAll(userTaskList);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return list;
 	}
@@ -1792,11 +1887,16 @@ public void rejecttoPreTask(String taskId,String username){
 			
 			listInfo = executor.queryListInfoBean(TaskManager.class, 
 					"selectTaskByUser_wf",offset, pagesize, task);
+			
+			// 获取分页中List数据
+			List<TaskManager> taskList = listInfo.getDatas();
+			
+			dealTaskInfo(taskList);
+			
+			return listInfo;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
 		}
-		return listInfo;
 	}
 	
 	/**
@@ -1817,7 +1917,7 @@ public void rejecttoPreTask(String taskId,String username){
 			userTaskList.addAll(executor.queryListBean(TaskEntity.class,
 					"selectAllTaskByUser", map));
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return userTaskList;
 	}
@@ -1840,7 +1940,7 @@ public void rejecttoPreTask(String taskId,String username){
 			userTaskList = executor.queryListInfoBean(TaskEntity.class,
 					"selectAllTaskByUser",offset,pagesize, map);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return userTaskList;
 	}
@@ -1861,7 +1961,7 @@ public void rejecttoPreTask(String taskId,String username){
 			userTaskList = executor.queryListInfoBean(TaskEntity.class,
 					"selectAllTaskByUser",offset,pagesize, map);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
 		return userTaskList;
 	}
@@ -2098,16 +2198,15 @@ public void rejecttoPreTask(String taskId,String username){
 			ListInfo listInfo = executor.queryListInfoBean(ProcessDef.class, "queryProdef", offset, pagesize, processDefCondition);
 			return listInfo;
 		}catch(Exception e){
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
 		}
 
 	}
 
 	public void deleteDeploymentCascade(String[] processDeploymentids,
 			boolean[] cascades) {
-		processDeploymentids = Arrays.toString(processDeploymentids)
-				.replace("[", "").replace("]", "").split(",");
+//		processDeploymentids = Arrays.toString(processDeploymentids)
+//				.replace("[", "").replace("]", "").split(",");
 		if (cascades != null && cascades.length > 0) {
 			for (int i = 0; i < processDeploymentids.length; i++) {
 				repositoryService.deleteDeployment(
@@ -2129,10 +2228,13 @@ public void rejecttoPreTask(String taskId,String username){
 	 * (java.lang.String[])
 	 */
 	public void deleteDeploymentAllVersions(String[] processDeploymentids) {
-		processDeploymentids = Arrays.toString(processDeploymentids)
-				.replace("[", "").replace("]", "").split(",");
+		
 		for (String processDeploymentid : processDeploymentids) {
-			deleteProcDef(processDeploymentid);
+			
+			if (StringUtil.isNotEmpty(processDeploymentid)){
+				
+				deleteProcDef(processDeploymentid);
+			}
 		}
 	}
 
@@ -2209,30 +2311,33 @@ public void rejecttoPreTask(String taskId,String username){
 	 * @throws IOException
 	 * 2014年5月13日
 	 */
-	public void getProccessActivePic(String processInstId, OutputStream out) throws IOException {
+	public void getProccessActivePic(String processInstId, OutputStream out) {
 		InputStream is = null;
-		try
-		{
-			if(processInstId!=null&&!processInstId.equals("")){
-				//运行中的活动id集合
-				List<String> hightLightList = new ArrayList<String> ();
+		try {
+			if (processInstId != null && !processInstId.equals("")) {
+				// 运行中的活动id集合
+				List<String> hightLightList = new ArrayList<String>();
 				// 根据流程实例ID获取运行的实例
-				List<Execution> exectionList = runtimeService.createExecutionQuery().
-						processInstanceId(processInstId).list();
+				List<Execution> exectionList = runtimeService
+						.createExecutionQuery()
+						.processInstanceId(processInstId).list();
 				// 获取运行实例的运行活动节点
-				for (Execution execution : exectionList){
-					ExecutionEntity exeEntity = (ExecutionEntity)runtimeService.
-							createExecutionQuery().executionId(execution.getId()).singleResult();
+				for (Execution execution : exectionList) {
+					ExecutionEntity exeEntity = (ExecutionEntity) runtimeService
+							.createExecutionQuery()
+							.executionId(execution.getId()).singleResult();
 					String activitiId = exeEntity.getActivityId();
 					hightLightList.add(activitiId);
 				}
 				// 根据流程实例iD获取流程定义KEY
 				HistoricProcessInstance hiInstance = getHisProcessInstanceById(processInstId);
 				// 根据流程定义ID获取流程定义对应的实体对象
-				BpmnModel bpmnModel = repositoryService.getBpmnModel(hiInstance.getProcessDefinitionId());
-				
-				is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png", hightLightList);
-				
+				BpmnModel bpmnModel = repositoryService.getBpmnModel(hiInstance
+						.getProcessDefinitionId());
+
+				is = ProcessDiagramGenerator.generateDiagram(bpmnModel, "png",
+						hightLightList);
+
 				byte[] b = new byte[1024];
 				int len = -1;
 				while ((len = is.read(b, 0, 1024)) != -1) {
@@ -2240,14 +2345,14 @@ public void rejecttoPreTask(String taskId,String username){
 				}
 				out.flush();
 			}
-		}
-		finally
-		{
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
 			try {
-				if(is != null)
+				if (is != null)
 					is.close();
-			} catch (Exception e) {
-				
+			} catch (Exception e1) {
+				throw new ProcessException(e1);
 			}
 		}
 	}
@@ -2572,30 +2677,204 @@ public void rejecttoPreTask(String taskId,String username){
 	@Override
 	public ListInfo queryProcessInsts(long offset, int pagesize,
 			ProcessInstCondition processInstCondition) {
+
+		TransactionManager tm = new TransactionManager();
+
 		try {
+
+			tm.begin();
+
 			// 流程实例ID
-			if (processInstCondition.getWf_Inst_Id() != null
-					&& !processInstCondition.getWf_Inst_Id().isEmpty()) {
+			if (StringUtil.isNotEmpty(processInstCondition.getWf_Inst_Id())) {
 				processInstCondition.setWf_Inst_Id("%"
 						+ processInstCondition.getWf_Inst_Id() + "%");
 			}
+
+			// 业务主键
+			if (StringUtil.isNotEmpty(processInstCondition.getWf_business_key())) {
+				processInstCondition.setWf_business_key("%"
+						+ processInstCondition.getWf_business_key() + "%");
+			}
+
+			// 分页获取流程实例数据
 			ListInfo listInfo = executor.queryListInfoBean(ProcessInst.class,
-					"queryProInst", offset, pagesize, processInstCondition);
+					"queryProInst_wf", offset, pagesize, processInstCondition);
+
+			List<ProcessInst> processInstList = listInfo.getDatas();
+
+			if (processInstList != null && processInstList.size() != 0) {
+
+				for (int i = 0; i < processInstList.size(); i++) {
+
+					ProcessInst pi = processInstList.get(i);
+
+					// 耗时转换
+					if (StringUtil.isNotEmpty(pi.getDURATION_())) {
+						long mss = Long.parseLong(pi.getDURATION_());
+						pi.setDURATION_(formatDuring(mss));
+					} else {
+						// 流程未结束，以系统当前时间计算耗时
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd hh:mm:ss");
+						Date startTime = sdf.parse(pi.getSTART_TIME_());
+
+						pi.setDURATION_(formatDuring(new Date().getTime()
+								- startTime.getTime()));
+					}
+
+					// 流程实例完成，不需要查询处理人和签收人
+					if (StringUtil.isEmpty(pi.getSUSPENSION_STATE_())) {
+
+						continue;
+					}
+
+					// 根据流程实例id获取任务信息
+					List<TaskManager> taskList = executor.queryList(
+							TaskManager.class, "getTaskInfoById_wf",
+							pi.getPROC_INST_ID_());
+
+					// 任务列表数据处理(处理人/组，行转列)
+					dealTaskInfo(taskList);
+
+					pi.setTaskList(taskList);
+
+				}
+			}
+
+			tm.commit();
+
 			return listInfo;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	/** 耗时转换 gw_tanx
+	 * @param mss
+	 * @return
+	 * 2014年5月21日
+	 */
+	private String formatDuring(long mss) {
+		long days = mss / (1000 * 60 * 60 * 24);
+		long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+		long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+		long seconds = (mss % (1000 * 60)) / 1000;
+		
+		StringBuffer sb = new StringBuffer();
+		if (days != 0){
+			sb.append( days + "天");
+		}
+		if (hours != 0) {
+			sb.append( hours + "时");
+		}
+		if (minutes != 0) {
+			sb.append( minutes + "分");
+		}
+		if (seconds != 0) {
+			sb.append( seconds + "秒");
+		}
+		
+		return sb.toString();
+	}
+	
+	/** 任务列表数据处理 gw_tanx
+	 * @param taskList
+	 * @throws Exception
+	 * 2014年5月20日
+	 */
+	private void dealTaskInfo(List<TaskManager> taskList) throws Exception{
+		if (taskList != null && taskList.size() != 0) {
+			
+			for (int j = 0; j < taskList.size(); j++) {
+				
+				TaskManager tm = taskList.get(j);
+				
+				// 实时任务中没有act_type_字段值，历史任务有
+				if (tm.getACT_TYPE_() != null && !tm.getACT_TYPE_().equals("userTask")) {
+					continue;
+				}
+				
+				// 任务已签收，处理人 = 签收人
+				if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
+					
+					tm.setUSER_ID_(tm.getASSIGNEE_());
+					continue;
+				}
+				
+				// 任务未签收，根据任务id查询任务可处理人
+				List<HashMap> candidatorList = executor.queryList(HashMap.class, 
+						"getCandidatorOftask_wf", tm.getID_());
+				
+				StringBuffer users = new StringBuffer();
+				StringBuffer groups = new StringBuffer();
+				
+				if ( candidatorList != null && candidatorList.size() != 0 ){
+					
+					for (int k = 0;  k < candidatorList.size(); k++){
+						HashMap candidatorMap = candidatorList.get(k);
+						
+						// 处理人行转列
+						String userId = (String)candidatorMap.get("USER_ID_");
+						if(StringUtil.isNotEmpty(userId)){
+							
+							if(k == 0){	
+								users.append(userId);
+							}else{
+								users.append(",").append(userId);
+							}
+						}
+						
+						// 处理组行转列
+						String group = (String)candidatorMap.get("GROUP_ID_");
+						if(StringUtil.isNotEmpty(group)){
+							
+							if(k == 0){	
+								groups.append(group);
+							}else{
+								groups.append(",").append(userId);
+							}
+						}
+					}
+				}
+				tm.setUSER_ID_(users.toString());
+				tm.setGROUP_ID(groups.toString());	
+				
+			}
 		}
 	}
 
 	@Override
-	public void cancleProcessInstances(String[] processInstids,
-			String deleteReason) {
-		processInstids = Arrays.toString(processInstids).replace("[", "")
-				.replace("]", "").split(",");
-		for (String processInstid : processInstids) {
-			this.runtimeService.deleteProcessInstance(processInstid,
-					deleteReason);
+	public void cancleProcessInstances(String processInstids,String deleteReason) {
+		
+		String[] ids = processInstids.split(",");
+		
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			
+			for (String processInstid : ids) {
+				
+				if (StringUtil.isNotEmpty(processInstid)){
+					
+					// 获取流程实例信息
+					ProcessInst pi = executor.queryObject(ProcessInst.class, "queryProInstById_wf", processInstid);
+					
+					// 流程完成，不需要进行逻辑删除
+					if (pi == null ) {
+						continue;
+					}
+					
+					this.runtimeService.deleteProcessInstance(processInstid,
+							deleteReason);
+				}
+			}
+			
+			tm.commit();
+		}catch(Exception e){
+			throw new ProcessException(e);
 		}
 	}
 
@@ -2604,11 +2883,220 @@ public void rejecttoPreTask(String taskId,String username){
 		instanceUpgrade.upgradeInstances(processKey);
 		
 	}
+	
+	
+	/** 删除某个具体流程(物理删除) gw_tan
+	 * @param processInstid
+	 * @throws Exception
+	 * 2014年5月21日
+	 */
+	private void delProcessInstance(String processInstid) throws Exception{
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
+		
+		// 判断是否存在子流程
+		dbUtil.preparedSelect("SELECT A.PROC_INST_ID_ FROM ACT_RU_EXECUTION A WHERE A.SUPER_EXEC_= ?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.executePrepared();
+		
+		if (dbUtil.size() > 0){
+			
+			for (int i = 0 ; i< dbUtil.size();i++) {
+				
+				// 递归删除子流程
+				delProcessInstance(dbUtil.getString(i, "PROC_INST_ID_"));
+				
+			}
+			
+		}
+		
+		// 获取流程实例信息
+		ProcessInst pi = executor.queryObject(ProcessInst.class, "queryProInstById_wf", processInstid);
+		
+		// 流程完成，不需要进行逻辑删除
+		if (pi != null) {
+			// 停止流程实例在引擎中所有的逻辑关系
+			cancleProcessInstance(processInstid,"物理删除");
+		}
+								
+		dbUtil.preparedDelete("delete From act_ru_event_subscr a where a.proc_inst_id_=?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+					
+		dbUtil.preparedDelete("delete From act_ru_variable b where b.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_ru_job c where c.process_instance_id_=?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_ru_identitylink d where d.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_ru_task e where e.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_ru_execution f where f.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_varinst g where g.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_taskinst h where h.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_procinst i where i.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_detail j where j.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_comment k where k.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_attachment l where l.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From act_hi_actinst m where m.proc_inst_id_ =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();		
+		
+		dbUtil.executePreparedBatch();
+			
+	}
 
 	@Override
-	public void delProcessInstances(String[] processInstanceIds,
-			String deleteReason) {
-		
+	public void delProcessInstances(String processInstanceIds) {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			
+			String[] ids = processInstanceIds.split(",");
+
+			for (String processInstid : ids) {
+
+				if (StringUtil.isNotEmpty(processInstid)) {
+
+					delProcessInstance(processInstid);
+				}
+			}
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
+
+	}
+
+	@Override
+	public ProcessInst getProcessInstById(String processInstId) {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			ProcessInstCondition pic = new ProcessInstCondition();
+			pic.setWf_Inst_Id(processInstId);
+
+			// 获取流程实例信息
+			ProcessInst pi = executor.queryObjectBean(ProcessInst.class,
+					"queryProInst_wf", pic);
+
+			// 根据流程实例id获取任务信息
+			List<TaskManager> taskList = executor.queryList(TaskManager.class,
+					"getTaskInfoById_wf", pi.getPROC_INST_ID_());
+
+			if (taskList != null && taskList.size() != 0) {
+
+				// 任务列表数据处理(处理人/组，行转列)
+				dealTaskInfo(taskList);
+
+				pi.setTaskList(taskList);
+
+			}
+			
+			tm.commit();
+			
+			return pi;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public List<TaskManager> queryHistorTasks(String processInstId) {
+
+		TransactionManager tms = new TransactionManager();
+
+		try {
+			tms.begin();
+
+			List<TaskManager> taskList = executor.queryList(TaskManager.class,
+					"selectTaskHistorById_wf", processInstId);
+
+			// 获取处理人列表
+			dealTaskInfo(taskList);
+
+			// 耗时处理
+			if (taskList != null && taskList.size() != 0) {
+				for (int i = 0; i < taskList.size(); i++) {
+					TaskManager tm = taskList.get(i);
+
+					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
+						long mss = Long.parseLong(tm.getDURATION_());
+						tm.setDURATION_(formatDuring(mss));
+					} else {
+						// 流程未结束，以系统当前时间计算耗时
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyy-MM-dd hh:mm:ss");
+						Date startTime = sdf.parse(tm.getSTART_TIME_());
+
+						tm.setDURATION_(formatDuring(new Date().getTime()
+								- startTime.getTime()));
+					}
+				}
+			}
+
+			tms.commit();
+
+			return taskList;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tms.release();
+		}
+	}
+
+	@Override
+	public ListInfo queryHistorTasks(TaskCondition task, long offset,
+			int pagesize) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void suspendProcessInst(String processInstId) {
+		this.runtimeService.suspendProcessInstanceById(processInstId);
+	}
+
+	@Override
+	public void activateProcessInst(String processInstId) {
+		this.runtimeService.activateProcessInstanceById(processInstId);
 	}
 
 }

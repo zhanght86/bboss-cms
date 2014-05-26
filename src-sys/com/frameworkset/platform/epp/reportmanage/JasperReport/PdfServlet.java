@@ -57,7 +57,7 @@ public class PdfServlet extends BaseHttpServlet
 		HttpServletResponse response
 		) throws IOException, ServletException
 	{
-		List jasperPrintList = BaseHttpServlet.getJasperPrintList(request);
+		List jasperPrintList = getJasperPrintList(request);
 
 		if (jasperPrintList == null)
 		{
@@ -80,7 +80,7 @@ public class PdfServlet extends BaseHttpServlet
 				if (fbos.size() > 0)
 				{
 					response.setContentType("application/pdf");
-					response.setHeader("Content-Disposition", "attachement; filename="+THREAD_FILE_NAME.get()+".pdf");
+					response.setHeader("Content-Disposition", "attachement; filename="+request.getParameter("filename")+".pdf");
 
 					response.setContentLength(fbos.size());
 					ServletOutputStream ouputStream = response.getOutputStream();
@@ -130,7 +130,7 @@ public class PdfServlet extends BaseHttpServlet
 		else
 		{
 			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition", "attachement; filename="+THREAD_FILE_NAME.get()+".pdf");
+			response.setHeader("Content-Disposition", "attachement; filename="+request.getParameter("filename")+".pdf");
 
 			JRPdfExporter exporter = new JRPdfExporter();
 			exporter.setParameter(JRExporterParameter.JASPER_PRINT_LIST, jasperPrintList);

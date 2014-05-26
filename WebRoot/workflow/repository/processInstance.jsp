@@ -12,6 +12,7 @@
 <title>流程实例信息</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -80,10 +81,10 @@ function upBatchButton() {
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert(data);
+					alert("流程实例升级出错："+data);
 				}else {
-					modifyQueryData();
-					api.close();	
+					queryList();
+					close();	
 				}
 			}	
 		 });
@@ -92,35 +93,85 @@ function upBatchButton() {
      });
 }
 
-// 重载列表数据
-function modifyQueryData(){
-	$("#instanceContainer").load("<%=request.getContextPath()%>/workflow/repository/queryProcessIntsByKey.page?wf_key=${processKey}"+$("#querystring").val()+" #customContent",function(){loadjs()});
-}
-
 // 查询数据
 function queryList(){	
-	var wf_key = $.trim($("#wf_key").val());
-	var wf_Inst_Id = $.trim($("#wf_Inst_Id").val());
-	var wf_start_time1 = $.trim($("#wf_start_time1").val());
-	var wf_start_time2 = $.trim($("#wf_start_time2").val());
-	var wf_end_time1 = $.trim($("#wf_end_time1").val());
-	var wf_end_time2 = $.trim($("#wf_end_time2").val());
-	var wf_state = $.trim($("#wf_state").val());
+	var wf_key = $("#wf_key").val();
+	var wf_Inst_Id = $("#wf_Inst_Id").val();
+	var wf_start_time1 = $("#wf_start_time1").val();
+	var wf_start_time2 = $("#wf_start_time2").val();
+	var wf_end_time1 = $("#wf_end_time1").val();
+	var wf_end_time2 = $("#wf_end_time2").val();
+	var wf_state = $("#wf_state").val();
+	var wf_business_key = $("#wf_business_key").val();
 	var wf_version = $("#wf_version").combobox('getValues');
 	
-	$("#instanceContainer").load("<%=request.getContextPath()%>/workflow/repository/queryProcessIntsByKey.page #customContent", 
+	$("#instanceContainer").load("<%=request.getContextPath()%>/workflow/repository/queryProcessIntsByKey.page?"+$("#querystring").val()+" #customContent", 
 		{wf_key:wf_key, wf_Inst_Id:wf_Inst_Id,wf_start_time1:wf_start_time1,wf_start_time2:wf_start_time2,
-		wf_end_time1:wf_end_time1,wf_end_time2:wf_end_time2,wf_state:wf_state,wf_versions:wf_version},
+		wf_end_time1:wf_end_time1,wf_end_time2:wf_end_time2,wf_state:wf_state,wf_versions:wf_version,
+		wf_business_key:wf_business_key},
 		function(){loadjs();});
 }
 
 //查看流程实例详情
 function viewDetailInfo(processInstId) {
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskDetailInfo.page?processInstId="+processInstId;
-	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'明细查看-'+$("#wf_key").val(),width:1100,height:620, content:'url:'+url});
+}
+
+//流程实例挂起
+function suspendProcess(processInstId){
+	$.dialog.confirm('确定将实例挂起？', function(){
+    	$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/repository/suspendProcessInst.page",
+			data :{"processInstId":processInstId},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("流程实例挂起出错："+data);
+				}else {
+					queryList();
+					close();	
+				}
+			}	
+		 });
+     },function(){
+     		
+     });
+}
+
+//流程实例激活
+function activateProcess(processInstId){
+	$.dialog.confirm('确定将实例激活？', function(){
+    	$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/repository/activateProcessInst.page",
+			data :{"processInstId":processInstId},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("流程实例激活出错："+data);
+				}else {
+					queryList();
+					close();	
+				}
+			}	
+		 });
+     },function(){
+     		
+     });
 }
 
 function doreset(){
+	$("#wf_version").combobox('setValues',"");
    	$("#reset").click();
 }
 	
@@ -158,7 +209,7 @@ function doreset(){
 												 onclick="new WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="w120" /></td>
 											<th>版本号：</th>
 											<td>
-												<select id="wf_version" name="wf_version" class="easyui-combobox" style="width: 100px;"  multiple="multiple">
+												<select id="wf_version" name="wf_version" class="easyui-combobox" style="width: 120px;" editable="false" panelHeight="100px;" multiple="multiple">
 													<pg:list actual="${defList}" >            
 														<option value="<pg:cell colName="version"/>" ><pg:cell colName="version"/> </option>
 													</pg:list>  
@@ -186,6 +237,10 @@ function doreset(){
 												 onclick="new WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="w120" />
 												 ~<input id="wf_end_time2" name="wf_end_time2" type="text"
 												 onclick="new WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="w120" />
+											</td>
+											<th>业务主键：</th>
+											<td>
+												<input id="wf_business_key" name="wf_business_key" type="text" class="w120" />
 											</td>
 										</tr>
 									</table>
