@@ -11,4 +11,7 @@ out.println("<br>");
 session.removeAttribute("$a.b.c");
 value = (String)session.getAttribute("$a.b.c");
 out.println("after remove:"+value);
+out.println("<br>");
+session.setAttribute("local", java.util.Locale.CHINESE);
+out.println(session.getAttribute("local"));
  %>
