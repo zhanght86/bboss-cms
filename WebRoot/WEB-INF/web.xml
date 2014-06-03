@@ -43,7 +43,7 @@
   </filter-mapping>
     <filter>
 	    <filter-name>CharsetEncoding</filter-name>
-	    <filter-class>com.frameworkset.common.filter.CharsetEncodingFilter</filter-class>
+	    <filter-class>com.frameworkset.common.filter.SessionCharsetEncodingFilter</filter-class>
 	    <init-param>
 	      <param-name>RequestEncoding</param-name>
 	      <param-value>UTF-8</param-value>
@@ -148,8 +148,7 @@
       <param-name>preventDispatchLoop</param-name>
       <param-value>false</param-value>
     </init-param>	
-	
-		<!-- url权限控制开关-->   
+    
 		<init-param>
 			<param-name>enablePermissionCheck</param-name>
 			<param-value>true</param-value>

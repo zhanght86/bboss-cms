@@ -1,7 +1,7 @@
 package com.sany.activiti.demo.pojo;
 
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 
 public class TaskInfo {
 
@@ -20,6 +20,8 @@ public class TaskInfo {
 	private String is_pass;
 	
 	private String task_name;
+	
+	private List<MaterielTest> materielList;
 
 
 	public String getId() {
@@ -87,6 +89,14 @@ public class TaskInfo {
 
 	public void setTask_name(String task_name) {
 		this.task_name = task_name;
+	}
+
+	public List<MaterielTest> getMaterielList() {
+		return materielList;
+	}
+
+	public void setMaterielList(List<MaterielTest> materielList) {
+		this.materielList = materielList;
 	}
 	
 	

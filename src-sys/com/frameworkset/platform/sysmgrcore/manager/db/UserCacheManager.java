@@ -223,6 +223,8 @@ public class UserCacheManager {
 				}
 				
 			}, sql,userAccount);
+			if(user.getUserName() == null || user.getUserName().equals(""))
+				return null;
 			return user;
 		} catch (Exception e) {
 			throw new ManagerException(e);
