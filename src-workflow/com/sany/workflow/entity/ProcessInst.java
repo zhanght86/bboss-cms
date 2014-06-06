@@ -25,26 +25,81 @@ import java.util.List;
 public class ProcessInst {
 
 	private String ID_;
-	private String PROC_INST_ID_;//流程实例ID
+	private String PROC_INST_ID_;// 流程实例ID
 	private String BUSINESS_KEY_;
-	private String PROC_DEF_ID_;//流程定义ID
-	private String START_TIME_;//流程开启时间
-	private String END_TIME_;//流程开启时间
+	private String PROC_DEF_ID_;// 流程定义ID
+	private String START_TIME_;// 流程开启时间
+	private String END_TIME_;// 流程结束时间
 	private String DURATION_;
-	private String START_USER_ID_;//流程开启人
+	private String START_USER_ID_;// 流程开启人
 	private String START_ACT_ID_;
 	private String END_ACT_ID_;
-	private String SUPER_PROCESS_INSTANCE_ID_;
-	private String DELETE_REASON_;//删除原因
-	
-	private String VERSION_;//版本
+	private String SUPER_PROCESS_INSTANCE_ID_;// 父流程实例id（ACT_HI_PROCINST表中字段）
+	private String DELETE_REASON_;// 删除原因
+
+	private String VERSION_;// 版本
 	private String KEY_;// 流程KEY
-	
+
 	private String NAME_;// 流程名称
 	private String SUSPENSION_STATE_;// 流程状态 1激活， 2挂起，空->流程结束
-	
-	private List<TaskManager> taskList;//任务集合
 
+	private List<TaskManager> taskList;// 任务集合
+
+	private String SUPER_SUSPENSION_STATE_;// 父流程实例状态
+	private String SUPER_START_USER_ID_;// 父流程开启人
+	private String SUPER_START_TIME_;// 父流程开启时间
+	private String SUPER_END_TIME_;// 父流程结束时间
+	private String PARENT_ID_;// 父流程实例id （ACT_RU_EXECUTION表中字段）
+	
+	private List<ActivitiVariable> variableList;// 变量参数集合
+
+	public List<ActivitiVariable> getVariableList() {
+		return variableList;
+	}
+
+	public void setVariableList(List<ActivitiVariable> variableList) {
+		this.variableList = variableList;
+	}
+
+	public String getPARENT_ID_() {
+		return PARENT_ID_;
+	}
+
+	public void setPARENT_ID_(String pARENT_ID_) {
+		PARENT_ID_ = pARENT_ID_;
+	}
+
+	public String getSUPER_SUSPENSION_STATE_() {
+		return SUPER_SUSPENSION_STATE_;
+	}
+
+	public void setSUPER_SUSPENSION_STATE_(String sUPER_SUSPENSION_STATE_) {
+		SUPER_SUSPENSION_STATE_ = sUPER_SUSPENSION_STATE_;
+	}
+
+	public String getSUPER_START_USER_ID_() {
+		return SUPER_START_USER_ID_;
+	}
+
+	public void setSUPER_START_USER_ID_(String sUPER_START_USER_ID_) {
+		SUPER_START_USER_ID_ = sUPER_START_USER_ID_;
+	}
+
+	public String getSUPER_START_TIME_() {
+		return SUPER_START_TIME_;
+	}
+
+	public void setSUPER_START_TIME_(String sUPER_START_TIME_) {
+		SUPER_START_TIME_ = sUPER_START_TIME_;
+	}
+
+	public String getSUPER_END_TIME_() {
+		return SUPER_END_TIME_;
+	}
+
+	public void setSUPER_END_TIME_(String sUPER_END_TIME_) {
+		SUPER_END_TIME_ = sUPER_END_TIME_;
+	}
 
 	public String getID_() {
 		return ID_;

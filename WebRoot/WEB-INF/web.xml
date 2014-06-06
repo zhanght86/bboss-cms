@@ -249,7 +249,8 @@
              /WEB-INF/conf/sanygsp/bboss-*.xml,
              /WEB-INF/conf/sanyhrm/bboss-*.xml,
             
-             /WEB-INF/conf/sanymbp/bboss-*.xml
+             /WEB-INF/conf/sanymbp/bboss-*.xml,
+             /WEB-INF/conf/session/bboss-*.xml
             </param-value>
         </init-param>
         <init-param>

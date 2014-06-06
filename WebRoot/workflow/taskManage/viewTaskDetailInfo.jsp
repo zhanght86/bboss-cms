@@ -15,63 +15,145 @@
 			<form id="viewForm" name="viewForm">
 				<pg:beaninfo requestKey="processInst">
 					<fieldset >
-						<legend><strong>实例信息</strong></legend>
-							<table border="0" cellpadding="0" cellspacing="0" class="table4">
-								<tr height="25px">
-									<th width=85px ><strong>定义ID：</strong></th>
-									<td width=140px ><pg:cell colName="PROC_DEF_ID_"/></td>
-									<th width=85px ><strong>流程KEY：</strong></th>
-									<td width=140px ><pg:cell colName="KEY_"/></td>
-									<th width=85px ><strong>流程名称：</strong></th>
-									<td width=140px ><pg:cell colName="NAME_"/></td>
-									<th width=85px ><strong>版本：</strong></th>
-									<td width=140px ><pg:cell colName="VERSION_"/></td>
-								</tr>
-								<tr height="25px">
-									<th width=85px ><strong>实例ID：</strong></th>
-									<td width=140px ><pg:cell colName="PROC_INST_ID_"/></td>
-									<th width=85px ><strong>父实例ID：</strong></th>
-									<td width=140px ><pg:cell colName="SUPER_PROCESS_INSTANCE_ID_"/></td>
-									<th width=85px ><strong>实例状态：</strong></th>
-									<td width=140px >
-										<pg:empty colName="SUSPENSION_STATE_" >
-											流程结束
-										</pg:empty>
-										<pg:notempty colName="SUSPENSION_STATE_" >
-											<pg:equal colName="SUSPENSION_STATE_" value="1">
-												流程激活
-											</pg:equal>
-											<pg:equal colName="SUSPENSION_STATE_" value="2">
-												流程挂起
-											</pg:equal>
+						<legend><strong>流程信息</strong></legend>
+								<%--流程定义table--%>
+								<table border="0" cellpadding="0" cellspacing="0" class="table3" >
+									<tr >
+										<th rowspan="2" width="100"><strong>定义信息：</strong></th>
+										<th width="350"><strong>定义ID</strong></th>
+										<th width="100"><strong>流程KEY</strong></th>
+										<th width="100"><strong>流程名称</strong></th>
+										<th width="150"><strong>版本</strong></th>
+									</tr>
+									<tr >
+										<td width="350"><pg:cell colName="PROC_DEF_ID_"/></td>
+										<td width="100"><pg:cell colName="KEY_"/></td>
+										<td width="100"><pg:cell colName="NAME_"/></td>
+										<td width="150"><pg:cell colName="VERSION_"/></td>
+									</tr>
+								</table>
+								
+								<%--流程实例table--%>
+								<table border="0" cellpadding="0" cellspacing="0" class="table3">
+									<tr >
+										<th 
+										<pg:notempty colName="SUPER_PROCESS_INSTANCE_ID_" >
+										rowspan="4" 
 										</pg:notempty>
-									</td>
-									<th width=85px><strong>发起人：</strong></th>
-									<td width=140px ><pg:cell colName="START_USER_ID_"/></td>
-								</tr>
-								<tr height="25px">
-									<th width=85px><strong>发起时间：</strong></th>
-									<td width=140px ><pg:cell colName="START_TIME_"/></td>
-									<th width=85px ><strong>结束时间：</strong></th>
-									<td width=140px ><pg:cell colName="END_TIME_"/></td>
-									<pg:notempty colName="taskList" >
-										<th width=85px ><strong>当前节点：</strong></th>
-										<td width=140px >
-											<pg:list colName="taskList">
-									           	<pg:cell index="1" colName="NAME_"/></br>
-									        </pg:list>
+										<pg:empty colName="SUPER_PROCESS_INSTANCE_ID_" >
+										rowspan="2" 
+										</pg:empty>
+										
+										width="100"><strong>实例信息：</strong></th>
+										<th width="350"><strong>实例ID</strong></th>
+										<th width="100"><strong>实例状态</strong></th>
+										<th width="100"><strong>发起人</strong></th>
+										<th width="150"><strong>发起时间</strong></th>
+										<th width="150"><strong>结束时间</strong></th>
+									</tr>
+									<tr >
+										<td width="350"><pg:cell colName="PROC_INST_ID_"/></td>
+										<td width="100">
+											<pg:empty colName="SUSPENSION_STATE_" >
+												流程结束
+											</pg:empty>
+											<pg:notempty colName="SUSPENSION_STATE_" >
+												<pg:equal colName="SUSPENSION_STATE_" value="1">
+													流程激活
+												</pg:equal>
+												<pg:equal colName="SUSPENSION_STATE_" value="2">
+													流程挂起
+												</pg:equal>
+											</pg:notempty>
 										</td>
-									</pg:notempty>
-									<pg:notempty colName="taskList" >
-										<th width=85px ><strong>处理人：</strong></th>
-										<td width=140px >
-											<pg:list colName="taskList">
-											   <pg:cell index="1" colName="USER_ID_"/></br>
-									       	</pg:list>
+										<td width="100"><pg:cell colName="START_USER_ID_"/></td>
+										<td width="150"><pg:cell colName="START_TIME_"/></td>
+										<td width="150">
+											<pg:notempty colName="END_TIME_" >
+												<pg:cell colName="END_TIME_"/>
+											</pg:notempty>
+											<pg:empty colName="END_TIME_" >
+												&nbsp;
+											</pg:empty>
 										</td>
+									</tr>
+									<pg:notempty colName="SUPER_PROCESS_INSTANCE_ID_" >
+									<tr >
+										<th width="350"><strong>父实例ID</strong></th>
+										<th width="100"><strong>实例状态</strong></th>
+										<th width="100"><strong>发起人</strong></th>
+										<th width="150"><strong>发起时间</strong></th>
+										<th width="150"><strong>结束时间</strong></th>
+									</tr>
+									<tr>
+										<td width="350">
+											<a href="javascript:void(0)" 
+												onclick="javascript:W.viewDetailInfo('<pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" />')">
+			          				 			<pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" />
+			        						</a>
+			        					</td>
+										<td rowspan="2" width="100">
+											<pg:empty colName="SUSPENSION_STATE_" >
+												流程结束
+											</pg:empty>
+											<pg:notempty colName="SUSPENSION_STATE_" >
+												<pg:equal colName="SUSPENSION_STATE_" value="1">
+													流程激活
+												</pg:equal>
+												<pg:equal colName="SUSPENSION_STATE_" value="2">
+													流程挂起
+												</pg:equal>
+											</pg:notempty>
+										</td>
+										<td rowspan="2" width="100"><pg:cell colName="START_USER_ID_"/></td>
+										<td rowspan="2" width="150"><pg:cell colName="START_TIME_"/></td>
+										<td rowspan="2" width="150">
+											<pg:notempty colName="END_TIME_" >
+												<pg:cell colName="END_TIME_"/>
+											</pg:notempty>
+											<pg:empty colName="END_TIME_" >
+												&nbsp;
+											</pg:empty>
+										</td>
+									</tr>
 									</pg:notempty>
-								</tr>
-							</table>
+								</table>
+								
+								<%--当前节点table--%>
+								<pg:notempty actual="${processInst.taskList}">
+									<table border="0" cellpadding="0" cellspacing="0" class="table3">
+										<tr >
+											<th rowspan="<pg:size actual="${processInst.taskList}" increament="1"/>" width="100"><strong>当前节点信息：</strong></th>
+											<th width="350"><strong>节点名称</strong></th>
+											<th colspan="3" width="377"><strong>处理人</strong></th>
+											<th width="150"><strong>签收人</strong></th>
+										</tr>
+										
+										<pg:notempty colName="taskList" >
+											<pg:list colName="taskList">
+											<tr >
+												<td width="350"><pg:cell colName="NAME_"/></td>
+												<td colspan="3" width="377">
+													<pg:notempty colName="USER_ID_" >
+														<pg:cell colName="USER_ID_"/>
+													</pg:notempty>
+													<pg:empty colName="USER_ID_" >
+														&nbsp;
+													</pg:empty>
+												</td>
+												<td width="150">
+													<pg:notempty colName="ASSIGNEE_" >
+														<pg:cell colName="ASSIGNEE_"/>
+													</pg:notempty>
+													<pg:empty colName="ASSIGNEE_" >
+														&nbsp;
+													</pg:empty>
+												</td>
+											</tr>
+											</pg:list>
+										</pg:notempty>
+									</table>
+								</pg:notempty>
 					</fieldset>
 				</pg:beaninfo>
 				
@@ -134,6 +216,13 @@
 					 </pg:list>
 				</table>
 				</fieldset>
+				
+				<fieldset >
+					<legend><strong>参数信息</strong></legend>
+					
+					<%@ include file="nodeVariableInfo.jsp"%>	
+						
+				</fieldset>
 			</form>
 		</div>
   	</div>	
@@ -144,8 +233,8 @@
 </div>
 </body>
 <script type="text/javascript">
+var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
-
 	 	    
 });
 

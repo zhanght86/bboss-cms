@@ -3,15 +3,76 @@ package com.sany.workflow.entity;
 public class ActivitiNodeInfo {
 
 	private String id;
-	
+
 	private String process_key;
-	
+
 	private String node_key;
-	
+
 	private String node_name;
-	
+
 	private int order_num;
+
 	private String node_type;
+
+	private String node_groups_id;
+
+	private String node_groups_name;
+
+	private String node_users_id;
+
+	private String node_users_name;
+
+	private String node_param_id;
+
+	private String node_param_value;
+	
+	public String getNode_param_id() {
+		return node_param_id;
+	}
+
+	public void setNode_param_id(String node_param_id) {
+		this.node_param_id = node_param_id;
+	}
+
+	public String getNode_param_value() {
+		return node_param_value;
+	}
+
+	public void setNode_param_value(String node_param_value) {
+		this.node_param_value = node_param_value;
+	}
+
+	public String getNode_groups_id() {
+		return node_groups_id;
+	}
+
+	public void setNode_groups_id(String node_groups_id) {
+		this.node_groups_id = node_groups_id;
+	}
+
+	public String getNode_groups_name() {
+		return node_groups_name;
+	}
+
+	public void setNode_groups_name(String node_groups_name) {
+		this.node_groups_name = node_groups_name;
+	}
+
+	public String getNode_users_id() {
+		return node_users_id;
+	}
+
+	public void setNode_users_id(String node_users_id) {
+		this.node_users_id = node_users_id;
+	}
+
+	public String getNode_users_name() {
+		return node_users_name;
+	}
+
+	public void setNode_users_name(String node_users_name) {
+		this.node_users_name = node_users_name;
+	}
 
 	public String getId() {
 		return id;

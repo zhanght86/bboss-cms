@@ -26,6 +26,7 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
@@ -659,14 +660,6 @@ public interface ActivitiService {
 	public void completeTaskByUser(String taskId, String username);
 	
 	/**
-	 * 签收任务 gw_tanx
-	 * 
-	 * @param taskId
-	 * @param map
-	 */
-	public void signTaskByUser(String taskId, String username);
-	
-	/**
 	 * 完成任务(先领用再完成),并驳回到指定节点
 	 * 
 	 * @param taskId
@@ -723,15 +716,6 @@ public interface ActivitiService {
 	 */
 	public List<TaskManager> queryHistorTasks(String processInstId);
 	
-	/** 获取历史任务，分页展示 gw_tanx
-	 * @param task
-	 * @param offset
-	 * @param pagesize
-	 * @return
-	 * 2014年5月19日
-	 */
-	public ListInfo queryHistorTasks(TaskCondition task,long offset, int pagesize) ;
-
 	/**
 	 * 获得历史任务实例 by用户名
 	 * 
@@ -1090,7 +1074,7 @@ public interface ActivitiService {
 	public List<ProcessDef> getUnloadProcesses();
 	
 	/**
-	 * 根据条件查询流程实例清单
+	 * 根据条件查询流程实例清单 gw_tanx
 	 * 
 	 * @param offset
 	 * @param pagesize
@@ -1100,9 +1084,32 @@ public interface ActivitiService {
 	public ListInfo queryProcessInsts(long offset, int pagesize,
 			ProcessInstCondition processInstCondition) ;
 	/**
-	 * 将流程实例升级到最新版本
+	 * 将流程实例升级到最新版本 gw_tanx
 	 * @param processKey
 	 * @throws Exception
 	 */
 	public void upgradeInstances(String processKey) throws Exception;
+	
+	/**用户ID转中文名称 gw_tanx
+	 * @param userids
+	 * @param style 
+	 * @return
+	 * 2014年5月26日
+	 */
+	public String userIdToUserName(String userids,String style);
+	
+	/**获取流程参数信息 gw_tanx
+	 * @param processInstId
+	 * @return
+	 * 2014年5月28日
+	 */
+	public List<ActivitiVariable> getInstVariableInfoById(String processInstId);
+	
+	/**获取当前节点参数 gw_tanx
+	 * @param processInstId
+	 * @return
+	 * 2014年5月28日
+	 */
+	public Object[] getCurTaskVariableInfoById(String processInstId);
+	
 }

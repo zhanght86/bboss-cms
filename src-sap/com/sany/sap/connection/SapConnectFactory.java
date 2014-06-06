@@ -21,9 +21,9 @@ import com.sap.conn.jco.ext.DestinationDataEventListener;
 import com.sap.conn.jco.ext.DestinationDataProvider;
 import com.sap.conn.jco.ext.Environment;
 
-public class SapConnectFactory implements org.frameworkset.spi.InitializingBean {
+public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,org.frameworkset.spi.DisposableBean {
 	private static Logger logger = Logger.getLogger(SapConnectFactory.class);
-	private static final SanyDestinationDataProvider sanyDestinationDataProvider;
+	private  static SanyDestinationDataProvider sanyDestinationDataProvider;
 	static 
 	{
 		sanyDestinationDataProvider = new SanyDestinationDataProvider();
@@ -90,7 +90,20 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 	}
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		
+//		sanyDestinationDataProvider = new SanyDestinationDataProvider();
+//		sanyDestinationDataProvider
+//				.setDestinationDataEventListener(new DestinationDataEventListener() {
+//					public void deleted(String arg0) {
+//						logger.debug("deleted:" + arg0);
+//					}
+//
+//					public void updated(String arg0) {
+//						logger.debug("updated:" + arg0);
+//					}
+//				});
+//		
+//		Environment
+//		.registerDestinationDataProvider(sanyDestinationDataProvider);
 
 		if(domainSAPConf == null)//通过ip连接sap服务器
 		{
@@ -878,6 +891,33 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean 
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void destroy()  {
+		try {
+			sanyDestinationDataProvider.deleteDestination(this.ABAP_AS_POOLED);
+			
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		try
+		{
+			
+			Environment.unregisterDestinationDataProvider(sanyDestinationDataProvider);
+			
+			
+			
+		}
+		catch(Exception e)
+		{
+			// TODO Auto-generated catch block
+			 e.printStackTrace();
+		}
+		
+		
+		
 	}
 
 }

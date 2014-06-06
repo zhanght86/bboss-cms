@@ -3,6 +3,7 @@ package com.sany.workflow.action;
 import java.util.List;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -10,11 +11,14 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
+import com.sany.workflow.entity.ActivitiVariable;
+import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
+import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
 
 /**
@@ -26,7 +30,9 @@ import com.sany.workflow.service.ProcessException;
 public class ActivitiTaskManageAction {
 
 	private ActivitiService activitiService;
-
+	
+	private ActivitiTaskService activitiTaskService;
+	
 	private ActivitiConfigService activitiConfigService;
 
 	/**
@@ -68,7 +74,7 @@ public class ActivitiTaskManageAction {
 		try {
 			ListInfo listInfo = activitiService.queryTasks(task, offset,
 					pagesize);
-
+			
 			model.addAttribute("listInfo", listInfo);
 
 			return "path:ontimeTaskList";
@@ -125,15 +131,30 @@ public class ActivitiTaskManageAction {
 			ProcessInst processInst = activitiService
 					.getProcessInstById(processInstId);
 
+			model.addAttribute("processInst", processInst);
+
 			if (processInst != null) {
 				// 获取流程实例的处理记录
 				List<TaskManager> taskHistorList = activitiService
 						.queryHistorTasks(processInstId);
 
 				model.addAttribute("taskHistorList", taskHistorList);
-			}
 
-			model.addAttribute("processInst", processInst);
+				// 获取流程所有参数
+				List<ActivitiVariable> instVariableList = activitiService
+						.getInstVariableInfoById(processInstId);
+
+				model.addAttribute("instVariableList", instVariableList);
+
+				// 获取当前活动级别参数
+				Object[] arryObj = activitiService
+						.getCurTaskVariableInfoById(processInstId);
+
+				model.addAttribute("taskVariableMap", arryObj[0]);
+				model.addAttribute("variableRownum",
+						Integer.parseInt(arryObj[1] + "") + 1);// 加标题行
+				model.addAttribute("instanceRownum", arryObj[1]);
+			}
 
 			return "path:viewTaskDetailInfo";
 
@@ -152,40 +173,35 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String signTask(String taskId, ModelMap model) {
 		try {
-			activitiService.signTaskByUser(taskId, AccessControl
+			
+			activitiTaskService.signTaskByUser(taskId, AccessControl
 					.getAccessControl().getUserAccount());
 
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 
 	}
 
-	/**
-	 * 完成任务
-	 * 
+	/** 处理任务
 	 * @param taskId
 	 * @param taskState
+	 * @param nodeList
 	 * @param model
-	 * @return 2014年5月16日
+	 * @return
+	 * 2014年5月26日
 	 */
 	public @ResponseBody
-	String completeTask(String taskId, String taskState, ModelMap model) {
+	String completeTask(String taskId, String taskState,String taskKey,
+			List<ActivitiNodeInfo> nodeList, ModelMap model) {
 		try {
-
-			// 未签收任务处理
-			if ("1".equals(taskState)) {
-				activitiService.completeTaskByUser(taskId, AccessControl
-						.getAccessControl().getUserAccount());
-				// 已签收任务处理
-			} else if ("2".equals(taskState)) {
-				activitiService.completeTask(taskId);
-			}
-
+			
+			activitiTaskService.completeTask(taskId, taskState, taskKey, nodeList);
+			
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 	}
 
@@ -196,15 +212,29 @@ public class ActivitiTaskManageAction {
 	 * @param model
 	 * @return 2014年5月22日
 	 */
-	public String toDealTask(String processKey, ModelMap model) {
+	public String toDealTask(String processKey, String processInstId,
+			String taskState, String taskId, ModelMap model) {
 
 		try {
-			// 获取所有节点信息
-			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
-					.queryAllActivitiNodeInfo(processKey);
+			//当前流程实例下所有节点信息
+			List<ActivitiNodeInfo> nodeList = activitiTaskService.getNodeInfoById(processKey,processInstId);
 			
-			model.addAttribute("nodeInfoList", nodeInfoList);
-			model.addAttribute("process_key", processKey);
+			// 可选的下一节点信息
+			List<ActivitiNodeInfo> nextNodeList = activitiTaskService.getNextNodeInfoById(nodeList,processInstId);
+			
+			//当前任务节点信息
+			Task task = activitiService.getTaskById(taskId);
+			task.setAssignee(activitiService.userIdToUserName(task.getAssignee(), "2"));
+			
+			//节点参数
+			List<Nodevariable> nodevariableList = activitiConfigService.selectNodevariable(processKey, "", "");
+			
+			model.addAttribute("task", task);
+			model.addAttribute("taskState", taskState);
+			model.addAttribute("taskId", taskId);
+			model.addAttribute("nodeList", nodeList);
+			model.addAttribute("nextNodeList", nextNodeList);
+			model.addAttribute("nodevariableList", nodevariableList);
 
 			return "path:dealTask";
 
@@ -212,5 +242,25 @@ public class ActivitiTaskManageAction {
 			throw new ProcessException(e);
 		}
 	}
+	
+	/** 驳回任务
+	 * @param taskId
+	 * @param model
+	 * @return
+	 * 2014年5月27日
+	 */
+	public @ResponseBody
+	String rejectToPreTask(String taskId, List<ActivitiNodeInfo> nodeList,
+			ModelMap model) {
+		try {
 
+			activitiTaskService.rejectToPreTask(taskId, nodeList);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail"+e.getMessage();
+		}
+
+	}
+	
 }

@@ -44,12 +44,12 @@
                 <td class="td_center">
 	                <pg:equal colName="state" value="1">
 	                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="signTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />')">签收</a>|
-	                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="state" />')">处理</a>|
+	                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />')">处理</a>|
 					</pg:equal>
 					<pg:equal colName="state" value="2">
-	                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="state" />')">处理</a>|
+	                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />')">处理</a>|
 					</pg:equal>
-                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">查看详情</a>
+                	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
                 </td>    
         </tr>
 	 </pg:list>

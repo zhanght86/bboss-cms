@@ -29,6 +29,7 @@ import com.sany.workflow.entity.VariableResource;
 import com.sany.workflow.service.ActivitiConfigException;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
+import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
 
 public class ActivitiConfigServiceImpl implements ActivitiConfigService {
@@ -639,15 +640,14 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	@Override
 	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key){
 		try{
-			Map<String,String> params = new HashMap<String,String>();
-			params.put("process_key", process_key);
+//			Map<String,String> params = new HashMap<String,String>();
+//			params.put("process_key", process_key);
 			
-			List<ActivitiNodeInfo> list = executor.queryListBean(ActivitiNodeInfo.class, "queryAllActivitiNodes", params);
+			List<ActivitiNodeInfo> list = executor.queryList(ActivitiNodeInfo.class, "queryAllActivitiNodes", process_key);
 			return list;
 		}catch(Exception e){
-			e.printStackTrace();
+			throw new ProcessException(e);
 		}
-		return null;
 	}
 	/**
 	 * 获取给定流程所有节点信息已经每个节点对应的业务处理人信息

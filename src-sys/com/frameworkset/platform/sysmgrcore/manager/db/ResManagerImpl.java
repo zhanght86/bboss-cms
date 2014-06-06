@@ -1,7 +1,9 @@
 package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.adapter.DB;
@@ -58,6 +61,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 	
 	public static SQLUtil sqlUtilInsert = SQLUtil
 	.getInstance("org/frameworkset/insert.xml");
+    private ConfigSQLExecutor executor_ = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/resManagerImpl.xml");
 
 	/**
 	 * 存储资源类型
@@ -1138,233 +1142,78 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 
 	/**
 	 * 获取资源列表 2007.10.22 chunqiu.zhao
+	 * sql盲注修复：将sql硬编码改成sql模板形式 houtt2 2013.06.03
 	 */ 
-	public ListInfo getResList(Map paramMap, long offset,
-			int maxItems) {
+	public ListInfo getResList(Map paramMap, long offset,int maxItems) {
 		String type = (String)paramMap.get("type");
 		String id = (String)paramMap.get("id");
 		String name = (String)paramMap.get("name");
 		String resId = (String)paramMap.get("resId");
 		String resName = (String)paramMap.get("resName");
-		String restypeId = (String)paramMap.get("restypeId");
-		String opId = (String)paramMap.get("opId");
-		String auto = (String)paramMap.get("auto");
 		List list = new ArrayList();
 		ListInfo listInfo = new ListInfo();
-		DBUtil dbUtil = new DBUtil();
+      		 
 		ResourceManager rsManager = new ResourceManager();
-		StringBuffer hsql = new StringBuffer();
-		DB dbconcat = DBUtil.getDBAdapter();
 
 		// 查用户资源
 		if ("user".equals(type)) {
-			
-//			StringBuffer roleres = new StringBuffer(
-//					"select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat(concat('来自用户自身角色【',b.role_name), '】') as jobname,a.AUTHORIZATION_STIME,a.auto  ");
-			String concat = dbconcat.concat("'来自用户自身角色【'","b.role_name","'】'");
-			String concat1 = dbconcat.concat("'来自【'","o.remark5","'】机构的角色【'","b.role_name","'】'");
-			String concat2 = dbconcat.concat("'来自【'","g.group_name","'】用户组角色【'","b.role_name","'】'");
-			String concat3 = dbconcat.concat("'来自岗位【'","infos.job_name","'】的角色【'","b.role_name","'】'");
-			String concat4 = dbconcat.concat("'来自机构【'","b.org_name","'】'");
-			String concat5 = dbconcat.concat("'普通角色:'","b.role_name");
-			
-			StringBuffer roleres = new StringBuffer(
-			"select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,").append(concat).append(" as jobname,a.AUTHORIZATION_STIME,a.auto  ");
-			 roleres.append(" from td_sm_roleresop a,td_sm_role b where a.types='role' and a.role_id=b.role_id and a.role_id in")
-					.append(" (select  b.role_id")
-					.append(" from td_sm_userrole b")
-					.append(" where b.user_id= '")
-					.append(id)
-					.append("') union")
-					.append(" select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,").append(concat1).append(" as jobname,a.AUTHORIZATION_STIME,a.auto ")
-					.append(" from td_sm_orgrole c left join td_sm_organization o on c.org_id=o.org_id,td_sm_roleresop a,td_sm_role b ")
-					.append(" where a.role_id=c.role_id and a.types='role' and c.role_id=b.role_id and c.org_id in (")
-					.append("select  org_id from td_sm_userjoborg where user_id ='")
-					.append(id)
-					.append("') union ")
-					.append(" select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,").append(concat2).append(" as jobname,a.AUTHORIZATION_STIME,a.auto ")
-					.append(" from td_sm_grouprole d left join td_sm_group g on d.group_id=g.group_id,td_sm_roleresop a,td_sm_role b where a.role_id=d.role_id and d.role_id=b.role_id and a.types='role' and d.group_id in (")
-					.append(" select  group_id from td_sm_usergroup  where user_id = '")
-					.append(id)
-					.append("') union ")
-					
-//					.append(" select org_job_role.role_id from td_sm_userjoborg u_job ")
-//					.append("inner join td_sm_orgjobrole org_job_role ")
-//					.append("on u_job.job_id=org_job_role.job_id and u_job.org_id=org_job_role.org_id and u_job.user_id='")
-//					.append(id)
-//					.append("'")
-//					.append(")");
-					.append("select a.restype_id, a.res_id, a.res_name, a.op_id, a.types,a.role_id ,").append(concat3).append(" as jobname,a.AUTHORIZATION_STIME,a.auto ")
-					.append("from (select aa.role_id, aa.job_id, job.job_name from td_sm_orgjobrole aa , td_sm_userjoborg bb ,")
-					.append("  td_sm_job job ")
-					.append("where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id ")
-					.append("and bb.user_id=").append(id)
-					.append(" )infos , td_sm_roleresop a, td_sm_role b where a.role_id=infos.role_id and a.types='role' and a.role_id=b.role_id ");
-
-			StringBuffer userres = new StringBuffer(
-					"select a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id,'用户自身资源' as jobname,a.AUTHORIZATION_STIME,a.auto ");
-			userres.append(	" from td_sm_roleresop a where a.types='user' and a.role_id='")
-					.append(id).append("'");
-
-			StringBuffer userorgres = new StringBuffer(
-					"select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id,").append(concat4).append(" as jobname,a.AUTHORIZATION_STIME,a.auto ");
-			userorgres.append(" from td_sm_roleresop a left join td_sm_organization b on a.role_id = b.org_id  where a.types='organization' and a.role_id in (")
-					.append("select  org_id from td_sm_userjoborg where user_id ='")
-					.append(id).append("')  ");
-
-			StringBuffer commonuserres = new StringBuffer(
-					"select   a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id, ").append(concat5).append(" as jobname,a.AUTHORIZATION_STIME,a.auto");
-			commonuserres.append(
-							" from td_sm_roleresop a inner join td_sm_role b on a.role_id = b.role_id where b.role_name='")
-					.append(AccessControl.getEveryonegrantedRoleName()).append(
-							"' and a.types = 'role' ");
-
-			hsql.append("select  * from (").append(roleres).append(" union ")
-					.append(userres).append(" union ").append(userorgres)
-					.append(" union ").append(commonuserres).append(") e where 1 = 1 ");
+			try {
+				listInfo  = executor_.queryListInfoBean(HashMap.class, "getUserRes", offset, maxItems, paramMap);
+			} catch (SQLException e) {
+				logger.error(e);
+			}
 		}
 		// 查机构资源
 		else if ("org".equals(type)) {
-			String concat6 = dbconcat.concat("'来自机构角色【'","b.role_name","'】'");
-			hsql.append("select * from ")
-				.append(" (select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,").append(concat6).append(" AS jobname,a.AUTHORIZATION_STIME,a.auto ")
-				.append(" from td_sm_roleresop a,td_sm_role b where a.types='role' and a.role_id in(")
-				.append(" select role_id from td_sm_orgrole where org_id='")
-				.append(id)
-				.append("') and a.role_id=b.role_id " +
-						"union  " +
-						"select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id")
-				.append(",'机构自身拥有的资源' AS jobname,a.AUTHORIZATION_STIME,a.auto from td_sm_roleresop a left join td_sm_organization b on a.role_id=b.org_id where 1 = 1 and a.types='organization' and a.role_id='")
-				.append(id).append("') e where 1 = 1 ");
+			try {
+				listInfo  = executor_.queryListInfoBean(HashMap.class, "getOrgRes", offset, maxItems, paramMap);
+			} catch (SQLException e) {
+				logger.error(e);
+			}
 		}
 		// 查角色资源
 		else if ("role".equals(type)) {
-//			hsql.append("select  distinct a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,a.AUTHORIZATION_STIME,'角色自身资源' as jobname,a.auto ")
-//				.append(" from td_sm_roleresop a where 1 = 1 and a.types='role' and a.role_id='")
-//				.append(id).append("'");
-			hsql.append("select  distinct e.restype_id,e.res_id,e.res_name,e.op_id,e.types,e.role_id,e.AUTHORIZATION_STIME,'角色自身资源' as jobname,e.auto ")
-			.append(" from td_sm_roleresop e where 1 = 1 and e.types='role' and e.role_id='")
-			.append(id).append("'");
+			try {
+				listInfo  = executor_.queryListInfoBean(HashMap.class, "getRoleRes", offset, maxItems, paramMap);
+			} catch (SQLException e) {
+				logger.error(e);
+			}
 		}
 		//查询机构岗位资源
 		else if("orgjob".equals(type))
 			
 		{
-			String concat7 = dbconcat.concat("'来自角色【'","r.role_name","'】'");
-			String orgid = id.substring(0, id.indexOf(":"));
-			String jobid = id.substring(id.indexOf(":") + 1, id.length());
-			hsql.append("select a.*,").append(concat7).append(" as jobname from ( select rp.restype_id,rp.res_id,rp.res_name,rp.op_id,rp.types,rp.role_id,rp.AUTHORIZATION_STIME,rp.auto from td_sm_roleresop rp ")
-				.append("inner join td_sm_orgjobrole ojr ")
-				.append("on rp.role_id = ojr.role_id ")
-				.append("where ojr.org_id='" + orgid + "' and ojr.job_id='" + jobid + "' and rp.types='role' )")
-				.append(" a left join  td_sm_role r on a.role_id = r.role_id ")
-				.append(" where 1 = 1 ");
-		}
-
-//		boolean flag = false;
-		if (restypeId != null && restypeId.length() > 0) {
-
-			hsql.append(" and restype_id = '" + restypeId + "'");
-//			flag = true;
-		}
-		if (resId != null && resId.length() > 0) {
-//			if (flag) {
-				hsql.append(" and res_id like '%" + resId + "%'");
-//			} else {
-//				hsql.append(" where res_id like '%" + resId + "%'");
-//				flag = true;
-//			}
-		}
-		if (resName != null && resName.length() > 0) {
-//			if (flag) {
-				hsql.append(" and res_name like '%" + resName + "%'");
-//			} else {
-//				hsql.append(" where res_name like '%" + resName + "%'");
-//				flag = true;
-//			}
-		}
-		if (opId != null && opId.length() > 0) {
-//			if (flag) {
-				hsql.append(" and op_id = '" + opId + "'");
-//			} else {
-//				hsql.append(" where op_id = '" + opId + "'");
-//				flag = true;
-//			}
-		}
-		if(auto != null && !"".equals(auto)){
-			if("0".equals(auto)){//查询出系统资源，系统资源包含auto字段值为0和为null
-				hsql.append(" and (auto = '0' or auto is null) ");
-			}else{//查询自定义资源，auto字段值为1
-				hsql.append(" and auto = '").append(auto).append("' ");
+			try {
+				listInfo  = executor_.queryListInfoBean(HashMap.class, "getOrgjobRes", offset, maxItems, paramMap);
+			} catch (SQLException e) {
+				logger.error(e);
 			}
-			
 		}
-		if("orgjob".equals(type)){
-			hsql.append(" order by restype_id,a.role_id,res_id,res_name,op_id ");
-		}else{
-			hsql.append(" order by e.restype_id,e.role_id,e.res_id,e.res_name,e.op_id ");
-		}
-//	System.out.println("hsql = " + hsql.toString());
 		try {
-			if(offset == 0 && maxItems == 0){//不翻页
-
-				dbUtil.executeSelect(hsql.toString());
-			}else{
-
-				dbUtil.executeSelect(hsql.toString(), (int) offset, maxItems);
-			}
-			
-			for (int i = 0; i < dbUtil.size(); i++) {
+			List datas = listInfo.getDatas();
+			if(datas!=null)
+			for (int i = 0; i <datas.size(); i++) {
+				HashMap obj = (HashMap)datas.get(i);
 				Permission permission = new Permission();
 				permission.setId(id);
 				permission.setResId(resId);
 				permission.setResName(resName);
 				permission.setType(type);
 				permission.setName(name);
-				permission.setAuto(dbUtil.getInt(i, "AUTO"));
+				permission.setAuto(obj.get("AUTO")==null?0:Integer.parseInt(obj.get("AUTO").toString()));
+				if(obj.get("AUTHORIZATION_STIME")!=null)
+				   permission.setSDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(obj.get("AUTHORIZATION_STIME").toString()));
 				
-				String restypeid = dbUtil.getString(i, "restype_id");
-				String opid = dbUtil.getString(i, "op_id");
-				String resid = dbUtil.getString(i, "res_id");
-				String resname = dbUtil.getString(i, "res_name");
-				String types = dbUtil.getString(i, "types");
-				permission.setSDate(dbUtil.getDate(i, "AUTHORIZATION_STIME"));
-				String resResource = "";
-				if ("user".equals(type) || "org".equals(type)){ 
-					resResource = dbUtil.getString(i, "jobname");
-				}
-//					if(resResource.equals("0"))
-//					{
-//						resResource = new String("来自用户自身资源");
-//					}
-				if(restypeid == null)
-				{
-					restypeid = "";
-				}
-				if(opid == null)
-				{
-					opid = "";
-				}
-				if(resid == null)
-				{
-					resid = "";
-				}
-				if(resname == null)
-				{
-					resname = "";
-				}
-				
-				permission.setResTypeId(restypeid);
-				permission.setOpId(opid);
-				permission.setResId(resid);
-				permission.setResName(resname);
+				permission.setResTypeId(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString());
+				permission.setOpId(obj.get("OP_ID")==null?"":obj.get("OP_ID").toString());
+				permission.setResId(obj.get("RES_ID")==null?"":obj.get("RES_ID").toString());
+				permission.setResName(obj.get("RES_NAME")==null?"":obj.get("RES_NAME").toString());
 //				permission.setTypes(types);
-				permission.setResResource(resResource);
-//				permission.setRoleId(dbUtil.getString(i, "role_id"));
-				
-				
+				if ("user".equals(type) || "org".equals(type)){ 
+				permission.setResResource(obj.get("JOBNAME")==null?"":obj.get("JOBNAME").toString());
+				}						
 				try{
-					permission.setResTypeName(rsManager.getResourceInfoByType(restypeid).getName());
+					permission.setResTypeName(rsManager.getResourceInfoByType(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString()).getName());
 				}catch(Exception e){
 					permission.setResTypeName("未知");
 				}
@@ -1372,15 +1221,15 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 				try{
 					com.frameworkset.platform.config.model.Operation operation  = null;
 					try {
-						String gresid  = rsManager.getGlobalResourceid(dbUtil.getString(i,"restype_id"));
-						if(gresid == null || !gresid.equals(dbUtil.getString(i,"RES_ID")))
+						String gresid  = rsManager.getGlobalResourceid(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString());
+						if(gresid == null || !gresid.equals(obj.get("RES_ID")==null?"":obj.get("RES_ID").toString()))
 						{
-							operation  = rsManager.getOperation(dbUtil.getString(i,"restype_id"),dbUtil.getString(i, "op_id"));
+							operation  = rsManager.getOperation(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString(),obj.get("OP_ID")==null?"":obj.get("OP_ID").toString());
 							 
 						}
 						else
 						{
-							operation  = rsManager.getGlobalOperation(dbUtil.getString(i,"restype_id"),dbUtil.getString(i, "op_id"));
+							operation  = rsManager.getGlobalOperation(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString(),obj.get("OP_ID")==null?"":obj.get("OP_ID").toString());
 						}
 					} catch (ConfigException e) {
 						e.printStackTrace();
@@ -1393,7 +1242,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 				list.add(permission);
 			}
 			listInfo.setDatas(list);
-			listInfo.setTotalSize(dbUtil.getTotalSize());
+			listInfo.setTotalSize(listInfo.getTotalSize());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

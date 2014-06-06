@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-session,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -57,7 +57,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-session,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -459,7 +459,42 @@
 	</target>
 	
 	
-	
+	<target name="compile-sany-session" description="compile the session source ">
+					<echo>compile the compile-all source ...</echo>
+					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+						<src path="${source}/src-session" />				
+						<classpath id="cp-cms_baseline">
+							<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+							<fileset dir="${source}/lib" includes="*.jar *.zip" />
+							<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+							<fileset dir="${distrib}" includes="*.jar *.zip" />
+							
+						</classpath>
+					</javac>
+				<copy todir="classes-sany">
+					<fileset dir="${source}/src-session" includes="**/*.xml"/>
+				</copy>
+			<copy todir="classes-sonar">
+				<fileset dir="classes-sany" includes="**/*.*"/>
+			</copy>	
+		</target>
+		
+		<target name="jar-sany-session" depends="compile-sany-session" description="generate the sany-session-lib library sany-session.jar">
+					<echo>Generate the jar-sany-session library sany-session.jar ...</echo>
+					<jar jarfile="${distrib}/sany-session.jar" basedir="classes-sany" includes="**/*">
+						<manifest>
+							<attribute name="Implementation-Version" value="${impl.version}" />
+							<attribute name="Specification-Version" value="${revision}" />
+							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+							<attribute name="Implementation-ProductID" value="${impl.productID}" />
+							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+							<attribute name="Compile-User" value="${username}" />
+						</manifest>
+					</jar>
+				 <delete dir="classes-sany"/>
+				 <mkdir dir="classes-sany"/>	
+				
+		</target>
 	<!--<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>
 				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
@@ -831,7 +866,7 @@
 	   </not>
 	   <then>
 	    <echo message="start tomcat in ${server.ip}..." />
-	    <sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="${tomcat.home}/bin/startup.sh" trust="true" /><!--通过ssh远程启动tomcat-->
+	    <sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="${tomcat.home}/bin/restart.sh" trust="true" /><!--通过ssh远程启动tomcat-->
 	    <waitfor maxwait="5" maxwaitunit="minute" checkevery="5" checkeveryunit="second"><!--每5秒钟检查tomcat是否启动-->
 	     <and>
 	      <socket server="${server.ip}" port="${tomcat.port}" />
@@ -854,4 +889,115 @@
 	   </then>
 	  </if>
 	</target>
+	
+	<target name="deploywar" >				
+		<antcall target="stopTomcat">
+			<param name="server.ip" value="${server.ip}" />
+			<param name="tomcat.port" value="${tomcat.port}" />
+			<param name="tomcat.home" value="${tomcat.home}" />
+			<param name="server.username" value="${server.username}" />
+			<param name="server.password" value="${server.password}" />
+		</antcall>
+		<scp file="${warfile}" todir="${server.username}@${server.ip}:${tomcat.home}/webapps" trust="true" password="${server.password}" />
+		<echo>Clear old dirctory ${clearfile} ...</echo>
+		<sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="rm -Rf ${tomcat.home}/webapps/${clearfile}" trust="true" />				
+		<antcall target="startTomcat">
+			<param name="server.ip" value="${server.ip}" />
+			<param name="tomcat.port" value="${tomcat.port}" />
+			<param name="tomcat.home" value="${tomcat.home}" />
+			<param name="server.username" value="${server.username}" />
+			<param name="server.password" value="${server.password}" />
+		</antcall>				
+	</target>
+		
+	<target name="uploadtoserver" depends="default">
+		<antcall target="deploywar">
+			<param name="server.ip" value="10.0.15.138" />
+			<param name="tomcat.port" value="8080" />
+			<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+			<param name="server.username" value="root" />
+			<param name="server.password" value="31p@sSw0rd" />
+			<param name="clearfile" value="SanyPDP" />
+			<param name="warfile" value="distrib/SanyPDP.war" />
+		</antcall>
+		
+		<antcall target="deploywar">
+			<param name="server.ip" value="10.0.15.137" />
+			<param name="tomcat.port" value="8080" />
+			<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+			<param name="server.username" value="root" />
+			<param name="server.password" value="31p@sSw0rd" />
+			<param name="clearfile" value="SanyPDP" />
+			<param name="warfile" value="distrib/SanyPDP.war" />
+		</antcall>
+		
+		<antcall target="deploywar">
+			<param name="server.ip" value="10.0.15.141" />
+			<param name="tomcat.port" value="8080" />
+			<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+			<param name="server.username" value="root" />
+			<param name="server.password" value="1234qwerASDF" />
+			<param name="clearfile" value="SanyPDP" />
+			<param name="warfile" value="distrib/SanyPDP.war" />
+		</antcall>
+		<echo>deploy token server ...</echo>
+		<move file="distrib/SanyPDP.war" tofile="distrib/SanyToken.war"/>		
+		<antcall target="deploywar">
+			<param name="server.ip" value="10.0.15.138" />
+			<param name="tomcat.port" value="9080" />
+			<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54-token" />
+			<param name="server.username" value="root" />
+			<param name="server.password" value="31p@sSw0rd" />
+			<param name="clearfile" value="SanyToken" />
+			<param name="warfile" value="distrib/SanyToken.war" />
+		</antcall>
+		<antcall target="deploywar">
+			<param name="server.ip" value="10.0.15.137" />
+			<param name="tomcat.port" value="9080" />
+			<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54-token" />
+			<param name="server.username" value="root" />
+			<param name="server.password" value="31p@sSw0rd" />
+			<param name="clearfile" value="SanyToken" />
+			<param name="warfile" value="distrib/SanyToken.war" />
+		</antcall>
+		<move file="distrib/SanyToken.war" tofile="distrib/SanyPDP.war"/>
+		<echo>deploy token server ok</echo>
+		
+		
+	</target>
+	
+	<target name="testtomcat" >
+				
+					<antcall target="stopTomcat">
+						<param name="server.ip" value="10.0.15.137" />
+						<param name="tomcat.port" value="8080" />
+						<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+						<param name="server.username" value="root" />
+						<param name="server.password" value="31p@sSw0rd" />
+					</antcall>
+					<sshexec host="10.0.15.137" username="root" password="31p@sSw0rd" command="rm -Rf /opt/env/apache-tomcat-7.0.54/webapps/SanyPDP" trust="true" />			
+					<antcall target="startTomcat">
+						<param name="server.ip" value="10.0.15.137" />
+						<param name="tomcat.port" value="8080" />
+						<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+						<param name="server.username" value="root" />
+						<param name="server.password" value="31p@sSw0rd" />
+					</antcall>
+				
+				
+			</target>
+	
+	<target name="testclearfile" >
+					
+						<antcall target="stopTomcat">
+							<param name="server.ip" value="10.0.15.137" />
+							<param name="tomcat.port" value="8080" />
+							<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+							<param name="server.username" value="root" />
+							<param name="server.password" value="31p@sSw0rd" />
+						</antcall>
+						<sshexec host="10.0.15.137" username="root" password="31p@sSw0rd" command="rm -Rf /opt/env/apache-tomcat-7.0.54/webapps/SanyPDP" trust="true" />			
+						
+					
+				</target>
 </project>

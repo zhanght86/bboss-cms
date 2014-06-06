@@ -2,23 +2,22 @@
 <properties>
 
 
-	<!-- 
-		描述:工作流任务管理模块
-	    author:谭湘
-		CopyRight:三一
-		版本:1.0
-	    Date: 2014-05-06
-	-->
+	<!-- 描述:工作流任务管理模块 author:谭湘 CopyRight:三一 版本:1.0 Date: 2014-05-06 -->
 
 	<property name="/workflow/taskManage/*.page"
 		path:ontimeTaskManager="/workflow/taskManage/ontimeTaskManager.jsp"
 		path:ontimeTaskList="/workflow/taskManage/ontimeTaskList.jsp"
 		path:viewTaskInfo="/workflow/repository/viewProcessInfo.jsp"
 		path:viewTaskDetailInfo="/workflow/taskManage/viewTaskDetailInfo.jsp"
-		path:dealTask="/workflow/taskManage/dealTask.jsp"
+		path:dealTask="/workflow/taskManage/dealTask.jsp" 
 		f:activitiService="attr:activitiService"
+		f:activitiTaskService="attr:activitiTaskService"
 		f:activitiConfigService="attr:activitiConfigService"
-		class="com.sany.workflow.action.ActivitiTaskManageAction" >
+		class="com.sany.workflow.action.ActivitiTaskManageAction">
 	</property>
-	
+
+	<property name="activitiTaskService" 
+		f:executor="attr:activiti.configsqlexecutor"
+		f:activitiService="attr:activitiService"
+		class="com.sany.workflow.service.impl.ActivitiTaskServiceImpl" />
 </properties>

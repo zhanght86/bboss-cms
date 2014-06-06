@@ -344,6 +344,18 @@
 				</authoration>
 				
 			</item>
+			<item name="Session管理" id="sessioncontrol" showleftmenu="false" area="main" i18n:en_US="Session Control">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<navigator></navigator>
+				<workspace>
+					<content>session/sessionManager/sessionManager.page</content>
+				</workspace>
+				<authoration>				 
+				 	<url>/session/sessionManager/*.page</url>
+				</authoration>
+				
+			</item>
 		</module>
 		<module name="应用管理" id="wfappmanager" used="true" showleftmenu="true" i18n:en_US="App Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>

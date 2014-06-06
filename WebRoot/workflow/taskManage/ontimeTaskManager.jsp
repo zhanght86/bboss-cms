@@ -62,12 +62,12 @@ function signTask(taskId,SuspensionState) {
 			}else {
 				queryList();
 			}
-		}	
+		}
 	 });
 }
 
 // 处理任务
-function doTask(taskId,SuspensionState,taskState){
+function doTask(taskId,SuspensionState,processInstId,taskState){
 	
 	if (SuspensionState == '2'){
 		alert("当前流程已被挂起,不能处理！");
@@ -76,29 +76,11 @@ function doTask(taskId,SuspensionState,taskState){
 	
 	var processKey = $("#processKey").val();
 	
-	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey;
+	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey
+			+"&processInstId="+processInstId+"&taskId="+taskId+"&taskState="+taskState;
 	
 	$.dialog({ title:'任务处理',width:1100,height:620, content:'url:'+url});
 	
-	<%--
-	$.ajax({
- 	 	type: "POST",
-		url : "<%=request.getContextPath()%>/workflow/taskManage/completeTask.page",
-		data :{"taskId":taskId,"taskState":taskState},
-		dataType : 'json',
-		async:false,
-		beforeSend: function(XMLHttpRequest){
-			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			},
-		success : function(data){
-			if (data != 'success') {
-				alert(data);
-			}else {
-				queryList();
-			}
-		}	
-	 });
-	 --%>
 }
 
 //查看流程实例详情

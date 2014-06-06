@@ -44,7 +44,14 @@
 	<!-- 获取运行时流程实例信息  gw_tanx-->
 	<property name="queryProInstById_wf">
 		<![CDATA[
-			SELECT * FROM ACT_RU_EXECUTION A WHERE A.PROC_INST_ID_=?
+			SELECT * FROM ACT_RU_EXECUTION A WHERE A.ID_=?
+		]]>
+	</property>
+	
+	<!-- 获取运行时流程实例信息  gw_tanx-->
+	<property name="queryProInstListById_wf">
+		<![CDATA[
+			SELECT * FROM ACT_RU_EXECUTION A WHERE A.PROC_INST_ID_=? ORDER BY A.IS_ACTIVE_,A.REV_ DESC
 		]]>
 	</property>
 	
@@ -212,7 +219,7 @@
 	</property>
 	
 	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
-	<property name="getTaskInfoById_wf">
+	<property name="getTaskInfoByInstId_wf">
 		<![CDATA[
 			SELECT A.ID_,
 		       A.REV_,
@@ -974,9 +981,6 @@
 			#if($business_type && !$business_type.equals(""))
 				and t.business_type = #[business_type]
 			#end
-			#if($node_key && !$node_key.equals(""))
-				and t.node_key = #[node_key]
-			#end
 			order by n.order_num,  t.rowno_
 		]]>
 	</property>
@@ -1107,9 +1111,73 @@
 	<!-- 获取当前节点信息 gw_tanx -->
 	<property name="getCurrentNodeInfoById_wf">
 		<![CDATA[
-			  SELECT DISTINCT A.PROC_INST_ID_, A.TASK_DEF_KEY_
+			  SELECT DISTINCT A.PROC_INST_ID_, A.TASK_DEF_KEY_,A.NAME_
 			   FROM ACT_RU_TASK A
 			  WHERE A.PROC_INST_ID_ = ?
+		]]>
+	</property>
+	
+	<!-- 获取流程实例所有参数信息 gw_tanx -->
+	<property name="getInstVariableInfoById_wf">
+		<![CDATA[
+			  SELECT T.ID_,
+			       T.PROC_INST_ID_,
+			       T.EXECUTION_ID_,
+			       T.TASK_ID_,
+			       T.NAME_,
+			       T.VAR_TYPE_ AS TYPE_,
+			       T.REV_,
+			       T.BYTEARRAY_ID_,
+			       T.DOUBLE_,
+			       T.LONG_,
+			       T.TEXT_,
+			       T.TEXT2_
+			  FROM ACT_HI_VARINST T
+			 WHERE T.PROC_INST_ID_ =  ?
+			 ORDER BY T.NAME_
+		]]>
+	</property>
+	
+	<!-- 获取流程运行实例参数信息 gw_tanx -->
+	<property name="getRunInstVariableInfoById_wf">
+		<![CDATA[
+			  SELECT T.ID_,
+			       T.PROC_INST_ID_,
+			       T.EXECUTION_ID_,
+			       T.TASK_ID_,
+			       T.NAME_,
+			       T.VAR_TYPE_ AS TYPE_,
+			       T.REV_,
+			       T.BYTEARRAY_ID_,
+			       T.DOUBLE_,
+			       T.LONG_,
+			       T.TEXT_,
+			       T.TEXT2_
+			  FROM ACT_HI_VARINST T
+			 WHERE T.execution_id_ =  ?
+			 ORDER BY T.NAME_
+		]]>
+	</property>
+	
+	<!-- 获取流程实例参数信息 gw_tanx -->
+	<property name="getInstVariableInfoByIdAndName_wf">
+		<![CDATA[
+			  SELECT T.ID_,
+			       T.PROC_INST_ID_,
+			       T.EXECUTION_ID_,
+			       T.TASK_ID_,
+			       T.NAME_,
+			       T.VAR_TYPE_ AS TYPE_,
+			       T.REV_,
+			       T.BYTEARRAY_ID_,
+			       T.DOUBLE_,
+			       T.LONG_,
+			       T.TEXT_,
+			       T.TEXT2_
+			  FROM ACT_HI_VARINST T
+			 WHERE T.execution_id_ =  ?
+			 and t.name_= ?
+			 ORDER BY T.NAME_
 		]]>
 	</property>
 	

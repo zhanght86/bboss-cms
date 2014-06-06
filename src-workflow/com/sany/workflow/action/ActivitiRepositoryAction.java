@@ -533,7 +533,7 @@ public class ActivitiRepositoryAction {
 					.getAccessControl().getUserAccount());
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 	}
 	
@@ -590,7 +590,7 @@ public class ActivitiRepositoryAction {
 			
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 
 	}
@@ -610,7 +610,7 @@ public class ActivitiRepositoryAction {
 			
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 	}
 	
@@ -626,7 +626,7 @@ public class ActivitiRepositoryAction {
 			
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 	}
 	
@@ -642,7 +642,7 @@ public class ActivitiRepositoryAction {
 			
 			return "success";
 		} catch (Exception e) {
-			throw new ProcessException(e);
+			return "fail"+e.getMessage();
 		}
 	}
 	

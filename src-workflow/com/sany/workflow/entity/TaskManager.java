@@ -56,6 +56,12 @@ public class TaskManager {
 	
 	private String DELETE_REASON_;//备注
 	
+	private String state;// 签收状态 0所有任务 1 未签收 2已签收(关联其他表的业务字段)
+	
+	private String USER_ID_;// 处理人id (关联其他表的业务字段)
+	
+	private String GROUP_ID;// 处理组id
+	
 	public String getDELETE_REASON_() {
 		return DELETE_REASON_;
 	}
@@ -63,12 +69,6 @@ public class TaskManager {
 	public void setDELETE_REASON_(String dELETE_REASON_) {
 		DELETE_REASON_ = dELETE_REASON_;
 	}
-
-	private String state;// 签收状态 0所有任务 1 未签收 2已签收(关联其他表的业务字段)
-	
-	private String USER_ID_;// 处理人id (关联其他表的业务字段)
-	
-	private String GROUP_ID;// 处理组id
 
 	public String getID_() {
 		return ID_;
