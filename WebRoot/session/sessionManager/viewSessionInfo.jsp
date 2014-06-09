@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 
@@ -52,16 +53,9 @@
 				
 					<fieldset >
 						<legend><strong>属性列表</strong></legend>
-							<table border="1" cellpadding="0" cellspacing="0" class="table2" width="100%">
-								<pg:map colName="attributes">
-									<tr height="60px">
-										<td ><pg:mapkey/></td>  
-										<td><textarea rows="8" cols="50"  class="w120" 
-											style="width: 600px;font-size: 12px;height:60px;" ><pg:cell htmlEncode="true"/></textarea>
-										</td>  
-									</tr>
-								</pg:map>	
-							</table>
+						<div class="shadow">
+						
+						</div>
 					</fieldset>
 				</pg:beaninfo>
 			</form>
@@ -74,10 +68,34 @@
 </div>
 </body>
 <script type="text/javascript">
-var api = frameElement.api, W = api.opener;
-$(document).ready(function() {
-	 	    
-});
+
+var trHtml ="";
+
+if(!$.browser.msie) {
+	trHtml += "<div class='info'><p><div id='detail'>";
+	trHtml +="<table border='1' cellspacing='0' width='100%' id='resultsTable'><tbody>";
+	<pg:map actual='${sessionInfo.attributes}'>
+		trHtml+="<tr><td ><pg:mapkey/></td><td><pre name='code' class='xml'><pg:cell htmlEncode='true'/></pre></td></tr>";
+	</pg:map>
+	trHtml+="</tbody></table></div></p></div>";
+	$(".shadow").append(trHtml);
+	
+	dp.SyntaxHighlighter.ClipboardSwf = '${pageContext.request.contextPath}/include/syntaxhighlighter/clipboard.swf';
+	dp.SyntaxHighlighter.HighlightAll('code');
+}else {
+	trHtml +="<table border='1' cellpadding='0' cellspacing='0' class='table2' width='100%'>";
+	<pg:map actual='${sessionInfo.attributes}'>
+		trHtml+="<tr height='60px'><td ><pg:mapkey/></td>"; 
+		trHtml+="<td><textarea rows='8' cols='50'  class='w120' "; 
+		trHtml+="style='width: 800px;font-size: 12px;height:60px;' ><pg:cell htmlEncode='true'/></textarea>";
+		trHtml+="</td></tr>";
+	</pg:map>
+	trHtml+="</table>";
+	$(".shadow").append(trHtml);
+	
+}	
+
+</script>
 
 </script>
 </head>
