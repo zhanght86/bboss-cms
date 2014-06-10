@@ -457,10 +457,10 @@
 				 	<url>workflow/businesstype/*.page</url>
 				</authoration>
 			</item>
+			<!--  
 			<item name="工作流demo" id="workflowdemo" i18n:en_US="Workflow Demo">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>test/toApplyPage.page</content>
 				</workspace>
@@ -469,7 +469,6 @@
 			<item name="用户待办" id="workflowusertask" i18n:en_US="User Tasks">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>test/task_userlist.jsp</content>
 				</workspace>
@@ -478,7 +477,6 @@
 			<item name="用户待审" id="workflowuserdedetails" i18n:en_US="User Check Tasks">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>test/details_userlist.jsp</content>
 				</workspace>
@@ -486,11 +484,11 @@
 			<item name="用户已办" id="workflowuserhis" i18n:en_US="User History Tasks">
 				
 				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>test/his_userlist.jsp</content>
 				</workspace>
 			</item>
+			-->
 			<item name="任务管理" id="taskmanage" i18n:en_US="task manager">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>

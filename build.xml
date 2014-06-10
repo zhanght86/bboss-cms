@@ -1000,4 +1000,26 @@
 						
 					
 				</target>
+				<target name="teststoptomcat" >
+						
+						<antcall target="stopTomcat">
+							<param name="server.ip" value="10.0.15.137" />
+							<param name="tomcat.port" value="8080" />
+							<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+							<param name="server.username" value="root" />
+							<param name="server.password" value="31p@sSw0rd" />
+						</antcall>
+						
+					
+				</target>
+	
+				<target name="teststarttomcat" >							
+					<antcall target="startTomcat">
+						<param name="server.ip" value="10.0.15.137" />
+						<param name="tomcat.port" value="8080" />
+						<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+						<param name="server.username" value="root" />
+						<param name="server.password" value="31p@sSw0rd" />
+					</antcall>		
+				</target>
 </project>

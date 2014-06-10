@@ -21,6 +21,7 @@ import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.IpControlUtil;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.util.StringUtil;
 
@@ -90,6 +91,12 @@ public class UserPasswordLoginModule extends ACLLoginModule
                 throw new LoginException(messageSource.getMessage("sany.pdp.login.user.not.exist",RequestContextUtils.getRequestContextLocal(request)));
                 
             }
+            /******验证登录用户的IP是否限制*****/
+            String userip =   com.frameworkset.util.StringUtil.getClientIP(request);
+            boolean ip_control = IpControlUtil.validateIp(userName,userip);
+             if(!ip_control){
+          	   throw new LoginException("IP访问限制，请与管理员联系");
+             }
 //            if(user.getUserIsvalid() != null && user.getUserIsvalid().intValue()==0)
 //            	throw new LoginException("用户[" + userName + "]无效,请与系统管理员联系");
             //2007-05-30修改by袁勇福,由于isvalid的值改为了:0：删除，1：申请，2：开通，3：停用
@@ -192,8 +199,8 @@ public class UserPasswordLoginModule extends ACLLoginModule
 //         Organization org = orgManager.getMainOrganizationOfUser(userName);
         checkCallBack.setUserAttribute("userName", user.getUserRealname());
         checkCallBack.setUserAttribute("userID", user.getUserId().toString());
-        checkCallBack.setUserAttribute("password", password);
-        checkCallBack.setUserAttribute("password_i", password_i);
+//        checkCallBack.setUserAttribute("password", password);
+//        checkCallBack.setUserAttribute("password_i", password_i);
         // 获取当前登陆用户所在主机构************
        
         if (org == null || org.getOrgName() == null) {

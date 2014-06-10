@@ -5393,6 +5393,9 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	public boolean ishistorypassword(int userid,String password)throws ManagerException
 	{
 		try {
+			boolean passwordreusable = ConfigManager.getInstance().getConfigBooleanValue("passwordreusable", true);
+			if(passwordreusable)
+				return false;
 			int count = SQLExecutor.queryObject(int.class, "select count(1) from TD_SM_PASSWORDHIS where user_id=? and PASSWORD_= ?", 
 					userid,EncrpyPwd.encodePassword(password));
 			return count > 0;

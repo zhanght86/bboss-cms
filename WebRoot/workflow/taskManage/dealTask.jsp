@@ -244,9 +244,9 @@ function checkNode(){
 function addTr(){
 	var trHtml = "<tr><td><select name='node_id' id='node_id'>";
 	<pg:list requestKey="nodeList">
-		<pg:equal colName="node_type" value="userTask">
+		<pg:notin colName="node_type" scope="startEvent,endEvent">
 			trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
-		</pg:equal>
+		</pg:notin>
 	</pg:list>
 	trHtml+="</select></td>";
 	trHtml+="<td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";

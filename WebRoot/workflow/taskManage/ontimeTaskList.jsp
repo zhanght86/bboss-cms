@@ -15,6 +15,8 @@
 </pg:empty> 
 <pg:notempty actual="${listInfo}" >
    <pg:pager scope="request"  data="listInfo" desc="true" isList="false" containerid="ontimeContainer" selector="customContent">
+   
+    <pg:param name="taskState"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">

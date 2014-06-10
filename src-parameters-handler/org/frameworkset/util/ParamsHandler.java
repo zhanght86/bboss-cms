@@ -564,6 +564,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			tm.begin();
 			if(SimpleStringUtil.isEmpty(params.getParamId() )|| SimpleStringUtil.isEmpty(params.getParamType()))
 			{
+				rnParams(paramList );
 				for (Param param : paramList) {
 					String key = param.getParamid() + "^^" + param.getParam_type();
 					if (trace.containsKey(key))
@@ -578,6 +579,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			}
 			else
 			{
+				String key = params.getParamId() + "^^" + params.getParamType();
+				trace.put(key, t);
 				rnParams(paramList );
 				dbutil.preparedDelete(this.getDbname(), sql_del.toString());
 				dbutil.setString(1, params.getParamId());

@@ -2,12 +2,14 @@ package com.sany.workflow.action;
 
 import java.util.List;
 
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
+import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
@@ -30,9 +32,9 @@ import com.sany.workflow.service.ProcessException;
 public class ActivitiTaskManageAction {
 
 	private ActivitiService activitiService;
-	
+
 	private ActivitiTaskService activitiTaskService;
-	
+
 	private ActivitiConfigService activitiConfigService;
 
 	/**
@@ -74,7 +76,7 @@ public class ActivitiTaskManageAction {
 		try {
 			ListInfo listInfo = activitiService.queryTasks(task, offset,
 					pagesize);
-			
+
 			model.addAttribute("listInfo", listInfo);
 
 			return "path:ontimeTaskList";
@@ -173,35 +175,37 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String signTask(String taskId, ModelMap model) {
 		try {
-			
+
 			activitiTaskService.signTaskByUser(taskId, AccessControl
 					.getAccessControl().getUserAccount());
 
 			return "success";
 		} catch (Exception e) {
-			return "fail"+e.getMessage();
+			return "fail" + e.getMessage();
 		}
 
 	}
 
-	/** 处理任务
+	/**
+	 * 处理任务
+	 * 
 	 * @param taskId
 	 * @param taskState
 	 * @param nodeList
 	 * @param model
-	 * @return
-	 * 2014年5月26日
+	 * @return 2014年5月26日
 	 */
 	public @ResponseBody
-	String completeTask(String taskId, String taskState,String taskKey,
+	String completeTask(String taskId, String taskState, String taskKey,
 			List<ActivitiNodeInfo> nodeList, ModelMap model) {
 		try {
-			
-			activitiTaskService.completeTask(taskId, taskState, taskKey, nodeList);
-			
+
+			activitiTaskService.completeTask(taskId, taskState, taskKey,
+					nodeList);
+
 			return "success";
 		} catch (Exception e) {
-			return "fail"+e.getMessage();
+			return "fail" + e.getMessage();
 		}
 	}
 
@@ -216,19 +220,34 @@ public class ActivitiTaskManageAction {
 			String taskState, String taskId, ModelMap model) {
 
 		try {
-			//当前流程实例下所有节点信息
-			List<ActivitiNodeInfo> nodeList = activitiTaskService.getNodeInfoById(processKey,processInstId);
-			
+			// 统一任务管理界面过来，没有指定processKey
+			if (StringUtil.isEmpty(processKey)) {
+				// 根据流程实例id获取流程Key
+				HistoricProcessInstance hiInstance = activitiService
+						.getHisProcessInstanceById(processInstId);
+				
+				processKey = activitiService
+						.getRepositoryService()
+						.getProcessDefinition(
+								hiInstance.getProcessDefinitionId()).getKey();
+			}
+			// 当前流程实例下所有节点信息
+			List<ActivitiNodeInfo> nodeList = activitiTaskService
+					.getNodeInfoById(processKey, processInstId);
+
 			// 可选的下一节点信息
-			List<ActivitiNodeInfo> nextNodeList = activitiTaskService.getNextNodeInfoById(nodeList,processInstId);
-			
-			//当前任务节点信息
+			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
+					.getNextNodeInfoById(nodeList, processInstId);
+
+			// 当前任务节点信息
 			Task task = activitiService.getTaskById(taskId);
-			task.setAssignee(activitiService.userIdToUserName(task.getAssignee(), "2"));
-			
-			//节点参数
-			List<Nodevariable> nodevariableList = activitiConfigService.selectNodevariable(processKey, "", "");
-			
+			task.setAssignee(activitiService.userIdToUserName(
+					task.getAssignee(), "2"));
+
+			// 节点参数
+			List<Nodevariable> nodevariableList = activitiConfigService
+					.selectNodevariable(processKey, "", "");
+
 			model.addAttribute("task", task);
 			model.addAttribute("taskState", taskState);
 			model.addAttribute("taskId", taskId);
@@ -242,12 +261,13 @@ public class ActivitiTaskManageAction {
 			throw new ProcessException(e);
 		}
 	}
-	
-	/** 驳回任务
+
+	/**
+	 * 驳回任务
+	 * 
 	 * @param taskId
 	 * @param model
-	 * @return
-	 * 2014年5月27日
+	 * @return 2014年5月27日
 	 */
 	public @ResponseBody
 	String rejectToPreTask(String taskId, List<ActivitiNodeInfo> nodeList,
@@ -258,9 +278,9 @@ public class ActivitiTaskManageAction {
 
 			return "success";
 		} catch (Exception e) {
-			return "fail"+e.getMessage();
+			return "fail" + e.getMessage();
 		}
 
 	}
-	
+
 }
