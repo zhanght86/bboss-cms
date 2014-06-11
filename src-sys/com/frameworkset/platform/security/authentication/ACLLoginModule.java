@@ -3,7 +3,6 @@
 package com.frameworkset.platform.security.authentication;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.security.Principal;
 
 import javax.security.auth.callback.Callback;
@@ -12,7 +11,6 @@ import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -27,7 +25,7 @@ import com.frameworkset.platform.security.authorization.AuthPrincipal;
  * @author biaoping.yin
  * @version 1.0
  */
-public abstract class ACLLoginModule implements LoginModule,Serializable {
+public abstract class ACLLoginModule implements LoginModule {
 
     private static Logger log = Logger.getLogger(ACLLoginModule.class);
     protected String loginModuleName;
@@ -156,7 +154,7 @@ public abstract class ACLLoginModule implements LoginModule,Serializable {
             log.error(uce.getMessage(),uce);
             throw new LoginException(uce.toString());
         }
-        throw new FailedLoginException();
+        throw new LoginException();
     }
 
     /**

@@ -1052,6 +1052,7 @@ public class AccessControl implements AccessControlInf{
 			
 			throw new AccessException(ex.getMessage(),ex);
 		}
+		
 		catch (Exception ex) {
 			
 			throw new AccessException(ex.getMessage(),ex);
@@ -3078,6 +3079,23 @@ public class AccessControl implements AccessControlInf{
 		
 
 		try {
+			if(session == null)
+			{
+				if(redirected )
+				{
+					log_info("Unknown user Logout to "+redirect+" from system on " + new java.util.Date() + ". session is null.",request);
+					if(redirect == null && redirecttarget == null)
+					{
+						redirect();
+					}
+					else
+					{
+						redirect(request,response,redirect,redirecttarget);
+					}
+				}
+				
+				return;
+			}
 			Map principalsIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
 
 			if (principalsIndexs == null) {
@@ -3208,7 +3226,7 @@ public class AccessControl implements AccessControlInf{
 				}
 			}
 		}  catch (Exception ex) {
-			//ex.printStackTrace();
+			ex.printStackTrace();
 			//log("Unknown user Logout failed from system on " + new java.util.Date() + ". ",request);
 			log.debug("Logout failed：" + ex.getMessage());
 		}

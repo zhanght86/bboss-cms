@@ -16,7 +16,7 @@
 package com.frameworkset.platform.security.authentication;
 
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginException;
+
 
 /**
  * <p>Title: LoginModule.java</p> 

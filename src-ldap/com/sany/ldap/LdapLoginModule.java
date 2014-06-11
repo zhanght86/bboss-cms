@@ -16,7 +16,6 @@ package com.sany.ldap;
 
 import java.util.Map;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -26,13 +25,14 @@ import com.frameworkset.platform.ca.CaProperties;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
+import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
-import com.frameworkset.util.StringUtil;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.IpControlUtil;
 import com.sany.ldap.ad.AdAccountLogin;
 
 /**
@@ -77,6 +77,14 @@ public class LdapLoginModule extends UserPasswordLoginModule{
                 throw new LoginException("用户名/口令有误,或者用户[" + userName + "]不存在");
 
             }
+            
+            /******验证登录用户的IP是否限制*****/
+          String userip =   com.frameworkset.util.StringUtil.getClientIP(request);
+          boolean ip_control = IpControlUtil.validateIp(userName,userip);
+           if(!ip_control){
+        	   throw new LoginException("IP访问限制，请与管理员联系");
+           }
+           
             if (user.getUserIsvalid() != null && user.getUserIsvalid().intValue() != 2)
                 throw new LoginException("用户[" + userName + "]无效,请与系统管理员联系");
             if (!enableusertype(user.getUserType()))
@@ -129,7 +137,7 @@ public class LdapLoginModule extends UserPasswordLoginModule{
         } catch (SPIException ex) {
           
             throw new LoginException(ex.getMessage());
-        } catch (Exception e) {
+        }catch (Exception e) {
            
             logger.debug("未知错误:" + e.getClass() + "," + e.getMessage());
             throw new LoginException(e.getMessage());
@@ -162,7 +170,10 @@ public class LdapLoginModule extends UserPasswordLoginModule{
 		  		  	return check(userName, password, checkCallBack);
 		  	  }
     	}
-        
+    	
     }
+   
+    
+   
 }
 

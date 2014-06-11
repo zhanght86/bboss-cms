@@ -880,7 +880,7 @@
 	   <socket server="${server.ip}" port="${tomcat.port}" /><!--检查tomcat的端口，判断tomcat是否还在运行-->
 	   <then>
 	    <echo message="stop tomcat in ${server.ip}..." />
-	    <sshexec host="${server.ip}" username="${server.username}" password="${server.password}" command="${tomcat.home}/bin/shutdown.sh" trust="true" /><!--远程执行关闭tomcat-->
+	    <sshexec failonerror="false" host="${server.ip}" username="${server.username}" password="${server.password}" command="ps -ef | grep ${tomcat.home}/bin | awk '{print $2}' | xargs kill -9" trust="true" /><!--远程执行关闭tomcat-->
 	    <waitfor maxwait="5" maxwaitunit="minute" checkevery="5" checkeveryunit="second">
 	     <not>
 	      <socket server="${server.ip}" port="${tomcat.port}" />
@@ -1009,6 +1009,21 @@
 							<param name="server.username" value="root" />
 							<param name="server.password" value="31p@sSw0rd" />
 						</antcall>
+					
+					<antcall target="stopTomcat">
+												<param name="server.ip" value="10.0.15.138" />
+												<param name="tomcat.port" value="8080" />
+												<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+												<param name="server.username" value="root" />
+												<param name="server.password" value="31p@sSw0rd" />
+											</antcall>
+					<antcall target="stopTomcat">
+																	<param name="server.ip" value="10.0.15.141" />
+																	<param name="tomcat.port" value="8080" />
+																	<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+																	<param name="server.username" value="root" />
+																	<param name="server.password" value="1234qwerASDF" />
+																</antcall>
 						
 					
 				</target>
@@ -1020,6 +1035,20 @@
 						<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
 						<param name="server.username" value="root" />
 						<param name="server.password" value="31p@sSw0rd" />
-					</antcall>		
+					</antcall>	
+					<antcall target="startTomcat">
+											<param name="server.ip" value="10.0.15.138" />
+											<param name="tomcat.port" value="8080" />
+											<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+											<param name="server.username" value="root" />
+											<param name="server.password" value="31p@sSw0rd" />
+										</antcall>		
+					<antcall target="startTomcat">
+											<param name="server.ip" value="10.0.15.141" />
+											<param name="tomcat.port" value="8080" />
+											<param name="tomcat.home" value="/opt/env/apache-tomcat-7.0.54" />
+											<param name="server.username" value="root" />
+											<param name="server.password" value="1234qwerASDF" />
+										</antcall>		
 				</target>
 </project>

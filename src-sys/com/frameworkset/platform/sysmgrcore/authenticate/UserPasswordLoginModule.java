@@ -1,6 +1,5 @@
 package com.frameworkset.platform.sysmgrcore.authenticate;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -16,6 +15,7 @@ import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.ACLLoginModule;
 import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
+import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;

@@ -4,7 +4,7 @@
 <%@page import="com.frameworkset.platform.config.ConfigManager"%>
 <%
   boolean isCasServer = ConfigManager.getInstance().getConfigBooleanValue("isCasServer",false);
-  
+  String _redirectPath = request.getParameter("_redirectPath");
   if(isCasServer){
   	String logoutUrl = (String)session.getAttribute("edu.yale.its.tp.cas.client.filter.logout");
   	response.sendRedirect(logoutUrl);
@@ -33,11 +33,20 @@
 	  	  else
 	  	  {
 	  			
-	  	  		boolean success = accesscontroler.checkAccess(request, response);
+	  	  		boolean success = accesscontroler.checkAccess(request, response,false);
 	  	  		String logoutpage = null;
 	  	  		if(success)
 	  	  		{	  	  			
 	  	  			logoutpage = accesscontroler.getSubSystemLogoutRedirect();
+	  	  		}
+	  	  		else
+	  	  		{
+	  	  			if(_redirectPath != null && !_redirectPath.equals(""))
+	  	  			{
+	  	  				logoutpage = _redirectPath;
+	  	  			}
+	  	  			else
+	  	  				logoutpage = accesscontroler.getSubSystemLogoutRedirect(request,null,false);
 	  	  		}
 	  	  		
 	  	  		accesscontroler.logout(logoutpage);

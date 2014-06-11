@@ -456,46 +456,61 @@ public class SimpleLoginContext {
 //                                                (new java.io.PrintWriter(sw));
 //                    sw.flush();
 //                    le = new LoginException(sw.toString());
-                	
-                    le = new LoginException(ite.getTargetException().getMessage(),ite.getTargetException());
+                	if(ite.getTargetException() instanceof LoginException)
+                	{
+                		le = (LoginException)ite.getTargetException();
+                	}
+                	else
+                	{
+                		le = new LoginException(ite.getTargetException().getMessage(),ite.getTargetException());
+                	}
                     
                 }
 
                 //如果是REQUISITE，那么立即抛出异常
-                if (moduleStack[i].entry.getControlFlag().equals(
-                    LoginModuleControlFlag.REQUISITE.controlFlag)) {
-
-                    log.debug(action+" REQUISITE failure");
-
-                    // if REQUISITE, then immediately throw an exception
-//                    if (methodName.equals(ABORT_METHOD) ||
-//                        methodName.equals(LOGOUT_METHOD)) {
-//                        if (firstRequiredError == null)
-//                            firstRequiredError = le;
-//                    } else 
-                    {
-                        throwException(firstRequiredError, le);
-                    }
-
-                } else if (moduleStack[i].entry.getControlFlag().equals(LoginModuleControlFlag.REQUIRED.controlFlag)) {
-
-                    log.debug(action+" REQUIRED failure");
-
-                    // mark down that a REQUIRED module failed
-                    if (firstRequiredError == null)
-                        firstRequiredError = le;
-
-                } else {
-
-                    log.debug(action+" OPTIONAL failure");
-
-                    // mark down that an OPTIONAL module failed
-                    if (firstError == null)
-                        firstError = le;
+                if(action.equals(LOGIN_METHOD) || action.equals(COMMIT_METHOD))
+                {
+	                if (moduleStack[i].entry.getControlFlag().equals(
+	                    LoginModuleControlFlag.REQUISITE.controlFlag)) {
+	
+	                    log.debug(action+" REQUISITE failure");
+	
+	                    // if REQUISITE, then immediately throw an exception
+	//                    if (methodName.equals(ABORT_METHOD) ||
+	//                        methodName.equals(LOGOUT_METHOD)) {
+	//                        if (firstRequiredError == null)
+	//                            firstRequiredError = le;
+	//                    } else 
+	                    {
+	                        throwException(firstRequiredError, le);
+	                    }
+	
+	                } else if (moduleStack[i].entry.getControlFlag().equals(LoginModuleControlFlag.REQUIRED.controlFlag)) {
+	
+	                    log.debug(action+" REQUIRED failure");
+	
+	                    // mark down that a REQUIRED module failed
+	                    if (firstRequiredError == null)
+	                        firstRequiredError = le;
+	
+	                } else {
+	
+	                    log.debug(action+" OPTIONAL failure");
+	
+	                    // mark down that an OPTIONAL module failed
+	                    if (firstError == null)
+	                        firstError = le;
+	                }
                 }
-            } catch (javax.security.auth.login.LoginException e) {
-				throw new LoginException(e);
+            } catch (LoginException e) {
+            	throw e;
+				
 			}
+            catch (Exception e) {
+            	throw new LoginException(e);
+				
+			}
+            
         }
     }
 
