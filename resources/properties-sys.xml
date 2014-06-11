@@ -10,7 +10,7 @@
 			    获取方法：
 			    String approot = ConfigManager.getInstance().getConfigValue("approot");
 				-->
-			<property name="approot" value="D:/d/workspace/bboss-cms/WebRoot" />
+			<property name="approot" value="F:/workspace/bboss-cms/WebRoot" />
 		
 			<!--
 				是否允许用户作为一种用户类型的角色，如果为true则将用户帐号作为用户固有的一种用户类型角色
@@ -320,6 +320,9 @@
 	<property name="enable_login_validatecode" value="false"/>
 	<!-- 是否启用用户级的口令过期时间  -->
 	<property name="enableUserScopePasswordExpiredDays" value="true"/>
+	
+	<!-- 密码是否可以重用:true 可以，false不可以 -->
+	<property name="passwordreusable" value="true"/>
 	
 	
 	
