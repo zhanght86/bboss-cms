@@ -1,8 +1,9 @@
-<%@page contentType="text/html;charset=UTF-8"%>
+<%@page session="false" contentType="text/html;charset=UTF-8"%>
 <%@page import="com.frameworkset.platform.security.AccessControl
                 ,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.synchronize.httpclient.*"%>
 <%@page import="com.frameworkset.platform.config.ConfigManager"%>
 <%
+  HttpSession session = request.getSession(false);
   boolean isCasServer = ConfigManager.getInstance().getConfigBooleanValue("isCasServer",false);
   String _redirectPath = request.getParameter("_redirectPath");
   if(isCasServer){
