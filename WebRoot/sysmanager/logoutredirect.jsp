@@ -1,5 +1,6 @@
+<%@ page  session="false" language="java" pageEncoding="UTF-8"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
-<%@ page language="java" pageEncoding="UTF-8"%>
+
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@page import="com.frameworkset.util.StringUtil"%><%
 	/**

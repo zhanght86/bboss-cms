@@ -15,7 +15,13 @@
 </pg:empty> 
 <pg:notempty actual="${sessionList}" >
    <pg:pager scope="request"  data="sessionList" desc="true" isList="false" containerid="sessionContainer" selector="customContent">
-	
+	<pg:param name="sessionid"/>
+	<pg:param name="appkey"/>
+	<pg:param name="referip"/>
+	<pg:param name="createtime_start"/>
+	<pg:param name="createtime_end"/>
+	<pg:param name="host"/>
+	<pg:param name="validate"/>
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">

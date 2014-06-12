@@ -24,7 +24,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 			int offset, int pagesize) {
 
 		ListInfo list = new ListInfo();
-		list.setMore(true);
+		
 		try {
 
 			Map<String, Object> queryParams = new HashMap<String, Object>();
@@ -71,10 +71,12 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 
 					beanList.add(bean);
 				}
+				list.setMore(true);
+				list.setResultSize(infoList.size());
 			}
 
 			list.setDatas(beanList);
-
+			
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}

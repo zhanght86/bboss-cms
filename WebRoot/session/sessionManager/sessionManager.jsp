@@ -34,6 +34,11 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
+	bboss.pager.pagerevent = {   
+			                            beforeload:null,   
+			                          afterload:function(opt){ 
+			                             getTreeDate();   
+	}};   
 
 	$("#wait").hide();
        		

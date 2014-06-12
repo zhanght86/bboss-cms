@@ -1,9 +1,10 @@
+<%@ page session="false" language="java"
+	contentType="text/html; charset=utf-8"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.authenticate.LoginUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portlet.iframe.action.WebDes"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
-<%@ page session="true" language="java"
-	contentType="text/html; charset=utf-8"%>
+
 <%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.config.ConfigManager,com.liferay.portlet.iframe.action.SSOUserMapping,org.frameworkset.web.servlet.support.RequestContextUtils"%>
 <%@ page import="com.frameworkset.platform.ca.CaProperties"%>
 <%@ page import="com.frameworkset.platform.ca.CAManager"%>
@@ -17,6 +18,7 @@
 	
 <%@ page import="java.util.*"%>
 <%
+HttpSession session = request.getSession(false);
 	//AccessControl context_ = AccessControl.getInstance();
 	//boolean success = context_.checkAccess(request, response,false);
 	//if(success)
