@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" session="false"  import="java.util.*" pageEncoding="UTF-8"%>
 <%@page import="com.frameworkset.platform.framework.MenuHelper"%>
 <%@page import="com.frameworkset.platform.framework.ModuleQueue"%>
 <%@page import="com.frameworkset.platform.framework.Module"%>

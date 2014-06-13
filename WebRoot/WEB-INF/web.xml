@@ -112,7 +112,10 @@
     <filter-name>CharsetEncoding</filter-name>
     <url-pattern>/jasperreport/*</url-pattern>
   </filter-mapping>
-  
+  <filter-mapping>
+    <filter-name>CharsetEncoding</filter-name>
+    <url-pattern>/druid/*</url-pattern>
+  </filter-mapping>
   
   <filter>
     <filter-name>securityFilter</filter-name>

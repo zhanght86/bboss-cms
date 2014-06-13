@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page session="false"  contentType="text/html; charset=UTF-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

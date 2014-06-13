@@ -20,12 +20,10 @@ if(customtype != null && customtype.equals("default"))
 	<head>
 		<title>属性容器</title>
 		<pg:config enablecontextmenu="false"/>
-		<%@ include file="/common/jsp/jqureyEasyui.jsp"%>
-		<%@ include file="/common/scripts/dialog/dialog.include.jsp"%>
-		<script language="JavaScript" src="changeView.js"
-			type="text/javascript"></script>
+	
+		
 		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../css/treeview.css">
+		
 		
 		<script>
 		
@@ -119,7 +117,7 @@ if(customtype != null && customtype.equals("default"))
 
 							<tree:tree tree="role_column_tree" node="role_column_tree.node"
 								imageFolder="/sysmanager/images/tree_images" collapse="true"
-								includeRootNode="false" mode="static">
+								includeRootNode="false" mode="static-dynamic">
 								<tree:checkbox name="menupath" />
 								<tree:treedata
 									treetype="com.frameworkset.platform.esb.datareuse.common.action.DeskTopMenuTree"

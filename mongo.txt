@@ -150,3 +150,7 @@ config = {_id: 'rs0', members: [
 {_id: 2, host: '10.0.15.134:27018'}]
 
 
+问题列表：
+com.mongodb.MongoException: No replica set members available for query with { "mode" : "primary"}
+
+session创建异常：多出很多session，需要记录session创建的

@@ -18,11 +18,8 @@
 		<script type='text/javascript'
 			src='<%=request.getContextPath() %>/include/jquery-1.4.2.min.js'
 			language='JavaScript'></script>
-		<%@ include file="/common/scripts/dialog/dialog.include.jsp"%>
-		<script language="JavaScript" src="changeView.js"
-			type="text/javascript"></script>
-		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../css/treeview.css">
+
+		
 		
          <link href="${pageContext.request.contextPath}/common/css/button.css"
 	rel="stylesheet" type="text/css" />
@@ -83,7 +80,7 @@
 
 							<tree:tree tree="role_column_tree" node="role_column_tree.node"
 								imageFolder="/sysmanager/images/tree_images" collapse="true"
-								includeRootNode="false" mode="static"
+								includeRootNode="false" mode="static-dynamic"
 								href="../../desktop/getMenuCustom.page" target="sizewin">
 								
 								<tree:treedata

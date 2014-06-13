@@ -68,6 +68,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 							(int) info.getMaxInactiveInterval());
 
 					bean.setLoseTime(gc.getTime());
+					bean.setRequesturi(info.getRequesturi());
 
 					beanList.add(bean);
 				}
@@ -128,7 +129,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 			bean.setReferip(info.getReferip());
 			bean.setSessionid(info.getSessionid());
 			bean.setValidate(info.isValidate());
-
+			bean.setRequesturi(info.getRequesturi());
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(info.getLastAccessedTime());
 			gc.add(Calendar.MILLISECOND, (int) info.getMaxInactiveInterval());

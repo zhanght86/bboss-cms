@@ -22,7 +22,7 @@ public class SessionInfoBean {
 	private boolean validate;// 状态
 	private Map<String, Object> attributes;// 属性
 	private String host;// 服务端
-
+	private String requesturi;
 	public Date getLoseTime() {
 		return loseTime;
 	}
@@ -109,6 +109,16 @@ public class SessionInfoBean {
 
 	public void setAppKey(String appKey) {
 		this.appKey = appKey;
+	}
+
+	
+
+	public String getRequesturi() {
+		return requesturi;
+	}
+
+	public void setRequesturi(String requesturi) {
+		this.requesturi = requesturi;
 	}
 
 }

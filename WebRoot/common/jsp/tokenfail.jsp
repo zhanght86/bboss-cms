@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page session="false"  language="java" contentType="text/html; charset=UTF-8"%>
 
 <%@page import="org.frameworkset.spi.remote.RemoteException"%>
 

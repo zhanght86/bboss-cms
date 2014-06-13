@@ -97,7 +97,7 @@ function getTreeDate(){
 			if (data) {
 				treeData = data;
 			} else {
-				$.dialog.alert('查询应用菜单异常');
+				
 			}
 		}	
 	 });
@@ -173,7 +173,7 @@ function delSession (sessionid) {
 			},
 		success : function(data){
 			if (data != 'success') {
-				alert("删除session出错："+data);
+				 $.dialog.alert("删除session出错："+data);
 			}else {
 				queryList();
 				close();	
@@ -204,6 +204,11 @@ function delSessions () {
 }
 
 function delAllSessions () {
+	if($("#app_key").val() == '')
+	{
+		  $.dialog.alert('请选择左边的应用,然后再清除应用会话信息!');
+		return;
+	}
 	$.dialog.confirm('确定要清空'+$("#app_key").val()+'应用下所有的session吗？', function(){
      	$.ajax({
 	 	type: "POST",
@@ -216,7 +221,7 @@ function delAllSessions () {
 		},
 		success : function(data){
 			if (data != 'success') {
-				alert("清空"+$("#app_key").val()+"应用下所有session出错："+data);
+				 $.dialog.alert("清空"+$("#app_key").val()+"应用下所有session出错："+data);
 			}else {
 				queryList();
 				close();	

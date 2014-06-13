@@ -48,6 +48,10 @@
 						       		<pg:false colName="validate">无效</pg:false>
 					       		</td>
 							</tr>
+							<tr>
+								<th width="60"><strong>请求地址:</strong></th>
+								<td width="300" colspan="10"><pg:cell colName="requesturi" /></td>								
+							</tr>
 						</table>
 					</fieldset>
 				
