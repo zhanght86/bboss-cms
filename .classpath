@@ -177,8 +177,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/xmlschema-core-2.0.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar" sourcepath="/bboss-tablib"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3.jar" sourcepath="WebRoot/WEB-INF/lib/mongo-java-driver-2.9.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="F:/开源项目/报表/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-applet-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-fonts-5.5.1.jar"/>
@@ -201,5 +199,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security.jar" sourcepath="/bboss-security"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-2.12.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-javadoc-2.12.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mongo-java-driver-source-2.12.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
