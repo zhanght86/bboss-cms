@@ -42,15 +42,8 @@
 		reFlush = "true";
 	}
 	
-	String userNamesNo = String.valueOf(session.getAttribute("promptString"));
-	session.removeAttribute("promptString");
-	//System.out.println(userNamesNo);
-	Integer currUserId = (Integer)session.getAttribute("currUserId");
+	String userNamesNo = null;
 	
-	if(currUserId == null)
-	{
-		currUserId = Integer.valueOf("-1");
-	}
 	
 	
 	String desc = (String)request.getParameter("pager.desc");	

@@ -11,14 +11,7 @@ if(qstring != null){
 }
 
 
-//点击了用户，置session
-if(userId != null){
-	session.setAttribute("currUserId",Integer.valueOf(userId));
-}
-if(userId == null){
-	session.setAttribute("currUserId",null);
-	userId = "";
-}
+
 %>
 <html>
 <head>
@@ -31,7 +24,7 @@ if(userId == null){
 
 <script language="javascript" src="../scripts/toolbar.js"></script>
 <script language="javascript">
-var uId = "<%=userId%>";
+
 var qstring="<%=qstring%>";
 	function getElementByName(eName){
 		var elements = document.body.all;

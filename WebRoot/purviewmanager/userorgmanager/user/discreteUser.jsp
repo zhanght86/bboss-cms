@@ -14,14 +14,7 @@ String qqstring = qstring;
 if(qstring != null){
 	qstring = java.net.URLEncoder.encode(qstring);
 }
-//点击了用户，置session
-if(userId != null){
-	session.setAttribute("currUserId",Integer.valueOf(userId));
-}
-if(userId == null){
-	session.setAttribute("currUserId",null);
-	userId = "";
-}
+
 %>
 <html>
 <head>

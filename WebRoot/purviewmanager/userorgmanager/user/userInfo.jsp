@@ -59,7 +59,7 @@
 	    	//新建用户初始化action
 		    request.setAttribute("currUser", null);
 			request.setAttribute("reFlush", "false");
-			request.getSession().setAttribute("currUserId", null);
+			
 			request.setAttribute("isNew", "1");
 		}
 		String newUserName = "";
