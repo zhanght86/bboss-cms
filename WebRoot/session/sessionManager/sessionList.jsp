@@ -33,6 +33,7 @@
        		<th>最后访问时间</th>
        		<th>失效时间</th>
        		<th>请求地址</th>
+       		<th>上次访问地址</th>
        		<th>客户端</th>
        		<th>服务端</th>
        		<th>有效期</th>
@@ -50,6 +51,7 @@
     		<td><pg:cell colName="lastAccessedTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>       
        		<td><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
        		<td><pg:cell colName="requesturi"/></td>
+       		<td ><pg:cell colName="lastAccessedUrl"/></td>
        		<td><pg:cell colName="referip"/></td>
        		<td><pg:cell colName="host" /></td>
        		<td><pg:cell colName="maxInactiveInterval" /></td>

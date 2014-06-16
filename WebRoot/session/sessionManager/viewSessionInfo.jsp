@@ -50,7 +50,9 @@
 							</tr>
 							<tr>
 								<th width="60"><strong>请求地址:</strong></th>
-								<td width="300" colspan="10"><pg:cell colName="requesturi" /></td>								
+								<td width="300" ><pg:cell colName="requesturi" /></td>	
+								<th width="60"><strong>上次访问地址:</strong></th>
+								<td width="300" colspan="10"><pg:cell colName="lastAccessedUrl" /></td>									
 							</tr>
 						</table>
 					</fieldset>

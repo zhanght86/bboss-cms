@@ -23,6 +23,7 @@ public class SessionInfoBean {
 	private Map<String, Object> attributes;// 属性
 	private String host;// 服务端
 	private String requesturi;
+	private String lastAccessedUrl;
 	public Date getLoseTime() {
 		return loseTime;
 	}
@@ -119,6 +120,14 @@ public class SessionInfoBean {
 
 	public void setRequesturi(String requesturi) {
 		this.requesturi = requesturi;
+	}
+
+	public String getLastAccessedUrl() {
+		return lastAccessedUrl;
+	}
+
+	public void setLastAccessedUrl(String lastAccessedUrl) {
+		this.lastAccessedUrl = lastAccessedUrl;
 	}
 
 }

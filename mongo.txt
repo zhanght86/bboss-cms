@@ -1,3 +1,5 @@
+总体集群情况
+
 rep set:
 10.0.15.38:27017
 10.0.15.39:27017
@@ -99,13 +101,16 @@ rs.remove("mongod3.example.net")
 rs.remove("10.0.15.38:30000")
 
 2.启动mongodb
-10.0.15.134
+38:
+./mongod --config /etc/mongodb.conf
+39
+./mongod --config /etc/mongodb.conf
+./mongod --config /etc/mongoabr.conf
+134:
 ./mongod --config /etc/mongodb.conf
 ./mongod --config /etc/mongodb1.conf
-10.0.15.38
-./mongod --config /etc/mongodb.conf
-10.0.15.39
-./mongod --config /etc/mongodb.conf
+
+
 
 说明：./mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --logpath /data/logs/db0.log --fork true
 
@@ -117,19 +122,26 @@ rs.remove("10.0.15.38:30000")
 ./mongo --host 10.0.15.39 --port 27017
 ./mongo --host 10.0.15.39 --port 30000
 4.配置并初始化复制服务器群
-10.0.15.134：27017为主服务器
+10.0.15.38：27017为主服务器
 连接
-./mongo --host 10.0.15.134 --port 27017
+./mongo --host 10.0.15.38 --port 27017
 提示符下输入以下配置：
-config = {_id: 'rs0', members: [
-{_id: 0, host: '10.0.15.38:27017'},
-{_id: 1, host: '10.0.15.134:27017'},
-{_id: 2, host: '10.0.15.134:27018'}]
-}
+
+cfg = { _id: "rs0", members: [
+    { _id:0, host:"10.0.15.38:27017"},  
+    { _id:1, host:"10.0.15.134:27017"},
+    { _id:2, host:"10.0.15.134:27018"},
+    { _id:3, host:"10.0.15.39:27017"},   
+    { _id:4, host:"10.0.15.39:30000",arbiterOnly: true}
+    ]}
+
+
 然后执行以下指令即可
-rs.initiate(config)
+rs.initiate(cfg)
+查看rs状态：
+rs.status()
 最后分别连入各客户端，执行：
-rs.slaveOk()
+rs.slaveOk()，可以再second执行查询操作了
 
 5.使用mongodb
 use mydb
@@ -142,14 +154,10 @@ db.testData.insert( k )
 关闭mongodb
 db.adminCommand({shutdown : 1, force : true})
 
-6.java编程：
-
-config = {_id: 'rs0', members: [
-{_id: 0, host: '10.0.15.38:27017'},
-{_id: 1, host: '10.0.15.134:27017'},
-{_id: 2, host: '10.0.15.134:27018'}]
 
 
+
+      
 问题列表：
 com.mongodb.MongoException: No replica set members available for query with { "mode" : "primary"}
 
