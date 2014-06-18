@@ -27,4 +27,7 @@
 	<property name="sys.user.paramshandler" class="org.frameworkset.util.ParamsHandler" >
 		<property name="tableName" value="TD_SM_USERPARAMETERS" />
 	</property>
+	<property name="sys.msg.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_MSGPARAMETERS" />
+	</property>
 </manager-config>

@@ -386,13 +386,32 @@
 					<content><![CDATA[/params/showParams.page?paramId=Token&paramType=Token&handler=cms.siteparamshandler]]></content>
 				</workspace>
 			</item>
+			<item name="邮件消息参数管理" id="mailmsgmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content><![CDATA[/params/showParams.page?paramId=mail&paramType=msg&handler=sys.msg.paramshandler]]></content>
+				</workspace>
+			</item>
+			
+			<item name="短信消息参数管理" id="smsmsgmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content><![CDATA[/params/showParams.page?paramId=msg&paramType=msg&handler=sys.msg.paramshandler]]></content>
+				</workspace>
+			</item>
 			<item name="节假日管理" id="holidaymanager">
 				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
 				
 				<top>header.page</top>
 				
 				<workspace>
-					<content><![CDATA[/sysmanager/holiday/setholiday.jsp]]></content>
+					<content><![CDATA[/sysmanager/holiday/index.page]]></content>
 				</workspace>
 			</item>
 			
@@ -497,6 +516,16 @@
 				</workspace>
 				<authoration>				 
 					 <url>workflow/taskManage/*.page</url>
+				</authoration>
+			</item>
+			<item name="模板管理" id="templemanage" i18n:en_US="temple manager">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<workspace>
+					<content>workflow/templeManage/templeManager.page</content>
+				</workspace>
+				<authoration>				 
+					 <url>workflow/templeManage/*.page</url>
 				</authoration>
 			</item>
 		</module>
