@@ -872,6 +872,7 @@
 	      <socket server="${server.ip}" port="${tomcat.port}" />
 	     </and>
 	    </waitfor>
+	   	<sleep seconds="${sleeptime}"/>
 	   </then>
 	  </if>
 	</target>
@@ -880,7 +881,8 @@
 	   <socket server="${server.ip}" port="${tomcat.port}" /><!--检查tomcat的端口，判断tomcat是否还在运行-->
 	   <then>
 	    <echo message="stop tomcat in ${server.ip}..." />
-	    <sshexec failonerror="false" host="${server.ip}" username="${server.username}" password="${server.password}" command="ps -ef | grep ${tomcat.home}/bin | awk '{print $2}' | xargs kill -9" trust="true" /><!--远程执行关闭tomcat-->
+	    <sshexec failonerror="true" host="${server.ip}" username="${server.username}" password="${server.password}"
+	    	command="ps -efww|grep ${tomcat.home}/bin |grep -v grep|cut -c 9-15|xargs kill -9" trust="true" /><!--远程执行关闭tomcat-->
 	    <waitfor maxwait="5" maxwaitunit="minute" checkevery="5" checkeveryunit="second">
 	     <not>
 	      <socket server="${server.ip}" port="${tomcat.port}" />
@@ -906,7 +908,8 @@
 			<param name="tomcat.port" value="${tomcat.port}" />
 			<param name="tomcat.home" value="${tomcat.home}" />
 			<param name="server.username" value="${server.username}" />
-			<param name="server.password" value="${server.password}" />
+			<param name="server.password" value="${server.password}" />			
+			<param name="sleeptime" value="${sleeptime}" />
 		</antcall>				
 	</target>
 		
@@ -919,6 +922,7 @@
 			<param name="server.password" value="31p@sSw0rd" />
 			<param name="clearfile" value="SanyPDP" />
 			<param name="warfile" value="distrib/SanyPDP.war" />
+			<param name="sleeptime" value="60" />
 		</antcall>
 		
 		<antcall target="deploywar">
@@ -929,6 +933,7 @@
 			<param name="server.password" value="31p@sSw0rd" />
 			<param name="clearfile" value="SanyPDP" />
 			<param name="warfile" value="distrib/SanyPDP.war" />
+			<param name="sleeptime" value="60" />
 		</antcall>
 		
 		<antcall target="deploywar">
@@ -939,6 +944,7 @@
 			<param name="server.password" value="1234qwerASDF" />
 			<param name="clearfile" value="SanyPDP" />
 			<param name="warfile" value="distrib/SanyPDP.war" />
+			<param name="sleeptime" value="60" />
 		</antcall>
 		<echo>deploy token server ...</echo>
 		<move file="distrib/SanyPDP.war" tofile="distrib/SanyToken.war"/>		
@@ -950,6 +956,7 @@
 			<param name="server.password" value="31p@sSw0rd" />
 			<param name="clearfile" value="SanyToken" />
 			<param name="warfile" value="distrib/SanyToken.war" />
+			<param name="sleeptime" value="30" />
 		</antcall>
 		<antcall target="deploywar">
 			<param name="server.ip" value="10.0.15.137" />
@@ -959,6 +966,7 @@
 			<param name="server.password" value="31p@sSw0rd" />
 			<param name="clearfile" value="SanyToken" />
 			<param name="warfile" value="distrib/SanyToken.war" />
+			<param name="sleeptime" value="30" />
 		</antcall>
 		<move file="distrib/SanyToken.war" tofile="distrib/SanyPDP.war"/>
 		<echo>deploy token server ok</echo>

@@ -3553,7 +3553,7 @@ public class AccessControl implements AccessControlInf{
 			LoginContext.resetUserAttribute(request,credential.getCheckCallBack(), userAttribute);
 //			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
 //			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
-			
+			session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3568,6 +3568,7 @@ public class AccessControl implements AccessControlInf{
 //			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
 //			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
 			
+			session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

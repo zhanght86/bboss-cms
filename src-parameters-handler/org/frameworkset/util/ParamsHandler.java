@@ -345,7 +345,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			return getAttributeBoolean(0, code);
 		}
 
-		List<Param> getParams() {
+		public List<Param> getParams() {
 			return params;
 		}
 		/**
