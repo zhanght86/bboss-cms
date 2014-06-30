@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import javax.transaction.RollbackException;
 
-
 import org.apache.log4j.Logger;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -28,7 +27,6 @@ import com.frameworkset.platform.holiday.area.bean.WorkTime;
 import com.frameworkset.platform.holiday.area.service.AreaManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
-import com.sany.application.action.AppcreateAction;
 
 public class AreaController {
 	private AreaManager areaManager;
