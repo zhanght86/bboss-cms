@@ -21,7 +21,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 
 	@Override
 	public ListInfo querySessionDataForPage(SessionCondition condition,
-			int offset, int pagesize) {
+			int offset, int pagesize) throws Exception {
 
 		ListInfo list = new ListInfo();
 		
@@ -70,6 +70,9 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 					bean.setLoseTime(gc.getTime());
 					bean.setRequesturi(info.getRequesturi());
 					bean.setLastAccessedUrl(info.getLastAccessedUrl());
+					bean.setSecure(info.isSecure());
+					bean.setHttpOnly(info.isHttpOnly());
+					bean.setLastAccessedHostIP(info.getLastAccessedHostIP());
 					beanList.add(bean);
 				}
 				list.setMore(true);
@@ -79,7 +82,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 			list.setDatas(beanList);
 			
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw e;
 		}
 		return list;
 	}
@@ -91,7 +94,7 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 	}
 
 	@Override
-	public void delSession(String appkey, String sessionids) {
+	public void delSession(String appkey, String sessionids)  throws Exception{
 		try {
 
 			String[] ids = sessionids.split(",");
@@ -105,13 +108,13 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw e;
 		}
 
 	}
 
 	@Override
-	public SessionInfoBean getSessionInfo(String appkey, String sessionid) {
+	public SessionInfoBean getSessionInfo(String appkey, String sessionid)  throws Exception{
 		try {
 
 			SessionInfo info = SessionHelper.getSessionStaticManager()
@@ -134,21 +137,23 @@ public class SessionManagerServiceImpl implements SessionManagerService {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(info.getLastAccessedTime());
 			gc.add(Calendar.MILLISECOND, (int) info.getMaxInactiveInterval());
-
+			bean.setSecure(info.isSecure());
+			bean.setHttpOnly(info.isHttpOnly());
 			bean.setLoseTime(gc.getTime());
+			bean.setLastAccessedHostIP(info.getLastAccessedHostIP());
 
 			return bean;
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw e;
 		}
 	}
 
 	@Override
-	public void delAllSessions(String appkey) {
+	public void delAllSessions(String appkey) throws Exception {
 		try {
 			SessionHelper.getSessionStaticManager().removeAllSession(appkey);
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw e;
 		}
 	}
 

@@ -24,6 +24,9 @@ public class SessionInfoBean {
 	private String host;// 服务端
 	private String requesturi;
 	private String lastAccessedUrl;
+	private boolean httpOnly;
+	private boolean secure;
+	private String lastAccessedHostIP;
 	public Date getLoseTime() {
 		return loseTime;
 	}
@@ -128,6 +131,30 @@ public class SessionInfoBean {
 
 	public void setLastAccessedUrl(String lastAccessedUrl) {
 		this.lastAccessedUrl = lastAccessedUrl;
+	}
+
+	public boolean isHttpOnly() {
+		return httpOnly;
+	}
+
+	public void setHttpOnly(boolean httpOnly) {
+		this.httpOnly = httpOnly;
+	}
+
+	public boolean isSecure() {
+		return secure;
+	}
+
+	public void setSecure(boolean secure) {
+		this.secure = secure;
+	}
+
+	public String getLastAccessedHostIP() {
+		return lastAccessedHostIP;
+	}
+
+	public void setLastAccessedHostIP(String lastAccessedHostIP) {
+		this.lastAccessedHostIP = lastAccessedHostIP;
 	}
 
 }

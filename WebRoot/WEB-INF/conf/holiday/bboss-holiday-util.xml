@@ -1,0 +1,28 @@
+<properties>
+	
+	<property name="/sysmanager/holiday/util/*.freepage" class="com.frameworkset.platform.holiday.area.util.WorkTimeUtil" singlable="true"
+	    path:index="/sysmanager/holiday/interface.jsp"
+		f:util="attr:sysmanager.holiday.util.UtilAction"
+		/>
+		
+	<property name="sysmanager.holiday.util.UtilAction" class="com.frameworkset.platform.holiday.area.util.action.UtilAction" singlable="true"
+		f:utilManager="attr:sysmanager.holiday.util.UtilManager"
+		/>
+		 
+	
+	<property name="sysmanager.holiday.util.UtilManager"
+		f:executor="attr:sysmanager.holiday.UtilManager.configsqlexecutor"
+		class="com.frameworkset.platform.holiday.area.util.service.impl.UtilManagerImpl"
+		/>
+	
+	<property name="sysmanager.holiday.UtilManager.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/holiday/area/util/service/impl/UtilManager.xml"/>
+		</construction>
+		
+	</property>
+	
+	
+		
+</properties>

@@ -69,8 +69,7 @@ public class XMLBaseTag extends CellTag
     public void setPageContext(PageContext pageContext)
     {
     	super.setPageContext(pageContext);
-    	accesscontroler = AccessControl.getInstance();
-    	accesscontroler.checkAccess(request,response,false);
+    	accesscontroler = AccessControl.getAccessControl();
     }
     
     /**

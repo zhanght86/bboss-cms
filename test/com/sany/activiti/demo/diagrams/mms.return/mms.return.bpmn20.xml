@@ -6,9 +6,7 @@
     <userTask id="usertask1" name="申请退料" activiti:candidateUsers="${usertask1_users}"></userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
     <userTask id="usertask2" name="工作中心主任审批" activiti:candidateUsers="${usertask2_users}"></userTask>
-    <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="usertask2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==true}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="usertask2"></sequenceFlow>
     <userTask id="usertask3" name="工艺工程师审批" activiti:assignee="${usertask3_user}">
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="usertask3_users" activiti:elementVariable="usertask3_user"></multiInstanceLoopCharacteristics>
     </userTask>

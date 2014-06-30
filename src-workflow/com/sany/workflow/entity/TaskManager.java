@@ -35,11 +35,11 @@ public class TaskManager {
 	private String CREATE_TIME_;// 创建时间
 
 	private String SUSPENSION_STATE_;// 是否挂起 1代表激活 2代表挂起
-	
+
 	private String ACT_ID_;// 节点定义ID
-	
+
 	private String TASK_ID_;// 任务ID
-	
+
 	private String CALL_PROC_INST_ID_;// 调用外部流程的流程实例ID
 
 	private String ACT_NAME_;// 节点定义名称
@@ -51,17 +51,47 @@ public class TaskManager {
 	private String CLAIM_TIME_;// 提醒时间
 
 	private String END_TIME_;// 结束时间
-	
+
 	private String DURATION_;// 耗时(毫秒值)
-	
-	private String DELETE_REASON_;//备注
-	
+
+	private String DELETE_REASON_;// 备注
+
 	private String state;// 签收状态 0所有任务 1 未签收 2已签收(关联其他表的业务字段)
-	
+
 	private String USER_ID_;// 处理人id (关联其他表的业务字段)
-	
+
 	private String GROUP_ID;// 处理组id
-	
+
+	private String BUSINESS_KEY_;// 业务主题
+
+	private String KEY_;// 流程key
+
+	private String BUSINESS_NAME;// 业务类型
+
+	public String getKEY_() {
+		return KEY_;
+	}
+
+	public void setKEY_(String kEY_) {
+		KEY_ = kEY_;
+	}
+
+	public String getBUSINESS_NAME() {
+		return BUSINESS_NAME;
+	}
+
+	public void setBUSINESS_NAME(String bUSINESS_NAME) {
+		BUSINESS_NAME = bUSINESS_NAME;
+	}
+
+	public String getBUSINESS_KEY_() {
+		return BUSINESS_KEY_;
+	}
+
+	public void setBUSINESS_KEY_(String bUSINESS_KEY_) {
+		BUSINESS_KEY_ = bUSINESS_KEY_;
+	}
+
 	public String getDELETE_REASON_() {
 		return DELETE_REASON_;
 	}
@@ -277,6 +307,5 @@ public class TaskManager {
 	public void setGROUP_ID(String gROUP_ID) {
 		GROUP_ID = gROUP_ID;
 	}
-
 
 }

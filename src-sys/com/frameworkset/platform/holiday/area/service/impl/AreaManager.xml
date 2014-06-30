@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+<!-- 节假日管理  start -->
+
+<!--   删除一条工作时间     -->
+<property name="deleteWorkTime">
+		<![CDATA[
+		delete from  TD_SP_HOLIDAY_WORKTIME where id =  ?
+		]]>
+	</property>
+	<!--   保存工作时间设置    -->
+ <property name="saveWorkTime">
+		<![CDATA[
+		insert into TD_SP_HOLIDAY_WORKTIME (pid,id,name,start_time,end_time) values(?,?,?,?,?)
+		]]>
+	</property>
+  <!--   更新工作时间     -->
+  <property name="updateWorkTime">
+		<![CDATA[
+		update TD_SP_HOLIDAY_WORKTIME set name = ? ,start_time = ?,end_time = ? where id = ?
+		]]>
+	</property>
+	<!--   查询工作日期安排下的所有工作时间设置     -->
+  <property name="queryWorkTimeList">
+		<![CDATA[
+select ID  id,PID pid , NAME name ,START_TIME startTime,END_TIME  endTime from TD_SP_HOLIDAY_WORKTIME where pid = ?
+		]]>
+	</property>
+
+<!--   更新工作日期安排     -->
+<property name="updateWorkDate">
+		<![CDATA[
+		update TD_SP_HOLIDAY_WORKDATE set NAME = ?, PERIOD_DESC = ?, START_DATE = ?, END_DATE =? where id =?
+
+		]]>
+	</property>
+	<!--   添加工作日期安排     -->
+<property name="addWorkDate">
+		<![CDATA[
+		insert into TD_SP_HOLIDAY_WORKDATE (ID,AREA_ID,NAME,PERIOD_DESC,START_DATE,END_DATE) values(?,?,?,?,?,?)
+
+		]]>
+	</property>
+	<!--   查询区域所有工作日期安排     -->
+<property name="queryWorkDateList">
+		<![CDATA[
+		select ID id,AREA_ID areaId,NAME name,PERIOD_DESC periodDesc,START_DATE startDate,END_DATE endDate from TD_SP_HOLIDAY_WORKDATE where AREA_ID = ?
+		]]>
+	</property> 
+	<!--   新增日期类型     -->
+<property name="insertSingleArrange">
+		<![CDATA[
+		
+	insert into TD_SP_HOLIDAY_ARRANGE (type, year,  area_id,  week,date_of_year) values(?,?,?,?,?)
+		]]>
+	</property> 
+	<!--   更新日期类型     -->
+    <property name="updateSingleArrange">
+		<![CDATA[
+		
+	update TD_SP_HOLIDAY_ARRANGE set type = ?,DATE_OF_YEAR = ?  where year = ? and area_id = ?  and week = ?
+		]]>
+	</property>        
+  <!--   查询日期类型     -->
+  <property name="getSingleArrange">
+		<![CDATA[
+		
+	select 	AREA_ID areaId , year year , week week , DATE_OF_YEAR dateOfYear , type type from TD_SP_HOLIDAY_ARRANGE where area_id = ? and year = ? and week = ?
+		]]>
+	</property>
+	<!--   查询某年日期类型     -->
+<property name="getArrangeByAreaId">
+		<![CDATA[
+		
+	select 	AREA_ID areaId , year year , week week , DATE_OF_YEAR dateOfYear , type type from TD_SP_HOLIDAY_ARRANGE where area_id = ? and year = ?
+		]]>
+	</property>
+	<!--   查询单个部门     -->
+<property name="querySingleOrg">
+		<![CDATA[
+		
+		select org_name orgName from TD_SP_HOLIDAY_ORG where area_id = ? and org_id = ?
+		
+		]]>
+	</property>
+	<!--   添加区域     -->
+<property name="addArea">
+		<![CDATA[
+		
+		insert into TD_SP_HOLIDAY_AREA (area_id,area_name,area_desc,creator,create_time)values(?,?,?,?,?)
+		
+		]]>
+	</property>
+<!--   查询单个区域信息     -->
+<property name="querySingleArea">
+		<![CDATA[
+		
+		select area_id areaId , area_name areaName , area_desc areaDesc , creator creator , create_time createTime from TD_SP_HOLIDAY_AREA where area_id = ?
+		
+		]]>
+	</property>
+	<!--   删除区域下的机构     -->
+<property name="deleteOrg">
+		<![CDATA[
+		
+		delete from  TD_SP_HOLIDAY_ORG where org_id = ? and area_id = ?
+		
+		]]>
+	</property>
+<!--   添加区域下的机构     -->
+<property name="addOrg">
+		<![CDATA[
+		
+		insert into TD_SP_HOLIDAY_ORG (org_id , org_name , area_id) values (?,?,?)
+		
+		]]>
+	</property>
+<!--   查询区域下的机构     -->
+<property name="queryOrgList">
+		<![CDATA[
+		
+		select area_id areaId , org_id orgId , org_name orgName from TD_SP_HOLIDAY_ORG where area_id = ?
+		
+		]]>
+	</property>
+	<!--   查询所有机构按树状     -->
+<property name="getAllOrgLeaf">
+		<![CDATA[
+		
+    select org_id id,parent_id pId,org_name name,org_id orgId from TD_SM_ORGANIZATION t1 start with t1.org_id = '50020020'	CONNECT BY PRIOR t1.org_id = t1.parent_id
+		
+		]]>
+	</property>
+<!--   更新区域信息     -->	
+<property name="updateArea">
+		<![CDATA[
+		update TD_SP_HOLIDAY_AREA set area_name = ? , area_desc = ? where area_id = ?
+		
+		]]>
+	</property>
+ <!--   查询所有区域     -->
+<property name="queryAreaList">
+		<![CDATA[
+  
+  select AREA_ID areaId , AREA_NAME areaName , AREA_DESC areaDesc , CREATOR creator , CREATE_TIME createTime from TD_SP_HOLIDAY_AREA
+		]]>
+	</property>
+	
+	
+	
+</properties>

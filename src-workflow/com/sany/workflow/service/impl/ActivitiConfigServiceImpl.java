@@ -1,6 +1,7 @@
 package com.sany.workflow.service.impl;
 
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -426,6 +427,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 				for(ActivitiNodeCandidate activitiNodeCandidate: activitiNodeCandidates)
 				{
 					activitiNodeCandidate.setId(java.util.UUID.randomUUID().toString());
+					if (!StringUtil.isEmpty(activitiNodeCandidate.getDuration_node())) {
+						
+						// 转毫秒值
+						double duration_node = Double.parseDouble(activitiNodeCandidate.getDuration_node());
+						activitiNodeCandidate.setDuration_node(duration_node*60*60*1000+ "");
+					}
 				}
 				executor.insertBeans("insertActivitiNodeCandidate", activitiNodeCandidates);
 			}
@@ -439,7 +446,6 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			tm.release();
 		}
 	}
-	
 	
 	/**
 	 * 查询节点参数配置列表
@@ -905,6 +911,36 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			return businessName;
 		}catch(Exception e){
 			throw new ActivitiConfigException(e);
+		}
+	}
+
+	@Override
+	public List<Nodevariable> queryNodeVariable(String business_type,
+			String business_id, String processKey) {
+		
+		try{
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("process_key", processKey);
+			params.put("business_type", business_type);
+			params.put("bussinessid", business_id);
+			
+			List<Nodevariable> list = executor.queryListBean(Nodevariable.class, "queryNodeVariable_wf", params);
+			
+			return list;
+		}catch(Exception e){
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public Map queryMessageTempleById(String processKey) {
+
+		try {
+			return (HashMap)executor.queryObject(HashMap.class,
+					"getMessTamplateById_wf", processKey);
+
+		} catch (SQLException e) {
+			throw new ProcessException(e);
 		}
 	}
 }

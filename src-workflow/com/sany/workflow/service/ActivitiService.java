@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -45,11 +47,27 @@ public interface ActivitiService {
 	   */
 	  void rejecttoPreTask(String taskId, Map<String, Object> variables);
 	  
+	/**将当前任务驳回到上一个任务处理人处，并更新流程变量参数 gw_tanx
+	 * @param taskId
+	 * @param variables
+	 * @param rejectReason
+	 * 2014年6月27日
+	 */
+	public void rejecttoPreTaskWithReson(String taskId,
+			Map<String, Object> variables, String rejectReason);
+	  
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处
 	   * @param taskId
 	   */
 	  void rejecttoPreTask(String taskId);
+	  
+	  /** 将当前任务驳回到上一个任务处理人处 gw_tanx
+	 * @param taskId
+	 * @param rejectReason
+	 * 2014年6月27日
+	 */
+	public void rejecttoPreTaskWithReson(String taskId,String rejectReason);
 	  
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
@@ -57,12 +75,30 @@ public interface ActivitiService {
 	   * @param variables
 	   */
 	void rejecttoPreTask(String taskId, String username,Map<String, Object> variables);
+	
+	/** 将当前任务驳回到上一个任务处理人处，并更新流程变量参数 gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param variables
+	 * @param rejectReason
+	 * 2014年6月27日
+	 */
+	public void rejecttoPreTask(String taskId, String username,
+			Map<String, Object> variables, String rejectReason);
 		  
 		  /**
 		   * 将当前任务驳回到上一个任务处理人处
 		   * @param taskId
 		   */
 	void rejecttoPreTask(String taskId,String username);
+	
+	/** 将当前任务驳回到上一个任务处理人处 gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param rejectReason
+	 * 2014年6月27日
+	 */
+	public void rejecttoPreTask(String taskId, String username,String rejectReason);
 	/**
 	 * 获得activiti服务
 	 * 
@@ -160,6 +196,13 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public List<ProcessDefinition> activitiListByprocesskey(String process_key);
+	
+	/**获取流程版本号集合
+	 * @param process_key
+	 * @return
+	 * 2014年6月18日
+	 */
+	public List getProcessVersionList(String processKey);
 
 	/**
 	 * 流程实例列表
@@ -423,6 +466,14 @@ public interface ActivitiService {
 	 */
 	public void completeTask(String taskId, Map<String, Object> map);
 	
+	/**完成任务 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithReason(String taskId, Map<String, Object> map,String completeReason);
+	
 	/**
 	 * 完成任务(普通)
 	 * 
@@ -431,6 +482,13 @@ public interface ActivitiService {
 	 */
 	public void completeTask(String taskId);
 	
+	/** 完成任务 gw_tanx
+	 * @param taskId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithReason(String taskId,String completeReason);
+	
 	/**
 	 * 完成任务(普通)，并驳回到指定节点
 	 * 
@@ -438,6 +496,16 @@ public interface ActivitiService {
 	 * @param map
 	 */
 	public void completeTaskWithDest(String taskId, Map<String, Object> map,String destinationTaskKey);
+	
+	/** 完成任务(普通)，并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithDest(String taskId, Map<String, Object> map,
+			String destinationTaskKey, String completeReason);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -449,6 +517,14 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadOrgParams(String taskId, String orgId);
 	
+	/**完成任务(加载组织机构节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param orgId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadOrgParamsReason(String taskId, String orgId,String completeReason);
+	
 	/**
 	 * 完成任务(加载组织机构节点参数配置),并驳回到指定节点
 	 * 
@@ -458,6 +534,16 @@ public interface ActivitiService {
 	 *            组织机构ID
 	 */
 	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,String destinationTaskKey);
+	
+	/** 完成任务(加载组织机构节点参数配置),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param orgId
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,
+			String destinationTaskKey,String completeReason);
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -472,6 +558,16 @@ public interface ActivitiService {
 	public void completeTaskLoadOrgParams(String taskId,
 			Map<String, Object> map, String orgId);
 	
+	/**完成任务(加载组织机构节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param orgId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadOrgParamsReason(String taskId,
+			Map<String, Object> map, String orgId, String completeReason);
+	
 	/**
 	 * 完成任务(加载组织机构节点参数配置)，并驳回到指定节点
 	 * 
@@ -484,6 +580,18 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadOrgParams(String taskId,
 			Map<String, Object> map, String orgId,String destinationTaskKey);
+	
+	/**完成任务(加载组织机构节点参数配置)，并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param orgId
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadOrgParamsReason(String taskId,
+			Map<String, Object> map, String orgId, String destinationTaskKey,
+			String completeReason);
 
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
@@ -496,6 +604,15 @@ public interface ActivitiService {
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			String bussinesstypeId);
 	
+	/** 完成任务(加载业务类型节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param bussinesstypeId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			String bussinesstypeId,String completeReason);
+	
 	/**
 	 * 完成任务(加载业务类型节点参数配置),并驳回到指定节点
 	 * 
@@ -506,6 +623,17 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
 			String bussinesstypeId,String destinationTaskKey);
+	
+	/** 完成任务(加载业务类型节点参数配置),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param bussinesstypeId
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
+			String bussinesstypeId, String destinationTaskKey,
+			String completeReason);
 
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
@@ -520,6 +648,16 @@ public interface ActivitiService {
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			Map<String, Object> map, String bussinesstypeId);
 	
+	/**完成任务(加载业务类型节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param bussinesstypeId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			Map<String, Object> map, String bussinesstypeId,String completeReason);
+	
 	/**
 	 * 完成任务(加载业务类型节点参数配置)，并驳回到指定节点
 	 * 
@@ -532,6 +670,18 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadBussinesstypeParams(String taskId,
 			Map<String, Object> map, String bussinesstypeId,String destinationTaskKey);
+	
+	/** 完成任务(加载业务类型节点参数配置)，并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param bussinesstypeId
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			Map<String, Object> map, String bussinesstypeId,
+			String destinationTaskKey, String completeReason);
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
@@ -543,6 +693,14 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadCommonParams(String taskId);
 	
+	/**完成任务(加载通用节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			String completeReason);
+	
 	/**
 	 * 完成任务(加载通用节点参数配置),并驳回到指定节点
 	 * 
@@ -552,6 +710,15 @@ public interface ActivitiService {
 	 *            自定义参数MAP
 	 */
 	public void completeTaskLoadCommonParamsWithDest(String taskId,String destinationTaskKey);
+	
+	/** 完成任务(加载通用节点参数配置),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadCommonParamsWithDest(String taskId,
+			String destinationTaskKey, String completeReason);
 
 
 	/**
@@ -565,6 +732,15 @@ public interface ActivitiService {
 	public void completeTaskLoadCommonParams(String taskId,
 			Map<String, Object> map);
 	
+	/**完成任务(加载通用节点参数配置) gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			Map<String, Object> map, String completeReason);
+	
 	/**
 	 * 完成任务(加载通用节点参数配置),并驳回到指定节点
 	 * 
@@ -575,6 +751,17 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadCommonParams(String taskId,
 			Map<String, Object> map,String destinationTaskKey);
+	
+	/** 完成任务(加载通用节点参数配置),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			Map<String, Object> map, String destinationTaskKey,
+			String completeReason);
 
 
 	/**
@@ -590,6 +777,16 @@ public interface ActivitiService {
 	public void completeTaskLoadParams(String taskId, String business_id,
 			String business_type);
 	
+	/**处理任务(加载配置好的参数) gw_tanx
+	 * @param taskId
+	 * @param business_id
+	 * @param business_type
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadParamsReason(String taskId, String business_id,
+			String business_type, String completeReason);
+	
 	/**
 	 * 处理任务(加载配置好的参数)，并驳回到指定节点
 	 * 
@@ -602,6 +799,18 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadParamsWithDest(String taskId, String business_id,
 			String business_type,String destinationTaskKey);
+	
+	/**处理任务(加载配置好的参数)，并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param business_id
+	 * @param business_type
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadParamsWithDest(String taskId,
+			String business_id, String business_type,
+			String destinationTaskKey, String completeReason);
 
 	/**
 	 * 处理任务(加载配置好的参数)
@@ -618,6 +827,18 @@ public interface ActivitiService {
 	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
 			String business_id, String business_type);
 	
+	/**处理任务(加载配置好的参数) gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param business_id
+	 * @param business_type
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadParamsReason(String taskId,
+			Map<String, Object> map, String business_id, String business_type,
+			String completeReason);
+	
 	/**
 	 * 处理任务(加载配置好的参数),并驳回到指定节点
 	 * 
@@ -632,6 +853,19 @@ public interface ActivitiService {
 	 */
 	public void completeTaskLoadParams(String taskId, Map<String, Object> map,
 			String business_id, String business_type,String destinationTaskKey);
+	
+	/**处理任务(加载配置好的参数),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param map
+	 * @param business_id
+	 * @param business_type
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskLoadParamsReason(String taskId,
+			Map<String, Object> map, String business_id, String business_type,
+			String destinationTaskKey, String completeReason);
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -642,6 +876,15 @@ public interface ActivitiService {
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map);
 	
+	/**完成任务(先领用再完成) gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param map
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithReason(String taskId, String username,
+			Map<String, Object> map,String completeReason);
+	
 	/**
 	 * 完成任务(先领用再完成),并驳回到指定节点
 	 * 
@@ -650,6 +893,17 @@ public interface ActivitiService {
 	 */
 	public void completeTask(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey);
+	
+	/** 完成任务(先领用再完成),并驳回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param map
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithReason(String taskId, String username,
+			Map<String, Object> map,String destinationTaskKey,String completeReason);
 	
 	/**
 	 * 完成任务(先领用再完成)
@@ -660,6 +914,14 @@ public interface ActivitiService {
 	public void completeTaskByUser(String taskId, String username);
 	
 	/**
+	 * 完成任务(先领用再完成) gw_tanx
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUser(String taskId, String username,String completeReason);
+	
+	/**
 	 * 完成任务(先领用再完成),并驳回到指定节点
 	 * 
 	 * @param taskId
@@ -667,8 +929,27 @@ public interface ActivitiService {
 	 */
 	public void completeTaskByUserWithDest(String taskId, String username,String destinationTaskKey);
 	
+	/**
+	 * 完成任务(先领用再完成),并驳回到指定节点 gw_tanx
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskByUserWithDest(String taskId, String username,
+			String destinationTaskKey, String completeReason);
+	
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map);
+	
+	/** gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param map
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithLocalVariablesReason(String taskId,
+			String username, Map<String, Object> map, String completeReason);
 	
 	/**
 	 * 查询指定任务节点的最新记录
@@ -690,6 +971,18 @@ public interface ActivitiService {
 	 */
 	public void completeTaskWithLocalVariables(String taskId, String username,
 			Map<String, Object> map,String destinationTaskKey);
+	
+	/**完成任务并拨回到指定节点 gw_tanx
+	 * @param taskId
+	 * @param username
+	 * @param map
+	 * @param destinationTaskKey
+	 * @param completeReason
+	 * 2014年6月26日
+	 */
+	public void completeTaskWithLocalVariablesReason(String taskId, String username,
+			Map<String, Object> map, String destinationTaskKey,
+			String completeReason);
 
 	/**
 	 * 获得历史任务实例by流程实例ID
@@ -1111,5 +1404,42 @@ public interface ActivitiService {
 	 * 2014年5月28日
 	 */
 	public Object[] getCurTaskVariableInfoById(String processInstId);
+	
+	/**消息模板保存 gw_tanx
+	 * @param processKey
+	 * @param messagetempleid
+	 * @param emailtempleid
+	 * 2014年6月23日
+	 */
+	public void saveMessageType(String processKey, String messagetempleid,
+			String emailtempleid, String noticeId);
+	
+	/** 设置流程定义是否包含节假日 gw_tanx
+	 * @param processKey
+	 * @param IsContainHoliday
+	 * 2014年6月27日
+	 */
+	public void addIsContainHoliday(String processKey, String IsContainHoliday)
+			throws Exception;
+	
+	/** 打包下载流程定义xml和图片 gw_tanx
+	 * @param processKey
+	 * @param version
+	 * @param response
+	 * @throws Exception
+	 * 2014年6月24日
+	 */
+	public void downProcessXMLandPicZip(String processKey, String version,
+			HttpServletResponse response) throws Exception;
+	
+	/** 增加节点的处理工时和提醒次数 gw_tanx
+	 * @param processKey
+	 * @param processIntsId
+	 * @param nodeWorktimeList
+	 * @throws Exception
+	 * 2014年6月27日
+	 */
+	public void addNodeWorktime(String processKey, String processIntsId,
+			List<Map<String, String>> nodeWorktimeList) throws Exception;
 	
 }

@@ -4,14 +4,25 @@
 
 	<property name="queryProdef">
 		<![CDATA[
-			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_,
+			select p.ID_,p.name_,p.key_,p.version_ ,p.resource_name_,p.dgrm_resource_name_,p.category_, P.SUSPENSION_STATE_,
 			d.name_ as DEPLOYMENT_NAME_,d.deploy_time_ as DEPLOYMENT_TIME_,d.id_ as DEPLOYMENT_ID_,b.business_name,b.business_id,
-			app.system_name as wf_app_name
+			app.system_name as wf_app_name, E.MESSAGETEMPLEID,E.MESSAGETEMPLETITLE,E.EMAILTEMPLEID, E.EMAILTEMPLETITLE, E.NOTICEID, E.IS_CONTAIN_HOLIDAY
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
 			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
 			left join td_wf_app_proc_relation pr on pr.procdef_id = p.ID_
 			left join td_wf_app app on app.id = pr.wf_app_id
+			LEFT JOIN (SELECT A.PROCESS_KEY,
+			 		A.IS_CONTAIN_HOLIDAY,
+					A.NOTICEID,
+                    A.MESSAGETEMPLEID,
+                    B.TEMPLETITLE AS MESSAGETEMPLETITLE,
+                    A.EMAILTEMPLEID,
+                    C.TEMPLETITLE AS EMAILTEMPLETITLE
+               FROM TD_WF_PROC_MESSTEMPLATE A
+               LEFT JOIN TD_WF_MESSTEMPLATE B ON A.MESSAGETEMPLEID = B.TEMPLEID
+               LEFT JOIN TD_WF_MESSTEMPLATE C ON A.EMAILTEMPLEID = C.TEMPLEID) E ON E.PROCESS_KEY = P.KEY_
+			 
 			where p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
 			#if($processKey && !$processKey.equals(""))
 				and p.key_ like #[processKey]
@@ -73,15 +84,20 @@
 		       B.NAME_,
        		   B.KEY_,
 		       B.VERSION_,
+		       C.BUSINESS_NAME,
 		       D.SUSPENSION_STATE_
 		  FROM ACT_HI_PROCINST A
 		  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
 		  LEFT JOIN ACT_RU_EXECUTION D ON A.PROC_INST_ID_ = D.ID_
 		  
+		  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
+	          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
+	         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) C ON B.KEY_ = C.PROCESS_KEY
+		  
 			WHERE 1=1
 			
 			#if($wf_key && !$wf_key.equals(""))
-				AND B.KEY_ = #[wf_key]
+				AND B.KEY_ like #[wf_key]
 			#end
 			
 			#if($wf_Inst_Id && !$wf_Inst_Id.equals(""))
@@ -127,6 +143,10 @@
 			
 			#if($wf_business_key && !$wf_business_key.equals(""))
 				AND A.BUSINESS_KEY_ like #[wf_business_key]
+			#end
+			
+			#if($businessTypeId && !$businessTypeId.equals(""))
+				and C.business_id = #[businessTypeId]
 			#end
 			
 			ORDER BY A.START_TIME_ DESC
@@ -287,32 +307,48 @@
 		<![CDATA[
 		--taskState签收状态字段 0 所有 1 未签收 2 签收
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
-				select distinct 1 as state,RES.*
+				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME,RES.*
 				  from ACT_RU_TASK RES
+				  
 				 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
+				 LEFT JOIN ACT_RU_EXECUTION A ON RES.EXECUTION_ID_ = A.ID_
+				 LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
+				 
+				 #if($processKey && !$processKey.equals(""))
+				 	AND B.KEY_ like #[processKey]
+				 #end
+				  	
+				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
+				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
+				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON B.KEY_ = D.PROCESS_KEY
+				                                                          
 				 WHERE RES.ASSIGNEE_ is null
-				   and I.TYPE_ = 'candidate'
+				   		and I.TYPE_ = 'candidate'
 				   
 				   #if($isAdmin == false)
-				   	and (I.USER_ID_ = #[assignee])
+				   		and (I.USER_ID_ = #[assignee])
 				   #end
 				   
 				   #if($processIntsId && !$processIntsId.equals(""))
-				 	AND RES.PROC_INST_ID_ like #[processIntsId]
+				 		AND RES.PROC_INST_ID_ like #[processIntsId]
 			 	   #end
 			 	   
 			 	   #if($taskName && !$taskName.equals(""))
-				 	AND RES.NAME_ like #[taskName]
+				 		AND RES.NAME_ like #[taskName]
 			 	   #end
 				   
-				   #if($processKey && !$processKey.equals(""))
-					   AND EXISTS (SELECT 1 FROM ACT_RE_PROCDEF A
-       				   WHERE A.KEY_ = #[processKey] AND RES.PROC_DEF_ID_ = A.ID_)
+				   #if($taskId && !$taskId.equals(""))
+					   	AND RES.ID_ like #[taskId]
 				   #end
 				   
-				   #if($taskId && !$taskId.equals(""))
-					   AND RES.ID_ like #[taskId]
+				   #if($businessTypeId && !$businessTypeId.equals(""))
+					   	and D.business_id = #[businessTypeId]
 				   #end
+				   
+				   #if($businessKey && !$businessKey.equals(""))
+					   	and A.BUSINESS_KEY_ like #[businessKey]
+				   #end
+				   
 			#end
 			
 			#if($taskState && $taskState.equals("0"))
@@ -320,8 +356,20 @@
 			#end
 			
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
-				select distinct 2 as state,a.*
+				select distinct 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,a.*
 				  from ACT_RU_TASK a
+				  
+				  LEFT JOIN ACT_RU_EXECUTION B ON A.EXECUTION_ID_ = B.ID_
+				  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
+				  
+				  #if($processKey && !$processKey.equals(""))
+				 	AND C.KEY_ like #[processKey]
+				  #end
+				 
+				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
+				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
+				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
+				         
 				  WHERE 1=1
 				  
 				  #if($isAdmin == false)
@@ -332,24 +380,72 @@
 				  
 				  #if($processIntsId && !$processIntsId.equals(""))
 				 	AND a.PROC_INST_ID_ like #[processIntsId]
-			 	   #end
+			 	  #end
 			 	   
-			 	   #if($taskName && !$taskName.equals(""))
+			 	  #if($taskName && !$taskName.equals(""))
 				 	AND a.NAME_ like #[taskName]
-			 	   #end
-				  
-				  #if($processKey && !$processKey.equals(""))
-					  AND EXISTS (SELECT 1 FROM ACT_RE_PROCDEF b
-       				  WHERE b.KEY_ = #[processKey] AND a.PROC_DEF_ID_ = b.ID_)
-				  #end
+			 	  #end
 				  
 				  #if($taskId && !$taskId.equals(""))
 					  AND A.ID_ like #[taskId]
 				  #end
+				  
+				  #if($businessTypeId && !$businessTypeId.equals(""))
+					  and D.business_id = #[businessTypeId]
+				  #end
+				  
+				  #if($businessKey && !$businessKey.equals(""))
+					  and B.BUSINESS_KEY_ like #[businessKey]
+				  #end
 			#end
 			
 			--以CREATE_TIME_字段排序，不能直接写字段名， 字段列序号
-			ORDER BY 15 DESC  
+			ORDER BY 18 DESC  
+		]]>
+	</property>
+	
+	<!-- 工作流管理中查看任务列表  gw_tanx-->
+	<property name="selectHistoryTask_wf">
+		<![CDATA[
+			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, A.*
+			
+			  FROM ACT_HI_TASKINST A
+			  LEFT JOIN ACT_HI_PROCINST B ON A.EXECUTION_ID_ = B.ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
+			  
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
+			                          
+			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
+			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
+			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
+			         
+			 WHERE A.END_TIME_ IS NOT NULL
+			 
+			  #if($isAdmin == false)
+				AND A.ASSIGNEE_ = #[assignee]
+			  #end
+			 
+			  #if($processIntsId && !$processIntsId.equals(""))
+			 	AND A.PROC_INST_ID_ like #[processIntsId]
+		 	  #end
+		 	   
+		 	  #if($taskName && !$taskName.equals(""))
+			 	AND A.NAME_ like #[taskName]
+		 	  #end
+			  
+			  #if($taskId && !$taskId.equals(""))
+				  AND A.ID_ like #[taskId]
+			  #end
+			  
+			  #if($businessTypeId && !$businessTypeId.equals(""))
+				  and D.business_id = #[businessTypeId]
+			  #end
+			  
+			  #if($businessKey && !$businessKey.equals(""))
+				  and B.BUSINESS_KEY_ like #[businessKey]
+			  #end
 		]]>
 	</property>
 	
@@ -769,11 +865,13 @@
   			(id, node_id, candidate_groups_id, candidate_groups_name, candidate_users_id, 
   			 candidate_users_name, business_id, business_type, create_date, create_person_id,
    			create_person_name, is_valid, is_edit_candidate, candidate_orgs_id, candidate_orgs_name, 
-  			 candidate_jobs_id, candidate_jobs_name, candidate_roles_id, candidate_roles_name)
+  			 candidate_jobs_id, candidate_jobs_name, candidate_roles_id, candidate_roles_name,
+  			 MESSAGETEMPLEID,EMAILTEMPLEID,DURATION_NODE,NOTICENUM)
    			values(#[id],#[node_id],#[candidate_groups_id],#[candidate_groups_name],
 			#[candidate_users_id],#[candidate_users_name],#[business_id],#[business_type],#[create_date],
 			#[create_person_id],#[create_person_name],#[is_valid],#[is_edit_candidate],#[candidate_orgs_id],
-			#[candidate_orgs_name],#[candidate_jobs_id],#[candidate_jobs_name],#[candidate_roles_id],#[candidate_roles_name])
+			#[candidate_orgs_name],#[candidate_jobs_id],#[candidate_jobs_name],#[candidate_roles_id],
+			#[candidate_roles_name],#[messagetempleid],#[emailtempleid],#[duration_node],#[noticenum])
 		]]>
 	</property>
 	
@@ -803,14 +901,22 @@
 	
 	<property name="queryProcessNodesCandidates">
 		<![CDATA[
-			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,
+			t.candidate_users_name,t.is_valid,t.is_edit_candidate,  t.messagetempleid,a.templetitle messagetempletitle,
+       		t.emailtempleid,b.templetitle emailtempletitle,T.DURATION_NODE/1000/60/60 as DURATION_NODE,T.NOTICENUM
+       		
 			from td_wf_activiti_node_info n 
 			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
+			
+			and t.business_type = #[business_type]
+			
 			#if($bussinessid && !$bussinessid.equals(""))
 				and t.business_id = #[bussinessid]
 			#end
-				
-				and t.business_type = #[business_type]
+			
+			left join TD_WF_MESSTEMPLATE a on a.templeid = t.messagetempleid
+  			left join TD_WF_MESSTEMPLATE b on b.templeid = t.emailtempleid
+			
 			 where n.process_key = #[process_key] and n.node_type = 'userTask'
 			order by n.order_num
 		]]>
@@ -1178,6 +1284,106 @@
 			 WHERE T.execution_id_ =  ?
 			 and t.name_= ?
 			 ORDER BY T.NAME_
+		]]>
+	</property>
+	
+	<!-- 获取流程版本集合 gw_tanx -->
+	<property name="getProcessVersionList_wf">
+		<![CDATA[
+			  SELECT DISTINCT T.VERSION_ FROM ACT_RE_PROCDEF T 
+				WHERE 1=1
+				#if($processKey && !$processKey.equals(""))
+					AND T.KEY_= #[processKey]
+				#end 
+				ORDER BY T.VERSION_
+		]]>
+	</property>
+	
+	<!-- 获取节点参数信息 gw_tanx -->
+	<property name="queryNodeVariable_wf">
+		<![CDATA[
+			  SELECT T.BUSINESS_ID,
+				       T.PARAM_NAME,
+				       T.PARAM_DES,
+				       T.PARAM_VALUE,
+				       T.PARAM_TYPE,
+				       T.IS_EDIT_PARAM,
+				       T.NODE_ID,
+				       N.*
+				  FROM TD_WF_ACTIVITI_NODE_INFO N
+			  
+				 RIGHT JOIN TD_WF_NODEVARIABLE T ON T.NODE_ID = N.ID
+				       AND T.BUSINESS_TYPE = #[business_type]
+				                                
+				 WHERE N.PROCESS_KEY = #[process_key]
+				 
+					#if($bussinessid && !$bussinessid.equals(""))
+						and t.business_id = #[bussinessid]
+					#end
+			
+				 ORDER BY N.ORDER_NUM
+		]]>
+	</property>
+	
+	<!-- 添加流程消息提示方式记录  gw_tanx -->
+	<property name="insertProTemplate_wf">
+		<![CDATA[
+			insert into TD_WF_PROC_MESSTEMPLATE (NOTICEID,PROCESS_KEY,MESSAGETEMPLEID,EMAILTEMPLEID) values(?,?,?,?)
+		]]>
+	</property>
+	
+	<!-- 添加流程定义计算工时是否包含节假日  gw_tanx -->
+	<property name="insertProIsContainHoliday_wf">
+		<![CDATA[
+			insert into TD_WF_PROC_MESSTEMPLATE (NOTICEID,PROCESS_KEY,IS_CONTAIN_HOLIDAY) values(?,?,?)
+		]]>
+	</property>
+	
+	<!-- 修改流程定义计算工时是否包含节假日  gw_tanx -->
+	<property name="updateProIsContainHoliday_wf">
+		<![CDATA[
+			update TD_WF_PROC_MESSTEMPLATE set IS_CONTAIN_HOLIDAY = ? where NOTICEID = ?
+		]]>
+	</property>
+	
+	<!-- 修改流程消息提示方式记录  gw_tanx -->
+	<property name="updateProTemplate_wf">
+		<![CDATA[
+			update TD_WF_PROC_MESSTEMPLATE set MESSAGETEMPLEID = ?,EMAILTEMPLEID= ? where NOTICEID = ?
+		]]>
+	</property>
+	
+	<!-- 修改流程消息提示方式记录  gw_tanx -->
+	<property name="queryNoticeIdByProKey">
+		<![CDATA[
+			select NOTICEID from TD_WF_PROC_MESSTEMPLATE where process_key=?
+		]]>
+	</property>
+	
+	<!-- 修改流程消息提示方式记录  gw_tanx -->
+	<property name="getMessTamplateById_wf">
+		<![CDATA[
+			SELECT A.PROCESS_KEY,
+			       A.NOTICEID,
+			       A.MESSAGETEMPLEID,
+			       B.TEMPLETITLE AS MESSAGETEMPLETITLE,
+			       A.EMAILTEMPLEID,
+			       C.TEMPLETITLE AS EMAILTEMPLETITLE
+			  FROM TD_WF_PROC_MESSTEMPLATE A
+			  LEFT JOIN TD_WF_MESSTEMPLATE B ON A.MESSAGETEMPLEID = B.TEMPLEID
+			  LEFT JOIN TD_WF_MESSTEMPLATE C ON A.EMAILTEMPLEID = C.TEMPLEID
+			  where 1=1
+			  and PROCESS_KEY=?
+		]]>
+	</property>
+	
+	<!-- 添加节点处理工时与提醒次数  gw_tanx -->
+	<property name="insertNodeWorktime_wf">
+		<![CDATA[
+			INSERT INTO TD_WF_NODE_WORKTIME
+			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE, NOTICENUM)
+			VALUES
+			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE],#[NOTICENUM])
 		]]>
 	</property>
 	

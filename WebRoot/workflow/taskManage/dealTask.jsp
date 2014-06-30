@@ -26,7 +26,7 @@
 			<pg:beaninfo requestKey="task">
 				<table border="0" cellpadding="0" cellspacing="0" class="table4" >
 					<tr>
-						<th width="60"><strong>业务主键:</strong></th>
+						<th width="60"><strong>业务主题:</strong></th>
 						<td width="100">流程测试</td>
 						<th width="60"><strong>任务名称:</strong></th>
 						<td width="150"><pg:cell colName="name" /></td>
@@ -42,18 +42,6 @@
 						<td width="150"><pg:cell colName="assignee" /></td>
 						<th width="60"><strong>到达时间:</strong></th>
 						<td width="300"><pg:cell colName="createTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
-						<th width="100">
-							<input type="checkbox" id="nodeto" onclick='javascript:checkNode();' /><strong>节点流向:</strong>
-						</th>
-						<td width="300">
-							<select id="taskKey" name="taskKey" class="select1" style="display:none;width: 125px;">
-								<option value="" selected></option>
-								<pg:list autosort="false" requestKey="nextNodeList">
-									<option value="<pg:cell colName="node_key"/>" >
-									<pg:cell colName="node_name"/></option>
-								</pg:list>
-							</select>
-						</td>
 					</tr>
 				</table>
 			</pg:beaninfo>
@@ -71,7 +59,7 @@
 					</pg:header>
 						
 					<pg:list autosort="false" requestKey="nodeList">
-						<pg:equal colName="node_type" value="userTask">
+					<pg:in colName="node_type" scope="userTask">
 						<tr>
 							<input type="hidden" id="<pg:cell colName='node_key'/>" 
 								name="node_key" value="<pg:cell colName='node_key'></pg:cell>" />
@@ -91,13 +79,7 @@
 								<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
 							</td>
 						</tr>
-						</pg:equal>
-						<pg:notequal colName="node_type" value="userTask">
-						<tr style="display:none;">
-							<td><pg:cell colName="node_key"></pg:cell></td>
-							<td><pg:cell colName="node_name"></pg:cell></td>
-						</tr>
-						</pg:notequal>
+					</pg:in>
 					</pg:list>
 				</table>
 			
@@ -105,7 +87,7 @@
 		</fieldset>
 		
 		<fieldset >
-			<legend><strong>节点参数配置</strong></legend>
+			<legend><strong>参数配置</strong></legend>
 			<div class="rightbtn">
 					<a href="javascript:addTr()" class="bt_small" id="addButton"><span>新增</span></a>
 			</div>
@@ -113,23 +95,27 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"
 					class="stable" id="tb1">
 					<pg:header>
-						<th>所属节点</th>
+						<%-- <th>所属节点</th>--%>
 						<th>参数名称</th>
 						<th>参数值</th>
+						<%-- 
 						<th>参数描述</th>
 						<th>是否可修改</th>
+						--%>
 						<th>操作</th>
 					</pg:header>
 					
 					<pg:list autosort="false" requestKey="nodevariableList">
-						<input type="hidden" name="node_param_id" value="<pg:cell colName='param_name'/>" />
+						<input type="hidden" name="param_name" value="<pg:cell colName='param_name'/>" />
 						
 						<tr>
-							<td><pg:cell colName="node_name"></pg:cell></td>
+						 
+						<%--<td><pg:cell colName="node_name"></pg:cell></td>--%>
 							<td><pg:cell colName="param_name"></pg:cell></td>
+							
 							<td><input type="text" class="input1 w20"
-								value="<pg:cell colName='param_value'/>" name="node_param_value"/></td>
-							<td><input type="text" class="input1 w200"
+								value="<pg:cell colName='param_value'/>" name="param_value"/></td>
+						<%--<td><input type="text" class="input1 w200"
 								value="<pg:cell colName='param_des'/>" name="param_des"/></td>
 							<td><select name="is_edit_param">
 									<pg:equal colName="is_edit_param" value="0">
@@ -141,6 +127,7 @@
 										<option value="1" selected>否</option>
 									</pg:equal>
 							</select></td>
+							--%>
 							<td><a href="javascript:void(0);" class="bt"><span>删除</span></a>
 							</td>
 						</tr>
@@ -149,10 +136,35 @@
 			</div>
 		</fieldset>
 		
+		<fieldset >
+			<legend></legend>
+			<div>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb4" >
+					<tr>
+						<th><strong>处理意见</strong></th>
+						<td>
+							<textarea rows="10" cols="50" id="completeReason" name="completeReason"  
+							class="w120" style="width: 280px;font-size: 12px;height:50px;" maxlength="200"></textarea>
+						</td>
+						<th><strong>节点流向:</strong></th>
+						<td>
+							<select id="taskKey" name="taskKey" class="select1" style="width: 125px;">
+								<option value="" selected>默认节点</option>
+								<pg:list autosort="false" requestKey="nextNodeList">
+									<option value="<pg:cell colName="node_key"/>" >
+									<pg:cell colName="node_name"/></option>
+								</pg:list>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</fieldset>
+		
 		<div class="btnarea">
 			<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
 			<a href="javascript:void(0)" class="bt_2" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
-			<a href="javascript:void(0)" class="bt_2" id="addButton" onclick="exeTask()"><span>处理</span></a> 
+			<a href="javascript:void(0)" class="bt_2" id="addButton" onclick="exeTask()"><span>处理</span></a>
 		</div>
 		
 	</form>
@@ -184,8 +196,8 @@ function openChooseGroups(node_key){
 //执行处理
 function exeTask(){
 	
-	var taskId = $("#taskId").val();
-	var taskState = $("#taskState").val();
+	//var taskId = $("#taskId").val();
+	//var taskState = $("#taskState").val();
 	
 	$.ajax({
  	 	type: "POST",
@@ -200,7 +212,7 @@ function exeTask(){
 			if (data != 'success') {
 				alert("处理任务出错:"+data);
 			}else {
-				W.queryList();
+				W.modifyQueryData();
 				api.close();	
 			}
 		}
@@ -210,7 +222,7 @@ function exeTask(){
 //驳回任务
 function rejectToPreTask(){
 	
-	var taskId = $("#taskId").val();
+	//var taskId = $("#taskId").val();
 	
 	$.ajax({
  	 	type: "POST",
@@ -225,13 +237,14 @@ function rejectToPreTask(){
 			if (data != 'success') {
 				alert("驳回任务出错:"+data);
 			}else {
-				W.queryList();
+				W.modifyQueryData();
 				api.close();	
 			}
 		}	
 	 });
 }
 
+<%-- 
 function checkNode(){
 	if ($("#nodeto").attr("checked") == "checked") {
 		$("#taskKey").show();
@@ -240,8 +253,10 @@ function checkNode(){
 		$("#taskKey").hide();
 	}
 }
+--%>
 
 function addTr(){
+	<%--
 	var trHtml = "<tr><td><select name='node_id' id='node_id'>";
 	<pg:list requestKey="nodeList">
 		<pg:notin colName="node_type" scope="startEvent,endEvent">
@@ -249,10 +264,14 @@ function addTr(){
 		</pg:notin>
 	</pg:list>
 	trHtml+="</select></td>";
-	trHtml+="<td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
+	--%>
+	var trHtml="";
+	trHtml+="<tr><td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
 	trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
+	<%--
 	trHtml+="<td><input type='text' class='input1 w200' name='param_des'/></td>";
 	trHtml+="<td><select name='is_edit_param'><option value='0' selected>是</option><option value='1'>否</option></select></td>";
+	--%>
 	trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
 	$("#tb1").append(trHtml);
 	$(".bt").click(function(){

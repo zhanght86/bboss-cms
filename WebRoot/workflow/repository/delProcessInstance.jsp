@@ -98,7 +98,7 @@ function dosubmit(){
 			success : function(data){
 				if(data=="success"){
 					api.close();
-		 			W.queryList();
+		 			W.modifyQueryData();
 				}else{
 					$.dialog.alert("流程实例删除出错"+data,function(){},api);
 				}

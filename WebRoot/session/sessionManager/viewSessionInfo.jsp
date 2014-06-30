@@ -49,18 +49,48 @@
 					       		</td>
 							</tr>
 							<tr>
+								<th width="60"><strong>Cookie HttpOnly:</strong></th>
+								<td width="300" ><pg:true colName="httpOnly">启用</pg:true>
+	       		<pg:false colName="httpOnly"><span style=" color: red;">关闭</span></pg:false></td>	
+								<th width="60"><strong>Cookie Secure:</strong></th>
+								<td width="300" colspan="10"><pg:true colName="secure">启用</pg:true>
+	       		<pg:false colName="secure"><span style=" color: red;">关闭</span></pg:false></td>									
+							</tr>
+							<tr>
 								<th width="60"><strong>请求地址:</strong></th>
 								<td width="300" ><pg:cell colName="requesturi" /></td>	
 								<th width="60"><strong>上次访问地址:</strong></th>
 								<td width="300" colspan="10"><pg:cell colName="lastAccessedUrl" /></td>									
 							</tr>
+							<tr>
+							
+								<th width="60"><strong>上次访问主机IP:</strong></th>
+								<td width="300" colspan="10"><pg:cell colName="lastAccessedHostIP"/></td>									
+							</tr>
+							
 						</table>
 					</fieldset>
 				
 					<fieldset >
 						<legend><strong>属性列表</strong></legend>
 						<div class="shadow">
-						
+						<%if(!StringUtil.isIE(request)){ %>
+						<div class='info'><p><div id='detail'>
+							<table border='1' cellspacing='0' width='100%' id='resultsTable'><tbody>
+								<pg:map actual='${sessionInfo.attributes}'>
+									<tr><td ><pg:mapkey/></td><td><pre name='code' class='xml'><pg:cell htmlEncode='true'/></pre></td></tr>
+								</pg:map>
+						</tbody></table></div></p></div>
+						<%}else{ %>
+							<table border='1' cellpadding='0' cellspacing='0' class='table2' width='100%'>
+							<pg:map actual='${sessionInfo.attributes}'>
+								<tr height='60px'><td ><pg:mapkey/></td> 
+									<td><textarea rows='8' cols='50'  class='w120'  
+								           style='width: 800px;font-size: 12px;height:60px;' ><pg:cell htmlEncode='true'/></textarea>
+								</td></tr>
+							</pg:map>
+							</table>
+						<%} %>
 						</div>
 					</fieldset>
 				</pg:beaninfo>
@@ -78,26 +108,11 @@
 var trHtml ="";
 
 if(!$.browser.msie) {
-	trHtml += "<div class='info'><p><div id='detail'>";
-	trHtml +="<table border='1' cellspacing='0' width='100%' id='resultsTable'><tbody>";
-	<pg:map actual='${sessionInfo.attributes}'>
-		trHtml+="<tr><td ><pg:mapkey/></td><td><pre name='code' class='xml'><pg:cell htmlEncode='true'/></pre></td></tr>";
-	</pg:map>
-	trHtml+="</tbody></table></div></p></div>";
-	$(".shadow").append(trHtml);
-	
+		
 	dp.SyntaxHighlighter.ClipboardSwf = '${pageContext.request.contextPath}/include/syntaxhighlighter/clipboard.swf';
 	dp.SyntaxHighlighter.HighlightAll('code');
 }else {
-	trHtml +="<table border='1' cellpadding='0' cellspacing='0' class='table2' width='100%'>";
-	<pg:map actual='${sessionInfo.attributes}'>
-		trHtml+="<tr height='60px'><td ><pg:mapkey/></td>"; 
-		trHtml+="<td><textarea rows='8' cols='50'  class='w120' "; 
-		trHtml+="style='width: 800px;font-size: 12px;height:60px;' ><pg:cell htmlEncode='true'/></textarea>";
-		trHtml+="</td></tr>";
-	</pg:map>
-	trHtml+="</table>";
-	$(".shadow").append(trHtml);
+	
 	
 }	
 

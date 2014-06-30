@@ -18,7 +18,6 @@ import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
-import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
@@ -35,11 +34,11 @@ public class ActivitiTaskManageAction {
 
 	private ActivitiTaskService activitiTaskService;
 
-	private ActivitiConfigService activitiConfigService;
-
 	/**
 	 * 跳转至实时任务管理页面
 	 * 
+	 * @param processKey
+	 * @param model
 	 * @return 2014年5月7日
 	 */
 	public String ontimeTaskManager(String processKey, ModelMap model) {
@@ -53,6 +52,58 @@ public class ActivitiTaskManageAction {
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
+	}
+
+	/**
+	 * 跳转至历史任务管理页面
+	 * 
+	 * @param processKey
+	 * @param model
+	 * @return 2014年6月18日
+	 */
+	public String historyTaskManager(String processKey, ModelMap model) {
+
+		try {
+
+			model.addAttribute("processKey", processKey);
+
+			return "path:historyTaskManager";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	/**
+	 * 加载历史任务数据
+	 * 
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param task
+	 * @param model
+	 * @return 2014年6月18日
+	 */
+	public String queryHistoryTaskData(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			TaskCondition task, ModelMap model) {
+
+		try {
+			ListInfo listInfo = activitiTaskService.queryHistoryTasks(task,
+					offset, pagesize);
+
+			model.addAttribute("listInfo", listInfo);
+
+			return "path:historyTaskList";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
 	}
 
 	/**
@@ -196,12 +247,13 @@ public class ActivitiTaskManageAction {
 	 * @return 2014年5月26日
 	 */
 	public @ResponseBody
-	String completeTask(String taskId, String taskState, String taskKey,
-			List<ActivitiNodeInfo> nodeList, ModelMap model) {
+	String completeTask(TaskCondition task,
+			List<ActivitiNodeInfo> activitiNodeCandidateList,
+			List<Nodevariable> nodevariableList, ModelMap model) {
 		try {
 
-			activitiTaskService.completeTask(taskId, taskState, taskKey,
-					nodeList);
+			activitiTaskService.completeTask(task, activitiNodeCandidateList,
+					nodevariableList);
 
 			return "success";
 		} catch (Exception e) {
@@ -225,7 +277,7 @@ public class ActivitiTaskManageAction {
 				// 根据流程实例id获取流程Key
 				HistoricProcessInstance hiInstance = activitiService
 						.getHisProcessInstanceById(processInstId);
-				
+
 				processKey = activitiService
 						.getRepositoryService()
 						.getProcessDefinition(
@@ -244,9 +296,9 @@ public class ActivitiTaskManageAction {
 			task.setAssignee(activitiService.userIdToUserName(
 					task.getAssignee(), "2"));
 
-			// 节点参数
-			List<Nodevariable> nodevariableList = activitiConfigService
-					.selectNodevariable(processKey, "", "");
+			// 流程级别参数
+			List<Nodevariable> nodevariableList = activitiTaskService
+					.getProcessVariable(processInstId);
 
 			model.addAttribute("task", task);
 			model.addAttribute("taskState", taskState);
@@ -270,11 +322,13 @@ public class ActivitiTaskManageAction {
 	 * @return 2014年5月27日
 	 */
 	public @ResponseBody
-	String rejectToPreTask(String taskId, List<ActivitiNodeInfo> nodeList,
-			ModelMap model) {
+	String rejectToPreTask(TaskCondition task,
+			List<ActivitiNodeInfo> activitiNodeCandidateList,
+			List<Nodevariable> nodevariableList, ModelMap model) {
 		try {
 
-			activitiTaskService.rejectToPreTask(taskId, nodeList);
+			activitiTaskService.rejectToPreTask(task,
+					activitiNodeCandidateList, nodevariableList);
 
 			return "success";
 		} catch (Exception e) {

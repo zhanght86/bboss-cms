@@ -34,10 +34,13 @@
        		<th>失效时间</th>
        		<th>请求地址</th>
        		<th>上次访问地址</th>
-       		<th>客户端</th>
-       		<th>服务端</th>
-       		<th>有效期</th>
+       		<th>上次访问主机IP</th>
+       		<th>客户端IP</th>
+       		<th>初始服务端IP</th>
+       		<th>有效期</th>       		
        		<th>状态</th>
+       		<th>httpOnly</th>
+       		<th>secure</th>
        		<th>操作</th>
        	</pg:header>	
 
@@ -52,12 +55,21 @@
        		<td><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
        		<td><pg:cell colName="requesturi"/></td>
        		<td ><pg:cell colName="lastAccessedUrl"/></td>
+       		<td><pg:cell colName="lastAccessedHostIP"/></td>
        		<td><pg:cell colName="referip"/></td>
        		<td><pg:cell colName="host" /></td>
        		<td><pg:cell colName="maxInactiveInterval" /></td>
        		<td>
 	       		<pg:true colName="validate">有效</pg:true>
 	       		<pg:false colName="validate"><span style=" color: red;">无效</span></pg:false>
+       		</td>
+       		<td>
+	       		<pg:true colName="httpOnly">启用</pg:true>
+	       		<pg:false colName="httpOnly"><span style=" color: red;">关闭</span></pg:false>
+       		</td>
+       		<td>
+	       		<pg:true colName="secure">启用</pg:true>
+	       		<pg:false colName="secure"><span style=" color: red;">关闭</span></pg:false>
        		</td>
             <td class="td_center">
             	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="delSession('<pg:cell colName="sessionid" />')">删除</a>|

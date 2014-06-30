@@ -16,15 +16,14 @@ package com.sany.workflow.entity;
 
 import java.util.Date;
 
-
 /**
  * 对应activiti中的流程定义表中的数据
+ * 
  * @author yinbp
  * @since 2012-3-22 下午6:06:29
  */
 public class ProcessDef {
-	
-	
+
 	private int REV_;
 	private int HAS_START_FORM_KEY_;
 	private int SUSPENSION_STATE_;
@@ -47,18 +46,78 @@ public class ProcessDef {
 
 	// Method descriptor #4 ()Ljava/lang/String;
 	private java.lang.String DGRM_RESOURCE_NAME_;
-	
+
 	private String DEPLOYMENT_NAME_;
-	
+
 	private Date DEPLOYMENT_TIME_;
-	
+
 	private String DEPLOYMENT_TIME_STRING_;
-	
+
 	private String business_name;
 	private String business_id;
-	
+
 	private String wf_app_name;
 	
+	private String noticeId;// 流程消息主键
+
+	private String messagetempleid; // 短信模板id
+
+	private String messagetempletitle;// 短息模板名称
+
+	private String emailtempleid;// 邮件模板id
+
+	private String emailtempletitle;// 邮件模板名称
+	
+	private String IS_CONTAIN_HOLIDAY;//是否包含节假日0 否 1是
+
+	public String getIS_CONTAIN_HOLIDAY() {
+		return IS_CONTAIN_HOLIDAY;
+	}
+
+	public void setIS_CONTAIN_HOLIDAY(String iS_CONTAIN_HOLIDAY) {
+		IS_CONTAIN_HOLIDAY = iS_CONTAIN_HOLIDAY;
+	}
+
+	public String getNoticeId() {
+		return noticeId;
+	}
+
+	public void setNoticeId(String noticeId) {
+		this.noticeId = noticeId;
+	}
+
+	public String getMessagetempleid() {
+		return messagetempleid;
+	}
+
+	public void setMessagetempleid(String messagetempleid) {
+		this.messagetempleid = messagetempleid;
+	}
+
+	public String getMessagetempletitle() {
+		return messagetempletitle;
+	}
+
+	public void setMessagetempletitle(String messagetempletitle) {
+		this.messagetempletitle = messagetempletitle;
+	}
+
+	public String getEmailtempleid() {
+		return emailtempleid;
+	}
+
+	public void setEmailtempleid(String emailtempleid) {
+		this.emailtempleid = emailtempleid;
+	}
+
+	public String getEmailtempletitle() {
+		return emailtempletitle;
+	}
+
+	public void setEmailtempletitle(String emailtempletitle) {
+		this.emailtempletitle = emailtempletitle;
+	}
+
 	public int getREV_() {
 		return REV_;
 	}
@@ -179,7 +238,6 @@ public class ProcessDef {
 		this.business_name = business_name;
 	}
 
-	
 	public String getBusiness_id() {
 		return business_id;
 	}
@@ -195,9 +253,5 @@ public class ProcessDef {
 	public void setWf_app_name(String wf_app_name) {
 		this.wf_app_name = wf_app_name;
 	}
-	
-
-	
-	
 
 }

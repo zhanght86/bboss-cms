@@ -18,11 +18,6 @@
 	    	 if (${not empty tabNum}){
 	    		 setTab(1,4,{frameid:"tab4iframe",framesrc:"<%=request.getContextPath()%>/workflow/taskManage/ontimeTaskManager.page?processKey=${processDef.KEY_}"});
 	    	 }
-			//if (${tabNum == 4}){
-			//	setTab(1,${tabNum},{frameid:"tab4iframe",framesrc:"<%=request.getContextPath()%>/workflow/taskManage/ontimeTaskManager.page?processKey=${processDef.KEY_}"});
-			//}else {
-			//	setTab(1,${tabNum},{frameid:"tab5iframe",framesrc:"<%=request.getContextPath()%>/workflow/taskManage/historyTimeTaskManager.page?processKey=${processDef.KEY_}"});
-			//}
 	 	    
 	    });
 		
@@ -77,10 +72,8 @@
 			     <li><a href="javascript:void(0)" onclick="setTab(1,1)"><span>版本信息</span></a></li>
 			     <li><a href="javascript:void(0)" onclick='setTab(1,2,{frameid:"tab2iframe",framesrc:"${pageContext.request.contextPath}/workflow/repository/getProccessXMLByKey.page?processKey=${processDef.KEY_}&version=${processDef.VERSION_}"})'><span><pg:message code="sany.pdp.workflow.process.xml"/></span></a></li>
 			     <li><a href="javascript:void(0)" onclick='setTab(1,3,{frameid:"tab3iframe",framesrc:"${pageContext.request.contextPath}/workflow/repository/toProcessInstance.page?processKey=${processDef.KEY_}"})'><span>流程实例</span></a></li>
-			     <li><a href="javascript:void(0)" onclick='setTab(1,4,{frameid:"tab4iframe",framesrc:"${pageContext.request.contextPath}/workflow/taskManage/ontimeTaskManager.page?processKey=${processDef.KEY_}&version=${processDef.VERSION_}"})'><span>实时任务</span></a></li>
-			     <!-- 
-			     <li><a href="javascript:void(0)" onclick='setTab(1,5,{frameid:"tab5iframe",framesrc:"${pageContext.request.contextPath}/workflow/taskManage/historyTimeTaskManager.page?processKey=${processDef.KEY_}&version=${processDef.VERSION_}"})'><span>历史任务</span></a></li>
-			      -->
+			     <li><a href="javascript:void(0)" onclick='setTab(1,4,{frameid:"tab4iframe",framesrc:"${pageContext.request.contextPath}/workflow/taskManage/ontimeTaskManager.page?processKey=${processDef.KEY_}"})'><span>实时任务</span></a></li>
+			     <li><a href="javascript:void(0)" onclick='setTab(1,5,{frameid:"tab5iframe",framesrc:"${pageContext.request.contextPath}/workflow/taskManage/historyTaskManager.page?processKey=${processDef.KEY_}"})'><span>历史任务</span></a></li>
 		</ul>
 		</div>
 		<div id="main1">
@@ -153,11 +146,10 @@
 			<iframe id="tab4iframe"  frameborder="0" width="100%"  height="630" ></iframe>
 		</ul>
 		
-		<!-- 
 		<ul id="tab6" style="display: none;">
 			<iframe id="tab5iframe"  frameborder="0" width="100%"  height="630" ></iframe>
 		</ul>
-		 -->
+		
 		<div class="btnarea" >
 				<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
 				</div>	

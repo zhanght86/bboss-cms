@@ -19,7 +19,7 @@ public interface SessionManagerService {
 	 * @return 2014年6月5日
 	 */
 	public ListInfo querySessionDataForPage(SessionCondition condition,
-			int offset, int pagesize);
+			int offset, int pagesize) throws Exception;
 
 	/**
 	 * 查询应用列表
@@ -29,27 +29,27 @@ public interface SessionManagerService {
 	 * @throws Exception
 	 *             2014年6月5日
 	 */
-	public List<SessionAPP> queryAppSessionData(String appKey);
+	public List<SessionAPP> queryAppSessionData(String appKey) throws Exception;
 	
 	/** 删除应用下的session
 	 * @param appkey
 	 * @param sessionid
 	 * 2014年6月5日
 	 */
-	public void delSession(String appkey, String sessionid);
+	public void delSession(String appkey, String sessionid) throws Exception;
 	
 	/** 删除应用下的session
 	 * @param appkey
 	 * @param sessionid
 	 * 2014年6月5日
 	 */
-	public void delAllSessions(String appkey);
+	public void delAllSessions(String appkey)  throws Exception;
 	
 	/** 获取单个session明细信息
 	 * @param appkey
 	 * @param sessionid
 	 * 2014年6月5日
 	 */
-	public SessionInfoBean getSessionInfo(String appkey, String sessionid);
+	public SessionInfoBean getSessionInfo(String appkey, String sessionid) throws Exception;
 
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 
+		描述:定时任务
+	    author:qingl2
+		CopyRight:sany
+		版本:1.0
+	    Date: 2014-06-23
+	    checkProcessOvertimeTask
+	-->
+
+	<property name="/workflow/jobtest/*.freepage"
+		f:jobService="attr:workflow.job.service"
+		f:templeService="attr:workflow.temple.templeService"
+		class="com.sany.workflow.job.action.CheckProcessOvertime"
+		/>
+	
+		
+	<property name="workflow.job.service"
+		f:executor="attr:workflow.job.configsqlexecutor"
+		class="com.sany.workflow.job.service.impl.JobServiceImpl" />
+	
+	
+	<property name="workflow.job.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/workflow/job.xml"/>
+		</construction>
+	</property>
+		
+</properties>

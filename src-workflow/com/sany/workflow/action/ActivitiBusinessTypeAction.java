@@ -139,13 +139,14 @@ public class ActivitiBusinessTypeAction {
         	businessType.setBusinessId(UUID.randomUUID().toString());
             int res = businessTypeService.insert(businessType);
             if (res == 0) {
-                responseBody = "添加失败";
+                responseBody = "fail";
             } else {
-                responseBody = "添加成功";
+//                responseBody = "添加成功";
+                responseBody = "success";
             }
         } catch (Exception e) {
             logger.error("add businessType error", e);
-            responseBody = e.getMessage();
+            responseBody = "fali:"+e.getMessage();
         }
         return responseBody;
     }

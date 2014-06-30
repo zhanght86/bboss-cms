@@ -19,66 +19,117 @@
 			
 			<form name="submitForm" id="submitForm" method="post">
 				
-				<table width="100%" border="0" cellpadding="0" cellspacing="0"
-										class="stable" id="tb">
-										<pg:header>
-											<th>节点KEY</th>
-											<th>节点名称</th>
-											<th>待办人</th>
-											<th>待办组</th>
-											<th>操作</th>
-										</pg:header>
-										<pg:list autosort="false" requestKey="activitiNodeCandidateList">
-										<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
-											<input type="hidden"
-												id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
-												value="<pg:cell colName='candidate_users_id'></pg:cell>" />
-											<input type="hidden"
-												id="<pg:cell colName='node_key'/>_groups_id" name="candidate_groups_id"
-												value="<pg:cell colName='candidate_groups_id'></pg:cell>" />
-											<input type="hidden" id="node_id" name="node_id" value="<pg:cell colName='id'/>"/>
-											<input type="hidden" name="business_id" value="<pg:cell colName='business_id'/>"/>
-											<input type="hidden" name="business_type" value="<pg:cell colName='business_type'/>"/>
-											<tr>
-												<td><pg:cell colName="node_key"></pg:cell></td>
-												<td><pg:cell colName="node_name"></pg:cell></td>
-												<td><input type="text"
-													id="<pg:cell colName='node_key'/>_users_name" name="candidate_users_name"
-													value="<pg:cell colName='candidate_users_name'></pg:cell>"
-													 class="input1 w200" /><a
-													href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a></td>
-												<td><input type="text"
-													id="<pg:cell colName='node_key'/>_groups_name" name="candidate_groups_name"
-													value="<pg:cell colName='candidate_groups_name'></pg:cell>"
-													 class="input1 w200" /><a
-													href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a></td>
-												<td>
-													可修改
-													<select name="is_edit_candidate">
-														<pg:equal colName="is_edit_candidate" value="0">
-															<option value="0" selected>是</option>
-															<option value="1">否</option>
-														</pg:equal>
-														<pg:equal colName="is_edit_candidate" value="1">
-															<option value="0">是</option>
-															<option value="1" selected>否</option>
-														</pg:equal>
-													</select>&nbsp;&nbsp; &nbsp;       |&nbsp;&nbsp;&nbsp;      
-													有效
-													<select name="is_valid">
-														<pg:equal colName="is_valid" value="0">
-															<option value="0" selected>是</option>
-															<option value="1">否</option>
-														</pg:equal>
-														<pg:equal colName="is_valid" value="1">
-															<option value="0">是</option>
-															<option value="1" selected>否</option>
-														</pg:equal>
-													</select>
-												</td>
-											</tr>
-										</pg:list>
-									</table>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
+					<pg:header>
+						<th>节点KEY</th>
+						<th>节点名称</th>
+						<th>待办人</th>
+						<th>待办组</th>
+						<!-- 
+						<th>通知模板</th>
+						-->
+						<th>处理工时/小时</th>
+						<th>提醒次数</th>
+						<th>操作</th>
+					</pg:header>
+					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
+					<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
+						<input type="hidden"
+							id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
+							value="<pg:cell colName='candidate_users_id'></pg:cell>" />
+						<input type="hidden"
+							id="<pg:cell colName='node_key'/>_groups_id" name="candidate_groups_id"
+							value="<pg:cell colName='candidate_groups_id'></pg:cell>" />
+						<input type="hidden" id="node_id" name="node_id" value="<pg:cell colName='id'/>"/>
+						<input type="hidden" name="business_id" value="<pg:cell colName='business_id'/>"/>
+						<input type="hidden" name="business_type" value="<pg:cell colName='business_type'/>"/>
+						<tr>
+							<td><pg:cell colName="node_key"></pg:cell></td>
+							<td><pg:cell colName="node_name"></pg:cell></td>
+							<td><input type="text"
+								id="<pg:cell colName='node_key'/>_users_name" name="candidate_users_name"
+								value="<pg:cell colName='candidate_users_name'></pg:cell>"
+								 class="input1 w200" /><a
+								href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a></td>
+							<td><input type="text"
+								id="<pg:cell colName='node_key'/>_groups_name" name="candidate_groups_name"
+								value="<pg:cell colName='candidate_groups_name'></pg:cell>"
+								 class="input1 w200" /><a
+								href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a></td>
+							<!-- 
+							<td>
+								<input type="hidden"
+									id="<pg:cell colName='messagetempleid'/>_messagetempleid" name="messagetempleid"
+									value="<pg:cell colName='messagetempleid'></pg:cell>" />
+									
+								<input type="hidden"
+									id="<pg:cell colName='emailtempleid'/>_emailtempleid" name="emailtempleid"
+									value="<pg:cell colName='emailtempleid'></pg:cell>" />
+									
+								<input type="text" id="<pg:cell colName='messagetempleid'/>_messagetitle" name="messagetitle" 
+									value="<pg:cell colName="messagetempletitle"/>" class="input1 w150"/>
+								<a href="javascript:openMessTemple('<pg:cell colName="messagetempleid"/>','0')">短信</a>
+								
+								<br/>
+								<input type="text" id="<pg:cell colName='emailtempleid'/>_eamiltitle" name="eamiltitle" 
+									value="<pg:cell colName="emailtempletitle"/>" class="input1 w150"/>
+								<a href="javascript:openMessTemple('<pg:cell colName="emailtempleid"/>','1')">邮件</a>
+							</td>
+							 
+							<td >
+								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" 
+								style="width: 40px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
+								<select id="simpleDate" name="simpleDate">
+									<pg:notempty colName="simpleDate">
+										<option value="D" <pg:equal colName="simpleDate" value="D">selected</pg:equal>>D(日)</option>
+										<option value="H" <pg:equal colName="simpleDate" value="H">selected</pg:equal>>H(时)</option>
+										<option value="m" <pg:equal colName="simpleDate" value="m">selected</pg:equal>>m(分)</option>
+									</pg:notempty>
+									<pg:empty colName="simpleDate">
+										<option value="D" >D(日)</option>
+										<option value="H" selected>H(时)</option>
+										<option value="m" >m(分)</option>
+									</pg:empty>
+								</select>
+							</td>
+							-->
+							<td >
+								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
+							</td>
+							<td >
+								<input type="text" name="noticenum" style="width: 50px;" value="<pg:notequal colName="noticenum" value="0"><pg:cell colName="noticenum"/></pg:notequal>" onpaste="javascript: return false;"
+									onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" 
+									onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+							</td>
+							
+							<td>
+								可修改
+								<select name="is_edit_candidate">
+									<pg:equal colName="is_edit_candidate" value="0">
+										<option value="0" selected>是</option>
+										<option value="1">否</option>
+									</pg:equal>
+									<pg:equal colName="is_edit_candidate" value="1">
+										<option value="0">是</option>
+										<option value="1" selected>否</option>
+									</pg:equal>
+								</select>&nbsp;&nbsp; &nbsp;       |&nbsp;&nbsp;&nbsp;      
+								有效
+								<select name="is_valid">
+									<pg:equal colName="is_valid" value="0">
+										<option value="0" selected>是</option>
+										<option value="1">否</option>
+									</pg:equal>
+									<pg:equal colName="is_valid" value="1">
+										<option value="0">是</option>
+										<option value="1" selected>否</option>
+									</pg:equal>
+								</select>
+							</td>
+						</tr>
+					</pg:list>
+				</table>
+				
 				<div class="btnarea">
 					<a href="javascript:void(0)" class="bt_1" id="addButton"
 						onclick="doCandidateSubmit()"><span>确定</span></a> 
@@ -108,7 +159,7 @@
 				<div class="btnarea">
 					<a href="javascript:void(0)" class="bt_1" id="addButton"
 						onclick="doParamSubmit()"><span>确定</span></a> 
-</div>
+				</div>
 				</form>
 			</div>
 		</div>
@@ -139,6 +190,17 @@ function openChooseUsers(node_key){
 	
 }
 
+function openMessTemple(templeId,templeType) {
+	var title="";
+	if (templeType == '0') {
+		title = "短信模板";
+	}else{
+		title = "邮件模板";
+	}
+	var url = "<%=request.getContextPath()%>/workflow/taskConfig/chooseMessageTemple.jsp?templeType="+templeType+"&templeId="+templeId;
+	$.dialog({ id:'nodeInfoIframe', title:title,width:900,height:500, content:'url:'+url});
+}
+
 function openChooseGroups(node_key){
 	var url = "<%=request.getContextPath()%>/workflow/config/toChooseGroupPage.page?groups="
 		+ $("#" + node_key + "_groups_id").val()
@@ -158,7 +220,7 @@ function openChooseGroups(node_key){
 			type: "post",
 			
 			data: formToJson("#submitForm"),			
-			datatype:"json",			
+			dataType:"json",			
 			success: function(data){
 			    alert(data);
 			  }
@@ -174,7 +236,7 @@ function openChooseGroups(node_key){
 			type: "post",
 			
 			data: formToJson("#submitParamForm"),			
-			datatype:"json",			
+			dataType:"json",			
 			success: function(data){
 			    alert(data);
 			  }
@@ -226,5 +288,24 @@ function openChooseGroups(node_key){
 		};
 		
 	   });
+	
+	function chkPrice(obj){
+		obj.value = obj.value.replace(/[^\d.]/g,""); 
+		//必须保证第一位为数字而不是. 
+		obj.value = obj.value.replace(/^\./g,""); 
+		//保证只有出现一个.而没有多个. 
+		obj.value = obj.value.replace(/\.{2,}/g,"."); 
+		//小数点后面保留一位小数
+		obj.value = obj.value.replace(/\.\d\d/g,"."); 
+		//保证.只出现一次，而不能出现两次以上 
+		obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+	} 
+	
+	function chkLast(obj){ 
+		// 如果出现非法字符就截取掉 
+		if(obj.value.substr((obj.value.length - 1), 1) == '.') {
+			obj.value = obj.value.substr(0,(obj.value.length - 1)); 
+		}
+	}
 </script>
 </html>

@@ -34,6 +34,8 @@
        		<th><pg:message code="sany.pdp.workflow.processdef.path"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.business.type"/></th>
+       		<th>消息提醒</th>
+       		<th>节假日</th>
        		<th><pg:message code="sany.pdp.common.status"/></th>
        		<th><pg:message code="sany.pdp.common.operation"/></th>
        	</pg:header>	
@@ -53,16 +55,34 @@
            		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
            		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
            		<td><pg:cell colName="business_name"/></td>
-           		 <td>
-                	<pg:equal colName="SUSPENSION_STATE_" value="0"><pg:message code="sany.pdp.workflow.operation.open"/></pg:equal>
-                	<pg:equal colName="SUSPENSION_STATE_" value="1"><pg:message code="sany.pdp.workflow.operation.close"/></pg:equal>
-                </td>	   
+           		<td>
+           		<!-- 
+           			<input type="checkbox" name="<pg:cell colName="DEPLOYMENT_ID_" />_a" disabled <pg:notempty colName="messagetempleid" >checked</pg:notempty>/>短信
+           			<input type="checkbox" name="<pg:cell colName="DEPLOYMENT_ID_" />_b" disabled <pg:notempty colName="emailtempleid" >checked</pg:notempty>/>邮件
+           		-->
+           			<pg:notempty colName="messagetempleid" >
+           				<a href="javascript:openMessTemple('<pg:cell colName="messagetempleid" />','0')"><pg:cell colName="messagetempletitle" /></a>
+					</pg:notempty>
+					<pg:notempty colName="emailtempleid" >
+						<a href="javascript:openMessTemple('<pg:cell colName="emailtempleid" />','1')"><pg:cell colName="emailtempletitle" /></a>
+					</pg:notempty>
+					<a href="javascript:openSetMessTemple('<pg:cell colName="KEY_" />')">设置</a>
+           		</td>
+           		<td>
+                	<input type="radio" name="<pg:cell colName="DEPLOYMENT_ID_" />_a" value="0" <pg:equal colName="IS_CONTAIN_HOLIDAY" value="0">checked</pg:equal> onclick="setHoliday('<pg:cell colName="KEY_" />',this.value)"/>剔除
+                	<input type="radio" name="<pg:cell colName="DEPLOYMENT_ID_" />_b" value="1" <pg:equal colName="IS_CONTAIN_HOLIDAY" value="1">checked</pg:equal> onclick="setHoliday('<pg:cell colName="KEY_" />',this.value)"/>包含
+                </td> 
+           		<td>
+                	<pg:equal colName="SUSPENSION_STATE_" value="1"><pg:message code="sany.pdp.workflow.operation.open"/></pg:equal>
+                	<pg:equal colName="SUSPENSION_STATE_" value="2"><pg:message code="sany.pdp.workflow.operation.close"/></pg:equal>
+                </td>   
                 <td class="td_center">
-                	<a href="javascript:void(0)" id="activateProcess" onclick="activateProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='0'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.open"/></a>
-                	<a href="javascript:void(0)" id="suspendProcess" onclick="suspendProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='1'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.close"/></a>|
+                	<a href="javascript:void(0)" id="activateProcess" onclick="activateProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='1'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.open"/></a>
+                	<a href="javascript:void(0)" id="suspendProcess" onclick="suspendProcess('<pg:cell colName="ID_" />')" style="display: <pg:equal colName='SUSPENSION_STATE_' value='2'>none</pg:equal>;"><pg:message code="sany.pdp.workflow.operation.close"/></a>|
                 	<a href="javascript:void(0)" id="viewProcessInfo" onclick="viewProcessInfo('<pg:cell colName="KEY_" />')"><pg:message code="sany.pdp.workflow.operation.workflow.info"/></a>|
                 	<a href="<%=request.getContextPath()%>/workflow/config/taskConfigMain.page?processKey=<pg:cell colName="KEY_" />&deploymentId=<pg:cell colName='DEPLOYMENT_ID_' />" id="viewOrgProcessInfo"><pg:message code="sany.pdp.workflow.operation.workflow.config"/></a>|
-                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="viewTaskInfo('<pg:cell colName="KEY_" />')">任务管理</a>
+                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="viewTaskInfo('<pg:cell colName="KEY_" />')">任务管理</a>|
+                	<a href="<%=request.getContextPath()%>/workflow/repository/downProcessXMLandPicZip.page?processKey=<pg:cell colName="KEY_" />&version=<pg:cell colName="VERSION_"/>" >下载</a>
                 </td>    
         </tr>
 	 </pg:list>

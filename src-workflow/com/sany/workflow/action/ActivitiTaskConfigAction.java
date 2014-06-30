@@ -110,47 +110,26 @@ public class ActivitiTaskConfigAction {
 	public String showActivitiNodeInfo(String processKey,
 			String business_id, String business_type, ModelMap model) {
 	
-//		List<ActivitiNodeCandidate> list = activitiConfigService.queryActivitiNodeInfo(processKey);
-//		for(int i=0;i<list.size();i++){
-//			if(i==0){
-//				list.get(i).setCandidate_users_name("流程启动者");
-//				list.get(i).setCandidate_groups_name("流程启动者");
-//				
-//				continue;
-//			}
-//			ActivitiNodeCandidate activitiNodeCandidate = activitiConfigService.queryActivitiNodeCandidate(processKey, list.get(i).getNode_key(), business_id, business_type);
-//			if(activitiNodeCandidate!=null){
-//				list.get(i).setCandidate_groups_id(activitiNodeCandidate.getCandidate_groups_id());
-//				list.get(i).setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name() != null?activitiNodeCandidate.getCandidate_groups_name().trim():"");
-//				list.get(i).setCandidate_users_id(activitiNodeCandidate.getCandidate_users_id());
-//				list.get(i).setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name() != null?activitiNodeCandidate.getCandidate_users_name().trim():"");
-//				list.get(i).setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
-//				list.get(i).setIs_valid(activitiNodeCandidate.getIs_valid());
-//			}
-//			list.get(i).setBusiness_type(business_type);
-//			list.get(i).setBusiness_id(business_id);
-//			
-//		}
 		List<ActivitiNodeCandidate> list = activitiConfigService.queryActivitiNodesCandidates(business_type, business_id, processKey);
 		for(int i=0;list != null && i<list.size();i++){
 			ActivitiNodeCandidate activitiNodeCandidate = list.get(i);
-			if(i==0){
-				activitiNodeCandidate.setCandidate_users_name("流程启动者");
-				activitiNodeCandidate.setCandidate_groups_name("流程启动者");
+			//if(i==0){
+			//	activitiNodeCandidate.setCandidate_users_name("流程启动者");
+			//	activitiNodeCandidate.setCandidate_groups_name("流程启动者");
 				
 				
-			}
-			else
+		//	}
+			//else
 //			ActivitiNodeCandidate activitiNodeCandidate = activitiConfigService.queryActivitiNodeCandidate(processKey, list.get(i).getNode_key(), business_id, business_type);
 			
-			{
+		//	{
 				activitiNodeCandidate.setCandidate_groups_id(activitiNodeCandidate.getCandidate_groups_id());
 				activitiNodeCandidate.setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name() != null?activitiNodeCandidate.getCandidate_groups_name().trim():"");
 				activitiNodeCandidate.setCandidate_users_id(activitiNodeCandidate.getCandidate_users_id());
 				activitiNodeCandidate.setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name() != null?activitiNodeCandidate.getCandidate_users_name().trim():"");
 				activitiNodeCandidate.setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
 				activitiNodeCandidate.setIs_valid(activitiNodeCandidate.getIs_valid());
-			}
+		//	}
 			activitiNodeCandidate.setBusiness_type(business_type);
 			activitiNodeCandidate.setBusiness_id(business_id);
 			
@@ -178,7 +157,6 @@ public class ActivitiTaskConfigAction {
 		}
 		return "path:nodeinfo";
 	}
-	
 	
 	public String queryUsers(User user,
 			

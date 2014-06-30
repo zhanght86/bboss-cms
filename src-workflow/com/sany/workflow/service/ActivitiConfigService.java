@@ -2,15 +2,14 @@ package com.sany.workflow.service;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
-import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.OrganizationDTO;
 import com.sany.workflow.entity.User;
-import com.sany.workflow.entity.VariableResource;
 
 public interface ActivitiConfigService {
 	public void deleteActivitiNodeInfo(String processKey) throws ActivitiConfigException;
@@ -276,5 +275,27 @@ public interface ActivitiConfigService {
 
 	void addProBusinessType(String processKey, String businessTypeId)  throws ActivitiConfigException;
 
-	String queryBusinessName(String process_key) throws ActivitiConfigException;
+	String queryBusinessName(String process_key) throws ActivitiConfigException;
+	
+	/** 获取流程节点参数 gw_tanx
+	 * @param business_type
+	 * @param business_id
+	 * @param processKey
+	 * @return
+	 * 2014年6月19日
+	 */
+	public List<Nodevariable> queryNodeVariable (String business_type,
+			String business_id, String processKey);
+	
+	/** 获取流程消息模板信息  gw_tanx
+	 * @param processKey
+	 * @return
+	 * 2014年6月23日
+	 */
+	/**
+	 * @param processKey
+	 * @return
+	 * 2014年6月23日
+	 */
+	public Map queryMessageTempleById (String processKey);
 }

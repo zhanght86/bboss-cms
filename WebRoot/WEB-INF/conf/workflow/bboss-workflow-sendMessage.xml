@@ -1,0 +1,43 @@
+
+<properties>
+   <property name="/workflow/sendMessage/*.freepage"
+		
+		f:messageService="attr:workflow.MessageService" 
+		class="com.sany.workflow.test.SendMessageTest">
+	</property>
+
+  <!--测试环境-->
+	<property name="workflow.MessageService" factory-method="create"
+		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		f:serviceClass="com.sany.sim.message.MessageService"
+		f:address="http://10.0.14.21:8080/SanySIM/cxfservices/messageServicePort" >
+	</property>
+	 <!--正式环境
+	<property name="sim.MessageService" factory-method="create"
+		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		f:serviceClass="com.sany.sim.message.MessageService"
+		f:address="http://sim.sany.com.cn:85/SanySIM/cxfservices/messageServicePort" >
+	</property>
+	-->
+	
+	<!--
+	<property name="reseiveServiceHolder" ws:servicePort="reseiveServicePort"  
+		f:messageService="attr:sim.MessageService"
+		f:reseiveService="attr:reseiveService"
+		f:sysId="adm" f:token="wer4-sdf"
+		class="com.sany.sim.message.impl.ReseiveServiceImpl" />
+		
+	<property name="sim.MessageService" factory-method="create"
+		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		f:serviceClass="com.sany.sim.message.MessageService"
+		f:address="http://10.0.14.21:8080/SanySIM/cxfservices/messageServicePort" >
+	</property>
+		
+	<property name="reseiveService"
+		class="reseiveService"	/>
+		
+		<property name="getMessageTask"
+		f:reseiveServiceHolder="attr:reseiveServiceHolder"
+		class="getMessageTask"	/>
+		-->
+</properties>

@@ -81,13 +81,10 @@
 				unblockUI();
 				
 				if (responseText == "success") {
-					W.$.dialog.alert(responseText, function() {
-						W.queryList();
-						api.close();
-					}, api);
+					W.queryList();
+					api.close();
 				} else {
-					w.$.dialog.alert(responseText, function() {
-					}, api);
+					alert("新增业务类别失败："+responseText);
 				}
 			}
 		});

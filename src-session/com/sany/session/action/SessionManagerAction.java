@@ -37,7 +37,7 @@ public class SessionManagerAction {
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) int offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-			SessionCondition condition, ModelMap model) {
+			SessionCondition condition, ModelMap model)  throws Exception{
 
 		try {
 			// 分页获取session数据
@@ -49,7 +49,7 @@ public class SessionManagerAction {
 			return "path:sessionList";
 
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw e;
 		}
 
 	}
@@ -61,7 +61,7 @@ public class SessionManagerAction {
 	 * @return 2014年6月5日
 	 */
 	public @ResponseBody(datatype = "json")
-	List<SessionAPP> getAppSessionData(String appKey) {
+	List<SessionAPP> getAppSessionData(String appKey)  throws Exception{
 
 		try {
 			List<SessionAPP> appSessionList = sessionService
@@ -70,7 +70,7 @@ public class SessionManagerAction {
 			return appSessionList;
 
 		} catch (Exception e) {
-			return null;
+			throw e;
 		}
 	}
 
@@ -119,7 +119,7 @@ public class SessionManagerAction {
 	 * @return 2014年5月7日
 	 */
 	public String viewSessionInfo(String sessionid, String appkey,
-			ModelMap model) {
+			ModelMap model)  throws Exception{
 		try {
 
 			SessionInfoBean sessionInfo = sessionService.getSessionInfo(appkey,
@@ -130,8 +130,8 @@ public class SessionManagerAction {
 			return "path:viewSessionInfo";
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException();
+			
+			throw e;
 		}
 	}
 

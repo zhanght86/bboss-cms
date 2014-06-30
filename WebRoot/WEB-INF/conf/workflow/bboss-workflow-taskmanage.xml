@@ -7,16 +7,18 @@
 	<property name="/workflow/taskManage/*.page"
 		path:ontimeTaskManager="/workflow/taskManage/ontimeTaskManager.jsp"
 		path:ontimeTaskList="/workflow/taskManage/ontimeTaskList.jsp"
+		path:historyTaskManager="/workflow/taskManage/historyTaskManager.jsp"
+		path:historyTaskList="/workflow/taskManage/historyTaskList.jsp"
 		path:viewTaskInfo="/workflow/repository/viewProcessInfo.jsp"
 		path:viewTaskDetailInfo="/workflow/taskManage/viewTaskDetailInfo.jsp"
 		path:dealTask="/workflow/taskManage/dealTask.jsp" 
 		f:activitiService="attr:activitiService"
-		f:activitiTaskService="attr:activitiTaskService"
+		f:activitiTaskService="attr:workflow.task.activitiTaskService"
 		f:activitiConfigService="attr:activitiConfigService"
 		class="com.sany.workflow.action.ActivitiTaskManageAction">
 	</property>
 
-	<property name="activitiTaskService" 
+	<property name="workflow.task.activitiTaskService" 
 		f:executor="attr:activiti.configsqlexecutor"
 		f:activitiService="attr:activitiService"
 		class="com.sany.workflow.service.impl.ActivitiTaskServiceImpl" />

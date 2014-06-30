@@ -23,6 +23,10 @@ $(document).ready(function() {
     $('#delBatchButton').click(function() {
            delBatch();
     });
+    
+    $("#businessType").combotree({
+   		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
+   	});
            	
 });
        
@@ -33,10 +37,17 @@ function queryList(){
 	var taskState = $("#taskState").val();
 	var taskName = $("#taskName").val();
 	var taskId = $("#taskId").val();
+	var businessTypeId = $("#businessType").combotree('getValue');
+	var businessKey = $("#businessKey").val();
 	
     $("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page #customContent", 
-    	{processIntsId:processIntsId, processKey:processKey,taskState:taskState,taskId:taskId,taskName:taskName},
+    	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
+    	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey},
     	function(){loadjs();});
+}
+
+function modifyQueryData(){
+	$("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page?"+$("#querystring").val()+" #customContent",function(){loadjs()});
 }
 
 // 签收任务
@@ -60,7 +71,7 @@ function signTask(taskId,SuspensionState) {
 			if (data != 'success') {
 				alert("流程实例签收出错："+data);
 			}else {
-				queryList();
+				modifyQueryData();
 			}
 		}
 	 });
@@ -99,7 +110,9 @@ function doreset(){
 <body>
 	<div class="mcontent" style="width:98%;margin:0 auto;overflow:auto;">
 	
-		<sany:menupath />
+	<pg:empty actual="${processKey}">
+		<sany:menupath menuid="ontimeTask"/>
+	</pg:empty>
 		
 		<div id="rightContentDiv">
 			
@@ -122,8 +135,6 @@ function doreset(){
 											<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
 											<th>任务名称：</th>
 											<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
-											<th>流程实例ID：</th>
-											<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
 											<th>签收状态：</th>
 											<td>
 												<select id="taskState" name="taskState" class="select1" style="width: 125px;">
@@ -132,11 +143,25 @@ function doreset(){
 													<option value="2">已签收</option>
 												</select>
 											</td>
-											<td style="text-align:right">
+											<th>业务类型：</th>
+											<td>
+												<select class="easyui-combotree" id='businessType' name="businessType" required="false"
+														style="width: 120px;">
+											</td>
+											<td style="text-align:center" rowspan="2" >
 												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
-												<input type="hidden" name="processKey" id="processKey" value="${processKey}"/>
 												<input type="reset" id="reset" style="display:none"/>
+											</td>
+										</tr>
+										<tr>
+											<th>流程实例ID：</th>
+											<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
+											<th>业务主题：</th>
+											<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
+											<th>流程key：</th>
+											<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
+												<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
 											</td>
 										</tr>
 									</table>
@@ -154,13 +179,7 @@ function doreset(){
 			</div>
 			
 			<div class="title_box">
-				<div class="rightbtn">
-				<!--
-					<a href="#" class="bt_small" id="upBatchButton"><span>开启</span></a>
-					<a href="#" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
-					<a href="#" class="bt_small" id="upBatchButton"><span>升级</span></a>
-				-->
-				</div>
+				<div class="rightbtn"></div>
 					
 				<strong>实时任务列表</strong>
 				<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				

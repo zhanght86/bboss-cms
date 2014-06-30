@@ -52,7 +52,65 @@ public class ActivitiNodeCandidate {
 	
 	private String org_name;
 	
+	private String messagetempleid; // 短信模板id
 	
+	private String messagetempletitle;// 短息模板名称
+	
+	private String emailtempleid ;// 邮件模板id 
+	
+	private String emailtempletitle;// 邮件模板名称
+	
+	private String duration_node;//节点可以耗时
+	
+	private int noticenum;// 提醒次数
+
+	public int getNoticenum() {
+		return noticenum;
+	}
+
+	public void setNoticenum(int noticenum) {
+		this.noticenum = noticenum;
+	}
+
+	public String getDuration_node() {
+		return duration_node;
+	}
+
+	public void setDuration_node(String duration_node) {
+		this.duration_node = duration_node;
+	}
+
+	public String getMessagetempletitle() {
+		return messagetempletitle;
+	}
+
+	public void setMessagetempletitle(String messagetempletitle) {
+		this.messagetempletitle = messagetempletitle;
+	}
+
+	public String getEmailtempletitle() {
+		return emailtempletitle;
+	}
+
+	public void setEmailtempletitle(String emailtempletitle) {
+		this.emailtempletitle = emailtempletitle;
+	}
+
+	public String getMessagetempleid() {
+		return messagetempleid;
+	}
+
+	public void setMessagetempleid(String messagetempleid) {
+		this.messagetempleid = messagetempleid;
+	}
+
+	public String getEmailtempleid() {
+		return emailtempleid;
+	}
+
+	public void setEmailtempleid(String emailtempleid) {
+		this.emailtempleid = emailtempleid;
+	}
 
 	public String getId() {
 		return id;
@@ -118,7 +176,6 @@ public class ActivitiNodeCandidate {
 	public void setCandidate_users_name(String candidate_users_name) {
 		this.candidate_users_name = candidate_users_name;
 	}
-
 
 	public Timestamp getCreate_date() {
 		return create_date;

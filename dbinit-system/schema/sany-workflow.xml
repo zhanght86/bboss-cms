@@ -15,8 +15,9 @@
         <column name="TASK_NAME" size="100" type="VARCHAR"/>
     </table>
     
+   
     <table name="TD_WF_ACTIVITI_NODE_CANDIDATE">
-        <column name="ID" primaryKey="true" size="100" required="true"  type="VARCHAR"/>
+        <column name="ID" primaryKey="true" required="true" size="100" type="VARCHAR"/>
         <column name="NODE_ID" size="100" type="VARCHAR"/>
         <column name="CANDIDATE_GROUPS_ID" size="100" type="VARCHAR"/>
         <column name="CANDIDATE_GROUPS_NAME" size="100" type="VARCHAR"/>
@@ -28,16 +29,17 @@
         <column name="CANDIDATE_JOBS_NAME" size="100" type="VARCHAR"/>
         <column name="CANDIDATE_ROLES_ID" size="100" type="VARCHAR"/>
         <column name="CANDIDATE_ROLES_NAME" size="100" type="VARCHAR"/>
-        <column name="business_id" size="100" type="VARCHAR"/>
-        <column name="business_type" size="100" type="VARCHAR"/>
+        <column name="BUSINESS_ID" size="100" type="VARCHAR"/>
+        <column name="BUSINESS_TYPE" size="100" type="VARCHAR"/>
         <column name="CREATE_DATE" type="TIMESTAMP"/>
         <column name="CREATE_PERSON_ID" size="100" type="VARCHAR"/>
         <column name="CREATE_PERSON_NAME" size="100" type="VARCHAR"/>
-        
         <column name="IS_VALID" size="1" type="DECIMAL"/>
         <column name="IS_EDIT_CANDIDATE" size="1" type="DECIMAL"/>
-       
-        
+        <column name="MESSAGETEMPLEID" size="100" type="VARCHAR"/>
+        <column name="EMAILTEMPLEID" size="100" type="VARCHAR"/>
+        <column name="DURATION_NODE" size="19" type="DECIMAL"/>
+        <column name="NOTICENUM" size="22" type="DECIMAL"/>
     </table>
     
     <table name="TD_WF_ACTIVITI_NODE_DELEGATE">
@@ -102,5 +104,29 @@
         <column name="PARAM_VALUE" size="100" type="VARCHAR"/>
         <column name="PARAM_DES" size="200" type="VARCHAR"/>
         <column name="IS_EDIT_PARAM" type="DECIMAL"/>
+    </table>
+    <table name="TD_WF_MESSTEMPLATE">
+        <column name="TEMPLEID" size="100" type="VARCHAR"/>
+        <column default="0" name="TEMPLETYPE" required="true" size="1" type="DECIMAL"/>
+        <column name="TEMPLETITLE" size="100" type="VARCHAR"/>
+        <column name="TEMPLECONTENT" type="CLOB"/>
+        <column name="CREATETIME" type="DATE"/>
+        <column name="CREATOR" size="50" type="VARCHAR"/>
+        <column name="LASTUPDATETIME" type="DATE"/>
+    </table>
+    <table name="TD_WF_NODE_WORKTIME">
+        <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
+        <column name="PROCESS_ID" size="100" type="VARCHAR"/>
+        <column default="userTask" name="NODE_TYPE" size="100" type="VARCHAR"/>
+        <column name="NODE_KEY" size="100" type="VARCHAR"/>
+        <column name="DURATION_NODE" size="19" type="DECIMAL"/>
+        <column name="NOTICENUM" size="22" type="DECIMAL"/>
+    </table>
+    <table name="TD_WF_PROC_MESSTEMPLATE">
+        <column name="NOTICEID" size="100" type="VARCHAR"/>
+        <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
+        <column name="MESSAGETEMPLEID" size="100" type="VARCHAR"/>
+        <column name="EMAILTEMPLEID" size="100" type="VARCHAR"/>
+        <column default="1" name="IS_CONTAIN_HOLIDAY" size="1" type="VARCHAR"/>
     </table>
 </database>

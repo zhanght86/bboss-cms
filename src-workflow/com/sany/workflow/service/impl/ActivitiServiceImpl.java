@@ -14,7 +14,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.FormService;
@@ -103,6 +107,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService.claim(taskId, username);
 		this.taskService.rejecttoPreTask(taskId, variables);
 	}
+	
+	public void rejecttoPreTaskWithReson(String taskId, Map<String, Object> variables,
+			String rejectReason) {
+		this.taskService.rejecttoPreTask(taskId, variables, rejectReason);
+	}
 
 	/**
 	 * 将当前任务驳回到上一个任务处理人处
@@ -111,6 +120,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public void rejecttoPreTask(String taskId) {
 		this.taskService.rejecttoPreTask(taskId);
+	}
+	
+	/**
+	 * 将当前任务驳回到上一个任务处理人处
+	 * 
+	 * @param taskId
+	 */
+	public void rejecttoPreTaskWithReson(String taskId,String rejectReason) {
+		this.taskService.rejecttoPreTask(taskId, rejectReason);
 	}
 
 	/**
@@ -127,6 +145,23 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			taskService.claim(taskId, username);
 			this.taskService.rejecttoPreTask(taskId, variables);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	public void rejecttoPreTask(String taskId, String username,
+			Map<String, Object> variables, String rejectReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			this.taskService.rejecttoPreTask(taskId, variables, rejectReason);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -156,6 +191,24 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+	
+	public void rejecttoPreTask(String taskId, String username,
+			String rejectReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			this.taskService.rejecttoPreTask(taskId, rejectReason);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
 
 	public ActivitiServiceImpl(String xmlPath) {
 		TransactionManager tm = new TransactionManager();
@@ -355,6 +408,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map);
 	}
+	
+	public void completeTaskWithReason(String taskId, Map<String, Object> map,String completeReason) {
+		taskService.completeWithReason(taskId, map, completeReason);
+	}
 
 	/**
 	 * 完成任务(普通)
@@ -365,6 +422,16 @@ public class ActivitiServiceImpl implements ActivitiService,
 	public void completeTask(String taskId) {
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId);
+	}
+	
+	/**
+	 * 完成任务+completeReason gw_tanx
+	 * 
+	 * @param taskId
+	 * @param map
+	 */
+	public void completeTaskWithReason(String taskId,String completeReason) {
+		taskService.completeWithReason(taskId, completeReason);
 	}
 
 	/**
@@ -378,6 +445,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId, map, destinationTaskKey);
 	}
+	
+	public void completeTaskWithDest(String taskId,
+			Map<String, Object> map, String destinationTaskKey,
+			String completeReason) {
+		taskService.completeWithReason(taskId, map, destinationTaskKey, completeReason);
+	}
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -389,6 +462,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public void completeTaskLoadOrgParams(String taskId, String orgId) {
 		completeTaskLoadOrgParams(taskId, (Map<String, Object>) null, orgId);
+	}
+	
+	public void completeTaskLoadOrgParamsReason(String taskId, String orgId,
+			String completeReason) {
+		completeTaskLoadOrgParamsReason(taskId, (Map<String, Object>) null,
+				orgId, completeReason);
 	}
 
 	/**
@@ -404,6 +483,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		completeTaskLoadOrgParams(taskId, (Map<String, Object>) null, orgId,
 				destinationTaskKey);
 	}
+	
+	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,
+			String destinationTaskKey, String completeReason) {
+		completeTaskLoadOrgParamsReason(taskId, (Map<String, Object>) null,
+				orgId, destinationTaskKey, completeReason);
+	}
 
 	/**
 	 * 完成任务(加载组织机构节点参数配置)
@@ -418,6 +503,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 	public void completeTaskLoadOrgParams(String taskId,
 			Map<String, Object> map, String orgId) {
 		completeTaskLoadOrgParams(taskId, map, orgId, (String) null);
+	}
+	
+	public void completeTaskLoadOrgParamsReason(String taskId,
+			Map<String, Object> map, String orgId, String completeReason) {
+		completeTaskLoadOrgParamsReason(taskId, map, orgId, (String) null,
+				completeReason);
 	}
 
 	/**
@@ -452,6 +543,28 @@ public class ActivitiServiceImpl implements ActivitiService,
 		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
 
+	public void completeTaskLoadOrgParamsReason(String taskId,
+			Map<String, Object> map, String orgId, String destinationTaskKey,
+			String completeReason) {
+		Task task = this.getTaskById(taskId);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+
+		Nodevariable nodevariable = new Nodevariable();
+		nodevariable.setNode_key(task.getName());
+		nodevariable.setBusiness_id(orgId);
+		nodevariable.setBusiness_type(WorkFlowConstant.BUSINESS_TYPE_ORG);
+
+		List<Nodevariable> nodevariableList = activitiConfigService
+				.queryNodevariable(nodevariable);
+		for (Nodevariable item : nodevariableList) {
+			paramsMap.put(item.getParam_name(), item.getParam_value());
+		}
+		if (map != null && map.size() > 0) {
+			paramsMap.putAll(map);
+		}
+		// taskService = processEngine.getTaskService();
+		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey, completeReason);
+	}
 	/**
 	 * 完成任务(加载业务类型节点参数配置)
 	 * 
@@ -464,6 +577,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 			String bussinesstypeId) {
 		completeTaskLoadBussinesstypeParams(taskId, (Map<String, Object>) null,
 				bussinesstypeId, (String) null);
+	}
+	
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			String bussinesstypeId,String completeReason) {
+		completeTaskLoadBussinesstypeParamsReason(taskId, (Map<String, Object>) null,
+				bussinesstypeId, (String) null,completeReason);
 	}
 
 	/**
@@ -478,6 +597,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 			String bussinesstypeId, String destinationTaskKey) {
 		completeTaskLoadBussinesstypeParams(taskId, (Map<String, Object>) null,
 				bussinesstypeId, destinationTaskKey);
+	}
+	
+	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
+			String bussinesstypeId, String destinationTaskKey,
+			String completeReason) {
+		completeTaskLoadBussinesstypeParamsReason(taskId,
+				(Map<String, Object>) null, bussinesstypeId,
+				destinationTaskKey, completeReason);
 	}
 
 	/**
@@ -494,6 +621,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 			Map<String, Object> map, String bussinesstypeId) {
 		completeTaskLoadBussinesstypeParams(taskId, map, bussinesstypeId,
 				(String) null);
+	}
+	
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			Map<String, Object> map, String bussinesstypeId,
+			String completeReason) {
+		completeTaskLoadBussinesstypeParamsReason(taskId, map, bussinesstypeId,
+				(String) null,completeReason);
 	}
 
 	/**
@@ -530,6 +664,29 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
+	
+	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
+			Map<String, Object> map, String bussinesstypeId,
+			String destinationTaskKey, String completeReason) {
+		Task task = this.getTaskById(taskId);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+
+		Nodevariable nodevariable = new Nodevariable();
+		nodevariable.setNode_key(task.getName());
+		nodevariable.setBusiness_id(bussinesstypeId);
+		nodevariable
+				.setBusiness_type(WorkFlowConstant.BUSINESS_TYPE_BUSINESSTYPE);
+
+		List<Nodevariable> nodevariableList = activitiConfigService
+				.queryNodevariable(nodevariable);
+		for (Nodevariable item : nodevariableList) {
+			paramsMap.put(item.getParam_name(), item.getParam_value());
+		}
+		if (map != null && map.size() > 0) {
+			paramsMap.putAll(map);
+		}
+		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey, completeReason);
+	}
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
@@ -541,6 +698,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public void completeTaskLoadCommonParams(String taskId) {
 		completeTaskLoadCommonParams(taskId, (Map<String, Object>) null);
+	}
+	
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			String completeReason) {
+		completeTaskLoadCommonParamsReason(taskId, (Map<String, Object>) null,
+				completeReason);
 	}
 
 	/**
@@ -556,6 +719,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		completeTaskLoadCommonParams(taskId, (Map<String, Object>) null,
 				destinationTaskKey);
 	}
+	
+	public void completeTaskLoadCommonParamsWithDest(String taskId,
+			String destinationTaskKey, String completeReason) {
+		completeTaskLoadCommonParamsReason(taskId, (Map<String, Object>) null,
+				destinationTaskKey, completeReason);
+	}
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
@@ -568,6 +737,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 	public void completeTaskLoadCommonParams(String taskId,
 			Map<String, Object> map) {
 		completeTaskLoadCommonParams(taskId, map, (String) null);
+	}
+	
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			Map<String, Object> map, String completeReason) {
+		completeTaskLoadCommonParamsReason(taskId, map, (String) null,
+				completeReason);
 	}
 
 	/**
@@ -599,6 +774,28 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
+	
+	public void completeTaskLoadCommonParamsReason(String taskId,
+			Map<String, Object> map, String destinationTaskKey,
+			String completeReason) {
+		Task task = this.getTaskById(taskId);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+
+		Nodevariable nodevariable = new Nodevariable();
+		nodevariable.setNode_key(task.getName());
+		nodevariable.setBusiness_id("");
+		nodevariable.setBusiness_type(WorkFlowConstant.BUSINESS_TYPE_COMMON);
+
+		List<Nodevariable> nodevariableList = activitiConfigService
+				.queryNodevariable(nodevariable);
+		for (Nodevariable item : nodevariableList) {
+			paramsMap.put(item.getParam_name(), item.getParam_value());
+		}
+		if (map != null && map.size() > 0) {
+			paramsMap.putAll(map);
+		}
+		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey, completeReason);
+	}
 
 	/**
 	 * 处理任务(加载配置好的参数)
@@ -615,6 +812,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		completeTaskLoadParamsWithDest(taskId, business_id, business_type,
 				(String) null);
 	}
+	
+	public void completeTaskLoadParamsReason(String taskId, String business_id,
+			String business_type, String completeReason) {
+		completeTaskLoadParamsWithDest(taskId, business_id, business_type,
+				(String) null,completeReason);
+	}
 
 	/**
 	 * 处理任务(加载配置好的参数)
@@ -630,6 +833,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 			String business_id, String business_type, String destinationTaskKey) {
 		completeTaskLoadParams(taskId, (Map<String, Object>) null, business_id,
 				business_type, destinationTaskKey);
+	}
+	
+	public void completeTaskLoadParamsWithDest(String taskId,
+			String business_id, String business_type,
+			String destinationTaskKey, String completeReason) {
+		completeTaskLoadParamsReason(taskId, (Map<String, Object>) null,
+				business_id, business_type, destinationTaskKey, completeReason);
 	}
 
 	/**
@@ -648,6 +858,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 			String business_id, String business_type) {
 		completeTaskLoadParams(taskId, map, business_id, business_type,
 				(String) null);
+	}
+
+	public void completeTaskLoadParamsReason(String taskId,
+			Map<String, Object> map, String business_id, String business_type,
+			String completeReason) {
+		completeTaskLoadParamsReason(taskId, map, business_id, business_type,
+				(String) null,completeReason);
 	}
 
 	/**
@@ -683,6 +900,29 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// taskService = processEngine.getTaskService();
 		taskService.complete(taskId, paramsMap, destinationTaskKey);
 	}
+	
+	public void completeTaskLoadParamsReason(String taskId,
+			Map<String, Object> map, String business_id, String business_type,
+			String destinationTaskKey, String completeReason) {
+		Task task = this.getTaskById(taskId);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+
+		Nodevariable nodevariable = new Nodevariable();
+		nodevariable.setNode_key(task.getName());
+		nodevariable.setBusiness_id(business_id);
+		nodevariable.setBusiness_type(business_type);
+
+		List<Nodevariable> nodevariableList = activitiConfigService
+				.queryNodevariable(nodevariable);
+		for (Nodevariable item : nodevariableList) {
+			paramsMap.put(item.getParam_name(), item.getParam_value());
+		}
+		if (map != null && map.size() > 0) {
+			paramsMap.putAll(map);
+		}
+		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey, completeReason);
+	}
+
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -707,6 +947,24 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+	
+	public void completeTaskWithReason(String taskId, String username,
+			Map<String, Object> map,String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			taskService.completeWithReason(taskId, map, completeReason);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -730,6 +988,23 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+	
+	public void completeTaskWithReason(String taskId, String username,
+			Map<String, Object> map, String destinationTaskKey,String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			taskService.completeWithReason(taskId, map, destinationTaskKey, completeReason);
+			
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -745,6 +1020,22 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// taskService = processEngine.getTaskService();
 			taskService.claim(taskId, username);
 			taskService.complete(taskId);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	public void completeTaskByUser(String taskId, String username,String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			taskService.completeWithReason(taskId, completeReason);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -794,6 +1085,24 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+	
+	public void completeTaskByUserWithDest(String taskId, String username,
+			String destinationTaskKey, String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+			taskService.completeWithDestReason(taskId, destinationTaskKey,
+					completeReason);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
 
 	/**
 	 * 完成任务(先领用再完成)
@@ -811,6 +1120,24 @@ public class ActivitiServiceImpl implements ActivitiService,
 			taskService.claim(taskId, username);
 			
 			taskService.complete(taskId,map);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	public void completeTaskWithLocalVariablesReason(String taskId,
+			String username, Map<String, Object> map, String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+
+			taskService.completeWithReason(taskId, map, completeReason);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -844,6 +1171,26 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+	
+	public void completeTaskWithLocalVariablesReason(String taskId,
+			String username, Map<String, Object> map,
+			String destinationTaskKey, String completeReason) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			taskService.claim(taskId, username);
+
+			taskService.completeWithReason(taskId, map, destinationTaskKey, completeReason);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
 
 	/**
 	 * 获得历史任务实例by流程实例ID
@@ -1904,6 +2251,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 			if (StringUtil.isNotEmpty(task.getTaskId())) {
 				task.setTaskId("%" + task.getTaskId() + "%");
 			}
+			
+			if (StringUtil.isNotEmpty(task.getBusinessKey())) {
+				task.setBusinessKey("%" + task.getBusinessKey() + "%");
+			}
+			
+			if (StringUtil.isNotEmpty(task.getProcessKey())) {
+				task.setProcessKey("%" + task.getProcessKey() + "%");
+			}
 
 			listInfo = executor.queryListInfoBean(TaskManager.class,
 					"selectTaskByUser_wf", offset, pagesize, task);
@@ -2716,11 +3071,17 @@ public class ActivitiServiceImpl implements ActivitiService,
 						+ processInstCondition.getWf_Inst_Id() + "%");
 			}
 
-			// 业务主键
+			// 业务主题
 			if (StringUtil
 					.isNotEmpty(processInstCondition.getWf_business_key())) {
 				processInstCondition.setWf_business_key("%"
 						+ processInstCondition.getWf_business_key() + "%");
+			}
+
+			// 流程key
+			if (StringUtil.isNotEmpty(processInstCondition.getWf_key())) {
+				processInstCondition.setWf_key("%"
+						+ processInstCondition.getWf_key() + "%");
 			}
 
 			// 分页获取流程实例数据
@@ -2748,6 +3109,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 						pi.setDURATION_(formatDuring(new Date().getTime()
 								- startTime.getTime()));
 					}
+
+					// 发起人，展示转换
+					pi.setSTART_USER_ID_(userIdToUserName(
+							pi.getSTART_USER_ID_(), "1"));
 
 					// 流程实例完成，不需要查询处理人和签收人
 					if (StringUtil.isEmpty(pi.getSUSPENSION_STATE_())) {
@@ -3050,6 +3415,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 获取流程实例信息
 			ProcessInst pi = executor.queryObjectBean(ProcessInst.class,
 					"queryProInst_wf", pic);
+			
+			// 发起人，展示转换
+			pi.setSTART_USER_ID_(userIdToUserName(pi.getSTART_USER_ID_(), "1"));
 
 			// 获取父流程信息
 			if (StringUtil.isNotEmpty(pi.getSUPER_PROCESS_INSTANCE_ID_())) {
@@ -3058,7 +3426,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 						pi.getSUPER_PROCESS_INSTANCE_ID_());
 
 				pi.setSUPER_SUSPENSION_STATE_(super_pi.getSUSPENSION_STATE_());
-				pi.setSUPER_START_USER_ID_(super_pi.getSTART_USER_ID_());
+				pi.setSUPER_START_USER_ID_(userIdToUserName(super_pi.getSTART_USER_ID_(),"1"));
 				pi.setSUPER_START_TIME_(super_pi.getSTART_TIME_());
 				pi.setSUPER_END_TIME_(super_pi.getEND_TIME_());
 			}
@@ -3277,6 +3645,158 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throw new ProcessException(e);
 		} finally {
 			tms.release();
+		}
+	}
+
+	@Override
+	public List getProcessVersionList(String processKey) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("processKey", processKey);
+		
+		try {
+			return executor.queryListBean(HashMap.class,
+					"getProcessVersionList_wf", map);
+			
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public void saveMessageType(String processKey, String messagetempleid,
+			String emailtempleid, String noticeId) {
+		try {
+			// 新增
+			if (StringUtil.isEmpty(noticeId)) {
+				noticeId = java.util.UUID.randomUUID().toString();
+
+				executor.insert("insertProTemplate_wf", noticeId, processKey,
+						messagetempleid, emailtempleid);
+
+			} else {// 修改
+
+				executor.update("updateProTemplate_wf", messagetempleid,
+						emailtempleid, noticeId);
+
+			}
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	@Override
+	public void addIsContainHoliday(String processKey, String IsContainHoliday)
+			throws Exception {
+
+		if (StringUtil.isEmpty(processKey)) {
+			throw new Exception("设置流程工时处理是否包含节假日出错,processKey是空");
+		}
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			String noticeId = executor.queryField("queryNoticeIdByProKey",
+					processKey);
+
+			if (StringUtil.isNotEmpty(noticeId)) {
+				executor.update("updateProIsContainHoliday_wf",
+						IsContainHoliday, noticeId);
+			} else {
+				executor.insert("insertProIsContainHoliday_wf", java.util.UUID
+						.randomUUID().toString(), processKey, IsContainHoliday);
+			}
+			
+			tm.commit();
+		} finally {
+			tm.release();
+		}
+
+	}
+	
+	public void downProcessXMLandPicZip(String processKey, String version,
+			HttpServletResponse response) throws Exception {
+
+		response.setContentType("APPLICATION/OCTET-STREAM");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ processKey + "_" + version + ".zip");
+
+		ZipOutputStream zipOut = null;
+		try {
+			if (processKey != null && !processKey.equals("")) {
+				ProcessDef processDefinition = queryProdefByKey(processKey,
+						version);
+				// 流程定义图片名称
+				String picName = processDefinition.getDGRM_RESOURCE_NAME_();
+				// 流程定义XML名称
+				String xmlName = processDefinition.getRESOURCE_NAME_();
+
+				zipOut = new ZipOutputStream(response.getOutputStream());
+
+				String[] targetName = { xmlName, picName };
+				
+				for (int i = 0; i < targetName.length; i++) {
+					InputStream is = getResourceAsStream(
+							processDefinition.getDEPLOYMENT_ID_(),
+							targetName[i]);
+
+					ZipEntry ze = new ZipEntry(targetName[i]);
+					// 将ZipEntry加到zos中，再写入实际的文件内容
+					zipOut.putNextEntry(ze);
+
+					byte[] buffer = new byte[1024];
+					int len = -1;
+					while ((len = is.read(buffer)) > 0) {
+						zipOut.write(buffer, 0, len);
+					}
+					zipOut.closeEntry();
+					is.close();
+				}
+				zipOut.close();
+			}
+		} finally {
+			if (zipOut != null) {
+				zipOut.close();
+			}
+		}
+	}
+
+	@Override
+	public void addNodeWorktime(String processKey, String processIntsId,
+			List<Map<String, String>> nodeWorktimeList) throws Exception {
+		TransactionManager tm = new TransactionManager();
+
+		List<Map<String, String>> beansList =   new ArrayList<Map<String, String>>();	
+		
+		try {
+			tm.begin();
+			
+			if (nodeWorktimeList.size() > 0) {
+				for (int i = 0; i < nodeWorktimeList.size(); i++) {
+					
+					Map<String,String> worktimeMap = nodeWorktimeList.get(i);
+					
+					worktimeMap.put("PROCESS_KEY", processKey);
+					worktimeMap.put("PROCESS_ID", processIntsId);
+					worktimeMap.put("NODE_KEY",worktimeMap.get("NODE_KEY"));
+					
+					if (StringUtil.isNotEmpty(worktimeMap.get("DURATION_NODE"))) {
+						double duration_node = Double.parseDouble(worktimeMap.get("DURATION_NODE"));
+						worktimeMap.put("DURATION_NODE", duration_node*60*60*1000+ "");
+					}else {
+						worktimeMap.put("DURATION_NODE", "0");
+					}
+					worktimeMap.put("NOTICENUM", worktimeMap.get("NOTICENUM"));
+					beansList.add(worktimeMap);
+				}
+				executor.insertBeans("insertNodeWorktime_wf", beansList);
+			}
+			
+			tm.commit();
+			
+		} finally {
+			tm.release();
 		}
 	}
 

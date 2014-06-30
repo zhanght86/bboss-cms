@@ -127,7 +127,7 @@ var api = frameElement.api, W = api.opener;
 			if(detail)
 				$("#selectDetai2").html("工号:"+$("#"+detail+"user_worknumber").val()+"<br/>登陆名:"+detail+"<br/>组织机构："+$("#"+detail+"org_name").val()+$("#"+detail+"job_name").val());
 		})
-		 $("#org_tree").load("../taskConfig/task_config_org_tree.jsp");
+		 $("#org_tree").load("../taskConfig/task_config_common_org_tree.jsp");
 	   });
 </script>
 <body class="easyui-layout">

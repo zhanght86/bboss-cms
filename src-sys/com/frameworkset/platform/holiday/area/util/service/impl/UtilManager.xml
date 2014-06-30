@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+<!-- 节假日工具  start -->
+<property name="getAllOrgLeaf">
+		<![CDATA[
+		
+    select org_id id,parent_id pId,org_name name,org_id orgId from TD_SM_ORGANIZATION t1 start with t1.org_id = '50020020'	CONNECT BY PRIOR t1.org_id = t1.parent_id
+		
+		]]>
+	</property>
+<property name="getWorkTimeByWorkDate">
+		<![CDATA[
+		select start_time startTime , end_time endTime from TD_SP_HOLIDAY_WORKTIME where pid in(
+		
+		select id  from TD_SP_HOLIDAY_WORKDATE
+		
+		where area_id = #[areaId] and start_date <= #[date] and end_date >= #[date] 
+		
+		) order by start_time asc
+		]]>
+	</property>
+<property name="getWorkTimeByPid">
+		<![CDATA[
+		select start_time startTime , end_time endTime from TD_SP_HOLIDAY_WORKTIME where pid = ?
+		]]>
+	</property>
+
+<property name="getWorkDateIn">
+		<![CDATA[
+		select id id,start_date start_date , end_date endDate from TD_SP_HOLIDAY_WORKDATE
+		
+		where area_id = #[areaId] and start_date <= #[startTime] and end_date >= #[startTime]) 
+		
+		]]>
+	</property>
+
+<property name="getThisAndNextYearArrange">
+		<![CDATA[
+		select 	DATE_OF_YEAR dateOfYear , type type from TD_SP_HOLIDAY_ARRANGE where AREA_ID = ? and YEAR in (?,?)
+		]]>
+	</property>
+
+<property name="querySubOrg">
+		<![CDATA[		
+		select org_id orgId from TD_SM_ORGANIZATION t1 start with t1.org_id = ?	CONNECT BY PRIOR t1.org_id = t1.parent_id	
+		]]>
+	</property>
+
+<property name="queryAreaIds">
+		<![CDATA[		
+		select area_id from TD_SP_HOLIDAY_AREA		
+		]]>
+	</property>
+
+
+<property name="queryOrgToArea">
+		<![CDATA[
+		select org_id orgId , area_id areaId from TD_SP_HOLIDAY_ORG
+		]]>
+	</property>
+
+
+	
+</properties>

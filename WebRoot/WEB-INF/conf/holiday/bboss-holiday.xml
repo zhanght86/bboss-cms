@@ -1,0 +1,29 @@
+<properties>
+	
+		
+	<property name="/sysmanager/holiday/*.page" class="com.frameworkset.platform.holiday.area.action.AreaController" singlable="true"
+		f:areaManager="attr:sysmanager.holiday.areaManager"
+		path:index="/sysmanager/holiday/areaIndex.jsp"
+		path:areaList="/sysmanager/holiday/areaList.jsp"
+		path:orgList="/sysmanager/holiday/orgList.jsp"
+		path:workDateList="/sysmanager/holiday/workDateList.jsp"
+		path:workTimeList="/sysmanager/holiday/workTimeList.jsp"
+		/>
+		 
+	
+	<property name="sysmanager.holiday.areaManager"
+		f:executor="attr:sysmanager.holiday.areaManager.configsqlexecutor"
+		class="com.frameworkset.platform.holiday.area.service.impl.AreaManagerImpl"
+		/>
+	
+	<property name="sysmanager.holiday.areaManager.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/holiday/area/service/impl/AreaManager.xml"/>
+		</construction>
+		
+	</property>
+	
+	
+		
+</properties>

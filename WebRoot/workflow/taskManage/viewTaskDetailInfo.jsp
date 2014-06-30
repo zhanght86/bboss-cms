@@ -54,17 +54,17 @@
 									<tr >
 										<td width="350"><pg:cell colName="PROC_INST_ID_"/></td>
 										<td width="100">
-											<pg:empty colName="SUSPENSION_STATE_" >
-												流程结束
-											</pg:empty>
-											<pg:notempty colName="SUSPENSION_STATE_" >
+											<pg:notempty colName="END_TIME_" >
+												结束
+											</pg:notempty>
+											<pg:empty colName="END_TIME_" >
 												<pg:equal colName="SUSPENSION_STATE_" value="1">
-													流程激活
+													进行中
 												</pg:equal>
 												<pg:equal colName="SUSPENSION_STATE_" value="2">
-													流程挂起
+													挂起
 												</pg:equal>
-											</pg:notempty>
+											</pg:empty>
 										</td>
 										<td width="100"><pg:cell colName="START_USER_ID_"/></td>
 										<td width="150"><pg:cell colName="START_TIME_"/></td>
@@ -93,17 +93,17 @@
 			        						</a>
 			        					</td>
 										<td rowspan="2" width="100">
-											<pg:empty colName="SUSPENSION_STATE_" >
-												流程结束
-											</pg:empty>
-											<pg:notempty colName="SUSPENSION_STATE_" >
+											<pg:notempty colName="END_TIME_" >
+												结束
+											</pg:notempty>
+											<pg:empty colName="END_TIME_" >
 												<pg:equal colName="SUSPENSION_STATE_" value="1">
-													流程激活
+													进行中
 												</pg:equal>
 												<pg:equal colName="SUSPENSION_STATE_" value="2">
-													流程挂起
+													挂起
 												</pg:equal>
-											</pg:notempty>
+											</pg:empty>
 										</td>
 										<td rowspan="2" width="100"><pg:cell colName="START_USER_ID_"/></td>
 										<td rowspan="2" width="150"><pg:cell colName="START_TIME_"/></td>

@@ -1,0 +1,50 @@
+@charset "utf-8";
+/* CSS Document */
+ul,li{padding:0px;margin:0px; list-style:none}
+.date_content{width:948px;height:auto;margin:0px auto;padding-left:12px;clear:both}
+.date_content ul li{width:203px;height:208px; float:left;margin:5px 12px 5px 12px;font-family:"microsoft yahei",arial}
+.d_c_title{
+	background-color:#2a80be;
+	height:24px;
+	padding-top:5px;
+	font-size:15px; 
+	text-align:center;
+	color:#fff; 
+	border-top-left-radius:2px;
+	border-top-right-radius:2px;
+	box-shadow:inset 0px 1px 0px rgba(255,255,255,0.3);
+	border-top:1px solid #24628d;
+	border-left:1px solid #24628d;
+	border-right:1px solid #24628d;
+	}
+.data_table th{
+	background-color:#a7d8fa;
+	height:20px;
+	font-size:10px;
+	font-family:"microsoft yahei";
+	color:#333;
+	line-height:20px;
+	border-bottom:1px solid #5a9cca;
+	text-align:center;
+	font-weight:100;	
+}
+.data_table td
+{
+	line-height:25px;
+	font-size:12px;
+	text-align:center;
+	border-left:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+.bordr{border-right:1px solid #ccc}
+.bdrdhl{border-left:1px solid #24628d}
+.bdrdhr{border-right:1px solid #24628d}
+ 
+.explain{font-size:12px;line-height:26px;float:right;text-align:right;margin-right:36px; }
+.explain p{padding:0px;margin:0px;line-height:26px;float:left}
+.point{width:26px;height:26px; text-align:center; vertical-align:central; float:left}
+.point img,.point_toggle img{vertical-align:middle;margin-top:2px;}
+.point_toggle{ background: url(/SanyPDP/html/images/holiday/hand_pg.gif);width:26px;height:26px; text-align:center; vertical-align:central;float:left}
+
+.check_year{float:left;margin-left:24px; width:420px; text-align:left}
+.mt_10{margin-top:10px;}

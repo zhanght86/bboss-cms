@@ -39,6 +39,7 @@ public class ProcessInst {
 
 	private String VERSION_;// 版本
 	private String KEY_;// 流程KEY
+	private String BUSINESS_NAME;// 业务类型
 
 	private String NAME_;// 流程名称
 	private String SUSPENSION_STATE_;// 流程状态 1激活， 2挂起，空->流程结束
@@ -50,8 +51,16 @@ public class ProcessInst {
 	private String SUPER_START_TIME_;// 父流程开启时间
 	private String SUPER_END_TIME_;// 父流程结束时间
 	private String PARENT_ID_;// 父流程实例id （ACT_RU_EXECUTION表中字段）
-	
+
 	private List<ActivitiVariable> variableList;// 变量参数集合
+
+	public String getBUSINESS_NAME() {
+		return BUSINESS_NAME;
+	}
+
+	public void setBUSINESS_NAME(String bUSINESS_NAME) {
+		BUSINESS_NAME = bUSINESS_NAME;
+	}
 
 	public List<ActivitiVariable> getVariableList() {
 		return variableList;

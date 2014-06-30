@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import javax.transaction.RollbackException;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.frameworkset.util.CollectionUtils;
@@ -78,7 +79,6 @@ public class ActivitiRepositoryAction {
 	
 	private ActivitiRelationService activitiRelationService;
 	
-	
 	/**
 	 * 部署流程
 	 * @param processDeployment
@@ -91,7 +91,7 @@ public class ActivitiRepositoryAction {
 		try {
 			tm.begin();
 			Deployment deployment = null;
-			if (processDeployment.getProcessDef().getContentType().contains(FILE_TYPE_ZIP)) {
+			if (processDeployment.getProcessDef().getOriginalFilename().endsWith(".zip") || processDeployment.getProcessDef().getContentType().contains(FILE_TYPE_ZIP)) {
 				deployment = activitiService.deployProcDefByZip(processDeployment.getNAME_(), new ZipInputStream(processDeployment
 						.getProcessDef().getInputStream()),processDeployment.getUpgradepolicy());
 			} else {
@@ -112,6 +112,9 @@ public class ActivitiRepositoryAction {
 					activitiConfigService.addProBusinessType(pd.getKEY_(), processDeployment.getBusinessTypeId());
 					
 					activitiRelationService.addAppProcRelation(pd,processDeployment.getWf_app_id());
+					
+					// 部署流程定义，默认计算工时是包含节假日的（状态是1）
+					activitiService.addIsContainHoliday(pd.getKEY_(),"1");
 				}
 			}
 			tm.commit();
@@ -436,13 +439,40 @@ public class ActivitiRepositoryAction {
 		}
 		return null;
 	}
-	public @ResponseBody(datatype="xml") String getProccessXMLByKey(String processKey,String version) throws IOException {
-		
-		if(processKey!=null&&!processKey.equals("")){
+//	public @ResponseBody(datatype="xml") String getProccessXMLByKey(String processKey,String version) throws IOException {
+//		
+//		if(processKey!=null&&!processKey.equals("")){
+//			
+//			return activitiService.getProccessXMLByKey(processKey, version,"UTF-8");
+//		}
+//		return null;
+//	}
+	
+	/** 获取流程定义XML gw_tanx
+	 * @param processKey
+	 * @param version
+	 * @param model
+	 * @return
+	 * 2014年6月24日
+	 */
+	public String getProccessXMLByKey(String processKey, String version,
+			ModelMap model) {
+
+		try {
+			if (processKey != null && !processKey.equals("")) {
+
+				String processXML = activitiService.getProccessXMLByKey(
+						processKey, version, "UTF-8");
+				model.addAttribute("processXML", processXML);
+			}
+
+			model.addAttribute("processKey", processKey);
+			model.addAttribute("version", version);
 			
-			return activitiService.getProccessXMLByKey(processKey, version,"UTF-8");
+			return "path:processDefsXML";
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
-		return null;
 	}
 	
 	/**
@@ -454,11 +484,9 @@ public class ActivitiRepositoryAction {
 	 */
 	public String toProcessInstance(String processKey, ModelMap model) {
 		try {
-			// 根据流程key获取流程版本号
-			List<ProcessDefinition> defList = activitiService
-					.activitiListByprocesskey(processKey);
-
-			model.addAttribute("defList", defList);
+			List versionList = activitiService.getProcessVersionList(processKey);
+			
+			model.addAttribute("versionList", versionList);
 			model.addAttribute("processKey", processKey);
 			
 			return "path:toProcessInstance";
@@ -508,8 +536,15 @@ public class ActivitiRepositoryAction {
 	public @ResponseBody
 	String startPorcessInstance(String processKey,String businessKey,
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,List<Nodevariable> nodevariableList) {
+		
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+			
+			// 流程引擎的变量参数集合
 			Map<String, Object> map = new HashMap<String, Object>();
+			// 节点工时提醒次数集合
+			List<Map<String, String>> worktimeList = new ArrayList<Map<String, String>>();
 				
 			for (int i = 0; i < activitiNodeCandidateList.size();i++) {
 				// 用户
@@ -522,6 +557,20 @@ public class ActivitiRepositoryAction {
 					map.put(activitiNodeCandidateList.get(i).getNode_key()+"_groups",
 							activitiNodeCandidateList.get(i).getCandidate_groups_id());
 				}
+				
+				// 流程实例下节点的处理工时与提醒次数
+				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i).getNode_key())) {
+					
+					Map<String, String> worktimeMap = new HashMap<String, String>();
+					worktimeMap.put("NODE_KEY",activitiNodeCandidateList.get(i).getNode_key()+"");
+					worktimeMap.put("DURATION_NODE", activitiNodeCandidateList.get(i).getDuration_node()+"");
+					worktimeMap.put("NOTICENUM", activitiNodeCandidateList.get(i).getNoticenum()+"");
+					worktimeList.add(worktimeMap);
+				}
+				
+			}
+			
+			for (int i = 0; i < nodevariableList.size();i++) {
 				// 变量
 				if (!StringUtil.isEmpty(nodevariableList.get(i).getParam_name())) {
 					map.put(nodevariableList.get(i).getParam_name(),
@@ -529,11 +578,19 @@ public class ActivitiRepositoryAction {
 				}
 			}
 
-			activitiService.startProcDef(businessKey, processKey, map,AccessControl
+			ProcessInstance processInstance =activitiService.startProcDef(businessKey, processKey, map,AccessControl
 					.getAccessControl().getUserAccount());
+			
+			activitiService.addNodeWorktime(processKey,processInstance.getId(),worktimeList);
+			
+			tm.commit();
+			
 			return "success";
+			
 		} catch (Exception e) {
 			return "fail"+e.getMessage();
+		}finally {
+			tm.release();
 		}
 	}
 	
@@ -544,20 +601,14 @@ public class ActivitiRepositoryAction {
 	 * @param model
 	 * 2014年5月13日
 	 */
-	public String toStartProcessInst(String processKey, String business_id,
-			String business_type, ModelMap model) {
+	public String toStartProcessInst(String processKey, ModelMap model) {
 		try {
-			List<ActivitiNodeCandidate> list = activitiConfigService
-					.queryActivitiNodesCandidates(business_type, business_id,
-							processKey);
 
-			model.addAttribute("activitiNodeCandidateList", list);
-			model.addAttribute("business_id", business_id);
-			model.addAttribute("business_type", business_type);
-			model.addAttribute("process_key", processKey);
 			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
 					.queryAllActivitiNodeInfo(processKey);
+			
 			model.addAttribute("nodeInfoList", nodeInfoList);
+			model.addAttribute("process_key", processKey);
 
 			return "path:startProcess";
 		} catch (Exception e) {
@@ -646,6 +697,105 @@ public class ActivitiRepositoryAction {
 		}
 	}
 	
+	/** 获取节点配置信息  gw_tanx
+	 * @param business_type
+	 * @param business_id
+	 * @param processKey
+	 * @return
+	 * 2014年6月19日
+	 */
+	public @ResponseBody
+	Map<String, List> getConfigTempleInfo(String business_type,
+			String business_id, String processKey) {
+		try {
+
+			// 节点代办配置信息
+			List<ActivitiNodeCandidate> nodeConfigList = activitiConfigService
+					.queryActivitiNodesCandidates(business_type, business_id,
+							processKey);
+
+			// 节点参数配置信息
+			List<Nodevariable> nodeVariableList = activitiConfigService
+					.queryNodeVariable(business_type, business_id,
+							processKey);
+			
+			Map<String, List> map = new HashMap<String, List>();
+			map.put("nodeConfigList", nodeConfigList);
+			map.put("nodeVariableList", nodeVariableList);
+			
+			return map;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 跳转到设置流程定义消息模板界面 gw_tanx
+	 * @param processKey
+	 * @param model
+	 * @return
+	 * 2014年6月23日
+	 */
+	public String toSetMessageTemplate(String processKey, ModelMap model){
+		try {
+
+			// 获取模板信息
+			Map templateMap = activitiConfigService
+					.queryMessageTempleById(processKey);
+			
+			model.addAttribute("templateMap", templateMap);
+			model.addAttribute("processKey", processKey);
+
+			return "path:setMessageTemplate";
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 消息模板保存 gw_tanx
+	 * @param processKey
+	 * @param messagetempleid
+	 * @param emailtempleid
+	 * @return
+	 * 2014年6月23日
+	 */
+	public @ResponseBody
+	String saveMessageTemplate(String processKey, String messagetempleid,
+			String emailtempleid, String noticeId) {
+		try {
+
+			activitiService.saveMessageType(processKey, messagetempleid,
+					emailtempleid, noticeId);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+	
+	/** 打包下载流程定义xml和图片 gw_tanx
+	 * @param processKey
+	 * @param version
+	 * 2014年6月24日
+	 */
+	public void downProcessXMLandPicZip(String processKey, String version,
+			HttpServletResponse response) throws Exception {
+
+		activitiService.downProcessXMLandPicZip(processKey, version, response);
+
+	}
+	
+	/** 设置流程定义中，处理工时是否包含节假日 gw_tanx
+	 * @param processKey
+	 * @param version
+	 * 2014年6月24日
+	 */
+	public void updateHoliday(String processKey, String IsContainHoliday)
+			throws Exception {
+
+		activitiService.addIsContainHoliday(processKey, IsContainHoliday);
+
+	}
+
 }
 
 

@@ -28,6 +28,46 @@ public class TaskCondition {
 
 	private boolean isAdmin;// 是否管理员
 
+	private String businessKey;// 业务主题
+
+	private String businessTypeId;// 业务类型id
+
+	private String taskDefKey;// 任务key
+
+	private String completeReason;// 处理结果
+
+	public String getTaskDefKey() {
+		return taskDefKey;
+	}
+
+	public void setTaskDefKey(String taskDefKey) {
+		this.taskDefKey = taskDefKey;
+	}
+
+	public String getCompleteReason() {
+		return completeReason;
+	}
+
+	public void setCompleteReason(String completeReason) {
+		this.completeReason = completeReason;
+	}
+
+	public String getBusinessKey() {
+		return businessKey;
+	}
+
+	public void setBusinessKey(String businessKey) {
+		this.businessKey = businessKey;
+	}
+
+	public String getBusinessTypeId() {
+		return businessTypeId;
+	}
+
+	public void setBusinessTypeId(String businessTypeId) {
+		this.businessTypeId = businessTypeId;
+	}
+
 	public String getTaskId() {
 		return taskId;
 	}

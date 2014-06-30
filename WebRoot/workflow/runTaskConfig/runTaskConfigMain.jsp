@@ -59,7 +59,7 @@ function doCandidataSubmit(){
 		type: "post",
 		
 		data: formToJson("#submitCandidataForm"),			
-		datatype:"json",			
+		dataType:"json",			
 		success: function(data){
 		    alert(data);
 		  }
@@ -72,7 +72,7 @@ function doParamSubmit(){
 		type: "post",
 		
 		data: formToJson("#submitParamForm"),			
-		datatype:"json",			
+		dataType:"json",			
 		success: function(data){
 		    alert(data);
 		  }

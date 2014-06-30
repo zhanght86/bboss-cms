@@ -83,7 +83,7 @@ height:44px;
 		</pg:false>
 		</div>
 	</div>
-	<sany:menus level="3"/>
+	<sany:menus level="3" enableindex="true"/>
 </div>
 
 <%-- <div class="l_body">

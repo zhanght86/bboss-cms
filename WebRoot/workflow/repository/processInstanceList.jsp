@@ -17,13 +17,25 @@
 	<pg:notempty actual="${processInsts}">
 	   <pg:pager scope="request" data="processInsts" desc="true" isList="false" containerid="instanceContainer" selector="customContent">
 	   
-	   <pg:param name="wf_key"/>
+	   	<pg:param name="wf_key"/>
+	   	<pg:param name="wf_Inst_Id"/>
+	   	<pg:param name="wf_start_time1"/>
+	   	<pg:param name="wf_start_time2"/>
+	   	<pg:param name="wf_end_time1"/>
+	   	<pg:param name="wf_end_time2"/>
+	   	<pg:param name="wf_state"/>
+	   	<pg:param name="wf_versions"/>
+	   	<pg:param name="wf_business_key"/>
+	   	<pg:param name="businessTypeId"/>
+	   	
 		<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 		<div id="changeColor1">
 		 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb" sytle="background-color: red;">
 	        <pg:header>
 	            <th align=center><input id="CKA" name="CKA" type="checkbox" onClick="checkAll('CKA','CK')"></th>
-	       		<th>业务主键</th>
+	       		<th>业务主题</th>
+	       		<th>流程key</th>
+	       		<th>业务类型</th>
 	       		<th>版本</th>
 	       		<th>流程实例ID</th>
 	       		<th>父流程实例ID</th>
@@ -35,6 +47,7 @@
 	       		<th>结束时间</th>
 	       		<th>耗时</th>
 	       		<th>状态</th>
+	       		<th>备注</th>
 	       		<th><pg:message code="sany.pdp.common.operation"/></th>
 	       	</pg:header>
 	
@@ -45,22 +58,25 @@
 		            	<input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="ID_" />"/>
 		                <input id="PROC_DEF_ID_" type="hidden" name="PROC_DEF_ID_" value="<pg:cell colName="PROC_DEF_ID_" />"/>
 		                <input id="PROC_INST_ID_" type="hidden" name="PROC_INST_ID_" value="<pg:cell colName="PROC_INST_ID_" />"/>
-		                <input id="END_TIME" type="hidden" name="END_TIME" value="<pg:cell colName="END_TIME_" />"/></td>
+		                <input id="END_TIME" type="hidden" name="END_TIME" value="<pg:cell colName="END_TIME_" />"/>
+		            </td>
 		            <td ><pg:cell colName="BUSINESS_KEY_" /></td> 
+		            <td ><pg:cell colName="KEY_" /></td> 
+		            <td ><pg:cell colName="BUSINESS_NAME" /></td> 
 		            <td ><pg:cell colName="VERSION_" /></td>
 		            <td ><pg:cell colName="PROC_INST_ID_" /></td>  
 		            <td ><pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" /></td> 
 		        	<td ><pg:cell colName="START_USER_ID_" /></td>  
 		           	<td >
 		           		<span style=" color: purple;">
-				           	<pg:empty colName="taskList" >
-						           		流程结束
-						    </pg:empty>
-						    <pg:notempty colName="taskList" >
+		           			<pg:notempty colName="END_TIME_" >
+		           				流程结束
+		           			</pg:notempty>
+						    <pg:empty colName="END_TIME_" >
 						    	<pg:list colName="taskList" position="0" >
 						           	<pg:cell colName="NAME_"/></br>
 						        </pg:list>
-						    </pg:notempty>	
+						    </pg:empty>	
 						 </span>
 		           	</td>
 		           	<td>
@@ -85,22 +101,30 @@
 		            <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 		            <td><pg:cell colName="DURATION_" /></td>
 		            <td>
-		            	<pg:empty colName="SUSPENSION_STATE_" >
-		            		<pg:notempty colName="DELETE_REASON_" >
-		           				<pg:cell colName="DELETE_REASON_" />
-		            		</pg:notempty>
-		            		<pg:empty colName="DELETE_REASON_" >
-		           				<span style=" color: blue;">完成</span>
-		            		</pg:empty>
-		           		</pg:empty>
-		           		<pg:notempty colName="SUSPENSION_STATE_" >
+		            	<pg:notempty colName="END_TIME_" >
+		           			<span style=" color: blue;">完成</span>
+		           		</pg:notempty>
+		           		<pg:empty colName="END_TIME_" >
 		           			<pg:equal colName="SUSPENSION_STATE_" value="1">
-		           				激活
+		           				进行中
 		           			</pg:equal>
 		           			<pg:equal colName="SUSPENSION_STATE_" value="2">
 		           				<span style=" color: red;">挂起</span>
 		           			</pg:equal>
+		           		</pg:empty>
+		            </td>
+		            <td>
+		            	<pg:notempty colName="END_TIME_" >
+		            		<pg:empty colName="DELETE_REASON_" >
+		           				正常完成
+		            		</pg:empty>
+		            		<pg:notempty colName="DELETE_REASON_" >
+		           				<pg:cell colName="DELETE_REASON_" />
+		            		</pg:notempty>
 		           		</pg:notempty>
+		           		<pg:empty colName="END_TIME_" >
+		           			<pg:cell colName="DELETE_REASON_" />
+		           		</pg:empty>
 		            </td>
 		            
 		            <td class="td_center">
@@ -120,10 +144,13 @@
 		 		<tr>
 		   			<td class="td_center" rowspan="<pg:size colName="taskList"/>">
 		            	<input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="ID_" />"/>
-		                <input id="PROC_DEF_ID_" type="hidden" name="PROC_DEF_ID_" value="<pg:cell colName="PROC_DEF_ID_" />"/></td>
-		                <input id="PROC_INST_ID_" type="hidden" name="PROC_INST_ID_" value="<pg:cell colName="PROC_INST_ID_" />"/></td>
-		                <input id="END_TIME" type="hidden" name="END_TIME" value="<pg:cell colName="END_TIME_" />"/></td>
+		                <input id="PROC_DEF_ID_" type="hidden" name="PROC_DEF_ID_" value="<pg:cell colName="PROC_DEF_ID_" />"/>
+		                <input id="PROC_INST_ID_" type="hidden" name="PROC_INST_ID_" value="<pg:cell colName="PROC_INST_ID_" />"/>
+		                <input id="END_TIME" type="hidden" name="END_TIME" value="<pg:cell colName="END_TIME_" />"/>
+		            </td>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="BUSINESS_KEY_" /></td> 
+		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="KEY_" /></td> 
+		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="BUSINESS_NAME" /></td> 
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="VERSION_" /></td>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="PROC_INST_ID_" /></td>  
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" /></td> 
@@ -139,22 +166,30 @@
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="DURATION_" /></td>
 		            <td rowspan="<pg:size colName="taskList"/>">
-		            	<pg:empty colName="SUSPENSION_STATE_" >
-		            		<pg:notempty colName="DELETE_REASON_" >
-		           				<pg:cell colName="DELETE_REASON_" />
-		            		</pg:notempty>
-		            		<pg:empty colName="DELETE_REASON_" >
-		           				<span style=" color: blue;">完成</span>
-		            		</pg:empty>
-		           		</pg:empty>
-		           		<pg:notempty colName="SUSPENSION_STATE_" >
+		           	 	<pg:notempty colName="END_TIME_" >
+		           			<span style=" color: blue;">完成</span>
+		           		</pg:notempty>
+		           		<pg:empty colName="END_TIME_" >
 		           			<pg:equal colName="SUSPENSION_STATE_" value="1">
-		           				激活
+		           				进行中
 		           			</pg:equal>
 		           			<pg:equal colName="SUSPENSION_STATE_" value="2">
 		           				<span style=" color: red;">挂起</span>
 		           			</pg:equal>
+		           		</pg:empty>
+		            </td>
+		            <td rowspan="<pg:size colName="taskList"/>">
+		            	<pg:notempty colName="END_TIME_" >
+		            		<pg:empty colName="DELETE_REASON_" >
+		           				正常完成
+		            		</pg:empty>
+		            		<pg:notempty colName="DELETE_REASON_" >
+		           				<pg:cell colName="DELETE_REASON_" />
+		            		</pg:notempty>
 		           		</pg:notempty>
+		           		<pg:empty colName="END_TIME_" >
+		           			<pg:cell colName="DELETE_REASON_" />
+		           		</pg:empty>
 		            </td>
 		            
 		            <td class="td_center" rowspan="<pg:size colName="taskList"/>">
@@ -172,23 +207,12 @@
 		        
 		        
 		         <pg:list colName="taskList" start="1">
-			        <tr >
+			        <tr><input id="CK" type="hidden" name="CK" value=""/>
 			           	<td><span style=" color: purple;"><pg:cell colName="NAME_"/></span></td>
 			           	<td><span style=" color: purple;"><pg:cell colName="USER_ID_" /></span></td>
 			           	<td><span style=" color: purple;"><pg:cell colName="ASSIGNEE_" /></span></td>
 			        </tr>
 		        </pg:list>
-		       <%--
-		        <pg:list colName="taskList" >
-		        	<pg:notequal expression="{rowid}" value="0">
-			        <tr>
-			           	<td><pg:cell colName="NAME_"/></td>
-			           	<td><pg:cell colName="USER_ID_" /></td>
-			           	<td><pg:cell colName="ASSIGNEE_" /></td>
-			        </tr>
-			        </pg:notequal>
-		        </pg:list>
-		         --%>
 			</pg:upper>
 		 </pg:list>
 	    </table>

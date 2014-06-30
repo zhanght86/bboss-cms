@@ -327,6 +327,39 @@
     	
     	queryList();
     }
+  
+function openSetMessTemple(processKey) {
+	var url = "<%=request.getContextPath()%>/workflow/repository/toSetMessageTemplate.page?processKey="+processKey;
+	$.dialog({ id:'nodeInfoIframe', title:"模板设置("+processKey+")",width:300,height:200, content:'url:'+url});
+}
+
+function openMessTemple(templeId,templeType) {
+	var title="";
+	if (templeType == '0') {
+		title = "短信模板";
+	}else{
+		title = "邮件模板";
+	}
+	var url = "<%=request.getContextPath()%>/workflow/taskConfig/chooseMessageTemple.jsp?templeType="+templeType+"&templeId="+templeId;
+	$.dialog({ id:'templateIframe', title:title,width:900,height:500, content:'url:'+url});
+}
+
+function setHoliday(processKey,value) {
+	
+	$.ajax({
+ 	 	type: "POST",
+		url : "<%=request.getContextPath()%>/workflow/repository/updateHoliday.page",
+		data :{"processKey":processKey,"IsContainHoliday":value},
+		dataType : 'json',
+		async:false,
+		beforeSend: function(XMLHttpRequest){
+			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+		success : function(data){
+			modifyQueryData();
+		}	
+	 });
+}
 	
 </script>
 </head>

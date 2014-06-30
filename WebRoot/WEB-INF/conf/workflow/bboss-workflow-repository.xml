@@ -24,6 +24,8 @@
 		path:toProcessInstance="/workflow/repository/processInstance.jsp"
 		path:queryProcessIntsByKey="/workflow/repository/processInstanceList.jsp"
 		path:startProcess="/workflow/repository/startProcess.jsp"
+		path:setMessageTemplate="/workflow/repository/setMessageTemplate.jsp"
+		path:processDefsXML="/workflow/repository/processDefsXML.jsp"
 		f:activitiService="attr:activitiService"
 		f:activitiConfigService="attr:activitiConfigService"
 		f:appcreateService="attr:application.appcreateService"

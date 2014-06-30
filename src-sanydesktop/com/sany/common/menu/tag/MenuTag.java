@@ -167,7 +167,7 @@ public class MenuTag extends BaseTag {
 	
 	
 	
-	
+	private boolean enableindex = true;
 	private int level = 3;
 	private String web = "false";
 	
@@ -190,7 +190,7 @@ public class MenuTag extends BaseTag {
 		Item publicitem = menuHelper.getPublicItem();
 		
 		String framepath = web != null && web.equals("true")?contextpath + "/sanydesktop/webframe.page":contextpath + "/sanydesktop/frame.page";
-		if(publicitem != null && publicitem.isMain())
+		if(this.enableindex && publicitem != null && publicitem.isMain())
 		{
 
 			String target = publicitem.getTarget() == null ?"mainFrame":publicitem.getTarget();
@@ -622,6 +622,7 @@ public class MenuTag extends BaseTag {
 		super.doFinally();
 		this.level = 3;
 		this.web = "false";
+		enableindex = true;
 	}
 
 	
@@ -632,6 +633,18 @@ public class MenuTag extends BaseTag {
 
 	public void setWeb(String web) {
 		this.web = web;
+	}
+
+
+
+	public boolean isEnableindex() {
+		return enableindex;
+	}
+
+
+
+	public void setEnableindex(boolean enableindex) {
+		this.enableindex = enableindex;
 	}
 	
 }

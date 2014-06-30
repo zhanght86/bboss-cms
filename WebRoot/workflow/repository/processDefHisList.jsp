@@ -26,7 +26,7 @@
        		<th><pg:message code="sany.pdp.workflow.deploy.time"/></th>
        		<th><pg:message code="sany.pdp.workflow.processdef.path"/></th>
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
-       		<th>查看</th>
+       		<th>操作</th>
        	</pg:header>	
 
 
@@ -50,7 +50,10 @@
            		<td><pg:cell colName="DEPLOYMENT_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
            		<td><pg:cell colName="RESOURCE_NAME_"/></td>	   
            		<td><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>	   	  
-           		<td><a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="viewProcessInfo('<pg:cell colName="KEY_" />','<pg:cell colName="VERSION_" />')"><span>查看详情</span></a></td>
+           		<td>
+	           		<a href="javascript:void(0)" id="queryButton" onclick="viewProcessInfo('<pg:cell colName="KEY_" />','<pg:cell colName="VERSION_" />')">详情</a>|
+	           		<a href="<%=request.getContextPath()%>/workflow/repository/downProcessXMLandPicZip.page?processKey=<pg:cell colName="KEY_" />&version=<pg:cell colName="VERSION_"/>" >下载</a>
+	           	</td>
         </tr>
 	 </pg:list>
 	 </pg:notempty>
