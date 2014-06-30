@@ -54,4 +54,15 @@
         <column name="EMAILTEMPLEID" size="100" type="VARCHAR"/>
         <column default="1" name="IS_CONTAIN_HOLIDAY" size="1" type="VARCHAR"/>
     </table>
+     <table name="TD_SM_MSGPARAMETERS">
+        <column name="PARAM_TYPE" primaryKey="true" required="true"
+            size="50" type="VARCHAR"/>
+        <column name="NODE_ID" primaryKey="true" required="true"
+            size="50" type="VARCHAR"/>
+        <column name="NAME" primaryKey="true" required="true" size="50" type="VARCHAR"/>
+        <column name="RN" primaryKey="true" required="true" size="10" type="DECIMAL"/>
+        <column name="VALUE" size="200" type="VARCHAR"/>
+        <column name="ISBIGDATA" size="1" type="DECIMAL"/>
+        <column name="BIGDATA" type="BLOB"/>
+    </table>
 </database>

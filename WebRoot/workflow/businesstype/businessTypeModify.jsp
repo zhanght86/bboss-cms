@@ -101,14 +101,11 @@
 				//去掉遮罩
 				unblockUI();
 				
-				if (responseText == "修改成功") {
-					W.$.dialog.alert(responseText, function() {
+				if (responseText == "success") {
 						W.queryList();
 						api.close();
-					}, api);
 				} else {
-					w.$.dialog.alert(responseText, function() {
-					}, api);
+					alert("修改业务类别失败："+responseText);
 				}
 			}
 		});

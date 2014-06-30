@@ -177,13 +177,13 @@ public class ActivitiBusinessTypeAction {
         try {
             int res = businessTypeService.update(businessType);
             if (res == 0) {
-                responseBody = "修改失败";
+                responseBody = "fail";
             } else {
-                responseBody = "修改成功";
+                responseBody = "success";
             }
         } catch (Exception e) {
             logger.error("update businessType error", e);
-            responseBody = e.getMessage();
+            responseBody = "fail:"+e.getMessage();
         }
         return responseBody;
     }
