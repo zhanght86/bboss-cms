@@ -148,7 +148,7 @@
 						</td>
 						<th><strong>节点流向:</strong></th>
 						<td>
-							<select id="taskKey" name="taskKey" class="select1" style="width: 125px;">
+							<select id="taskDefKey" name="taskDefKey" class="select1" style="width: 125px;">
 								<option value="" selected>默认节点</option>
 								<pg:list autosort="false" requestKey="nextNodeList">
 									<option value="<pg:cell colName="node_key"/>" >

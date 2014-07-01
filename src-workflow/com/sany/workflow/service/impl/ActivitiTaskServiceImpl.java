@@ -420,7 +420,17 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						continue;
 					} else if (variable.getNAME_().endsWith("_groups")) {
 						continue;
-					} else {
+					} else if (variable.getNAME_().endsWith("loopCounter")) {
+						continue;
+					} else if (variable.getNAME_().endsWith("nrOfActiveInstances")) {
+						continue;
+					} else if (variable.getNAME_().endsWith("nrOfCompletedInstances")) {
+						continue;
+					} else if (variable.getNAME_().endsWith("nrOfInstances")) {
+						continue;
+					} else if (variable.getNAME_().endsWith("_user")) {
+						continue;
+					}else {
 						Nodevariable node = new Nodevariable();
 						node.setParam_name(variable.getNAME_());
 						node.setParam_value(variable.getTEXT_());

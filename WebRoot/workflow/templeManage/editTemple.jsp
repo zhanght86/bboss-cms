@@ -185,7 +185,7 @@ function dosubmit(){
 	if (templeType == '1') {
 		templeContent = editor.getData();
 	}else {// 短信模板
-		templeContent = $("#messtempleContent").text();
+		templeContent = $("#messtempleContent").val();
 	}
 	
 	if ($.trim(templeTitle) == ""){
@@ -197,7 +197,7 @@ function dosubmit(){
 		alert("模板内容不能为空！");
 		return;
 	}
-		
+	
 	$.ajax({
  	 	type: "POST",
 		url : "<%=request.getContextPath()%>/workflow/templeManage/saveTemple.page",

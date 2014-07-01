@@ -311,7 +311,7 @@
 				  from ACT_RU_TASK RES
 				  
 				 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
-				 LEFT JOIN ACT_RU_EXECUTION A ON RES.EXECUTION_ID_ = A.ID_
+				 LEFT JOIN ACT_RU_EXECUTION A ON RES.PROC_INST_ID_ = A.ID_
 				 LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 				 
 				 #if($processKey && !$processKey.equals(""))
@@ -359,7 +359,7 @@
 				select distinct 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,a.*
 				  from ACT_RU_TASK a
 				  
-				  LEFT JOIN ACT_RU_EXECUTION B ON A.EXECUTION_ID_ = B.ID_
+				  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.ID_
 				  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 				  
 				  #if($processKey && !$processKey.equals(""))

@@ -103,7 +103,7 @@
 	<property name="selectNodeById">
 		<![CDATA[
 			SELECT T.*
-			  FROM TD_WF_ACTIVITI_NODE_CANDIDATE T
+			  FROM TD_WF_PROC_MESSTEMPLATE T
 			 WHERE 1 = 1
 			   AND (T.EMAILTEMPLEID = ? OR T.MESSAGETEMPLEID = ?)
 		]]>
