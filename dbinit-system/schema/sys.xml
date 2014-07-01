@@ -342,6 +342,7 @@
         <column default="0" name="ISFOREIGNPARTY" size="1" type="DECIMAL"/>
         <column default="0" name="ISJICHAPARTY" size="1" type="DECIMAL"/>
         <column default="0" name="ISDIRECTGUANHU" size="1" type="DECIMAL"/>
+        <column name="ORGLEADER" size="100" type="VARCHAR"/>
     </table>
     <table name="TD_SM_ORGJOB">
         <column name="ORG_ID" primaryKey="true" required="true"

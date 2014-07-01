@@ -14,8 +14,6 @@
  */
 package com.sany.masterdata.hr.sync;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,9 +43,9 @@ import com.sany.masterdata.utils.MDPropertiesUtil;
  */
 public class SyncOrganizationInfo {
 
-    private static final String SAVA_SQL = "insert into td_sm_organization (org_sn, org_name, parent_id, orgnumber, remark3, remark5, org_level, org_xzqm, org_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SAVA_SQL = "insert into td_sm_organization (org_sn, org_name, parent_id, orgnumber, remark3, remark5, org_level, org_xzqm, org_id,orgLeader) values (?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
      
-    private static final String UPDATE_SQL = "update td_sm_organization set org_sn=?, org_name=?, parent_id=?, orgnumber=?, remark3=?, remark5=?, org_level=?, org_xzqm=? where org_id=?";
+    private static final String UPDATE_SQL = "update td_sm_organization set org_sn=?, org_name=?, parent_id=?, orgnumber=?, remark3=?, remark5=?, org_level=?, org_xzqm=?,orgLeader=? where org_id=?";
     
     private static final Integer BATCH_LIMIT = 1000;
     
@@ -136,7 +134,7 @@ public class SyncOrganizationInfo {
                 for (MdmOrg temp : orgList) {
                     if (orgKeySet.contains(temp.getOrgId())) {
                         updateSize ++;
-                        addPreBatch(updatePre, temp,fixedorginfos);
+                        addPreBatch(updatePre, temp,fixedorginfos,true);
                         if (saveSize > BATCH_LIMIT) {
                             updateSize = 0;
                             updatePre.executePreparedBatch();
@@ -145,7 +143,7 @@ public class SyncOrganizationInfo {
                         }
                     } else {
                         saveSize ++;
-                        addPreBatch(savePre, temp,fixedorginfos);
+                        addPreBatch(savePre, temp,fixedorginfos,false);
                         if (saveSize > BATCH_LIMIT) {
                             saveSize = 0;
                             savePre.executePreparedBatch();
@@ -226,7 +224,7 @@ public class SyncOrganizationInfo {
         logger.info("Sync org info finished...");
     }
     
-    private void addPreBatch(PreparedDBUtil pre, MdmOrg temp,Map<String,String> fixedorginfos) throws Exception {
+    private void addPreBatch(PreparedDBUtil pre, MdmOrg temp,Map<String,String> fixedorginfos,boolean update) throws Exception {
 //        if (temp.getOrgRank() != null) {
 //            pre.setString(1, temp.getOrgId());
 //        } else {
@@ -275,8 +273,18 @@ public class SyncOrganizationInfo {
         pre.setString(5, temp.getUseFlag());
         pre.setString(6, temp.getOrgText());
         pre.setString(7, temp.getOrgLevel());
-        pre.setString(8, "31" + temp.getOrgId());
-        pre.setString(9, temp.getOrgId());
+        pre.setString(8, "31" + temp.getOrgId());        
+        
+        if(!update)
+        {
+        	pre.setString(9, temp.getOrgId());
+        	pre.setString(10, temp.getOrgLeader());
+        }
+        else
+        {
+        	pre.setString(9, temp.getOrgLeader());
+        	pre.setString(10, temp.getOrgId());
+        }
         
         pre.addPreparedBatch();
     }
