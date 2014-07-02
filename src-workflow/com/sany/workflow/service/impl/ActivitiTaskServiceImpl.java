@@ -353,16 +353,23 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			List<TaskManager> taskList = listInfo.getDatas();
 
 			if (taskList != null && taskList.size() > 0) {
+				// 判断是否超时
+				activitiService.judgeOverTime(taskList);
 
 				for (int i = 0; i < taskList.size(); i++) {
 					TaskManager tm = taskList.get(i);
-
+					// 处理人格式化
 					tm.setASSIGNEE_(activitiService.userIdToUserName(
 							tm.getASSIGNEE_(), "2"));
-
+					// 节点耗时格式化
 					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
 						long mss = Long.parseLong(tm.getDURATION_());
 						tm.setDURATION_(formatDuring(mss));
+					}
+					// 节点处理工时格式化
+					if (StringUtil.isNotEmpty(tm.getDURATION_NODE())) {
+						long worktime = Long.parseLong(tm.getDURATION_NODE());
+						tm.setDURATION_NODE(formatDuring(worktime));
 					}
 				}
 			}

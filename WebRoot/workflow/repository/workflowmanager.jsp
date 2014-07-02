@@ -229,7 +229,8 @@
 						 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
 						},
 					success : function(data){
-				 		modifyQueryData();
+						doClickTreeNode($("#wf_app_id").val(),'');
+				 		//modifyQueryData();
 				 		//alert("成功删除记录");
 					}	
 				 });

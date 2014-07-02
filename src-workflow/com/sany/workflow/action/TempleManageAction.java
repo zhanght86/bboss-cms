@@ -1,5 +1,8 @@
 package com.sany.workflow.action;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.frameworkset.util.ParamsHandler;
@@ -142,6 +145,13 @@ public class TempleManageAction {
 			return "fail" + e.getMessage();
 		}
 
+	}
+	
+	public static void main(String args[]) {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MILLISECOND, 14400000);
+		System.out.println(sdf.format(c.getTime()));
 	}
 
 }

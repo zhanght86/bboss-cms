@@ -254,7 +254,7 @@
 		       A.ASSIGNEE_,
 		       A.DELEGATION_,
 		       A.PRIORITY_,
-		       A.CREATE_TIME_,
+		       A.CREATE_TIME_ as START_TIME_,
 		       A.DUE_DATE_,
 		       A.SUSPENSION_STATE_
 		  FROM ACT_RU_TASK A
@@ -290,9 +290,18 @@
 			       A.CLAIM_TIME_,
 			       T.END_TIME_,
 			       A.DELETE_REASON_,
-			       T.DURATION_ 
+			       T.DURATION_ ,
+			       C.DURATION_NODE,
+       			   C.IS_CONTAIN_HOLIDAY
 			  FROM ACT_HI_ACTINST T
 			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
+			  
+			  -- 获取处理工时与是否包含节假日
+			  LEFT JOIN (SELECT A.PROCESS_KEY, B.PROCESS_ID, B.NODE_KEY,
+                B.DURATION_NODE, A.IS_CONTAIN_HOLIDAY
+              FROM TD_WF_PROC_MESSTEMPLATE A
+              LEFT JOIN TD_WF_NODE_WORKTIME B ON A.PROCESS_KEY = B.PROCESS_KEY) C 
+              ON C.PROCESS_ID = A.PROC_INST_ID_  AND C.NODE_KEY = A.TASK_DEF_KEY_
 			  
 			 WHERE 1=1 
 			  
@@ -307,7 +316,11 @@
 		<![CDATA[
 		--taskState签收状态字段 0 所有 1 未签收 2 签收
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
-				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME,RES.*
+				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME, 
+				  C.DURATION_NODE, C.IS_CONTAIN_HOLIDAY, RES.ID_,RES.REV_, RES.EXECUTION_ID_,
+                  RES.PROC_INST_ID_,RES.PROC_DEF_ID_,RES.NAME_,RES.PARENT_TASK_ID_,RES.DESCRIPTION_,
+                  RES.TASK_DEF_KEY_,RES.OWNER_,RES.ASSIGNEE_,RES.DELEGATION_,RES.PRIORITY_,
+                  RES.CREATE_TIME_ AS START_TIME_,RES.DUE_DATE_, RES.SUSPENSION_STATE_
 				  from ACT_RU_TASK RES
 				  
 				 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
@@ -317,10 +330,15 @@
 				 #if($processKey && !$processKey.equals(""))
 				 	AND B.KEY_ like #[processKey]
 				 #end
-				  	
+				 --获取业务类型				 
 				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON B.KEY_ = D.PROCESS_KEY
+				 --获取处理工时和是否包含节假日        
+				 LEFT JOIN (SELECT A.PROCESS_KEY, B.PROCESS_ID,B.NODE_KEY, B.DURATION_NODE,
+                 A.IS_CONTAIN_HOLIDAY FROM TD_WF_PROC_MESSTEMPLATE A
+               	 LEFT JOIN TD_WF_NODE_WORKTIME B ON A.PROCESS_KEY = B.PROCESS_KEY)
+               	 C ON C.PROCESS_ID = RES.PROC_INST_ID_ AND C.NODE_KEY = RES.TASK_DEF_KEY_
 				                                                          
 				 WHERE RES.ASSIGNEE_ is null
 				   		and I.TYPE_ = 'candidate'
@@ -356,7 +374,11 @@
 			#end
 			
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
-				select distinct 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,a.*
+				select distinct 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,
+				  E.DURATION_NODE, E.IS_CONTAIN_HOLIDAY,A.ID_,A.REV_, A.EXECUTION_ID_,
+                  A.PROC_INST_ID_,A.PROC_DEF_ID_,A.NAME_,A.PARENT_TASK_ID_,A.DESCRIPTION_,
+                  A.TASK_DEF_KEY_,A.OWNER_,A.ASSIGNEE_,A.DELEGATION_,A.PRIORITY_,
+                  A.CREATE_TIME_ AS START_TIME_,A.DUE_DATE_, A.SUSPENSION_STATE_
 				  from ACT_RU_TASK a
 				  
 				  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.ID_
@@ -365,10 +387,15 @@
 				  #if($processKey && !$processKey.equals(""))
 				 	AND C.KEY_ like #[processKey]
 				  #end
-				 
+				 --获取业务类型		
 				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
+				  --获取处理工时和是否包含节假日        
+				  LEFT JOIN (SELECT A.PROCESS_KEY, B.PROCESS_ID, B.NODE_KEY, B.DURATION_NODE,
+                  A.IS_CONTAIN_HOLIDAY FROM TD_WF_PROC_MESSTEMPLATE A
+                  LEFT JOIN TD_WF_NODE_WORKTIME B ON A.PROCESS_KEY = B.PROCESS_KEY) E 
+                  ON E.PROCESS_ID = A.PROC_INST_ID_ AND E.NODE_KEY = A.TASK_DEF_KEY_
 				         
 				  WHERE 1=1
 				  
@@ -407,10 +434,10 @@
 	<!-- 工作流管理中查看任务列表  gw_tanx-->
 	<property name="selectHistoryTask_wf">
 		<![CDATA[
-			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, A.*
+			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, E.DURATION_NODE,E.IS_CONTAIN_HOLIDAY,A.* 
 			
 			  FROM ACT_HI_TASKINST A
-			  LEFT JOIN ACT_HI_PROCINST B ON A.EXECUTION_ID_ = B.ID_
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
 			  #if($processKey && !$processKey.equals(""))
@@ -420,6 +447,12 @@
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
+			  
+			  --获取处理工时和是否包含节假日        
+			  LEFT JOIN (SELECT A.PROCESS_KEY, B.PROCESS_ID, B.NODE_KEY, B.DURATION_NODE,
+                 A.IS_CONTAIN_HOLIDAY FROM TD_WF_PROC_MESSTEMPLATE A
+              LEFT JOIN TD_WF_NODE_WORKTIME B ON A.PROCESS_KEY = B.PROCESS_KEY) E 
+                 ON E.PROCESS_ID = A.PROC_INST_ID_ AND E.NODE_KEY = A.Task_Def_Key_
 			         
 			 WHERE A.END_TIME_ IS NOT NULL
 			 
@@ -446,6 +479,8 @@
 			  #if($businessKey && !$businessKey.equals(""))
 				  and B.BUSINESS_KEY_ like #[businessKey]
 			  #end
+			  
+			  ORDER BY A.START_TIME_ DESC
 		]]>
 	</property>
 	

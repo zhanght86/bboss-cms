@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -2251,11 +2252,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 			if (StringUtil.isNotEmpty(task.getTaskId())) {
 				task.setTaskId("%" + task.getTaskId() + "%");
 			}
-			
+
 			if (StringUtil.isNotEmpty(task.getBusinessKey())) {
 				task.setBusinessKey("%" + task.getBusinessKey() + "%");
 			}
-			
+
 			if (StringUtil.isNotEmpty(task.getProcessKey())) {
 				task.setProcessKey("%" + task.getProcessKey() + "%");
 			}
@@ -2265,10 +2266,76 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			// 获取分页中List数据
 			List<TaskManager> taskList = listInfo.getDatas();
-
-			dealTaskInfo(taskList);
+			if (taskList != null && taskList.size() != 0) {
+				//处理人、组行转列
+				dealTaskInfo(taskList);
+				// 判断是否超时
+				judgeOverTime(taskList);
+				// 处理耗时
+				handleDurationTime(taskList);
+			}
 
 			return listInfo;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 判断是否超时 gw_tanx
+	 * @param taskList
+	 * 2014年7月1日
+	 */
+	public void judgeOverTime(List<TaskManager> taskList) {
+		try {
+
+			for (int i = 0; i < taskList.size(); i++) {
+				TaskManager tm = taskList.get(i);
+
+				// 节点设置了处理工时
+				if (StringUtil.isNotEmpty(tm.getDURATION_NODE())
+						&& !"0".equals(tm.getDURATION_NODE())) {
+
+					// 节点处理工时
+					long workTime = Long.parseLong(tm.getDURATION_NODE());
+
+					// 包含节假日
+					if ("1".equals(tm.getIS_CONTAIN_HOLIDAY())) {
+
+					}
+
+					Calendar c = Calendar.getInstance();
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd hh:mm:ss");
+
+					// 节点任务开始时间
+					c.setTime(sdf.parse(tm.getSTART_TIME_()));
+					// 节点任务理论处理完时间点
+					c.add(Calendar.MILLISECOND, (int) workTime);
+					Date time1 = c.getTime();
+
+					// 节点任务实际处理完时间点
+					Date time2 = null;
+
+					// 已完成节点任务
+					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
+						c.setTime(sdf.parse(tm.getEND_TIME_()));
+						time2 = c.getTime();
+					} else {
+						time2 = new Date();
+					}
+
+					// 实际处理时间在理论时间点之后
+					if (time2.after(time1)) {
+						tm.setIsOverTime("1");// 超时
+					} else {
+						tm.setIsOverTime("0");// 没有超时
+					}
+
+				} else {
+					tm.setIsOverTime("0");// 没有超时
+				}
+
+			}
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
@@ -3125,10 +3192,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 							TaskManager.class, "getTaskInfoByInstId_wf",
 							pi.getPROC_INST_ID_());
 
-					// 任务列表数据处理(处理人/组，行转列)
-					dealTaskInfo(taskList);
+					if (taskList != null && taskList.size() != 0) {
+						// 任务列表数据处理(处理人/组，行转列)
+						dealTaskInfo(taskList);
 
-					pi.setTaskList(taskList);
+						pi.setTaskList(taskList);
+					}
 
 				}
 			}
@@ -3180,65 +3249,63 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 *             2014年5月20日
 	 */
 	private void dealTaskInfo(List<TaskManager> taskList) throws Exception {
-		if (taskList != null && taskList.size() != 0) {
 
-			for (int j = 0; j < taskList.size(); j++) {
+		for (int j = 0; j < taskList.size(); j++) {
 
-				TaskManager tm = taskList.get(j);
+			TaskManager tm = taskList.get(j);
 
-				// 实时任务中没有act_type_字段值，历史任务有
-				if (tm.getACT_TYPE_() != null
-						&& !tm.getACT_TYPE_().equals("userTask")) {
-					continue;
-				}
+			// 实时任务中没有act_type_字段值，历史任务有
+			if (tm.getACT_TYPE_() != null
+					&& !tm.getACT_TYPE_().equals("userTask")) {
+				continue;
+			}
 
-				// 任务已签收，处理人 = 签收人
-				if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
+			// 任务已签收，处理人 = 签收人
+			if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
 
-					tm.setASSIGNEE_(userIdToUserName(tm.getASSIGNEE_(), "2"));
-					tm.setUSER_ID_(tm.getASSIGNEE_());
-					continue;
-				}
+				tm.setASSIGNEE_(userIdToUserName(tm.getASSIGNEE_(), "2"));
+				tm.setUSER_ID_(tm.getASSIGNEE_());
+				continue;
+			}
 
-				// 任务未签收，根据任务id查询任务可处理人
-				List<HashMap> candidatorList = executor.queryList(
-						HashMap.class, "getCandidatorOftask_wf", tm.getID_());
+			// 任务未签收，根据任务id查询任务可处理人
+			List<HashMap> candidatorList = executor.queryList(HashMap.class,
+					"getCandidatorOftask_wf", tm.getID_());
 
-				StringBuffer users = new StringBuffer();
-				StringBuffer groups = new StringBuffer();
+			StringBuffer users = new StringBuffer();
+			StringBuffer groups = new StringBuffer();
 
-				if (candidatorList != null && candidatorList.size() != 0) {
+			if (candidatorList != null && candidatorList.size() != 0) {
 
-					for (int k = 0; k < candidatorList.size(); k++) {
-						HashMap candidatorMap = candidatorList.get(k);
+				for (int k = 0; k < candidatorList.size(); k++) {
+					HashMap candidatorMap = candidatorList.get(k);
 
-						// 处理人行转列
-						String userId = (String) candidatorMap.get("USER_ID_");
-						if (StringUtil.isNotEmpty(userId)) {
+					// 处理人行转列
+					String userId = (String) candidatorMap.get("USER_ID_");
+					if (StringUtil.isNotEmpty(userId)) {
 
-							if (k == 0) {
-								users.append(userId);
-							} else {
-								users.append(",").append(userId);
-							}
+						if (k == 0) {
+							users.append(userId);
+						} else {
+							users.append(",").append(userId);
 						}
+					}
 
-						// 处理组行转列
-						String group = (String) candidatorMap.get("GROUP_ID_");
-						if (StringUtil.isNotEmpty(group)) {
+					// 处理组行转列
+					String group = (String) candidatorMap.get("GROUP_ID_");
+					if (StringUtil.isNotEmpty(group)) {
 
-							if (k == 0) {
-								groups.append(group);
-							} else {
-								groups.append(",").append(userId);
-							}
+						if (k == 0) {
+							groups.append(group);
+						} else {
+							groups.append(",").append(userId);
 						}
 					}
 				}
-				tm.setUSER_ID_(userIdToUserName(users.toString(), "2"));
-				tm.setGROUP_ID(groups.toString());
-
 			}
+			tm.setUSER_ID_(userIdToUserName(users.toString(), "2"));
+			tm.setGROUP_ID(groups.toString());
+
 		}
 	}
 
@@ -3439,7 +3506,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 				// 任务列表数据处理(处理人/组，行转列)
 				dealTaskInfo(taskList);
-
+				
 				pi.setTaskList(taskList);
 
 			}
@@ -3451,6 +3518,42 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throw new ProcessException(e);
 		} finally {
 			tm.release();
+		}
+	}
+	
+	/** 处理耗时
+	 * @param taskList
+	 * 2014年7月1日
+	 */
+	private void handleDurationTime(List<TaskManager> taskList) {
+
+		try {
+			for (int i = 0; i < taskList.size(); i++) {
+				TaskManager tm = taskList.get(i);
+				
+				// 节点耗时转换
+				if (StringUtil.isNotEmpty(tm.getDURATION_())) {
+					long mss = Long.parseLong(tm.getDURATION_());
+					tm.setDURATION_(formatDuring(mss));
+				} else {
+					// 流程未结束，以系统当前时间计算耗时
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy-MM-dd hh:mm:ss");
+					Date startTime = sdf.parse(tm.getSTART_TIME_());
+
+					tm.setDURATION_(formatDuring(new Date().getTime()
+							- startTime.getTime()));
+				}
+				
+				// 节点处理工时转换
+				if (StringUtil.isNotEmpty(tm.getDURATION_NODE())) {
+					long worktime = Long.parseLong(tm.getDURATION_NODE());
+					tm.setDURATION_NODE(formatDuring(worktime));
+				}
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 	}
 
@@ -3465,27 +3568,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 			List<TaskManager> taskList = executor.queryList(TaskManager.class,
 					"selectTaskHistorById_wf", processInstId);
 
-			// 获取处理人列表
-			dealTaskInfo(taskList);
-
-			// 耗时处理
 			if (taskList != null && taskList.size() != 0) {
-				for (int i = 0; i < taskList.size(); i++) {
-					TaskManager tm = taskList.get(i);
-
-					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
-						long mss = Long.parseLong(tm.getDURATION_());
-						tm.setDURATION_(formatDuring(mss));
-					} else {
-						// 流程未结束，以系统当前时间计算耗时
-						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd hh:mm:ss");
-						Date startTime = sdf.parse(tm.getSTART_TIME_());
-
-						tm.setDURATION_(formatDuring(new Date().getTime()
-								- startTime.getTime()));
-					}
-				}
+				// 获取处理人列表
+				dealTaskInfo(taskList);
+				// 判断是否超时
+				judgeOverTime(taskList);
+				// 处理耗时
+				handleDurationTime(taskList);
 			}
 
 			tms.commit();
@@ -3799,5 +3888,5 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
-
+	
 }

@@ -34,6 +34,7 @@ import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
 import com.sany.greatwall.domain.MdmOrg;
+import com.sany.greatwall.domain.MdmOrgLeader;
 import com.sany.masterdata.utils.MDPropertiesUtil;
 
 /**
@@ -113,7 +114,7 @@ public class SyncOrganizationInfo {
 		boolean isfailed = false;
 		String error = "";
         try {
-            List<MdmOrg> orgList = mdmService.getOrgList("19000101", "99000101", "1", "99999999");
+            List<MdmOrgLeader> orgList = mdmService.getOrgLeaderList("19000101", "99000101", "1", "99999999");
             
            
            
@@ -131,7 +132,7 @@ public class SyncOrganizationInfo {
                 int updateSize = 0;
                 savePre.preparedInsert(SAVA_SQL);
                 updatePre.preparedUpdate(UPDATE_SQL);
-                for (MdmOrg temp : orgList) {
+                for (MdmOrgLeader temp : orgList) {
                     if (orgKeySet.contains(temp.getOrgId())) {
                         updateSize ++;
                         addPreBatch(updatePre, temp,fixedorginfos,true);
@@ -224,7 +225,7 @@ public class SyncOrganizationInfo {
         logger.info("Sync org info finished...");
     }
     
-    private void addPreBatch(PreparedDBUtil pre, MdmOrg temp,Map<String,String> fixedorginfos,boolean update) throws Exception {
+    private void addPreBatch(PreparedDBUtil pre, MdmOrgLeader temp,Map<String,String> fixedorginfos,boolean update) throws Exception {
 //        if (temp.getOrgRank() != null) {
 //            pre.setString(1, temp.getOrgId());
 //        } else {

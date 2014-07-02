@@ -366,7 +366,7 @@ function checkBM(){
    {
 		if(!checkBM()){
 			
-			$.dialog.alert("编码已存在，请重新录入!",function(){return;},api);
+			W.$.dialog.alert("编码已存在，请重新录入!",function(){return;},api);
 			return;
 		}
 		$.ajax({
@@ -390,12 +390,12 @@ function checkBM(){
 				//去掉遮罩
 				unblockUI();
 				if(responseText=="success"){
-					$.dialog.alert("新增记录成功",function(){	
+					W.$.dialog.alert("新增记录成功",function(){	
 							W.modifyQueryData();
 							api.close();
 					},api);													
 				}else{
-					$.dialog.alert("新增出错",function(){},api);
+					W.$.dialog.alert("新增出错",function(){},api);
 				}
 			}
 		  });

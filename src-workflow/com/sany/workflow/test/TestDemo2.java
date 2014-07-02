@@ -23,12 +23,44 @@ public class TestDemo2 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-				deployment("demo1", "com/sany/workflow/test/demo2.bpmn", "");
+//				deployment("demo1", "com/sany/workflow/test/demo2.bpmn", "");
 //		checkOne();
 //				huiqianbohui();
-				task1jumptotask5();
+		tasktype();
 	}
-
+	public static void tasktype()
+	{
+		TransactionManager tm = new TransactionManager();
+		try {
+			//初始化引擎
+			ActivitiServiceImpl activitiService = new ActivitiServiceImpl("activiti.cfg.xml");
+			//tm.begin();
+			List<ActivityImpl>  activties = activitiService.getActivitImplListByProcessKey("Mms.return");
+			System.out.println("Mms.return********************************************************************");
+			for(ActivityImpl activtie:activties)
+			{
+				System.out.println(activtie.getId()+".ismail:"+activtie.isMailTask());
+				System.out.println(activtie.getId()+".ismulti:"+activtie.isMultiTask());
+				System.out.println(activtie.getId()+".isparrel:"+activtie.isParreal());
+				System.out.println(activtie.getId()+".isSequence:"+activtie.isSequence());
+			}
+			
+			System.out.println("Test.mail********************************************************************");
+			activties = activitiService.getActivitImplListByProcessKey("appactionMyProcess");
+			for(ActivityImpl activtie:activties)
+			{
+				System.out.println(activtie.getId()+".ismail:"+activtie.isMailTask());
+				System.out.println(activtie.getId()+".ismulti:"+activtie.isMultiTask());
+				System.out.println(activtie.getId()+".isparrel:"+activtie.isParreal());
+				System.out.println(activtie.getId()+".isSequence:"+activtie.isSequence());
+			}
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	/**
 	 * 任务往后跳转
@@ -40,7 +72,7 @@ public class TestDemo2 {
 			//初始化引擎
 			ActivitiServiceImpl activitiService = new ActivitiServiceImpl("activiti.cfg.xml");
 			//tm.begin();
-
+			activitiService.getActivitImplListByProcessKey("mms.return");
 			//检查是否已发布
 			System.out.println("发布信息--------------");
 

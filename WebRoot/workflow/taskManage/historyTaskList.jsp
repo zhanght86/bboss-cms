@@ -40,6 +40,7 @@
        		<th>处理人</th>
        		<th>任务到达时间</th>
        		<th>任务完成时间</th>
+       		<th>处理工时</th>
        		<th>耗时</th>
        		<th>操作</th>
        	</pg:header>	
@@ -59,7 +60,20 @@
        		<td><pg:cell colName="ASSIGNEE_"/></td>
        		<td><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
             <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td> 
-            <td><pg:cell colName="DURATION_" /></td>   
+            <td><pg:cell colName="DURATION_NODE" /></td> 
+            <td>
+            	<pg:notempty colName="isOverTime" >
+		           <pg:equal colName="isOverTime" value="0">
+		           		<pg:cell colName="DURATION_" />
+		           </pg:equal>
+		           <pg:equal colName="isOverTime" value="1">
+		           		<span style="color: red;"><pg:cell colName="DURATION_" /></span>
+		           	</pg:equal>
+		        </pg:notempty>
+		       	<pg:empty colName="isOverTime" >
+		       		<pg:cell colName="DURATION_" />
+		       	</pg:empty>
+			</td>   
             <td class="td_center">
             	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
             </td>     

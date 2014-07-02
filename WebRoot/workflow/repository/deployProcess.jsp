@@ -139,7 +139,8 @@ function checkBM(){
 				unblockUI();
 				if(responseText=="success"){
 				$.dialog.alert("部署成功",function(){	
-							W.modifyQueryData();
+							//W.modifyQueryData();
+							W.doClickTreeNode(W.$("#wf_app_id").val(),'');
 							api.close();
 					},api);													
 				}else{

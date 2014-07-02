@@ -32,8 +32,6 @@ public class TaskManager {
 
 	private String PRIORITY_;// 优先级别，默认为：50
 
-	private String CREATE_TIME_;// 创建时间
-
 	private String SUSPENSION_STATE_;// 是否挂起 1代表激活 2代表挂起
 
 	private String ACT_ID_;// 节点定义ID
@@ -67,6 +65,36 @@ public class TaskManager {
 	private String KEY_;// 流程key
 
 	private String BUSINESS_NAME;// 业务类型
+
+	private String DURATION_NODE;// 处理工时
+
+	private String IS_CONTAIN_HOLIDAY;// 是否包含节假日（0剔除1包含）
+
+	private String isOverTime;// 是否超时(0未超时1超时)
+
+	public String getIsOverTime() {
+		return isOverTime;
+	}
+
+	public void setIsOverTime(String isOverTime) {
+		this.isOverTime = isOverTime;
+	}
+
+	public String getDURATION_NODE() {
+		return DURATION_NODE;
+	}
+
+	public void setDURATION_NODE(String dURATION_NODE) {
+		DURATION_NODE = dURATION_NODE;
+	}
+
+	public String getIS_CONTAIN_HOLIDAY() {
+		return IS_CONTAIN_HOLIDAY;
+	}
+
+	public void setIS_CONTAIN_HOLIDAY(String iS_CONTAIN_HOLIDAY) {
+		IS_CONTAIN_HOLIDAY = iS_CONTAIN_HOLIDAY;
+	}
 
 	public String getKEY_() {
 		return KEY_;
@@ -194,14 +222,6 @@ public class TaskManager {
 
 	public void setPRIORITY_(String pRIORITY_) {
 		PRIORITY_ = pRIORITY_;
-	}
-
-	public String getCREATE_TIME_() {
-		return CREATE_TIME_;
-	}
-
-	public void setCREATE_TIME_(String cREATE_TIME_) {
-		CREATE_TIME_ = cREATE_TIME_;
 	}
 
 	public String getSUSPENSION_STATE_() {

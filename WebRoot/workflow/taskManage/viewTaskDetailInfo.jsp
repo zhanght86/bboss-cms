@@ -52,7 +52,7 @@
 										<th width="150"><strong>结束时间</strong></th>
 									</tr>
 									<tr >
-										<td width="350"><pg:cell colName="PROC_INST_ID_"/></td>
+										<td width="350"><pg:cell actual="${name }" colName="PROC_INST_ID_"/></td>
 										<td width="100">
 											<pg:notempty colName="END_TIME_" >
 												结束
@@ -181,6 +181,7 @@
 				       	<th>任务到达时间</th>
 				       	<th>任务签收时间</th>
 				       	<th>任务处理时间</th>
+				       	<th>处理工时</th>
 				       	<th>耗时</th>
 				       	<th>处理人</th>
 				       	<th>签收人</th>
@@ -191,8 +192,21 @@
 					    	<td><pg:cell colName="ACT_NAME_" /></td>     
 					    	<td><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>  
 					    	<td><pg:cell colName="CLAIM_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>   
-					    	<td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>    
-					    	<td><pg:cell colName="DURATION_" /></td>  
+					    	<td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>  
+					    	 <td><pg:cell colName="DURATION_NODE" /></td>   
+					    	<td>
+					    		<pg:notempty colName="isOverTime" >
+						           <pg:equal colName="isOverTime" value="0">
+						           		<pg:cell colName="DURATION_" />
+						           </pg:equal>
+						           <pg:equal colName="isOverTime" value="1">
+						           		<span style="color: red;"><pg:cell colName="DURATION_" /></span>
+						           	</pg:equal>
+						        </pg:notempty>
+						       	<pg:empty colName="isOverTime" >
+						       		<pg:cell colName="DURATION_" />
+						       	</pg:empty>
+							</td>  
 					    	<td>
 						    	<pg:empty colName="USER_ID_" >
 						    		<pg:cell colName="ASSIGNEE_" />

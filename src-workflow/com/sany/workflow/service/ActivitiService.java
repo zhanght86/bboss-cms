@@ -1002,6 +1002,12 @@ public interface ActivitiService {
 	 */
 	public ListInfo queryTasks(TaskCondition task,long offset, int pagesize) ;
 	
+	/** 判断是否超时 gw_tanx
+	 * @param taskList
+	 * 2014年7月1日
+	 */
+	public void judgeOverTime(List<TaskManager> taskList) ;
+	
 	/** 获取历史任务 gw_tanx
 	 * @param task
 	 * @return
