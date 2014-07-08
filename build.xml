@@ -598,8 +598,8 @@
 						<attribute name="Compile-User" value="${username}" />
 					</manifest>
 				</jar>
-			 <delete dir="classes-sany-ldap"/>
-			 <mkdir dir="classes-sany-ldap"/>	
+			 <delete dir="classes-sany"/>
+			 <mkdir dir="classes-sany"/>	
 			
 	</target>
 	<target name="compile-sany-workflow" depends="jar-sany-application" description="compile the sany appbom source ">

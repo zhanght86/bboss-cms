@@ -33,7 +33,6 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManage
 import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
-import com.sany.greatwall.domain.MdmOrg;
 import com.sany.greatwall.domain.MdmOrgLeader;
 import com.sany.masterdata.utils.MDPropertiesUtil;
 
@@ -275,7 +274,7 @@ public class SyncOrganizationInfo {
         pre.setString(6, temp.getOrgText());
         pre.setString(7, temp.getOrgLevel());
         pre.setString(8, "31" + temp.getOrgId());        
-        
+        System.out.println("temp.getOrgLeader():"+temp.getOrgLeader());
         if(!update)
         {
         	pre.setString(9, temp.getOrgId());
