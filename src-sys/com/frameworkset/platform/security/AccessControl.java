@@ -684,6 +684,8 @@ public class AccessControl implements AccessControlInf{
 	}
 
 	public String getCurrentSystemID() {
+		if(this.session == null)
+			return "";
 		String id = (String) this.session.getAttribute(Framework.SUBSYSTEM);
 
 		return id == null ? "" : id;

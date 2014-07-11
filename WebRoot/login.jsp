@@ -386,7 +386,7 @@ HttpSession session = request.getSession(false);
 	               
 				} catch (Exception ex) {
 					errorMessage = ex.getMessage();
-					ex.printStackTrace();
+					
 					if(errorMessage != null)
 					{
 						//errorMessage = errorMessage.replaceAll("\\n",

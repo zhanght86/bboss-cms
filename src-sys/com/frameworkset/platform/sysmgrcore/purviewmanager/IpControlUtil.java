@@ -3,6 +3,7 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager;
 import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.platform.config.ConfigManager;
 
 
 /**
@@ -22,7 +23,9 @@ public class IpControlUtil {
      */
     public static boolean validateIp(String controluser,String userip){
 		boolean flag = false;
-		
+		boolean enableipcontrol = ConfigManager.getInstance().getConfigBooleanValue("enableipcontrol", false);
+		if(!enableipcontrol)//判断是否开启ip访问控制策略
+			return true;
 		StringBuffer sql =  new StringBuffer()
 		.append("select t.IP,t.CONTROLUSER,t.FILTERTYPE from TD_SM_IPCONTROL t where CONTROLUSER=?");
 		try {

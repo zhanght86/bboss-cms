@@ -26,9 +26,9 @@
 	
 	try{
 		if("storeUser".equals(action)){
-			String orgId = (String) request.getSession().getAttribute("orgId");
+			//String orgId = (String) request.getSession().getAttribute("orgId");
 			
-			request.setAttribute("orgId",orgId);
+			//request.setAttribute("orgId",orgId);
 			//UserInfoForm userInfoForm = (UserInfoForm) form;
 			//--新增用户是记录日志
 			String operContent="";        
