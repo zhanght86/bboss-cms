@@ -136,6 +136,19 @@ public class UtilManagerImpl implements UtilManager{
         }   
 		return list;
 	}
+	@Override
+	public String getOrgIdByuserAccount(String userAccount) throws Exception {
+		List<String> list = new ArrayList<String>();
+		
+		list = executor.queryList(String.class, "getOrgIdByuserAccount", userAccount);
+		if(null != list && list.size()>0){
+			return list.get(0);
+		}else{
+			return null;
+		}
+		
+		
+	}
 
 	
 

@@ -44,7 +44,7 @@ ul,li{padding:0px;margin:0px; list-style:none}
 .explain p{padding:0px;margin:0px;line-height:26px;float:left}
 .point{width:26px;height:26px; text-align:center; vertical-align:central; float:left}
 .point img,.point_toggle img{vertical-align:middle;margin-top:2px;}
-.point_toggle{ background: url(/SanyPDP/html/images/holiday/hand_pg.gif);width:26px;height:26px; text-align:center; vertical-align:central;float:left}
+.point_toggle{ background: url(/SanyPDP/sysmanager/holiday/images/hand_pg.gif);width:26px;height:26px; text-align:center; vertical-align:central;float:left}
 
 .check_year{float:left;margin-left:24px; width:420px; text-align:left}
 .mt_10{margin-top:10px;}

@@ -29,6 +29,21 @@
 						<td><pg:cell colName="system_secret_text" defaultValue="" /></td>
 					</tr>
 					<tr>
+						<th>待办类型：</th>
+						<td><%-- <pg:cell colName="pending_type" defaultValue="" /> --%>
+						<pg:equal colName="pending_type" value="1">GW</pg:equal>
+						<pg:equal colName="pending_type"  value="2">本地</pg:equal>
+						<pg:equal colName="pending_type" value="3">其它库</pg:equal>
+						</td>
+					</tr>
+					<tr>
+						<th>启用待办：</th>
+						<td><%-- <pg:cell colName="used" defaultValue="" /> --%>
+						<pg:equal colName="pending_used"  value="0">关闭</pg:equal>
+				        <pg:equal colName="pending_used" value="1">开启</pg:equal>
+						</td>
+					</tr>
+					<tr>
 						<th>待办URL：</th>
 						<td><pg:cell colName="todo_url" defaultValue="" /></td>
 					</tr>

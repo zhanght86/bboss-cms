@@ -16,119 +16,192 @@
 </style>
 <script type="text/javascript">
 var api = frameElement.api, W = api.opener;
-	function query(orgId){
-		$("a").removeClass("a_bg_color");
-		$("a[name='"+orgId+"']").addClass("a_bg_color"); 
-		$("#userlist").load("queryUsers.page?org_id="+orgId); 
-	}
-	function queryList(){
-		var user_worknumber = $("#user_worknumber").val();
-		var user_realname = $("#user_realname").val();
-		var user_name = $("#user_name").val();
-		if(user_worknumber==''&&user_realname==''&&user_name==''){
-			alert("请输入查询条件");
-			return;
-		}
-		$("#userlist").load("queryUsers.page?user_worknumber="+user_worknumber+"&user_realname="+user_realname+"&user_name="+user_name); 
-	}
+
+function doreset(){
+	$("#reset").click();
+}
+
+function query(orgId){
+	$("a").removeClass("a_bg_color");
+	$("a[name='"+orgId+"']").addClass("a_bg_color"); 
+		
+	doreset();
+		
+	queryList(orgId);
+		
+}
 	
-	function setUsers(){
-		var usernames='' ;
-		var user_realnames='';
-		for (var i = 0; i < $("#select2").find('option').length; i++) { 
-			if(i!=0){
-				usernames+=","+$("#select2").find('option')[i].value;
-				user_realnames+=","+$("#select2").find('option')[i].innerHTML;
-			}else{
-				usernames=$("#select2").find('option')[i].value;
-				user_realnames=$("#select2").find('option')[i].innerHTML;
+function queryList(orgId){
+	var user_worknumber = $("#user_worknumber").val();
+	var user_realname = $("#user_realname").val();
+	var user_name = $("#user_name").val();
+	
+	if(orgId == '' && user_worknumber==''&&user_realname==''&&user_name==''){
+		alert("请输入查询条件");
+		return;
+	}
+		
+	$.ajax({
+		
+		url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page",
+		type: "post",
+		data :{"org_id":orgId,"user_worknumber":user_worknumber,"user_realname":user_realname,
+			   "user_name":user_name,"pagesize":$("#rownums").val()},
+		dataType:"json",			
+		success: function(data){
+			
+			if (data != null) {
+				$("#select1").find('option').remove();
+				
+				var optionHtml = '';
+				for(var i=0; i< data.length; i++){
+					var isExit =SelectIsExitItem($("#select2"),data[i].user_name);
+					
+					 if (!isExit) {
+						optionHtml += "<option value='"+data[i].user_name+"'>"+data[i].user_realname+"</option>";
+					 }
+				}
+				$("#select1").append(optionHtml);
+				
+				if (orgId == null || orgId == '') {
+					$("#select1").find('option').attr('selected','selected');
+					move($('#select1'),$('#select2'));
+				}
 			}
-	     } 
-		$("#usernames").val(usernames);
-		$("#user_realnames").val(user_realnames);
-	}
+		}
+	});
+	
+}
+	
+function setUsers(){
+	var usernames='' ;
+	var user_realnames='';
+	for (var i = 0; i < $("#select2").find('option').length; i++) { 
+		if(i!=0){
+			usernames+=","+$("#select2").find('option')[i].value;
+			user_realnames+=","+$("#select2").find('option')[i].innerHTML;
+		}else{
+			usernames=$("#select2").find('option')[i].value;
+			user_realnames=$("#select2").find('option')[i].innerHTML;
+		}
+	} 
+	$("#usernames").val(usernames);
+	$("#user_realnames").val(user_realnames);
+}
 	
 	
-	function submitData(){
-		setUsers();
-		var node_key = $("#node_key").val();
-		W.$("#"+node_key+"_users_id").val($("#usernames").val());
-		W.$("#"+node_key+"_users_name").val($("#user_realnames").val());
-		api.close();
-	}
-	function showOrgInfo(){
-		var detail=$("#select1").find('option:selected').val();
-		if(detail)
-		$("#selectDetail").html("工号:"+$("#"+detail+"user_worknumber").val()+"<br/>登陆名:"+detail+"<br/>组织机构："+$("#"+detail+"org_name").val()+$("#"+detail+"job_name").val());
-	}
+function submitData(){
+	setUsers();
+	var node_key = $("#node_key").val();
+	W.$("#"+node_key+"_users_id").val($("#usernames").val());
+	W.$("#"+node_key+"_users_name").val($("#user_realnames").val());
+	api.close();
+}
+
+function showOrgInfo(){
+	var detail=$("#select1").find('option:selected').val();
+	if(detail)
+	$("#selectDetail").html("工号:"+$("#"+detail+"user_worknumber").val()+"<br/>登陆名:"+detail+"<br/>组织机构："+$("#"+detail+"org_name").val()+$("#"+detail+"job_name").val());
+}
 	
 	 
-	/* 添加选择的项 */
-	function move(ObjSource, ObjTarget) {
-		var sourceName =ObjSource.attr("id");
-		
-		if (ObjSource.val() == null)
-			return;
-		try{
-			$.each(ObjSource.find('option:selected'), function(i, n) {
-				
-					if(SelectIsExitItem(ObjTarget,n.value) ){
-						if(sourceName != 'select2')
-							throw "已选列表中已存在  "+n.innerHTML;
-									
-					}
-					else
-					{						
-						ObjTarget.append(n);		
-				    };
-			});
-			ObjSource.find('option:selected').remove();
-		}catch(e) {    
-		    alert(e);    
-		}	
-	}
-
-	/* 添加全部 */
-	function moveAll(ObjSource, ObjTarget) {
-		try{
-			var sourceName =ObjSource.attr("id");
-			$.each(ObjSource.find('option'), function(i, m) {		
-					if(SelectIsExitItem(ObjTarget,m.value) ){
-						 if( sourceName != 'select2')
-							throw "已选列表中已存在  "+n.innerHTML;
-						
-					}
-					else
-					{
-						ObjTarget.append(m);
-					}
-			});
-			
-			//ObjTarget.append(ObjSource.html());
-			ObjSource.empty();
-		}catch(e) {    
-		    alert(e);    
-		}	
-	}
-	function SelectIsExitItem(objSelect, objItemValue) {        
-	    var isExit = false;
-	    for (var i = 0; i < objSelect.find('option').length; i++) {        
-	        if (objSelect.find('option')[i].value == objItemValue) {        
-	            isExit = true;        
-	            break;        
-	         }
-	     }        
-	    return isExit;        
-	}
+/* 添加选择的项 */
+function move(ObjSource, ObjTarget) {
+	var sourceName =ObjSource.attr("id");
+	var targetName =ObjTarget.attr("id");
 	
-	$(document).ready(function() {
-		$("#select2").click(function(){
-			var detail=$("#select2").find('option:selected').val();
-			if(detail)
-				$("#selectDetai2").html("工号:"+$("#"+detail+"user_worknumber").val()+"<br/>登陆名:"+detail+"<br/>组织机构："+$("#"+detail+"org_name").val()+$("#"+detail+"job_name").val());
-		})
-		 $("#org_tree").load("../taskConfig/task_config_common_org_tree.jsp");
-	   });
+	if (ObjSource.val() == null)
+		return;
+	try{
+		ObjTarget.find('option').attr('selected',false);
+		
+		$.each(ObjSource.find('option:selected'), function(i, n) {
+			
+				if(SelectIsExitItem(ObjTarget,n.value) ){
+					if(sourceName != 'select2')
+						throw "已选列表中已存在  "+n.innerHTML;
+								
+				}else{
+					ObjTarget.append(n);		
+			    };
+		});
+		ObjSource.find('option:selected').remove();
+	}catch(e) {    
+	    alert(e);    
+	}	
+	
+	// 工号/登录名/组织机构两边切换
+	selectOption(targetName);
+	selectOption(sourceName);
+}
+
+/* 添加全部 */
+function moveAll(ObjSource, ObjTarget) {
+	var sourceName =ObjSource.attr("id");
+	var targetName =ObjTarget.attr("id");
+	try{
+		ObjTarget.find('option').attr('selected',false);
+		ObjSource.find('option').attr('selected',true);
+		
+		$.each(ObjSource.find('option'), function(i, m) {	
+				if(SelectIsExitItem(ObjTarget,m.value) ){
+					 if( sourceName != 'select2')
+						throw "已选列表中已存在  "+n.innerHTML;
+					
+				}else{
+					ObjTarget.append(m);
+				}
+		});
+		
+		//ObjTarget.append(ObjSource.html());
+		ObjSource.empty();
+	}catch(e) {    
+	    alert(e);    
+	}	
+	
+	// 工号/登录名/组织机构两边切换
+	selectOption(targetName);
+	selectOption(sourceName);
+}
+
+function SelectIsExitItem(objSelect, objItemValue) {        
+    var isExit = false;
+    for (var i = 0; i < objSelect.find('option').length; i++) {   
+        if (objSelect.find('option')[i].value == objItemValue) {        
+            isExit = true;        
+            break;        
+         }
+     }        
+    return isExit;        
+}
+
+function getUserInfo(userName,obj){
+	$.ajax({
+		
+		url: "<%=request.getContextPath()%>/workflow/config/getUserInfo.page",
+		type: "post",
+		data :{"userName":userName},
+		dataType:"json",			
+		success: function(data){
+			if (data != null) {
+				obj.html("工号:"+data.user_worknumber+"("+data.job_name+")<br/>登陆名:"+data.user_name+"<br/>组织机构："+data.org_name);
+			}else {
+				obj.html("工号:</br>登陆名:</br>组织机构:</div>");
+			}
+		}
+	});
+}
+
+function selectOption(selector){
+	
+	var detail=$("#"+selector).find('option:selected').val();
+	getUserInfo(detail,$("#"+selector+"Detail"));
+}
+	
+$(document).ready(function() {
+	
+	 $("#org_tree").load("../taskConfig/task_config_common_org_tree.jsp");
+});
 </script>
 <body class="easyui-layout">
 	<input type="hidden" value="${usernames }" name="usernames" id="usernames"/>
@@ -166,11 +239,17 @@ var api = frameElement.api, W = api.opener;
 											<th>登陆名：</th>
 											<td><input id="user_name" name="user_name" type="text"
 													value="" class="w120"/></td>
-											<th>
-												&nbsp;
-											</th>
+											<th>显示</th>
 											<td>
-												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span>查询</span>
+												<select class="w50" id="rownums">
+													<option value="50" selected>50</option>
+													<option value="100">100</option>
+													<option value="200">200</option>
+												</select>
+											</td>
+											<th>数据</th>
+											<td>
+												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList('')"><span>查询</span>
 												</a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span>重置</span>
 												</a>
@@ -201,20 +280,10 @@ var api = frameElement.api, W = api.opener;
 							<td align="left">
 								<div id="userlist">
 									<select name="select1" size="15" multiple="multiple" id="select1"
-										style="width: 220px; height: 400px">
-										<pg:list requestKey="userList">
-											<option value="<pg:cell colName='user_worknumber'/>">
-												<pg:cell colName="user_realname" />
-											</option>
-										</pg:list>
+										style="width: 220px; height: 400px" onclick="selectOption('select1');">
 									</select>
-									<pg:list requestKey="userList">
-										<input type="hidden" value="<pg:cell colName='org_name'/>"
-											id="<pg:cell colName='user_worknumber'/>org_name" />
-										<input type="hidden" value="<pg:cell colName='job_name'/>"
-											id="<pg:cell colName='user_worknumber'/>job_name" />
-									</pg:list>
-								</div>	
+								</div>
+							</td>	
 							<td align="center"><input type="button" name="button"
 								id="button" value=">"
 								onclick="move($('#select1'),$('#select2'))" /> <br /> <input
@@ -223,25 +292,20 @@ var api = frameElement.api, W = api.opener;
 								type="button" name="button4" id="button4" value=">>"
 								onclick="moveAll($('#select1'),$('#select2'))" /> <br /> <input
 								type="button" name="button5" id="button5" value="<<"
-								onclick="moveAll($('#select2'),$('#select1'))" /></td>
-							<td align="right"><select name="select2" size="25"
+								onclick="moveAll($('#select2'),$('#select1'))" />
+							</td>
+							<td align="right">
+								<select name="select2" size="25" onclick="selectOption('select2');"
 								multiple="multiple" id="select2" style="width: 220px;height: 400px">
-								<pg:list requestKey="chooseuserlist">
-									<option value="<pg:cell colName='user_name'/>"><pg:cell colName="user_realname"/></option>
-								</pg:list>	
-								<pg:list requestKey="chooseuserlist">
-									<input type="hidden" value="<pg:cell colName='org_name'/>"
-										id="<pg:cell colName='user_name'/>org_name" />
-									<input type="hidden" value="<pg:cell colName='job_name'/>"
-										id="<pg:cell colName='user_name'/>job_name" />
-									<input type="hidden" value="<pg:cell colName='user_worknumber'/>"
-										id="<pg:cell colName='user_name'/>user_worknumber" />
-								</pg:list>
-							</select></td>
+									<pg:list requestKey="chooseuserlist">
+										<option value="<pg:cell colName='user_name'/>"><pg:cell colName="user_realname"/></option>
+									</pg:list>	
+								</select>
+							</td>
 						</tr>
 						<tr>
-							<td colspan="2"><div class="treesearch" id="selectDetail">工号:</br>登陆名:</br>组织机构:</div></td>
-							<td colspan="2"><div class="treesearch" id="selectDetai2">工号:</br>登陆名:</br>组织机构:</div></td>
+							<td colspan="2"><div class="treesearch" id="select1Detail">工号:</br>登陆名:</br>组织机构:</div></td>
+							<td colspan="2"><div class="treesearch" id="select2Detail">工号:</br>登陆名:</br>组织机构:</div></td>
 						</tr>
 						<tr>
 							<td colspan="3" align="center" height="40"><a href="javascript:submitData()"  class="bt_1"><span>确定</span></a></td>

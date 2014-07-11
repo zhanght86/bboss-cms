@@ -3,33 +3,38 @@ package com.sany.workflow.entrust.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 public class WfEntrust {
-	
+
 	private String id;
-	
+
 	private String entrust_user;
-	
+
 	private String entrust_user_name;
-	
+
+	@RequestParam(dateformat = "yyyy-MM-dd")
 	private Timestamp start_date;
-	
+
+	@RequestParam(dateformat = "yyyy-MM-dd")
 	private Timestamp end_date;
-	
+
+	@RequestParam(dateformat = "yyyy-MM-dd")
 	private Timestamp create_date;
-	
+
 	private String create_user;
-	
+
 	private String create_user_name;
-	
+
 	private String sts;
-	
+
 	private String wf_entrust_type;
-	
+
 	private List<String> wfProcdefIdList;
-	
+
 	private List<String> wfEntrustIdList;
-	
-    public List<String> getWfEntrustIdList() {
+
+	public List<String> getWfEntrustIdList() {
 		return wfEntrustIdList;
 	}
 
@@ -124,10 +129,5 @@ public class WfEntrust {
 	public void setCreate_user_name(String create_user_name) {
 		this.create_user_name = create_user_name;
 	}
-	
+
 }
-
-
-
-
-

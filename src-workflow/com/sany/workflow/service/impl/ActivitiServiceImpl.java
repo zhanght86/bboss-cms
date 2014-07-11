@@ -58,6 +58,7 @@ import org.frameworkset.util.CollectionUtils;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
@@ -97,6 +98,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 	private ManagementService managementService;// 用于管理定时任务
 	private IdentityService identityService;// 用于管理组织结构
 	private ActivitiRelationService activitiRelationService;// 应用管理
+	private WorkTimeUtil workTimeUtil;
 
 	/**
 	 * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
@@ -104,14 +106,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * @param taskId
 	 * @param variables
 	 */
-	public void rejecttoPreTask(String taskId, Map<String, Object> variables) {
+	public void rejecttoPreTask(String taskId, Map<String, Object> variables,int rejectedtype) {
 		// taskService.claim(taskId, username);
-		this.taskService.rejecttoPreTask(taskId, variables);
+		this.taskService.rejecttoPreTask(taskId, variables,rejectedtype);
 	}
 	
-	public void rejecttoPreTaskWithReson(String taskId, Map<String, Object> variables,
-			String rejectReason) {
-		this.taskService.rejecttoPreTask(taskId, variables, rejectReason);
+	public void rejecttoPreTaskWithReson(String taskId,
+			Map<String, Object> variables, String rejectReason, int rejectedtype) {
+		this.taskService.rejecttoPreTask(taskId, variables, rejectReason,
+				rejectedtype);
 	}
 
 	/**
@@ -119,8 +122,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * 
 	 * @param taskId
 	 */
-	public void rejecttoPreTask(String taskId) {
-		this.taskService.rejecttoPreTask(taskId);
+	public void rejecttoPreTask(String taskId,int rejectedtype) {
+		this.taskService.rejecttoPreTask(taskId,rejectedtype);
 	}
 	
 	/**
@@ -128,8 +131,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * 
 	 * @param taskId
 	 */
-	public void rejecttoPreTaskWithReson(String taskId,String rejectReason) {
-		this.taskService.rejecttoPreTask(taskId, rejectReason);
+	public void rejecttoPreTaskWithReson(String taskId, String rejectReason,
+			int rejectedtype) {
+		this.taskService.rejecttoPreTask(taskId, rejectReason, rejectedtype);
 	}
 
 	/**
@@ -139,13 +143,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * @param variables
 	 */
 	public void rejecttoPreTask(String taskId, String username,
-			Map<String, Object> variables) {
+			Map<String, Object> variables, int rejectedtype) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			this.taskService.rejecttoPreTask(taskId, variables);
+			this.taskService.rejecttoPreTask(taskId, variables, rejectedtype);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -156,13 +160,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 	
 	public void rejecttoPreTask(String taskId, String username,
-			Map<String, Object> variables, String rejectReason) {
+			Map<String, Object> variables, String rejectReason, int rejectedtype) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			this.taskService.rejecttoPreTask(taskId, variables, rejectReason);
+			this.taskService.rejecttoPreTask(taskId, variables, rejectReason,
+					rejectedtype);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -177,13 +182,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * 
 	 * @param taskId
 	 */
-	public void rejecttoPreTask(String taskId, String username) {
+	public void rejecttoPreTask(String taskId, String username,int rejectedtype) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			this.taskService.rejecttoPreTask(taskId);
+			this.taskService.rejecttoPreTask(taskId,rejectedtype);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -194,13 +199,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 	
 	public void rejecttoPreTask(String taskId, String username,
-			String rejectReason) {
+			String rejectReason, int rejectedtype) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			this.taskService.rejecttoPreTask(taskId, rejectReason);
+			this.taskService
+					.rejecttoPreTask(taskId, rejectReason, rejectedtype);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -2287,54 +2293,84 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public void judgeOverTime(List<TaskManager> taskList) {
 		try {
-
+	
 			for (int i = 0; i < taskList.size(); i++) {
 				TaskManager tm = taskList.get(i);
-
+	
 				// 节点设置了处理工时
 				if (StringUtil.isNotEmpty(tm.getDURATION_NODE())
 						&& !"0".equals(tm.getDURATION_NODE())) {
-
+	
+					Calendar c = Calendar.getInstance();
+					Date time1 = null;// 节点任务理论处理完时间点
+					Date time2 = null;// 节点任务实际处理完时间点
+	
 					// 节点处理工时
 					long workTime = Long.parseLong(tm.getDURATION_NODE());
-
-					// 包含节假日
+					// 全年为工作日
 					if ("1".equals(tm.getIS_CONTAIN_HOLIDAY())) {
-
+						// 节点任务开始时间
+						c.setTime(tm.getSTART_TIME_());
+						// 节点任务理论处理完时间点
+						c.add(Calendar.MILLISECOND, (int) workTime);
+						time1 = c.getTime();
+					} else {
+						String userid ="";
+						// 实时任务列表处理人为user_id_字段
+						if (StringUtil.isNotEmpty(tm.getUSER_ID_())) {
+							String[] userids = tm.getUSER_ID_().split(",");
+							userid = userids[0].substring(userids[0].indexOf("(")+1, userids[0].indexOf(")"));
+						// 历史任务列表处理人为assignee_字段
+						}else {
+							userid = tm.getASSIGNEE_();
+						}
+						// 获取处理人组织id
+						String userOrgid = executor.queryField(
+								"getUserOrgId_wf", userid);
+	
+//						if (!StringUtil.isEmpty(userOrgid)) {
+//							String endTime = "";
+//							// 剔除周末/节假日
+//							if ("0".equals(tm.getIS_CONTAIN_HOLIDAY())) {
+//								endTime = workTimeUtil.getNextTimeNoRestDay(
+//										userOrgid, tm.getSTART_TIME_(),
+//										workTime);
+//								time1 = sdf.parse(endTime);
+//								// 剔除周末/节假日/工作休息时间
+//							} else if ("2".equals(tm.getIS_CONTAIN_HOLIDAY())) {
+//								endTime = workTimeUtil.getNextTimeNoRestTime(
+//										userOrgid, tm.getSTART_TIME_(),
+//										workTime);
+//								time1 = sdf.parse(endTime);
+//							}
+//						} else {
+							// 节点任务开始时间
+							c.setTime(tm.getSTART_TIME_());
+							// 节点任务理论处理完时间点
+							c.add(Calendar.MILLISECOND, (int) workTime);
+							time1 = c.getTime();
+//						}
 					}
-
-					Calendar c = Calendar.getInstance();
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy-MM-dd hh:mm:ss");
-
-					// 节点任务开始时间
-					c.setTime(sdf.parse(tm.getSTART_TIME_()));
-					// 节点任务理论处理完时间点
-					c.add(Calendar.MILLISECOND, (int) workTime);
-					Date time1 = c.getTime();
-
-					// 节点任务实际处理完时间点
-					Date time2 = null;
-
+	
 					// 已完成节点任务
 					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
-						c.setTime(sdf.parse(tm.getEND_TIME_()));
+						c.setTime(tm.getEND_TIME_());
 						time2 = c.getTime();
 					} else {
 						time2 = new Date();
 					}
-
+	
 					// 实际处理时间在理论时间点之后
 					if (time2.after(time1)) {
 						tm.setIsOverTime("1");// 超时
 					} else {
 						tm.setIsOverTime("0");// 没有超时
 					}
-
+					
 				} else {
 					tm.setIsOverTime("0");// 没有超时
 				}
-
+	
 			}
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -2439,7 +2475,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 		ProcessDefinitionEntity def = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService)
 				.getDeployedProcessDefinition(processDefinitionId);
 		List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点
-		return activitiList;
+		List<ActivityImpl> ret = new ArrayList<ActivityImpl>(activitiList);
+		return ret;
 	}
 
 	/**
@@ -2457,7 +2494,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 				.getDeployedProcessDefinition(processDefinition.getId());
 
 		List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点
-		return activitiList;
+		List<ActivityImpl> ret = new ArrayList<ActivityImpl>(activitiList);
+		return ret;
 	}
 
 	/**
@@ -3169,9 +3207,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 						pi.setDURATION_(formatDuring(mss));
 					} else {
 						// 流程未结束，以系统当前时间计算耗时
-						SimpleDateFormat sdf = new SimpleDateFormat(
-								"yyyy-MM-dd hh:mm:ss");
-						Date startTime = sdf.parse(pi.getSTART_TIME_());
+						Date startTime = pi.getSTART_TIME_();
 
 						pi.setDURATION_(formatDuring(new Date().getTime()
 								- startTime.getTime()));
@@ -3229,10 +3265,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			sb.append(days + "天");
 		}
 		if (hours != 0) {
-			sb.append(hours + "时");
+			sb.append(hours + "小时");
 		}
 		if (minutes != 0) {
-			sb.append(minutes + "分");
+			sb.append(minutes + "分钟");
 		}
 		if (seconds != 0) {
 			sb.append(seconds + "秒");
@@ -3437,6 +3473,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.preparedDelete("delete From act_hi_actinst m where m.proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
+		
+		// 流程实例的处理工时扩展表
+		dbUtil.preparedDelete("delete From TD_WF_NODE_WORKTIME n where n.PROCESS_ID =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		dbUtil.preparedDelete("delete From TD_WF_HI_NODE_WORKTIME o where o.PROCESS_ID =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
 
 		dbUtil.executePreparedBatch();
 
@@ -3528,6 +3573,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	private void handleDurationTime(List<TaskManager> taskList) {
 
 		try {
+			
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					"yyyy-MM-dd hh:mm:ss");
+			
 			for (int i = 0; i < taskList.size(); i++) {
 				TaskManager tm = taskList.get(i);
 				
@@ -3537,9 +3586,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 					tm.setDURATION_(formatDuring(mss));
 				} else {
 					// 流程未结束，以系统当前时间计算耗时
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy-MM-dd hh:mm:ss");
-					Date startTime = sdf.parse(tm.getSTART_TIME_());
+					Date startTime = tm.getSTART_TIME_();
 
 					tm.setDURATION_(formatDuring(new Date().getTime()
 							- startTime.getTime()));
@@ -3753,19 +3800,21 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	@Override
 	public void saveMessageType(String processKey, String messagetempleid,
-			String emailtempleid, String noticeId) {
+			String emailtempleid, String noticeId, String iscontainholiday,
+			String noticerate) {
 		try {
 			// 新增
 			if (StringUtil.isEmpty(noticeId)) {
 				noticeId = java.util.UUID.randomUUID().toString();
 
 				executor.insert("insertProTemplate_wf", noticeId, processKey,
-						messagetempleid, emailtempleid);
+						messagetempleid, emailtempleid, iscontainholiday,
+						noticerate);
 
 			} else {// 修改
 
 				executor.update("updateProTemplate_wf", messagetempleid,
-						emailtempleid, noticeId);
+						emailtempleid, iscontainholiday, noticerate, noticeId);
 
 			}
 		} catch (SQLException e) {
@@ -3876,7 +3925,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 					}else {
 						worktimeMap.put("DURATION_NODE", "0");
 					}
-					worktimeMap.put("NOTICENUM", worktimeMap.get("NOTICENUM"));
 					beansList.add(worktimeMap);
 				}
 				executor.insertBeans("insertNodeWorktime_wf", beansList);

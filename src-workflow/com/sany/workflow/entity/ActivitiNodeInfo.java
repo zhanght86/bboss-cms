@@ -25,7 +25,17 @@ public class ActivitiNodeInfo {
 	private String node_param_id;
 
 	private String node_param_value;
-	
+
+	private String isMulti;// 0不是多实例1串行多实例2并行多实例
+
+	public String getIsMulti() {
+		return isMulti;
+	}
+
+	public void setIsMulti(String isMulti) {
+		this.isMulti = isMulti;
+	}
+
 	public String getNode_param_id() {
 		return node_param_id;
 	}

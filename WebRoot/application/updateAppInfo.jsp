@@ -62,6 +62,33 @@ function initSystemSecret(){
 							required="true" maxlength="100" /><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
+						<th>待办类型：</th>
+						<td><%-- <input id="pending_type" name="pending_type" type="text"
+							value="<pg:cell colName="pending_type" defaultValue="" />" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> --%>
+							<select id="pending_type" name="pending_type"  maxlength="50" >
+							<option value="1" <pg:equal colName="pending_type" value="1">selected="true"</pg:equal>>GW</option>
+							<option value="2" <pg:equal colName="pending_type"  value="2">selected="true"</pg:equal>>本地</option>
+							<option value="3" <pg:equal colName="pending_type" value="3">selected="true"</pg:equal>>其它库</option>
+							</select>
+							<font color="red">*</font></td>
+							
+						
+						
+							
+					</tr>
+					<tr>
+						<th>启用待办：</th>
+						<td><%-- <input id="used" name="used" type="text"
+							value="<pg:cell colName="used" defaultValue="" />" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> --%>
+							<select id="pending_used" name="pending_used"  maxlength="50" >
+							<option value="0" <pg:equal colName="pending_used" value="0">selected="true"</pg:equal>>关闭</option>
+							<option value="1" <pg:equal colName="pending_used"  value="1">selected="true"</pg:equal>>启用</option>
+							</select>
+							<font color="red">*</font></td>
+					</tr>
+					<tr>
 						<th>待办URL：</th>
 						<td><input id="todo_url" name="todo_url" type="text"
 							value="<pg:cell colName="todo_url" defaultValue="" />" class="w120 input_default easyui-validatebox"

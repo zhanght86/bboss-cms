@@ -15,6 +15,7 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
@@ -173,6 +174,42 @@ public class ActivitiTaskConfigAction {
 		List<User> userList = activitiConfigService.queryUsers(user);
 		model.addAttribute("userList", userList);
 		return "path:userlist";
+	}
+	
+	/** 获取用户列表转成json
+	 * @param user
+	 * @return
+	 * 2014年7月7日
+	 */
+	public @ResponseBody
+	List<User> queryUsersToJson(
+			User user,long offset,int pagesize) {
+		if (user.getUser_realname() != null
+				&& !user.getUser_realname().equals("")) {
+			user.setUser_realname("%" + user.getUser_realname() + "%");
+		}
+		if (user.getUser_name() != null && !user.getUser_name().equals("")) {
+			user.setUser_name("%" + user.getUser_name() + "%");
+		}
+		if (user.getUser_worknumber() != null
+				&& !user.getUser_worknumber().equals("")) {
+			user.setUser_worknumber("%" + user.getUser_worknumber() + "%");
+		}
+		
+		ListInfo listInfo = activitiConfigService.queryUsersForPage(user,offset,pagesize);
+		List<User> userList = listInfo.getDatas();
+		
+		return userList;
+	}
+	
+	/** 获取用户列表转成json
+	 * @param user
+	 * @return
+	 * 2014年7月7日
+	 */
+	public @ResponseBody
+	User getUserInfo(String userName) throws Exception {
+		return activitiConfigService.getUserInfo(userName);
 	}
 	
 	/**

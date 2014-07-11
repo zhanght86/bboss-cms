@@ -16,6 +16,7 @@
      $(document).ready(function() {
     	 initArrangeTable("");
     	 initYear();
+    	 initColor();
      }); 
      function queryList(){	
     	 $("#custombackContainer").load("queryAreaList.page #customContent", {},function(){loadjs();});
@@ -139,6 +140,7 @@
 	 }
 	 
 	 function setDayType(type,id){
+		  /*  取消设置,或权限设置       */
 		 if(null == id_daySet || "" == id_daySet || id == id_daySet){
 			 var cur_type=$("#"+id).attr("class") == "point"?"point_toggle":"point";
 			 var cur_mouseType = cur_type == "point"?"default":"pointer";
@@ -147,17 +149,39 @@
 				 id_daySet = "";
 				 document.getElementById("holidayArrange").style.cursor="default";
 				 setType = "";
+				//界面可操作元素设置恢复
+				  $('#setDefault').removeAttr("disabled");
+				  $('#setDefault').removeClass("bt_2");
+				  $("body").css("background","#fff");
+				  $('#year').removeAttr("disabled"); 
 			 }else{
 				 setType = type;
 				 id_daySet = id;
-				 document.getElementById("holidayArrange").style.cursor="pointer";
-				 //document.getElementById("holidayArrange").setAttribute("style","cursor:url('/SanyPDP/html/images/holiday/01.ico'),auto;");
+				 //document.getElementById("holidayArrange").style.cursor="pointer";
+				 
+				  if("1" == type){
+					  document.getElementById("holidayArrange").style.cursor="url('<%=request.getContextPath()%>/sysmanager/holiday/images/workset.cur'),auto"; 
+				  }else{
+					  document.getElementById("holidayArrange").style.cursor="url('<%=request.getContextPath()%>/sysmanager/holiday/images/holidayset.cur'),auto"; 
+				  }
+				  //界面可操作元素设置失效
+				  $('#setDefault').attr("disabled","disabled");
+				  $('#setDefault').addClass("bt_2");
+				  $("body").css("background","#ddd");
+				  $("#holidayArrange").css("background","#fff");
+				  $("#date_top").css("background","#fff");  
+				  $('#year').attr("disabled","disabled");
 			 }
-		 }else{
+		 }else{ /*  一种设置覆盖另一种   */
 			 $("#"+id_daySet).attr("class","point");
 			 $("#"+id).attr("class","point_toggle");
 			 id_daySet = id;
 			 setType = type;
+			 if("1" == type){
+				  document.getElementById("holidayArrange").style.cursor="url('<%=request.getContextPath()%>/sysmanager/holiday/images/workset.cur'),auto"; 
+			  }else{
+				  document.getElementById("holidayArrange").style.cursor="url('<%=request.getContextPath()%>/sysmanager/holiday/images/holidayset.cur'),auto"; 
+			  }
 		 }
 	 }
 	 function changeBgColor(id,type){
@@ -182,13 +206,33 @@
 			 }
 		 }
 	 }
+	 
+	 
+	 
+	 function initColor(){
+		 for(var m =  1;m<=12;m++){
+			 for(var w =1;w<=6;w++){
+				 for(var d = 1;d<=7;d++){
+					 id = m.toString() +w.toString() +d.toString();
+					 var date = $("#"+id).html();
+					 var cellColor = $("#"+id).attr("bgcolor");
+					 if(null != date&&""!=date&&"&nbsp;"!=date){//判断这一天是否有日期数字存在
+						 //判断这一天是否有颜色设置
+						 if("#129f00"!=cellColor && "#00a2ff"!=cellColor){
+							 changeBgColor(id,(1 == d||7 == d)? 2:1);
+						 }
+					 }
+				 }
+			 }
+		 }
+	 }
 </script>
 
 </head>
-	<body>
-		<div class="date_content mt_10">			
+	<body style="autoflow-y:scroll;">
+		<div class="date_content mt_10"  id="date_top">			
 		 <div class="check_year"><strong>请选择年份:&nbsp;&nbsp;</strong><select id="year" name="year"  maxlength="50" onchange="initArrangeTable(value)"></select>
-		 <a href="#" onclick="saveDefaultSetting()" class="bt_1" title="设置全年周一至周五为工作日，周六，周日双休"><span>保存默认配置</span></a>
+		 <a href="#" id="setDefault" onclick="saveDefaultSetting()" class="bt_1" title="设置全年周一至周五为工作日，周六，周日双休"><span>保存默认配置</span></a>
 		 </div>
          
           <div class="explain">
@@ -197,6 +241,7 @@
 			<p>工作日设置：</p>
 			<div class="point" id="workSet"><img src="${pageContext.request.contextPath}/sysmanager/holiday/images/workhand.gif" onclick="setDayType('1','workSet');"/></div>
 			<p>提示：点击图片后,再点击日期进行设置！</p>
+	    </div>
 	    </div>		
     <div class="date_content" id="holidayArrange">
     <ul>

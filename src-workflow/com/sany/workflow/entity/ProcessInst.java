@@ -14,6 +14,7 @@
  */
 package com.sany.workflow.entity;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -28,8 +29,8 @@ public class ProcessInst {
 	private String PROC_INST_ID_;// 流程实例ID
 	private String BUSINESS_KEY_;
 	private String PROC_DEF_ID_;// 流程定义ID
-	private String START_TIME_;// 流程开启时间
-	private String END_TIME_;// 流程结束时间
+	private Timestamp START_TIME_;// 流程开启时间
+	private Timestamp END_TIME_;// 流程结束时间
 	private String DURATION_;
 	private String START_USER_ID_;// 流程开启人
 	private String START_ACT_ID_;
@@ -48,8 +49,8 @@ public class ProcessInst {
 
 	private String SUPER_SUSPENSION_STATE_;// 父流程实例状态
 	private String SUPER_START_USER_ID_;// 父流程开启人
-	private String SUPER_START_TIME_;// 父流程开启时间
-	private String SUPER_END_TIME_;// 父流程结束时间
+	private Timestamp SUPER_START_TIME_;// 父流程开启时间
+	private Timestamp SUPER_END_TIME_;// 父流程结束时间
 	private String PARENT_ID_;// 父流程实例id （ACT_RU_EXECUTION表中字段）
 
 	private List<ActivitiVariable> variableList;// 变量参数集合
@@ -94,20 +95,28 @@ public class ProcessInst {
 		SUPER_START_USER_ID_ = sUPER_START_USER_ID_;
 	}
 
-	public String getSUPER_START_TIME_() {
+	public Timestamp getSUPER_START_TIME_() {
 		return SUPER_START_TIME_;
 	}
 
-	public void setSUPER_START_TIME_(String sUPER_START_TIME_) {
+	public void setSUPER_START_TIME_(Timestamp sUPER_START_TIME_) {
 		SUPER_START_TIME_ = sUPER_START_TIME_;
 	}
 
-	public String getSUPER_END_TIME_() {
+	public Timestamp getSUPER_END_TIME_() {
 		return SUPER_END_TIME_;
 	}
 
-	public void setSUPER_END_TIME_(String sUPER_END_TIME_) {
+	public void setSUPER_END_TIME_(Timestamp sUPER_END_TIME_) {
 		SUPER_END_TIME_ = sUPER_END_TIME_;
+	}
+
+	public void setSTART_TIME_(Timestamp sTART_TIME_) {
+		START_TIME_ = sTART_TIME_;
+	}
+
+	public void setEND_TIME_(Timestamp eND_TIME_) {
+		END_TIME_ = eND_TIME_;
 	}
 
 	public String getID_() {
@@ -142,20 +151,12 @@ public class ProcessInst {
 		PROC_DEF_ID_ = pROC_DEF_ID_;
 	}
 
-	public String getSTART_TIME_() {
+	public Timestamp getSTART_TIME_() {
 		return START_TIME_;
 	}
 
-	public void setSTART_TIME_(String sTART_TIME_) {
-		START_TIME_ = sTART_TIME_;
-	}
-
-	public String getEND_TIME_() {
+	public Timestamp getEND_TIME_() {
 		return END_TIME_;
-	}
-
-	public void setEND_TIME_(String eND_TIME_) {
-		END_TIME_ = eND_TIME_;
 	}
 
 	public String getDURATION_() {

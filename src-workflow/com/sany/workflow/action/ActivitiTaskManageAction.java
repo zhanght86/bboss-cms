@@ -5,6 +5,7 @@ import java.util.List;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.task.Task;
+import org.frameworkset.task.TaskService;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -296,8 +297,8 @@ public class ActivitiTaskManageAction {
 			task.setAssignee(activitiService.userIdToUserName(
 					task.getAssignee(), "2"));
 
-			// 流程级别参数
-			List<Nodevariable> nodevariableList = activitiTaskService
+			// 参数
+			Object [] arrayVariable = activitiTaskService
 					.getProcessVariable(processInstId);
 
 			model.addAttribute("task", task);
@@ -305,7 +306,8 @@ public class ActivitiTaskManageAction {
 			model.addAttribute("taskId", taskId);
 			model.addAttribute("nodeList", nodeList);
 			model.addAttribute("nextNodeList", nextNodeList);
-			model.addAttribute("nodevariableList", nodevariableList);
+			model.addAttribute("nodevariableList", arrayVariable[0]);//非系统参数
+			model.addAttribute("sysvariableList", arrayVariable[1]);//系统参数
 
 			return "path:dealTask";
 
@@ -314,27 +316,98 @@ public class ActivitiTaskManageAction {
 		}
 	}
 
-	/**
-	 * 驳回任务
-	 * 
-	 * @param taskId
+	/**驳回任务
+	 * @param task
+	 * @param activitiNodeCandidateList
+	 * @param nodevariableList
+	 * @param rejectedtype
 	 * @param model
-	 * @return 2014年5月27日
+	 * @return
+	 * 2014年7月9日
 	 */
 	public @ResponseBody
 	String rejectToPreTask(TaskCondition task,
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList, ModelMap model) {
+			List<Nodevariable> nodevariableList, int rejectedtype,
+			ModelMap model) {
 		try {
 
 			activitiTaskService.rejectToPreTask(task,
-					activitiNodeCandidateList, nodevariableList);
+					activitiNodeCandidateList, nodevariableList, rejectedtype);
 
 			return "success";
 		} catch (Exception e) {
 			return "fail" + e.getMessage();
 		}
+	}
+	
+	/** 废弃任务
+	 * @param processInstIds
+	 * @param deleteReason
+	 * @param model
+	 * @return
+	 * 2014年7月9日
+	 */
+	public @ResponseBody
+	String discardTask(String processInstIds, String deleteReason,
+			ModelMap model) {
+		try {
 
+			activitiService
+					.cancleProcessInstances(processInstIds, deleteReason);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+	
+	/** 转办任务
+	 * @param taskId
+	 * @param userId
+	 * @param model
+	 * @return
+	 * 2014年7月9日
+	 */
+	public @ResponseBody
+	String delegateTask(String taskId, String userId, ModelMap model) {
+		try {
+
+			activitiService.delegateTask(taskId, userId);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+	
+	/** 撤销任务
+	 * @param taskId
+	 * @param userId
+	 * @param model
+	 * @return
+	 * 2014年7月9日
+	 */
+	public @ResponseBody
+	String cancelTask(String taskId, String processKey, String processId,
+			String cancelTaskReason, ModelMap model) {
+		try {
+			//获得流程的所有节点
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
+
+			//获得当前活动任务
+			List<Task> task = activitiService.getTaskService()
+					.createTaskQuery().processInstanceId(processId).list();
+
+			activitiService.completeTaskLoadCommonParamsWithDest(task.get(0)
+					.getId(), activties.get(1).getId(), cancelTaskReason);
+
+			return "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "fail" + e.getMessage();
+		}
 	}
 
 }

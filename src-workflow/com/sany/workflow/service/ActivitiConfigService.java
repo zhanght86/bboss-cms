@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
@@ -38,6 +39,23 @@ public interface ActivitiConfigService {
 	 * @return
 	 */
 	public List<User> queryUsers(User user);
+	
+	/**
+	 * 根据查询条件查询用户分页列表
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public ListInfo queryUsersForPage(User user, long offset,
+			int pagesize);
+	
+	/**
+	 * 获取单个用户信息
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public User getUserInfo(String userName) throws Exception;
 	
 	/**
 	 * 根据一组用户名查询CandidateUser

@@ -39,6 +39,28 @@ public class WfApp {
 	private String system_secret_text;
 	
 	private String old_system_secret;
+	
+	private String pending_type;
+	
+	private String pending_used;
+
+	public String getPending_type() {
+		return pending_type;
+	}
+
+	public void setPending_type(String pending_type) {
+		this.pending_type = pending_type;
+	}
+
+	
+
+	public String getPending_used() {
+		return pending_used;
+	}
+
+	public void setPending_used(String pending_used) {
+		this.pending_used = pending_used;
+	}
 
 	public String getId() {
 		return id;

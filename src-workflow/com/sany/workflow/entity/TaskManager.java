@@ -1,5 +1,7 @@
 package com.sany.workflow.entity;
 
+import java.sql.Timestamp;
+
 /**
  * @todo 平台任务实体
  * @author tanx
@@ -44,11 +46,11 @@ public class TaskManager {
 
 	private String ACT_TYPE_;// 父节点实例ID
 
-	private String START_TIME_;// 开始时间
+	private Timestamp START_TIME_;// 开始时间
 
-	private String CLAIM_TIME_;// 提醒时间
+	private Timestamp CLAIM_TIME_;// 提醒时间
 
-	private String END_TIME_;// 结束时间
+	private Timestamp END_TIME_;// 结束时间
 
 	private String DURATION_;// 耗时(毫秒值)
 
@@ -272,27 +274,27 @@ public class TaskManager {
 		ACT_TYPE_ = aCT_TYPE_;
 	}
 
-	public String getSTART_TIME_() {
+	public Timestamp getSTART_TIME_() {
 		return START_TIME_;
 	}
 
-	public void setSTART_TIME_(String sTART_TIME_) {
+	public void setSTART_TIME_(Timestamp sTART_TIME_) {
 		START_TIME_ = sTART_TIME_;
 	}
 
-	public String getCLAIM_TIME_() {
+	public Timestamp getCLAIM_TIME_() {
 		return CLAIM_TIME_;
 	}
 
-	public void setCLAIM_TIME_(String cLAIM_TIME_) {
+	public void setCLAIM_TIME_(Timestamp cLAIM_TIME_) {
 		CLAIM_TIME_ = cLAIM_TIME_;
 	}
 
-	public String getEND_TIME_() {
+	public Timestamp getEND_TIME_() {
 		return END_TIME_;
 	}
 
-	public void setEND_TIME_(String eND_TIME_) {
+	public void setEND_TIME_(Timestamp eND_TIME_) {
 		END_TIME_ = eND_TIME_;
 	}
 

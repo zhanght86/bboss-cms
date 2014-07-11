@@ -1,5 +1,6 @@
 package com.sany.workflow.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -18,11 +19,11 @@ public class Template {
 
 	private String templeContent;
 
-	private Date createTime;
+	private Timestamp createTime;
 
 	private String creator;
 
-	private Date lastUpdatetime;
+	private Timestamp lastUpdatetime;
 
 	public String getTempleId() {
 		return templeId;
@@ -56,14 +57,6 @@ public class Template {
 		this.templeContent = templeContent;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
 	public String getCreator() {
 		return creator;
 	}
@@ -72,11 +65,19 @@ public class Template {
 		this.creator = creator;
 	}
 
-	public Date getLastUpdatetime() {
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+
+	public Timestamp getLastUpdatetime() {
 		return lastUpdatetime;
 	}
 
-	public void setLastUpdatetime(Date lastUpdatetime) {
+	public void setLastUpdatetime(Timestamp lastUpdatetime) {
 		this.lastUpdatetime = lastUpdatetime;
 	}
 

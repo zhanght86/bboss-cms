@@ -3,66 +3,84 @@ package com.sany.workflow.entity;
 import java.sql.Timestamp;
 
 public class ActivitiNodeCandidate {
-	
+
 	private String id;
-	
+
 	private String node_id;
-	
+
 	private String candidate_groups_id;
-	
+
 	private String candidate_groups_name;
-	
+
 	private String candidate_users_id;
-	
+
 	private String candidate_users_name;
-	
+
 	private String business_id;
-	
+
 	private String business_type;
-	
+
 	private Timestamp create_date;
-	
+
 	private String create_person_id;
-	
+
 	private String create_person_name;
-	
+
 	private String candidate_orgs_id;
-	
+
 	private String candidate_orgs_name;
-	
+
 	private String candidate_jobs_id;
-	
+
 	private String candidate_jobs_name;
-	
+
 	private String candidate_roles_id;
-	
+
 	private String candidate_roles_name;
-	
-	
+
 	private int is_valid;
-	
+
 	private int is_edit_candidate;
-	
-	
+
 	private String node_key;
 	
+	private String node_type;
+
 	private String node_name;
-	
+
 	private String process_key;
-	
+
 	private String org_name;
-	
+
 	private String messagetempleid; // 短信模板id
-	
+
 	private String messagetempletitle;// 短息模板名称
-	
-	private String emailtempleid ;// 邮件模板id 
-	
+
+	private String emailtempleid;// 邮件模板id
+
 	private String emailtempletitle;// 邮件模板名称
-	
-	private String duration_node;//节点可以耗时
-	
+
+	private String duration_node;// 节点处理工时
+
 	private int noticenum;// 提醒次数
+
+	private String isMulti;// 0不是多实例1串行多实例2并行多实例
+
+	public String getNode_type() {
+		return node_type;
+	}
+
+	public void setNode_type(String node_type) {
+		this.node_type = node_type;
+	}
+
+	public String getIsMulti() {
+		return isMulti;
+	}
+
+	public void setIsMulti(String isMulti) {
+		this.isMulti = isMulti;
+	}
 
 	public int getNoticenum() {
 		return noticenum;
@@ -151,7 +169,6 @@ public class ActivitiNodeCandidate {
 	public void setCandidate_users_id(String candidate_users_id) {
 		this.candidate_users_id = candidate_users_id;
 	}
-
 
 	public String getBusiness_id() {
 		return business_id;

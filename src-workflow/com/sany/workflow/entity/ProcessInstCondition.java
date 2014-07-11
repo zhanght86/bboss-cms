@@ -14,6 +14,10 @@
  */
 package com.sany.workflow.entity;
 
+import java.sql.Timestamp;
+
+import org.frameworkset.util.annotations.RequestParam;
+
 /**
  * @todo 流程实例查询条件
  * @author tanx
@@ -26,12 +30,16 @@ public class ProcessInstCondition {
 	private String wf_Inst_Id;
 
 	// 流程实例开始时间
-	private String wf_start_time1;
-	private String wf_start_time2;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp wf_start_time1;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp wf_start_time2;
 
 	// 流程实例结束时间
-	private String wf_end_time1;
-	private String wf_end_time2;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp wf_end_time1;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp wf_end_time2;
 
 	// 流程定义id
 	private String wf_denf_id;
@@ -85,35 +93,35 @@ public class ProcessInstCondition {
 		return wf_key;
 	}
 
-	public String getWf_start_time1() {
+	public Timestamp getWf_start_time1() {
 		return wf_start_time1;
 	}
 
-	public void setWf_start_time1(String wf_start_time1) {
+	public void setWf_start_time1(Timestamp wf_start_time1) {
 		this.wf_start_time1 = wf_start_time1;
 	}
 
-	public String getWf_start_time2() {
+	public Timestamp getWf_start_time2() {
 		return wf_start_time2;
 	}
 
-	public void setWf_start_time2(String wf_start_time2) {
+	public void setWf_start_time2(Timestamp wf_start_time2) {
 		this.wf_start_time2 = wf_start_time2;
 	}
 
-	public String getWf_end_time1() {
+	public Timestamp getWf_end_time1() {
 		return wf_end_time1;
 	}
 
-	public void setWf_end_time1(String wf_end_time1) {
+	public void setWf_end_time1(Timestamp wf_end_time1) {
 		this.wf_end_time1 = wf_end_time1;
 	}
 
-	public String getWf_end_time2() {
+	public Timestamp getWf_end_time2() {
 		return wf_end_time2;
 	}
 
-	public void setWf_end_time2(String wf_end_time2) {
+	public void setWf_end_time2(Timestamp wf_end_time2) {
 		this.wf_end_time2 = wf_end_time2;
 	}
 

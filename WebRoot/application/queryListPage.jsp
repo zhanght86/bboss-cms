@@ -18,7 +18,9 @@
         <pg:header>
             <th>操作</th>
         	<th>应用编号</th>
-			<th>应用名称</th>	
+			<th>应用名称</th>
+			<th>待办类型</th>
+			<th>启用待办</th>	
 			<th>待办URL</th>
 			<th>应用URL</th>
 			<th>应用类型</th>							
@@ -35,6 +37,19 @@
    				</td>
    				<td align="center"><pg:cell colName="system_id" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="system_name" defaultValue="" /></td>
+				<td align="center">
+				
+				<%-- <pg:cell colName="pending_type" defaultValue="" /> --%>
+				<pg:equal colName="pending_type" value="1">GW</pg:equal>
+				<pg:equal colName="pending_type"  value="2">本地</pg:equal>
+				<pg:equal colName="pending_type" value="3">其它库</pg:equal>
+				</td>
+				<td align="center">
+				
+				<%-- <pg:cell colName="used" defaultValue="" /> --%>
+				<pg:equal colName="pending_used"  value="0">关闭</pg:equal>
+				<pg:equal colName="pending_used" value="1">开启</pg:equal>
+				</td>
 				<td align="center"><pg:cell colName="todo_url" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="app_url" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="app_mode_type" defaultValue="" /></td>

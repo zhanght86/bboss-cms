@@ -25,4 +25,6 @@ public interface UtilManager {
 	public List<WorkTime> getWorkTimeByWorkDate(String areaId,String date)throws Exception;
 	
 	public List<OrgLeaf> getAllOrgLeaf()throws Exception;
+	
+	public String getOrgIdByuserAccount(String userAccount)throws Exception;
 }

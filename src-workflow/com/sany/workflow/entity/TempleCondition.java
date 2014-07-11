@@ -1,5 +1,10 @@
 package com.sany.workflow.entity;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+
+import org.frameworkset.util.annotations.RequestParam;
+
 import com.frameworkset.orm.annotation.Column;
 
 /**
@@ -19,13 +24,16 @@ public class TempleCondition {
 	@Column(type = "clob")
 	private String templeContent;
 
-	private String createTime1;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp createTime1;
 
-	private String createTime2;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp createTime2;
 
 	private String creator;
 
-	private String lastUpdatetime;
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp lastUpdatetime;
 
 	public String getTempleId() {
 		return templeId;
@@ -59,19 +67,19 @@ public class TempleCondition {
 		this.templeContent = templeContent;
 	}
 
-	public String getCreateTime1() {
+	public Timestamp getCreateTime1() {
 		return createTime1;
 	}
 
-	public void setCreateTime1(String createTime1) {
+	public void setCreateTime1(Timestamp createTime1) {
 		this.createTime1 = createTime1;
 	}
 
-	public String getCreateTime2() {
+	public Timestamp getCreateTime2() {
 		return createTime2;
 	}
 
-	public void setCreateTime2(String createTime2) {
+	public void setCreateTime2(Timestamp createTime2) {
 		this.createTime2 = createTime2;
 	}
 
@@ -83,11 +91,11 @@ public class TempleCondition {
 		this.creator = creator;
 	}
 
-	public String getLastUpdatetime() {
+	public Timestamp getLastUpdatetime() {
 		return lastUpdatetime;
 	}
 
-	public void setLastUpdatetime(String lastUpdatetime) {
+	public void setLastUpdatetime(Timestamp lastUpdatetime) {
 		this.lastUpdatetime = lastUpdatetime;
 	}
 

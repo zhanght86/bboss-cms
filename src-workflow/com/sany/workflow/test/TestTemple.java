@@ -1,6 +1,8 @@
 package com.sany.workflow.test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.frameworkset.spi.BaseApplicationContext;
@@ -8,52 +10,58 @@ import org.frameworkset.spi.DefaultApplicationContext;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.sany.mail.MailInfo;
-import com.sany.mail.SendMail;
 import com.sany.workflow.service.TempleService;
 import com.sany.workflow.service.impl.TempleServiceImpl;
 
 public class TestTemple {
 
-	private SendMail sendMail;
 	private TempleService templeService;
 
 	@Before
 	public void init() throws Exception {
-		BaseApplicationContext context = DefaultApplicationContext
-				.getApplicationContext("com/sany/mail/property-mail.xml");
-		sendMail = context.getTBeanObject("sendMail", SendMail.class);
-		
-		BaseApplicationContext context2 = DefaultApplicationContext
+		BaseApplicationContext context1 = DefaultApplicationContext
 				.getApplicationContext("WebRoot/WEB-INF/conf/workflow/bboss-workflow-templemanage.xml");
 
-		templeService = context2.getTBeanObject("templeService",
+		templeService = context1.getTBeanObject("workflow.temple.templeService",
 				TempleServiceImpl.class);
 
 	}
 
 	@Test
 	public void testEmail() throws Exception {
+		
+		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		Map<String,String> map = new HashMap<String,String>();
+		
+		map.put("emailTempleId", "6296be8f-e449-479b-9677-f365f01afc30");
+		map.put("mailAddress", "yinbp@sany.com.cn");
+		map.put("subject", "邮件测试");
+		map.put("taskId", "23434");
+		map.put("realName", "卿琳");
+		map.put("processName", "测试流程");
+		map.put("taskName", "测试节点");
+		list.add(map);
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("userName", "李四");
-		map.put("processName", "退料申请流程");
-		map.put("nodeName", "工艺工程师审批");
+		templeService.sendNotice(list);
 
-//		String content = templeService.replaceTemple(
-//				"6e3b0827-627e-45f6-8788-add5080b9fe3", map);
+	}
+	
+	@Test
+	public void testMessage() throws Exception {
+		
+		List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		Map<String,String> map = new HashMap<String,String>();
+		
+		map.put("messageTempleId", "97ccf603-2db4-475a-9ead-be44608366da");
+		map.put("worknum", "");
+		map.put("mobile", "");
+		map.put("taskId", "23434");
+		map.put("realName", "卿琳");
+		map.put("processName", "测试流程");
+		map.put("taskName", "测试节点");
+		list.add(map);
 
-		MailInfo mailInfo = new MailInfo();
-		mailInfo.setMailServerHost("smtp.sany.com.cn");
-		mailInfo.setMailServerPort("25");
-		mailInfo.setFromAddress("uimadmin@sany.com.cn");
-		mailInfo.setUserName("uimadmin");
-		mailInfo.setPassword("uimpc@SANY");
-		mailInfo.setValidate(true);
-		mailInfo.setSubject("邮件测试");
-		mailInfo.setToAddress(new String[] { "yinbp@sany.com.cn" });
-//		mailInfo.setContent(content);
+		templeService.sendNotice(list);
 
-		sendMail.sendTextMail(mailInfo);
 	}
 }

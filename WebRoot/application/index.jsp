@@ -8,7 +8,7 @@
 
 <html >
 <head>				
-	<tab:tabConfig/>
+
 		<title>属性容器</title>
 		<%@ include file="/common/jsp/css.jsp"%>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>

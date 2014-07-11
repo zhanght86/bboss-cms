@@ -9,7 +9,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
 
 <script type="text/javascript">
-var api = frameElement.api, W = api.opener;
+var api = frameElement.api;
 
 var pid = '${param.pid}';
 $(document).ready(function() {
@@ -63,13 +63,13 @@ $(document).ready(function() {
 				},
 			success : function(data){
 				if (data == "success") {
-					W.$.dialog.alert("删除成功", function() {
+					$.dialog.alert("删除成功");
 						obj.parentNode.parentNode.parentNode.deleteRow(index);
-					}, api);
+					
 				} else {
-					W.$.dialog.alert("删除失败", function() {
+					$.dialog.alert("删除失败");
 						obj.parentNode.parentNode.style.backgroundColor="#ffcc00";
-					}, api);
+					
 				}
 			}	
 		 });
@@ -108,14 +108,14 @@ $(document).ready(function() {
 				},
 			success : function(data){
 				if (data.result == "success") {
-					W.$.dialog.alert("保存成功", function() {
+					$.dialog.alert("保存成功");
 						obj.parentNode.parentNode.childNodes[0].innerHTML = data.id;
 						obj.parentNode.parentNode.style.backgroundColor="";
-					}, api);
+					
 				} else {
-					W.$.dialog.alert("保存失败", function() {
+					$.dialog.alert("保存失败");
 						obj.parentNode.parentNode.style.backgroundColor="#ffcc00";
-					}, api);
+					
 				}
 			}	
 		 });
@@ -179,7 +179,7 @@ $(document).ready(function() {
 			<div class="title_box">
 				<div class="rightbtn">
 				<a href="#" class="bt_small" id="addButton" onclick="javascript:addWorkTime();"><span>新增工作时间</span></a>
-				<a href="#" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
+				<!-- <a href="#" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a> -->
 				</div>
 				
 				<strong></strong>				

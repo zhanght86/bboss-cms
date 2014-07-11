@@ -41,7 +41,9 @@
        		<th>任务到达时间</th>
        		<th>任务完成时间</th>
        		<th>处理工时</th>
+       		<th>工时规则</th>
        		<th>耗时</th>
+       		<th>是否超时</th>
        		<th>操作</th>
        	</pg:header>	
 
@@ -62,19 +64,34 @@
             <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td> 
             <td><pg:cell colName="DURATION_NODE" /></td> 
             <td>
-            	<pg:notempty colName="isOverTime" >
+       			<pg:equal colName="IS_CONTAIN_HOLIDAY" value="0">
+		           	剔除周末/节假日
+		        </pg:equal>
+		        <pg:equal colName="IS_CONTAIN_HOLIDAY" value="1">
+		           	全年为工作日
+		        </pg:equal>
+		        <pg:equal colName="IS_CONTAIN_HOLIDAY" value="2">
+		           	剔除周末/节假日/工作休息时间
+		        </pg:equal>
+       		</td>
+            <td><pg:cell colName="DURATION_" /></td>
+       		<td>
+       			<pg:notempty colName="isOverTime" >
 		           <pg:equal colName="isOverTime" value="0">
-		           		<pg:cell colName="DURATION_" />
+		           		未超时
 		           </pg:equal>
 		           <pg:equal colName="isOverTime" value="1">
-		           		<span style="color: red;"><pg:cell colName="DURATION_" /></span>
+		           		<span style="color: red;">超时</span>
 		           	</pg:equal>
 		        </pg:notempty>
 		       	<pg:empty colName="isOverTime" >
-		       		<pg:cell colName="DURATION_" />
+		       		未超时
 		       	</pg:empty>
-			</td>   
+		    </td>
             <td class="td_center">
+            	<pg:notempty colName="SUSPENSION_STATE_" >
+            		<a href="javascript:void(0)" id="cancelTask" onclick="cancelTask('<pg:cell colName="ID_" />','<pg:cell colName="PROC_INST_ID_" />')">撤销</a> | 
+            	</pg:notempty>
             	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
             </td>     
         </tr>

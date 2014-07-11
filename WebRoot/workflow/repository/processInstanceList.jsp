@@ -69,14 +69,14 @@
 		        	<td ><pg:cell colName="START_USER_ID_" /></td>  
 		           	<td >
 		           		<span style=" color: purple;">
-		           			<pg:notempty colName="END_TIME_" >
+		           			<pg:notnull colName="END_TIME_" >
 		           				流程结束
-		           			</pg:notempty>
-						    <pg:empty colName="END_TIME_" >
+		           			</pg:notnull>
+						    <pg:null colName="END_TIME_" >
 						    	<pg:list colName="taskList" position="0" >
 						           	<pg:cell colName="NAME_"/></br>
 						        </pg:list>
-						    </pg:empty>	
+						    </pg:null>	
 						 </span>
 		           	</td>
 		           	<td>
@@ -101,30 +101,30 @@
 		            <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 		            <td><pg:cell colName="DURATION_" /></td>
 		            <td>
-		            	<pg:notempty colName="END_TIME_" >
+		            	<pg:notnull colName="END_TIME_" >
 		           			<span style=" color: blue;">完成</span>
-		           		</pg:notempty>
-		           		<pg:empty colName="END_TIME_" >
+		           		</pg:notnull>
+		           		<pg:null colName="END_TIME_" >
 		           			<pg:equal colName="SUSPENSION_STATE_" value="1">
 		           				进行中
 		           			</pg:equal>
 		           			<pg:equal colName="SUSPENSION_STATE_" value="2">
 		           				<span style=" color: red;">挂起</span>
 		           			</pg:equal>
-		           		</pg:empty>
+		           		</pg:null>
 		            </td>
 		            <td>
-		            	<pg:notempty colName="END_TIME_" >
+		            	<pg:notnull colName="END_TIME_" >
 		            		<pg:empty colName="DELETE_REASON_" >
 		           				正常完成
 		            		</pg:empty>
 		            		<pg:notempty colName="DELETE_REASON_" >
 		           				<pg:cell colName="DELETE_REASON_" />
 		            		</pg:notempty>
-		           		</pg:notempty>
-		           		<pg:empty colName="END_TIME_" >
+		           		</pg:notnull>
+		           		<pg:null colName="END_TIME_" >
 		           			<pg:cell colName="DELETE_REASON_" />
-		           		</pg:empty>
+		           		</pg:null>
 		            </td>
 		            
 		            <td class="td_center">
@@ -166,30 +166,30 @@
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="DURATION_" /></td>
 		            <td rowspan="<pg:size colName="taskList"/>">
-		           	 	<pg:notempty colName="END_TIME_" >
+		           	 	<pg:notnull colName="END_TIME_" >
 		           			<span style=" color: blue;">完成</span>
-		           		</pg:notempty>
-		           		<pg:empty colName="END_TIME_" >
+		           		</pg:notnull>
+		           		<pg:null colName="END_TIME_" >
 		           			<pg:equal colName="SUSPENSION_STATE_" value="1">
 		           				进行中
 		           			</pg:equal>
 		           			<pg:equal colName="SUSPENSION_STATE_" value="2">
 		           				<span style=" color: red;">挂起</span>
 		           			</pg:equal>
-		           		</pg:empty>
+		           		</pg:null>
 		            </td>
 		            <td rowspan="<pg:size colName="taskList"/>">
-		            	<pg:notempty colName="END_TIME_" >
+		            	<pg:notnull colName="END_TIME_" >
 		            		<pg:empty colName="DELETE_REASON_" >
 		           				正常完成
 		            		</pg:empty>
 		            		<pg:notempty colName="DELETE_REASON_" >
 		           				<pg:cell colName="DELETE_REASON_" />
 		            		</pg:notempty>
-		           		</pg:notempty>
-		           		<pg:empty colName="END_TIME_" >
+		           		</pg:notnull>
+		           		<pg:null colName="END_TIME_" >
 		           			<pg:cell colName="DELETE_REASON_" />
-		           		</pg:empty>
+		           		</pg:null>
 		            </td>
 		            
 		            <td class="td_center" rowspan="<pg:size colName="taskList"/>">

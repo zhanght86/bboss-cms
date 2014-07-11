@@ -18,6 +18,7 @@ import org.frameworkset.spi.SOAApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
@@ -127,7 +128,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		return null;
 	}
 	/**
-	 * 根据查询条件查询用户分页列表
+	 * 根据查询条件查询用户列表
 	 * @param offset
 	 * @param pagesize
 	 * @return
@@ -140,6 +141,33 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * 根据查询条件查询用户列表
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public ListInfo queryUsersForPage(User user, long offset, int pagesize) {
+		try {
+			ListInfo listInfo = executor.queryListInfoBean(User.class,
+					"selectUsersByCondition", offset, pagesize, user);
+			return listInfo;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据查询条件查询用户列表
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public User getUserInfo(String userName) throws Exception{
+		return executor.queryObject(User.class, "selectUsersByUserName_wf", userName);
 	}
 	
 	/**
@@ -285,6 +313,10 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			executor.deleteBean("deleteNodevariableByKey", param);
 			executor.deleteBean("deleteActivitiNodeInfoByKey", param);
 			executor.deleteBean("deleteProBusinessByKey", param);
+			
+			executor.deleteBean("deleteProcMesstemplateBykey", param);
+			executor.deleteBean("deleteNodeWorktimeBykey", param);
+			executor.deleteBean("deleteHiNodeWorktimeBykey", param);
 			tm.commit();
 		} catch (Exception e) {
 			try {
@@ -644,14 +676,47 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	}
 	
 	@Override
-	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key){
-		try{
-//			Map<String,String> params = new HashMap<String,String>();
-//			params.put("process_key", process_key);
-			
-			List<ActivitiNodeInfo> list = executor.queryList(ActivitiNodeInfo.class, "queryAllActivitiNodes", process_key);
+	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key) {
+		try {
+
+			List<ActivitiNodeInfo> list = executor.queryList(
+					ActivitiNodeInfo.class, "queryAllActivitiNodes",
+					process_key);
+
+			if (list != null && list.size() > 0) {
+				List<ActivityImpl> activties = activitiService
+						.getActivitImplListByProcessKey(process_key);
+
+				for (int i = 0; i < list.size(); i++) {
+					ActivitiNodeInfo nodeInfo = list.get(i);
+					
+					for (ActivityImpl activtie : activties) {
+						if (activtie.getId().equals(nodeInfo.getNode_key())) {
+
+							if (activtie.isMultiTask()) {
+								if (activtie.isParreal()) {
+									nodeInfo.setIsMulti("2");// 2并行多实例
+								} else if (activtie.isSequence()) {
+									nodeInfo.setIsMulti("1");// 串行多实例
+								} else {
+									nodeInfo.setIsMulti("0");// 不是多实例
+								}
+							} else {
+								nodeInfo.setIsMulti("0");// 单实例
+							}
+							
+							//邮件任务
+							if (activtie.isMailTask()) {
+								nodeInfo.setNode_type("mailTask");
+							}
+							
+							break;
+						}
+					}
+				}
+			}
 			return list;
-		}catch(Exception e){
+		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
 	}
@@ -670,6 +735,40 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			params.put("business_type", bussinessType);
 			params.put("bussinessid", bussinessid);
 			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryProcessNodesCandidates", params);
+			
+			if (list != null && list.size() > 0) {
+				List<ActivityImpl> activties = activitiService
+						.getActivitImplListByProcessKey(process_key);
+
+				for (int i = 0; i < list.size(); i++) {
+					ActivitiNodeCandidate nodeInfo = list.get(i);
+
+					for (ActivityImpl activtie : activties) {
+						if (activtie.getId().equals(nodeInfo.getNode_key())) {
+
+							if (activtie.isMultiTask()) {
+								if (activtie.isParreal()) {
+									nodeInfo.setIsMulti("2");// 2并行多实例
+								} else if (activtie.isSequence()) {
+									nodeInfo.setIsMulti("1");// 串行多实例
+								} else {
+									nodeInfo.setIsMulti("0");// 不是多实例
+								}
+							} else {
+								nodeInfo.setIsMulti("0");// 不是多实例
+							}
+							
+							//邮件任务
+							if (activtie.isMailTask()) {
+								nodeInfo.setNode_type("mailTask");
+							}
+							
+							break;
+						}
+					}
+				}
+			}
+			
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -677,7 +776,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		return null;
 	}
 
-	/*@Override
+	/*@Overridebbbb
 	public ActivitiNodeCandidate queryActivitiNodeCandidate(String process_key,
 			String activityKey) {
 		return queryActivitiNodeCandidate(process_key,activityKey,null,null);

@@ -13,6 +13,7 @@
 	<property name="/workflow/jobtest/*.freepage"
 		f:jobService="attr:workflow.job.service"
 		f:templeService="attr:workflow.temple.templeService"
+		f:workTimeUtil="attr:sysmanager.holiday.util"
 		class="com.sany.workflow.job.action.CheckProcessOvertime"
 		/>
 	

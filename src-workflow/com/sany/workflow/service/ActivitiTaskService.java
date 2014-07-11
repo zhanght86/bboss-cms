@@ -49,7 +49,8 @@ public interface ActivitiTaskService {
 	 *            2014年5月27日
 	 */
 	public void rejectToPreTask(TaskCondition task,
-			List<ActivitiNodeInfo> nodeList, List<Nodevariable> nodevariableList);
+			List<ActivitiNodeInfo> nodeList,
+			List<Nodevariable> nodevariableList, int rejectedtype);
 
 	/**
 	 * 签收任务 gw_tanx
@@ -75,7 +76,7 @@ public interface ActivitiTaskService {
 	 * @param processInstId
 	 * @return 2014年6月27日
 	 */
-	public List<Nodevariable> getProcessVariable(String processInstId);
+	public Object [] getProcessVariable(String processInstId);
 
 	/**
 	 * 获取下一流向节点信息 gw_tanx
@@ -85,5 +86,16 @@ public interface ActivitiTaskService {
 	 */
 	public List<ActivitiNodeInfo> getNextNodeInfoById(
 			final List<ActivitiNodeInfo> nodeList, String processInstId);
+	
+	/** 统一代办取待办任务接口
+	 * @param pernr 登录账号
+	 * @param sysid 系统管理id
+	 * @param offset
+	 * @param pagesize
+	 * @return ListInfo 统一代办集合数据，包含分页参数
+	 * 2014年7月3日
+	 */
+	public ListInfo getNoHandleTask(String pernr, String sysid,
+			long offset, int pagesize);
 
 }

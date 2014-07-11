@@ -10,8 +10,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/html2/js/validate_class.js"></script>
 <script type="text/javascript">
 var api = frameElement.api, W = api.opener;
-//var areaId = '${param.areaId}';
+
+var id = '${param.id}';
    $(document).ready(function() {
+	   //alert($('#frame1').src);
+	    document.getElementById("frame1").src = "<%=request.getContextPath()%>/sysmanager/holiday/workTimeIndex.jsp?pid=" + id;
    });  
    
    function CloseDlg(){
@@ -133,5 +136,8 @@ var api = frameElement.api, W = api.opener;
 		</table>
 			        <a href="#" class="bt_2"  onclick="confirm()"><span>保存</span></a>
 					<a href="#" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
+					<div   style="display:block;">
+        <iframe id="frame1" height="680" width="900" scrolling="no" frameborder="0" vspace="0" hspace="0"  ></iframe> 
+    </div>
 	</body>
 </html>

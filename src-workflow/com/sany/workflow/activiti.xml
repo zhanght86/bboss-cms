@@ -105,19 +105,19 @@
 			#end
 			
 			#if($wf_start_time1 && !$wf_start_time1.equals(""))
-				and A.START_TIME_ >= TO_TIMESTAMP(#[wf_start_time1], 'YYYY-MM-DD HH24:MI:SS')
+				and A.START_TIME_ >= #[wf_start_time1]
 			#end
 			
 			#if($wf_start_time2 && !$wf_start_time2.equals(""))
-				and A.START_TIME_ <= TO_TIMESTAMP(#[wf_start_time2], 'YYYY-MM-DD HH24:MI:SS')
+				and A.START_TIME_ <= #[wf_start_time2]
 			#end
 			
 			#if($wf_end_time1 && !$wf_end_time1.equals(""))
-				and A.END_TIME_ >= TO_TIMESTAMP(#[wf_end_time1], 'YYYY-MM-DD HH24:MI:SS')
+				and A.END_TIME_ >= #[wf_end_time1]
 			#end
 			
 			#if($wf_end_time2 && !$wf_end_time2.equals(""))
-				and A.END_TIME_ <= TO_TIMESTAMP(#[wf_end_time2], 'YYYY-MM-DD HH24:MI:SS')
+				and A.END_TIME_ <= #[wf_end_time2]
 			#end
 			
 			--流程状态 1 激活 2 挂起 3 流程结束 
@@ -427,14 +427,90 @@
 			#end
 			
 			--以CREATE_TIME_字段排序，不能直接写字段名， 字段列序号
-			ORDER BY 18 DESC  
+			ORDER BY 20 DESC  
+		]]>
+	</property>
+	
+	<!-- 工作流管理统一代办获取任务列表  gw_tanx-->
+	<property name="selectNoHandleTask_wf">
+		<![CDATA[
+		--taskState签收状态字段  1 未签收 2 签收
+			select distinct 1    as state,
+                B.Business_Key_  as businessKey,
+                b.start_user_id_ as userAccount,
+                c.name_          as title,
+                a.ID_            as taskId,
+                a.PROC_INST_ID_  as instanceId,
+                a.PROC_DEF_ID_   as defId,
+                a.TASK_DEF_KEY_  as taskDefKey,
+                a.CREATE_TIME_   AS createTime
+			  from ACT_RU_TASK a
+			
+			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = a.ID_
+			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
+			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			
+			 WHERE a.ASSIGNEE_ is null
+			   and I.TYPE_ = 'candidate'
+			   
+			   #if($isAdmin == false)
+				   and (I.USER_ID_ = #[assignee])
+			   #end
+			   
+			   -- 系统id来查数据
+			   #if($sysid && !$sysid.equals(""))
+				   and exists (select a.procdef_id
+				          from td_wf_app_proc_relation a
+				         where exists (select 1
+				                  From td_wf_app b
+				                 where a.wf_app_id = b.id
+				                   and b.system_id = #[sysid])
+				           and a.procdef_id = c.id_)
+			   #end
+			   
+			union
+
+			select 2                as state,
+			       B.Business_Key_  as businessKey,
+			       b.start_user_id_ as userAccount,
+			       c.name_          as title,
+			       a.ID_            as taskId,
+			       a.PROC_INST_ID_  as instanceId,
+			       a.PROC_DEF_ID_   as defId,
+			       a.TASK_DEF_KEY_  as taskDefKey,
+			       a.CREATE_TIME_   AS createTime
+			  from ACT_RU_TASK a
+			
+			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
+			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			 where 1 = 1
+			 
+			   #if($isAdmin == false)
+				   	and a.ASSIGNEE_ = #[assignee]
+			   #else
+				    and a.ASSIGNEE_ is not null
+			   #end
+			   
+			   -- 系统id来查数据
+			   #if($sysid && !$sysid.equals(""))
+				   and exists (select a.procdef_id
+				          from td_wf_app_proc_relation a
+				         where exists (select 1
+				                  From td_wf_app b
+				                 where a.wf_app_id = b.id
+				                   and b.system_id = #[sysid])
+				           and a.procdef_id = c.id_)
+			   #end
 		]]>
 	</property>
 	
 	<!-- 工作流管理中查看任务列表  gw_tanx-->
 	<property name="selectHistoryTask_wf">
 		<![CDATA[
-			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, E.DURATION_NODE,E.IS_CONTAIN_HOLIDAY,A.* 
+			SELECT B.BUSINESS_KEY_, C.KEY_, E.SUSPENSION_STATE_, D.BUSINESS_NAME, E.DURATION_NODE,E.IS_CONTAIN_HOLIDAY,
+		       A.ID_,A.PROC_DEF_ID_, A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_,
+		       A.NAME_, A.DESCRIPTION_, A.OWNER_, A.ASSIGNEE_,  A.START_TIME_, A.CLAIM_TIME_,
+		       A.END_TIME_,A.DURATION_,  A.DELETE_REASON_, A.PRIORITY_, A.DUE_DATE_, A.FORM_KEY_ 
 			
 			  FROM ACT_HI_TASKINST A
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
@@ -453,6 +529,9 @@
                  A.IS_CONTAIN_HOLIDAY FROM TD_WF_PROC_MESSTEMPLATE A
               LEFT JOIN TD_WF_NODE_WORKTIME B ON A.PROCESS_KEY = B.PROCESS_KEY) E 
                  ON E.PROCESS_ID = A.PROC_INST_ID_ AND E.NODE_KEY = A.Task_Def_Key_
+                 
+              --获取流程实例状态
+              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_  
 			         
 			 WHERE A.END_TIME_ IS NOT NULL
 			 
@@ -796,6 +875,19 @@
 		]]>
 	</property>
 	
+	<!-- 获取用户信息 gw_tanx -->
+	<property name="selectUsersByUserName_wf">
+		<![CDATA[
+			select u.user_id ,u.user_name ,u.user_realname ,u.user_worknumber  
+			,org.org_name ,j.job_name
+			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
+			inner join td_sm_organization org on oj.org_id=org.org_id
+			inner join td_sm_job j on oj.job_id = j.job_id
+			where 1=1 
+				and u.user_name = ?
+		]]>
+	</property>
+	
 	<property name="selectGroupInfoByNames">
 		<![CDATA[
 			select t.*,u.user_realname as owner_name from td_sm_group t inner join td_sm_user u on t.owner_id = u.user_id 
@@ -952,7 +1044,7 @@
 			left join TD_WF_MESSTEMPLATE a on a.templeid = t.messagetempleid
   			left join TD_WF_MESSTEMPLATE b on b.templeid = t.emailtempleid
 			
-			 where n.process_key = #[process_key] and n.node_type = 'userTask'
+			 where n.process_key = #[process_key] 
 			order by n.order_num
 		]]>
 	</property>
@@ -1028,7 +1120,7 @@
 				and business_id=#[business_id] 
 			#end
 			and business_type=#[business_type]
-			and NODE_ID in (select NODE_ID from td_wf_activiti_node_info where PROCESS_KEY=#[process_key])
+			and NODE_ID in (select ID from td_wf_activiti_node_info where PROCESS_KEY=#[process_key])
 		]]>
 	</property>
 	
@@ -1363,7 +1455,15 @@
 	<!-- 添加流程消息提示方式记录  gw_tanx -->
 	<property name="insertProTemplate_wf">
 		<![CDATA[
-			insert into TD_WF_PROC_MESSTEMPLATE (NOTICEID,PROCESS_KEY,MESSAGETEMPLEID,EMAILTEMPLEID) values(?,?,?,?)
+			 INSERT INTO TD_WF_PROC_MESSTEMPLATE
+			     (NOTICEID,
+			      PROCESS_KEY,
+			      MESSAGETEMPLEID,
+			      EMAILTEMPLEID,
+			      IS_CONTAIN_HOLIDAY,
+			      NOTICERATE)
+			   VALUES
+			     (?, ?, ?, ?, ?, ?)
 		]]>
 	</property>
 	
@@ -1384,7 +1484,12 @@
 	<!-- 修改流程消息提示方式记录  gw_tanx -->
 	<property name="updateProTemplate_wf">
 		<![CDATA[
-			update TD_WF_PROC_MESSTEMPLATE set MESSAGETEMPLEID = ?,EMAILTEMPLEID= ? where NOTICEID = ?
+			  UPDATE TD_WF_PROC_MESSTEMPLATE
+			     SET MESSAGETEMPLEID    = ?,
+			         EMAILTEMPLEID      = ?,
+			         IS_CONTAIN_HOLIDAY = ?,
+			         NOTICERATE         = ?
+			   WHERE NOTICEID = ?
 		]]>
 	</property>
 	
@@ -1403,7 +1508,9 @@
 			       A.MESSAGETEMPLEID,
 			       B.TEMPLETITLE AS MESSAGETEMPLETITLE,
 			       A.EMAILTEMPLEID,
-			       C.TEMPLETITLE AS EMAILTEMPLETITLE
+			       C.TEMPLETITLE AS EMAILTEMPLETITLE,
+			       A.IS_CONTAIN_HOLIDAY,
+       			   A.NOTICERATE
 			  FROM TD_WF_PROC_MESSTEMPLATE A
 			  LEFT JOIN TD_WF_MESSTEMPLATE B ON A.MESSAGETEMPLEID = B.TEMPLEID
 			  LEFT JOIN TD_WF_MESSTEMPLATE C ON A.EMAILTEMPLEID = C.TEMPLEID
@@ -1416,9 +1523,40 @@
 	<property name="insertNodeWorktime_wf">
 		<![CDATA[
 			INSERT INTO TD_WF_NODE_WORKTIME
-			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE, NOTICENUM)
+			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE)
 			VALUES
-			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE],#[NOTICENUM])
+			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE])
+		]]>
+	</property>
+	
+	<!-- 获取用户组织id  gw_tanx -->
+	<property name="getUserOrgId_wf">
+		<![CDATA[
+			SELECT T1.ORG_ID
+			  FROM TD_SM_ORGUSER T1
+			  LEFT JOIN TD_SM_USER T2 ON T1.USER_ID = T2.USER_ID
+			 WHERE T2.USER_NAME = ?
+		]]>
+	</property>
+	
+	<!-- 删除流程定义的消息提醒设置信息  gw_tanx -->
+	<property name="deleteProcMesstemplateBykey">
+		<![CDATA[
+			 delete from TD_WF_PROC_MESSTEMPLATE where process_key=#[process_key]
+		]]>
+	</property>
+	
+	<!-- 删除流程实例的处理工时信息  gw_tanx -->
+	<property name="deleteNodeWorktimeBykey">
+		<![CDATA[
+			 delete from TD_WF_NODE_WORKTIME where process_key=#[process_key]
+		]]>
+	</property>
+	
+	<!-- 删除流程实例的处理工时信息  gw_tanx -->
+	<property name="deleteHiNodeWorktimeBykey">
+		<![CDATA[
+			 delete from TD_WF_HI_NODE_WORKTIME where process_key=#[process_key]
 		]]>
 	</property>
 	

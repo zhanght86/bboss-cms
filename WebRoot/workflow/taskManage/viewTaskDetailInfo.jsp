@@ -52,29 +52,29 @@
 										<th width="150"><strong>结束时间</strong></th>
 									</tr>
 									<tr >
-										<td width="350"><pg:cell actual="${name }" colName="PROC_INST_ID_"/></td>
+										<td width="350"><pg:cell colName="PROC_INST_ID_"/></td>
 										<td width="100">
-											<pg:notempty colName="END_TIME_" >
+											<pg:notnull colName="END_TIME_" >
 												结束
-											</pg:notempty>
-											<pg:empty colName="END_TIME_" >
+											</pg:notnull>
+											<pg:null colName="END_TIME_" >
 												<pg:equal colName="SUSPENSION_STATE_" value="1">
 													进行中
 												</pg:equal>
 												<pg:equal colName="SUSPENSION_STATE_" value="2">
 													挂起
 												</pg:equal>
-											</pg:empty>
+											</pg:null>
 										</td>
 										<td width="100"><pg:cell colName="START_USER_ID_"/></td>
-										<td width="150"><pg:cell colName="START_TIME_"/></td>
+										<td width="150"><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 										<td width="150">
-											<pg:notempty colName="END_TIME_" >
-												<pg:cell colName="END_TIME_"/>
-											</pg:notempty>
-											<pg:empty colName="END_TIME_" >
+											<pg:notnull colName="END_TIME_" >
+												<pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/>
+											</pg:notnull>
+											<pg:null colName="END_TIME_" >
 												&nbsp;
-											</pg:empty>
+											</pg:null>
 										</td>
 									</tr>
 									<pg:notempty colName="SUPER_PROCESS_INSTANCE_ID_" >
@@ -93,27 +93,27 @@
 			        						</a>
 			        					</td>
 										<td rowspan="2" width="100">
-											<pg:notempty colName="END_TIME_" >
+											<pg:notnull colName="END_TIME_" >
 												结束
-											</pg:notempty>
-											<pg:empty colName="END_TIME_" >
+											</pg:notnull>
+											<pg:null colName="END_TIME_" >
 												<pg:equal colName="SUSPENSION_STATE_" value="1">
 													进行中
 												</pg:equal>
 												<pg:equal colName="SUSPENSION_STATE_" value="2">
 													挂起
 												</pg:equal>
-											</pg:empty>
+											</pg:null>
 										</td>
 										<td rowspan="2" width="100"><pg:cell colName="START_USER_ID_"/></td>
-										<td rowspan="2" width="150"><pg:cell colName="START_TIME_"/></td>
+										<td rowspan="2" width="150"><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 										<td rowspan="2" width="150">
-											<pg:notempty colName="END_TIME_" >
-												<pg:cell colName="END_TIME_"/>
-											</pg:notempty>
-											<pg:empty colName="END_TIME_" >
+											<pg:notnull colName="END_TIME_" >
+												<pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/>
+											</pg:notnull>
+											<pg:null colName="END_TIME_" >
 												&nbsp;
-											</pg:empty>
+											</pg:null>
 										</td>
 									</tr>
 									</pg:notempty>

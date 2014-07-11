@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
+
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
+import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
@@ -32,6 +36,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
 	private ActivitiService activitiService;
+	
+	private String[] arraySysVariable = { "_users", "_groups", "loopCounter",
+			"nrOfActiveInstances", "nrOfCompletedInstances", "nrOfInstances",
+			"_user",".bpmn.behavior.multiInstance.mode" };
 
 	@Override
 	public void destroy() throws Exception {
@@ -73,6 +81,20 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			} else {
 				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
 						+ "_groups", "");
+			}
+			
+			// 串/并行切换(多实例)
+			String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
+			if ("1".equals(isMulti)) {
+				variableMap
+						.put(activitiNodeCandidateList.get(i).getNode_key()
+								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+								MultiInstanceActivityBehavior.multiInstanceMode_sequential);
+			} else if ("2".equals(isMulti)) {
+				variableMap
+						.put(activitiNodeCandidateList.get(i).getNode_key()
+								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+								MultiInstanceActivityBehavior.multiInstanceMode_parallel);
 			}
 
 		}
@@ -167,17 +189,20 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void rejectToPreTask(TaskCondition task, List<ActivitiNodeInfo> nodeList,
-			List<Nodevariable> nodevariableList) {
+	public void rejectToPreTask(TaskCondition task,
+			List<ActivitiNodeInfo> nodeList,
+			List<Nodevariable> nodevariableList, int rejectedtype) {
 
 		// 获取参数配置信息
 		Map<String, Object> variableMap = getVariableMap(nodeList,
 				nodevariableList);
 
 		if (StringUtil.isNotEmpty(task.getCompleteReason())) {
-			activitiService.rejecttoPreTaskWithReson(task.getTaskId(), variableMap,task.getCompleteReason());
-		}else {
-			activitiService.rejecttoPreTask(task.getTaskId(), variableMap);
+			activitiService.rejecttoPreTaskWithReson(task.getTaskId(),
+					variableMap, task.getCompleteReason(), rejectedtype);
+		} else {
+			activitiService.rejecttoPreTask(task.getTaskId(), variableMap,
+					rejectedtype);
 		}
 
 	}
@@ -204,7 +229,25 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				tms.commit();
 				return null;
 			}
+			
+			// 判断是否邮件任务
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
+			
+			for (int i = 0; i < nodeList.size(); i++) {
+				ActivitiNodeInfo nodeInfo = nodeList.get(i);
 
+				for (ActivityImpl activtie : activties) {
+					if (activtie.getId().equals(nodeInfo.getNode_key())) {
+						//邮件任务
+						if (activtie.isMailTask()) {
+							nodeInfo.setNode_type("mailTask");
+						}
+						break;
+					}
+				}
+			}
+			
 			// 根据流程实例ID 获取流程的参数变量信息
 			List<ActivitiVariable> variableList = executor.queryList(
 					ActivitiVariable.class, "getVariableListById_wf",
@@ -214,18 +257,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 				StringBuffer users = new StringBuffer();
 				StringBuffer groups = new StringBuffer();
+				StringBuffer types = new StringBuffer();
 
 				for (int i = 0; i < nodeList.size(); i++) {
 					ActivitiNodeInfo ani = nodeList.get(i);
 
-					// 非人工处理的过滤
-					if (!"userTask".equals(ani.getNode_type())) {
-						continue;
-					}
-
 					// 拼接匹配对象
 					users.append(ani.getNode_key() + "_users");
 					groups.append(ani.getNode_key() + "_groups");
+					types.append(ani.getNode_key()+".bpmn.behavior.multiInstance.mode");
 
 					for (int j = 0; j < variableList.size(); j++) {
 
@@ -246,11 +286,29 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 								ani.setNode_groups_id(av.getTEXT_());
 							}
+							
+							// 串/并行
+							if (av.getNAME_().equals(types.toString())) { 
+								
+								if (av.getTEXT_().equals("sequential")) {
+									ani.setIsMulti("1");// 串行多实例
+								}else if (av.getTEXT_().equals("parallel")){
+									ani.setIsMulti("2");// 并行多实例
+								}else {
+									ani.setIsMulti("0");// 不是多实例
+								}
+								
+							}
 						}
+					}
+					
+					if (StringUtil.isEmpty(ani.getIsMulti())) {
+						ani.setIsMulti("0");// 不是多实例
 					}
 
 					users.setLength(0);
 					groups.setLength(0);
+					types.setLength(0);
 
 				}
 			}
@@ -397,10 +455,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			sb.append(days + "天");
 		}
 		if (hours != 0) {
-			sb.append(hours + "时");
+			sb.append(hours + "小时");
 		}
 		if (minutes != 0) {
-			sb.append(minutes + "分");
+			sb.append(minutes + "分钟");
 		}
 		if (seconds != 0) {
 			sb.append(seconds + "秒");
@@ -410,45 +468,74 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public List<Nodevariable> getProcessVariable(String processInstId) {
+	public Object [] getProcessVariable(String processInstId) {
 		try {
 			List<ActivitiVariable> variableList = executor.queryList(
 					ActivitiVariable.class, "getVariableListById_wf",
 					processInstId);
 
+			// 非系统管理参数
 			List<Nodevariable> nodevariableList = new ArrayList<Nodevariable>();
+			// 系统参数
+			List<Nodevariable> sysvariableList = new ArrayList<Nodevariable>();
 
 			if (variableList != null && variableList.size() > 0) {
 
 				for (int i = 0; i < variableList.size(); i++) {
 					ActivitiVariable variable = variableList.get(i);
-
-					if (variable.getNAME_().endsWith("_users")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("_groups")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("loopCounter")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("nrOfActiveInstances")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("nrOfCompletedInstances")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("nrOfInstances")) {
-						continue;
-					} else if (variable.getNAME_().endsWith("_user")) {
-						continue;
-					}else {
-						Nodevariable node = new Nodevariable();
-						node.setParam_name(variable.getNAME_());
-						node.setParam_value(variable.getTEXT_());
+					
+					Nodevariable node = new Nodevariable();
+					node.setParam_name(variable.getNAME_());
+					node.setParam_value(variable.getTEXT_());
+					
+					boolean isSysvariable = false;
+					for (int j = 0; j < arraySysVariable.length; j++) {
+						if (variable.getNAME_().endsWith(arraySysVariable[j])) {
+							sysvariableList.add(node);
+							
+							isSysvariable = true;
+							break;
+						}
+					}
+					
+					if (!isSysvariable) {
 						nodevariableList.add(node);
 					}
 				}
 			}
 
-			return nodevariableList;
+			return new Object []{nodevariableList,sysvariableList};
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
+	}
+
+	@Override
+	public ListInfo getNoHandleTask(String pernr, String sysid,
+			long offset, int pagesize) {
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("isAdmin", AccessControl.getAccessControl().isAdmin(pernr));
+			params.put("assignee", pernr);
+			params.put("sysid", sysid);
+
+			ListInfo listInfo = executor.queryListInfoBean(NoHandleTask.class,
+					"selectNoHandleTask_wf", offset, pagesize, params);
+
+			List<NoHandleTask> taskList = listInfo.getDatas();
+			if (taskList != null && taskList.size() != 0) {
+				for (int i = 0; i < taskList.size(); i++) {
+					NoHandleTask tm = taskList.get(i);
+					// 处理人格式化
+					tm.setSender(activitiService.userIdToUserName(
+							tm.getUserAccount(), "1"));
+				}
+			}
+
+			return listInfo;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
 	}
 }

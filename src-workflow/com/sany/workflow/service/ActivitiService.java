@@ -45,7 +45,7 @@ public interface ActivitiService {
 	   * @param taskId
 	   * @param variables
 	   */
-	  void rejecttoPreTask(String taskId, Map<String, Object> variables);
+	  void rejecttoPreTask(String taskId, Map<String, Object> variables,int rejectedtype);
 	  
 	/**将当前任务驳回到上一个任务处理人处，并更新流程变量参数 gw_tanx
 	 * @param taskId
@@ -54,27 +54,29 @@ public interface ActivitiService {
 	 * 2014年6月27日
 	 */
 	public void rejecttoPreTaskWithReson(String taskId,
-			Map<String, Object> variables, String rejectReason);
+			Map<String, Object> variables, String rejectReason, int rejectedtype);
 	  
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处
 	   * @param taskId
 	   */
-	  void rejecttoPreTask(String taskId);
+	  void rejecttoPreTask(String taskId,int rejectedtype);
 	  
 	  /** 将当前任务驳回到上一个任务处理人处 gw_tanx
 	 * @param taskId
 	 * @param rejectReason
 	 * 2014年6月27日
 	 */
-	public void rejecttoPreTaskWithReson(String taskId,String rejectReason);
+	public void rejecttoPreTaskWithReson(String taskId, String rejectReason,
+			int rejectedtype);
 	  
 	  /**
 	   * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
 	   * @param taskId
 	   * @param variables
 	   */
-	void rejecttoPreTask(String taskId, String username,Map<String, Object> variables);
+	void rejecttoPreTask(String taskId, String username,
+			Map<String, Object> variables, int rejectedtype);
 	
 	/** 将当前任务驳回到上一个任务处理人处，并更新流程变量参数 gw_tanx
 	 * @param taskId
@@ -84,13 +86,13 @@ public interface ActivitiService {
 	 * 2014年6月27日
 	 */
 	public void rejecttoPreTask(String taskId, String username,
-			Map<String, Object> variables, String rejectReason);
+			Map<String, Object> variables, String rejectReason, int rejectedtype);
 		  
 		  /**
 		   * 将当前任务驳回到上一个任务处理人处
 		   * @param taskId
 		   */
-	void rejecttoPreTask(String taskId,String username);
+	void rejecttoPreTask(String taskId,String username,int rejectedtype);
 	
 	/** 将当前任务驳回到上一个任务处理人处 gw_tanx
 	 * @param taskId
@@ -98,7 +100,8 @@ public interface ActivitiService {
 	 * @param rejectReason
 	 * 2014年6月27日
 	 */
-	public void rejecttoPreTask(String taskId, String username,String rejectReason);
+	public void rejecttoPreTask(String taskId, String username,
+			String rejectReason, int rejectedtype);
 	/**
 	 * 获得activiti服务
 	 * 
@@ -1418,7 +1421,8 @@ public interface ActivitiService {
 	 * 2014年6月23日
 	 */
 	public void saveMessageType(String processKey, String messagetempleid,
-			String emailtempleid, String noticeId);
+			String emailtempleid, String noticeId, String iscontainholiday,
+			String noticerate);
 	
 	/** 设置流程定义是否包含节假日 gw_tanx
 	 * @param processKey

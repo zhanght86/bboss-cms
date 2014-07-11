@@ -1,5 +1,9 @@
 package com.sany.workflow.entity;
 
+import java.sql.Timestamp;
+
+import org.frameworkset.util.annotations.RequestParam;
+
 /**
  * @todo 任务查询条件
  * @author tanx
@@ -16,9 +20,11 @@ public class TaskCondition {
 
 	private String processDefId;// 流程定义id
 
-	private String startTime;// 任务开始时间
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp startTime;// 任务开始时间
 
-	private String endTime;// 任务结束时间
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
+	private Timestamp endTime;// 任务结束时间
 
 	private String taskState;// 任务状态 0 所有任务 1 未签收 2 已签收
 
@@ -100,19 +106,19 @@ public class TaskCondition {
 		this.processDefId = processDefId;
 	}
 
-	public String getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 

@@ -14,6 +14,10 @@ import com.frameworkset.platform.holiday.area.bean.WorkTime;
 public class UtilAction {
 
 	private UtilManager utilManager;
+	public String getOrgIdByuserAccount(String userAccount)throws Exception{
+		
+		return utilManager.getOrgIdByuserAccount(userAccount);
+	}
 	public String getAreaByOrgId(String orgId){
 		try {
 			Map<String,String> orgToArea = utilManager.queryOrgToArea();

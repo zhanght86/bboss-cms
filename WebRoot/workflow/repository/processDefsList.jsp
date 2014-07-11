@@ -35,7 +35,7 @@
        		<th><pg:message code="sany.pdp.workflow.picture.resource.name"/></th>
        		<th><pg:message code="sany.pdp.workflow.business.type"/></th>
        		<th>消息提醒</th>
-       		<th>节假日</th>
+       		<!-- <th>节假日</th> -->
        		<th><pg:message code="sany.pdp.common.status"/></th>
        		<th><pg:message code="sany.pdp.common.operation"/></th>
        	</pg:header>	
@@ -68,10 +68,12 @@
 					</pg:notempty>
 					<a href="javascript:openSetMessTemple('<pg:cell colName="KEY_" />')">设置</a>
            		</td>
+           		<!-- 
            		<td>
                 	<input type="radio" name="<pg:cell colName="DEPLOYMENT_ID_" />_a" value="0" <pg:equal colName="IS_CONTAIN_HOLIDAY" value="0">checked</pg:equal> onclick="setHoliday('<pg:cell colName="KEY_" />',this.value)"/>剔除
                 	<input type="radio" name="<pg:cell colName="DEPLOYMENT_ID_" />_b" value="1" <pg:equal colName="IS_CONTAIN_HOLIDAY" value="1">checked</pg:equal> onclick="setHoliday('<pg:cell colName="KEY_" />',this.value)"/>包含
-                </td> 
+                </td>
+                 --> 
            		<td>
                 	<pg:equal colName="SUSPENSION_STATE_" value="1"><pg:message code="sany.pdp.workflow.operation.open"/></pg:equal>
                 	<pg:equal colName="SUSPENSION_STATE_" value="2"><pg:message code="sany.pdp.workflow.operation.close"/></pg:equal>

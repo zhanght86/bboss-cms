@@ -288,7 +288,8 @@ public class ActivitiServiceImpl {
 				.getDeployedProcessDefinition(processDefinition.getId());
 
 		List<ActivityImpl> activitiList = def.getActivities();// 获得当前任务的所有节点
-		return activitiList;
+		List<ActivityImpl> ret = new ArrayList<ActivityImpl>(activitiList);
+		return ret;
 	}
 	/**
 	 * 根据任务ID和流程定义ID获取活动节点 

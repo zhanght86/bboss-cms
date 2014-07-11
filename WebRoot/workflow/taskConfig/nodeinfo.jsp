@@ -25,14 +25,13 @@
 						<th>节点名称</th>
 						<th>待办人</th>
 						<th>待办组</th>
-						<!-- 
-						<th>通知模板</th>
-						-->
+						<!--<th>通知模板</th>-->
 						<th>处理工时/小时</th>
-						<th>提醒次数</th>
+						<!-- <th>提醒次数</th>-->
 						<th>操作</th>
 					</pg:header>
 					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
+					<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
 					<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
 						<input type="hidden"
 							id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
@@ -96,12 +95,13 @@
 							<td >
 								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
 							</td>
+							<!-- 
 							<td >
 								<input type="text" name="noticenum" style="width: 50px;" value="<pg:notequal colName="noticenum" value="0"><pg:cell colName="noticenum"/></pg:notequal>" onpaste="javascript: return false;"
 									onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" 
 									onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
 							</td>
-							
+							 -->
 							<td>
 								可修改
 								<select name="is_edit_candidate">
@@ -127,6 +127,7 @@
 								</select>
 							</td>
 						</tr>
+						</pg:notin>
 					</pg:list>
 				</table>
 				

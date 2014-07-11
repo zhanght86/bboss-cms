@@ -48,6 +48,32 @@ function initSystemSecret(){
 							required="true" maxlength="100" /><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
+						<th>待办类型：</th>
+						<td><!-- <input id="pending_type" name="pending_type" type="text"
+							value="" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> -->
+							
+							<select id="pending_type" name="pending_type"  maxlength="50" >
+							<option value="1">GW</option>
+							<option value="2">本地</option>
+							<option value="3">其它库</option>
+							</select>
+							
+							<font color="red">*</font></td>
+					</tr>
+					<tr>
+						<th>启用待办：</th>
+						<td><!-- <input id="used" name="used" type="text"
+							value="" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> -->
+							<select id="pending_used" name="pending_used"  maxlength="50" >
+							<option value="0">关闭</option>
+							<option value="1">启用</option>
+							</select>
+							
+							<font color="red">*</font></td>
+					</tr>
+					<tr>
 						<th>待办URL：</th>
 						<td><input id="todo_url" name="todo_url" type="text"
 							value="" class="w120 input_default easyui-validatebox"

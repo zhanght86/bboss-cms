@@ -1,6 +1,6 @@
 <properties>
 	
-	<property name="/sysmanager/holiday/util/*.freepage" class="com.frameworkset.platform.holiday.area.util.WorkTimeUtil" singlable="true"
+	<property name="sysmanager.holiday.util" class="com.frameworkset.platform.holiday.area.util.WorkTimeUtil" singlable="true"
 	    path:index="/sysmanager/holiday/interface.jsp"
 		f:util="attr:sysmanager.holiday.util.UtilAction"
 		/>

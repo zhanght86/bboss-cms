@@ -33,8 +33,8 @@
 	</property>
 	
 	
-	<!-- 单元测试需要的配置 -->
-	<!-- <property name="activitiService"
+	<!-- 单元测试需要的配置 
+	 <property name="activitiService"
 		f:executor="attr:activiti.configsqlexecutor"
 		class="com.sany.workflow.service.impl.ActivitiServiceImpl">
 		<construction>
@@ -48,6 +48,6 @@
 			<property value="com/sany/workflow/activiti.xml"/>
 		</construction>
 		
-	</property>-->
-
+	</property>
+ -->
 </properties>

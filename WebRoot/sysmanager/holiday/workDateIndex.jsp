@@ -46,7 +46,7 @@ var areaId = '${param.areaId}';
 		 $.dialog({
 			  id : '',
 			  title : '修改工作日期设置',
-			  width : 450,
+			  width : 900,
 			  height : 500,
 			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/editWorkDate.jsp?id=" + id +"&name=" +name +"&periodDesc=" +periodDesc +"&startDate=" +startDate +"&endDate=" + endDate
 		  });

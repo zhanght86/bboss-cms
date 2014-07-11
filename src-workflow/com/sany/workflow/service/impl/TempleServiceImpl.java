@@ -8,15 +8,13 @@ import java.util.UUID;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.frameworkset.spi.BaseApplicationContext;
-import org.frameworkset.spi.DefaultApplicationContext;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.greatwall.domain.AccessToken;
-import com.sany.mail.SendMail;
+import com.sany.mail.util.MailHelper;
 import com.sany.sim.message.MessageService;
 import com.sany.sim.message.entity.ReturnBean;
 import com.sany.sim.message.entity.SendMessageBean;
@@ -106,7 +104,7 @@ public class TempleServiceImpl implements TempleService,
 		if (fieldList != null && fieldList.size() > 0) {
 
 			for (int i = 0; i < fieldList.size(); i++) {
-				Map map = fieldList.get(i);
+				Map<String, String> map = fieldList.get(i);
 				// 短信模板
 				String messagetempleid = map.get("messageTempleId") == null ? ""
 						: map.get("messageTempleId") + "";
@@ -128,8 +126,9 @@ public class TempleServiceImpl implements TempleService,
 				map.remove("mobile");
 
 				// 接收人邮件地址
-				String mailAddress = map.get("mailAddress") == null ? "" : map
+				String mailAddresss = map.get("mailAddress") == null ? "" : map
 						.get("mailAddress") + "";
+				String[] mailAddress =mailAddresss.split(",");
 				map.remove("mailAddress");
 
 				// 邮件主题
@@ -226,14 +225,15 @@ public class TempleServiceImpl implements TempleService,
 	 * @param content
 	 * @return 2014年6月25日
 	 */
-	private boolean sendEmail(String toAddress, String subject, String content) {
+	private boolean sendEmail(String[] toAddress, String subject, String content) {
 
-		BaseApplicationContext context = DefaultApplicationContext
-				.getApplicationContext("com/sany/mail/property-mail.xml");
+		// BaseApplicationContext context = DefaultApplicationContext
+		// .getApplicationContext("com/sany/mail/property-mail.xml");
+		//
+		// SendMail sendMail = context.getTBeanObject("sendMail",
+		// SendMail.class);
 
-		SendMail sendMail = context.getTBeanObject("sendMail", SendMail.class);
-
-		return sendMail.sendHtmlMail(new String[] { toAddress }, subject,
+		return MailHelper.getSendMail().sendHtmlMail(toAddress, subject,
 				content);
 	}
 

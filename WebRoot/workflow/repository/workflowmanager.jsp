@@ -190,14 +190,14 @@
 	function viewProcessInfo(processKey) {
 		
 		var url="<%=request.getContextPath()%>/workflow/repository/viewProcessInfo.page?processKey="+processKey;
-		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
+		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url,maxState:true});   
 	}
 	
 	//特定流程的任务管理查看  add by tanx
 	function viewTaskInfo(processKey) {
 		
 		var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskInfo.page?processKey="+processKey;
-		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url});   
+		$.dialog({ title:'查看流程信息-'+processKey,width:1100,height:620, content:'url:'+url,maxState:true});   
 	}
 	
     function doreset(){
@@ -331,7 +331,7 @@
   
 function openSetMessTemple(processKey) {
 	var url = "<%=request.getContextPath()%>/workflow/repository/toSetMessageTemplate.page?processKey="+processKey;
-	$.dialog({ id:'nodeInfoIframe', title:"模板设置("+processKey+")",width:300,height:200, content:'url:'+url});
+	$.dialog({ id:'nodeInfoIframe', title:"消息提醒设置("+processKey+")",width:400,height:280, content:'url:'+url});
 }
 
 function openMessTemple(templeId,templeType) {

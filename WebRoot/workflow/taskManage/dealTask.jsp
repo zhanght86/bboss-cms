@@ -24,7 +24,7 @@
 		<fieldset >
 			<legend><strong>基本信息</strong></legend>
 			<pg:beaninfo requestKey="task">
-				<table border="0" cellpadding="0" cellspacing="0" class="table4" >
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table4" >
 					<tr>
 						<th width="60"><strong>业务主题:</strong></th>
 						<td width="100">流程测试</td>
@@ -56,10 +56,11 @@
 						<th>节点名称</th>
 						<th>待办人</th>
 						<th>待办组</th>
+						<th>节点类型</th>
 					</pg:header>
 						
 					<pg:list autosort="false" requestKey="nodeList">
-					<pg:in colName="node_type" scope="userTask">
+					<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
 						<tr>
 							<input type="hidden" id="<pg:cell colName='node_key'/>" 
 								name="node_key" value="<pg:cell colName='node_key'></pg:cell>" />
@@ -78,11 +79,53 @@
 									id="" name="" value=""/>
 								<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
 							</td>
+							<td >
+								<pg:equal colName="isMulti" value="0">
+									<span>
+										<input type="hidden" name="isMulti" value="0" />单实例
+										<pg:equal colName="node_type" value="userTask">
+											人工任务
+										</pg:equal>
+										<pg:equal colName="node_type" value="mailTask">
+											邮件任务
+										</pg:equal>
+									</span>
+								</pg:equal>
+								<pg:notequal colName="isMulti" value="0">
+										多实例
+									<pg:equal colName="node_type" value="userTask">
+										人工任务
+									</pg:equal>
+									<pg:equal colName="node_type" value="mailTask">
+										邮件任务
+									</pg:equal>
+									<pg:notequal actual="${task.taskDefinitionKey}" expressionValue="{node_key}"  >
+									<select name="isMulti">
+										<option value="1" <pg:equal colName="isMulti" value="1">selected</pg:equal>>串行</option>
+										<option value="2" <pg:equal colName="isMulti" value="2">selected</pg:equal>>并行</option>
+									</select>
+									</pg:notequal>
+								</pg:notequal>
+							</td>
 						</tr>
-					</pg:in>
+					</pg:notin>
 					</pg:list>
 				</table>
 			
+			</div>
+		</fieldset>
+		
+		<fieldset >
+			<legend><strong>系统参数</strong></legend>
+			<div>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" >
+					<pg:list autosort="false" requestKey="sysvariableList">
+						<tr>
+							<td><pg:cell colName="param_name"></pg:cell></td>
+							<td><pg:cell colName="param_value"></pg:cell></td>
+						</tr>
+					</pg:list>
+				</table>
 			</div>
 		</fieldset>
 		
@@ -95,39 +138,17 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0"
 					class="stable" id="tb1">
 					<pg:header>
-						<%-- <th>所属节点</th>--%>
 						<th>参数名称</th>
 						<th>参数值</th>
-						<%-- 
-						<th>参数描述</th>
-						<th>是否可修改</th>
-						--%>
 						<th>操作</th>
 					</pg:header>
 					
 					<pg:list autosort="false" requestKey="nodevariableList">
 						<input type="hidden" name="param_name" value="<pg:cell colName='param_name'/>" />
-						
 						<tr>
-						 
-						<%--<td><pg:cell colName="node_name"></pg:cell></td>--%>
 							<td><pg:cell colName="param_name"></pg:cell></td>
-							
 							<td><input type="text" class="input1 w20"
 								value="<pg:cell colName='param_value'/>" name="param_value"/></td>
-						<%--<td><input type="text" class="input1 w200"
-								value="<pg:cell colName='param_des'/>" name="param_des"/></td>
-							<td><select name="is_edit_param">
-									<pg:equal colName="is_edit_param" value="0">
-										<option value="0" selected>是</option>
-										<option value="1">否</option>
-									</pg:equal>
-									<pg:equal colName="is_edit_param" value="1">
-										<option value="0">是</option>
-										<option value="1" selected>否</option>
-									</pg:equal>
-							</select></td>
-							--%>
 							<td><a href="javascript:void(0);" class="bt"><span>删除</span></a>
 							</td>
 						</tr>
@@ -137,34 +158,44 @@
 		</fieldset>
 		
 		<fieldset >
-			<legend></legend>
+			<legend><strong>处理意见</strong></legend>
 			<div>
-				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb4" >
-					<tr>
-						<th><strong>处理意见</strong></th>
-						<td>
-							<textarea rows="10" cols="50" id="completeReason" name="completeReason"  
-							class="w120" style="width: 280px;font-size: 12px;height:50px;" maxlength="200"></textarea>
-						</td>
-						<th><strong>节点流向:</strong></th>
-						<td>
-							<select id="taskDefKey" name="taskDefKey" class="select1" style="width: 125px;">
-								<option value="" selected>默认节点</option>
-								<pg:list autosort="false" requestKey="nextNodeList">
-									<option value="<pg:cell colName="node_key"/>" >
-									<pg:cell colName="node_name"/></option>
-								</pg:list>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<textarea rows="10" cols="50" id="completeReason" name="completeReason"  
+				class="w120" style="width: 100%;font-size: 12px;height:50px;" maxlength="200"></textarea>
 			</div>
 		</fieldset>
 		
 		<div class="btnarea">
-			<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
-			<a href="javascript:void(0)" class="bt_2" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
-			<a href="javascript:void(0)" class="bt_2" id="addButton" onclick="exeTask()"><span>处理</span></a>
+			<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+				<tr>
+					<td width="250px;" align="center">
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
+					</td>
+					<td width="250px;" align="center">
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
+						<select id="rejectedtype" name="rejectedtype" style=" width: 160px;">
+							<option value="0" selected>上一个任务对应的节点</option>
+							<option value="1" >当前节点的上一个节点</option>
+						</select>
+					</td>
+					<td width="250px;" align="center">
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="delegateTask()"><span>转办</span></a>
+						<input type="hidden" class="input1 w120" id="delegate_users_id" />
+						<input type="text" class="input1 w120" id="delegate_users_name" />
+						<a href="javascript:openChooseUsers('delegate')">选择</a>
+					</td>
+					<td width="250px;" align="center">
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="exeTask()"><span>通过</span></a>
+						<select id="taskDefKey" name="taskDefKey" class="select1" >
+							<option value="" selected>默认节点</option>
+							<pg:list autosort="false" requestKey="nextNodeList">
+								<option value="<pg:cell colName="node_key"/>" >
+								<pg:cell colName="node_name"/></option>
+							</pg:list>
+						</select>
+					</td>
+				</tr>
+			</table>
 		</div>
 		
 	</form>
@@ -193,55 +224,121 @@ function openChooseGroups(node_key){
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户组',width:700,height:400, content:'url:'+url}); 
 }
 
-//执行处理
+// 转办
+function delegateTask(){
+	var userid = $.trim($("#delegate_users_id").val());
+	if (userid == ''){
+		alert("请选择转办处理人！");
+		return;
+	} 
+	
+	$.dialog.confirm('确定转办任务给'+$("#delegate_users_name").val()+'？', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/delegateTask.page",
+			data: {"taskId":'${task.id}',"userId":userid},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("转办任务出错:"+data);
+				}else {
+					W.modifyQueryData();
+					api.close();	
+				}
+			}
+		 });
+	},function(){});   
+}
+
+//通过
 function exeTask(){
 	
-	//var taskId = $("#taskId").val();
-	//var taskState = $("#taskState").val();
-	
-	$.ajax({
- 	 	type: "POST",
-		url : "<%=request.getContextPath()%>/workflow/taskManage/completeTask.page",
-		data: formToJson("#submitForm"),
-		dataType : 'json',
-		async:false,
-		beforeSend: function(XMLHttpRequest){
-			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			},
-		success : function(data){
-			if (data != 'success') {
-				alert("处理任务出错:"+data);
-			}else {
-				W.modifyQueryData();
-				api.close();	
+	$.dialog.confirm('确定要通过任务吗？', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/completeTask.page",
+			data: formToJson("#submitForm"),
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("通过任务出错:"+data);
+				}else {
+					W.modifyQueryData();
+					api.close();	
+				}
 			}
-		}
-	 });
+		 });
+	},function(){});   
+
+}
+
+//废弃任务
+function discardTask() {
+	
+	var deleteReason = $.trim($("completeReason").val());
+	if (deleteReason == ''){
+		alert("请填写废弃原因，在处理意见中填写！");
+		return;
+	} 
+	
+	$.dialog.confirm('确定要废弃吗？', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/discardTask.page",
+			data: {"processInstIds":'${task.processInstanceId}',"deleteReason":deleteReason},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("废弃任务出错:"+data);
+				}else {
+					W.modifyQueryData();
+					api.close();	
+				}
+			}	
+		 });	
+	},function(){});   
 }
 
 //驳回任务
 function rejectToPreTask(){
 	
-	//var taskId = $("#taskId").val();
+	$.dialog.confirm('确定要驳回吗？', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/rejectToPreTask.page",
+			data: formToJson("#submitForm"),
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("驳回任务出错:"+data);
+				}else {
+					W.modifyQueryData();
+					api.close();	
+				}
+			}	
+		 });	
+	},function(){});   
 	
-	$.ajax({
- 	 	type: "POST",
-		url : "<%=request.getContextPath()%>/workflow/taskManage/rejectToPreTask.page",
-		data: formToJson("#submitForm"),
-		dataType : 'json',
-		async:false,
-		beforeSend: function(XMLHttpRequest){
-			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			},
-		success : function(data){
-			if (data != 'success') {
-				alert("驳回任务出错:"+data);
-			}else {
-				W.modifyQueryData();
-				api.close();	
-			}
-		}	
-	 });
 }
 
 <%-- 

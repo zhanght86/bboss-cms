@@ -1,19 +1,26 @@
 package com.frameworkset.platform.holiday.area.util;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.frameworkset.util.annotations.ResponseBody;
 
+import com.frameworkset.platform.holiday.area.bean.FlowWarning;
 import com.frameworkset.platform.holiday.area.bean.WorkTime;
 import  com.frameworkset.platform.holiday.area.bean.OrgLeaf;
 import com.frameworkset.platform.holiday.area.util.action.UtilAction;
 
 public class WorkTimeUtil {
 	private  SimpleDateFormat df_date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+	private static SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期时间格式
+
+
 	private static String rexp_orgId = "[0-9]+";
 	private static String rexp_startTime = "\\d{4}\\-\\d{1,2}\\-\\d{1,2}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}";
 	private static String rexp_interval = "[0-9]+\\.{0,1}[0-9]{0,1}[DHm]{1}";
@@ -28,46 +35,128 @@ public class WorkTimeUtil {
 	private static float interval_bound_day = 79536;
 	private static float interval_bound_hour = 596523;
 	private static float interval_bound_min = 35791380;
-	private static float  hour_of_workday = 7.5f;
+	private static int the_whole_day_millisecond = 86400;
 	
 	private UtilAction util;
 	
 	
-	public static void main(String [] args0){
+	public static void main(String [] args0) throws ParseException{
 		String s1 = "20111D";
 		if(s1.matches(rexp_interval)){
-			System.out.print("ok");
+			//System.out.print("ok");
 		}else{
-			System.out.print("not--ok");
+			//System.out.print("not--ok");
 		}
+		
+		Date date = df_dateAndTime.parse("2014-07-02 11:08:30");
+		System.out.print(date.getTime());
 	}
 	
 	public String index(){
 		return "path:index";
 	}
 	@SuppressWarnings("unchecked")
-	public @ResponseBody()List<OrgLeaf> getOrgTree() throws Exception{
+	public @ResponseBody List<OrgLeaf> getOrgTree() throws Exception{
 		
 		return util.getOrgTree();
 	}
-	@SuppressWarnings("unchecked")
-	public @ResponseBody(datatype = "json")String getNextTimeNode(String orgId,String startTime,String interval){
-		return getNextTime( orgId, startTime, interval);
+	/**
+	*计算工作完成时间和预警时间
+	*
+	*/
+	@SuppressWarnings("static-access")
+	public FlowWarning getCompleteAndWarnTime( String userAccount,Date createTime,int dicipline,long interval, String warnPercent)throws Exception{
+		Timestamp ts = new Timestamp(System.currentTimeMillis());   
+
+		FlowWarning bean = new FlowWarning();
+		bean.setCreateTime(createTime);
+		bean.setDicipline(dicipline);
+		bean.setInterval(interval);
+		bean.setUserAccount(userAccount);
+		bean.setWarnPercent(warnPercent);
+		String orgId = util.getOrgIdByuserAccount(userAccount);
+		String createTimeString = df_dateAndTime.format(createTime);
+		long intervalNotice = (interval*Integer.parseInt(warnPercent))/100;
+		String completeTime = null;
+		if(dicipline==0){
+			completeTime = getNextTimeNoRest(createTimeString,interval);
+		}else if(dicipline==1){
+			completeTime = getNextTimeNoRestDay(orgId, createTimeString, interval);
+		}else if(dicipline==2){
+			completeTime = getNextTimeNoRestTime(orgId, createTimeString, interval);
+		}
+		if(completeTime.matches(rexp_startTime)){
+			bean.setErrorCode(createTimeString);//接口报错
+			
+		}else{
+			Calendar instance = Calendar.getInstance();
+			Date date = df_dateAndTime.parse(completeTime);
+			instance.setTimeInMillis(date.getTime()-intervalNotice);
+			bean.setCompleteTime(ts.valueOf(completeTime));
+			bean.setWarnTime(ts.valueOf(df_dateAndTime.format(instance.getTime())));
+		}
+		return bean;
 	}
-	/**获取工作完成时间步骤
-	 * 接口主要逻辑:从开始时间起算，得出一个特定的时间点消耗掉所有的工作时长
-	 * 计算步骤：1.检查参数是否正确；
-	 *           2.根据用户输入的部门编码获取该部门所在产业园的工作日期设置
-	 *           while(工作时长){
-		 *           3.获取开始时间的所在日期的类型，若为休息日，则跳到下一天，若为工作日则计算消耗时长
-		 *           4.循环上一步，直到某天没有工作类型设置，或者工作时长消耗为 '0',则程序退出
-	 *           }
-	 */
-	public String getNextTime(String orgId,String startTime,String interval){
+	
+	
+	/**
+	*计算工作完成时间，包含休息日和法定节假日
+	 * @throws ParseException 
+	*/
+	public String getNextTimeNoRest(String startTime,long millisecond) throws ParseException{
+		Calendar instance = Calendar.getInstance();
+		Date date = df_dateAndTime.parse(startTime);
+		instance.setTimeInMillis(date.getTime()+millisecond);
+		return df_dateAndTime.format(instance.getTime());
+	}
+	
+	/**
+	*计算工作完成时间接口，不包含休息日和法定节假日，包含工作日的休息时间
+	 * @throws Exception 
+	 * @throws ParseException 
+	*/
+	public String getNextTimeNoRestDay(String orgId,String startTime,long millisecond) throws Exception{
+		
+		return getNextTimeNoRestDay( orgId, startTime, millisecondToSecond(millisecond));
+	}
+	
+	
+	/**
+	 * 封装getNextTime,校验参数,并把单位为 D(天) , H(小时) , m(分钟)的时间间隔转换为 (int)秒
+	*/
+	@SuppressWarnings("unchecked")
+	public @ResponseBody String getNextTimeNoRestTime(String orgId,String startTime,String interval){
 		String reCheck = checkParameters( orgId, startTime, interval);
 		if(right_para != reCheck){
 			return reCheck;
 		}
+		return getNextTimeNoRestTime( orgId, startTime, changeIntervalToSecond(interval));
+	}
+	/**
+	 * 封装getNextTime,校验参数,并把单位为 millisecond(毫秒)的时间间隔转换为 (int)秒
+	*/
+	public String getNextTimeNoRestTime(String orgId,String startTime,long millisecond){
+		
+		return getNextTimeNoRestTime( orgId, startTime, millisecondToSecond(millisecond));
+	}
+	
+	
+	/**获取工作完成时间步骤(剔除休息日，法定节假日，工作日中的休息时间)
+	 * 接口主要逻辑:从开始时间起算，得出一个特定的时间点消耗掉所有的工作时长
+	 * @param  orgId      部门编码
+	 * @param  startTime  开始时间
+	 * @param  interval  时间间隔，单位秒
+	 * 
+	 * 计算步骤：
+	 *           1.根据用户输入的部门编码获取该部门所在产业园的工作日期设置
+	 *           while(工作时长){
+		 *           2.获取开始时间的所在日期的类型，若为休息日，则跳到下一天，若为工作日则计算消耗时长
+		 *           3.循环上一步，直到某天没有工作类型设置，或者工作时长消耗为 '0',则程序退出
+	 *           }
+	 */
+	public String getNextTimeNoRestDay(String orgId,String startTime, int int_interval_second)throws Exception{
+
+		
 		String areaId = util.getAreaByOrgId(orgId);
 		if(null == areaId||"".equals(areaId)){
 			return no_erea_set;
@@ -79,7 +168,6 @@ public class WorkTimeUtil {
 		String thisDate = getDate(startTime);//循环变量，日期
 		String thisTime = startTime.split(" ")[1];//循环变量，时间
 		
-		int int_interval_second = changeIntervalToSecond(interval);//循环变量，剩余工作时间
 		
 		
 		while(0 != int_interval_second){//程序在工作剩余秒数为"0"时退出
@@ -88,7 +176,77 @@ public class WorkTimeUtil {
 			if(null == type||"".equals(type)){//没有设置类型，返回错误代码
 				return no_workDate_set;
 			}else if("1".equals(type)){//'1'表示工作日，计算工作时间消耗 
-				map = getSurplusSecond( areaId,thisDate,thisTime,int_interval_second);
+				map = getSurplusSecondNoRestDay( thisDate,thisTime,int_interval_second);
+				if("error" == map.get("re")){
+					return no_workTime_set;
+				}else{
+					int_interval_second = Integer.parseInt(map.get("int_interval_second"));
+					thisDate = map.get("date");
+					thisTime = map.get("time");
+				}
+				
+            }else{//休息日，跳到下一天
+            	thisDate = getNextDate(thisDate);
+            	thisTime = "00:00:00";
+            }
+		}
+		
+		
+		
+		return thisDate+" "+thisTime;
+	
+	}
+	
+	private Map<String,String> getSurplusSecondNoRestDay(String thisDate,String thisTime,int int_interval_second){
+		Map<String,String> map = new HashMap<String,String>();
+		if(int_interval_second <= the_whole_day_millisecond ){
+			map.put("date", thisDate);
+			map.put("time", changeToTime(changeToSecond(thisTime)+int_interval_second));
+			map.put("int_interval_second", "0");
+		}else{
+			map.put("date", getNextDate(thisDate));
+			map.put("time", "00:00:00");
+			map.put("int_interval_second", String.valueOf(int_interval_second-the_whole_day_millisecond));
+		}
+		return map;
+	}
+	
+	/**获取工作完成时间步骤(剔除休息日，法定节假日，工作日中的休息时间)
+	 * 接口主要逻辑:从开始时间起算，得出一个特定的时间点消耗掉所有的工作时长
+	 * @param  orgId      部门编码
+	 * @param  startTime  开始时间
+	 * @param  interval  时间间隔，单位秒
+	 * 
+	 * 计算步骤：1.检查参数是否正确；
+	 *           2.根据用户输入的部门编码获取该部门所在产业园的工作日期设置
+	 *           while(工作时长){
+		 *           3.获取开始时间的所在日期的类型，若为休息日，则跳到下一天，若为工作日则计算消耗时长
+		 *           4.循环上一步，直到某天没有工作类型设置，或者工作时长消耗为 '0',则程序退出
+	 *           }
+	 */
+	private String getNextTimeNoRestTime(String orgId,String startTime,int int_interval_second){
+		
+		String areaId = util.getAreaByOrgId(orgId);
+		if(null == areaId||"".equals(areaId)){
+			return no_erea_set;
+		}
+		String thisYear = startTime.substring(0, 4);
+		
+		Map<String,String> getThisAndNextYearArrange = util.getThisAndNextYearArrange(areaId, thisYear);
+		
+		String thisDate = getDate(startTime);//循环变量，日期
+		String thisTime = startTime.split(" ")[1];//循环变量，时间
+		
+		//int int_interval_second = changeIntervalToSecond(interval);//循环变量，剩余工作时间
+		
+		
+		while(0 != int_interval_second){//程序在工作剩余秒数为"0"时退出
+			Map<String,String> map = new HashMap<String,String>();
+			String type = getThisAndNextYearArrange.get(thisDate);
+			if(null == type||"".equals(type)){//没有设置类型，返回错误代码
+				return no_workDate_set;
+			}else if("1".equals(type)){//'1'表示工作日，计算工作时间消耗 
+				map = getSurplusSecondNoRestTime( areaId,thisDate,thisTime,int_interval_second);
 				if("error" == map.get("re")){
 					return no_workTime_set;
 				}else{
@@ -114,7 +272,7 @@ public class WorkTimeUtil {
 	 * @param time  开始时间
 	 * @param int_interval_second 剩余工作时长
 	*/
-	private Map<String,String> getSurplusSecond(String areaId,String date,String time,int int_interval_second){
+	private Map<String,String> getSurplusSecondNoRestTime(String areaId,String date,String time,int int_interval_second){
 		Map<String,String> map = new HashMap<String,String>();
 		List<WorkTime> list = util.getWorkTimeByWorkDate(areaId, date);//获取当日的时间安排
 	    if(null == list || list.size()==0){
@@ -156,6 +314,16 @@ public class WorkTimeUtil {
 	    return null;
 	}
 	
+	/*把毫秒转换成秒
+	*/
+	private int millisecondToSecond(long  millisecond){
+		
+		int second = new Long(millisecond).intValue() /1000;
+		
+		return second;
+	}
+	/*把天，小时，分钟转换成秒
+	*/
 	private int changeIntervalToSecond(String interval){
 		float value =  Float.valueOf(interval.substring(0,interval.length()-1)) ;
 		String piece = interval.substring(interval.length()-1,interval.length());

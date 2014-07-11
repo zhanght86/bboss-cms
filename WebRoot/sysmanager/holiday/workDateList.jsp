@@ -22,7 +22,7 @@
                 <td><pg:cell colName="periodDesc"/></td>
                 <td><pg:cell colName="startDate"/>&nbsp;&nbsp;至&nbsp;&nbsp;<pg:cell colName="endDate"/></td>
                 <td><a href="#" onclick="editWorkDate('<pg:cell colName="id"/>','<pg:cell colName="areaId"/>','<pg:cell colName="name"/>','<pg:cell colName="periodDesc"/>','<pg:cell colName="startDate"/>','<pg:cell colName="endDate"/>')"><span>编辑工作日期</span></a>
-                |&nbsp;&nbsp;<a href="#" onclick="editWorkTime('<pg:cell colName="id"/>')"><span>编辑工作时间</span></a>
+                <%-- |&nbsp;&nbsp;<a href="#" onclick="editWorkTime('<pg:cell colName="id"/>')"><span>编辑工作时间</span></a> --%>
                 </td>
         </tr>
 	 </pg:list>

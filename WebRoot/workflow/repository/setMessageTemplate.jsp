@@ -26,7 +26,8 @@
 				<input type="hidden" id="noticeId" value="${templateMap.NOTICEID}" />
 				<input type="hidden" id="processkey" value="${processKey}" />
 			<tr >
-				<td align="center">
+				<td align="center" rowspan="2">模板设置</td>
+				<td >
 				
 					<input type="hidden" id="messagetempleid" name="messagetempleid" value="${templateMap.MESSAGETEMPLEID}" />
 					
@@ -36,7 +37,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td align="center">
+				<td >
 					<input type="hidden" id="emailtempleid" name="EMAILTEMPLEID" value="${templateMap.EMAILTEMPLEID}" />
 					
 					<input type="text" id="eamiltitle" name="eamiltitle" value="${templateMap.EMAILTEMPLETITLE}" class="input1 w150" readonly/>
@@ -44,6 +45,44 @@
 					<a href="javascript:openMessTemple('${templateMap.EMAILTEMPLEID}','1')">邮件</a>
 				</td>
 			</tr>
+			<tr >
+				<td align="center">预警频率</td>
+				<td >
+					<input type="text" id="noticerate" name="noticerate" value="${templateMap.NOTICERATE}" class="input1 w150"  onpaste="javascript: return false;"
+						onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" 
+						onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/>%
+				</td>
+			</tr>
+			<pg:empty actual="${templateMap.IS_CONTAIN_HOLIDAY}">
+			<tr >
+				<td align="center" rowspan="3">工时规则</td>
+				<td ><input type="radio" name="iscontainholiday" value="1" checked/>全年为工作日</td>
+			</tr>
+			<tr >
+				<td ><input type="radio" name="iscontainholiday" value="0" />剔除周末/节假日</td>
+			</tr>
+			<tr >
+				<td ><input type="radio" name="iscontainholiday" value="2" />剔除周末/节假日/工作休息时间</td>
+			</tr>
+			</pg:empty>
+			<pg:notempty actual="${templateMap.IS_CONTAIN_HOLIDAY}">
+			<tr >
+				<td align="center" rowspan="3">工时规则</td>
+				<td ><input type="radio" name="iscontainholiday" value="1" 
+					 <pg:equal actual="${templateMap.IS_CONTAIN_HOLIDAY}" value="1">checked</pg:equal>
+					 />全年为工作日</td>
+			</tr>
+			<tr >
+				<td ><input type="radio" name="iscontainholiday" value="0" 
+				    <pg:equal actual="${templateMap.IS_CONTAIN_HOLIDAY}" value="0">checked</pg:equal>
+				    />剔除周末/节假日</td>
+			</tr>
+			<tr >
+				<td ><input type="radio" name="iscontainholiday" value="2" 
+					<pg:equal actual="${templateMap.IS_CONTAIN_HOLIDAY}" value="2">checked</pg:equal>
+					/>剔除周末/节假日/工作休息时间</td>
+			</tr>
+			</pg:notempty>
 		</table>			
 		
 		<div class="btnarea" >
@@ -74,7 +113,9 @@ function dosubmit(){
  	 	type: "POST",
 		url : "<%=request.getContextPath()%>/workflow/repository/saveMessageTemplate.page",
 		data :{"messagetempleid":$("#messagetempleid").val(),"processKey":$("#processkey").val(),
-			"emailtempleid":$("#emailtempleid").val(),"noticeId":$("#noticeId").val()},
+			"emailtempleid":$("#emailtempleid").val(),"noticeId":$("#noticeId").val(),
+			"iscontainholiday":$("input[name=iscontainholiday]:checked").val(),
+			"noticerate":$("#noticerate").val()},
 		dataType : 'json',
 		async:false,
 		beforeSend: function(XMLHttpRequest){

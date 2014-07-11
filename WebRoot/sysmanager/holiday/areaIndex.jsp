@@ -42,10 +42,10 @@
 		  });
 	 }
 	 
-	 function editOrgList(areaId){
+	 function editOrgList(areaId,areaName){
 		 $.dialog({
 			  id : '',
-			  title : '区域所辖部门',
+			  title : areaName+'所辖部门',
 			  width : 550,
 			  height : 500,
 			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/orgIndex.jsp?areaId=" +areaId
@@ -55,18 +55,20 @@
 		 $.dialog({
 			  id : '',
 			  title : areaName+'假日安排',
-			  width : 1100,
+			  width : 1024,
 			  height : 800,
-			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/arrange.jsp?areaId=" +areaId
-		  });
+			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/arrange.jsp?areaId=" +areaId,
+			  maxState:true
+		 });
 	 }
-	 function queryWorkDate(areaId){
+	 function queryWorkDate(areaId,areaName){
 		 $.dialog({
 			  id : '',
-			  title : '工作时间设置',
+			  title : areaName+'工作时间设置',
 			  width : 800,
 			  height : 500,
 			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/workDateIndex.jsp?areaId=" +areaId
+			  	  
 		  });
 	 }
 </script>

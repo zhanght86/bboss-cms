@@ -47,14 +47,15 @@
 							<th>节点名称</th>
 							<th>待办人</th>
 							<th>待办组</th>
+							<th>节点类型</th>
 							<th>处理工时/小时</th>
-							<th>提醒次数</th>
+							<!-- <th>提醒次数</th> -->
 						</pg:header>
 						
 						<input type="hidden" id="processKey" name="processKey" value="${process_key}"/>
 						
 						<pg:list autosort="false" requestKey="nodeInfoList">
-							<pg:in colName="node_type" scope="userTask">
+							<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
 								<tr class="replaceTr">
 									<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
 										name="candidate_users_id" value="" />
@@ -77,15 +78,43 @@
 										<a href="javascript:openChooseGroups('<pg:cell colName='node_key'/>')">选择</a>
 									</td>
 									<td >
+										<pg:equal colName="isMulti" value="0">
+											<span>
+												<input type="hidden" name="isMulti" value="0" />单实例
+												<pg:equal colName="node_type" value="userTask">
+													人工任务
+												</pg:equal>
+												<pg:equal colName="node_type" value="mailTask">
+													邮件任务
+												</pg:equal>
+											</span>
+										</pg:equal>
+										<pg:notequal colName="isMulti" value="0">
+												多实例
+											<pg:equal colName="node_type" value="userTask">
+												人工任务
+											</pg:equal>
+											<pg:equal colName="node_type" value="mailTask">
+												邮件任务
+											</pg:equal>
+											<select name="isMulti">
+												<option value="1" <pg:equal colName="isMulti" value="1">selected</pg:equal>>串行</option>
+												<option value="2" <pg:equal colName="isMulti" value="2">selected</pg:equal>>并行</option>
+											</select>
+										</pg:notequal>
+									</td>
+									<td >
 										<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
 									</td>
+									<!-- 
 									<td >
 										<input type="text" name="noticenum" style="width: 50px;" value="<pg:notequal colName="noticenum" value="0"><pg:cell colName="noticenum"/></pg:notequal>" onpaste="javascript: return false;"
 											onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" 
 											onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"/>
 									</td>
+									 -->
 								</tr>
-							</pg:in>
+							</pg:notin>
 						</pg:list>
 					</table>
 				</div>
@@ -207,35 +236,72 @@ function query(businessId,businessType,treename){
 						var candidate_groups_id=nodeConfigList[i].candidate_groups_id == null ? '':nodeConfigList[i].candidate_groups_id;
 						var duration_node = nodeConfigList[i].duration_node == null ? '':nodeConfigList[i].duration_node;
 						var noticenum = nodeConfigList[i].noticenum == 0 ? '':nodeConfigList[i].noticenum;
+						var isMulti = nodeConfigList[i].isMulti ;
+						var node_type = nodeConfigList[i].node_type ;
 						
-						configHtml +="<tr class='replaceTr'>";
-						configHtml +="<input type='hidden' id='"+nodekey+"_users_id' ";
-						configHtml +="name='candidate_users_id' value='"+candidate_users_id+"'/>";
-						configHtml +="<input type='hidden' id='"+nodekey+"_groups_id' ";
-						configHtml +="name='candidate_groups_id' value='"+candidate_groups_id+"' />";
-						configHtml +="<input type='hidden' name='node_id' value='"+node_id+"'/>";
-						configHtml +="<input type='hidden' name='node_key' value='"+nodekey+"'/>";
-						configHtml +="<td>"+nodekey+"</td>";
-						configHtml +="<td>"+node_name+"</td>";
-						configHtml +="<td><input type='text' class='input1 w200' ";
-						configHtml +="id='"+nodekey+"_users_name' ";
-						configHtml +="name='candidate_users_name' value='"+candidate_users_name+"'/>";
-						configHtml +="<a href=\"javascript:openChooseUsers('"+nodekey+"')\">选择</a></td>";
-						configHtml +="<td><input type='text' class='input1 w200' ";
-						configHtml +="id='"+nodekey+"_groups_name' ";
-						configHtml +="name='candidate_groups_name' value='"+candidate_groups_name+"'/>";
-						configHtml +="<a href=\"javascript:openChooseGroups('"+nodekey+"')\">选择</a></td>";
+						if (node_type !='startEvent' && node_type !='endEvent' && node_type !='serviceTask'){
 						
-						configHtml +="<td><input type='text' value='"+duration_node+"' ";
-						configHtml +="name='duration_node' style='width: 50px;' onkeyup='chkPrice(this);' ";
-						configHtml +="onblur='chkLast(this)' onpaste='javascript: return false;'/></td>";
-						
-						configHtml +="<td><input type='text' name='noticenum' style='width: 50px;' ";
-						configHtml +="value='" +noticenum+ "' onpaste='javascript: return false;' ";
-						configHtml +="onkeyup=\"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}";
-						configHtml +="else{this.value=this.value.replace(/\D/g,'')}\" ";
-						configHtml +="onafterpaste=\"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}";
-						configHtml +="else{this.value=this.value.replace(/\D/g,'')}\" /></td></tr> ";
+							configHtml +="<tr class='replaceTr'>";
+							configHtml +="<input type='hidden' id='"+nodekey+"_users_id' ";
+							configHtml +="name='candidate_users_id' value='"+candidate_users_id+"'/>";
+							configHtml +="<input type='hidden' id='"+nodekey+"_groups_id' ";
+							configHtml +="name='candidate_groups_id' value='"+candidate_groups_id+"' />";
+							configHtml +="<input type='hidden' name='node_id' value='"+node_id+"'/>";
+							configHtml +="<input type='hidden' name='node_key' value='"+nodekey+"'/>";
+							configHtml +="<td>"+nodekey+"</td>";
+							configHtml +="<td>"+node_name+"</td>";
+							configHtml +="<td><input type='text' class='input1 w200' ";
+							configHtml +="id='"+nodekey+"_users_name' ";
+							configHtml +="name='candidate_users_name' value='"+candidate_users_name+"'/>";
+							configHtml +="<a href=\"javascript:openChooseUsers('"+nodekey+"')\">选择</a></td>";
+							configHtml +="<td><input type='text' class='input1 w200' ";
+							configHtml +="id='"+nodekey+"_groups_name' ";
+							configHtml +="name='candidate_groups_name' value='"+candidate_groups_name+"'/>";
+							configHtml +="<a href=\"javascript:openChooseGroups('"+nodekey+"')\">选择</a></td>";
+							
+							configHtml +="<td >";
+							if (isMulti == '0'){
+								configHtml +="<span><input type='hidden' name='isMulti' value='0' />单实例";
+								if (node_type=='userTask'){
+									configHtml +=" 人工任务";
+								}else if (node_type=='mailTask') {
+									configHtml +=" 邮件任务";
+								}
+								configHtml +="</span>";
+							}else {
+								configHtml +="多实例";
+								if (node_type=='userTask'){
+									configHtml +=" 人工任务 ";
+								}else if (node_type=='mailTask') {
+									configHtml +=" 邮件任务 ";
+								}
+								configHtml +="<select name='isMulti'>";
+								configHtml +="<option value='1' ";
+								if (isMulti == '1') {
+									configHtml +="selected";
+								}
+								configHtml +=">串行</option>";
+								configHtml +="<option value='2' ";
+								if (isMulti == '2') {
+									configHtml +="selected";
+								}
+								configHtml +=">并行</option>";
+								configHtml +="</select>";
+							}
+							configHtml +="</td>";
+							
+							configHtml +="<td><input type='text' value='"+duration_node+"' ";
+							configHtml +="name='duration_node' style='width: 50px;' onkeyup='chkPrice(this);' ";
+							configHtml +="onblur='chkLast(this)' onpaste='javascript: return false;'/></td></tr>";
+							<%-- 
+							configHtml +="<td><input type='text' name='noticenum' style='width: 50px;' ";
+							configHtml +="value='" +noticenum+ "' onpaste='javascript: return false;' ";
+							configHtml +="onkeyup=\"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}";
+							configHtml +="else{this.value=this.value.replace(/\D/g,'')}\" ";
+							configHtml +="onafterpaste=\"if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}";
+							configHtml +="else{this.value=this.value.replace(/\D/g,'')}\" /></td></tr> ";
+							--%>
+						}
 						
 					}
 					$("#tb").append(configHtml);

@@ -60,7 +60,7 @@ public  @ResponseBody String updateArea(String areaId,String areaName,String are
 		 return "success";
 	 }catch(Exception e){
 		 e.printStackTrace();
-		 logger.error("更新区域信息报错"+e.getMessage());
+		 logger.error("更新区域信息报错",e);
 		 return "error"; 
 	 }
 }
@@ -96,7 +96,7 @@ public  @ResponseBody String addOrg(String orgId,String orgName,String areaId) t
 		 	 
 		 return "success";
 	 }catch(Exception e){
-		 logger.error("添加机构报错"+e.getMessage());
+		 logger.error("添加机构报错",e);
 		 e.printStackTrace();
 		 return "添加失败"; 
 	 }
@@ -112,7 +112,7 @@ public  @ResponseBody String deleteOrg(String orgId,String areaId) throws Except
 		 	 
 		 return "success";
 	 }catch(Exception e){
-		 logger.error("删除机构报错"+e.getMessage());
+		 logger.error("删除机构报错",e);
 		 e.printStackTrace();
 		 return "error"; 
 	 }
@@ -128,7 +128,7 @@ public  @ResponseBody Area querySingleArea(String areaId) throws Exception {
 		 	 
 		 return (null != list && list.size()>0)?list.get(0):null;
 	 }catch(Exception e){
-		 logger.error("查询单个区域报错"+e.getMessage());
+		 logger.error("查询单个区域报错",e);
 		 e.printStackTrace();
 		 return null; 
 	 }
@@ -146,8 +146,7 @@ public  @ResponseBody String addArea(String areaName , String areaDesc) throws E
 		 	 
 		 return "success";
 	 }catch(Exception e){
-		 logger.error("添加报错"+e.getMessage());
-		 e.printStackTrace();
+		 logger.error("添加报错",e);
 		 return "error"; 
 	 }
 	
@@ -216,14 +215,12 @@ public  @ResponseBody String updateSingleArrange(String year,String areaId , Str
 		
 		return "success";
 	}catch(Exception e){
-		try {
-			tm.rollback();
-		} catch (RollbackException e1) {
-			e1.printStackTrace();
-		}
-		logger.error("更新日期类型报错"+e.getMessage());
-		e.printStackTrace();
+		
+		logger.error("更新日期类型报错",e);
+		
 		return  "false";
+	}finally{
+		tm.release();
 	}
 	
 	
@@ -347,7 +344,7 @@ public  @ResponseBody String updateSingleArrange(String year,String areaId , Str
 				 	 
 				 return "success";
 			 }catch(Exception e){
-				 logger.error("新增工作日期报错"+e.getMessage());
+				 logger.error("新增工作日期报错",e);
 				 e.printStackTrace();
 				 return "error"; 
 			 }
@@ -362,7 +359,7 @@ public  @ResponseBody String updateSingleArrange(String year,String areaId , Str
 				 	 
 				 return "success";
 			 }catch(Exception e){
-				 logger.error("更新工作日期报错"+e.getMessage());
+				 logger.error("更新工作日期报错",e);
 				 e.printStackTrace();
 				 return "error"; 
 			 }
@@ -394,7 +391,7 @@ public  @ResponseBody Map<String,String> saveOrUpdateWorkTime(String pid,String 
 		 map.put("result", "success");
 		 
 	 }catch(Exception e){
-		 logger.error("更新或保存工作时间设置报错"+e.getMessage());
+		 logger.error("更新或保存工作时间设置报错",e);
 		 e.printStackTrace();
 		 map.put("id", id);
 		 map.put("result", "error");
@@ -410,7 +407,7 @@ public  @ResponseBody String deleteWorkTime(String id) throws Exception {
 		 areaManager.deleteWorkTime(id);
 		 return "success";
 	 }catch(Exception e){
-		 logger.error("删除工作时间设置报错"+e.getMessage());
+		 logger.error("删除工作时间设置报错",e);
 		 e.printStackTrace();
 		 return "error";
 	 }

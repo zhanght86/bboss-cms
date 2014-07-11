@@ -56,10 +56,10 @@
 		<![CDATA[
 			insert into td_wf_app 
 				(ID, SYSTEM_ID, SYSTEM_NAME, WF_PUBLISHED_URL, WF_MANAGE_URL, APP_MODE_TYPE, CREATOR, CREATE_DATE,
-			     TODO_URL, APP_URL, SYSTEM_SECRET, SYSTEM_SECRET_TEXT) 
+			     TODO_URL, APP_URL, SYSTEM_SECRET, SYSTEM_SECRET_TEXT,PENDING_TYPE,PENDING_USED) 
 			values
 				(#[id], #[system_id], #[system_name], #[wf_published_url], #[wf_manage_url], #[app_mode_type],#[creator],#[create_date],
-			     #[todo_url], #[app_url], #[system_secret], #[system_secret_text])
+			     #[todo_url], #[app_url], #[system_secret], #[system_secret_text],#[pending_type],#[pending_used])
 		]]>
 	</property>
 	
@@ -68,7 +68,7 @@
 			update td_wf_app
 			    set id=#[id],SYSTEM_ID=#[system_id],SYSTEM_NAME=#[system_name],APP_MODE_TYPE=#[app_mode_type],
 			    TODO_URL=#[todo_url],APP_URL=#[app_url],UPDATE_PERSON=#[update_person],UPDATE_DATE=#[update_date],
-			    SYSTEM_SECRET=#[system_secret],SYSTEM_SECRET_TEXT=#[system_secret_text]
+			    SYSTEM_SECRET=#[system_secret],SYSTEM_SECRET_TEXT=#[system_secret_text],PENDING_TYPE=#[pending_type],PENDING_USED=#[pending_used]
 			    where id=#[id]
 				
 		]]>
