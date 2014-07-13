@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPFileFilter;
 
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.context.FTPConfig;
@@ -406,6 +407,33 @@ public class FtpUpfile {
 	    		ftpFiles = ftpClient.listFiles();
 	    	}else{
 	    		ftpFiles = ftpClient.listFiles(fullPath.substring(1));
+	    	}
+	    	    
+	         ArrayList retList = new ArrayList();   
+	         if (ftpFiles == null || ftpFiles.length == 0) {   
+	             return retList;   
+	         }   
+	         for (int i=0; i<ftpFiles.length; i++) {   
+	             if (ftpFiles[i].isFile()) {   
+	                 retList.add(ftpFiles[i].getName());   
+	             }   
+	         }   
+	         return retList;   
+	 }
+	    
+	    
+	    /**
+	     * 取得指定目录下的所有文件名，不包括目录名称
+	     * @param fullPath String
+	     * @return ArrayList
+	     * @throws Exception
+	     */
+	    public ArrayList fileNames(String fullPath,FTPFileFilter filter) throws Exception {
+	    	FTPFile[] ftpFiles= null ;
+	    	if(isRoot(fullPath)){
+	    		ftpFiles = ftpClient.listFiles("/", filter);
+	    	}else{
+	    		ftpFiles = ftpClient.listFiles(fullPath.substring(1),filter);
 	    	}
 	    	    
 	         ArrayList retList = new ArrayList();   
