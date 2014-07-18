@@ -85,6 +85,29 @@
 							<a href="#"  onclick="selectUser();">选择</a>
 						</td>
 					</tr>
+					
+					
+					<tr>
+						
+						<td colspan="7">
+							
+							<a href="<%=request.getContextPath() %>/test/sessiontest.jsp"  target="_blank""  >session共享测试</a>
+						</td>
+					</tr>
+					
+					<tr>
+						
+						<td colspan="7">							
+							<a href="http://testpdp.sany.com.cn:8080/WebRoot/sanydesktop/frame.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="frame_blank""  >session共享单点登录测试(不带top)</a>
+						</td>
+						<td colspan="7">							
+							<a href="http://testpdp.sany.com.cn:8080/WebRoot/sanydesktop/index.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="top_blank""  >session共享单点登录测试(带top)</a>
+						</td>
+						
+						<td colspan="7">							
+							<a href="<%=request.getContextPath() %>/sanydesktop/index.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="top_blank""  >session共享单点登录测试(带top，本机)</a>
+						</td>
+					</tr>
 				</table>
 			</fieldset>
 			</form>

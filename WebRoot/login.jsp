@@ -317,7 +317,7 @@ HttpSession session = request.getSession(false);
 					{
 						String rand=request.getParameter("rand");
 						String session_rand=(String)session.getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
-						session.removeAttribute("rand");
+						session.removeAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
 						if(session_rand==null||(!session_rand.equalsIgnoreCase(rand))){
 							throw new AccessException("验证码错误!");
 						}
@@ -386,7 +386,7 @@ HttpSession session = request.getSession(false);
 	               
 				} catch (Exception ex) {
 					errorMessage = ex.getMessage();
-					
+					ex.printStackTrace();
 					if(errorMessage != null)
 					{
 						//errorMessage = errorMessage.replaceAll("\\n",
