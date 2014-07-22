@@ -19,7 +19,12 @@
 	<form name="submitForm" id="submitForm" method="post">
 	
 		<input type="hidden" id="taskId" name="taskId" value="${task.id}" />
+		<input type="hidden" id="processIntsId" name="processIntsId" value="${task.processInstanceId}" />
+		<input type="hidden" id="processKey" name="processKey" value="${processKey}" />
 		<input type="hidden" id="taskState" name="taskState" value="${taskState}" />
+		<input type="hidden" id="createUser" name="createUser" value="${createUser}" />
+		<input type="hidden" id="entrustUser" name="entrustUser" value="${entrustUser}" />
+		<input type="hidden" id="currentUser" name="currentUser" value="${currentUser}" />
 	
 		<fieldset >
 			<legend><strong>基本信息</strong></legend>
@@ -57,6 +62,7 @@
 						<th>待办人</th>
 						<th>待办组</th>
 						<th>节点类型</th>
+						<th>处理工时</th>
 					</pg:header>
 						
 					<pg:list autosort="false" requestKey="nodeList">
@@ -106,6 +112,9 @@
 									</select>
 									</pg:notequal>
 								</pg:notequal>
+							</td>
+							<td >
+								<span><pg:cell colName="DURATION_NODE"/></span>
 							</td>
 						</tr>
 					</pg:notin>
@@ -169,7 +178,14 @@
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" >
 				<tr>
 					<td width="250px;" align="center">
-						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="exeTask()"><span>通过</span></a>
+						<select id="taskDefKey" name="taskDefKey" class="select1" >
+							<option value="" selected>默认节点</option>
+							<pg:list autosort="false" requestKey="nextNodeList">
+								<option value="<pg:cell colName="node_key"/>" >
+								<pg:cell colName="node_name"/></option>
+							</pg:list>
+						</select>
 					</td>
 					<td width="250px;" align="center">
 						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
@@ -185,14 +201,7 @@
 						<a href="javascript:openChooseUsers('delegate')">选择</a>
 					</td>
 					<td width="250px;" align="center">
-						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="exeTask()"><span>通过</span></a>
-						<select id="taskDefKey" name="taskDefKey" class="select1" >
-							<option value="" selected>默认节点</option>
-							<pg:list autosort="false" requestKey="nextNodeList">
-								<option value="<pg:cell colName="node_key"/>" >
-								<pg:cell colName="node_name"/></option>
-							</pg:list>
-						</select>
+						<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
 					</td>
 				</tr>
 			</table>
@@ -227,17 +236,23 @@ function openChooseGroups(node_key){
 // 转办
 function delegateTask(){
 	var userid = $.trim($("#delegate_users_id").val());
+	var currentUser = $.trim($("#currentUser").val());
 	if (userid == ''){
 		alert("请选择转办处理人！");
 		return;
 	} 
 	
-	$.dialog.confirm('确定转办任务给'+$("#delegate_users_name").val()+'？', function(){
+	if (currentUser == userid) {
+		alert("不能转办给自己！");
+		return;
+	}
+	
+	$.dialog.confirm('确定将任务转办给'+$("#delegate_users_name").val()+'？', function(){
 		
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/delegateTask.page",
-			data: {"taskId":'${task.id}',"userId":userid},
+			data: {"taskId":'${task.id}',"userId":userid,"processIntsId":'${task.processInstanceId}',"processKey":'${processKey}'},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){
@@ -296,7 +311,7 @@ function discardTask() {
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/discardTask.page",
-			data: {"processInstIds":'${task.processInstanceId}',"deleteReason":deleteReason},
+			data: {"processInstIds":'${task.processInstanceId}',"deleteReason":deleteReason,"taskId":'${task.id}'},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){

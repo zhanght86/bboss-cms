@@ -31,7 +31,7 @@
        	</pg:header>
   
       	<pg:list autosort="false" >
-   			<tr>
+   			<tr id="<pg:cell colName="id"/>">
    				<td align="right">
    					<input type="radio" name="appInfoRadio" value='<pg:cell colName="id"/>'/>&nbsp;&nbsp;<pg:rowid increament="1" offset="false"/>
    				</td>

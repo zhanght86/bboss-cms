@@ -13,13 +13,13 @@ public class WfEntrust {
 
 	private String entrust_user_name;
 
-	@RequestParam(dateformat = "yyyy-MM-dd")
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp start_date;
 
-	@RequestParam(dateformat = "yyyy-MM-dd")
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp end_date;
 
-	@RequestParam(dateformat = "yyyy-MM-dd")
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp create_date;
 
 	private String create_user;
@@ -30,9 +30,39 @@ public class WfEntrust {
 
 	private String wf_entrust_type;
 
+	private String procdefId;
+
 	private List<String> wfProcdefIdList;
 
 	private List<String> wfEntrustIdList;
+
+	private String procdef_name;
+
+	private String wf_app_name;
+
+	public String getProcdef_name() {
+		return procdef_name;
+	}
+
+	public void setProcdef_name(String procdef_name) {
+		this.procdef_name = procdef_name;
+	}
+
+	public String getWf_app_name() {
+		return wf_app_name;
+	}
+
+	public void setWf_app_name(String wf_app_name) {
+		this.wf_app_name = wf_app_name;
+	}
+
+	public String getProcdefId() {
+		return procdefId;
+	}
+
+	public void setProcdefId(String procdefId) {
+		this.procdefId = procdefId;
+	}
 
 	public List<String> getWfEntrustIdList() {
 		return wfEntrustIdList;

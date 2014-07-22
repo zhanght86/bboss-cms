@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -56,6 +56,8 @@ import org.apache.commons.lang.StringUtils;
 import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
@@ -64,14 +66,17 @@ import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
+import com.sany.workflow.entity.NodeInfoEntity;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.ProcessInstCondition;
 import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entity.TaskDelegateRelation;
 import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entity.WfAppProcdefRelation;
+import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
@@ -2272,13 +2277,22 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			// 获取分页中List数据
 			List<TaskManager> taskList = listInfo.getDatas();
+
 			if (taskList != null && taskList.size() != 0) {
-				//处理人、组行转列
-				dealTaskInfo(taskList);
-				// 判断是否超时
-				judgeOverTime(taskList);
-				// 处理耗时
-				handleDurationTime(taskList);
+
+				for (int j = 0; j < taskList.size(); j++) {
+
+					TaskManager tm = taskList.get(j);
+					
+					// 处理人、组行转列
+					dealTaskInfo(tm);
+					// 转办关系处理
+					delegateTaskInfo(tm);
+					// 判断是否超时
+					judgeOverTime(tm);
+					// 处理耗时
+					handleDurationTime(tm);
+				}
 			}
 
 			return listInfo;
@@ -2287,96 +2301,152 @@ public class ActivitiServiceImpl implements ActivitiService,
 		}
 	}
 	
-	/** 判断是否超时 gw_tanx
-	 * @param taskList
-	 * 2014年7月1日
+	/**
+	 * 根据条件获取委托任务列表,分页展示 gw_tanx
+	 * 
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return 2014年5月14日
 	 */
-	public void judgeOverTime(List<TaskManager> taskList) {
+	public ListInfo queryEntrustTasks(TaskCondition task, long offset,
+			int pagesize) {
+		ListInfo listInfo = null;
 		try {
-	
-			for (int i = 0; i < taskList.size(); i++) {
-				TaskManager tm = taskList.get(i);
-	
-				// 节点设置了处理工时
-				if (StringUtil.isNotEmpty(tm.getDURATION_NODE())
-						&& !"0".equals(tm.getDURATION_NODE())) {
-	
-					Calendar c = Calendar.getInstance();
-					Date time1 = null;// 节点任务理论处理完时间点
-					Date time2 = null;// 节点任务实际处理完时间点
-	
-					// 节点处理工时
-					long workTime = Long.parseLong(tm.getDURATION_NODE());
-					// 全年为工作日
-					if ("1".equals(tm.getIS_CONTAIN_HOLIDAY())) {
-						// 节点任务开始时间
-						c.setTime(tm.getSTART_TIME_());
-						// 节点任务理论处理完时间点
-						c.add(Calendar.MILLISECOND, (int) workTime);
-						time1 = c.getTime();
-					} else {
-						String userid ="";
-						// 实时任务列表处理人为user_id_字段
-						if (StringUtil.isNotEmpty(tm.getUSER_ID_())) {
-							String[] userids = tm.getUSER_ID_().split(",");
-							userid = userids[0].substring(userids[0].indexOf("(")+1, userids[0].indexOf(")"));
-						// 历史任务列表处理人为assignee_字段
-						}else {
-							userid = tm.getASSIGNEE_();
-						}
-						// 获取处理人组织id
-						String userOrgid = executor.queryField(
-								"getUserOrgId_wf", userid);
-	
-//						if (!StringUtil.isEmpty(userOrgid)) {
-//							String endTime = "";
-//							// 剔除周末/节假日
-//							if ("0".equals(tm.getIS_CONTAIN_HOLIDAY())) {
-//								endTime = workTimeUtil.getNextTimeNoRestDay(
-//										userOrgid, tm.getSTART_TIME_(),
-//										workTime);
-//								time1 = sdf.parse(endTime);
-//								// 剔除周末/节假日/工作休息时间
-//							} else if ("2".equals(tm.getIS_CONTAIN_HOLIDAY())) {
-//								endTime = workTimeUtil.getNextTimeNoRestTime(
-//										userOrgid, tm.getSTART_TIME_(),
-//										workTime);
-//								time1 = sdf.parse(endTime);
-//							}
-//						} else {
-							// 节点任务开始时间
-							c.setTime(tm.getSTART_TIME_());
-							// 节点任务理论处理完时间点
-							c.add(Calendar.MILLISECOND, (int) workTime);
-							time1 = c.getTime();
-//						}
-					}
-	
-					// 已完成节点任务
-					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
-						c.setTime(tm.getEND_TIME_());
-						time2 = c.getTime();
-					} else {
-						time2 = new Date();
-					}
-	
-					// 实际处理时间在理论时间点之后
-					if (time2.after(time1)) {
-						tm.setIsOverTime("1");// 超时
-					} else {
-						tm.setIsOverTime("0");// 没有超时
-					}
-					
-				} else {
-					tm.setIsOverTime("0");// 没有超时
-				}
-	
+			// 根据当前用户获取委托关系列表数据
+			Map<String, Object> entrustMap = new HashMap<String, Object>();
+			entrustMap.put("isAdmin", AccessControl.getAccessControl()
+					.isAdmin());
+			entrustMap.put("entrust_user", AccessControl.getAccessControl()
+					.getUserAccount());
+
+			// 委托人
+			if (StringUtil.isNotEmpty(task.getAssignee())) {
+				entrustMap.put("create_user", "%" + task.getAssignee() + "%");
 			}
+
+			List<WfEntrust> entrustList = executor.queryListBean(
+					WfEntrust.class, "selectEntrustList", entrustMap);
+
+			// 没有委托关系，不需要去查任务数据
+			if (entrustList == null || entrustList.size() == 0) {
+				return null;
+			}
+
+			task.setEntrustList(entrustList);
+
+			if (StringUtil.isNotEmpty(task.getProcessIntsId())) {
+				task.setProcessIntsId("%" + task.getProcessIntsId() + "%");
+			}
+
+			if (StringUtil.isNotEmpty(task.getTaskName())) {
+				task.setTaskName("%" + task.getTaskName() + "%");
+			}
+
+			if (StringUtil.isNotEmpty(task.getTaskId())) {
+				task.setTaskId("%" + task.getTaskId() + "%");
+			}
+
+			if (StringUtil.isNotEmpty(task.getBusinessKey())) {
+				task.setBusinessKey("%" + task.getBusinessKey() + "%");
+			}
+
+			if (StringUtil.isNotEmpty(task.getProcessKey())) {
+				task.setProcessKey("%" + task.getProcessKey() + "%");
+			}
+
+			listInfo = executor.queryListInfoBean(TaskManager.class,
+					"selectEntrustTaskByUser_wf", offset, pagesize, task);
+
+			// 获取分页中List数据
+			List<TaskManager> taskList = listInfo.getDatas();
+
+			if (taskList != null && taskList.size() != 0) {
+
+				for (int j = 0; j < taskList.size(); j++) {
+
+					TaskManager tm = taskList.get(j);
+
+					// 处理人、组行转列
+					dealTaskInfo(tm);
+					// 处理人的委托关系处理
+					dealEntrustTaskInfo(tm, entrustList);
+					// 判断是否超时
+					judgeOverTime(tm);
+					// 处理耗时
+					handleDurationTime(tm);
+				}
+			}
+
+			return listInfo;
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
 	}
+	
+	/** 处理人的委托关系处理
+	 * @param taskList
+	 * @param entrustList
+	 * @throws Exception
+	 * 2014年7月11日
+	 */
+	private void dealEntrustTaskInfo(TaskManager tm, List<WfEntrust> entrustList)
+			throws Exception {
 
+		for (int j = 0; j < entrustList.size(); j++) {
+			WfEntrust entrust = entrustList.get(j);
+
+			// 先判断处理人中是否有委托人
+			if (tm.getUSER_ID_().contains(entrust.getCreate_user())) {
+
+				// 任务开启时间是否在委托时间范围内标志
+				boolean flag = false;
+
+				// 时间在委托范围内，条件一：委托时间为空
+				if (entrust.getStart_date() == null
+						&& entrust.getEnd_date() == null) {
+					flag = true;
+				}
+
+				// 时间在委托范围内，条件二：
+				if (entrust.getStart_date().before(tm.getSTART_TIME_())
+						&& entrust.getEnd_date().after(tm.getSTART_TIME_())) {
+					flag = true;
+				}
+
+				if (flag) {
+					// 委托流程为空(处理委托人的任务，在流程类型上没有限制)或者任务流
+					if (StringUtil.isEmpty(entrust.getProcdefId())
+							|| entrust.getProcdefId().equals(tm.getKEY_())) {
+
+						// 委托人格式化
+						String create_user_name = userIdToUserName(
+								entrust.getCreate_user(), "2");
+						create_user_name = create_user_name.replace("(", "\\(");
+						create_user_name = create_user_name.replace(")", "\\)");
+						// 被委托人格式化
+						String entrust_username = userIdToUserName(
+								entrust.getEntrust_user(), "2");
+
+						tm.setUSER_ID_NAME(tm.getUSER_ID_NAME().replaceAll(
+								create_user_name,
+								create_user_name + "委托给" + entrust_username));
+
+						tm.setWfEntrust(entrust);
+					}
+				}
+
+			}
+		}
+	}
+	
+	public static void main (String args[]) {
+		String str = "test2";
+		String[]  array = str.split("\\|");
+//		System.out.println(array.length);
+		System.out.println(array[0]);
+	}
+	
 	/**
 	 * 根据用户名,流程KEY查询待办任务分页列表
 	 * 
@@ -2542,12 +2612,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		return processDefinition.getKey();
 	}
 
-	public static void main(String agres[]) {
-		ActivitiServiceImpl activitHelper = new ActivitiServiceImpl(
-				"activiti.cfg.xml");
-		// activitHelper.getNextNodes("usertask1","mms");
-		activitHelper.deployProcDefByPath("test", "E://test.bpmn20.xml", null);
-	}
+//	public static void main(String agres[]) {
+//		ActivitiServiceImpl activitHelper = new ActivitiServiceImpl(
+//				"activiti.cfg.xml");
+//		// activitHelper.getNextNodes("usertask1","mms");
+//		activitHelper.deployProcDefByPath("test", "E://test.bpmn20.xml", null);
+//	}
 
 	public Deployment deployProcDefByPath(String deploymentName, String xmlPath) {
 		Deployment deploy = repositoryService.createDeployment()
@@ -3214,7 +3284,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 					}
 
 					// 发起人，展示转换
-					pi.setSTART_USER_ID_(userIdToUserName(
+					// pi.setSTART_USER_ID_(userIdToUserName(
+					// pi.getSTART_USER_ID_(), "1"));
+					pi.setSTART_USER_ID_NAME(userIdToUserName(
 							pi.getSTART_USER_ID_(), "1"));
 
 					// 流程实例完成，不需要查询处理人和签收人
@@ -3229,12 +3301,17 @@ public class ActivitiServiceImpl implements ActivitiService,
 							pi.getPROC_INST_ID_());
 
 					if (taskList != null && taskList.size() != 0) {
-						// 任务列表数据处理(处理人/组，行转列)
-						dealTaskInfo(taskList);
 
+						for (int j = 0; j < taskList.size(); j++) {
+
+							TaskManager tmr = taskList.get(j);
+
+							// 任务列表数据处理(处理人/组，行转列)
+							dealTaskInfo(tmr);
+
+						}
 						pi.setTaskList(taskList);
 					}
-
 				}
 			}
 
@@ -3276,75 +3353,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 		return sb.toString();
 	}
-
-	/**
-	 * 任务列表数据处理 gw_tanx
-	 * 
-	 * @param taskList
-	 * @throws Exception
-	 *             2014年5月20日
-	 */
-	private void dealTaskInfo(List<TaskManager> taskList) throws Exception {
-
-		for (int j = 0; j < taskList.size(); j++) {
-
-			TaskManager tm = taskList.get(j);
-
-			// 实时任务中没有act_type_字段值，历史任务有
-			if (tm.getACT_TYPE_() != null
-					&& !tm.getACT_TYPE_().equals("userTask")) {
-				continue;
-			}
-
-			// 任务已签收，处理人 = 签收人
-			if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
-
-				tm.setASSIGNEE_(userIdToUserName(tm.getASSIGNEE_(), "2"));
-				tm.setUSER_ID_(tm.getASSIGNEE_());
-				continue;
-			}
-
-			// 任务未签收，根据任务id查询任务可处理人
-			List<HashMap> candidatorList = executor.queryList(HashMap.class,
-					"getCandidatorOftask_wf", tm.getID_());
-
-			StringBuffer users = new StringBuffer();
-			StringBuffer groups = new StringBuffer();
-
-			if (candidatorList != null && candidatorList.size() != 0) {
-
-				for (int k = 0; k < candidatorList.size(); k++) {
-					HashMap candidatorMap = candidatorList.get(k);
-
-					// 处理人行转列
-					String userId = (String) candidatorMap.get("USER_ID_");
-					if (StringUtil.isNotEmpty(userId)) {
-
-						if (k == 0) {
-							users.append(userId);
-						} else {
-							users.append(",").append(userId);
-						}
-					}
-
-					// 处理组行转列
-					String group = (String) candidatorMap.get("GROUP_ID_");
-					if (StringUtil.isNotEmpty(group)) {
-
-						if (k == 0) {
-							groups.append(group);
-						} else {
-							groups.append(",").append(userId);
-						}
-					}
-				}
-			}
-			tm.setUSER_ID_(userIdToUserName(users.toString(), "2"));
-			tm.setGROUP_ID(groups.toString());
-
-		}
-	}
-
+	
 	@Override
 	public void cancleProcessInstances(String processInstids,
 			String deleteReason) {
@@ -3479,7 +3488,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 		
-		dbUtil.preparedDelete("delete From TD_WF_HI_NODE_WORKTIME o where o.PROCESS_ID =?");
+		//转办关系记录表
+		dbUtil.preparedDelete("delete From TD_WF_NODE_CHANGEINFO o where o.PROCESS_ID =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		//委托任务处理记录表
+		dbUtil.preparedDelete("delete From TD_WF_ENTRUST_TASK p where p.PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
@@ -3527,18 +3542,23 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 获取流程实例信息
 			ProcessInst pi = executor.queryObjectBean(ProcessInst.class,
 					"queryProInst_wf", pic);
-			
+
 			// 发起人，展示转换
-			pi.setSTART_USER_ID_(userIdToUserName(pi.getSTART_USER_ID_(), "1"));
+			pi.setSTART_USER_ID_NAME(userIdToUserName(pi.getSTART_USER_ID_(),
+					"1"));
 
 			// 获取父流程信息
 			if (StringUtil.isNotEmpty(pi.getSUPER_PROCESS_INSTANCE_ID_())) {
+				// 设置父id为查询条件
+				pic.setWf_Inst_Id(pi.getSUPER_PROCESS_INSTANCE_ID_());
+
 				ProcessInst super_pi = executor.queryObjectBean(
-						ProcessInst.class, "queryProInst_wf",
-						pi.getSUPER_PROCESS_INSTANCE_ID_());
+						ProcessInst.class, "queryProInst_wf", pic);
 
 				pi.setSUPER_SUSPENSION_STATE_(super_pi.getSUSPENSION_STATE_());
-				pi.setSUPER_START_USER_ID_(userIdToUserName(super_pi.getSTART_USER_ID_(),"1"));
+				pi.setSUPER_START_USER_ID_(super_pi.getSTART_USER_ID_());
+				pi.setSUPER_START_USER_ID_NAME(userIdToUserName(
+						super_pi.getSTART_USER_ID_(), "1"));
 				pi.setSUPER_START_TIME_(super_pi.getSTART_TIME_());
 				pi.setSUPER_END_TIME_(super_pi.getEND_TIME_());
 			}
@@ -3549,9 +3569,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			if (taskList != null && taskList.size() != 0) {
 
-				// 任务列表数据处理(处理人/组，行转列)
-				dealTaskInfo(taskList);
-				
+				for (int j = 0; j < taskList.size(); j++) {
+
+					TaskManager tmr = taskList.get(j);
+
+					// 任务列表数据处理(处理人/组，行转列)
+					dealTaskInfo(tmr);
+				}
+
 				pi.setTaskList(taskList);
 
 			}
@@ -3566,44 +3591,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 		}
 	}
 	
-	/** 处理耗时
-	 * @param taskList
-	 * 2014年7月1日
-	 */
-	private void handleDurationTime(List<TaskManager> taskList) {
-
-		try {
-			
-			SimpleDateFormat sdf = new SimpleDateFormat(
-					"yyyy-MM-dd hh:mm:ss");
-			
-			for (int i = 0; i < taskList.size(); i++) {
-				TaskManager tm = taskList.get(i);
-				
-				// 节点耗时转换
-				if (StringUtil.isNotEmpty(tm.getDURATION_())) {
-					long mss = Long.parseLong(tm.getDURATION_());
-					tm.setDURATION_(formatDuring(mss));
-				} else {
-					// 流程未结束，以系统当前时间计算耗时
-					Date startTime = tm.getSTART_TIME_();
-
-					tm.setDURATION_(formatDuring(new Date().getTime()
-							- startTime.getTime()));
-				}
-				
-				// 节点处理工时转换
-				if (StringUtil.isNotEmpty(tm.getDURATION_NODE())) {
-					long worktime = Long.parseLong(tm.getDURATION_NODE());
-					tm.setDURATION_NODE(formatDuring(worktime));
-				}
-			}
-
-		} catch (Exception e) {
-			throw new ProcessException(e);
-		}
-	}
-
 	@Override
 	public List<TaskManager> queryHistorTasks(String processInstId) {
 
@@ -3616,12 +3603,23 @@ public class ActivitiServiceImpl implements ActivitiService,
 					"selectTaskHistorById_wf", processInstId);
 
 			if (taskList != null && taskList.size() != 0) {
-				// 获取处理人列表
-				dealTaskInfo(taskList);
-				// 判断是否超时
-				judgeOverTime(taskList);
-				// 处理耗时
-				handleDurationTime(taskList);
+
+				for (int j = 0; j < taskList.size(); j++) {
+
+					TaskManager tm = taskList.get(j);
+
+					// 获取处理人列表
+					dealTaskInfo(tm);
+					// 转办关系处理
+					delegateTaskInfo(tm);
+					// 委托处理人转换处理
+					entrustTaskInfo(tm);
+					// 判断是否超时
+					judgeOverTime(tm);
+					// 处理耗时
+					handleDurationTime(tm);
+				}
+
 			}
 
 			tms.commit();
@@ -3631,6 +3629,218 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throw new ProcessException(e);
 		} finally {
 			tms.release();
+		}
+	}
+	
+	/**
+	 * 任务列表数据处理 gw_tanx
+	 * 
+	 * @param taskList
+	 * @throws Exception
+	 *             2014年5月20日
+	 */
+	public void dealTaskInfo(TaskManager tm) {
+		try {
+			// 实时任务中没有act_type_字段值，历史任务有
+			if (tm.getACT_TYPE_() == null
+					|| tm.getACT_TYPE_().equals("userTask")) {
+
+				if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
+
+					// 任务已签收，处理人 = 签收人
+					tm.setASSIGNEE_NAME(userIdToUserName(tm.getASSIGNEE_(), "2"));
+					tm.setUSER_ID_NAME(tm.getASSIGNEE_NAME());
+					tm.setUSER_ID_(tm.getASSIGNEE_());
+
+				} else {
+
+					// 任务未签收，根据任务id查询任务可处理人
+					List<HashMap> candidatorList = executor.queryList(
+							HashMap.class, "getCandidatorOftask_wf",
+							tm.getID_());
+
+					StringBuffer users = new StringBuffer();
+					StringBuffer groups = new StringBuffer();
+
+					if (candidatorList != null && candidatorList.size() != 0) {
+
+						for (int k = 0; k < candidatorList.size(); k++) {
+							HashMap candidatorMap = candidatorList.get(k);
+
+							// 处理人行转列
+							String userId = (String) candidatorMap
+									.get("USER_ID_");
+							if (StringUtil.isNotEmpty(userId)) {
+
+								if (k == 0) {
+									users.append(userId);
+								} else {
+									users.append(",").append(userId);
+								}
+							}
+
+							// 处理组行转列
+							String group = (String) candidatorMap
+									.get("GROUP_ID_");
+							if (StringUtil.isNotEmpty(group)) {
+
+								if (k == 0) {
+									groups.append(group);
+								} else {
+									groups.append(",").append(userId);
+								}
+							}
+						}
+					}
+					tm.setUSER_ID_NAME(userIdToUserName(users.toString(), "2"));
+					tm.setUSER_ID_(users.toString());
+					tm.setGROUP_ID(groups.toString());
+				}
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 代办任务处理 gw_tanx 
+	 * @param taskList
+	 * @throws Exception
+	 * 2014年7月15日
+	 */
+	public void delegateTaskInfo(TaskManager tm) {
+		try {
+			// 历史表中无DELEGATION_字段
+			if (("PENDING").equals(tm.getDELEGATION_())
+					|| StringUtil.isNotEmpty(tm.getOWNER_())) {
+
+				// 根据任务id获取转办关系(从扩展表中解析转办关系)
+				List<TaskDelegateRelation> tdRelationList = executor.queryList(
+						TaskDelegateRelation.class, "getNodeChangeInfo_wf",
+						tm.getID_());
+
+				// 转办人格式化
+				for (int i = 0; i < tdRelationList.size(); i++) {
+					TaskDelegateRelation tdr = tdRelationList.get(i);
+					tdr.setFROM_USER_NAME(userIdToUserName(tdr.getFROM_USER(),
+							"2"));
+					tdr.setTO_USER_NAME(userIdToUserName(tdr.getTO_USER(), "2"));
+				}
+				tm.setDelegateTaskList(tdRelationList);
+
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 处理人委托转换
+	 * @param taskList
+	 * 2014年7月18日
+	 */
+	public void entrustTaskInfo(TaskManager tm) {
+		try {
+			Map map = executor.queryObject(HashMap.class,
+					"getEntrustTaskInfoById_wf", tm.getID_());
+
+			if (map != null) {
+				// 判断任务是否被 （被委托人）处理的
+				if (tm.getUSER_ID_().equals(map.get("ENTRUST_USER"))) {
+					
+					WfEntrust entrust = new WfEntrust();
+					entrust.setCreate_user_name(userIdToUserName(map.get("CREATE_USER") + "",
+							"2"));
+					entrust.setEntrust_user_name(userIdToUserName(map.get("ENTRUST_USER") + "",
+									"2"));
+					
+					tm.setWfEntrust(entrust);
+				}
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/**
+	 * 判断是否超时 gw_tanx
+	 * 
+	 * @param taskList
+	 *            2014年7月1日
+	 */
+	public void judgeOverTime(TaskManager tm) {
+		try {
+
+			Calendar c = Calendar.getInstance();
+
+			Date endDate = null;// 任务结束时间点
+
+			// 已完成节点任务
+			if (tm.getEND_TIME_() != null) {
+				c.setTime(tm.getEND_TIME_());
+				endDate = c.getTime();
+			} else {
+				endDate = new Date();
+			}
+
+			// 判断超时
+			if (tm.getOVERTIME() != null) {
+				Date overDate = tm.getOVERTIME();// 节点任务超时时间点
+
+				// 超时判断
+				if (endDate.after(overDate)) {
+					tm.setIsOverTime("1");// 超时
+				} else {
+					tm.setIsOverTime("0");// 没有超时
+				}
+			} else {
+				tm.setIsOverTime("0");// 没有超时
+			}
+
+			// 判断预警
+			if (tm.getALERTTIME() != null) {
+				Date alertDate = tm.getALERTTIME();// 节点任务预警时间点
+
+				// 预警判断
+				if (endDate.after(alertDate)) {
+					tm.setIsAlertTime("1");// 预警
+				} else {
+					tm.setIsAlertTime("0");// 未预警
+				}
+			} else {
+				tm.setIsAlertTime("0");// 未预警
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+	
+	/** 处理耗时
+	 * @param taskList
+	 * 2014年7月1日
+	 */
+	public void handleDurationTime(TaskManager tm) {
+
+		try {
+
+			// 节点耗时转换
+			if (StringUtil.isNotEmpty(tm.getDURATION_())) {
+				long mss = Long.parseLong(tm.getDURATION_());
+				tm.setDURATION_(formatDuring(mss));
+			} else {
+				// 流程未结束，以系统当前时间计算耗时
+				Date startTime = tm.getSTART_TIME_();
+
+				tm.setDURATION_(formatDuring(new Date().getTime()
+						- startTime.getTime()));
+			}
+
+			// 节点处理工时转换
+			if (tm.getDURATION_NODE() != null) {
+				long worktime = Long.parseLong(tm.getDURATION_NODE());
+				tm.setDURATION_NODE(formatDuring(worktime));
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 	}
 
@@ -3800,8 +4010,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	@Override
 	public void saveMessageType(String processKey, String messagetempleid,
-			String emailtempleid, String noticeId, String iscontainholiday,
-			String noticerate) {
+			String emailtempleid, String noticeId, int iscontainholiday,
+			int noticerate) {
 		try {
 			// 新增
 			if (StringUtil.isEmpty(noticeId)) {
@@ -3823,7 +4033,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 	
 	@Override
-	public void addIsContainHoliday(String processKey, String IsContainHoliday)
+	public void addIsContainHoliday(String processKey, int IsContainHoliday)
 			throws Exception {
 
 		if (StringUtil.isEmpty(processKey)) {
@@ -3900,6 +4110,60 @@ public class ActivitiServiceImpl implements ActivitiService,
 		}
 	}
 
+	public NodeInfoEntity getNodeInfoEntity(List<Map<String, String>> nodes,
+			String taskKey) throws Exception {
+		if (nodes == null)
+			return null;
+		NodeInfoEntity nodeInfoEntity = null;
+		for (Map<String, String> node : nodes) {
+			if (node.get("NODE_KEY").equals(taskKey)) {
+				nodeInfoEntity = new NodeInfoEntity();
+				if (StringUtil.isNotEmpty(node.get("DURATION_NODE"))) {
+					double duration_node = Double.parseDouble(node
+							.get("DURATION_NODE"));
+					nodeInfoEntity.setDURATION_NODE((long)duration_node*60*60*1000);
+				} else {
+					nodeInfoEntity.setDURATION_NODE(0);
+				}
+
+				HashMap map = executor.queryObject(HashMap.class,
+						"getNodeHoliday_wf", node.get("PROCESS_KEY"));
+
+				if (map != null) {
+					Object IS_CONTAIN_HOLIDAY =  map
+							.get("IS_CONTAIN_HOLIDAY");
+					if(IS_CONTAIN_HOLIDAY instanceof BigDecimal)
+					{
+						nodeInfoEntity.setIS_CONTAIN_HOLIDAY(((BigDecimal)IS_CONTAIN_HOLIDAY).intValue());
+					}
+					else if(IS_CONTAIN_HOLIDAY instanceof Long)
+					{
+						nodeInfoEntity.setIS_CONTAIN_HOLIDAY(((Long)IS_CONTAIN_HOLIDAY).intValue());
+					}
+					else
+					{
+						nodeInfoEntity.setIS_CONTAIN_HOLIDAY(((Integer)IS_CONTAIN_HOLIDAY).intValue());
+					}
+					Object NOTICERATE =   map
+							.get("NOTICERATE");
+					if(NOTICERATE instanceof BigDecimal)
+					{
+						nodeInfoEntity.setNOTICERATE(((BigDecimal)NOTICERATE).intValue());
+					}
+					else if(NOTICERATE instanceof Long)
+					{
+						nodeInfoEntity.setNOTICERATE(((Long)NOTICERATE).intValue());
+					}
+					else
+					{
+						nodeInfoEntity.setNOTICERATE(((Integer)NOTICERATE).intValue());
+					}
+				}
+			}
+		}
+		return nodeInfoEntity;
+	}
+	
 	@Override
 	public void addNodeWorktime(String processKey, String processIntsId,
 			List<Map<String, String>> nodeWorktimeList) throws Exception {
@@ -3915,7 +4179,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 					
 					Map<String,String> worktimeMap = nodeWorktimeList.get(i);
 					
-					worktimeMap.put("PROCESS_KEY", processKey);
+//					worktimeMap.put("PROCESS_KEY", processKey);
 					worktimeMap.put("PROCESS_ID", processIntsId);
 					worktimeMap.put("NODE_KEY",worktimeMap.get("NODE_KEY"));
 					
@@ -3936,5 +4200,83 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 	}
+
+	@Override
+	public NodeInfoEntity getNodeWorktime(String processIntsId,
+			String nodeKey) {
+		try {
+			return executor.queryObject(NodeInfoEntity.class, "getNodeWorktime_wf",
+					processIntsId, nodeKey);
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public List<Map<String, String>> getProcessNodeUnComplete()
+			throws Exception {
+		final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+
+		executor.queryByNullRowHandler(new NullRowHandler() {
+			@Override
+			public void handleRow(Record origine) throws Exception {
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("state",origine.getString("STATE"));//任务状态（1未签收2未处理）
+				map.put("taskId",origine.getString("TASKID"));//--任务id
+				map.put("taskName",origine.getString("TASKNAME"));//--任务名称
+				map.put("createTime",origine.getString("CREATETIME"));//--任务创建时间
+				map.put("userId",origine.getString("USERID"));//--处理人
+				map.put("processName",origine.getString("PROCESSNAME"));//--流程名称
+				map.put("procInstanceId",origine.getString("PROCINSTANCEID"));//--流程实例id
+				map.put("taskDefKey",origine.getString("TASKDEFKEY"));//--任务节点key
+				map.put("alertTime",origine.getString("ALERTTIME"));//--预警时间点
+				map.put("overTime",origine.getString("OVERTIME"));//--超时时间点
+				map.put("messageTempleId",origine.getString("MESSAGETEMPLEID"));//短信模板id
+				map.put("emailTempleId",origine.getString("EMAILTEMPLEID"));//邮件模板id
+				map.put("realName",userInfoMap.getUserName(origine.getString("USERID")));//处理人真实姓名
+				map.put("orgId",userInfoMap.getUserAttribute(origine.getString("USERID"), "orgId")+"");//处理人所在部门
+				map.put("mobile",userInfoMap.getUserAttribute(origine.getString("USERID"), "userMobiletel1")+"");//手机号码
+				map.put("mailAddress", origine.getString("USERID")+"@sany.com.cn");//邮箱地址
+				map.put("worknum",userInfoMap.getUserAttribute(origine.getString("USERID"), "userWorknumber")+"");//处理人工号
+				list.add(map);
+			}
+		}, "getProcessNodeUnComplete");
+
+		return list;
+	}
 	
+	@Override
+	public void updateMessSendState(String taskId, int advancesend,
+			int overtimesend) throws Exception {
+
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
+
+		if (overtimesend != 0) {
+			dbUtil.preparedUpdate("UPDATE ACT_RU_TASK A SET A.OVERTIMESEND = ? WHERE A.ID_ = ?");
+			dbUtil.setInt(1, overtimesend);
+			dbUtil.setString(2, taskId);
+			dbUtil.addPreparedBatch();
+
+			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.OVERTIMESEND = ? WHERE A.ID_");
+			dbUtil.setInt(1, overtimesend);
+			dbUtil.setString(2, taskId);
+			dbUtil.addPreparedBatch();
+			
+		}else if (advancesend != 0) {
+			
+			dbUtil.preparedUpdate("UPDATE ACT_RU_TASK A SET A.ADVANCESEND = ? WHERE A.ID_ = ?");
+			dbUtil.setInt(1, advancesend);
+			dbUtil.setString(2, taskId);
+			dbUtil.addPreparedBatch();
+
+			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.ADVANCESEND = ? WHERE A.ID_");
+			dbUtil.setInt(1, advancesend);
+			dbUtil.setString(2, taskId);
+			dbUtil.addPreparedBatch();
+			
+		}
+
+		dbUtil.executePreparedBatch();
+	}
+
 }

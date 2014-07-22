@@ -9,7 +9,7 @@ public class FlowWarning {
 	private Date createTime;//任务开始时间
 	private int dicipline;//节假日规则
 	private long interval;//工时
-	private String warnPercent;//预警百分率
+	private int warnPercent;//预警百分率
 	private Timestamp completeTime;//任务超时时间
 	private Timestamp warnTime;//任务预警时间
 	private String errorCode;
@@ -44,23 +44,24 @@ public class FlowWarning {
 	public void setInterval(long interval) {
 		this.interval = interval;
 	}
-	public String getWarnPercent() {
-		return warnPercent;
-	}
-	public void setWarnPercent(String warnPercent) {
-		this.warnPercent = warnPercent;
-	}
-	public Date getCompleteTime() {
+	
+	public Timestamp getCompleteTime() {
 		return completeTime;
 	}
 	public void setCompleteTime(Timestamp completeTime) {
 		this.completeTime = completeTime;
 	}
-	public Date getWarnTime() {
+	public Timestamp getWarnTime() {
 		return warnTime;
 	}
 	public void setWarnTime(Timestamp warnTime) {
 		this.warnTime = warnTime;
+	}
+	public int getWarnPercent() {
+		return warnPercent;
+	}
+	public void setWarnPercent(int warnPercent) {
+		this.warnPercent = warnPercent;
 	}
 	
 	

@@ -11,23 +11,9 @@
 	-->
 
 	<property name="/workflow/jobtest/*.freepage"
-		f:jobService="attr:workflow.job.service"
+		f:activitiService="attr:activitiService"
 		f:templeService="attr:workflow.temple.templeService"
-		f:workTimeUtil="attr:sysmanager.holiday.util"
 		class="com.sany.workflow.job.action.CheckProcessOvertime"
 		/>
 	
-		
-	<property name="workflow.job.service"
-		f:executor="attr:workflow.job.configsqlexecutor"
-		class="com.sany.workflow.job.service.impl.JobServiceImpl" />
-	
-	
-	<property name="workflow.job.configsqlexecutor"		
-		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
-		<construction>
-			<property value="com/sany/workflow/job.xml"/>
-		</construction>
-	</property>
-		
 </properties>

@@ -78,7 +78,7 @@
 			     CREATETIME,
 			     CREATOR)
 			  VALUES
-			    (#[templeId], #[templeType], #[templeTitle], #[templeContent], SYSDATE, #[creator])
+			    (#[templeId], #[templeType], #[templeTitle], #[templeContent], #[createTime1], #[creator])
 		]]>
 	</property>
 	
@@ -88,7 +88,7 @@
 		       SET TEMPLETITLE    = #[templeTitle],
 		           TEMPLETYPE     = #[templeType],
 		           TEMPLECONTENT  = #[templeContent],
-		           LASTUPDATETIME = SYSDATE
+		           LASTUPDATETIME = #[lastUpdatetime]
 		      WHERE TEMPLEID = #[templeId]
 		]]>
 	</property>

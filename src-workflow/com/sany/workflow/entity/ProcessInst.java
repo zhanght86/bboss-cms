@@ -33,6 +33,7 @@ public class ProcessInst {
 	private Timestamp END_TIME_;// 流程结束时间
 	private String DURATION_;
 	private String START_USER_ID_;// 流程开启人
+	private String START_USER_ID_NAME;
 	private String START_ACT_ID_;
 	private String END_ACT_ID_;
 	private String SUPER_PROCESS_INSTANCE_ID_;// 父流程实例id（ACT_HI_PROCINST表中字段）
@@ -49,11 +50,28 @@ public class ProcessInst {
 
 	private String SUPER_SUSPENSION_STATE_;// 父流程实例状态
 	private String SUPER_START_USER_ID_;// 父流程开启人
+	private String SUPER_START_USER_ID_NAME;
 	private Timestamp SUPER_START_TIME_;// 父流程开启时间
 	private Timestamp SUPER_END_TIME_;// 父流程结束时间
 	private String PARENT_ID_;// 父流程实例id （ACT_RU_EXECUTION表中字段）
 
 	private List<ActivitiVariable> variableList;// 变量参数集合
+	
+	public String getSTART_USER_ID_NAME() {
+		return START_USER_ID_NAME;
+	}
+
+	public void setSTART_USER_ID_NAME(String sTART_USER_ID_NAME) {
+		START_USER_ID_NAME = sTART_USER_ID_NAME;
+	}
+
+	public String getSUPER_START_USER_ID_NAME() {
+		return SUPER_START_USER_ID_NAME;
+	}
+
+	public void setSUPER_START_USER_ID_NAME(String sUPER_START_USER_ID_NAME) {
+		SUPER_START_USER_ID_NAME = sUPER_START_USER_ID_NAME;
+	}
 
 	public String getBUSINESS_NAME() {
 		return BUSINESS_NAME;

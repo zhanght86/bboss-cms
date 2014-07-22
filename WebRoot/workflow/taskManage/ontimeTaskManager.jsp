@@ -15,20 +15,26 @@
 <script type="text/javascript">
 
 $(document).ready(function() {
-
+	
 	$("#wait").hide();
+	
+	$("#entrustwait").hide();
+	
+	queryList();  
+	
+	queryEntrustList();
        		
-	queryList();   
-       		
-    $('#delBatchButton').click(function() {
-           delBatch();
-    });
-    
     $("#businessType").combotree({
    		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
    	});
            	
 });
+
+//查看委托关系
+function getEntrustInfo(){
+	var url="<%=request.getContextPath()%>/workflow/taskManage/viewEntrustInfo.page";
+	$.dialog({ title:'查看委托信息',width:1100,height:620, content:'url:'+url});
+}
        
 //加载实时任务列表数据  
 function queryList(){
@@ -43,11 +49,17 @@ function queryList(){
     $("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page #customContent", 
     	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
     	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey},
-    	function(){loadjs();});
+    	function(){
+    		if($("#isEmptyData1").val()){
+				$("#ontimeDiv").show();
+			}
+    	});
+    
 }
 
 function modifyQueryData(){
 	$("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page?"+$("#querystring").val()+" #customContent",function(){loadjs()});
+	$("#entrustContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryEntrustTaskData.page?"+$("#querystring").val()+" #entrustContent",function(){loadjs()});
 }
 
 // 签收任务
@@ -97,11 +109,87 @@ function doTask(taskId,SuspensionState,processInstId,taskState){
 //查看流程实例详情
 function viewDetailInfo(processInstId) {
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskDetailInfo.page?processInstId="+processInstId;
-	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url,maxState:true});
 }
 	
 function doreset(){
 	$("#reset").click();
+}
+
+//加载委托任务列表数据  
+function queryEntrustList(){
+	var processIntsId = $("#entrustForm #processIntsId").val();
+	var processKey = $("#entrustForm #processKey").val();
+	var taskState = $("#entrustForm #taskState").val();
+	var taskName = $("#entrustForm #taskName").val();
+	var taskId = $("#entrustForm #taskId").val();
+	var businessTypeId = $("#entrustForm #businessType").combotree('getValue');
+	var businessKey = $("#entrustForm #businessKey").val();
+	var assignee = $("#entrustForm #assignee").val();
+	
+    $("#entrustContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryEntrustTaskData.page #entrustContent", 
+        	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
+        	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey,"assignee":assignee},
+        	function(){
+        			if($("#isEmptyData").val()){
+						$("#entrustDiv").show();//有委托任务就显示委托任务DIV
+        			}
+        	});
+}
+
+//签收委托任务
+function signEntrustTask(taskId,SuspensionState) {
+	
+	if (SuspensionState == '2'){
+		alert("当前流程已被挂起,不能签收！");
+		return ;
+	}
+	
+	$.ajax({
+ 	 	type: "POST",
+		url : "<%=request.getContextPath()%>/workflow/taskManage/signTask.page",
+		data :{"taskId":taskId},
+		dataType : 'json',
+		async:false,
+		beforeSend: function(XMLHttpRequest){
+			 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+		success : function(data){
+			if (data != 'success') {
+				alert("流程实例签收出错："+data);
+			}else {
+				modifyQueryData();
+			}
+		}
+	 });
+}
+
+//处理委托任务
+function doEntrustTask(taskId,SuspensionState,processInstId,taskState,createUser,entrustUser){
+	
+	if (SuspensionState == '2'){
+		alert("当前流程已被挂起,不能处理！");
+		return ;
+	}
+	
+	var processKey = $("#processKey").val();
+	
+	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey
+			+"&processInstId="+processInstId+"&taskId="+taskId+"&taskState="+taskState
+			+"&createUser="+createUser+"&entrustUser="+entrustUser;
+	
+	$.dialog({ title:'任务处理',width:1100,height:620, content:'url:'+url});
+	
+}
+
+//查看流程实例详情
+function viewEntrustDetailInfo(processInstId) {
+	var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskDetailInfo.page?processInstId="+processInstId;
+	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url});
+}
+
+function doEntrustReset(){
+	$("#entrustReset").click();
 }
 
 </script>
@@ -116,77 +204,166 @@ function doreset(){
 		
 		<div id="rightContentDiv">
 			
-			<div id="searchblock">
-			
-				<div class="search_top">
-					<div class="right_top"></div>
-					<div class="left_top"></div>
-				</div>
+			<%--实时任务div --%>
+			<div id="ontimeDiv" style="display:none;">
+				<div id="searchblock">
 				
-				<div class="search_box">
-					<form id="queryForm" name="queryForm">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td class="left_box"></td>
-								<td>
-									<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
-										<tr>
-											<th>任务ID：</th>
-											<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
-											<th>任务名称：</th>
-											<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
-											<th>签收状态：</th>
-											<td>
-												<select id="taskState" name="taskState" class="select1" style="width: 125px;">
-												    <option value="0" selected>全部</option>
-													<option value="1">未签收</option>
-													<option value="2">已签收</option>
-												</select>
-											</td>
-											<th>业务类型：</th>
-											<td>
-												<select class="easyui-combotree" id='businessType' name="businessType" required="false"
-														style="width: 120px;">
-											</td>
-											<td style="text-align:center" rowspan="2" >
-												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
-												<input type="reset" id="reset" style="display:none"/>
-											</td>
-										</tr>
-										<tr>
-											<th>流程实例ID：</th>
-											<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
-											<th>业务主题：</th>
-											<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
-											<th>流程key：</th>
-											<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
-												<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
-											</td>
-										</tr>
-									</table>
-								</td>
-								<td class="right_box"></td>
-							</tr>
-						</table>
-					</form>
-				</div>
-				
-				<div class="search_bottom">
-					<div class="right_bottom"></div>
-					<div class="left_bottom"></div>
-				</div>
-			</div>
-			
-			<div class="title_box">
-				<div class="rightbtn"></div>
+					<div class="search_top">
+						<div class="right_top"></div>
+						<div class="left_top"></div>
+					</div>
 					
-				<strong>实时任务列表</strong>
-				<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+					<div class="search_box">
+						<form id="queryForm" name="queryForm">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td class="left_box"></td>
+									<td>
+										<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
+											<tr>
+												<th>任务ID：</th>
+												<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
+												<th>任务名称：</th>
+												<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
+												<th>签收状态：</th>
+												<td>
+													<select id="taskState" name="taskState" class="select1" style="width: 125px;">
+													    <option value="0" selected>全部</option>
+														<option value="1">未签收</option>
+														<option value="2">已签收</option>
+													</select>
+												</td>
+												<th>业务类型：</th>
+												<td>
+													<select class="easyui-combotree" id='businessType' name="businessType" required="false"
+															style="width: 120px;">
+												</td>
+												<td style="text-align:center" rowspan="2" >
+													<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+													<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+													<input type="reset" id="reset" style="display:none"/>
+												</td>
+											</tr>
+											<tr>
+												<th>流程实例ID：</th>
+												<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
+												<th>业务主题：</th>
+												<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
+												<th>流程key：</th>
+												<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
+													<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
+												</td>
+											</tr>
+										</table>
+									</td>
+									<td class="right_box"></td>
+								</tr>
+							</table>
+						</form>
+					</div>
+					
+					<div class="search_bottom">
+						<div class="right_bottom"></div>
+						<div class="left_bottom"></div>
+					</div>
+				</div>
+				
+				<div class="title_box">
+					<div class="rightbtn">
+						<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a>
+					</div>
+						
+					<strong>实时任务列表</strong>
+					<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+				</div>
+				
+				<div id="ontimeContainer" style="overflow:auto"></div>
+			
 			</div>
 			
-			<div id="ontimeContainer" style="overflow:auto"></div>
+			
+			<%--委托任务div --%>
+			<div id="entrustDiv" style="display:none;">
+				<div id="searchblock" >
+					
+						<div class="search_top">
+							<div class="right_top"></div>
+							<div class="left_top"></div>
+						</div>
+						
+						<div class="search_box">
+							<form id="entrustForm" name="entrustForm">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="left_box"></td>
+										<td>
+											<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
+												<tr>
+													<th>任务ID：</th>
+													<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
+													<th>任务名称：</th>
+													<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
+													<th>签收状态：</th>
+													<td>
+														<select id="taskState" name="taskState" class="select1" style="width: 125px;">
+														    <option value="0" selected>全部</option>
+															<option value="1">未签收</option>
+															<option value="2">已签收</option>
+														</select>
+													</td>
+													<th>业务类型：</th>
+													<td>
+														<select class="easyui-combotree" id='businessType' name="businessType" required="false"
+																style="width: 120px;">
+													</td>
+													<td style="text-align:center" rowspan="2" >
+														<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryEntrustList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+														<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doEntrustReset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+														<input type="reset" id="entrustReset" style="display:none"/>
+													</td>
+												</tr>
+												<tr>
+													<th>流程实例ID：</th>
+													<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
+													<th>业务主题：</th>
+													<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
+													<th>流程key：</th>
+													<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
+														<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
+													</td>
+													<th>委托人：</th>
+													<td><input id="assignee" name="assignee" type="text" class="w120"/></td>
+												</tr>
+											</table>
+										</td>
+										<td class="right_box"></td>
+									</tr>
+								</table>
+							</form>
+						</div>
+						
+						<div class="search_bottom">
+							<div class="right_bottom"></div>
+							<div class="left_bottom"></div>
+						</div>
+					</div>
+					
+					<div class="title_box">
+						<div class="rightbtn">
+							<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a>
+						</div>
+							
+						<strong>委托任务列表</strong>
+						<img id="entrustwait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+					</div>
+					
+					<div id="entrustContainer" style="overflow:auto"></div>
+			
+			</div>
+			
 		</div>
+			
 	</div>
+	
 </body>
 </html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 
+		描述:统一待办
+	    author:qingl2
+		CopyRight:sany
+		版本:1.0
+	    Date: 2014-07-01
+	    f:gwPendingService="attr:workflow.gw.workflow.service"
+	    
+	    <property name="workflow.gw.workflow.service" factory-method="create"
+		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		f:serviceClass="com.sany.greatwall.WorkFlowService"
+		f:address="http://10.0.15.164:8080/sany-greatwall-web/services/wsworkflowservice" />
+	-->
+
+    <property name="workflow.gw.pending" factory-method="create"
+		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
+		f:serviceClass="com.sany.greatwall.WorkflowService"
+		f:address="http://10.0.15.164:8080/sany-greatwall-web/services/wsworkflowservice" />
+		
+	<property name="/workflow/pending/*.page"
+		f:pendingService="attr:workflow.pending.service"
+		f:gwPendingService="attr:workflow.gw.pending"
+		f:activitiTaskService="attr:workflow.task.activitiTaskService"
+		path:main="/workflow/pending/pendingIndex.jsp"
+		path:subscribeIndex="/workflow/pending/subscribeIndex.jsp"
+		path:selectPending="/workflow/pending/selectPending.jsp"
+		class="com.sany.workflow.pending.action.PendingAction"
+		/>
+		
+	<property name="workflow.pending.service"
+		f:executor="attr:workflow.pending.configsqlexecutor"
+		class="com.sany.workflow.pending.service.impl.PendingServiceImpl" />
+	
+	
+	<property name="workflow.pending.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/sany/workflow/pending.xml"/>
+		</construction>
+	</property>
+		
+</properties>

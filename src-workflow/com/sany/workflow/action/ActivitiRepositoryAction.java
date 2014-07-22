@@ -60,6 +60,7 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
 import com.sany.workflow.util.WorkFlowConstant;
 
 /**
@@ -114,8 +115,8 @@ public class ActivitiRepositoryAction {
 					
 					activitiRelationService.addAppProcRelation(pd,processDeployment.getWf_app_id());
 					
-					// 部署流程定义，默认计算工时是包含节假日的（状态是1）
-					activitiService.addIsContainHoliday(pd.getKEY_(),"1");
+					// 部署流程定义，默认不考虑节假日/作息时间（状态是0）
+					activitiService.addIsContainHoliday(pd.getKEY_(),0);
 				}
 			}
 			tm.commit();
@@ -579,11 +580,12 @@ public class ActivitiRepositoryAction {
 					}
 				}
 
-				// 流程实例下节点的处理工时与提醒次数
+				// 流程实例下节点的处理工时
 				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
 						.getNode_key())) {
 
 					Map<String, String> worktimeMap = new HashMap<String, String>();
+					worktimeMap.put("PROCESS_KEY", processKey);
 					worktimeMap.put("NODE_KEY", activitiNodeCandidateList
 							.get(i).getNode_key() + "");
 					worktimeMap.put("DURATION_NODE", activitiNodeCandidateList
@@ -601,7 +603,7 @@ public class ActivitiRepositoryAction {
 							nodevariableList.get(i).getParam_value());
 				}
 			}
-
+			PlatformKPIServiceImpl.setWorktimelist(worktimeList);
 			ProcessInstance processInstance = activitiService.startProcDef(
 					businessKey, processKey, map, AccessControl
 							.getAccessControl().getUserAccount());
@@ -614,8 +616,10 @@ public class ActivitiRepositoryAction {
 			return "success";
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "fail" + e.getMessage();
 		} finally {
+			PlatformKPIServiceImpl.setWorktimelist(null);
 			tm.release();
 		}
 	}
@@ -789,12 +793,17 @@ public class ActivitiRepositoryAction {
 	 */
 	public @ResponseBody
 	String saveMessageTemplate(String processKey, String messagetempleid,
-			String emailtempleid, String noticeId, String iscontainholiday,
-			String noticerate) {
+			String emailtempleid, String noticeId, int iscontainholiday,
+			int noticerate,String isRenew) {
 		try {
 
 			activitiService.saveMessageType(processKey, messagetempleid,
 					emailtempleid, noticeId, iscontainholiday, noticerate);
+			
+			//更新已生成任务的工时 1是 0 否
+			if ("1".equals(isRenew)) {
+				
+			}
 
 			return "success";
 		} catch (Exception e) {
@@ -819,7 +828,7 @@ public class ActivitiRepositoryAction {
 	 * @param version
 	 * 2014年6月24日
 	 */
-	public void updateHoliday(String processKey, String IsContainHoliday)
+	public void updateHoliday(String processKey, int IsContainHoliday)
 			throws Exception {
 
 		activitiService.addIsContainHoliday(processKey, IsContainHoliday);

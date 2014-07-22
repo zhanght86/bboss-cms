@@ -66,7 +66,7 @@
 		            <td ><pg:cell colName="VERSION_" /></td>
 		            <td ><pg:cell colName="PROC_INST_ID_" /></td>  
 		            <td ><pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" /></td> 
-		        	<td ><pg:cell colName="START_USER_ID_" /></td>  
+		        	<td ><pg:cell colName="START_USER_ID_NAME" /></td>  
 		           	<td >
 		           		<span style=" color: purple;">
 		           			<pg:notnull colName="END_TIME_" >
@@ -83,7 +83,7 @@
 		           		<span style=" color: purple;">
 				           	<pg:notempty colName="taskList" >
 						       <pg:list colName="taskList" position="0">
-								  <pg:cell colName="USER_ID_" />
+								  <pg:cell colName="USER_ID_NAME" />
 						       </pg:list>
 					        </pg:notempty>	
 				        </span>
@@ -92,7 +92,7 @@
 		           		<span style=" color: purple;">
 				           	<pg:notempty colName="taskList" >
 					           	<pg:list colName="taskList" position="0">
-					           		<pg:cell colName="ASSIGNEE_" />
+					           		<pg:cell colName="ASSIGNEE_NAME" />
 						        </pg:list>
 					        </pg:notempty>
 					    </span>
@@ -154,12 +154,12 @@
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="VERSION_" /></td>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="PROC_INST_ID_" /></td>  
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="SUPER_PROCESS_INSTANCE_ID_" /></td> 
-		        	<td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="START_USER_ID_" /></td>       
+		        	<td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="START_USER_ID_NAME" /></td>       
 					<pg:notempty colName="taskList" >
 						<pg:list colName="taskList" position="0" >
 				           	<td ><span style=" color: purple;"><pg:cell colName="NAME_"/></span></td>
-				           	<td><span style=" color: purple;"><pg:cell colName="USER_ID_"/></span></td>
-				           	<td><span style=" color: purple;"><pg:cell colName="ASSIGNEE_" /></span></td>
+				           	<td><span style=" color: purple;"><pg:cell colName="USER_ID_NAME"/></span></td>
+				           	<td><span style=" color: purple;"><pg:cell colName="ASSIGNEE_NAME" /></span></td>
 			           	</pg:list>
 		           	</pg:notempty>
 		            <td rowspan="<pg:size colName="taskList"/>"><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>    
@@ -209,8 +209,8 @@
 		         <pg:list colName="taskList" start="1">
 			        <tr><input id="CK" type="hidden" name="CK" value=""/>
 			           	<td><span style=" color: purple;"><pg:cell colName="NAME_"/></span></td>
-			           	<td><span style=" color: purple;"><pg:cell colName="USER_ID_" /></span></td>
-			           	<td><span style=" color: purple;"><pg:cell colName="ASSIGNEE_" /></span></td>
+			           	<td><span style=" color: purple;"><pg:cell colName="USER_ID_NAME" /></span></td>
+			           	<td><span style=" color: purple;"><pg:cell colName="ASSIGNEE_NAME" /></span></td>
 			        </tr>
 		        </pg:list>
 			</pg:upper>

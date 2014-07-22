@@ -114,7 +114,8 @@
 	
 	<property name="queryBusinessNode">
 		<![CDATA[
-			select business_id as id,business_name as text from td_wf_businesstype where parent_id=?
+			select business_id as id,business_name as text from td_wf_businesstype 
+				where USE_FLAG = '1' AND parent_id=?
 		]]>
 	</property>
 	<property name="deleteBusinessType">

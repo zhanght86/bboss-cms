@@ -22,6 +22,8 @@
     <pg:param name="taskName"/>
     <pg:param name="businessTypeId"/>
     <pg:param name="businessKey"/>
+    <pg:param name="createUser"/>
+    <pg:param name="entrustUser"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
@@ -43,7 +45,10 @@
        		<th>处理工时</th>
        		<th>工时规则</th>
        		<th>耗时</th>
-       		<th>是否超时</th>
+       		<th>预警时间</th>
+       		<th>预警提醒状况</th>
+       		<th>超时时间</th>
+       		<th>超时提醒状况</th>
        		<th>操作</th>
        	</pg:header>	
 
@@ -59,34 +64,73 @@
     		<td><pg:cell colName="PROC_INST_ID_" /></td>  
     		<td><pg:cell colName="ID_" /></td> 
        		<td><pg:cell colName="NAME_"/></td>
-       		<td><pg:cell colName="ASSIGNEE_"/></td>
+       		<td>
+       			<pg:null colName="wfEntrust">
+       				<pg:null colName="delegateTaskList">
+       					<pg:cell colName="USER_ID_NAME"/>
+       				</pg:null>
+       			</pg:null>
+       			<pg:notnull colName="wfEntrust">
+       				<pg:cell colName="wfEntrust" property="create_user_name"/>委托给<pg:cell colName="wfEntrust" property="entrust_user_name"/>
+       			</pg:notnull>
+       			<pg:notnull colName="delegateTaskList" >
+			     	<pg:list colName="delegateTaskList" >
+					  <pg:cell colName="FROM_USER_NAME"/>转办给<pg:cell colName="TO_USER_NAME"/>
+					  [<pg:cell colName="CHANGETIME"/>]
+					  <br/>
+			       </pg:list>
+		         </pg:notnull>	
+       		</td>
        		<td><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
             <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td> 
             <td><pg:cell colName="DURATION_NODE" /></td> 
             <td>
        			<pg:equal colName="IS_CONTAIN_HOLIDAY" value="0">
-		           	剔除周末/节假日
+		           	不考虑节假日/作息时间
 		        </pg:equal>
-		        <pg:equal colName="IS_CONTAIN_HOLIDAY" value="1">
-		           	全年为工作日
+       			<pg:equal colName="IS_CONTAIN_HOLIDAY" value="1">
+		           	考虑节假日,不考虑作息时间
 		        </pg:equal>
 		        <pg:equal colName="IS_CONTAIN_HOLIDAY" value="2">
-		           	剔除周末/节假日/工作休息时间
+		           	考虑节假日/作息时间
 		        </pg:equal>
        		</td>
             <td><pg:cell colName="DURATION_" /></td>
-       		<td>
-       			<pg:notempty colName="isOverTime" >
-		           <pg:equal colName="isOverTime" value="0">
-		           		未超时
-		           </pg:equal>
-		           <pg:equal colName="isOverTime" value="1">
-		           		<span style="color: red;">超时</span>
-		           	</pg:equal>
+            <td>
+       			<pg:notempty colName="ALERTTIME" >
+       				<span 
+       				<pg:equal colName="isAlertTime" value="1">style=" color: red";</pg:equal>
+       				>
+		          		<pg:cell colName="ALERTTIME" dateformat="yyyy-MM-dd HH:mm:ss"/>
+		          	</span>
 		        </pg:notempty>
-		       	<pg:empty colName="isOverTime" >
-		       		未超时
-		       	</pg:empty>
+		    </td>
+            <td>
+            	<pg:notempty colName="ALERTTIME" >
+			    	<pg:equal colName="advancesend" value="0">未发送预警提醒</pg:equal>
+			    	<pg:equal colName="advancesend" value="1">发送预警提醒成功</pg:equal>
+			    	<pg:equal colName="advancesend" value="2">短信发送预警提醒成功，邮件发送预警提醒失败</pg:equal>
+			    	<pg:equal colName="advancesend" value="3">短信发送预警提醒失败，邮件发送预警提醒成功</pg:equal>
+			    	<pg:equal colName="advancesend" value="4">发送预警提醒失败</pg:equal>
+			    </pg:notempty>
+		    </td>
+       		<td>
+       			<pg:notempty colName="OVERTIME" >
+       				<span 
+       				<pg:equal colName="isOverTime" value="1">style=" color: red";</pg:equal>
+       				>
+		           		<pg:cell colName="OVERTIME" dateformat="yyyy-MM-dd HH:mm:ss"/>
+		           	</span>
+		        </pg:notempty>
+		    </td>
+		    <td>
+		    	<pg:notempty colName="OVERTIME" >
+			    	<pg:equal colName="overtimesend" value="0">未发送超时提醒</pg:equal>
+	       			<pg:equal colName="overtimesend" value="1">发送超时提醒成功</pg:equal>
+			    	<pg:equal colName="overtimesend" value="2">短信发送超时提醒成功，邮件发送超时提醒失败</pg:equal>
+			    	<pg:equal colName="overtimesend" value="3">短信发送超时提醒失败，邮件发送超时提醒成功</pg:equal>
+			    	<pg:equal colName="overtimesend" value="4">发送超时提醒失败</pg:equal>
+			     </pg:notempty>	
 		    </td>
             <td class="td_center">
             	<pg:notempty colName="SUSPENSION_STATE_" >

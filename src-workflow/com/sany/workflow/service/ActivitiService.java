@@ -30,6 +30,7 @@ import org.activiti.engine.task.Task;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
+import com.sany.workflow.entity.NodeInfoEntity;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessInst;
@@ -1005,11 +1006,20 @@ public interface ActivitiService {
 	 */
 	public ListInfo queryTasks(TaskCondition task,long offset, int pagesize) ;
 	
+	/** 根据条件获取委托任务列表,分页展示 gw_tanx
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * 2014年5月14日
+	 */
+	public ListInfo queryEntrustTasks(TaskCondition task,long offset, int pagesize) ;
+	
 	/** 判断是否超时 gw_tanx
 	 * @param taskList
 	 * 2014年7月1日
 	 */
-	public void judgeOverTime(List<TaskManager> taskList) ;
+	public void judgeOverTime(TaskManager tm) ;
 	
 	/** 获取历史任务 gw_tanx
 	 * @param task
@@ -1421,15 +1431,15 @@ public interface ActivitiService {
 	 * 2014年6月23日
 	 */
 	public void saveMessageType(String processKey, String messagetempleid,
-			String emailtempleid, String noticeId, String iscontainholiday,
-			String noticerate);
+			String emailtempleid, String noticeId, int iscontainholiday,
+			int noticerate);
 	
 	/** 设置流程定义是否包含节假日 gw_tanx
 	 * @param processKey
 	 * @param IsContainHoliday
 	 * 2014年6月27日
 	 */
-	public void addIsContainHoliday(String processKey, String IsContainHoliday)
+	public void addIsContainHoliday(String processKey, int IsContainHoliday)
 			throws Exception;
 	
 	/** 打包下载流程定义xml和图片 gw_tanx
@@ -1452,4 +1462,59 @@ public interface ActivitiService {
 	public void addNodeWorktime(String processKey, String processIntsId,
 			List<Map<String, String>> nodeWorktimeList) throws Exception;
 	
+	/**根据条件获取节点工时 gw_tanx
+	 * @param processKey
+	 * @param processIntsId
+	 * @param nodeKey
+	 */
+	public NodeInfoEntity getNodeWorktime(String processIntsId, String nodeKey);
+	
+	public NodeInfoEntity getNodeInfoEntity(List<Map<String, String>> nodes,String taskKey) throws Exception;
+	
+	/**获取需要发送消息提醒的数据 gw_tanx
+	 * @param templateIds
+	 * @return
+	 * @throws Exception
+	 * 2014年7月16日
+	 */
+	public List<Map<String, String>> getProcessNodeUnComplete() throws Exception;
+	
+	/**
+	 * 更新任务消息发送状态
+	 * 
+	 * @param taskId
+	 * @param status
+	 * @throws Exception
+	 *             2014年7月16日
+	 */
+	public void updateMessSendState(String taskId, int advancesend,
+			int overtimesend) throws Exception;
+	
+	/** 处理人委托转换
+	 * @param taskList
+	 * 2014年7月18日
+	 */
+	public void entrustTaskInfo(TaskManager tm);
+	
+	/** 处理耗时
+	 * @param taskList
+	 * 2014年7月1日
+	 */
+	public void handleDurationTime(TaskManager tm);
+	
+	/**
+	 * 任务列表数据处理 gw_tanx
+	 * 
+	 * @param taskList
+	 * @throws Exception
+	 *             2014年5月20日
+	 */
+	public void dealTaskInfo(TaskManager tm);
+	
+	/** 代办任务处理 gw_tanx 
+	 * @param taskList
+	 * @throws Exception
+	 * 2014年7月15日
+	 */
+	public void delegateTaskInfo(TaskManager tm);
 }

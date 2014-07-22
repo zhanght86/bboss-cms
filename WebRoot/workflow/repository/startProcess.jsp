@@ -66,13 +66,13 @@
 									<td><pg:cell colName="node_key"></pg:cell></td>
 									<td><pg:cell colName="node_name"></pg:cell></td>
 									<td>
-										<input type="text" class="input1 w200" 
+										<input type="text" class="input1 w150" 
 											id="<pg:cell colName='node_key'/>_users_name" 
 											name="candidate_users_name" value="" />
 										<a href="javascript:openChooseUsers('<pg:cell colName='node_key'/>')">选择</a>
 									</td>
 									<td>
-										<input type="text" class="input1 w200"
+										<input type="text" class="input1 w150"
 											id="<pg:cell colName='node_key'/>_groups_name" 
 											name="candidate_groups_name" value=""/>
 										<a href="javascript:openChooseGroups('<pg:cell colName='node_key'/>')">选择</a>
@@ -104,7 +104,7 @@
 										</pg:notequal>
 									</td>
 									<td >
-										<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
+										<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" class="input1 w50" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
 									</td>
 									<!-- 
 									<td >
@@ -250,11 +250,11 @@ function query(businessId,businessType,treename){
 							configHtml +="<input type='hidden' name='node_key' value='"+nodekey+"'/>";
 							configHtml +="<td>"+nodekey+"</td>";
 							configHtml +="<td>"+node_name+"</td>";
-							configHtml +="<td><input type='text' class='input1 w200' ";
+							configHtml +="<td><input type='text' class='input1 w150' ";
 							configHtml +="id='"+nodekey+"_users_name' ";
 							configHtml +="name='candidate_users_name' value='"+candidate_users_name+"'/>";
 							configHtml +="<a href=\"javascript:openChooseUsers('"+nodekey+"')\">选择</a></td>";
-							configHtml +="<td><input type='text' class='input1 w200' ";
+							configHtml +="<td><input type='text' class='input1 w150' ";
 							configHtml +="id='"+nodekey+"_groups_name' ";
 							configHtml +="name='candidate_groups_name' value='"+candidate_groups_name+"'/>";
 							configHtml +="<a href=\"javascript:openChooseGroups('"+nodekey+"')\">选择</a></td>";

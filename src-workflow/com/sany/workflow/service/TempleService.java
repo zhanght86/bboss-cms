@@ -66,5 +66,5 @@ public interface TempleService {
 	 *            2014年6月12日
 	 */
 	public String delTemplates(String templateIds) throws Exception;
-
+	
 }

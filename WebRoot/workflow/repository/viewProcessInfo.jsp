@@ -65,7 +65,7 @@
 		</script>
 	</head>
 	<body>
-	<div class="form">
+	<div class="">
 		<div class="tabbox">
 		<ul class="tab" id="menu1">
 			     <li><a href="javascript:void(0)" class="current" onclick="setTab(1,0)"><span><pg:message code="sany.pdp.workflow.detail.info"/></span></a></li>

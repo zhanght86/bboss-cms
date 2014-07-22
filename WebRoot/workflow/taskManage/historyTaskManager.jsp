@@ -38,10 +38,12 @@ function queryList(){
 	var taskId = $("#taskId").val();
 	var businessTypeId = $("#businessType").combotree('getValue');
 	var businessKey = $("#businessKey").val();
+	var createUser = $("#createUser").val();
+	var entrustUser = $("#entrustUser").val();
 	
     $("#historyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryHistoryTaskData.page #customContent", 
-    	{"processIntsId":processIntsId, "processKey":processKey,"taskId":taskId,
-    	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey},
+    	{"processIntsId":processIntsId, "processKey":processKey,"taskId":taskId,"taskName":taskName,"businessTypeId":businessTypeId,
+    	"businessKey":businessKey,"createUser":createUser,"entrustUser":entrustUser},
     	function(){loadjs();});
 }
 
@@ -52,7 +54,7 @@ function modifyQueryData(){
 //查看流程实例详情
 function viewDetailInfo(processInstId) {
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskDetailInfo.page?processInstId="+processInstId;
-	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url,maxState:true});
 }
 	
 function doreset(){
@@ -127,6 +129,10 @@ function cancelTask(taskId,processId){
 												<select class="easyui-combotree" id='businessType' name="businessType" required="false"
 														style="width: 120px;">
 											</td>
+											<th>被委托人：</th>
+											<td>
+												<input id="entrustUser" name="entrustUser" type="text" class="w120"/>
+											</td>
 											<td style="text-align:center" rowspan="2" >
 												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
@@ -141,6 +147,12 @@ function cancelTask(taskId,processId){
 											<th>流程key：</th>
 											<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
 												<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
+											</td>
+											<th>委托人：</th>
+											<td>
+												<input id="createUser" name="createUser" type="text" class="w120"
+												<pg:false actual="${isAdmin}"> value="${currentAccount}" disabled</pg:false>
+												/>
 											</td>
 										</tr>
 									</table>

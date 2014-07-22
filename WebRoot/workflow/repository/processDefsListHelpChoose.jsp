@@ -30,7 +30,7 @@
        	</pg:header>	
 
       <pg:list >
-   		<tr onDBLclick="chooseThisData('<pg:cell colName="ID_" />','<pg:cell colName="NAME_" />','<pg:cell colName="business_name"/>','<pg:cell colName="wf_app_name"/>')" >
+   		<tr onDBLclick="chooseThisData('<pg:cell colName="KEY_" />','<pg:cell colName="ID_" />','<pg:cell colName="NAME_" />','<pg:cell colName="business_name"/>','<pg:cell colName="wf_app_name"/>')" >
 	        <td class="td_center">
                 <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK');selectedSel()" value="<pg:cell colName="ID_" />"/>
                 <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/>

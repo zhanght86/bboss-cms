@@ -1,8 +1,11 @@
 package com.sany.workflow.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.frameworkset.util.annotations.RequestParam;
+
+import com.sany.workflow.entrust.entity.WfEntrust;
 
 /**
  * @todo 任务查询条件
@@ -41,6 +44,36 @@ public class TaskCondition {
 	private String taskDefKey;// 任务key
 
 	private String completeReason;// 处理结果
+
+	private List<WfEntrust> entrustList;// 委托代办关系集合数据
+
+	private String createUser;// 委托人
+
+	private String entrustUser;// 被委托人
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public String getEntrustUser() {
+		return entrustUser;
+	}
+
+	public void setEntrustUser(String entrustUser) {
+		this.entrustUser = entrustUser;
+	}
+
+	public List<WfEntrust> getEntrustList() {
+		return entrustList;
+	}
+
+	public void setEntrustList(List<WfEntrust> entrustList) {
+		this.entrustList = entrustList;
+	}
 
 	public String getTaskDefKey() {
 		return taskDefKey;

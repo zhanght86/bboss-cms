@@ -98,10 +98,11 @@
 	<property name="queryRelationByEntrustId">
 		<![CDATA[
 				select r.*,p.name_ as procdef_name,a.system_name as wf_app_name from TD_WF_ENTRUST_PROC_RELATION r
-					left join ACT_RE_PROCDEF p on p.id_ = r.procdef_id
+					left join ACT_RE_PROCDEF p on p.key_ = r.procdef_id
 					left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.id_
 					left join TD_WF_APP a on a.id = ar.wf_app_id
 				where ENTRUST_ID = ?
+				and p.version_ = (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
 			]]>
 	</property>
 	

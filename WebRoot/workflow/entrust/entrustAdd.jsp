@@ -115,7 +115,7 @@ function chooseSelectedData(chooseData){
 			
 			var row = 
 				"<tr name='procdef_row'>\n" +
-				"\t\t<td>"+ data.proc_name +"<input type='hidden' name='procdef_id' value='"+ data.proc_id +"' /></td>\n" + 
+				"\t\t<td>"+ data.proc_name +"<input type='hidden' name='procdef_id' value='"+ data.proc_key +"' /></td>\n" + 
 				"\t\t<td>"+ data.wf_app_name +"</td>\n" + 
 				"\t\t<td><a href='#' onclick='delProcRow(this)' >删除</a></td>\n" + 
 				"</tr>";
@@ -180,13 +180,13 @@ function delProcRow(delDoc){
 						<th>授权开始时间：</th>
 						<td id="secret_td" ><input id="start_date" name="start_date" type="text"
 							value="" class="Wdate" required="true" readonly  style="width:175px;"
-							maxlength="100" onclick="WdatePicker()" /></td>
+							maxlength="100" onclick="new WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" /></td>
 					</tr>
 					<tr id="re_secret_tr">
 						<th>授权结束时间：</th>
 						<td ><input id="end_date" name="end_date" type="text"
 							value="" class="Wdate" required="true" readonly style="width:175px;"
-							maxlength="100" onclick="WdatePicker()" /></td>
+							maxlength="100" onclick="new WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" /></td>
 					</tr>
 					<tr id="selectProcdefTR">
 						<th vAlign="top">授权流程选择：</th>

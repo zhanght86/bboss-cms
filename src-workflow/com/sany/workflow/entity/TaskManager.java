@@ -1,6 +1,9 @@
 package com.sany.workflow.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
+
+import com.sany.workflow.entrust.entity.WfEntrust;
 
 /**
  * @todo 平台任务实体
@@ -28,7 +31,11 @@ public class TaskManager {
 
 	private String OWNER_;// 实际签收人（一般情况下为空，只有在委托时才有值）
 
+	private String OWNER_NAME;// 实际签收人姓名
+
 	private String ASSIGNEE_;// 签收人或委托人
+
+	private String ASSIGNEE_NAME;// 签收人姓名
 
 	private String DELEGATION_;// 委托类型，DelegationState分为两种：PENDING，RESOLVED。如无委托则为空
 
@@ -60,6 +67,8 @@ public class TaskManager {
 
 	private String USER_ID_;// 处理人id (关联其他表的业务字段)
 
+	private String USER_ID_NAME;// 处理人姓名
+
 	private String GROUP_ID;// 处理组id
 
 	private String BUSINESS_KEY_;// 业务主题
@@ -70,9 +79,105 @@ public class TaskManager {
 
 	private String DURATION_NODE;// 处理工时
 
-	private String IS_CONTAIN_HOLIDAY;// 是否包含节假日（0剔除1包含）
+	private int IS_CONTAIN_HOLIDAY;// 是否包含节假日（0剔除1包含）
 
-	private String isOverTime;// 是否超时(0未超时1超时)
+	private String isOverTime;// 是否超时提醒(0未超时1超时)
+
+	private String isAlertTime;// 是否预警提醒(0未预警1预警)
+
+	private Timestamp ALERTTIME;// 预警时间点
+
+	private Timestamp OVERTIME;// 预警时间点
+
+	private int advancesend;// 预警发送状态 0 未发送预警 1 发送预警成功 2短信发送预警成功，邮件发送预警失败
+							// 3短信发送预警失败，邮件发送预警成功4发送预警失败
+
+	private int overtimesend;// 超时发送状态 0 未发送超时 1 发送超时成功 2短信发送超时成功，邮件发送超时失败
+								// 3短信发送超时失败，邮件发送超时成功4发送超时失败
+
+	private WfEntrust wfEntrust;// 委托关系
+
+	public WfEntrust getWfEntrust() {
+		return wfEntrust;
+	}
+
+	public void setWfEntrust(WfEntrust wfEntrust) {
+		this.wfEntrust = wfEntrust;
+	}
+
+	public int getAdvancesend() {
+		return advancesend;
+	}
+
+	public void setAdvancesend(int advancesend) {
+		this.advancesend = advancesend;
+	}
+
+	public int getOvertimesend() {
+		return overtimesend;
+	}
+
+	public void setOvertimesend(int overtimesend) {
+		this.overtimesend = overtimesend;
+	}
+
+	private List<TaskDelegateRelation> delegateTaskList;// 任务委托关系
+
+	public String getIsAlertTime() {
+		return isAlertTime;
+	}
+
+	public void setIsAlertTime(String isAlertTime) {
+		this.isAlertTime = isAlertTime;
+	}
+
+	public Timestamp getALERTTIME() {
+		return ALERTTIME;
+	}
+
+	public void setALERTTIME(Timestamp aLERTTIME) {
+		ALERTTIME = aLERTTIME;
+	}
+
+	public Timestamp getOVERTIME() {
+		return OVERTIME;
+	}
+
+	public void setOVERTIME(Timestamp oVERTIME) {
+		OVERTIME = oVERTIME;
+	}
+
+	public List<TaskDelegateRelation> getDelegateTaskList() {
+		return delegateTaskList;
+	}
+
+	public void setDelegateTaskList(List<TaskDelegateRelation> delegateTaskList) {
+		this.delegateTaskList = delegateTaskList;
+	}
+
+	public String getOWNER_NAME() {
+		return OWNER_NAME;
+	}
+
+	public void setOWNER_NAME(String oWNER_NAME) {
+		OWNER_NAME = oWNER_NAME;
+	}
+
+	public String getASSIGNEE_NAME() {
+		return ASSIGNEE_NAME;
+	}
+
+	public void setASSIGNEE_NAME(String aSSIGNEE_NAME) {
+		ASSIGNEE_NAME = aSSIGNEE_NAME;
+	}
+
+	public String getUSER_ID_NAME() {
+		return USER_ID_NAME;
+	}
+
+	public void setUSER_ID_NAME(String uSER_ID_NAME) {
+		USER_ID_NAME = uSER_ID_NAME;
+	}
 
 	public String getIsOverTime() {
 		return isOverTime;
@@ -90,11 +195,11 @@ public class TaskManager {
 		DURATION_NODE = dURATION_NODE;
 	}
 
-	public String getIS_CONTAIN_HOLIDAY() {
+	public int getIS_CONTAIN_HOLIDAY() {
 		return IS_CONTAIN_HOLIDAY;
 	}
 
-	public void setIS_CONTAIN_HOLIDAY(String iS_CONTAIN_HOLIDAY) {
+	public void setIS_CONTAIN_HOLIDAY(int iS_CONTAIN_HOLIDAY) {
 		IS_CONTAIN_HOLIDAY = iS_CONTAIN_HOLIDAY;
 	}
 

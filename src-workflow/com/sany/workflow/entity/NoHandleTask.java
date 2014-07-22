@@ -1,5 +1,7 @@
 package com.sany.workflow.entity;
 
+import java.util.Date;
+
 /**
  * 统一待办取待办任务实体bean
  * 
@@ -10,25 +12,55 @@ package com.sany.workflow.entity;
  */
 public class NoHandleTask {
 
-	private String userAccount;//发起人工号
+	private String taskState;// 任务状态 1 未签收2 签收
 
-	private String createTime;//创建时间
+	private String userAccount;// 发起人工号
 
-	private String taskId;//任务id
+	private Date createTime;// 创建时间
 
-	private String taskDefKey;//任务key
+	private String taskId;// 任务id
 
-	private String businessKey;//业务主题key
+	private String taskDefKey;// 任务key
 
-	private String instanceId;//流程实例id
+	private String businessKey;// 业务主题key
 
-	private String defId;//流程定义id
+	private String instanceId;// 流程实例id
 
-	private String sender;//发起人姓名
+	private String defId;// 流程定义id
 
-	private String title;//流程标题
+	private String sender;// 发起人姓名
 
-	private String url;//链接地址
+	private String title;// 流程标题
+
+	private String processKey;// 流程key
+
+	private String suspensionState;// 流程状态 1 运行中2 挂起
+
+	private String url;// 链接地址
+
+	public String getTaskState() {
+		return taskState;
+	}
+
+	public void setTaskState(String taskState) {
+		this.taskState = taskState;
+	}
+
+	public String getProcessKey() {
+		return processKey;
+	}
+
+	public void setProcessKey(String processKey) {
+		this.processKey = processKey;
+	}
+
+	public String getSuspensionState() {
+		return suspensionState;
+	}
+
+	public void setSuspensionState(String suspensionState) {
+		this.suspensionState = suspensionState;
+	}
 
 	public String getUserAccount() {
 		return userAccount;
@@ -38,11 +70,11 @@ public class NoHandleTask {
 		this.userAccount = userAccount;
 	}
 
-	public String getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 

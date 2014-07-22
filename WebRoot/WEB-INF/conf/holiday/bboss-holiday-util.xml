@@ -1,11 +1,10 @@
 <properties>
 	
-	<property name="sysmanager.holiday.util" class="com.frameworkset.platform.holiday.area.util.WorkTimeUtil" singlable="true"
-	    path:index="/sysmanager/holiday/interface.jsp"
+	<property name="sysmanager.holiday.util" class="com.frameworkset.platform.holiday.area.util.WorkTimeUtil" 
 		f:util="attr:sysmanager.holiday.util.UtilAction"
 		/>
 		
-	<property name="sysmanager.holiday.util.UtilAction" class="com.frameworkset.platform.holiday.area.util.action.UtilAction" singlable="true"
+	<property name="sysmanager.holiday.util.UtilAction" class="com.frameworkset.platform.holiday.area.util.action.UtilAction" 
 		f:utilManager="attr:sysmanager.holiday.util.UtilManager"
 		/>
 		 

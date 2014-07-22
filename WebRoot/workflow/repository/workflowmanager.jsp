@@ -331,7 +331,7 @@
   
 function openSetMessTemple(processKey) {
 	var url = "<%=request.getContextPath()%>/workflow/repository/toSetMessageTemplate.page?processKey="+processKey;
-	$.dialog({ id:'nodeInfoIframe', title:"消息提醒设置("+processKey+")",width:400,height:280, content:'url:'+url});
+	$.dialog({ id:'nodeInfoIframe', title:"消息提醒设置("+processKey+")",width:360,height:320, content:'url:'+url});
 }
 
 function openMessTemple(templeId,templeType) {

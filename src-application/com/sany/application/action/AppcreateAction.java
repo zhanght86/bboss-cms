@@ -14,18 +14,26 @@
  */
 package com.sany.application.action;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import net.fiyu.edit.TimeStamp;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
+import org.frameworkset.web.multipart.MultipartFile;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
 
@@ -171,7 +179,6 @@ public class AppcreateAction {
 				}
 				appcreateService.saveWfApp(wfApp);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				logger.error(e);
 				return e.getMessage();
 			}
@@ -192,6 +199,22 @@ public class AppcreateAction {
 		}
 		
 		return actionResult;
+	}
+	
+	public @ResponseBody String uploadAppPic( MultipartFile uploadFileName,String appInfoId,ModelMap model,HttpServletRequest request)throws Exception{
+		//String fileNameOrig = uploadFileName.getOriginalFilename();
+	
+		try {
+			String contextPath= request.getSession().getServletContext().getRealPath("");
+			File _file = new File(contextPath+"\\application\\images\\" + appInfoId+".png");
+			
+			uploadFileName.transferTo(_file);
+			
+			return "导入成功";
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "导入失败";
+		}
 	}
 	
 }

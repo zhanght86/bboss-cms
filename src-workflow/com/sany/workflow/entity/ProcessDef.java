@@ -68,13 +68,13 @@ public class ProcessDef {
 
 	private String emailtempletitle;// 邮件模板名称
 	
-	private String IS_CONTAIN_HOLIDAY;//是否包含节假日0 否 1是
+	private int IS_CONTAIN_HOLIDAY;//是否包含节假日0 否 1是
 
-	public String getIS_CONTAIN_HOLIDAY() {
+	public int getIS_CONTAIN_HOLIDAY() {
 		return IS_CONTAIN_HOLIDAY;
 	}
 
-	public void setIS_CONTAIN_HOLIDAY(String iS_CONTAIN_HOLIDAY) {
+	public void setIS_CONTAIN_HOLIDAY(int iS_CONTAIN_HOLIDAY) {
 		IS_CONTAIN_HOLIDAY = iS_CONTAIN_HOLIDAY;
 	}
 

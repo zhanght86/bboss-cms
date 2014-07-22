@@ -13,14 +13,11 @@ import org.frameworkset.util.annotations.ResponseBody;
 
 import com.frameworkset.platform.holiday.area.bean.FlowWarning;
 import com.frameworkset.platform.holiday.area.bean.WorkTime;
-import  com.frameworkset.platform.holiday.area.bean.OrgLeaf;
 import com.frameworkset.platform.holiday.area.util.action.UtilAction;
 
 public class WorkTimeUtil {
-	private  SimpleDateFormat df_date = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-	private static SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期时间格式
 
-
+	private static String rexp_userId = "[0-9]+";
 	private static String rexp_orgId = "[0-9]+";
 	private static String rexp_startTime = "\\d{4}\\-\\d{1,2}\\-\\d{1,2}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}";
 	private static String rexp_interval = "[0-9]+\\.{0,1}[0-9]{0,1}[DHm]{1}";
@@ -41,6 +38,7 @@ public class WorkTimeUtil {
 	
 	
 	public static void main(String [] args0) throws ParseException{
+		SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String s1 = "20111D";
 		if(s1.matches(rexp_interval)){
 			//System.out.print("ok");
@@ -52,20 +50,18 @@ public class WorkTimeUtil {
 		System.out.print(date.getTime());
 	}
 	
-	public String index(){
-		return "path:index";
-	}
-	@SuppressWarnings("unchecked")
-	public @ResponseBody List<OrgLeaf> getOrgTree() throws Exception{
-		
-		return util.getOrgTree();
-	}
+	
 	/**
 	*计算工作完成时间和预警时间
 	*
 	*/
 	@SuppressWarnings("static-access")
-	public FlowWarning getCompleteAndWarnTime( String userAccount,Date createTime,int dicipline,long interval, String warnPercent)throws Exception{
+	public FlowWarning getCompleteAndWarnTime( String userAccount,Date createTime,int dicipline,long interval, int warnPercent)throws Exception{
+		if(0 == interval){
+			return null;
+		}
+		
+		SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Timestamp ts = new Timestamp(System.currentTimeMillis());   
 
 		FlowWarning bean = new FlowWarning();
@@ -74,36 +70,80 @@ public class WorkTimeUtil {
 		bean.setInterval(interval);
 		bean.setUserAccount(userAccount);
 		bean.setWarnPercent(warnPercent);
-		String orgId = util.getOrgIdByuserAccount(userAccount);
-		String createTimeString = df_dateAndTime.format(createTime);
-		long intervalNotice = (interval*Integer.parseInt(warnPercent))/100;
+		
+		long intervalNotice = 0;
+		
 		String completeTime = null;
+		Date completeTime0 = null;
 		if(dicipline==0){
-			completeTime = getNextTimeNoRest(createTimeString,interval);
-		}else if(dicipline==1){
-			completeTime = getNextTimeNoRestDay(orgId, createTimeString, interval);
-		}else if(dicipline==2){
-			completeTime = getNextTimeNoRestTime(orgId, createTimeString, interval);
-		}
-		if(completeTime.matches(rexp_startTime)){
-			bean.setErrorCode(createTimeString);//接口报错
-			
-		}else{
+			completeTime0 = getNextTimeNoRest(createTime,interval);
+			bean.setCompleteTime(new Timestamp(completeTime0.getTime()));
 			Calendar instance = Calendar.getInstance();
-			Date date = df_dateAndTime.parse(completeTime);
-			instance.setTimeInMillis(date.getTime()-intervalNotice);
-			bean.setCompleteTime(ts.valueOf(completeTime));
-			bean.setWarnTime(ts.valueOf(df_dateAndTime.format(instance.getTime())));
+			if(0 != warnPercent){
+				intervalNotice = (interval*warnPercent)/100;
+				instance.setTimeInMillis(completeTime0.getTime()-intervalNotice);
+				bean.setWarnTime(new Timestamp(instance.getTimeInMillis()));
+			}
+		
+		}else if(dicipline==1){
+			String orgId = util.getOrgIdByuserAccountOrWorkNo(userAccount);
+			String createTimeString = df_dateAndTime.format(createTime);
+			completeTime = getNextTimeNoRestDay(orgId, createTimeString, interval);
+			/*返回的完成时间不符合日期时间格式,则写bean的errorCode属性       */
+//			if(!completeTime.matches(rexp_startTime)){yyyy-MM-dd HH:mm:ss
+			if(completeTime.length() != 19){
+				bean.setErrorCode(completeTime);
+				
+			}else{
+				Calendar instance = Calendar.getInstance();
+				if(0 != warnPercent){
+					intervalNotice = (interval*warnPercent)/100;
+					Date date = df_dateAndTime.parse(completeTime);
+					instance.setTimeInMillis(date.getTime()-intervalNotice);
+					bean.setCompleteTime(ts.valueOf(completeTime));
+				}
+				bean.setWarnTime(ts.valueOf(df_dateAndTime.format(instance.getTime())));
+			}
+		}else if(dicipline==2){
+			String orgId = util.getOrgIdByuserAccountOrWorkNo(userAccount);
+			String createTimeString = df_dateAndTime.format(createTime);
+			completeTime = getNextTimeNoRestTime(orgId, createTimeString, interval);
+			/*返回的完成时间不符合日期时间格式,则写bean的errorCode属性       */
+			if(completeTime.length() != 19){
+				bean.setErrorCode(completeTime);
+				
+			}else{
+				Calendar instance = Calendar.getInstance();
+				if(0 != warnPercent){
+					intervalNotice = (interval*warnPercent)/100;
+					Date date = df_dateAndTime.parse(completeTime);
+					instance.setTimeInMillis(date.getTime()-intervalNotice);
+					bean.setCompleteTime(ts.valueOf(completeTime));
+				}
+				bean.setWarnTime(ts.valueOf(df_dateAndTime.format(instance.getTime())));
+			}
 		}
+		
+		
 		return bean;
 	}
-	
+	/**
+	*计算工作完成时间，包含休息日和法定节假日
+	 * @throws ParseException 
+	*/
+	public Date getNextTimeNoRest(Date startTime,long millisecond) throws ParseException{
+		SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar instance = Calendar.getInstance();
+		instance.setTimeInMillis(startTime.getTime()+millisecond);
+		return instance.getTime();
+	}
 	
 	/**
 	*计算工作完成时间，包含休息日和法定节假日
 	 * @throws ParseException 
 	*/
 	public String getNextTimeNoRest(String startTime,long millisecond) throws ParseException{
+		SimpleDateFormat df_dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar instance = Calendar.getInstance();
 		Date date = df_dateAndTime.parse(startTime);
 		instance.setTimeInMillis(date.getTime()+millisecond);
@@ -117,9 +157,33 @@ public class WorkTimeUtil {
 	*/
 	public String getNextTimeNoRestDay(String orgId,String startTime,long millisecond) throws Exception{
 		
-		return getNextTimeNoRestDay( orgId, startTime, millisecondToSecond(millisecond));
+        String areaId = util.getAreaByOrgId(orgId);
+		
+		//如果没有发现部门挂靠的产业园则启用默认配置
+		if(null == areaId||"".equals(areaId)){
+			return getNextTimeNoRest(startTime, millisecond);
+		}
+		
+		return getNextTimeNoRestDay( areaId, startTime, millisecondToSecond(millisecond));
 	}
 	
+	
+	
+	/**
+	 * 封装getNextTime,校验参数,并把单位为 millisecond(毫秒)的时间间隔转换为 (int)秒
+	 * @throws Exception 
+	*/
+	public String getNextTimeNoRestTime(String orgId,String startTime,long millisecond) throws Exception{
+		
+		String areaId = util.getAreaByOrgId(orgId);
+		
+		//如果没有发现部门挂靠的产业园则启用默认配置
+		if(null == areaId||"".equals(areaId)){
+			return getNextTimeNoRest(startTime, millisecond);
+		}
+		
+		return getNextTimeNoRestTime( areaId, startTime, millisecondToSecond(millisecond));
+	}
 	
 	/**
 	 * 封装getNextTime,校验参数,并把单位为 D(天) , H(小时) , m(分钟)的时间间隔转换为 (int)秒
@@ -130,16 +194,9 @@ public class WorkTimeUtil {
 		if(right_para != reCheck){
 			return reCheck;
 		}
+		
 		return getNextTimeNoRestTime( orgId, startTime, changeIntervalToSecond(interval));
 	}
-	/**
-	 * 封装getNextTime,校验参数,并把单位为 millisecond(毫秒)的时间间隔转换为 (int)秒
-	*/
-	public String getNextTimeNoRestTime(String orgId,String startTime,long millisecond){
-		
-		return getNextTimeNoRestTime( orgId, startTime, millisecondToSecond(millisecond));
-	}
-	
 	
 	/**获取工作完成时间步骤(剔除休息日，法定节假日，工作日中的休息时间)
 	 * 接口主要逻辑:从开始时间起算，得出一个特定的时间点消耗掉所有的工作时长
@@ -154,13 +211,13 @@ public class WorkTimeUtil {
 		 *           3.循环上一步，直到某天没有工作类型设置，或者工作时长消耗为 '0',则程序退出
 	 *           }
 	 */
-	public String getNextTimeNoRestDay(String orgId,String startTime, int int_interval_second)throws Exception{
+	private String getNextTimeNoRestDay(String areaId,String startTime, int int_interval_second)throws Exception{
 
 		
-		String areaId = util.getAreaByOrgId(orgId);
+		/*String areaId = util.getAreaByOrgId(orgId);
 		if(null == areaId||"".equals(areaId)){
 			return no_erea_set;
-		}
+		}*/
 		String thisYear = startTime.substring(0, 4);
 		
 		Map<String,String> getThisAndNextYearArrange = util.getThisAndNextYearArrange(areaId, thisYear);
@@ -224,12 +281,12 @@ public class WorkTimeUtil {
 		 *           4.循环上一步，直到某天没有工作类型设置，或者工作时长消耗为 '0',则程序退出
 	 *           }
 	 */
-	private String getNextTimeNoRestTime(String orgId,String startTime,int int_interval_second){
+	private String getNextTimeNoRestTime(String areaId,String startTime,int int_interval_second){
 		
-		String areaId = util.getAreaByOrgId(orgId);
+		/*String areaId = util.getAreaByOrgId(orgId);
 		if(null == areaId||"".equals(areaId)){
 			return no_erea_set;
-		}
+		}*/
 		String thisYear = startTime.substring(0, 4);
 		
 		Map<String,String> getThisAndNextYearArrange = util.getThisAndNextYearArrange(areaId, thisYear);
@@ -357,6 +414,7 @@ public class WorkTimeUtil {
 	}
 	
 	private  String getNextDate(String thisDate){
+		SimpleDateFormat df_date = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar calendar = Calendar.getInstance();
 		int y = Integer.parseInt(thisDate.split("-")[0]);
 		int m=Integer.parseInt(thisDate.split("-")[1]);

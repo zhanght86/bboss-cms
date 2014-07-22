@@ -1,12 +1,17 @@
 package com.sany.workflow.service.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Task;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
@@ -18,6 +23,7 @@ import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
+import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
@@ -36,10 +42,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
 	private ActivitiService activitiService;
-	
+
 	private String[] arraySysVariable = { "_users", "_groups", "loopCounter",
 			"nrOfActiveInstances", "nrOfCompletedInstances", "nrOfInstances",
-			"_user",".bpmn.behavior.multiInstance.mode" };
+			"_user", ".bpmn.behavior.multiInstance.mode" };
 
 	@Override
 	public void destroy() throws Exception {
@@ -82,7 +88,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
 						+ "_groups", "");
 			}
-			
+
 			// 串/并行切换(多实例)
 			String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
 			if ("1".equals(isMulti)) {
@@ -220,26 +226,32 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		try {
 			tms.begin();
 
-			// 从扩展表中获取节点信息
-			List<ActivitiNodeInfo> nodeList = executor
-					.queryList(ActivitiNodeInfo.class, "queryAllActivitiNodes",
-							processKey);
+			// 从扩展表中获取节点信息(包含工时)
+			List<ActivitiNodeInfo> nodeList = executor.queryList(
+					ActivitiNodeInfo.class, "getAllActivitiNodesInfo_wf",
+					processInstId, processKey);
 
 			if (nodeList == null) {
 				tms.commit();
 				return null;
 			}
-			
+
 			// 判断是否邮件任务
 			List<ActivityImpl> activties = activitiService
 					.getActivitImplListByProcessKey(processKey);
-			
+
 			for (int i = 0; i < nodeList.size(); i++) {
 				ActivitiNodeInfo nodeInfo = nodeList.get(i);
 
+				// 节点处理工时转换
+				if (nodeInfo.getDURATION_NODE() != null) {
+					long worktime = Long.parseLong(nodeInfo.getDURATION_NODE());
+					nodeInfo.setDURATION_NODE(formatDuring(worktime));
+				}
+
 				for (ActivityImpl activtie : activties) {
 					if (activtie.getId().equals(nodeInfo.getNode_key())) {
-						//邮件任务
+						// 邮件任务
 						if (activtie.isMailTask()) {
 							nodeInfo.setNode_type("mailTask");
 						}
@@ -247,7 +259,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					}
 				}
 			}
-			
+
 			// 根据流程实例ID 获取流程的参数变量信息
 			List<ActivitiVariable> variableList = executor.queryList(
 					ActivitiVariable.class, "getVariableListById_wf",
@@ -265,7 +277,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					// 拼接匹配对象
 					users.append(ani.getNode_key() + "_users");
 					groups.append(ani.getNode_key() + "_groups");
-					types.append(ani.getNode_key()+".bpmn.behavior.multiInstance.mode");
+					types.append(ani.getNode_key()
+							+ ".bpmn.behavior.multiInstance.mode");
 
 					for (int j = 0; j < variableList.size(); j++) {
 
@@ -286,22 +299,22 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 								ani.setNode_groups_id(av.getTEXT_());
 							}
-							
+
 							// 串/并行
-							if (av.getNAME_().equals(types.toString())) { 
-								
+							if (av.getNAME_().equals(types.toString())) {
+
 								if (av.getTEXT_().equals("sequential")) {
 									ani.setIsMulti("1");// 串行多实例
-								}else if (av.getTEXT_().equals("parallel")){
+								} else if (av.getTEXT_().equals("parallel")) {
 									ani.setIsMulti("2");// 并行多实例
-								}else {
+								} else {
 									ani.setIsMulti("0");// 不是多实例
 								}
-								
+
 							}
 						}
 					}
-					
+
 					if (StringUtil.isEmpty(ani.getIsMulti())) {
 						ani.setIsMulti("0");// 不是多实例
 					}
@@ -378,11 +391,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 		ListInfo listInfo = null;
 
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+			
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+			String currentAccount = AccessControl.getAccessControl()
+					.getUserAccount();
+
 			// 数据查看权限管控
-			task.setAdmin(AccessControl.getAccessControl().isAdmin());
+			task.setAdmin(isAdmin);
 			// 当前用户登录id
-			task.setAssignee(AccessControl.getAccessControl().getUserAccount());
+			task.setAssignee(currentAccount);
 
 			if (StringUtil.isNotEmpty(task.getProcessIntsId())) {
 				task.setProcessIntsId("%" + task.getProcessIntsId() + "%");
@@ -403,38 +423,54 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (StringUtil.isNotEmpty(task.getProcessKey())) {
 				task.setProcessKey("%" + task.getProcessKey() + "%");
 			}
+			
+			if (StringUtil.isNotEmpty(task.getCreateUser())) {
+				task.setCreateUser("%" + task.getCreateUser() + "%");
+			}
+			
+			if (StringUtil.isNotEmpty(task.getEntrustUser())) {
+				task.setEntrustUser("%" + task.getEntrustUser() + "%");
+			}
 
-			listInfo = executor.queryListInfoBean(TaskManager.class,
-					"selectHistoryTask_wf", offset, pagesize, task);
+			// 处理的历史任务记录
+			if (isAdmin) {
+				listInfo = executor.queryListInfoBean(TaskManager.class,
+						"selectHistoryTaskForAdmin_wf", offset, pagesize, task);
+			}else {
+				listInfo = executor.queryListInfoBean(TaskManager.class,
+						"selectHistoryTaskForNotAdmin_wf", offset, pagesize, task);
+			}
+			
+			// 用户转办记录
 
 			// 获取分页中List数据
 			List<TaskManager> taskList = listInfo.getDatas();
 
 			if (taskList != null && taskList.size() > 0) {
-				// 判断是否超时
-				activitiService.judgeOverTime(taskList);
 
 				for (int i = 0; i < taskList.size(); i++) {
-					TaskManager tm = taskList.get(i);
-					// 处理人格式化
-					tm.setASSIGNEE_(activitiService.userIdToUserName(
-							tm.getASSIGNEE_(), "2"));
-					// 节点耗时格式化
-					if (StringUtil.isNotEmpty(tm.getDURATION_())) {
-						long mss = Long.parseLong(tm.getDURATION_());
-						tm.setDURATION_(formatDuring(mss));
-					}
-					// 节点处理工时格式化
-					if (StringUtil.isNotEmpty(tm.getDURATION_NODE())) {
-						long worktime = Long.parseLong(tm.getDURATION_NODE());
-						tm.setDURATION_NODE(formatDuring(worktime));
-					}
+					TaskManager tmr = taskList.get(i);
+
+					// 处理人转换
+					activitiService.dealTaskInfo(tmr);
+					// 转办关系处理
+					activitiService.delegateTaskInfo(tmr);
+					// 处理人委托转换
+					activitiService.entrustTaskInfo(tmr);
+					// 判断是否超时
+					activitiService.judgeOverTime(tmr);
+					// 耗时处理
+					activitiService.handleDurationTime(tmr);
 				}
 			}
+			
+			tm.commit();
 
 			return listInfo;
 		} catch (Exception e) {
 			throw new ProcessException(e);
+		}finally {
+			tm.release();
 		}
 	}
 
@@ -468,7 +504,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public Object [] getProcessVariable(String processInstId) {
+	public Object[] getProcessVariable(String processInstId) {
 		try {
 			List<ActivitiVariable> variableList = executor.queryList(
 					ActivitiVariable.class, "getVariableListById_wf",
@@ -483,59 +519,253 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 				for (int i = 0; i < variableList.size(); i++) {
 					ActivitiVariable variable = variableList.get(i);
-					
+
 					Nodevariable node = new Nodevariable();
 					node.setParam_name(variable.getNAME_());
 					node.setParam_value(variable.getTEXT_());
-					
+
 					boolean isSysvariable = false;
 					for (int j = 0; j < arraySysVariable.length; j++) {
 						if (variable.getNAME_().endsWith(arraySysVariable[j])) {
 							sysvariableList.add(node);
-							
+
 							isSysvariable = true;
 							break;
 						}
 					}
-					
+
 					if (!isSysvariable) {
 						nodevariableList.add(node);
 					}
 				}
 			}
 
-			return new Object []{nodevariableList,sysvariableList};
+			return new Object[] { nodevariableList, sysvariableList };
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
 	}
 
 	@Override
-	public ListInfo getNoHandleTask(String pernr, String sysid,
-			long offset, int pagesize) {
+	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
+			long offset, int pagesize, HttpServletRequest request) {
+		List<NoHandleTask> list = new ArrayList<NoHandleTask>();
+
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+
+			// 当前用户的任务列表数据
 			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("isAdmin", AccessControl.getAccessControl().isAdmin(pernr));
 			params.put("assignee", pernr);
 			params.put("sysid", sysid);
 
-			ListInfo listInfo = executor.queryListInfoBean(NoHandleTask.class,
-					"selectNoHandleTask_wf", offset, pagesize, params);
+			List<NoHandleTask> taskList = executor.queryListBean(
+					NoHandleTask.class, "selectNoHandleTask_wf", params);
 
-			List<NoHandleTask> taskList = listInfo.getDatas();
 			if (taskList != null && taskList.size() != 0) {
 				for (int i = 0; i < taskList.size(); i++) {
-					NoHandleTask tm = taskList.get(i);
+					NoHandleTask nt = taskList.get(i);
 					// 处理人格式化
-					tm.setSender(activitiService.userIdToUserName(
-							tm.getUserAccount(), "1"));
+					nt.setSender(activitiService.userIdToUserName(
+							nt.getUserAccount(), "1"));
+
+					String url = request.getContextPath()
+							+ "/workflow/taskManage/toDealTaskForUnite.page?processKey="
+							+ nt.getProcessKey() + "&processInstId="
+							+ nt.getInstanceId() + "&taskId=" + nt.getTaskId()
+							+ "&taskState=" + nt.getTaskState()
+							+ "&suspensionState=" + nt.getSuspensionState();
+					nt.setUrl(url);
+					list.add(nt);
 				}
 			}
 
-			return listInfo;
+			// 委托给当前用户的任务列表数据
+			Map<String, Object> entrustMap = new HashMap<String, Object>();
+			entrustMap.put("isAdmin", false);
+			entrustMap.put("entrust_user", pernr);
+
+			// 根据当前用户获取委托关系列表数据
+			List<WfEntrust> entrustList = executor.queryListBean(
+					WfEntrust.class, "selectEntrustList", entrustMap);
+
+			// 没有委托关系，不需要去查任务数据
+			if (entrustList != null && entrustList.size() > 0) {
+				params.put("entrustList", entrustList);
+				// 根据当前用户获取委托关系列表数据
+				List<NoHandleTask> entrustlist = executor.queryListBean(
+						NoHandleTask.class, "selectNoHandleEntrustTask_wf",
+						params);
+
+				if (entrustlist != null && entrustlist.size() != 0) {
+					for (int i = 0; i < entrustlist.size(); i++) {
+						NoHandleTask nt = entrustlist.get(i);
+						// 处理人格式化
+						nt.setSender(activitiService.userIdToUserName(
+								nt.getUserAccount(), "1"));
+
+						String url = request.getContextPath()
+								+ "/workflow/taskManage/toDealTaskForUnite.page?processKey="
+								+ nt.getProcessKey() + "&processInstId="
+								+ nt.getInstanceId() + "&taskId="
+								+ nt.getTaskId() + "&taskState="
+								+ nt.getTaskState() + "&suspensionState="
+								+ nt.getSuspensionState();
+						nt.setUrl(url);
+
+						list.add(nt);
+					}
+				}
+			}
+
+			tm.commit();
+
+			return list;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public void updateNodeChangeInfo(String taskId, String processIntsId,
+			String processKey, String userId) {
+
+		try {
+
+			String fromUser = AccessControl.getAccessControl().getUserAccount();
+
+			executor.insert("addNodeChangeInfo_wf", fromUser, userId, taskId,
+					processIntsId, processKey, new Timestamp(new Date().getTime()));
+
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
+	}
 
+	@Override
+	public int countTaskNum(String pernr, String sysid) {
+		
+		TransactionManager tm = new TransactionManager();
+		try {
+			
+			tm.begin();
+			
+			// 当前用户的任务数
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("assignee", pernr);
+			params.put("sysid", sysid);
+
+			int taskNum = executor.queryObjectBean(int.class,
+					"countTaskNum_wf", params);
+
+			// 委托给当前用户的任务数
+			Map<String, Object> entrustMap = new HashMap<String, Object>();
+			entrustMap.put("isAdmin", false);
+			entrustMap.put("entrust_user", pernr);
+
+			// 根据当前用户获取委托关系列表数据
+			List<WfEntrust> entrustList = executor.queryListBean(
+					WfEntrust.class, "selectEntrustList", entrustMap);
+
+			// 没有委托关系，不需要去查任务数据
+			int entrustTaskNum = 0;
+			if (entrustList != null && entrustList.size() > 0) {
+				params.put("entrustList", entrustList);
+
+				entrustTaskNum = executor.queryObjectBean(int.class,
+						"countEntrustTaskNum_wf", params);
+			}
+
+			tm.commit();
+
+			return taskNum + entrustTaskNum;
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public void addEntrustTaskInfo(TaskCondition task) {
+
+		try {
+
+			executor.insert("addEntrustTaskInfo_wf", task.getTaskId(),
+					task.getCreateUser(), task.getEntrustUser(),
+					task.getProcessIntsId(), task.getProcessKey());
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public List<WfEntrust> getEntrustInfo() {
+		try {
+			String currentAccount = AccessControl.getAccessControl()
+					.getUserAccount();
+
+			return executor.queryList(WfEntrust.class, "getEntrustInfo_wf",
+					currentAccount, currentAccount);
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public boolean judgeAuthority(String taskId) {
+
+		try {
+
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+
+			if (isAdmin) {
+				return true;
+			} else {
+				String currentAccount = AccessControl.getAccessControl()
+						.getUserAccount();
+
+				// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+				Task task = activitiService.getTaskById(taskId);
+
+				if (StringUtil.isNotEmpty(task.getAssignee())) {
+
+					if (currentAccount.equals(task.getAssignee())) {
+						return true;
+					}
+
+				} else {
+					// 任务未签收，根据任务id查询任务可处理人
+					List<HashMap> candidatorList = executor.queryList(
+							HashMap.class, "getNodeCandidates_wf", taskId,
+							currentAccount);
+
+					if (candidatorList != null && candidatorList.size() > 0) {
+						return true;
+					}
+				}
+
+				// 最后查看当前用户的委托关系
+				List<WfEntrust> entrustList = executor.queryList(
+						WfEntrust.class, "getEntrustRelation_wf",
+						currentAccount, task.getTaskDefinitionKey(),
+						new Timestamp(task.getCreateTime().getTime()),
+						new Timestamp(task.getCreateTime().getTime()));
+
+				if (entrustList == null || entrustList.size() == 0) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
 	}
 }

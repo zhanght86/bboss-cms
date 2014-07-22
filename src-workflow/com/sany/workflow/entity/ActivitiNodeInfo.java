@@ -28,6 +28,16 @@ public class ActivitiNodeInfo {
 
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
 
+	private String DURATION_NODE;// 处理工时
+
+	public String getDURATION_NODE() {
+		return DURATION_NODE;
+	}
+
+	public void setDURATION_NODE(String dURATION_NODE) {
+		DURATION_NODE = dURATION_NODE;
+	}
+
 	public String getIsMulti() {
 		return isMulti;
 	}

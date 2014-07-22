@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 
+
 import com.frameworkset.platform.holiday.area.util.service.UtilManager;
 import com.frameworkset.platform.holiday.area.bean.OrgLeaf;
 import com.frameworkset.platform.holiday.area.bean.WorkDate;
@@ -14,6 +15,25 @@ import com.frameworkset.platform.holiday.area.bean.WorkTime;
 public class UtilAction {
 
 	private UtilManager utilManager;
+	
+	 /** 
+     *根据工号返回部门编码   
+     */
+	public String getOrgIdByUserId(String userId)throws Exception{
+		return utilManager.getOrgIdByuserAccount(userId);
+	}
+	
+	 /** 
+     *根据工号返回部门编码   
+     */
+	public String getOrgIdByuserAccountOrWorkNo(String userAccount) throws Exception{
+		return utilManager.getOrgIdByuserAccountOrWorkNo(userAccount);
+	}
+	
+	
+    /** 
+     *根据域账号返回部门编码   
+     */ 	
 	public String getOrgIdByuserAccount(String userAccount)throws Exception{
 		
 		return utilManager.getOrgIdByuserAccount(userAccount);

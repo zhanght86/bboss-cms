@@ -66,7 +66,7 @@
 			<!--<left>perspective_outlookbar.jsp</left> -->
 			<workspace>
 				<!--<content>detail.html</content> -->
-				<content isany="/html/main.jsp"
+				<content isany="workflow/pending/pendingIndex.page"
 						 logoimage="/html/images/top_logo.jpg"
 						 i18n:en_US="/html/images/top_logo_en.jpg">contentoutlook.page</content>
 
@@ -84,6 +84,57 @@
 		            id="veh_line_query" used="true"
 		           option="{popup:true,width:700,height:500,maxstate:true}"
 		             url="appbom/index.page">		
+		</module>
+		
+		<module name="web前端展示" 
+		             i18n:en_US="WEB UI Show" 
+		            id="WEB_UI_Show" used="true" showleftmenu="false"
+		             url="appbom/index.page">	
+		    <item name="列表"
+			i18n:en_US="web list" id="web_list" >
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>appbom/index.page</content>
+				</workspace>
+			
+			</item>  
+			 <item name="列表1"
+			i18n:en_US="web list" id="web_list1" >
+				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>appbom/index.page</content>
+				</workspace>
+			
+			</item>      
+			<module name="web前端展示1" 
+		             i18n:en_US="WEB UI Show" 
+		            id="WEB_UI_Show1" used="true"
+		             url="appbom/index.page">	
+			    <item name="列表2"
+				i18n:en_US="web list" id="web_list2" >
+					<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>appbom/index.page</content>
+					</workspace>
+				
+				</item>     
+				<item name="列表3"
+				i18n:en_US="web list" id="web_list3" >
+					<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>appbom/index.page</content>
+					</workspace>
+				
+				</item>      	 	
+		</module>	    	
 		</module>	
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
 
@@ -424,6 +475,7 @@
 					<content>workflow/entrust/index.page</content>
 				</workspace>
 			</item>
+			
 		</module>
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
@@ -508,16 +560,41 @@
 				</workspace>
 			</item>
 			-->
-			<item name="任务管理" id="taskmanage" i18n:en_US="task manager">
+			<module name="任务管理" id="taskmanage" used="true" i18n:en_US="task manager"
+				url="workflow/taskManage/ontimeTaskManager.page" showleftmenu="true" popup="true">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<top>header.page</top>
-				<workspace>
-					<content>workflow/taskManage/ontimeTaskManager.page</content>
-				</workspace>
-				<authoration>				 
-					 <url>workflow/taskManage/*.page</url>
-				</authoration>
-			</item>
+				<item name="流程实例" id="processInsts" i18n:en_US="process Insts">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/repository/toProcessInstance.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/repository/*.page</url>
+					</authoration>
+				</item>
+				<item name="实时任务" id="ontimeTask" i18n:en_US="ontime task">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/taskManage/ontimeTaskManager.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/taskManage/*.page</url>
+					</authoration>
+				</item>
+				<item name="历史任务" id="historyTask" i18n:en_US="history task">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/taskManage/historyTaskManager.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/taskManage/*.page</url>
+					</authoration>
+				</item>
+			</module>
+
 			<item name="模板管理" id="templemanage" i18n:en_US="temple manager">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>

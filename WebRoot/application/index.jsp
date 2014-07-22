@@ -152,6 +152,27 @@
 		});
 	}
 	
+	//上传应用图片
+	function uploadPic() {
+		var appName = "";
+		var appInfoId = "";
+		var appInfoRadio = $('input[name="appInfoRadio"]:checked');
+		if(appInfoRadio != null && appInfoRadio.length > 0){
+			appInfoId = $('input[name="appInfoRadio"]:checked').val();
+			appName = document.getElementById(appInfoId).childNodes[2].innerHTML;
+		}else{
+			alert("请先选择一条记录查看");
+			return;
+		}
+		$.dialog({
+			id : 'uploadPic',
+			title : appName+'上传应用图片',
+			width : 450,
+			height : 320,
+			content : 'url:' + "<%=request.getContextPath()%>/application/uploadPic.jsp?appInfoId="+appInfoId
+		});
+	}
+	
 	</SCRIPT>	
 </head>
 <body onload="pageInit();">
@@ -208,6 +229,7 @@
 			<a href="#" class="bt_small" id="viewButton" onclick="javascript:viewAppInfo();"><span>查看</span></a>
 			<a href="#" class="bt_small" id="updateButton" onclick="javascript:updateAppInfo();"><span>修改</span></a>
 			<a href="#" class="bt_small" id="delBatchButton" onclick="javascript:deleteAppInfo()"><span>删除</span></a>
+			<a href="#" class="bt_small" id="uploadPicButton" onclick="javascript:uploadPic()"><span>上传应用图片</span></a>
 			</div>
 			<strong>应用列表</strong>
 		</div>

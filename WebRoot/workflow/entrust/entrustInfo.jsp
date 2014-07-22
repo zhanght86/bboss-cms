@@ -47,7 +47,7 @@
 					</tr>
 					<tr id="re_secret_tr">
 						<th>授权结束时间：</th>
-						<td style="width:220px;"><pg:cell colName="start_date" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
+						<td style="width:220px;"><pg:cell colName="end_date" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
 					</tr>
 					<tr id="re_secret_tr">
 						<th>创建时间：</th>

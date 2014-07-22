@@ -52,7 +52,8 @@
         <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
         <column name="MESSAGETEMPLEID" size="100" type="VARCHAR"/>
         <column name="EMAILTEMPLEID" size="100" type="VARCHAR"/>
-        <column default="1" name="IS_CONTAIN_HOLIDAY" size="1" type="VARCHAR"/>
+        <column default="0" name="IS_CONTAIN_HOLIDAY" size="1" type="DECIMAL"/>
+        <column default="0" name="NOTICERATE" size="8" type="DECIMAL"/>
     </table>
      <table name="TD_SM_MSGPARAMETERS">
         <column name="PARAM_TYPE" primaryKey="true" required="true"
@@ -64,5 +65,28 @@
         <column name="VALUE" size="200" type="VARCHAR"/>
         <column name="ISBIGDATA" size="1" type="DECIMAL"/>
         <column name="BIGDATA" type="BLOB"/>
+    </table>
+    
+     <table name="TD_WF_ENTRUST_TASK">
+        <column name="TASKID" size="64" type="VARCHAR"/>
+        <column name="CREATE_USER" size="64" type="VARCHAR"/>
+        <column name="ENTRUST_USER" size="64" type="VARCHAR"/>
+        <column name="PROCESS_ID" size="100" type="VARCHAR"/>
+        <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
+    </table>
+    <table name="TD_WF_NODE_CHANGEINFO">
+        <column name="TASKID" type="VARCHAR"/>
+        <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
+        <column name="PROCESS_ID" size="100" type="VARCHAR"/>
+        <column name="FROM_USER" type="VARCHAR"/>
+        <column name="TO_USER" type="VARCHAR"/>
+        <column name="CHANGETIME" type="TIMESTAMP"/>
+    </table>
+    <table name="TD_WF_USER_SUBSCRIBE">
+        <column name="USER_ID" primaryKey="true" required="true"
+            size="40" type="VARCHAR"/>
+        <column name="APP_ID" primaryKey="true" required="true"
+            size="100" type="VARCHAR"/>
+        <column name="PENDING_SUBSCRIBE" size="8" type="VARCHAR"/>
     </table>
 </database>

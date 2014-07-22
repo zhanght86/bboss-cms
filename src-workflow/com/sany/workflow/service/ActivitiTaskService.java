@@ -2,10 +2,14 @@ package com.sany.workflow.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
+import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entrust.entity.WfEntrust;
 
 /**
  * 任务管理业务接口
@@ -76,7 +80,7 @@ public interface ActivitiTaskService {
 	 * @param processInstId
 	 * @return 2014年6月27日
 	 */
-	public Object [] getProcessVariable(String processInstId);
+	public Object[] getProcessVariable(String processInstId);
 
 	/**
 	 * 获取下一流向节点信息 gw_tanx
@@ -86,16 +90,64 @@ public interface ActivitiTaskService {
 	 */
 	public List<ActivitiNodeInfo> getNextNodeInfoById(
 			final List<ActivitiNodeInfo> nodeList, String processInstId);
-	
-	/** 统一代办取待办任务接口
-	 * @param pernr 登录账号
-	 * @param sysid 系统管理id
+
+	/**
+	 * 统一代办取待办任务接口
+	 * 
+	 * @param pernr
+	 *            登录账号
+	 * @param sysid
+	 *            系统管理id
 	 * @param offset
 	 * @param pagesize
-	 * @return ListInfo 统一代办集合数据，包含分页参数
-	 * 2014年7月3日
+	 * @return ListInfo 统一代办集合数据，包含分页参数 2014年7月3日
 	 */
-	public ListInfo getNoHandleTask(String pernr, String sysid,
-			long offset, int pagesize);
+	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
+			long offset, int pagesize, HttpServletRequest request);
+
+	/**
+	 * 统一代办获取任务的条数
+	 * 
+	 * @param pernr
+	 * @param sysid
+	 * @return 2014年7月16日
+	 */
+	public int countTaskNum(String pernr, String sysid);
+
+	/**
+	 * 修改节点转办信息 gw_tanx
+	 * 
+	 * @param taskId
+	 * @param changeInfo
+	 *            2014年7月14日
+	 */
+	public void updateNodeChangeInfo(String taskId, String processIntsId,
+			String processKey, String userId);
+
+	/**
+	 * 记录已处理委托任务信息
+	 * 
+	 * @param taskId
+	 * @param entrustUser
+	 *            委托用户 2014年7月17日
+	 */
+	public void addEntrustTaskInfo(TaskCondition task);
+
+	/**
+	 * 查看当前用户的委托任务信息
+	 * 
+	 * @param taskId
+	 * @param entrustUser
+	 *            委托用户 2014年7月17日
+	 */
+	public List<WfEntrust> getEntrustInfo();
+
+	/**
+	 * 权限判断
+	 * 
+	 * @param taskId
+	 * @return 2014年7月22日
+	 */
+	public boolean judgeAuthority(String taskId);
 
 }

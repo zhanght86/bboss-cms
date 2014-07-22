@@ -291,9 +291,9 @@
 		}
 	}
 	
-	function chooseThisData(proc_id,proc_name, business_name, wf_app_name){
+	function chooseThisData(proc_key,proc_id,proc_name, business_name, wf_app_name){
 		
-		var data = {"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
+		var data = {"proc_key":proc_key,"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
 		
 		chooseData.push(data);
 		
@@ -312,8 +312,9 @@
 		    var proc_id = $(this).val();
 			var proc_name = $(this).parent().find("input[name=proc_name]").val();
 			var wf_app_name = $(this).parent().find("input[name=wf_app_name]").val();
+			var proc_key = $(this).parent().find("input[name=key]").val();
 			
-			var data = {"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
+			var data = {"proc_key":proc_key,"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
 			
 			if(chooseStr.indexOf(proc_id)<0){
 				chooseData.push(data);
@@ -332,7 +333,7 @@
 		var addRow = 
 			"<tr>\n" +
 			"\t<td>"+addData.wf_app_name+"<input type='hidden' name='procdef_id' value='"+ addData.proc_id +"' /></td>\n" + 
-			"\t<td>"+addData.proc_name+"</td>\n" + 
+			"\t<td>"+addData.proc_name+"<input type='hidden' name='proc_key' value='"+ addData.proc_key +"' /></td>\n" + 
 			"\t<td><a href='#' onclick='delProcRow(this)' >删除</a></td>\n" + 
 			"</tr>";
 		$("#selectProcdefTable").append(addRow);

@@ -34,7 +34,7 @@ public class TestTemple {
 		Map<String,String> map = new HashMap<String,String>();
 		
 		map.put("emailTempleId", "6296be8f-e449-479b-9677-f365f01afc30");
-		map.put("mailAddress", "yinbp@sany.com.cn");
+		map.put("mailAddress", "qingl2@sany.com.cn");
 		map.put("subject", "邮件测试");
 		map.put("taskId", "23434");
 		map.put("realName", "卿琳");
