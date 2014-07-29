@@ -26,10 +26,10 @@ public class AreaManagerImpl implements AreaManager{
 		return datas;
 	}
 	@Override
-	public void updateArea(String areaId,String areaName,String areaDesc)throws Exception{
+	public void updateArea(String areaId,String areaName,String areaDesc,String areaDefault)throws Exception{
 		
 		             
-			executor.update("updateArea", areaName,areaDesc,areaId);
+			executor.update("updateArea", areaName,areaDesc, areaDefault,areaId);
 			
 			
        
@@ -82,9 +82,9 @@ public class AreaManagerImpl implements AreaManager{
 		return list;
 	}
 	@Override
-	public void addArea(String areaId,String areaName ,String areaDesc,String creator ,String createTime) throws Exception {
+	public void addArea(String areaId,String areaName ,String areaDesc,String creator ,String createTime,String areaDefault) throws Exception {
 		             
-			 executor.insert("addArea",  areaId, areaName , areaDesc, creator , createTime);
+			 executor.insert("addArea",  areaId, areaName , areaDesc, creator , createTime, areaDefault);
             
       
 	}
@@ -184,6 +184,25 @@ public class AreaManagerImpl implements AreaManager{
 		             
 			executor.delete("deleteWorkTime",id);
         
+	}
+	@Override
+	public boolean checkDuplicateDefaultArea(String areaId,int num) throws Exception {
+		boolean flag = false;
+		List<String> list = executor.queryList(String.class, "checkDuplicateDefaultArea");
+		/*新增的情况   */
+		if(list.size()>=num){
+			flag = true;
+		}
+		/*修改的情况   */
+		if(null != list && list.size()>0){
+			for(String id :list){
+				if(!id.equals(areaId)){
+					flag = true;
+					break;
+				}
+			}
+		}
+		return flag;
 	}
 	
 

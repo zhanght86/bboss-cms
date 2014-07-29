@@ -5,7 +5,7 @@
 	<property name="getSysTitleById">
 		<![CDATA[
 	
-	select t1.id id ,t1.system_id nameEN ,t1.system_name nameCH ,t1.pending_type pendingType ,t1.todo_url pendingUrl from TD_WF_APP t1 where t1.id = ?
+	select t1.id id ,t1.system_id nameEN ,t1.system_name nameCH ,t1.pending_type pendingType ,t1.todo_url pendingUrl,t1.app_url appUrl from TD_WF_APP t1 where t1.id = ?
 			
 		]]>
 	</property>	
@@ -13,7 +13,7 @@
 	<property name="getAllSysTitleByUsed">
 		<![CDATA[
 	
-	select t1.id id ,t1.system_id nameEN ,t1.system_name nameCH ,t1.pending_type pendingType ,t1.todo_url pendingUrl from 
+	select t1.id id ,t1.system_id nameEN ,t1.system_name nameCH ,t1.pending_type pendingType ,t1.todo_url pendingUrl,t1.pic_name picName from 
 	
 	(select * from TD_WF_APP where PENDING_USED = ?) t1 right join 
 	
@@ -26,7 +26,7 @@
 <!-- 获取用户所有可以订阅的待办	 -->
 	<property name="getAllSysTitleForScribe">
 		<![CDATA[
-		select t1.id id ,t1.SYSTEM_ID nameEN , t1.SYSTEM_NAME nameCH , t1.PENDING_TYPE pendingType , t1.PENDING_USED pendingUsed ,t2.PENDING_SUBSCRIBE pendingSubscribe
+		select t1.id id ,t1.SYSTEM_ID nameEN , t1.SYSTEM_NAME nameCH , t1.PENDING_TYPE pendingType , t1.PENDING_USED pendingUsed,t1.pic_name picName ,t2.PENDING_SUBSCRIBE pendingSubscribe
 		from 	TD_WF_APP t1 left join 
 		(
 		select * from TD_WF_USER_SUBSCRIBE  where user_id = ?

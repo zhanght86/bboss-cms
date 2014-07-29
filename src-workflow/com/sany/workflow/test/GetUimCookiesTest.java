@@ -18,7 +18,7 @@ public class GetUimCookiesTest {
 	private static int 	WebSealTimeout = 1500;
 	
 	
-	public String getCookie(ModelMap model,HttpServletRequest request,HttpServletResponse response)throws Exception{
+	public String getCookie(HttpServletRequest request,HttpServletResponse response)throws Exception{
 
 		HttpClient httpclient = new HttpClient();
 		httpclient.getHttpConnectionManager().getParams().setConnectionTimeout(WebSealTimeout);
@@ -26,8 +26,8 @@ public class GetUimCookiesTest {
 		javax.servlet.http.Cookie[] jcookies = null;
 		PostMethod post = new PostMethod(WebSealURL);
 			     NameValuePair[] data = {
-					new NameValuePair("username", "qingl2"),
-					new NameValuePair("password", "1qaz@WSX"),
+					new NameValuePair("username", "hanyh"),
+					new NameValuePair("password", "Traning6^"),
 					new NameValuePair("login-form-type", "pwd") };
 			     
 			        post.setRequestBody(data);

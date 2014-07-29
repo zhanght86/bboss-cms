@@ -2,7 +2,6 @@ package com.sany.workflow.service.impl;
 
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +24,7 @@ import com.sany.workflow.entity.Template;
 import com.sany.workflow.entity.TempleCondition;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.TempleService;
+import com.sany.workflow.util.WorkFlowConstant;
 
 /**
  * @todo 模板管理模块实现类
@@ -42,6 +42,10 @@ public class TempleServiceImpl implements TempleService,
 	private ActivitiService activitiService;
 
 	private MessageService messageService;
+
+	// 发送短信参数
+	private String token_value;
+	private String app_name;
 
 	@Override
 	public void destroy() throws Exception {
@@ -102,12 +106,12 @@ public class TempleServiceImpl implements TempleService,
 	}
 
 	@Override
-	public void sendNotice(List<Map<String, String>> fieldList) {
+	public void sendNotice(List<Map<String, Object>> fieldList) {
 
 		if (fieldList != null && fieldList.size() > 0) {
 
 			for (int i = 0; i < fieldList.size(); i++) {
-				Map<String, String> map = fieldList.get(i);
+				Map<String, Object> map = fieldList.get(i);
 				// 短信模板
 				String messagetempleid = map.get("messageTempleId") == null ? ""
 						: map.get("messageTempleId") + "";
@@ -129,9 +133,7 @@ public class TempleServiceImpl implements TempleService,
 				map.remove("mobile");
 
 				// 接收人邮件地址
-				String mailAddresss = map.get("mailAddress") == null ? "" : map
-						.get("mailAddress") + "";
-				String[] mailAddress = mailAddresss.split(",");
+				String[] mailAddresss = (String[]) map.get("mailAddress");
 				map.remove("mailAddress");
 
 				// 邮件主题
@@ -144,8 +146,9 @@ public class TempleServiceImpl implements TempleService,
 						.get("taskId") + "";
 				map.remove("taskId");
 
-				// 预警类型
-				String noticeType = map.get("noticeType") + "";
+				// 提醒类型
+				String noticeType = map.get("noticeType") == null ? "" : map
+						.get("noticeType") + "";
 				map.remove("noticeType");
 
 				if (StringUtil.isEmpty(messagetempleid)
@@ -153,14 +156,9 @@ public class TempleServiceImpl implements TempleService,
 					continue;
 				}
 
-				/*
-				 * advancesend 0 未发送预警 1 发送预警成功 2短信发送预警成功，邮件发送预警失败
-				 * 3短信发送预警失败，邮件发送预警成功4发送预警失败 
-				 * overtimesend 0 未发送超时 1 发送超时成功
-				 * 2短信发送超时成功，邮件发送超时失败 3短信发送超时失败，邮件发送超时成功4发送超时失败
-				 */
-				boolean isMessSuccess = false;
-				boolean isEmailSuccess = false;
+				// 0 未发送 1发送成功 2 发送失败
+				String isMessSuccess = "0";
+				String isEmailSuccess = "0";
 				// 调短信接口，发送短信
 				if (StringUtil.isNotEmpty(messagetempleid)) {
 
@@ -168,9 +166,12 @@ public class TempleServiceImpl implements TempleService,
 
 						String content = replaceTemplate(messagetempleid, map);
 
-						isMessSuccess = sendMessage(worknum, content);
+						isMessSuccess = sendMessage(worknum, content) == true ? "1"
+								: "2";
 
 					} catch (Exception e) {
+						isMessSuccess = "2";
+
 						logger.error("任务id:" + taskId + "短信发送异常:"
 								+ e.getMessage());
 					}
@@ -182,45 +183,48 @@ public class TempleServiceImpl implements TempleService,
 
 						String content = replaceTemplate(emailtempleid, map);
 
-						isEmailSuccess = sendEmail(mailAddress, subject,
-								content);
+						isEmailSuccess = sendEmail(mailAddresss, subject,
+								content) == true ? "1" : "2";
 
 					} catch (Exception e) {
+						isEmailSuccess = "2";
+
 						logger.error("任务id:" + taskId + "邮件发送异常:"
 								+ e.getMessage());
 					}
 				}
 
 				try {
-					// 记录预警短信提醒发送状态
-					if ("0".equals(noticeType)) {
-						int advancesend = 0;
-						if (isMessSuccess && !isEmailSuccess) {
-							advancesend = 2;// 短信发送预警成功，邮件发送预警失败
-						} else if (!isMessSuccess && isEmailSuccess) {
-							advancesend = 3;// 短信发送预警失败，邮件发送预警成功
-						} else if (!isMessSuccess && !isEmailSuccess) {
-							advancesend = 4;// 发送预警失败
-						} else {
-							advancesend = 1;// 发送预警成功
-						}
 
-						activitiService.updateMessSendState(taskId,
-								advancesend, 0);
-					} else {// 记录超时短信提醒发送状态
-						int overtimesend = 0;
-						if (isMessSuccess && !isEmailSuccess) {
-							overtimesend = 2;// 短信发送超时成功，邮件发送超时失败
-						} else if (!isMessSuccess && isEmailSuccess) {
-							overtimesend = 3;// 短信发送超时失败，邮件发送超时成功
-						} else if (!isMessSuccess && !isEmailSuccess) {
-							overtimesend = 4;// 发送超时失败
-						} else {
-							overtimesend = 1;// 发送超时成功
-						}
-						activitiService.updateMessSendState(taskId, 0,
-								overtimesend);
+					int isSend = 0;
+
+					if ("1".equals(isMessSuccess) && "1".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.ALL_SEND_SUCCESS;// 短信、邮件发送成功
+					} else if ("1".equals(isMessSuccess) && "0".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.MESS_SEND_SUCCESS;// 短信发送成功
+					} else if ("2".equals(isMessSuccess) && "0".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.MESS_SEND_FAIL;// 短信发送失败
+					} else if ("0".equals(isMessSuccess) && "1".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.EMAIL_SEND_SUCCESS;//邮件发送成功
+					} else if ("0".equals(isMessSuccess) && "2".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.EMAIL_SEND_FAIL;//邮件发送失败
+					} else if ("1".equals(isMessSuccess) && "2".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.SEND_MESS_SUCCESS_EMAIL_FAIL;// 短信发送成功、邮件发送失败
+					} else if ("2".equals(isMessSuccess) && "1".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.SEND_MESS_FAIL_EMAIL_SUCCESS;// 短信发送失败、邮件发送成功
+					} else if ("2".equals(isMessSuccess) && "2".equals(isEmailSuccess)) {
+						isSend = WorkFlowConstant.ALL_SEND_FAIL;// 短信、邮件发送失败
+					} else {
+						isSend = WorkFlowConstant.NO_SEND;// 未发送
 					}
+
+					// 记录预警短信提醒发送状态 1预警2超时
+					if ("1".equals(noticeType)) {
+						activitiService.updateMessSendState(taskId, isSend, 0);
+					} else {
+						activitiService.updateMessSendState(taskId, 0, isSend);
+					}
+
 				} catch (Exception e) {
 					logger.error("记录任务id:" + taskId
 							+ (noticeType.equals("0") ? "预警" : "超时")
@@ -239,20 +243,21 @@ public class TempleServiceImpl implements TempleService,
 	 * @throws Exception
 	 *             2014年6月25日
 	 */
-	private String replaceTemplate(String templateId, Map map) throws Exception {
+	private String replaceTemplate(String templateId, Map<String, Object> map)
+			throws Exception {
 		// 获取模板内容
 		Template template = executor.queryObject(Template.class,
 				"selectMessTemplateById", templateId);
 
 		String content = template.getTempleContent();
 
-		Iterator<Map.Entry<String, String>> it = map.entrySet().iterator();
+		Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
 
 		while (it.hasNext()) {
-			Map.Entry<String, String> entry = it.next();
+			Map.Entry<String, Object> entry = it.next();
 
 			content = content.replaceAll("\\$\\{" + entry.getKey() + "\\}",
-					entry.getValue());
+					entry.getValue() + "");
 		}
 		return content;
 	}
@@ -288,8 +293,8 @@ public class TempleServiceImpl implements TempleService,
 	private boolean sendMessage(String worknum, String content)
 			throws Exception {
 		AccessToken accessToken = new AccessToken();
-		accessToken.setToken("f19f3394-8242-4842-beba-33c7731c34ed");
-		accessToken.setApplication("sim");
+		accessToken.setToken(token_value);
+		accessToken.setApplication(app_name);
 
 		SendMessageBean smb = new SendMessageBean();
 		smb.setWorknum(worknum);
@@ -345,21 +350,6 @@ public class TempleServiceImpl implements TempleService,
 			tm.release();
 		}
 
-	}
-
-	// public TempleServiceImpl() {
-	// executor = new com.frameworkset.common.poolman.ConfigSQLExecutor(
-	// "com/sany/workflow/messTemplate.xml");
-	// }
-
-	public static void main(String[] args) throws Exception {
-		TempleServiceImpl tma = new TempleServiceImpl();
-		Map map = new HashMap();
-		map.put("oper", "李四");
-		map.put("processKey", "退料申请流程");
-		map.put("nodeKey", "工艺工程师审批");
-		// System.out.println(tma.replaceTemple(
-		// "45303c4b-a8a0-45ee-8513-e22a63460169", map));
 	}
 
 }

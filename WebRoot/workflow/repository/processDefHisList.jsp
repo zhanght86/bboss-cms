@@ -15,8 +15,6 @@
 	<div id="changeColor">
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
-            <th align=center><input id="CKA" name="CKA" type="checkbox" 
-							onClick="checkAll('CKA','CK')"></th>
 			<th>ID</th>
        		<th><pg:message code="sany.pdp.workflow.deploy.catalogue"/></th>
        		<th><pg:message code="sany.pdp.common.name"/></th>
@@ -37,11 +35,8 @@
 <pg:notempty actual="${processDefs }">
       <pg:list requestKey="processDefs">
 
-   		<tr onDblClick="processDefs('<pg:cell colName="ID_" />')">
-   		        <td class="td_center">
-                    <input id="CK" type="checkbox"  name="CK" onClick="checkOne('CKA','CK'), makeOneCheck(this), viewProcessInfo('<pg:cell colName="DEPLOYMENT_ID_" />')" value="<pg:cell colName="ID_" />"/>
-                    <input id="id" type="hidden" name="id" value="<pg:cell colName="DEPLOYMENT_ID_" />"/></td>
-                 <td><pg:cell colName="ID_" /></td>        
+   		<tr >
+                <td><pg:cell colName="ID_" /></td>        
                 <td><span class="toolTip" title="<pg:cell colName="CATEGORY_"/>"><pg:cell colName="CATEGORY_" /></span></td>
                 <td><pg:cell colName="NAME_" maxlength="8" replace="..."/></td>
         		<td><pg:cell colName="KEY_" /></td>       

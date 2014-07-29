@@ -1,9 +1,10 @@
 package com.sany.workflow.action;
 
 import java.util.List;
+import java.util.Map;
 
-import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -23,6 +24,7 @@ import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.util.WorkFlowConstant;
 
 /**
  * @todo 工作流任务管理模块
@@ -104,6 +106,14 @@ public class ActivitiTaskManageAction {
 			ListInfo listInfo = activitiTaskService.queryHistoryTasks(task,
 					offset, pagesize);
 
+			Map<Integer, String> advanceSendMap = WorkFlowConstant
+					.getAdvanceSend();
+
+			Map<Integer, String> overtimeSendMap = WorkFlowConstant
+					.getOvertimeSend();
+
+			model.addAttribute("advanceSendMap", advanceSendMap);
+			model.addAttribute("overtimeSendMap", overtimeSendMap);
 			model.addAttribute("listInfo", listInfo);
 
 			return "path:historyTaskList";
@@ -138,6 +148,14 @@ public class ActivitiTaskManageAction {
 			ListInfo listInfo = activitiService.queryTasks(task, offset,
 					pagesize);
 
+			Map<Integer, String> advanceSendMap = WorkFlowConstant
+					.getAdvanceSend();
+
+			Map<Integer, String> overtimeSendMap = WorkFlowConstant
+					.getOvertimeSend();
+
+			model.addAttribute("advanceSendMap", advanceSendMap);
+			model.addAttribute("overtimeSendMap", overtimeSendMap);
 			model.addAttribute("listInfo", listInfo);
 
 			return "path:ontimeTaskList";
@@ -171,6 +189,14 @@ public class ActivitiTaskManageAction {
 			ListInfo entrustlist = activitiService.queryEntrustTasks(task,
 					offset, pagesize);
 
+			Map<Integer, String> advanceSendMap = WorkFlowConstant
+					.getAdvanceSend();
+
+			Map<Integer, String> overtimeSendMap = WorkFlowConstant
+					.getOvertimeSend();
+
+			model.addAttribute("advanceSendMap", advanceSendMap);
+			model.addAttribute("overtimeSendMap", overtimeSendMap);
 			model.addAttribute("entrustlist", entrustlist);
 
 			return "path:entrustTaskList";
@@ -260,6 +286,14 @@ public class ActivitiTaskManageAction {
 				model.addAttribute("variableRownum",
 						Integer.parseInt(arryObj[1] + "") + 1);// 加标题行
 				model.addAttribute("instanceRownum", arryObj[1]);
+				
+				// 预警、超时状态转义
+				Map<Integer, String> advanceSendMap = WorkFlowConstant
+						.getAdvanceSend();
+				Map<Integer, String> overtimeSendMap = WorkFlowConstant
+						.getOvertimeSend();
+				model.addAttribute("advanceSendMap", advanceSendMap);
+				model.addAttribute("overtimeSendMap", overtimeSendMap);
 			}
 
 			tm.commit();
@@ -281,10 +315,11 @@ public class ActivitiTaskManageAction {
 	 * @return 2014年5月15日
 	 */
 	public @ResponseBody
-	String signTask(String taskId, ModelMap model) {
+	String signTask(String taskId, String processKey, ModelMap model) {
 		try {
 
-			boolean isAuthor = activitiTaskService.judgeAuthority(taskId);
+			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
+					processKey);
 
 			if (isAuthor) {
 
@@ -299,7 +334,6 @@ public class ActivitiTaskManageAction {
 		} catch (Exception e) {
 			return "fail" + e.getMessage();
 		}
-
 	}
 
 	/**
@@ -316,13 +350,15 @@ public class ActivitiTaskManageAction {
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList, ModelMap model) {
 
-		boolean isAuthor = activitiTaskService.judgeAuthority(task.getTaskId());
+		TransactionManager tm = new TransactionManager();
 
-		if (isAuthor) {
+		try {
 
-			TransactionManager tm = new TransactionManager();
+			boolean isAuthor = activitiTaskService.judgeAuthority(
+					task.getTaskId(), task.getProcessKey());
 
-			try {
+			if (isAuthor) {
+
 				tm.begin();
 
 				// 记录委托关系(有就处理，没有就不处理)
@@ -350,14 +386,14 @@ public class ActivitiTaskManageAction {
 
 				return "success";
 
-			} catch (Exception e) {
-				return "fail" + e.getMessage();
-			} finally {
-				tm.release();
+			} else {
+				return "fail:您没有权限处理当前任务";
 			}
 
-		} else {
-			return "fail:您没有权限处理当前任务";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		} finally {
+			tm.release();
 		}
 
 	}
@@ -378,54 +414,62 @@ public class ActivitiTaskManageAction {
 	 */
 	public String toDealTask(String processKey, String processInstId,
 			String taskState, String taskId, String createUser,
-			String entrustUser, ModelMap model) {
+			String entrustUser, String sysid, ModelMap model) {
 
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
 
-			// 统一任务管理界面过来，没有指定processKey
-			if (StringUtil.isEmpty(processKey)) {
-				// 根据流程实例id获取流程Key
-				HistoricProcessInstance hiInstance = activitiService
-						.getHisProcessInstanceById(processInstId);
+			// 用来获取流程业务主题和状态
+			ProcessInstance instance = activitiService
+					.getProcessInstanceById(processInstId);
+			model.addAttribute("businessKey", instance.getBusinessKey());// 业务主题
+			model.addAttribute("suspended", instance.isSuspended());// 状态
 
-				processKey = activitiService
-						.getRepositoryService()
-						.getProcessDefinition(
-								hiInstance.getProcessDefinitionId()).getKey();
-			}
+			// 获取流程实例的处理记录
+			List<TaskManager> taskHistorList = activitiService
+					.queryHistorTasks(processInstId);
+			model.addAttribute("taskHistorList", taskHistorList);
+
 			// 当前流程实例下所有节点信息
 			List<ActivitiNodeInfo> nodeList = activitiTaskService
 					.getNodeInfoById(processKey, processInstId);
+			model.addAttribute("nodeList", nodeList);
 
 			// 可选的下一节点信息
 			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
 					.getNextNodeInfoById(nodeList, processInstId);
+			model.addAttribute("nextNodeList", nextNodeList);
 
 			// 当前任务节点信息
 			Task task = activitiService.getTaskById(taskId);
 			task.setAssignee(activitiService.userIdToUserName(
 					task.getAssignee(), "2"));
+			model.addAttribute("task", task);
 
 			// 参数
 			Object[] arrayVariable = activitiTaskService
 					.getProcessVariable(processInstId);
-
-			model.addAttribute("task", task);
-			model.addAttribute("taskState", taskState);
-			model.addAttribute("taskId", taskId);
-			model.addAttribute("nodeList", nodeList);
-			model.addAttribute("nextNodeList", nextNodeList);
 			model.addAttribute("nodevariableList", arrayVariable[0]);// 非系统参数
 			model.addAttribute("sysvariableList", arrayVariable[1]);// 系统参数
 
-			model.addAttribute("createUser", createUser);
-			model.addAttribute("entrustUser", entrustUser);
+			model.addAttribute("taskState", taskState);
+			model.addAttribute("taskId", taskId);
+			model.addAttribute("createUser", createUser);// 委托人
+			model.addAttribute("entrustUser", entrustUser);// 被委托人
 			model.addAttribute("processKey", processKey);
+			model.addAttribute("sysid", sysid);
 			model.addAttribute("currentUser", AccessControl.getAccessControl()
 					.getUserAccount());
+			
+			// 预警、超时状态转义
+			Map<Integer, String> advanceSendMap = WorkFlowConstant
+					.getAdvanceSend();
+			Map<Integer, String> overtimeSendMap = WorkFlowConstant
+					.getOvertimeSend();
+			model.addAttribute("advanceSendMap", advanceSendMap);
+			model.addAttribute("overtimeSendMap", overtimeSendMap);
 
 			tm.commit();
 
@@ -455,8 +499,8 @@ public class ActivitiTaskManageAction {
 			ModelMap model) {
 		try {
 
-			boolean isAuthor = activitiTaskService.judgeAuthority(task
-					.getTaskId());
+			boolean isAuthor = activitiTaskService.judgeAuthority(
+					task.getTaskId(), task.getProcessKey());
 
 			if (isAuthor) {
 
@@ -484,10 +528,11 @@ public class ActivitiTaskManageAction {
 	 */
 	public @ResponseBody
 	String discardTask(String processInstIds, String deleteReason,
-			String taskId, ModelMap model) {
+			String taskId, String processKey, ModelMap model) {
 		try {
 
-			boolean isAuthor = activitiTaskService.judgeAuthority(taskId);
+			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
+					processKey);
 
 			if (isAuthor) {
 
@@ -518,13 +563,13 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String delegateTask(String taskId, String userId, String processIntsId,
 			String processKey, ModelMap model) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
+					processKey);
 
-		boolean isAuthor = activitiTaskService.judgeAuthority(taskId);
+			if (isAuthor) {
 
-		if (isAuthor) {
-
-			TransactionManager tm = new TransactionManager();
-			try {
 				tm.begin();
 
 				// 先签收
@@ -542,13 +587,14 @@ public class ActivitiTaskManageAction {
 
 				return "success";
 
-			} catch (Exception e) {
-				return "fail" + e.getMessage();
-			} finally {
-				tm.release();
+			} else {
+				return "fail:您没有权限转办当前任务";
 			}
-		} else {
-			return "fail:您没有权限转办当前任务";
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -563,12 +609,14 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String cancelTask(String taskId, String processKey, String processId,
 			String cancelTaskReason, ModelMap model) {
+		TransactionManager tm = new TransactionManager();
 
-		boolean isAuthor = activitiTaskService.judgeAuthority(taskId);
+		try {
 
-		if (isAuthor) {
-			TransactionManager tm = new TransactionManager();
-			try {
+			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
+					processKey);
+
+			if (isAuthor) {
 
 				tm.begin();
 
@@ -588,13 +636,14 @@ public class ActivitiTaskManageAction {
 
 				return "success";
 
-			} catch (Exception e) {
-				return "fail" + e.getMessage();
-			} finally {
-				tm.release();
+			} else {
+				return "fail:您没有权限撤销当前任务";
 			}
-		} else {
-			return "fail:您没有权限撤销当前任务";
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -620,57 +669,37 @@ public class ActivitiTaskManageAction {
 	}
 
 	/**
-	 * 统一代办跳转处理页面
+	 * 手动发送消息
 	 * 
-	 * @param processKey
-	 * @param processInstId
-	 * @param taskState
 	 * @param taskId
-	 * @param suspensionState
+	 * @param processKey
+	 * @param taskState
+	 *            1未签收 2 已签收
+	 * @param sentType
+	 *            1 预警 2 超时
 	 * @param model
-	 * @return 2014年7月17日
+	 * @return 2014年7月25日
 	 */
-	public String toDealTaskForUnite(String processKey, String processInstId,
-			String taskState, String taskId, String suspensionState,
-			ModelMap model) {
-
-		TransactionManager tm = new TransactionManager();
+	public @ResponseBody
+	String sendMess(String taskId, String processKey, String taskState,
+			String sentType, ModelMap model) {
 		try {
-			tm.begin();
 
-			// 当前流程实例下所有节点信息
-			List<ActivitiNodeInfo> nodeList = activitiTaskService
-					.getNodeInfoById(processKey, processInstId);
+			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
+					processKey);
 
-			// 可选的下一节点信息
-			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
-					.getNextNodeInfoById(nodeList, processInstId);
+			if (isAuthor) {
 
-			// 当前任务节点信息
-			Task task = activitiService.getTaskById(taskId);
-			task.setAssignee(activitiService.userIdToUserName(
-					task.getAssignee(), "2"));
+				activitiTaskService.sendMess(taskId, taskState, sentType);
 
-			// 参数
-			Object[] arrayVariable = activitiTaskService
-					.getProcessVariable(processInstId);
+				return "success";
 
-			model.addAttribute("task", task);
-			model.addAttribute("taskState", taskState);
-			model.addAttribute("taskId", taskId);
-			model.addAttribute("nodeList", nodeList);
-			model.addAttribute("nextNodeList", nextNodeList);
-			model.addAttribute("nodevariableList", arrayVariable[0]);// 非系统参数
-			model.addAttribute("sysvariableList", arrayVariable[1]);// 系统参数
-
-			tm.commit();
-
-			return "path:dealTask";
+			} else {
+				return "fail:您没有权限发送当前任务的消息";
+			}
 
 		} catch (Exception e) {
-			throw new ProcessException(e);
-		} finally {
-			tm.release();
+			return "fail" + e.getMessage();
 		}
 	}
 

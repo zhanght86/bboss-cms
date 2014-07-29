@@ -8,10 +8,16 @@
 </head>
 <script type="text/javascript">
 
-function initSystemSecret(){
-	var systemSecret = "<%=request.getRequestedSessionId() %>";
-	$("#system_secret").val(systemSecret);
-	$("#re_system_secret").val(systemSecret);
+function getSystemSecret(){
+	$.ajax({
+		type : "POST",
+		url : "getSystemSecret.page",
+		async : false,
+		success : function(responseText) {
+			$("#system_secret").val(responseText);
+			$("#re_system_secret").val(responseText);
+		}
+	});
 }
 
 </script>
@@ -23,28 +29,28 @@ function initSystemSecret(){
 				<table border="0" cellpadding="0" cellspacing="0" class="table4">
 					<tr>
 						<th>应用编号：</th>
-						<td width=140px><input id="system_id" name="system_id"
-							type="text" value=""
-							class="w120 input_default easyui-validatebox" required="true"
+						<td width=350px><input id="system_id" name="system_id"
+							type="text" value="" style="width: 240px;"
+							class="input_default easyui-validatebox" required="true"
 							maxlength="100" /><font color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>应用名称：</th>
-						<td><input id="system_name" name="system_name" type="text"
-							value="" class="w120 input_default easyui-validatebox"
+						<td width=350px><input id="system_name" name="system_name" type="text"
+							value="" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="100" /><font color="red">*</font></td>
 					</tr>
 					<tr id="secret_tr">
 						<th>应用口令：</th>
-						<td id="secret_td" style="width:220px;"><input id="system_secret" name="system_secret" type="text"
-							value="" class="w120 input_default easyui-validatebox"
+						<td id="secret_td" style="width:350px;"><input id="system_secret" name="system_secret" type="text"
+							value="" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="100" /><font color="red">*</font><a href="javascript:void(0)" class="bt_1" id="changeButton"
-							onclick="initSystemSecret()"><span id="system_seq_span">生成口令</span></a></td>
+							onclick="getSystemSecret()"><span id="system_seq_span">生成口令</span></a></td>
 					</tr>
 					<tr id="re_secret_tr">
 						<th>重复口令：</th>
-						<td style="width:220px;"><input id="re_system_secret" name="re_system_secret" type="text"
-							value="" class="w120 input_default easyui-validatebox"
+						<td style="width:350px;"><input id="re_system_secret" name="re_system_secret" type="text"
+							value="" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="100" /><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
@@ -76,13 +82,13 @@ function initSystemSecret(){
 					<tr>
 						<th>待办URL：</th>
 						<td><input id="todo_url" name="todo_url" type="text"
-							value="" class="w120 input_default easyui-validatebox"
+							value="" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="200" /><font color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>应用URL：</th>
 						<td><input id="app_url" name="app_url" type="text"
-							value="" class="w120 input_default easyui-validatebox"
+							value="" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="200" /><font color="red">*</font></td>
 					</tr>
 					<tr>

@@ -81,7 +81,7 @@ Java class or method name.
         | DATE | TIME    | TIMESTAMP   | BINARY     | VARBINARY | LONGVARBINARY
         | NULL | OTHER   | JAVA_OBJECT | DISTINCT   | STRUCT    | ARRAY
         | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
-        | DOUBLE
+        | DOUBLE | NVARCHAR   
     ) "VARCHAR"
   size CDATA #IMPLIED
   scale CDATA #IMPLIED
@@ -131,7 +131,7 @@ Java class or method name.
         | DATE | TIME    | TIMESTAMP   | BINARY     | VARBINARY | LONGVARBINARY
         | NULL | OTHER   | JAVA_OBJECT | DISTINCT   | STRUCT    | ARRAY
         | BLOB | CLOB    | REF         | BOOLEANINT | BOOLEANCHAR
-        | DOUBLE
+        | DOUBLE | NVARCHAR
     ) #IMPLIED
   javaType (object|primitive) #IMPLIED
   size CDATA #IMPLIED

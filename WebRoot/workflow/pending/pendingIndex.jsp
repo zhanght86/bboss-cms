@@ -97,7 +97,7 @@ function wrapDatas(datas){
 	    "<td>"+datas[i].sender+"("+datas[i].userAccount+")"+"</td>"+
 	   " <td>"+datas[i].title+"</td>"+
 	   " <td>"+datas[i].createTime+"</td>"+
-	   " <td><a href=\"#\" onclick=\"openSysUrl('"+datas[i].url+"')\">审批</a></td>"+
+	   " <td><a href=\"#\" onclick=\"openSysUrl('"+datas[i].url+"','"+datas[i].title+"')\">"+datas[i].dealButtionName+"</a></td>"+
 	  "</tr>";
 		content = content + tr;
 	}
@@ -114,10 +114,39 @@ function wrapDatas(datas){
 		});
    }
    
-   function openSysUrl(url){
+   function openSysUrl(url,title){
 	   
-	   window.open(url,'newwindow','height=700,width=1400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no');
+	   //window.open(url,'newwindow','height=800,width=1400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no');
+	    $.dialog({
+			id : '',
+			title : title,
+			width : 1400,
+			height : 800,
+			content : 'url:' + url
+		});  
  
+   }
+   
+   function modifyQueryData(sysid){
+	   var id = document.getElementById(sysid).value;
+	   //页面没有打开则发起请求  
+		$.ajax({
+	 	 	type: "POST",
+			url : "getSysPending.page",
+			data :{id:id},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data) {
+					var content = wrapDatas(data);
+					document.getElementById(id+"_detail").style.display="";
+					document.getElementById(id+"_detail").innerHTML = content;
+				} 
+			}	
+		 });
    }
 </script>
 </head>
@@ -127,8 +156,8 @@ function wrapDatas(datas){
   <div class="main_contain">
     <div class="sys_dot"><a href="#" onclick="subscribePending()"><img src="images/dot_sys.gif" width="13" height="11" />&nbsp;&nbsp;待办订阅</a></div> 
       <pg:list  autosort="false" requestKey="datas">
-      <div class="system_msg"  id="<pg:cell colName="id"/>" onclick="getPendingDetail('<pg:cell colName="id"/>','<pg:cell colName="nameEN"/>','<pg:cell colName="pendingType"/>','<pg:cell colName="pendingUrl"/>')">
-      <div class="system_img"><img src="${pageContext.request.contextPath}/application/images/<pg:cell colName="id"/>.png" width="82" height="82"  /></div>
+      <div class="system_msg"  id="<pg:cell colName="id"/>" onclick="getPendingDetail('<pg:cell colName="id"/>')">
+      <div class="system_img"><img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="82" height="82"  /></div>
       <span class="system_name"><pg:cell colName="nameEN"/>&nbsp;&nbsp;<pg:cell colName="nameCH"/></span><br/>
       您共有<span class="num" id="<pg:cell colName="id"/>_num"></span>条待办</div>
       <div class="do_list" style="display:none"  id="<pg:cell colName="id"/>_detail"></div>
@@ -136,6 +165,7 @@ function wrapDatas(datas){
       
       <input type="text" id="<pg:cell colName="id"/>_type" value="<pg:cell colName="pendingType"/>" style="display:none" >
       <input type="text" value="<pg:cell colName="id"/>" name="sys_title" style="display:none" >
+      <input type="text" value="<pg:cell colName="id"/>" id='<pg:cell colName="nameEN"/>' style="display:none" >
 	 </pg:list>
     
     

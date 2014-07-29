@@ -38,6 +38,9 @@ public class UtilAction {
 		
 		return utilManager.getOrgIdByuserAccount(userAccount);
 	}
+	/** 
+     *根据部门编码  返回产业园编码
+     */
 	public String getAreaByOrgId(String orgId){
 		try {
 			Map<String,String> orgToArea = utilManager.queryOrgToArea();
@@ -65,7 +68,12 @@ public class UtilAction {
 		
 		return "";
 	}
-	
+	/** 
+     *返回默认产业园编码
+     */
+	public String getDefaultAreaId()throws Exception{
+		return utilManager.getDefaultAreaId();
+	}
 	public Map<String,String> getThisAndNextYearArrange(String areaId,String thisYear){
 		Map<String,String> map = new HashMap<String,String>();
 		try{

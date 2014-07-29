@@ -62,9 +62,9 @@ function doreset(){
 }
 
 // 撤销任务
-function cancelTask(taskId,processId){
+function cancelTask(taskId,processId,processKey){
 	
-	var url="<%=request.getContextPath()%>/workflow/taskManage/cancelTask.jsp?processKey=${processKey}"
+	var url="<%=request.getContextPath()%>/workflow/taskManage/cancelTask.jsp?processKey="+processKey
 			+"&processId="+processId+"&taskId="+taskId;
     $.dialog({ id:'iframeNewId', title:'填写撤销原因',width:400,height:200, content:'url:'+url});  
 	

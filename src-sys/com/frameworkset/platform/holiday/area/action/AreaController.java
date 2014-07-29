@@ -51,11 +51,15 @@ public String queryAreaList(
 
 
 @SuppressWarnings("unchecked")
-public  @ResponseBody String updateArea(String areaId,String areaName,String areaDesc) throws Exception {
-	
-	
+public  @ResponseBody String updateArea(String areaId,String areaName,String areaDesc,String areaDefault) throws Exception {
+	/*判断默认区域是否重复设置   */
+	if("1".equals(areaDefault)){
+		if(areaManager.checkDuplicateDefaultArea(areaId,2)){//true 表示重复
+			return "error";
+		}
+	}
 	try{
-		areaManager.updateArea( areaId, areaName, areaDesc);
+		areaManager.updateArea( areaId, areaName, areaDesc,areaDefault);
 	 	 
 		 return "success";
 	 }catch(Exception e){
@@ -137,12 +141,18 @@ public  @ResponseBody Area querySingleArea(String areaId) throws Exception {
 }
 
 @SuppressWarnings("unchecked")
-public  @ResponseBody String addArea(String areaName , String areaDesc) throws Exception {  
+public  @ResponseBody String addArea(String areaName , String areaDesc,String areaDefault) throws Exception {  
 	String areaId = UUID.randomUUID().toString();
 	String createTime = df.format(new Date());
 	String creator = AccessControl.getAccessControl().getUserAccount();
+	/*判断默认区域是否重复设置   */
+	if("1".equals(areaDefault)){
+		if(areaManager.checkDuplicateDefaultArea(areaId,1)){//true 表示重复
+			return "error";
+		}
+	}
 	 try{
-		 areaManager.addArea(areaId, areaName , areaDesc, creator , createTime);
+		 areaManager.addArea(areaId, areaName , areaDesc, creator , createTime,areaDefault);
 		 	 
 		 return "success";
 	 }catch(Exception e){

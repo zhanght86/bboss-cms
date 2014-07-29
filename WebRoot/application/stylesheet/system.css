@@ -1,0 +1,28 @@
+@charset "utf-8";
+/* CSS Document */
+body,ul,li{margin:0px;padding:0px;font-size:12px; line-height:160%;;font-family:"Microsoft YaHei",  Arial, Helvetica, sans-serif;}
+img{border:none;}
+.title_system{font-size:18px;line-height:30px;font-weight:bold;padding:8px;}
+.system_list{padding:8px;}
+.system_list ul li {list-style-type: none;float:left;width:96px; height:96px; line-height:18px; text-align:left;margin:15px;}
+.system_list ul li img{ display:block;margin-left:3px;margin-bottom:8px;}
+.system_list ul li span input{float:left;width:16px;padding:0px;}
+.foot_position{height:55px; display:block;clear:both;}
+.foot_button{position:fixed;bottom:0px;left:0px;height:55px;width:100%; text-align:center;}
+.foot_button img{margin:10px;}
+.contain_system{ width:1000px;margin:0 auto;}
+.sys_dot{ text-align:right;padding:10px 30px;}
+.sys_dot a{ text-decoration:none; color:#333;}
+.sys_dot a:hover{ text-decoration:underline; color:#900;}
+.system_msg{margin:30px;margin-top:0px;background-color:#f3f3f3; height:82px; border:1px solid #e5e5e5;font-size:14px;}
+.system_img{float:left;width:82px;margin-right:10px;}
+.system_name{font-size:18px;font-weight:bold; line-height:40px;height:40px; }
+.num{padding:2px;color:#f00;}
+.do_list{margin:-30px 30px 30px 30px; max-height:320px; overflow-y:auto; overflow-x:hidden;}
+.system_table{width:100%;}
+.system_table,.system_table td,.system_table th{border:1px solid #e5e5e5; border-collapse:collapse;}
+.system_table td,.system_table th{padding:5px 10px;line-height:18px; text-align:left;}
+.system_table th{ background-color:#dbdbdb;}
+.system_table a{ text-decoration:none;}
+.system_table a:hover{color:#900; text-decoration:underline;}
+.foot{margin-top:30px;}

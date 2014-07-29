@@ -14,7 +14,7 @@
 		path:queryListPage="/application/queryListPage.jsp"
 		path:updateAppInfo="/application/updateAppInfo.jsp"
 		path:viewAppInfo="/application/appInfo.jsp"
-		
+		path:selectPic="/application/selectPic.jsp"
 		f:appcreateService="attr:application.appcreateService"
 		
 		class="com.sany.application.action.AppcreateAction" />

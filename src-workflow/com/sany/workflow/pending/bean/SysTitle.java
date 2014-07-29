@@ -9,6 +9,24 @@ private String sysDesc;
 private String  pendingType;
 private String pendingNum;
 private String pendingUrl;
+private String appUrl;
+private String picName;
+
+public String getPicName() {
+	return picName;
+}
+
+public void setPicName(String picName) {
+	this.picName = picName;
+}
+
+public String getAppUrl() {
+	return appUrl;
+}
+
+public void setAppUrl(String appUrl) {
+	this.appUrl = appUrl;
+}
 
 public String getPendingUrl() {
 	return pendingUrl;

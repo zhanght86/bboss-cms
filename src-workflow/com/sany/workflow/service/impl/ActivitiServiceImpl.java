@@ -59,10 +59,10 @@ import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
@@ -104,6 +104,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	private IdentityService identityService;// 用于管理组织结构
 	private ActivitiRelationService activitiRelationService;// 应用管理
 	private WorkTimeUtil workTimeUtil;
+
+	public UserInfoMap getUserInfoMap() {
+		return userInfoMap;
+	}
 
 	/**
 	 * 将当前任务驳回到上一个任务处理人处，并更新流程变量参数
@@ -3332,26 +3336,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * @return 2014年5月21日
 	 */
 	private String formatDuring(long mss) {
-		long days = mss / (1000 * 60 * 60 * 24);
-		long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-		long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
-		long seconds = (mss % (1000 * 60)) / 1000;
 
-		StringBuffer sb = new StringBuffer();
-		if (days != 0) {
-			sb.append(days + "天");
-		}
-		if (hours != 0) {
-			sb.append(hours + "小时");
-		}
-		if (minutes != 0) {
-			sb.append(minutes + "分钟");
-		}
-		if (seconds != 0) {
-			sb.append(seconds + "秒");
-		}
-
-		return sb.toString();
+		return StringUtil.formatTimeToString(mss);
 	}
 	
 	@Override
@@ -4121,7 +4107,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 				if (StringUtil.isNotEmpty(node.get("DURATION_NODE"))) {
 					double duration_node = Double.parseDouble(node
 							.get("DURATION_NODE"));
-					nodeInfoEntity.setDURATION_NODE((long)duration_node*60*60*1000);
+					nodeInfoEntity.setDURATION_NODE((long)(duration_node*60*60*1000));
 				} else {
 					nodeInfoEntity.setDURATION_NODE(0);
 				}
@@ -4213,31 +4199,46 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	@Override
-	public List<Map<String, String>> getProcessNodeUnComplete()
+	public List<Map<String, Object>> getProcessNodeUnComplete()
 			throws Exception {
-		final List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		final List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
 		executor.queryByNullRowHandler(new NullRowHandler() {
 			@Override
 			public void handleRow(Record origine) throws Exception {
-				Map<String, String> map = new HashMap<String, String>();
+				Map<String, Object> map = new HashMap<String, Object>();
 				map.put("state",origine.getString("STATE"));//任务状态（1未签收2未处理）
 				map.put("taskId",origine.getString("TASKID"));//--任务id
 				map.put("taskName",origine.getString("TASKNAME"));//--任务名称
-				map.put("createTime",origine.getString("CREATETIME"));//--任务创建时间
-				map.put("userId",origine.getString("USERID"));//--处理人
+				map.put("createTime",origine.getTimestamp("CREATETIME"));//--任务创建时间
+				//map.put("userId",origine.getString("USERID"));//--处理人
 				map.put("processName",origine.getString("PROCESSNAME"));//--流程名称
 				map.put("procInstanceId",origine.getString("PROCINSTANCEID"));//--流程实例id
 				map.put("taskDefKey",origine.getString("TASKDEFKEY"));//--任务节点key
-				map.put("alertTime",origine.getString("ALERTTIME"));//--预警时间点
-				map.put("overTime",origine.getString("OVERTIME"));//--超时时间点
+				map.put("alertTime",origine.getTimestamp("ALERTTIME"));//--预警时间点
+				map.put("overTime",origine.getTimestamp("OVERTIME"));//--超时时间点
 				map.put("messageTempleId",origine.getString("MESSAGETEMPLEID"));//短信模板id
 				map.put("emailTempleId",origine.getString("EMAILTEMPLEID"));//邮件模板id
-				map.put("realName",userInfoMap.getUserName(origine.getString("USERID")));//处理人真实姓名
 				map.put("orgId",userInfoMap.getUserAttribute(origine.getString("USERID"), "orgId")+"");//处理人所在部门
 				map.put("mobile",userInfoMap.getUserAttribute(origine.getString("USERID"), "userMobiletel1")+"");//手机号码
-				map.put("mailAddress", origine.getString("USERID")+"@sany.com.cn");//邮箱地址
+//				map.put("mailAddress", userInfoMap.getUserAttribute("qingl2", "userEmail")+"");//邮箱地址
+//				map.put("mailAddress", origine.getString("USERID")+"@sany.com.cn");//邮箱地址
 				map.put("worknum",userInfoMap.getUserAttribute(origine.getString("USERID"), "userWorknumber")+"");//处理人工号
+				
+				//map.put("entrustUser",origine.getString("ENTRUSTUSER"));//--委托人
+				String userName = userInfoMap.getUserName(origine.getString("USERID"));//处理人姓名
+				String userEmail = origine.getString("USERID")+"@sany.com.cn";//处理人邮件地址
+				if (StringUtil.isNotEmpty(origine.getString("ENTRUSTUSER"))) {
+					String entrustUserName = userInfoMap.getUserName(origine.getString("ENTRUSTUSER"));//委托人姓名
+					String entrustUserEmail = origine.getString("ENTRUSTUSER")+"@sany.com.cn";//委托人邮件地址
+					
+					map.put("mailAddress", new String [] {userEmail,entrustUserEmail});
+					map.put("realName",userName+"("+entrustUserName+")");
+				}else {
+					map.put("mailAddress", new String [] {userEmail});
+					map.put("realName",userName);
+				}
+				
 				list.add(map);
 			}
 		}, "getProcessNodeUnComplete");
@@ -4257,7 +4258,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			dbUtil.setString(2, taskId);
 			dbUtil.addPreparedBatch();
 
-			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.OVERTIMESEND = ? WHERE A.ID_");
+			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.OVERTIMESEND = ? WHERE A.ID_ = ?");
 			dbUtil.setInt(1, overtimesend);
 			dbUtil.setString(2, taskId);
 			dbUtil.addPreparedBatch();
@@ -4269,7 +4270,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			dbUtil.setString(2, taskId);
 			dbUtil.addPreparedBatch();
 
-			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.ADVANCESEND = ? WHERE A.ID_");
+			dbUtil.preparedDelete("UPDATE ACT_HI_TASKINST A SET A.ADVANCESEND = ? WHERE A.ID_ = ?");
 			dbUtil.setInt(1, advancesend);
 			dbUtil.setString(2, taskId);
 			dbUtil.addPreparedBatch();

@@ -23,5 +23,6 @@
 	<property name="workflow.task.activitiTaskService" 
 		f:executor="attr:activiti.configsqlexecutor"
 		f:activitiService="attr:activitiService"
+		f:templeService="attr:workflow.temple.templeService"
 		class="com.sany.workflow.service.impl.ActivitiTaskServiceImpl" />
 </properties>

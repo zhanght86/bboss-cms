@@ -295,7 +295,9 @@
 			       A.DURATION_NODE,
 			       A.IS_CONTAIN_HOLIDAY,
 			       A.ALERTTIME,
-			       A.OVERTIME
+			       A.OVERTIME,
+			       A.ADVANCESEND,
+       			   A.OVERTIMESEND
 			       
 			  FROM ACT_HI_ACTINST T
 			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
@@ -428,8 +430,8 @@
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
 			--未签收任务
 				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME, 
-				  RES.DURATION_NODE, RES.IS_CONTAIN_HOLIDAY, RES.OVERTIME, RES.ALERTTIME,
-				  RES.ID_,RES.REV_, RES.EXECUTION_ID_,
+				  RES.DURATION_NODE, RES.IS_CONTAIN_HOLIDAY, RES.ALERTTIME, RES.OVERTIME, 
+				  RES.ADVANCESEND, RES.OVERTIMESEND,RES.ID_,RES.REV_, RES.EXECUTION_ID_,
                   RES.PROC_INST_ID_,RES.PROC_DEF_ID_,RES.NAME_,RES.PARENT_TASK_ID_,RES.DESCRIPTION_,
                   RES.TASK_DEF_KEY_,RES.OWNER_,RES.ASSIGNEE_,RES.DELEGATION_,RES.PRIORITY_,
                   RES.CREATE_TIME_ AS START_TIME_,RES.DUE_DATE_, RES.SUSPENSION_STATE_
@@ -516,8 +518,8 @@
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
 			--已签收任务
 				select 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,
-				  A.DURATION_NODE,A.IS_CONTAIN_HOLIDAY,A.ALERTTIME,
-       			  A.OVERTIME,A.ID_,A.REV_, A.EXECUTION_ID_,
+				  A.DURATION_NODE,A.IS_CONTAIN_HOLIDAY,A.ALERTTIME, A.OVERTIME,
+       			  A.ADVANCESEND, A.OVERTIMESEND,A.ID_,A.REV_, A.EXECUTION_ID_,
                   A.PROC_INST_ID_,A.PROC_DEF_ID_,A.NAME_,A.PARENT_TASK_ID_,A.DESCRIPTION_,
                   A.TASK_DEF_KEY_,A.OWNER_,A.ASSIGNEE_,A.DELEGATION_,A.PRIORITY_,
                   A.CREATE_TIME_ AS START_TIME_,A.DUE_DATE_, A.SUSPENSION_STATE_
@@ -612,7 +614,8 @@
                 a.TASK_DEF_KEY_  	as taskDefKey,
                 a.CREATE_TIME_   	AS createTime,
                 c.key_              as processkey,
-                a.suspension_state_ as suspensionState
+                a.suspension_state_ as suspensionState,
+                I.USER_ID_			as FROMUSER
 			  from ACT_RU_TASK a
 			
 			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = a.ID_
@@ -621,8 +624,6 @@
 			
 			 WHERE a.ASSIGNEE_ is null
 			   	and I.TYPE_ = 'candidate'
-			   
-				and (I.USER_ID_ = #[assignee])
         
         		-- 系统id
 			   #if($sysid && !$sysid.equals(""))
@@ -643,11 +644,11 @@
     	                   (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
     	                   
     	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
-    	                   	AND RES.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   	AND a.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
     	                   #end
     	                   
     	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
-    	                   	AND RES.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   	AND a.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
     	                   #end
     	                   
     	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
@@ -658,11 +659,11 @@
 							OR (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
     	                   
     	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
-    	                   	AND RES.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   	AND a.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
     	                   #end
     	                   
     	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
-    	                   	AND RES.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   	AND a.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
     	                   #end
     	                   
     	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
@@ -687,14 +688,13 @@
 			       a.TASK_DEF_KEY_  	as taskDefKey,
 			       a.CREATE_TIME_   	AS createTime,
 			       c.key_              	as processkey,
-                   a.suspension_state_ 	as suspensionState
+                   a.suspension_state_ 	as suspensionState,
+                   a.ASSIGNEE_			as FROMUSER
 			  from ACT_RU_TASK a
 			
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
 			 where 1 = 1
-			 
-				and a.ASSIGNEE_ = #[assignee]
 			   
 			   -- 系统id来查数据
 			   #if($sysid && !$sysid.equals(""))
@@ -763,8 +763,6 @@
 			        
 			         WHERE a.ASSIGNEE_ is null
 			           and I.TYPE_ = 'candidate'
-			              
-			           and I.USER_ID_ = #[assignee]
 			           
 			           -- 系统id来查数据
 					   #if($sysid && !$sysid.equals(""))
@@ -781,7 +779,7 @@
 					   		and (
 		      				#foreach($WfEntrust in $entrustList)
 		      					#if($velocityCount == 0)
-		    	                   (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+		    	                   (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
 		    	                   
 		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
 		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
@@ -796,7 +794,7 @@
 		    	                   #end
 		    	                   )
 				    	        #else  
-									OR (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+									OR (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
 		    	                   
 		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
 		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
@@ -817,11 +815,11 @@
 			        
 			        union
 			      --签收任务  
-			        SELECT *
+			        SELECT A.*
 			          FROM ACT_RU_TASK A
 			          left join act_re_procdef c on c.id_ = A.proc_def_id_
 			        
-			         WHERE a.ASSIGNEE_ = #[assignee]
+			         WHERE 1=1
 			         	
 			         	-- 系统id来查数据
 					   #if($sysid && !$sysid.equals(""))
@@ -875,7 +873,7 @@
 		]]>
 	</property>
 	
-	<!-- 工作流管理统一代办获取任务条数  gw_tanx-->
+	<!-- 工作流管理统一代办当前用户自己任务条数  gw_tanx-->
 	<property name="countTaskNum_wf">
 		<![CDATA[
 			SELECT COUNT(*) as tasknum
@@ -937,7 +935,8 @@
                 a.TASK_DEF_KEY_  	as taskDefKey,
                 a.CREATE_TIME_   	AS createTime,
                 c.key_              as processkey,
-                a.suspension_state_ as suspensionState
+                a.suspension_state_ as suspensionState,
+                null				AS FROMUSER
 			  from ACT_RU_TASK a
 			
 			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = a.ID_
@@ -972,11 +971,14 @@
 			       a.TASK_DEF_KEY_  	as taskDefKey,
 			       a.CREATE_TIME_   	AS createTime,
 			       c.key_              	as processkey,
-                   a.suspension_state_ 	as suspensionState
+                   a.suspension_state_ 	as suspensionState,
+                   D.FROM_USER          AS FROMUSER
 			  from ACT_RU_TASK a
 			
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			  left join td_wf_node_changeinfo d on a.id_ = d.taskid
+                                   				and a.assignee_ = d.to_user
 			 where 1 = 1
 			 
 				and a.ASSIGNEE_ = #[assignee]
@@ -2353,11 +2355,24 @@
 			       A.ALERTTIME       AS ALERTTIME, -- 预警时间点
 			       A.OVERTIME        AS OVERTIME, --超时时间点
 			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID, -- 短信模板
-			       C.EMAILTEMPLEID   AS EMAILTEMPLEID -- 邮件模板
+			       C.EMAILTEMPLEID   AS EMAILTEMPLEID, -- 邮件模板
+			       D.ENTRUST_USER    AS ENTRUSTUSER--委托人
 			  FROM ACT_RU_TASK A
 			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
+			  --委托关系
+			  LEFT JOIN (SELECT A.ENTRUST_USER,
+			                    A.START_DATE,
+			                    A.END_DATE,
+			                    B.PROCDEF_ID,
+			                    A.CREATE_USER
+			               FROM TD_WF_ENTRUST A
+			               LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID =
+			                                                          B.ENTRUST_ID
+			              WHERE A.STS = '有效') D ON D.CREATE_USER = I.USER_ID_
+			                                     AND D.START_DATE <= A.CREATE_TIME_
+			                                     AND D.END_DATE >= A.CREATE_TIME_
 			
 			 WHERE A.ASSIGNEE_ IS NULL
 			   and I.TYPE_ = 'candidate'
@@ -2378,15 +2393,108 @@
 			       A.ALERTTIME       AS ALERTTIME,
 			       A.OVERTIME        AS OVERTIME,
 			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID,
-			       C.EMAILTEMPLEID   AS EMAILTEMPLEID
+			       C.EMAILTEMPLEID   AS EMAILTEMPLEID,
+			       D.ENTRUST_USER    AS ENTRUSTUSER
 			  FROM ACT_RU_TASK A
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
+			  --委托关系
+			  LEFT JOIN (SELECT A.ENTRUST_USER,
+			                    A.START_DATE,
+			                    A.END_DATE,
+			                    B.PROCDEF_ID,
+			                    A.CREATE_USER
+			               FROM TD_WF_ENTRUST A
+			               LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID =
+			                                                          B.ENTRUST_ID
+			              WHERE A.STS = '有效') D ON D.CREATE_USER = A.ASSIGNEE_
+			                                     AND D.START_DATE <= A.CREATE_TIME_
+			                                     AND D.END_DATE >= A.CREATE_TIME_
+			  
 			
 			 WHERE A.ASSIGNEE_ IS NOT NULL
 			   AND A.ALERTTIME is not null
 			   AND (A.ADVANCESEND = 0 -- 预警发送 0未发送 1发送成功 2 发送失败
 			       OR A.OVERTIMESEND = 0) -- 超时发送 0未发送 1发送成功 2 发送失败
+		]]>
+	</property>
+	
+	<!-- 根据任务id获取需要发送消息提醒的数据 gw_tanx -->
+	<property name="getNoSignTaskById">
+		<![CDATA[
+			
+			SELECT A.ID_             AS TASKID, --任务ID
+			       A.NAME_           AS TASKNAME, --任务名称
+			       A.CREATE_TIME_    AS CREATETIME, --任务创建时间
+			       I.USER_ID_        AS USERID, --处理人
+			       B.NAME_           AS PROCESSNAME, --流程名称
+			       A.PROC_INST_ID_   AS PROCINSTANCEID, --流程实例ID
+			       A.TASK_DEF_KEY_   AS TASKDEFKEY, --任务节点KEY
+			       A.ALERTTIME       AS ALERTTIME, -- 预警时间点
+			       A.OVERTIME        AS OVERTIME, --超时时间点
+			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID, -- 短信模板
+			       C.EMAILTEMPLEID   AS EMAILTEMPLEID, -- 邮件模板
+			       D.ENTRUST_USER    AS ENTRUSTUSER--委托人
+			  FROM ACT_RU_TASK A
+			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
+			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
+			  --委托关系
+			  LEFT JOIN (SELECT A.ENTRUST_USER,
+			                    A.START_DATE,
+			                    A.END_DATE,
+			                    B.PROCDEF_ID,
+			                    A.CREATE_USER
+			               FROM TD_WF_ENTRUST A
+			               LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID =
+			                                                          B.ENTRUST_ID
+			              WHERE A.STS = '有效') D ON D.CREATE_USER = I.USER_ID_
+			                                     AND D.START_DATE <= A.CREATE_TIME_
+			                                     AND D.END_DATE >= A.CREATE_TIME_
+			
+			 WHERE A.ASSIGNEE_ IS NULL
+			   and I.TYPE_ = 'candidate'
+			   AND A.ALERTTIME is not null
+			   AND A.ID_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据任务id获取需要发送消息提醒的数据 gw_tanx -->
+	<property name="getSignedTaskById">
+		<![CDATA[
+			
+			SELECT A.ID_             AS TASKID,
+			       A.NAME_           AS TASKNAME,
+			       A.CREATE_TIME_    AS CREATETIME,
+			       A.ASSIGNEE_       AS USERID,
+			       B.NAME_           AS PROCESSNAME,
+			       A.PROC_INST_ID_   AS PROCINSTANCEID,
+			       A.TASK_DEF_KEY_   AS TASKDEFKEY,
+			       A.ALERTTIME       AS ALERTTIME,
+			       A.OVERTIME        AS OVERTIME,
+			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID,
+			       C.EMAILTEMPLEID   AS EMAILTEMPLEID,
+			       D.ENTRUST_USER    AS ENTRUSTUSER
+			  FROM ACT_RU_TASK A
+			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
+			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
+			  --委托关系
+			  LEFT JOIN (SELECT A.ENTRUST_USER,
+			                    A.START_DATE,
+			                    A.END_DATE,
+			                    B.PROCDEF_ID,
+			                    A.CREATE_USER
+			               FROM TD_WF_ENTRUST A
+			               LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID =
+			                                                          B.ENTRUST_ID
+			              WHERE A.STS = '有效') D ON D.CREATE_USER = A.ASSIGNEE_
+			                                     AND D.START_DATE <= A.CREATE_TIME_
+			                                     AND D.END_DATE >= A.CREATE_TIME_
+			  
+			
+			 WHERE A.ASSIGNEE_ IS NOT NULL
+			   AND A.ALERTTIME is not null
+			   AND A.ID_ = ?
 		]]>
 	</property>
 	
@@ -2431,8 +2539,8 @@
 			 WHERE A.STS = '有效'
 			   AND A.ENTRUST_USER = ?
 			   AND (B.PROCDEF_ID = ? OR B.PROCDEF_ID IS NULL)
-			   AND A.START_DATE >= ?
-			   AND A.END_DATE <= ?
+			   AND A.START_DATE <= ?
+			   AND A.END_DATE >= ?
 		]]>
 	</property>
 	

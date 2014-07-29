@@ -159,6 +159,11 @@ public class UtilManagerImpl implements UtilManager{
 		String orgid = executor.queryObject(String.class, "getOrgIdByUserId", userId);
 		return orgid;
 	}
+	@Override
+	public String getDefaultAreaId() throws Exception {
+		List<String> list = executor.queryList(String.class, "getDefaultAreaId");
+		return (null != list && list.size()>0)?list.get(0):null;
+	}
 
 	
 

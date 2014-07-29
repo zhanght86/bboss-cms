@@ -1,9 +1,11 @@
 package com.sany.application.service;
 
+import java.io.File;
 import java.util.List;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.application.entity.WfApp;
+import com.sany.application.entity.WfPic;
 
 public interface AppcreateService {
 	
@@ -52,5 +54,35 @@ public interface AppcreateService {
      * @param wfApp
      */
     public void saveWfApp(WfApp wfApp) throws Exception;
-    
+    /**
+     * 保存图片
+     * @param wfApp
+     */
+    public void insertPic(WfPic pic) throws Exception;
+    /**
+     * 获取所有图片没有内容
+     * @param wfApp
+     */
+    public List<WfPic> getAllWfPicNoContent()throws Exception;
+    /**
+     * 获取单个图片含内容
+     * @param wfApp
+     */
+    public File getWfPicById(String id,String path)throws Exception;
+    /**
+     * 获取应用已经选择的图片
+     * @param wfApp
+     */
+    public List<String> getAppSelectedPic(String appInfoId)throws Exception;
+    /**
+     * 更新应用的图片
+     * @param wfApp
+     */
+   public void updatePicSelected(String appId,String picName)throws Exception;
+    /** 判断是否删除应用
+     * @param appInfoId
+     * @throws Exception
+     * 2014年7月29日
+     */
+    public String isDeleteApp(String appInfoId) throws Exception;
 }

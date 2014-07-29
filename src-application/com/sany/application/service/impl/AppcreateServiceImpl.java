@@ -1,5 +1,6 @@
 package com.sany.application.service.impl;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -8,9 +9,12 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.FieldRowHandler;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
 import com.sany.application.entity.WfApp;
+import com.sany.application.entity.WfPic;
 import com.sany.application.service.AppcreateService;
 
 public class AppcreateServiceImpl implements AppcreateService {
@@ -154,7 +158,54 @@ public class AppcreateServiceImpl implements AppcreateService {
 		int result = executor.queryObject(int.class, "validateAppSecret", appid,secret);
 		return result > 0;
 	}
-    
+
+	@Override
+	public void insertPic(WfPic pic) throws Exception {
+		executor.insertBean("insertPic", pic);
+	}
+
+	@Override
+	public List<WfPic> getAllWfPicNoContent() throws Exception {
+		return executor.queryList(WfPic.class, "getAllWfPicNoContent");
+	}
+
+	@Override
+	public File getWfPicById(String id,final String path) throws Exception {
+
+		return executor.queryTField( File.class,   new FieldRowHandler<File>() {
+
+			@Override
+			public File handleField(Record record) throws Exception {
+				File f = new File(path);   
+				if (f.exists())					 
+					return f;
+				record.getFile("content",f); 
+				return f;  
+			}  },"getWfPicById",id);
+		
+//		return executor.queryObject(WfPic.class, "getWfPicById",id);
+	}
+
+	@Override
+	public List<String> getAppSelectedPic(String appInfoId) throws Exception {
+		
+		return executor.queryList(String.class, "getAppSelectedPic",appInfoId);
+	}
+
+	@Override
+	public void updatePicSelected(String appId, String picName)
+			throws Exception {
+		executor.update("updatePicSelected", picName,appId);
+	}
+    @Override
+	public String isDeleteApp(String appInfoId) throws Exception {
+		int result = executor.queryObject(int.class, "validateAppRelationIsExists", appInfoId);
+		if (result > 0) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
 }
 
 

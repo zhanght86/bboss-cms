@@ -78,7 +78,7 @@ function submit(){
   <ul>
   <pg:list  autosort="false" requestKey="datas">
   <li id="<pg:cell colName="id"/>">
-  <img src="${pageContext.request.contextPath}/application/images/<pg:cell colName="id"/>.png" width="68" height="68" /> 
+  <img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="68" height="68" /> 
   <span><pg:equal colName="pendingSubscribe"  value="0"><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"/></pg:equal>
 		<pg:equal colName="pendingSubscribe" value="1"><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"  checked="checked"/></pg:equal>
 		<pg:empty colName="pendingSubscribe" ><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"/></pg:empty>

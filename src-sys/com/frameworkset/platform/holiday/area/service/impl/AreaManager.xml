@@ -88,7 +88,7 @@ select ID  id,PID pid , NAME name ,START_TIME startTime,END_TIME  endTime from T
 <property name="addArea">
 		<![CDATA[
 		
-		insert into TD_SP_HOLIDAY_AREA (area_id,area_name,area_desc,creator,create_time)values(?,?,?,?,?)
+		insert into TD_SP_HOLIDAY_AREA (area_id,area_name,area_desc,creator,create_time, area_default)values(?,?,?,?,?,?)
 		
 		]]>
 	</property>
@@ -135,7 +135,7 @@ select ID  id,PID pid , NAME name ,START_TIME startTime,END_TIME  endTime from T
 <!--   更新区域信息     -->	
 <property name="updateArea">
 		<![CDATA[
-		update TD_SP_HOLIDAY_AREA set area_name = ? , area_desc = ? where area_id = ?
+		update TD_SP_HOLIDAY_AREA set area_name = ? , area_desc = ?,area_default = ?  where area_id = ?
 		
 		]]>
 	</property>
@@ -143,10 +143,15 @@ select ID  id,PID pid , NAME name ,START_TIME startTime,END_TIME  endTime from T
 <property name="queryAreaList">
 		<![CDATA[
   
-  select AREA_ID areaId , AREA_NAME areaName , AREA_DESC areaDesc , CREATOR creator , CREATE_TIME createTime from TD_SP_HOLIDAY_AREA
+  select AREA_ID areaId , AREA_NAME areaName , AREA_DESC areaDesc , CREATOR creator , CREATE_TIME createTime ,AREA_DEFAULT areaDefault from TD_SP_HOLIDAY_AREA
 		]]>
 	</property>
+	<!--   查询所有默认区域的ID     -->
 	
-	
-	
+	<property name="checkDuplicateDefaultArea">
+		<![CDATA[
+  
+  select AREA_ID areaId from TD_SP_HOLIDAY_AREA where AREA_DEFAULT = '1' 
+		]]>
+	</property>
 </properties>

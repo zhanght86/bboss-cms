@@ -31,4 +31,6 @@ public interface UtilManager {
 	public String getOrgIdByUserId(String userId)throws Exception;
 	
 	public String getOrgIdByuserAccountOrWorkNo(String userAccount) throws Exception;
+	
+	public String getDefaultAreaId() throws Exception;
 }

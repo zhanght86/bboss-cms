@@ -1017,7 +1017,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 		String sqlMaxSn = "select max(org_sn) from td_sm_organization where parent_id=?";
 //		DBUtil db = new DBUtil();
 //		db.executeSelect(sqlMaxSn);
-		int sn = SQLExecutor.queryObject(int.class, sqlMaxSn, parentid);
+		long sn = SQLExecutor.queryObject(long.class, sqlMaxSn, parentid);
 		String orgSn = String.valueOf(sn + 1);	
 		return orgSn;
 	}
@@ -1062,11 +1062,13 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 				{
 					parentId = "0";
 				}
-				String orgSn = getMaxSN(parentId);
-				String OrgTreeLevel = getOrgTreeLevel(parentId,orgSn);
+				
+				
 				PreparedDBUtil conn = new PreparedDBUtil();
 				//String orgId = conn.getNextStringPrimaryKey("td_sm_organization");
 				String orgId = getKeyPrimary("td_sm_organization");
+				String OrgTreeLevel = getOrgTreeLevel(parentId,orgId);
+				String orgSn = getMaxSN(parentId);
 				String sql = "insert into td_sm_organization" + 
 							"(" +
 							"ORG_SN,ORG_NAME," +

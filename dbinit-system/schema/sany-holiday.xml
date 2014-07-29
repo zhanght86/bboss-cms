@@ -10,6 +10,8 @@
         <column name="AREA_DESC" size="200" type="VARCHAR"/>
         <column name="CREATOR" size="100" type="VARCHAR"/>
         <column name="CREATE_TIME" size="100" type="VARCHAR"/>
+        <column name="AREA_DEFAULT" size="4" default="0" type="VARCHAR"/>
+        
     </table>
     <table name="TD_SP_HOLIDAY_ARRANGE">
         <column name="AREA_ID" primaryKey="true" required="true"

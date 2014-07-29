@@ -3,7 +3,11 @@
 <properties>
 <!-- 节假日工具  start -->
 
-
+<property name="getDefaultAreaId">
+		<![CDATA[
+	select AREA_ID areaId from TD_SP_HOLIDAY_AREA where AREA_DEFAULT = '1'
+		]]>
+	</property>
 <property name="getOrgIdByUserId">
 		<![CDATA[
 	select t1.org_id from  TD_SM_ORGUSER t1  where t1.user_id = ?	

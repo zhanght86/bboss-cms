@@ -33,7 +33,7 @@ public class SendMessageTest {
 			      try {
 	                        SendMessageBean smb = new SendMessageBean();
 	                        smb.setWorknum("10001861");
-				//           smb.setMobile(mobile);
+				//           smb.setMobile(mobile);21002521
 				//           smb.setBusinessKey(businessKey);
 	                        smb.setMsgContent("本条信息为IT发送的移动平台测试消息，谢谢！");
 	                        ReturnBean rb =mms.sendMsg(accessToken, smb);

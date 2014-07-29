@@ -29,7 +29,7 @@
 		
 		<table border="0" cellpadding="0" cellspacing="0" class="table2" width="100%" >
 			<tr>
-				<th width="100px">删除撤销原因：</th>
+				<th width="100px">撤销原因：</th>
 				<td width="220px">
 					<textarea rows="8" cols="50" id="cancelTaskReason" name="cancelTaskReason"  
 						class="w120" style="width: 280px;font-size: 12px;height:40px;" maxlength="200"></textarea>

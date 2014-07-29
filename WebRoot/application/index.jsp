@@ -69,7 +69,7 @@
 		$.dialog({
 			id : 'add',
 			title : '新增应用',
-			width : 450,
+			width : 500,
 			height : 320,
 			content : 'url:' + "<%=request.getContextPath()%>/application/appTypeAdd.jsp"
 		});
@@ -89,7 +89,7 @@
 		$.dialog({
 			id : 'update',
 			title : '修改应用',
-			width : 450,
+			width : 500,
 			height : 320,
 			content : 'url:' + "<%=request.getContextPath()%>/application/updateAppInfo.page?appInfoId="+appInfoId
 		});
@@ -109,7 +109,7 @@
 		$.dialog({
 			id : 'update',
 			title : '查看应用',
-			width : 450,
+			width : 500,
 			height : 320,
 			content : 'url:' + "<%=request.getContextPath()%>/application/viewAppInfo.page?appInfoId="+appInfoId
 		});
@@ -122,34 +122,62 @@
 		if(appInfoRadio != null && appInfoRadio.length > 0){
 			appInfoId = $('input[name="appInfoRadio"]:checked').val();
 		}else{
-			alert("请先选择一条记录修改");
+			alert("请先选择一条记录");
 			return;
 		}
+		
+		var promptContent = "";
+		if (isDeleteApp(appInfoId) == 'success') {
+			promptContent ="当前应用有关联流程，是否继续删除？";
+		}else {
+			promptContent ="确定删除应用吗？";
+		}
+		
+		$.dialog.confirm(promptContent, function(){
+			
+			$.ajax({
+				type : "POST",
+				url : "deleteAppInfo.page",
+				data : {"appInfoId":appInfoId},
+				dataType : 'json',
+				async : false,
+				beforeSend : function(XMLHttpRequest) {
+				
+					blockUI();
+					XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+				success : function(responseText) {
+					//去掉遮罩
+					unblockUI();
+					
+					if (responseText == "success") {
+						$.dialog.alert("删除成功", function() {
+							queryList();
+						}, frameElement.api);
+					} else {
+						$.dialog.alert(responseText, function() {
+						}, frameElement.api);
+					}
+				}
+			});
+		},function(){});  
+		
+	}
+	
+	// 判断是否删除应用
+	function isDeleteApp(appInfoId){
+		var text = '';
 		$.ajax({
 			type : "POST",
-			url : "deleteAppInfo.page",
+			url : "isDeleteApp.page",
 			data : {"appInfoId":appInfoId},
-			dataType : 'json',
 			async : false,
-			beforeSend : function(XMLHttpRequest) {
-			
-				blockUI();
-				XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			},
 			success : function(responseText) {
-				//去掉遮罩
-				unblockUI();
-				
-				if (responseText == "success") {
-					$.dialog.alert("删除成功", function() {
-						queryList();
-					}, frameElement.api);
-				} else {
-					$.dialog.alert(responseText, function() {
-					}, frameElement.api);
-				}
+				text =  responseText;
 			}
 		});
+		
+		return text;
 	}
 	
 	//上传应用图片
@@ -170,6 +198,37 @@
 			width : 450,
 			height : 320,
 			content : 'url:' + "<%=request.getContextPath()%>/application/uploadPic.jsp?appInfoId="+appInfoId
+		});
+	}
+	
+	function picRefApp(){
+		var appName = "";
+		var appInfoId = "";
+		var appInfoRadio = $('input[name="appInfoRadio"]:checked');
+		if(appInfoRadio != null && appInfoRadio.length > 0){
+			appInfoId = $('input[name="appInfoRadio"]:checked').val();
+			appName = document.getElementById(appInfoId).childNodes[2].innerHTML;
+		}else{
+			alert("请先选择一条记录查看");
+			return;
+		}
+		$.dialog({
+			id : 'picRefApp',
+			title : appName+'应用图片选择',
+			width : 450,
+			height : 320,
+			content : 'url:' + "<%=request.getContextPath()%>/application/picRefApp.page?appInfoId="+appInfoId
+		});
+	}
+	
+	//上传应用图片
+	function uploadAppPic(){
+		$.dialog({
+			id : 'uploadPic',
+			title : '上传应用图片',
+			width : 450,
+			height : 320,
+			content : 'url:' + "<%=request.getContextPath()%>/application/uploadPic.jsp"
 		});
 	}
 	
@@ -229,7 +288,8 @@
 			<a href="#" class="bt_small" id="viewButton" onclick="javascript:viewAppInfo();"><span>查看</span></a>
 			<a href="#" class="bt_small" id="updateButton" onclick="javascript:updateAppInfo();"><span>修改</span></a>
 			<a href="#" class="bt_small" id="delBatchButton" onclick="javascript:deleteAppInfo()"><span>删除</span></a>
-			<a href="#" class="bt_small" id="uploadPicButton" onclick="javascript:uploadPic()"><span>上传应用图片</span></a>
+			<a href="#" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>应用图片选择</span></a>
+			<a href="#" class="bt_small" id="uploadPicButton" onclick="javascript:uploadAppPic()"><span>应用图片上传</span></a>
 			</div>
 			<strong>应用列表</strong>
 		</div>

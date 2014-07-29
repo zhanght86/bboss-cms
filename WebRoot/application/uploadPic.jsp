@@ -57,9 +57,9 @@ function CloseDlg(){
 					<tr><td style="height:50px;">
 					<input type="file" name="uploadFileName" id="uploadFileName" size="20" style="height:25px;"/>
 					</td></tr>
-                    <tr style="display:none">
+                    <%-- <tr style="display:none">
                     <td><input type="text" name="appInfoId" id="appInfoId" value="${param.appInfoId}"/></td>
-                    </tr>
+                    </tr> --%>
                     
 					<tr><td>
 					<a href="#" class="bt_2"  onclick="Import()"><span>上传</span></a>

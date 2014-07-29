@@ -38,6 +38,46 @@ public class NoHandleTask {
 
 	private String url;// 链接地址
 
+	private int taskType;// 任务类型 0自己任务1委托任务2转办任务
+
+	private String fromUser;// 转办/委托人
+
+	private String fromUserName;// 转办/委托人姓名
+
+	private String dealButtionName;// 处理记录按钮名称
+
+	public String getDealButtionName() {
+		return dealButtionName;
+	}
+
+	public void setDealButtionName(String dealButtionName) {
+		this.dealButtionName = dealButtionName;
+	}
+
+	public String getFromUserName() {
+		return fromUserName;
+	}
+
+	public void setFromUserName(String fromUserName) {
+		this.fromUserName = fromUserName;
+	}
+
+	public String getFromUser() {
+		return fromUser;
+	}
+
+	public void setFromUser(String fromUser) {
+		this.fromUser = fromUser;
+	}
+
+	public int getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;
+	}
+
 	public String getTaskState() {
 		return taskState;
 	}

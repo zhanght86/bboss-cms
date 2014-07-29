@@ -17,6 +17,7 @@ package com.sany.application.action;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +36,7 @@ import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.application.entity.WfApp;
+import com.sany.application.entity.WfPic;
 import com.sany.application.service.AppcreateService;
 
 /**
@@ -201,14 +203,17 @@ public class AppcreateAction {
 		return actionResult;
 	}
 	
-	public @ResponseBody String uploadAppPic( MultipartFile uploadFileName,String appInfoId,ModelMap model,HttpServletRequest request)throws Exception{
-		//String fileNameOrig = uploadFileName.getOriginalFilename();
-	
+	/*   图片上传    */
+	public @ResponseBody String uploadAppPic( MultipartFile uploadFileName,ModelMap model,HttpServletRequest request)throws Exception{
+		String fileNameOrig = uploadFileName.getOriginalFilename();
+	    String id = UUID.randomUUID().toString();
+	    WfPic pic = new WfPic(id,fileNameOrig,uploadFileName);
 		try {
 			String contextPath= request.getSession().getServletContext().getRealPath("");
-			File _file = new File(contextPath+"\\application\\images\\" + appInfoId+".png");
+			File _file = new File(contextPath+"\\application\\app_images\\" + fileNameOrig);
 			
 			uploadFileName.transferTo(_file);
+			appcreateService.insertPic(pic);
 			
 			return "导入成功";
 		} catch (Exception ex) {
@@ -217,4 +222,77 @@ public class AppcreateAction {
 		}
 	}
 	
+	/*   跳转到图片选择页面    */
+	public String picRefApp(String appInfoId, ModelMap model,HttpServletRequest request)throws Exception{
+		List<WfPic> list = appcreateService.getAllWfPicNoContent();
+		List<String> pic_selected = appcreateService.getAppSelectedPic(appInfoId);
+		String pic_selected_name = "no";
+		if(null != pic_selected&&pic_selected.size()>0){
+			if(null != pic_selected.get(0)&&!"".equals(pic_selected.get(0))){
+				pic_selected_name = pic_selected.get(0);
+			}
+		}
+		String contextPath= request.getSession().getServletContext().getRealPath("");
+		File file=new File(contextPath+"\\application\\app_images" ); 
+		String files[]=file.list();  
+		//前台没有的图片，后台传过去
+		if(null != list && list.size()>0){
+			for(int i=0;i<list.size();i++){
+				String id = list.get(i).getId();
+				String name = list.get(i).getName();
+				boolean flag = false;
+				for(int j=0;j<files.length;j++){
+					if(name.equals(files[j])){
+						flag = true;
+						break;
+					}
+				}
+				if(!flag){
+					appcreateService.getWfPicById(id,contextPath+"\\application\\app_images\\" + name);
+					
+				}
+			}
+			model.addAttribute("datas", list);
+			model.addAttribute("appInfoId", appInfoId);
+			model.addAttribute("picSelected",pic_selected_name );
+		}
+		return "path:selectPic";
+	}
+	/*   保存图片选择    */
+	@SuppressWarnings("unchecked")
+	public @ResponseBody String selectPicForApp(String appId ,String picName) throws Exception{
+		appcreateService.updatePicSelected(appId,picName);
+		return "success";
+	}
+	/** 获取口令 gw_tanx
+	 * @param model
+	 * @return
+	 * 2014年7月29日
+	 */
+	public @ResponseBody String getSystemSecret(ModelMap model) throws Exception{
+
+		return java.util.UUID.randomUUID().toString();
+
+	}
+	
+	/** 判断是否删除应用
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 * 2014年7月29日
+	 */
+	public @ResponseBody String isDeleteApp(String appInfoId, ModelMap model) throws Exception{
+
+		return appcreateService.isDeleteApp(appInfoId);
+
+	}
+	public static void main(String []args0){
+		File file=new File("D:\\apache-maven-3.0.4\\bin"); 
+		String test[];  
+		test=file.list();  
+		for(int i=0;i<test.length;i++) 
+		{   
+			System.out.println(test[i]); 
+			}
+	}
 }

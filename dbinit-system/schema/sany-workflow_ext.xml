@@ -13,11 +13,11 @@
 <!--     </table> -->
     <table name="TD_WF_ENTRUST">
         <column name="ID" primaryKey="true" size="64" required="true" type="VARCHAR"/>
-        <column name="ENTRUST_USER" size="64" type="VARCHAR"/>
+        <column name="ENTRUST_USER" size="255" type="NVARCHAR"/>
         <column name="START_DATE" type="TIMESTAMP" />
         <column name="END_DATE" type="TIMESTAMP"/>
         <column name="CREATE_DATE" type="TIMESTAMP"/>
-        <column name="CREATE_USER" size="64" type="VARCHAR"/>
+        <column name="CREATE_USER" size="64" type="NVARCHAR"/>
         <column name="STS" size="32" type="VARCHAR"/>
         <column name="ENTRUST_USER_NAME" size="64" type="VARCHAR"/>
 		<column name="CREATE_USER_NAME" size="64" type="VARCHAR"/>
@@ -75,11 +75,11 @@
         <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
     </table>
     <table name="TD_WF_NODE_CHANGEINFO">
-        <column name="TASKID" type="VARCHAR"/>
+        <column name="TASKID" size="64" type="NVARCHAR"/>
         <column name="PROCESS_KEY" size="200" type="VARCHAR"/>
         <column name="PROCESS_ID" size="100" type="VARCHAR"/>
-        <column name="FROM_USER" type="VARCHAR"/>
-        <column name="TO_USER" type="VARCHAR"/>
+        <column name="FROM_USER" size="255" type="NVARCHAR"/>
+        <column name="TO_USER" size="255"  type="NVARCHAR"/>
         <column name="CHANGETIME" type="TIMESTAMP"/>
     </table>
     <table name="TD_WF_USER_SUBSCRIBE">

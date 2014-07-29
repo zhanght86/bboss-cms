@@ -57,7 +57,7 @@ public interface TempleService {
 	 * @param map
 	 * @return 2014年6月11日
 	 */
-	public void sendNotice(List<Map<String, String>> fieldList);
+	public void sendNotice(List<Map<String, Object>> fieldList);
 
 	/**
 	 * 删除模板
@@ -66,5 +66,5 @@ public interface TempleService {
 	 *            2014年6月12日
 	 */
 	public String delTemplates(String templateIds) throws Exception;
-	
+
 }

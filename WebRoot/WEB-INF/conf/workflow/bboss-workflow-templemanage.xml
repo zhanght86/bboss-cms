@@ -16,6 +16,9 @@
 	<property name="workflow.temple.templeService" 
 		f:executor="attr:workflow.temple.configsqlexecutor"
 		f:activitiService="attr:activitiService" 
+		f:messageService="attr:workflow.MessageService" 
+		f:token_value="f19f3394-8242-4842-beba-33c7731c34ed" 
+		f:app_name="sim" 
 		class="com.sany.workflow.service.impl.TempleServiceImpl" />
 
 	<property name="workflow.temple.configsqlexecutor"
@@ -24,14 +27,6 @@
 			<property value="com/sany/workflow/messTemplate.xml" />
 		</construction>
 	</property>
-	
-	 <!--测试环境-->
-	<property name="workflow.temple.MessageService" factory-method="create"
-		factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean"
-		f:serviceClass="com.sany.sim.message.MessageService"
-		f:address="http://10.0.14.21:8080/SanySIM/cxfservices/messageServicePort" >
-	</property>
-	
 	
 	<!-- 单元测试需要的配置 
 	 <property name="activitiService"

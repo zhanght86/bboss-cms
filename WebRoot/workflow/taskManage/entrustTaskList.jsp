@@ -82,11 +82,8 @@
 		    </td>
 		    <td>
 		    	<pg:notempty colName="ALERTTIME" >
-			    	<pg:equal colName="advancesend" value="0">未发送预警提醒</pg:equal>
-			    	<pg:equal colName="advancesend" value="1">发送预警提醒成功</pg:equal>
-			    	<pg:equal colName="advancesend" value="2">短信发送预警提醒成功，邮件发送预警提醒失败</pg:equal>
-			    	<pg:equal colName="advancesend" value="3">短信发送预警提醒失败，邮件发送预警提醒成功</pg:equal>
-			    	<pg:equal colName="advancesend" value="4">发送预警提醒失败</pg:equal>
+			    	<pg:convert convertData="advanceSendMap" colName="advancesend"/> 
+			    	<a href="javascript:void(0)" onclick="sendMess('<pg:cell colName="ID_" />','<pg:cell colName="KEY_" />','<pg:cell colName="state" />','1')">发送</a>
 		    	</pg:notempty>
 		    </td>
        		<td>
@@ -100,11 +97,8 @@
 		    </td>
 		    <td>
 		    	<pg:notempty colName="OVERTIME" >
-			    	<pg:equal colName="overtimesend" value="0">未发送超时提醒</pg:equal>
-	       			<pg:equal colName="overtimesend" value="1">发送超时提醒成功</pg:equal>
-			    	<pg:equal colName="overtimesend" value="2">短信发送超时提醒成功，邮件发送超时提醒失败</pg:equal>
-			    	<pg:equal colName="overtimesend" value="3">短信发送超时提醒失败，邮件发送超时提醒成功</pg:equal>
-			    	<pg:equal colName="overtimesend" value="4">发送超时提醒失败</pg:equal>
+			    	<pg:convert convertData="overtimeSendMap" colName="overtimesend"/> 
+			    	<a href="javascript:void(0)" onclick="sendMess('<pg:cell colName="ID_" />','<pg:cell colName="KEY_" />','<pg:cell colName="state" />','2')">发送</a>
 		    	</pg:notempty>
 		    </td>
             <td class="td_center">
@@ -120,7 +114,7 @@
 				</pg:equal>
 				 -->
 				 <a href="javascript:void(0)" id="doEntrustTask" onclick="doEntrustTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />',
-             		'<pg:cell colName="state" />','<pg:cell colName="wfEntrust" property="create_user"/>','<pg:cell colName="wfEntrust" property="entrust_user"/>')">处理</a>|
+             		'<pg:cell colName="state" />','<pg:cell colName="KEY_" />','<pg:cell colName="wfEntrust" property="create_user"/>','<pg:cell colName="wfEntrust" property="entrust_user"/>')">处理</a>|
             	<a href="javascript:void(0)" id="viewEntrustDetailInfo" onclick="viewEntrustDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
             </td>    
         </tr>

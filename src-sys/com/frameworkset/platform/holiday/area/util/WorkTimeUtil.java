@@ -158,6 +158,10 @@ public class WorkTimeUtil {
 	public String getNextTimeNoRestDay(String orgId,String startTime,long millisecond) throws Exception{
 		
         String areaId = util.getAreaByOrgId(orgId);
+      //找默认的产业园
+      		if(null == areaId||"".equals(areaId)){
+      			areaId = util.getDefaultAreaId();
+      		}
 		
 		//如果没有发现部门挂靠的产业园则启用默认配置
 		if(null == areaId||"".equals(areaId)){

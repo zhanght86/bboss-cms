@@ -2,6 +2,33 @@
 
 <properties>
 
+<property name="updatePicSelected">
+		<![CDATA[
+			update  TD_WF_APP set pic_name = ? where id = ?
+		]]>
+	</property>
+<property name="getAppSelectedPic">
+		<![CDATA[
+			select pic_name from  TD_WF_APP where id = ?
+		]]>
+	</property>
+
+<property name="getWfPicById">
+		<![CDATA[
+			select id id ,name name,content content from  TD_WF_APP_PIC where id = ?
+		]]>
+	</property>
+<property name="getAllWfPicNoContent">
+		<![CDATA[
+			select id id ,name name from  TD_WF_APP_PIC
+		]]>
+	</property>
+<property name="insertPic">
+		<![CDATA[
+			insert into TD_WF_APP_PIC (id,name,content) values(#[id],#[name],#[content])
+		]]>
+	</property>
+
 	<property name="selectWfAppList">
 		<![CDATA[
 			select a.* from td_wf_app a

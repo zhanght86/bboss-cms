@@ -50,9 +50,9 @@ function queryList(){
     	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
     	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey},
     	function(){
-    		if($("#isEmptyData1").val()){
-				$("#ontimeDiv").show();
-			}
+    		//if($("#isEmptyData1").val()){
+			//	$("#ontimeDiv").show();
+			//}
     	});
     
 }
@@ -63,7 +63,7 @@ function modifyQueryData(){
 }
 
 // 签收任务
-function signTask(taskId,SuspensionState) {
+function signTask(taskId,SuspensionState,processKey) {
 	
 	if (SuspensionState == '2'){
 		alert("当前流程已被挂起,不能签收！");
@@ -73,7 +73,7 @@ function signTask(taskId,SuspensionState) {
 	$.ajax({
  	 	type: "POST",
 		url : "<%=request.getContextPath()%>/workflow/taskManage/signTask.page",
-		data :{"taskId":taskId},
+		data :{"taskId":taskId,"processKey":processKey},
 		dataType : 'json',
 		async:false,
 		beforeSend: function(XMLHttpRequest){
@@ -90,26 +90,24 @@ function signTask(taskId,SuspensionState) {
 }
 
 // 处理任务
-function doTask(taskId,SuspensionState,processInstId,taskState){
+function doTask(taskId,SuspensionState,processInstId,taskState,processKey){
 	
 	if (SuspensionState == '2'){
 		alert("当前流程已被挂起,不能处理！");
 		return ;
 	}
 	
-	var processKey = $("#processKey").val();
-	
 	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey
 			+"&processInstId="+processInstId+"&taskId="+taskId+"&taskState="+taskState;
 	
-	$.dialog({ title:'任务处理',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'任务处理',width:1100,height:700, content:'url:'+url});
 	
 }
 
 //查看流程实例详情
 function viewDetailInfo(processInstId) {
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewTaskDetailInfo.page?processInstId="+processInstId;
-	$.dialog({ title:'明细查看',width:1100,height:620, content:'url:'+url,maxState:true});
+	$.dialog({ title:'明细查看',width:1100,height:700, content:'url:'+url,maxState:true});
 }
 	
 function doreset(){
@@ -131,9 +129,9 @@ function queryEntrustList(){
         	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
         	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey,"assignee":assignee},
         	function(){
-        			if($("#isEmptyData").val()){
-						$("#entrustDiv").show();//有委托任务就显示委托任务DIV
-        			}
+        			//if($("#isEmptyData").val()){
+					//	$("#entrustDiv").show();//有委托任务就显示委托任务DIV
+        			//}
         	});
 }
 
@@ -165,20 +163,18 @@ function signEntrustTask(taskId,SuspensionState) {
 }
 
 //处理委托任务
-function doEntrustTask(taskId,SuspensionState,processInstId,taskState,createUser,entrustUser){
+function doEntrustTask(taskId,SuspensionState,processInstId,taskState,processKey,createUser,entrustUser){
 	
 	if (SuspensionState == '2'){
 		alert("当前流程已被挂起,不能处理！");
 		return ;
 	}
 	
-	var processKey = $("#processKey").val();
-	
 	var url="<%=request.getContextPath()%>/workflow/taskManage/toDealTask.page?processKey="+ processKey
 			+"&processInstId="+processInstId+"&taskId="+taskId+"&taskState="+taskState
 			+"&createUser="+createUser+"&entrustUser="+entrustUser;
 	
-	$.dialog({ title:'任务处理',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'任务处理',width:1100,height:700, content:'url:'+url});
 	
 }
 
@@ -190,6 +186,39 @@ function viewEntrustDetailInfo(processInstId) {
 
 function doEntrustReset(){
 	$("#entrustReset").click();
+}
+
+// 手动发送消息
+function sendMess(taskId,processKey,taskState,sentType){
+
+	var title='';
+	
+	if (sentType == '1') {
+		title = '确定发送预警提醒信息吗？';
+	}else {
+		title = '确定发送超时提醒信息吗？';
+	}
+	
+	$.dialog.confirm(title, function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/sendMess.page",
+			data: {"taskId":taskId,"processKey":processKey,"taskState":taskState,"sentType":sentType},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("手动发送信息出错:"+data);
+				}else {
+					modifyQueryData();
+				}
+			}
+		 });
+	},function(){});  
 }
 
 </script>
@@ -205,7 +234,7 @@ function doEntrustReset(){
 		<div id="rightContentDiv">
 			
 			<%--实时任务div --%>
-			<div id="ontimeDiv" style="display:none;">
+			<div id="ontimeDiv" >
 				<div id="searchblock">
 				
 					<div class="search_top">
@@ -281,9 +310,10 @@ function doEntrustReset(){
 			
 			</div>
 			
+			<br/>
 			
 			<%--委托任务div --%>
-			<div id="entrustDiv" style="display:none;">
+			<div id="entrustDiv" >
 				<div id="searchblock" >
 					
 						<div class="search_top">
@@ -350,7 +380,7 @@ function doEntrustReset(){
 					
 					<div class="title_box">
 						<div class="rightbtn">
-							<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a>
+							<!-- <a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a> -->
 						</div>
 							
 						<strong>委托任务列表</strong>

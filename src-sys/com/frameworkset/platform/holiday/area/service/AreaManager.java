@@ -14,7 +14,7 @@ import com.frameworkset.util.ListInfo;
 public interface AreaManager {
 	public ListInfo queryAreaList(int offset,int pagesize)throws Exception;
 	
-	public void updateArea(String areaId,String areaName,String areaDesc)throws Exception;
+	public void updateArea(String areaId,String areaName,String areaDesc,String areaDefault)throws Exception;
 	
 	public List<OrgLeaf> getAllOrgLeaf()throws Exception;
 	
@@ -26,7 +26,7 @@ public interface AreaManager {
 	
 	public List<Area> querySingleArea(String areaId)throws Exception;
 	
-	public void addArea(String areaId,String areaName ,String areaDesc,String creator ,String createTime)throws Exception;
+	public void addArea(String areaId,String areaName ,String areaDesc,String creator ,String createTime,String areaDefault)throws Exception;
 	
 	public List<Org> querySingleOrg(String areaId,String orgId)throws Exception;
 
@@ -52,4 +52,6 @@ public interface AreaManager {
 	public void updateWorkTime(String pid,String id,String name,String startTime,String endTime)throws Exception;
 	
 	public void deleteWorkTime(String id)throws Exception;
+	
+	public boolean checkDuplicateDefaultArea(String areaId,int num)throws Exception;
 }

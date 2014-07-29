@@ -9,14 +9,16 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.task.Task;
 
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.NoHandleTask;
@@ -27,6 +29,7 @@ import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.service.TempleService;
 
 /**
  * 任务管理业务实现类
@@ -42,6 +45,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
 	private ActivitiService activitiService;
+
+	private TempleService templeService;
 
 	private String[] arraySysVariable = { "_users", "_groups", "loopCounter",
 			"nrOfActiveInstances", "nrOfCompletedInstances", "nrOfInstances",
@@ -246,7 +251,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				// 节点处理工时转换
 				if (nodeInfo.getDURATION_NODE() != null) {
 					long worktime = Long.parseLong(nodeInfo.getDURATION_NODE());
-					nodeInfo.setDURATION_NODE(formatDuring(worktime));
+					nodeInfo.setDURATION_NODE(StringUtil.formatTimeToString(worktime));
 				}
 
 				for (ActivityImpl activtie : activties) {
@@ -394,7 +399,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			
+
 			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
 			String currentAccount = AccessControl.getAccessControl()
 					.getUserAccount();
@@ -423,11 +428,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (StringUtil.isNotEmpty(task.getProcessKey())) {
 				task.setProcessKey("%" + task.getProcessKey() + "%");
 			}
-			
+
 			if (StringUtil.isNotEmpty(task.getCreateUser())) {
 				task.setCreateUser("%" + task.getCreateUser() + "%");
 			}
-			
+
 			if (StringUtil.isNotEmpty(task.getEntrustUser())) {
 				task.setEntrustUser("%" + task.getEntrustUser() + "%");
 			}
@@ -436,11 +441,12 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (isAdmin) {
 				listInfo = executor.queryListInfoBean(TaskManager.class,
 						"selectHistoryTaskForAdmin_wf", offset, pagesize, task);
-			}else {
+			} else {
 				listInfo = executor.queryListInfoBean(TaskManager.class,
-						"selectHistoryTaskForNotAdmin_wf", offset, pagesize, task);
+						"selectHistoryTaskForNotAdmin_wf", offset, pagesize,
+						task);
 			}
-			
+
 			// 用户转办记录
 
 			// 获取分页中List数据
@@ -463,45 +469,17 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					activitiService.handleDurationTime(tmr);
 				}
 			}
-			
+
 			tm.commit();
 
 			return listInfo;
 		} catch (Exception e) {
 			throw new ProcessException(e);
-		}finally {
+		} finally {
 			tm.release();
 		}
 	}
 
-	/**
-	 * 耗时转换 gw_tanx
-	 * 
-	 * @param mss
-	 * @return 2014年5月21日
-	 */
-	private String formatDuring(long mss) {
-		long days = mss / (1000 * 60 * 60 * 24);
-		long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-		long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
-		long seconds = (mss % (1000 * 60)) / 1000;
-
-		StringBuffer sb = new StringBuffer();
-		if (days != 0) {
-			sb.append(days + "天");
-		}
-		if (hours != 0) {
-			sb.append(hours + "小时");
-		}
-		if (minutes != 0) {
-			sb.append(minutes + "分钟");
-		}
-		if (seconds != 0) {
-			sb.append(seconds + "秒");
-		}
-
-		return sb.toString();
-	}
 
 	@Override
 	public Object[] getProcessVariable(String processInstId) {
@@ -546,20 +524,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 	}
 
-	@Override
-	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
-			long offset, int pagesize, HttpServletRequest request) {
-		List<NoHandleTask> list = new ArrayList<NoHandleTask>();
-
-		TransactionManager tm = new TransactionManager();
+	/**
+	 * 统一代办获取用户自己的任务
+	 * 
+	 * @param params
+	 * @param list
+	 * @param request
+	 *            2014年7月23日
+	 */
+	private void getOneselfTask(Map<String, Object> params,
+			List<NoHandleTask> list, HttpServletRequest request) {
 		try {
-			tm.begin();
-
 			// 当前用户的任务列表数据
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("assignee", pernr);
-			params.put("sysid", sysid);
-
 			List<NoHandleTask> taskList = executor.queryListBean(
 					NoHandleTask.class, "selectNoHandleTask_wf", params);
 
@@ -571,28 +547,65 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 							nt.getUserAccount(), "1"));
 
 					String url = request.getContextPath()
-							+ "/workflow/taskManage/toDealTaskForUnite.page?processKey="
+							+ "/workflow/taskManage/toDealTask.page?processKey="
 							+ nt.getProcessKey() + "&processInstId="
 							+ nt.getInstanceId() + "&taskId=" + nt.getTaskId()
 							+ "&taskState=" + nt.getTaskState()
-							+ "&suspensionState=" + nt.getSuspensionState();
+							+ "&suspensionState=" + nt.getSuspensionState()
+							+ "&sysid=" + params.get("sysid");
+
+					if (StringUtil.isNotEmpty(nt.getFromUser())) {
+
+						nt.setFromUserName(activitiService.userIdToUserName(
+								nt.getFromUser(), "1"));
+
+						nt.setTitle((nt.getTitle() + "(" + nt.getBusinessKey()
+								+ ")[" + nt.getFromUserName() + "转办]"));
+
+						nt.setTaskType(2);// 转办任务
+					} else {
+						nt.setTaskType(0);// 自己任务
+					}
 					nt.setUrl(url);
+
+					// 处理按钮
+					if (nt.getSuspensionState().equals("2")) {
+						nt.setDealButtionName("处理[挂起]");
+					} else {
+						nt.setDealButtionName("处理");
+					}
+
 					list.add(nt);
 				}
 			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
 
-			// 委托给当前用户的任务列表数据
+	/**
+	 * 统一代办获取用户委托任务
+	 * 
+	 * @param params
+	 * @param list
+	 * @param request
+	 *            2014年7月23日
+	 */
+	private void getEntrustTask(Map<String, Object> params,
+			List<NoHandleTask> list, HttpServletRequest request) {
+		try {
 			Map<String, Object> entrustMap = new HashMap<String, Object>();
 			entrustMap.put("isAdmin", false);
-			entrustMap.put("entrust_user", pernr);
+			entrustMap.put("entrust_user", params.get("assignee"));
 
 			// 根据当前用户获取委托关系列表数据
 			List<WfEntrust> entrustList = executor.queryListBean(
 					WfEntrust.class, "selectEntrustList", entrustMap);
 
-			// 没有委托关系，不需要去查任务数据
 			if (entrustList != null && entrustList.size() > 0) {
+
 				params.put("entrustList", entrustList);
+
 				// 根据当前用户获取委托关系列表数据
 				List<NoHandleTask> entrustlist = executor.queryListBean(
 						NoHandleTask.class, "selectNoHandleEntrustTask_wf",
@@ -604,20 +617,57 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						// 处理人格式化
 						nt.setSender(activitiService.userIdToUserName(
 								nt.getUserAccount(), "1"));
+						nt.setFromUserName(activitiService.userIdToUserName(
+								nt.getFromUser(), "1"));
 
 						String url = request.getContextPath()
-								+ "/workflow/taskManage/toDealTaskForUnite.page?processKey="
+								+ "/workflow/taskManage/toDealTask.page?processKey="
 								+ nt.getProcessKey() + "&processInstId="
 								+ nt.getInstanceId() + "&taskId="
 								+ nt.getTaskId() + "&taskState="
 								+ nt.getTaskState() + "&suspensionState="
-								+ nt.getSuspensionState();
-						nt.setUrl(url);
+								+ nt.getSuspensionState() + "&sysid="
+								+ params.get("sysid");
 
+						nt.setTitle((nt.getTitle() + "(" + nt.getBusinessKey()
+								+ ")[" + nt.getFromUserName() + "委托]"));
+
+						// 处理按钮
+						if (nt.getSuspensionState().equals("2")) {
+							nt.setDealButtionName("处理[挂起]");
+						} else {
+							nt.setDealButtionName("处理");
+						}
+
+						nt.setTaskType(1);// 委托任务
+						nt.setUrl(url);
 						list.add(nt);
 					}
 				}
 			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
+			long offset, int pagesize, HttpServletRequest request) {
+		List<NoHandleTask> list = new ArrayList<NoHandleTask>();
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("assignee", pernr);
+			params.put("sysid", sysid);
+
+			// 获取当前用户自己的任务(包括别人转办给当前用户的任务)
+			getOneselfTask(params, list, request);
+
+			// 获取别人委托给当前用户的任务
+			getEntrustTask(params, list, request);
 
 			tm.commit();
 
@@ -638,7 +688,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			String fromUser = AccessControl.getAccessControl().getUserAccount();
 
 			executor.insert("addNodeChangeInfo_wf", fromUser, userId, taskId,
-					processIntsId, processKey, new Timestamp(new Date().getTime()));
+					processIntsId, processKey,
+					new Timestamp(new Date().getTime()));
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -647,12 +698,12 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public int countTaskNum(String pernr, String sysid) {
-		
+
 		TransactionManager tm = new TransactionManager();
 		try {
-			
+
 			tm.begin();
-			
+
 			// 当前用户的任务数
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("assignee", pernr);
@@ -718,7 +769,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public boolean judgeAuthority(String taskId) {
+	public boolean judgeAuthority(String taskId, String processKey) {
 
 		try {
 
@@ -731,11 +782,13 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						.getUserAccount();
 
 				// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-				Task task = activitiService.getTaskById(taskId);
+				HistoricTaskInstance hisTask = activitiService
+						.getHistoryService().createHistoricTaskInstanceQuery()
+						.taskId(taskId).singleResult();
 
-				if (StringUtil.isNotEmpty(task.getAssignee())) {
+				if (StringUtil.isNotEmpty(hisTask.getAssignee())) {
 
-					if (currentAccount.equals(task.getAssignee())) {
+					if (currentAccount.equals(hisTask.getAssignee())) {
 						return true;
 					}
 
@@ -753,9 +806,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				// 最后查看当前用户的委托关系
 				List<WfEntrust> entrustList = executor.queryList(
 						WfEntrust.class, "getEntrustRelation_wf",
-						currentAccount, task.getTaskDefinitionKey(),
-						new Timestamp(task.getCreateTime().getTime()),
-						new Timestamp(task.getCreateTime().getTime()));
+						currentAccount, processKey, new Timestamp(hisTask
+								.getStartTime().getTime()), new Timestamp(
+								hisTask.getStartTime().getTime()));
 
 				if (entrustList == null || entrustList.size() == 0) {
 					return false;
@@ -768,4 +821,178 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			throw new ProcessException(e);
 		}
 	}
+
+	@Override
+	public void sendMess(String taskId, String taskState, final String sentType)
+			throws Exception {
+
+		final List<Map<String, Object>> fieldList = new ArrayList<Map<String, Object>>();
+
+		// 未签收的任务
+		if ("1".equals(taskState)) {
+			executor.queryByNullRowHandler(new NullRowHandler() {
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					Map<String, Object> map = new HashMap<String, Object>();
+					// --任务id
+					map.put("taskId", origine.getString("TASKID"));
+					// --任务名称
+					map.put("taskName", origine.getString("TASKNAME"));
+					// --任务创建时间
+					map.put("createTime", origine.getTimestamp("CREATETIME"));
+					// --流程名称
+					map.put("processName", origine.getString("PROCESSNAME"));
+					// --流程实例id
+					map.put("procInstanceId",
+							origine.getString("PROCINSTANCEID"));
+					// --任务节点key
+					map.put("taskDefKey", origine.getString("TASKDEFKEY"));
+					// --预警时间点
+					map.put("alertTime", origine.getTimestamp("ALERTTIME"));
+					// --超时时间点
+					map.put("overTime", origine.getTimestamp("OVERTIME"));
+					// 短信模板id
+					map.put("messageTempleId",
+							origine.getString("MESSAGETEMPLEID"));
+					// 邮件模板id
+					map.put("emailTempleId", origine.getString("EMAILTEMPLEID"));
+					// 处理人所在部门
+					map.put("orgId",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"), "orgId")
+									+ "");
+					// 手机号码
+					map.put("mobile",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"),
+									"userMobiletel1")
+									+ "");
+					// 处理人工号
+					map.put("worknum",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"),
+									"userWorknumber")
+									+ "");
+					// 处理人姓名
+					String userName = activitiService.getUserInfoMap()
+							.getUserName(origine.getString("USERID"));
+					// 处理人邮件地址
+					String userEmail = origine.getString("USERID")
+							+ "@sany.com.cn";
+					if (StringUtil.isNotEmpty(origine.getString("ENTRUSTUSER"))) {
+						// 委托人姓名
+						String entrustUserName = activitiService
+								.getUserInfoMap().getUserName(
+										origine.getString("ENTRUSTUSER"));
+						// 委托人邮件地址
+						String entrustUserEmail = origine
+								.getString("ENTRUSTUSER") + "@sany.com.cn";
+
+						map.put("mailAddress", new String[] { userEmail,
+								entrustUserEmail });
+						map.put("realName", userName + "(" + entrustUserName
+								+ ")");
+					} else {
+						map.put("mailAddress", new String[] { userEmail });
+						map.put("realName", userName);
+					}
+
+					if ("1".equals(sentType)) {
+						map.put("subject", "流程预警提醒");
+						map.put("noticeType", "1");
+					} else {
+						map.put("subject", "流程超时提醒");
+						map.put("noticeType", "2");
+					}
+
+					fieldList.add(map);
+				}
+			}, "getNoSignTaskById", taskId);
+
+		} else {// 已签收任务
+			executor.queryByNullRowHandler(new NullRowHandler() {
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					Map<String, Object> map = new HashMap<String, Object>();
+					// --任务id
+					map.put("taskId", origine.getString("TASKID"));
+					// --任务名称
+					map.put("taskName", origine.getString("TASKNAME"));
+					// --任务创建时间
+					map.put("createTime", origine.getTimestamp("CREATETIME"));
+					// --流程名称
+					map.put("processName", origine.getString("PROCESSNAME"));
+					// --流程实例id
+					map.put("procInstanceId",
+							origine.getString("PROCINSTANCEID"));
+					// --任务节点key
+					map.put("taskDefKey", origine.getString("TASKDEFKEY"));
+					// --预警时间点
+					map.put("alertTime", origine.getTimestamp("ALERTTIME"));
+					// --超时时间点
+					map.put("overTime", origine.getTimestamp("OVERTIME"));
+					// 短信模板id
+					map.put("messageTempleId",
+							origine.getString("MESSAGETEMPLEID"));
+					// 邮件模板id
+					map.put("emailTempleId", origine.getString("EMAILTEMPLEID"));
+					// 处理人所在部门
+					map.put("orgId",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"), "orgId")
+									+ "");
+					// 手机号码
+					map.put("mobile",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"),
+									"userMobiletel1")
+									+ "");
+					// 处理人工号
+					map.put("worknum",
+							activitiService.getUserInfoMap().getUserAttribute(
+									origine.getString("USERID"),
+									"userWorknumber")
+									+ "");
+
+					// 处理人姓名
+					String userName = activitiService.getUserInfoMap()
+							.getUserName(origine.getString("USERID"));
+					// 处理人邮件地址
+					String userEmail = origine.getString("USERID")
+							+ "@sany.com.cn";
+					if (StringUtil.isNotEmpty(origine.getString("ENTRUSTUSER"))) {
+						// 委托人姓名
+						String entrustUserName = activitiService
+								.getUserInfoMap().getUserName(
+										origine.getString("ENTRUSTUSER"));
+						// 委托人邮件地址
+						String entrustUserEmail = origine
+								.getString("ENTRUSTUSER") + "@sany.com.cn";
+
+						map.put("mailAddress", new String[] { userEmail,
+								entrustUserEmail });
+						map.put("realName", userName + "(" + entrustUserName
+								+ ")");
+					} else {
+						map.put("mailAddress", new String[] { userEmail });
+						map.put("realName", userName);
+					}
+
+					if ("1".equals(sentType)) {
+						map.put("subject", "流程预警提醒");
+						map.put("noticeType", "1");
+					} else {
+						map.put("subject", "流程超时提醒");
+						map.put("noticeType", "2");
+					}
+
+					fieldList.add(map);
+				}
+			}, "getSignedTaskById", taskId);
+		}
+
+		templeService.sendNotice(fieldList);
+
+	}
+
 }

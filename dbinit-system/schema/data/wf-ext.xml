@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<manager-config>
+	<description>
+<![CDATA[
+	msg 初始化语句
+ ]]>
+	</description>
+		<property name="all_datas">
+			<list>
+				<property name="msg_list" index="0">
+					<map>
+						<property name="default">
+							<list>
+								<property index="0"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','处理人姓名','realName',0)	]]></property>
+								<property index="1"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','任务名称','taskName',0)]]></property>
+								<property index="2"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','流程名称','processName',0)]]></property>
+								<property index="3"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','任务创建时间','createTime',0)]]></property>
+								<property index="4"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','任务状态','state',0)]]></property>
+							</list>
+						</property>
+					</map>
+				</property>
+			</list>
+		</property>
+	
+
+
+</manager-config>

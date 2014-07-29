@@ -20,6 +20,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.impl.identity.UserInfoMap;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -1477,7 +1478,7 @@ public interface ActivitiService {
 	 * @throws Exception
 	 * 2014年7月16日
 	 */
-	public List<Map<String, String>> getProcessNodeUnComplete() throws Exception;
+	public List<Map<String, Object>> getProcessNodeUnComplete() throws Exception;
 	
 	/**
 	 * 更新任务消息发送状态
@@ -1517,4 +1518,10 @@ public interface ActivitiService {
 	 * 2014年7月15日
 	 */
 	public void delegateTaskInfo(TaskManager tm);
+	
+	/**  gw_tanx
+	 * @return
+	 * 2014年7月25日
+	 */
+	public UserInfoMap getUserInfoMap();
 }

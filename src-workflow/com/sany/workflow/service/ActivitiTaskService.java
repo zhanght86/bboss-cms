@@ -145,9 +145,21 @@ public interface ActivitiTaskService {
 	/**
 	 * 权限判断
 	 * 
+	 * @param processKey
 	 * @param taskId
-	 * @return 2014年7月22日
+	 * @return 2014年7月23日
 	 */
-	public boolean judgeAuthority(String taskId);
+	public boolean judgeAuthority(String taskId, String processKey);
+
+	/**
+	 * 手动发送信息
+	 * 
+	 * @param taskId
+	 * @param sentType
+	 * @throws Exception
+	 *             2014年7月25日
+	 */
+	public void sendMess(String taskId, String taskState, String sentType)
+			throws Exception;
 
 }

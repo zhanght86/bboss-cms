@@ -17,11 +17,18 @@ function pageInit(){
 	}
 }
 
-function initSystemSecret(){
-	var systemSecret = "<%=request.getRequestedSessionId() %>";
-	$("#system_secret").val(systemSecret);
-	$("#re_system_secret").val(systemSecret);
+function getSystemSecret(){
+	$.ajax({
+		type : "POST",
+		url : "getSystemSecret.page",
+		async : false,
+		success : function(responseText) {
+			$("#system_secret").val(responseText);
+			$("#re_system_secret").val(responseText);
+		}
+	});
 }
+
 
 </script>
 <body onload="pageInit();">
@@ -33,33 +40,33 @@ function initSystemSecret(){
 				    <pg:beaninfo requestKey="wfApp" >
 					<tr>
 						<th>应用编号：</th>
-						<td width=140px><input id="system_id" name="system_id"
+						<td width=350px><input id="system_id" name="system_id"
 							type="text" value="<pg:cell colName="system_id" defaultValue="" />"
-							class="w120 input_default easyui-validatebox" required="true"
+							class="input_default easyui-validatebox" required="true" style="width: 240px;"
 							maxlength="100" /><font color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>应用名称：</th>
-						<td><input id="system_name" name="system_name" type="text"
-							value="<pg:cell colName="system_name" defaultValue="" />" class="w120 input_default easyui-validatebox"
-							required="true" maxlength="100" /><font color="red">*</font>
+						<td width=350px><input id="system_name" name="system_name" type="text"
+							value="<pg:cell colName="system_name" defaultValue="" />" class="input_default easyui-validatebox"
+							required="true" maxlength="100" style="width: 240px;"/><font color="red">*</font>
 							<input type="hidden" id="old_system_secret_hidden" name="old_system_secret_hidden" value="<pg:cell colName="system_secret" defaultValue="" />" />
 							</td>
 					</tr>
 					<tr id="secret_tr">
 						<th>应用口令：</th>
-						<td id="secret_td" style="width:220px;"><input id="system_secret" name="system_secret" type="text"
-							value="<pg:cell colName="system_secret_text" defaultValue="" />" class="w120 input_default easyui-validatebox"
+						<td id="secret_td" style="width:350px;"><input id="system_secret" name="system_secret" type="text"
+							value="<pg:cell colName="system_secret_text" defaultValue="" />" class="input_default easyui-validatebox" style="width: 240px;"
 							required="true" maxlength="100" /><font color="red">*</font><a href="javascript:void(0)" class="bt_1" id="changeButton"
-							onclick="initSystemSecret()"><span id="system_seq_span">重置口令</span></a>
+							onclick="getSystemSecret()"><span id="system_seq_span">重置口令</span></a>
 					        <input type="hidden" id="system_secret_text_hidden" name="system_secret_text_hidden" value="<pg:cell colName="system_secret_text" defaultValue="" />" />
 						</td>
 					</tr>
 					<tr id="re_secret_tr">
 						<th>重复口令：</th>
-						<td style="width:220px;"><input id="re_system_secret" name="re_system_secret" type="text"
-							value="<pg:cell colName="system_secret_text" defaultValue="" />" class="w120 input_default easyui-validatebox"
-							required="true" maxlength="100" /><font id="re_secret_font" color="red">*</font></td>
+						<td style="width:350px;"><input id="re_system_secret" name="re_system_secret" type="text"
+							value="<pg:cell colName="system_secret_text" defaultValue="" />" class="input_default easyui-validatebox"
+							required="true" maxlength="100" style="width: 240px;"/><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>待办类型：</th>
@@ -91,14 +98,14 @@ function initSystemSecret(){
 					<tr>
 						<th>待办URL：</th>
 						<td><input id="todo_url" name="todo_url" type="text"
-							value="<pg:cell colName="todo_url" defaultValue="" />" class="w120 input_default easyui-validatebox"
-							required="true" maxlength="200" /><font color="red">*</font></td>
+							value="<pg:cell colName="todo_url" defaultValue="" />" class="input_default easyui-validatebox"
+							required="true" maxlength="200" style="width: 240px;"/><font color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>应用URL：</th>
 						<td><input id="app_url" name="app_url" type="text"
-							value="<pg:cell colName="app_url" defaultValue="" />" class="w120 input_default easyui-validatebox"
-							required="true" maxlength="200" /><font color="red">*</font></td>
+							value="<pg:cell colName="app_url" defaultValue="" />" class="input_default easyui-validatebox"
+							required="true" maxlength="200" style="width: 240px;"/><font color="red">*</font></td>
 					</tr>
 					<tr>
 						<th>应用类型：</th>

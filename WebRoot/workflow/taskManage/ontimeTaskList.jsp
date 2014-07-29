@@ -65,16 +65,18 @@
     		<td><pg:cell colName="ID_" /></td> 
        		<td><pg:cell colName="NAME_"/></td>
        		<td>
-       			<pg:empty colName="delegateTaskList" >
-			    	<pg:cell colName="USER_ID_NAME" />
-		    	 </pg:empty>
-		    	 <pg:notempty colName="delegateTaskList" >
+       			<pg:null colName="wfEntrust">
+       				<pg:null colName="delegateTaskList">
+       					<pg:cell colName="USER_ID_NAME"/>
+       				</pg:null>
+       			</pg:null>
+       			<pg:notnull colName="delegateTaskList" >
 			     	<pg:list colName="delegateTaskList" >
 					  <pg:cell colName="FROM_USER_NAME"/>转办给<pg:cell colName="TO_USER_NAME"/>
-					  [<pg:cell colName="CHANGETIME"/>]
+					  [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
 					  <br/>
 			       </pg:list>
-		         </pg:notempty>	
+		        </pg:notnull>	
        		</td>
        		<td>
 	       		<pg:cell colName="ASSIGNEE_NAME"/>
@@ -104,11 +106,8 @@
 		    </td>
 		    <td>
 		    	<pg:notempty colName="ALERTTIME" >
-			    	<pg:equal colName="advancesend" value="0">未发送预警提醒</pg:equal>
-			    	<pg:equal colName="advancesend" value="1">发送预警提醒成功</pg:equal>
-			    	<pg:equal colName="advancesend" value="2">短信发送预警提醒成功，邮件发送预警提醒失败</pg:equal>
-			    	<pg:equal colName="advancesend" value="3">短信发送预警提醒失败，邮件发送预警提醒成功</pg:equal>
-			    	<pg:equal colName="advancesend" value="4">发送预警提醒失败</pg:equal>
+		    		<pg:convert convertData="advanceSendMap" colName="advancesend"/> 
+			    	<a href="javascript:void(0)" onclick="sendMess('<pg:cell colName="ID_" />','<pg:cell colName="KEY_" />','<pg:cell colName="state" />','1')">发送</a>
 		    	</pg:notempty>
 		    </td>
        		<td>
@@ -122,22 +121,19 @@
 		    </td>
 		    <td>
 		    	<pg:notempty colName="OVERTIME" >
-			    	<pg:equal colName="overtimesend" value="0">未发送超时提醒</pg:equal>
-	       			<pg:equal colName="overtimesend" value="1">发送超时提醒成功</pg:equal>
-			    	<pg:equal colName="overtimesend" value="2">短信发送超时提醒成功，邮件发送超时提醒失败</pg:equal>
-			    	<pg:equal colName="overtimesend" value="3">短信发送超时提醒失败，邮件发送超时提醒成功</pg:equal>
-			    	<pg:equal colName="overtimesend" value="4">发送超时提醒失败</pg:equal>
+		    		<pg:convert convertData="overtimeSendMap" colName="overtimesend"/> 
+			    	<a href="javascript:void(0)" onclick="sendMess('<pg:cell colName="ID_" />','<pg:cell colName="KEY_" />','<pg:cell colName="state" />','2')">发送</a>
 		    	</pg:notempty>
 		    </td>
             <td class="td_center">
              	<pg:equal colName="state" value="1">
-             		<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="signTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />')">签收</a>|
-             		<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />')">处理</a>|
+             		<a href="javascript:void(0)" id="" onclick="signTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="KEY_" />')">签收</a>|
+             		<a href="javascript:void(0)" id="" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />','<pg:cell colName="KEY_" />')">处理</a>|
 				</pg:equal>
 				<pg:equal colName="state" value="2">
-             		<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />')">处理</a>|
+             		<a href="javascript:void(0)" id="" onclick="doTask('<pg:cell colName="ID_" />','<pg:cell colName="SUSPENSION_STATE_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="state" />','<pg:cell colName="KEY_" />')">处理</a>|
 				</pg:equal>
-            	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
+            	<a href="javascript:void(0)" id="" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
             </td>    
         </tr>
 	 </pg:list>

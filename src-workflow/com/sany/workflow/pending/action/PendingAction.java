@@ -71,7 +71,7 @@ public class PendingAction {
 	@SuppressWarnings("unchecked")
 	private String getPendingNumFromGW(String userId,String name)throws Exception{
 		AccessToken token = new AccessToken();
-		String jsonString = gwPendingService.getTaskCount(null, "7183", null,GW_PENDING_TYPE);
+		String jsonString = gwPendingService.getTaskCount(null, "10006419", null,GW_PENDING_TYPE);
 		Map<String,Object> params = StringUtil.json2Object(jsonString, HashMap.class);
 		String num = String.valueOf(params.get(name));
 		return (null == num ||"".equals(num))?"0":num;
@@ -154,11 +154,13 @@ public class PendingAction {
 		SysTitle sys = pendingService.getSysTitleById(id);
 		String type = sys.getPendingType();
 		String pendingUrl = sys.getPendingUrl();
+		String context = sys.getAppUrl();
+		String nameEN = sys.getNameEN();
 		//取GW接口的
 		if("1".equals(type)){
-			return getPendingFromGW(id,"7183",1,20);
+			return getPendingFromGW(nameEN,"10006419",context,0,100);
 		}else if("2".equals(type)){
-			return getPendingFromLocal(id,userAccount,0,0,request);
+			return getPendingFromLocal(nameEN,userAccount,0,0,request);
 		}else if("3".equals(type)){
 			return null;
 		}else{
@@ -169,12 +171,12 @@ public class PendingAction {
 	/**
 	 * 获取GW待办的详细信息
 	*/
-	private  List<SysPending> getPendingFromGW(String system_id,String pernr,int low,int high)throws Exception{
+	private  List<SysPending> getPendingFromGW(String system_id,String pernr,String context,int low,int high)throws Exception{
 		List<SysPending> list = new ArrayList<SysPending>();
 		List<ToDoPro> datas = gwPendingService.getTaskList(null, pernr, system_id, low, high,GW_PENDING_TYPE);
 		if(null != datas && datas.size()>0){
 			for(int i=0;i<datas.size();i++){
-				list.add(new SysPending(datas.get(i)));
+				list.add(new SysPending(datas.get(i),context));
 			}
 		}
 		return list;
