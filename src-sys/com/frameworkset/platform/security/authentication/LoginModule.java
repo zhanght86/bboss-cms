@@ -15,7 +15,6 @@
  */
 package com.frameworkset.platform.security.authentication;
 
-import javax.security.auth.callback.CallbackHandler;
 
 
 /**

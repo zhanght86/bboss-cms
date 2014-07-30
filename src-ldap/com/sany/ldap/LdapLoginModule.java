@@ -16,14 +16,12 @@ package com.sany.ldap;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.platform.ca.CaProperties;
 import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.security.authentication.CheckCallBack;
+import com.frameworkset.platform.security.authentication.CheckCallBackWrapper;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule;
@@ -49,25 +47,11 @@ public class LdapLoginModule extends UserPasswordLoginModule{
     /**
      * 登录认证
      */
-    @SuppressWarnings("rawtypes")
-    protected boolean check(String userName, String password, CheckCallBack checkCallBack) throws LoginException {
+    protected boolean _check(String userName, String password, CheckCallBackWrapper checkCallBack) throws LoginException {
 
         String password_i = password;
         
-        /**
-         * 匿名用户登录系统
-         */
-        if (userName.equals("guest___")) {
-            checkCallBack.setUserAttribute("userName", "匿名用户");
-            checkCallBack.setUserAttribute("userID", "-1");
-            checkCallBack.setUserAttribute("password", EncrpyPwd.encodePassword("123456"));
-            checkCallBack.setUserAttribute("password_i", "123456");
-            checkCallBack.setUserAttribute("CHARGEORGID", (Organization) null);
-            checkCallBack.setUserAttribute("orgName", "没有兼职单位");
-            checkCallBack.setUserAttribute("secondOrgs", null);
-            checkCallBack.setUserAttribute("userAccount", "guest___");
-            return true;
-        }
+       
 
         try {
             User user = SecurityDatabase.getUserManager(registTable).getUserByName(userName);
@@ -79,7 +63,7 @@ public class LdapLoginModule extends UserPasswordLoginModule{
             }
             
             /******验证登录用户的IP是否限制*****/
-          String userip =   com.frameworkset.util.StringUtil.getClientIP(request);
+          String userip =   com.frameworkset.util.StringUtil.getClientIP(checkCallBack.getRequest());
           boolean ip_control = IpControlUtil.validateIp(userName,userip);
            if(!ip_control){
         	   throw new LoginException("IP访问限制，请与管理员联系");
@@ -146,14 +130,14 @@ public class LdapLoginModule extends UserPasswordLoginModule{
     
   
 
-    protected boolean check(HttpServletRequest request, String userName, String password, CheckCallBack checkCallBack)
+    protected boolean check( String userName, String password, CheckCallBackWrapper checkCallBack)
             throws LoginException {
 
     	 boolean isWebSealServer = ConfigManager.getInstance()
     				.getConfigBooleanValue("isWebSealServer", false);
 //    	System.out.println(">>>>>>>>>>>isWebSealServer:"+isWebSealServer);		 
-    	String user_name = request.getHeader("iv-user");
-    	String fromsso = (String)request.getAttribute("fromsso");
+    	String user_name = checkCallBack.getRequest().getHeader("iv-user");
+    	String fromsso = (String)checkCallBack.getRequest().getAttribute("fromsso");
     	if(fromsso != null && fromsso.equals("true"))
     	{
     		return super.check(userName, password, checkCallBack);
@@ -167,7 +151,7 @@ public class LdapLoginModule extends UserPasswordLoginModule{
 		  	  }
 		  	  else
 		  	  {
-		  		  	return check(userName, password, checkCallBack);
+		  		  	return _check(userName, password, checkCallBack);
 		  	  }
     	}
     	

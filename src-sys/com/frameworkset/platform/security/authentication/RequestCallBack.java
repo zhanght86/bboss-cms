@@ -1,6 +1,5 @@
 package com.frameworkset.platform.security.authentication;
 
-import javax.security.auth.callback.Callback;
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestCallBack  implements Callback{

@@ -1,6 +1,5 @@
 package com.frameworkset.platform.security.authentication;
 
-import javax.security.auth.callback.Callback;
 
 /**
  * 用户类型获取对象

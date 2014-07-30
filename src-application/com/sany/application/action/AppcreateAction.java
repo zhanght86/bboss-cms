@@ -286,6 +286,18 @@ public class AppcreateAction {
 		return appcreateService.isDeleteApp(appInfoId);
 
 	}
+	
+	
+	
+	/*   前台没有图片，后台传到前台    */
+	@SuppressWarnings("unchecked")
+	public @ResponseBody String findPic(String picName,HttpServletRequest request) throws Exception{
+		String contextPath= request.getSession().getServletContext().getRealPath("");		
+		appcreateService.getWfPicByName( picName,  contextPath+"\\application\\app_images\\" + picName);
+		return "success";
+	}
+	
+	
 	public static void main(String []args0){
 		File file=new File("D:\\apache-maven-3.0.4\\bin"); 
 		String test[];  

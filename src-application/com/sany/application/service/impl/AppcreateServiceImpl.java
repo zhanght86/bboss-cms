@@ -183,7 +183,21 @@ public class AppcreateServiceImpl implements AppcreateService {
 				return f;  
 			}  },"getWfPicById",id);
 		
-//		return executor.queryObject(WfPic.class, "getWfPicById",id);
+	}
+	@Override
+	public File getWfPicByName(String picName,final String path) throws Exception {
+
+		return executor.queryTField( File.class,   new FieldRowHandler<File>() {
+
+			@Override
+			public File handleField(Record record) throws Exception {
+				File f = new File(path);   
+				if (f.exists())					 
+					return f;
+				record.getFile("content",f); 
+				return f;  
+			}  },"getWfPicByName",picName);
+		
 	}
 
 	@Override

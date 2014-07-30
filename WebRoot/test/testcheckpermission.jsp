@@ -86,7 +86,13 @@
 						</td>
 					</tr>
 					
-					
+					<tr>
+						
+						<td colspan="7">
+							
+							<a href="<%=request.getContextPath() %>/test/testssowithtoken.jsp"  target="_blank""  >token单点登录测试</a>
+						</td>
+					</tr>
 					<tr>
 						
 						<td colspan="7">

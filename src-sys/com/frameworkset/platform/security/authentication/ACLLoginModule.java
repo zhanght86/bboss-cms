@@ -5,17 +5,14 @@ package com.frameworkset.platform.security.authentication;
 import java.io.IOException;
 import java.security.Principal;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.security.auth.login.FailedLoginException;
+
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
 
 /**
  * <p>Title: </p>
@@ -50,12 +47,12 @@ public abstract class ACLLoginModule implements LoginModule {
      * 如果登录接口没有指定用户类型表，不需要检测用户的类型
      */
     protected String[] userTypes ;
-    protected HttpServletRequest request;
+//    protected HttpServletRequest request;
 
     /**标识用户登录是否成功*/
     private boolean loginSuccess;
     /**登录口令*/
-    private char[] password;
+    private String password;
     
     protected boolean enableusertype(String userType)
     {
@@ -112,29 +109,46 @@ public abstract class ACLLoginModule implements LoginModule {
             throw new LoginException("No CallbackHandler defined for LoginModule" + this.getClass().getName()  );
 
         }
-        Callback[] callbacks = new Callback[4];
-        callbacks[0] = new NameCallback("Username");
-        callbacks[1] = new PasswordCallback("Password", false);
-        callbacks[2] = new UserTypeCallBack("UserType");
-         callbacks[3] = new RequestCallBack("Request");
+//        Callback[] callbacks = new Callback[3];
+//        callbacks[0] = new NameCallback("Username");
+//        callbacks[1] = new PasswordCallback("Password", false);
+//        callbacks[2] = new UserTypeCallBack("UserType");
         
         //
         // Call the callback handler to get the username
         try {
             log.debug( this.getClass().getName() + " Login");
-            callbackHandler.handle(callbacks);
-            username = ((NameCallback) callbacks[0]).getName();
-            userTypes = ((UserTypeCallBack)callbacks[2]).getUserTypes();
-            this.request = ((RequestCallBack)callbacks[3]).getRequest();
-            char[] temp = ((PasswordCallback) callbacks[1]).getPassword();
-            password = new char[temp.length];
+//            callbackHandler.handle(callbacks);
+            username =callbackHandler.getUserName();
+            userTypes = callbackHandler.getUserTypes();
+//            this.request = ((RequestCallBack)callbacks[3]).getRequest();
+            password = callbackHandler.getPassword();
+//            password = new char[temp.length];
 
-            System.arraycopy(temp, 0, password, 0, temp.length);
-            ((PasswordCallback) callbacks[1]).clearPassword();
-            if(request == null)
-            	loginSuccess = check(username, new String(password),checkCallBack);
+//            System.arraycopy(temp, 0, password, 0, temp.length);
+//            ((PasswordCallback) callbacks[1]).clearPassword();
+            /**
+             * 匿名用户登录系统
+             */
+            if (username.equals("guest___")) {
+                checkCallBack.setUserAttribute("userName", "匿名用户");
+                checkCallBack.setUserAttribute("userID", "-1");
+                checkCallBack.setUserAttribute("password", EncrpyPwd.encodePassword("123456"));
+                checkCallBack.setUserAttribute("password_i", "123456");
+                checkCallBack.setUserAttribute("CHARGEORGID", (Organization) null);
+                checkCallBack.setUserAttribute("orgName", "没有兼职单位");
+                checkCallBack.setUserAttribute("secondOrgs", null);
+                checkCallBack.setUserAttribute("userAccount", "guest___");
+                loginSuccess = true;
+            }
             else
-            	loginSuccess = check(request,username, new String(password),checkCallBack);
+            {
+	            CheckCallBackWrapper checkCallBackWrapper = new CheckCallBackWrapper(checkCallBack,callbackHandler.getRequest(),callbackHandler.getResponse());
+	//            if(request == null)
+	            	loginSuccess = check(callbackHandler.getUserName(), callbackHandler.getPassword(),checkCallBackWrapper);
+            }
+//            else
+//            	loginSuccess = check(request,username, new String(password),checkCallBack);
 
 
             if (loginSuccess) {
@@ -146,14 +160,11 @@ public abstract class ACLLoginModule implements LoginModule {
             {
                 log.debug( "" + this.getClass().getName() + " login failed");
             }
-        } catch (IOException ioe) {
+        } catch (Exception ioe) {
 
             log.error(ioe.getMessage(),ioe);
             throw new LoginException(ioe.toString());
-        } catch (UnsupportedCallbackException uce) {
-            log.error(uce.getMessage(),uce);
-            throw new LoginException(uce.toString());
-        }
+        } 
         throw new LoginException();
     }
 
@@ -252,19 +263,14 @@ public abstract class ACLLoginModule implements LoginModule {
      * @return boolean
      * @throws LoginException
      */
-    protected abstract boolean check(String userName, String password,CheckCallBack checkCallBack) throws
+    protected abstract boolean check(String userName, String password,CheckCallBackWrapper checkCallBack) throws
             LoginException;
     
-    protected abstract boolean check(HttpServletRequest request,String userName, String password,CheckCallBack checkCallBack) throws
-    LoginException;
+//    protected abstract boolean check(HttpServletRequest request,String userName, String password,CheckCallBackWrapper checkCallBack) throws
+//    LoginException;
 
     private void clearPassword() {
-        if (password == null) {
-            return;
-        }
-        for (int i = 0; i < password.length; i++) {
-            password[i] = ' ';
-        }
+      
         password = null;
     }
 

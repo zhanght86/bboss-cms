@@ -69,7 +69,24 @@ function submit(){
 	}
 	
 }
-  
+function findPic(picName){
+	   if(null == picName || ""==picName){
+		   return;
+	   }
+	   $.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/application/findPic.page",
+			data :{picName:picName},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				 
+			}	
+		 });
+}
 </script>
 </head>
 	<body>
@@ -78,7 +95,7 @@ function submit(){
   <ul>
   <pg:list  autosort="false" requestKey="datas">
   <li id="<pg:cell colName="id"/>">
-  <img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="68" height="68" /> 
+  <img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="68" height="68" onerror="findPic('<pg:cell colName="picName"/>')"/> 
   <span><pg:equal colName="pendingSubscribe"  value="0"><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"/></pg:equal>
 		<pg:equal colName="pendingSubscribe" value="1"><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"  checked="checked"/></pg:equal>
 		<pg:empty colName="pendingSubscribe" ><input id="<pg:cell colName="id"/>_check" name="" type="checkbox"/></pg:empty>

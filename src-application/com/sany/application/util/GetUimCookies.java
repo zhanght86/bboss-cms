@@ -1,4 +1,4 @@
-package com.sany.workflow.test;
+package com.sany.application.util;
 
 import java.io.IOException;
 
@@ -10,15 +10,14 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.frameworkset.web.servlet.ModelMap;
 
-public class GetUimCookiesTest {
+public class GetUimCookies {
 
 	private static String WebSealURL="http://uimweb.sany.com.cn/pkmslogin.form";
 	private static int 	WebSealTimeout = 1500;
 	
 	
-	public String getCookie(HttpServletRequest request,HttpServletResponse response)throws Exception{
+	public String getCookie(HttpServletRequest request,HttpServletResponse response,String userName ,String password)throws Exception{
 
 		HttpClient httpclient = new HttpClient();
 		httpclient.getHttpConnectionManager().getParams().setConnectionTimeout(WebSealTimeout);
@@ -26,8 +25,8 @@ public class GetUimCookiesTest {
 		javax.servlet.http.Cookie[] jcookies = null;
 		PostMethod post = new PostMethod(WebSealURL);
 			     NameValuePair[] data = {
-					new NameValuePair("username", "hanyh"),
-					new NameValuePair("password", "Traning6^"),
+					new NameValuePair("username", userName),
+					new NameValuePair("password", password),
 					new NameValuePair("login-form-type", "pwd") };
 			     
 			        post.setRequestBody(data);
@@ -39,7 +38,7 @@ public class GetUimCookiesTest {
 
 					Cookie[] cookies = httpclient.getState().getCookies();
 					if (null != cookies && cookies.length != 0) {
-						request.getSession().setAttribute("UIMCookies", cookies);
+						
 						jcookies = new javax.servlet.http.Cookie[cookies.length];
 						
 						javax.servlet.http.Cookie jcookie = null;
@@ -47,7 +46,7 @@ public class GetUimCookiesTest {
 						for (Cookie cookie : cookies) {
 
 							jcookie = new javax.servlet.http.Cookie(cookie.getName(),cookie.getValue());
-							jcookie.setMaxAge(500000);
+							jcookie.setMaxAge(-1);
 							jcookie.setDomain(".sany.com.cn");
 							jcookie.setPath(cookie.getPath());
 							jcookie.setVersion(cookie.getVersion());

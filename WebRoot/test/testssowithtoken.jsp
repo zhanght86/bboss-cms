@@ -4,7 +4,7 @@
 <%@page import="com.caucho.hessian.client.HessianProxyFactory"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
-<%@ page session="true" language="java"
+<%@ page session="false" language="java"
 	contentType="text/html; charset=utf-8"%>
 <%@page import="org.frameworkset.web.token.TokenHelper"%>
 

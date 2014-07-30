@@ -1,12 +1,14 @@
 package com.sany.common.action;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.frameworkset.util.FileCopyUtils;
 import org.frameworkset.util.annotations.AssertDToken;
 import org.frameworkset.web.token.TokenStore;
 
@@ -38,7 +40,7 @@ public class SSOControler {
 	public void ssowithtoken(HttpServletRequest request,
 			HttpServletResponse response) {
 		// return "path:sso";
-	
+		
 		String u = "", p = "", ck = "";
 
 		String successRedirect = request.getParameter("successRedirect");
@@ -292,15 +294,15 @@ public class SSOControler {
 				String errorMessage = ex.getMessage();
 				if (errorMessage == null)
 					errorMessage = "";
-				errorMessage = errorMessage.replaceAll("\\n", "\\\\n");
-				errorMessage = errorMessage.replaceAll("\\r", "\\\\r");
+				
+				
 				try {
-					response.getWriter().print(
-							errorMessage + "登陆失败，请确保输入的用户名和口令是否正确！");
+					FileCopyUtils.copy(errorMessage + ","+userName+"登陆失败，请确保输入的用户名和口令是否正确！", new OutputStreamWriter(response.getOutputStream(), "UTF-8"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 			}
 		}
 

@@ -3,9 +3,6 @@ package com.frameworkset.platform.security.authentication;
 import java.io.IOException;
 import java.io.Serializable;
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
 
 /**
  * <p>Title: </p>
@@ -34,8 +31,8 @@ public abstract class ACLCallbackHandler implements CallbackHandler,Serializable
      * @todo Implement this javax.security.auth.callback.CallbackHandler
      *   method
      */
-    public abstract void handle(Callback[] callbacks) throws IOException,
-            UnsupportedCallbackException ;
+//    public abstract void handle(Callback[] callbacks) throws IOException,
+//            UnsupportedCallbackException ;
 
     public static void main(String[] args) {
     }

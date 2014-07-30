@@ -2,6 +2,12 @@
 
 <properties>
 
+<property name="getWfPicByName">
+		<![CDATA[
+			select id id ,name name,content content from  TD_WF_APP_PIC where name = ?
+		]]>
+	</property>
+
 <property name="updatePicSelected">
 		<![CDATA[
 			update  TD_WF_APP set pic_name = ? where id = ?

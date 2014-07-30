@@ -1,7 +1,5 @@
 package com.frameworkset.platform.sysmgrcore.authenticate;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.spi.support.MessageSource;
@@ -13,7 +11,7 @@ import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.ca.CaProperties;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.ACLLoginModule;
-import com.frameworkset.platform.security.authentication.CheckCallBack;
+import com.frameworkset.platform.security.authentication.CheckCallBackWrapper;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.security.authentication.LoginException;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -54,32 +52,18 @@ public class UserPasswordLoginModule extends ACLLoginModule
 
     protected boolean check(String userName,
                             String password,
-                            CheckCallBack checkCallBack) throws
+                            CheckCallBackWrapper checkCallBack) throws
             LoginException
     {
     	String fromsso = null;
-    	if(super.request != null)
+    	if(checkCallBack.getRequest() != null)
     	{
-    		fromsso =(String)request.getAttribute("fromsso");
+    		fromsso =(String)checkCallBack.getRequest().getAttribute("fromsso");
     	}
     	
     		
     	String password_i = password;
-    	/**
-    	 * 匿名用户登录系统
-    	 */
-    	if(userName.equals("guest___"))
-    	{
-    		 checkCallBack.setUserAttribute("userName","匿名用户");
-             checkCallBack.setUserAttribute("userID","-1");
-             checkCallBack.setUserAttribute("password",EncrpyPwd.encodePassword("123456"));
-             checkCallBack.setUserAttribute("password_i","123456");
-             checkCallBack.setUserAttribute("CHARGEORGID",(Organization)null);
-             checkCallBack.setUserAttribute("orgName","没有兼职单位");
-             checkCallBack.setUserAttribute("secondOrgs",null);
-             checkCallBack.setUserAttribute("userAccount","guest___");
-             return true;
-    	}
+    	
     	TransactionManager tm = new TransactionManager();
         try {
         	tm.begin(TransactionType.RW_TRANSACTION);
@@ -88,11 +72,11 @@ public class UserPasswordLoginModule extends ACLLoginModule
             if(user == null)
             {
                 log.debug("用户名/口令有误,或者用户[" + userName + "]不存在");
-                throw new LoginException(messageSource.getMessage("sany.pdp.login.user.not.exist",RequestContextUtils.getRequestContextLocal(request)));
+                throw new LoginException(messageSource.getMessage("sany.pdp.login.user.not.exist",RequestContextUtils.getRequestContextLocal(checkCallBack.getRequest())));
                 
             }
             /******验证登录用户的IP是否限制*****/
-            String userip =   com.frameworkset.util.StringUtil.getClientIP(request);
+            String userip =   com.frameworkset.util.StringUtil.getClientIP(checkCallBack.getRequest());
             boolean ip_control = IpControlUtil.validateIp(userName,userip);
              if(!ip_control){
           	   throw new LoginException("IP访问限制，请与管理员联系");
@@ -101,9 +85,9 @@ public class UserPasswordLoginModule extends ACLLoginModule
 //            	throw new LoginException("用户[" + userName + "]无效,请与系统管理员联系");
             //2007-05-30修改by袁勇福,由于isvalid的值改为了:0：删除，1：申请，2：开通，3：停用
             if(user.getUserIsvalid() != null && user.getUserIsvalid().intValue()!=2)
-            	throw new LoginException(messageSource.getMessage("sany.pdp.login.user.invaild",RequestContextUtils.getRequestContextLocal(request)));
+            	throw new LoginException(messageSource.getMessage("sany.pdp.login.user.invaild",RequestContextUtils.getRequestContextLocal(checkCallBack.getRequest())));
             if(!enableusertype(user.getUserType()))
-            	throw new LoginException(messageSource.getMessage("sany.pdp.login.user.invaild",RequestContextUtils.getRequestContextLocal(request)));
+            	throw new LoginException(messageSource.getMessage("sany.pdp.login.user.invaild",RequestContextUtils.getRequestContextLocal(checkCallBack.getRequest())));
             	
         	/**
         	 * 是否启用了单点登录功能,如果启用了单点登录功能，cas服务端会传给子应用用户名称，
@@ -174,26 +158,26 @@ public class UserPasswordLoginModule extends ACLLoginModule
         	tm.releasenolog();
         }
     }
-    protected boolean check(HttpServletRequest request,String userName, String password,CheckCallBack checkCallBack) throws
-    LoginException{
-    	 
-//    	 try {
-//	             CommonInfo info = new CommonInfo(); 
-//	             UimUserInfo userinfo = info.validateUIM(request);
-//	             userinfo.getUser_ip();
-//	             userinfo.getUser_name();
-//         }
-//         catch(Throwable e)
-//         {
-//            e.printStackTrace();
-//         }
-
-    	return check(userName,
-                password,
-                checkCallBack);
-    }
+//    protected boolean check(HttpServletRequest request,String userName, String password,CheckCallBackWrapper checkCallBack) throws
+//    LoginException{
+//    	 
+////    	 try {
+////	             CommonInfo info = new CommonInfo(); 
+////	             UimUserInfo userinfo = info.validateUIM(request);
+////	             userinfo.getUser_ip();
+////	             userinfo.getUser_name();
+////         }
+////         catch(Throwable e)
+////         {
+////            e.printStackTrace();
+////         }
+//
+//    	return check(userName,
+//                password,
+//                checkCallBack);
+//    }
     
-    protected void buildCallback( CheckCallBack checkCallBack,User user ,String userName,String password,String password_i,Organization org) throws ManagerException
+    protected void buildCallback( CheckCallBackWrapper checkCallBack,User user ,String userName,String password,String password_i,Organization org) throws ManagerException
     {
 //    	 OrgManager orgManager = SecurityDatabase.getOrgManager();
 //         Organization org = orgManager.getMainOrganizationOfUser(userName);

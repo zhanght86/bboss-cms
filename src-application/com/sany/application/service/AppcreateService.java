@@ -85,4 +85,10 @@ public interface AppcreateService {
      * 2014年7月29日
      */
     public String isDeleteApp(String appInfoId) throws Exception;
+    /**
+     * 获取单个图片含内容
+     * @param wfApp
+     */
+    
+    public File getWfPicByName(String picName, String path) throws Exception ;
 }

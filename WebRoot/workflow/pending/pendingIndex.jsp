@@ -148,6 +148,24 @@ function wrapDatas(datas){
 			}	
 		 });
    }
+   function findPic(picName){
+	   if(null == picName || ""==picName){
+		   return;
+	   }
+	   $.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/application/findPic.page",
+			data :{picName:picName},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				 
+			}	
+		 });
+   }
 </script>
 </head>
 	<body>
@@ -157,7 +175,7 @@ function wrapDatas(datas){
     <div class="sys_dot"><a href="#" onclick="subscribePending()"><img src="images/dot_sys.gif" width="13" height="11" />&nbsp;&nbsp;待办订阅</a></div> 
       <pg:list  autosort="false" requestKey="datas">
       <div class="system_msg"  id="<pg:cell colName="id"/>" onclick="getPendingDetail('<pg:cell colName="id"/>')">
-      <div class="system_img"><img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="82" height="82"  /></div>
+      <div class="system_img"><img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="82" height="82"  onerror="findPic('<pg:cell colName="picName"/>')"/></div>
       <span class="system_name"><pg:cell colName="nameEN"/>&nbsp;&nbsp;<pg:cell colName="nameCH"/></span><br/>
       您共有<span class="num" id="<pg:cell colName="id"/>_num"></span>条待办</div>
       <div class="do_list" style="display:none"  id="<pg:cell colName="id"/>_detail"></div>

@@ -24,10 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.security.auth.AuthPermission;
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -222,10 +220,7 @@ public class SimpleLoginContext {
         if (callbackHandler == null)
             throw new LoginException(ResourcesMgr.getString
                                 ("invalid null CallbackHandler provided"));
-        this.callbackHandler = new SecureCallbackHandler
-                                (
-//                                		java.security.AccessController.getContext(),
-                                callbackHandler);
+        this.callbackHandler = callbackHandler;
     }
 
     
@@ -568,53 +563,7 @@ public class SimpleLoginContext {
 
    
 
-    /**
-     * Wrap the application-provided CallbackHandler in our own
-     * and invoke it within a privileged block, constrained by
-     * the caller's AccessControlContext.
-     */
-    private static class SecureCallbackHandler implements CallbackHandler,Serializable {
-
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-//		private final java.security.AccessControlContext acc;
-        private final CallbackHandler ch;
-
-        SecureCallbackHandler(CallbackHandler ch) {
-//            this.acc = acc;
-            this.ch = ch;
-        }
-        
-//        SecureCallbackHandler(java.security.AccessControlContext acc,
-//                CallbackHandler ch) {
-//    this.acc = acc;
-//    this.ch = ch;
-//}
-        
-
-        public void handle(Callback[] callbacks) throws java.io.IOException,
-                                                UnsupportedCallbackException {
-//            try {
-                final Callback[] finalCallbacks = callbacks;
-//                java.security.AccessController.doPrivileged
-//                    (new java.security.PrivilegedExceptionAction() {
-//                    public Object run() throws java.io.IOException,
-//                                        UnsupportedCallbackException {
-                        ch.handle(finalCallbacks);
-//                        return null;
-//                    }
-//                }, acc);
-//            } catch (java.security.PrivilegedActionException pae) {
-//                if (pae.getException() instanceof java.io.IOException) {
-//                    throw (java.io.IOException)pae.getException();
-//                } else {
-//                    throw (UnsupportedCallbackException)pae.getException();
-//                }
-//            }
-        }
-    }
+   
 
     /**
      * LoginModule information -

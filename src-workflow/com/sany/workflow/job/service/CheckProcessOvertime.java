@@ -28,7 +28,7 @@ public class CheckProcessOvertime {
 			for (Map<String, Object> process : list) {
 
 				// 检查数据
-				checkPara(process);
+				//checkPara(process);
 
 				Timestamp alertTime = (Timestamp) process.get("alertTime");
 				Timestamp overTime = (Timestamp) process.get("overTime");

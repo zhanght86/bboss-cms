@@ -1038,7 +1038,7 @@ public class AccessControl implements AccessControlInf{
 //		}
 		
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
-				userName, password,userTypes,request);
+				userName, password,userTypes,request,response);
 
 		principalIndexs = new HashMap();
 		credentialIndexs = new HashMap();
@@ -1069,7 +1069,7 @@ public class AccessControl implements AccessControlInf{
 	private void guestlogin()
 	{
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
-				BaseAuthorizationTable.guest, BaseAuthorizationTable.password,null,request);
+				BaseAuthorizationTable.guest, BaseAuthorizationTable.password,null,request,response);
 		
 		try {
 			credentialIndexs = new HashMap();
@@ -1433,7 +1433,7 @@ public class AccessControl implements AccessControlInf{
 
 		
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
-				userName, password, userTypes,request);
+				userName, password, userTypes,request,response);
 
 		principalIndexs = new HashMap();
 		credentialIndexs = new HashMap();
