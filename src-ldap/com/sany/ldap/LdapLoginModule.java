@@ -75,7 +75,7 @@ public class LdapLoginModule extends UserPasswordLoginModule{
                 throw new LoginException("用户[" + userName + "]的类型无法登录本系统:需要的类型为[userType=" + this.userTypes
                         + "],请与系统管理员联系");
           
-            if(user.getUserType().equals("1"))
+            if(user.getUserType().equals("1"))//域账号
             {
 	            AdAccountLogin test = new AdAccountLogin();
 	            Map<String, String> loginRes = test.validateUser(userName, password, null);	            
@@ -117,14 +117,14 @@ public class LdapLoginModule extends UserPasswordLoginModule{
 
         } catch (ManagerException ex) {
            
-            throw new LoginException(ex.getMessage());
+            throw new LoginException(ex.getMessage(),ex);
         } catch (SPIException ex) {
           
-            throw new LoginException(ex.getMessage());
+            throw new LoginException(ex.getMessage(),ex);
         }catch (Exception e) {
            
             logger.debug("未知错误:" + e.getClass() + "," + e.getMessage());
-            throw new LoginException(e.getMessage());
+            throw new LoginException(e.getMessage(),e);
         }
     }
     

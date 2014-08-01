@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-common"/>
-	<classpathentry kind="src" path="src-session"/>
 	<classpathentry kind="src" path="src-application"/>
 	<classpathentry kind="src" path="src-sanymbp"/>
 	<classpathentry kind="src" path="src-datasource"/>
@@ -204,5 +203,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sany-message.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3.jar" sourcepath="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

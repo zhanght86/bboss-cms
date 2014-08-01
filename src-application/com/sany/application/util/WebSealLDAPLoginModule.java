@@ -18,7 +18,7 @@ public class WebSealLDAPLoginModule extends LdapLoginModule{
 		boolean loginsuccess = super.check(userName, password, checkCallBack);
 		
 		
-		if(loginsuccess)
+		if(loginsuccess && checkCallBack.getUserAttribute("userType").equals("1"))//域账号
 		{
 			 boolean isWebSealServer = ConfigManager.getInstance()
 	    				.getConfigBooleanValue("isWebSealServer", false);
@@ -38,6 +38,7 @@ public class WebSealLDAPLoginModule extends LdapLoginModule{
 			  	  }
 			  	  else
 			  	  {
+			  		  
 				  		GetUimCookies uim = new GetUimCookies();
 						
 						try {

@@ -480,7 +480,7 @@
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 			<description>工作流管理</description>
-			<item name="工作流管理新" area="main" id="workflowmanagernew" i18n:en_US="Workflow Manage">
+			<item name="工作流管理新" id="workflowmanagernew" i18n:en_US="Workflow Manage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -499,7 +499,7 @@
 				 	<url>workflow/repository/*.page</url>
 				</authoration>
 			</item>
-			<item name="工作流管理" area="main" id="workflowmanager" i18n:en_US="Workflow Manage">
+			<item name="工作流管理"  id="workflowmanager" i18n:en_US="Workflow Manage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->

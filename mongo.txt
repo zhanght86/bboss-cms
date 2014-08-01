@@ -1,3 +1,5 @@
+一、测试环境
+
 总体集群情况
 
 rep set:
@@ -162,3 +164,104 @@ db.adminCommand({shutdown : 1, force : true})
 com.mongodb.MongoException: No replica set members available for query with { "mode" : "primary"}
 
 session创建异常：多出很多session，需要记录session创建的
+
+
+二、生产环境
+node1
+vi /etc/mongodb.conf
+port = 27017
+bind_ip = 10.0.31.31
+dbpath = /data/db0/
+fork = true
+replSet = rs0
+logpath = /data/logs/db0.log
+./mongod --config /etc/mongodb.conf
+
+node2
+vi /etc/mongodb1.conf
+port = 27018
+bind_ip = 10.0.31.31
+dbpath = /data/db1/
+fork = true
+replSet = rs0
+logpath = /data/logs/db1.log
+./mongod --config /etc/mongodb1.conf
+
+node3
+vi /etc/mongodb.conf
+port = 27017
+bind_ip = 10.0.31.32
+dbpath = /data/db0/
+fork = true
+replSet = rs0
+logpath = /data/logs/db0.log
+./mongod --config /etc/mongodb.conf
+
+node4
+vi /etc/mongodb1.conf
+port = 27018
+bind_ip = 10.0.31.32
+dbpath = /data/db1/
+fork = true
+replSet = rs0
+logpath = /data/logs/db1.log
+./mongod --config /etc/mongodb1.conf
+
+node5
+vi /etc/mongodb.conf
+port = 27017
+bind_ip = 10.0.31.33
+dbpath = /data/db0/
+fork = true
+replSet = rs0
+logpath = /data/logs/db0.log
+./mongod --config /etc/mongodb.conf
+
+node6
+vi /etc/mongodb1.conf
+port = 27018
+bind_ip = 10.0.31.33
+dbpath = /data/db1/
+fork = true
+replSet = rs0
+logpath = /data/logs/db1.log
+
+mkdir /data/db0
+mkdir /data/db1
+mkdir /data/logs
+
+./mongod --config /etc/mongodb1.conf
+
+node7
+vi /etc/mongoabr.conf
+port = 30000
+bind_ip = 10.0.31.33
+dbpath = /data/abr/
+fork = true
+replSet = rs0
+logpath = /data/logs/abr.log
+./mongod --config /etc/mongoabr.conf
+
+./mongod --config /etc/mongodb.conf
+./mongod --config /etc/mongodb1.conf
+配置集群：
+./mongo --host 10.0.31.31 --port 27017
+cfg = { _id: "rs0", members: [
+    { _id:0, host:"10.0.31.31:27017"},  
+    { _id:1, host:"10.0.31.31:27018"},
+    { _id:2, host:"10.0.31.32:27017"},
+    { _id:3, host:"10.0.31.32:27018"},   
+    { _id:4, host:"10.0.31.33:27017"},
+    { _id:5, host:"10.0.31.33:27018"},      
+    { _id:6, host:"10.0.31.33:30000",arbiterOnly: true}
+    ]}
+
+
+然后执行以下指令即可
+rs.initiate(cfg)
+查看rs状态：
+rs.status()
+最后分别连入各客户端，执行：
+rs.slaveOk()，可以再second执行查询操作了
+
+./mongostat -discover -host 10.0.31.31 -port 27017
