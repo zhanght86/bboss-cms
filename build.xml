@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-sany-session,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -57,7 +57,7 @@
 					<fileset dir="src-workflow" includes="**/*"/>
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-session,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -459,42 +459,7 @@
 	</target>
 	
 	
-	<target name="compile-sany-session" description="compile the session source ">
-					<echo>compile the compile-all source ...</echo>
-					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
-						<src path="${source}/src-session" />				
-						<classpath id="cp-cms_baseline">
-							<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
-							<fileset dir="${source}/lib" includes="*.jar *.zip" />
-							<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
-							<fileset dir="${distrib}" includes="*.jar *.zip" />
-							
-						</classpath>
-					</javac>
-				<copy todir="classes-sany">
-					<fileset dir="${source}/src-session" includes="**/*.xml"/>
-				</copy>
-			<copy todir="classes-sonar">
-				<fileset dir="classes-sany" includes="**/*.*"/>
-			</copy>	
-		</target>
-		
-		<target name="jar-sany-session" depends="compile-sany-session" description="generate the sany-session-lib library sany-session.jar">
-					<echo>Generate the jar-sany-session library sany-session.jar ...</echo>
-					<jar jarfile="${distrib}/sany-session.jar" basedir="classes-sany" includes="**/*">
-						<manifest>
-							<attribute name="Implementation-Version" value="${impl.version}" />
-							<attribute name="Specification-Version" value="${revision}" />
-							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
-							<attribute name="Implementation-ProductID" value="${impl.productID}" />
-							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
-							<attribute name="Compile-User" value="${username}" />
-						</manifest>
-					</jar>
-				 <delete dir="classes-sany"/>
-				 <mkdir dir="classes-sany"/>	
-				
-		</target>
+	
 	<!--<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
 				<echo>compile the compile-all source ...</echo>
 				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">

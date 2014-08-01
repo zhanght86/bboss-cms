@@ -2,6 +2,8 @@ package com.sany.workflow.entity;
 
 import java.util.Date;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 /**
  * 统一待办取待办任务实体bean
  * 
@@ -16,6 +18,7 @@ public class NoHandleTask {
 
 	private String userAccount;// 发起人工号
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;// 创建时间
 
 	private String taskId;// 任务id
@@ -45,6 +48,16 @@ public class NoHandleTask {
 	private String fromUserName;// 转办/委托人姓名
 
 	private String dealButtionName;// 处理记录按钮名称
+	
+	private String appUrl;// 应用url
+
+	public String getAppUrl() {
+		return appUrl;
+	}
+
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
+	}
 
 	public String getDealButtionName() {
 		return dealButtionName;

@@ -1,6 +1,7 @@
 package com.sany.workflow.job.service;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,17 @@ public class CheckProcessOvertime {
 
 	private TempleService templeService;
 	private ActivitiService activitiService;
-	private Calendar instance = Calendar.getInstance();
+	private Calendar instance = null;
+	private SimpleDateFormat sdf = null;
+
+	public CheckProcessOvertime() {
+		if (instance == null) {
+			instance = Calendar.getInstance();
+		}
+		if (sdf == null) {
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		}
+	}
 
 	/**
 	 * @throws Exception
@@ -28,7 +39,7 @@ public class CheckProcessOvertime {
 			for (Map<String, Object> process : list) {
 
 				// 检查数据
-				//checkPara(process);
+				// checkPara(process);
 
 				Timestamp alertTime = (Timestamp) process.get("alertTime");
 				Timestamp overTime = (Timestamp) process.get("overTime");
@@ -37,12 +48,14 @@ public class CheckProcessOvertime {
 				if (compareTime(instance, alertTime)) {
 					process.put("subject", "流程预警提醒");
 					process.put("noticeType", "1");
+					process.put("alertTime", sdf.format(alertTime));
 				}
 
 				// 判断是否超时提醒
 				if (compareTime(instance, overTime)) {
 					process.put("subject", "流程超时提醒");
 					process.put("noticeType", "2");
+					process.put("overTime", sdf.format(overTime));
 				}
 			}
 			templeService.sendNotice(list);

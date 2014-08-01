@@ -286,7 +286,7 @@ public class ActivitiTaskManageAction {
 				model.addAttribute("variableRownum",
 						Integer.parseInt(arryObj[1] + "") + 1);// 加标题行
 				model.addAttribute("instanceRownum", arryObj[1]);
-				
+
 				// 预警、超时状态转义
 				Map<Integer, String> advanceSendMap = WorkFlowConstant
 						.getAdvanceSend();
@@ -361,13 +361,16 @@ public class ActivitiTaskManageAction {
 
 				tm.begin();
 
+				String currentUser = AccessControl.getAccessControl()
+						.getUserAccount();
+				task.setCurrentUser(currentUser);
+
 				// 记录委托关系(有就处理，没有就不处理)
 				if (StringUtil.isNotEmpty(task.getCreateUser())
 						&& StringUtil.isNotEmpty(task.getEntrustUser())) {
 
 					// 当前用户就是被委托的用户
-					if (AccessControl.getAccessControl().getUserAccount()
-							.equals(task.getEntrustUser())) {
+					if (currentUser.equals(task.getEntrustUser())) {
 
 						activitiTaskService.addEntrustTaskInfo(task);
 
@@ -462,7 +465,7 @@ public class ActivitiTaskManageAction {
 			model.addAttribute("sysid", sysid);
 			model.addAttribute("currentUser", AccessControl.getAccessControl()
 					.getUserAccount());
-			
+
 			// 预警、超时状态转义
 			Map<Integer, String> advanceSendMap = WorkFlowConstant
 					.getAdvanceSend();

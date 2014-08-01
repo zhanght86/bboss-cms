@@ -51,6 +51,16 @@ public class TaskCondition {
 
 	private String entrustUser;// 被委托人
 
+	private String currentUser;// 当前用户
+
+	public String getCurrentUser() {
+		return currentUser;
+	}
+
+	public void setCurrentUser(String currentUser) {
+		this.currentUser = currentUser;
+	}
+
 	public String getCreateUser() {
 		return createUser;
 	}

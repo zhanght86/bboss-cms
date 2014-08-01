@@ -10,7 +10,7 @@
 			from act_re_procdef p
 			join act_re_deployment d on p.deployment_id_=d.id_
 			join (select wb.business_name,wb.business_id,wpb.process_key from td_wf_businesstype wb,td_wf_pro_businesstype wpb where wb.business_id = wpb.businesstype_id) b on p.key_=b.process_key			
-			left join td_wf_app_proc_relation pr on pr.procdef_id = p.ID_
+			left join td_wf_app_proc_relation pr on pr.procdef_id = p.key_
 			left join td_wf_app app on app.id = pr.wf_app_id
 			LEFT JOIN (SELECT A.PROCESS_KEY,
 			 		A.IS_CONTAIN_HOLIDAY,
@@ -31,7 +31,7 @@
 				and p.resource_name_ like #[resourceName]
 			#end
 			#if($processName && !$processName.equals(""))
-				and p._ like #[processName]
+				and p.name_ like #[processName]
 			#end
 			#if($businesstype_id && !$businesstype_id.equals(""))
 				and b.business_id = #[businesstype_id]
@@ -40,13 +40,13 @@
 				and d.id_ = #[deploymentId]
 			#end
 			#if($wf_app_id && !$wf_app_id.equals(""))
-				and p.ID_ in (select procdef_id from td_wf_app_proc_relation where wf_app_id = #[wf_app_id])
+				and p.key_ in (select procdef_id from td_wf_app_proc_relation where wf_app_id = #[wf_app_id])
 			#end
 			#if($wf_app_name && !$wf_app_name.equals(""))
-				and p.ID_ in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and (a.system_id like #[wf_app_name] or a.system_name like #[wf_app_name]))
+				and p.key_ in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and (a.system_id like #[wf_app_name] or a.system_name like #[wf_app_name]))
 			#end
 			#if($wf_app_mode_type_nonexist && !$wf_app_mode_type_nonexist.equals(""))
-				and p.ID_ not in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and a.app_mode_type like #[wf_app_mode_type_nonexist])
+				and p.key_ not in (select procdef_id from td_wf_app_proc_relation r,td_wf_app a where a.id=r.wf_app_id and a.app_mode_type like #[wf_app_mode_type_nonexist])
 			#end
 			
 		]]>
@@ -615,27 +615,26 @@
                 a.CREATE_TIME_   	AS createTime,
                 c.key_              as processkey,
                 a.suspension_state_ as suspensionState,
-                I.USER_ID_			as FROMUSER
+                I.USER_ID_			as FROMUSER,
+                d.APP_URL           as appUrl
 			  from ACT_RU_TASK a
 			
 			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = a.ID_
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			  
+			  --关联系统
+			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
+               FROM TD_WF_APP_PROC_RELATION A
+               LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
+	           #if($sysid && !$sysid.equals(""))
+	             WHERE B.SYSTEM_ID = #[sysid]
+	           #end
+	           ) D ON D.PROCDEF_ID = C.KEY_
 			
 			 WHERE a.ASSIGNEE_ is null
 			   	and I.TYPE_ = 'candidate'
-        
-        		-- 系统id
-			   #if($sysid && !$sysid.equals(""))
-				   and exists (select a.procdef_id
-				          from td_wf_app_proc_relation a
-				         where exists (select 1
-				                  From td_wf_app b
-				                 where a.wf_app_id = b.id
-				                   and b.system_id = #[sysid])
-				           and a.procdef_id = c.id_)
-			   #end
-         
+
          		--委托关系
         		#if($entrustList && $entrustList.size()>0)
 			   		and (
@@ -689,23 +688,21 @@
 			       a.CREATE_TIME_   	AS createTime,
 			       c.key_              	as processkey,
                    a.suspension_state_ 	as suspensionState,
-                   a.ASSIGNEE_			as FROMUSER
+                   a.ASSIGNEE_			as FROMUSER,
+                   d.APP_URL            as appUrl
 			  from ACT_RU_TASK a
 			
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			    --关联系统
+			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
+               FROM TD_WF_APP_PROC_RELATION A
+               LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
+	           #if($sysid && !$sysid.equals(""))
+	             WHERE B.SYSTEM_ID = #[sysid]
+	           #end
+	           ) D ON D.PROCDEF_ID = C.KEY_
 			 where 1 = 1
-			   
-			   -- 系统id来查数据
-			   #if($sysid && !$sysid.equals(""))
-				   and exists (select a.procdef_id
-				          from td_wf_app_proc_relation a
-				         where exists (select 1
-				                  From td_wf_app b
-				                 where a.wf_app_id = b.id
-				                   and b.system_id = #[sysid])
-				           and a.procdef_id = c.id_)
-			   #end
 				  
 			  #if($entrustList && $entrustList.size()>0)
 			   		and (
@@ -772,7 +769,7 @@
 						                  From td_wf_app b
 						                 where aa.wf_app_id = b.id
 						                   and b.system_id = #[sysid])
-						           and aa.procdef_id = a.proc_def_id_)
+						           and aa.procdef_id = C.KEY_)
 					    #end
 					    
 					    #if($entrustList && $entrustList.size()>0)
@@ -829,7 +826,7 @@
 						                  From td_wf_app b
 						                 where aa.wf_app_id = b.id
 						                   and b.system_id = #[sysid])
-						           and aa.procdef_id = a.proc_def_id_)
+						           and aa.procdef_id = C.KEY_)
 					    #end
 					    
 					    #if($entrustList && $entrustList.size()>0)
@@ -883,6 +880,7 @@
 			          FROM ACT_RU_TASK A
 			        
 			         INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+			         LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = A.PROC_DEF_ID_
 			        
 			         WHERE a.ASSIGNEE_ is null
 			           and I.TYPE_ = 'candidate'
@@ -897,13 +895,14 @@
 						                  From td_wf_app b
 						                 where aa.wf_app_id = b.id
 						                   and b.system_id = #[sysid])
-						           and aa.procdef_id = a.proc_def_id_)
+						           and aa.procdef_id = C.KEY_)
 					    #end
 			        
 			        union
 			      --签收任务  
 			        SELECT A.*
 			          FROM ACT_RU_TASK A
+			          LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = A.PROC_DEF_ID_
 			        
 			         WHERE a.ASSIGNEE_ = #[assignee]
 			         	
@@ -915,7 +914,7 @@
 						                  From td_wf_app b
 						                 where aa.wf_app_id = b.id
 						                   and b.system_id = #[sysid])
-						           and aa.procdef_id = a.proc_def_id_)
+						           and aa.procdef_id = C.KEY_)
 					    #end
 			         ) a
 		]]>
@@ -936,28 +935,27 @@
                 a.CREATE_TIME_   	AS createTime,
                 c.key_              as processkey,
                 a.suspension_state_ as suspensionState,
-                null				AS FROMUSER
+                null				AS FROMUSER,
+                d.APP_URL           as appUrl
 			  from ACT_RU_TASK a
 			
 			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = a.ID_
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			  
+			   --关联系统
+			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
+               FROM TD_WF_APP_PROC_RELATION A
+               LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
+	           #if($sysid && !$sysid.equals(""))
+	             WHERE B.SYSTEM_ID = #[sysid]
+	           #end
+	           ) D ON D.PROCDEF_ID = C.KEY_
 			
 			 WHERE a.ASSIGNEE_ is null
 			   	and I.TYPE_ = 'candidate'
 			   
 				and (I.USER_ID_ = #[assignee])
-			   
-			   -- 系统id来查数据
-			   #if($sysid && !$sysid.equals(""))
-				   and exists (select a.procdef_id
-				          from td_wf_app_proc_relation a
-				         where exists (select 1
-				                  From td_wf_app b
-				                 where a.wf_app_id = b.id
-				                   and b.system_id = #[sysid])
-				           and a.procdef_id = c.id_)
-			   #end
 			   
 			union
 
@@ -972,27 +970,28 @@
 			       a.CREATE_TIME_   	AS createTime,
 			       c.key_              	as processkey,
                    a.suspension_state_ 	as suspensionState,
-                   D.FROM_USER          AS FROMUSER
+                   e.FROM_USER          AS FROMUSER,
+                   d.APP_URL            as appUrl
 			  from ACT_RU_TASK a
 			
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
-			  left join td_wf_node_changeinfo d on a.id_ = d.taskid
-                                   				and a.assignee_ = d.to_user
+			  
+			   --关联系统
+			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
+               FROM TD_WF_APP_PROC_RELATION A
+               LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
+	           #if($sysid && !$sysid.equals(""))
+	             WHERE B.SYSTEM_ID = #[sysid]
+	           #end
+	           ) D ON D.PROCDEF_ID = C.KEY_
+	           
+			  left join td_wf_node_changeinfo e on a.id_ = e.taskid
+                                   				and a.assignee_ = e.to_user
 			 where 1 = 1
 			 
 				and a.ASSIGNEE_ = #[assignee]
 			   
-			   -- 系统id来查数据
-			   #if($sysid && !$sysid.equals(""))
-				   and exists (select a.procdef_id
-				          from td_wf_app_proc_relation a
-				         where exists (select 1
-				                  From td_wf_app b
-				                 where a.wf_app_id = b.id
-				                   and b.system_id = #[sysid])
-				           and a.procdef_id = c.id_)
-			   #end
 		]]>
 	</property>
 	
@@ -2521,7 +2520,7 @@
 			   From TD_WF_ENTRUST_PROC_RELATION c
 			   left join td_wf_entrust d on c.entrust_id = d.id
 			   left join ACT_RE_PROCDEF p on p.key_ = c.procdef_id
-			   left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.id_
+			   left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.key_
 			   left join TD_WF_APP a on a.id = ar.wf_app_id
 			  where p.version_ =
 			        (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)

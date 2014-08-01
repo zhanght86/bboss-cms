@@ -103,7 +103,7 @@ public interface ActivitiTaskService {
 	 * @return ListInfo 统一代办集合数据，包含分页参数 2014年7月3日
 	 */
 	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
-			long offset, int pagesize, HttpServletRequest request);
+			long offset, int pagesize);
 
 	/**
 	 * 统一代办获取任务的条数

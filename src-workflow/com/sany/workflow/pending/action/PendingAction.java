@@ -148,7 +148,7 @@ public class PendingAction {
 	 * 获取应用系统具体的待办列表(根据用户传来参数)
 	*/
 	@SuppressWarnings("unchecked")
-	public @ResponseBody List<SysPending> getSysPending(String id,HttpServletRequest request)throws Exception{
+	public @ResponseBody List<SysPending> getSysPending(String id)throws Exception{
 		String userId = AccessControl.getAccessControl().getUserID();
 		String userAccount = AccessControl.getAccessControl().getUserAccount();
 		SysTitle sys = pendingService.getSysTitleById(id);
@@ -160,7 +160,7 @@ public class PendingAction {
 		if("1".equals(type)){
 			return getPendingFromGW(nameEN,"10006419",context,0,100);
 		}else if("2".equals(type)){
-			return getPendingFromLocal(nameEN,userAccount,0,0,request);
+			return getPendingFromLocal(nameEN,userAccount,0,0);
 		}else if("3".equals(type)){
 			return null;
 		}else{
@@ -184,9 +184,9 @@ public class PendingAction {
 	/**
 	 * 获取本地待办的详细信息
 	*/
-	private List<SysPending> getPendingFromLocal(String system_id,String userAccount,long offset,int pagesize,HttpServletRequest request)throws Exception{
+	private List<SysPending> getPendingFromLocal(String system_id,String userAccount,long offset,int pagesize)throws Exception{
 		List<SysPending> list = new ArrayList<SysPending>();
-		List<NoHandleTask> datas = activitiTaskService.getNoHandleTask(userAccount, system_id, offset, pagesize,request);
+		List<NoHandleTask> datas = activitiTaskService.getNoHandleTask(userAccount, system_id, offset, pagesize);
 		if(null != datas && datas.size()>0){
 			for(int i=0;i<datas.size();i++){
 				list.add(new SysPending(datas.get(i)));

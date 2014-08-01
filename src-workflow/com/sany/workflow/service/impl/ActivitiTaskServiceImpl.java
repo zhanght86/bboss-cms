@@ -139,12 +139,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					if (StringUtil.isEmpty(task.getCompleteReason())) {
 
 						activitiService.completeTask(task.getTaskId(),
-								AccessControl.getAccessControl()
-										.getUserAccount(), variableMap);
+								task.getCurrentUser(), variableMap);
 					} else {
 						activitiService.completeTaskWithReason(
-								task.getTaskId(), AccessControl
-										.getAccessControl().getUserAccount(),
+								task.getTaskId(), task.getCurrentUser(),
 								variableMap, task.getCompleteReason());
 					}
 
@@ -152,16 +150,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 					if (StringUtil.isEmpty(task.getCompleteReason())) {
 
-						activitiService.completeTaskWithLocalVariables(task
-								.getTaskId(), AccessControl.getAccessControl()
-								.getUserAccount(), variableMap, task
-								.getTaskDefKey());
+						activitiService.completeTaskWithLocalVariables(
+								task.getTaskId(), task.getCurrentUser(),
+								variableMap, task.getTaskDefKey());
 					} else {
 						activitiService.completeTaskWithLocalVariablesReason(
-								task.getTaskId(), AccessControl
-										.getAccessControl().getUserAccount(),
-								variableMap, task.getTaskDefKey(), task
-										.getCompleteReason());
+								task.getTaskId(), task.getCurrentUser(),
+								variableMap, task.getTaskDefKey(),
+								task.getCompleteReason());
 					}
 				}
 
@@ -251,7 +247,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				// 节点处理工时转换
 				if (nodeInfo.getDURATION_NODE() != null) {
 					long worktime = Long.parseLong(nodeInfo.getDURATION_NODE());
-					nodeInfo.setDURATION_NODE(StringUtil.formatTimeToString(worktime));
+					nodeInfo.setDURATION_NODE(StringUtil
+							.formatTimeToString(worktime));
 				}
 
 				for (ActivityImpl activtie : activties) {
@@ -480,7 +477,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 	}
 
-
 	@Override
 	public Object[] getProcessVariable(String processInstId) {
 		try {
@@ -533,7 +529,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	 *            2014年7月23日
 	 */
 	private void getOneselfTask(Map<String, Object> params,
-			List<NoHandleTask> list, HttpServletRequest request) {
+			List<NoHandleTask> list) {
 		try {
 			// 当前用户的任务列表数据
 			List<NoHandleTask> taskList = executor.queryListBean(
@@ -546,7 +542,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					nt.setSender(activitiService.userIdToUserName(
 							nt.getUserAccount(), "1"));
 
-					String url = request.getContextPath()
+					String url = nt.getAppUrl()
 							+ "/workflow/taskManage/toDealTask.page?processKey="
 							+ nt.getProcessKey() + "&processInstId="
 							+ nt.getInstanceId() + "&taskId=" + nt.getTaskId()
@@ -592,7 +588,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	 *            2014年7月23日
 	 */
 	private void getEntrustTask(Map<String, Object> params,
-			List<NoHandleTask> list, HttpServletRequest request) {
+			List<NoHandleTask> list) {
 		try {
 			Map<String, Object> entrustMap = new HashMap<String, Object>();
 			entrustMap.put("isAdmin", false);
@@ -620,7 +616,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						nt.setFromUserName(activitiService.userIdToUserName(
 								nt.getFromUser(), "1"));
 
-						String url = request.getContextPath()
+						String url = nt.getAppUrl()
 								+ "/workflow/taskManage/toDealTask.page?processKey="
 								+ nt.getProcessKey() + "&processInstId="
 								+ nt.getInstanceId() + "&taskId="
@@ -652,7 +648,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public List<NoHandleTask> getNoHandleTask(String pernr, String sysid,
-			long offset, int pagesize, HttpServletRequest request) {
+			long offset, int pagesize) {
 		List<NoHandleTask> list = new ArrayList<NoHandleTask>();
 
 		TransactionManager tm = new TransactionManager();
@@ -664,10 +660,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			params.put("sysid", sysid);
 
 			// 获取当前用户自己的任务(包括别人转办给当前用户的任务)
-			getOneselfTask(params, list, request);
+			getOneselfTask(params, list);
 
 			// 获取别人委托给当前用户的任务
-			getEntrustTask(params, list, request);
+			getEntrustTask(params, list);
 
 			tm.commit();
 

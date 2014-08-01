@@ -27,7 +27,8 @@ public class ActivitiRelationServiceImpl implements ActivitiRelationService {
     		
     		WfAppProcdefRelation relation = new WfAppProcdefRelation();
     		
-    		relation.setProcdef_id(processDef.getID_());
+//    		relation.setProcdef_id(processDef.getID_()); edit by gw_tanx 20140731
+    		relation.setProcdef_id(processDef.getKEY_());
     		
     		List<WfAppProcdefRelation> relationList = selectAppProcRelation(relation);
     		
