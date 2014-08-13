@@ -149,6 +149,14 @@
 				and C.business_id = #[businessTypeId]
 			#end
 			
+			-- 应用
+		    #if($wf_app_name && !$wf_app_name.equals(""))
+		   		and b.key_ in (select procdef_id
+				  from td_wf_app_proc_relation r, td_wf_app a
+				 where a.id = r.wf_app_id
+				   and (a.system_id like #[wf_app_name] or a.system_name like #[wf_app_name]))
+		    #end
+			
 			ORDER BY A.START_TIME_ DESC
 		]]>
 	</property>
@@ -262,6 +270,32 @@
 		]]>
 	</property>
 	
+	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
+	<property name="getTaskInfoByTaskId_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			   B.BUSINESS_KEY_,
+		       A.REV_,
+		       A.EXECUTION_ID_,
+		       A.PROC_INST_ID_,
+		       A.PROC_DEF_ID_,
+		       A.NAME_,
+		       A.PARENT_TASK_ID_,
+		       A.DESCRIPTION_,
+		       A.TASK_DEF_KEY_,
+		       A.OWNER_,
+		       A.ASSIGNEE_,
+		       A.DELEGATION_,
+		       A.PRIORITY_,
+		       A.CREATE_TIME_ as START_TIME_,
+		       A.DUE_DATE_,
+		       A.SUSPENSION_STATE_
+		  FROM ACT_RU_TASK A
+		  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+		 WHERE A.Id_ = ?
+		]]>
+	</property>
+	
 	<!-- 根据任务id获取处理人列表  gw_tanx-->
 	<property name="getCandidatorOftask_wf">
 		<![CDATA[
@@ -363,6 +397,14 @@
 					   	and A.BUSINESS_KEY_ like #[businessKey]
 				   #end
 				   
+				   -- 应用
+				   #if($appName && !$appName.equals(""))
+				   		and b.key_ in (select procdef_id
+						  from td_wf_app_proc_relation r, td_wf_app a
+						 where a.id = r.wf_app_id
+						   and (a.system_id like #[appName] or a.system_name like #[appName]))
+				   #end
+				   
 			#end
 			
 			#if($taskState && $taskState.equals("0"))
@@ -372,7 +414,7 @@
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
 			--已签收任务
 				select 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,
-				  A.DURATION_NODE, A.IS_CONTAIN_HOLIDAY, A.OVERTIME, A.ALERTTIME,A.ADVANCESEND,
+				  A.DURATION_NODE, A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME,A.ADVANCESEND,
                   A.OVERTIMESEND,A.ID_,A.REV_, A.EXECUTION_ID_,A.PROC_INST_ID_,A.PROC_DEF_ID_,
          		  A.NAME_,A.PARENT_TASK_ID_,A.DESCRIPTION_,
                   A.TASK_DEF_KEY_,A.OWNER_,A.ASSIGNEE_,A.DELEGATION_,A.PRIORITY_,
@@ -416,6 +458,14 @@
 				  
 				  #if($businessKey && !$businessKey.equals(""))
 					  and B.BUSINESS_KEY_ like #[businessKey]
+				  #end
+				  
+				  -- 应用
+				  #if($appName && !$appName.equals(""))
+				   		and c.key_ in (select procdef_id
+						  from td_wf_app_proc_relation r, td_wf_app a
+						 where a.id = r.wf_app_id
+						   and (a.system_id like #[appName] or a.system_name like #[appName]))
 				  #end
 			#end
 			
@@ -470,6 +520,14 @@
 				   
 				   #if($businessKey && !$businessKey.equals(""))
 					   	and A.BUSINESS_KEY_ like #[businessKey]
+				   #end
+				   
+				   -- 应用
+				   #if($appName && !$appName.equals(""))
+				   		and b.key_ in (select procdef_id
+						  from td_wf_app_proc_relation r, td_wf_app a
+						 where a.id = r.wf_app_id
+						   and (a.system_id like #[appName] or a.system_name like #[appName]))
 				   #end
 				   
 				   #if($entrustList && $entrustList.size()>0)
@@ -556,6 +614,14 @@
 				  
 				  #if($businessKey && !$businessKey.equals(""))
 					  and B.BUSINESS_KEY_ like #[businessKey]
+				  #end
+				  
+				  -- 应用
+				  #if($appName && !$appName.equals(""))
+				   		and c.key_ in (select procdef_id
+						  from td_wf_app_proc_relation r, td_wf_app a
+						 where a.id = r.wf_app_id
+						   and (a.system_id like #[appName] or a.system_name like #[appName]))
 				  #end
 				  
 				  #if($entrustList && $entrustList.size()>0)
@@ -1049,6 +1115,14 @@
 				  and B.BUSINESS_KEY_ like #[businessKey]
 			  #end
 			  
+			  -- 应用
+			  #if($appName && !$appName.equals(""))
+			   	  and c.key_ in (select procdef_id
+					  from td_wf_app_proc_relation r, td_wf_app a
+					where a.id = r.wf_app_id
+					   and (a.system_id like #[appName] or a.system_name like #[appName]))
+			  #end
+			  
 			  ORDER BY START_TIME_ DESC
 		]]>
 	</property>
@@ -1102,6 +1176,15 @@
 			  #if($businessKey && !$businessKey.equals(""))
 				  and B.BUSINESS_KEY_ like #[businessKey]
 			  #end
+			  
+			   -- 应用
+			  #if($appName && !$appName.equals(""))
+			   	  and c.key_ in (select procdef_id
+					  from td_wf_app_proc_relation r, td_wf_app a
+					where a.id = r.wf_app_id
+					   and (a.system_id like #[appName] or a.system_name like #[appName]))
+			  #end
+			  
 			  --排除自己签收，被委托人处理的重复记录
 			  AND NOT EXISTS
  				(SELECT 1 FROM TD_WF_ENTRUST_TASK TWET WHERE TWET.TASKID = A.ID_)
@@ -2500,8 +2583,8 @@
 	<!-- 记录委托处理的任务  gw_tanx -->
 	<property name="addEntrustTaskInfo_wf">
 		<![CDATA[
-			INSERT INTO TD_WF_ENTRUST_TASK (TASKID,CREATE_USER,ENTRUST_USER,PROCESS_ID,PROCESS_KEY) 
-				VALUES (?,?,?,?,?)
+			INSERT INTO TD_WF_ENTRUST_TASK (TASKID,CREATE_USER,ENTRUST_USER,PROCESS_ID,PROCESS_KEY,ENTRUSTTIME) 
+				VALUES (?,?,?,?,?,?)
 		]]>
 	</property>
 	
@@ -2509,6 +2592,35 @@
 	<property name="getEntrustTaskInfoById_wf">
 		<![CDATA[
 			SELECT A.* FROM TD_WF_ENTRUST_TASK A WHERE A.TASKID = ?
+		]]>
+	</property>
+	
+	<!-- 查询任务的委托/转办记录  gw_tanx -->
+	<property name="getChangeOrEntrustTaskInfoById_wf">
+		<![CDATA[
+			--转办关系
+			SELECT 1 TASKRELATION,
+			       A.TASKID,
+			       A.PROCESS_KEY,
+			       A.PROCESS_ID,
+			       A.FROM_USER,
+			       A.TO_USER,
+			       A.CHANGETIME CHANGETIME
+			  FROM TD_WF_NODE_CHANGEINFO A
+			 WHERE A.TASKID = ?
+			UNION
+			--委托关系
+			SELECT 2 TASKRELATION,
+			       B.TASKID,
+			       B.PROCESS_KEY,
+			       B.PROCESS_ID,
+			       B.CREATE_USER,
+			       B.ENTRUST_USER,
+			       B.ENTRUSTTIME CHANGETIME
+			  FROM TD_WF_ENTRUST_TASK B
+			 WHERE B.TASKID = ?
+			
+			 ORDER BY CHANGETIME
 		]]>
 	</property>
 	
@@ -2522,10 +2634,7 @@
 			   left join ACT_RE_PROCDEF p on p.key_ = c.procdef_id
 			   left join TD_WF_APP_PROC_RELATION ar on ar.procdef_id = p.key_
 			   left join TD_WF_APP a on a.id = ar.wf_app_id
-			  where p.version_ =
-			        (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = p.KEY_)
-			       
-			    and (d.entrust_user = ? or d.create_user = ?)
+			  where (d.entrust_user = ? or d.create_user = ?)
 		]]>
 	</property>
 	

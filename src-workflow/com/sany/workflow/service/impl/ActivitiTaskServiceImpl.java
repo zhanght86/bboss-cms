@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -70,51 +68,60 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		Map<String, Object> variableMap = new HashMap<String, Object>();
 
 		// 流程参数
-		for (int i = 0; i < activitiNodeCandidateList.size(); i++) {
-			// 用户
-			if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-					.getNode_users_id())) {
+		if (activitiNodeCandidateList != null
+				&& activitiNodeCandidateList.size() > 0) {
+			for (int i = 0; i < activitiNodeCandidateList.size(); i++) {
+				// 用户
+				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
+						.getNode_users_id())) {
 
-				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
-						+ "_users", activitiNodeCandidateList.get(i)
-						.getNode_users_id());
-			} else {
-				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
-						+ "_users", "");
+					variableMap
+							.put(activitiNodeCandidateList.get(i).getNode_key()
+									+ "_users", activitiNodeCandidateList
+									.get(i).getNode_users_id());
+				} else {
+					variableMap.put(activitiNodeCandidateList.get(i)
+							.getNode_key() + "_users", "");
+				}
+
+				// 组
+				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
+						.getNode_groups_id())) {
+					variableMap.put(activitiNodeCandidateList.get(i)
+							.getNode_key() + "_groups",
+							activitiNodeCandidateList.get(i)
+									.getNode_groups_id());
+				} else {
+					variableMap.put(activitiNodeCandidateList.get(i)
+							.getNode_key() + "_groups", "");
+				}
+
+				// 串/并行切换(多实例)
+				String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
+				if ("1".equals(isMulti)) {
+					variableMap
+							.put(activitiNodeCandidateList.get(i).getNode_key()
+									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+									MultiInstanceActivityBehavior.multiInstanceMode_sequential);
+				} else if ("2".equals(isMulti)) {
+					variableMap
+							.put(activitiNodeCandidateList.get(i).getNode_key()
+									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+									MultiInstanceActivityBehavior.multiInstanceMode_parallel);
+				}
+
 			}
-
-			// 组
-			if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-					.getNode_groups_id())) {
-				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
-						+ "_groups", activitiNodeCandidateList.get(i)
-						.getNode_groups_id());
-			} else {
-				variableMap.put(activitiNodeCandidateList.get(i).getNode_key()
-						+ "_groups", "");
-			}
-
-			// 串/并行切换(多实例)
-			String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
-			if ("1".equals(isMulti)) {
-				variableMap
-						.put(activitiNodeCandidateList.get(i).getNode_key()
-								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-								MultiInstanceActivityBehavior.multiInstanceMode_sequential);
-			} else if ("2".equals(isMulti)) {
-				variableMap
-						.put(activitiNodeCandidateList.get(i).getNode_key()
-								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-								MultiInstanceActivityBehavior.multiInstanceMode_parallel);
-			}
-
 		}
 
-		for (int i = 0; i < nodevariableList.size(); i++) {
-			// 参数
-			if (!StringUtil.isEmpty(nodevariableList.get(i).getParam_name())) {
-				variableMap.put(nodevariableList.get(i).getParam_name(),
-						nodevariableList.get(i).getParam_value());
+		if (nodevariableList != null
+				&& nodevariableList.size() > 0) {
+			for (int i = 0; i < nodevariableList.size(); i++) {
+				// 参数
+				if (!StringUtil
+						.isEmpty(nodevariableList.get(i).getParam_name())) {
+					variableMap.put(nodevariableList.get(i).getParam_name(),
+							nodevariableList.get(i).getParam_value());
+				}
 			}
 		}
 		return variableMap;
@@ -433,6 +440,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (StringUtil.isNotEmpty(task.getEntrustUser())) {
 				task.setEntrustUser("%" + task.getEntrustUser() + "%");
 			}
+			
+			if (StringUtil.isNotEmpty(task.getAppName())) {
+				task.setAppName("%" + task.getAppName() + "%");
+			}
 
 			// 处理的历史任务记录
 			if (isAdmin) {
@@ -456,10 +467,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 					// 处理人转换
 					activitiService.dealTaskInfo(tmr);
-					// 转办关系处理
+					// 转办/委托关系处理
 					activitiService.delegateTaskInfo(tmr);
-					// 处理人委托转换
-					activitiService.entrustTaskInfo(tmr);
 					// 判断是否超时
 					activitiService.judgeOverTime(tmr);
 					// 耗时处理
@@ -560,6 +569,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 						nt.setTaskType(2);// 转办任务
 					} else {
+
+						nt.setTitle((nt.getTitle() + "(" + nt.getBusinessKey() + ")"));
+
 						nt.setTaskType(0);// 自己任务
 					}
 					nt.setUrl(url);
@@ -623,7 +635,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 								+ nt.getTaskId() + "&taskState="
 								+ nt.getTaskState() + "&suspensionState="
 								+ nt.getSuspensionState() + "&sysid="
-								+ params.get("sysid");
+								+ params.get("sysid") + "&createUser="
+								+ nt.getFromUser() + "&entrustUser="
+								+ params.get("assignee");
 
 						nt.setTitle((nt.getTitle() + "(" + nt.getBusinessKey()
 								+ ")[" + nt.getFromUserName() + "委托]"));
@@ -677,13 +691,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String userId) {
+			String processKey, String fromuserID, String userId) {
 
 		try {
 
-			String fromUser = AccessControl.getAccessControl().getUserAccount();
-
-			executor.insert("addNodeChangeInfo_wf", fromUser, userId, taskId,
+			executor.insert("addNodeChangeInfo_wf", fromuserID, userId, taskId,
 					processIntsId, processKey,
 					new Timestamp(new Date().getTime()));
 
@@ -743,7 +755,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 			executor.insert("addEntrustTaskInfo_wf", task.getTaskId(),
 					task.getCreateUser(), task.getEntrustUser(),
-					task.getProcessIntsId(), task.getProcessKey());
+					task.getProcessIntsId(), task.getProcessKey(),
+					new Timestamp(new Date().getTime()));
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -989,6 +1002,24 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 		templeService.sendNotice(fieldList);
 
+	}
+
+	@Override
+	public boolean isSignTask(String taskId) {
+		try {
+
+			HashMap map = executor.queryObject(HashMap.class,
+					"getTaskInfoByTaskId_wf", taskId);
+
+			if (map != null && map.get("ASSIGNEE_") != null) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
 	}
 
 }

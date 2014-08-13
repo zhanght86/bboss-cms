@@ -285,20 +285,24 @@
 				}else{
 					chooseStr += data.proc_id+"==";
 					chooseData.push(data);
+					
+					var selectedRadio = $('input[name="CK"]');
+					alert(selectedRadio.length);
+					
+					$('input[name="CK"]').each(function(){
+						var business_name = $(this).parent().find("input[name=business_name]").val();
+					    var proc_id = $(this).val();
+						var proc_name = $(this).parent().find("input[name=proc_name]").val();
+						var wf_app_name = $(this).parent().find("input[name=wf_app_name]").val();
+						var proc_key = $(this).parent().find("input[name=key]").val();
+						
+						alert(proc_key);
+					});
+					
 				}
 				addProcdefTable(data);
 			}
 		}
-	}
-	
-	function chooseThisData(proc_key,proc_id,proc_name, business_name, wf_app_name){
-		
-		var data = {"proc_key":proc_key,"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
-		
-		chooseData.push(data);
-		
-		addProcdefTable(addData);
-		
 	}
 	
 	//选择行
@@ -316,9 +320,9 @@
 			
 			var data = {"proc_key":proc_key,"proc_id":proc_id,"proc_name":proc_name, "business_name":business_name, "wf_app_name":wf_app_name};
 			
-			if(chooseStr.indexOf(proc_id)<0){
+			if(chooseStr.indexOf(proc_key)<0){
 				chooseData.push(data);
-				chooseStr += proc_id +"==";
+				chooseStr += proc_key +"==";
 				addProcdefTable(data);
 			}
 			

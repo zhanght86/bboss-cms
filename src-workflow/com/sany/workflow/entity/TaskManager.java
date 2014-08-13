@@ -3,6 +3,8 @@ package com.sany.workflow.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 import com.sany.workflow.entrust.entity.WfEntrust;
 
 /**
@@ -53,10 +55,13 @@ public class TaskManager {
 
 	private String ACT_TYPE_;// 父节点实例ID
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp START_TIME_;// 开始时间
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp CLAIM_TIME_;// 提醒时间
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp END_TIME_;// 结束时间
 
 	private String DURATION_;// 耗时(毫秒值)
@@ -85,8 +90,10 @@ public class TaskManager {
 
 	private String isAlertTime;// 是否预警提醒(0未预警1预警)
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp ALERTTIME;// 预警时间点
 
+	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp OVERTIME;// 预警时间点
 
 	private int advancesend;// 预警发送状态 0 未发送预警 1 发送预警成功 2短信发送预警成功，邮件发送预警失败

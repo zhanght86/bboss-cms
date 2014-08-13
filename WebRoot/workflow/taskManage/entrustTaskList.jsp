@@ -23,6 +23,7 @@
     <pg:param name="taskName"/>
     <pg:param name="businessTypeId"/>
     <pg:param name="businessKey"/>
+    <pg:param name="appName"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">

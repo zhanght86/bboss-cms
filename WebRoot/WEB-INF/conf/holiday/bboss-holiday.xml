@@ -8,6 +8,7 @@
 		path:orgList="/sysmanager/holiday/orgList.jsp"
 		path:workDateList="/sysmanager/holiday/workDateList.jsp"
 		path:workTimeList="/sysmanager/holiday/workTimeList.jsp"
+		path:editWorkDate="/sysmanager/holiday/editWorkDate.jsp"
 		/>
 		 
 	

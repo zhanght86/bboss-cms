@@ -24,6 +24,7 @@
     <pg:param name="taskName"/>
     <pg:param name="businessTypeId"/>
     <pg:param name="businessKey"/>
+    <pg:param name="appName"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
@@ -72,9 +73,11 @@
        			</pg:null>
        			<pg:notnull colName="delegateTaskList" >
 			     	<pg:list colName="delegateTaskList" >
-					  <pg:cell colName="FROM_USER_NAME"/>转办给<pg:cell colName="TO_USER_NAME"/>
-					  [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
-					  <br/>
+			     		<pg:equal colName="TASKRELATION" value="1">
+					  		<pg:cell colName="FROM_USER_NAME"/>转办给<pg:cell colName="TO_USER_NAME"/>
+						   [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
+						    <br/>
+					  	</pg:equal>
 			       </pg:list>
 		        </pg:notnull>	
        		</td>

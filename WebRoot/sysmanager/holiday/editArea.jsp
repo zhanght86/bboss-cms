@@ -45,10 +45,11 @@ var areaId = '${param.areaId}';
 	   var areaId = $("#areaId").val();
 	   var areaName = $("#areaName").val();
 	   var areaDesc = $('#areaDesc').html();
+	   var areaDefault = $("#areaDefault option:selected").val();  
 	    $.ajax({
 	 	 	type: "POST",
 			url : "updateArea.page",
-			data :{areaId:areaId,areaName:areaName,areaDesc:areaDesc},
+			data :{areaId:areaId,areaName:areaName,areaDesc:areaDesc,areaDefault:areaDefault},
 			dataType : '',
 			async:false,
 			beforeSend: function(XMLHttpRequest){
@@ -85,6 +86,15 @@ var areaId = '${param.areaId}';
 		   		   <td>区域名称</td>
 		   		   <td><input type="text" id="areaName"  value='${param.areaName}'/></td>
 	   		   </tr>
+	   		   <tr>
+					<td>默认区域：</td>
+					<td>
+					<select id="areaDefault" name="areaDefault"  maxlength="50" >
+					<option value="0" <pg:equal actual="${param.areaDefault}"  value="0">selected="true"</pg:equal>>非默认区域</option>
+					<option value="1" <pg:equal actual="${param.areaDefault}"   value="1">selected="true"</pg:equal>>默认区域</option>
+					</select>
+					</td>
+			  </tr>
 	   		   <tr>
 		   		   <td>创建人</td>
 		   		   <td><input type="text" id="creator"  value='${param.creator}' readonly="readonly"/></td>

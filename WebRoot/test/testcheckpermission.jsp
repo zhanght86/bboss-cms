@@ -113,7 +113,12 @@
 						<td colspan="7">							
 							<a href="<%=request.getContextPath() %>/sanydesktop/index.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="top_blank""  >session共享单点登录测试(带top，本机)</a>
 						</td>
+						<td colspan="7">							
+							<a href="<%=request.getContextPath() %>test/svg/wf.html"  target="top_blank""  >wf.html</a>
+						</td>
+						
 					</tr>
+					
 				</table>
 			</fieldset>
 			</form>

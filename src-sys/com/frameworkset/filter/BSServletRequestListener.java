@@ -57,7 +57,7 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 //				
 				boolean state = TransactionManager.destroyTransaction();
 				if(state){
-					log.debug("A DB transaction leaked in Page ["+ uri +"] has been forcibly destoried. ");
+					log.warn("A DB transaction leaked in Page ["+ uri +"] has been forcibly destoried. ");
 					System.out.println("A DB transaction leaked in Page ["+ uri +"] has been forcibly destoried. ");
 				}
 				AccessControl.init(null);
@@ -87,7 +87,7 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 			{	
 				boolean state = TransactionManager.destroyTransaction();
 				if(state){
-					log.debug("A DB transaction leaked before Page ["+ uri +"] has been forcibly destoried. ");
+					log.warn("A DB transaction leaked before Page ["+ uri +"] has been forcibly destoried. ");
 					System.out.println("A DB transaction leaked before Page ["+ uri +"] has been forcibly destoried. ");
 				}
 				AccessControl.init(null);

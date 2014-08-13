@@ -18,8 +18,8 @@
 
 	<form name="submitForm" id="submitForm" method="post">
 		<input type="hidden" id="sysid" name="sysid" value="${sysid}" />
-		<input type="hidden" id="taskId" name="taskId" value="${task.id}" />
-		<input type="hidden" id="processIntsId" name="processIntsId" value="${task.processInstanceId}" />
+		<input type="hidden" id="taskId" name="taskId" value="${task.ID_}" />
+		<input type="hidden" id="processIntsId" name="processIntsId" value="${task.PROC_INST_ID_}" />
 		<input type="hidden" id="processKey" name="processKey" value="${processKey}" />
 		<input type="hidden" id="taskState" name="taskState" value="${taskState}" />
 		<input type="hidden" id="createUser" name="createUser" value="${createUser}" />
@@ -31,27 +31,29 @@
 			<pg:beaninfo requestKey="task">
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table4" >
 					<tr>
-						<th width="60"><strong>业务主题:</strong></th>
-						<td width="100">${businessKey}</td>
-						<th width="60"><strong>任务名称:</strong></th>
-						<td width="150"><pg:cell colName="name" /></td>
-						<th width="60"><strong>任务ID:</strong></th>
-						<td width="300"><pg:cell colName="id" /></td>
-						<th width="100"><strong>流程实例ID:</strong></th>
-						<td width="300"><pg:cell colName="processInstanceId" /></td>
+						<th width="100"><strong>业务主题:</strong></th>
+						<td width="150"><pg:cell colName="BUSINESS_KEY_" /></td>
+						<th width="100"><strong>任务名称:</strong></th>
+						<td width="150"><pg:cell colName="NAME_" /></td>
+						<th width="100"><strong>任务ID:</strong></th>
+						<td width="300"><pg:cell colName="ID_" /></td>
+						<th width="100"><strong>签收人:</strong></th>
+						<td width="150"><pg:cell colName="ASSIGNEE_NAME" /></td>
 					</tr>
 					<tr>
-						<th width="60"><strong>处理人:</strong></th>
-						<td width="100"><pg:cell colName="assignee" /></td>
-						<th width="60"><strong>签收人:</strong></th>
-						<td width="150"><pg:cell colName="assignee" /></td>
-						<th width="60"><strong>到达时间:</strong></th>
-						<td width="300"><pg:cell colName="createTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
+						<th width="100"><strong>到达时间:</strong></th>
+						<td width="150"><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 						<th width="100"><strong>流程状态:</strong></th>
-						<td width="300">
-							<pg:true actual="${suspended}">挂起</pg:true>
-							<pg:false actual="${suspended}">进行中</pg:false>
+						<td width="150">
+							<pg:equal colName="SUSPENSION_STATE_" value="1">进行中</pg:equal>
+							<pg:equal colName="SUSPENSION_STATE_" value="2">挂起</pg:equal>
 						</td>
+						<th width="100"><strong>流程实例ID:</strong></th>
+						<td width="300"><pg:cell colName="PROC_INST_ID_" /></td>
+					</tr>
+					<tr>
+						<th width="100"><strong>处理人:</strong></th>
+						<td colspan="7"><pg:cell colName="USER_ID_NAME" /></td>
 					</tr>
 				</table>
 			</pg:beaninfo>
@@ -72,7 +74,7 @@
 				<div id="main1" >
 					<ul id="tab1" style="display:block;">
 						<div title="执行图" style="padding:10px;overflow-y:auto; overflow-x:auto;"> 
-							<img id="pic" src="${pageContext.request.contextPath}/workflow/repository/getProccessActivePic.page?processInstId=${task.processInstanceId}" />
+							<img id="pic" src="${pageContext.request.contextPath}/workflow/repository/getProccessActivePic.page?processInstId=${task.PROC_INST_ID_}" />
 						</div>
 					</ul>
 					
@@ -129,7 +131,7 @@
 													<pg:equal colName="node_type" value="mailTask">
 														邮件任务
 													</pg:equal>
-													<pg:notequal actual="${task.taskDefinitionKey}" expressionValue="{node_key}"  >
+													<pg:notequal actual="${task.TASK_DEF_KEY_}" expressionValue="{node_key}"  >
 													<select name="isMulti">
 														<option value="1" <pg:equal colName="isMulti" value="1">selected</pg:equal>>串行</option>
 														<option value="2" <pg:equal colName="isMulti" value="2">selected</pg:equal>>并行</option>
@@ -289,7 +291,8 @@ function delegateTask(){
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/delegateTask.page",
-			data: {"taskId":'${task.id}',"userId":userid,"processIntsId":'${task.processInstanceId}',"processKey":'${processKey}'},
+			data: {"taskId":'${task.ID_}',"changeUserId":userid,"processIntsId":'${task.PROC_INST_ID_}',
+				"processKey":'${processKey}',"createUser":'${createUser}',"entrustUser":'${entrustUser}'},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){
@@ -337,7 +340,7 @@ function exeTask(){
 //废弃任务
 function discardTask() {
 	
-	var deleteReason = $.trim($("completeReason").val());
+	var deleteReason = $.trim($("#completeReason").val());
 	if (deleteReason == ''){
 		alert("请填写废弃原因，在处理意见中填写！");
 		return;
@@ -348,8 +351,8 @@ function discardTask() {
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/discardTask.page",
-			data: {"processInstIds":'${task.processInstanceId}',"deleteReason":deleteReason,
-				"taskId":'${task.id}',"processKey":'${processKey}'},
+			data: {"processInstIds":'${task.PROC_INST_ID_}',"deleteReason":deleteReason,
+				"taskId":'${task.ID_}',"processKey":'${processKey}'},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){

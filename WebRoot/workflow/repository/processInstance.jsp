@@ -12,11 +12,22 @@
 <title>流程实例信息</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
-
+<%-- 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/style.css" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/demo/selectgrid/Script/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/demo/selectgrid/Script/jquery.multiselect.js"></script>
+--%>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	
+	<%--
+	$("#s1").multiselect({
+		selectedList: 3,
+		show: ["blind", 200],
+		hide: ["blind", 200]
+	});
+	--%>
 	$("#wait").hide();
 	
 	queryList();
@@ -107,11 +118,12 @@ function queryList(){
 	var wf_business_key = $("#wf_business_key").val();
 	var wf_version = $("#wf_version").combobox('getValues');
 	var businessTypeId = $("#businessType").combotree('getValue');
+	var wf_app_name = $("#wf_app_name").val();
 	
 	$("#instanceContainer").load("<%=request.getContextPath()%>/workflow/repository/queryProcessIntsByKey.page? #customContent", 
 		{"wf_key":wf_key,"wf_Inst_Id":wf_Inst_Id,"wf_start_time1":wf_start_time1,"wf_start_time2":wf_start_time2,
 		"wf_end_time1":wf_end_time1,"wf_end_time2":wf_end_time2,"wf_state":wf_state,"wf_versions":wf_version,
-		"wf_business_key":wf_business_key,"businessTypeId":businessTypeId},
+		"wf_business_key":wf_business_key,"businessTypeId":businessTypeId,"wf_app_name":wf_app_name},
 		function(){loadjs();});
 }
 
@@ -257,12 +269,25 @@ function doreset(){
 														<option value="<pg:cell colName="VERSION_"/>" ><pg:cell colName="VERSION_"/> </option>
 													</pg:list>  
 												</select>
+												<%--
+												<select name="" multiple="multiple" style="width:125px" id="s1">
+													<pg:list actual="${versionList}" >            
+														<option value="<pg:cell colName="VERSION_"/>" ><pg:cell colName="VERSION_"/> </option>
+													</pg:list>  
+												</select>
+												--%>
 											</td>
 											<th>业务类型：</th>
 											<td>
 												<select class="easyui-combotree" id='businessType' name="businessType" required="false"
 														style="width: 120px;">
 											</td>
+											<pg:empty actual="${processKey}" >
+												<th>应用：</th>
+												<td>
+													<input id="wf_app_name" name="wf_app_name" type="text" class="w120" />
+												</td>
+											</pg:empty>
 										</tr>
 									</table>
 								</td>

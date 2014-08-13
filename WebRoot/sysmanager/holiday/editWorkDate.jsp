@@ -106,6 +106,7 @@ var id = '${param.id}';
 </script>
 </head>
 	<body>
+	<pg:beaninfo requestKey="workDate">
 		<form  method="post" id="glform" name="glform" ></form>
 			<div class="form_box"></div>
 			
@@ -114,24 +115,24 @@ var id = '${param.id}';
 	   		   
 	   		   <tr>
 		   		   <td>id</td>
-		   		   <td id="id">${param.id}</td>
+		   		   <td id="id"><pg:cell colName="id"/></td>
 	   		   </tr>
 	   		   
 	   		   <tr>     
 		   		   <td>名称</td>
-		           <td><input  id='name' value='${param.name}' /></td>
+		           <td><input  id='name' value="<pg:cell colName="name"/>"/></td>
 	           </tr>
 	           <tr>     
 		   		   <td>描述</td>
-		           <td><textarea rows="3" cols="20" id='desc' >${param.periodDesc}</textarea></td>
+		           <td><textarea rows="3" cols="20" id='desc' ><pg:cell colName="periodDesc"/></textarea></td>
 	           </tr>
 	           <tr>
 		   		   <td>开始时间</td>
-		   		   <td><input type="text" id="startDate" onclick="WdatePicker()" value='${param.startDate}'/></td>
+		   		   <td><input type="text" id="startDate" onclick="WdatePicker()" value='<pg:cell colName="startDate"/>'/></td>
 	   		   </tr>
 	   		   <tr>
 		   		   <td>结束时间</td>
-		   		   <td><input type="text" id="endDate" onclick="WdatePicker()" value='${param.endDate}'/></td>
+		   		   <td><input type="text" id="endDate" onclick="WdatePicker()" value='<pg:cell colName="endDate"/>'/></td>
 	   		   </tr>
 		</table>
 			        <a href="#" class="bt_2"  onclick="confirm()"><span>保存</span></a>
@@ -139,5 +140,6 @@ var id = '${param.id}';
 					<div   style="display:block;">
         <iframe id="frame1" height="680" width="900" scrolling="no" frameborder="0" vspace="0" hspace="0"  ></iframe> 
     </div>
+    </pg:beaninfo>
 	</body>
 </html>

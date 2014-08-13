@@ -423,4 +423,14 @@ public  @ResponseBody String deleteWorkTime(String id) throws Exception {
 	 }
 	
 }
+
+public String toEditWorkDate(String id,ModelMap model) throws Exception {
+	
+		 WorkDate workDate = areaManager.toEditWorkDate(id);
+		 
+		 model.addAttribute("workDate",workDate);
+		 
+		 return "path:editWorkDate"; 
+	
+}
 }

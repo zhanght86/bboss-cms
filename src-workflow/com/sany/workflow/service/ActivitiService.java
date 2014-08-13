@@ -29,9 +29,11 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.NodeInfoEntity;
+import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
 import com.sany.workflow.entity.ProcessInst;
@@ -1068,6 +1070,14 @@ public interface ActivitiService {
 	 * @return
 	 */
 	public Task getTaskById(String taskId);
+	
+	/**
+	 * 根据任务ID查询任务信息
+	 * 
+	 * @param taskId
+	 * @return
+	 */
+	public TaskManager getTaskByTaskId(String taskId);
 
 	/**
 	 * 根据历史任务ID查询历史任务信息
@@ -1494,8 +1504,8 @@ public interface ActivitiService {
 	/** 处理人委托转换
 	 * @param taskList
 	 * 2014年7月18日
-	 */
-	public void entrustTaskInfo(TaskManager tm);
+	 
+	public void entrustTaskInfo(TaskManager tm);*/
 	
 	/** 处理耗时
 	 * @param taskList
@@ -1524,4 +1534,14 @@ public interface ActivitiService {
 	 * 2014年7月25日
 	 */
 	public UserInfoMap getUserInfoMap();
+	
+	/** 代办任务处理 gw_tanx 
+	 * @param taskList
+	 * @throws Exception
+	 * 2014年7月15日
+	 */
+	public void startPorcessInstance(String processKey, String businessKey,
+			String currentUser,
+			List<ActivitiNodeCandidate> activitiNodeCandidateList,
+			List<Nodevariable> nodevariableList);
 }

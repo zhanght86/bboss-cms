@@ -2,8 +2,6 @@ package com.sany.workflow.service;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.NoHandleTask;
@@ -55,6 +53,15 @@ public interface ActivitiTaskService {
 	public void rejectToPreTask(TaskCondition task,
 			List<ActivitiNodeInfo> nodeList,
 			List<Nodevariable> nodevariableList, int rejectedtype);
+
+	/**
+	 * 驳回任务
+	 * 
+	 * @param taskId
+	 * @param nodeList
+	 *            2014年8月11日
+	 */
+	public boolean isSignTask(String taskId);
 
 	/**
 	 * 签收任务 gw_tanx
@@ -122,7 +129,7 @@ public interface ActivitiTaskService {
 	 *            2014年7月14日
 	 */
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String userId);
+			String processKey, String fromuserID, String userId);
 
 	/**
 	 * 记录已处理委托任务信息

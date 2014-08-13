@@ -233,7 +233,7 @@ public class AppcreateAction {
 			}
 		}
 		String contextPath= request.getSession().getServletContext().getRealPath("");
-		File file=new File(contextPath+"\\application\\app_images" ); 
+		File file=new File(contextPath+File.separatorChar+"application"+File.separatorChar+"app_images" ); 
 		String files[]=file.list();  
 		//前台没有的图片，后台传过去
 		if(null != list && list.size()>0){
@@ -248,7 +248,7 @@ public class AppcreateAction {
 					}
 				}
 				if(!flag){
-					appcreateService.getWfPicById(id,contextPath+"\\application\\app_images\\" + name);
+					appcreateService.getWfPicById(id,contextPath+File.separatorChar+"application"+File.separatorChar+"app_images" +File.pathSeparatorChar+ name);
 					
 				}
 			}

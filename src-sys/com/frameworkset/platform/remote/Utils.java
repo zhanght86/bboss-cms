@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.ClientProxyContext;
 import org.frameworkset.spi.remote.JGroupHelper;
 import org.frameworkset.spi.remote.RPCAddress;
 import org.frameworkset.spi.remote.RPCHelper;
@@ -119,8 +119,7 @@ public class Utils {
 //				e.printStackTrace();
 //			}
 		    try {
-		        RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager		    
-		        .getProvider("("+ip + ":" + port+ ")/base.serivce");
+		        RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("("+ip + ":" + port+ ")/base.serivce",RemoteHandlerInf.class);
 		        return remoteService.getDataSourceStatus();
 		    
 		    } catch (Exception e) {
@@ -160,8 +159,7 @@ public class Utils {
 //					Map infos = (Map) poolmanrsps.get(ip + ":" + port);
 //					return infos;
 //				}
-			    RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager
-	                        .getProvider("("+ip + ":" + port+ ")/base.serivce");
+			    RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("("+ip + ":" + port+ ")/base.serivce",RemoteHandlerInf.class);
 	                    return remoteService.getDataSourceInfos();
 
 			} catch (Exception e) {
@@ -186,8 +184,7 @@ public class Utils {
 //							GroupRequest.GET_ALL, 0);
 //			return poolmanstatusrsps;
 		    try {
-                        RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager                   
-                                                            .getProvider("(all)/base.serivce");
+                        RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("(all)/base.serivce",RemoteHandlerInf.class);
                         return remoteService.getDataSourceStatus();
                     
                     } catch (Exception e) {
@@ -222,8 +219,7 @@ public class Utils {
 //			// // System.out.println("key:" +ff.getKey());
 //			// // }
 //			return poolmanrsps;
-		    RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager                   
-                    .getProvider("(all)/base.serivce");
+		    RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("(all)/base.serivce",RemoteHandlerInf.class);
 		    return remoteService.getDataSourceInfos();
 		}
 		return new HashMap();
@@ -241,8 +237,7 @@ public class Utils {
 //							new Object[] {}, new Class[] {},
 //							GroupRequest.GET_ALL, 0);
 //			return poolmanrsps;
-		    RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager                   
-                    .getProvider("(all)/base.serivce");
+		    RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("(all)/base.serivce",RemoteHandlerInf.class);
 //		    RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager                   
 //                    .getProvider("(base.serivce");
 		    return (RspList)remoteService.getOnlineUserCount();
@@ -280,7 +275,7 @@ public class Utils {
 //		if (clusterstarted()) {
 //			return JGroupHelper.getJGroupHelper().getChannel().getView().getMembers();
 //		}
-	        return BaseSPIManager.getAllNodes();
+	        return ClientProxyContext.getAllNodes();
 //		return new Vector();
 	}
 	
@@ -288,7 +283,7 @@ public class Utils {
 //          if (clusterstarted()) {
 //                  return JGroupHelper.getJGroupHelper().getChannel().getView().getMembers();
 //          }
-            return BaseSPIManager.getAllNodes(protocol);
+            return ClientProxyContext.getAllNodes(protocol);
 //          return new Vector();
     }
 
@@ -297,7 +292,7 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean clusterstarted() {
-	    return BaseSPIManager.clusterstarted();
+	    return ClientProxyContext.clusterstarted();
 	}
 	
 	/**
@@ -305,7 +300,7 @@ public class Utils {
          * @return
          */
         public static boolean clusterstarted(String protocol) {
-            return BaseSPIManager.clusterstarted(protocol);
+            return ClientProxyContext.clusterstarted(protocol);
         }
 
 	public static boolean refreshReadorgname(String eventtype) {
@@ -322,8 +317,7 @@ public class Utils {
 //							new Object[] { eventtype, ipAddress.toString() }, new Class[] {
 //									String.class, String.class },
 //							GroupRequest.GET_ALL, 0);
-				    RemoteHandlerInf remoteService = (RemoteHandlerInf)BaseSPIManager                   
-		                    .getProvider("("+ ipAddress.getIp() + ":" + ipAddress.getPort() +")/base.serivce");
+				    RemoteHandlerInf remoteService = ClientProxyContext.getApplicationClientBean("("+ ipAddress.getIp() + ":" + ipAddress.getPort() +")/base.serivce",RemoteHandlerInf.class);
 				    
 		                    remoteService.refreshReadorgname(eventtype, ipAddress.toString());
 				    
@@ -359,7 +353,7 @@ public class Utils {
 	
 	public static String getClusterName()
         {
-            return BaseSPIManager.getClusterName();
+            return ClientProxyContext.getClusterName();
         }
 
 }

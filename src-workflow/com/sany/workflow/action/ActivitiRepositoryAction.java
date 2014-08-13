@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.RollbackException;
 
-import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.frameworkset.util.CollectionUtils;
@@ -60,7 +57,6 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
-import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
 import com.sany.workflow.util.WorkFlowConstant;
 
 /**
@@ -540,88 +536,19 @@ public class ActivitiRepositoryAction {
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList) {
 
-		TransactionManager tm = new TransactionManager();
 		try {
-			tm.begin();
 
-			// 流程引擎的变量参数集合
-			Map<String, Object> map = new HashMap<String, Object>();
-			// 节点工时提醒次数集合
-			List<Map<String, String>> worktimeList = new ArrayList<Map<String, String>>();
+			String currentUser = AccessControl.getAccessControl()
+					.getUserAccount();
 
-			for (int i = 0; i < activitiNodeCandidateList.size(); i++) {
-				// 用户
-				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-						.getCandidate_users_id())) {
-					map.put(activitiNodeCandidateList.get(i).getNode_key()
-							+ "_users", activitiNodeCandidateList.get(i)
-							.getCandidate_users_id());
-				}
-
-				// 组
-				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-						.getCandidate_groups_id())) {
-					map.put(activitiNodeCandidateList.get(i).getNode_key()
-							+ "_groups", activitiNodeCandidateList.get(i)
-							.getCandidate_groups_id());
-				}
-
-				// 串/并行切换(多实例)
-				String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
-				if (!"0".equals(isMulti)) {
-					if ("1".equals(isMulti)) {
-						map.put(activitiNodeCandidateList.get(i).getNode_key()
-								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-								MultiInstanceActivityBehavior.multiInstanceMode_sequential);
-					} else if ("2".equals(isMulti)) {
-						map.put(activitiNodeCandidateList.get(i).getNode_key()
-								+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-								MultiInstanceActivityBehavior.multiInstanceMode_parallel);
-					}
-				}
-
-				// 流程实例下节点的处理工时
-				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-						.getNode_key())) {
-
-					Map<String, String> worktimeMap = new HashMap<String, String>();
-					worktimeMap.put("PROCESS_KEY", processKey);
-					worktimeMap.put("NODE_KEY", activitiNodeCandidateList
-							.get(i).getNode_key() + "");
-					worktimeMap.put("DURATION_NODE", activitiNodeCandidateList
-							.get(i).getDuration_node() + "");
-					worktimeList.add(worktimeMap);
-				}
-
-			}
-
-			for (int i = 0; i < nodevariableList.size(); i++) {
-				// 变量
-				if (!StringUtil
-						.isEmpty(nodevariableList.get(i).getParam_name())) {
-					map.put(nodevariableList.get(i).getParam_name(),
-							nodevariableList.get(i).getParam_value());
-				}
-			}
-			PlatformKPIServiceImpl.setWorktimelist(worktimeList);
-			ProcessInstance processInstance = activitiService.startProcDef(
-					businessKey, processKey, map, AccessControl
-							.getAccessControl().getUserAccount());
-
-			activitiService.addNodeWorktime(processKey,
-					processInstance.getId(), worktimeList);
-
-			tm.commit();
+			activitiService.startPorcessInstance(processKey, businessKey,
+					currentUser, activitiNodeCandidateList, nodevariableList);
 
 			return "success";
-
 		} catch (Exception e) {
-			e.printStackTrace();
 			return "fail" + e.getMessage();
-		} finally {
-			PlatformKPIServiceImpl.setWorktimelist(null);
-			tm.release();
 		}
+
 	}
 	
 	/** 跳转流程开启参数配置页面 gw_tanx

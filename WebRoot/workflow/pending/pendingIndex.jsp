@@ -129,7 +129,7 @@ function wrapDatas(datas){
    
    function modifyQueryData(sysid){
 	   var id = document.getElementById(sysid).value;
-	   //页面没有打开则发起请求  
+	   //获取应用待办数据
 		$.ajax({
 	 	 	type: "POST",
 			url : "getSysPending.page",
@@ -147,6 +147,24 @@ function wrapDatas(datas){
 				} 
 			}	
 		 });
+	   
+		//获取应用待办总记录数
+		$.ajax({
+	 	 	type: "POST",
+			url : "getSysPendingNum.page",
+			data :{id:id,name:sysid,"type":"2"},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data) {
+					$("#"+data.id).text(data.num) ;
+				} 
+			}	
+		 });
+	   
    }
    function findPic(picName){
 	   if(null == picName || ""==picName){

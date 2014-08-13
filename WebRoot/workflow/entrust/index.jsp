@@ -162,30 +162,35 @@
 			  alert("请先选择一条记录修改");
 			  return;
 		  }
-		  $.ajax({
-			  type : "POST",
-			  url : "deleteEntrustInfo.page",
-			  data : {"entrustInfoId":entrustInfoId},
-			  dataType : 'json',
-			  async : false,
-			  beforeSend : function(XMLHttpRequest) {
-				  blockUI();
-				  XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-			  },
-			  success : function(responseText) {
-				  //去掉遮罩
-				  unblockUI();
-				
-				  if (responseText == "success") {
-					  $.dialog.alert("删除成功", function() {
-						  queryList();
-					  }, frameElement.api);
-				  } else {
-					  $.dialog.alert(responseText, function() {
-					  }, frameElement.api);
+		  
+		$.dialog.confirm('确定删除？', function(){
+			$.ajax({
+				  type : "POST",
+				  url : "deleteEntrustInfo.page",
+				  data : {"entrustInfoId":entrustInfoId},
+				  dataType : 'json',
+				  async : false,
+				  beforeSend : function(XMLHttpRequest) {
+					  blockUI();
+					  XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				  },
+				  success : function(responseText) {
+					  //去掉遮罩
+					  unblockUI();
+					
+					  if (responseText == "success") {
+						  $.dialog.alert("删除成功", function() {
+							  queryList();
+						  }, frameElement.api);
+					  } else {
+						  $.dialog.alert(responseText, function() {
+						  }, frameElement.api);
+					  }
 				  }
-			  }
-		  });
+			  });
+	     },function(){
+	     		
+	     });
 	 }
 </script>
 </head>

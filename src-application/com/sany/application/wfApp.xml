@@ -113,4 +113,13 @@
 		]]>
 	</property>
 	
+	<!-- 判断是否存在关联关系  gw_tanx-->
+	<property name="validateAppRelationIsExists">
+		<![CDATA[
+			select count(1)
+			  From td_wf_app_proc_relation c
+			 where c.wf_app_id = ?
+		]]>
+	</property>
+	
 </properties>

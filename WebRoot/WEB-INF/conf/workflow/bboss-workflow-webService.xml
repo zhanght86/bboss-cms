@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+    <!-- 工作流服务发布   
+    author：gw_tanx 
+    CopyRight:sany   
+    Date:2014.7.29  
+    -->  
+    <property name="/workflow/webservice/*.freepage" 
+    	ws:servicePort="workflowService"    
+    	hessian:servicePort="workflowService"  
+    	f:activitiService="attr:activitiService"
+    	f:activitiTaskService="attr:workflow.task.activitiTaskService"
+    	f:activitiConfigService="attr:activitiConfigService"
+    	f:activitiRelationService="attr:activitiRelationService"
+    class="com.sany.workflow.webservice.action.WorkflowController" />  
+
+		
+</properties>

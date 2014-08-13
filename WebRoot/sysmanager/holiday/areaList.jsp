@@ -16,6 +16,7 @@
        		<th style="display:none">区域编码</th>
        		<th>区域名称</th>
        		<th>区域描述</th>
+       		<th>默认区域</th>
        		<th>创建时间</th>
        		<th>创建人</th>
        		<th>操作</th>
@@ -29,11 +30,15 @@
             <td style="display:none"><pg:cell colName="areaId" /></td>
     		<td><pg:cell colName="areaName" /></td>
     		<td><pg:cell colName="areaDesc" /></td>
+    		<td>
+    		    <pg:equal colName="areaDefault" value="0">非默认区域</pg:equal>
+				<pg:equal colName="areaDefault"  value="1">默认区域</pg:equal>
+    		</td>
     		<td><pg:cell colName="createTime" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
     		<td><pg:cell colName="creator"  /></td>
     		
        		<td>
-       			<a href="#" onclick="editArea('<pg:cell colName="areaId"/>');">区域信息</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+       			<a href="#" onclick="editArea('<pg:cell colName="areaId"/>','<pg:cell colName="areaDefault"/>');">区域信息</a>&nbsp;&nbsp;|&nbsp;&nbsp;
        			<a href="#" onclick="editOrgList('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">所辖部门</a>&nbsp;&nbsp;|&nbsp;&nbsp;
        			<a href="#" onclick="editHoliday('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">假日安排</a>&nbsp;&nbsp;|&nbsp;&nbsp;
        			<a href="#" onclick="queryWorkDate('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">工作时间设置</a>

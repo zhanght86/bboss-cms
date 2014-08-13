@@ -48,7 +48,7 @@ var areaId = '${param.areaId}';
 			  title : '修改工作日期设置',
 			  width : 900,
 			  height : 500,
-			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/editWorkDate.jsp?id=" + id +"&name=" +name +"&periodDesc=" +periodDesc +"&startDate=" +startDate +"&endDate=" + endDate
+			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/toEditWorkDate.page?id=" + id
 		  });
 	 }
 	 function editWorkTime(pid){

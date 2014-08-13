@@ -23,13 +23,13 @@
 	 
 	
 	 
-	 function editArea(areaId){
+	 function editArea(areaId,areaDefault){
 		 $.dialog({
 			  id : '',
 			  title : '修改区域信息',
 			  width : 550,
 			  height : 250,
-			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/editArea.jsp?areaId=" + areaId 
+			  content : "url:" + "<%=request.getContextPath()%>/sysmanager/holiday/editArea.jsp?areaId=" + areaId +"&areaDefault=" +areaDefault
 		  });
 	 }
 	 function addArea(){

@@ -57,6 +57,17 @@ public class ProcessInstCondition {
 	// 业务类型
 	private String businessTypeId;
 
+	// 应用
+	private String wf_app_name;
+
+	public String getWf_app_name() {
+		return wf_app_name;
+	}
+
+	public void setWf_app_name(String wf_app_name) {
+		this.wf_app_name = wf_app_name;
+	}
+
 	public String getBusinessTypeId() {
 		return businessTypeId;
 	}

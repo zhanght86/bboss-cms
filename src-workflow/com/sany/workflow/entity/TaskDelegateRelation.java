@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import org.frameworkset.util.annotations.RequestParam;
 
 /**
- * 任务代办关系
+ * 任务转办/委托关系
  * 
  * @todo
  * @author tanx
@@ -14,22 +14,32 @@ import org.frameworkset.util.annotations.RequestParam;
  */
 public class TaskDelegateRelation {
 
+	private String TASKRELATION;// 1转办关系 2 委托关系
+
 	private String TASKID;
 
 	private String PROCESS_KEY;
 
 	private String PROCESS_ID;
 
-	private String FROM_USER;// 转办人
+	private String FROM_USER;// 转办/委托人
 
 	private String FROM_USER_NAME;
 
-	private String TO_USER;// 被转办人
+	private String TO_USER;// 被转办/委托人
 
-	private String TO_USER_NAME;// 被转办人
+	private String TO_USER_NAME;
 
 	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
-	private Timestamp CHANGETIME;// 转办时间
+	private Timestamp CHANGETIME;// 转办/委托时间
+
+	public String getTASKRELATION() {
+		return TASKRELATION;
+	}
+
+	public void setTASKRELATION(String tASKRELATION) {
+		TASKRELATION = tASKRELATION;
+	}
 
 	public String getFROM_USER_NAME() {
 		return FROM_USER_NAME;

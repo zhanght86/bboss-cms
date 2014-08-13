@@ -27,6 +27,7 @@
 	   	<pg:param name="wf_versions"/>
 	   	<pg:param name="wf_business_key"/>
 	   	<pg:param name="businessTypeId"/>
+	    <pg:param name="wf_app_name"/>
 	   	
 		<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 		<div id="changeColor1">

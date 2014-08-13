@@ -48,6 +48,12 @@ select ID  id,PID pid , NAME name ,START_TIME startTime,END_TIME  endTime from T
 		select ID id,AREA_ID areaId,NAME name,PERIOD_DESC periodDesc,START_DATE startDate,END_DATE endDate from TD_SP_HOLIDAY_WORKDATE where AREA_ID = ?
 		]]>
 	</property> 
+	<!--   查询区域所有工作日期安排    gw_tanx 20140811-->
+<property name="queryWorkDateById">
+		<![CDATA[
+		select ID id,AREA_ID areaId,NAME name,PERIOD_DESC periodDesc,START_DATE startDate,END_DATE endDate from TD_SP_HOLIDAY_WORKDATE where ID = ?
+		]]>
+	</property> 
 	<!--   新增日期类型     -->
 <property name="insertSingleArrange">
 		<![CDATA[

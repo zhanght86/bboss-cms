@@ -20,10 +20,11 @@ var api = frameElement.api, W = api.opener;
    function confirm() {	
 	   var areaName = $("#areaName").val();
 	   var areaDesc = $('#areaDesc').html();
+	   var areaDefault = $("#areaDefault option:selected").val();  
 	    $.ajax({
 	 	 	type: "POST",
 			url : "addArea.page",
-			data :{areaName:areaName,areaDesc:areaDesc},
+			data :{areaName:areaName,areaDesc:areaDesc,areaDefault:areaDefault},
 			dataType : '',
 			async:false,
 			beforeSend: function(XMLHttpRequest){
@@ -57,7 +58,15 @@ var api = frameElement.api, W = api.opener;
 		   		   <td>区域名称</td>
 		   		   <td><input type="text" id="areaName"  value='${param.areaName}'/></td>
 	   		   </tr>
-	   		   
+	   		   <tr>
+					<td>默认区域：</td>
+					<td>
+					<select id="areaDefault" name="areaDefault"  maxlength="50" >
+					<option value="0" selected="true">非默认区域</option>
+					<option value="1" >默认区域</option>
+					</select>
+					</td>
+			  </tr>
 	   		   <tr>     
 		   		   <td>区域描述</td>
 		           <td><textarea rows="3" cols="20" id='areaDesc' >${param.areaDesc}</textarea></td>

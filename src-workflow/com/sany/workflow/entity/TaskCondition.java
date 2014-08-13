@@ -53,6 +53,26 @@ public class TaskCondition {
 
 	private String currentUser;// 当前用户
 
+	private String changeUserId; // 转办人id
+	
+	private String appName;//应用名称
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getChangeUserId() {
+		return changeUserId;
+	}
+
+	public void setChangeUserId(String changeUserId) {
+		this.changeUserId = changeUserId;
+	}
+
 	public String getCurrentUser() {
 		return currentUser;
 	}

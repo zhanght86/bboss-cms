@@ -40,10 +40,11 @@ function queryList(){
 	var businessKey = $("#businessKey").val();
 	var createUser = $("#createUser").val();
 	var entrustUser = $("#entrustUser").val();
+	var appName = $("#appName").val();
 	
     $("#historyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryHistoryTaskData.page #customContent", 
     	{"processIntsId":processIntsId, "processKey":processKey,"taskId":taskId,"taskName":taskName,"businessTypeId":businessTypeId,
-    	"businessKey":businessKey,"createUser":createUser,"entrustUser":entrustUser},
+    	"businessKey":businessKey,"createUser":createUser,"entrustUser":entrustUser,"appName":appName},
     	function(){loadjs();});
 }
 
@@ -133,7 +134,7 @@ function cancelTask(taskId,processId,processKey){
 											<td>
 												<input id="entrustUser" name="entrustUser" type="text" class="w120"/>
 											</td>
-											<td style="text-align:center" rowspan="2" >
+											<td style="text-align:center" rowspan="3" >
 												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 												<input type="reset" id="reset" style="display:none"/>
@@ -154,6 +155,12 @@ function cancelTask(taskId,processId,processKey){
 												<pg:false actual="${isAdmin}"> value="${currentAccount}" disabled</pg:false>
 												/>
 											</td>
+										</tr>
+										<tr>
+										<pg:empty actual="${processKey}">
+											<th>应用：</th>
+											<td><input id="appName" name="appName" type="text" class="w120"/></td>
+										</pg:empty>
 										</tr>
 									</table>
 								</td>

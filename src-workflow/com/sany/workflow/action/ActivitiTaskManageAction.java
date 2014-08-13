@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -365,6 +364,8 @@ public class ActivitiTaskManageAction {
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
 
+				String remark = "";
+
 				// 记录委托关系(有就处理，没有就不处理)
 				if (StringUtil.isNotEmpty(task.getCreateUser())
 						&& StringUtil.isNotEmpty(task.getEntrustUser())) {
@@ -374,11 +375,17 @@ public class ActivitiTaskManageAction {
 
 						activitiTaskService.addEntrustTaskInfo(task);
 
-						// 委托任务重写DELETE_REASON_字段信息
-						task.setCompleteReason("[" + task.getCreateUser()
-								+ "]的任务委托给[" + task.getEntrustUser() + "]完成");
+						// 追加DELETE_REASON_字段信息
+						remark = "<br/>备注:[" + task.getCreateUser() + "]的任务委托给["
+								+ task.getEntrustUser() + "]完成";
 					}
 
+				} else {
+					remark = "<br/>备注:[" + task.getCurrentUser() + "]完成";
+				}
+
+				if (StringUtil.isNotEmpty(task.getCompleteReason())) {
+					task.setCompleteReason(task.getCompleteReason() + remark);
 				}
 
 				// 完成任务
@@ -424,11 +431,12 @@ public class ActivitiTaskManageAction {
 		try {
 			tm.begin();
 
-			// 用来获取流程业务主题和状态
-			ProcessInstance instance = activitiService
-					.getProcessInstanceById(processInstId);
-			model.addAttribute("businessKey", instance.getBusinessKey());// 业务主题
-			model.addAttribute("suspended", instance.isSuspended());// 状态
+			// // 用来获取流程业务主题和状态
+			// ProcessInstance instance = activitiService
+			// .getProcessInstanceById(processInstId);
+			// model.addAttribute("businessKey", instance.getBusinessKey());//
+			// 业务主题
+			// model.addAttribute("suspended", instance.isSuspended());// 状态
 
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
@@ -444,11 +452,12 @@ public class ActivitiTaskManageAction {
 			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
 					.getNextNodeInfoById(nodeList, processInstId);
 			model.addAttribute("nextNodeList", nextNodeList);
+			// 获取当前节点的上
+			// ActivityImpl[] activityTask = activitiService.getTaskService()
+			// .findRejectedActivityNode(taskId);
 
 			// 当前任务节点信息
-			Task task = activitiService.getTaskById(taskId);
-			task.setAssignee(activitiService.userIdToUserName(
-					task.getAssignee(), "2"));
+			TaskManager task = activitiService.getTaskByTaskId(taskId);
 			model.addAttribute("task", task);
 
 			// 参数
@@ -564,27 +573,49 @@ public class ActivitiTaskManageAction {
 	 * @return 2014年7月18日
 	 */
 	public @ResponseBody
-	String delegateTask(String taskId, String userId, String processIntsId,
-			String processKey, ModelMap model) {
+	String delegateTask(TaskCondition task, ModelMap model) {
 		TransactionManager tm = new TransactionManager();
 		try {
-			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
-					processKey);
+			boolean isAuthor = activitiTaskService.judgeAuthority(
+					task.getTaskId(), task.getProcessKey());
 
 			if (isAuthor) {
 
 				tm.begin();
 
-				// 先签收
-				activitiService.claim(taskId, AccessControl.getAccessControl()
-						.getUserAccount());
+				String currentUser = AccessControl.getAccessControl()
+						.getUserAccount();
+				task.setCurrentUser(currentUser);
+
+				// 记录委托关系(有就处理，没有就不处理)
+				if (StringUtil.isNotEmpty(task.getCreateUser())
+						&& StringUtil.isNotEmpty(task.getEntrustUser())) {
+
+					// 当前用户就是被委托的用户
+					if (currentUser.equals(task.getEntrustUser())) {
+
+						activitiTaskService.addEntrustTaskInfo(task);
+
+					}
+
+				}
+
+				// 判断是否有没被签收
+				boolean isClaim = activitiTaskService.isSignTask(task
+						.getTaskId());
+				if (!isClaim) {
+					// 先签收
+					activitiService.claim(task.getTaskId(), currentUser);
+				}
 
 				// 再转办
-				activitiService.delegateTask(taskId, userId);
+				activitiService.delegateTask(task.getTaskId(),
+						task.getChangeUserId());
 
 				// 在扩展表中添加转办记录
-				activitiTaskService.updateNodeChangeInfo(taskId, processIntsId,
-						processKey, userId);
+				activitiTaskService.updateNodeChangeInfo(task.getTaskId(),
+						task.getProcessIntsId(), task.getProcessKey(),
+						currentUser, task.getChangeUserId());
 
 				tm.commit();
 

@@ -54,4 +54,6 @@ public interface AreaManager {
 	public void deleteWorkTime(String id)throws Exception;
 	
 	public boolean checkDuplicateDefaultArea(String areaId,int num)throws Exception;
+	
+	public WorkDate toEditWorkDate(String id)throws Exception;
 }

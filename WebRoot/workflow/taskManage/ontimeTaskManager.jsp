@@ -38,17 +38,18 @@ function getEntrustInfo(){
        
 //加载实时任务列表数据  
 function queryList(){
-	var processIntsId = $("#processIntsId").val();
-	var processKey = $("#processKey").val();
-	var taskState = $("#taskState").val();
-	var taskName = $("#taskName").val();
-	var taskId = $("#taskId").val();
-	var businessTypeId = $("#businessType").combotree('getValue');
-	var businessKey = $("#businessKey").val();
+	var processIntsId = $("#queryForm #processIntsId").val();
+	var processKey = $("#queryForm #processKey").val();
+	var taskState = $("#queryForm #taskState").val();
+	var taskName = $("#queryForm #taskName").val();
+	var taskId = $("#queryForm #taskId").val();
+	var businessTypeId = $("#queryForm #businessType").combotree('getValue');
+	var businessKey = $("#queryForm #businessKey").val();
+	var appName = $("#queryForm #appName").val();
 	
     $("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page #customContent", 
     	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
-    	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey},
+    	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey,"appName":appName},
     	function(){
     		//if($("#isEmptyData1").val()){
 			//	$("#ontimeDiv").show();
@@ -124,9 +125,10 @@ function queryEntrustList(){
 	var businessTypeId = $("#entrustForm #businessType").combotree('getValue');
 	var businessKey = $("#entrustForm #businessKey").val();
 	var assignee = $("#entrustForm #assignee").val();
+	var appName = $("#entrustForm #appName").val();
 	
     $("#entrustContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryEntrustTaskData.page #entrustContent", 
-        	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
+        	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,"appName":appName,
         	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey,"assignee":assignee},
         	function(){
         			//if($("#isEmptyData").val()){
@@ -282,6 +284,11 @@ function sendMess(taskId,processKey,taskState,sentType){
 												<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
 													<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
 												</td>
+												
+												<pg:empty actual="${processKey}" >
+												<th>应用：</th>
+													<td><input id="appName" name="appName" type="text" class="w120" /></td>
+												</pg:empty>
 											</tr>
 										</table>
 									</td>
@@ -346,7 +353,7 @@ function sendMess(taskId,processKey,taskState,sentType){
 														<select class="easyui-combotree" id='businessType' name="businessType" required="false"
 																style="width: 120px;">
 													</td>
-													<td style="text-align:center" rowspan="2" >
+													<td style="text-align:center" rowspan="3" >
 														<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryEntrustList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
 														<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doEntrustReset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 														<input type="reset" id="entrustReset" style="display:none"/>
@@ -363,6 +370,10 @@ function sendMess(taskId,processKey,taskState,sentType){
 													</td>
 													<th>委托人：</th>
 													<td><input id="assignee" name="assignee" type="text" class="w120"/></td>
+												</tr>
+												<tr>
+													<th>应用：</th>
+													<td><input id="appName" name="appName" type="text" class="w120"/></td>
 												</tr>
 											</table>
 										</td>

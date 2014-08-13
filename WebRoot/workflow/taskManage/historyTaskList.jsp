@@ -24,6 +24,7 @@
     <pg:param name="businessKey"/>
     <pg:param name="createUser"/>
     <pg:param name="entrustUser"/>
+    <pg:param name="appName"/>
 	
 	<!-- 加入 class="tableOutline" 可控制表格宽度，滚动条展示 -->
 	<div id="changeColor">
@@ -72,14 +73,14 @@
        			</pg:null>
        			<pg:notnull colName="delegateTaskList" >
 			     	<pg:list colName="delegateTaskList" >
-					  <pg:cell colName="FROM_USER_NAME"/>转办给<pg:cell colName="TO_USER_NAME"/>
+					  <pg:cell colName="FROM_USER_NAME"/>
+					 	<pg:equal colName="TASKRELATION" value="1">转办给</pg:equal> 
+					 	<pg:equal colName="TASKRELATION" value="2">委托给</pg:equal> 
+					  <pg:cell colName="TO_USER_NAME"/>
 					  [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
 					  <br/>
 			       </pg:list>
 		        </pg:notnull>	
-       			<pg:notnull colName="wfEntrust">
-       				<pg:cell colName="wfEntrust" property="create_user_name"/>委托给<pg:cell colName="wfEntrust" property="entrust_user_name"/>
-       			</pg:notnull>
        		</td>
        		<td><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
             <td><pg:cell colName="END_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td> 

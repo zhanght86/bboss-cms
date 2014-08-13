@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.platform.holiday.area.bean.Area;
 import com.frameworkset.platform.holiday.area.bean.Arrange;
@@ -203,6 +204,10 @@ public class AreaManagerImpl implements AreaManager{
 			}
 		}
 		return flag;
+	}
+	@Override
+	public WorkDate toEditWorkDate(String id) throws Exception {
+		return executor.queryObject(WorkDate.class, "queryWorkDateById",id);
 	}
 	
 
