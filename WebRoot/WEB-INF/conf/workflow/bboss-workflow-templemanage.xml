@@ -8,7 +8,6 @@
 		path:templeManager="/workflow/templeManage/templeManager.jsp"
 		path:templeList="/workflow/templeManage/templeList.jsp"
 		path:editTemple="/workflow/templeManage/editTemple.jsp"
-		f:activitiService="attr:activitiService" 
 		f:templeService="attr:workflow.temple.templeService"
 		class="com.sany.workflow.action.TempleManageAction">
 	</property>

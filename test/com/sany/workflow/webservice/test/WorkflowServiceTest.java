@@ -1,8 +1,10 @@
 package com.sany.workflow.webservice.test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Before;
@@ -22,17 +24,19 @@ public class WorkflowServiceTest {
 	private WorkflowService hassianService = null;
 	// webservice方式
 	private WorkflowService cxfService = null;
-
+	private String context = "http://pdp.sany.com.cn:8080/SanyPDP/";
+	private String user = "chenm24";
+	private String app = "pdp";
 	@Before
 	public void init() throws Exception {
 		// hessian服务方式
 		HessianProxyFactory factory = new HessianProxyFactory();
-		String url = "http://localhost:8080/SanyPDP/hessian?service=workflowService";
+		String url = context +"hessian?service=workflowService";
 		hassianService = (WorkflowService) factory.create(
 				WorkflowService.class, url);
 
 		// webservice方式
-		String cxfUrl = "http://localhost:8080/SanyPDP/cxfservices/workflowService";
+		String cxfUrl = context +"cxfservices/workflowService";
 		JaxWsProxyFactoryBean WSServiceClientFactory = new JaxWsProxyFactoryBean();
 		WSServiceClientFactory.setAddress(cxfUrl);
 		WSServiceClientFactory.setServiceClass(WorkflowService.class);
@@ -73,6 +77,17 @@ public class WorkflowServiceTest {
 		ResultResponse cxfResult = cxfService.deployProcess(info);
 		System.out.println("webservice方式返回结果:" + cxfResult.getResultCode()
 				+ " " + cxfResult.getResultMess());
+		/**
+		 * http请求部署流程，可以直接上传文件
+		 */
+		String url = context +"workflow/webservice/deployZipProcess.freepage";
+		Map params = new HashMap();
+		Map<String,File> fileparams = new HashMap<String,File>();
+		fileparams.put("processZipDef", new File("E:\\workspace\\SanyPDP\\test\\com\\sany\\activiti\\demo\\diagrams\\mms.return.zip"));
+		fileparams.put("processParamFile", new File("E:\\workspace\\SanyPDP\\test\\com\\sany\\activiti\\demo\\diagrams\\mms.return.zip"));
+		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
+				.httpPostforString(url, params, fileparams);
+		System.out.println("http请求方式返回结果:" + httpResult);
 
 	}
 
@@ -91,7 +106,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// // HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/suspendProcessDef.freepage?processDefId=Mms.return:12:b8427c9a-1dd2-11e4-bf57-4437e6999a31";
+		String url = context +"workflow/webservice/suspendProcessDef.freepage?processDefId=Mms.return:12:b8427c9a-1dd2-11e4-bf57-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -112,7 +127,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/activateProcessDef.freepage?processDefId=Mms.return:12:b8427c9a-1dd2-11e4-bf57-4437e6999a31";
+		String url = context +"workflow/webservice/activateProcessDef.freepage?processDefId=Mms.return:12:b8427c9a-1dd2-11e4-bf57-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -133,7 +148,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/delDeployment.freepage?processKeys=Test.mail";
+		String url = context +"workflow/webservice/delDeployment.freepage?processKeys=Test.mail";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -152,7 +167,7 @@ public class WorkflowServiceTest {
 		System.out.println("webservice方式返回结果:" + cxfResult.getResultData());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/getProccessXML.freepage?processKey=Mms.return&version=1";
+		String url = context +"workflow/webservice/getProccessXML.freepage?processKey=Mms.return&version=1";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -163,7 +178,7 @@ public class WorkflowServiceTest {
 	public void testGetProccessPic() throws Exception {
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/getProccessPic.freepage";
+		String url = context +"workflow/webservice/getProccessPic.freepage";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -218,7 +233,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/upgradeInstancesByProcessKey.freepage?processKey=Test.mail";
+		String url = context +"workflow/webservice/upgradeInstancesByProcessKey.freepage?processKey=Test.mail";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -238,7 +253,7 @@ public class WorkflowServiceTest {
 
 		// HTTP方式
 		String deleteReason = java.net.URLEncoder.encode("HTTP测试删除", "UTF-8");
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/delInstancesForLogic.freepage?instancesIds=3ca0037a-1e1a-11e4-b400-4437e6999a31&deleteReason="
+		String url = context +"workflow/webservice/delInstancesForLogic.freepage?instancesIds=3ca0037a-1e1a-11e4-b400-4437e6999a31&deleteReason="
 				+ deleteReason;
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
@@ -260,7 +275,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/delInstancesForPhysics.freepage?instancesIds=2f9b0603-190f-11e4-9627-4437e6999a31";
+		String url = context +"workflow/webservice/delInstancesForPhysics.freepage?instancesIds=2f9b0603-190f-11e4-9627-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -281,7 +296,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/suspendInstance.freepage?instancesId=136cd515-1e94-11e4-a662-4437e6999a31";
+		String url = context +"workflow/webservice/suspendInstance.freepage?instancesId=136cd515-1e94-11e4-a662-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -302,7 +317,7 @@ public class WorkflowServiceTest {
 				+ " " + cxfResult.getResultMess());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/activateInstance.freepage?instancesId=136cd515-1e94-11e4-a662-4437e6999a31";
+		String url = context +"workflow/webservice/activateInstance.freepage?instancesId=136cd515-1e94-11e4-a662-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -325,7 +340,7 @@ public class WorkflowServiceTest {
 				+ cxfResult.getDataList());
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/getInstanceDealInfo.freepage?instancesId=0f6e3028-1e94-11e4-a662-4437e6999a31";
+		String url = context +"workflow/webservice/getInstanceDealInfo.freepage?instancesId=0f6e3028-1e94-11e4-a662-4437e6999a31";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -344,7 +359,7 @@ public class WorkflowServiceTest {
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/signTask.freepage?taskId=0ac71645-1e94-11e4-a662-4437e6999a31&userId=test1";
+		String url = context +"workflow/webservice/signTask.freepage?taskId=0ac71645-1e94-11e4-a662-4437e6999a31&userId=test1";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -362,7 +377,7 @@ public class WorkflowServiceTest {
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/discardTask.freepage";
+		String url = context +"workflow/webservice/discardTask.freepage";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -379,7 +394,7 @@ public class WorkflowServiceTest {
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/cancelTask.freepage";
+		String url = context +"workflow/webservice/cancelTask.freepage";
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -402,7 +417,7 @@ public class WorkflowServiceTest {
 
 		// HTTP方式
 		// String url =
-		// "http://localhost:8080/SanyPDP/workflow/webservice/delegateTask.freepage?"
+		// context +"workflow/webservice/delegateTask.freepage?"
 		// +
 		// "taskId=0ac71645-1e94-11e4-a662-4437e6999a31&fromUserId=test1&toUserId=test2"
 		// +
@@ -455,15 +470,15 @@ public class WorkflowServiceTest {
 	public void testCountTaskNum() throws Exception {
 		// hessian服务方式
 		DataResponse hessianResult = hassianService
-				.countTaskNum("test2", "pdp");
+				.countTaskNum(user, app);
 		System.out.println("hessian方式返回结果:" + hessianResult);
 
 		// webservice方式
-		DataResponse cxfResult = cxfService.countTaskNum("test2", "pdp");
+		DataResponse cxfResult = cxfService.countTaskNum(user, app);
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/countTaskNum.freepage?pernr=test2&sysId=pdp";
+		String url = context +"workflow/webservice/countTaskNum.freepage?pernr="+user+"&sysId="+app;
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);
@@ -473,16 +488,16 @@ public class WorkflowServiceTest {
 	public void testGetNoHandleTask() throws Exception {
 		// hessian服务方式
 		NoHandTaskResponse hessianResult = hassianService.getNoHandleTask(
-				"test2", "pdp");
+				user, app);
 		System.out.println("hessian方式返回结果:" + hessianResult);
 
 		// webservice方式
-		NoHandTaskResponse cxfResult = cxfService.getNoHandleTask("test2",
-				"pdp");
+		NoHandTaskResponse cxfResult = cxfService.getNoHandleTask(user,
+				app);
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
-		String url = "http://localhost:8080/SanyPDP/workflow/webservice/getNoHandleTask.freepage?pernr=test2&sysId=pdp";
+		String url = context +"workflow/webservice/getNoHandleTask.freepage?pernr="+user+"&sysId="+app;
 		String httpResult = org.frameworkset.spi.remote.http.HttpReqeust
 				.httpPostforString(url);
 		System.out.println("http请求方式返回结果:" + httpResult);

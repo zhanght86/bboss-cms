@@ -16,7 +16,6 @@
 		path:viewEntrustInfo="/workflow/taskManage/viewEntrustInfo.jsp" 
 		f:activitiService="attr:activitiService"
 		f:activitiTaskService="attr:workflow.task.activitiTaskService"
-		f:activitiConfigService="attr:activitiConfigService"
 		class="com.sany.workflow.action.ActivitiTaskManageAction">
 	</property>
 

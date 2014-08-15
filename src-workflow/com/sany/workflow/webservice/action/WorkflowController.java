@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +37,7 @@ import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.webservice.entity.DataResponse;
 import com.sany.workflow.webservice.entity.DealInfoResponse;
 import com.sany.workflow.webservice.entity.DeploymentInfo;
+import com.sany.workflow.webservice.entity.DeploymentZipFile;
 import com.sany.workflow.webservice.entity.NoHandTaskInfo;
 import com.sany.workflow.webservice.entity.NoHandTaskResponse;
 import com.sany.workflow.webservice.entity.NodeTaskInfo;
@@ -58,6 +60,18 @@ public class WorkflowController implements WorkflowService {
 	private ActivitiConfigService activitiConfigService;
 	private ActivitiRelationService activitiRelationService;
 
+	/**
+	 * 部署流程定义
+	 * 
+	 * 
+	 *            部署信息
+	 * @return 2014年8月6日
+	 */
+	@WebMethod(exclude=true)
+	public @ResponseBody(datatype = "json")
+	ResultResponse deployZipProcess(DeploymentZipFile deployInfo) {
+		return null;
+	}
 	/**
 	 * 部署流程定义
 	 * 
@@ -103,7 +117,7 @@ public class WorkflowController implements WorkflowService {
 		try {
 
 			tm.begin();
-
+//			deployInfo.getProcessZipDef();
 			// 部署资源 （将byte[]转换成ZipInputStream）
 			ByteArrayInputStream zipStream = new ByteArrayInputStream(
 					deployInfo.getProcessDefFile());

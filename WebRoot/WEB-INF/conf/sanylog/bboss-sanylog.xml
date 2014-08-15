@@ -5,8 +5,6 @@
 		/>
 		
 		<property name="/sanylog/stat/*.freepage" class="com.frameworkset.platform.sanylog.action.StatJSController" 
-		f:counterManager="attr:counterManagerLog"
-		f:configManager="attr:logConfigManager"
 		/>
 	
 	<property name="/sanylog/*.page" class="com.frameworkset.platform.sanylog.action.CounterController" singlable="true"
