@@ -236,14 +236,16 @@
 		<servlet-name>Kaptcha</servlet-name>
 		<url-pattern>/Kaptcha.jpg</url-pattern>
 	</servlet-mapping> 
+	<!-- 测试控制器：
+	 /WEB-INF/conf/test/bboss-*.xml,
+	 -->
 	<servlet>
         <servlet-name>mvc</servlet-name>
         <servlet-class>org.frameworkset.web.servlet.DispatchServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/conf/appbom/bboss-*.xml,
-            /WEB-INF/conf/commons/bboss-*.xml,
-            /WEB-INF/conf/test/bboss-*.xml,
+            /WEB-INF/conf/commons/bboss-*.xml,           
             /WEB-INF/conf/workflow/bboss-*.xml,
 			/WEB-INF/conf/application/bboss-*.xml,
             /WEB-INF/conf/document/bboss-*.xml,

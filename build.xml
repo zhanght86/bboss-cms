@@ -101,7 +101,9 @@
 		<copy todir="classes-all">
 			<fileset dir="${source}/src-common" includes="**/*.xml"/>
 			<fileset dir="${source}/src-cms" includes="**/*.xml"/>
-			<fileset dir="${source}/src-sys" includes="com/frameworkset/platform/sysmgrcore/manager/db/job.xml"/>
+			<!--<fileset dir="${source}/src-sys" includes="com/frameworkset/platform/sysmgrcore/manager/db/job.xml"/>-->
+			<fileset dir="${source}/src-sys" includes="**/*.xml"/>
+			<fileset dir="${source}/src-dictionary" includes="**/*.xml"/>
 		</copy>
 		<copy todir="classes-sonar">
 			<fileset dir="classes-all" includes="**/*.*"/>

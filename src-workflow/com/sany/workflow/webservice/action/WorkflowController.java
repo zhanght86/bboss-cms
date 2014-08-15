@@ -64,14 +64,16 @@ public class WorkflowController implements WorkflowService {
 	 * 部署流程定义
 	 * 
 	 * 
-	 *            部署信息
+	 * 部署信息
+	 * 
 	 * @return 2014年8月6日
 	 */
-	@WebMethod(exclude=true)
+	@WebMethod(exclude = true)
 	public @ResponseBody(datatype = "json")
 	ResultResponse deployZipProcess(DeploymentZipFile deployInfo) {
 		return null;
 	}
+
 	/**
 	 * 部署流程定义
 	 * 
@@ -117,7 +119,7 @@ public class WorkflowController implements WorkflowService {
 		try {
 
 			tm.begin();
-//			deployInfo.getProcessZipDef();
+			// deployInfo.getProcessZipDef();
 			// 部署资源 （将byte[]转换成ZipInputStream）
 			ByteArrayInputStream zipStream = new ByteArrayInputStream(
 					deployInfo.getProcessDefFile());
@@ -171,7 +173,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程定义部署出错：" + e.getMessage());
+			logger.error("流程定义部署出错：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("流程定义部署出错：" + e.getMessage());
@@ -207,7 +209,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("挂起流程定义" + processDefId + "失败：" + e.getMessage());
+			logger.error("挂起流程定义" + processDefId + "失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("挂起操作失败：" + e.getMessage());
@@ -241,7 +243,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("激活流程定义" + processDefId + "失败：" + e.getMessage());
+			logger.error("激活流程定义" + processDefId + "失败：" + e.getMessage(), e);
 
 			rr.setResultCode("1");
 			rr.setResultMess("激活操作失败：" + e.getMessage());
@@ -277,7 +279,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("删除流程定义" + processKeys + "失败：" + e.getMessage());
+			logger.error("删除流程定义" + processKeys + "失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("删除操作失败：" + e.getMessage());
@@ -321,7 +323,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("获取流程定义" + processKey + "XML失败：" + e.getMessage());
+			logger.error("获取流程定义" + processKey + "XML失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("获取流程定义XML失败：" + e.getMessage());
@@ -346,7 +348,8 @@ public class WorkflowController implements WorkflowService {
 				activitiService.getProccessPic(processDefId, out);
 			}
 		} catch (Exception e) {
-			logger.error("获取流程定义ID" + processDefId + "图片失败：" + e.getMessage());
+			logger.error("获取流程定义ID" + processDefId + "图片失败：" + e.getMessage(),
+					e);
 		}
 	}
 
@@ -412,7 +415,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("开启实例，节点配置转换出错：" + e.getMessage());
+			logger.error("开启实例，节点配置转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("3");
 			rr.setResultMess("开启实例，节点配置转换出错：" + e.getMessage());
@@ -440,7 +443,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("开始实例，参数转换出错：" + e.getMessage());
+			logger.error("开始实例，参数转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("2");
 			rr.setResultMess("开始实例，参数转换出错：" + e.getMessage());
@@ -457,7 +460,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程定义：" + processKey + "开始实例失败：" + e.getMessage());
+			logger.error("流程定义：" + processKey + "开始实例失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("开启实例操作失败：" + e.getMessage());
@@ -492,7 +495,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程定义：" + processKey + "升级失败：" + e.getMessage());
+			logger.error("流程定义：" + processKey + "升级失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("升级操作失败:" + e.getMessage());
@@ -534,7 +537,8 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程实例：" + instancesIds + ",逻辑删除失败：" + e.getMessage());
+			logger.error("流程实例：" + instancesIds + ",逻辑删除失败：" + e.getMessage(),
+					e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("逻辑删除操作失败:" + e.getMessage());
@@ -566,7 +570,8 @@ public class WorkflowController implements WorkflowService {
 			rr.setResultMess("物理删除操作成功");
 			return rr;
 		} catch (Exception e) {
-			logger.error("流程实例：" + instancesIds + ",物理删除失败：" + e.getMessage());
+			logger.error("流程实例：" + instancesIds + ",物理删除失败：" + e.getMessage(),
+					e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("物理删除操作失败：" + e.getMessage());
@@ -598,7 +603,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程实例：" + instancesId + ",挂起失败：" + e.getMessage());
+			logger.error("流程实例：" + instancesId + ",挂起失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("挂起流程实例操作失败：" + e.getMessage());
@@ -631,7 +636,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("流程实例：" + instancesId + ",激活失败：" + e.getMessage());
+			logger.error("流程实例：" + instancesId + ",激活失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("激活流程实例操作失败：" + e.getMessage());
@@ -733,7 +738,7 @@ public class WorkflowController implements WorkflowService {
 			return wr;
 
 		} catch (Exception e) {
-			logger.error("获取处理记录失败：" + e.getMessage());
+			logger.error("获取处理记录失败：" + e.getMessage(), e);
 
 			wr.setResultCode("0");
 			wr.setResultMess("获取处理记录操作失败：" + e.getMessage());
@@ -774,7 +779,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("任务id：" + taskId + ",签收失败：" + e.getMessage());
+			logger.error("任务id：" + taskId + ",签收失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("签收任务操作失败：" + e.getMessage());
@@ -815,7 +820,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("实例id：" + instancesId + ",废弃失败：" + e.getMessage());
+			logger.error("实例id：" + instancesId + ",废弃失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("废弃任务操作失败：" + e.getMessage());
@@ -882,7 +887,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("实例id：" + instancesId + ",撤销失败：" + e.getMessage());
+			logger.error("实例id：" + instancesId + ",撤销失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("撤销任务操作失败：" + e.getMessage());
@@ -947,7 +952,7 @@ public class WorkflowController implements WorkflowService {
 		try {
 
 			tm.begin();
-			
+
 			// 判断是否有没被签收
 			boolean isClaim = activitiTaskService.isSignTask(taskId);
 			if (!isClaim) {
@@ -969,7 +974,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("任务id：" + taskId + ",转办失败：" + e.getMessage());
+			logger.error("任务id：" + taskId + ",转办失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("转办任务操作失败");
@@ -1045,7 +1050,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("驳回任务，节点配置转换出错：" + e.getMessage());
+			logger.error("驳回任务，节点配置转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("3");
 			rr.setResultMess("驳回任务，节点配置转换出错：" + e.getMessage());
@@ -1073,7 +1078,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("驳回任务，参数转换出错：" + e.getMessage());
+			logger.error("驳回任务，参数转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("2");
 			rr.setResultMess("驳回任务，参数转换出错：" + e.getMessage());
@@ -1090,7 +1095,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("任务id：" + taskId + ",驳回失败：" + e.getMessage());
+			logger.error("任务id：" + taskId + ",驳回失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("驳回任务操作失败:" + e.getMessage());
@@ -1195,7 +1200,7 @@ public class WorkflowController implements WorkflowService {
 			}
 
 		} catch (Exception e) {
-			logger.error("通过任务，节点基本参数转换出错：" + e.getMessage());
+			logger.error("通过任务，节点基本参数转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("4");
 			rr.setResultMess("通过任务，节点基本参数转换出错：" + e.getMessage());
@@ -1230,7 +1235,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("通过任务，节点配置转换出错：" + e.getMessage());
+			logger.error("通过任务，节点配置转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("3");
 			rr.setResultMess("通过任务，节点配置转换出错：" + e.getMessage());
@@ -1258,7 +1263,7 @@ public class WorkflowController implements WorkflowService {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("通过任务，参数转换出错：" + e.getMessage());
+			logger.error("通过任务，参数转换出错：" + e.getMessage(), e);
 
 			rr.setResultCode("2");
 			rr.setResultMess("通过任务，参数转换出错：" + e.getMessage());
@@ -1292,7 +1297,8 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("任务id：" + task.getTaskId() + ",通过失败：" + e.getMessage());
+			logger.error(
+					"任务id：" + task.getTaskId() + ",通过失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("通过任务操作失败：" + e.getMessage());
@@ -1329,7 +1335,7 @@ public class WorkflowController implements WorkflowService {
 			return rr;
 
 		} catch (Exception e) {
-			logger.error("统计用户：" + pernr + "代办数失败：" + e.getMessage());
+			logger.error("统计用户：" + pernr + "代办数失败：" + e.getMessage(), e);
 
 			rr.setResultCode("0");
 			rr.setResultMess("任务代办数统计操作失败" + e.getMessage());
@@ -1400,7 +1406,7 @@ public class WorkflowController implements WorkflowService {
 			return nhtr;
 
 		} catch (Exception e) {
-			logger.error("统一代办数据查询出错：" + e.getMessage());
+			logger.error("统一代办数据查询出错：" + e.getMessage(), e);
 
 			nhtr.setResultCode("0");
 			nhtr.setResultMess("获取任务待办数据操作失败：" + e.getMessage());
@@ -1425,7 +1431,8 @@ public class WorkflowController implements WorkflowService {
 				activitiService.getProccessPic(instancesId, out);
 			}
 		} catch (Exception e) {
-			logger.error("获取流程实例" + instancesId + ",任务追踪图片失败：" + e.getMessage());
+			logger.error(
+					"获取流程实例" + instancesId + ",任务追踪图片失败：" + e.getMessage(), e);
 		}
 	}
 
