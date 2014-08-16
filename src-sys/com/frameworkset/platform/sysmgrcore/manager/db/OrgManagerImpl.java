@@ -973,7 +973,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			
 			org.setOrg_level(origine.getString( "org_level"));	
 			org.setOrg_xzqm(origine.getString( "org_xzqm"));
-			
+			org.setOrgtreelevel(origine.getString("ORG_TREE_LEVEL"));
 			org.setIsdirectlyparty(origine.getString( "isdirectlyparty"));
 			org.setIsforeignparty(origine.getString( "isforeignparty"));
 			org.setIsjichaparty(origine.getString( "isjichaparty"));
