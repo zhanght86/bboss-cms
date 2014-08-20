@@ -65,7 +65,8 @@ function delInst(){
        return false;
     }
     
-    var url="<%=request.getContextPath()%>/workflow/repository/delProcessInstance.jsp?ids="+ids;
+    var url="<%=request.getContextPath()%>/workflow/repository/delProcessInstance.jsp?ids="+ids
+    		+"&processKey=${processKey}";
     $.dialog({ id:'iframeNewId', title:'填写删除原因',width:400,height:200, content:'url:'+url});  
 }
 

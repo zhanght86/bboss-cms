@@ -120,7 +120,9 @@ public interface WorkflowService {
 	public @WebResult(name = "delInstancesForLogic", partName = "partDelInstancesForLogic")
 	ResultResponse delInstancesForLogic(
 			@WebParam(name = "instancesIds", partName = "partInstancesIds") String instancesIds,
-			@WebParam(name = "deleteReason", partName = "partDeleteReason") String deleteReason);
+			@WebParam(name = "deleteReason", partName = "partDeleteReason") String deleteReason,
+			@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser);
 
 	/**
 	 * 物理删除流程
@@ -209,7 +211,10 @@ public interface WorkflowService {
 	public @WebResult(name = "discardTask", partName = "partDiscardTask")
 	ResultResponse discardTask(
 			@WebParam(name = "instancesId", partName = "partInstancesId") String instancesId,
-			@WebParam(name = "deleteReason", partName = "partDeleteReason") String deleteReason);
+			@WebParam(name = "deleteReason", partName = "partDeleteReason") String deleteReason,
+			@WebParam(name = "taskId", partName = "partTaskId") String taskId,
+			@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser);
 
 	/**
 	 * 撤销任务
@@ -226,7 +231,9 @@ public interface WorkflowService {
 	ResultResponse cancelTask(
 			@WebParam(name = "instancesId", partName = "partInstancesId") String instancesId,
 			@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
-			@WebParam(name = "cancelReason", partName = "partCancelReason") String cancelReason);
+			@WebParam(name = "cancelReason", partName = "partCancelReason") String cancelReason,
+			@WebParam(name = "taskId", partName = "partTaskId") String taskId,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser);
 
 	/**
 	 * 转办任务
@@ -271,6 +278,8 @@ public interface WorkflowService {
 			@WebParam(name = "taskId", partName = "partTaskId") String taskId,
 			@WebParam(name = "rejectedReason", partName = "partRejectedReason") String rejectedReason,
 			@WebParam(name = "rejectedType", partName = "partRejectedType") int rejectedType,
+			@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser,
 			@WebParam(name = "nodeInfoMap", partName = "partNodeInfoMap") List<HashMap<String, Object>> nodeInfoList,
 			@WebParam(name = "variableMap", partName = "partVariableMap") List<HashMap<String, Object>> variableList);
 

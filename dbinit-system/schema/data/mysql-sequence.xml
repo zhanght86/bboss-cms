@@ -100,7 +100,7 @@
                                 sequence_name = seq_name ; 
                                 END IF; 
                                 RETURN cur_val; 
-                           END; 
+                           END
                                    ]]></property>
 						</list>
 					</property>

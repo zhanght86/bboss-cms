@@ -376,12 +376,18 @@ public class ActivitiTaskManageAction {
 						activitiTaskService.addEntrustTaskInfo(task);
 
 						// 追加DELETE_REASON_字段信息
-						remark = "<br/>备注:[" + task.getCreateUser() + "]的任务委托给["
-								+ task.getEntrustUser() + "]完成";
+						remark = "<br/>备注:["
+								+ activitiService.getUserInfoMap().getUserName(
+										task.getCreateUser())
+								+ "]的任务委托给["
+								+ activitiService.getUserInfoMap().getUserName(
+										task.getEntrustUser()) + "]完成";
 					}
 
 				} else {
-					remark = "<br/>备注:[" + task.getCurrentUser() + "]完成";
+					remark = "<br/>备注:["
+							+ activitiService.getUserInfoMap().getUserName(
+									task.getCurrentUser()) + "]完成";
 				}
 
 				if (StringUtil.isNotEmpty(task.getCompleteReason())) {
@@ -431,13 +437,6 @@ public class ActivitiTaskManageAction {
 		try {
 			tm.begin();
 
-			// // 用来获取流程业务主题和状态
-			// ProcessInstance instance = activitiService
-			// .getProcessInstanceById(processInstId);
-			// model.addAttribute("businessKey", instance.getBusinessKey());//
-			// 业务主题
-			// model.addAttribute("suspended", instance.isSuspended());// 状态
-
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
 					.queryHistorTasks(processInstId);
@@ -448,13 +447,24 @@ public class ActivitiTaskManageAction {
 					.getNodeInfoById(processKey, processInstId);
 			model.addAttribute("nodeList", nodeList);
 
+			// 获取可驳回的节点
+			ActivityImpl[] activityArry = activitiService.getTaskService()
+					.findRejectedActivityNode(taskId);
+			String lastTaskToNode = "";
+			String lastNode = "";
+			if (activityArry[0] != null) {
+				lastTaskToNode = activityArry[0].getProperty("name") + "";
+				model.addAttribute("lastTaskToNode", lastTaskToNode);// 上一个任务对应的节点
+			}
+			if (activityArry[1] != null) {
+				lastNode = activityArry[1].getProperty("name") + "";
+				model.addAttribute("lastNode", lastNode);// 当前节点的上一个节点
+			}
+
 			// 可选的下一节点信息
 			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
 					.getNextNodeInfoById(nodeList, processInstId);
 			model.addAttribute("nextNodeList", nextNodeList);
-			// 获取当前节点的上
-			// ActivityImpl[] activityTask = activitiService.getTaskService()
-			// .findRejectedActivityNode(taskId);
 
 			// 当前任务节点信息
 			TaskManager task = activitiService.getTaskByTaskId(taskId);
@@ -516,6 +526,10 @@ public class ActivitiTaskManageAction {
 
 			if (isAuthor) {
 
+				String currentUser = AccessControl.getAccessControl()
+						.getUserAccount();
+				task.setCurrentUser(currentUser);
+
 				activitiTaskService.rejectToPreTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						rejectedtype);
@@ -540,7 +554,7 @@ public class ActivitiTaskManageAction {
 	 */
 	public @ResponseBody
 	String discardTask(String processInstIds, String deleteReason,
-			String taskId, String processKey, ModelMap model) {
+			String taskId, String processKey, String currentUser, ModelMap model) {
 		try {
 
 			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
@@ -549,7 +563,8 @@ public class ActivitiTaskManageAction {
 			if (isAuthor) {
 
 				activitiService.cancleProcessInstances(processInstIds,
-						deleteReason);
+						deleteReason, taskId, processKey, AccessControl
+								.getAccessControl().getUserAccount());
 
 				return "success";
 
@@ -665,6 +680,19 @@ public class ActivitiTaskManageAction {
 				activitiService.completeTaskLoadCommonParamsWithDest(task
 						.get(0).getId(), activties.get(1).getId(),
 						cancelTaskReason);
+
+				// 日志记录废弃操作
+				String currentUser = activitiService.getUserInfoMap()
+						.getUserName(
+								AccessControl.getAccessControl()
+										.getUserAccount());
+
+				String remark = cancelTaskReason + "<br/>备注:" + currentUser
+						+ "将任务撤销至[" + task.get(0).getName() + "]";
+
+				activitiService.addDealTask(taskId, currentUser, "2",
+						processId, processKey, remark, task.get(0)
+								.getTaskDefinitionKey(), task.get(0).getName());
 
 				tm.commit();
 

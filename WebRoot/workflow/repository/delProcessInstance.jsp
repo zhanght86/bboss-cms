@@ -8,6 +8,7 @@
  --%>	
  <%
   request.setAttribute("ids", request.getParameter("ids"));
+  request.setAttribute("processKey", request.getParameter("processKey"));
  %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -89,7 +90,8 @@ function dosubmit(){
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/repository/delPorcessInstance.page",
-			data :{"deleteReason":deleteReason,"processInstIds":'${ids}',"delType":delType},
+			data :{"deleteReason":deleteReason,"processInstIds":'${ids}',
+				"delType":delType,"processKey":'${processKey}'},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){

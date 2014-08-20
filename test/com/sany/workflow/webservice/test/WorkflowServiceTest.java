@@ -243,12 +243,12 @@ public class WorkflowServiceTest {
 	public void testDelInstancesForLogic() throws Exception {
 		// hessian服务方式
 		ResultResponse hessianResult = hassianService.delInstancesForLogic(
-				"0675be3f-1c48-11e4-a6be-4437e6999a31", "hessian服务测试删除");
+				"0675be3f-1c48-11e4-a6be-4437e6999a31", "hessian服务测试删除","","");
 		System.out.println("hessian方式返回结果:" + hessianResult);
 
 		// webservice方式
 		ResultResponse cxfResult = cxfService.delInstancesForLogic(
-				"45d70902-1bad-11e4-ab01-4437e6999a31", "webservice方式测试删除");
+				"45d70902-1bad-11e4-ab01-4437e6999a31", "webservice方式测试删除","","");
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
@@ -369,11 +369,11 @@ public class WorkflowServiceTest {
 	public void testDiscardTask() throws Exception {
 		// hessian服务方式
 		ResultResponse hessianResult = hassianService.discardTask(
-				"0b814505-1e9c-11e4-a662-4437e6999a31", "废弃测试");
+				"0b814505-1e9c-11e4-a662-4437e6999a31", "废弃测试","","","");
 		System.out.println("hessian方式返回结果:" + hessianResult);
 
 		// webservice方式
-		ResultResponse cxfResult = cxfService.discardTask("", "");
+		ResultResponse cxfResult = cxfService.discardTask("", "","","","");
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式
@@ -386,11 +386,11 @@ public class WorkflowServiceTest {
 	@Test
 	public void testCancelTask() throws Exception {
 		// hessian服务方式
-		ResultResponse hessianResult = hassianService.cancelTask("", "", "");
+		ResultResponse hessianResult = hassianService.cancelTask("", "", "", "", "");
 		System.out.println("hessian方式返回结果:" + hessianResult);
 
 		// webservice方式
-		ResultResponse cxfResult = cxfService.cancelTask("", "", "");
+		ResultResponse cxfResult = cxfService.cancelTask("", "", "", "", "");
 		System.out.println("webservice方式返回结果:" + cxfResult);
 
 		// HTTP方式

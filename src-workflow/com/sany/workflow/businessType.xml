@@ -123,4 +123,18 @@
 			delete from td_wf_businesstype where business_id=#[businessId]
 		]]>
 	</property>
+	
+	<property name="querySonBusiness">
+		<![CDATA[
+			select *
+			  from td_wf_businesstype t
+			 where t.parent_id = ?
+		]]>
+	</property>
+	
+	<property name="queryProBusinesstype">
+		<![CDATA[
+			SELECT * FROM TD_WF_PRO_BUSINESSTYPE T WHERE T.BUSINESSTYPE_ID = ?
+		]]>
+	</property>
 </properties>

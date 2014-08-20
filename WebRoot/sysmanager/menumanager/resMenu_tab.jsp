@@ -1,30 +1,12 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld"%>
 
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
-<%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.manager.OrgManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.entity.Organization"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.entity.Roleresop"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.entity.*"%>
-<%@ page import="com.frameworkset.platform.framework.MenuItem"%>
-<%@ page import="java.util.List,java.util.ArrayList,com.frameworkset.platform.framework.*"%>
-<%@ page import="com.frameworkset.platform.security.AccessControl"%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
 <%@ include file="/common/jsp/importtaglib.jsp"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <html>
 	<head>
 		<tab:tabConfig />
-		<script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js" type="text/javascript"></script>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
-		<script language="javascript">
-	</script>
+		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
 	</head>
 	<body>
 		<sany:menupath menuid="menumanage"/>
@@ -58,9 +40,9 @@
 									name:
 								</td>
 								<td class="detailcontent">
-									<c:forEach var="name" items="${menu.localeNames}" varStatus="status">
-										${name.key}:${name.value}${status.index != fn:length(menu.localeNames)-1 ? "," : ""}&nbsp;
-									</c:forEach>
+									<pg:map actual="${menu.localeNames}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+									</pg:map>
 								</td>
 							</tr>
 							<tr>
@@ -68,20 +50,20 @@
 									i18n:
 								</td>
 								<td class="detailcontent">
-									<c:forEach var="name" items="${menu.localeNames}" varStatus="status">
-										${name.key}${status.index != fn:length(menu.localeNames)-1 ? "," : ""}&nbsp;
-									</c:forEach>
+									<pg:map actual="${menu.localeNames}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+									</pg:map>
 								</td>
 							</tr>
-							<c:if test="${menuType eq 'item' or menuType eq 'module'}">
+							<pg:in actual="${menuType}" scope="item,menuType,module">
 								<tr>
 									<td class="detailtitle" height="28">
 										title:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="title" items="${menu.localeTitles}" varStatus="status">
-											${title.key}:${title.value}${status.index != fn:length(menu.localeTitles)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeTitles}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<pg:equal actual="${menuType}" value="module">
@@ -90,9 +72,9 @@
 											description:
 										</td>
 										<td class="detailcontent">
-											<c:forEach var="description" items="${menu.localeDescriptions}" varStatus="status">
-												${description.key}:${description.value}${status.index != fn:length(menu.localeDescriptions)-1 ? "," : ""}&nbsp;
-											</c:forEach>
+											<pg:map actual="${menu.localeDescriptions}">
+												<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+											</pg:map>
 										</td>
 									</tr>
 									<tr>
@@ -137,8 +119,8 @@
 											${menu.top}
 										</td>
 									</tr>
-							</pg:equal>
-							</c:if>
+								</pg:equal>
+							</pg:in>
 							<pg:equal actual="${menuType}" value="subSystem">
 								<tr>
 									<td width="124" height="28" class="detailtitle">
@@ -182,15 +164,15 @@
 								</td>
 							</tr>
 						</pg:in>
-						<c:if test="${menuType eq 'framework'}">
+						<pg:equal actual="${menuType}" value="framework">
 							<tr>
 								<td width="124" height="28" class="detailtitle">
 									description:
 								</td>
 								<td class="detailcontent">
-									<c:forEach var="description" items="${menu.localeDescriptions}" varStatus="status">
-										${description.key}:${description.value}${status.index != fn:length(menu.localeDescriptions)-1 ? "," : ""}&nbsp;
-									</c:forEach>
+									<pg:map actual="${menu.localeDescriptions}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+									</pg:map>
 								</td>
 							</tr>
 							<tr>
@@ -198,9 +180,9 @@
 									i18n:
 								</td>
 								<td class="detailcontent">
-									<c:forEach var="description" items="${menu.localeDescriptions}" varStatus="status">
-										${description.key}${status.index != fn:length(menu.localeDescriptions)-1 ? "," : ""}&nbsp;
-									</c:forEach>
+									<pg:map actual="${menu.localeDescriptions}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+									</pg:map>
 								</td>
 							</tr>
 							<tr>
@@ -251,7 +233,7 @@
 									${menu.messagesourcefiles}
 								</td>
 							</tr>
-						</c:if>
+						</pg:equal>
 						</table>
 					</fieldset>
 					<pg:in actual="${menuType}" scope="framework,subSystem">
@@ -271,9 +253,9 @@
 										name:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="name" items="${publicItem.localeNames}" varStatus="status">
-											${name.key}:${name.value}${status.index != fn:length(publicItem.localeNames)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeNames}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -289,9 +271,9 @@
 										mouseupimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseupimg" items="${publicItem.localeMouseupimgs}" varStatus="status">
-											${mouseupimg.key}:${mouseupimg.value}${status.index != fn:length(publicItem.localeMouseupimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeMouseupimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 	
@@ -300,9 +282,9 @@
 										mouseoverimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseoverimg" items="${publicItem.localeMouseoverimgs}" varStatus="status">
-											${mouseoverimg.key}:${mouseoverimg.value}${status.index != fn:length(publicItem.localeMouseoverimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeMouseoverimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -310,9 +292,9 @@
 										mouseclickimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseclickimg" items="${publicItem.localeMouseclickimgs}" varStatus="status">
-											${mouseclickimg.key}:${mouseclickimg.value}${status.index != fn:length(publicItem.localeMouseclickimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeMouseclickimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -320,9 +302,9 @@
 										mouseoutimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseoutimg" items="${publicItem.localeMouseoutimgs}" varStatus="status">
-											${mouseoutimg.key}:${mouseoutimg.value}${status.index != fn:length(publicItem.localeMouseoutimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeMouseoutimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -330,9 +312,9 @@
 										headimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="headimg" items="${publicItem.localeHeadimgs}" varStatus="status">
-											${headimg.key}:${headimg.value}${status.index != fn:length(publicItem.localeHeadimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${publicItem.localeHeadimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -365,9 +347,10 @@
 								<tr>
 								<td width="124" height="28" class="detailtitle" >
 								额外的开放权限的url:</td>
-								<td class="detailcontent"><pg:list actual="${publicItem.authorResources}">
-									<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
-								</pg:list>
+								<td class="detailcontent">
+									<pg:list actual="${publicItem.authorResources}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
+									</pg:list>
 								</td>
 								</tr>
 							</table>
@@ -376,16 +359,16 @@
 						
 						<fieldset>
 						<legend><pg:message code="sany.pdp.menumanager.menu.subsystem"/></legend>
-						<c:forEach var="subSys"  items="${subSystems}">
+						<pg:map actual="${subSystems}">
 							<fieldset>
-								<legend>${subSys.value.name}</legend>
+								<legend><pg:cell colName="name"/></legend>
 								<table>
 								<tr>
 									<td width="124" height="28" class="detailtitle">
 										id:
 									</td>
 									<td class="detailcontent">
-										${subSys.value.id}
+										<pg:cell colName="id"/>
 									</td>
 								</tr>
 								<tr>
@@ -393,9 +376,9 @@
 										name:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="name" items="${subSys.value.localeNames}" varStatus="status">
-											${name.key}:${name.value}${status.index != fn:length(subSys.value.localeNames)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map colName="localeNames">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -403,9 +386,9 @@
 										i18n:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="name" items="${subSys.value.localeNames}" varStatus="status">
-											${name.key}${status.index != fn:length(subSys.value.localeNames)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map colName="localeNames">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -413,7 +396,7 @@
 										template:
 									</td>
 									<td class="detailcontent">
-										${subSys.value.template}
+										<pg:cell colName="template"/>
 									</td>
 								</tr>
 								<tr>
@@ -421,7 +404,7 @@
 										module:
 									</td>
 									<td class="detailcontent">
-										${subSys.value.module}
+										<pg:cell colName="module"/>
 									</td>
 								</tr>
 								<tr>
@@ -429,7 +412,7 @@
 										logoutredirect:
 									</td>
 									<td class="detailcontent">
-										${subSys.value.logoutredirect}
+										<pg:cell colName="logoutredirect"/>
 									</td>
 								</tr>
 								<tr>
@@ -437,12 +420,12 @@
 										baseuri:
 									</td>
 									<td class="detailcontent">
-										${subSys.value.baseuri}
+										<pg:cell colName="baseuri"/>
 									</td>
 								</tr>
 								</table>
 							</fieldset>
-						</c:forEach>
+						</pg:map>
 						</fieldset>
 					</pg:in>
 					<pg:equal actual="${menuType}" value="item">
@@ -500,7 +483,7 @@
 						</table>
 					</fieldset>
 					</pg:equal>
-					<c:if test="${menuType eq 'item' or menuType eq 'module'}">
+					<pg:true actual="${menuType eq 'item' or menuType eq 'module'}">
 						<fieldset>
 							<legend><pg:message code="sany.pdp.menumanager.menu.image"/></legend>
 							
@@ -508,9 +491,10 @@
 							<tr>
 								<td width="124" height="28" class="detailtitle" >
 								额外的权限检测的url:</td>
-								<td class="detailcontent"><pg:list actual="${menu.authorResources}">
-									<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
-								</pg:list>
+								<td class="detailcontent">
+									<pg:list actual="${menu.authorResources}">
+										<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:cell/>
+									</pg:list>
 								</td>
 							</tr>
 								<tr>
@@ -518,9 +502,9 @@
 										mouseupimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseupimg" items="${menu.localeMouseupimgs}" varStatus="status">
-											${mouseupimg.key}:${mouseupimg.value}${status.index != fn:length(menu.localeMouseupimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeMouseupimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 	
@@ -529,9 +513,9 @@
 										mouseoverimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseoverimg" items="${menu.localeMouseoverimgs}" varStatus="status">
-											${mouseoverimg.key}:${mouseoverimg.value}${status.index != fn:length(menu.localeMouseoverimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeMouseoverimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -539,9 +523,9 @@
 										mouseclickimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseclickimg" items="${menu.localeMouseclickimgs}" varStatus="status">
-											${mouseclickimg.key}:${mouseclickimg.value}${status.index != fn:length(menu.localeMouseclickimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeMouseclickimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -549,9 +533,9 @@
 										mouseoutimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="mouseoutimg" items="${menu.localeMouseoutimgs}" varStatus="status">
-											${mouseoutimg.key}:${mouseoutimg.value}${status.index != fn:length(menu.localeMouseoutimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeMouseoutimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<tr>
@@ -559,9 +543,9 @@
 										headimg:
 									</td>
 									<td class="detailcontent">
-										<c:forEach var="headimg" items="${menu.localeHeadimgs}" varStatus="status">
-											${headimg.key}:${headimg.value}${status.index != fn:length(menu.localeHeadimgs)-1 ? "," : ""}&nbsp;
-										</c:forEach>
+										<pg:map actual="${menu.localeHeadimgs}">
+											<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+										</pg:map>
 									</td>
 								</tr>
 								<pg:equal actual="${menuType}" value="item">
@@ -570,15 +554,15 @@
 											logoimage:
 										</td>
 										<td class="detailcontent">
-											<c:forEach var="logoimage" items="${menu.localLogoimages}" varStatus="status">
-												${logoimage.key}:${logoimage.value}${status.index != fn:length(menu.localLogoimages)-1 ? "," : ""}&nbsp;
-											</c:forEach>
+											<pg:map actual="${menu.localLogoimages}">
+												<pg:notequal expression="{rowid}" value="0">,</pg:notequal><pg:mapkey/>:<pg:cell/>&nbsp;
+											</pg:map>
 										</td>
 									</tr>
 								</pg:equal>
 							</table>
 						</fieldSet>
-					</c:if>
+					</pg:true>
 				</FORM>
 			</tab:tabPane>
 

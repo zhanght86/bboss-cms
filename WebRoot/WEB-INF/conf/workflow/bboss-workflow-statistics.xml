@@ -1,0 +1,32 @@
+
+<properties>
+
+
+	<!-- 描述:流程统计模块 author:谭湘 CopyRight:三一 版本:1.0 Date: 2014-08-13 -->
+
+	<property name="/workflow/statistics/*.page"
+		f:statisticsService="attr:workflow.statistics.statisticsService" 
+		path:processCount="/workflow/statistics/processCount.jsp"
+		path:personalCount="/workflow/statistics/personalCount.jsp"
+		path:processCountList="/workflow/statistics/processCountList.jsp"
+		path:viewProcessInfo="/workflow/statistics/viewProcessInfo.jsp"
+		path:viewProcessAnalyse="/workflow/statistics/viewProcessAnalyse.jsp"
+		path:personalCountList="/workflow/statistics/personalCountList.jsp"
+		path:viewPersonalInfo="/workflow/statistics/viewPersonalInfo.jsp"
+		path:viewPersonalAnalyse="/workflow/statistics/viewPersonalAnalyse.jsp"
+		class="com.sany.workflow.action.ActivitiStatisticsAction">
+	</property>
+
+	<property name="workflow.statistics.statisticsService" 
+		f:executor="attr:workflow.statistics.configsqlexecutor"
+		f:activitiService="attr:activitiService"
+		class="com.sany.workflow.service.impl.ActivitiStatisticsServiceImpl" />
+
+	<property name="workflow.statistics.configsqlexecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/sany/workflow/statistics.xml" />
+		</construction>
+	</property>
+	
+</properties>

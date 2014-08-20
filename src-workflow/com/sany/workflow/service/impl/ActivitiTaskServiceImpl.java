@@ -113,8 +113,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			}
 		}
 
-		if (nodevariableList != null
-				&& nodevariableList.size() > 0) {
+		if (nodevariableList != null && nodevariableList.size() > 0) {
 			for (int i = 0; i < nodevariableList.size(); i++) {
 				// 参数
 				if (!StringUtil
@@ -207,18 +206,43 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			List<ActivitiNodeInfo> nodeList,
 			List<Nodevariable> nodevariableList, int rejectedtype) {
 
-		// 获取参数配置信息
-		Map<String, Object> variableMap = getVariableMap(nodeList,
-				nodevariableList);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
 
-		if (StringUtil.isNotEmpty(task.getCompleteReason())) {
-			activitiService.rejecttoPreTaskWithReson(task.getTaskId(),
-					variableMap, task.getCompleteReason(), rejectedtype);
-		} else {
-			activitiService.rejecttoPreTask(task.getTaskId(), variableMap,
-					rejectedtype);
+			// 获取参数配置信息
+			Map<String, Object> variableMap = getVariableMap(nodeList,
+					nodevariableList);
+
+			if (StringUtil.isNotEmpty(task.getCompleteReason())) {
+				activitiService.rejecttoPreTaskWithReson(task.getTaskId(),
+						variableMap, task.getCompleteReason(), rejectedtype);
+			} else {
+				activitiService.rejecttoPreTask(task.getTaskId(), variableMap,
+						rejectedtype);
+			}
+
+			// 日志记录废弃操作
+			ActivityImpl[] activityArry = activitiService.getTaskService()
+					.findRejectedActivityNode(task.getTaskId());
+			String remark = task.getCompleteReason()
+					+ "<br/>备注:"
+					+ activitiService.getUserInfoMap().getUserName(
+							task.getCurrentUser()) + "将任务驳回至["
+					+ activityArry[rejectedtype].getProperty("name") + "]";
+
+			activitiService.addDealTask(task.getTaskId(), activitiService
+					.getUserInfoMap().getUserName(task.getCurrentUser()), "1",
+					task.getProcessIntsId(), task.getProcessKey(), remark,
+					activityArry[rejectedtype].getId(),
+					activityArry[rejectedtype].getProperty("name") + "");
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
 		}
-
 	}
 
 	@Override
@@ -440,7 +464,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (StringUtil.isNotEmpty(task.getEntrustUser())) {
 				task.setEntrustUser("%" + task.getEntrustUser() + "%");
 			}
-			
+
 			if (StringUtil.isNotEmpty(task.getAppName())) {
 				task.setAppName("%" + task.getAppName() + "%");
 			}
@@ -779,12 +803,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey) {
+		TransactionManager tm = new TransactionManager();
 
 		try {
+			tm.begin();
 
 			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
 
 			if (isAdmin) {
+				tm.commit();
 				return true;
 			} else {
 				String currentAccount = AccessControl.getAccessControl()
@@ -820,14 +847,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 								hisTask.getStartTime().getTime()));
 
 				if (entrustList == null || entrustList.size() == 0) {
+					tm.commit();
 					return false;
 				} else {
+					tm.commit();
 					return true;
 				}
 			}
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
+		} finally {
+			tm.release();
 		}
 	}
 

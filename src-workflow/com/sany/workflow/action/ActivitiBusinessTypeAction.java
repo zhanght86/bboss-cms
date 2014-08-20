@@ -72,26 +72,30 @@ public class ActivitiBusinessTypeAction {
      * @param model
      * @return
      */
-    public @ResponseBody
-    String delete(BusinessTypeCondition condition, ModelMap model) {
+	public @ResponseBody
+	String delete(BusinessTypeCondition condition, ModelMap model) {
 
-        String responseBody = "";
-        try {
-            BusinessType businessType = new BusinessType();
-            businessType.setBusinessId(condition.getBusinessId());
+		String responseBody = "";
+		try {
+			BusinessType businessType = new BusinessType();
+			businessType.setBusinessId(condition.getBusinessId());
 
-            int res = businessTypeService.delete(businessType);
-            if (res == 0) {
-                responseBody = "删除失败";
-            } else {
-                responseBody = "删除成功";
-            }
-        } catch (Exception e) {
-            logger.error("delete bussinessType error", e);
-            responseBody = e.getMessage();
-        }
-        return responseBody;
-    }
+			int res = businessTypeService.delete(businessType);
+			if (res == 0) {
+				responseBody = "删除失败";
+			} else if (res == 1) {
+				responseBody = "删除成功";
+			} else if (res == 2) {
+				responseBody = "该业务类型存在子类型,不能删除";
+			} else if (res == 3) {
+				responseBody = "该业务类型与流程关联,不能删除";
+			}
+		} catch (Exception e) {
+			logger.error("delete bussinessType error", e);
+			responseBody = e.getMessage();
+		}
+		return responseBody;
+	}
 
     /**
      * 批量删除

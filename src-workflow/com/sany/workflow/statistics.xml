@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<!-- 分页查询流程统计数据 -->
+	<property name="getProcessCountDataPage">
+		<![CDATA[
+			SELECT B.KEY_ AS processKey, -- 流程KEY
+			       B.NAME_ AS processName, -- 流程名称
+			       COUNT(1) AS processNum, -- 流程总数
+			       (COUNT(A.END_TIME_) - COUNT(A.DELETE_REASON_)) AS passNum, -- 通过总数(结束流程-废弃总数)
+			       (COUNT(1) - COUNT(A.END_TIME_)) AS waitNum, -- 待审总数(所有流程-结束的流程)
+			       (SELECT COUNT(1)
+			          FROM TD_WF_DEAL_TASK C
+			         where B.KEY_ = C.PROCESS_KEY
+			           and C.DEALTYPE = '1') AS rejectNum, -- 驳回总数
+			       (SELECT COUNT(1)
+			          FROM TD_WF_DEAL_TASK C
+			         where B.KEY_ = C.PROCESS_KEY
+			           and C.DEALTYPE = '2') AS cancelNum, -- 撤销总数
+			       (SELECT COUNT(1)
+			          FROM TD_WF_DEAL_TASK C
+			         where B.KEY_ = C.PROCESS_KEY
+			           and C.DEALTYPE = '3') AS discardNum -- 废弃总数
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			  
+			  -- 业务类型
+			  LEFT JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
+	          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
+	         	WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) C ON B.KEY_ = C.PROCESS_KEY
+			  
+			  where 1=1
+			  
+			  #if($count_start_time && !$count_start_time.equals(""))
+				AND A.START_TIME_ >= #[count_start_time]
+			  #end
+			
+			  #if($count_end_time && !$count_end_time.equals(""))
+				AND A.START_TIME_ <= #[count_end_time]
+			  #end
+			  
+			  #if($businessType && !$businessType.equals(""))
+				AND C.BUSINESS_ID = #[businessType]
+			  #end
+			  
+			  #if($app && !$app.equals(""))
+			  	AND B.KEY_ IN
+			       (SELECT PROCDEF_ID
+			          FROM TD_WF_APP_PROC_RELATION R, TD_WF_APP A
+			         WHERE A.ID = R.WF_APP_ID
+			           AND (A.SYSTEM_ID LIKE #[app] OR A.SYSTEM_NAME LIKE #[app]))
+			  #end
+			
+			 GROUP BY B.KEY_, B.NAME_
+				
+		]]>
+	</property>	
+	
+	<!-- 分页查询流程明细数据 -->
+	<property name="getProcessDetailDataPage">
+		<![CDATA[
+			SELECT A.BUSINESS_KEY_ as businessKey, -- 业务主题
+			       A.START_USER_ID_ as startUserId, -- 流程发起人
+			       a.start_time_ as startTime, -- 流程开启时间
+			       A.END_TIME_ as endTime, -- 流程结束时间
+			       A.DURATION_ as duration, -- 耗时
+			       (SELECT COUNT(1)
+			          FROM TD_WF_NODE_CHANGEINFO AA
+			         WHERE A.PROC_INST_ID_ = AA.PROCESS_ID) as delegateNum, -- 转办次数
+			       (SELECT COUNT(1)
+			          FROM TD_WF_ENTRUST_TASK AA
+			         WHERE A.PROC_INST_ID_ = AA.PROCESS_ID) as entrustNum, -- 委托次数
+			       (SELECT COUNT(1)
+			          FROM td_wf_deal_task AA
+			         WHERE A.PROC_INST_ID_ = AA.PROCESS_ID) as discardNum, -- 废弃次数
+			       (SELECT COUNT(1)
+			          FROM td_wf_deal_task AA
+			         WHERE A.PROC_INST_ID_ = AA.PROCESS_ID) as cancelNum, -- 撤销次数
+			       (SELECT COUNT(1)
+			          FROM td_wf_deal_task AA
+			         WHERE A.PROC_INST_ID_ = AA.PROCESS_ID) as rejectNum -- 驳回次数
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			
+			 WHERE 1 = 1
+			 
+			  #if($processKey && !$processKey.equals(""))
+			    AND B.KEY_ = #[processKey]
+			  #end
+			 
+			  #if($count_start_time && !$count_start_time.equals(""))
+				AND A.START_TIME_ >= #[count_start_time]
+			  #end
+			
+			  #if($count_end_time && !$count_end_time.equals(""))
+				AND A.START_TIME_ <= #[count_end_time]
+			  #end
+				
+		]]>
+	</property>	
+	
+	<!-- 获取流程完成总记录数和平均办理工时 -->
+	<property name="getProcessPassNumAndWorkTime">
+		<![CDATA[
+			SELECT count(1) as PASSNUM, sum(A.DURATION_) as WORKTIME
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.END_TIME_ IS NOT NULL
+			   AND A.DELETE_REASON_ IS NULL
+			 
+			 #if($processKey && !$processKey.equals(""))
+			   AND B.KEY_ = #[processKey]
+			 #end
+			 
+			  #if($count_start_time && !$count_start_time.equals(""))
+				AND A.START_TIME_ >= #[count_start_time]
+			  #end
+			
+			  #if($count_end_time && !$count_end_time.equals(""))
+				AND A.START_TIME_ <= #[count_end_time]
+			  #end
+				
+		]]>
+	</property>	
+	
+	<!-- 获取流程完成过程中转办次数 -->
+	<property name="getProcessDelegateNum">
+		<![CDATA[
+			SELECT COUNT(1) as DELEGATENUM
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			  RIGHT JOIN TD_WF_NODE_CHANGEINFO C ON A.PROC_INST_ID_ = C.PROCESS_ID
+			 WHERE 1=1
+			   
+			 #if($processKey && !$processKey.equals(""))
+			   AND B.KEY_ = #[processKey]
+			 #end
+			  
+			 #if($count_start_time && !$count_start_time.equals(""))
+			   AND A.START_TIME_ >= #[count_start_time]
+			 #end
+			
+			 #if($count_end_time && !$count_end_time.equals(""))
+			   AND A.START_TIME_ <= #[count_end_time]
+			 #end
+		]]>
+	</property>	
+	
+	<!-- 获取流程完成过程中驳回/废弃/撤销次数 -->
+	<property name="getProcessCancelNumAndDiscardNumAndRejectNum">
+		<![CDATA[
+			SELECT (SELECT COUNT(1)
+		          FROM TD_WF_DEAL_TASK C
+		         where B.KEY_ = C.PROCESS_KEY
+		           and C.DEALTYPE = '1') AS rejectNum, -- 驳回总数
+		       (SELECT COUNT(1)
+		          FROM TD_WF_DEAL_TASK C
+		         where B.KEY_ = C.PROCESS_KEY
+		           and C.DEALTYPE = '2') AS cancelNum, -- 撤销总数
+		       (SELECT COUNT(1)
+		          FROM TD_WF_DEAL_TASK C
+		         where B.KEY_ = C.PROCESS_KEY
+		           and C.DEALTYPE = '3') AS discardNum -- 废弃总数
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE 1=1
+			   
+			 #if($processKey && !$processKey.equals(""))
+			   AND B.KEY_ = #[processKey]
+			 #end
+			  
+			 #if($count_start_time && !$count_start_time.equals(""))
+			   AND A.START_TIME_ >= #[count_start_time]
+			 #end
+			
+			 #if($count_end_time && !$count_end_time.equals(""))
+			   AND A.START_TIME_ <= #[count_end_time]
+			 #end
+		]]>
+	</property>	
+	
+	
+	<!-- 获取流程完成过程中本人自己处理次数 -->
+	<property name="getProcessPersonlDealNum">
+		<![CDATA[
+			SELECT count(1) AS PersonlDealNUM
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 RIGHT JOIN TD_WF_NODE_CHANGEINFO C ON A.PROC_INST_ID_ = C.PROCESS_ID
+			 WHERE 1 = 1
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_ENTRUST_TASK E WHERE A.ID_ = E.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_NODE_CHANGEINFO F WHERE A.ID_ = F.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_DEAL_TASK G WHERE A.ID_ = G.TASKID)
+			   
+			 #if($processKey && !$processKey.equals(""))
+			   AND B.KEY_ = #[processKey]
+			 #end
+			  
+			 #if($count_start_time && !$count_start_time.equals(""))
+			   AND A.START_TIME_ >= #[count_start_time]
+			 #end
+			
+			 #if($count_end_time && !$count_end_time.equals(""))
+			   AND A.START_TIME_ <= #[count_end_time]
+			 #end
+		]]>
+	</property>	
+	
+	<!-- 获取流程完成过程中节点数 -->
+	<property name="getProcessNodeNum">
+		<![CDATA[
+			SELECT COUNT(1) as NODENUM 
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			  LEFT JOIN ACT_HI_TASKINST C ON A.PROC_INST_ID_ = C.PROC_INST_ID_
+			 WHERE A.END_TIME_ IS NOT NULL
+			   AND A.DELETE_REASON_ IS NULL
+			   
+			 #if($processKey && !$processKey.equals(""))
+			   AND B.KEY_ = #[processKey]
+			 #end
+			  
+			 #if($count_start_time && !$count_start_time.equals(""))
+			   AND A.START_TIME_ >= #[count_start_time]
+			 #end
+			
+			 #if($count_end_time && !$count_end_time.equals(""))
+			   AND A.START_TIME_ <= #[count_end_time]
+			 #end
+		]]>
+	</property>	
+	
+	<!-- 获取用户userid -->
+	<property name="getUserInfo">
+		<![CDATA[
+			select t1.user_id       as userId,
+			       t2.user_realname as realName,
+			       t2.user_name     as userName
+			  from TD_SM_ORGUSER t1
+			  left join TD_SM_USER t2 on t1.user_id = t2.user_id
+			 where 1=1
+			 
+			 #if($orgId && !$orgId.equals(""))
+			   AND t1.org_id = #[orgId]
+			 #end
+			 
+			 #if($realName && !$realName.equals(""))
+			   AND (t2.user_realname like #[realName] or t2.user_name like #[realName])
+			 #end
+		]]>
+	</property>	
+	
+	<!-- 获取用户的流程启动数 -->
+	<property name="getStartProcessNum">
+		<![CDATA[
+			SELECT count(*) as STARTNUM
+			  FROM ACT_HI_PROCINST T
+			 WHERE 1=1
+			 	
+			   #if($userName && !$userName.equals(""))
+			   	AND t.START_USER_ID_ = #[userName]
+			   #end
+			   
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND t.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND t.START_TIME_ <= #[count_end_time]
+			   #end
+		]]>
+	</property>	
+	
+	<!-- 获取用户处理任务数 -->
+	<property name="getDealTaskNum">
+		<![CDATA[
+			-- 通过任务数
+			SELECT COUNT(1)
+			  FROM ACT_HI_TASKINST A
+			
+			 WHERE NOT EXISTS (SELECT * FROM TD_WF_DEAL_TASK B WHERE A.ID_ = B.TASKID)
+			   AND A.ASSIGNEE_ = #[userName]
+			 
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND t.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND t.START_TIME_ <= #[count_end_time]
+			   #end
+			
+			UNION
+			
+			-- 废弃/驳回/撤销数
+			SELECT COUNT(1)
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_DEAL_TASK B ON A.ID_ = B.TASKID
+			 WHERE B.DEALUSER = #[userName]
+			   
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND t.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND t.START_TIME_ <= #[count_end_time]
+			   #end
+		]]>
+	</property>	
+	
+	<!-- 获取用户转办/委托任务数 -->
+	<property name="getDelegateNumAndEntrustNum">
+		<![CDATA[
+		
+		  SELECT (SELECT COUNT(1) as DELEGATENUM
+		            FROM ACT_HI_PROCINST A
+		           RIGHT JOIN TD_WF_NODE_CHANGEINFO C ON A.PROC_INST_ID_ =
+		                                                 C.PROCESS_ID
+		           WHERE c.from_user = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+			   	) AS DELEGATENUM,-- 转办数
+			   	
+		         (SELECT COUNT(1) as DELEGATEDNUM
+		            FROM ACT_HI_PROCINST A
+		           RIGHT JOIN TD_WF_NODE_CHANGEINFO C ON A.PROC_INST_ID_ =
+		                                                 C.PROCESS_ID
+		           WHERE c.TO_USER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+		        ) AS DELEGATEDNUM, -- 被转办数
+		        
+		         (SELECT COUNT(1) as ENTRUSTNUM
+		            FROM ACT_HI_PROCINST A
+		           RIGHT JOIN TD_WF_ENTRUST_TASK C ON A.PROC_INST_ID_ = C.PROCESS_ID
+		           WHERE c.CREATE_USER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+		        ) AS ENTRUSTNUM, -- 委托数
+		        
+		        (SELECT COUNT(1) as ENTRUSTEDNUM
+		            FROM ACT_HI_PROCINST A
+		           RIGHT JOIN TD_WF_ENTRUST_TASK C ON A.PROC_INST_ID_ = C.PROCESS_ID
+		           WHERE C.ENTRUST_USER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+		        ) AS ENTRUSTEDNUM -- 被委托数
+		    FROM DUAL
+		]]>
+	</property>	
+	
+	<!-- 获取用户废弃/驳回/撤销任务数 -->
+	<property name="getRejectNumAndCancelNumAndDiscardNum">
+		<![CDATA[
+		
+		  SELECT (SELECT COUNT(1) AS REJECTNUM
+				  FROM ACT_HI_PROCINST A
+				 RIGHT JOIN TD_WF_DEAL_TASK C ON A.PROC_INST_ID_ = C.PROCESS_ID
+				 WHERE C.DEALTYPE = '1'
+				   AND C.DEALUSER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+			   	) AS REJECTNUM,-- 驳回数
+			   	
+		         ( SELECT COUNT(1) AS CANCELNUM
+				   FROM ACT_HI_PROCINST A
+				  RIGHT JOIN TD_WF_DEAL_TASK C ON A.PROC_INST_ID_ = C.PROCESS_ID
+				  WHERE C.DEALTYPE = '2'
+				    AND C.DEALUSER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+		        ) AS CANCELNUM, -- 撤销数
+		        
+		         (SELECT COUNT(1) AS DISCARDNUM
+				    FROM ACT_HI_PROCINST A
+				   RIGHT JOIN TD_WF_DEAL_TASK C ON A.PROC_INST_ID_ = C.PROCESS_ID
+				   WHERE C.DEALTYPE = '3'
+				     AND C.DEALUSER = #[userName]
+		           
+		           #if($count_start_time && !$count_start_time.equals(""))
+				    AND A.START_TIME_ >= #[count_start_time]
+				   #end
+				
+				   #if($count_end_time && !$count_end_time.equals(""))
+				    AND A.START_TIME_ <= #[count_end_time]
+				   #end
+		        ) AS DISCARDNUM -- 废弃数
+		    FROM DUAL
+		]]>
+	</property>	
+	
+	<!-- 分页查询个人明细数据，获取流程信息 -->
+	<property name="getProcessPage">
+		<![CDATA[
+			--废弃/撤销/驳回处理的流程
+			SELECT DISTINCT C.NAME_         AS PROCESSNAME,
+			                B.BUSINESS_KEY_ AS BUSINESSKEY,
+			                A.PROC_INST_ID_ AS PROCESSID
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_DEAL_TASK D ON A.ID_ = D.TASKID
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE d.DEALUSER = #[userName]
+			 
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND A.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND A.START_TIME_ <= #[count_end_time]
+			   #end
+			   
+			union
+			-- 转办处理的流程
+			SELECT DISTINCT C.NAME_         AS PROCESSNAME,
+			                B.BUSINESS_KEY_ AS BUSINESSKEY,
+			                A.PROC_INST_ID_ AS PROCESSID
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_NODE_CHANGEINFO D ON A.ID_ = D.TASKID
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE D.FROM_USER = #[userName]
+			 
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND A.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND A.START_TIME_ <= #[count_end_time]
+			   #end
+			
+			union
+			-- 委托处理的流程
+			SELECT DISTINCT C.NAME_         AS PROCESSNAME,
+			                B.BUSINESS_KEY_ AS BUSINESSKEY,
+			                A.PROC_INST_ID_ AS PROCESSID
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_ENTRUST_TASK D ON A.ID_ = D.TASKID
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE D.Entrust_User = #[userName]
+			 
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND A.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND A.START_TIME_ <= #[count_end_time]
+			   #end
+			
+			union
+			-- 自己任务处理的流程
+			SELECT DISTINCT C.NAME_         AS PROCESSNAME,
+			                B.BUSINESS_KEY_ AS BUSINESSKEY,
+			                A.PROC_INST_ID_ AS PROCESSID
+			  FROM ACT_HI_TASKINST A
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE A.ASSIGNEE_ = #[userName]
+			 
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_ENTRUST_TASK E WHERE A.ID_ = E.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_NODE_CHANGEINFO F WHERE A.ID_ = F.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_DEAL_TASK G WHERE A.ID_ = G.TASKID)
+			   
+			   #if($count_start_time && !$count_start_time.equals(""))
+			    AND A.START_TIME_ >= #[count_start_time]
+			   #end
+			
+			   #if($count_end_time && !$count_end_time.equals(""))
+			    AND A.START_TIME_ <= #[count_end_time]
+			   #end
+	
+		]]>
+	</property>	
+	
+	<!-- 分页查询个人明细数据，获取处理任务信息 -->
+	<property name="getDealTaskInfo">
+		<![CDATA[
+			-- 废弃/撤销/驳回记录信息
+			SELECT A.NAME_         AS NODENAME,
+			       A.DURATION_NODE AS DURATIONNODE,
+			       A.DURATION_     AS DURATION,
+			       B.REMARK        AS REMARK,
+			       A.START_TIME_   AS STARTTIME,
+			       A.END_TIME_     AS ENDTIME,
+			       A.PROC_INST_ID_ AS PROCESSID,
+			       A.ALERTTIME      AS ALERTTIME,
+       			   A.OVERTIME       AS OVERTIME
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_DEAL_TASK B ON A.ID_ = B.TASKID
+			
+			 WHERE A.END_TIME_ IS NOT NULL
+			   AND B.DEALUSER = ?
+			   AND A.PROC_INST_ID_ = ?
+			
+			UNION
+			-- 用户通过记录信息
+			SELECT A.NAME_          AS NODENAME,
+			       A.DURATION_NODE  AS DURATIONNODE,
+			       A.DURATION_      AS DURATION,
+			       A.DELETE_REASON_ AS REMARK,
+			       A.START_TIME_    AS STARTTIME,
+			       A.END_TIME_      AS ENDTIME,
+			       A.PROC_INST_ID_  AS PROCESSID,
+			       A.ALERTTIME      AS ALERTTIME,
+       			   A.OVERTIME       AS OVERTIME
+			  FROM ACT_HI_TASKINST A
+			
+			 WHERE A.END_TIME_ IS NOT NULL
+			   AND A.ASSIGNEE_ = ?
+			   AND A.PROC_INST_ID_ = ?
+			   
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_ENTRUST_TASK E WHERE A.ID_ = E.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_NODE_CHANGEINFO F WHERE A.ID_ = F.TASKID)
+			   AND NOT EXISTS
+			 (SELECT 1 FROM TD_WF_DEAL_TASK G WHERE A.ID_ = G.TASKID)
+			 
+			 UNION
+			-- 用户转办记录信息
+			SELECT A.NAME_          AS NODENAME,
+			       A.DURATION_NODE  AS DURATIONNODE,
+			       A.DURATION_      AS DURATION,
+			       A.DELETE_REASON_ AS REMARK,
+			       A.START_TIME_    AS STARTTIME,
+			       A.END_TIME_      AS ENDTIME,
+			       A.PROC_INST_ID_  AS PROCESSID,
+			       A.ALERTTIME      AS ALERTTIME,
+       			   A.OVERTIME       AS OVERTIME
+			  FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_NODE_CHANGEINFO D ON A.ID_ = D.TASKID
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE A.END_TIME_ IS NOT NULL
+			 AND D.FROM_USER = ?
+			 AND A.PROC_INST_ID_ = ?
+			 
+			 UNION
+			-- 用户委托记录信息
+			SELECT A.NAME_          AS NODENAME,
+			       A.DURATION_NODE  AS DURATIONNODE,
+			       A.DURATION_      AS DURATION,
+			       A.DELETE_REASON_ AS REMARK,
+			       A.START_TIME_    AS STARTTIME,
+			       A.END_TIME_      AS ENDTIME,
+			       A.PROC_INST_ID_  AS PROCESSID,
+			       A.ALERTTIME      AS ALERTTIME,
+       			   A.OVERTIME       AS OVERTIME
+			   FROM ACT_HI_TASKINST A
+			 RIGHT JOIN TD_WF_ENTRUST_TASK D ON A.ID_ = D.TASKID
+			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON A.PROC_DEF_ID_ = C.ID_
+			 WHERE A.END_TIME_ IS NOT NULL
+			 AND D.ENTRUST_USER = ?
+			 AND A.PROC_INST_ID_ = ?
+			 
+			 ORDER BY STARTTIME, PROCESSID
+			 
+		]]>
+	</property>	
+	
+</properties>

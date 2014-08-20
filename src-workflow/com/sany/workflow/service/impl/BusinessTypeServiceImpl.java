@@ -15,6 +15,7 @@
 package com.sany.workflow.service.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -159,16 +160,34 @@ public class BusinessTypeServiceImpl implements BusinessTypeService {
      * @param businessType
      * @return
      */
-    public int delete(BusinessType businessType) {
-        int result = 0;
-        try {
-            executor.deleteBean("deleteBusinessType", businessType);
-            result = 1;
-        } catch (Exception e) {
-            logger.error(e);
-        }
-        return result;
-    }
+	public int delete(BusinessType businessType) {
+		int result = 0;
+		try {
+
+			// 查看当前类别是否有子节点
+			HashMap sonMap = executor.queryObject(HashMap.class,
+					"querySonBusiness", businessType.getBusinessId());
+
+			if (sonMap == null) {
+				// 查看当前类别是否与流程关联
+				HashMap proMap = executor.queryObject(HashMap.class,
+						"queryProBusinesstype", businessType.getBusinessId());
+
+				if (proMap == null) {
+					executor.deleteBean("deleteBusinessType", businessType);
+					result = 1;
+				} else {
+					result = 3;
+				}
+			} else {
+				result = 2;
+			}
+
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return result;
+	}
 
     /**
      * 批量删除业务类别

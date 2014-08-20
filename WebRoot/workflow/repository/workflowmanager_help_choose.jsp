@@ -287,7 +287,6 @@
 					chooseData.push(data);
 					
 					var selectedRadio = $('input[name="CK"]');
-					alert(selectedRadio.length);
 					
 					$('input[name="CK"]').each(function(){
 						var business_name = $(this).parent().find("input[name=business_name]").val();
@@ -296,7 +295,6 @@
 						var wf_app_name = $(this).parent().find("input[name=wf_app_name]").val();
 						var proc_key = $(this).parent().find("input[name=key]").val();
 						
-						alert(proc_key);
 					});
 					
 				}
@@ -307,6 +305,8 @@
 	
 	//选择行
 	function selectedSel(){
+		delAllProcRow();
+		
 		var selectedRadio = $('input[name="CK"]:checked');
 		if(selectedRadio==null||selectedRadio.length==0){
 			return ;
@@ -337,8 +337,8 @@
 		var addRow = 
 			"<tr>\n" +
 			"\t<td>"+addData.wf_app_name+"<input type='hidden' name='procdef_id' value='"+ addData.proc_id +"' /></td>\n" + 
-			"\t<td>"+addData.proc_name+"<input type='hidden' name='proc_key' value='"+ addData.proc_key +"' /></td>\n" + 
-			"\t<td><a href='#' onclick='delProcRow(this)' >删除</a></td>\n" + 
+			"\t<td>"+addData.proc_name+"<input type='hidden' name='proc_key' value='"+ addData.proc_key +"' /></td>" + 
+			//"\n\t<td><a href='#' onclick='delProcRow(this)' >删除</a></td>\n" + 
 			"</tr>";
 		$("#selectProcdefTable").append(addRow);
 	}
@@ -352,8 +352,8 @@
 		var titleRow = 
 			"<tr>\n" +
 			"\t<th>应用系统</th>\n" + 
-			"\t<th>流程名称</th>\n" + 
-			"\t<th>操作</th>\n" + 
+			"\t<th>流程名称</th>" + 
+			//"\n\t<th>操作</th>\n" + 
 			"</tr>";
 		$("#selectProcdefTable").html("");
 		$("#selectProcdefTable").append(titleRow);
@@ -371,7 +371,7 @@
 				
 				var data = chooseData[i];
 				
-				if(chooseStr.indexOf(data.proc_id+"==")>=0){
+				if(chooseStr.indexOf(data.proc_key+"==")>=0){
 					subData.push(data);
 				}
 			}
@@ -493,8 +493,8 @@
 				<div class="title_box">
 					<div class="rightbtn">
 					<a href="#" class="bt_small" id="addButton" onclick="subSelectedData();"><span>确认选择</span></a>
-					<a href="#" class="bt_small" id="exportButton" onclick="delAllProcRow();"><span>全部删除</span></a>
-					<!--<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
+					<!--<a href="#" class="bt_small" id="exportButton" onclick="delAllProcRow();"><span>全部删除</span></a>
+					<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 					<input  type="radio" name="excelType"  >2007</input>-->
 					</div>
 					
@@ -505,7 +505,7 @@
 						<tr>
 							<th>应用系统</th>
 							<th>流程名称</th>
-							<th>操作</th>
+							<!-- <th>操作</th> -->
 						</tr>
 						
 					</table>

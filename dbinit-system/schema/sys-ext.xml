@@ -9,48 +9,5 @@
         <column name="FILTERTYPE" size="1" type="DECIMAL"/>
         <column name="IPDESC" size="2000" type="VARCHAR"/>
     </table>
-   <table name="TD_WF_APP">
-        <column name="ID" size="64" type="VARCHAR"/>
-        <column name="SYSTEM_ID" size="64" type="VARCHAR"/>
-        <column name="SYSTEM_NAME" size="128" type="VARCHAR"/>
-        <column name="WF_PUBLISHED_URL" size="200" type="VARCHAR"/>
-        <column name="WF_MANAGE_URL" size="200" type="VARCHAR"/>
-        <column name="APP_MODE_TYPE" size="100" type="VARCHAR"/>
-        <column name="CREATOR" size="128" type="VARCHAR"/>
-        <column name="CREATE_DATE" type="TIMESTAMP"/>
-        <column name="UPDATE_PERSON" size="128" type="VARCHAR"/>
-        <column name="UPDATE_DATE" type="TIMESTAMP"/>
-        <column name="TODO_URL" size="128" type="VARCHAR"/>
-        <column name="APP_URL" size="128" type="VARCHAR"/>
-        <column name="SYSTEM_SECRET" size="200" type="VARCHAR"/>
-        <column name="SYSTEM_SECRET_TEXT" size="100" type="VARCHAR"/>
-        <column name="PENDING_TYPE" size="8" type="VARCHAR"/>
-        <column default="0" name="PENDING_USED" size="8" type="VARCHAR"/>
-        <column name="PIC_NAME" size="128" type="VARCHAR"/>
-    </table>
-    <table name="TD_WF_APP_PROC_RELATION">
-        <column name="ID" primaryKey="true" required="true" size="64" type="VARCHAR"/>
-        <column name="WF_APP_ID" size="64" type="VARCHAR"/>
-        <column name="PROCDEF_ID" size="64" type="VARCHAR"/>
-    </table>
-    <table name="TB_WF_TASK_URL">
-        <column name="ID" primaryKey="true" required="true" size="64" type="VARCHAR"/>
-        <column name="SYSTEM_ID" size="64" type="VARCHAR"/>
-        <column name="SYSTEM_NAME" size="128" type="VARCHAR"/>
-        <column name="PROCESS_ID" size="64" type="VARCHAR"/>
-        <column name="PROCESS_NAME" size="128" type="VARCHAR"/>
-        <column name="ACTIVITY_ID" size="64" type="VARCHAR"/>
-        <column name="ACTIVITY_NAME" size="128" type="VARCHAR"/>
-        <column name="AUDIT_SIM_URL" size="256" type="VARCHAR"/>
-        <column name="AUDIT_BPS_URL" size="256" type="VARCHAR"/>
-        <column name="CREATOR" size="128" type="VARCHAR"/>
-        <column name="CREATE_DATE" type="TIMESTAMP"/>
-        <column name="UPDATE_PERSON" size="128" type="VARCHAR"/>
-        <column name="UPDATE_DATE" type="TIMESTAMP"/>
-    </table>
-     <table name="TD_WF_APP_PIC">
-        <column name="ID" size="100" primaryKey="true" required="true" type="VARCHAR"/>
-        <column name="NAME" size="200" type="VARCHAR"/>
-        <column name="CONTENT" type="BLOB"/>
-    </table>
+  
 </database>    

@@ -16,6 +16,15 @@
 								<property index="2"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','流程名称','processName',0)]]></property>
 								<property index="3"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','任务创建时间','createTime',0)]]></property>
 								<property index="4"><![CDATA[insert into TD_SM_MSGPARAMETERS (param_type,node_id,name,value,rn)values('msg','msg','任务状态','state',0)]]></property>
+
+<!-- 								<property index="5"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD MESSAGETEMPLEID varchar(100) DEFAULT NULL ]]></property> -->
+<!-- 								<property index="6"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD EMAILTEMPLEID varchar(100) DEFAULT NULL ]]></property> -->
+<!-- 								<property index="7"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD DURATION_NODE decimal(19,0) DEFAULT NULL ]]></property> -->
+<!-- 								<property index="8"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD NOTICENUM decimal(22,0) DEFAULT NULL ]]></property> -->
+
+<!-- 								<property index="9"><![CDATA[ALTER TABLE TD_WF_APP ADD PENDING_TYPE varchar(8) DEFAULT NULL ]]></property> -->
+<!-- 								<property index="10"><![CDATA[ALTER TABLE TD_WF_APP ADD PENDING_USED varchar(8) DEFAULT '0' ]]></property> -->
+<!-- 								<property index="11"><![CDATA[ALTER TABLE TD_WF_APP ADD PIC_NAME varchar(128) DEFAULT NULL ]]></property> -->
 							</list>
 						</property>
 					</map>

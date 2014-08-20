@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -3356,7 +3358,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	
 	@Override
 	public void cancleProcessInstances(String processInstids,
-			String deleteReason) {
+			String deleteReason, String taskId, String processKey,
+			String currentUser) {
 
 		String[] ids = processInstids.split(",");
 
@@ -3380,6 +3383,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 					this.runtimeService.deleteProcessInstance(processInstid,
 							deleteReason);
+
+					// 日志记录废弃操作
+					String remark = deleteReason + "<br/>备注:"
+							+ getUserInfoMap().getUserName(currentUser)
+							+ "将任务废弃";
+					addDealTask(taskId,
+							getUserInfoMap().getUserName(currentUser), "3",
+							processInstid, processKey, remark,"","");
+
 				}
 			}
 
@@ -3495,6 +3507,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		
 		//委托任务处理记录表
 		dbUtil.preparedDelete("delete From TD_WF_ENTRUST_TASK p where p.PROCESS_ID =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+
+		// 委托任务处理记录表
+		dbUtil.preparedDelete(" delete from TD_WF_DEAL_TASK where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
@@ -4420,5 +4437,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.release();
 		}
 
+	}
+	
+	@Override
+	public void addDealTask(String taskId, String dealUser, String dealType,
+			String processId, String processKey, String remark, String taskKey,
+			String taskName) throws Exception {
+
+		executor.insert("addDealTaskInfo_wf", UUID.randomUUID().toString(),
+				taskId, dealUser, dealType, processId, processKey,
+				new Timestamp(new Date().getTime()), remark, taskKey, taskName);
 	}
 }

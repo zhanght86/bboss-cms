@@ -514,8 +514,21 @@ public class WorkflowController implements WorkflowService {
 	 * @return 2014年7月30日
 	 */
 	public @ResponseBody(datatype = "json")
-	ResultResponse delInstancesForLogic(String instancesIds, String deleteReason) {
+	ResultResponse delInstancesForLogic(String instancesIds,
+			String deleteReason, String processKey, String currentUser) {
 		ResultResponse rr = new ResultResponse();
+
+		if (StringUtil.isEmpty(currentUser)) {
+			rr.setResultCode("5");
+			rr.setResultMess("currentUser为空");
+			return rr;
+		}
+
+		if (StringUtil.isEmpty(processKey)) {
+			rr.setResultCode("4");
+			rr.setResultMess("processKey为空");
+			return rr;
+		}
 
 		if (StringUtil.isEmpty(deleteReason)) {
 			rr.setResultCode("3");
@@ -530,7 +543,8 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-			activitiService.cancleProcessInstances(instancesIds, deleteReason);
+			activitiService.cancleProcessInstances(instancesIds, deleteReason,
+					"", processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("逻辑删除操作成功");
@@ -797,8 +811,27 @@ public class WorkflowController implements WorkflowService {
 	 * @return 2014年7月30日
 	 */
 	public @ResponseBody(datatype = "json")
-	ResultResponse discardTask(String instancesId, String deleteReason) {
+	ResultResponse discardTask(String instancesId, String deleteReason,
+			String taskId, String processKey, String currentUser) {
 		ResultResponse rr = new ResultResponse();
+
+		if (StringUtil.isEmpty(currentUser)) {
+			rr.setResultCode("6");
+			rr.setResultMess("currentUser为空");
+			return rr;
+		}
+
+		if (StringUtil.isEmpty(processKey)) {
+			rr.setResultCode("5");
+			rr.setResultMess("processKey为空");
+			return rr;
+		}
+
+		if (StringUtil.isEmpty(taskId)) {
+			rr.setResultCode("4");
+			rr.setResultMess("taskId为空");
+			return rr;
+		}
 
 		if (StringUtil.isEmpty(instancesId)) {
 			rr.setResultCode("3");
@@ -813,7 +846,8 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-			activitiService.cancleProcessInstances(instancesId, deleteReason);
+			activitiService.cancleProcessInstances(instancesId, deleteReason,
+					taskId, processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("废弃任务操作成功");
@@ -841,8 +875,20 @@ public class WorkflowController implements WorkflowService {
 	 */
 	public @ResponseBody(datatype = "json")
 	ResultResponse cancelTask(String instancesId, String processKey,
-			String cancelReason) {
+			String cancelReason, String taskId, String currentUser) {
 		ResultResponse rr = new ResultResponse();
+
+		if (StringUtil.isEmpty(currentUser)) {
+			rr.setResultCode("6");
+			rr.setResultMess("currentUser为空");
+			return rr;
+		}
+
+		if (StringUtil.isEmpty(taskId)) {
+			rr.setResultCode("5");
+			rr.setResultMess("taskId为空");
+			return rr;
+		}
 
 		if (StringUtil.isEmpty(processKey)) {
 			rr.setResultCode("4");
@@ -1001,7 +1047,8 @@ public class WorkflowController implements WorkflowService {
 	 */
 	public @ResponseBody(datatype = "json")
 	ResultResponse rejectToPreTask(String taskId, String rejectedReason,
-			int rejectedType, List<HashMap<String, Object>> nodeInfoList,
+			int rejectedType, String processKey, String currentUser,
+			List<HashMap<String, Object>> nodeInfoList,
 			List<HashMap<String, Object>> variableList) {
 		ResultResponse rr = new ResultResponse();
 

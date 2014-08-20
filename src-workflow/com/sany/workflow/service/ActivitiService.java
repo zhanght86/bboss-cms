@@ -1366,15 +1366,16 @@ public interface ActivitiService {
 	ProcessEngine getProcessEngine();
 	
 	void cancleProcessInstance(String processInstanceId, String deleteReason);
-	/**
-	 * 逻辑删除流程实例 gw_tanx
-	 * 
+	/** 逻辑删除流程实例 gw_tanx
 	 * @param processInstanceIds
 	 * @param deleteReason
-	 *            2014年5月9日
+	 * @param taskId
+	 * @param processKey
+	 * 2014年8月15日
 	 */
 	public void cancleProcessInstances(String processInstanceIds,
-			String deleteReason);
+			String deleteReason, String taskId, String processKey,
+			String currentUser);
 	
 	/**
 	 * 物理删除流程实例 gw_tanx
@@ -1544,4 +1545,21 @@ public interface ActivitiService {
 			String currentUser,
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList);
+	
+	/**
+	 * 日志记录任务操作
+	 * 
+	 * @param taskId
+	 * @param dealUser
+	 *            处理人
+	 * @param dealType
+	 *            处理类型 0管理员处理1驳回处理2撤销处理3废弃处理
+	 * @param processId
+	 * @param processKey
+	 * @param remark
+	 *            2014年8月15日
+	 */
+	public void addDealTask(String taskId, String dealUser, String dealType,
+			String processId, String processKey, String remark, String taskKey,
+			String taskName) throws Exception;
 }

@@ -12,6 +12,7 @@
 		<form id="addForm" name="addForm" method="post">
 		<input type="hidden" value="<pg:cell colName='businessId'/>" id="businessId" name="businessId"/>
 		<input type="hidden" value="<pg:cell colName='parentId'/>" id="parentId" name="parentId"/>
+		<input type="hidden" value="<pg:cell colName='parent_name'/>" id="parent_name" name="parent_name"/>
 			<fieldset>
 				<legend>业务类别基本信息</legend>
 				<table border="0" cellpadding="0" cellspacing="0" class="table4">
@@ -70,7 +71,7 @@
 		$("#parentBusinessType").combotree({
 			url:"showComboxBusinessTree.page"
 			});
-		$("#parentBusinessType").combotree('setValue',$('#parentId').val());
+		$("#parentBusinessType").combotree('setValue',$('#parent_name').val());
 	});
 	
 	var api = frameElement.api, W = api.opener;

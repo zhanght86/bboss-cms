@@ -57,7 +57,9 @@
 			<div class="title_box">
 				<div class="rightbtn">
 				<a href="#" class="bt_small" id="addButton" onclick="javascript:add()"><span>新增</span></a>
+				<!--  
 				<a href="#" class="bt_small" id="delBatchButton" onclick="javascript:batchDelete()"><span>批量删除</span></a>
+				-->
 				</div>
 				
 			</div>
@@ -107,7 +109,7 @@
 		}
 
 		function del(businessId) {
-			$.dialog.confirm('确定要删除记录吗？，删除后将不可恢复', function() {
+			$.dialog.confirm('确定要删除记录吗？删除后将不可恢复', function() {
 				$.ajax({
 					type : "POST",
 					url : "delete.page",
@@ -120,6 +122,7 @@
 						XMLHttpRequest.setRequestHeader("RequestType", "ajax");
 					},
 					success : function(data) {
+						alert(data);
 						queryList();
 					}
 				});

@@ -220,20 +220,26 @@
 									</pg:list>
 								</select>
 							</td>
-							<td width="250px;" align="center">
+							
+							<td width="300px;" align="center">
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
-								<select id="rejectedtype" name="rejectedtype" style=" width: 160px;">
-									<option value="0" selected>上一个任务对应的节点</option>
-									<option value="1" >当前节点的上一个节点</option>
+								<select id="rejectedtype" name="rejectedtype" style=" width: 200px;">
+									<pg:notempty actual="${lastTaskToNode}">
+										<option value="0" selected>${lastTaskToNode}(上一个任务对应的节点)</option>
+									</pg:notempty>
+									<pg:notempty actual="${lastNode}">
+										<option value="1" >${lastNode}(当前节点的上一个节点)</option>
+									</pg:notempty>
 								</select>
 							</td>
+							
 							<td width="250px;" align="center">
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="delegateTask()"><span>转办</span></a>
 								<input type="hidden" class="input1 w120" id="delegate_users_id" />
 								<input type="text" class="input1 w120" id="delegate_users_name" />
 								<a href="javascript:openChooseUsers('delegate')">选择</a>
 							</td>
-							<td width="250px;" align="center">
+							<td width="200px;" align="center">
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
 							</td>
 						</tr>
@@ -372,6 +378,11 @@ function discardTask() {
 
 //驳回任务
 function rejectToPreTask(){
+	var rejectedtype = $("#rejectedtype").val();
+	if (rejectedtype == null) {
+		alert("驳回节点为空，不能被驳回");
+		return;
+	}
 	
 	$.dialog.confirm('确定要驳回吗？', function(){
 		

@@ -120,7 +120,7 @@
 				and A.END_TIME_ <= #[wf_end_time2]
 			#end
 			
-			--流程状态 1 激活 2 挂起 3 流程结束 
+			-- 流程状态 1 激活 2 挂起 3 流程结束 
 			#if($wf_state && $wf_state.equals("3"))
 				AND D.SUSPENSION_STATE_ IS NULL
 			#elseif ($wf_state && $wf_state.equals("1"))
@@ -347,9 +347,9 @@
 	<!-- 工作流管理中查看任务列表  gw_tanx-->
 	<property name="selectTaskByUser_wf">
 		<![CDATA[
-		--taskState签收状态字段 0 所有 1 未签收 2 签收
+		-- taskState签收状态字段 0 所有 1 未签收 2 签收
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
-			--未签收任务
+			-- 未签收任务
 				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME, 
 				   RES.DURATION_NODE,RES.IS_CONTAIN_HOLIDAY,RES.ALERTTIME,RES.OVERTIME, RES.ADVANCESEND,
                    RES.OVERTIMESEND,RES.ID_,RES.REV_, RES.EXECUTION_ID_,RES.PROC_INST_ID_,RES.PROC_DEF_ID_,
@@ -365,7 +365,7 @@
 				 #if($processKey && !$processKey.equals(""))
 				 	AND B.KEY_ like #[processKey]
 				 #end
-				 --获取业务类型				 
+				 -- 获取业务类型				 
 				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON B.KEY_ = D.PROCESS_KEY
@@ -412,7 +412,7 @@
 			#end
 			
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
-			--已签收任务
+			-- 已签收任务
 				select 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,
 				  A.DURATION_NODE, A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME,A.ADVANCESEND,
                   A.OVERTIMESEND,A.ID_,A.REV_, A.EXECUTION_ID_,A.PROC_INST_ID_,A.PROC_DEF_ID_,
@@ -427,7 +427,7 @@
 				  #if($processKey && !$processKey.equals(""))
 				 	AND C.KEY_ like #[processKey]
 				  #end
-				 --获取业务类型		
+				 -- 获取业务类型		
 				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
@@ -476,9 +476,9 @@
 	<!-- 工作流管理中查看委托任务列表  gw_tanx-->
 	<property name="selectEntrustTaskByUser_wf">
 		<![CDATA[
-		--taskState签收状态字段 0 所有 1 未签收 2 签收
+		-- taskState签收状态字段 0 所有 1 未签收 2 签收
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("1")))
-			--未签收任务
+			-- 未签收任务
 				select distinct 1 as state,A.BUSINESS_KEY_,B.KEY_,D.BUSINESS_NAME, 
 				  RES.DURATION_NODE, RES.IS_CONTAIN_HOLIDAY, RES.ALERTTIME, RES.OVERTIME, 
 				  RES.ADVANCESEND, RES.OVERTIMESEND,RES.ID_,RES.REV_, RES.EXECUTION_ID_,
@@ -494,7 +494,7 @@
 				 #if($processKey && !$processKey.equals(""))
 				 	AND B.KEY_ like #[processKey]
 				 #end
-				 --获取业务类型				 
+				 -- 获取业务类型				 
 				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON B.KEY_ = D.PROCESS_KEY
@@ -574,7 +574,7 @@
 			#end
 			
 			#if($taskState && ( $taskState.equals("0") || $taskState.equals("2")))
-			--已签收任务
+			-- 已签收任务
 				select 2 as state,B.BUSINESS_KEY_,C.KEY_, D.BUSINESS_NAME,
 				  A.DURATION_NODE,A.IS_CONTAIN_HOLIDAY,A.ALERTTIME, A.OVERTIME,
        			  A.ADVANCESEND, A.OVERTIMESEND,A.ID_,A.REV_, A.EXECUTION_ID_,
@@ -589,7 +589,7 @@
 				  #if($processKey && !$processKey.equals(""))
 				 	AND C.KEY_ like #[processKey]
 				  #end
-				 --获取业务类型		
+				 -- 获取业务类型		
 				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 				         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
@@ -689,7 +689,7 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
 			  
-			  --关联系统
+			  -- 关联系统
 			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
                FROM TD_WF_APP_PROC_RELATION A
                LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
@@ -701,7 +701,7 @@
 			 WHERE a.ASSIGNEE_ is null
 			   	and I.TYPE_ = 'candidate'
 
-         		--委托关系
+         		-- 委托关系
         		#if($entrustList && $entrustList.size()>0)
 			   		and (
       				#foreach($WfEntrust in $entrustList)
@@ -742,7 +742,7 @@
 			
 			union 
 			
-			--已签收任务
+			-- 已签收任务
 			select 2                	as taskState,
 			       B.Business_Key_  	as businessKey,
 			       b.start_user_id_ 	as userAccount,
@@ -760,7 +760,7 @@
 			
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
-			    --关联系统
+			    -- 关联系统
 			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
                FROM TD_WF_APP_PROC_RELATION A
                LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
@@ -817,7 +817,7 @@
 		<![CDATA[
 			SELECT COUNT(*)
 			  FROM (
-			  		--未签收任务
+			  		-- 未签收任务
 			  		SELECT DISTINCT A.*
 			          FROM ACT_RU_TASK A
 			        
@@ -877,7 +877,7 @@
 						#end
 			        
 			        union
-			      --签收任务  
+			      -- 签收任务  
 			        SELECT A.*
 			          FROM ACT_RU_TASK A
 			          left join act_re_procdef c on c.id_ = A.proc_def_id_
@@ -941,7 +941,7 @@
 		<![CDATA[
 			SELECT COUNT(*) as tasknum
 			  FROM (
-			  	--未签收任务
+			  	-- 未签收任务
 			  		SELECT DISTINCT A.*
 			          FROM ACT_RU_TASK A
 			        
@@ -965,7 +965,7 @@
 					    #end
 			        
 			        union
-			      --签收任务  
+			      -- 签收任务  
 			        SELECT A.*
 			          FROM ACT_RU_TASK A
 			          LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = A.PROC_DEF_ID_
@@ -989,7 +989,7 @@
 	<!-- 工作流管理统一代办获取任务列表  gw_tanx-->
 	<property name="selectNoHandleTask_wf">
 		<![CDATA[
-		--taskState签收状态字段  1 未签收 2 签收
+		-- taskState签收状态字段  1 未签收 2 签收
 			select distinct 1    	as taskState,
                 B.Business_Key_  	as businessKey,
                 b.start_user_id_ 	as userAccount,
@@ -1009,7 +1009,7 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
 			  
-			   --关联系统
+			   -- 关联系统
 			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
                FROM TD_WF_APP_PROC_RELATION A
                LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
@@ -1043,7 +1043,7 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
 			  left join act_re_procdef c on c.id_ = b.proc_def_id_
 			  
-			   --关联系统
+			   -- 关联系统
 			  INNER JOIN (SELECT A.PROCDEF_ID, B.APP_URL
                FROM TD_WF_APP_PROC_RELATION A
                LEFT JOIN TD_WF_APP B ON A.WF_APP_ID = B.ID
@@ -1065,7 +1065,7 @@
 	<property name="selectHistoryTaskForAdmin_wf">
 		<![CDATA[
 		
-		--用户自己处理的任务记录
+		-- 用户自己处理的任务记录
 			SELECT B.BUSINESS_KEY_, C.KEY_, E.SUSPENSION_STATE_,D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_, A.NAME_,
@@ -1080,13 +1080,13 @@
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
 			  #end
-			  --获取业务类型	             
+			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  --获取流程实例状态
+			  -- 获取流程实例状态
               LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_ 
-              --委托处理记录
+              -- 委托处理记录
               LEFT JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
@@ -1130,9 +1130,9 @@
 	<!-- notadmin工作流管理中查看历史任务列表  gw_tanx-->
 	<property name="selectHistoryTaskForNotAdmin_wf">
 		<![CDATA[
-		--entrustUser字段有值，那么只查委托任务记录
+		-- entrustUser字段有值，那么只查委托任务记录
 		#if(!$entrustUser || $entrustUser.equals(""))
-		--用户自己处理的任务记录
+		-- 用户自己处理的任务记录
 			SELECT B.BUSINESS_KEY_, C.KEY_, E.SUSPENSION_STATE_,D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_, A.NAME_,
@@ -1146,11 +1146,11 @@
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
 			  #end
-			  --获取业务类型	             
+			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  --获取流程实例状态
+			  -- 获取流程实例状态
               LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_ 
                  
 			 WHERE A.END_TIME_ IS NOT NULL
@@ -1185,14 +1185,14 @@
 					   and (a.system_id like #[appName] or a.system_name like #[appName]))
 			  #end
 			  
-			  --排除自己签收，被委托人处理的重复记录
+			  -- 排除自己签收，被委托人处理的重复记录
 			  AND NOT EXISTS
  				(SELECT 1 FROM TD_WF_ENTRUST_TASK TWET WHERE TWET.TASKID = A.ID_)
 			  
 		union
 		#end
 		
-		--用户处理别人委托任务的处理记录
+		-- 用户处理别人委托任务的处理记录
 		
 			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
@@ -1207,13 +1207,13 @@
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
 			  #end
-			  --获取业务类型	             
+			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  --获取流程实例状态
+			  -- 获取流程实例状态
               LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
-			  --委托处理记录
+			  -- 委托处理记录
   			  right JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
@@ -1245,7 +1245,7 @@
 			  #end
 		
 		union
-		--别人委托给当前用户任务的处理记录
+		-- 别人委托给当前用户任务的处理记录
 		
 			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
@@ -1260,13 +1260,13 @@
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
 			  #end
-			  --获取业务类型	             
+			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  --获取流程实例状态
+			  -- 获取流程实例状态
               LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
-			  --委托处理记录
+			  -- 委托处理记录
   			  right JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
@@ -1297,11 +1297,11 @@
 				  and B.BUSINESS_KEY_ like #[businessKey]
 			  #end
 		
-		--entrustUser字段有值，那么只查委托任务记录
+		-- entrustUser字段有值，那么只查委托任务记录
 		#if(!$entrustUser || $entrustUser.equals(""))
 		
 		union
-		--用户转办记录
+		-- 用户转办记录
 		
 			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
@@ -1316,13 +1316,13 @@
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
 			  #end
-			  --获取业务类型	             
+			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  --获取流程实例状态
+			  -- 获取流程实例状态
               LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
-			  --转办记录
+			  -- 转办记录
   			 RIGHT JOIN TD_WF_NODE_CHANGEINFO F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
@@ -2361,6 +2361,13 @@
 		]]>
 	</property>
 	
+	<!-- 删除驳回/撤销/废弃记录信息  gw_tanx -->
+	<property name="deleteDealTaskBykey">
+		<![CDATA[
+			 delete from TD_WF_DEAL_TASK where process_key=#[process_key]
+		]]>
+	</property>
+	
 	<!-- 根据用户获取委托关系列表数据  gw_tanx -->
 	<property name="selectEntrustList">
 		<![CDATA[
@@ -2427,23 +2434,23 @@
 		<![CDATA[
 			
 			SELECT 1                 AS STATE, -- 任务状态（1未签收2未处理）
-			       A.ID_             AS TASKID, --任务ID
-			       A.NAME_           AS TASKNAME, --任务名称
-			       A.CREATE_TIME_    AS CREATETIME, --任务创建时间
-			       I.USER_ID_        AS USERID, --处理人
-			       B.NAME_           AS PROCESSNAME, --流程名称
-			       A.PROC_INST_ID_   AS PROCINSTANCEID, --流程实例ID
-			       A.TASK_DEF_KEY_   AS TASKDEFKEY, --任务节点KEY
+			       A.ID_             AS TASKID, -- 任务ID
+			       A.NAME_           AS TASKNAME, -- 任务名称
+			       A.CREATE_TIME_    AS CREATETIME, -- 任务创建时间
+			       I.USER_ID_        AS USERID, -- 处理人
+			       B.NAME_           AS PROCESSNAME, -- 流程名称
+			       A.PROC_INST_ID_   AS PROCINSTANCEID, -- 流程实例ID
+			       A.TASK_DEF_KEY_   AS TASKDEFKEY, -- 任务节点KEY
 			       A.ALERTTIME       AS ALERTTIME, -- 预警时间点
-			       A.OVERTIME        AS OVERTIME, --超时时间点
+			       A.OVERTIME        AS OVERTIME, -- 超时时间点
 			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID, -- 短信模板
 			       C.EMAILTEMPLEID   AS EMAILTEMPLEID, -- 邮件模板
-			       D.ENTRUST_USER    AS ENTRUSTUSER--委托人
+			       D.ENTRUST_USER    AS ENTRUSTUSER-- 委托人
 			  FROM ACT_RU_TASK A
 			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
-			  --委托关系
+			  -- 委托关系
 			  LEFT JOIN (SELECT A.ENTRUST_USER,
 			                    A.START_DATE,
 			                    A.END_DATE,
@@ -2480,7 +2487,7 @@
 			  FROM ACT_RU_TASK A
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
-			  --委托关系
+			  -- 委托关系
 			  LEFT JOIN (SELECT A.ENTRUST_USER,
 			                    A.START_DATE,
 			                    A.END_DATE,
@@ -2505,23 +2512,23 @@
 	<property name="getNoSignTaskById">
 		<![CDATA[
 			
-			SELECT A.ID_             AS TASKID, --任务ID
-			       A.NAME_           AS TASKNAME, --任务名称
-			       A.CREATE_TIME_    AS CREATETIME, --任务创建时间
-			       I.USER_ID_        AS USERID, --处理人
-			       B.NAME_           AS PROCESSNAME, --流程名称
-			       A.PROC_INST_ID_   AS PROCINSTANCEID, --流程实例ID
-			       A.TASK_DEF_KEY_   AS TASKDEFKEY, --任务节点KEY
+			SELECT A.ID_             AS TASKID, -- 任务ID
+			       A.NAME_           AS TASKNAME, -- 任务名称
+			       A.CREATE_TIME_    AS CREATETIME, -- 任务创建时间
+			       I.USER_ID_        AS USERID, -- 处理人
+			       B.NAME_           AS PROCESSNAME, -- 流程名称
+			       A.PROC_INST_ID_   AS PROCINSTANCEID, -- 流程实例ID
+			       A.TASK_DEF_KEY_   AS TASKDEFKEY, -- 任务节点KEY
 			       A.ALERTTIME       AS ALERTTIME, -- 预警时间点
-			       A.OVERTIME        AS OVERTIME, --超时时间点
+			       A.OVERTIME        AS OVERTIME, -- 超时时间点
 			       C.MESSAGETEMPLEID AS MESSAGETEMPLEID, -- 短信模板
 			       C.EMAILTEMPLEID   AS EMAILTEMPLEID, -- 邮件模板
-			       D.ENTRUST_USER    AS ENTRUSTUSER--委托人
+			       D.ENTRUST_USER    AS ENTRUSTUSER-- 委托人
 			  FROM ACT_RU_TASK A
 			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
-			  --委托关系
+			  -- 委托关系
 			  LEFT JOIN (SELECT A.ENTRUST_USER,
 			                    A.START_DATE,
 			                    A.END_DATE,
@@ -2560,7 +2567,7 @@
 			  FROM ACT_RU_TASK A
 			  LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 			  LEFT JOIN TD_WF_PROC_MESSTEMPLATE C ON C.PROCESS_KEY = B.KEY_
-			  --委托关系
+			  -- 委托关系
 			  LEFT JOIN (SELECT A.ENTRUST_USER,
 			                    A.START_DATE,
 			                    A.END_DATE,
@@ -2598,7 +2605,7 @@
 	<!-- 查询任务的委托/转办记录  gw_tanx -->
 	<property name="getChangeOrEntrustTaskInfoById_wf">
 		<![CDATA[
-			--转办关系
+			-- 转办关系
 			SELECT 1 TASKRELATION,
 			       A.TASKID,
 			       A.PROCESS_KEY,
@@ -2609,7 +2616,7 @@
 			  FROM TD_WF_NODE_CHANGEINFO A
 			 WHERE A.TASKID = ?
 			UNION
-			--委托关系
+			-- 委托关系
 			SELECT 2 TASKRELATION,
 			       B.TASKID,
 			       B.PROCESS_KEY,
@@ -2652,7 +2659,7 @@
 		]]>
 	</property>
 	
-		<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
+	<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
 	<property name="getNodeCandidates_wf">
 		<![CDATA[
 			SELECT *
@@ -2661,6 +2668,25 @@
 			   and I.TYPE_ = 'candidate'
 			   and I.TASK_ID_=?
 			   and I.USER_ID_=?
+		]]>
+	</property>
+	
+	<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
+	<property name="addDealTaskInfo_wf">
+		<![CDATA[
+			INSERT INTO TD_WF_DEAL_TASK
+					  (DEALID,
+					   TASKID,
+					   DEALUSER,
+					   DEALTYPE,
+					   PROCESS_ID,
+					   PROCESS_KEY,
+					   DEALTIME,
+					   REMARK,
+					   TARGETTASKDEFKEY,
+					   TARGETTASKNAME)
+					VALUES
+					  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		]]>
 	</property>
 	

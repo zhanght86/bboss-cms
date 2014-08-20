@@ -318,6 +318,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			executor.deleteBean("deleteNodeWorktimeBykey", param);
 			executor.deleteBean("deleteNodeChangeInfoBykey", param);
 			executor.deleteBean("deleteEntrustTaskBykey", param);
+			executor.deleteBean("deleteDealTaskBykey", param);			
 			
 			tm.commit();
 		} catch (Exception e) {

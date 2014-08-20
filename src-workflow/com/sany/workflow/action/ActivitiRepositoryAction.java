@@ -582,14 +582,15 @@ public class ActivitiRepositoryAction {
 	 */
 	public @ResponseBody
 	String delPorcessInstance(String processInstIds, String deleteReason,
-			String delType) {
+			String delType,String processKey) {
 
 		try {
 			// 逻辑删除
 			if ("1".equals(delType)) {
-
+				
 				activitiService.cancleProcessInstances(processInstIds,
-						deleteReason);
+						deleteReason,"",processKey,AccessControl
+						.getAccessControl().getUserAccount());
 			} else {// 物理删除
 
 				activitiService.delProcessInstances(processInstIds);
