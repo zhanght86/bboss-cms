@@ -474,6 +474,9 @@
 				<workspace>
 					<content>workflow/entrust/index.page</content>
 				</workspace>
+				<authoration>				 
+				 	<url>sysmanager/user/userquery_help_choose.jsp</url>
+				</authoration>
 			</item>
 			
 		</module>
@@ -605,6 +608,31 @@
 					 <url>workflow/templeManage/*.page</url>
 				</authoration>
 			</item>
+			
+			<module name="统计分析" id="statistics" used="true" i18n:en_US="workflow statistics"
+				url="workflow/statistics/toProcessCount.page" showleftmenu="true" popup="true">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<item name="流程统计" id="processCount" i18n:en_US="process Count">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/statistics/toProcessCount.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/statistics/*.page</url>
+					</authoration>
+				</item>
+				<item name="个人统计" id="personalCount" i18n:en_US="personal Count">
+					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+					<top>header.page</top>
+					<workspace>
+						<content>workflow/statistics/toPersonalCount.page</content>
+					</workspace>
+					<authoration>				 
+					 	<url>workflow/statistics/*.page</url>
+					</authoration>
+				</item>
+			</module>
 		</module>
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">
