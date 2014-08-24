@@ -277,6 +277,10 @@
 			<param-name>useCodeAsDefaultMessage</param-name>
 			<param-value>true</param-value>
 		</init-param>
+		<init-param>
+			<param-name>iocLifeCycleEventListeners</param-name>
+			<param-value>com.frameworkset.platform.sysmgrcore.manager.SYSIocLifeCycleEventListener</param-value>
+		</init-param>
 		<load-on-startup>0</load-on-startup>
     </servlet>
 	 <servlet-mapping>

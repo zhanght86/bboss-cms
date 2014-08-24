@@ -202,9 +202,7 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 				Framework.getInstanceWithContext(config.getServletContext()).init((String)null);
 				inited = true;
 	
-				// 初始化任务管理服务
-				TaskService service = TaskService.getTaskService();
-				service.startService();
+				
 			}
 		}
 	}
