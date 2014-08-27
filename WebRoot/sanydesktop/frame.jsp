@@ -24,7 +24,8 @@
 <style>
 html,body{ height:100%;}
 </style>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/menu.js?userName=<%= appName%>&appName =<%=userName %>"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/menubase.js?userName=<%= appName%>&appName =<%=userName %>"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/menu.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/log.js"></script>
 <script>
 $(document).ready(function(){ 

@@ -121,8 +121,10 @@ HttpSession session = request.getSession(false);
 					if ((loginPath != null && loginPath.equals("1"))  || subsystem.equals("cms")) {
 						successRedirect = "index.jsp?subsystem_id="
 								+ subsystem;
-				 } else if (loginPath == null || loginPath.equals("3")) {
+				 }else if (loginPath == null || loginPath.equals("3")) {
 						successRedirect = "sanydesktop/index.page";
+				}  else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
 				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
 						} else if (loginPath.equals("4")) {
@@ -153,7 +155,9 @@ HttpSession session = request.getSession(false);
 									+ subsystem;
 					 } else if (loginPath == null || loginPath.equals("3")) {
 							successRedirect = "sanydesktop/index.page";
-					}  else if (loginPath.equals("2")) {
+					}   else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
+				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
 						} else if (loginPath.equals("4")) {
 							successRedirect = "sanydesktop/webindex.page";
@@ -172,7 +176,9 @@ HttpSession session = request.getSession(false);
 										+ subsystem;
 						 } else if (loginPath == null || loginPath.equals("3")) {
 								successRedirect = "sanydesktop/index.page";
-						} else if (loginPath.equals("2")) {
+						}   else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
+				} else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
 						}else if (loginPath.equals("4")) {
 							successRedirect = "sanydesktop/webindex.page";
@@ -242,7 +248,9 @@ HttpSession session = request.getSession(false);
 							}else if (loginPath == null || loginPath.equals("3")) {
 								successRedirect = "sanydesktop/index.page";
 							}
-							 else if (loginPath.equals("2")) {
+							  else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
+				}  else if (loginPath.equals("2")) {
 								successRedirect = "desktop/desktop1.page";
 							} else if (loginPath.equals("4")) {
 								successRedirect = "sanydesktop/webindex.page";
@@ -273,7 +281,9 @@ HttpSession session = request.getSession(false);
 								+ subsystem;
 					}else if (loginPath == null || loginPath.equals("3")) {
 						successRedirect = "sanydesktop/index.page";
-					}else  if (loginPath.equals("2")) {
+					}  else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
+				} else  if (loginPath.equals("2")) {
 						successRedirect = "desktop/desktop1.page";
 					} else if (loginPath.equals("4")) {
 						successRedirect = "sanydesktop/webindex.page";
@@ -350,7 +360,9 @@ HttpSession session = request.getSession(false);
 									+ subsystem;
 					 } else if (loginPath == null || loginPath.equals("3")) {
 							successRedirect = "sanydesktop/index.page";
-					}  else if (loginPath.equals("2")) {
+					}   else if (loginPath == null || loginPath.equals("5")) {
+						successRedirect = "sanydesktop/indexcommon.page";
+				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
 						} else if (loginPath.equals("4")) {
 							successRedirect = "sanydesktop/webindex.page";
@@ -704,9 +716,14 @@ DD_belatedPNG.fix('div');
 				</li>
                 <li><label><pg:message code="sany.pdp.style"/>：</label>               
 				<select name="loginPath"  style="width:160px;margin-left:-110px;">
-					<option value="3"
-						<%if(loginStyle == null||loginStyle.equals("3")){%>
+					<option value="5"
+						<%if(loginStyle == null||loginStyle.equals("5")){%>
 						selected <%}%>>
+						common
+					</option>
+					<option value="3"
+							<%if(loginStyle != null&&loginStyle.equals("3")){%>
+						selected <%}%>>>
 						ISany
 					</option>
 					<option value="1"

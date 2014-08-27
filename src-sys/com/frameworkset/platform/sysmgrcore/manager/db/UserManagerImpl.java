@@ -1761,6 +1761,43 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		}
 		return user;
 	}
+	
+	/** 根据用户工号或域账号查询用户信息
+	 * @param worknumber
+	 * @return
+	 * @throws ManagerException
+	 * 2014年8月22日
+	 */
+	public User getUserByWorknumberOrUsername(String worknumberOrUsername)  throws ManagerException {
+		if(StringUtil.isEmpty(worknumberOrUsername))
+			return null;
+		User user = null;
+		try {
+			PreparedDBUtil db = new PreparedDBUtil();
+			StringBuffer sql = new StringBuffer();
+			sql.append("select USER_ID, USER_SN, USER_NAME, USER_PASSWORD, USER_REALNAME, USER_PINYIN, ")
+			   .append("USER_SEX, USER_HOMETEL, USER_WORKTEL, USER_WORKNUMBER, USER_MOBILETEL1, ")
+			   .append("USER_MOBILETEL2, USER_FAX, USER_OICQ, USER_BIRTHDAY, USER_EMAIL, USER_ADDRESS, ")
+			   .append("USER_POSTALCODE, USER_IDCARD, USER_ISVALID, USER_REGDATE, USER_LOGINCOUNT, ")
+			   .append("USER_TYPE, REMARK1, REMARK2, REMARK3, REMARK4, REMARK5, PAST_TIME, DREDGE_TIME, ")
+			   .append("LASTLOGIN_DATE, WORKLENGTH, POLITICS, ISTAXMANAGER,password_updatetime,Password_DualTime from TD_SM_USER ")
+			   .append("where user_worknumber = ? or user_name= ? ");
+		
+			db.preparedSelect(sql.toString());
+			db.setString(1, worknumberOrUsername);
+			db.setString(2, worknumberOrUsername);
+			db.executePrepared();
+		
+			if (db.size() > 0) {
+				user = this.getUser(db);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ManagerException e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
 	/**
 	 * 根据传入的名称对用户安装用户账号，用户工号，用户真实名称进行组合
 	 * @param username

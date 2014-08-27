@@ -65,6 +65,15 @@ public class NewsCondition {
 	private String docType;
 	@RequestParam(defaultvalue="10")
 	private int count;
+ 
+	private boolean isArrangeDoc;
+	public boolean isArrangeDoc() {
+		return isArrangeDoc;
+	}
+
+	public void setArrangeDoc(boolean isArrangeDoc) {
+		this.isArrangeDoc = isArrangeDoc;
+	}
 
 	public int getSiteId() {
 		return siteId;

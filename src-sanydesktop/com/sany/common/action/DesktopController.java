@@ -6,12 +6,14 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.util.I18NUtil;
 import org.frameworkset.web.servlet.ModelMap;
 import org.frameworkset.web.token.TokenHelper;
 
+import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
 import com.frameworkset.platform.framework.Item;
@@ -59,12 +61,59 @@ public class DesktopController {
 	
 	public String index(String sany_menupath,String sany_selecturl,HttpServletRequest request,ModelMap model)
 	{
-		return _index(sany_menupath,sany_selecturl,request,model,false);
+		/**
+		 * 1 other
+		 * 2 other
+		 * 3 ISany
+		 * 4 WEBIsany
+		 * 5 common
+		 */
+		String loginstyle = AccessControl.getLoginStyle(request);
+		if(loginstyle != null)
+		{
+			if(loginstyle.equals("3"))
+				return _index(sany_menupath,sany_selecturl,request,model,0);
+			else if(loginstyle.equals("5"))
+				return _index(sany_menupath,sany_selecturl,request,model,2);
+				
+		}
+		return _index(sany_menupath,sany_selecturl,request,model,0);
 			
 	}
 	
+	public String indexcommon(String sany_menupath,String sany_selecturl,HttpServletRequest request,ModelMap model)
+	{
+		
+		/**
+		 * 1 other
+		 * 2 other
+		 * 3 ISany
+		 * 4 WEBIsany
+		 * 5 common
+		 */
+		String loginstyle = AccessControl.getLoginStyle(request);
+		if(loginstyle != null)
+		{
+			if(loginstyle.equals("3"))
+				return _index(sany_menupath,sany_selecturl,request,model,0);
+			else if(loginstyle.equals("5"))
+				return _index(sany_menupath,sany_selecturl,request,model,2);
+				
+		}
+		return _index(sany_menupath,sany_selecturl,request,model,2);
+			
+	}
 	
-	private String _index(String sany_menupath,String url,HttpServletRequest request,ModelMap model,boolean isweb)
+	/**
+	 * 
+	 * @param sany_menupath
+	 * @param url
+	 * @param request
+	 * @param model
+	 * @param style 0 index 1 isweb 2 common
+	 * @return
+	 */
+	private String _index(String sany_menupath,String url,HttpServletRequest request,ModelMap model,int style)
 	{
 		
 		MenuHelper menuHelper = MenuHelper.getMenuHelper(request);
@@ -96,8 +145,24 @@ public class DesktopController {
 		{
 			MenuItem menu = menuHelper.getFramework().getMenuByPath(sany_menupath);
 			
-			String framepath = isweb?new StringBuffer().append(contextpath).append("/sanydesktop/webframe.page").toString()
-					:new StringBuffer().append(contextpath).append("/sanydesktop/frame.page").toString();
+			String framepath = null;
+			if(style == 0)
+			{
+				framepath = new StringBuffer().append(contextpath).append("/sanydesktop/frame.page").toString();
+				
+			}
+			else if(style == 2)
+			{
+				framepath = new StringBuffer().append(contextpath).append("/sanydesktop/frame.page").toString();
+			}
+			else if(style == 1)
+			{
+				framepath = new StringBuffer().append(contextpath).append("/sanydesktop/webframe.page").toString();
+			}
+			else
+			{
+				framepath = new StringBuffer().append(contextpath).append("/sanydesktop/frame.page").toString();
+			}
 			
 			if(menu instanceof Module)
 			{
@@ -139,8 +204,9 @@ public class DesktopController {
 			logoimage = MenuHelper.getRealUrl(contextpath,temp);
 		model.addAttribute("logoimage", logoimage);
 		model.addAttribute("fromwebseal", AccessControl.fromWebseal(request));
-		model.addAttribute("isweb", isweb);
+		model.addAttribute("style", style);
 		model.addAttribute("selected", AccessControl.getAccessControl().getCurrentSystemID());
+		model.addAttribute("showboot", ConfigManager.getInstance().getConfigBooleanValue("destop.showboot", true));
 		String selectedmenuid = request.getParameter(MenuHelper.sanyselectedmodule);//查找选择的菜单项path
 		
 		if(selectedmenuid != null)
@@ -149,17 +215,27 @@ public class DesktopController {
 		}
 		else
 			model.addAttribute("selectedmenuid", "publicitem");
-		if(!isweb)
+		if(style == 0)
 		{
 			return "path:index";
+			
+		}
+		else if(style == 2)
+		{
+			return "path:indexcommon";
+		}
+		else if(style == 1)
+		{
+			return "path:webindex";
 		}
 		else
-			return "path:webindex";
+			return "path:index";
+		
 	}
 	public String webindex(String sany_menupath,String sany_selecturl,HttpServletRequest request,ModelMap model)
 	{
 //		System.out.println("---------------------------------------sany_selecturl:" + sany_selecturl);
-		return _index(sany_menupath,sany_selecturl,request,model,true);
+		return _index(sany_menupath,sany_selecturl,request,model,1);
 		
 			
 	}

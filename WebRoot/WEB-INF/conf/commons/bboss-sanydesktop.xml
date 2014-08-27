@@ -7,6 +7,7 @@
 	<property name="/sanydesktop/*.page"	
 	path:index="/sanydesktop/index.jsp"
 	path:webindex="/sanydesktop/webindex.jsp"
+	path:indexcommon="/sanydesktop/index_common.jsp"
 	path:frame="/sanydesktop/frame.jsp"
 	path:webframe="/sanydesktop/webframe.jsp"
 	path:login="redirect:/login.jsp"

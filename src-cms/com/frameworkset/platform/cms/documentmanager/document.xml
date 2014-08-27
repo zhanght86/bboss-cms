@@ -379,7 +379,10 @@
                  docwtime DESC,
                  publishtime DESC,
                  document_id DESC
-        ) p where rownum <=#[count]    
+        ) p where rownum <=#[count] 
+			#if ($isArrangeDoc)
+				and order_no>=0
+			#end    
 		]]>
 	</property>
 	

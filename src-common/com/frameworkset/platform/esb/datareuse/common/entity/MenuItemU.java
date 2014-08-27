@@ -1,5 +1,7 @@
 package com.frameworkset.platform.esb.datareuse.common.entity;
 
+import java.util.Map;
+
 /**
  * 
  * <p>Copyright: isany (c) 2010</p>
@@ -20,6 +22,14 @@ public class MenuItemU {
 	private String desktop_height;
 	private String option;
 	private boolean hasSon;
+	private Map<String,String> extendAttribute;
+
+	public Map<String, String> getExtendAttribute() {
+		return extendAttribute;
+	}
+	public void setExtendAttribute(Map<String, String> extendAttribute) {
+		this.extendAttribute = extendAttribute;
+	}
 	public String getId() {
 		return id;
 	}

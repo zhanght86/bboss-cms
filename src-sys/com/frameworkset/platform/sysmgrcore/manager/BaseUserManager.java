@@ -830,4 +830,10 @@ public class BaseUserManager extends EventHandle implements UserManager {
 		return 0;
 	}
 
+	@Override
+	public User getUserByWorknumberOrUsername(String userId) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

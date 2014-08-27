@@ -113,6 +113,7 @@ public class AccessControl implements AccessControlInf{
 	public static final String MACADDR_CACHE_KEY = "MACADDR_CACHE_KEY";
 	
 	public static final String MACHINENAME_CACHE_KEY = "MACHINENAME_CACHE_KEY";
+	public static final String LOGINSTYLE_CACHE_KEY = "LOGINSTYLE_CACHE_KEY";
 	
 	public static final String SESSIONID_CACHE_KEY = "SESSIONID_CACHE_KEY";
 	public static final String SERVER_IP_KEY = "SERVER_IP_KEY";
@@ -1124,6 +1125,19 @@ public class AccessControl implements AccessControlInf{
 		String default_module = ConfigManager.getInstance().getConfigValue("default_module", "module");
 		return default_module;
 	}
+	public static String getLoginStyle(HttpServletRequest request)
+	{
+		HttpSession session = request.getSession(false);
+		/**
+		 * 1 other
+		 * 2 other
+		 * 3 ISany
+		 * 4 WEBIsany
+		 * 5 common
+		 */
+		String loginstyle = session != null ?(String)session.getAttribute(AccessControl.LOGINSTYLE_CACHE_KEY):null;
+		return loginstyle;
+	}
 	private void innerlogon(UsernamePasswordCallbackHandler callbackHandler,
 			String userName,
 			boolean enablelog,boolean recordonlineuser) throws LoginException
@@ -1167,7 +1181,19 @@ public class AccessControl implements AccessControlInf{
 		session.setAttribute(MACADDR_CACHE_KEY, macaddr);
 		session.setAttribute(AccessControl.MACHINENAME_CACHE_KEY, machineName);
 		session.setAttribute(SESSIONID_CACHE_KEY,session.getId());
-
+		/**
+		 * 1 other
+		 * 2 other
+		 * 3 ISany
+		 * 4 WEBIsany
+		 * 5 common
+		 */
+		String loginPath = request.getParameter("loginPath");
+		if(StringUtil.isEmpty(loginPath))
+		{
+			loginPath = "5";
+		}
+		session.setAttribute(LOGINSTYLE_CACHE_KEY,loginPath);
 		StringBuffer ssoCookie = new StringBuffer();
 		StringBuffer credentialCookie = new StringBuffer();
 		boolean flag = false;
@@ -2517,6 +2543,24 @@ public class AccessControl implements AccessControlInf{
 		try {
 			UserManager um = SecurityDatabase.getUserManager();
 			User user = um.getUserById(usrID);
+			if (user == null)
+				return "";
+			return user.getUserName() + "";
+		} catch (SPIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ManagerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+
+	}
+	
+	public static String getUserAccounByWorknumberOrUsername(String worknumberOrUsername) {
+		try {
+			UserManager um = SecurityDatabase.getUserManager();
+			User user = um.getUserByWorknumberOrUsername(worknumberOrUsername);
 			if (user == null)
 				return "";
 			return user.getUserName() + "";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="Mms.return" name="mms.return" isExecutable="true">
+  <process id="Mms.return" name="物料退料流程" isExecutable="true">
     <documentation>物料退料流程(生产辅料)</documentation>
     <startEvent id="startevent1" name="Start"></startEvent>
     <userTask id="usertask1" name="申请退料" activiti:candidateUsers="${usertask1_users}"></userTask>
@@ -26,10 +26,8 @@
     <sequenceFlow id="flow8" name="驳回" sourceRef="usertask4" targetRef="usertask1">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==false}]]></conditionExpression>
     </sequenceFlow>
-    <serviceTask id="servicetask1" name="SAP冲销" activiti:delegateExpression="${demo_service}"></serviceTask>
-    <sequenceFlow id="flow9" sourceRef="usertask4" targetRef="servicetask1"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow10" sourceRef="servicetask1" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow9" sourceRef="usertask4" targetRef="endevent1"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_Mms.return">
     <bpmndi:BPMNPlane bpmnElement="Mms.return" id="BPMNPlane_Mms.return">
@@ -48,11 +46,8 @@
       <bpmndi:BPMNShape bpmnElement="usertask4" id="BPMNShape_usertask4">
         <omgdc:Bounds height="55.0" width="105.0" x="650.0" y="190.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="800.0" y="190.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="950.0" y="200.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="810.0" y="200.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="125.0" y="217.0"></omgdi:waypoint>
@@ -101,11 +96,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
         <omgdi:waypoint x="755.0" y="217.0"></omgdi:waypoint>
-        <omgdi:waypoint x="800.0" y="217.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
-        <omgdi:waypoint x="905.0" y="217.0"></omgdi:waypoint>
-        <omgdi:waypoint x="950.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="810.0" y="217.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

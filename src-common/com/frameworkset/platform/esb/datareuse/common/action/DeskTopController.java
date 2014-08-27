@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.frameworkset.util.annotations.RequestParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -189,6 +190,7 @@ public class DeskTopController {
 				//判断表里面是否有自定义窗口大小数据，如果有就取该数据，如果无，就使用默认的数据
 				mb.setDesktop_width((deskTopMenuBean.getWidth()!= null&&!deskTopMenuBean.getWidth().equals(""))? deskTopMenuBean.getWidth():item.getDesktop_width());
 				mb.setDesktop_height((deskTopMenuBean.getHeight() != null&&!deskTopMenuBean.getHeight().equals(""))? deskTopMenuBean.getHeight():item.getDesktop_height());
+				mb.setExtendAttribute(item.getExtendAttributes());
 				listreturn.add(mb);
 			}
 		}

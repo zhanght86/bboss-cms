@@ -568,6 +568,14 @@ public interface UserManager extends Provider, Serializable {
 	public User getUserById(String userId)  throws ManagerException;
 	
 	/**
+	 * 根据worknumber得到user
+	 * @param userId
+	 * @return
+	 * @throws ManagerException
+	 */
+	public User getUserByWorknumberOrUsername(String userId)  throws ManagerException;
+	
+	/**
 	 * 根据userName得到user
 	 * @param userName
 	 * @return

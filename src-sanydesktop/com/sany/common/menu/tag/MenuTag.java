@@ -162,7 +162,9 @@ import com.frameworkset.platform.security.AccessControl;
  */
 public class MenuTag extends BaseTag {
 	private static String header = "<div id=\"menubar\" class=\"ddsmoothmenu \"><ul>"; 
+	private static String header_common = "<div id=\"menubar\">  <ul id=\"menus\" class=\"menus\">";
 	private static String rooter = "</ul><br style=\"clear: left\" /></div>";
+	private static String rooter_common = "</ul></div>";
 	public static final String personcenter = "个人中心";
 	
 	
@@ -170,7 +172,20 @@ public class MenuTag extends BaseTag {
 	private boolean enableindex = true;
 	private int level = 3;
 	private String web = "false";
+	private String style="default";// default common
 	
+	public String getStyle() {
+		return style;
+	}
+
+
+
+	public void setStyle(String style) {
+		this.style = style;
+	}
+
+
+
 	@Override
 	public int doStartTag() throws JspException {	
 		int ret = super.doStartTag();
@@ -180,7 +195,10 @@ public class MenuTag extends BaseTag {
 		String personcenter = Framework.getInstance(control.getCurrentSystemID()).getMessage("sany.pdp.module.personcenter", RequestContextUtils.getRequestContextLocal(request));
 		StringBuffer datas = new StringBuffer();
 		String selectedmenuid = request.getParameter(MenuHelper.sanyselectedmodule);//查找选择的菜单项path
-		datas.append(header);
+		if(this.style.equals("default"))
+			datas.append(header);
+		else
+			datas.append(header_common);
 
 		
 		
@@ -335,57 +353,69 @@ public class MenuTag extends BaseTag {
 					 .append("</a>");
 				}
 			}
-			datas.append("<ul >");  //class=\"second\"
-			
-			ItemQueue subitems = module.getItems() != null ?module.getItems():null;
-			for(int j = 0; subitems != null && j < subitems.size(); j ++)
+			boolean hasson = (module.getItems() != null && module.getItems().size() > 0)||(module.getSubModules() != null && module.getSubModules().size() > 0) ;
+			if(hasson)
 			{
-				Item subitem = subitems.getItem(j);
-				
-				
-				String target = subitem.getTarget() == null ?"mainFrame":subitem.getTarget();	
-				
-				
-				
-				
-				if(target.equals("mainFrame"))
+				if(this.style.equals("default"))
 				{
-
-					String mname = subitem.getName(request);
-					String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
-					datas.append("<li><a id=\"anchor_").append(subitem.getId()).append("\" href=\"#\" onclick=\"navto_sany_MenuItem('").append(tokenurl)
-				.append("','").append(module.getId()).append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\"><span></span>")
-						.append("<div>").append(mname).append("</div>")
-						.append("</a></li>");
+					datas.append("<ul >");  //class=\"second\"
 				}
 				else
 				{
-					datas.append("<li><a id=\"anchor_").append(subitem.getId())
-					.append("\" href=\"#\" onclick=\"navto_sany_MenuItem_window('").append(tokenurl)
-					.append("','")
-					.append(subitem.getName(request)).append("','")
-					.append(module.getId()).append("','")
-					.append(subitem.getPath()).append("','").append(contextpath)
-					 .append("','")
-					.append(target).append("')\"><span></span>")
-					.append("<div>").append(subitem.getName(request)).append("</div>")
-					.append("</a></li>");
+					datas.append("<ul class=\"second\">");  //class=\"second\"
 				}
 				
-			}
-			ModuleQueue submodules = module.getSubModules() != null?  module.getSubModules():null;
-			for(int j = 0; submodules != null && j < submodules.size(); j ++)
-			{
-				Module submodule = submodules.getModule(j);
-
-				String target = submodule.getTarget() == null ?"mainFrame":submodule.getTarget();
+				ItemQueue subitems = module.getItems() != null ?module.getItems():null;
+				for(int j = 0; subitems != null && j < subitems.size(); j ++)
+				{
+					Item subitem = subitems.getItem(j);
+					
+					
+					String target = subitem.getTarget() == null ?"mainFrame":subitem.getTarget();	
+					
+					
+					
+					
+					if(target.equals("mainFrame"))
+					{
+	
+						String mname = subitem.getName(request);
+						String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
+						datas.append("<li><a id=\"anchor_").append(subitem.getId()).append("\" href=\"#\" onclick=\"navto_sany_MenuItem('").append(tokenurl)
+					.append("','").append(module.getId()).append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\"><span></span>")
+							.append("<div>").append(mname).append("</div>")
+							.append("</a></li>");
+					}
+					else
+					{
+						datas.append("<li><a id=\"anchor_").append(subitem.getId())
+						.append("\" href=\"#\" onclick=\"navto_sany_MenuItem_window('").append(tokenurl)
+						.append("','")
+						.append(subitem.getName(request)).append("','")
+						.append(module.getId()).append("','")
+						.append(subitem.getPath()).append("','").append(contextpath)
+						 .append("','")
+						.append(target).append("')\"><span></span>")
+						.append("<div>").append(subitem.getName(request)).append("</div>")
+						.append("</a></li>");
+					}
+					
+				}
+				ModuleQueue submodules = module.getSubModules() != null?  module.getSubModules():null;
+				for(int j = 0; submodules != null && j < submodules.size(); j ++)
+				{
+					Module submodule = submodules.getModule(j);
+	
+					String target = submodule.getTarget() == null ?"mainFrame":submodule.getTarget();
+					
+					renderSubMenus(submodule, datas, contextpath, target,control,module.getId(),framepath,2,tokenurl);
+	
+				}
 				
-				renderSubMenus(submodule, datas, contextpath, target,control,module.getId(),framepath,2,tokenurl);
-
+				
+				datas.append("</ul>");
 			}
-			
-			
-			datas.append("</ul></li>");
+			datas.append("</li>");
 			
 		}
 		
@@ -457,7 +487,10 @@ public class MenuTag extends BaseTag {
 		}
 		  
 		datas.append(rooter);
-		
+		if(this.style.equals("default"))
+			datas.append(rooter);
+		else
+			datas.append(rooter_common);
 		try {
 //			System.out.println(datas.toString());
 			this.out.write(datas.toString());
@@ -480,6 +513,7 @@ public class MenuTag extends BaseTag {
 		if (!module.isUsed()) {
 			return ;
 		}			
+	
 		if(!module.isShowleftmenu())
 		{
 			
@@ -560,49 +594,55 @@ public class MenuTag extends BaseTag {
 		}
 		if(current_level < level)
 		{
-			datas.append("<ul>"); // class=\"third\"
-			
-			current_level ++;
-			ModuleQueue submodules = module.getSubModules() != null?  module.getSubModules():null;
-			for(int j = 0; submodules != null && j < submodules.size(); j ++)
+			boolean hasson = (module.getItems() != null && module.getItems().size() > 0)||(module.getSubModules() != null && module.getSubModules().size() > 0) ;
+			if(hasson)
 			{
-				
-				Module submodule = submodules.getModule(j);
-				String target_ = submodule.getTarget() == null?"mainFrame":submodule.getTarget(); 
-				renderSubMenus(submodule,datas,contextpath,target_,control,selectedID,framepath,current_level,tokenurl);
-
-			}
-			ItemQueue subitems = module.getItems() != null ?module.getItems():null;
-			for(int j = 0; subitems != null && j < subitems.size(); j ++)
-			{
-				Item subitem = subitems.getItem(j);
-				String area = subitem.getArea();
-				
-
-				String target_ = subitem.getTarget() == null?"mainFrame":subitem.getTarget(); 
-				if(target.equals("mainFrame"))
-				{
-					String mname = subitem.getName(request);
-					String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
-					datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
-				.append("','").append(selectedID).append("','").append(url).append("','").append(target_).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">")
-						.append(mname)
-						.append("</a></li>");
-				}
+				if(this.style.equals("default"))
+					datas.append("<ul>"); // class=\"third\"
 				else
+					datas.append("<ul class=\"third\">"); // class=\"third\"
+				current_level ++;
+				ModuleQueue submodules = module.getSubModules() != null?  module.getSubModules():null;
+				for(int j = 0; submodules != null && j < submodules.size(); j ++)
 				{
-					datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId())
-					.append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
-				.append("','")
-					.append(subitem.getName(request)).append("','")
-					.append(selectedID).append("','").append(subitem.getPath()).append("','").append(contextpath)
-					 .append("','").append(target_).append("')\">")
-					.append(subitem.getName(request))
-					.append("</a></li>");
+					
+					Module submodule = submodules.getModule(j);
+					String target_ = submodule.getTarget() == null?"mainFrame":submodule.getTarget(); 
+					renderSubMenus(submodule,datas,contextpath,target_,control,selectedID,framepath,current_level,tokenurl);
+	
 				}
-				
+				ItemQueue subitems = module.getItems() != null ?module.getItems():null;
+				for(int j = 0; subitems != null && j < subitems.size(); j ++)
+				{
+					Item subitem = subitems.getItem(j);
+					String area = subitem.getArea();
+					
+	
+					String target_ = subitem.getTarget() == null?"mainFrame":subitem.getTarget(); 
+					if(target.equals("mainFrame"))
+					{
+						String mname = subitem.getName(request);
+						String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
+						datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+					.append("','").append(selectedID).append("','").append(url).append("','").append(target_).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">")
+							.append(mname)
+							.append("</a></li>");
+					}
+					else
+					{
+						datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId())
+						.append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
+					.append("','")
+						.append(subitem.getName(request)).append("','")
+						.append(selectedID).append("','").append(subitem.getPath()).append("','").append(contextpath)
+						 .append("','").append(target_).append("')\">")
+						.append(subitem.getName(request))
+						.append("</a></li>");
+					}
+					
+				}
+				datas.append("</ul>");
 			}
-			datas.append("</ul>");
 		}
 		
 		datas.append("</li>");
@@ -622,6 +662,7 @@ public class MenuTag extends BaseTag {
 		super.doFinally();
 		this.level = 3;
 		this.web = "false";
+		this.style = "default";
 		enableindex = true;
 	}
 
