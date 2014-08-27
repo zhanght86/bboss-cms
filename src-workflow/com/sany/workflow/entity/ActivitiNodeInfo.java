@@ -29,6 +29,16 @@ public class ActivitiNodeInfo {
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
 
 	private String DURATION_NODE;// 处理工时
+	
+	private String node_describe;// 节点描述
+
+	public String getNode_describe() {
+		return node_describe;
+	}
+
+	public void setNode_describe(String node_describe) {
+		this.node_describe = node_describe;
+	}
 
 	public String getDURATION_NODE() {
 		return DURATION_NODE;

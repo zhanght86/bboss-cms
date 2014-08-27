@@ -22,6 +22,7 @@
 	<classpathentry kind="src" path="src-ldap"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="src-sap"/>
+	<classpathentry kind="src" path="src_workflow-business"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activation-1.1.jar"/>

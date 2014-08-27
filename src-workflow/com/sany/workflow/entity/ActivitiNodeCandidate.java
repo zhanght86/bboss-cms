@@ -38,12 +38,12 @@ public class ActivitiNodeCandidate {
 
 	private String candidate_roles_name;
 
-	private int is_valid;
+	private int is_valid;// 是否有效 0否1是
 
-	private int is_edit_candidate;
+	private int is_edit_candidate;// 是否能修改本节点 0否1是
 
 	private String node_key;
-	
+
 	private String node_type;
 
 	private String node_name;
@@ -60,11 +60,41 @@ public class ActivitiNodeCandidate {
 
 	private String emailtempletitle;// 邮件模板名称
 
-	private String duration_node;// 节点处理工时
+	private double duration_node;// 节点处理工时
 
 	private int noticenum;// 提醒次数
 
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
+
+	private int is_auto_candidate;// 是否是自动审批节点 0否1是
+
+	private int is_recall_candidate;// 本节点是否能撤回 0否1是
+
+	private int is_editafter_candidate;// 是否能修改后续节点 0否1是
+
+	public int getIs_auto_candidate() {
+		return is_auto_candidate;
+	}
+
+	public void setIs_auto_candidate(int is_auto_candidate) {
+		this.is_auto_candidate = is_auto_candidate;
+	}
+
+	public int getIs_recall_candidate() {
+		return is_recall_candidate;
+	}
+
+	public void setIs_recall_candidate(int is_recall_candidate) {
+		this.is_recall_candidate = is_recall_candidate;
+	}
+
+	public int getIs_editafter_candidate() {
+		return is_editafter_candidate;
+	}
+
+	public void setIs_editafter_candidate(int is_editafter_candidate) {
+		this.is_editafter_candidate = is_editafter_candidate;
+	}
 
 	public String getNode_type() {
 		return node_type;
@@ -90,11 +120,11 @@ public class ActivitiNodeCandidate {
 		this.noticenum = noticenum;
 	}
 
-	public String getDuration_node() {
+	public double getDuration_node() {
 		return duration_node;
 	}
 
-	public void setDuration_node(String duration_node) {
+	public void setDuration_node(double duration_node) {
 		this.duration_node = duration_node;
 	}
 

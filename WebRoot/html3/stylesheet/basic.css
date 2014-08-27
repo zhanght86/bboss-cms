@@ -1,0 +1,23 @@
+@charset "utf-8";
+/*basic*/
+body{font-size:12px;line-height:24px;margin:0px; padding:0px;color:#232323; background-color:#FFF;font-family:"Microsoft YaHei";}
+/*font*/
+p,img,ul,li,form,table,h6,h5,h4,h3,h2,h1{border:none; margin:0px; padding:0px; list-style:none; font-family:"Microsoft YaHei";}
+a{ text-decoration:none; color:#0033CC;}
+a:hover {text-decoration:underline; color:#0036ff;}
+a:visited{color:#0033CC;}
+p{padding:5px 0px; text-indent:2em;}
+form{font-size:13px;}
+ol li{list-style-type: decimal;}
+hr{color:#eee;}
+h1,h2,h3,h4,h5,h6{line-height:1.8em;font-family:"Microsoft YaHei";}
+h1{font-size:30px;text-align:center;line-height:2.8em;}
+h2{font-size:28px;}
+h3{font-size:24px;}
+h4{font-size:20px;}
+h5{font-size:18px;}
+h6{font-size:16px;}
+/*main*/
+#wrap{min-width:985px;}
+.Zclear {clear:both;line-height:1px;visibility:hidden;height: 1px;}
+.clearfix {display: block;}

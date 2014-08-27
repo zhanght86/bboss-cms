@@ -310,10 +310,19 @@ public interface ActivitiConfigService {
 	 * @return
 	 * 2014年6月23日
 	 */
-	/**
+	public Map queryMessageTempleById (String processKey);
+	
+	/**  扩展表中获取节点信息
 	 * @param processKey
 	 * @return
-	 * 2014年6月23日
+	 * 2014年8月23日
 	 */
-	public Map queryMessageTempleById (String processKey);
+	public List<ActivitiNodeInfo> queryAllActivitiNodes(String processKey);
+	
+	/**  扩展表中修改节点信息
+	 * @param processKey
+	 * @return
+	 * 2014年8月23日
+	 */
+	public void updateNodeInfo(ActivitiNodeInfo nodeInfo);
 }

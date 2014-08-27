@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 获取用户特定状态下的任务待办数 -->
+	<property name="getTaskIdByBusinessKey">
+		<![CDATA[ 
+      		select TASK.ID_ 
+			from act_ru_execution exec 
+			left join act_ru_task task 
+			on exec.PROC_INST_ID_ = task.PROC_INST_ID_ 
+         	where EXEC.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
+	<!-- 工作流管理中查看明细列表  -->
+	<property name="selectTaskHistorById_wf">
+		<![CDATA[
+			SELECT *
+			       
+			  FROM ACT_HI_TASKINST A 
+			  
+			 WHERE A.END_TIME_ IS NOT NULL
+			  
+			 AND A.PROC_INST_ID_ = ?
+			
+			ORDER BY A.START_TIME_ ,A.END_TIME_
+		]]>
+	</property>
+
+	<!-- 获取用户组织层级 -->
+	<property name="getUserLevel">
+        <![CDATA[
+			 SELECT O.ORG_TREE_LEVEL
+				  FROM TD_SM_USER U, TD_SM_ORGUSER OU, TD_SM_ORGANIZATION O
+				 WHERE U.USER_ID = OU.USER_ID
+				   AND OU.ORG_ID = O.ORG_ID
+				   AND U.USER_NAME = ?
+	        ]]>
+    </property>
+    
+    <!-- 获取流程节点信息 -->
+	<property name="getWFNodeInfoList">
+        <![CDATA[
+			SELECT N.NODE_NAME AS ACTNAME,
+			       N.NODE_KEY AS ACTID,
+			       N.NODE_DESCRIBE AS NODEDESCRIBE,
+			       T.CANDIDATE_USERS_ID AS CANDIDATENAME,
+			       T.CANDIDATE_USERS_NAME AS REALNAME,
+			       T.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME,
+			       T.BUSINESS_ID AS ORGID,
+			       T.IS_VALID AS ISVALID,
+			       T.IS_EDIT_CANDIDATE AS CANEDIT,
+			       T.IS_AUTO_CANDIDATE AS AUTOAPPROVE,
+			       T.IS_RECALL_CANDIDATE AS CANRECALL,
+			       T.IS_EDITAFTER_CANDIDATE AS EDITAFTER
+			
+			  FROM TD_WF_ACTIVITI_NODE_INFO N
+			  LEFT JOIN TD_WF_ACTIVITI_NODE_CANDIDATE T ON T.NODE_ID = N.ID
+			                                              
+			                                           AND T.BUSINESS_TYPE = #[businessType]
+			
+			 WHERE N.NODE_TYPE = 'userTask'
+			   AND N.PROCESS_KEY = #[processKey]
+			   
+			   #if($userLevel)
+			   	 AND T.BUSINESS_ID in 
+			   	 	(#foreach($org in $userLevel)  
+		             	#if($velocityCount == 0)  
+		                  	#[userLevel[$velocityCount]]  
+		             	#else  
+		                 	,#[userLevel[$velocityCount]]  
+		             	#end  
+       		 		#end)
+			   #end
+			   
+			 ORDER BY N.ORDER_NUM
+	        ]]>
+    </property>
+    
+    <!-- 获取节点信息（开启流程实例后）-->
+	<property name="getAllActivitiNodesInfo_wf">
+		<![CDATA[
+			SELECT N.NODE_NAME              AS ACTNAME,
+			       N.NODE_KEY               AS ACTID,
+			       N.NODE_DESCRIBE          AS NODEDESCRIBE,
+			       A.DURATION_NODE / 1000 / 60 / 60         AS NODEWORKTIME,
+			       A.IS_EDIT_CANDIDATE      AS CANEDIT,
+			       A.IS_AUTO_CANDIDATE      AS AUTOAPPROVE,
+			       A.IS_RECALL_CANDIDATE    AS CANRECALL,
+			       A.IS_EDITAFTER_CANDIDATE AS EDITAFTER
+			  FROM TD_WF_ACTIVITI_NODE_INFO N
+			  LEFT JOIN TD_WF_NODE_WORKTIME A ON N.PROCESS_KEY = A.PROCESS_KEY
+			                                 AND A.PROCESS_ID = ?             
+			                                 AND N.NODE_KEY = A.NODE_KEY
+			 WHERE N.NODE_TYPE = 'userTask'
+			   AND N.PROCESS_KEY = ?
+			 ORDER BY N.ORDER_NUM
+		]]>
+	</property>
+	
+	<!-- 根据流程实例ID获取实例参数变量值 gw_tanx -->
+	<property name="getVariableListById_wf">
+		<![CDATA[
+			 SELECT B.ID_,
+		        B.REV_,
+		        B.TYPE_,
+		        B.NAME_,
+		        B.EXECUTION_ID_,
+		        B.PROC_INST_ID_,
+		        B.TASK_ID_,
+		        B.BYTEARRAY_ID_,
+		        B.DOUBLE_,
+		        B.LONG_,
+		        B.TEXT_,
+		        B.TEXT2_
+		   FROM ACT_RU_VARIABLE B
+		  WHERE B.PROC_INST_ID_ = ?
+		  ORDER BY B.NAME_
+		]]>
+	</property>
+	
+	<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
+	<property name="getNodeCandidates_wf">
+		<![CDATA[
+			SELECT *
+			  FROM ACT_RU_IDENTITYLINK I 
+			 WHERE 1=1
+			   and I.TYPE_ = 'candidate'
+			   and I.TASK_ID_=?
+			   and I.USER_ID_=?
+		]]>
+	</property>
+	
+	<!-- 获取用户的委托关系，权限判断  gw_tanx -->
+	<property name="getEntrustRelation_wf">
+		<![CDATA[
+			SELECT A.ENTRUST_USER, A.START_DATE, A.END_DATE, B.PROCDEF_ID, A.CREATE_USER
+			  FROM TD_WF_ENTRUST A
+			  LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID = B.ENTRUST_ID
+			 WHERE A.STS = '有效'
+			   AND A.ENTRUST_USER = ?
+			   AND (B.PROCDEF_ID = ? OR B.PROCDEF_ID IS NULL)
+			   AND A.START_DATE <= ?
+			   AND A.END_DATE >= ?
+		]]>
+	</property>
+	
+</properties>

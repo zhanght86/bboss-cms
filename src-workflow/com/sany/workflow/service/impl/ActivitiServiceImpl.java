@@ -4143,17 +4143,17 @@ public class ActivitiServiceImpl implements ActivitiService,
 		}
 	}
 
-	public NodeInfoEntity getNodeInfoEntity(List<Map<String, String>> nodes,
+	public NodeInfoEntity getNodeInfoEntity(List<Map<String, Object>> nodes,
 			String taskKey) throws Exception {
 		if (nodes == null)
 			return null;
 		NodeInfoEntity nodeInfoEntity = null;
-		for (Map<String, String> node : nodes) {
+		for (Map<String, Object> node : nodes) {
 			if (node.get("NODE_KEY").equals(taskKey)) {
 				nodeInfoEntity = new NodeInfoEntity();
 				if (StringUtil.isNotEmpty(node.get("DURATION_NODE"))) {
 					double duration_node = Double.parseDouble(node
-							.get("DURATION_NODE"));
+							.get("DURATION_NODE")+"");
 					nodeInfoEntity.setDURATION_NODE((long)(duration_node*60*60*1000));
 				} else {
 					nodeInfoEntity.setDURATION_NODE(0);
@@ -4199,10 +4199,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	
 	@Override
 	public void addNodeWorktime(String processKey, String processIntsId,
-			List<Map<String, String>> nodeWorktimeList) throws Exception {
+			List<Map<String, Object>> nodeWorktimeList) throws Exception {
 		TransactionManager tm = new TransactionManager();
 
-		List<Map<String, String>> beansList =   new ArrayList<Map<String, String>>();	
+		List<Map<String, Object>> beansList =   new ArrayList<Map<String, Object>>();	
 		
 		try {
 			tm.begin();
@@ -4210,14 +4210,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 			if (nodeWorktimeList.size() > 0) {
 				for (int i = 0; i < nodeWorktimeList.size(); i++) {
 					
-					Map<String,String> worktimeMap = nodeWorktimeList.get(i);
+					Map<String,Object> worktimeMap = nodeWorktimeList.get(i);
 					
 //					worktimeMap.put("PROCESS_KEY", processKey);
 					worktimeMap.put("PROCESS_ID", processIntsId);
 					worktimeMap.put("NODE_KEY",worktimeMap.get("NODE_KEY"));
 					
 					if (StringUtil.isNotEmpty(worktimeMap.get("DURATION_NODE"))) {
-						double duration_node = Double.parseDouble(worktimeMap.get("DURATION_NODE"));
+						double duration_node = Double.parseDouble(worktimeMap.get("DURATION_NODE")+"");
 						worktimeMap.put("DURATION_NODE", duration_node*60*60*1000+ "");
 					}else {
 						worktimeMap.put("DURATION_NODE", "0");
@@ -4355,7 +4355,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 流程引擎的变量参数集合
 			Map<String, Object> map = new HashMap<String, Object>();
 			// 节点工时提醒次数集合
-			List<Map<String, String>> worktimeList = new ArrayList<Map<String, String>>();
+			List<Map<String, Object>> worktimeList = new ArrayList<Map<String, Object>>();
 
 			if (activitiNodeCandidateList != null
 					&& activitiNodeCandidateList.size() > 0) {
@@ -4397,14 +4397,35 @@ public class ActivitiServiceImpl implements ActivitiService,
 					if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
 							.getNode_key())) {
 
-						Map<String, String> worktimeMap = new HashMap<String, String>();
+						Map<String, Object> worktimeMap = new HashMap<String, Object>();
 						worktimeMap.put("PROCESS_KEY", processKey);
 						worktimeMap.put("NODE_KEY",
 								(String) activitiNodeCandidateList.get(i)
 										.getNode_key());
 						worktimeMap.put("DURATION_NODE",
-								(String) activitiNodeCandidateList.get(i)
+								(double) activitiNodeCandidateList.get(i)
 										.getDuration_node());
+						
+						worktimeMap.put("IS_VALID",
+								activitiNodeCandidateList.get(i)
+										.getIs_valid());
+						
+						worktimeMap.put("IS_EDIT_CANDIDATE",
+								activitiNodeCandidateList.get(i)
+										.getIs_valid());
+						
+						worktimeMap.put("IS_AUTO_CANDIDATE",
+								activitiNodeCandidateList.get(i)
+										.getIs_auto_candidate());
+						
+						worktimeMap.put("IS_RECALL_CANDIDATE",
+								activitiNodeCandidateList.get(i)
+										.getIs_recall_candidate());
+						
+						worktimeMap.put("IS_EDITAFTER_CANDIDATE",
+								activitiNodeCandidateList.get(i)
+										.getIs_editafter_candidate());
+						
 						worktimeList.add(worktimeMap);
 					}
 

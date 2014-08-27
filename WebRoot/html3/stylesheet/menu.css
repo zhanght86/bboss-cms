@@ -1,0 +1,26 @@
+#menubar {background-color:#2a77d4 ;height: 38px; font-family:"Microsoft YaHei",Arial, Helvetica, sans-serif; clear:both;}
+#menubar ul.menus li {display: list-item;float: left;line-height:38px;height:38px;border-left:1px solid #488fe7; border-right:1px solid #205299;}
+#menubar ul.menus li a {width:105px;text-align:center;display:block;font-size:15px;color:#fff;line-height:38px;}
+#menubar ul.menus li a:hover{display: block;color: #fff; background-color:#076beb; font-weight:bold;}
+#menubar  ul.menus .select {font-weight: bold;background-color:#1264c6;}
+#menubar  ul.menus .select a{ color:#fff;}
+#menubar ul.menus li a.fcurrent {font-weight: bold;color: #fff;background-color:#076beb;}
+#menubar ul.second,#menubar ul.third {POSITION: absolute;left:2px; display: block; VISIBILITY: hidden;top:2px;z-index:999;}
+#menubar ul.third {border-top:1px solid #ccc;line-height:20px;}
+#menubar ul.menus li a.current {background:url(../images/ndot.gif) 95% 13px no-repeat;display: block;color: #fff; background-color:#076beb;text-decoration:none;}
+#menubar  ul.menus .select a.current {color:#fff;}
+#menubar ul.second li a.subtitle:hover{background:url(../images/ndot.gif) 95% 13px no-repeat;display: block;color: #FFFFFF;}
+#menubar ul.menus li a.current span{background:url(../images/mdot2.jpg) center center no-repeat;}
+#menubar ul.second li a div{line-height:22px;height:auto !important;height:22px; min-height:22px;cursor:pointer;font-size:14px;}
+#menubar ul.second li {float:none;line-height: 22px;display:inline;border:none;}
+#menubar ul.third li {float:none; line-height: 22px;display:inline;border:none;}
+#menubar ul.second li a,#menubar ul.third li a{padding:5px 8px 8px 10px;width:120px; line-height:22px;font-size:14px;font-weight:normal;text-align:left;display: block;color:#444;background-color:#f0f0f0;border:1px solid #ccc; border-top:1px solid #fefefe;}
+#menubar ul.third li a{padding-bottom:5px; }
+#menubar ul .select ul.second li a,#menubar ul .select ul.third li a{ color:#082B57;}
+#menubar ul.second li a:hover,#menubar ul.third li a:hover{color: #fff; display: block;font-weight:normal;}
+#menubar ul .select ul.second li a:hover,#menubar ul .select ul.third li a:hover{ color:#fff;background:#076beb; }
+#menubar ul.third li a span{margin:0;float:left;display:block;width:12px;height:22px;background: url(../images/mdot1.jpg) 4px 11px no-repeat;}
+#menubar ul.third li a:hover span{ background:url(../images/mdot2.jpg) 4px 11px no-repeat;}
+#menubar ul.second li a.subtitle {display: block;background:#f0f0f0 url(../images/ndot1.gif) 95% 13px no-repeat;}
+
+

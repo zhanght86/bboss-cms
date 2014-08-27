@@ -408,7 +408,7 @@ public class WorkflowController implements WorkflowService {
 					String isMulti = (String) map.get("isMulti");
 					node.setIsMulti(isMulti);
 
-					String durationNode = (String) map.get("durationNode");
+					double durationNode = Double.parseDouble(map.get("durationNode")+"");
 					node.setDuration_node(durationNode);
 
 					activitiNodeCandidateList.add(node);

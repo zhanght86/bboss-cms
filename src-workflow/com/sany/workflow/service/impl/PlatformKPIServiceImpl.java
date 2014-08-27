@@ -20,13 +20,13 @@ import com.sany.workflow.service.ActivitiService;
 public class PlatformKPIServiceImpl implements KPIService {
 	private WorkTimeUtil workTimeUtil;
 	private ActivitiService activitiService;
-	private static ThreadLocal<List<Map<String, String>>> worktimelist = new ThreadLocal<List<Map<String, String>>>();
+	private static ThreadLocal<List<Map<String, Object>>> worktimelist = new ThreadLocal<List<Map<String, Object>>>();
 	private static Logger log = Logger.getLogger(PlatformKPIServiceImpl.class);
 	public PlatformKPIServiceImpl() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void setWorktimelist(List<Map<String, String>> worktimeList)
+	public static void setWorktimelist(List<Map<String, Object>> worktimeList)
 	{
 		worktimelist.set(worktimeList);
 	}

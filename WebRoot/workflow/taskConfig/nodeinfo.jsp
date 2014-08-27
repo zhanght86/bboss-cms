@@ -25,9 +25,7 @@
 						<th>节点名称</th>
 						<th>待办人</th>
 						<th>待办组</th>
-						<!--<th>通知模板</th>-->
 						<th>处理工时/小时</th>
-						<!-- <th>提醒次数</th>-->
 						<th>操作</th>
 					</pg:header>
 					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
@@ -55,76 +53,66 @@
 								value="<pg:cell colName='candidate_groups_name'></pg:cell>"
 								 class="input1 w200" /><a
 								href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a></td>
-							<!-- 
-							<td>
-								<input type="hidden"
-									id="<pg:cell colName='messagetempleid'/>_messagetempleid" name="messagetempleid"
-									value="<pg:cell colName='messagetempleid'></pg:cell>" />
-									
-								<input type="hidden"
-									id="<pg:cell colName='emailtempleid'/>_emailtempleid" name="emailtempleid"
-									value="<pg:cell colName='emailtempleid'></pg:cell>" />
-									
-								<input type="text" id="<pg:cell colName='messagetempleid'/>_messagetitle" name="messagetitle" 
-									value="<pg:cell colName="messagetempletitle"/>" class="input1 w150"/>
-								<a href="javascript:openMessTemple('<pg:cell colName="messagetempleid"/>','0')">短信</a>
-								
-								<br/>
-								<input type="text" id="<pg:cell colName='emailtempleid'/>_eamiltitle" name="eamiltitle" 
-									value="<pg:cell colName="emailtempletitle"/>" class="input1 w150"/>
-								<a href="javascript:openMessTemple('<pg:cell colName="emailtempleid"/>','1')">邮件</a>
-							</td>
-							 
-							<td >
-								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" 
-								style="width: 40px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
-								<select id="simpleDate" name="simpleDate">
-									<pg:notempty colName="simpleDate">
-										<option value="D" <pg:equal colName="simpleDate" value="D">selected</pg:equal>>D(日)</option>
-										<option value="H" <pg:equal colName="simpleDate" value="H">selected</pg:equal>>H(时)</option>
-										<option value="m" <pg:equal colName="simpleDate" value="m">selected</pg:equal>>m(分)</option>
-									</pg:notempty>
-									<pg:empty colName="simpleDate">
-										<option value="D" >D(日)</option>
-										<option value="H" selected>H(时)</option>
-										<option value="m" >m(分)</option>
-									</pg:empty>
-								</select>
-							</td>
-							-->
 							<td >
 								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
 							</td>
-							<!-- 
-							<td >
-								<input type="text" name="noticenum" style="width: 50px;" value="<pg:notequal colName="noticenum" value="0"><pg:cell colName="noticenum"/></pg:notequal>" onpaste="javascript: return false;"
-									onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" 
-									onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
-							</td>
-							 -->
 							<td>
 								可修改
 								<select name="is_edit_candidate">
 									<pg:equal colName="is_edit_candidate" value="0">
-										<option value="0" selected>是</option>
-										<option value="1">否</option>
+										<option value="0" selected>否</option>
+										<option value="1">是</option>
 									</pg:equal>
 									<pg:equal colName="is_edit_candidate" value="1">
-										<option value="0">是</option>
-										<option value="1" selected>否</option>
+										<option value="0">否</option>
+										<option value="1" selected>是</option>
 									</pg:equal>
-								</select>&nbsp;&nbsp; &nbsp;       |&nbsp;&nbsp;&nbsp;      
+								</select>&nbsp; | 
 								有效
 								<select name="is_valid">
 									<pg:equal colName="is_valid" value="0">
-										<option value="0" selected>是</option>
-										<option value="1">否</option>
+										<option value="0" selected>否</option>
+										<option value="1">是</option>
 									</pg:equal>
 									<pg:equal colName="is_valid" value="1">
-										<option value="0">是</option>
-										<option value="1" selected>否</option>
+										<option value="0">否</option>
+										<option value="1" selected>是</option>
+									</pg:equal>
+								</select>&nbsp; |
+								自动审批
+								<select name="is_auto_candidate">
+									<pg:equal colName="is_auto_candidate" value="0">
+										<option value="0" selected>否</option>
+										<option value="1">是</option>
+									</pg:equal>
+									<pg:equal colName="is_auto_candidate" value="1">
+										<option value="0">否</option>
+										<option value="1" selected>是</option>
 									</pg:equal>
 								</select>
+								<br/>
+								可撤回
+								<select name="is_recall_candidate">
+									<pg:equal colName="is_recall_candidate" value="0">
+										<option value="0" selected>否</option>
+										<option value="1">是</option>
+									</pg:equal>
+									<pg:equal colName="is_recall_candidate" value="1">
+										<option value="0">否</option>
+										<option value="1" selected>是</option>
+									</pg:equal>
+								</select>&nbsp; |
+								可修改后续节点
+								<select name="is_editafter_candidate">
+									<pg:equal colName="is_editafter_candidate" value="0">
+										<option value="0" selected>否</option>
+										<option value="1">是</option>
+									</pg:equal>
+									<pg:equal colName="is_editafter_candidate" value="1">
+										<option value="0">否</option>
+										<option value="1" selected>否</option>
+									</pg:equal>
+								</select>         
 							</td>
 						</tr>
 						</pg:notin>

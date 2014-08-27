@@ -297,6 +297,11 @@ public class ActivitiRepositoryAction {
 		model.addAttribute("processDef", activitiService.queryProdefByKey(processKey,version));
 		List<ActivityImpl> aList = activitiService
 				.getActivitImplListByProcessKey(processKey);
+		
+		//从扩展表中获取节点信息
+		List<ActivitiNodeInfo> nodeList = activitiConfigService.queryAllActivitiNodes(processKey);
+		model.addAttribute("nodeList",nodeList);
+		
 		for(int i=0;i<aList.size();i++){
 			if(!aList.get(i).getProperty("type").equals("userTask")){
 				aList.remove(i);

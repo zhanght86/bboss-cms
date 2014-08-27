@@ -1724,6 +1724,15 @@
 		]]>
 	</property>
 	
+	<property name="updateActivitiNodeInfo">
+		<![CDATA[
+			UPDATE TD_WF_ACTIVITI_NODE_INFO A
+			   SET A.NODE_DESCRIBE =?
+			 WHERE A.PROCESS_KEY = ?
+			   AND A.NODE_KEY =?
+		]]>
+	</property>
+	
 	<property name="deleteActivitiNodeInfoByKey">
 		<![CDATA[
 			delete from  td_wf_activiti_node_info where process_key=#[process_key]
@@ -2327,9 +2336,11 @@
 	<property name="insertNodeWorktime_wf">
 		<![CDATA[
 			INSERT INTO TD_WF_NODE_WORKTIME
-			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE)
+			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE,IS_VALID,
+			  IS_EDIT_CANDIDATE,IS_AUTO_CANDIDATE,IS_RECALL_CANDIDATE,IS_EDITAFTER_CANDIDATE)
 			VALUES
-			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE])
+			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE],#[IS_VALID],
+			  #[IS_EDIT_CANDIDATE],#[IS_AUTO_CANDIDATE],#[IS_RECALL_CANDIDATE],#[IS_EDITAFTER_CANDIDATE])
 		]]>
 	</property>
 	

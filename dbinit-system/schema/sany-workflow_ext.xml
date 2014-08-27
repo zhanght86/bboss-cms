@@ -46,6 +46,11 @@
         <column name="NODE_KEY" primaryKey="true" required="true" size="100" type="NVARCHAR"/>
         <column name="DURATION_NODE" size="19" type="DECIMAL"/>
         <column name="NOTICENUM" size="22" type="DECIMAL"/>
+        <column name="IS_VALID" size="1" type="DECIMAL" default="1"/>
+        <column name="IS_EDIT_CANDIDATE" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_AUTO_CANDIDATE" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_RECALL_CANDIDATE" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_EDITAFTER_CANDIDATE" size="1" type="DECIMAL" default="0"/>
     </table>
     <table name="TD_WF_PROC_MESSTEMPLATE">
         <column name="NOTICEID" primaryKey="true" required="true" size="100" type="VARCHAR"/>

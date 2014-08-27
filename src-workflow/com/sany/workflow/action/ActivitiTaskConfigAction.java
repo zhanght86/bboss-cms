@@ -677,4 +677,41 @@ public class ActivitiTaskConfigAction {
 		return"path:nodevariablelist";
 	}
 	
+	/**
+	 * 跳转至修改节点描述界面
+	 * 
+	 * @param processKey
+	 * @param model
+	 * @return 2014年5月7日
+	 */
+	public String toUpdateNodeInfo(String processKey, String taskKey,
+			ModelMap model) {
+
+		ActivitiNodeInfo nodeInfo = activitiConfigService
+				.getActivitiNodeByKeys(processKey, taskKey);
+
+		model.addAttribute("nodeInfo", nodeInfo);
+
+		return "path:toUpdateNodeInfo";
+	}
+	
+	/**
+	 * 修改节点信息
+	 * 
+	 * @param processKey
+	 * @param model
+	 * @return 2014年5月7日
+	 */
+	public @ResponseBody
+	String updateNodeInfo(ActivitiNodeInfo nodeInfo, ModelMap model) {
+		try {
+
+			activitiConfigService.updateNodeInfo(nodeInfo);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+	
 }

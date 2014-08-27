@@ -25,6 +25,24 @@
 <!-- 								<property index="9"><![CDATA[ALTER TABLE TD_WF_APP ADD PENDING_TYPE varchar(8) DEFAULT NULL ]]></property> -->
 <!-- 								<property index="10"><![CDATA[ALTER TABLE TD_WF_APP ADD PENDING_USED varchar(8) DEFAULT '0' ]]></property> -->
 <!-- 								<property index="11"><![CDATA[ALTER TABLE TD_WF_APP ADD PIC_NAME varchar(128) DEFAULT NULL ]]></property> -->
+
+
+<!--
+								<property index="12"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_INFO ADD NODE_DESCRIBE VARCHAR(4000) ]]></property>
+
+								<property index="13"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
+								<property index="14"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="15"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="16"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="17"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+
+								<property index="18"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
+								<property index="19"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="20"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="21"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="22"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+
+-->
 							</list>
 						</property>
 					</map>

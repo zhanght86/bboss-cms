@@ -262,7 +262,8 @@
              /WEB-INF/conf/sanyhrm/bboss-*.xml,
              /WEB-INF/conf/sanymbp/bboss-*.xml,
              /WEB-INF/conf/session/bboss-*.xml,
-             /WEB-INF/conf/holiday/bboss-*.xml
+             /WEB-INF/conf/holiday/bboss-*.xml,
+             /WEB-INF/conf/workflowbusiness/bboss-*.xml
             </param-value>
         </init-param>
         <init-param>

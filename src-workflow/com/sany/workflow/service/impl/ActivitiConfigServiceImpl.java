@@ -351,12 +351,15 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 				aNode.setProcess_key(processKey);
 				ActivityImpl actImpl = aList.get(i);
 				String node_type = actImpl.getProperty("type").toString();
+				String describe = actImpl.getProperty("documentation") == null ? ""
+						: actImpl.getProperty("documentation") + "";// 节点描述
 //				if (actImpl.getProperty("type").toString().equals("userTask")) {
 //					
 //				}
 				aNode.setNode_type(node_type);
 				aNode.setId(java.util.UUID.randomUUID().toString());
 				aNode.setNode_key(actImpl.getId());
+				aNode.setNode_describe(describe);
 				aNode.setNode_name(actImpl.getProperty("name").toString());
 				aNode.setOrder_num(i);
 				executor.insertBean("insertActivitiNodeInfo", aNode);
@@ -394,6 +397,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			for(int i=0;i<aList.size();i++){//添加新的节点信息
 				ActivityImpl actImpl = aList.get(i);
 				String type = actImpl.getProperty("type").toString();
+				String describe = actImpl.getProperty("documentation") == null ? ""
+						: actImpl.getProperty("documentation") + "";// 节点描述
 //				if (actImpl.getProperty("type").toString().equals("userTask")) {
 //					
 //				}
@@ -403,6 +408,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 					ActivitiNodeInfo aNode = new ActivitiNodeInfo();
 					aNode.setProcess_key(processKey);
 					aNode.setNode_type(type);
+					aNode.setNode_describe(describe);
 					aNode.setId(java.util.UUID.randomUUID().toString());
 					aNode.setNode_key(actImpl.getId());					
 					aNode.setNode_name(actImpl.getProperty("name").toString());
@@ -465,8 +471,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 					if (!StringUtil.isEmpty(activitiNodeCandidate.getDuration_node())) {
 						
 						// 转毫秒值
-						double duration_node = Double.parseDouble(activitiNodeCandidate.getDuration_node());
-						activitiNodeCandidate.setDuration_node(duration_node*60*60*1000+ "");
+//						double duration_node = Double.parseDouble(activitiNodeCandidate.getDuration_node());
+						activitiNodeCandidate.setDuration_node(activitiNodeCandidate.getDuration_node()*60*60*1000);
 					}
 				}
 				executor.insertBeans("insertActivitiNodeCandidate", activitiNodeCandidates);
@@ -682,10 +688,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key) {
 		try {
 
-			List<ActivitiNodeInfo> list = executor.queryList(
-					ActivitiNodeInfo.class, "queryAllActivitiNodes",
-					process_key);
-
+			List<ActivitiNodeInfo> list = this.queryAllActivitiNodes(process_key);
+			
 			if (list != null && list.size() > 0) {
 				List<ActivityImpl> activties = activitiService
 						.getActivitImplListByProcessKey(process_key);
@@ -1041,6 +1045,27 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			return (HashMap)executor.queryObject(HashMap.class,
 					"getMessTamplateById_wf", processKey);
 
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public List<ActivitiNodeInfo> queryAllActivitiNodes(String processKey) {
+		try {
+			return executor.queryList(ActivitiNodeInfo.class,
+					"queryAllActivitiNodes", processKey);
+		} catch (SQLException e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	@Override
+	public void updateNodeInfo(ActivitiNodeInfo nodeInfo) {
+		try {
+			executor.update("updateActivitiNodeInfo",
+					nodeInfo.getNode_describe(), nodeInfo.getProcess_key(),
+					nodeInfo.getNode_key());
 		} catch (SQLException e) {
 			throw new ProcessException(e);
 		}

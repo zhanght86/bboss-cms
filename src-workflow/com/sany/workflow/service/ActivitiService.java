@@ -1472,7 +1472,7 @@ public interface ActivitiService {
 	 * 2014年6月27日
 	 */
 	public void addNodeWorktime(String processKey, String processIntsId,
-			List<Map<String, String>> nodeWorktimeList) throws Exception;
+			List<Map<String, Object>> nodeWorktimeList) throws Exception;
 	
 	/**根据条件获取节点工时 gw_tanx
 	 * @param processKey
@@ -1481,7 +1481,7 @@ public interface ActivitiService {
 	 */
 	public NodeInfoEntity getNodeWorktime(String processIntsId, String nodeKey);
 	
-	public NodeInfoEntity getNodeInfoEntity(List<Map<String, String>> nodes,String taskKey) throws Exception;
+	public NodeInfoEntity getNodeInfoEntity(List<Map<String, Object>> nodes,String taskKey) throws Exception;
 	
 	/**获取需要发送消息提醒的数据 gw_tanx
 	 * @param templateIds

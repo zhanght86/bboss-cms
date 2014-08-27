@@ -61,6 +61,12 @@
 			}
 		}
 		
+		function updateNodeInfo(nodekey,processKey){
+			 var url="<%=request.getContextPath()%>/workflow/config/toUpdateNodeInfo.page?processKey="+processKey
+	    		+"&taskKey="+nodekey;
+	    	$.dialog({ id:'iframeNewId', title:'修改节点信息',width:400,height:250, content:'url:'+url});  
+		}
+		
 		
 		</script>
 	</head>
@@ -119,6 +125,30 @@
 							<th width=85px ><pg:message code="sany.pdp.workflow.picture.resource.name"/>：</th>
 							<td id="DGRM_RESOURCE_NAME_"><pg:cell colName="DGRM_RESOURCE_NAME_"/></td>
 						</tr>
+					</table>
+				</fieldset>
+				<fieldset>
+				<legend>节点信息</legend>
+					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
+						<pg:header>
+							<th>节点KEY</th>
+							<th>节点类型</th>
+							<th>节点名称</th>
+							<th>节点描述</th>
+							<th>操作</th>
+						</pg:header>
+							
+						<pg:list autosort="false" requestKey="nodeList">
+							<tr id="nodeInfoTr">
+								<td id="key<pg:cell colName="node_key"/>" ><pg:cell colName="node_key"/></td>
+								<td id="type<pg:cell colName="node_key"/>"><pg:cell colName="node_type"/></td>
+								<td id="name<pg:cell colName="node_key"/>"><pg:cell colName="node_name"/></td>
+								<td id="describe<pg:cell colName="node_key"/>"><pg:cell colName="node_describe"/></td>
+								<td class="td_center">
+									<a href="javascript:void(0)" id="" onclick="updateNodeInfo('<pg:cell colName="node_key"/>','<pg:cell colName="process_key"/>')">修改</a>
+								</td>
+							</tr>
+						</pg:list>
 					</table>
 				</fieldset>
 				<fieldset id="viewResouceSet">

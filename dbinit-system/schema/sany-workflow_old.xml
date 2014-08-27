@@ -20,12 +20,15 @@
         <column name="CREATE_DATE" type="TIMESTAMP"/>
         <column name="CREATE_PERSON_ID" size="100" type="VARCHAR"/>
         <column name="CREATE_PERSON_NAME" size="100" type="VARCHAR"/>
-        <column name="IS_VALID" size="1" type="DECIMAL"/>
-        <column name="IS_EDIT_CANDIDATE" size="1" type="DECIMAL"/>
+        <column name="IS_VALID" size="1" type="DECIMAL" default="1"/>
+        <column name="IS_EDIT_CANDIDATE" size="1" type="DECIMAL" default="0"/>
         <column name="MESSAGETEMPLEID" size="100" type="VARCHAR"/>
         <column name="EMAILTEMPLEID" size="100" type="VARCHAR"/>
         <column name="DURATION_NODE" size="19" type="DECIMAL"/>
         <column name="NOTICENUM" size="22" type="DECIMAL"/>
+        <column name="IS_AUTO_CANDIDATE" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_RECALL_CANDIDATE" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_EDITAFTER_CANDIDATE" size="1" type="DECIMAL" default="0"/>
     </table>
 	<table name="TD_WF_ACTIVITI_NODE_DELEGATE">
         <column name="ID" primaryKey="true" size="100" required="true"  type="VARCHAR"/>
@@ -46,6 +49,7 @@
         <column name="NODE_NAME" size="100" type="VARCHAR"/>
         <column name="NODE_TYPE" size="100" type="VARCHAR" default="userTask"/>
         <column name="ORDER_NUM" size="4" type="DECIMAL"/>
+        <column name="NODE_DESCRIBE" size="4000" type="VARCHAR"/>
         
     </table>
 	 <table name="TD_WF_APP">
