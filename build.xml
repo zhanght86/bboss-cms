@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -69,7 +69,7 @@
 					
 				</jar>
 			</target>
-	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -650,6 +650,43 @@
 			  <mkdir dir="classes-sany"/>	
 			
 		</target>
+	
+	
+	
+	<target name="compile-sany-workflow-bussiness" depends="jar-sany-workflow" description="compile the sany appbom source ">
+					<echo>compile the appbom source ...</echo>
+					<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+						<src path="${source}/src_workflow-business" />				
+										
+						<classpath id="cp-cms_baseline">
+							<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+							<fileset dir="${source}/lib" includes="*.jar *.zip" />
+							<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+							<fileset dir="${distrib}" includes="*.jar *.zip" />
+						</classpath>
+					</javac>
+				<copy todir="classes-sany">
+					<fileset dir="${source}/src_workflow-business" includes="**/*.xml"/>
+					
+				</copy>
+			</target>
+			
+			<target name="jar-sany-workflow-bussiness" depends="compile-sany-workflow-bussiness" description="generate the sany-workflow-web-lib library sany-workflow-web.jar">
+					<echo>Generate the sany-workflow library sany-workflow.jar ...</echo>
+					<jar jarfile="${distrib}/sany-workflow-bussiness.jar" basedir="classes-sany" includes="**/*">
+						<manifest>
+							<attribute name="Implementation-Version" value="${impl.version}" />
+							<attribute name="Specification-Version" value="${revision}" />
+							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+							<attribute name="Implementation-ProductID" value="${impl.productID}" />
+							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+							<attribute name="Compile-User" value="${username}" />
+						</manifest>
+					</jar>
+				 <delete dir="classes-sany"/>
+				  <mkdir dir="classes-sany"/>	
+				
+			</target>
 	
 	<target name="compile-sany-application" depends="jar-sany-ldap,jar-sany-mail" description="compile the sany application source ">
 			<echo>compile the application source ...</echo>
