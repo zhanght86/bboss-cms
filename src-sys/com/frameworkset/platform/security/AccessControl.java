@@ -1136,6 +1136,8 @@ public class AccessControl implements AccessControlInf{
 		 * 5 common
 		 */
 		String loginstyle = session != null ?(String)session.getAttribute(AccessControl.LOGINSTYLE_CACHE_KEY):null;
+		if(loginstyle == null)
+			return "3";
 		return loginstyle;
 	}
 	private void innerlogon(UsernamePasswordCallbackHandler callbackHandler,
