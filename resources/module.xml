@@ -79,11 +79,12 @@
 				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>-->				 
 			</authoration>
 		</publicitem>
-			<module name="排队信息显示" 
+			<module name="统一待办" 
 		             i18n:en_US="Line Information Query" 
 		            id="veh_line_query" used="true"
 		           option="{popup:true,width:700,height:500,maxstate:true}"
-		             url="appbom/index.page">		
+		             url="workflow/pending/pendingIndex.page" menuType="type1">	
+				<mouseclickimg>html3/images/app1.png</mouseclickimg>	
 		</module>
 		
 		<module name="web前端展示" 
@@ -91,8 +92,8 @@
 		            id="WEB_UI_Show" used="true" showleftmenu="false"
 		             url="appbom/index.page">	
 		    <item name="列表"
-			i18n:en_US="web list" id="web_list" >
-				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+			i18n:en_US="web list" id="web_list"  menuType="type1">
+				<mouseclickimg>html3/images/app2.png</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -101,8 +102,8 @@
 			
 			</item>  
 			 <item name="列表1"
-			i18n:en_US="web list" id="web_list1" >
-				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+			i18n:en_US="web list" id="web_list1" menuType="type1">
+				<mouseclickimg>html3/images/app3.png</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -113,10 +114,10 @@
 			<module name="web前端展示1" 
 		             i18n:en_US="WEB UI Show" 
 		            id="WEB_UI_Show1" used="true"
-		             url="appbom/index.page">	
+		             url="workflow/pending/pendingIndex.page">	
 			    <item name="列表2"
-				i18n:en_US="web list" id="web_list2" >
-					<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+				i18n:en_US="web list" id="web_list2" menuType="type1">
+					<mouseclickimg>html3/images/app4.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -125,8 +126,8 @@
 				
 				</item>     
 				<item name="列表3"
-				i18n:en_US="web list" id="web_list3" >
-					<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+				i18n:en_US="web list" id="web_list3" menuType="type2">
+					<mouseclickimg>html3/images/app5.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -146,8 +147,8 @@
 			
 			<description i18n:en_US="App Bom" >应用台账</description>
 			<item name="应用台账"
-			i18n:en_US="App Bom" id="appbommanager" >
-				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+			i18n:en_US="App Bom" id="appbommanager" menuType="type2">
+				<mouseclickimg>html3/images/app6.png</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -159,8 +160,8 @@
 			</item>
 			
 			<item name="应用台账固定列宽"
-			i18n:en_US="App Bom" id="appbommanagerfixed" >
-				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+			i18n:en_US="App Bom" id="appbommanagerfixed" menuType="type2">
+				<mouseclickimg>html3/images/app7.png</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -172,8 +173,8 @@
 			</item>
 		
 			
-			<item name="创建领料单" id="newGetDoc" i18n:en_US="Apply Materail">
-				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+			<item name="创建领料单" id="newGetDoc" i18n:en_US="Apply Materail" menuType="type2">
+				<mouseclickimg>html3/images/app8.png</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -181,16 +182,16 @@
 				</workspace>
 			</item>
 			
-			<item name="创建退料单" id="newReturnDoc" i18n:en_US="Apply Return Materail">
-				<mouseclickimg>html/images/suzhi.jpg</mouseclickimg>
+			<item name="创建退料单" id="newReturnDoc" i18n:en_US="Apply Return Materail" menuType="type2">
+				<mouseclickimg>html3/images/app9.png</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
 					<content>appbom/index.page</content>
 				</workspace>
 			</item>
-			<item name="工单管理" id="docManage" i18n:en_US="Invoices Manage" option="{popup:true}" >
-				<mouseclickimg>html/images/salary.jpg</mouseclickimg>
+			<item name="工单管理" id="docManage" i18n:en_US="Invoices Manage" option="{popup:true}" menuType="type2">
+				<mouseclickimg>html3/images/app10.png</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -198,8 +199,8 @@
 				</workspace>
 			</item>
 			
-			<item name="台账查询" id="materailQuery" i18n:en_US="Query" option="{popup:true}">
-				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
+			<item name="台账查询" id="materailQuery" i18n:en_US="Query" option="{popup:true}" menuType="type2">
+				<mouseclickimg>html3/images/app11.png</mouseclickimg>
 					<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
@@ -213,8 +214,8 @@
 <module name="应用台账11" id="appbommanagermodule1e" used="true" i18n:en_US="App Bome" url="html/tab_edit.html" showleftmenu="true" popup="true">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<description>应用台账ee</description>
-				<item name="标签页效果eee" id="appbommanager1eeee" i18n:en_US="Label Page Demo">
-						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<item name="标签页效果eee" id="appbommanager1eeee" i18n:en_US="Label Page Demo" menuType="type3">
+						<mouseclickimg>html3/images/app12.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -226,8 +227,8 @@
 			<module name="应用台账1" id="appbommanagermodule1" used="true" i18n:en_US="App Bom" url="html/tab_edit.html" showleftmenu="true" popup="true">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<description>应用台账</description>
-				<item name="标签页效果" id="appbommanager1" i18n:en_US="Label Page Demo">
-						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<item name="标签页效果" id="appbommanager1" i18n:en_US="Label Page Demo" menuType="type3">
+						<mouseclickimg>html3/images/app13.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
@@ -242,7 +243,7 @@
 						<content>html/table2.html</content>
 					</workspace>
 				</item>
-				<item name="列表页面二" id="page" i18n:en_US="page">
+				<item name="列表页面二" id="appbommanager12" i18n:en_US="page">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -250,7 +251,7 @@
 						<content>html/table3.html</content>
 					</workspace>
 				</item>
-				<item name="列表页面三" id="page" i18n:en_US="page">
+				<item name="列表页面三" id="appbommanager13" i18n:en_US="page">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -258,7 +259,7 @@
 						<content>html/table4.html</content>
 					</workspace>
 				</item>
-				<item name="列表页面四" id="page" i18n:en_US="page">
+				<item name="列表页面四" id="appbommanager14" i18n:en_US="page">
 						<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -633,6 +634,17 @@
 					</authoration>
 				</item>
 			</module>
+			
+			<item name="业务演示" id="businessDemo" i18n:en_US="business demo">
+				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
+				<top>header.page</top>
+				<workspace>
+					<content>workflowBusiness/business/toIndex.page</content>
+				</workspace>
+				<authoration>				 
+					 <url>workflowBusiness/business/*.page</url>
+				</authoration>
+			</item>
 		</module>
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">

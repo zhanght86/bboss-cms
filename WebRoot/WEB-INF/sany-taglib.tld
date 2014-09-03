@@ -33,10 +33,7 @@
 			<name>enableindex</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
-		<attribute>
-			<name>style</name>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
+		
 		
     </tag>
 	<!-- 功能说明：当前位置标签 

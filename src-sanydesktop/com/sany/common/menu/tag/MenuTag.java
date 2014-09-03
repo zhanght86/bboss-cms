@@ -172,17 +172,17 @@ public class MenuTag extends BaseTag {
 	private boolean enableindex = true;
 	private int level = 3;
 	private String web = "false";
-	private String style="default";// default common
-	
-	public String getStyle() {
-		return style;
-	}
-
-
-
-	public void setStyle(String style) {
-		this.style = style;
-	}
+//	private String style="default";// default common
+//	
+//	public String getStyle() {
+//		return style;
+//	}
+//
+//
+//
+//	public void setStyle(String style) {
+//		this.style = style;
+//	}
 
 
 
@@ -195,7 +195,8 @@ public class MenuTag extends BaseTag {
 		String personcenter = Framework.getInstance(control.getCurrentSystemID()).getMessage("sany.pdp.module.personcenter", RequestContextUtils.getRequestContextLocal(request));
 		StringBuffer datas = new StringBuffer();
 		String selectedmenuid = request.getParameter(MenuHelper.sanyselectedmodule);//查找选择的菜单项path
-		if(this.style.equals("default"))
+		String loginstyle = AccessControl.getLoginStyle(request);
+		if(loginstyle.equals("3"))
 			datas.append(header);
 		else
 			datas.append(header_common);
@@ -356,7 +357,7 @@ public class MenuTag extends BaseTag {
 			boolean hasson = (module.getItems() != null && module.getItems().size() > 0)||(module.getSubModules() != null && module.getSubModules().size() > 0) ;
 			if(hasson)
 			{
-				if(this.style.equals("default"))
+				if( loginstyle.equals("3"))
 				{
 					datas.append("<ul >");  //class=\"second\"
 				}
@@ -408,7 +409,7 @@ public class MenuTag extends BaseTag {
 	
 					String target = submodule.getTarget() == null ?"mainFrame":submodule.getTarget();
 					
-					renderSubMenus(submodule, datas, contextpath, target,control,module.getId(),framepath,2,tokenurl);
+					renderSubMenus(submodule, datas, contextpath, target,control,module.getId(),framepath,2,tokenurl, loginstyle);
 	
 				}
 				
@@ -487,7 +488,7 @@ public class MenuTag extends BaseTag {
 		}
 		  
 		datas.append(rooter);
-		if(this.style.equals("default"))
+		if( loginstyle.equals("3"))
 			datas.append(rooter);
 		else
 			datas.append(rooter_common);
@@ -507,7 +508,7 @@ public class MenuTag extends BaseTag {
 	
 	
 	
-	private void renderSubMenus(Module module,StringBuffer datas,String contextpath,String target,AccessControl control,String selectedID,String framepath,int current_level,String tokenurl)
+	private void renderSubMenus(Module module,StringBuffer datas,String contextpath,String target,AccessControl control,String selectedID,String framepath,int current_level,String tokenurl,String loginstyle)
 	{
 //		String tokenurl = request.getContextPath() + "/token/getParameterToken.freepage"; 
 		if (!module.isUsed()) {
@@ -597,7 +598,7 @@ public class MenuTag extends BaseTag {
 			boolean hasson = (module.getItems() != null && module.getItems().size() > 0)||(module.getSubModules() != null && module.getSubModules().size() > 0) ;
 			if(hasson)
 			{
-				if(this.style.equals("default"))
+				if(loginstyle.equals("3"))
 					datas.append("<ul>"); // class=\"third\"
 				else
 					datas.append("<ul class=\"third\">"); // class=\"third\"
@@ -608,7 +609,7 @@ public class MenuTag extends BaseTag {
 					
 					Module submodule = submodules.getModule(j);
 					String target_ = submodule.getTarget() == null?"mainFrame":submodule.getTarget(); 
-					renderSubMenus(submodule,datas,contextpath,target_,control,selectedID,framepath,current_level,tokenurl);
+					renderSubMenus(submodule,datas,contextpath,target_,control,selectedID,framepath,current_level,tokenurl,loginstyle);
 	
 				}
 				ItemQueue subitems = module.getItems() != null ?module.getItems():null;
@@ -662,7 +663,7 @@ public class MenuTag extends BaseTag {
 		super.doFinally();
 		this.level = 3;
 		this.web = "false";
-		this.style = "default";
+		
 		enableindex = true;
 	}
 

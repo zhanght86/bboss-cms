@@ -19,7 +19,12 @@
 <title>三一人力资源管理系统--首页</title>
 <link href="../html3/stylesheet/basic.css" rel="stylesheet" type="text/css" />
 <link href="../html3/stylesheet/menu.css" rel="stylesheet" type="text/css" />
+<pg:true  requestKey="showboot" >
 <link href="../html3/stylesheet/top.css" rel="stylesheet" type="text/css" />
+</pg:true>
+<pg:false  requestKey="showboot" >
+<link href="../html3/stylesheet/top2.css" rel="stylesheet" type="text/css" />
+</pg:false>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?skin=sany"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
@@ -37,8 +42,27 @@ $(document).ready(function(){
 		$(this).find(".pulldown").hide();
 		$(this).find(".pulldown-nav").removeClass("hover");
 	});
+	var  screenHeight=document.documentElement.clientHeight;
+	var topHead=$(".top").css("height").substring(0,$(".top").css("height").length-2);
+	var menuHead=$("#menubar").css("height").substring(0,$("#menubar").css("height").length-2);
+	var footerHead=0;
+	if($(".footer").css("height")!=undefined){
+		 footerHead=$(".footer").css("height").substring(0,$(".footer").css("height").length-2);
+	}
+	var frameHead=screenHeight -topHead -menuHead -footerHead -5;
+	$("#mainFrame").css("height",frameHead+"px");
 	
 });
+function logout()
+{
+	$.dialog.confirm("<pg:message code='sany.pdp.index.check.signout'/>",
+		function(){
+			parent.location='../logout.jsp';
+		    flag = false;
+		 },
+		function(){},'','<pg:message code="sany.pdp.common.confirm"/>'
+	)
+}
 </script>
 </head>
 <body>
@@ -47,9 +71,17 @@ $(document).ready(function(){
   <div class="logo_top" >三一集团人力资源管理系统</div>
   <div class="info">
     <ul>
-      <li class="info-i has-pulldown"> <em class="f-icon pull-arrow"></em> 欢迎您 ,李四
+      <li class="info-i has-pulldown"> <em class="f-icon pull-arrow"></em> 
+	<sany:accesscontrol userattribute="userName"/>-<sany:accesscontrol userattribute="userAccount"/>[<sany:accesscontrol userattribute="orgjob"/>]，<pg:message code="sany.pdp.module.welcome"/>　
+		
         <div class="pulldown user-info"> <em class="arrow"></em>
-          <div class="content"> <span class="li"><a href="">个人资料</a></span> <span class="li"><a href="">修改密码</a></span> <span class="li"><a href="">快捷修改</a></span> <span class="li"><a href="javascript:;" id="signout">注销</a></span> </div>
+          <div class="content"> <span class="li"><a href="">个人资料</a></span> <span class="li"><a href="">修改密码</a></span> <span class="li"><a href="">快捷修改</a></span> 
+          <pg:false actual="${fromwebseal}">
+			<pg:empty actual="<%=specialuser %>">
+				<span class="li"><a href="javascript:;" onclick="logout()" id="signout"><pg:message code="sany.pdp.module.logout"/></a></span>
+			</pg:empty>
+		</pg:false>
+           </div>
         </div>
       </li>
       <li class="info-i">审批事项：<a href="#">10</a>条</li>
@@ -62,8 +94,9 @@ $(document).ready(function(){
     </ul>
   </div>
 </div>
-<sany:menus level="3" enableindex="true" style="common"/>
+<sany:menus level="3" enableindex="true"/>
 <div class="content_box"><iframe id="mainFrame" name="mainFrame" src="${mainurl}" width="100%" height="612" scrolling="auto" frameborder="0"></iframe></div>
+<pg:true  requestKey="showboot" >
 <div class="footer">
   <div class="left_footer"> <a href="ghp/index.html">全球招聘平台</a> | <a href="http://olm.sany.com.cn/SanyOLM/login.do?method=login">在线学习平台</a> | <a href="#" id="contact">联系我们 </a>| <a href="#">调查问卷</a> 
   </div>
@@ -73,5 +106,7 @@ $(document).ready(function(){
 		document.write( "&copy;" + "1989-"+ update );
 	</script> 
   三一集团有限公司 版权所有</span></div>
+    
+  </pg:true>  
 </body>
 </html>

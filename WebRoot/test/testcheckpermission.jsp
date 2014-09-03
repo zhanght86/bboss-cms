@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 
 <%
 	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();
@@ -115,6 +116,19 @@
 						</td>
 						<td colspan="7">							
 							<a href="<%=request.getContextPath() %>test/svg/wf.html"  target="top_blank""  >wf.html</a>
+						</td>
+						
+					</tr>
+					
+					
+						<tr>
+						
+						<td colspan="7">							
+							字典标签国际化测试
+						</td>
+						
+						<td colspan="7">							
+							<dict:select type="sex" name="userSex" textValueCode="sany.pdp.common.operation.select" textNAN="-1"  extend=" onclick='alert(1) '"/>
 						</td>
 						
 					</tr>

@@ -35,6 +35,8 @@
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		
+		
 		<attribute>
 			<name>style</name>
 			<required>false</required>
@@ -73,6 +75,16 @@
 		</attribute>
 		<attribute>
 			<name>splittoken</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>textValueCode</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>textNAN</name>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
     </tag>

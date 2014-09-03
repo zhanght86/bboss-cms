@@ -8,6 +8,7 @@ import javax.servlet.jsp.JspException;
 
 import org.apache.ecs.html.Option;
 import org.apache.ecs.html.Select;
+import org.frameworkset.util.I18NUtil;
 
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.DataManagerFactory;
@@ -20,6 +21,15 @@ import com.frameworkset.dictionary.Item;
 public class XMLSelectTag extends XMLBaseTag
 {
 	protected String textValue;
+	/**
+	 * 默认项的国际化值
+	 */
+	protected String textValueCode;
+	
+	/**
+	 * 指定默认项的默认的值
+	 */
+	protected String textNAN = "NaN";
 	protected boolean multiple;
 	
 	/* (non-Javadoc)
@@ -45,7 +55,7 @@ public class XMLSelectTag extends XMLBaseTag
 			if(this.getTextValue() != null)
 			{
 				options = new Option[data.size() + 1];
-				options[0] = new Option().setValue("NaN");
+				options[0] = new Option().setValue(textNAN);
 				options[0].setTagText(getTextValue());
 				temp ++;
 			}
@@ -116,7 +126,12 @@ public class XMLSelectTag extends XMLBaseTag
 	 */
 	public String getTextValue()
 	{
-		return textValue;
+		if(textValue != null)
+			return textValue;
+		if(this.textValueCode != null)
+			return textValue = I18NUtil.getI18nMessage(textValueCode, this.textValue,request);
+		else
+			return textValue;
 	}
 
 	/**
@@ -132,6 +147,8 @@ public class XMLSelectTag extends XMLBaseTag
 		int ret = super.doEndTag();
 		this.textValue = null;
 		this.multiple = false;
+		textValueCode = null;
+		textNAN = "NaN";
 		return ret;
 	}
 
@@ -143,4 +160,19 @@ public class XMLSelectTag extends XMLBaseTag
 		this.multiple = multiple;
 	}
 
+	public String getTextValueCode() {
+		return textValueCode;
+	}
+
+	public void setTextValueCode(String textValueCode) {
+		this.textValueCode = textValueCode;
+	}
+
+	public String getTextNAN() {
+		return textNAN;
+	}
+
+	public void setTextNAN(String textNAN) {
+		this.textNAN = textNAN;
+	}
 }
