@@ -73,6 +73,23 @@
 			<name>actual</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		<attribute>
 			<name>splittoken</name>
 			<rtexprvalue>true</rtexprvalue>
@@ -144,8 +161,24 @@
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-        <attribute>
+         <attribute>
 			<name>actual</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 
@@ -215,6 +248,22 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>splittoken</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -248,6 +297,22 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		<attribute>
 			<name>defaultItemValue</name>
 			<rtexprvalue>true</rtexprvalue>
@@ -284,6 +349,23 @@
         </attribute>
         <attribute>
 			<name>actual</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<attribute>
+			<name>colName</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>property</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		
+		<!--
+			查找祖先(list)索引
+		-->
+		<attribute>
+			<name>index</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
     </tag>
