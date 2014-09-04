@@ -1,6 +1,8 @@
 
 package com.frameworkset.dictionary.tag;
 
+import javax.servlet.jsp.JspException;
+
 import org.apache.ecs.html.Input;
 
 import com.frameworkset.platform.security.AccessControl;
@@ -86,5 +88,11 @@ public class XMLRadioTag extends XMLBaseTag
 	public void setVertical(String string)
 	{
 		vertical = string;
+	}
+	@Override
+	public int doEndTag() throws JspException {
+		// TODO Auto-generated method stub
+		this.vertical = null;
+		return super.doEndTag();
 	}
 }

@@ -5,6 +5,8 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.jsp.JspException;
+
 import com.frameworkset.dictionary.ProfessionDataManagerException;
 import com.frameworkset.util.StringUtil;
 
@@ -145,6 +147,14 @@ public class XMLItemvalueTag extends XMLBaseTag
 	public void setItemName(String string)
 	{
 		itemName = string;
+	}
+
+	@Override
+	public int doEndTag() throws JspException {
+		// TODO Auto-generated method stub
+		this.itemName = null;
+		this.defaultItemValue = null;
+		return super.doEndTag();
 	}
 
 }

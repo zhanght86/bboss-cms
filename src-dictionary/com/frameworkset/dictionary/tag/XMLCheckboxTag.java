@@ -3,6 +3,8 @@ package com.frameworkset.dictionary.tag;
 
 import java.util.List;
 
+import javax.servlet.jsp.JspException;
+
 import org.apache.ecs.html.Input;
 
 import com.frameworkset.dictionary.DataManager;
@@ -104,6 +106,13 @@ public class XMLCheckboxTag extends XMLBaseTag
 	public void setVertical(String string)
 	{
 		vertical = string;
+	}
+
+	@Override
+	public int doEndTag() throws JspException {
+		// TODO Auto-generated method stub
+		this.vertical = null;
+		return super.doEndTag();
 	}
 	
 	

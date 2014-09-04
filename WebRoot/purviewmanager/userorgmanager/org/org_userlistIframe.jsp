@@ -686,11 +686,11 @@
 										defaultValue="" /></td>										
 										
 								<td><dict:itemname type="sex"
-										expression="{userSex}" /></td>
-								<td><dict:itemname type="userType" expression="{userType}" />
+										colName="userSex" /></td>
+								<td><dict:itemname type="userType" colName="userType" />
 								</td>
 								<td><dict:itemname type="isvalid"
-										expression="{user_isvalid}" /></td>
+										colName="user_isvalid" /></td>
 								<td><pg:cell colName="org_Name"
 										defaultValue="" /></td>
 										
@@ -718,9 +718,9 @@
 										defaultValue="" /></td>
 								<td><pg:cell colName="userMobiletel1"
 										defaultValue="" /></td>		
-								<td><dict:itemname type="sex" expression="{userSex}" /></td>
-								<td><dict:itemname type="userType" expression="{userType}" /></td>
-								<td><dict:itemname type="isvalid" expression="{user_isvalid}" /></td>
+								<td><dict:itemname type="sex" colName="userSex" /></td>
+								<td><dict:itemname type="userType" colName="userType" /></td>
+								<td><dict:itemname type="isvalid" colName="user_isvalid" /></td>
 								<td><pg:cell colName="org_Name" defaultValue="" /></td>
 								<td><pg:cell colName="passwordExpiredTime" dateformat="yyyy-MM-dd HH:mm:ss"
 										defaultValue="" /></td>	

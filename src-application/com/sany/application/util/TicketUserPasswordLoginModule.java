@@ -22,17 +22,52 @@ public class TicketUserPasswordLoginModule extends UserPasswordLoginModule {
 		super.buildCallback(checkCallBack, user, userName, password, password_i, org);
 		
 		try {
+			//dosomething here 业务
 			
-			String ticket = AppHelper.getTicket(userName, user.getUserWorknumber());
-			
+			//获取业务信息设置到会话对象中
+			String ticket = AppHelper.getTicket(userName, user.getUserWorknumber());			
 			checkCallBack.setUserAttribute("ticket", ticket);
 			
+			//系统中获取ticket对象的方法:
+//			AccessControl accesscontroler = AccessControl.getAccessControl();
+//			String ticket_ = accesscontroler.getUserAttribute("ticket");
+//			
 		} catch (Exception e) {
 			logger.error(e);
 		}
 		
 	}
 
-
-
+//	/**
+//	 * 重置用户属性
+//	 * 业务中使用方法：AccessControl.getAccessControl().resetUserAttribute("hotelcode");
+//	 */
+//	@Override
+//	
+//	public void resetUserAttribute(HttpServletRequest request,
+//			CheckCallBack checkCallBack, String userAttribute) {
+//		String userName = (String)checkCallBack.getUserAttribute("userAccount");
+//		String userAttributevalue = "";//........;//获取最新的属性值			
+//		checkCallBack.setUserAttribute(userAttribute, userAttributevalue);//更新属性值
+//		// TODO Auto-generated method stub
+//		//super.resetUserAttribute(request, checkCallBack, userAttribute);
+//	}
+//
+//	/**
+//	 * 更新用户会话属性
+//	 * 业务中调用方法：AccessControl.getAccessControl().resetUserAttributes();
+//	 */
+//	@Override
+//	public void resetUserAttributes(HttpServletRequest request,
+//			CheckCallBack checkCallBack) {
+//		//根据需要更新属性值
+//		try {
+//			String userName = (String)checkCallBack.getUserAttribute("userAccount");
+//			String userWorknumber = (String)checkCallBack.getUserAttribute("userWorknumber");
+//			String ticket = AppHelper.getTicket(userName, userWorknumber);			
+//			checkCallBack.setUserAttribute("ticket", ticket);
+//		} catch (Exception e) {
+//			logger.error(e);
+//		}
+//	}
 }

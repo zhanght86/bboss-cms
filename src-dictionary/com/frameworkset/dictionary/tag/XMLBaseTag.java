@@ -332,7 +332,7 @@ public class XMLBaseTag extends CellTag
 	{
 		int ret = super.doEndTag();
 		this.data = null;
-		this.defaultValue = "";
+		this.defaultValue = null;
 		this.t_value = null;
 		this.name = null;
 		this.style = null;
