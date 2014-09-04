@@ -9,7 +9,17 @@
 	//if (!accesscontroler.checkAccess(request, response)){
 	//	return;
 	//}
-	boolean hasaddpermission = accesscontroler.checkPermission("testid","add","testresource");
+	
+	String userID = accesscontroler.getUserID();//获取用户id
+	String userName = accesscontroler.getUserName();//获取用户中文名
+	accesscontroler.getUserAttribute(userAttribute)
+	String worknumber = accesscontroler.getUserAttribute("userWorknumber");//获取用户工号
+	String fullorgjob = accesscontroler.getUserAttribute("fullorgjob");//获取用户带层级的机构岗位信息
+	String orgjob = accesscontroler.getUserAttribute("orgjob");//获取用户直属机构岗位信息
+	boolean hasaddpermission = accesscontroler.checkPermission("testid",//资源id
+																"add",//资源操作
+																"testresource"//资源类型
+																);
 	boolean hasupdatepermission = accesscontroler.checkPermission("testid","write","testresource");
 	boolean hasdeletepermission = accesscontroler.checkPermission("testid","delete","testresource");
 	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
