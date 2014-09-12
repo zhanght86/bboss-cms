@@ -34,7 +34,7 @@ public class XMLBaseTag extends CellTag
     private static Logger log = Logger.getLogger(XMLBaseTag.class);
     
     protected AccessControl accesscontroler = null;
-    protected String defaultName = "其它";
+    protected String defaultName = "";
     protected String splittoken = "#$";
     
     
@@ -337,7 +337,7 @@ public class XMLBaseTag extends CellTag
 		this.name = null;
 		this.style = null;
 		this.checkPermission = false;
-		defaultName = "其它";
+		defaultName = "";
 		splittoken = "#$";
 		return ret;
 	}
