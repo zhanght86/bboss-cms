@@ -5,14 +5,14 @@
 <table border="0" cellpadding="0" cellspacing="0" class="table3">
 	<tr >
 		<th rowspan="<pg:size actual='${instVariableList}' increament="1"/>" width="100"><strong>流程参数信息：</strong></th>
-	<th width="150"><strong>参数名称</strong></th>
-	<th width="100"><strong>参数类型</strong></th>
-	<th width="100"><strong>BYTEARRAY_ID_</strong></th>
-	<th width="100"><strong>DOUBLE_</strong></th>
-	<th width="100"><strong>LONG_</strong></th>
-	<th width="150"><strong>TEXT_</strong></th>
-	<th width="100"><strong>TEXT2_</strong></th>
-</tr>
+		<th width="150"><strong>参数名称</strong></th>
+		<th width="100"><strong>参数类型</strong></th>
+		<th width="100"><strong>BYTEARRAY_ID_</strong></th>
+		<th width="100"><strong>DOUBLE_</strong></th>
+		<th width="100"><strong>LONG_</strong></th>
+		<th width="150"><strong>TEXT_</strong></th>
+		<th width="100"><strong>TEXT2_</strong></th>
+	</tr>
 		
 <pg:notempty actual="${instVariableList}" >
 <pg:list actual="${instVariableList}"  >
@@ -48,6 +48,105 @@
 				<pg:cell colName="TEXT2_"/>
 			</pg:notempty>
 			<pg:empty colName="TEXT2_" >&nbsp;</pg:empty>
+		</td>
+	</tr>
+</pg:list>
+</pg:notempty>
+</table>
+
+<%--节点控制参数table--%>
+<table border="0" cellpadding="0" cellspacing="0" class="table3">
+	<tr >
+		<th rowspan="<pg:size actual='${instVariableList}' increament="1"/>" width="100"><strong>节点控制参数信息：</strong></th>
+		<th width="100"><strong>节点KEY</strong></th>
+		<th width="160"><strong>节点描述</strong></th>
+		<th width="300"><strong>待办URL</strong></th>
+		<th width="500"><strong>控制参数</strong></th>
+	</tr>
+		
+<pg:notempty actual="${controlParamList}" >
+<pg:list actual="${controlParamList}"  >
+	<tr >
+		<td width="100"><pg:cell colName="NODE_KEY"/></td>
+		<td width="160"><pg:cell colName="NODE_DESCRIBE"/></td>
+		<td width="300"><pg:cell colName="TASK_URL"/></td>
+		<td width="500">
+			<pg:notempty colName="IS_VALID">
+				<input type="checkbox" disabled <pg:equal colName="IS_VALID" value="1">checked </pg:equal> />是否有效 
+			</pg:notempty>
+			<pg:empty colName="IS_VALID">
+				<input type="checkbox" disabled/>是否有效 
+			</pg:empty>
+			
+			<pg:notempty colName="IS_EDIT">
+				<input type="checkbox" disabled <pg:equal colName="IS_EDIT" value="1">checked </pg:equal> />可修改
+			</pg:notempty>
+			<pg:empty colName="IS_EDIT">
+				<input type="checkbox" disabled/>可修改
+			</pg:empty>
+			
+			<pg:notempty colName="IS_EDITAFTER">
+				<input type="checkbox" disabled <pg:equal colName="IS_EDITAFTER" value="1">checked </pg:equal>/>可修改后续节点
+			</pg:notempty>
+			<pg:empty colName="IS_EDITAFTER">
+				<input type="checkbox" disabled />可修改后续节点
+			</pg:empty>
+			
+			<pg:notempty colName="IS_AUTO">
+				<input type="checkbox" disabled <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批
+			</pg:notempty>
+			<pg:empty colName="IS_AUTO">
+				<input type="checkbox" disabled />自动审批
+			</pg:empty>
+			
+			<pg:notempty colName="IS_AUTOAFTER">
+				<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>后续节点自动审批
+			</pg:notempty>
+			<pg:empty colName="IS_AUTOAFTER">
+				<input type="checkbox" disabled />后续节点自动审批
+			</pg:empty>
+			
+			<pg:notempty colName="IS_RECALL">
+				<input type="checkbox" disabled <pg:equal colName="IS_RECALL" value="1">checked </pg:equal>/>可被撤回
+			</pg:notempty>
+			<pg:empty colName="IS_RECALL">
+				<input type="checkbox" disabled />可被撤回
+			</pg:empty>
+			
+			<pg:notempty colName="IS_CANCEL">
+				<input type="checkbox" disabled <pg:equal colName="IS_CANCEL" value="1">checked </pg:equal>/>可驳回
+			</pg:notempty>
+			<pg:empty colName="IS_CANCEL">
+				<input type="checkbox" disabled />可驳回
+			</pg:empty>
+			
+			<pg:notempty colName="IS_DISCARD">
+				<input type="checkbox" disabled <pg:equal colName="IS_DISCARD" value="1">checked </pg:equal>/>可废弃
+			</pg:notempty>
+			<pg:empty colName="IS_DISCARD">
+				<input type="checkbox" disabled />可废弃
+			</pg:empty>
+			
+			<pg:notempty colName="IS_COPY">
+				<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
+			</pg:notempty>
+			<pg:empty colName="IS_COPY">
+				<input type="checkbox" disabled />可抄送
+			</pg:empty>
+			
+			<pg:notempty colName="IS_MULTI">
+				<input type="checkbox" disabled <pg:equal colName="IS_MULTI" value="1">checked </pg:equal>/>多实例
+			</pg:notempty>
+			<pg:empty colName="IS_MULTI">
+				<input type="checkbox" disabled />多实例
+			</pg:empty>
+			
+			<pg:notempty colName="IS_SEQUENTIAL">
+				<input type="checkbox" disabled <pg:equal colName="IS_SEQUENTIAL" value="1">checked </pg:equal>/>串行
+			</pg:notempty>
+			<pg:empty colName="IS_SEQUENTIAL">
+				<input type="checkbox" disabled />串行
+			</pg:empty>
 		</td>
 	</tr>
 </pg:list>

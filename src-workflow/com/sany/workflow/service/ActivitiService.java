@@ -30,8 +30,10 @@ import org.activiti.engine.task.Task;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
+import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.LoadProcess;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.NodeInfoEntity;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
@@ -1293,6 +1295,13 @@ public interface ActivitiService {
 	Task getCurrentTask(String processInstanceId);
 	
 	/**
+	 * 获得流程的第一个人工任务
+	 * @param processInstanceId
+	 * @return
+	 */
+	public HistoricTaskInstance getFirstTask(String processInstanceId);
+	
+	/**
 	 * 根据任务ID查询任务的待办人
 	 * @param taskId
 	 * @return
@@ -1472,7 +1481,7 @@ public interface ActivitiService {
 	 * 2014年6月27日
 	 */
 	public void addNodeWorktime(String processKey, String processIntsId,
-			List<Map<String, Object>> nodeWorktimeList) throws Exception;
+			List<NodeControlParam> worktimeList) throws Exception;
 	
 	/**根据条件获取节点工时 gw_tanx
 	 * @param processKey
@@ -1481,7 +1490,7 @@ public interface ActivitiService {
 	 */
 	public NodeInfoEntity getNodeWorktime(String processIntsId, String nodeKey);
 	
-	public NodeInfoEntity getNodeInfoEntity(List<Map<String, Object>> nodes,String taskKey) throws Exception;
+	public NodeInfoEntity getNodeInfoEntity(List<NodeControlParam> controlParamList,String taskKey) throws Exception;
 	
 	/**获取需要发送消息提醒的数据 gw_tanx
 	 * @param templateIds
@@ -1523,12 +1532,12 @@ public interface ActivitiService {
 	 */
 	public void dealTaskInfo(TaskManager tm);
 	
-	/** 代办任务处理 gw_tanx 
+	/** 委托任务处理 gw_tanx 
 	 * @param taskList
 	 * @throws Exception
 	 * 2014年7月15日
 	 */
-	public void delegateTaskInfo(TaskManager tm);
+	public void entrustTaskInfo(TaskManager tm);
 	
 	/**  gw_tanx
 	 * @return
@@ -1544,7 +1553,8 @@ public interface ActivitiService {
 	public void startPorcessInstance(String processKey, String businessKey,
 			String currentUser,
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList);
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList);
 	
 	/**
 	 * 日志记录任务操作
@@ -1562,4 +1572,32 @@ public interface ActivitiService {
 	public void addDealTask(String taskId, String dealUser, String dealType,
 			String processId, String processKey, String remark, String taskKey,
 			String taskName) throws Exception;
+
+	/**
+	 * 可驳回节点列表 gw_tanx
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param currentTaskKey
+	 *            当前任务key
+	 * @return
+	 * @throws Exception
+	 *             2014年9月1日
+	 */
+	public List<ActivitiNodeInfo> getBackActNode(String processId,
+			String currentTaskKey) throws Exception;
+	
+	/**
+	 * 获取节点控制参数变量 gw_tanx
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param taskKey
+	 *            任务key
+	 * @return
+	 * @throws Exception
+	 *             2014年9月4日
+	 */
+	public NodeControlParam getNodeControlParam(String processId, String taskKey)
+			throws Exception;
 }

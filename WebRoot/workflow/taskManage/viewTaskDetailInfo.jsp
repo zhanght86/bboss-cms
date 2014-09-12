@@ -190,6 +190,9 @@
   	</div>	
   		
 	<div class="btnarea" >
+		<pg:equal actual="${isRecall}" value="1">
+            <a href="javascript:void(0)" class="bt_2" id="recallTask" onclick="recallTask('${nowTaskId}','${processInst.PROC_INST_ID_}','${processInst.KEY_}')"><span>撤销</span></a> 
+		</pg:equal>
 		<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
 	</div>	
 </div>
@@ -199,6 +202,16 @@ var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
 	 	    
 });
+
+//撤销任务
+function recallTask(taskId,processId,processKey){
+	
+	var url="<%=request.getContextPath()%>/workflow/taskManage/cancelTask.jsp?processKey="+processKey
+			+"&processId="+processId+"&taskId="+taskId;
+ $.dialog({ id:'iframeNewId', title:'填写撤销原因',width:400,height:200, content:'url:'+url});  
+	
+}
+
 
 //轨迹回放
 function reBack(){

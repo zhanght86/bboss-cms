@@ -104,6 +104,34 @@ public class TaskManager {
 
 	private WfEntrust wfEntrust;// 委托关系
 
+	private int isRecall;// 可撤回 0不能1能
+	private int isCancel;// 可驳回 0 不能 1 能
+	private int isDiscard;// 可废弃 0 不能 1 能
+
+	public int getIsRecall() {
+		return isRecall;
+	}
+
+	public void setIsRecall(int isRecall) {
+		this.isRecall = isRecall;
+	}
+
+	public int getIsCancel() {
+		return isCancel;
+	}
+
+	public void setIsCancel(int isCancel) {
+		this.isCancel = isCancel;
+	}
+
+	public int getIsDiscard() {
+		return isDiscard;
+	}
+
+	public void setIsDiscard(int isDiscard) {
+		this.isDiscard = isDiscard;
+	}
+
 	public WfEntrust getWfEntrust() {
 		return wfEntrust;
 	}

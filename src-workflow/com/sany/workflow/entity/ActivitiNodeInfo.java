@@ -27,10 +27,40 @@ public class ActivitiNodeInfo {
 	private String node_param_value;
 
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
+	
+	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
 
 	private String DURATION_NODE;// 处理工时
 	
 	private String node_describe;// 节点描述
+	
+	private String taskUrl;//待办URL
+	
+	private String nodeTypeName;//类型名称
+
+	public int getIS_MULTI_DEFAULT() {
+		return IS_MULTI_DEFAULT;
+	}
+
+	public void setIS_MULTI_DEFAULT(int iS_MULTI_DEFAULT) {
+		IS_MULTI_DEFAULT = iS_MULTI_DEFAULT;
+	}
+
+	public String getNodeTypeName() {
+		return nodeTypeName;
+	}
+
+	public void setNodeTypeName(String nodeTypeName) {
+		this.nodeTypeName = nodeTypeName;
+	}
+
+	public String getTaskUrl() {
+		return taskUrl;
+	}
+
+	public void setTaskUrl(String taskUrl) {
+		this.taskUrl = taskUrl;
+	}
 
 	public String getNode_describe() {
 		return node_describe;

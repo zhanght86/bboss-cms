@@ -3,7 +3,6 @@
 <%@ include file="/common/jsp/accessControl.jsp"%>
 <%@ include file="/common/jsp/importAndTaglib.jsp"%>
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld"%>
-<%@ include file="/common/jsp/commonCssScript.jsp"%>
 	<%--
 	描述：桌面快捷排序设置
 	作者：qian.wang

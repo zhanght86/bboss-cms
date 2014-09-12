@@ -38,10 +38,6 @@ public class ActivitiNodeCandidate {
 
 	private String candidate_roles_name;
 
-	private int is_valid;// 是否有效 0否1是
-
-	private int is_edit_candidate;// 是否能修改本节点 0否1是
-
 	private String node_key;
 
 	private String node_type;
@@ -52,48 +48,36 @@ public class ActivitiNodeCandidate {
 
 	private String org_name;
 
-	private String messagetempleid; // 短信模板id
-
-	private String messagetempletitle;// 短息模板名称
-
-	private String emailtempleid;// 邮件模板id
-
-	private String emailtempletitle;// 邮件模板名称
-
-	private double duration_node;// 节点处理工时
-
-	private int noticenum;// 提醒次数
-
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
+	
+	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
+	
+	private String nodeTypeName;//类型名称
 
-	private int is_auto_candidate;// 是否是自动审批节点 0否1是
-
-	private int is_recall_candidate;// 本节点是否能撤回 0否1是
-
-	private int is_editafter_candidate;// 是否能修改后续节点 0否1是
-
-	public int getIs_auto_candidate() {
-		return is_auto_candidate;
+	public int getIS_MULTI_DEFAULT() {
+		return IS_MULTI_DEFAULT;
 	}
 
-	public void setIs_auto_candidate(int is_auto_candidate) {
-		this.is_auto_candidate = is_auto_candidate;
+	public void setIS_MULTI_DEFAULT(int iS_MULTI_DEFAULT) {
+		IS_MULTI_DEFAULT = iS_MULTI_DEFAULT;
 	}
 
-	public int getIs_recall_candidate() {
-		return is_recall_candidate;
+	private NodeControlParam nodeControlParam;// 节点控制变量参数
+
+	public String getNodeTypeName() {
+		return nodeTypeName;
 	}
 
-	public void setIs_recall_candidate(int is_recall_candidate) {
-		this.is_recall_candidate = is_recall_candidate;
+	public void setNodeTypeName(String nodeTypeName) {
+		this.nodeTypeName = nodeTypeName;
 	}
 
-	public int getIs_editafter_candidate() {
-		return is_editafter_candidate;
+	public NodeControlParam getNodeControlParam() {
+		return nodeControlParam;
 	}
 
-	public void setIs_editafter_candidate(int is_editafter_candidate) {
-		this.is_editafter_candidate = is_editafter_candidate;
+	public void setNodeControlParam(NodeControlParam nodeControlParam) {
+		this.nodeControlParam = nodeControlParam;
 	}
 
 	public String getNode_type() {
@@ -110,54 +94,6 @@ public class ActivitiNodeCandidate {
 
 	public void setIsMulti(String isMulti) {
 		this.isMulti = isMulti;
-	}
-
-	public int getNoticenum() {
-		return noticenum;
-	}
-
-	public void setNoticenum(int noticenum) {
-		this.noticenum = noticenum;
-	}
-
-	public double getDuration_node() {
-		return duration_node;
-	}
-
-	public void setDuration_node(double duration_node) {
-		this.duration_node = duration_node;
-	}
-
-	public String getMessagetempletitle() {
-		return messagetempletitle;
-	}
-
-	public void setMessagetempletitle(String messagetempletitle) {
-		this.messagetempletitle = messagetempletitle;
-	}
-
-	public String getEmailtempletitle() {
-		return emailtempletitle;
-	}
-
-	public void setEmailtempletitle(String emailtempletitle) {
-		this.emailtempletitle = emailtempletitle;
-	}
-
-	public String getMessagetempleid() {
-		return messagetempleid;
-	}
-
-	public void setMessagetempleid(String messagetempleid) {
-		this.messagetempleid = messagetempleid;
-	}
-
-	public String getEmailtempleid() {
-		return emailtempleid;
-	}
-
-	public void setEmailtempleid(String emailtempleid) {
-		this.emailtempleid = emailtempleid;
 	}
 
 	public String getId() {
@@ -326,22 +262,6 @@ public class ActivitiNodeCandidate {
 
 	public void setCandidate_roles_name(String candidate_roles_name) {
 		this.candidate_roles_name = candidate_roles_name;
-	}
-
-	public int getIs_valid() {
-		return is_valid;
-	}
-
-	public void setIs_valid(int is_valid) {
-		this.is_valid = is_valid;
-	}
-
-	public int getIs_edit_candidate() {
-		return is_edit_candidate;
-	}
-
-	public void setIs_edit_candidate(int is_edit_candidate) {
-		this.is_edit_candidate = is_edit_candidate;
 	}
 
 }

@@ -10,43 +10,35 @@
 
 $(document).ready(function(){
 	
-	workflowaddInit();
+	//如果是驳回按钮，显示驳回至节点
+	$("input[name=operateType]").click( function () { 
+		if($(this).val()=='reject'){
+			$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
+			$("#rejectto").show();
+		}else{
+			$("#rejectto").hide(); 
+		}
+		if($(this).val()=='turnTo'){
+			$("#delegateTr").show();
+		}else{
+			$("#delegateTr").hide(); 
+		}
+	}); 
+	//选择拨回到某个节点，将节点Key参数赋值
+	$("#rejectToActId").change( function() {
+		$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
+	}); 
+
+	//如果允许修改，显示审批人修改按钮
+	showChooseUsers();
+
+	//列表显示执行中节点
+	selectNode($("form").data("coordinateObj").id,'执行中');
+
+	//显示当前处理人
+	queryAssignees();
 
 });		
-//工作流页面默认参数配置
-function workflowaddInit(){
-	
-	var pagestate = $("#pagestate").val();
-	
-	//流程页面状态
-	if (pagestate == '1'){//新增初始状态
-		//第一个节点状态设置
-		$("tr[id='protr1'] td:last").html('当前处理节点');
-		
-	}else if (pagestate == '2') {//暂存或驳回提交人节点，提交人查看状态
-		
-	}else if (pagestate == '3') {//审批中提交人查看状态
-		
-	}else if (pagestate == '4') {//审批中审批人查看状态
-		
-	}else if (pagestate == '5') {//审批中或暂存中其他人查看状态
-		
-	}else if (pagestate == '6') {//流程结束后查看状态
-		
-	}
-}
-//节点状态标记设置
-function selectNode(actId,txt){	
-	$("#zx"+actId).text(txt);
-	if(txt=='执行中'){
-		obj = $("#protr"+actId.substring(8,actId.length));
-		obj.css("color","red");
-	}
-}
-//选择处理人
-function setCandidate(node_key){
-	setTaskCandidateUsers(node_key);
-}
 //显示当前处理人
 function queryAssignees(){
 	if($("#assignees").attr("title") != $("form").data("assignees")){
@@ -76,30 +68,41 @@ function showTemp(){
 //隐藏选择按钮
 function showChooseUsers(){
 	var pagestate =$("form").data("pagestate");
+	//获取当前任务节点key
 	var nowTaskId = $("form").data("coordinateObj").id;
-	if(pagestate == '1'||pagestate == '2'){
-		$("a[name=chooseUsersa]").show();
-	}else{
-
-		var objs = $("#protable").find("input[value="+nowTaskId+"]");
-		if(objs.attr("nvl") == '10'){
-			var con = parseInt(objs.attr("con"))-1;
-			$("tr[id^=protr]:gt("+con+")").find("a").show();
+	
+	// 流程开启时默认第一个任务key
+	if (pagestate == 1) {
+		nowTaskId = "usertask1";
+	}
+	
+	//根据当前任务节点key获取节点顺位数
+	var objs = $("#protable").find("input[value="+nowTaskId+"]");
+	var currentTaskNum = parseInt(objs.attr("con"));
+	//获取所有节点个数
+	var listSize = $("#actListSize").val();
+	
+	// 当前节点能修改后续节点权限
+	if($("#isEditAfter"+currentTaskNum).val() == 1){
+		
+		for (var i = currentTaskNum+1;i <= listSize; i++) {
+			// 后续节点是否能被修改
+			if ($("#isEdit"+i).val() == 1) {
+				$("#protr"+i).find("a").show();
+			}
 		}
 	}
 }
 
-//加载页面时 让需要选择的节点红色星号显示,objs为必选节点
-function initliteRequiredStar(objs){
-	var vs = objs.split(',');
-	$("#tempnum").val(objs);
-	var trs = $("#protable tr");
-	for(var j=0;j<vs.length;j++){
-		var req = vs[j];
-		$(trs[req]).find(".requiredstar").show();
+//标记已通过节点
+function selectNode(actId,txt){	
+	$("#zx"+actId).text(txt);
+	if(txt=='执行中'){
+		obj = $("#protr"+actId.substring(8,actId.length));
+		obj.css("color","red");
 	}
-
 }
+
 //显示当前处理人
 function workAssignees(userList){
 	var userNames = '';

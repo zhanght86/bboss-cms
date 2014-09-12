@@ -30,14 +30,14 @@ public class TestDemo {
 	public static void main(String[] args) {
 //				deployment("demo1", "com/sany/workflow/test/demo1.bpmn", "");
 //		checkOne();
-//				testinitor();
+				testinitor();
 //				deployment("demo1", "com/sany/workflow/test/demo1.bpmn", "");
 //				huiqianparraleltosequential();
 //		huiqianparralelt2ndsequentialswitch();
 //		deployment("dddd", "RefundProcess.bpmn20.xml", "");
 		//deployment("fff", "com/sany/workflow/test/EndorseProcess.bpmn20.xml", "");
 		
-		 deploytest();
+//		 deploytest();
 		
 	}
 	
@@ -72,7 +72,74 @@ public class TestDemo {
 		{
 			//            	ProcessInstance instance = activitiService.startProcDef("demo1", params);
 //			ProcessInstance instance = activitiService.startProcDef(UUID.randomUUID().toString(),"demo1", params);
-			ProcessInstance instance = activitiService.startProcDef(UUID.randomUUID().toString(),"demo1", params,"user1");
+			ProcessInstance instance = activitiService.startProcDef(UUID.randomUUID().toString(),"mms", params,"user1");
+			System.out.println("processDefinitionId=" + instance.getProcessDefinitionId());
+			System.out.println("businessKey=" + instance.getBusinessKey());
+			System.out.println("instanceId=" + instance.getProcessInstanceId());
+		}
+		
+//		System.out.println("==============================删除流程实例");
+//		for (ProcessInstance instance : instanceList) {
+//			activitiService.getRuntimeService().deleteProcessInstance(instance.getId(),"");
+//		}
+		
+		
+		
+		TaskService taskService = activitiService.getTaskService();
+		
+		System.out.println("==============================根据用户名获取待办");
+		String[] users = {"user1"};
+		for(String user:users){
+			List<Task> taskList1 = activitiService.getTaskService().createTaskQuery().taskCandidateUser(user).list();
+			for (Task task : taskList1) {
+				
+				
+				System.out.println("=========获取流程各节点审批人信息");
+				Map variables = activitiService.getRuntimeService().getVariables(task.getProcessInstanceId(), new ArrayList<String>());
+				System.out.println("参数："+variables);
+				
+				System.out.println("=========通过流程");
+				
+				activitiService.completeTask(task.getId(),  null);
+				
+//				System.out.println("=========通过流程后返回驳回节点");
+				//activitiService.commitProcess(task.getId(), user, new HashMap(), "usertask3");
+				
+				System.out.println("=========查询历史记录");
+				//List his = activitiService.findHistoricUserTask(task.getProcessInstanceId());
+				//System.out.println("历史记录："+his);
+				
+//				if("user1"==user){
+//					System.out.println("==============================转办");
+//					activitiService.transferAssignee(task.getId(),"user2");
+//				}
+
+			
+			}
+		}
+	}
+	
+	
+	public static void testmultiinitor()
+	{
+		ActivitiService activitiService = new ActivitiServiceImpl("activiti.cfg.xml");
+		//分支1后续会在节点4被驳回，分支2直接通过。
+		Map common_params = new HashMap();
+		common_params.put("next_task", 2);
+
+		Map params = new HashMap();
+		params.put("usertask1_user", Arrays.asList("user1".split(",")));
+		params.put("usertask2_user", Arrays.asList("user2,user22,user23".split(",")));
+		params.put("usertask3_user", Arrays.asList("user3,user32".split(",")));
+		params.put("usertask4_user", Arrays.asList("user4,user42".split(",")));
+		params.put("usertask5_user", Arrays.asList("user5".split(",")));
+		params.put("businessType", "test");
+
+//		if (instanceList.isEmpty()) 
+		{
+			//            	ProcessInstance instance = activitiService.startProcDef("demo1", params);
+//			ProcessInstance instance = activitiService.startProcDef(UUID.randomUUID().toString(),"demo1", params);
+			ProcessInstance instance = activitiService.startProcDef(UUID.randomUUID().toString(),"mms", params,"user1");
 			System.out.println("processDefinitionId=" + instance.getProcessDefinitionId());
 			System.out.println("businessKey=" + instance.getBusinessKey());
 			System.out.println("instanceId=" + instance.getProcessInstanceId());

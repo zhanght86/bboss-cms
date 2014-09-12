@@ -4,14 +4,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <div class="tabbox" id="tabbox">
 	<ul class="tab" id="menu0">
-		<li><a href="javascript:void(0)" class="current"
-			onclick="setTab(0,0)"><span>待办配置</span></a></li>
+		<li><a href="javascript:void(0)" class="current" onclick="setTab(0,0)"><span>处理人配置</span></a></li>
 		<li><a href="javascript:void(0)" onclick="setTab(0,1)"><span>参数配置</span></a></li>
+		<li><a href="javascript:void(0)" onclick="setTab(0,2)"><span>控制变量配置</span></a></li>
 	</ul>
 </div>
 
 <div id="main0">
-	
 	
 	<ul id="tab1" style="display: block;">
 		<div>
@@ -25,12 +24,10 @@
 						<th>节点名称</th>
 						<th>待办人</th>
 						<th>待办组</th>
-						<th>处理工时/小时</th>
-						<th>操作</th>
 					</pg:header>
 					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
 					<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
-					<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
+						<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
 						<input type="hidden"
 							id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
 							value="<pg:cell colName='candidate_users_id'></pg:cell>" />
@@ -46,73 +43,16 @@
 							<td><input type="text"
 								id="<pg:cell colName='node_key'/>_users_name" name="candidate_users_name"
 								value="<pg:cell colName='candidate_users_name'></pg:cell>"
-								 class="input1 w200" /><a
-								href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a></td>
+								 class="input1 w200" readonly/>
+								<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
+								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
+							</td>
 							<td><input type="text"
 								id="<pg:cell colName='node_key'/>_groups_name" name="candidate_groups_name"
 								value="<pg:cell colName='candidate_groups_name'></pg:cell>"
-								 class="input1 w200" /><a
-								href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a></td>
-							<td >
-								<input type="text" value="<pg:cell colName="duration_node"/>" name="duration_node" style="width: 50px;" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>
-							</td>
-							<td>
-								可修改
-								<select name="is_edit_candidate">
-									<pg:equal colName="is_edit_candidate" value="0">
-										<option value="0" selected>否</option>
-										<option value="1">是</option>
-									</pg:equal>
-									<pg:equal colName="is_edit_candidate" value="1">
-										<option value="0">否</option>
-										<option value="1" selected>是</option>
-									</pg:equal>
-								</select>&nbsp; | 
-								有效
-								<select name="is_valid">
-									<pg:equal colName="is_valid" value="0">
-										<option value="0" selected>否</option>
-										<option value="1">是</option>
-									</pg:equal>
-									<pg:equal colName="is_valid" value="1">
-										<option value="0">否</option>
-										<option value="1" selected>是</option>
-									</pg:equal>
-								</select>&nbsp; |
-								自动审批
-								<select name="is_auto_candidate">
-									<pg:equal colName="is_auto_candidate" value="0">
-										<option value="0" selected>否</option>
-										<option value="1">是</option>
-									</pg:equal>
-									<pg:equal colName="is_auto_candidate" value="1">
-										<option value="0">否</option>
-										<option value="1" selected>是</option>
-									</pg:equal>
-								</select>
-								<br/>
-								可撤回
-								<select name="is_recall_candidate">
-									<pg:equal colName="is_recall_candidate" value="0">
-										<option value="0" selected>否</option>
-										<option value="1">是</option>
-									</pg:equal>
-									<pg:equal colName="is_recall_candidate" value="1">
-										<option value="0">否</option>
-										<option value="1" selected>是</option>
-									</pg:equal>
-								</select>&nbsp; |
-								可修改后续节点
-								<select name="is_editafter_candidate">
-									<pg:equal colName="is_editafter_candidate" value="0">
-										<option value="0" selected>否</option>
-										<option value="1">是</option>
-									</pg:equal>
-									<pg:equal colName="is_editafter_candidate" value="1">
-										<option value="0">否</option>
-										<option value="1" selected>否</option>
-									</pg:equal>
-								</select>         
+								 class="input1 w200" readonly/>
+								<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
+								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
 							</td>
 						</tr>
 						</pg:notin>
@@ -153,6 +93,51 @@
 			</div>
 		</div>
 	</ul>
+	
+	<ul id="tab3">
+	
+		<div id="contralconig">
+			<form name="contralForm" id="contralForm" method="post">
+			
+				<input type="hidden" id="business_id" name="business_id" value="${business_id }"/>
+				<input type="hidden" id="business_type" name="business_type" value="${business_type }"/>
+				<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
+				
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
+					<pg:header>
+						<th>节点KEY</th>
+						<th>节点名称</th>
+						<th>处理工时/小时</th>
+						<th>节点描述</th>
+						<th>业务处理类</th>
+						<th>待办URL</th>
+						<th>操作</th>
+					</pg:header>
+					
+					<pg:list autosort="false" requestKey="contralParamList">
+						<tr>
+							<td><pg:cell colName="NODE_KEY"/></td>
+							<td><pg:cell colName="NODE_NAME"/></td>
+							<td id="DURATION_NODE<pg:cell colName="NODE_KEY"/>">
+							<pg:equal colName="DURATION_NODE" value="0">&nbsp;</pg:equal>
+							<pg:notequal colName="DURATION_NODE" value="0">
+								<pg:cell colName="DURATION_NODE"/>
+							</pg:notequal>
+							</td>
+							<td id="NODE_DESCRIBE<pg:cell colName="NODE_KEY"/>"><pg:cell colName="NODE_DESCRIBE"/></td>
+							<td id="BUSSINESSCONTROLCLASS<pg:cell colName="NODE_KEY"/>"><pg:cell colName="BUSSINESSCONTROLCLASS"/></td>
+							<td id="TASK_URL<pg:cell colName="NODE_KEY"/>"><pg:cell colName="TASK_URL"/></td>
+							<td>
+							<a href="javascript:void(0)" onclick="updateNodeControlParam('<pg:cell colName="NODE_KEY" />')">设置</a>
+							</td>
+						</tr>
+					</pg:list>
+				</table>
+					
+			</form>
+		</div>
+	</ul>
+	
 </div>
 <div id="sp" style="display:none">
 		<div style="color:#99BBE8;background:#fafafa;padding:5px;">选择节点</div>
@@ -161,6 +146,25 @@
 		</pg:list>
 </div>
 <script type="text/javascript">
+
+// 清空选择
+function emptyChoose(id,type){
+	if (type=='1') {//清空用户
+		$("#"+id+"_users_id").val('');
+		$("#"+id+"_users_name").val('');
+	}else {//清空组
+		$("#"+id+"_groups_id").val('');
+		$("#"+id+"_groups_name").val('');
+	}
+}
+
+function updateNodeControlParam(nodekey){
+	 var url="<%=request.getContextPath()%>/workflow/config/toUpdateNodeControlParam.page?"
+			 +"process_key=${process_key}&business_id=${business_id}&business_type=${business_type}"
+			 +"&taskKey="+nodekey+"&pageType=fromTemplet";
+	$.dialog({ id:'iframeNewId', title:'设置节点控制参数信息',width:580,height:600, content:'url:'+url});  
+}
+
 function setUser(node_key,users_id,users_name){
 		$("#"+node_key+"_users_id").val(users_id);
 		$("#"+node_key+"_users_name").val(users_name);
@@ -233,7 +237,6 @@ function openChooseGroups(node_key){
 			});
 	}
 	
-	
 	function loadNodevariableData(){
 		$("#nodevariableContent").load("queryNodevariable.page?business_id="+$("#business_id").val()+"&business_type="+$("#business_type").val()+"&processKey="+$("#process_key").val());
 	}
@@ -278,23 +281,5 @@ function openChooseGroups(node_key){
 		
 	   });
 	
-	function chkPrice(obj){
-		obj.value = obj.value.replace(/[^\d.]/g,""); 
-		//必须保证第一位为数字而不是. 
-		obj.value = obj.value.replace(/^\./g,""); 
-		//保证只有出现一个.而没有多个. 
-		obj.value = obj.value.replace(/\.{2,}/g,"."); 
-		//小数点后面保留一位小数
-		obj.value = obj.value.replace(/\.\d\d/g,"."); 
-		//保证.只出现一次，而不能出现两次以上 
-		obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
-	} 
-	
-	function chkLast(obj){ 
-		// 如果出现非法字符就截取掉 
-		if(obj.value.substr((obj.value.length - 1), 1) == '.') {
-			obj.value = obj.value.substr(0,(obj.value.length - 1)); 
-		}
-	}
 </script>
 </html>

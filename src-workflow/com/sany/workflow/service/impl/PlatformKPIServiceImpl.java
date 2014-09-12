@@ -3,9 +3,9 @@ package com.sany.workflow.service.impl;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ControlParam;
 import org.activiti.engine.KPI;
 import org.activiti.engine.KPIService;
 import org.activiti.engine.delegate.DelegateExecution;
@@ -14,21 +14,22 @@ import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
 
 import com.frameworkset.platform.holiday.area.bean.FlowWarning;
 import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.NodeInfoEntity;
 import com.sany.workflow.service.ActivitiService;
 
 public class PlatformKPIServiceImpl implements KPIService {
 	private WorkTimeUtil workTimeUtil;
 	private ActivitiService activitiService;
-	private static ThreadLocal<List<Map<String, Object>>> worktimelist = new ThreadLocal<List<Map<String, Object>>>();
+	private static ThreadLocal<List<NodeControlParam>> nodeControlParamList = new ThreadLocal<List<NodeControlParam>>();
 	private static Logger log = Logger.getLogger(PlatformKPIServiceImpl.class);
 	public PlatformKPIServiceImpl() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void setWorktimelist(List<Map<String, Object>> worktimeList)
+	public static void setWorktimelist(List<NodeControlParam> controlParamList)
 	{
-		worktimelist.set(worktimeList);
+		nodeControlParamList.set(controlParamList);
 	}
 	
 	@Override
@@ -45,7 +46,7 @@ public class PlatformKPIServiceImpl implements KPIService {
 			nodeInfoEntity = activitiService.getNodeWorktime(pinstanceid, activieKey);
 			if(nodeInfoEntity == null)
 			{
-				nodeInfoEntity = activitiService.getNodeInfoEntity(worktimelist.get(), activieKey);
+				nodeInfoEntity = activitiService.getNodeInfoEntity(nodeControlParamList.get(), activieKey);
 			}
 			if(nodeInfoEntity == null || nodeInfoEntity.getDURATION_NODE() == 0)
 				return null;
@@ -75,6 +76,61 @@ public class PlatformKPIServiceImpl implements KPIService {
 		}
 	
 	
+	}
+
+	@Override
+	public ControlParam getControlParam(DelegateExecution currentexecution,String activieKey)
+			throws ActivitiException {
+		return getControlParam( currentexecution.getProcessInstanceId(),activieKey);
+	}
+	
+	@Override
+	public ControlParam getControlParam(String processInstanceId,String activieKey)
+			throws ActivitiException {
+		try {
+			if(this.activitiService == null)
+				this.activitiService = WebApplicationContextUtils.getWebApplicationContext().getTBeanObject("activitiService", ActivitiService.class);
+			NodeControlParam controlParam = activitiService.getNodeControlParam(
+					processInstanceId,activieKey );
+			List<NodeControlParam> controlParamList = nodeControlParamList.get();
+			if(controlParam == null)
+				controlParam = getNodeInfoEntity(controlParamList,activieKey);
+			if(controlParam == null)
+				return null;
+			ControlParam param = new ControlParam();
+			param.setID(controlParam.getID());
+			param.setBUSSINESSCONTROLCLASS(controlParam.getBUSSINESSCONTROLCLASS());
+			param.setIS_AUTO(controlParam.getIS_AUTO());
+			param.setIS_AUTOAFTER(controlParam.getIS_AUTOAFTER());
+			param.setIS_COPY(controlParam.getIS_COPY());
+			param.setIS_MULTI(controlParam.getIS_MULTI());
+			param.setIS_SEQUENTIAL(controlParam.getIS_SEQUENTIAL());
+			param.setIS_VALID(controlParam.getIS_VALID());
+			param.setNODE_KEY(activieKey);
+			param.setNODE_NAME(controlParam.getNODE_NAME());
+			param.setPROCESS_ID(processInstanceId);
+			param.setPROCESS_KEY(controlParam.getPROCESS_KEY());
+			
+			return param;
+			
+		} catch (Exception e) {
+			throw new ActivitiException("get Node Control Param error:" , e);
+		}
+	}
+	
+	private NodeControlParam getNodeInfoEntity(
+			List<NodeControlParam> controlParamList, String taskKey)
+	{
+		if(controlParamList == null)
+			return null;
+		for(NodeControlParam param:controlParamList)
+		{
+			if(param.getNODE_KEY().equals(taskKey))
+			{
+				return param;
+			}
+		}
+		return null;
 	}
 
 }

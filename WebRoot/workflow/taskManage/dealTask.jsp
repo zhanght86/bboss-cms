@@ -80,7 +80,7 @@
 					
 					<ul id="tab2" style="display: none;">
 						<fieldset>
-							<legend><strong>节点处理人配置</strong></legend>
+							<legend><strong>处理人配置</strong></legend>
 								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 									<pg:header>
 										<th>节点KEY</th>
@@ -88,7 +88,6 @@
 										<th>待办人</th>
 										<th>待办组</th>
 										<th>节点类型</th>
-										<th>处理工时</th>
 									</pg:header>
 										
 									<pg:list autosort="false" requestKey="nodeList">
@@ -139,14 +138,110 @@
 													</pg:notequal>
 												</pg:notequal>
 											</td>
-											<td >
-												<span><pg:cell colName="DURATION_NODE"/></span>
-											</td>
 										</tr>
 									</pg:notin>
 									</pg:list>
 								</table>
-							
+						</fieldset>
+						
+						<fieldset >
+							<legend><strong>控制参数</strong></legend>
+							<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable">
+								<tr >
+									<th width="100"><strong>节点KEY</strong></th>
+									<th width="160"><strong>节点描述</strong></th>
+									<th width="300"><strong>待办URL</strong></th>
+									<th width="500"><strong>控制参数</strong></th>
+								</tr>
+									
+							<pg:notempty actual="${controlParamList}" >
+							<pg:list actual="${controlParamList}"  >
+								<tr >
+									<td width="100"><pg:cell colName="NODE_KEY"/></td>
+									<td width="160"><pg:cell colName="NODE_DESCRIBE"/></td>
+									<td width="300"><pg:cell colName="TASK_URL"/></td>
+									<td width="500">
+										<pg:notempty colName="IS_VALID">
+											<input type="checkbox" disabled <pg:equal colName="IS_VALID" value="1">checked </pg:equal> />是否有效 
+										</pg:notempty>
+										<pg:empty colName="IS_VALID">
+											<input type="checkbox" disabled/>是否有效 
+										</pg:empty>
+										
+										<pg:notempty colName="IS_EDIT">
+											<input type="checkbox" disabled <pg:equal colName="IS_EDIT" value="1">checked </pg:equal> />可修改
+										</pg:notempty>
+										<pg:empty colName="IS_EDIT">
+											<input type="checkbox" disabled/>可修改
+										</pg:empty>
+										
+										<pg:notempty colName="IS_EDITAFTER">
+											<input type="checkbox" disabled <pg:equal colName="IS_EDITAFTER" value="1">checked </pg:equal>/>可修改后续节点
+										</pg:notempty>
+										<pg:empty colName="IS_EDITAFTER">
+											<input type="checkbox" disabled />可修改后续节点
+										</pg:empty>
+										
+										<pg:notempty colName="IS_AUTO">
+											<input type="checkbox" disabled <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批
+										</pg:notempty>
+										<pg:empty colName="IS_AUTO">
+											<input type="checkbox" disabled />自动审批
+										</pg:empty>
+										
+										<pg:notempty colName="IS_AUTOAFTER">
+											<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>后续节点自动审批
+										</pg:notempty>
+										<pg:empty colName="IS_AUTOAFTER">
+											<input type="checkbox" disabled />后续节点自动审批
+										</pg:empty>
+										
+										<pg:notempty colName="IS_RECALL">
+											<input type="checkbox" disabled <pg:equal colName="IS_RECALL" value="1">checked </pg:equal>/>可被撤回
+										</pg:notempty>
+										<pg:empty colName="IS_RECALL">
+											<input type="checkbox" disabled />可被撤回
+										</pg:empty>
+										
+										<pg:notempty colName="IS_CANCEL">
+											<input type="checkbox" disabled <pg:equal colName="IS_CANCEL" value="1">checked </pg:equal>/>可驳回
+										</pg:notempty>
+										<pg:empty colName="IS_CANCEL">
+											<input type="checkbox" disabled />可驳回
+										</pg:empty>
+										
+										<pg:notempty colName="IS_DISCARD">
+											<input type="checkbox" disabled <pg:equal colName="IS_DISCARD" value="1">checked </pg:equal>/>可废弃
+										</pg:notempty>
+										<pg:empty colName="IS_DISCARD">
+											<input type="checkbox" disabled />可废弃
+										</pg:empty>
+										
+										<pg:notempty colName="IS_COPY">
+											<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
+										</pg:notempty>
+										<pg:empty colName="IS_COPY">
+											<input type="checkbox" disabled />可抄送
+										</pg:empty>
+										
+										<pg:notempty colName="IS_MULTI">
+											<input type="checkbox" disabled <pg:equal colName="IS_MULTI" value="1">checked </pg:equal>/>多实例
+										</pg:notempty>
+										<pg:empty colName="IS_MULTI">
+											<input type="checkbox" disabled />多实例
+										</pg:empty>
+										
+										<pg:notempty colName="IS_SEQUENTIAL">
+											<input type="checkbox" disabled <pg:equal colName="IS_SEQUENTIAL" value="1">checked </pg:equal>/>串行
+										</pg:notempty>
+										<pg:empty colName="IS_SEQUENTIAL">
+											<input type="checkbox" disabled />串行
+										</pg:empty>
+									</td>
+								</tr>
+							</pg:list>
+							</pg:notempty>
+							</table>
 						</fieldset>
 						
 						<fieldset >
@@ -221,25 +316,36 @@
 								</select>
 							</td>
 							
-							<td width="300px;" align="center">
-								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
-								<select id="rejectedtype" name="rejectedtype" style=" width: 200px;">
-									<pg:notempty actual="${lastTaskToNode}">
-										<option value="0" selected>${lastTaskToNode}(上一个任务对应的节点)</option>
-									</pg:notempty>
-									<pg:notempty actual="${lastNode}">
-										<option value="1" >${lastNode}(当前节点的上一个节点)</option>
-									</pg:notempty>
-								</select>
+							<td width="300px;" align="center" id="cancelTd">
+								<table>
+									<tr>
+										<td rowspan="2">
+											<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="rejectToPreTask()"><span>驳回</span></a>
+										</td>
+										<td >
+											<input type="checkbox" id="rejectedtype" name="rejectedtype" value="1"/>通过后直接返回本节点
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<input type="hidden" name="toActName" value="" />
+											<select id="rejectToActId" name="rejectToActId" style=" width: 200px;">
+												<pg:list requestKey="backActNodeList">
+													<option value="<pg:cell colName="node_key"/>" ><pg:cell colName="node_name"/></option>
+												</pg:list>
+											</select>
+										</td>
+									</tr>
+								</table>
 							</td>
 							
-							<td width="250px;" align="center">
+							<td width="250px;" align="center" >
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="delegateTask()"><span>转办</span></a>
 								<input type="hidden" class="input1 w120" id="delegate_users_id" />
 								<input type="text" class="input1 w120" id="delegate_users_name" />
 								<a href="javascript:openChooseUsers('delegate')">选择</a>
 							</td>
-							<td width="200px;" align="center">
+							<td width="200px;" align="center" id="discardTd">
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
 							</td>
 						</tr>
@@ -256,9 +362,23 @@ $(document).ready(function() {
 		$(this).parent('td').parent('tr').remove();
 	});
 	
+	//选择拨回到某个节点，将节点Key参数赋值
+	$("#rejectToActId").change( function() {
+		$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
+	}); 
 	
-	if (${suspended == true}) {
-		$("#dealButtonDiv").hide();
+	//是否有废弃功能
+	if ("${task.isDiscard}"=="1"){
+		$("#discardTd").show();
+	}else{
+		$("#discardTd").hide();
+	}
+	//是否有驳回功能
+	if ("${task.isCancel}"=="1"){
+		$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
+		$("#cancelTd").show();
+	}else {
+		$("#cancelTd").hide();
 	}
 });
 
@@ -298,7 +418,8 @@ function delegateTask(){
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/delegateTask.page",
 			data: {"taskId":'${task.ID_}',"changeUserId":userid,"processIntsId":'${task.PROC_INST_ID_}',
-				"processKey":'${processKey}',"createUser":'${createUser}',"entrustUser":'${entrustUser}'},
+				"processKey":'${processKey}',"createUser":'${createUser}',"entrustUser":'${entrustUser}',
+				"completeReason":$.trim($("#completeReason").val())},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){
@@ -378,11 +499,6 @@ function discardTask() {
 
 //驳回任务
 function rejectToPreTask(){
-	var rejectedtype = $("#rejectedtype").val();
-	if (rejectedtype == null) {
-		alert("驳回节点为空，不能被驳回");
-		return;
-	}
 	
 	$.dialog.confirm('确定要驳回吗？', function(){
 		

@@ -8,6 +8,7 @@ import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.OrganizationDTO;
 import com.sany.workflow.entity.User;
@@ -206,6 +207,26 @@ public interface ActivitiConfigService {
 	 * @return
 	 */
 	public List<Nodevariable> selectNodevariable(String processKey,String business_id,String business_type);
+	 
+	/** 获取节点控制参数信息 gw_tanx
+	 * @param processKey
+	 * @param business_id
+	 * @param business_type
+	 * @return
+	 * 2014年8月31日
+	 */
+	public List<NodeControlParam> getNodeContralParamList(String processKey,String business_id,String business_type)throws Exception;
+	
+	/** 获取节点控制参数信息 gw_tanx
+	 * @param processKey
+	 * @param business_id
+	 * @param business_type
+	 * @return
+	 * 2014年8月31日
+	 */
+	public NodeControlParam getNodeContralParam(String processKey,
+			String business_id, String business_type, String taskKey)
+			throws Exception;
 	
 	/**
 	 * 查询节点参数配置列表
@@ -290,6 +311,9 @@ public interface ActivitiConfigService {
 	 */
 	String saveNodevariable(List<Nodevariable> nodevariableList,
 			String business_id, String business_type, String process_key);
+	
+	public String saveNodeContralParam(NodeControlParam nodeControlParam,
+			String business_id, String business_type, String process_key);
 
 	void addProBusinessType(String processKey, String businessTypeId)  throws ActivitiConfigException;
 
@@ -317,12 +341,12 @@ public interface ActivitiConfigService {
 	 * @return
 	 * 2014年8月23日
 	 */
-	public List<ActivitiNodeInfo> queryAllActivitiNodes(String processKey);
+	public List<NodeControlParam> queryAllActivitiNodes(String processKey);
 	
-	/**  扩展表中修改节点信息
-	 * @param processKey
-	 * @return
-	 * 2014年8月23日
+	/** 保存节点排序 gw_tanx
+	 * @param controlParamList
+	 * 2014年9月10日
 	 */
-	public void updateNodeInfo(ActivitiNodeInfo nodeInfo);
+	public void saveNodeOrderNum(List<NodeControlParam> controlParamList) throws Exception;
+	
 }

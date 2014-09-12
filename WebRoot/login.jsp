@@ -723,7 +723,7 @@ DD_belatedPNG.fix('div');
 					</option>
 					<option value="3"
 							<%if(loginStyle != null&&loginStyle.equals("3")){%>
-						selected <%}%>>>
+						selected <%}%>>
 						ISany
 					</option>
 					<option value="1"

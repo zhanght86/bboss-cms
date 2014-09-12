@@ -79,7 +79,15 @@ public class ChooseUserAction {
 	List<User> queryUsersByUsernames(String usernames) {
 		try {
 			if (StringUtils.isNotEmpty(usernames)) {
-				return chooseUserService.queryUsersByUsernames(usernames);
+				List<User> userList = chooseUserService.queryUsersByUsernames(usernames);
+				
+				if(userList!=null&&userList.size()>0){
+					for(User u:userList){
+						u.setOrgName(FunctionDB.getUserorgjobinfos(u.getUserId()));
+					}
+				}
+				
+				return userList;
 			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage());

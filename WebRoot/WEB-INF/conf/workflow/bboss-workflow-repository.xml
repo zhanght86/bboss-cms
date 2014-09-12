@@ -26,6 +26,7 @@
 		path:startProcess="/workflow/repository/startProcess.jsp"
 		path:setMessageTemplate="/workflow/repository/setMessageTemplate.jsp"
 		path:processDefsXML="/workflow/repository/processDefsXML.jsp"
+		path:tostartProcessConfig="/workflow/repository/startProcessConfig.jsp"
 		f:activitiService="attr:activitiService"
 		f:activitiConfigService="attr:activitiConfigService"
 		f:appcreateService="attr:application.appcreateService"

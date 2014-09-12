@@ -71,7 +71,6 @@ function dosubmit(){
 				if (data != 'success') {
 					alert("撤销任务出错:"+data);
 				}else {
-					W.modifyQueryData();
 					api.close();	
 				}
 			}

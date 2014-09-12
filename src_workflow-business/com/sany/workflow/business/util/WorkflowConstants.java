@@ -9,14 +9,13 @@ package com.sany.workflow.business.util;
 public class WorkflowConstants {
 	
 	//流程TYPE
-	public static final String PRO_DEF_START ="usertask1";//流程启动节点key
-	
 	public static final String PRO_BUSINESS_TYPE ="businessType";//业务类型
 	public static final String PRO_TITLE ="title";//业务类型
 	public static final String PRO_CANDIDATE_POSTFIX ="_users";//审批人参数后缀
 	public static final String PRO_REALNAME_POSTFIX ="_realname";//审批人真实名称参数后缀
 	public static final String PRO_TO_ACTID ="_toActId";//任意跳转名称参数后缀
 	public static final String PRO_ACT_CANDIDATE_DEF ="system";//任意跳转名称参数前缀
+	public static final String PRO_DEF_START ="usertask1";//流程启动节点key
 	public static final String PRO_DEF_SECOND ="usertask2";//流程节点key
 	public static final String PRO_DEF_COPY_TO ="抄送";//流程启动节点key
 	public static final String PRO_ACTNODE ="actNode";//流程实例节点信息
@@ -28,6 +27,14 @@ public class WorkflowConstants {
 	public static final String PRO_ACT_AUTO_ARGS  ="_args";//自动审批参数后缀
 	public static final String PRO_COPY_TITLE_START  ="请查阅";//
 	public static final String PRO_COPY_TITLE_APR  ="请审批";//
+	
+	//流程页面类型
+	public static final Integer PRO_PAGETYPE_ADD= 1;        //流程新增页面
+	public static final Integer PRO_PAGETYPE_READD= 2;        //流程新增页面,重新提交
+	public static final Integer PRO_PAGETYPE_APPROVE= 3;        //流程审批页面
+	public static final Integer PRO_PAGETYPE_UPDATE= 4;        //流程修改页面
+	public static final Integer PRO_PAGETYPE_SHOW= 5;        //流程查看页面
+	public static final Integer PRO_PAGETYPE_ENDSHOW= 6;        //流程结束后的查看页面
 	
 	//流程操作描述
 	public static final String PRO_OPE_DES_SUBMIT = "提交流程";	
@@ -41,14 +48,16 @@ public class WorkflowConstants {
 	//新的页面状态类
 	/**页面状态   新增初始状态*/
 	public static final Integer PRO_PAGESTATE_INIT= 1;        
-	/**页面状态   暂存或驳回提交人节点，提交人查看状态(无转办/驳回功能，只有通过/废弃功能)*/
+	/**页面状态   暂存或驳回提交人节点，提交人查看状态*/
 	public static final Integer PRO_PAGESTATE_READD= 2;        
-	/**页面状态   审批中提交人查看状态(有撤回状态)*/
+	/**页面状态   审批中提交人查看状态*/
 	public static final Integer PRO_PAGESTATE_APPLYER= 3;        
-	/**页面状态   正常处理状态(无撤回)*/
+	/**页面状态   审批中审批人查看状态*/
 	public static final Integer PRO_PAGESTATE_APPROVE= 4; 
-	/**页面状态  查看状态*/
-	public static final Integer PRO_PAGESTATE_VIEW = 5; 
+	/**页面状态   审批中或暂存中其他人查看状态*/
+	public static final Integer PRO_PAGESTATE_SHOW= 5; 
+	/**页面状态   流程结束后查看状态*/
+	public static final Integer PRO_PAGESTATE_ENDSHOW= 6;        
 	
 	/**流程操作类型   流程通过*/
 	public static final String PRO_OPE_TYPE_PASS = "pass";	
@@ -68,8 +77,21 @@ public class WorkflowConstants {
 	/**流程节点参数说明   多实例并行 */
 	public static final String PRO_ACT_MUL = "20";
 	/**流程节点参数说明   会审 */
-//	public static final String PRO_ACT_SIG = "30";
+	public static final String PRO_ACT_SIG = "30";
 	/**流程节点参数说明   抄送 */
-	public static final String PRO_ACT_COP = "30";
+	public static final String PRO_ACT_COP = "40";
 	
+	/**流程节点参数说明   重复审批人自动跳过 */
+	public static final String PRO_ACT_AUTO_PER ="10";
+	/**流程节点参数说明   节点自动审批 */
+	public static final String PRO_ACT_AUTO ="20";
+	/**流程节点参数说明   节点不自动审批 */
+	public static final String PRO_ACT_NOT_AUTO ="10";
+	/**流程节点参数说明   节点允许撤回 */
+	public static final String PRO_ACT_CANRECALL ="10";
+	/**流程节点参数说明   节点允许修改后续节点 */
+	public static final String PRO_ACT_EDITAFTER ="10";
+	/**流程节点参数说明   本节点能否被修改 */
+	public static final String PRO_ACT_CANEDIT ="10";
+
 }

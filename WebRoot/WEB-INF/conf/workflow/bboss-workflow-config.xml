@@ -25,7 +25,7 @@
 		path:updatenodevariable="/workflow/taskConfig/updateNodevariable.jsp"
 		path:runmain="/workflow/runTaskConfig/runTaskConfigMain.jsp"
 		path:nodeinfolist="/workflow/runTaskConfig/nodeinfolist.jsp"
-		path:toUpdateNodeInfo="/workflow/taskConfig/updateNodeInfo.jsp"
+		path:toUpdateNodeControlParam="/workflow/taskConfig/updateNodeControlParam.jsp"
 		
 		path:runchooseusers="/workflow/runTaskConfig/chooseOrgUser.jsp"
 		path:runchoosegroups="/workflow/runTaskConfig/group_main.jsp"

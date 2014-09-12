@@ -48,6 +48,7 @@ import com.sany.application.util.AppHelper;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.LoadProcess;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessDef;
 import com.sany.workflow.entity.ProcessDefCondition;
@@ -298,8 +299,8 @@ public class ActivitiRepositoryAction {
 		List<ActivityImpl> aList = activitiService
 				.getActivitImplListByProcessKey(processKey);
 		
-		//从扩展表中获取节点信息
-		List<ActivitiNodeInfo> nodeList = activitiConfigService.queryAllActivitiNodes(processKey);
+		// 获取节点信息(通用配置里设置的控制信息)
+		List<NodeControlParam> nodeList = activitiConfigService.queryAllActivitiNodes(processKey);
 		model.addAttribute("nodeList",nodeList);
 		
 		for(int i=0;i<aList.size();i++){
@@ -539,7 +540,8 @@ public class ActivitiRepositoryAction {
 	public @ResponseBody
 	String startPorcessInstance(String processKey, String businessKey,
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList) {
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList) {
 
 		try {
 
@@ -547,7 +549,8 @@ public class ActivitiRepositoryAction {
 					.getUserAccount();
 
 			activitiService.startPorcessInstance(processKey, businessKey,
-					currentUser, activitiNodeCandidateList, nodevariableList);
+					currentUser, activitiNodeCandidateList, nodevariableList,
+					nodeControlParamList);
 
 			return "success";
 		} catch (Exception e) {
@@ -566,10 +569,10 @@ public class ActivitiRepositoryAction {
 	public String toStartProcessInst(String processKey, ModelMap model) {
 		try {
 
-			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
-					.queryAllActivitiNodeInfo(processKey);
-
-			model.addAttribute("nodeInfoList", nodeInfoList);
+//			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
+//					.queryAllActivitiNodeInfo(processKey);
+//
+//			model.addAttribute("nodeInfoList", nodeInfoList);
 			model.addAttribute("process_key", processKey);
 			
 			return "path:startProcess";
@@ -667,9 +670,8 @@ public class ActivitiRepositoryAction {
 	 * @return
 	 * 2014年6月19日
 	 */
-	public @ResponseBody
-	Map<String, List> getConfigTempleInfo(String business_type,
-			String business_id, String processKey) {
+	public String getConfigTempleInfo(String business_type,
+			String business_id, String processKey, ModelMap model) {
 		try {
 
 			// 节点代办配置信息
@@ -679,14 +681,19 @@ public class ActivitiRepositoryAction {
 
 			// 节点参数配置信息
 			List<Nodevariable> nodeVariableList = activitiConfigService
-					.queryNodeVariable(business_type, business_id,
-							processKey);
-			
-			Map<String, List> map = new HashMap<String, List>();
-			map.put("nodeConfigList", nodeConfigList);
-			map.put("nodeVariableList", nodeVariableList);
-			
-			return map;
+					.queryNodeVariable(business_type, business_id, processKey);
+
+			// 节点控制参数配置信息
+			List<NodeControlParam> nodeControlParamList = activitiConfigService
+					.getNodeContralParamList(processKey, business_id,
+							business_type);
+
+			model.addAttribute("processKey", processKey);
+			model.addAttribute("nodeConfigList", nodeConfigList);
+			model.addAttribute("nodeVariableList", nodeVariableList);
+			model.addAttribute("nodeControlParamList", nodeControlParamList);
+
+			return "path:tostartProcessConfig";
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
@@ -766,6 +773,25 @@ public class ActivitiRepositoryAction {
 
 		activitiService.addIsContainHoliday(processKey, IsContainHoliday);
 
+	}
+	
+	/** 保存节点排序 gw_tanx
+	 * @param menuBeans
+	 * @return
+	 * @throws Exception
+	 * 2014年9月10日
+	 */
+	public @ResponseBody
+	String saveNodeOrderNum(List<NodeControlParam> controlParamList)
+			throws Exception {
+		try {
+			activitiConfigService.saveNodeOrderNum(controlParamList);
+			
+			return "success";
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
 	}
 
 }

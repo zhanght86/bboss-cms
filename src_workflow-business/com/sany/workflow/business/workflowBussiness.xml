@@ -43,18 +43,26 @@
         <![CDATA[
 			SELECT N.NODE_NAME AS ACTNAME,
 			       N.NODE_KEY AS ACTID,
-			       N.NODE_DESCRIBE AS NODEDESCRIBE,
 			       T.CANDIDATE_USERS_ID AS CANDIDATENAME,
 			       T.CANDIDATE_USERS_NAME AS REALNAME,
-			       T.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME,
 			       T.BUSINESS_ID AS ORGID,
-			       T.IS_VALID AS ISVALID,
-			       T.IS_EDIT_CANDIDATE AS CANEDIT,
-			       T.IS_AUTO_CANDIDATE AS AUTOAPPROVE,
-			       T.IS_RECALL_CANDIDATE AS CANRECALL,
-			       T.IS_EDITAFTER_CANDIDATE AS EDITAFTER
+			       A.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME,
+			       A.BUSINESS_ID AS ORGID,
+			       A.IS_VALID AS ISVALID,
+			       A.IS_EDIT AS ISEDIT,
+			       A.IS_AUTO AS ISAUTO,
+			       A.IS_RECALL AS ISRECALL,
+			       A.NODE_DESCRIBE AS NODEDESCRIBE,
+			       A.IS_EDITAFTER AS ISEDITAFTER,
+			       A.TASK_URL AS TASKURL,
+			       A.IS_DISCARD AS ISDISCARD,
+			       A.IS_COPY AS ISCOPY,
+			       A.IS_CANCEL AS ISCANCEL,
+			       A.IS_AUTOAFTER AS ISAUTOAFTER,
+			       A.BUSSINESSCONTROLCLASS AS BUSSINESSCONTROLCLASS
 			
 			  FROM TD_WF_ACTIVITI_NODE_INFO N
+			  LEFT JOIN TD_WF_CONTROLPARAM A ON A.NODE_ID = N.ID
 			  LEFT JOIN TD_WF_ACTIVITI_NODE_CANDIDATE T ON T.NODE_ID = N.ID
 			                                              
 			                                           AND T.BUSINESS_TYPE = #[businessType]
@@ -80,21 +88,41 @@
     <!-- 获取节点信息（开启流程实例后）-->
 	<property name="getAllActivitiNodesInfo_wf">
 		<![CDATA[
-			SELECT N.NODE_NAME              AS ACTNAME,
-			       N.NODE_KEY               AS ACTID,
-			       N.NODE_DESCRIBE          AS NODEDESCRIBE,
-			       A.DURATION_NODE / 1000 / 60 / 60         AS NODEWORKTIME,
-			       A.IS_EDIT_CANDIDATE      AS CANEDIT,
-			       A.IS_AUTO_CANDIDATE      AS AUTOAPPROVE,
-			       A.IS_RECALL_CANDIDATE    AS CANRECALL,
-			       A.IS_EDITAFTER_CANDIDATE AS EDITAFTER
-			  FROM TD_WF_ACTIVITI_NODE_INFO N
-			  LEFT JOIN TD_WF_NODE_WORKTIME A ON N.PROCESS_KEY = A.PROCESS_KEY
-			                                 AND A.PROCESS_ID = ?             
-			                                 AND N.NODE_KEY = A.NODE_KEY
-			 WHERE N.NODE_TYPE = 'userTask'
-			   AND N.PROCESS_KEY = ?
-			 ORDER BY N.ORDER_NUM
+			SELECT A.NODE_KEY AS ACTID,
+			       A.NODE_NAME AS ACTNAME,
+			       A.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME,
+			       A.IS_VALID AS ISVALID,
+			       A.IS_EDIT AS ISEDIT,
+			       A.IS_AUTO AS ISAUTO,
+			       A.IS_RECALL AS ISRECALL,
+			       A.NODE_DESCRIBE AS NODEDESCRIBE,
+			       A.IS_EDITAFTER AS ISEDITAFTER,
+			       A.TASK_URL AS TASKURL,
+			       A.IS_DISCARD AS ISDISCARD,
+			       A.IS_COPY AS ISCOPY,
+			       A.IS_CANCEL AS ISCANCEL,
+			       A.IS_AUTOAFTER AS ISAUTOAFTER,
+			       A.BUSSINESSCONTROLCLASS AS BUSSINESSCONTROLCLASS
+			
+			  FROM TD_WF_NODE_WORKTIME A
+			 WHERE A.NODE_TYPE = 'userTask'
+			   AND A.PROCESS_ID = ?
+			   AND A.PROCESS_KEY = ?
+		]]>
+	</property>
+	
+	<!-- 获取节点信息（开启流程实例后）-->
+	<property name="getNodesInfo_wf">
+		<![CDATA[
+			SELECT A.NODE_KEY AS ACTID,
+			       A.NODE_NAME AS ACTNAME,
+			       A.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME
+			       A.TASK_URL AS TASKURL
+			
+			  FROM TD_WF_NODE_WORKTIME A
+			 WHERE A.NODE_TYPE = 'userTask'
+			   AND A.PROCESS_ID = ?
+			   AND A.PROCESS_KEY = ?
 		]]>
 	</property>
 	
@@ -142,6 +170,466 @@
 			   AND (B.PROCDEF_ID = ? OR B.PROCDEF_ID IS NULL)
 			   AND A.START_DATE <= ?
 			   AND A.END_DATE >= ?
+		]]>
+	</property>
+	
+	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
+	<property name="getCurrentTaskInfoById_wf">
+		<![CDATA[
+			SELECT A.ID_,
+		       A.REV_,
+		       A.EXECUTION_ID_,
+		       A.PROC_INST_ID_,
+		       A.PROC_DEF_ID_,
+		       A.NAME_,
+		       A.PARENT_TASK_ID_,
+		       A.DESCRIPTION_,
+		       A.TASK_DEF_KEY_,
+		       A.OWNER_,
+		       A.ASSIGNEE_,
+		       A.DELEGATION_,
+		       A.PRIORITY_,
+		       A.CREATE_TIME_ ,
+		       A.DUE_DATE_,
+		       A.SUSPENSION_STATE_
+		  FROM ACT_RU_TASK A
+		 WHERE A.Id_ = ?
+		]]>
+	</property>
+	
+	<!-- 获取待办任务总数  gw_tanx-->
+	<property name="countTaskNum_wf">
+		<![CDATA[
+			SELECT COUNT(*) as tasknum
+			  FROM (
+			        -- 未签收任务
+			        SELECT DISTINCT A.*
+			          FROM ACT_RU_TASK A
+			         INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+			          LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
+			          
+			         WHERE A.ASSIGNEE_ IS NULL
+			           and I.TYPE_ = 'candidate'
+			           and I.USER_ID_ = #[assignee] 
+			           
+			           #if($processKey && !$processKey.equals(""))
+			            AND B.KEY_ = #[processKey] 
+			           #end
+			           
+			        union
+			        
+			        -- 签收任务  
+			        SELECT A.*
+			          FROM ACT_RU_TASK A
+			          LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
+			         WHERE a.ASSIGNEE_ = #[assignee] 
+			         
+			          #if($processKey && !$processKey.equals(""))
+			            AND B.KEY_ = #[processKey] 
+			          #end
+			        
+			        ) A
+		]]>
+	</property>
+	
+	<!-- 根据用户获取委托关系列表数据  gw_tanx -->
+	<property name="selectEntrustList">
+		<![CDATA[
+			SELECT A.ENTRUST_USER,
+			       A.START_DATE,
+			       A.END_DATE,
+			       B.PROCDEF_ID,
+			       A.CREATE_USER
+			  FROM TD_WF_ENTRUST A
+			  LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID = B.ENTRUST_ID
+			 WHERE A.STS ='有效'
+				   and a.entrust_user = ?
+		]]>
+	</property>
+	
+	<!-- 获取委托任务总数  gw_tanx-->
+	<property name="countEntrustTaskNum_wf">
+		<![CDATA[
+			SELECT COUNT(*)
+			  FROM (
+			  -- 未签收
+			  		SELECT DISTINCT A.*
+			          FROM ACT_RU_TASK A
+			        
+			         INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+			         left join act_re_procdef c on c.id_ = A.proc_def_id_
+			        
+			         WHERE a.ASSIGNEE_ is null
+			            AND I.TYPE_ = 'candidate'
+			            
+			            #if($processKey && !$processKey.equals(""))
+			            	AND c.KEY_ = #[processKey]	
+						#end	
+								    
+						-- 委托关系
+					    #if($entrustList && $entrustList.size()>0)
+					   		and (
+		      				#foreach($WfEntrust in $entrustList)
+		      					#if($velocityCount == 0)
+		    	                   (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
+		    	                   
+		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
+		    	                   	AND C.KEY_ = #[entrustList[$velocityCount]->procdefId] 
+		    	                   #end
+		    	                   )
+				    	        #else  
+									OR (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
+		    	                   
+		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
+		    	                   	AND C.KEY_ = #[entrustList[$velocityCount]->procdefId] 
+		    	                   #end
+		    	                   )
+				    	        #end
+							#end
+							)
+						#end
+			       
+			         union
+			         
+			      -- 签收任务  
+			        SELECT A.*
+			          FROM ACT_RU_TASK A
+			          left join act_re_procdef c on c.id_ = A.proc_def_id_
+			        
+			         WHERE 1=1
+			         
+			         	#if($processKey && !$processKey.equals(""))
+			            	AND c.KEY_ = #[processKey]	
+						#end
+			         	
+					    #if($entrustList && $entrustList.size()>0)
+					   		and (
+		      				#foreach($WfEntrust in $entrustList)
+		      					#if($velocityCount == 0)
+		    	                   (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+		    	                   
+		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
+		    	                   	AND C.KEY_ = #[entrustList[$velocityCount]->procdefId] 
+		    	                   #end
+		    	                   
+		    	                   )
+				    	        #else  
+									OR (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+		    	                   
+		    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+		    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+		    	                   #end
+		    	                   
+		    	                   #if($WfEntrust.procdefId && !$WfEntrust.procdefId.equals(""))
+		    	                   	AND C.KEY_ = #[entrustList[$velocityCount]->procdefId] 
+		    	                   #end
+		    	                   
+		    	                   )
+				    	        #end
+							#end
+							)
+						#end
+						 
+			         ) a
+		]]>
+	</property>
+	
+	<!-- 获取待办任务数据  gw_tanx-->
+	<property name="getMyselfTask_wf">
+		<![CDATA[
+		-- taskState签收状态字段  1 未签收 2 签收
+		SELECT DISTINCT 1           AS TASKSTATE,
+                B.BUSINESS_KEY_     AS BUSINESSKEY,
+                B.START_USER_ID_    AS SENDER,
+                C.NAME_             AS TITLE,
+                A.ID_               AS TASKID,
+                A.PROC_INST_ID_     AS INSTANCEID,
+                A.PROC_DEF_ID_      AS DEFID,
+                A.TASK_DEF_KEY_     AS TASKDEFKEY,
+                A.CREATE_TIME_      AS CREATETIME,
+                C.KEY_              AS PROCESSKEY,
+                A.SUSPENSION_STATE_ AS SUSPENSIONSTATE,
+                NULL                AS FROMUSER,
+                D.TASK_URL          AS TASKURL
+
+		  FROM ACT_RU_TASK A
+		
+		 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+		  LEFT JOIN ACT_HI_PROCINST B ON B.PROC_INST_ID_ = A.PROC_INST_ID_
+		  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
+		 INNER JOIN TD_WF_NODE_WORKTIME D ON D.PROCESS_ID = b.PROC_INST_ID_
+                                 		 AND D.NODE_KEY = A.TASK_DEF_KEY_
+		
+		 WHERE a.ASSIGNEE_ is null
+		   AND I.TYPE_ = 'candidate'
+		   AND I.USER_ID_ = #[assignee]	
+		   
+		   #if($processKey && !$processKey.equals(""))
+			  AND c.KEY_ = #[processKey]	
+		   #end
+		
+		UNION
+		
+		SELECT 2                   AS TASKSTATE,
+		       B.BUSINESS_KEY_     AS BUSINESSKEY,
+		       B.START_USER_ID_    AS SENDER,
+		       C.NAME_             AS TITLE,
+		       A.ID_               AS TASKID,
+		       A.PROC_INST_ID_     AS INSTANCEID,
+		       A.PROC_DEF_ID_      AS DEFID,
+		       A.TASK_DEF_KEY_     AS TASKDEFKEY,
+		       A.CREATE_TIME_      AS CREATETIME,
+		       C.KEY_              AS PROCESSKEY,
+		       A.SUSPENSION_STATE_ AS SUSPENSIONSTATE,
+		       E.FROM_USER         AS FROMUSER,
+		       D.TASK_URL          AS TASKURL
+		  FROM ACT_RU_TASK A
+		
+		  LEFT JOIN ACT_HI_PROCINST B ON B.PROC_INST_ID_ = A.PROC_INST_ID_
+		  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
+		  LEFT JOIN TD_WF_NODE_CHANGEINFO E ON A.ID_ = E.TASKID
+		                                   AND A.ASSIGNEE_ = E.TO_USER
+		 INNER JOIN TD_WF_NODE_WORKTIME D ON D.PROCESS_ID = b.PROC_INST_ID_
+                                 AND D.NODE_KEY = A.TASK_DEF_KEY_
+		 where 1 = 1
+		   AND a.ASSIGNEE_ = #[assignee]	
+		   
+		   #if($processKey && !$processKey.equals(""))
+			  AND c.KEY_ = #[processKey]	
+		   #end
+		   
+		 ORDER BY CREATETIME DESC 
+		]]>
+	</property>
+	
+	<!-- 获取委托任务列表  gw_tanx-->
+	<property name="selectNoHandleEntrustTask_wf">
+		<![CDATA[
+			SELECT DISTINCT 1       AS TASKSTATE,
+                B.BUSINESS_KEY_     AS BUSINESSKEY,
+                B.START_USER_ID_    AS SENDER,
+                C.NAME_             AS TITLE,
+                A.ID_               AS TASKID,
+                A.PROC_INST_ID_     AS INSTANCEID,
+                A.PROC_DEF_ID_      AS DEFID,
+                A.TASK_DEF_KEY_     AS TASKDEFKEY,
+                A.CREATE_TIME_      AS CREATETIME,
+                C.KEY_              AS PROCESSKEY,
+                A.SUSPENSION_STATE_ AS SUSPENSIONSTATE,
+                NULL                AS FROMUSER,
+                D.TASK_URL          AS TASKURL
+			  from ACT_RU_TASK a
+			
+			 INNER JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = A.ID_
+			  LEFT JOIN ACT_HI_PROCINST B ON B.PROC_INST_ID_ = A.PROC_INST_ID_
+			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
+			 INNER JOIN TD_WF_NODE_WORKTIME D ON D.PROCESS_ID = b.PROC_INST_ID_
+                                 AND D.NODE_KEY = A.TASK_DEF_KEY_
+			
+			 WHERE a.ASSIGNEE_ is null
+			   and I.TYPE_ = 'candidate'
+			   
+			   #if($processKey && !$processKey.equals(""))
+				  AND c.KEY_ = #[processKey]	
+			   #end
+
+         		-- 委托关系
+        		#if($entrustList && $entrustList.size()>0)
+			   		and (
+      				#foreach($WfEntrust in $entrustList)
+      					#if($velocityCount == 0)
+    	                   (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
+    	                   
+    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+    	                   	AND a.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   #end
+    	                   
+    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+    	                   	AND a.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   #end
+    	                   
+    	                   )
+		    	        #else  
+							OR (I.USER_ID_ = #[entrustList[$velocityCount]->create_user] 
+    	                   
+    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+    	                   	AND a.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   #end
+    	                   
+    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+    	                   	AND a.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   #end
+    	                   
+    	                   )
+		    	        #end
+					#end
+					)
+				#end
+			
+			union 
+			
+			-- 已签收任务
+			select 2                	as TASKSTATE,
+			       B.Business_Key_  	as BUSINESSKEY,
+			       b.start_user_id_ 	as SENDER,
+			       c.name_          	as TITLE,
+			       a.ID_            	as TASKID,
+			       a.PROC_INST_ID_  	as INSTANCEID,
+			       a.PROC_DEF_ID_   	as DEFID,
+			       a.TASK_DEF_KEY_  	as TASKDEFKEY,
+			       a.CREATE_TIME_   	AS CREATETIME,
+			       c.key_              	as PROCESSKEY,
+                   a.suspension_state_ 	as SUSPENSIONSTATE,
+                   a.ASSIGNEE_			as FROMUSER,
+                   D.TASK_URL           AS TASKURL
+			  from ACT_RU_TASK a
+			
+			  LEFT JOIN ACT_HI_PROCINST B ON B.Proc_Inst_Id_ = a.Proc_Inst_Id_
+			  left join act_re_procdef c on c.id_ = b.proc_def_id_
+			  INNER JOIN TD_WF_NODE_WORKTIME D ON D.PROCESS_ID = b.PROC_INST_ID_
+                                 				AND D.NODE_KEY = A.TASK_DEF_KEY_
+			 where 1 = 1
+			 
+			  #if($processKey && !$processKey.equals(""))
+				  AND c.KEY_ = #[processKey]	
+			  #end
+				  
+			  #if($entrustList && $entrustList.size()>0)
+			   		and (
+      				#foreach($WfEntrust in $entrustList)
+      					#if($velocityCount == 0)
+    	                   (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+    	                   
+    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   #end
+    	                   
+    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   #end
+    	                   
+    	                   )
+		    	        #else  
+							OR (a.ASSIGNEE_ = #[entrustList[$velocityCount]->create_user] 
+    	                   
+    	                   #if($WfEntrust.start_date && !$WfEntrust.start_date.equals(""))
+    	                   	AND A.CREATE_TIME_ >= #[entrustList[$velocityCount]->start_date] 
+    	                   #end
+    	                   
+    	                   #if($WfEntrust.end_date && !$WfEntrust.end_date.equals(""))
+    	                   	AND A.CREATE_TIME_ <= #[entrustList[$velocityCount]->end_date] 
+    	                   #end
+    	                   
+    	                   )
+		    	        #end
+					#end
+					)
+				#end
+			
+			ORDER BY CREATETIME DESC  
+		]]>
+	</property>
+	
+	<!-- 获取当前任务信息  -->
+	<property name="getTaskInfoByTaskId_wf">
+		<![CDATA[
+			SELECT A.ID_           AS TASKID,
+			       B.BUSINESS_KEY_ AS BUSINESSKEY,
+			       A.PROC_INST_ID_ AS INSTANCEID,
+			       A.PROC_DEF_ID_  AS DEFID,
+			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
+			       A.START_TIME_   AS CREATETIME,
+			       C.IS_RECALL     AS ISRECALL,
+			       C.IS_DISCARD    AS ISDISCARD,
+			       C.IS_CANCEL     AS ISCANCEL
+			
+			  FROM ACT_HI_TASKINST A
+			  LEFT JOIN ACT_RU_EXECUTION B ON A.Id_ = B.ID_
+			  left join TD_WF_NODE_WORKTIME c on a.proc_inst_id_ = c.process_id
+			                                 and a.task_def_key_ = c.node_key
+			 WHERE A.Id_ = ?
+		]]>
+	</property>
+	
+	<!-- 查询任务的转办记录  gw_tanx -->
+	<property name="getChangeTaskInfoById_wf">
+		<![CDATA[
+			-- 转办关系
+			 SELECT A.ID_,
+			       A.PROC_DEF_ID_,
+			       A.TASK_DEF_KEY_,
+			       A.PROC_INST_ID_,
+			       A.EXECUTION_ID_,
+			       A.PARENT_TASK_ID_,
+			       A.NAME_,
+			       A.DESCRIPTION_,
+			       A.OWNER_ AS ASSIGNEE_,
+			       B.TO_USER,
+			       A.START_TIME_,
+			       A.CLAIM_TIME_,
+			       B.CHANGETIME AS END_TIME_,
+			       A.DURATION_,
+			       B.DELEGATEREMARK AS DELETE_REASON_,
+			       A.DURATION_NODE,
+			       A.ADVANCESEND,
+			       A.OVERTIMESEND,
+			       A.ALERTTIME,
+			       A.OVERTIME,
+			       A.NOTICERATE,
+			       A.IS_CONTAIN_HOLIDAY
+			
+			  FROM ACT_HI_TASKINST A
+			
+			  RIGHT JOIN TD_WF_NODE_CHANGEINFO B ON B.TASKID = A.ID_
+			
+			 WHERE A.PROC_INST_ID_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据业务主键获取流程实例  gw_tanx -->
+	<property name="getProcessByBusinesskey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
 		]]>
 	</property>
 	

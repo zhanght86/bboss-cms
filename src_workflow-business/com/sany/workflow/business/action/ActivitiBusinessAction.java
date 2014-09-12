@@ -76,6 +76,22 @@ public class ActivitiBusinessAction {
 			workflowService.getProccessPic(processKey, out);
 		}
 	}
+	
+	/**
+	 * 获取流程追踪图片
+	 * 
+	 * @param processkey
+	 * @param response
+	 * @throws IOException
+	 *             2014年8月20日
+	 */
+	public void getProccessActivePic(String processInstId, HttpServletResponse response)
+			throws IOException {
+		if (processInstId != null && !processInstId.equals("")) {
+			OutputStream out = response.getOutputStream();
+			workflowService.getProccessActivePic(processInstId, out);
+		}
+	}
 
 	/**
 	 * 开启流程实例
@@ -109,9 +125,9 @@ public class ActivitiBusinessAction {
 	public String toDealTask(String processKey, String processId,
 			String taskId, String userId, ModelMap model) throws Exception {
 
-		workflowService.toDealTask("Mms.return",
-				"9e8648f5-2bf5-11e4-a95b-4437e6999a31",
-				"9eaa72d6-2bf5-11e4-a95b-4437e6999a31", "admin", model);
+//		workflowService.toDealTask("Mms.return",
+//				"9e8648f5-2bf5-11e4-a95b-4437e6999a31",
+//				"9eaa72d6-2bf5-11e4-a95b-4437e6999a31", "admin", model);
 
 		return "path:toworkflowMain";
 	}

@@ -20,6 +20,7 @@ import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.OrganizationDTO;
 import com.sany.workflow.entity.User;
@@ -109,7 +110,7 @@ public class ActivitiTaskConfigAction {
 	 * @return
 	 */
 	public String showActivitiNodeInfo(String processKey,
-			String business_id, String business_type, ModelMap model) {
+			String business_id, String business_type, ModelMap model) throws Exception {
 	
 		List<ActivitiNodeCandidate> list = activitiConfigService.queryActivitiNodesCandidates(business_type, business_id, processKey);
 		for(int i=0;list != null && i<list.size();i++){
@@ -128,8 +129,8 @@ public class ActivitiTaskConfigAction {
 				activitiNodeCandidate.setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name() != null?activitiNodeCandidate.getCandidate_groups_name().trim():"");
 				activitiNodeCandidate.setCandidate_users_id(activitiNodeCandidate.getCandidate_users_id());
 				activitiNodeCandidate.setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name() != null?activitiNodeCandidate.getCandidate_users_name().trim():"");
-				activitiNodeCandidate.setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
-				activitiNodeCandidate.setIs_valid(activitiNodeCandidate.getIs_valid());
+//				activitiNodeCandidate.setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
+//				activitiNodeCandidate.setIs_valid(activitiNodeCandidate.getIs_valid());
 		//	}
 			activitiNodeCandidate.setBusiness_type(business_type);
 			activitiNodeCandidate.setBusiness_id(business_id);
@@ -156,6 +157,12 @@ public class ActivitiTaskConfigAction {
 		}else{
 			model.addAttribute("loadvariableresource","false");
 		}
+		
+		// 获取节点控制参数信息
+		List<NodeControlParam> contralParamList = activitiConfigService
+				.getNodeContralParamList(processKey, business_id, business_type);
+		model.addAttribute("contralParamList", contralParamList);
+		
 		return "path:nodeinfo";
 	}
 	
@@ -347,6 +354,21 @@ public class ActivitiTaskConfigAction {
 				business_id, business_type, process_key);
 	}
 	
+	/** 节点控制参数配置保存 gw_tanx
+	 * @param nodevariableList
+	 * @param business_id
+	 * @param business_type
+	 * @param process_key
+	 * @return
+	 * 2014年8月29日
+	 */
+	public @ResponseBody
+	String submitNodeContralParam(NodeControlParam nodeControlParam,
+			String business_id, String business_type, String process_key) {
+		return activitiConfigService.saveNodeContralParam(nodeControlParam,
+				business_id, business_type, process_key);
+	}
+	
 	/**
 	 * 查询节点参数配置列表
 	 * @param nodevariable
@@ -528,7 +550,7 @@ public class ActivitiTaskConfigAction {
 					list.get(i).setCandidate_groups_name("");
 					//list.get(i).setCandidate_users_id(getCurrentUserAccount(request,response));
 					list.get(i).setCandidate_users_name(userRealName);
-					list.get(i).setIs_edit_candidate(1);
+//					list.get(i).setIs_edit_candidate(1);
 				}else{
 					ActivitiNodeCandidate activitiNodeCandidate = activitiConfigService
 					.queryActivitiNodeCandidate(processKey, list.get(i)
@@ -542,8 +564,8 @@ public class ActivitiTaskConfigAction {
 									activitiNodeCandidate.getCandidate_users_id());
 							list.get(i).setCandidate_users_name(
 									activitiNodeCandidate.getCandidate_users_name());
-							list.get(i).setIs_edit_candidate(
-									activitiNodeCandidate.getIs_edit_candidate());
+//							list.get(i).setIs_edit_candidate(
+//									activitiNodeCandidate.getIs_edit_candidate());
 					}
 				}
 				
@@ -678,40 +700,26 @@ public class ActivitiTaskConfigAction {
 	}
 	
 	/**
-	 * 跳转至修改节点描述界面
+	 * 跳转至修改节点描述界面 gw_tanx
 	 * 
 	 * @param processKey
 	 * @param model
 	 * @return 2014年5月7日
 	 */
-	public String toUpdateNodeInfo(String processKey, String taskKey,
-			ModelMap model) {
+	public String toUpdateNodeControlParam(String process_key,
+			String business_id, String business_type, String taskKey,
+			String pageType, ModelMap model) throws Exception {
 
-		ActivitiNodeInfo nodeInfo = activitiConfigService
-				.getActivitiNodeByKeys(processKey, taskKey);
+		NodeControlParam nodeControlParam = activitiConfigService
+				.getNodeContralParam(process_key, business_id, business_type,
+						taskKey);
 
-		model.addAttribute("nodeInfo", nodeInfo);
-
-		return "path:toUpdateNodeInfo";
-	}
-	
-	/**
-	 * 修改节点信息
-	 * 
-	 * @param processKey
-	 * @param model
-	 * @return 2014年5月7日
-	 */
-	public @ResponseBody
-	String updateNodeInfo(ActivitiNodeInfo nodeInfo, ModelMap model) {
-		try {
-
-			activitiConfigService.updateNodeInfo(nodeInfo);
-
-			return "success";
-		} catch (Exception e) {
-			return "fail" + e.getMessage();
-		}
+		model.addAttribute("nodeControlParam", nodeControlParam);
+		model.addAttribute("process_key", process_key);
+		model.addAttribute("business_id", business_id);
+		model.addAttribute("business_type", business_type);
+		
+		return "path:toUpdateNodeControlParam";
 	}
 	
 }

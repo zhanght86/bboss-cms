@@ -78,6 +78,16 @@ public class HisTaskInfo implements Serializable {
 
 	private String isAlertTime;// 是否预警提醒(0未预警1预警)
 
+	private String DELETE_REASON_;// 操作内容
+
+	public String getDELETE_REASON_() {
+		return DELETE_REASON_;
+	}
+
+	public void setDELETE_REASON_(String dELETE_REASON_) {
+		DELETE_REASON_ = dELETE_REASON_;
+	}
+
 	public String getIsOverTime() {
 		return isOverTime;
 	}

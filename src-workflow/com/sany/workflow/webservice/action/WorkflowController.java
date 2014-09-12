@@ -408,8 +408,8 @@ public class WorkflowController implements WorkflowService {
 					String isMulti = (String) map.get("isMulti");
 					node.setIsMulti(isMulti);
 
-					double durationNode = Double.parseDouble(map.get("durationNode")+"");
-					node.setDuration_node(durationNode);
+//					double durationNode = Double.parseDouble(map.get("durationNode")+"");
+//					node.setDuration_node(durationNode);
 
 					activitiNodeCandidateList.add(node);
 				}
@@ -452,8 +452,8 @@ public class WorkflowController implements WorkflowService {
 
 		try {
 
-			activitiService.startPorcessInstance(processKey, businessKey,
-					currentUser, activitiNodeCandidateList, nodevariableList);
+//			activitiService.startPorcessInstance(processKey, businessKey,
+//					currentUser, activitiNodeCandidateList, nodevariableList);
 
 			rr.setResultCode("1");
 			rr.setResultMess("开启实例操作成功");
@@ -1010,8 +1010,8 @@ public class WorkflowController implements WorkflowService {
 			activitiService.delegateTask(taskId, toUserId);
 
 			// 添加转办记录
-			activitiTaskService.updateNodeChangeInfo(taskId, instancesId,
-					processKey, fromUserId, toUserId);
+//			activitiTaskService.updateNodeChangeInfo(taskId, instancesId,
+//					processKey, fromUserId, toUserId);
 
 			tm.commit();
 

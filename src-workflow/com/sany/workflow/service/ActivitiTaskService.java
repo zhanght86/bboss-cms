@@ -5,7 +5,9 @@ import java.util.List;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.NoHandleTask;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
+import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entrust.entity.WfEntrust;
 
@@ -129,7 +131,7 @@ public interface ActivitiTaskService {
 	 *            2014年7月14日
 	 */
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String fromuserID, String userId);
+			String processKey, String fromuserID, String userId, String reamrk);
 
 	/**
 	 * 记录已处理委托任务信息
@@ -168,5 +170,28 @@ public interface ActivitiTaskService {
 	 */
 	public void sendMess(String taskId, String taskState, String sentType)
 			throws Exception;
+
+	/**
+	 * 获取开启流程实例后节点控制参数信息
+	 * 
+	 * @param ProcessId
+	 *            流程实例id
+	 * @return
+	 * @throws Exception
+	 *             2014年9月5日
+	 */
+	public List<NodeControlParam> getNodeControlParamByProcessId(String ProcessId)
+			throws Exception;
+	
+	/**
+	 * 获取驳回日志记录
+	 * 
+	 * @param ProcessId
+	 *            流程实例id
+	 * @return
+	 * @throws Exception
+	 *             2014年9月5日
+	 */
+	public RejectLog getRejectlog(String taskId) throws Exception;
 
 }

@@ -29,19 +29,64 @@
 
 <!--
 								<property index="12"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_INFO ADD NODE_DESCRIBE VARCHAR(4000) ]]></property>
+								<property index="13"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_INFO ADD TASK_URL VARCHAR(500) ]]></property>
 
-								<property index="13"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
-								<property index="14"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="15"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="16"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="17"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="14"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
+								<property index="15"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="16"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="17"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="18"><![CDATA[ALTER TABLE TD_WF_ACTIVITI_NODE_CANDIDATE ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
 
-								<property index="18"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
-								<property index="19"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="20"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="21"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
-								<property index="22"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="19"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_VALID DECIMAL(1,0) DEFAULT 1 ]]></property>
+								<property index="20"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDIT_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="21"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_AUTO_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="22"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_RECALL_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="23"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_EDITAFTER_CANDIDATE DECIMAL(1,0) DEFAULT 0]]></property>
 
+-->
+
+<!--
+
+								<property index="23"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column IS_VALID]]></property>
+								<property index="24"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column IS_EDIT_CANDIDATE]]></property>
+								<property index="25"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column MESSAGETEMPLEID]]></property>
+								<property index="26"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column EMAILTEMPLEID]]></property>
+								<property index="27"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column DURATION_NODE]]></property>
+								<property index="28"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column NOTICENUM]]></property>
+								<property index="29"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column IS_AUTO_CANDIDATE]]></property>
+								<property index="30"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column IS_RECALL_CANDIDATE]]></property>
+								<property index="31"><![CDATA[alter table TD_WF_ACTIVITI_NODE_CANDIDATE drop column IS_EDITAFTER_CANDIDATE]]></property>
+
+								<property index="32"><![CDATA[alter table TD_WF_ACTIVITI_NODE_INFO drop column NODE_DESCRIBE]]></property>
+								<property index="33"><![CDATA[alter table TD_WF_ACTIVITI_NODE_INFO drop column TASK_URL]]></property>
+
+								<property index="34"><![CDATA[alter table TD_WF_NODE_WORKTIME drop column NOTICENUM]]></property>
+								<property index="35"><![CDATA[alter table TD_WF_NODE_WORKTIME rename column IS_EDIT_CANDIDATE to IS_EDIT]]></property>
+								<property index="36"><![CDATA[alter table TD_WF_NODE_WORKTIME rename column IS_AUTO_CANDIDATE to IS_AUTO]]></property>
+								<property index="37"><![CDATA[alter table TD_WF_NODE_WORKTIME rename column IS_RECALL_CANDIDATE to IS_RECALL]]></property>
+
+								<property index="38"><![CDATA[alter table TD_WF_NODE_WORKTIME rename column IS_EDITAFTER_CANDIDATE to IS_EDITAFTER]]></property>
+								<property index="39"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_DISCARD DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="40"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_COPY DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="41"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_CANCEL DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="42"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_AUTOAFTER DECIMAL(1,0) DEFAULT 0]]></property>
+								<property index="43"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD BUSSINESSCONTROLCLASS VARCHAR(100)]]></property>
+								<property index="44"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD TASK_URL VARCHAR(500)]]></property>
+								<property index="45"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD NODE_DESCRIBE VARCHAR(4000)]]></property>
+								<property index="46"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD NODE_NAME VARCHAR(255)]]></property>
+
+-->
+
+<!--
+								<property index="47"><![CDATA[ALTER TABLE TD_WF_NODE_CHANGEINFO ADD DELEGATEREMARK VARCHAR(255)]]></property>
+-->
+
+<!--							
+								<property index="48"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_MULTI DECIMAL(1,0) DEFAULT 0 ]]></property>
+								<property index="49"><![CDATA[ALTER TABLE TD_WF_NODE_WORKTIME ADD IS_SEQUENTIALS_MULTI DECIMAL(1,0) DEFAULT 1 ]]></property>
+
+								<property index="50"><![CDATA[ALTER TABLE TD_WF_CONTROLPARAM ADD IS_MULTI DECIMAL(1,0) DEFAULT 0 ]]></property>
+								<property index="51"><![CDATA[ALTER TABLE TD_WF_CONTROLPARAM ADD IS_SEQUENTIALS_MULTI DECIMAL(1,0) DEFAULT 1 ]]></property>
 -->
 							</list>
 						</property>

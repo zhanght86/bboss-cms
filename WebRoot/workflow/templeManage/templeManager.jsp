@@ -27,6 +27,10 @@ $(document).ready(function() {
     $('#delBatchButton').click(function() {
     	delTemples();
  	});
+    
+    $('#paramButton').click(function() {
+    	paramTempate();
+ 	});
            	
 });
        
@@ -56,6 +60,13 @@ function editTemple(templeId,state) {
 		title = '明细查看';
 	}
 	$.dialog({ title:title,width:1000,height:600, content:'url:'+url});
+}
+
+// 参数管理
+function paramTempate() {
+	var url="<%=request.getContextPath()%>/params/showParams.page?paramId=msg&paramType=msg&handler=sys.msg.paramshandler";
+	
+	$.dialog({ title:"参数管理",width:1000,height:600, content:'url:'+url});
 }
 
 function delTemples () {
@@ -163,6 +174,7 @@ function delTemples () {
 			
 			<div class="title_box">
 				<div class="rightbtn">
+					<a href="#" class="bt_small" id="paramButton"><span>参数管理</span></a>
 					<a href="#" class="bt_small" id="addButton"><span>新增</span></a>
 					<a href="#" class="bt_small" id="delBatchButton"><span>删除</span></a>
 				</div>

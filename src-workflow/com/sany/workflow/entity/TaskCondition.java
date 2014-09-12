@@ -54,8 +54,28 @@ public class TaskCondition {
 	private String currentUser;// 当前用户
 
 	private String changeUserId; // 转办人id
-	
-	private String appName;//应用名称
+
+	private String appName;// 应用名称
+
+	private String rejectToActId;// 驳回到哪个节点
+
+	private String toActName;// 驳回节点名称
+
+	public String getToActName() {
+		return toActName;
+	}
+
+	public void setToActName(String toActName) {
+		this.toActName = toActName;
+	}
+
+	public String getRejectToActId() {
+		return rejectToActId;
+	}
+
+	public void setRejectToActId(String rejectToActId) {
+		this.rejectToActId = rejectToActId;
+	}
 
 	public String getAppName() {
 		return appName;

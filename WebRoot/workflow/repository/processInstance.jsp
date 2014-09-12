@@ -77,7 +77,7 @@ function startInst(){
 	var url = "<%=request.getContextPath()%>/workflow/repository/toStartProcessInst.page?processKey="
 			+ processKey;
 	
-	$.dialog({ title:'流程节点参数配置-'+processKey,width:1000,height:620, content:'url:'+url});     
+	$.dialog({ title:'流程节点参数配置-'+processKey,width:1000,height:620, content:'url:'+url,maxState:true});     
 	 
 }
 

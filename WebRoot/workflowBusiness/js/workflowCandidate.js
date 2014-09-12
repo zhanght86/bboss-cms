@@ -13,17 +13,9 @@
 function setTaskCandidateUsers(node_key) {
 	var candidateName = $("#candidateName"+node_key).val();
 	if(!candidateName) candidateName='';
-	var url = $("#context").val()+"/workflowBusiness/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
+	var url = ctx +"/sanyadm/common/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
 }
-
-//选择转办人
-function delegateUsers(node_key){		
-	var candidateName = $("#delegateUser").val();
-	if(!candidateName) candidateName='';
-	var url = $("#context").val() +"/workflowBusiness/chooseOrgUser.jsp?node_key=&candidateName="+candidateName+"&callBackFunc=updateAfterChoose"+"&index=1";
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
-}	
 
 function updateAfterChoose(accouts,realnames,node_key){
 	
@@ -75,6 +67,14 @@ function saveCandi(node_key,userCodes,userNames){
 	}, 'json');
 }
 
+//选择转办人
+function delegateUsers(node_key){		
+	var candidateName = $("#delegateUser").val();
+	if(!candidateName) candidateName='';
+	var url = ctx +"/sanyadm/common/chooseOrgUser.jsp?node_key=&candidateName="+candidateName+"&callBackFunc=updateAfterChoose"+"&index=1";
+	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
+}	
+
  function submitReturn(result){
 	//去掉遮罩
 		unblockUI();
@@ -107,4 +107,38 @@ function closeP(){
 		}
 		api2.close();
 	
+}
+//工作流新增默认参数配置
+function workflowaddInit(){
+	if($("#candidateName1").val() == ''){
+		$("#protr1").attr('class','detail');
+		$("tr[id='protr1'] td:eq(1)").html($("form").data("user").userName);
+		$("tr[id='protr1'] td:last").html('当前处理节点');
+		var userId = $("form").data("user").userId;
+		var code_length = userId.length;
+		var re =  RegExp(/^[0-9]+$/);
+		if(re.test(userId)){
+		  if(code_length<8 && code_length>0){
+			var i = 8-code_length;
+			var code_prefix = "";
+			for(var j=1; j<=i; j++){
+				code_prefix += "0";
+			}
+			userId = code_prefix+userId;
+		  }
+		}
+		$("#candidateName1").val(userId);
+		$("#realName1").val($("form").data("user").userName);
+	}
+}
+//加载页面时 让需要选择的节点红色星号显示,objs为必选节点
+function initliteRequiredStar(objs){
+	var vs = objs.split(',');
+	$("#tempnum").val(objs);
+	var trs = $("#protable tr");
+	for(var j=0;j<vs.length;j++){
+		var req = vs[j];
+		$(trs[req]).find(".requiredstar").show();
+	}
+
 }

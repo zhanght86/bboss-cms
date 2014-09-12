@@ -23,6 +23,7 @@ import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.OrganizationDTO;
 import com.sany.workflow.entity.ProBusinessType;
@@ -351,15 +352,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 				aNode.setProcess_key(processKey);
 				ActivityImpl actImpl = aList.get(i);
 				String node_type = actImpl.getProperty("type").toString();
-				String describe = actImpl.getProperty("documentation") == null ? ""
-						: actImpl.getProperty("documentation") + "";// 节点描述
 //				if (actImpl.getProperty("type").toString().equals("userTask")) {
 //					
 //				}
 				aNode.setNode_type(node_type);
 				aNode.setId(java.util.UUID.randomUUID().toString());
 				aNode.setNode_key(actImpl.getId());
-				aNode.setNode_describe(describe);
 				aNode.setNode_name(actImpl.getProperty("name").toString());
 				aNode.setOrder_num(i);
 				executor.insertBean("insertActivitiNodeInfo", aNode);
@@ -397,23 +395,31 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			for(int i=0;i<aList.size();i++){//添加新的节点信息
 				ActivityImpl actImpl = aList.get(i);
 				String type = actImpl.getProperty("type").toString();
-				String describe = actImpl.getProperty("documentation") == null ? ""
-						: actImpl.getProperty("documentation") + "";// 节点描述
 //				if (actImpl.getProperty("type").toString().equals("userTask")) {
 //					
 //				}
-				int exist = executor.queryObject(int.class, "existNodeinfo",processKey,actImpl.getId());
-				if(exist == 0)
+				String id = executor.queryObject(String.class, "existNodeinfo",processKey,actImpl.getId());
+				if(StringUtil.isEmpty(id))
 				{
 					ActivitiNodeInfo aNode = new ActivitiNodeInfo();
 					aNode.setProcess_key(processKey);
 					aNode.setNode_type(type);
-					aNode.setNode_describe(describe);
 					aNode.setId(java.util.UUID.randomUUID().toString());
 					aNode.setNode_key(actImpl.getId());					
 					aNode.setNode_name(actImpl.getProperty("name").toString());
 					aNode.setOrder_num(i);
 					executor.insertBean("insertActivitiNodeInfo", aNode);
+					
+				}else {
+					
+					ActivitiNodeInfo aNode = new ActivitiNodeInfo();
+					aNode.setId(id);
+					aNode.setProcess_key(processKey);
+					aNode.setNode_type(type);
+					aNode.setNode_key(actImpl.getId());					
+					aNode.setNode_name(actImpl.getProperty("name").toString());
+					aNode.setOrder_num(i);
+					executor.insertBean("updateActivitiNodeInfo", aNode);
 					
 				}
 				nodekey.add(actImpl.getId());
@@ -468,12 +474,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 				for(ActivitiNodeCandidate activitiNodeCandidate: activitiNodeCandidates)
 				{
 					activitiNodeCandidate.setId(java.util.UUID.randomUUID().toString());
-					if (!StringUtil.isEmpty(activitiNodeCandidate.getDuration_node())) {
+//					if (!StringUtil.isEmpty(activitiNodeCandidate.getDuration_node())) {
 						
 						// 转毫秒值
 //						double duration_node = Double.parseDouble(activitiNodeCandidate.getDuration_node());
-						activitiNodeCandidate.setDuration_node(activitiNodeCandidate.getDuration_node()*60*60*1000);
-					}
+//						activitiNodeCandidate.setDuration_node(activitiNodeCandidate.getDuration_node()*60*60*1000);
+//					}
 				}
 				executor.insertBeans("insertActivitiNodeCandidate", activitiNodeCandidates);
 			}
@@ -688,7 +694,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	public List<ActivitiNodeInfo> queryAllActivitiNodeInfo(String process_key) {
 		try {
 
-			List<ActivitiNodeInfo> list = this.queryAllActivitiNodes(process_key);
+			List<ActivitiNodeInfo> list = executor.queryList(ActivitiNodeInfo.class,
+					"queryAllActivitiNodes", process_key);
 			
 			if (list != null && list.size() > 0) {
 				List<ActivityImpl> activties = activitiService
@@ -701,20 +708,15 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 						if (activtie.getId().equals(nodeInfo.getNode_key())) {
 
 							if (activtie.isMultiTask()) {
-								if (activtie.isParreal()) {
-									nodeInfo.setIsMulti("2");// 2并行多实例
-								} else if (activtie.isSequence()) {
-									nodeInfo.setIsMulti("1");// 串行多实例
-								} else {
-									nodeInfo.setIsMulti("0");// 不是多实例
-								}
+								nodeInfo.setIS_MULTI_DEFAULT(1);
 							} else {
-								nodeInfo.setIsMulti("0");// 单实例
+								nodeInfo.setIS_MULTI_DEFAULT(0);
 							}
 							
 							//邮件任务
 							if (activtie.isMailTask()) {
 								nodeInfo.setNode_type("mailTask");
+								nodeInfo.setNodeTypeName("邮件任务");
 							}
 							
 							break;
@@ -743,38 +745,33 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			params.put("bussinessid", bussinessid);
 			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryProcessNodesCandidates", params);
 			
-			if (list != null && list.size() > 0) {
-				List<ActivityImpl> activties = activitiService
-						.getActivitImplListByProcessKey(process_key);
-
-				for (int i = 0; i < list.size(); i++) {
-					ActivitiNodeCandidate nodeInfo = list.get(i);
-
-					for (ActivityImpl activtie : activties) {
-						if (activtie.getId().equals(nodeInfo.getNode_key())) {
-
-							if (activtie.isMultiTask()) {
-								if (activtie.isParreal()) {
-									nodeInfo.setIsMulti("2");// 2并行多实例
-								} else if (activtie.isSequence()) {
-									nodeInfo.setIsMulti("1");// 串行多实例
-								} else {
-									nodeInfo.setIsMulti("0");// 不是多实例
-								}
-							} else {
-								nodeInfo.setIsMulti("0");// 不是多实例
-							}
-							
-							//邮件任务
-							if (activtie.isMailTask()) {
-								nodeInfo.setNode_type("mailTask");
-							}
-							
-							break;
-						}
-					}
-				}
-			}
+//			if (list != null && list.size() > 0) {
+//				List<ActivityImpl> activties = activitiService
+//						.getActivitImplListByProcessKey(process_key);
+//
+//				for (int i = 0; i < list.size(); i++) {
+//					ActivitiNodeCandidate nodeInfo = list.get(i);
+//
+//					for (ActivityImpl activtie : activties) {
+//						if (activtie.getId().equals(nodeInfo.getNode_key())) {
+//
+//							if (activtie.isMultiTask()) {
+//								nodeInfo.setIS_MULTI_DEFAULT(1);
+//							} else {
+//								nodeInfo.setIS_MULTI_DEFAULT(0);
+//							}
+//							
+//							//邮件任务
+//							if (activtie.isMailTask()) {
+//								nodeInfo.setNode_type("mailTask");
+//								nodeInfo.setNodeTypeName("邮件任务");
+//							}
+//							
+//							break;
+//						}
+//					}
+//				}
+//			}
 			
 			return list;
 		}catch(Exception e){
@@ -1051,23 +1048,119 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	}
 
 	@Override
-	public List<ActivitiNodeInfo> queryAllActivitiNodes(String processKey) {
+	public List<NodeControlParam> queryAllActivitiNodes(String processKey) {
 		try {
-			return executor.queryList(ActivitiNodeInfo.class,
-					"queryAllActivitiNodes", processKey);
+			return executor.queryList(NodeControlParam.class,
+					"queryNodes", processKey);
 		} catch (SQLException e) {
 			throw new ProcessException(e);
 		}
 	}
 
 	@Override
-	public void updateNodeInfo(ActivitiNodeInfo nodeInfo) {
+	public String saveNodeContralParam(NodeControlParam nodeControlParam, String business_id,
+			String business_type, String process_key) {
+		TransactionManager tm = new TransactionManager();
+
 		try {
-			executor.update("updateActivitiNodeInfo",
-					nodeInfo.getNode_describe(), nodeInfo.getProcess_key(),
-					nodeInfo.getNode_key());
-		} catch (SQLException e) {
-			throw new ProcessException(e);
+			tm.begin();
+
+			if (StringUtil.isNotEmpty(nodeControlParam.getID())) {
+				executor.delete("deleteNodeContralParam", nodeControlParam.getID());
+			}
+
+			nodeControlParam.setID(UUID.randomUUID().toString());
+			nodeControlParam.setBUSINESS_ID(business_id);
+			nodeControlParam.setBUSINESS_TYPE(business_type);
+			nodeControlParam.setDURATION_NODE(nodeControlParam.getDURATION_NODE()*60*60*1000);
+			
+			executor.insertBean("addNodeControlParam", nodeControlParam);
+
+			tm.commit();
+			return "success";
+		} catch (Exception e) {
+			tm.release();
+			return "fail：" + e.getMessage();
 		}
+	}
+
+	@Override
+	public List<NodeControlParam> getNodeContralParamList(String processKey,
+			String business_id, String business_type) throws Exception {
+		try {
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("process_key", processKey);
+			params.put("business_id", business_id);
+			params.put("business_type", business_type);
+
+			List<NodeControlParam> list = executor.queryListBean(
+					NodeControlParam.class, "queryNodeContralParam_wf", params);
+			
+			if (list != null && list.size() > 0) {
+				List<ActivityImpl> activties = activitiService
+						.getActivitImplListByProcessKey(processKey);
+
+				for (int i = 0; i < list.size(); i++) {
+					NodeControlParam nodeInfo = list.get(i);
+
+					for (ActivityImpl activtie : activties) {
+						if (activtie.getId().equals(nodeInfo.getNODE_KEY())) {
+
+							if (activtie.isMultiTask()) {
+								nodeInfo.setIS_MULTI_DEFAULT(1);
+							} else {
+								nodeInfo.setIS_MULTI_DEFAULT(0);
+							}
+							
+							break;
+						}
+					}
+				}
+			}
+			
+			return list;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public NodeControlParam getNodeContralParam(String processKey,
+			String business_id, String business_type, String taskKey)
+			throws Exception {
+		try {
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("process_key", processKey);
+			params.put("business_id", business_id);
+			params.put("business_type", business_type);
+			params.put("taskKey", taskKey);
+
+			NodeControlParam controlParam = executor.queryObjectBean(
+					NodeControlParam.class, "queryNodeContralParam_wf", params);
+			
+			if (controlParam != null){
+				List<ActivityImpl> activties = activitiService
+						.getActivitImplListByProcessKey(processKey);
+				
+				for (ActivityImpl activtie : activties) {
+					if (activtie.getId().equals(taskKey)) {
+						if (activtie.isMultiTask()) {
+							controlParam.setIS_MULTI_DEFAULT(1);
+						} else {
+							controlParam.setIS_MULTI_DEFAULT(0);
+						}
+					}
+				}
+			}
+
+			return controlParam;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public void saveNodeOrderNum(List<NodeControlParam> controlParamList) throws Exception{
+		executor.updateBeans("updateNodeOrderNum", controlParamList);
 	}
 }

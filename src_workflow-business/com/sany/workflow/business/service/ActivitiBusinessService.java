@@ -7,9 +7,11 @@ import java.util.Map;
 
 import org.frameworkset.web.servlet.ModelMap;
 
+import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.ActNode;
 import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.ProIns;
+import com.sany.workflow.business.entity.TaskInfo;
 
 /**
  * 工作流业务接口
@@ -22,7 +24,23 @@ import com.sany.workflow.business.entity.ProIns;
 public interface ActivitiBusinessService {
 
 	/**
-	 * 权限判断
+	 * 页面状态权限判断
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param processKey
+	 *            流程key
+	 * @param businessKey
+	 *            业务主键
+	 * @param userAccount
+	 *            当前用户
+	 * @return 2014年8月20日
+	 */
+	public void judgeAuthorityToPageState(String taskId, String processKey,
+			String businessKey, String userAccount, ModelMap model);
+
+	/**
+	 * 处理任务权限判断
 	 * 
 	 * @param taskId
 	 *            任务id
@@ -35,20 +53,18 @@ public interface ActivitiBusinessService {
 	 * @return 2014年8月20日
 	 */
 	public boolean judgeAuthority(String taskId, String processKey,
-			String businessKey, String userAccount);
+			String userAccount);
 
 	/**
 	 * 获取流程组织结构类型节点配置 (还未开启流程实例前)
 	 * 
 	 * @param processKey
 	 *            流程key
-	 * @param businessType
-	 *            0 通用配置 1组织结构配置2业务类型配置
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @return
 	 * @throws Exception
-	 *             2014年8月21日
+	 *             2014年8月26日
 	 */
 	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
 			String userId) throws Exception;
@@ -58,32 +74,24 @@ public interface ActivitiBusinessService {
 	 * 
 	 * @param processKey
 	 *            流程key
-	 * @param businessType
-	 *            0 通用配置 1组织结构配置2业务类型配置
-	 * @param userId
-	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @return
 	 * @throws Exception
-	 *             2014年8月21日
+	 *             2014年8月26日
 	 */
-	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey,
-			String userId) throws Exception;
+	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey)
+			throws Exception;
 
 	/**
 	 * 获取流程通用节点配置 (还未开启流程实例前)
 	 * 
 	 * @param processKey
 	 *            流程key
-	 * @param businessType
-	 *            0 通用配置 1组织结构配置2业务类型配置
-	 * @param userId
-	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @return
 	 * @throws Exception
-	 *             2014年8月21日
+	 *             2014年8月26日
 	 */
-	public List<ActNode> getWFNodeConfigInfoForCommon(String processKey,
-			String userId) throws Exception;
+	public List<ActNode> getWFNodeConfigInfoForCommon(String processKey)
+			throws Exception;
 
 	/**
 	 * 获取流程节点配置(已开启流程实例)
@@ -97,6 +105,20 @@ public interface ActivitiBusinessService {
 	 *             2014年8月21日
 	 */
 	public List<ActNode> getWFNodeConfigInfoByCondition(String processKey,
+			String processInstId, String taskId) throws Exception;
+
+	/**
+	 * 获取流程节点信息(不带控制参数变量信息)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param processInstId
+	 *            流程Id
+	 * @return
+	 * @throws Exception
+	 *             2014年8月21日
+	 */
+	public List<ActNode> getWFNodeInfoByCondition(String processKey,
 			String processInstId) throws Exception;
 
 	/**
@@ -143,18 +165,13 @@ public interface ActivitiBusinessService {
 			Map<String, Object> paramMap) throws Exception;
 
 	/**
-	 * 开启流程实例
+	 * 获取流程实例的处理记录(已完成的任务)
 	 * 
-	 * @param proIns
-	 *            流程实例参数类
-	 * @param businessKey
-	 *            业务主键
-	 * @param processKey
-	 *            流程key
-	 * @param paramMap
-	 *            参数信息
+	 * @param processId
+	 *            流程实例id
+	 * @return
 	 * @throws Exception
-	 *             2014年8月22日
+	 *             2014年8月26日
 	 */
 	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception;
 
@@ -162,14 +179,232 @@ public interface ActivitiBusinessService {
 	 * 跳转至处理任务页面
 	 * 
 	 * @param processKey
+	 *            流程key
 	 * @param processId
+	 *            流程实例id
 	 * @param taskId
-	 * @param userId
+	 *            任务id
 	 * @return
 	 * @throws Exception
 	 *             2014年8月23日
 	 */
 	public ModelMap toDealTask(String processKey, String processId,
-			String taskId, String userId, ModelMap model) throws Exception;
+			String taskId, ModelMap model) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model) throws Exception;
+
+	/**
+	 * 通过任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数配置信息
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public void completeTask(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 废弃任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数配置信息
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public void discardTask(ProIns proIns, String processKey) throws Exception;
+
+	/**
+	 * 转办任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数配置信息
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public void delegateTask(ProIns proIns, String processKey) throws Exception;
+
+	/**
+	 * 撤销任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public void cancelTask(ProIns proIns, String processKey) throws Exception;
+
+	/**
+	 * 驳回任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数配置信息
+	 * @throws Exception
+	 *             2014年9月1日
+	 */
+	public void rejectToPreTask(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 获取用户任务总数(待办，不包括委托)
+	 * 
+	 * @param currentUser
+	 *            当前用户(工号，域账号都可以)
+	 * @param processKey
+	 *            流程key
+	 * @throws Exception
+	 *             2014年8月27日
+	 */
+	public int getMyselfTaskNum(String currentUser, String processKey)
+			throws Exception;
+
+	/**
+	 * 获取用户委托任务总数
+	 * 
+	 * @param currentUser
+	 *            当前用户(工号，域账号都可以)
+	 * @param processKey
+	 *            流程key
+	 * @throws Exception
+	 *             2014年8月27日
+	 */
+	public int getEntrustTaskNum(String currentUser, String processKey)
+			throws Exception;
+
+	/**
+	 * 获取用户待办任务数据
+	 * 
+	 * @param currentUser
+	 *            当前用户(工号，域账号都可以)
+	 * @param processKey
+	 *            流程key
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年8月27日
+	 */
+	public ListInfo getMyselfTaskList(String currentUser, String processKey,
+			long offset, int pagesize) throws Exception;
+
+	/**
+	 * 获取用户委托任务数据
+	 * 
+	 * @param currentUser
+	 *            当前用户(工号，域账号都可以)
+	 * @param processKey
+	 *            流程key
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年8月27日
+	 */
+	public ListInfo getEntrustTaskList(String currentUser, String processKey,
+			long offset, int pagesize) throws Exception;
+
+	/**
+	 * 判断节点是否可以串并行切换
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @return
+	 * @throws Exception
+	 *             2014年8月28日
+	 */
+	public boolean isChangeSeqOrPar(String taskId, List<ActNode> actList)
+			throws Exception;
+
+	/**
+	 * 获取流程可驳回到的节点信息
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param currentTaskKey
+	 *            任务key ，如 usertask1
+	 * @return
+	 * @throws Exception
+	 *             2014年8月28日
+	 */
+	public List<ActNode> getBackActNode(String processId, String currentTaskKey)
+			throws Exception;
+
+	/**
+	 * 审批处理任务
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            节点配置参数
+	 * @throws Exception
+	 *             2014年8月29日
+	 */
+	public void approveWorkFlow(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 获取当前节点任务信息
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @throws Exception
+	 *             2014年8月29日
+	 */
+	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
+
+	/**
+	 * 跳转到任意节点
+	 * 
+	 * @param nowTaskId
+	 *            当前任务id
+	 * @param currentUser
+	 *            当前任务处理人
+	 * @param map
+	 *            节点变量配置参数
+	 * @param destinationTaskKey
+	 *            跳转到的目标节点key
+	 * @param completeReason
+	 *            备注
+	 * @throws Exception
+	 *             2014年9月5日
+	 */
+	public void returnToNode(String nowTaskId, String currentUser,
+			Map<String, Object> map, String destinationTaskKey,
+			String completeReason) throws Exception;
 
 }

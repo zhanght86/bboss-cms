@@ -20,7 +20,9 @@ import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.NoHandleTask;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
+import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entrust.entity.WfEntrust;
@@ -210,32 +212,36 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		try {
 			tm.begin();
 
+			if (!isSignTask(task.getTaskId())) {
+				// 先签收
+				activitiService.claim(task.getTaskId(), task.getCurrentUser());
+			}
+
 			// 获取参数配置信息
 			Map<String, Object> variableMap = getVariableMap(nodeList,
 					nodevariableList);
 
-			if (StringUtil.isNotEmpty(task.getCompleteReason())) {
-				activitiService.rejecttoPreTaskWithReson(task.getTaskId(),
-						variableMap, task.getCompleteReason(), rejectedtype);
-			} else {
-				activitiService.rejecttoPreTask(task.getTaskId(), variableMap,
-						rejectedtype);
-			}
-
-			// 日志记录废弃操作
-			ActivityImpl[] activityArry = activitiService.getTaskService()
-					.findRejectedActivityNode(task.getTaskId());
 			String remark = task.getCompleteReason()
 					+ "<br/>备注:"
 					+ activitiService.getUserInfoMap().getUserName(
 							task.getCurrentUser()) + "将任务驳回至["
-					+ activityArry[rejectedtype].getProperty("name") + "]";
+					+ task.getToActName() + "]";
 
+			if (StringUtil.isNotEmpty(task.getCompleteReason())) {
+				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
+						variableMap, remark, task.getRejectToActId(),
+						rejectedtype == 1 ? true : false);
+			} else {
+				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
+						variableMap, task.getRejectToActId(),
+						rejectedtype == 1 ? true : false);
+			}
+
+			// 日志记录驳回操作
 			activitiService.addDealTask(task.getTaskId(), activitiService
 					.getUserInfoMap().getUserName(task.getCurrentUser()), "1",
-					task.getProcessIntsId(), task.getProcessKey(), remark,
-					activityArry[rejectedtype].getId(),
-					activityArry[rejectedtype].getProperty("name") + "");
+					task.getProcessIntsId(), task.getProcessKey(), remark, task
+							.getRejectToActId(), task.getToActName());
 
 			tm.commit();
 		} catch (Exception e) {
@@ -383,8 +389,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			HashMap currnetNodeMap = executor.queryObject(HashMap.class,
 					"getCurrentNodeInfoById_wf", processInstId);
 
-			// 判断当前节点是否有指向任意节点的权限(预留)
-
 			List<ActivitiNodeInfo> nextNodeList = new ArrayList<ActivitiNodeInfo>();
 
 			for (int i = 0; i < nodeList.size(); i++) {
@@ -479,8 +483,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						task);
 			}
 
-			// 用户转办记录
-
 			// 获取分页中List数据
 			List<TaskManager> taskList = listInfo.getDatas();
 
@@ -491,8 +493,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 					// 处理人转换
 					activitiService.dealTaskInfo(tmr);
-					// 转办/委托关系处理
-					activitiService.delegateTaskInfo(tmr);
+					// 委托关系处理
+					activitiService.entrustTaskInfo(tmr);
 					// 判断是否超时
 					activitiService.judgeOverTime(tmr);
 					// 耗时处理
@@ -715,13 +717,13 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String fromuserID, String userId) {
+			String processKey, String fromuserID, String userId, String reamrk) {
 
 		try {
 
 			executor.insert("addNodeChangeInfo_wf", fromuserID, userId, taskId,
 					processIntsId, processKey,
-					new Timestamp(new Date().getTime()));
+					new Timestamp(new Date().getTime()), reamrk);
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -1051,6 +1053,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		}
+	}
+
+	@Override
+	public List<NodeControlParam> getNodeControlParamByProcessId(
+			String ProcessId) throws Exception {
+		return executor.queryList(NodeControlParam.class,
+				"getNodeControlParamByProcessId_wf", ProcessId);
+	}
+
+	@Override
+	public RejectLog getRejectlog(String taskId) throws Exception {
+		return executor.queryObject(RejectLog.class, "getRejectlog_wf", taskId);
 	}
 
 }

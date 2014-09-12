@@ -73,15 +73,12 @@
 		    </td>
 	    	<td>
     			<pg:null colName="delegateTaskList" >
-			    	<pg:null colName="wfEntrust">
-	       				<pg:cell colName="USER_ID_NAME"/>
-	       			</pg:null>
+	       			<pg:cell colName="USER_ID_NAME"/>
        			</pg:null>
        			<pg:notnull colName="delegateTaskList" >
 			     	<pg:list colName="delegateTaskList" >
 					  <pg:cell colName="FROM_USER_NAME"/>
-					 	<pg:equal colName="TASKRELATION" value="1">转办给</pg:equal> 
-					 	<pg:equal colName="TASKRELATION" value="2">委托给</pg:equal> 
+					     委托给
 					  <pg:cell colName="TO_USER_NAME"/>
 					  [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
 					  <br/>

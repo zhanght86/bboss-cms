@@ -3,8 +3,8 @@ package com.sany.workflow.action;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -15,8 +15,10 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
+import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessInst;
+import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entrust.entity.WfEntrust;
@@ -261,8 +263,23 @@ public class ActivitiTaskManageAction {
 			// 获取流程实例信息
 			ProcessInst processInst = activitiService
 					.getProcessInstById(processInstId);
-
 			model.addAttribute("processInst", processInst);
+			
+			// 判断是否有撤销功能(当前节点能被撤回，流程实例状态是运行中，当前用户是流程发起人或管理员)
+			if (processInst.getTaskList() != null
+					&& processInst.getTaskList().size() > 0) {
+				String currentUser = AccessControl.getAccessControl()
+						.getUserAccount();
+				int isRecall = processInst.getTaskList().get(0).getIsRecall();
+				if (isRecall == 1
+						&& processInst.getSUSPENSION_STATE_().equals("1")) {
+					if (processInst.getSTART_USER_ID_().equals(currentUser)
+							|| AccessControl.getAccessControl().isAdmin()) {
+						model.addAttribute("isRecall", 1);
+						model.addAttribute("nowTaskId", processInst.getTaskList().get(0).getID_());
+					} 
+				}
+			}
 
 			if (processInst != null) {
 				// 获取流程实例的处理记录
@@ -285,6 +302,11 @@ public class ActivitiTaskManageAction {
 				model.addAttribute("variableRownum",
 						Integer.parseInt(arryObj[1] + "") + 1);// 加标题行
 				model.addAttribute("instanceRownum", arryObj[1]);
+
+				// 获取流程实例下所有人工节点控制参数信息
+				List<NodeControlParam> controlParamList = activitiTaskService
+						.getNodeControlParamByProcessId(processInstId);
+				model.addAttribute("controlParamList", controlParamList);
 
 				// 预警、超时状态转义
 				Map<Integer, String> advanceSendMap = WorkFlowConstant
@@ -447,34 +469,34 @@ public class ActivitiTaskManageAction {
 					.getNodeInfoById(processKey, processInstId);
 			model.addAttribute("nodeList", nodeList);
 
-			// 获取可驳回的节点
-			ActivityImpl[] activityArry = activitiService.getTaskService()
-					.findRejectedActivityNode(taskId);
-			String lastTaskToNode = "";
-			String lastNode = "";
-			if (activityArry[0] != null) {
-				lastTaskToNode = activityArry[0].getProperty("name") + "";
-				model.addAttribute("lastTaskToNode", lastTaskToNode);// 上一个任务对应的节点
+			// 指定驳回通过后直接返回本节点，不能任意跳转
+			RejectLog rejectlog = activitiTaskService.getRejectlog(taskId);
+			if (rejectlog == null) {
+				// 可选的下一节点信息
+				List<ActivitiNodeInfo> nextNodeList = activitiTaskService
+						.getNextNodeInfoById(nodeList, processInstId);
+				model.addAttribute("nextNodeList", nextNodeList);
 			}
-			if (activityArry[1] != null) {
-				lastNode = activityArry[1].getProperty("name") + "";
-				model.addAttribute("lastNode", lastNode);// 当前节点的上一个节点
-			}
-
-			// 可选的下一节点信息
-			List<ActivitiNodeInfo> nextNodeList = activitiTaskService
-					.getNextNodeInfoById(nodeList, processInstId);
-			model.addAttribute("nextNodeList", nextNodeList);
 
 			// 当前任务节点信息
 			TaskManager task = activitiService.getTaskByTaskId(taskId);
 			model.addAttribute("task", task);
+
+			// 可驳回的节点列表
+			List<ActivitiNodeInfo> backActNodeList = activitiService
+					.getBackActNode(processInstId, task.getTASK_DEF_KEY_());
+			model.addAttribute("backActNodeList", backActNodeList);
 
 			// 参数
 			Object[] arrayVariable = activitiTaskService
 					.getProcessVariable(processInstId);
 			model.addAttribute("nodevariableList", arrayVariable[0]);// 非系统参数
 			model.addAttribute("sysvariableList", arrayVariable[1]);// 系统参数
+			
+			// 获取流程实例下所有人工节点控制参数信息
+			List<NodeControlParam> controlParamList = activitiTaskService
+					.getNodeControlParamByProcessId(processInstId);
+			model.addAttribute("controlParamList", controlParamList);
 
 			model.addAttribute("taskState", taskState);
 			model.addAttribute("taskId", taskId);
@@ -529,7 +551,7 @@ public class ActivitiTaskManageAction {
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
-
+				
 				activitiTaskService.rejectToPreTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						rejectedtype);
@@ -562,9 +584,16 @@ public class ActivitiTaskManageAction {
 
 			if (isAuthor) {
 
+				String userAccount = AccessControl.getAccessControl()
+						.getUserAccount();
+
+				if (!activitiTaskService.isSignTask(taskId)) {
+					// 先签收
+					activitiService.claim(taskId, userAccount);
+				}
+
 				activitiService.cancleProcessInstances(processInstIds,
-						deleteReason, taskId, processKey, AccessControl
-								.getAccessControl().getUserAccount());
+						deleteReason, taskId, processKey, userAccount);
 
 				return "success";
 
@@ -627,10 +656,18 @@ public class ActivitiTaskManageAction {
 				activitiService.delegateTask(task.getTaskId(),
 						task.getChangeUserId());
 
+				String reamrk = task.getCompleteReason()
+						+ "<br/>备注:["
+						+ activitiService.getUserInfoMap().getUserName(
+								currentUser)
+						+ "]将任务转办给["
+						+ activitiService.getUserInfoMap().getUserName(
+								task.getChangeUserId()) + "]";
+
 				// 在扩展表中添加转办记录
 				activitiTaskService.updateNodeChangeInfo(task.getTaskId(),
 						task.getProcessIntsId(), task.getProcessKey(),
-						currentUser, task.getChangeUserId());
+						currentUser, task.getChangeUserId(), reamrk);
 
 				tm.commit();
 
@@ -669,30 +706,32 @@ public class ActivitiTaskManageAction {
 
 				tm.begin();
 
-				// 获得流程的所有节点
-				List<ActivityImpl> activties = activitiService
-						.getActivitImplListByProcessKey(processKey);
-
-				// 获得当前活动任务
-				List<Task> task = activitiService.getTaskService()
-						.createTaskQuery().processInstanceId(processId).list();
-
-				activitiService.completeTaskLoadCommonParamsWithDest(task
-						.get(0).getId(), activties.get(1).getId(),
-						cancelTaskReason);
-
-				// 日志记录废弃操作
 				String currentUser = activitiService.getUserInfoMap()
 						.getUserName(
 								AccessControl.getAccessControl()
 										.getUserAccount());
 
-				String remark = cancelTaskReason + "<br/>备注:" + currentUser
-						+ "将任务撤销至[" + task.get(0).getName() + "]";
+				// 获取第一人工节点信息
+				HistoricTaskInstance hiTask = activitiService
+						.getFirstTask(processId);
 
+				String remark = cancelTaskReason + "<br/>备注:" + currentUser
+						+ "将任务撤销至[" + hiTask.getName() + "]";
+
+				if (!activitiTaskService.isSignTask(taskId)) {
+					// 先签收
+					activitiService.claim(taskId, AccessControl
+							.getAccessControl().getUserAccount());
+				}
+
+				// 撤销任务
+				activitiService.completeTaskLoadCommonParamsWithDest(taskId,
+						hiTask.getTaskDefinitionKey(), remark);
+
+				// 日志记录撤销操作
 				activitiService.addDealTask(taskId, currentUser, "2",
-						processId, processKey, remark, task.get(0)
-								.getTaskDefinitionKey(), task.get(0).getName());
+						processId, processKey, remark,
+						hiTask.getTaskDefinitionKey(), hiTask.getName());
 
 				tm.commit();
 

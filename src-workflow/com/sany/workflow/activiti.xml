@@ -264,8 +264,13 @@
 		       A.PRIORITY_,
 		       A.CREATE_TIME_ as START_TIME_,
 		       A.DUE_DATE_,
-		       A.SUSPENSION_STATE_
+		       A.SUSPENSION_STATE_,
+		       B.IS_RECALL AS ISRECALL,
+		       B.IS_CANCEL AS ISCANCEL,
+		       B.IS_DISCARD AS ISDISCARD
 		  FROM ACT_RU_TASK A
+		  LEFT JOIN TD_WF_NODE_WORKTIME B on a.proc_inst_id_ = b.process_id
+                                 and a.task_def_key_ = b.node_key
 		 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
@@ -289,9 +294,14 @@
 		       A.PRIORITY_,
 		       A.CREATE_TIME_ as START_TIME_,
 		       A.DUE_DATE_,
-		       A.SUSPENSION_STATE_
+		       A.SUSPENSION_STATE_,
+		       C.IS_DISCARD ,
+		       C.IS_CANCEL,
+		       C.IS_RECALL
 		  FROM ACT_RU_TASK A
 		  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+		  LEFT JOIN TD_WF_NODE_WORKTIME C ON A.PROC_INST_ID_ = C.PROCESS_ID
+                                 		  AND A.TASK_DEF_KEY_ = C.NODE_KEY
 		 WHERE A.Id_ = ?
 		]]>
 	</property>
@@ -362,9 +372,6 @@
 				 LEFT JOIN ACT_RU_EXECUTION A ON RES.PROC_INST_ID_ = A.ID_
 				 LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 				 
-				 #if($processKey && !$processKey.equals(""))
-				 	AND B.KEY_ like #[processKey]
-				 #end
 				 -- 获取业务类型				 
 				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
@@ -397,6 +404,10 @@
 					   	and A.BUSINESS_KEY_ like #[businessKey]
 				   #end
 				   
+				   #if($processKey && !$processKey.equals(""))
+				 	AND B.KEY_ like #[processKey]
+				   #end
+				   
 				   -- 应用
 				   #if($appName && !$appName.equals(""))
 				   		and b.key_ in (select procdef_id
@@ -424,9 +435,6 @@
 				  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.ID_
 				  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 				  
-				  #if($processKey && !$processKey.equals(""))
-				 	AND C.KEY_ like #[processKey]
-				  #end
 				 -- 获取业务类型		
 				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
@@ -460,6 +468,10 @@
 					  and B.BUSINESS_KEY_ like #[businessKey]
 				  #end
 				  
+				  #if($processKey && !$processKey.equals(""))
+				 	AND C.KEY_ like #[processKey]
+				  #end
+				  
 				  -- 应用
 				  #if($appName && !$appName.equals(""))
 				   		and c.key_ in (select procdef_id
@@ -491,9 +503,6 @@
 				 LEFT JOIN ACT_RU_EXECUTION A ON RES.PROC_INST_ID_ = A.ID_
 				 LEFT JOIN ACT_RE_PROCDEF B ON B.ID_ = A.PROC_DEF_ID_
 				 
-				 #if($processKey && !$processKey.equals(""))
-				 	AND B.KEY_ like #[processKey]
-				 #end
 				 -- 获取业务类型				 
 				 JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
@@ -520,6 +529,10 @@
 				   
 				   #if($businessKey && !$businessKey.equals(""))
 					   	and A.BUSINESS_KEY_ like #[businessKey]
+				   #end
+				   
+				   #if($processKey && !$processKey.equals(""))
+				 	AND B.KEY_ like #[processKey]
 				   #end
 				   
 				   -- 应用
@@ -586,9 +599,6 @@
 				  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.ID_
 				  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 				  
-				  #if($processKey && !$processKey.equals(""))
-				 	AND C.KEY_ like #[processKey]
-				  #end
 				 -- 获取业务类型		
 				  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 				          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
@@ -614,6 +624,10 @@
 				  
 				  #if($businessKey && !$businessKey.equals(""))
 					  and B.BUSINESS_KEY_ like #[businessKey]
+				  #end
+				  
+				  #if($processKey && !$processKey.equals(""))
+				 	AND C.KEY_ like #[processKey]
 				  #end
 				  
 				  -- 应用
@@ -1066,7 +1080,7 @@
 		<![CDATA[
 		
 		-- 用户自己处理的任务记录
-			SELECT B.BUSINESS_KEY_, C.KEY_, E.SUSPENSION_STATE_,D.BUSINESS_NAME, A.DURATION_NODE,
+			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_, A.NAME_,
 		       A.DESCRIPTION_, A.OWNER_, A.ASSIGNEE_,  A.START_TIME_ as START_TIME_, A.CLAIM_TIME_,
@@ -1077,19 +1091,22 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
-			  #if($processKey && !$processKey.equals(""))
-				AND C.KEY_ like #[processKey]
-			  #end
 			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  -- 获取流程实例状态
-              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_ 
               -- 委托处理记录
               LEFT JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
+			 
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
+			  
+			  #if($processIntsId && !$processIntsId.equals(""))
+			 	AND A.PROC_INST_ID_ like #[processIntsId]
+		 	  #end
 			 
 			  #if($createUser && !$createUser.equals(""))
 			 	AND F.CREATE_USER like #[createUser]
@@ -1133,7 +1150,7 @@
 		-- entrustUser字段有值，那么只查委托任务记录
 		#if(!$entrustUser || $entrustUser.equals(""))
 		-- 用户自己处理的任务记录
-			SELECT B.BUSINESS_KEY_, C.KEY_, E.SUSPENSION_STATE_,D.BUSINESS_NAME, A.DURATION_NODE,
+			SELECT B.BUSINESS_KEY_, C.KEY_,D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_, A.NAME_,
 		       A.DESCRIPTION_, A.OWNER_, A.ASSIGNEE_,  A.START_TIME_ as START_TIME_, A.CLAIM_TIME_,
@@ -1143,19 +1160,18 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
-			  #if($processKey && !$processKey.equals(""))
-				AND C.KEY_ like #[processKey]
-			  #end
 			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  -- 获取流程实例状态
-              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_ 
                  
 			 WHERE A.END_TIME_ IS NOT NULL
 			 
 				AND A.ASSIGNEE_ = #[assignee]
+				
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
 			 
 			  #if($processIntsId && !$processIntsId.equals(""))
 			 	AND A.PROC_INST_ID_ like #[processIntsId]
@@ -1194,7 +1210,7 @@
 		
 		-- 用户处理别人委托任务的处理记录
 		
-			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
+			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_,A.NAME_,
 		       A.DESCRIPTION_, A.OWNER_, F.ENTRUST_USER as ASSIGNEE_,  A.START_TIME_ as START_TIME_, 
@@ -1204,21 +1220,20 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
-			  #if($processKey && !$processKey.equals(""))
-				AND C.KEY_ like #[processKey]
-			  #end
 			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  -- 获取流程实例状态
-              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
 			  -- 委托处理记录
   			  right JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
 			 	
 			 	AND F.CREATE_USER = #[assignee]
+			 	
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
 			 	
 			  #if($entrustUser && !$entrustUser.equals(""))
 			 	AND F.ENTRUST_USER like #[entrustUser]
@@ -1247,7 +1262,7 @@
 		union
 		-- 别人委托给当前用户任务的处理记录
 		
-			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
+			SELECT B.BUSINESS_KEY_, C.KEY_, D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_,A.NAME_,
 		       A.DESCRIPTION_, A.OWNER_, F.ENTRUST_USER as ASSIGNEE_,  A.START_TIME_ as START_TIME_, 
@@ -1257,21 +1272,20 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
-			  #if($processKey && !$processKey.equals(""))
-				AND C.KEY_ like #[processKey]
-			  #end
 			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  -- 获取流程实例状态
-              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
 			  -- 委托处理记录
   			  right JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
 			 	
 			 	AND F.ENTRUST_USER = #[assignee]
+			 	
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
 			 	
 			  #if($entrustUser && !$entrustUser.equals(""))
 			 	AND F.ENTRUST_USER like #[entrustUser]
@@ -1303,7 +1317,7 @@
 		union
 		-- 用户转办记录
 		
-			SELECT B.BUSINESS_KEY_, C.KEY_,E.SUSPENSION_STATE_, D.BUSINESS_NAME, A.DURATION_NODE,
+			SELECT B.BUSINESS_KEY_, C.KEY_,D.BUSINESS_NAME, A.DURATION_NODE,
        		   A.IS_CONTAIN_HOLIDAY, A.ALERTTIME, A.OVERTIME, A.ID_,A.PROC_DEF_ID_,
 		       A.TASK_DEF_KEY_, A.PROC_INST_ID_,  A.EXECUTION_ID_, A.PARENT_TASK_ID_,A.NAME_,
 		       A.DESCRIPTION_, A.OWNER_, A.ASSIGNEE_,  A.START_TIME_ as START_TIME_, 
@@ -1313,21 +1327,20 @@
 			  LEFT JOIN ACT_HI_PROCINST B ON A.PROC_INST_ID_ = B.ID_
 			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = B.PROC_DEF_ID_
 			  
-			  #if($processKey && !$processKey.equals(""))
-				AND C.KEY_ like #[processKey]
-			  #end
 			  -- 获取业务类型	             
 			  JOIN (SELECT WB.BUSINESS_NAME, WB.BUSINESS_ID, WPB.PROCESS_KEY
 			          FROM TD_WF_BUSINESSTYPE WB, TD_WF_PRO_BUSINESSTYPE WPB
 			         WHERE WB.BUSINESS_ID = WPB.BUSINESSTYPE_ID) D ON C.KEY_ = D.PROCESS_KEY
-			  -- 获取流程实例状态
-              LEFT JOIN ACT_RU_EXECUTION E ON A.PROC_INST_ID_ = E.ID_
 			  -- 转办记录
   			 RIGHT JOIN TD_WF_NODE_CHANGEINFO F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
 			 	
 			 	AND F.FROM_USER = #[assignee]
+			 	
+			  #if($processKey && !$processKey.equals(""))
+				AND C.KEY_ like #[processKey]
+			  #end
 			 
 			  #if($processIntsId && !$processIntsId.equals(""))
 			 	AND A.PROC_INST_ID_ like #[processIntsId]
@@ -1600,15 +1613,29 @@
 		]]>
 	</property>
 	
-	<property name="selectActivitiNodeInfoByKeys">
+	<property name="existNodeinfo">
 		<![CDATA[
-			select * from td_wf_activiti_node_info where process_key=#[process_key] and node_key=#[node_key]
+			select id from td_wf_activiti_node_info where process_key=? and node_key=?
 		]]>
 	</property>
 	
-	<property name="existNodeinfo">
+	<property name="updateActivitiNodeInfo">
 		<![CDATA[
-			select count(1) from td_wf_activiti_node_info where process_key=? and node_key=?
+			update td_wf_activiti_node_info 
+			   set process_key = #[process_key],
+			       node_key    = #[node_key],
+			       node_name   = #[node_name],
+			       node_type   = #[node_type],
+			       order_num   = #[order_num]
+			 where id = #[id]
+		]]>
+	</property>
+	
+	<property name="updateNodeOrderNum">
+		<![CDATA[
+			update td_wf_activiti_node_info 
+			   set order_num = #[ORDER_NUM]
+			 where id = #[ID]
 		]]>
 	</property>
 	
@@ -1724,15 +1751,6 @@
 		]]>
 	</property>
 	
-	<property name="updateActivitiNodeInfo">
-		<![CDATA[
-			UPDATE TD_WF_ACTIVITI_NODE_INFO A
-			   SET A.NODE_DESCRIBE =?
-			 WHERE A.PROCESS_KEY = ?
-			   AND A.NODE_KEY =?
-		]]>
-	</property>
-	
 	<property name="deleteActivitiNodeInfoByKey">
 		<![CDATA[
 			delete from  td_wf_activiti_node_info where process_key=#[process_key]
@@ -1791,20 +1809,18 @@
 			insert into td_wf_activiti_node_candidate
   			(id, node_id, candidate_groups_id, candidate_groups_name, candidate_users_id, 
   			 candidate_users_name, business_id, business_type, create_date, create_person_id,
-   			create_person_name, is_valid, is_edit_candidate, candidate_orgs_id, candidate_orgs_name, 
-  			 candidate_jobs_id, candidate_jobs_name, candidate_roles_id, candidate_roles_name,
-  			 MESSAGETEMPLEID,EMAILTEMPLEID,DURATION_NODE,NOTICENUM)
+   			create_person_name, candidate_orgs_id, candidate_orgs_name, candidate_jobs_id, 
+   			candidate_jobs_name, candidate_roles_id, candidate_roles_name)
    			values(#[id],#[node_id],#[candidate_groups_id],#[candidate_groups_name],
 			#[candidate_users_id],#[candidate_users_name],#[business_id],#[business_type],#[create_date],
-			#[create_person_id],#[create_person_name],#[is_valid],#[is_edit_candidate],#[candidate_orgs_id],
-			#[candidate_orgs_name],#[candidate_jobs_id],#[candidate_jobs_name],#[candidate_roles_id],
-			#[candidate_roles_name],#[messagetempleid],#[emailtempleid],#[duration_node],#[noticenum])
+			#[create_person_id],#[create_person_name],#[candidate_orgs_id],#[candidate_orgs_name],
+			#[candidate_jobs_id],#[candidate_jobs_name],#[candidate_roles_id],#[candidate_roles_name])
 		]]>
 	</property>
 	
 	<property name="queryActivitiNodeCandidate">
 		<![CDATA[
-			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name
 			from td_wf_activiti_node_info n 
 			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
 			#if($business_id && !$business_id.equals(""))
@@ -1828,9 +1844,8 @@
 	
 	<property name="queryProcessNodesCandidates">
 		<![CDATA[
-			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,
-			t.candidate_users_name,t.is_valid,t.is_edit_candidate,  t.messagetempleid,a.templetitle messagetempletitle,
-       		t.emailtempleid,b.templetitle emailtempletitle,T.DURATION_NODE/1000/60/60 as DURATION_NODE,T.NOTICENUM
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,
+			t.candidate_users_id,t.candidate_users_name
        		
 			from td_wf_activiti_node_info n 
 			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
@@ -1841,13 +1856,36 @@
 				and t.business_id = #[bussinessid]
 			#end
 			
-			left join TD_WF_MESSTEMPLATE a on a.templeid = t.messagetempleid
-  			left join TD_WF_MESSTEMPLATE b on b.templeid = t.emailtempleid
-			
 			 where n.process_key = #[process_key] 
 			order by n.order_num
 		]]>
 	</property>
+	<property name="queryNodes">
+		<![CDATA[
+			select a.*, 
+				   B.DURATION_NODE / 1000 / 60 / 60 AS DURATION_NODE,
+			       B.IS_VALID,
+			       B.IS_EDIT,
+			       B.IS_AUTO,
+			       B.IS_RECALL,
+			       B.IS_EDITAFTER,
+			       B.IS_DISCARD,
+			       B.IS_COPY,
+			       B.IS_CANCEL,
+			       B.IS_AUTOAFTER,
+			       B.IS_MULTI,
+			       B.IS_SEQUENTIAL,
+			       B.TASK_URL,
+			       B.NODE_DESCRIBE,
+			       B.BUSSINESSCONTROLCLASS
+			  from td_wf_activiti_node_info a
+			  left join td_wf_controlparam b on a.id = b.node_id
+											and b.business_type = '0'
+			 where a.process_key = ?
+			 order by a.order_num
+		]]>
+	</property>
+	
 	<property name="queryAllActivitiNodes">
 		<![CDATA[
 			select n.* from td_wf_activiti_node_info n
@@ -1871,7 +1909,7 @@
 	
 	<property name="queryProcessNodeCandidates">
 		<![CDATA[
-			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name
 			from td_wf_activiti_node_info n 
 			left join td_wf_activiti_node_candidate t on t.node_id=n.id 				
 			#if($business_id && !$business_id.equals(""))
@@ -1885,7 +1923,7 @@
 	</property>
 	<property name="queryActivitiNodeWithCommonCandidate">
 		<![CDATA[
-			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,t.is_valid,t.is_edit_candidate
+			select n.*,t.node_id,t.candidate_groups_id,t.candidate_groups_name,t.candidate_users_id,t.candidate_users_name,
 			from td_wf_activiti_node_info n 
 			left join td_wf_activiti_node_candidate t on t.node_id=n.id 
 				#if($business_id && !$business_id.equals(""))
@@ -1941,6 +1979,18 @@
 		<![CDATA[
 			insert into td_wf_nodevariable (id,business_id,business_type,node_id,param_name,param_value,param_type,param_des,is_edit_param,rowno_) 
 			values(#[id],#[business_id],#[business_type],#[node_id],#[param_name],#[param_value],#[param_type],#[param_des],#[is_edit_param],#[rowno_])
+		]]>
+	</property>
+	
+	<property name="addNodeControlParam">
+		<![CDATA[
+			INSERT INTO TD_WF_CONTROLPARAM
+			(ID,NODE_ID, BUSINESS_ID,BUSINESS_TYPE,DURATION_NODE,IS_VALID,IS_EDIT,IS_EDITAFTER,IS_AUTO,
+			 IS_AUTOAFTER,IS_RECALL,TASK_URL,NODE_DESCRIBE,IS_DISCARD,IS_COPY,IS_CANCEL,BUSSINESSCONTROLCLASS,
+			 IS_MULTI,IS_SEQUENTIAL) 
+			 VALUES(#[ID],#[NODE_ID],#[BUSINESS_ID],#[BUSINESS_TYPE],#[DURATION_NODE],#[IS_VALID],#[IS_EDIT],
+			 	#[IS_EDITAFTER],#[IS_AUTO],#[IS_AUTOAFTER],#[IS_RECALL],#[TASK_URL],#[NODE_DESCRIBE],
+			 	#[IS_DISCARD],#[IS_COPY],#[IS_CANCEL],#[BUSSINESSCONTROLCLASS],#[IS_MULTI],#[IS_SEQUENTIAL])
 		]]>
 	</property>
 	
@@ -2000,6 +2050,12 @@
 				and business_id=#[business_id] 
 			#end			
 			and business_type=#[business_type]
+		]]>
+	</property>
+	
+	<property name="deleteNodeContralParam">
+		<![CDATA[
+			delete from td_wf_controlparam where id = ? 
 		]]>
 	</property>
 	
@@ -2265,6 +2321,43 @@
 		]]>
 	</property>
 	
+	<!-- 获取节点控制参数信息 gw_tanx -->
+	<property name="queryNodeContralParam_wf">
+		<![CDATA[
+			 SELECT  A.ID AS NODE_ID,A.NODE_KEY, A.NODE_NAME, B.ID, B.BUSINESS_ID,
+			       B.BUSINESS_TYPE,B.DURATION_NODE / 1000 / 60 / 60 AS DURATION_NODE ,
+			       B.IS_VALID, B.IS_EDIT, B.IS_AUTO, B.IS_RECALL, B.IS_EDITAFTER,
+			       B.TASK_URL, B.NODE_DESCRIBE, B.IS_DISCARD, B.IS_COPY, B.IS_CANCEL,
+			       B.IS_AUTOAFTER, B.BUSSINESSCONTROLCLASS, B.IS_MULTI, B.IS_SEQUENTIAL
+			       FROM TD_WF_ACTIVITI_NODE_INFO A
+				  LEFT JOIN TD_WF_CONTROLPARAM B ON A.ID = B.NODE_ID
+				                                AND B.BUSINESS_TYPE = #[business_type]
+				                                
+				    #if($business_id && !$business_id.equals(""))
+						and b.business_id = #[business_id]
+					#end
+				                                
+				 WHERE A.NODE_TYPE = 'userTask'
+   					AND A.PROCESS_KEY = #[process_key]
+				 
+					#if($taskKey && !$taskKey.equals(""))
+						 AND A.NODE_KEY = #[taskKey]
+					#end
+			
+				 ORDER BY A.ORDER_NUM
+		]]>
+	</property>
+	
+	<!-- 获取节点控制参数信息 gw_tanx -->
+	<property name="getNodeContralParam_wf">
+		<![CDATA[
+			SELECT *
+			  FROM TD_WF_NODE_WORKTIME A
+			 WHERE A.PROCESS_ID = ?
+			   AND A.NODE_KEY = ?
+		]]>
+	</property>
+	
 	<!-- 添加流程消息提示方式记录  gw_tanx -->
 	<property name="insertProTemplate_wf">
 		<![CDATA[
@@ -2336,11 +2429,29 @@
 	<property name="insertNodeWorktime_wf">
 		<![CDATA[
 			INSERT INTO TD_WF_NODE_WORKTIME
-			  (PROCESS_KEY, PROCESS_ID, NODE_KEY, DURATION_NODE,IS_VALID,
-			  IS_EDIT_CANDIDATE,IS_AUTO_CANDIDATE,IS_RECALL_CANDIDATE,IS_EDITAFTER_CANDIDATE)
-			VALUES
-			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE],#[IS_VALID],
-			  #[IS_EDIT_CANDIDATE],#[IS_AUTO_CANDIDATE],#[IS_RECALL_CANDIDATE],#[IS_EDITAFTER_CANDIDATE])
+				  (PROCESS_KEY,
+				   PROCESS_ID,
+				   NODE_KEY,
+				   DURATION_NODE,
+				   IS_VALID,
+				   IS_EDIT,
+				   IS_AUTO,
+				   IS_RECALL,
+				   IS_EDITAFTER,
+				   IS_DISCARD,
+				   IS_COPY,
+				   IS_CANCEL,
+				   IS_AUTOAFTER,
+				   BUSSINESSCONTROLCLASS,
+				   TASK_URL,
+				   NODE_DESCRIBE,
+				   NODE_NAME,
+				   IS_MULTI,
+				   IS_SEQUENTIAL)
+				VALUES
+			  (#[PROCESS_KEY],#[PROCESS_ID],#[NODE_KEY],#[DURATION_NODE],#[IS_VALID],#[IS_EDIT],#[IS_AUTO],
+			  #[IS_RECALL],#[IS_EDITAFTER],#[IS_DISCARD],#[IS_COPY],#[IS_CANCEL],#[IS_AUTOAFTER],
+			  #[BUSSINESSCONTROLCLASS],#[TASK_URL],#[NODE_DESCRIBE],#[NODE_NAME],#[IS_MULTI],#[IS_SEQUENTIAL])
 		]]>
 	</property>
 	
@@ -2428,8 +2539,9 @@
 	<!-- 添加节点任务转办信息  gw_tanx -->
 	<property name="addNodeChangeInfo_wf">
 		<![CDATA[
-			 INSERT INTO TD_WF_NODE_CHANGEINFO (FROM_USER,TO_USER,TASKID,PROCESS_ID,PROCESS_KEY,CHANGETIME) 
-			 	VALUES (?,?,?,?,?,?) 
+			 INSERT INTO TD_WF_NODE_CHANGEINFO (FROM_USER,TO_USER,TASKID,PROCESS_ID,
+			 	PROCESS_KEY,CHANGETIME,DELEGATEREMARK) 
+			 	VALUES (?,?,?,?,?,?,?) 
 		]]>
 	</property>
 	
@@ -2613,20 +2725,9 @@
 		]]>
 	</property>
 	
-	<!-- 查询任务的委托/转办记录  gw_tanx -->
-	<property name="getChangeOrEntrustTaskInfoById_wf">
+	<!-- 查询任务的委托记录  gw_tanx -->
+	<property name="getEntrustTaskInfoById_wf">
 		<![CDATA[
-			-- 转办关系
-			SELECT 1 TASKRELATION,
-			       A.TASKID,
-			       A.PROCESS_KEY,
-			       A.PROCESS_ID,
-			       A.FROM_USER,
-			       A.TO_USER,
-			       A.CHANGETIME CHANGETIME
-			  FROM TD_WF_NODE_CHANGEINFO A
-			 WHERE A.TASKID = ?
-			UNION
 			-- 委托关系
 			SELECT 2 TASKRELATION,
 			       B.TASKID,
@@ -2639,6 +2740,39 @@
 			 WHERE B.TASKID = ?
 			
 			 ORDER BY CHANGETIME
+		]]>
+	</property>
+	
+	<!-- 查询任务的转办记录  gw_tanx -->
+	<property name="getChangeTaskInfoById_wf">
+		<![CDATA[
+			-- 转办关系
+			 SELECT BB.ID_,
+			       CC.PROC_DEF_ID_,
+			       CC.PROC_INST_ID_,
+			       CC.EXECUTION_ID_,
+			       CC.ACT_ID_,
+			       CC.TASK_ID_,
+			       CC.CALL_PROC_INST_ID_,
+			       CC.ACT_NAME_,
+			       CC.ACT_TYPE_,
+			       BB.OWNER_,
+			       AA.FROM_USER AS ASSIGNEE_,
+			       CC.START_TIME_,
+			       BB.CLAIM_TIME_,
+			       AA.CHANGETIME AS END_TIME_,
+			       AA.DELEGATEREMARK AS DELETE_REASON_,
+			       CC.DURATION_,
+			       BB.DURATION_NODE,
+			       BB.IS_CONTAIN_HOLIDAY,
+			       BB.ALERTTIME,
+			       BB.OVERTIME,
+			       BB.ADVANCESEND,
+			       BB.OVERTIMESEND
+			   FROM TD_WF_NODE_CHANGEINFO AA
+			   LEFT JOIN ACT_HI_TASKINST BB ON AA.TASKID = BB.ID_
+			   LEFT JOIN ACT_HI_ACTINST CC ON BB.ID_ = CC.TASK_ID_
+			  WHERE AA.PROCESS_ID = ?
 		]]>
 	</property>
 	
@@ -2682,7 +2816,7 @@
 		]]>
 	</property>
 	
-	<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
+	<!-- 处理日志记录  gw_tanx-->
 	<property name="addDealTaskInfo_wf">
 		<![CDATA[
 			INSERT INTO TD_WF_DEAL_TASK
@@ -2693,11 +2827,55 @@
 					   PROCESS_ID,
 					   PROCESS_KEY,
 					   DEALTIME,
-					   REMARK,
+					   DEALREMARK,
 					   TARGETTASKDEFKEY,
 					   TARGETTASKNAME)
 					VALUES
 					  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		]]>
+	</property>
+	
+	<!-- 获取当前流程实例下处理过的节点集合  gw_tanx-->
+	<property name="getTaskKeyList_wf">
+		<![CDATA[
+			SELECT T.TASK_DEF_KEY_, T.NAME_
+			  FROM ACT_HI_TASKINST T
+			 WHERE T.PROC_INST_ID_ = ?
+			   
+			 ORDER BY T.START_TIME_
+		]]>
+	</property>
+	
+	<!-- 获取当前流程实例下节点控制信息  gw_tanx-->
+	<property name="getNodeControlParamByProcessId_wf">
+		<![CDATA[
+			select B.NODE_KEY,
+			       B.NODE_DESCRIBE,
+			       B.NODE_NAME,
+			       B.DURATION_NODE / 1000 / 60 / 60 AS DURATION_NODE,
+			       B.IS_VALID,
+			       B.IS_EDIT,
+			       B.IS_AUTO,
+			       B.IS_RECALL,
+			       B.IS_EDITAFTER,
+			       B.IS_DISCARD,
+			       B.IS_COPY,
+			       B.IS_CANCEL,
+			       B.IS_AUTOAFTER,
+			       B.IS_MULTI,
+			       B.IS_SEQUENTIAL,
+			       B.TASK_URL,
+			       B.NODE_DESCRIBE,
+			       B.BUSSINESSCONTROLCLASS
+			  from td_wf_node_worktime b
+			 where b.process_id = ?
+		]]>
+	</property>
+	
+	<!-- 获取驳回日志记录  gw_tanx-->
+	<property name="getRejectlog_wf">
+		<![CDATA[
+			SELECT * FROM TD_WF_REJECTLOG T WHERE T.NEWTASKID=?
 		]]>
 	</property>
 	

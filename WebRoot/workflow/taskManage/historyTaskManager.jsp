@@ -62,38 +62,6 @@ function doreset(){
 	$("#reset").click();
 }
 
-// 撤销任务
-function cancelTask(taskId,processId,processKey){
-	
-	var url="<%=request.getContextPath()%>/workflow/taskManage/cancelTask.jsp?processKey="+processKey
-			+"&processId="+processId+"&taskId="+taskId;
-    $.dialog({ id:'iframeNewId', title:'填写撤销原因',width:400,height:200, content:'url:'+url});  
-	
-    return;
-    
-	$.dialog.confirm('确定撤销任务吗？', function(){
-		
-		$.ajax({
-	 	 	type: "POST",
-			url : "<%=request.getContextPath()%>/workflow/taskManage/cancelTask.page",
-			data: {"processKey":'${processKey}',"processId":processId,"taskId":taskId},
-			dataType : 'json',
-			async:false,
-			beforeSend: function(XMLHttpRequest){
-				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
-				},
-			success : function(data){
-				if (data != 'success') {
-					alert("撤销任务出错:"+data);
-				}else {
-					modifyQueryData();
-					api.close();	
-				}
-			}
-		 });
-	},function(){});  
-}
-
 </script>
 </head>
 

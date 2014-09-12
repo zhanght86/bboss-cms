@@ -66,16 +66,13 @@
     		<td><pg:cell colName="ID_" /></td> 
        		<td><pg:cell colName="NAME_"/></td>
        		<td>
-       			<pg:null colName="wfEntrust">
-       				<pg:null colName="delegateTaskList">
-       					<pg:cell colName="USER_ID_NAME"/>
-       				</pg:null>
-       			</pg:null>
+   				<pg:null colName="delegateTaskList">
+   					<pg:cell colName="USER_ID_NAME"/>
+   				</pg:null>
        			<pg:notnull colName="delegateTaskList" >
 			     	<pg:list colName="delegateTaskList" >
 					  <pg:cell colName="FROM_USER_NAME"/>
-					 	<pg:equal colName="TASKRELATION" value="1">转办给</pg:equal> 
-					 	<pg:equal colName="TASKRELATION" value="2">委托给</pg:equal> 
+					  	 委托给
 					  <pg:cell colName="TO_USER_NAME"/>
 					  [<pg:cell colName="CHANGETIME" dateformat="yyyy-MM-dd HH:mm:ss"/>]
 					  <br/>
@@ -126,9 +123,6 @@
 			     </pg:notempty>	
 		    </td>
             <td class="td_center">
-            	<pg:notempty colName="SUSPENSION_STATE_" >
-            		<a href="javascript:void(0)" id="cancelTask" onclick="cancelTask('<pg:cell colName="ID_" />','<pg:cell colName="PROC_INST_ID_" />','<pg:cell colName="KEY_" />')">撤销</a> | 
-            	</pg:notempty>
             	<a href="javascript:void(0)" id="viewTaskDetailInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
             </td>     
         </tr>
