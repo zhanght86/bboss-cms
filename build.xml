@@ -55,6 +55,8 @@
 					<fileset dir="src-common" includes="**/*.java"/>
 					<fileset dir="src-dictionary" includes="**/*.java"/>
 					<fileset dir="src-workflow" includes="**/*.java"/>
+					<fileset dir="src_workflow-business" includes="**/*.java"/>
+					
 					<fileset dir="src-workflow-web" includes="**/*.java"/>
 					<fileset dir="src-sap" includes="**/*.java"/>
 					<fileset dir="src-ldap" includes="**/*.java"/>

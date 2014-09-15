@@ -104,25 +104,6 @@ function query(businessId,businessType,treename){
 	
 }
 
-function chkPrice(obj){
-	obj.value = obj.value.replace(/[^\d.]/g,""); 
-	//必须保证第一位为数字而不是. 
-	obj.value = obj.value.replace(/^\./g,""); 
-	//保证只有出现一个.而没有多个. 
-	obj.value = obj.value.replace(/\.{2,}/g,"."); 
-	//小数点后面保留一位小数
-	obj.value = obj.value.replace(/\.\d\d/g,"."); 
-	//保证.只出现一次，而不能出现两次以上 
-	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
-} 
-
-function chkLast(obj){ 
-	// 如果出现非法字符就截取掉 
-	if(obj.value.substr((obj.value.length - 1), 1) == '.') {
-		obj.value = obj.value.substr(0,(obj.value.length - 1)); 
-	}
-}
-
 //清空选择
 function emptyChoose(id,type){
 	if (type=='1') {//清空用户
@@ -132,6 +113,23 @@ function emptyChoose(id,type){
 		$("#"+id+"_groups_id").val('');
 		$("#"+id+"_groups_name").val('');
 	}
+}
+
+//新增参数配置行
+function addTr(){
+	var trHtml = "<tr class='replaceTr'><td><select name='node_id' id='node_id'>";
+	<pg:list requestKey="nodeConfigList">
+		trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
+	</pg:list>
+	trHtml+="</select></td>";
+	trHtml+="<td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
+	trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
+	trHtml+="<td><input type='text' class='input1 w200' name='param_des'/></td>";
+	trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
+	$("#tb3").append(trHtml);
+	$(".bt").click(function(){
+		$(this).parent('td').parent('tr').remove();
+	});
 }
 
 $(document).ready(function() {

@@ -39,7 +39,7 @@
 		from td_sm_user u,td_sm_orguser orgu,td_sm_organization org,td_sm_userjoborg ujob,td_sm_job job
     where u.USER_ID = orgu.USER_ID and orgu.ORG_ID = org.ORG_ID and u.USER_ID = ujob.USER_ID 
     and ujob.JOB_ID = job.JOB_ID
-		and ( u.user_name in(
+		and (( u.user_name in(
 	 		 	#foreach($username in $usernames)  
                        #if($velocityCount == 0)  
                            #[usernames[$velocityCount]]  
@@ -48,6 +48,17 @@
                        #end  
                  #end
 				) 
+			) or
+			( u.user_worknumber in(
+	 		 	#foreach($username in $usernames)  
+                       #if($velocityCount == 0)  
+                           #[usernames[$velocityCount]]  
+                       #else  
+                           ,#[usernames[$velocityCount]]  
+                       #end  
+                 #end
+				) 
+			)
 			)
 		]]>
 	</property>

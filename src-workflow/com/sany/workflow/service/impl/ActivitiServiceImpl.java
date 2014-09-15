@@ -38,7 +38,6 @@ import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.db.upgrade.InstanceUpgrade;
@@ -4235,7 +4234,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			if (worktimeList.size() > 0) {
+			if (worktimeList != null && worktimeList.size() > 0) {
 				for (int i = 0; i < worktimeList.size(); i++) {
 					NodeControlParam nodeControlParam = worktimeList.get(i);
 					nodeControlParam.setPROCESS_KEY(processKey);
@@ -4249,6 +4248,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 						nodeControlParam.setDURATION_NODE(0);
 					}
 				}
+				
+				executor.deleteBeans("deleteNodeWorktime_wf", worktimeList);
+				
 				executor.insertBeans("insertNodeWorktime_wf", worktimeList);
 			}
 
@@ -4414,23 +4416,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 								.getCandidate_groups_id());
 					}
 
-					// 串/并行切换(多实例)
-					String isMulti = activitiNodeCandidateList.get(i)
-							.getIsMulti();
-					if (!"0".equals(isMulti)) {
-						if ("1".equals(isMulti)) {
-							map.put(activitiNodeCandidateList.get(i)
-									.getNode_key()
-									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-									MultiInstanceActivityBehavior.multiInstanceMode_sequential);
-						} else if ("2".equals(isMulti)) {
-							map.put(activitiNodeCandidateList.get(i)
-									.getNode_key()
-									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-									MultiInstanceActivityBehavior.multiInstanceMode_parallel);
-						}
-					}
-
 				}
 			}
 
@@ -4489,8 +4474,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			for (int i = 0; i < taskKeyList.size(); i++) {
 				HashMap map = taskKeyList.get(i);
-				String taskKey = map.get("TASK_DEF_KEY_") + "";
-				String taskName = map.get("NAME_") + "";
+				String taskKey = map.get("ACT_ID_") + "";
+				String taskName = map.get("ACT_NAME_") + "";
 
 				if (taskKey.equals(currentTaskKey)) {
 					break;

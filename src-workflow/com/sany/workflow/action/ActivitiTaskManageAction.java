@@ -264,7 +264,7 @@ public class ActivitiTaskManageAction {
 			ProcessInst processInst = activitiService
 					.getProcessInstById(processInstId);
 			model.addAttribute("processInst", processInst);
-			
+
 			// 判断是否有撤销功能(当前节点能被撤回，流程实例状态是运行中，当前用户是流程发起人或管理员)
 			if (processInst.getTaskList() != null
 					&& processInst.getTaskList().size() > 0) {
@@ -276,8 +276,9 @@ public class ActivitiTaskManageAction {
 					if (processInst.getSTART_USER_ID_().equals(currentUser)
 							|| AccessControl.getAccessControl().isAdmin()) {
 						model.addAttribute("isRecall", 1);
-						model.addAttribute("nowTaskId", processInst.getTaskList().get(0).getID_());
-					} 
+						model.addAttribute("nowTaskId", processInst
+								.getTaskList().get(0).getID_());
+					}
 				}
 			}
 
@@ -305,7 +306,8 @@ public class ActivitiTaskManageAction {
 
 				// 获取流程实例下所有人工节点控制参数信息
 				List<NodeControlParam> controlParamList = activitiTaskService
-						.getNodeControlParamByProcessId(processInstId);
+						.getNodeControlParamByProcessId(processInst.getKEY_(),
+								processInstId);
 				model.addAttribute("controlParamList", controlParamList);
 
 				// 预警、超时状态转义
@@ -369,7 +371,8 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String completeTask(TaskCondition task,
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList, ModelMap model) {
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList, ModelMap model) {
 
 		TransactionManager tm = new TransactionManager();
 
@@ -412,9 +415,11 @@ public class ActivitiTaskManageAction {
 									task.getCurrentUser()) + "]完成";
 				}
 
-				if (StringUtil.isNotEmpty(task.getCompleteReason())) {
-					task.setCompleteReason(task.getCompleteReason() + remark);
-				}
+				task.setCompleteReason(task.getCompleteReason() + remark);
+
+				// 保存控制变量参数
+				activitiService.addNodeWorktime(task.getProcessKey(),
+						task.getProcessIntsId(), nodeControlParamList);
 
 				// 完成任务
 				activitiTaskService.completeTask(task,
@@ -492,11 +497,11 @@ public class ActivitiTaskManageAction {
 					.getProcessVariable(processInstId);
 			model.addAttribute("nodevariableList", arrayVariable[0]);// 非系统参数
 			model.addAttribute("sysvariableList", arrayVariable[1]);// 系统参数
-			
+
 			// 获取流程实例下所有人工节点控制参数信息
-			List<NodeControlParam> controlParamList = activitiTaskService
-					.getNodeControlParamByProcessId(processInstId);
-			model.addAttribute("controlParamList", controlParamList);
+			List<NodeControlParam> nodeControlParamList = activitiTaskService
+					.getNodeControlParamByProcessId(processKey, processInstId);
+			model.addAttribute("nodeControlParamList", nodeControlParamList);
 
 			model.addAttribute("taskState", taskState);
 			model.addAttribute("taskId", taskId);
@@ -538,6 +543,7 @@ public class ActivitiTaskManageAction {
 	 */
 	public @ResponseBody
 	String rejectToPreTask(TaskCondition task,
+			List<NodeControlParam> nodeControlParamList,
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList, int rejectedtype,
 			ModelMap model) {
@@ -551,7 +557,11 @@ public class ActivitiTaskManageAction {
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
-				
+
+				// 保存控制变量参数
+				activitiService.addNodeWorktime(task.getProcessKey(),
+						task.getProcessIntsId(), nodeControlParamList);
+
 				activitiTaskService.rejectToPreTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						rejectedtype);

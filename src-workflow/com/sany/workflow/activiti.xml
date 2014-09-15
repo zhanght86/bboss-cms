@@ -2324,7 +2324,7 @@
 	<!-- 获取节点控制参数信息 gw_tanx -->
 	<property name="queryNodeContralParam_wf">
 		<![CDATA[
-			 SELECT  A.ID AS NODE_ID,A.NODE_KEY, A.NODE_NAME, B.ID, B.BUSINESS_ID,
+			 SELECT  A.ID AS NODE_ID,A.NODE_KEY,A.NODE_TYPE, A.NODE_NAME, B.ID, B.BUSINESS_ID,
 			       B.BUSINESS_TYPE,B.DURATION_NODE / 1000 / 60 / 60 AS DURATION_NODE ,
 			       B.IS_VALID, B.IS_EDIT, B.IS_AUTO, B.IS_RECALL, B.IS_EDITAFTER,
 			       B.TASK_URL, B.NODE_DESCRIBE, B.IS_DISCARD, B.IS_COPY, B.IS_CANCEL,
@@ -2422,6 +2422,16 @@
 			  LEFT JOIN TD_WF_MESSTEMPLATE C ON A.EMAILTEMPLEID = C.TEMPLEID
 			  where 1=1
 			  and PROCESS_KEY=?
+		]]>
+	</property>
+	
+	<!-- 删除节点控制信息  gw_tanx -->
+	<property name="deleteNodeWorktime_wf">
+		<![CDATA[
+			DELETE FROM TD_WF_NODE_WORKTIME A
+				 WHERE A.PROCESS_KEY = #[PROCESS_KEY]
+				   AND A.PROCESS_ID = #[PROCESS_ID]
+				   AND A.NODE_KEY = #[NODE_KEY]
 		]]>
 	</property>
 	
@@ -2838,10 +2848,10 @@
 	<!-- 获取当前流程实例下处理过的节点集合  gw_tanx-->
 	<property name="getTaskKeyList_wf">
 		<![CDATA[
-			SELECT T.TASK_DEF_KEY_, T.NAME_
-			  FROM ACT_HI_TASKINST T
-			 WHERE T.PROC_INST_ID_ = ?
-			   
+			SELECT T.ACT_ID_, T.ACT_NAME_
+			  FROM ACT_HI_ACTINST T
+			 WHERE 	T.ACT_TYPE_ = 'userTask'  
+			   AND	T.PROC_INST_ID_ = ?
 			 ORDER BY T.START_TIME_
 		]]>
 	</property>

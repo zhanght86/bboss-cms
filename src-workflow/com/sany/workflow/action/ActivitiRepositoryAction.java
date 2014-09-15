@@ -46,7 +46,6 @@ import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
 import com.sany.application.util.AppHelper;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
-import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;

@@ -13,7 +13,7 @@
 function setTaskCandidateUsers(node_key) {
 	var candidateName = $("#candidateName"+node_key).val();
 	if(!candidateName) candidateName='';
-	var url = ctx +"/sanyadm/common/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
+	var url = ctx+"/workflowBusiness/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
 }
 

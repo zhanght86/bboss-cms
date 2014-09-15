@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
 import com.frameworkset.common.poolman.Record;
@@ -99,18 +98,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				}
 
 				// 串/并行切换(多实例)
-				String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
-				if ("1".equals(isMulti)) {
-					variableMap
-							.put(activitiNodeCandidateList.get(i).getNode_key()
-									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-									MultiInstanceActivityBehavior.multiInstanceMode_sequential);
-				} else if ("2".equals(isMulti)) {
-					variableMap
-							.put(activitiNodeCandidateList.get(i).getNode_key()
-									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-									MultiInstanceActivityBehavior.multiInstanceMode_parallel);
-				}
+//				String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
+//				if ("1".equals(isMulti)) {
+//					variableMap
+//							.put(activitiNodeCandidateList.get(i).getNode_key()
+//									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+//									MultiInstanceActivityBehavior.multiInstanceMode_sequential);
+//				} else if ("2".equals(isMulti)) {
+//					variableMap
+//							.put(activitiNodeCandidateList.get(i).getNode_key()
+//									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
+//									MultiInstanceActivityBehavior.multiInstanceMode_parallel);
+//				}
 
 			}
 		}
@@ -274,10 +273,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				return null;
 			}
 
-			// 判断是否邮件任务
-			List<ActivityImpl> activties = activitiService
-					.getActivitImplListByProcessKey(processKey);
-
 			for (int i = 0; i < nodeList.size(); i++) {
 				ActivitiNodeInfo nodeInfo = nodeList.get(i);
 
@@ -286,16 +281,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					long worktime = Long.parseLong(nodeInfo.getDURATION_NODE());
 					nodeInfo.setDURATION_NODE(StringUtil
 							.formatTimeToString(worktime));
-				}
-
-				for (ActivityImpl activtie : activties) {
-					if (activtie.getId().equals(nodeInfo.getNode_key())) {
-						// 邮件任务
-						if (activtie.isMailTask()) {
-							nodeInfo.setNode_type("mailTask");
-						}
-						break;
-					}
 				}
 			}
 
@@ -308,7 +293,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 				StringBuffer users = new StringBuffer();
 				StringBuffer groups = new StringBuffer();
-				StringBuffer types = new StringBuffer();
 
 				for (int i = 0; i < nodeList.size(); i++) {
 					ActivitiNodeInfo ani = nodeList.get(i);
@@ -316,8 +300,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					// 拼接匹配对象
 					users.append(ani.getNode_key() + "_users");
 					groups.append(ani.getNode_key() + "_groups");
-					types.append(ani.getNode_key()
-							+ ".bpmn.behavior.multiInstance.mode");
 
 					for (int j = 0; j < variableList.size(); j++) {
 
@@ -339,28 +321,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 								ani.setNode_groups_id(av.getTEXT_());
 							}
 
-							// 串/并行
-							if (av.getNAME_().equals(types.toString())) {
-
-								if (av.getTEXT_().equals("sequential")) {
-									ani.setIsMulti("1");// 串行多实例
-								} else if (av.getTEXT_().equals("parallel")) {
-									ani.setIsMulti("2");// 并行多实例
-								} else {
-									ani.setIsMulti("0");// 不是多实例
-								}
-
-							}
 						}
-					}
-
-					if (StringUtil.isEmpty(ani.getIsMulti())) {
-						ani.setIsMulti("0");// 不是多实例
 					}
 
 					users.setLength(0);
 					groups.setLength(0);
-					types.setLength(0);
 
 				}
 			}
@@ -1057,9 +1022,41 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public List<NodeControlParam> getNodeControlParamByProcessId(
-			String ProcessId) throws Exception {
-		return executor.queryList(NodeControlParam.class,
-				"getNodeControlParamByProcessId_wf", ProcessId);
+			String processKey, String ProcessId) throws Exception {
+
+		List<NodeControlParam> list = executor.queryList(
+				NodeControlParam.class, "getNodeControlParamByProcessId_wf",
+				ProcessId);
+
+		if (list != null && list.size() > 0) {
+			// 判断串并行
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
+
+			for (int i = 0; i < list.size(); i++) {
+				NodeControlParam param = list.get(i);
+
+				for (ActivityImpl activtie : activties) {
+					if (activtie.getId().equals(param.getNODE_KEY())) {
+
+						if (activtie.isMultiTask()) {
+							param.setIS_MULTI_DEFAULT(1);
+						} else {
+							param.setIS_MULTI_DEFAULT(0);
+						}
+
+						// 邮件任务
+						if (activtie.isMailTask()) {
+							param.setNODE_TYPE("mailTask");
+						}
+
+						break;
+					}
+				}
+			}
+		}
+
+		return list;
 	}
 
 	@Override

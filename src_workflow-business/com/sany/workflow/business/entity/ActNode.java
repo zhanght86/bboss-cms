@@ -31,10 +31,36 @@ public class ActNode implements Serializable {
 	private int isCancel;// 可驳回 0 不能 1 能
 	private int isDiscard;// 可废弃 0 不能 1 能
 	private int isCopy;// 可抄送 0 不能 1 能
+	private int isMulti;// 多实例 0 单实例 1 多实例
+	private int isMultiDefault;// 默认多实例 0 不是 1 是
+	private int isSequential;// 串行 0 并行 1 串行
 	private String orgId;// 节点组织
 	private String taskUrl;// 待办URL
 	private String bussinessControlClass;// 业务控制类
-	private boolean isChangeSeqOrPar;// 是否能串/并行切换(优先级高于canEdit和editAfter)
+
+	public int getIsMultiDefault() {
+		return isMultiDefault;
+	}
+
+	public void setIsMultiDefault(int isMultiDefault) {
+		this.isMultiDefault = isMultiDefault;
+	}
+
+	public int getIsMulti() {
+		return isMulti;
+	}
+
+	public void setIsMulti(int isMulti) {
+		this.isMulti = isMulti;
+	}
+
+	public int getIsSequential() {
+		return isSequential;
+	}
+
+	public void setIsSequential(int isSequential) {
+		this.isSequential = isSequential;
+	}
 
 	public String getActId() {
 		return actId;
@@ -186,14 +212,6 @@ public class ActNode implements Serializable {
 
 	public void setBussinessControlClass(String bussinessControlClass) {
 		this.bussinessControlClass = bussinessControlClass;
-	}
-
-	public boolean isChangeSeqOrPar() {
-		return isChangeSeqOrPar;
-	}
-
-	public void setChangeSeqOrPar(boolean isChangeSeqOrPar) {
-		this.isChangeSeqOrPar = isChangeSeqOrPar;
 	}
 
 }

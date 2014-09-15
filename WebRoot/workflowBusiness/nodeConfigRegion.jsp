@@ -21,7 +21,7 @@
 			<tr>
 				<th width="10%">节点名</th>
 				<th width="20%">处理人员</th>
-				<th width="10%">处理方式</th>
+				<th width="20%">处理方式</th>
 				<th width="30%">节点描述</th>
 				<th width="10%">处理工时(小时)</th>
 				<th width="10%">节点状态</th>
@@ -46,12 +46,14 @@
 		             <input type="hidden" name="isRecall" id="isRecall<pg:rowid increament="1" />" value="<pg:cell colName="isRecall" />"/>
 		             <input type="hidden" name="isCancel" id="isCancel<pg:rowid increament="1" />" value="<pg:cell colName="isCancel" />"/>
 		             <input type="hidden" name="isDiscard" id="isDiscard<pg:rowid increament="1" />" value="<pg:cell colName="isDiscard" />"/>
+		             <input type="hidden" name="isMulti" id="isMulti<pg:rowid increament="1" />" value="<pg:cell colName="isMulti" />"/>
+		             <input type="hidden" name="isMultiDefault" id="isMultiDefault<pg:rowid increament="1" />" value="<pg:cell colName="isMultiDefault" />"/>
+		             <input type="hidden" name="isSequential" id="isSequential<pg:rowid increament="1" />" value="<pg:cell colName="isSequential" />"/>
 		             <input type="hidden" name="isCopy" id="isCopy<pg:rowid increament="1" />" value="<pg:cell colName="isCopy" />"/>
 		             <input type="hidden" name="nodeDescribe" id="nodeDescribe<pg:rowid increament="1" />" value="<pg:cell colName="nodeDescribe" />"/>
 		             <input type="hidden" name="nodeWorkTime" id="nodeWorkTime<pg:rowid increament="1" />" value="<pg:cell colName="nodeWorkTime" />"/>
 		             <input type="hidden" name="taskUrl" id="taskUrl<pg:rowid increament="1" />" value="<pg:cell colName="taskUrl" />"/>
 		             <input type="hidden" name="bussinessControlClass" id="bussinessControlClass<pg:rowid increament="1" />" value="<pg:cell colName="bussinessControlClass" />"/>
-		             <input type="hidden" name="approveType" id="approveType<pg:rowid increament="1" />" value="<pg:cell colName="approveType" />"/>
 			      <td>
 				      <pg:cell colName="actName" /> 
 			      </td>
@@ -63,9 +65,13 @@
 				      <span class="requiredstar" style="color: red;display: none;">*</span>
 			      </td>
 			      <td>审批：
-		       		<pg:in colName="approveType" scope="0,10" >串行</pg:in>
-		       		<pg:equal colName="approveType" value="20" >并行</pg:equal>
-		       		<pg:equal colName="approveType" value="40" >抄送</pg:equal>
+				   	<select name="approveType" id="approveType<pg:rowid increament="1"/>" >
+				      	<pg:equal colName="isMultiDefault" value="0">
+				      	<option <pg:equal colName="approveType" value="0">selected</pg:equal> value="0">单实例</option>
+				      	</pg:equal>
+				      	<option <pg:equal colName="approveType" value="10">selected</pg:equal> value="10">多实例  串行</option>
+				      	<option <pg:equal colName="approveType" value="20">selected</pg:equal> value="20">多实例  并行</option>
+				  	</select>
 			      </td>
 			      <td>
 				      <pg:empty colName="nodeDescribe">&nbsp;</pg:empty>

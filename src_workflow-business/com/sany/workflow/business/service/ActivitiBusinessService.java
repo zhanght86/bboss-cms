@@ -108,7 +108,7 @@ public interface ActivitiBusinessService {
 			String processInstId, String taskId) throws Exception;
 
 	/**
-	 * 获取流程节点信息(不带控制参数变量信息)
+	 * 获取流程节点信息(不带串并行切换信息)
 	 * 
 	 * @param processKey
 	 *            流程key
@@ -337,18 +337,6 @@ public interface ActivitiBusinessService {
 			long offset, int pagesize) throws Exception;
 
 	/**
-	 * 判断节点是否可以串并行切换
-	 * 
-	 * @param proIns
-	 *            流程实例参数类
-	 * @return
-	 * @throws Exception
-	 *             2014年8月28日
-	 */
-	public boolean isChangeSeqOrPar(String taskId, List<ActNode> actList)
-			throws Exception;
-
-	/**
 	 * 获取流程可驳回到的节点信息
 	 * 
 	 * @param processId
@@ -386,7 +374,7 @@ public interface ActivitiBusinessService {
 	 *             2014年8月29日
 	 */
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
-
+	
 	/**
 	 * 跳转到任意节点
 	 * 
@@ -406,5 +394,6 @@ public interface ActivitiBusinessService {
 	public void returnToNode(String nowTaskId, String currentUser,
 			Map<String, Object> map, String destinationTaskKey,
 			String completeReason) throws Exception;
+
 
 }

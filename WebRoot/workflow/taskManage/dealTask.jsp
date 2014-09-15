@@ -13,7 +13,7 @@
 <title>处理任务</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
-	
+
 <body class="">
 
 	<form name="submitForm" id="submitForm" method="post">
@@ -104,39 +104,16 @@
 													id="<pg:cell colName='node_key'/>_users_name" 
 													name="node_users_name" value="<pg:cell colName='node_users_name'/>" />
 												<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
+												<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
 											</td>
 											<td>
 												<input type="text" class="input1 w200"
 													id="" name="" value=""/>
 												<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
+												<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
 											</td>
 											<td >
-												<pg:equal colName="isMulti" value="0">
-													<span>
-														<input type="hidden" name="isMulti" value="0" />单实例
-														<pg:equal colName="node_type" value="userTask">
-															人工任务
-														</pg:equal>
-														<pg:equal colName="node_type" value="mailTask">
-															邮件任务
-														</pg:equal>
-													</span>
-												</pg:equal>
-												<pg:notequal colName="isMulti" value="0">
-														多实例
-													<pg:equal colName="node_type" value="userTask">
-														人工任务
-													</pg:equal>
-													<pg:equal colName="node_type" value="mailTask">
-														邮件任务
-													</pg:equal>
-													<pg:notequal actual="${task.TASK_DEF_KEY_}" expressionValue="{node_key}"  >
-													<select name="isMulti">
-														<option value="1" <pg:equal colName="isMulti" value="1">selected</pg:equal>>串行</option>
-														<option value="2" <pg:equal colName="isMulti" value="2">selected</pg:equal>>并行</option>
-													</select>
-													</pg:notequal>
-												</pg:notequal>
+												<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
 											</td>
 										</tr>
 									</pg:notin>
@@ -146,102 +123,9 @@
 						
 						<fieldset >
 							<legend><strong>控制参数</strong></legend>
-							<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable">
-								<tr >
-									<th width="100"><strong>节点KEY</strong></th>
-									<th width="160"><strong>节点描述</strong></th>
-									<th width="300"><strong>待办URL</strong></th>
-									<th width="500"><strong>控制参数</strong></th>
-								</tr>
-									
-							<pg:notempty actual="${controlParamList}" >
-							<pg:list actual="${controlParamList}"  >
-								<tr >
-									<td width="100"><pg:cell colName="NODE_KEY"/></td>
-									<td width="160"><pg:cell colName="NODE_DESCRIBE"/></td>
-									<td width="300"><pg:cell colName="TASK_URL"/></td>
-									<td width="500">
-										<pg:notempty colName="IS_VALID">
-											<input type="checkbox" disabled <pg:equal colName="IS_VALID" value="1">checked </pg:equal> />是否有效 
-										</pg:notempty>
-										<pg:empty colName="IS_VALID">
-											<input type="checkbox" disabled/>是否有效 
-										</pg:empty>
-										
-										<pg:notempty colName="IS_EDIT">
-											<input type="checkbox" disabled <pg:equal colName="IS_EDIT" value="1">checked </pg:equal> />可修改
-										</pg:notempty>
-										<pg:empty colName="IS_EDIT">
-											<input type="checkbox" disabled/>可修改
-										</pg:empty>
-										
-										<pg:notempty colName="IS_EDITAFTER">
-											<input type="checkbox" disabled <pg:equal colName="IS_EDITAFTER" value="1">checked </pg:equal>/>可修改后续节点
-										</pg:notempty>
-										<pg:empty colName="IS_EDITAFTER">
-											<input type="checkbox" disabled />可修改后续节点
-										</pg:empty>
-										
-										<pg:notempty colName="IS_AUTO">
-											<input type="checkbox" disabled <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批
-										</pg:notempty>
-										<pg:empty colName="IS_AUTO">
-											<input type="checkbox" disabled />自动审批
-										</pg:empty>
-										
-										<pg:notempty colName="IS_AUTOAFTER">
-											<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>后续节点自动审批
-										</pg:notempty>
-										<pg:empty colName="IS_AUTOAFTER">
-											<input type="checkbox" disabled />后续节点自动审批
-										</pg:empty>
-										
-										<pg:notempty colName="IS_RECALL">
-											<input type="checkbox" disabled <pg:equal colName="IS_RECALL" value="1">checked </pg:equal>/>可被撤回
-										</pg:notempty>
-										<pg:empty colName="IS_RECALL">
-											<input type="checkbox" disabled />可被撤回
-										</pg:empty>
-										
-										<pg:notempty colName="IS_CANCEL">
-											<input type="checkbox" disabled <pg:equal colName="IS_CANCEL" value="1">checked </pg:equal>/>可驳回
-										</pg:notempty>
-										<pg:empty colName="IS_CANCEL">
-											<input type="checkbox" disabled />可驳回
-										</pg:empty>
-										
-										<pg:notempty colName="IS_DISCARD">
-											<input type="checkbox" disabled <pg:equal colName="IS_DISCARD" value="1">checked </pg:equal>/>可废弃
-										</pg:notempty>
-										<pg:empty colName="IS_DISCARD">
-											<input type="checkbox" disabled />可废弃
-										</pg:empty>
-										
-										<pg:notempty colName="IS_COPY">
-											<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
-										</pg:notempty>
-										<pg:empty colName="IS_COPY">
-											<input type="checkbox" disabled />可抄送
-										</pg:empty>
-										
-										<pg:notempty colName="IS_MULTI">
-											<input type="checkbox" disabled <pg:equal colName="IS_MULTI" value="1">checked </pg:equal>/>多实例
-										</pg:notempty>
-										<pg:empty colName="IS_MULTI">
-											<input type="checkbox" disabled />多实例
-										</pg:empty>
-										
-										<pg:notempty colName="IS_SEQUENTIAL">
-											<input type="checkbox" disabled <pg:equal colName="IS_SEQUENTIAL" value="1">checked </pg:equal>/>串行
-										</pg:notempty>
-										<pg:empty colName="IS_SEQUENTIAL">
-											<input type="checkbox" disabled />串行
-										</pg:empty>
-									</td>
-								</tr>
-							</pg:list>
-							</pg:notempty>
-							</table>
+							
+							<%@ include file="/workflow/repository/nodeControlParam.jsp"%> 
+							
 						</fieldset>
 						
 						<fieldset >
@@ -380,7 +264,20 @@ $(document).ready(function() {
 	}else {
 		$("#cancelTd").hide();
 	}
+	
+	initNodeTypeName();
 });
+
+//清空选择
+function emptyChoose(id,type){
+	if (type=='1') {//清空用户
+		$("#"+id+"_users_id").val('');
+		$("#"+id+"_users_name").val('');
+	}else {//清空组
+		$("#"+id+"_groups_id").val('');
+		$("#"+id+"_groups_name").val('');
+	}
+}
 
 //选择用户
 function openChooseUsers(node_key){
@@ -524,34 +421,32 @@ function rejectToPreTask(){
 	
 }
 
-<%-- 
-function checkNode(){
-	if ($("#nodeto").attr("checked") == "checked") {
-		$("#taskKey").show();
+//改变节点类型名称
+function changeNodeTypeName(nodekey){
+	var ismulti = $("input[name="+nodekey+"_IS_MULTI]").is(":checked");
+	var isSquential = $("input[name="+nodekey+"_IS_SEQUENTIAL]").is(":checked");
+	
+	if (ismulti && isSquential) {
+		$("#"+nodekey+"_nodeTypeName").html("多实例  串行");
+	}else if (ismulti && !isSquential) {
+		$("#"+nodekey+"_nodeTypeName").html("多实例  并行");
 	}else {
-		$("#taskKey").val('');
-		$("#taskKey").hide();
+		$("#"+nodekey+"_nodeTypeName").html("单实例  串行");
 	}
-}
---%>
+} 
 
-function addTr(){
-	<%--
-	var trHtml = "<tr><td><select name='node_id' id='node_id'>";
+function initNodeTypeName() {
 	<pg:list requestKey="nodeList">
-		<pg:notin colName="node_type" scope="startEvent,endEvent">
-			trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
+		<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
+			changeNodeTypeName("<pg:cell colName='node_key'/>");
 		</pg:notin>
 	</pg:list>
-	trHtml+="</select></td>";
-	--%>
+}
+
+function addTr(){
 	var trHtml="";
 	trHtml+="<tr><td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
 	trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
-	<%--
-	trHtml+="<td><input type='text' class='input1 w200' name='param_des'/></td>";
-	trHtml+="<td><select name='is_edit_param'><option value='0' selected>是</option><option value='1'>否</option></select></td>";
-	--%>
 	trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
 	$("#tb1").append(trHtml);
 	$(".bt").click(function(){

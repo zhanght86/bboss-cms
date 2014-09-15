@@ -180,8 +180,8 @@ public interface ActivitiTaskService {
 	 * @throws Exception
 	 *             2014年9月5日
 	 */
-	public List<NodeControlParam> getNodeControlParamByProcessId(String ProcessId)
-			throws Exception;
+	public List<NodeControlParam> getNodeControlParamByProcessId(
+			String processKey, String ProcessId) throws Exception;
 	
 	/**
 	 * 获取驳回日志记录

@@ -146,9 +146,5 @@
         <column name="TASK_URL" size="500" type="VARCHAR" />
         <column name="NODE_DESCRIBE" size="4000" type="VARCHAR" />
     </table>
-     <table name="td_wf_rejectlog">
-        <column name="newtaskid" size="64" primaryKey="true" required="true" type="NVARCHAR"/>
-        <column name="rejecttaskid" size="64" type="NVARCHAR"/>
-        <column name="rejectnode" size="100" type="NVARCHAR"/>
-    </table>
+   
 </database>

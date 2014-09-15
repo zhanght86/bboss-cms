@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>业务系统演示首页</title>
-<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<%@ include file="/workflowBusiness/css/css.jsp"%>
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -23,12 +23,6 @@ function check2() {
 }
 
 function submitFormData(){
-	//<pg:equal actual="${pagestate}" value="1">
-	//$("form").attr("action","<%=request.getContextPath()%>/workflowBusiness/business/startProc.page");
-	//</pg:equal>
-	//<pg:in actual="${pagestate}" scope="2,3,4,5">
-	 //  $("form").attr("action","${pageContext.request.contextPath}/conference/order/approveWorkFlow.page");
-	// </pg:in>
 	$("#meetingOrderForm").form('submit', {
 	 onSubmit:function(){
 		 blockUI();
@@ -65,11 +59,13 @@ function submitFormData(){
 	<div region="center" style="overflow: hidden;" >
 		<form method="post" id="meetingOrderForm" 
 		action="${pageContext.request.contextPath}/workflowBusiness/business/startProc.page">
-			<div id="content"></div>
-			
+		
+		    <div id="content"></div>
+		
 			<div id="btnDiv" class="btnarea" style="display:none;">
 				<a href="javascript:void(0)" class="bt_2" id="btn" onclick="submitFormData()"><span>提交</span></a>
 			</div>	
+			
 		</form>
 	</div>
 		

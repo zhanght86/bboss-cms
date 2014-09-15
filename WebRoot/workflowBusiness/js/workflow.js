@@ -37,6 +37,11 @@ $(document).ready(function(){
 
 	//显示当前处理人
 	queryAssignees();
+	
+	// 流程发起可以改变审批类型
+	if($("form").data("pagestate") !=1){
+		$("select[name=approveType]").attr('disabled',true);
+	}
 
 });		
 //显示当前处理人

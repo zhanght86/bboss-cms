@@ -11,6 +11,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/workflowBusiness/js/dateUtils.js" ></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/workflowBusiness/js/stringUtils.js" ></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/workflowBusiness/js/workflowCandidate.js" ></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/workflowBusiness/js/workflow.js" ></script>
 <script type="text/javaScript"> 
 	$(document).ready(function(){
 		$("form").data("user", { userId: "${userId}", userName: "${userName}" });
@@ -27,22 +28,16 @@
 		setTaskCandidateUsers(node_key);
 	}
 </script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/workflowBusiness/js/workflow.js" ></script>
 <input type="hidden" id="pagestate" name="pagestate" value="${pagestate}"/>
 <input type="hidden" id="assignees" name="assignees" value="${assignees}"/>
 <input type="hidden" id="userId" name="userId" value="${userId}"/>
 <input type="hidden" id="userName" name="userName" value="${userName}"/>
 <input type="hidden" id="userAccount" name="userAccount" value="${userAccount}"/>
-
-<ul style="display: none">  
   
     <%@ include file="dealRegion.jsp"%>
-
 	
 	<%@ include file="nodeConfigRegion.jsp"%>
 	
-</ul>
-
 <pg:list requestKey="taskHistorList">
 	<script type="text/javaScript">
 		selectNode('<pg:cell colName="TASK_DEF_KEY_" />','已执行');

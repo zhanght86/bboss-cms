@@ -54,6 +54,9 @@
 					<th width="100px" >业务控制类：</th>
 					<td width="400px">
 					<input type="text" id="BUSSINESSCONTROLCLASS" name="BUSSINESSCONTROLCLASS" value="<pg:cell colName="BUSSINESSCONTROLCLASS"/>" style="width: 280px;"/>
+					<span style="color: red;">
+					<div>注：节点未设置处理人,自动通过需要配置业务控制类,且该类必须实现org.activiti.engine.delegate.JavaDelegate接口</div>
+					</span>
 					</td>
 				</tr>
 				
@@ -101,7 +104,7 @@
 							<tr>
 								<td>
 								<pg:notempty colName="IS_AUTO">
-									<input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTO" id="IS_AUTO_BOX" value="1" <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批&nbsp;(当前节点自动通过,不用判断前后节点审批人是否一致)
+									<input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTO" id="IS_AUTO_BOX" value="1" <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批&nbsp;(当前节点自动通过,没有设置处理人)
 								</pg:notempty>
 								<pg:empty colName="IS_AUTO">
 									<input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTO" id="IS_AUTO_BOX" value="1" />自动审批&nbsp;(当前节点自动通过,不用判断前后节点审批人是否一致)

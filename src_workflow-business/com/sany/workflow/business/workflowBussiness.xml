@@ -59,6 +59,8 @@
 			       A.IS_COPY AS ISCOPY,
 			       A.IS_CANCEL AS ISCANCEL,
 			       A.IS_AUTOAFTER AS ISAUTOAFTER,
+			       A.IS_MULTI AS ISMULTI,
+       			   A.IS_SEQUENTIAL AS ISSEQUENTIAL,
 			       A.BUSSINESSCONTROLCLASS AS BUSSINESSCONTROLCLASS
 			
 			  FROM TD_WF_ACTIVITI_NODE_INFO N
@@ -102,6 +104,8 @@
 			       A.IS_COPY AS ISCOPY,
 			       A.IS_CANCEL AS ISCANCEL,
 			       A.IS_AUTOAFTER AS ISAUTOAFTER,
+			       A.IS_MULTI AS ISMULTI,
+       			   A.IS_SEQUENTIAL AS ISSEQUENTIAL,
 			       A.BUSSINESSCONTROLCLASS AS BUSSINESSCONTROLCLASS
 			
 			  FROM TD_WF_NODE_WORKTIME A
@@ -630,6 +634,17 @@
 			  FROM ACT_HI_PROCINST A
 			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
 			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
+	<!-- 获取当前流程实例下处理过的节点集合  gw_tanx-->
+	<property name="getTaskKeyList_wf">
+		<![CDATA[
+			SELECT T.ACT_ID_, T.ACT_NAME_
+			  FROM ACT_HI_ACTINST T
+			 WHERE 	T.ACT_TYPE_ = 'userTask'  
+			   AND	T.PROC_INST_ID_ = ?
+			 ORDER BY T.START_TIME_
 		]]>
 	</property>
 	
