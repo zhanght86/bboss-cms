@@ -1,0 +1,43 @@
+﻿body {font-size: 13px;line-height: 24px;font-family: "Microsoft YaHei";}
+.left_title{background:#367ace url(../images/dot3.png) no-repeat 10px center;padding:7px 5px; padding-left:30px;font-size:16px;color:#fff;}
+.shrink{float:right;width:20px;padding:7px 2px; text-align:right;}
+ul.expmenu{width:200px; background-color:#fff;}
+ul.expmenu li div.header{padding:7px 5px;padding-left:32px;border-bottom:1px #fff solid; font-size:14px; }
+ul.expmenu li:last-child div.header{border-bottom:none;}
+ul.expmenu li ul li {padding:5px;border-bottom:1px  dashed #ccc;color:#727272;text-shadow:0px 1px 0px rgba(255, 255, 255, 0.8);}
+ul.expmenu li ul li:last-child{border-bottom:none;}
+ul.expmenu div.header{
+	color:#203f61;
+	text-shadow:0px 1px 0px rgba(255, 255, 255, 0.2);
+	background:#8295ac url(../images/dot2.png) no-repeat 16px 15px;
+}
+ul.expmenu li div.header .label{color: #fff;}
+ul.expmenu li div.header .arrow{display:block;width:16px;height:16px;background:no-repeat center;float:right;}
+ul.expmenu li div.header .arrow.up{background-image:url(../images/arrow_u.png);}
+ul.expmenu li div.header .arrow.down{background-image:url(../images/arrow_d.png);}
+ul.expmenu li .menu{display:none;}	
+/* Mouse Events */
+ul.expmenu div.header:hover{
+	background-color: #6983a4;
+	cursor: pointer;
+}
+
+ul.expmenu li ul li:not(.selected):hover{
+	background:#f2f2f2;/* Old browsers */ 
+	cursor:pointer;
+}
+ul.expmenu li ul li:not(.selected):active{
+	background: #DFF0FD;/* Old browsers */
+	cursor:pointer;
+}
+#left_bar .expmenu li .menu .select{
+	background-color: #E7F3FE;
+}
+#left_bar .expmenu li .menu li a:link,#left_bar .expmenu li .menu li a:visited{padding:5px;padding-left:35px;color:#333; background: url(../images/mdot1.jpg) no-repeat 24px center;}
+#left_bar .expmenu li .menu li a:hover{color:#03F; background: url(../images/arrow2.png) no-repeat 24px center; text-decoration:none;}
+#left_bar .expmenu li .menu .select a:link,#left_bar .expmenu li .menu .select a:visited{color:#03f;text-decoration:none;}
+#left_bar .expmenu .li1{border-bottom:1px dashed #ccc;padding:5px; background-color:#fafafa;}
+#left_bar .expmenu .li1 a:link,#left_bar .expmenu .li1 a:visited{padding:5px;padding-left:29px;color:#333; background: url(../images/dot4.png) no-repeat 14px center;}
+#left_bar .expmenu .li1 a:hover{color:#03F; background: url(../images/dot5.png) no-repeat 14px center; text-decoration:none;}
+#left_bar .expmenu .li1.select{background-color: #DFF0FD;}
+#left_bar .expmenu .li1.select a{color:#03f;background: url(../images/dot5.png) no-repeat 14px center;}

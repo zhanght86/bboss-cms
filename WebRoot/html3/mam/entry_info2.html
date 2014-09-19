@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
+<link href="stylesheet/entry.css" rel="stylesheet" type="text/css" />
+<link  href="../stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="../js/tab.js"></script>
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/dialog/lhgdialog.js"></script>
+<script language="javascript" type="text/javascript" src="../../include/datepicker/My97DatePicker/WdatePicker.js"></script>
+<title>入门单填写（送货）</title>
+</head>
+
+<body>
+<div class="entry_top">
+  <div class="left_top"><img src="images/u32.png" width="51" height="33" />入门单 → <strong>送货</strong></div>
+  <div class="center_top"> 是否回司销账？ 
+    <label>
+      <input name="RadioGroup1" type="radio" id="RadioGroup1_1" value="单选"  onclick="htmer.style.display='none'"/>
+      否</label>
+    <label>
+      <input type="radio" name="RadioGroup1" value="单选" id="RadioGroup1_2" checked="checked"  onclick="htmer.style.display=''"/>
+      是</label>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您是否自带物资？
+    <label>
+      <input name="RadioGroup2" type="radio" id="RadioGroup2_1" value="单选" checked="checked"  onclick="htmer1.style.display='none'"/>
+      否</label>
+    <label>
+      <input type="radio" name="RadioGroup2" value="单选" id="RadioGroup2_2"  onclick="htmer1.style.display=''"/>
+      是</label>
+  </div>
+  <span class="right_top"><a href="#">查看流程</a></span> </div>
+<div style="clear:both;"></div>
+<div class="main_contain">
+  <div class="u_tab_div"  id="tab01">
+    <div class="tab1"><span class="u_tab_hover"><a href="#">基本信息</a></span></div>
+    <div class="tab2"><span class="u_tab" id="htmer" ><a href="#">物资回司信息</a></span></div>
+    <div class="tab2" ><span class="u_tab" id="htmer1" style="display:none"><a href="#">自带物资信息</a></span></div>
+  </div>
+  <div id="tabCon01">
+    <ul class="ul_news">
+      <div class="title_1">入门责任人</div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150"> <span class="required">*</span>姓名/工号： </th>
+          <td width="200"><label for="fileField">
+              <input name="textfield13" type="text" class="input1" value="刘辉/10002166" />
+            </label></td>
+          <th width="150"> <span class="required">*</span>联系方式 ： </th>
+          <td width="200"><input name="textfield8" type="text" class="input1" value="18711062337" /></td>
+        </tr>
+      </table>
+      <div class="title_1">访客车辆信息</div>
+      <div><a href="#" class="bt_sany">新增</a><a href="#" class="bt_sany">删除</a></div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table">
+        <tr>
+          <th><input type="checkbox" name="checkbox" id="checkbox" />
+            <label for="checkbox"></label></th>
+          <th>序号</th>
+          <th> <span class="required">*</span>车牌号</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox2" id="checkbox2" /></td>
+          <td>1</td>
+          <td><input name="textfield" type="text" class="input1" value="湘A · 6PP66" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox3" id="checkbox3" /></td>
+          <td>2</td>
+          <td><input name="textfield2" type="text" class="input1" value="湘A · 6PP33" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+      </table>
+      <div class="title_1">访客信息</div>
+      <div> <a href="#" class="bt_sany">新增</a><a href="#" class="bt_sany">删除</a></div>      <table  border="0" cellpadding="0" cellspacing="0" class="sany_table">
+        <tr>
+          <th><input type="checkbox" name="checkbox7" id="checkbox7" /></th>
+          <th>序号</th>
+          <th> <span class="required">*</span>姓名</th>
+          <th> <span class="required">*</span>单位</th>
+          <th> <span class="required">*</span>证件类型</th>
+          <th> <span class="required">*</span>号码</th>
+          <th>联系电话</th>
+          <th>主责人</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox7" id="checkbox8" /></td>
+          <td>1</td>
+          <td><label for="textfield2"></label>
+            <input name="textfield16" type="text" class="input1 w75" id="textfield2" value="李军" /></td>
+          <td><input name="textfield16" type="text" class="input1 w200" id="textfield12" value="湖南省长沙县辉煌广告设计公司" /></td>
+          <td><label for="select2"></label>
+            <select name="select" class="select1 w100" id="select2">
+              <option>身份证</option>
+              <option>驾照</option>
+              <option>军官证</option>
+            </select></td>
+          <td><input name="textfield16" type="text" class="input1 w150" id="textfield13" value="430121198012120369" /></td>
+          <td><input name="textfield16" type="text" class="input1 w100" id="textfield14" value="13786145698" /></td>
+          <td><select name="select3" class="select1 w50" id="select3">
+            <option>是</option>
+            <option>否</option>
+          </select></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox7" id="checkbox9" /></td>
+          <td>2</td>
+          <td><input name="textfield16" type="text" class="input1 w75" id="textfield15" value="李芳" /></td>
+          <td><input name="textfield16" type="text" class="input1 w200" id="textfield16" value="湖南省长沙县辉煌广告设计公司" /></td>
+          <td><select name="select2" class="select1 w100" id="select2">
+            <option>身份证</option>
+            <option selected="selected">驾照</option>
+            <option>军官证</option>
+          </select></td>
+          <td><input name="textfield16" type="text" class="input1 w150" id="textfield17" value="12120000" /></td>
+          <td><input name="textfield16" type="text" class="input1 w100" id="textfield18" value="13286157568" /></td>
+          <td><select name="select4" class="select1 w50" id="select4">
+            <option>是</option>
+            <option selected="selected">否</option>
+          </select></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+      </table>
+      <div class="title_1">其他信息</div>
+      <table width="100%" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="100"> 上传文档： </th>
+          <td width="400"><label for="fileField"></label>
+            <input type="file" name="fileField" id="fileField" /></td>
+          <th width="100"> <span class="required">*</span>原因： </th>
+          <td width="400"><input name="textfield7" type="text" class="input1 w_95" id="textfield5"  value="至少填写5个字符" onfocus="this.value=''" onblur="if(this.value==''){this.value='至少填写5个字符'}"/></td>
+        </tr>
+        <tr>
+          <th><span class="required">*</span>目的地 ： </th>
+          <td colspan="3"><select name="select5" class="select1 w75" id="select5">
+              <option>湖南</option>
+              <option>江苏</option>
+            </select>
+            <select name="select6" class="select1 w75" id="select6">
+              <option>长沙</option>
+              <option>邵阳</option>
+            </select>
+            <select name="select7" class="select1" id="select7">
+              <option>星沙产业园</option>
+              <option>宁乡产业园</option>
+            </select>
+            <select name="select8" class="select1 w75" id="select8">
+              <option>东门</option>
+              <option>南门</option>
+              <option>西门</option>
+            </select></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="3"><div class="route_box">
+              <div>请选择您要去的地方：</div>
+              <div class="workshop_list">
+                <ol>
+                  <li><a href="#" class="bt_route"> +   1 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   2 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   3 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   5 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   6 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   7 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   8 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   9 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   12 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   18 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   23 号厂房</a></li>
+                  <li><a href="#" class="bt_route"> +   6 号仓库</a></li>
+                  <li><a href="#" class="bt_route"> +   18 号仓库</a></li>
+                  <li><a href="#" class="bt_route"> +   23 号仓库</a></li>
+                  <li><a href="#" class="bt_route"> +   3 号办公楼</a></li>
+                  <li><a href="#" class="bt_route"> +   6 号办公楼</a></li>
+                  <li><a href="#" class="bt_route"> +   新食堂</a></li>
+                  <li><a href="#" class="bt_route"> +   一号办公楼</a></li>
+                  <li><a href="#" class="bt_route"> +   1号办公楼（会所）</a></li>
+                </ol>
+              </div>
+              <div class="clear"></div>
+              <p class="route_1">您选择的路线：</p>
+              <div class="route_list">
+                <div class="start"></div>
+                <ol>
+                  <li><a href="#">1号厂房</a></li>
+                  <li><a href="#">9号厂房</a></li>
+                  <li><a href="#">3号办公楼</a></li>
+                  <li><a href="#">2号厂房</a></li>
+                  <li><a href="#">6号办公楼</a></li>
+                  <li><a href="#">1号厂房</a></li>
+                  <li><a href="#">1号厂房</a></li>
+                  <li><a href="#">9号厂房</a></li>
+                  <li><a href="#">3号办公楼</a></li>
+                  <li><a href="#">2号厂房</a></li>
+                  <li><a href="#">6号办公楼</a></li>
+                  <li><a href="#">1号厂房</a></li>
+                  <li><a href="#">1号厂房</a></li>
+                  <li><a href="#">9号厂房</a></li>
+                  <li><a href="#">3号办公楼</a></li>
+                  <li><a href="#">2号厂房</a></li>
+                  <li><a href="#">6号办公楼</a></li>
+                  <li><a href="#">1号厂房</a></li>
+                   <li><a href="#">1号办公楼（会所）</a></li>
+                </ol>
+              </div>
+              <div class="clear"></div>
+              <a href="#" class="bt_sany">重新设置路线</a> </div></td>
+        </tr>
+      </table>
+    </ul> <ul class="ul_news" style="display:none;">
+    <table width="100%"   border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+  <tr>
+    <th width="120"> <span class="required">*</span>出门单编号：</th>
+    <td> <input name="textfield3" type="text" class="input1 w_95" id="textfield" value="CM201407020001  CM201407030002" /></td>
+    <td width="190"><a href="#" class="bt_sany">确定</a></td>
+  </tr>
+</table>
+</ul>
+    <ul class="ul_news" style="display:none;">
+            <div class="title_1">自带物资信息</div>
+      <div> <a href="#" class="bt_sany">新增</a><a href="#" class="bt_sany">删除</a><a href="#" class="bt_sany">导入</a></div>
+      <table  border="0" cellpadding="0" cellspacing="0" class="sany_table">
+        <tr>
+          <th><input type="checkbox" name="checkbox4" id="checkbox4" /></th>
+          <th>序号</th>
+          <th> <span class="required">*</span>物资名称  </th>
+          <th> <span class="required">*</span> 规格型号 </th>
+          <th>  <span class="required">*</span>包装/散件 </th>
+          <th>  <span class="required">*</span> 数量</th>
+          <th> <span class="required">*</span>单位 </th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox5" id="checkbox5" /></td>
+          <td>1</td>
+          <td><label for="textfield"></label>
+            <input name="textfield3" type="text" class="input1 w200" id="textfield" value=" 笔记本电脑" /></td>
+          <td><input name="textfield5" type="text" class="input1 w75" id="textfield3" value="HP" /></td>
+          <td><input name="textfield9" type="text" class="input1 w75" id="textfield7" value="散件" /></td>
+          <td><input name="textfield11" type="text" class="input1 w75" id="textfield9" value="1" /></td>
+          <td><label for="select"></label>
+            <input name="textfield14" type="text" class="input1 w50" id="textfield6" value="台" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox6" id="checkbox6" /></td>
+          <td>2</td>
+          <td><input name="textfield4" type="text" class="input1 w200" id="textfield2" value="平板电脑" /></td>
+          <td><input name="textfield6" type="text" class="input1 w75" id="textfield4" value="APPLE" /></td>
+          <td><input name="textfield10" type="text" class="input1 w75" id="textfield8" value="散件" /></td>
+          <td><input name="textfield12" type="text" class="input1 w75" id="textfield10" value="2" /></td>
+          <td><input name="textfield15" type="text" class="input1 w50" id="textfield11" value="台" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+      </table>
+
+    </ul>
+          <div class="bottom_area"></div>
+      <div class="submit_operation"> <a href="#" class="bt_cancel"><span>上一步</span></a>  <a class="bt_next"><span>确定</span></a><a href="#" class="bt_cancel"><span>暂存</span></a> <a href="#" class="bt_cancel"><span>取消</span></a> </div>
+
+  </div>
+</div>
+</body>
+<script type="text/javascript">tabAction("tab01","tabCon01");</script>
+</html>

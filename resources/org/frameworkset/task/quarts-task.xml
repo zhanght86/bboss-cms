@@ -83,7 +83,7 @@
 		<!-- for cluster -->
 		
 	</property>
-	<property name="taskconfig" enable="false">
+	<property name="taskconfig" enable="true">
 		<list>
 			<property name="定时任务执行器" taskid="default"
 				class="org.frameworkset.task.DefaultScheduleService" used="true">
@@ -158,6 +158,16 @@
 						shouldRecover="false"
 						>
 					</property> 
+					
+				<!-- 流程节点处理超时监控	        -->
+				<property name="sanybps_process_overtime_checkjob" jobid="sanybps_process_overtime_checkjob"						
+						bean-name="sanybps_process_overtime_checkjob"
+						method="checkProcessOvertimeJob"
+						cronb_time="* 10 * * * ?" used="true"
+						shouldRecover="false"
+						>
+					</property> 
+				
 				</list>
 				 
 			</property>
@@ -194,9 +204,11 @@
 		</construction>
 	</property>
 	
-	<property name="browserCounterStatisticDailyJob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
+	<!-- 流程节点处理超时监控	        -->
+	
+	<property name="sanybps_process_overtime_checkjob" factory-bean="webapplicationcontext" factory-method="getBeanObject">
 		<construction>
-			<property value="browserCounterStatisticDailyTask" />
+			<property value="checkProcessOvertimeTask" />
 		</construction>
 	</property> 
 	

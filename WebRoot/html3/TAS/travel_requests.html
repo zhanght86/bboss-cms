@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
+<link  href="../stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
+<link href="../stylesheet/popwin.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/dialog/lhgdialog.js"></script>
+<script language="javascript" type="text/javascript" src="../../include/datepicker/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../js/popwin.js"></script>
+
+<title>三一集团差旅管理系统</title>
+<script> 
+function sany_Code(sname,sid){ 
+    if(sname.checked){ 
+        sid.style.display="block"; 
+    }else{ 
+        sid.style.display="none"; 
+    } 
+} 
+</script>
+</head>
+
+<body>
+<div class="main_contain"> 
+<div class="page_title">出差申请单</div>
+<div class="title_1">申请信息</div>
+<table width="920" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+  <tr>
+    <th width="140"><span class="required">*</span>申请单号： </th>
+    <td width="150"><input name="textfield" type="text" class="input1 readonly" value="201409080235" readonly="readonly" /></td>
+    <th width="140"><span class="required">*</span>申请日期： </th>
+    <td width="150"><input name="textfield9" type="text" class="input1 readonly" value="2014-09-18" readonly="readonly" /></td>
+    <th><span class="required">*</span>状态： </th>
+    <td width="150"><input name="textfield10" type="text" class="input1 readonly" value="新建" readonly="readonly" /></td>
+  </tr>
+  <tr>
+    <th><span class="required">*</span>申请人工号： </th>
+    <td><input name="textfield2" type="text" class="input1 readonly"  value="100031222" readonly="readonly" /></td>
+    <th><span class="required">*</span>申请人姓名： </th>
+    <td><input name="textfield3" type="text" class="input1 readonly" value="李四" readonly="readonly" /></td>
+    <th>&nbsp;</th>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th><span class="required">*</span>部门：</span></th>
+    <td colspan="5"><input name="textfield6" type="text" class="input1 readonly w_95" value="流程信息化总部信息应用部" readonly="readonly" /></td>
+  </tr>
+  <tr>
+    <th><span class="required">*</span>手机号码：</th>
+    <td><input name="textfield4" type="text" class="input1"   value="13656784321" /></td>
+    <th>其他联系方式：</th>
+    <td><input name="textfield8" type="text" class="input1"  value="0731-84080831" /></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <th><span class="required">*</span>费用归属部门：</th>
+    <td colspan="5"><input name="textfield5" type="text" class="input1 w400" value="流程信息化总部信息应用部" />
+      <a  href="#" class="bt_sany">查询</a></td>
+  </tr>
+  <tr>
+    <th><span class="required">*</span>出差事由：</th>
+    <td colspan="5"><textarea name="textfield7" class="textarea1 h_50" id="textfield5" onfocus="this.value=''" onblur="if(this.value==''){this.value='至少填写5个字符'}">产品调研</textarea></td>
+  </tr>
+</table>
+<div class="title_1">申请信息</div>
+  <div class="title_2"><div class="right_operate"><a  href="#" class="bt_sany2">x  删除</a></div>出差人一</div>
+<div class="block_box">
+  <table width="920" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+    <tr>
+      <th width="140"><span class="required">*</span>出差人类型： </th>
+      <td width="150">
+        <select name="select" class="select1" id="select">
+          <option selected="selected">员工</option>
+          <option>外部人员</option>
+        </select></td>
+      <th width="140"><span class="required">*</span>姓名： </th>
+      <td width="150"><input name="textfield12" type="text" class="input1 w75" value="李四" />
+        <select name="select2" id="select2" class="select1  w50" >
+          <option>男</option>
+          <option>女</option>
+        </select></td>
+      <th><span class="required">*</span>工号：</th>
+      <td width="150"><input name="textfield23" type="text" class="input1"  value="100031222" /></td>
+    </tr>
+    <tr>
+      <th><span class="required">*</span>手机号码：</th>
+      <td><input name="textfield13" type="text" class="input1"   value="13656784321" /></td>
+      <th>其他联系方式：</th>
+      <td><input name="textfield13" type="text" class="input1"  value="0731-84080831" /></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+  </tr>
+    <tr>
+      <th><span class="required">*</span>部门：</span></th>
+      <td colspan="5"><input name="textfield14" type="text" class="input1 w400" value="流程信息化总部信息应用部" />
+        <a  href="#" class="bt_sany">查询</a></td>
+    </tr>
+   
+    <tr>
+      <th><span class="required">*</span>待遇级别：</th>
+      <td><select name="select3" class="select1" id="select3">
+        <option>普通员工</option>
+        <option>科级</option>
+        <option>部级</option>
+      </select></td>
+      <th>证件类型：</th>
+      <td colspan="3"><select name="select4" class="select1 w100"  id="select4">
+        <option>身份证</option>
+        <option>驾驶证</option>
+        <option>护照</option>
+      </select>        
+        <input name="textfield11" type="text" class="input1 w300"  value="430121198808081234" /></td>
+      </tr>
+       <tr>
+      <th>&nbsp;</th>
+      <td colspan="5"><input type="checkbox" name="checkbox" id="checkbox"  onClick="sany_Code(this,sany_1);"/> 
+        国外出差
+      </td>
+      </tr>
+  </table>
+
+ <div id="sany_1"  style="display:none;">
+   <table width="920" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+     <tr>
+       <th width="140"><span class="required">*</span>护照姓名： </th>
+       <td width="150"><input name="textfield16" type="text" class="input1"   value="Li Si" /></td>
+       <th width="150"><span class="required">*</span>护照到期日： </th>
+       <td width="150">
+         <input type="text" class="Wdate" onclick="WdatePicker()" value="2015-02-30"/></td>
+       <th><span class="required">*</span>护照编号：</th>
+       <td width="150"><input name="textfield17" type="text" class="input1"  value="XCdt347768769-" /></td>
+     </tr>
+     <tr>
+       <th height="35"><span class="required">*</span>签证类型：</th>
+       <td><select name="select5" class="select1" id="select5">
+         <option>工作签证</option>
+         <option>临时签证</option>
+         <option>旅游签证</option>
+       </select></td>
+       <th><span class="required">*</span>签证到期日</th>
+       <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2015-08-30"/></td>
+       <th>出生日期： </th>
+       <td><input type="text" class="Wdate" onclick="WdatePicker()" value="1988-08-30"/></td>
+     </tr>
+   </table>
+ </div>
+<div class="top_operate"><a  href="#" class="bt_sany">新增</a><a  href="#" class="bt_sany">删除</a></div>
+ <table  border="0" cellpadding="0" cellspacing="0" class="sany_table">
+        <tr>
+          <th><input type="checkbox" name="checkbox4" id="checkbox4" /></th>
+          <th>行程</th>
+          <th><span class="required">*</span>交通</th>
+          <th><span class="required">*</span>待出发日期</th>
+          <th> <span class="required">*</span>到达日期 </th>
+          <th>  <span class="required">*</span>出发地 </th>
+          <th> <span class="required">*</span>目的地</th>
+          <th> 住宿</th>
+          <th><span class="required">*</span>入住日期</th>
+          <th>  <span class="required">*</span>天数</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox5" id="checkbox5" /></td>
+          <td>1</td>
+          <td><label for="textfield">
+            <select name="select6" id="select6" class="select1 w75" >
+              <option>飞机</option>
+              <option>火车</option>
+              <option>汽车</option>
+              <option>轮船</option>
+            </select>
+          </label></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2014-08-30"/></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2014-08-30"/></td>
+          <td><input name="textfield15" type="text" class="input1 w75"   value="长沙" /></td>
+          <td><input name="textfield19" type="text" class="input1 w75"   value="北京" /></td>
+          <td><select name="select8" id="select8" class="select1 w75">
+            <option>酒店</option>
+          </select></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2014-08-30"/></td>
+          <td><input name="textfield21" type="text" class="input1 w30"   value="4" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox6" id="checkbox6" /></td>
+          <td>2</td>
+          <td><select name="select7" id="select7" class="select1 w75" >
+            <option>飞机</option>
+            <option>火车</option>
+            <option>汽车</option>
+            <option>轮船</option>
+          </select></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2015-09-5"/></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2015-09-5"/></td>
+          <td><input name="textfield18" type="text" class="input1 w75"   value="北京" /></td>
+          <td><input name="textfield20" type="text" class="input1 w75"   value="澳大利亚" /></td>
+          <td><select name="select9" id="select9" class="select1 w75">
+            <option>酒店</option>
+          </select></td>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()" value="2014-08-30"/></td>
+          <td><input name="textfield22" type="text" class="input1 w30"   value="2" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+    </table>
+
+</div>
+<div class="top_operate"><a  href="#" class="bt_add">+ 添加出差人</a></div>
+</div>
+    <div class="bottom_area"></div>
+    <div class="submit_operation"> <a class="bt_submit"><span>提交申请</span></a> <a href="#" class="bt_cancel"><span>暂存</span></a> <a href="#" class="bt_cancel"><span>取消</span></a> </div>
+<div id="moquu_wmaps"><a href="javascript:void(0)" class='moquu_wmaps'>流程信息</a></div>
+<a id="moquu_top" href="javascript:void(0)"></a>
+
+</body>
+</html>

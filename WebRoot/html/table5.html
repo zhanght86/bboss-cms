@@ -1,0 +1,305 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>三一集团费用及商旅管理系统</title>
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
+<script language="javascript" type="text/javascript"  src="js/WdatePicker.js"></script>
+<script type="text/javascript" src="js/commontool.js"></script>
+<script type="text/javascript" src="js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#addButton").click(function(){
+		 $.dialog({ id:'iframeNewId', title:'新增',width:700,height:150, content:'url:../html/content.html'});
+	})	
+})
+</script>
+</head>
+<body>
+  <div class="mcontent">
+	<div class="titlebox"> <span class="location">您的当前位置： <a href="#">费用申请</a> &gt; 申请单草稿箱</span></div>
+	<div id="searchblock">
+	  <div  class="search_top">
+	    <div class="right_top"></div>
+	    <div class="left_top"></div>
+      </div>
+	  <div class="search_box">
+	    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	      <tr>
+	        <td class="left_box"></td>
+	        <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
+	          <tr>
+	            <th>单号：</th>
+	            <td><input name="textfield4" type="text" value="" class="w120"  /></td>
+	            <th>核算体系：</th>
+	            <td><select name="select3" class="select1">
+	              <option></option>
+	              <option>公共核算体系</option>
+	              <option>三一集团(9999)</option>
+	              </select></td>
+	            <th>提单日期：</th>
+	            <td>
+			    <input class="Wdate" type="text" onclick="WdatePicker()" />
+                  -
+                <input class="Wdate" type="text" onclick="WdatePicker()" /></td>
+	            <td></td>
+              </tr>
+	          <tr>
+	            <th height="24">项目：</th>
+	            <td><input name="textfield2" type="text" class="w120" />
+	              <img src="images/icon_search.jpg" width="16" height="16"/></td>
+	            <th>经办人：</th>
+	            <td><input name="textfield6" type="text" value="" class="w120"  /></td>
+	            <th>单据金额：</th>
+	            <td><input name="textfield" type="text" value="" class="w90"  />
+-
+  <input name="textfield5" type="text" value="" class="input3 w90"  /></td>
+	            <td><a href="#" class="bt_1"><span>预定</span></a><a href="#" class="bt_2"><span>重置</span></a></td>
+              </tr>
+	          </table></td>
+	        <td class="right_box"></td>
+          </tr>
+        </table>
+      </div>
+	  <div  class="search_bottom">
+	    <div class="right_bottom"></div>
+	    <div class="left_bottom"></div>
+      </div>
+    </div>
+	<div class="title_box"> 
+	<div class="rightbtn">
+	<a href="#" class="bt_small" id="addButton"><span>新增</span></a>				
+	</div>
+	<strong>申请单草稿列表</strong></div>
+	   <div class="tableOutline" id="changeColor">
+ <table  border="0" cellspacing="0" cellpadding="0"  width="100%" class="table3" style="padding-right:17px;" > 
+          <tr>
+            <th width="30">&nbsp;</th>
+            <th width="30">序号</th>
+            <th width="150">票据号码</th>
+            <th width="80">操作</th>
+            <th width="60">公司代码 </th>
+            <th width="60">利润中心</th>
+            <th width="100">收票日期</th>
+            <th width="80">寄票人</th>
+            <th >寄票单位</th>
+          </tr></table>
+		  <div class="table_scroll" >
+		  <table  border="0" cellspacing="0" cellpadding="0" width="100%" class="table3" > 
+		  <tr>
+            <td width="30"><input id="id2"  type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td width="30">1 </td>
+            <td  width="150">32000051/21038024</td>
+            <td width="80"><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td width="60">1001</td>
+            <td width="60">LR1002</td>
+            <td width="100">2012-08-12</td>
+            <td width="80">新裕</td>
+            <td>唐珍珍</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id3" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 2 </td>
+            <td>30800053/92470182</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1802</td>
+            <td>2012-07-13</td>
+            <td>张三</td>
+            <td>湖南</td>
+          </tr>
+          <tr>
+            <td><input id="id4" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 3 </td>
+            <td>30100053/92470112</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1802</td>
+            <td>2012-07-13</td>
+            <td>张三</td>
+            <td>湖南</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id5" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 4 </td>
+            <td>31400051/22335685</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr>
+            <td><input id="id6" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 5 </td>
+            <td>30700051/20692352</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id62" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 6 </td>
+            <td>40200051/22852498</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr>
+            <td><input id="id63" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 7 </td>
+            <td>31300052/20186652</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id64" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 8 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr>
+            <td><input id="id65" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 9 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id66" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 10 </td>
+            <td>10300052/21590947</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>青海</td>
+            <td>晋成芳</td>
+          </tr>
+			  <tr>
+            <td><input id="id65" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 9 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id66" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 10 </td>
+            <td>10300052/21590947</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>青海</td>
+            <td>晋成芳</td>
+          </tr>
+			  <tr>
+            <td><input id="id65" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 9 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id66" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 10 </td>
+            <td>10300052/21590947</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>青海</td>
+            <td>晋成芳</td>
+          </tr>
+			  <tr>
+            <td><input id="id65" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 9 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id66" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 10 </td>
+            <td>10300052/21590947</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>青海</td>
+            <td>晋成芳</td>
+          </tr>
+			  <tr>
+            <td><input id="id65" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 9 </td>
+            <td>10500053/21109966</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>浙江</td>
+            <td>唐静</td>
+          </tr>
+          <tr class="tr2">
+            <td><input id="id66" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
+            <td> 10 </td>
+            <td>10300052/21590947</td>
+            <td><a href="#">查看</a>  <a href="#">修改</a></td>
+            <td>1001</td>
+            <td>LR1002</td>
+            <td>2012-07-02</td>
+            <td>青海</td>
+            <td>晋成芳</td>
+          </tr>
+        </table>
+      </div>
+</div>
+	  <div class="pages">一页显示
+        <select name="select3">
+          <option>10</option>
+          <option>20</option>
+          <option>50</option>
+          <option>100</option>
+          <option>全部</option>
+        </select>
+        条 总计<span class="Total">35</span>条 <span class="current">1</span>/4 页 <span class="current_page"><a href="#">1</a></span> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> 跳转至
+        <input type="text" name="textfield3"  class="page_input"/>
+        页 <img src="images/go.jpg" width="18" height="16" align="absmiddle" />
+        </div>
+</div>      
+</body>
+</html>

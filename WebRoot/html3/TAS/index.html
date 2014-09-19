@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>三一集团差旅管理系统</title>
+<link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
+<link href="../stylesheet/menu.css" rel="stylesheet" type="text/css" />
+<link href="../stylesheet/top2.css" rel="stylesheet" type="text/css" />
+<link href="../stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../js/menu.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$(".def-nav,.info-i").hover(function(){
+		$(this).find(".pulldown-nav").addClass("hover");
+		$(this).find(".pulldown").show();
+	},function(){
+		$(this).find(".pulldown").hide();
+		$(this).find(".pulldown-nav").removeClass("hover");
+	});
+	
+});
+</script>
+</head>
+<body>
+<div id="wrap">
+  <div  class="top">
+    <div class="logo_top" >三一集团差旅管理系统</div>
+    <div class="right_info">审批事项：<a href="#" target="mam">10</a>条 | 
+      通知：<a href="#" target="mam">2</a>条 | </div>
+      <div class="info">
+        <ul>
+          <li class="info-i has-pulldown"> <em class="f-icon pull-arrow"></em> 欢迎您 ,李四
+            <div class="pulldown user-info"> <em class="arrow"></em>
+              <div class="content"> <span class="li"><a href="">个人资料</a></span> <span class="li"><a href="">修改密码</a></span> <span class="li"><a href="">快捷修改</a></span></div>
+            </div>
+          </li>
+          <li class="info-i normal"><a href="javascript:;" id="signout">注销</a></li>
+          <li class="info-i no-separate default-text has-pulldown"> <em class="f-icon pull-arrow"></em> <span class="more" hideFocus="hideFocus">更多</span>
+            <div class="pulldown more-info"> <em class="arrow"></em>
+              <div class="content"> <span class="li"><a href="">版本更新</a></span> <span class="li"><a href="">帮助中心</a></span> <span class="li"><a href="">问题反馈</a></span> <span class="li"><a href="">联系方式</a></span> <span class="li"><a href="">权利声明</a></span> </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+  </div>
+  <div id="menubar">
+    <ul id="menus" class="menus">
+      <li class="select"><a href="main_index.html" target="tas">首页</a> </li>
+      <li><a href="entry_reservation.html" target="tas">我要出差</a> </li>
+    </ul>
+  </div>
+</div>
+<iframe src="travel_requests.html" width="100%" height="700" scrolling="auto" frameborder="0" name="tas"></iframe>
+</body>
+</html>

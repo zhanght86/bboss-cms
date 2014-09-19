@@ -1,0 +1,223 @@
+a:link, a:visited {
+	color: #0858ba;
+}
+a:hover {
+	color: #900;
+}
+/*right*/
+body {
+	background-color: #f2f2f2;
+	font-size: 14px;
+}
+.performance_top {
+	height: 35px;
+	line-height: 35px;
+	min-width: 985px;
+}
+.top_message .td_right {
+	text-align: right;
+	width: 100px;
+	padding-right: 3px;
+}
+.main_contain {
+	margin-top: 48px;
+}
+.explain_1 {
+	text-align: right;
+	padding-right: 20px;
+	float: right;
+	width: 100px;
+	margin-top: -38px;
+}
+.title_top {
+	font-size: 24px;
+	line-height: 40px;
+	font-weight: bold;
+	text-align: center;
+	color: #333;
+	padding: 5px;
+}
+.next_button a {
+	float: right;
+	width: 100px;
+	font-size: 14px;
+	line-height: 24px;
+	background: #e4e4e4;
+	color: #333;
+	font-weight: normal;
+	margin-bottom: 10px;
+}
+.next_button a:hover {
+	background: #ccc;
+	color: #333;
+}
+.performance_top2 {
+	height: 60px;
+	line-height: 30px;
+	min-width: 985px;
+}
+.top_name {
+	font-weight: bold;
+	font-size: 20px;
+}
+a.bt_approval, a.bt_approval span, a.bt_approval:hover, a.bt_approval:hover span {
+	background-color: #00a6ff;
+	padding: 0 10px;
+	height: 36px;
+	color: #fff;
+	display: inline-block;
+	text-indent: 0;
+	line-height: 36px;
+	font-size: 16px;
+	text-decoration: none;
+	font-weight: bold;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.bt_approval {
+	margin: 9px 28px;
+	cursor: hand;
+}
+a.bt_approval span, a.bt_approval:hover span {
+	padding-left: 40px;
+	background: url(../images/u2.png) no-repeat 5px center;
+}
+a.bt_approval:hover, a.bt_approval:hover span {
+	background-color: #005bff;
+}
+a.bt_approval2, a.bt_approval2 span, a.bt_approval2:hover, a.bt_approval2:hover span {
+	background-color: #00a6ff;
+	padding: 0 10px;
+	height: 30px;
+	color: #fff;
+	display: inline-block;
+	text-indent: 0;
+	line-height: 30px;
+	font-size: 16px;
+	text-decoration: none;
+	font-weight: bold;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.bt_approval2 {
+	margin: 5px 28px;
+	cursor: hand;
+}
+a.bt_approval2 span, a.bt_approval2:hover span {
+	padding-left: 40px;
+	background: url(../images/u2.png) no-repeat 5px center;
+}
+a.bt_approval2:hover, a.bt_approval2:hover span {
+	background-color: #005bff;
+}
+a.bt_approval3, a.bt_approval3 span, a.bt_approval3:hover, a.bt_approval3:hover span {
+	background-color: #f5696c;
+	padding: 0 10px;
+	height: 30px;
+	color: #fff;
+	display: inline-block;
+	text-indent: 0;
+	line-height: 30px;
+	font-size: 16px;
+	text-decoration: none;
+	font-weight: bold;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.bt_approval3 {
+	margin: 5px;
+	cursor: hand;
+}
+a.bt_approval3:hover, a.bt_approval3:hover span {
+	background-color: #f36;
+}
+.performance_approval {
+	margin-top: 60px;
+	padding: 20px;padding-right:0;
+}
+.main_contain.performance_approval .department_box{clear:both;}
+.main_contain.performance_approval .department_box .department_title {
+	font-size: 20px;
+	font-weight: bold;
+	color: #068cef;
+}
+.main_contain.performance_approval .department_box .operate_msg{height:40px;margin-top:10px;}
+.main_contain.performance_approval .department_box .operate_msg .operat_button {
+	float: right;
+	width: 350px;
+	text-align: right;
+}
+.main_contain.performance_approval .department_box .operate_msg .proportion{font-size:12px; line-height:18px;}
+.main_contain.performance_approval .department_box .performance_box ul li {
+	background-color: #FFF; float:left;width:21.9%;min-width:285px;height:70px;margin:10px 20px 10px 0;
+	border: 1px solid #CCC;padding:10px;
+}
+.performance_name {
+	height: 30px;
+}
+.performance_name .name1 {
+	font-size: 20px;
+	font-weight: bold;
+	float: left;
+	width: 144px;
+	padding-left: 6px;color:#333;
+}
+.performance_name .date_1 {
+	text-align: right;margin-left:150px;
+}
+.performace_operate{height:40px;line-height:40px;}
+.performace_operate .performace_button {
+	float: left;
+	width: 190px;
+}
+.performace_operate .performace_state {
+	text-align: right;margin-left:190px;height:40px;
+}
+.performace_operate .performace_state .select1{margin-top:8px;}.performace_operate .performace_state .no_treaty {
+	border: 1px solid #e4e4e4;padding:3px 8px; background-color:#f2f2f2;color:#666;
+}
+.main_contain.performance_approval .num_list_box {
+	margin-top: 50px; margin-right:20px;
+}
+.main_contain.performance_approval .num_list_box .list_msg{padding:10px 0;}
+.main_contain.performance_approval .num_list_box .list_msg .notice {
+	color: #f00;
+	text-align: right;
+	float: right;
+	width: 300px;
+}
+.main_contain.performance_approval .num_list_box .list_msg .list_title {
+	font-size: 20px;
+	font-weight: bold;
+}
+.main_contain.performance_approval .num_list_box .list_search {
+	background-color: #767676;
+	height: 30px;padding:10px;
+}
+#moquu_top {
+	z-index:2;
+	width:50px;
+	height:50px;
+	right:10px;
+	position:fixed;
+	cursor:pointer;
+	_position:absolute;
+	_bottom:auto;
+	_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))
+}
+#moquu_top {
+	bottom:40px;
+	_margin-top:516px;
+	background:url(../images/sbtn.png) 0 -101px;
+	width:50px;
+	height:50px
+}
+#moquu_top:hover {
+	background:url(../images/sbtn.png) -50px -101px
+}

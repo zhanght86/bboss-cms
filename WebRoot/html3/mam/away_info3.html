@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
+<link href="stylesheet/entry.css" rel="stylesheet" type="text/css" />
+<link  href="../stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="../js/tab.js"></script>
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../../include/js/dialog/lhgdialog.js"></script>
+<script language="javascript" type="text/javascript" src="../../include/datepicker/My97DatePicker/WdatePicker.js"></script>
+<title>出门单（无系统单据）</title>
+</head>
+
+<body>
+<div class="entry_top">
+  <div class="left_top away"><img src="images/u90.png" width="51" height="33" />出门单 →<strong>无系统单据</strong></div>
+  <span class="right_top"><a href="#">查看流程</a></span> </div>
+<div style="clear:both;"></div>
+<div class="main_contain">
+  <div class="u_tab_div"  id="tab01">
+    <div class="tab1"><span class="u_tab_hover"><a href="#">单据信息</a></span></div>
+    <div class="tab2"><span class="u_tab" id="htmer" ><a href="#">人员信息</a></span></div>
+    <div class="tab2" ><span class="u_tab" id="htmer1" ><a href="#">出门信息</a></span></div>
+  </div>
+  <div id="tabCon01">
+   <ul class="ul_news">
+     <div class="title_1">包装信息</div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150">箱号（实）：</th>
+          <td><input name="textfield3" type="text" class="input1" id="textfield" /></td>
+          <th width="150">包装数量：</th>
+          <td><input name="textfield12" type="text" class="input1" id="textfield8" /></td>
+        </tr>
+        <tr>
+          <th>箱号（虚）：</th>
+          <td width="200"><input name="textfield11" type="text" class="input1" id="textfield7" /></td>
+          <th>散件数量：</th>
+          <td width="200"><input name="textfield14" type="text" class="input1" id="textfield9" /></td>
+        </tr>
+      </table>
+      <div class="title_1">物资信息</div>
+      <div> <a href="#" class="bt_sany">新增</a><a href="#" class="bt_sany">删除</a><a href="#" class="bt_sany">导入</a></div>
+      <table width="100%"  border="0" cellpadding="0" cellspacing="0" class="sany_table">
+        <tr>
+          <th width="30"><input type="checkbox" name="checkbox4" id="checkbox4" /></th>
+          <th width="30">序号</th>
+          <th><span class="required">*</span>物料/资产编码 </th>
+          <th> <span class="required">*</span>物资名称  </th>
+          <th> <span class="required">*</span> 规格型号 </th>
+          <th>  <span class="required">*</span>包装/散件 </th>
+          <th>  <span class="required">*</span> 数量</th>
+          <th> <span class="required">*</span>单位 </th>
+          <th><span class="required">*</span>箱号</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox5" id="checkbox5" /></td>
+          <td>1</td>
+          <td><input name="textfield16" type="text" class="input1" id="textfield14" value="H000123456899" /></td>
+          <td><label for="textfield"></label>
+            <input name="textfield6" type="text" class="input1" id="textfield" value=" 笔记本电脑" /></td>
+          <td><input name="textfield6" type="text" class="input1 w75" id="textfield3" value="HP" /></td>
+          <td><input name="textfield9" type="text" class="input1 w75" id="textfield3" value="散件" /></td>
+          <td><input name="textfield6" type="text" class="input1 w50" id="textfield4" value="1" /></td>
+          <td><label for="select"></label>
+            <input name="textfield6" type="text" class="input1 w50" id="textfield6" value="台" /></td>
+          <td><input name="textfield18" type="text" class="input1 w100" id="textfield16" value="X0001" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" name="checkbox6" id="checkbox6" /></td>
+          <td>2</td>
+          <td><input name="textfield17" type="text" class="input1" id="textfield15" value="A559922220000" /></td>
+          <td><input name="textfield6" type="text" class="input1" id="textfield6" value="平板电脑" /></td>
+          <td><input name="textfield6" type="text" class="input1 w75" id="textfield10" value="APPLE" /></td>
+          <td><input name="textfield10" type="text" class="input1 w75" id="textfield11" value="散件" /></td>
+          <td><input name="textfield6" type="text" class="input1 w50" id="textfield12" value="2" /></td>
+          <td><input name="textfield15" type="text" class="input1 w50" id="textfield13" value="台" /></td>
+          <td><input name="textfield19" type="text" class="input1 w100" id="textfield17" value="X0001" /></td>
+          <td><a href="#">删除</a></td>
+        </tr>
+      </table>
+   </ul>
+    <ul class="ul_news" style="display:none;">
+      <div class="title_1">监审单签字人员
+      </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150"> <span class="required">*</span>三一证明人： </th>
+          <td width="200"><label for="fileField">
+              <input name="textfield13" type="text" class="input1" value="姓名/手机号" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/手机号'}" />
+            </label></td>
+          <th width="150">非三一证明人 ： </th>
+          <td width="200"><input name="textfield8" type="text" class="input1"  value="姓名/手机号" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/手机号'}"/></td>
+        </tr>
+      </table>
+      <div class="title_1">出门责任人员
+      </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150"> <span class="required">*</span>出门责任人： </th>
+          <td width="200"><label for="fileField2">
+            <input name="textfield" type="text" class="input1" value="姓名/工号" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/工号'}" />
+          </label></td>
+          <th width="150"><span class="required">*</span>联系方式 ： </th>
+          <td width="200"><input name="textfield" type="text" class="input1"  value="电话号码/手机号" onfocus="this.value=''" onblur="if(this.value==''){this.value='电话号码/手机号'}"/></td>
+        </tr>
+      </table>
+      <div class="title_1">持物人信息
+      </div>
+      <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150"> <span class="required">*</span>持物人： </th>
+          <td width="200"><label for="fileField3">
+            <input name="textfield2" type="text" class="input1" value="姓名/工号" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/工号'}" />
+          </label></td>
+          <th width="150"><span class="required">*</span>联系方式 ： </th>
+          <td width="200"><input name="textfield2" type="text" class="input1"  value="电话号码/手机号" onfocus="this.value=''" onblur="if(this.value==''){this.value='电话号码/手机号'}"/></td>
+        </tr>
+      </table>
+    </ul>
+    <ul class="ul_news" style="display:none;">
+      <div class="title_1">出门信息</div>
+       <table border="0" cellpadding="0" cellspacing="0" class="sany_table2">
+        <tr>
+          <th width="150"><span class="required">*</span>物资分类： </th>
+          <td width="200"><select name="select" class="select1" id="select2">
+            <option selected="selected">请选择</option>
+            <option>电脑</option>
+            <option>办公耗材</option>
+            <option>电器</option>
+          </select></td>
+          <th width="150"><span class="required">*</span>业务场景：</th>
+          <td width="200"><select name="select2" class="select1" id="select">
+            <option selected="selected">请选择</option>
+</select></td>
+        </tr>
+        <tr>
+          <th><span class="required">*</span>预计回司时间：</th>
+          <td><input type="text" class="Wdate" onclick="WdatePicker()"/></td>
+          <th><span class="required">*</span>回司收货/销账人：</th>
+          <td><input name="textfield4" type="text" class="input1" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/工号'}" /></td>
+        </tr>
+        <tr>
+          <th><span class="required">*</span>出门原因：</th>
+          <td colspan="3"><textarea name="textfield7" class="textarea1 h_50" id="textfield5" onfocus="this.value=''" onblur="if(this.value==''){this.value='至少填写5个字符'}">至少填写5个字符</textarea></td>
+         </tr>
+        <tr>
+          <th> <span class="required">*</span>目的地： </th>
+          <td colspan="3">
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><input type="radio" name="RadioGroup1" value="单选" id="RadioGroup1_0" /> 产业园</td>
+              <td > <select name="select3" class="select1" id="select3">
+                <option>宁乡产业园</option>
+                <option>星沙产业园</option>
+               </select></td>
+            </tr>
+            <tr>
+              <td><input type="radio" name="RadioGroup1" value="单选" id="RadioGroup1_1" /> 非产业园</td>
+              <td><input name="textfield5" type="text" class="input1" id="textfield2" /></td>
+            </tr>
+          </table></td>
+         </tr>
+         <tr>
+           <th><span class="required">*</span>上传文档：</th>
+           <td colspan="3"><input type="file" name="fileField" id="fileField" />
+            附件格式为jpg、Excel、Word</td>
+         </tr>
+         <tr><th><span class="required">*</span>
+         OA编号：</th><td colspan="3"><input name="textfield20" type="text" class="input1" onfocus="this.value=''" onblur="if(this.value==''){this.value='姓名/工号'}" /></td></tr>
+      </table> 
+      
+    </ul>
+          <div class="bottom_area"></div>
+      <div class="submit_operation"> <a href="#" class="bt_cancel"><span>上一步</span></a>  <a class="bt_next"><span>确定</span></a><a href="#" class="bt_cancel"><span>暂存</span></a> <a href="#" class="bt_cancel"><span>取消</span></a> </div>
+<div class="print"> <a href="#" class="bt_print">打印</a> </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">tabAction("tab01","tabCon01");</script>
+</html>

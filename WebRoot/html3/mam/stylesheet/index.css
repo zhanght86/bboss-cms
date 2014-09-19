@@ -1,0 +1,93 @@
+a:link,a:visited{color:#0858ba;}
+a:hover{color: #900;}
+.num{font-weight:bold;padding:3px;font-size:1.1em;}
+/*right*/
+.notice_area{background:#f4f4f4;border-bottom:1px solid #e1e1e3; height:31px;clear:both; position:fixed;top:0;left:0; width:100%;}
+.notice_area .news_title{font-weight:bold;font-size:14px;padding-left:12px;}
+.index_contain{margin-top:33px; }
+.index_operate{ background-color:#cddeed;padding:30px 0;height:255px;}
+.operate_box{width:975px;margin:0 auto;padding-left:10px;}
+.operate_li{background-color:#fff;width:290px; float:left;margin:0 15px; text-align:center;}
+.index_contain .index_operate .operate_box .operate_li.li3{width:299px;}
+.operate_li img{margin-top:30px;}
+.operate_link{margin-top:20px;margin-bottom:6px;}
+a.bt_entry, a.bt_entry span, a.bt_entry:hover, a.bt_entry:hover span,a.bt_reservation, a.bt_reservation span, a.bt_reservation:hover, a.bt_reservation:hover span,a.bt_away, a.bt_away span, a.bt_away:hover, a.bt_away:hover span {
+	width:88px;
+	height: 36px;
+	color: #06c;
+	display: inline-block;
+	text-indent: 0;
+	line-height: 36px;
+	font-size: 15px;
+	text-decoration: none;
+	background-color:#dcf0fd;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.bt_entry,a.bt_reservation,a.bt_away{margin:3px;}
+a.bt_entry:hover, a.bt_entry:hover span {
+	background-color: #09f;cursor: hand; color:#fff;
+}
+a.bt_reservation, a.bt_reservation span, a.bt_reservation:hover, a.bt_reservation:hover span{ background-color:#ffe1ae; color:#c30;}
+a.bt_reservation:hover, a.bt_reservation:hover span {
+	background-color: #f90;cursor: hand;color:#fff;
+}
+a.bt_away, a.bt_away span, a.bt_away:hover, a.bt_away:hover span{ background-color:#d9f5b0; color:#360;}
+a.bt_away:hover, a.bt_away:hover span {
+	background-color: #3c0;cursor: hand;color:#fff;
+}
+ .operate_link .bt_away.name2{width:98px;}
+
+ .index_contain .index_content{width:968px;margin:10px auto;padding-left:17px;} 
+.index_contain .index_content ul li {
+	float: left;
+	width: 80px;margin:8px;
+}
+
+.index_contain .index_list{width:965px;margin:0 auto 20px auto; clear:both;}
+.index_contain .index_list .index_list_1 {
+	float: left;height:270px;
+	width: 640px;border:1px solid #ccc;margin-left:15px;
+}
+.index_contain .index_list .index_list_2 {
+	margin-left: 670px;border:1px solid #ccc;margin-right:5px;height:270px;
+}
+.index_contain .index_list .list_title {
+	font-size: 18px;border-bottom:1px solid #ccc;padding:8px; background:url(../images/line2.png) no-repeat left 38px;
+}
+.index_contain .index_list .list_title .more{float:right;width:60px; text-align:right;font-size:14px;}
+.index_contain .index_list .index_list_1 .content_box {
+	padding: 8px;
+}
+a.bt_approve, a.bt_approve span, a.bt_approve:hover, a.bt_approve:hover span {
+	height: 30px;
+	color: #06c;
+	display: inline-block;
+	text-indent: 0;
+	line-height: 30px;
+	font-size: 16px;
+	text-decoration: none;
+	background:#dcf0fd;
+	padding:0 10px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+a.bt_approve {
+	cursor: hand;
+}
+
+a.bt_approve:hover, a.bt_approve:hover span {
+	background-color: #09f;cursor: hand; color:#fff;
+}.index_contain .index_list .index_list_2 ul li {
+	padding: 4px 4px 4px 22px; line-height:24px;font-size:14px;
+	list-style-type:none; background:url(../images/mdot1.jpg) no-repeat 10px center;
+}
+.index_contain .index_list a:link, .index_contain .index_list a:visited{
+	color: #333;
+}
+.index_contain .index_list a:hover{ color:#06C;}
+.content_box_index{padding:10px;

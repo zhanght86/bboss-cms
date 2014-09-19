@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="../../include/datepicker/My97DatePicker/WdatePicker.js"></script>
+<title>待办列表</title>
+<link rel="stylesheet" href="../stylesheet/left_menu.css" type="text/css" />
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("ul.expmenu li > div.header").click(function(){
+												   
+		var arrow = $(this).find("span.arrow");
+	
+		if(arrow.hasClass("up")){
+			arrow.removeClass("up");
+			arrow.addClass("down");
+		}else if(arrow.hasClass("down")){
+			arrow.removeClass("down");
+			arrow.addClass("up");
+		}
+		$(this).parent().find("ul.menu").slideToggle();
+	});
+});
+</script>
+</head>
+<body>
+<div class="content_box">
+    <div class="position"> <a href="main_index.html"><img src="../images/home.gif" width="11" height="11" /></a> &gt;待办中心&gt; 已办</div>
+  <div class="search">
+  <table><tr><td>
+    <div class="sany_li2">
+     <input type="text" class="Wdate" id="d53" onFocus="var d54=$dp.$('d54');WdatePicker({onpicked:function(){d54.focus();},maxDate:'#F{$dp.$D(\'d54\')}'})" value="提交日期"/> 至 
+      <input type="text" class="Wdate" id="d54" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d53\')}'})" value="提交日期"//>
+
+    </div><div class="sany_li2">
+     <input type="text" class="Wdate" id="d55" onFocus="var d54=$dp.$('d54');WdatePicker({onpicked:function(){d56.focus();},maxDate:'#F{$dp.$D(\'d56\')}'})" value="审批日期"/> 至 
+      <input type="text" class="Wdate" id="d56" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'d55\')}'})" value="审批日期"//>
+
+    </div> <div class="sany_li">
+      <input name="" type="text"  class="input1" value="单号" onfocus="this.value=''" onblur="if(this.value==''){this.value='单号'}" />
+    </div>
+    <div class="sany_li">
+      <select name="select" class="select1" id="select">
+        <option>当前状态</option>
+        <option>审批中</option>
+        <option>已完成</option>
+      </select>
+  </div>
+       <div class="sany_li">
+      <select name="select" class="select1" id="select">
+        <option>单据类型</option>
+        <option>出门单</option>
+        <option>入门单</option>
+        <option>预约单</option>
+      </select>
+  </div>
+       <div class="sany_li">
+         <input name="" type="text"  class="input1" value="提交人" onfocus="this.value=''" onblur="if(this.value==''){this.value='提交人'}" />
+  </div>
+   <a  href="#" class="bt_search"><span>查询</span></a>
+    </td></tr></table>
+  </div>
+  <div class="list_box">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0"  class="list_table">
+  <tr>
+    <th width="30">序号</th>
+    <th>单据类型</th>
+    <th>业务分类</th>
+    <th>业务场景</th>
+    <th>单号</th>
+    <th>单据状态</th>
+    <th>审批节点</th>
+    <th>审批日期</th>
+    <th>提交人</th>
+    <th>提交日期</th>
+    <th>操作</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>法制车租赁</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>提交人</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>主机销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>提交人</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>出门单</td>
+    <td>不回司-有收益</td>
+    <td>配件销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>部门领导审批</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>法制车租赁</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>提交人</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>出门单</td>
+    <td>不回司-有收益</td>
+    <td>法制车租赁</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>部门领导审批</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>主机销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>部门领导审批</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>配件销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>提交人</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>出门单</td>
+    <td>不回司-有收益</td>
+    <td>展示车辆</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>部门领导审批</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>出门单</td>
+    <td>不回司-有收益</td>
+    <td>配件销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>提交人</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td>出门单</td>
+    <td>需回司</td>
+    <td>配件销售</td>
+    <td>1406110003</td>
+    <td>审批中</td>
+    <td>部门领导审批</td>
+    <td>2014-06-11 </td>
+    <td>张辉</td>
+    <td>2014-06-11 </td>
+    <td><a href="#">查看</a></td>
+  </tr>
+</table>
+</div>
+</div>
+</body>
+</html>
