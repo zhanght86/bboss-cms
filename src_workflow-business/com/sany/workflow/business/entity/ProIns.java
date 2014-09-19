@@ -22,7 +22,7 @@ public class ProIns {
 	private String rejectToActId;// 驳回节点key
 	private String toActName;// 驳回节点名称
 	private int isReturn;// 驳回后提交是否返回
-	private String remark;// 处理意见
+	private String dealReason;// 处理意见
 	private String businessKey;// 业务单据号
 	private String businessType;// 业务类型，用于分类查询流程
 	private int enableEdit;// 是否可修改
@@ -125,12 +125,12 @@ public class ProIns {
 		this.isReturn = isReturn;
 	}
 
-	public String getRemark() {
-		return remark;
+	public String getDealReason() {
+		return dealReason;
 	}
 
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setDealReason(String dealReason) {
+		this.dealReason = dealReason;
 	}
 
 	public String getBusinessKey() {

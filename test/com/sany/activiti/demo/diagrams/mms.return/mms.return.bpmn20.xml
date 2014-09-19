@@ -3,29 +3,22 @@
   <process id="Mms.return" name="物料退料流程" isExecutable="true">
     <documentation>物料退料流程(生产辅料)</documentation>
     <startEvent id="startevent1" name="Start"></startEvent>
-    <userTask id="usertask1" name="申请退料" activiti:candidateUsers="${usertask1_users}"></userTask>
+    <userTask id="usertask1" name="申请退料" activiti:candidateUsers="${usertask1_users}">
+      <documentation>申请退料描述</documentation>
+    </userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
-    <userTask id="usertask2" name="工作中心主任审批" activiti:candidateUsers="${usertask2_users}"></userTask>
+    <userTask id="usertask2" name="工作中心主任审批" activiti:candidateUsers="${usertask2_users}">
+      <documentation>工作中心主任审批描述</documentation>
+    </userTask>
     <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="usertask2"></sequenceFlow>
     <userTask id="usertask3" name="工艺工程师审批" activiti:assignee="${usertask3_user}">
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="usertask3_users" activiti:elementVariable="usertask3_user"></multiInstanceLoopCharacteristics>
     </userTask>
-    <sequenceFlow id="flow3" sourceRef="usertask2" targetRef="usertask3">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==true}]]></conditionExpression>
-    </sequenceFlow>
-    <userTask id="usertask4" name="仓管员入库" activiti:candidateUsers="${usertask4_users}"></userTask>
-    <sequenceFlow id="flow4" sourceRef="usertask3" targetRef="usertask4">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==true}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="flow6" name="驳回" sourceRef="usertask2" targetRef="usertask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==false}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="flow7" name="驳回" sourceRef="usertask3" targetRef="usertask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==false}]]></conditionExpression>
-    </sequenceFlow>
-    <sequenceFlow id="flow8" name="驳回" sourceRef="usertask4" targetRef="usertask1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass==false}]]></conditionExpression>
-    </sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="usertask2" targetRef="usertask3"></sequenceFlow>
+    <userTask id="usertask4" name="仓管员入库" activiti:candidateUsers="${usertask4_users}">
+      <documentation>仓管员入库描述</documentation>
+    </userTask>
+    <sequenceFlow id="flow4" sourceRef="usertask3" targetRef="usertask4"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow9" sourceRef="usertask4" targetRef="endevent1"></sequenceFlow>
   </process>
@@ -64,35 +57,6 @@
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="595.0" y="217.0"></omgdi:waypoint>
         <omgdi:waypoint x="650.0" y="217.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
-        <omgdi:waypoint x="382.0" y="245.0"></omgdi:waypoint>
-        <omgdi:waypoint x="382.0" y="275.0"></omgdi:waypoint>
-        <omgdi:waypoint x="301.0" y="275.0"></omgdi:waypoint>
-        <omgdi:waypoint x="222.0" y="275.0"></omgdi:waypoint>
-        <omgdi:waypoint x="222.0" y="245.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="24.0" x="392.0" y="245.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
-        <omgdi:waypoint x="542.0" y="245.0"></omgdi:waypoint>
-        <omgdi:waypoint x="543.0" y="327.0"></omgdi:waypoint>
-        <omgdi:waypoint x="223.0" y="327.0"></omgdi:waypoint>
-        <omgdi:waypoint x="222.0" y="245.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="24.0" x="552.0" y="245.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
-        <omgdi:waypoint x="702.0" y="245.0"></omgdi:waypoint>
-        <omgdi:waypoint x="703.0" y="391.0"></omgdi:waypoint>
-        <omgdi:waypoint x="455.0" y="391.0"></omgdi:waypoint>
-        <omgdi:waypoint x="223.0" y="391.0"></omgdi:waypoint>
-        <omgdi:waypoint x="222.0" y="245.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="24.0" x="712.0" y="245.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
         <omgdi:waypoint x="755.0" y="217.0"></omgdi:waypoint>

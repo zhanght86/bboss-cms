@@ -14,7 +14,6 @@
  */
 package com.sany.activiti.demo.action;
 
-import com.sany.workflow.service.impl.ActivitiServiceImpl;
 
 /**
  * @author yinbp

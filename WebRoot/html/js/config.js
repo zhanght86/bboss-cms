@@ -7,5 +7,5 @@ var langList =
 
 var skinList = 
 [
-	{name:'blue',	charset:'UTF-8'}
+	{name:'red',	charset:'UTF-8'}
 ];

@@ -83,15 +83,70 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public void judgeAuthorityToPageState(String taskId, String processKey,
-			String businessKey, String userAccount, ModelMap model) {
+	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
+			String userAccount) {
+		TransactionManager tm = new TransactionManager();
 
-		// 页面状态 新增初始状态
-		if (StringUtil.isEmpty(taskId) && StringUtil.isEmpty(businessKey)) {
-			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
-					WorkflowConstants.PRO_PAGESTATE_INIT);
-		} else if (StringUtil.isNotEmpty(taskId)) {
+		try {
+			tm.begin();
 
+			userAccount = this.changeToDomainAccount(userAccount);
+
+			if (StringUtil.isEmpty(taskId)) {
+
+				tm.commit();
+				return false;
+
+			} else {
+
+				// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+				HistoricTaskInstance hisTask = activitiService
+						.getHistoryService().createHistoricTaskInstanceQuery()
+						.taskId(taskId).singleResult();
+
+				if (StringUtil.isNotEmpty(hisTask.getAssignee())) {
+
+					if (userAccount.equals(hisTask.getAssignee())) {
+
+						tm.commit();
+						return true;
+					}
+
+				} else {
+					// 任务未签收，根据任务id查询任务可处理人
+					List<HashMap> candidatorList = executor.queryList(
+							HashMap.class, "getNodeCandidates_wf", taskId,
+							userAccount);
+
+					if (candidatorList != null && candidatorList.size() > 0) {
+
+						tm.commit();
+						return true;
+					}
+				}
+
+				// 最后查看当前用户的委托关系
+				List<WfEntrust> entrustList = executor.queryList(
+						WfEntrust.class, "getEntrustRelation_wf", userAccount,
+						processKey, new Timestamp(hisTask.getStartTime()
+								.getTime()), new Timestamp(hisTask
+								.getStartTime().getTime()));
+
+				if (entrustList == null || entrustList.size() == 0) {
+
+					tm.commit();
+					return false;
+				} else {
+
+					tm.commit();
+					return true;
+				}
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -100,10 +155,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String userAccount) {
 		TransactionManager tm = new TransactionManager();
 
-		userAccount = this.changeToDomainAccount(userAccount);
-
 		try {
 			tm.begin();
+
+			userAccount = this.changeToDomainAccount(userAccount);
 
 			if (AccessControl.isAdmin(userAccount)) {
 
@@ -112,57 +167,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			} else {
 
-				if (StringUtil.isEmpty(taskId)) {
+				boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
+						userAccount);
 
-					tm.commit();
-					return false;
+				tm.commit();
 
-				} else {
-
-					// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-					HistoricTaskInstance hisTask = activitiService
-							.getHistoryService()
-							.createHistoricTaskInstanceQuery().taskId(taskId)
-							.singleResult();
-
-					if (StringUtil.isNotEmpty(hisTask.getAssignee())) {
-
-						if (userAccount.equals(hisTask.getAssignee())) {
-
-							tm.commit();
-							return true;
-						}
-
-					} else {
-						// 任务未签收，根据任务id查询任务可处理人
-						List<HashMap> candidatorList = executor.queryList(
-								HashMap.class, "getNodeCandidates_wf", taskId,
-								userAccount);
-
-						if (candidatorList != null && candidatorList.size() > 0) {
-
-							tm.commit();
-							return true;
-						}
-					}
-
-					// 最后查看当前用户的委托关系
-					List<WfEntrust> entrustList = executor.queryList(
-							WfEntrust.class, "getEntrustRelation_wf",
-							userAccount, processKey, new Timestamp(hisTask
-									.getStartTime().getTime()), new Timestamp(
-									hisTask.getStartTime().getTime()));
-
-					if (entrustList == null || entrustList.size() == 0) {
-
-						tm.commit();
-						return false;
-					} else {
-
-						tm.commit();
-						return true;
-					}
-				}
+				return flag;
 			}
 
 		} catch (Exception e) {
@@ -492,16 +502,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						nodeControl.setIS_EDITAFTER(node.getIsEditAfter());
 						nodeControl.setIS_RECALL(node.getIsRecall());
 						nodeControl.setIS_VALID(node.getIsValid());
-						if (node.getApproveType().equals(
-								WorkflowConstants.PRO_ACT_ONE)) {// 单实例
+						if (WorkflowConstants.PRO_ACT_ONE.equals(node
+								.getApproveType())) {// 单实例
 							nodeControl.setIS_MULTI(0);
 							nodeControl.setIS_SEQUENTIAL(0);
-						} else if (node.getApproveType().equals(
-								WorkflowConstants.PRO_ACT_SEQ)) {// 多实例串行
+						} else if (WorkflowConstants.PRO_ACT_SEQ.equals(node
+								.getApproveType())) {// 多实例串行
 							nodeControl.setIS_MULTI(1);
 							nodeControl.setIS_SEQUENTIAL(0);
-						} else if (node.getApproveType().equals(
-								WorkflowConstants.PRO_ACT_MUL)) {// 多实例并行
+						} else if (WorkflowConstants.PRO_ACT_MUL.equals(node
+								.getApproveType())) {// 多实例并行
 							nodeControl.setIS_MULTI(1);
 							nodeControl.setIS_SEQUENTIAL(1);
 						}
@@ -872,16 +882,15 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
 			String userId) throws Exception {
-
-		userId = changeToDomainAccount(userId);
-
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("processKey", processKey);
-		map.put("businessType", "1");
-
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+
+			userId = changeToDomainAccount(userId);
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("processKey", processKey);
+			map.put("businessType", "1");
 
 			// 用户组织节点和层级
 			String userLevel = executor.queryObject(String.class,
@@ -936,26 +945,27 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public void completeTask(ProIns proIns, String processKey,
 			Map<String, Object> paramMap) throws Exception {
 
-		// 当前用户转成域账号
-		String userAccount = this
-				.changeToDomainAccount(proIns.getUserAccount());
-		proIns.setUserAccount(userAccount);
-
-		// 委托用户转成域账号
-		String fromUser = this.changeToDomainAccount(proIns
-				.getNowTaskFromUser());
-		// 被委托用户转成域账号
-		String toUser = this.changeToDomainAccount(proIns.getNowTaskToUser());
-
-		// 权限判断
-		if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-			throw new Exception("您没有权限通过任务！");
-		}
-
 		TransactionManager tm = new TransactionManager();
 		try {
 
 			tm.begin();
+
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+			proIns.setUserAccount(userAccount);
+
+			// 委托用户转成域账号
+			String fromUser = this.changeToDomainAccount(proIns
+					.getNowTaskFromUser());
+			// 被委托用户转成域账号
+			String toUser = this.changeToDomainAccount(proIns
+					.getNowTaskToUser());
+
+			// 权限判断
+			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
+				throw new ProcessException("您没有权限通过任务！");
+			}
 
 			String remark = "";
 
@@ -990,8 +1000,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 								userAccount) + "]完成";
 			}
 
-			proIns.setRemark("通过流程&nbsp;&nbsp;&nbsp;&nbsp;"
-					+ proIns.getRemark() + remark);
+			proIns.setDealReason("通过流程&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ proIns.getDealReason() + remark);
 
 			// 节点配置参数转换
 			getVariableMap(proIns.getActs(), paramMap);
@@ -1000,6 +1010,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.commit();
 
+		} catch (ProcessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new Exception("处理任务出错：" + e.getMessage());
 		} finally {
@@ -1014,29 +1026,28 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			if (StringUtil.isEmpty(proIns.getToTaskKey())) {
 
-				if (StringUtil.isEmpty(proIns.getRemark())) {
+				if (StringUtil.isEmpty(proIns.getDealReason())) {
 
 					activitiService.completeTask(proIns.getNowtaskId(),
 							proIns.getUserAccount(), paramMap);
 				} else {
 					activitiService.completeTaskWithReason(
 							proIns.getNowtaskId(), proIns.getUserAccount(),
-							paramMap, proIns.getRemark());
+							paramMap, proIns.getDealReason());
 				}
 
 			} else {
 
-				if (StringUtil.isEmpty(proIns.getRemark())) {
+				if (StringUtil.isEmpty(proIns.getDealReason())) {
 
 					activitiService.completeTaskWithLocalVariables(
 							proIns.getNowtaskId(), proIns.getUserAccount(),
 							paramMap, proIns.getToTaskKey());
 				} else {
-					activitiService
-							.completeTaskWithLocalVariablesReason(
-									proIns.getNowtaskId(),
-									proIns.getUserAccount(), paramMap,
-									proIns.getToTaskKey(), proIns.getRemark());
+					activitiService.completeTaskWithLocalVariablesReason(
+							proIns.getNowtaskId(), proIns.getUserAccount(),
+							paramMap, proIns.getToTaskKey(),
+							proIns.getDealReason());
 				}
 			}
 
@@ -1044,26 +1055,26 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			if (StringUtil.isEmpty(proIns.getToTaskKey())) {
 
-				if (StringUtil.isEmpty(proIns.getRemark())) {
+				if (StringUtil.isEmpty(proIns.getDealReason())) {
 
 					activitiService.completeTask(proIns.getNowtaskId(),
 							paramMap);
 
 				} else {
-					activitiService
-							.completeTaskWithReason(proIns.getNowtaskId(),
-									paramMap, proIns.getRemark());
+					activitiService.completeTaskWithReason(
+							proIns.getNowtaskId(), paramMap,
+							proIns.getDealReason());
 				}
 
 			} else {
-				if (StringUtil.isEmpty(proIns.getRemark())) {
+				if (StringUtil.isEmpty(proIns.getDealReason())) {
 					activitiService.completeTaskLoadCommonParams(
 							proIns.getNowtaskId(), paramMap,
 							proIns.getToTaskKey());
 				} else {
 					activitiService.completeTaskLoadCommonParamsReason(
 							proIns.getNowtaskId(), paramMap,
-							proIns.getToTaskKey(), proIns.getRemark());
+							proIns.getToTaskKey(), proIns.getDealReason());
 				}
 			}
 
@@ -1072,33 +1083,40 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public void discardTask(ProIns proIns, String processKey) throws Exception {
+		TransactionManager tm = new TransactionManager();
+		try {
 
-		// 当前用户转成域账号
-		String userAccount = this
-				.changeToDomainAccount(proIns.getUserAccount());
+			tm.begin();
 
-		// 权限判断
-		if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-			throw new Exception("您没有权限废弃任务！");
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+
+			// 权限判断
+			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
+				throw new ProcessException("您没有权限废弃任务！");
+			}
+
+			if (!isSignTask(proIns.getNowtaskId())) {
+				// 先签收
+				activitiService.claim(proIns.getNowtaskId(), userAccount);
+			}
+
+			activitiService.cancleProcessInstances(proIns.getProInsId(),
+					proIns.getDealReason(), proIns.getNowtaskId(), processKey,
+					userAccount);
+
+		} catch (ProcessException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new Exception("废弃任务出错：" + e.getMessage());
+		} finally {
+			tm.release();
 		}
-
-		if (!isSignTask(proIns.getNowtaskId())) {
-			// 先签收
-			activitiService.claim(proIns.getNowtaskId(), userAccount);
-		}
-
-		activitiService.cancleProcessInstances(proIns.getProInsId(),
-				proIns.getRemark(), proIns.getNowtaskId(), processKey,
-				userAccount);
 	}
 
-	/**
-	 * 判断任务是否被签收
-	 * 
-	 * @param taskId
-	 * @return 2014年8月26日
-	 */
-	private boolean isSignTask(String taskId) throws Exception {
+	@Override
+	public boolean isSignTask(String taskId) throws Exception {
 
 		HashMap map = executor.queryObject(HashMap.class,
 				"getCurrentTaskInfoById_wf", taskId);
@@ -1113,29 +1131,29 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public void delegateTask(ProIns proIns, String processKey) throws Exception {
-		// 当前用户转成域账号
-		String userAccount = this
-				.changeToDomainAccount(proIns.getUserAccount());
-
-		// 委托用户转成域账号
-		String fromUser = this.changeToDomainAccount(proIns
-				.getNowTaskFromUser());
-
-		// 被委托用户转成域账号
-		String toUser = this.changeToDomainAccount(proIns.getNowTaskToUser());
-
-		// 转办用户转成域账号
-		String delegateUser = this.changeToDomainAccount(proIns
-				.getDelegateUser());
-
-		// 权限判断
-		if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-			throw new Exception("您没有权限转办任务！");
-		}
-
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+
+			// 委托用户转成域账号
+			String fromUser = this.changeToDomainAccount(proIns
+					.getNowTaskFromUser());
+
+			// 被委托用户转成域账号
+			String toUser = this.changeToDomainAccount(proIns
+					.getNowTaskToUser());
+
+			// 转办用户转成域账号
+			String delegateUser = this.changeToDomainAccount(proIns
+					.getDelegateUser());
+
+			// 权限判断
+			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
+				throw new ProcessException("您没有权限转办任务！");
+			}
 
 			// 记录委托关系(有就处理，没有就不处理)
 			if (StringUtil.isNotEmpty(userAccount)
@@ -1165,7 +1183,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.delegateTask(proIns.getNowtaskId(), delegateUser);
 
 			String reamrk = "转办流程&nbsp;&nbsp;&nbsp;&nbsp;"
-					+ proIns.getRemark()
+					+ proIns.getDealReason()
 					+ "&nbsp;&nbsp;&nbsp;&nbsp;备注:["
 					+ activitiService.getUserInfoMap().getUserName(userAccount)
 					+ "]将任务转办给["
@@ -1178,6 +1196,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					delegateUser, reamrk);
 
 			tm.commit();
+		} catch (ProcessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new Exception("转办任务出错:" + e.getMessage());
 		} finally {
@@ -1187,19 +1207,19 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public void cancelTask(ProIns proIns, String processKey) throws Exception {
-		// 当前用户转成域账号
-		String userAccount = this
-				.changeToDomainAccount(proIns.getUserAccount());
-
-		// 权限判断
-		if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-			throw new Exception("您没有权限撤销任务！");
-		}
-
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
+
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+
+			// 权限判断
+			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
+				throw new ProcessException("您没有权限撤销任务！");
+			}
 
 			// 获取第一人工节点信息
 			HistoricTaskInstance hiTask = activitiService.getFirstTask(proIns
@@ -1208,9 +1228,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
 
-			String remark = "撤回流程&nbsp;&nbsp;&nbsp;&nbsp;" + proIns.getRemark()
-					+ "&nbsp;&nbsp;&nbsp;&nbsp;备注:" + currentUser + "将任务撤回至["
-					+ hiTask.getName() + "]";
+			String remark = "撤回流程&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ proIns.getDealReason() + "&nbsp;&nbsp;&nbsp;&nbsp;备注:"
+					+ currentUser + "将任务撤回至[" + hiTask.getName() + "]";
 
 			if (!isSignTask(proIns.getNowtaskId())) {
 				// 先签收
@@ -1228,6 +1248,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					hiTask.getTaskDefinitionKey(), hiTask.getName());
 
 			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new Exception("撤销任务出错:" + e.getMessage());
 		} finally {
@@ -1239,18 +1262,18 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public void rejectToPreTask(ProIns proIns, String processKey,
 			Map<String, Object> paramMap) throws Exception {
 
-		// 当前用户转成域账号
-		String userAccount = this
-				.changeToDomainAccount(proIns.getUserAccount());
-
-		// 权限判断
-		if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-			throw new Exception("您没有权限驳回任务！");
-		}
-
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+
+			// 权限判断
+			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
+				throw new ProcessException("您没有权限驳回任务！");
+			}
 
 			// 获取参数配置信息
 			getVariableMap(proIns.getActs(), paramMap);
@@ -1260,12 +1283,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
 			}
 
-			String remark = "驳回流程&nbsp;&nbsp;&nbsp;&nbsp;" + proIns.getRemark()
-					+ "&nbsp;&nbsp;&nbsp;&nbsp;备注:"
+			String remark = "驳回流程&nbsp;&nbsp;&nbsp;&nbsp;"
+					+ proIns.getDealReason() + "&nbsp;&nbsp;&nbsp;&nbsp;备注:"
 					+ activitiService.getUserInfoMap().getUserName(userAccount)
 					+ "将任务驳回至[" + proIns.getToActName() + "]";
 
-			if (StringUtil.isNotEmpty(proIns.getRemark())) {
+			if (StringUtil.isNotEmpty(proIns.getDealReason())) {
 				activitiService.getTaskService().rejecttoTask(
 						proIns.getNowtaskId(), paramMap, remark,
 						proIns.getRejectToActId(),
@@ -1284,6 +1307,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					.getRejectToActId(), proIns.getToActName());
 
 			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		} finally {
@@ -1294,10 +1320,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public int getMyselfTaskNum(String currentUser, String processKey)
 			throws Exception {
-		// 当前用户转成域账号
-		currentUser = this.changeToDomainAccount(currentUser);
 
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+
+			// 当前用户转成域账号
+			currentUser = this.changeToDomainAccount(currentUser);
 
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("assignee", currentUser);
@@ -1307,19 +1336,26 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			int taskNum = executor.queryObjectBean(int.class,
 					"countTaskNum_wf", params);
 
+			tm.commit();
 			return taskNum;
+
 		} catch (Exception e) {
 			throw new Exception("获取用户待办任务总数出错：" + e.getMessage());
+		} finally {
+			tm.release();
 		}
 	}
 
 	@Override
 	public int getEntrustTaskNum(String currentUser, String processKey)
 			throws Exception {
-		// 当前用户转成域账号
-		currentUser = this.changeToDomainAccount(currentUser);
 
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+
+			// 当前用户转成域账号
+			currentUser = this.changeToDomainAccount(currentUser);
 
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("assignee", currentUser);
@@ -1338,9 +1374,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						"countEntrustTaskNum_wf", params);
 			}
 
+			tm.commit();
 			return entrustTaskNum;
 		} catch (Exception e) {
 			throw new Exception("获取用户委托任务总数出错：" + e.getMessage());
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -1348,19 +1387,20 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public ListInfo getMyselfTaskList(String currentUser, String processKey,
 			long offset, int pagesize) throws Exception {
 
-		// 当前用户转成域账号
-		currentUser = this.changeToDomainAccount(currentUser);
-
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+
+			// 当前用户转成域账号
+			currentUser = this.changeToDomainAccount(currentUser);
 
 			Map<String, Object> params = new HashMap<String, Object>();
 			params.put("assignee", currentUser);
 			params.put("processKey", processKey);
 
 			ListInfo listInfo = executor.queryListInfoBean(TaskInfo.class,
-					"getMyselfTask_wf", offset, pagesize, params);
+					"getMyselfTask_wf", offset, pagesize, "countTaskNum_wf",
+					params);
 
 			List<TaskInfo> taskList = listInfo.getDatas();
 
@@ -1396,12 +1436,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public ListInfo getEntrustTaskList(String currentUser, String processKey,
 			long offset, int pagesize) throws Exception {
-		// 当前用户转成域账号
-		currentUser = this.changeToDomainAccount(currentUser);
 
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+
+			// 当前用户转成域账号
+			currentUser = this.changeToDomainAccount(currentUser);
 
 			// 根据当前用户获取委托关系列表数据
 			List<WfEntrust> entrustRelationList = executor.queryList(
@@ -1516,21 +1557,49 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
-		return executor.queryObject(TaskInfo.class, "getTaskInfoByTaskId_wf",
-				taskId);
+	public void approveWorkFlowByBussinesskey(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			String userAccount = this.changeToDomainAccount(proIns
+					.getUserAccount());
+
+			TaskInfo nowTask = getCurrentNodeInfoByBussinessKey(
+					proIns.getBusinessKey(), userAccount);
+
+			if (nowTask == null) {
+				throw new ProcessException("任务不存在或您没有权限处理当前任务");
+			} else {
+				proIns.setNowtaskId(nowTask.getTaskId());
+			}
+
+			approveWorkFlow(proIns, processKey, paramMap);
+
+			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			tm.release();
+		}
+
 	}
 
 	@Override
 	public ModelMap toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model) throws Exception {
 
-		// 当前用户转成域账号
-		String userAccount = this.changeToDomainAccount(userId);
-
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+
+			// 当前用户转成域账号
+			String userAccount = this.changeToDomainAccount(userId);
 
 			// 根据bussinessKey获取流程实例
 			ProcessInst inst = executor.queryObject(ProcessInst.class,
@@ -1596,16 +1665,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 				// 当前用户是流程发起人
 				if (inst.getSTART_USER_ID_().equals(userAccount)) {
-					// // 获取流程第一个任务节点
-					// HistoricTaskInstance hiTask = activitiService
-					// .getFirstTask(inst.getPROC_INST_ID_());
-					// TaskInfo taskInfo = getCurrentNodeInfo(hiTask.getId());
-					// task.setIsRecall(taskInfo.getIsRecall());
-					// task.setIsCancel(taskInfo.getIsCancel());
-					// task.setIsDiscard(taskInfo.getIsDiscard());
 
-					model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
-							WorkflowConstants.PRO_PAGESTATE_APPLYER);
+					if (authorFlag) {
+						// 当前审批人或者管理员查看
+						model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+								WorkflowConstants.PRO_PAGESTATE_APPROVE);
+					} else {
+						// 当前用户
+						model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+								WorkflowConstants.PRO_PAGESTATE_APPLYER);
+					}
 
 				} else {
 
@@ -1631,6 +1700,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			return model;
 		} catch (Exception e) {
 			throw new Exception("查看跳转查询数据出错:" + e.getMessage());
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -1639,11 +1710,108 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			Map<String, Object> map, String destinationTaskKey,
 			String completeReason) throws Exception {
 
-		// 当前用户转成域账号
-		currentUser = this.changeToDomainAccount(currentUser);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
 
-		activitiService.completeTaskWithLocalVariablesReason(nowTaskId,
-				currentUser, map, destinationTaskKey, completeReason);
+			// 当前用户转成域账号
+			currentUser = this.changeToDomainAccount(currentUser);
+
+			activitiService.completeTaskWithLocalVariablesReason(nowTaskId,
+					currentUser, map, destinationTaskKey, completeReason);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new Exception("跳转到任意节点出错:" + e.getMessage());
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
+		return executor.queryObject(TaskInfo.class, "getTaskInfoByTaskId_wf",
+				taskId);
+	}
+
+	@Override
+	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
+			String userId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 当前用户转成域账号
+			userId = this.changeToDomainAccount(userId);
+
+			// 根据bussinessKey获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByBusinesskey_wf", bussinesskey);
+
+			if (inst != null) {
+
+				// 根据流程实例ID获取运行任务
+				List<Task> taskList = activitiService
+						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+
+				String nowTaskId = "";
+
+				for (int i = 0; i < taskList.size(); i++) {
+					Task task = taskList.get(i);
+
+					// 判断用户是不是当前审批人
+					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+							userId)) {
+
+						nowTaskId = task.getId();
+						break;
+					}
+				}
+
+				// 当前任务节点信息
+				TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
+
+				tm.commit();
+
+				return taskInfo;
+			} else {
+
+				tm.commit();
+				return null;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("根据业务key获取当前任务节点信息出错:" + e.getMessage());
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public boolean isStartProcByBussinesskey(String bussinesskey)
+			throws Exception {
+
+		ProcessInst inst = executor.queryObject(ProcessInst.class,
+				"getProcessByBusinesskey_wf", bussinesskey);
+
+		if (inst != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isStartProcByProcessId(String processId) throws Exception {
+		ProcessInst inst = executor.queryObject(ProcessInst.class,
+				"getProcessByProcessId_wf", processId);
+
+		if (inst != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

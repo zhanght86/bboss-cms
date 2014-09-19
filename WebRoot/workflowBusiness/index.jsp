@@ -5,21 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>业务系统演示首页</title>
-<%@ include file="/workflowBusiness/css/css.jsp"%>
+<%@ include file="/common/jsp/common-css-lhgdialog.jsp"%>
+<script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/html3/js/tab.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	
+	initliteRequiredStar('1,3,4');
 });
 
-function check1() {
-	$("#content").load("<%=request.getContextPath()%>/workflowBusiness/business/toworkflowMain.page");
-	$("#btnDiv").show();
-}
-
-function check2() {
-	$("#content").load("<%=request.getContextPath()%>/workflowBusiness/business/toDealTask.page");
-	$("#btnDiv").show();
+function checkPage(){
+	checkoutPageElement();
 }
 
 function submitFormData(){
@@ -41,33 +36,32 @@ function submitFormData(){
 
 </script>
 </head>
+<body >
 
-<body class="easyui-layout">
-	
-	<div region="west" split="true" title="演示项目" style="width: 220px; padding1: 1px; overflow: hidden;">
-		<div class="easyui-accordion" fit="true" border="false" align="center">
-		
-			<a href="javaScript:check1();">申请流程页面显示</a>
-			<br/>
-			<a href="javaScript:check2();">处理任务</a>
-			<br/>
-			
-			
-		</div>
-	</div>
-	
-	<div region="center" style="overflow: hidden;" >
-		<form method="post" id="meetingOrderForm" 
-		action="${pageContext.request.contextPath}/workflowBusiness/business/startProc.page">
-		
-		    <div id="content"></div>
-		
-			<div id="btnDiv" class="btnarea" style="display:none;">
-				<a href="javascript:void(0)" class="bt_2" id="btn" onclick="submitFormData()"><span>提交</span></a>
-			</div>	
-			
-		</form>
-	</div>
-		
+<div class="main_contain">
+  <div class="u_tab_div2" id="tab">
+    <div class="tab1"><span class="u_tab_hover"><a href="#">流程</a></span></div>
+    <div class="tab2"><span class="u_tab"><a href="#">内容</a></span></div>
+  </div>
+  
+  <div id="tabCon01">
+    <ul class="ul_news">
+    	<%@ include file="workflowMain.jsp"%>
+    	
+    </ul>
+    <ul class="ul_news" style="display:none;">
+    	<div class="tickets"></div>
+    </ul>
+    
+   	<div class="bottom_area"></div>
+    <div class="submit_operation"> 
+	    <a href="#" class="bt_submit" onclick="checkPage()"><span>确定</span></a> 
+	    <a href="#" class="bt_cancel"><span>取消</span></a> 
+    </div>
+    
+   </div>
+</div>
+
 </body>
+<script type="text/javascript">tabAction("tab","tabCon01");</script>
 </html>

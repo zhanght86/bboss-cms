@@ -123,7 +123,7 @@ HttpSession session = request.getSession(false);
 								+ subsystem;
 				 }else if (loginPath == null || loginPath.equals("3")) {
 						successRedirect = "sanydesktop/index.page";
-				}  else if (loginPath == null || loginPath.equals("5")) {
+				}  else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
@@ -155,7 +155,7 @@ HttpSession session = request.getSession(false);
 									+ subsystem;
 					 } else if (loginPath == null || loginPath.equals("3")) {
 							successRedirect = "sanydesktop/index.page";
-					}   else if (loginPath == null || loginPath.equals("5")) {
+					}   else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
@@ -176,7 +176,7 @@ HttpSession session = request.getSession(false);
 										+ subsystem;
 						 } else if (loginPath == null || loginPath.equals("3")) {
 								successRedirect = "sanydesktop/index.page";
-						}   else if (loginPath == null || loginPath.equals("5")) {
+						}   else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				} else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
@@ -248,7 +248,7 @@ HttpSession session = request.getSession(false);
 							}else if (loginPath == null || loginPath.equals("3")) {
 								successRedirect = "sanydesktop/index.page";
 							}
-							  else if (loginPath == null || loginPath.equals("5")) {
+							  else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				}  else if (loginPath.equals("2")) {
 								successRedirect = "desktop/desktop1.page";
@@ -281,7 +281,7 @@ HttpSession session = request.getSession(false);
 								+ subsystem;
 					}else if (loginPath == null || loginPath.equals("3")) {
 						successRedirect = "sanydesktop/index.page";
-					}  else if (loginPath == null || loginPath.equals("5")) {
+					}  else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				} else  if (loginPath.equals("2")) {
 						successRedirect = "desktop/desktop1.page";
@@ -360,7 +360,7 @@ HttpSession session = request.getSession(false);
 									+ subsystem;
 					 } else if (loginPath == null || loginPath.equals("3")) {
 							successRedirect = "sanydesktop/index.page";
-					}   else if (loginPath == null || loginPath.equals("5")) {
+					}   else if (loginPath == null || loginPath.equals("5") || loginPath.equals("6")) {
 						successRedirect = "sanydesktop/indexcommon.page";
 				}  else if (loginPath.equals("2")) {
 							successRedirect = "desktop/desktop1.page";
@@ -720,6 +720,11 @@ DD_belatedPNG.fix('div');
 						<%if(loginStyle == null||loginStyle.equals("5")){%>
 						selected <%}%>>
 						common
+					</option>
+					<option value="6"
+						<%if(loginStyle != null&&loginStyle.equals("6")){%>
+						selected <%}%>>
+						common-fixwidth
 					</option>
 					<option value="3"
 							<%if(loginStyle != null&&loginStyle.equals("3")){%>

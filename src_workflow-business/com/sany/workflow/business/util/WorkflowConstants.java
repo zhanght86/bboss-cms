@@ -57,7 +57,9 @@ public class WorkflowConstants {
 	/**页面状态   审批中或暂存中其他人查看状态*/
 	public static final Integer PRO_PAGESTATE_SHOW= 5; 
 	/**页面状态   流程结束后查看状态*/
-	public static final Integer PRO_PAGESTATE_ENDSHOW= 6;        
+	public static final Integer PRO_PAGESTATE_ENDSHOW= 6;     
+	/**页面状态    审批中提交人与处理人一致权限累加查看状态*/
+	public static final Integer PRO_PAGESTATE_APPLYER_AND_APPROVE= 7;   
 	
 	/**流程操作类型   流程通过*/
 	public static final String PRO_OPE_TYPE_PASS = "pass";	

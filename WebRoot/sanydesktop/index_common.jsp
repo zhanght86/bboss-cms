@@ -18,7 +18,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>三一人力资源管理系统--首页</title>
 <link href="../html3/stylesheet/basic.css" rel="stylesheet" type="text/css" />
+
 <link href="../html3/stylesheet/menu.css" rel="stylesheet" type="text/css" />
+
 <pg:true  requestKey="showboot" >
 <link href="../html3/stylesheet/top.css" rel="stylesheet" type="text/css" />
 </pg:true>
@@ -31,7 +33,9 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/menubase.js?userName=<%= appName%>&appName =<%=userName %>&selecemenu=${selectedmenuid}"></script>
 <script type="text/javascript" src="../html3/js/menu.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
-
+<pg:equal sessionKey="LOGINSTYLE_CACHE_KEY" value="6">
+<link href="../html3/stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
+</pg:equal>
 <script type="text/javascript">
 $(document).ready(function(){
 	
@@ -49,7 +53,13 @@ $(document).ready(function(){
 	if($(".footer").css("height")!=undefined){
 		 footerHead=$(".footer").css("height").substring(0,$(".footer").css("height").length-2);
 	}
-	var frameHead=screenHeight -topHead -menuHead -footerHead -5;
+	<pg:true  requestKey="showboot" >
+	var frameHead=screenHeight -topHead -menuHead -footerHead-5;
+	</pg:true>
+	<pg:false  requestKey="showboot" >
+	var frameHead=screenHeight -topHead -menuHead -footerHead;
+	</pg:false>
+	
 	$("#mainFrame").css("height",frameHead+"px");
 	
 });
@@ -69,6 +79,8 @@ function logout()
 <div id="wrap">
 <div  class="top">
   <div class="logo_top" >三一集团人力资源管理系统</div>
+      <div class="right_info">审批事项：<a href="#" >10</a>条 | 
+      通知：<a href="#" >2</a>条 | </div>
   <div class="info">
     <ul>
       <li class="info-i has-pulldown"> <em class="f-icon pull-arrow"></em> 
@@ -76,16 +88,14 @@ function logout()
 		
         <div class="pulldown user-info"> <em class="arrow"></em>
           <div class="content"> <span class="li"><a href="">个人资料</a></span> <span class="li"><a href="">修改密码</a></span> <span class="li"><a href="">快捷修改</a></span> 
-          <pg:false actual="${fromwebseal}">
+          
+           </div>
+        </div>
+      </li> <li class="info-i"><pg:false actual="${fromwebseal}">
 			<pg:empty actual="<%=specialuser %>">
 				<span class="li"><a href="javascript:;" onclick="logout()" id="signout"><pg:message code="sany.pdp.module.logout"/></a></span>
 			</pg:empty>
-		</pg:false>
-           </div>
-        </div>
-      </li>
-      <li class="info-i">审批事项：<a href="#">10</a>条</li>
-      <li class="info-i">通知：<a href="#">2</a>条</li>
+		</pg:false></li>
       <li class="info-i no-separate default-text has-pulldown"> <em class="f-icon pull-arrow"></em> <span class="more" hideFocus="hideFocus">更多</span>
         <div class="pulldown more-info"> <em class="arrow"></em>
           <div class="content"> <span class="li"><a href="">版本更新</a></span> <span class="li"><a href="">帮助中心</a></span> <span class="li"><a href="">问题反馈</a></span> <span class="li"><a href="">联系方式</a></span> <span class="li"><a href="">权利声明</a></span> </div>

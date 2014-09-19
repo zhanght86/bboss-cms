@@ -4,7 +4,8 @@
  */
 package com.sany.test;
 
-import java.io.File;
+import java.lang.reflect.Constructor;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,7 +20,9 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.frameworkset.util.ClassUtil;
 
+import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.annotation.TransactionType;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.sany.workflow.entity.ProcessDef;
@@ -37,12 +40,24 @@ public class TestSrv {
 	{
 		String dirq = "F:\\workspace\\SanyIPP\\WebRoot\\cms\\siteResource\\sanyIPP\\_template\\reportDetail.html";
 		String dirb = "F:\\workspace\\SanyIPP\\WebRoot\\cms\\siteResource\\sanyIPP\\_template\\reportsList.html";
-		
+		javax.management.modelmbean.ModelMBeanNotificationBroadcaster s;
 		java.io.File f = new java.io.File(dirq);
 		java.io.File f1 = new java.io.File(dirb);
 		System.out.println(f.lastModified() );
 		System.out.println(f1.lastModified() );
 		System.out.println(f.lastModified() == f1.lastModified());
+	}
+	
+
+	@org.junit.Test
+	public void aatest() throws SQLException
+	{
+//		for(int i=6; i <100; i ++)
+//		{
+//			SQLExecutor.insert("insert into Accounts values ( ? , ?, 10000 )", "account"+i,"owner"+i);
+//		}
+		
+		SQLExecutor.insert("insert into Accounts values ( ? , ?, 10000 )", "account100","owner100");
 	}
     /**
      *
@@ -450,5 +465,22 @@ public class TestSrv {
                 ex.printStackTrace();
             }
         }
+    }
+    @org.junit.Test
+    public void tesetch()
+    {
+    	try {
+    		
+			Class clazz = Class.forName("com.frameworkset.platform.security.authentication.CheckCallBack$Attribute");
+			Class clazz1 = Class.forName("java.util.Collections$SynchronizedSet");
+			
+			Constructor[] cc = clazz1.getDeclaredConstructors();
+			cc = ClassUtil.getClassInfo(clazz1).getConstructions();
+			System.out.println(cc);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	//System.out.println(System.getProperties());
     }
 }

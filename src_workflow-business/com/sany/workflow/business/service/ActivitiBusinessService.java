@@ -24,7 +24,7 @@ import com.sany.workflow.business.entity.TaskInfo;
 public interface ActivitiBusinessService {
 
 	/**
-	 * 页面状态权限判断
+	 * 处理任务权限判断(排除管理员判断)
 	 * 
 	 * @param taskId
 	 *            任务id
@@ -36,11 +36,11 @@ public interface ActivitiBusinessService {
 	 *            当前用户
 	 * @return 2014年8月20日
 	 */
-	public void judgeAuthorityToPageState(String taskId, String processKey,
-			String businessKey, String userAccount, ModelMap model);
+	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
+			String userAccount);
 
 	/**
-	 * 处理任务权限判断
+	 * 处理任务权限判断(考虑管理员判断)
 	 * 
 	 * @param taskId
 	 *            任务id
@@ -351,7 +351,7 @@ public interface ActivitiBusinessService {
 			throws Exception;
 
 	/**
-	 * 审批处理任务
+	 * 审批处理任务(任务id)
 	 * 
 	 * @param proIns
 	 *            流程实例参数类
@@ -366,7 +366,22 @@ public interface ActivitiBusinessService {
 			Map<String, Object> paramMap) throws Exception;
 
 	/**
-	 * 获取当前节点任务信息
+	 * 审批处理任务(业务key)
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            节点配置参数
+	 * @throws Exception
+	 *             2014年8月29日
+	 */
+	public void approveWorkFlowByBussinesskey(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 获取当前节点任务信息,根据任务id
 	 * 
 	 * @param taskId
 	 *            任务id
@@ -374,7 +389,21 @@ public interface ActivitiBusinessService {
 	 *             2014年8月29日
 	 */
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
-	
+
+	/**
+	 * 获取当前节点任务信息,根据业务key
+	 * 
+	 * @param bussinesskey
+	 *            业务key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @return
+	 * @throws Exception
+	 *             2014年9月18日
+	 */
+	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
+			String userId) throws Exception;
+
 	/**
 	 * 跳转到任意节点
 	 * 
@@ -395,5 +424,38 @@ public interface ActivitiBusinessService {
 			Map<String, Object> map, String destinationTaskKey,
 			String completeReason) throws Exception;
 
+	/**
+	 * 判断任务是否被签收
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @return
+	 * @throws Exception
+	 *             2014年9月18日
+	 */
+	public boolean isSignTask(String taskId) throws Exception;
+
+	/**
+	 * 根据业务KEY判断流程是否开启
+	 * 
+	 * @param bussinesskey
+	 *            业务key
+	 * @return true 开启 false 没开启
+	 * @throws Exception
+	 *             2014年9月18日
+	 */
+	public boolean isStartProcByBussinesskey(String bussinesskey)
+			throws Exception;
+
+	/**
+	 * 根据流程实例id判断流程是否开启
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @return true 开启 false 没开启
+	 * @throws Exception
+	 *             2014年9月18日
+	 */
+	public boolean isStartProcByProcessId(String processId) throws Exception;
 
 }

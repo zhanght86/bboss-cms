@@ -12,5 +12,5 @@
 <script language="javascript" type="text/javascript"
 src="${pageContext.request.contextPath}/include/datepicker/My97DatePicker/WdatePicker.js?lang=<pg:locale/>"></script>
 <script language="javascript" type="text/javascript"
-src="${pageContext.request.contextPath}/html/js/collapsible.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/commontool.js"></script>
+src="${pageContext.request.contextPath}/include/js/collapsible.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/commontool.js"></script>

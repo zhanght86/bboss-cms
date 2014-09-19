@@ -1,7 +1,7 @@
-#menubar {background-color:#2a77d4 ;height: 38px; font-family:"Microsoft YaHei",Arial, Helvetica, sans-serif; clear:both;}
+#menubar {background-color:#2a77d4;height: 38px; font-family:"Microsoft YaHei",Arial, Helvetica, sans-serif; clear:both;}
 #menubar ul.menus li {display: list-item;float: left;line-height:38px;height:38px;border-left:1px solid #488fe7; border-right:1px solid #205299;}
-#menubar ul.menus li a {width:105px;text-align:center;display:block;font-size:15px;color:#fff;line-height:38px;}
-#menubar ul.menus li a:hover{display: block;color: #fff; background-color:#076beb; font-weight:bold;}
+#menubar ul.menus li a {min-width:80px;padding:0 15px;text-align:center;display:block;font-size:15px;color:#fff;line-height:38px;}
+#menubar ul.menus li a:hover{display: block;color: #fff; background-color:#076beb; font-weight:bold; text-decoration:none;}
 #menubar  ul.menus .select {font-weight: bold;background-color:#1264c6;}
 #menubar  ul.menus .select a{ color:#fff;}
 #menubar ul.menus li a.fcurrent {font-weight: bold;color: #fff;background-color:#076beb;}

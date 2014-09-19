@@ -73,7 +73,7 @@ public class DesktopController {
 		{
 			if(loginstyle.equals("3"))
 				return _index(sany_menupath,sany_selecturl,request,model,0);
-			else if(loginstyle.equals("5"))
+			else if(loginstyle.equals("5") || loginstyle.equals("6"))
 				return _index(sany_menupath,sany_selecturl,request,model,2);
 				
 		}
@@ -96,7 +96,7 @@ public class DesktopController {
 		{
 			if(loginstyle.equals("3"))
 				return _index(sany_menupath,sany_selecturl,request,model,0);
-			else if(loginstyle.equals("5"))
+			else if(loginstyle.equals("5")||loginstyle.equals("6"))
 				return _index(sany_menupath,sany_selecturl,request,model,2);
 				
 		}

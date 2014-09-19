@@ -20,12 +20,16 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
+<pg:notin sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet" type="text/css" />
+</pg:notin>
+<pg:in sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
+<link href="${pageContext.request.contextPath}/html3/stylesheet/menu_left.css" rel="stylesheet" type="text/css" />
+</pg:in>
 <style>
 html,body{ height:100%;}
 </style>
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/menubase.js?userName=<%= appName%>&appName =<%=userName %>"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/menu.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/log.js"></script>
 <script>
 $(document).ready(function(){ 
@@ -45,16 +49,22 @@ $(document).ready(function(){
 </head>
 <body>
   <div class="main_contain" style="height:100%">
-    <table width="100%"  height="99%" border="0" cellpadding="0" cellspacing="0" style="padding-top:6px;">
+    <table width="100%"  height="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td width="170" valign="top" id="Tbasic2" height="100%">
         <sany:leftmenu target="left_rightFrame"/>        
         </td>
-        <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
+        <pg:notin sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
+         <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
             <tr>
               <td valign="middle"><a href="javascript:togglevisible('basic2')"><img src="${pageContext.request.contextPath}/html/images/expand.gif"  name="Ibasic2"/></a></td>
             </tr>
           </table></td>
+        </pg:notin>
+        <pg:in sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">  
+       <td width="9" class="more2" onclick="javascript:togglevisible('basic2')">
+   <div id="Ibasic2"><img src="../html3/images/expand.png"  name="Ibasic2"/></div></td>
+        </pg:in>      
         <td valign="top" height="100%">
         <iframe src="${selectUrl }" name="left_rightFrame" id="left_rightFrame" frameborder="0" style="width:100%; height:99% "></iframe>        
         </td>
@@ -74,13 +84,13 @@ if (this.getobj("T"+treepart).style.visibility == "hidden")
 {
 this.getobj("T"+treepart).style.position="";
 this.getobj("T"+treepart).style.visibility="";
-document["I"+treepart].src="${pageContext.request.contextPath}/html/images/expand.gif";
+document["I"+treepart].src="../html3/images/expand.png";
 }
 else
 {
 this.getobj("T"+treepart).style.position="absolute";
 this.getobj("T"+treepart).style.visibility="hidden";
-document["I"+treepart].src="${pageContext.request.contextPath}/html/images/shrink.gif";
+document["I"+treepart].src="../html3/images/shrink.png";
 }
 }
 </script>

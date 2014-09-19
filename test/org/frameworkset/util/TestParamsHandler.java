@@ -77,6 +77,19 @@ public class TestParamsHandler {
 		
 	}
 	
+	@Test
+	public void testGetAppBlobParams(){
+		String paramid = "323a023a-8516-47c3-9dbd-afea40c23144";
+		String paramType = "app";
+		Params p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParams(paramid, paramType);
+		
+		System.out.println("asdfasdf = " + p.getAttributeString("asdfasdf"));
+		System.out.println("asdf = " + p.getAttributeString("asdf"));
+		
+		
+		
+	}
+	
 	public static class TestBlob implements java.io.Serializable{
 		/**
 		 * 

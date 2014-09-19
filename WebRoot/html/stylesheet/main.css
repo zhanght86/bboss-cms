@@ -73,6 +73,7 @@ img{ border:none;}
 .menu ul li a:hover{ color:#2C7BE2;
 font-weight:bold;}
 
+
 .table1 {
 	border-top: 1px solid #cbc8c8;
 	border-left: 1px solid #cbc8c8;
@@ -104,7 +105,7 @@ font-weight:bold;}
 .table1 a { padding:auto 3px;
 }
 
-.table2 {	border-top: 1px solid #cbc8c8;
+.table2 {border-top: 1px solid #cbc8c8;
 	border-left: 1px solid #cbc8c8;
 }
 
@@ -129,7 +130,10 @@ font-weight:bold;}
 }
 
 
-.pages {
+
+
+
+ .pages {
 	text-align: right;
 	margin-top: 5px;
 }
@@ -328,6 +332,7 @@ a.bt_1:hover span,a.bt_2:hover span,a.handle_bt:hover span{background-position:b
 	padding-left: 105px;
 }
 /*==============================she=========================*/
+
 
 .right_contain .search_box .left_box2 {
 	background-image: url(../images/left_search_2.jpg);

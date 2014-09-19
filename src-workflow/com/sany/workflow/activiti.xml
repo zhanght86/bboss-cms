@@ -2428,10 +2428,10 @@
 	<!-- 删除节点控制信息  gw_tanx -->
 	<property name="deleteNodeWorktime_wf">
 		<![CDATA[
-			DELETE FROM TD_WF_NODE_WORKTIME A
-				 WHERE A.PROCESS_KEY = #[PROCESS_KEY]
-				   AND A.PROCESS_ID = #[PROCESS_ID]
-				   AND A.NODE_KEY = #[NODE_KEY]
+			DELETE FROM TD_WF_NODE_WORKTIME
+				 WHERE PROCESS_KEY = #[PROCESS_KEY]
+				   AND PROCESS_ID = #[PROCESS_ID]
+				   AND NODE_KEY = #[NODE_KEY]
 		]]>
 	</property>
 	

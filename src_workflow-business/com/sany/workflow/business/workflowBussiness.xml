@@ -562,7 +562,7 @@
 		]]>
 	</property>
 	
-	<!-- 获取当前任务信息  -->
+	<!-- 根据任务id获取当前任务信息  -->
 	<property name="getTaskInfoByTaskId_wf">
 		<![CDATA[
 			SELECT A.ID_           AS TASKID,
@@ -570,16 +570,37 @@
 			       A.PROC_INST_ID_ AS INSTANCEID,
 			       A.PROC_DEF_ID_  AS DEFID,
 			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
-			       A.START_TIME_   AS CREATETIME,
+			       A.CREATE_TIME_  AS CREATETIME,
 			       C.IS_RECALL     AS ISRECALL,
 			       C.IS_DISCARD    AS ISDISCARD,
 			       C.IS_CANCEL     AS ISCANCEL
 			
-			  FROM ACT_HI_TASKINST A
-			  LEFT JOIN ACT_RU_EXECUTION B ON A.Id_ = B.ID_
+			  FROM ACT_RU_TASK A
+			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
 			  left join TD_WF_NODE_WORKTIME c on a.proc_inst_id_ = c.process_id
 			                                 and a.task_def_key_ = c.node_key
 			 WHERE A.Id_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据业务key获取当前任务信息  -->
+	<property name="getTaskInfoByBussinesskey_wf">
+		<![CDATA[
+			SELECT A.ID_           AS TASKID,
+			       B.BUSINESS_KEY_ AS BUSINESSKEY,
+			       A.PROC_INST_ID_ AS INSTANCEID,
+			       A.PROC_DEF_ID_  AS DEFID,
+			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
+			       A.CREATE_TIME_  AS CREATETIME,
+			       C.IS_RECALL     AS ISRECALL,
+			       C.IS_DISCARD    AS ISDISCARD,
+			       C.IS_CANCEL     AS ISCANCEL
+			
+			  FROM ACT_RU_TASK A
+			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  LEFT JOIN TD_WF_NODE_WORKTIME C ON A.PROC_INST_ID_ = C.PROCESS_ID
+			                                 AND A.TASK_DEF_KEY_ = C.NODE_KEY
+			 WHERE A.PROC_INST_ID_=?
 		]]>
 	</property>
 	
@@ -634,6 +655,25 @@
 			  FROM ACT_HI_PROCINST A
 			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
 			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据流程实例id获取流程实例  gw_tanx -->
+	<property name="getProcessByProcessId_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
 	

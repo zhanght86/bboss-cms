@@ -3,17 +3,39 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>三一集团费用及商旅管理系统</title>
-<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+
 <script type="text/javascript" src="js/jquery-1.5.2.min.js"></script>
-<script language="javascript" type="text/javascript" src="js/blue_WdatePicker.js"></script>
+<script language="javascript" type="text/javascript"  src="js/WdatePicker.js"></script>
 <script type="text/javascript" src="js/commontool.js"></script>
 <script type="text/javascript" src="js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<link rel="stylesheet" type="text/css" href="stylesheet/select/jquery.multiselect.css" />
+<link rel="stylesheet" type="text/css" href="stylesheet/select/prettify.css" />
+<!--<link rel="stylesheet" type="text/css" href="styleSheet/jquery-ui.css" />-->
+<link rel="stylesheet" type="text/css" href="stylesheet/select/style.css" />
+<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.multiselect.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#addButton").click(function(){
 		 $.dialog({ id:'iframeNewId', title:'新增',width:700,height:150, content:'url:../html/content.html'});
 	})	
 })
+</script>
+<script type="text/javascript">	
+$(function(){
+//jquery ui 的动画效果有   
+//'blind', 'bounce', 'clip', 'drop', 'explode', 'fold', 'highlight', 'puff', 'pulsate', 'scale', 'shake', 'size', 'slide', 'transfer'.
+	$("#s1").multiselect({
+		selectedList: 3,
+		show: ["blind", 200],
+		hide: ["blind", 200]
+
+		
+	});
+	
+});
 </script>
 </head>
 <body>
@@ -33,15 +55,21 @@ $(document).ready(function(){
 	            <th>单号：</th>
 	            <td><input name="textfield4" type="text" value="" class="w120"  /></td>
 	            <th>核算体系：</th>
-	            <td><select name="select3" class="select1">
-	              <option></option>
-	              <option>公共核算体系</option>
-	              <option>三一集团(9999)</option>
-	              </select></td>
+	            <td>
+					<select name="example-list" multiple="multiple" style="width:125px" id="s1">
+		             <option>公共核算体系</option>
+	                 <option>三一集团</option>
+		             <option value="option3">澳大利亚</option>
+		             <option value="option4">日本</option>
+		             <option value="option5">新西兰</option>
+		             <option value="option6">尼日利亚</option>
+		            </select>
+				</td>
 	            <th>提单日期：</th>
-	            <td><input class="Wdate" type="text" onclick="WdatePicker({isShowToday:true})" />
--
-<input class="Wdate" type="text" onclick="WdatePicker()" /></td>
+	            <td>
+			   <input class="Wdate" type="text" onClick="WdatePicker()">
+                  -
+                <input class="Wdate" type="text" onclick="WdatePicker()" /></td>
 	            <td></td>
               </tr>
 	          <tr>
@@ -205,54 +233,7 @@ $(document).ready(function(){
 	    <td>单据草稿</td>
 	    <td><a href="#">删除</a></td>
       </tr>
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td >&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_right">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-      </tr>
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td >&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_right">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-      </tr>
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td >&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_right">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-      </tr>
-	  <tr>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_left">&nbsp;</td>
-	    <td >&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td class="td_right">&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-      </tr>
+	 
     </table>
     </div>
 	<div class="pages"><span class="pages1">一页显示

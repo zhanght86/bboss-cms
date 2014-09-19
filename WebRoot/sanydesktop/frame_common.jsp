@@ -1,7 +1,5 @@
 <%@ page language="java" session="false"  import="java.util.*" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ taglib uri="/WEB-INF/sany-taglib.tld" prefix="sany"%>
-<%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
+<%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.authenticate.LoginUtil"%>
 <%@page import="com.frameworkset.platform.framework.MenuHelper"%>
 <%@page import="com.frameworkset.platform.framework.ModuleQueue"%>
@@ -13,20 +11,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="../html3/stylesheet/index.css" rel="stylesheet" type="text/css" />
-<link href="../html3/stylesheet/basic.css" rel="stylesheet" type="text/css" />
 
+<%@ include file="/common/jsp/common-css-lhgdialog.jsp"%>
+<link href="../html3/hrm/stylesheet/index.css" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
-#scrollWrap{height:26px;overflow:hidden;}
-#scrollMsg li{height:26px;line-height:26px;overflow:hidden;font-size:12px;} 
+#scrollWrap{height:31px;overflow:hidden;}
+#scrollMsg li{height:31px;line-height:31px;overflow:hidden;font-size:12px;} 
 </style>
 
 <title>无标题文档</title>
 
-<script type="text/javascript" src="../html3/js/jquery-1.5.2.min.js"></script>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	var host = '<dict:itemvalue type="newsservice" itemName="sitehost" defaultItemValue="${pageContext.request.contextPath}"/>';
@@ -210,12 +206,12 @@ function openCustomMenu(){
   <div class="side_bar">
     <div class="title_right">
       <div class="more_style"><a href="#">更多></a></div>
-      <img src="../html3/images/right1.png" width="13" height="14"  align="absmiddle"/>待办事宜</div>
+      <img src="../html3/hrm/images/right1.png" width="13" height="14"  align="absmiddle"/>待办事宜</div>
     <div class="right_content">审批类：<span class="num"><a href="#">15</a></span>条<br/>
       通知类：<span class="num"><a href="#">2</a></span>条</div>
     <div class="title_right">
       <div class="more_style"><a href="#" id="more_policy" target="_blank">更多></a></div>
-      <img src="../html3/images/right2.png" width="15" height="14" align="absmiddle"/>办事指南</div>
+      <img src="../html3/hrm/images/right2.png" width="15" height="14" align="absmiddle"/>办事指南</div>
     <div class="right_content" id="policy">
     <!--   <ul>
       
@@ -229,7 +225,7 @@ function openCustomMenu(){
     </div>
     <div class="title_right">
       <div class="more_style"><a href="#" id="moreCommonDoc" target="_blank">更多></a></div>
-      <img src="../html3/images/right3.png" width="14" height="12" align="absmiddle" />常用表格下载</div>
+      <img src="../html3/hrm/images/right3.png" width="14" height="12" align="absmiddle" />常用表格下载</div>
     <div class="right_content"  id="commonDoc">
     <!-- 
       <ul>
@@ -250,7 +246,7 @@ function openCustomMenu(){
         您目前有<span class="num"><a href="#">15</a></span>条待办，<span class="num"><a href="#">2</a></span>条通知，及时处理会帮助我成长哦！ </div>
     </div>
     <div class="index_title">
-      <div class="operate_right"><img src="../html3/images/quick.png"  width="16" height="16" align="absmiddle" />
+      <div class="operate_right"><img src="../html3/hrm/images/quick.png"  width="16" height="16" align="absmiddle" />
       <a href="javascript:void(0)" onclick="openCustomMenu()" >设置快捷应用</a></div>
       快捷应用</div>
       <div id="customMenu"></div>
@@ -295,7 +291,7 @@ function openCustomMenu(){
     </div>
     -->
     <div class="index_title">
-      <div class="operate_right"><img src="../html3/images/quick2.png"  width="16" height="16" align="absmiddle" /><a href="#">查看所有申请事项</a></div>
+      <div class="operate_right"><img src="../html3/hrm/images/quick2.png"  width="16" height="16" align="absmiddle" /><a href="#">查看所有申请事项</a></div>
       我的待审申请</div>
     <div class="index_list">
       <div class="tableContainer">
@@ -373,7 +369,7 @@ function openCustomMenu(){
     </div>
     
     <div class="index_title">
-      <div class="operate_right"><img src="../html3/images/quick3.png"  width="16" height="16" align="absmiddle" /><a href="#">查看内部竞聘列表</a></div>
+      <div class="operate_right"><img src="../html3/hrm/images/quick3.png"  width="16" height="16" align="absmiddle" /><a href="#">查看内部竞聘列表</a></div>
       内部应聘</div>
     <div class="index_list">
       <div class="tableContainer">

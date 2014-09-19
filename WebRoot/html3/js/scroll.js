@@ -21,14 +21,14 @@ try{
 
 function init_srolltext(){ 
 	oScroll.scrollTop = 0; 
-	setInterval('scrollUp()', 23); 
+	setInterval('scrollUp()', 28); 
 }
 
 function scrollUp(){ 
 	if(isStoped)
 	return; 
 	curTop += 1; 
-	if(curTop == 27){ 
+	if(curTop == 32){ 
 		stopTime += 1; 
 		curTop -= 1; 
 		if(stopTime == 180){ 

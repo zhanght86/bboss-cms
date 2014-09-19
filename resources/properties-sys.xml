@@ -324,7 +324,7 @@
 	<!-- 密码是否可以重用:true 可以，false不可以 -->
 	<property name="passwordreusable" value="true"/>
 	
-	
+	<property name="destop.showboot" value="false"/>
 	
 	
 	 

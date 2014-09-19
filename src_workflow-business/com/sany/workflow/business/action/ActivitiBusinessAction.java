@@ -28,6 +28,7 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.sany.workflow.business.entity.ActNode;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.service.ActivitiBusinessService;
+import com.sany.workflow.business.util.WorkflowConstants;
 
 /**
  * @todo 工作流业务管理类
@@ -53,12 +54,12 @@ public class ActivitiBusinessAction {
 	 */
 	public String toworkflowMain(ModelMap model) throws Exception {
 		String processKey = "Mms.return";
-		List<ActNode> actList = workflowService.getWFNodeConfigInfoForOrg(
-				processKey, "10007088");// 10007088
+		List<ActNode> actList = workflowService
+				.getWFNodeConfigInfoForCommon(processKey);
 		model.addAttribute("actList", actList);
 		model.addAttribute("pagestate", "1");
 		model.addAttribute("processKey", processKey);
-		return "path:toworkflowMain";
+		return "path:toIndex";
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class ActivitiBusinessAction {
 			workflowService.getProccessPic(processKey, out);
 		}
 	}
-	
+
 	/**
 	 * 获取流程追踪图片
 	 * 
@@ -85,8 +86,8 @@ public class ActivitiBusinessAction {
 	 * @throws IOException
 	 *             2014年8月20日
 	 */
-	public void getProccessActivePic(String processInstId, HttpServletResponse response)
-			throws IOException {
+	public void getProccessActivePic(String processInstId,
+			HttpServletResponse response) throws IOException {
 		if (processInstId != null && !processInstId.equals("")) {
 			OutputStream out = response.getOutputStream();
 			workflowService.getProccessActivePic(processInstId, out);
@@ -125,10 +126,28 @@ public class ActivitiBusinessAction {
 	public String toDealTask(String processKey, String processId,
 			String taskId, String userId, ModelMap model) throws Exception {
 
-//		workflowService.toDealTask("Mms.return",
-//				"9e8648f5-2bf5-11e4-a95b-4437e6999a31",
-//				"9eaa72d6-2bf5-11e4-a95b-4437e6999a31", "admin", model);
+		workflowService.toDealTask("Mms.return",
+				"23d3e61e-3ca4-11e4-8581-4437e6999a31",
+				"de6c2f66-3ed7-11e4-9c7e-4437e6999a31", model);
+		model.addAttribute("pagestate", WorkflowConstants.PRO_PAGESTATE_APPROVE);
 
-		return "path:toworkflowMain";
+		return "path:toIndex";
+	}
+
+	/**
+	 * 跳转到处理任务页面
+	 * 
+	 * @param processKey
+	 * @param taskId
+	 * @param userId
+	 * @return 2014年8月23日
+	 */
+	public String toViewTask(String processKey, String processId,
+			String taskId, String userId, ModelMap model) throws Exception {
+
+		workflowService.toViewTask("de6c2f66-3ed7-11e4-9c7e-4437e6999a31",
+				"测试3", "wangq81", model);
+
+		return "path:toIndex";
 	}
 }

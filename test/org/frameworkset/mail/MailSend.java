@@ -20,6 +20,7 @@ import java.util.List;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
+import org.junit.Test;
 
 import com.sany.mail.SendMail;
 
@@ -53,6 +54,13 @@ public class MailSend {
 		
 		sendMail.sendHtmlMail(new String[]{"yinbp@sany.com.cn"}, "你好html", content);
 		sendMail.sendAttach(new String[]{"yinbp@sany.com.cn"}, "你好html", content,new String[]{"D:\\workspace\\SanyPDP\\resources\\org\\frameworkset\\task\\quarts-task.xml"});
+	}
+	@Test
+	public void aaa( )
+	{
+		com.sany.greatwall.WorkflowService s;
+		BaseApplicationContext context = DefaultApplicationContext.getApplicationContext("beans.xml");
+		context.getBeanObject("WSServiceClient");
 	}
 
 }
