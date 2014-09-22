@@ -90,9 +90,17 @@
 			</td>  
 	    	<td>
 	    	 <pg:empty colName="DELETE_REASON_" >
-	    	 	<pg:equal colName="ACT_TYPE_" value="startEvent">流程开启</pg:equal>
-	    	 	<pg:equal colName="ACT_TYPE_" value="endEvent">流程结束</pg:equal>
-	    		<pg:cell colName="ACT_NAME_" />
+	    	 	<pg:equal colName="IS_AUTO_COMPLETE" value="0">
+		    	 	<pg:equal colName="ACT_TYPE_" value="startEvent">流程开启</pg:equal>
+		    	 	<pg:equal colName="ACT_TYPE_" value="endEvent">流程结束</pg:equal>
+		    		<pg:cell colName="ACT_NAME_" />
+	    		</pg:equal>
+	    		<pg:equal colName="IS_AUTO_COMPLETE" value="1">
+		    		系统自动完成任务
+		    		<pg:notempty colName="AUTO_HANDLER">
+		    			<br/> 业务处理类：<pg:cell colName="AUTO_HANDLER" />
+		    		</pg:notempty>
+	    		</pg:equal>
 	    	 </pg:empty>
 	    	 <pg:notempty colName="DELETE_REASON_" >
 	    		<pg:cell colName="DELETE_REASON_" />

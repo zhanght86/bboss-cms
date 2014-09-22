@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.util.I18NUtil;
@@ -423,6 +422,8 @@ public class DesktopController {
 		if(menu != null)
 			model.addAttribute("rootmodule", menu);
 		model.addAttribute("menuHelper", menuHelper);
+		String loginstyle = AccessControl.getLoginStyle(request);
+		model.addAttribute("loginstyle", loginstyle);
 		return "path:frame";
 	}
 	public String frame(String sany_menupath,String sany_selecturl,HttpServletRequest request,ModelMap model) throws Exception
@@ -877,6 +878,8 @@ public class DesktopController {
 			model.addAttribute("rootmodule", menu);
 		model.addAttribute("isweb", isweb);
 		model.addAttribute("menuHelper", menuHelper);
+		String loginstyle = AccessControl.getLoginStyle(request);
+		model.addAttribute("loginstyle", loginstyle);
 		if(!isweb)
 			return "path:frame";
 		else

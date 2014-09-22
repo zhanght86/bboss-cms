@@ -1600,4 +1600,15 @@ public interface ActivitiService {
 	 */
 	public NodeControlParam getNodeControlParam(String processId, String taskKey)
 			throws Exception;
+	
+	/**
+	 * 判断任务是否被签收
+	 * 
+	 * @param taskId
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 *             2014年9月22日
+	 */
+	public boolean isSignTask(String taskId, String userId);
 }

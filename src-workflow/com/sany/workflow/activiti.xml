@@ -341,7 +341,9 @@
 			       A.ALERTTIME,
 			       A.OVERTIME,
 			       A.ADVANCESEND,
-       			   A.OVERTIMESEND
+       			   A.OVERTIMESEND,
+       			   T.IS_AUTO_COMPLETE,
+       			   T.AUTO_HANDLER
 			       
 			  FROM ACT_HI_ACTINST T
 			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
@@ -2886,6 +2888,14 @@
 	<property name="getRejectlog_wf">
 		<![CDATA[
 			SELECT * FROM TD_WF_REJECTLOG T WHERE T.NEWTASKID=?
+		]]>
+	</property>
+	
+	<!-- 判断是否签收  gw_tanx-->
+	<property name="isSign_wf">
+		<![CDATA[
+			SELECT A.ASSIGNEE_ FROM ACT_RU_TASK A
+		 	WHERE A.Id_ = ?
 		]]>
 	</property>
 	

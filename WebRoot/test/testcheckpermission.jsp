@@ -9,17 +9,7 @@
 	//if (!accesscontroler.checkAccess(request, response)){
 	//	return;
 	//}
-	
-	String userID = accesscontroler.getUserID();//获取用户id
-	String userName = accesscontroler.getUserName();//获取用户中文名
-	accesscontroler.getUserAttribute(userAttribute)
-	String worknumber = accesscontroler.getUserAttribute("userWorknumber");//获取用户工号
-	String fullorgjob = accesscontroler.getUserAttribute("fullorgjob");//获取用户带层级的机构岗位信息
-	String orgjob = accesscontroler.getUserAttribute("orgjob");//获取用户直属机构岗位信息
-	boolean hasaddpermission = accesscontroler.checkPermission("testid",//资源id
-																"add",//资源操作
-																"testresource"//资源类型
-																);
+	boolean hasaddpermission = accesscontroler.checkPermission("testid","add","testresource");
 	boolean hasupdatepermission = accesscontroler.checkPermission("testid","write","testresource");
 	boolean hasdeletepermission = accesscontroler.checkPermission("testid","delete","testresource");
 	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
@@ -114,31 +104,52 @@
 					
 					<tr>
 						
-						<td colspan="7">							
+						<td >							
 							<a href="http://testpdp.sany.com.cn:8080/WebRoot/sanydesktop/frame.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="frame_blank""  >session共享单点登录测试(不带top)</a>
 						</td>
-						<td colspan="7">							
+						<td >							
 							<a href="http://testpdp.sany.com.cn:8080/WebRoot/sanydesktop/index.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="top_blank""  >session共享单点登录测试(带top)</a>
 						</td>
 						
-						<td colspan="7">							
+						<td >							
+							<a href="http://test.sany.com.cn:8080/sanydesktop/indexcommon.page"  target="top_blank""  >session共享单点登录测试(无上下文)</a>
+						</td>
+						
+						<td >							
 							<a href="<%=request.getContextPath() %>/sanydesktop/index.page?sany_menupath=module::menu://sysmenu$root/sysmanager$module/sessioncontrol$item"  target="top_blank""  >session共享单点登录测试(带top，本机)</a>
 						</td>
-						<td colspan="7">							
+						<td >							
 							<a href="<%=request.getContextPath() %>test/svg/wf.html"  target="top_blank""  >wf.html</a>
 						</td>
+						
+						
+						
 						
 					</tr>
 					
 					
 						<tr>
 						
-						<td colspan="7">							
+						<td >							
 							字典标签国际化测试
 						</td>
 						
 						<td colspan="7">							
 							<dict:select type="sex" name="userSex" textValueCode="sany.pdp.common.operation.select" textNAN="-1"  extend=" onclick='alert(1) '"/>
+						</td>
+						
+					</tr>
+					
+					<tr>
+						
+						<td >							
+							in标签类型匹配测试 int i = 10; in 1,2,10,20
+							<%request.setAttribute("i", 10); %>
+						</td>
+						
+						<td colspan="7">							
+							<pg:in requestKey="i" scope="1,2,10,20">in标签类型匹配测试 int i = 10; in 1,2,10,20: true</pg:in>
+							<pg:notin requestKey="i" scope="1,2,10,20">in标签类型匹配测试 int i = 10; in 1,2,10,20: false</pg:notin>
 						</td>
 						
 					</tr>

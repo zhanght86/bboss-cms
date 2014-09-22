@@ -15,15 +15,40 @@
 	<!-- 工作流管理中查看明细列表  -->
 	<property name="selectTaskHistorById_wf">
 		<![CDATA[
-			SELECT *
-			       
-			  FROM ACT_HI_TASKINST A 
-			  
-			 WHERE A.END_TIME_ IS NOT NULL
-			  
-			 AND A.PROC_INST_ID_ = ?
+			SELECT A.ID_,
+			       T.PROC_DEF_ID_,
+			       T.PROC_INST_ID_,
+			       T.EXECUTION_ID_,
+			       T.ACT_ID_ AS TASK_DEF_KEY_,
+			       T.TASK_ID_,
+			       T.CALL_PROC_INST_ID_,
+			       T.ACT_NAME_ AS NAME_,
+			       A.OWNER_,
+			       A.ASSIGNEE_,
+			       T.START_TIME_ AS START_TIME_,
+			       A.CLAIM_TIME_ AS CLAIM_TIME_,
+			       T.END_TIME_ AS END_TIME_,
+			       A.DELETE_REASON_,
+			       T.DURATION_,
+			       A.DURATION_NODE,
+			       A.IS_CONTAIN_HOLIDAY,
+			       A.ALERTTIME,
+			       A.OVERTIME,
+			       A.ADVANCESEND,
+			       A.OVERTIMESEND,
+			       T.IS_AUTO_COMPLETE,
+			       T.AUTO_HANDLER
 			
-			ORDER BY A.START_TIME_ ,A.END_TIME_
+			  FROM ACT_HI_ACTINST T
+			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
+			
+			 WHERE T.ACT_TYPE_='userTask'
+			      
+			   AND T.END_TIME_ IS NOT NULL
+			      
+			   AND T.PROC_INST_ID_ = ?
+			
+			 ORDER BY T.START_TIME_, T.END_TIME_
 		]]>
 	</property>
 
@@ -174,30 +199,6 @@
 			   AND (B.PROCDEF_ID = ? OR B.PROCDEF_ID IS NULL)
 			   AND A.START_DATE <= ?
 			   AND A.END_DATE >= ?
-		]]>
-	</property>
-	
-	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
-	<property name="getCurrentTaskInfoById_wf">
-		<![CDATA[
-			SELECT A.ID_,
-		       A.REV_,
-		       A.EXECUTION_ID_,
-		       A.PROC_INST_ID_,
-		       A.PROC_DEF_ID_,
-		       A.NAME_,
-		       A.PARENT_TASK_ID_,
-		       A.DESCRIPTION_,
-		       A.TASK_DEF_KEY_,
-		       A.OWNER_,
-		       A.ASSIGNEE_,
-		       A.DELEGATION_,
-		       A.PRIORITY_,
-		       A.CREATE_TIME_ ,
-		       A.DUE_DATE_,
-		       A.SUSPENSION_STATE_
-		  FROM ACT_RU_TASK A
-		 WHERE A.Id_ = ?
 		]]>
 	</property>
 	

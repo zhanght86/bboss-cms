@@ -80,6 +80,26 @@ public class HisTaskInfo implements Serializable {
 
 	private String DELETE_REASON_;// 操作内容
 
+	private int IS_AUTO_COMPLETE;// 是否自动完成
+
+	private String AUTO_HANDLER;// 自动处理类
+
+	public int getIS_AUTO_COMPLETE() {
+		return IS_AUTO_COMPLETE;
+	}
+
+	public void setIS_AUTO_COMPLETE(int iS_AUTO_COMPLETE) {
+		IS_AUTO_COMPLETE = iS_AUTO_COMPLETE;
+	}
+
+	public String getAUTO_HANDLER() {
+		return AUTO_HANDLER;
+	}
+
+	public void setAUTO_HANDLER(String aUTO_HANDLER) {
+		AUTO_HANDLER = aUTO_HANDLER;
+	}
+
 	public String getDELETE_REASON_() {
 		return DELETE_REASON_;
 	}

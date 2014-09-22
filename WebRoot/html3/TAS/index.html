@@ -19,6 +19,11 @@ $(document).ready(function(){
 		$(this).find(".pulldown").hide();
 		$(this).find(".pulldown-nav").removeClass("hover");
 	});
+	var  screenHeight=document.documentElement.clientHeight;
+	var topHead=$(".top").css("height").substring(0,$(".top").css("height").length-2);
+	var menuHead=$("#menubar").css("height").substring(0,$("#menubar").css("height").length-2);
+	var frameHead=screenHeight -topHead -menuHead;
+	$("#mainFrame").css("height",frameHead+"px");
 	
 });
 </script>
@@ -52,6 +57,6 @@ $(document).ready(function(){
     </ul>
   </div>
 </div>
-<iframe src="travel_requests.html" width="100%" height="700" scrolling="auto" frameborder="0" name="tas"></iframe>
+<iframe src="travel_requests.html" width="100%" id="mainFrame" scrolling="auto" frameborder="0" name="tas"></iframe>
 </body>
 </html>

@@ -428,12 +428,12 @@ public interface ActivitiBusinessService {
 	 * 判断任务是否被签收
 	 * 
 	 * @param taskId
-	 *            任务id
+	 * @param userId
 	 * @return
 	 * @throws Exception
-	 *             2014年9月18日
+	 *             2014年9月22日
 	 */
-	public boolean isSignTask(String taskId) throws Exception;
+	public boolean isSignTask(String taskId, String userId) throws Exception;
 
 	/**
 	 * 根据业务KEY判断流程是否开启

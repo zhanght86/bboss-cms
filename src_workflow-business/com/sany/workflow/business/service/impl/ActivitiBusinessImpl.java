@@ -546,9 +546,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					+ activitiService.getUserInfoMap().getUserName(currentUser)
 					+ "]提交";
 
+			if (!isSignTask(task.getId(), task.getAssignee())) {
+				// 先签收
+				activitiService.claim(task.getId(), task.getAssignee());
+			}
+
 			// 完成任务
-			activitiService.completeTaskWithReason(task.getId(), currentUser,
-					null, remark);
+			activitiService.completeTaskWithReason(task.getId(), null, remark);
 
 			tm.commit();
 
@@ -1022,7 +1026,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	private void completeTask(ProIns proIns, Map<String, Object> paramMap)
 			throws Exception {
 		// 未签收
-		if (!isSignTask(proIns.getNowtaskId())) {
+		if (!isSignTask(proIns.getNowtaskId(), proIns.getUserAccount())) {
 
 			if (StringUtil.isEmpty(proIns.getToTaskKey())) {
 
@@ -1097,7 +1101,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				throw new ProcessException("您没有权限废弃任务！");
 			}
 
-			if (!isSignTask(proIns.getNowtaskId())) {
+			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
 			}
@@ -1116,17 +1120,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public boolean isSignTask(String taskId) throws Exception {
-
-		HashMap map = executor.queryObject(HashMap.class,
-				"getCurrentTaskInfoById_wf", taskId);
-
-		if (map != null && map.get("ASSIGNEE_") != null) {
-			return true;
-		} else {
-			return false;
-		}
-
+	public boolean isSignTask(String taskId, String userId) throws Exception {
+		return activitiService.isSignTask(taskId, userId);
 	}
 
 	@Override
@@ -1174,7 +1169,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			}
 
-			if (!isSignTask(proIns.getNowtaskId())) {
+			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
 			}
@@ -1232,7 +1227,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					+ proIns.getDealReason() + "&nbsp;&nbsp;&nbsp;&nbsp;备注:"
 					+ currentUser + "将任务撤回至[" + hiTask.getName() + "]";
 
-			if (!isSignTask(proIns.getNowtaskId())) {
+			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
 			}
@@ -1278,7 +1273,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 获取参数配置信息
 			getVariableMap(proIns.getActs(), paramMap);
 
-			if (!isSignTask(proIns.getNowtaskId())) {
+			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
 			}

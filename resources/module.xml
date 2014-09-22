@@ -89,7 +89,7 @@
 		
 		<module name="web前端展示" 
 		             i18n:en_US="WEB UI Show" 
-		            id="WEB_UI_Show" used="true" showleftmenu="true"
+		            id="WEB_UI_Show" used="true" showleftmenu="false"
 		             url="appbom/index.page">	
 		    <item name="列表"
 			i18n:en_US="web list" id="web_list"  menuType="type1">
@@ -103,9 +103,19 @@
 			</item>  
 			<module name="物资出门" 
 		             i18n:en_US="MAM UI Show" 
-		            id="WEB_mam" used="true" showleftmenu="true">	
+		            id="WEB_mam" used="true" showleftmenu="true">
+		            <item name="首页"
+				i18n:en_US="web list" id="index_mam"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/mam/main_index.html</content>
+					</workspace>
+				
+				</item> 	
 				 <item name="入门页面"
-				i18n:en_US="web list" id="entry"  menuType="type1">
+				i18n:en_US="web list" id="entry"  showleftmenu="false"  menuType="type1">
 					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -114,17 +124,92 @@
 					</workspace>
 				
 				</item> 
+								 <item name="流程审批页面"
+				i18n:en_US="web list" id="entry"  showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/mam/approval.html</content>
+					</workspace>
+				
+				</item> 
+				 <item name="待办列表"
+				i18n:en_US="web list" id="to_do"  showleftmenu="true"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/mam/to_do.html</content>
+					</workspace>
+				
+				</item> 
 			</module>
 			<module name="人力资源管理系统" 
 		             i18n:en_US="HRM UI Show" 
-		            id="WEB_hrm" used="true" showleftmenu="true">	
-				 <item name="审批页面"
+		            id="WEB_hrm" used="true" showleftmenu="true">
+		             <item name="首页"
+				i18n:en_US="web list" id="index_hrm"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/hrm/main_index.html</content>
+					</workspace>
+				
+				</item> 	
+				 <item name="绩效提交页面"
 				i18n:en_US="web list" id="performance"  showleftmenu="true" menuType="type1">
 					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 					<workspace>
 						<content>/html3/hrm/performance.html</content>
+					</workspace>
+				
+				</item> 
+
+				 <item name="绩效审批页面"
+				i18n:en_US="web list" id="performance_approval"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/hrm/performance_approval.html</content>
+					</workspace>
+				
+				</item> 
+								<item name="列表页面1"
+				i18n:en_US="web list" id="list_hrm_1"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/hrm/reservation_list2.html</content>
+					</workspace>
+				
+				</item>        
+				<item name="列表页面2"
+				i18n:en_US="web list" id="list_hrm_2"  showleftmenu="true" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/hrm/reservation_list2.html</content>
+					</workspace>
+				
+				</item> 
+			</module>
+			<module name="差旅管理" 
+		             i18n:en_US="TAS UI Show" 
+		            id="WEB_mam" used="true" showleftmenu="true">	
+				 <item name="我要出差页面申请"
+				i18n:en_US="web list" id="travel_requests" showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/TAS/travel_requests.html</content>
 					</workspace>
 				
 				</item> 
@@ -410,7 +495,7 @@
 				
 			</item>
 
-			<item name="IP限制管理" id="ipcontrol" area="main" i18n:en_US="Ip Control">
+			<item name="IP限制管理" id="ipcontrol" i18n:en_US="Ip Control">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
@@ -424,7 +509,7 @@
 				</authoration>
 				
 			</item>
-			<item name="Session管理" id="sessioncontrol" showleftmenu="false" area="main" i18n:en_US="Session Control">
+			<item name="Session管理" id="sessioncontrol" showleftmenu="false" i18n:en_US="Session Control">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<navigator></navigator>

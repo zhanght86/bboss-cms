@@ -106,9 +106,8 @@ public class ActivitiBusinessAction {
 	String startProc(ProIns proIns, ModelMap model) throws Exception {
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			paramMap.put("isPass", true);
 			workflowService
-					.startProc(proIns, "流程开启设置7", "Mms.return", paramMap);
+					.startProc(proIns, "流程开启设置5", "Mms.return", paramMap);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -128,7 +127,7 @@ public class ActivitiBusinessAction {
 
 		workflowService.toDealTask("Mms.return",
 				"23d3e61e-3ca4-11e4-8581-4437e6999a31",
-				"de6c2f66-3ed7-11e4-9c7e-4437e6999a31", model);
+				"05bfea8a-41ef-11e4-ba8c-4437e6999a31", model);
 		model.addAttribute("pagestate", WorkflowConstants.PRO_PAGESTATE_APPROVE);
 
 		return "path:toIndex";
@@ -149,5 +148,26 @@ public class ActivitiBusinessAction {
 				"测试3", "wangq81", model);
 
 		return "path:toIndex";
+	}
+
+	/**
+	 * 处理任务
+	 * 
+	 * @param proIns
+	 * @param processKey
+	 * @param paramMap
+	 * @return
+	 * @throws Exception
+	 *             2014年9月19日
+	 */
+	public String approveWorkFlow(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception {
+		
+		try {
+			workflowService.approveWorkFlow(proIns, processKey, paramMap);
+			return "success";
+		} catch (Exception e) {
+			return "fail:" + e.getMessage();
+		}
 	}
 }

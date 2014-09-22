@@ -64,6 +64,9 @@ import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.manager.LogManager;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
@@ -4507,6 +4510,45 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throws Exception {
 		return executor.queryObject(NodeControlParam.class,
 				"getNodeContralParam_wf", processId, taskKey);
+	}
+	
+	@Override
+	public boolean isSignTask(String taskId, String userId) {
+
+		try {
+			HashMap map = executor.queryObject(HashMap.class, "isSign_wf",
+					taskId);
+
+			// 转域账号
+			userId = AccessControl.getUserAccounByWorknumberOrUsername(userId);
+
+			if (map != null && map.get("ASSIGNEE_") != null) {
+				String assignee = (String) map.get("ASSIGNEE_");
+
+				if (!assignee.equals(userId)) {
+
+					LogManager logMgr = SecurityDatabase.getLogManager();
+					String orgId = (String) userInfoMap.getUserAttribute(
+							userId, "orgId");
+					String visitorial = AccessControl.getAccessControl()
+							.getMachinedID();
+					String operContent = userId + "签收任务[" + taskId + "]失败,"
+							+ "任务已被" + assignee + "签收";
+
+					logMgr.log(userId, orgId, "工作流", visitorial, operContent,
+							"签收任务", Log.OTHER_OPER_TYPE);
+					
+					throw new ProcessException("任务已被" + assignee + "签收");
+					
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
 	}
 
 }

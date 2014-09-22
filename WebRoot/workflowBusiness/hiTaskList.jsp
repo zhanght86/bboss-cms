@@ -15,7 +15,18 @@
 				<td><pg:cell colName="END_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 				<td><pg:cell colName="NAME_" /></td>
 				<td><pg:cell colName="ASSIGNEE_NAME" /></td>
-				<td><pg:cell colName="DELETE_REASON_" /></td>
+				<td>
+					<pg:empty colName="DELETE_REASON_" >
+						<pg:equal colName="IS_AUTO_COMPLETE" value="1">
+			    		系统自动完成任务
+		    			</pg:equal>
+		    		</pg:empty>
+		    		<pg:notempty colName="DELETE_REASON_" >
+						<pg:equal colName="IS_AUTO_COMPLETE" value="0">
+				    		<pg:cell colName="DELETE_REASON_" />
+			    		</pg:equal>
+		    		</pg:notempty>
+				</td>
 			</tr>
 		</pg:list>
 	</table>

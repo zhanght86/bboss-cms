@@ -6,6 +6,7 @@
 <link href="../stylesheet/basic.css" rel="stylesheet" type="text/css" />
 <link href="../stylesheet/menu.css" rel="stylesheet" type="text/css" />
 <link href="../stylesheet/top2.css" rel="stylesheet" type="text/css" />
+<link href="../stylesheet/fixed_width.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="../js/menu.js"></script>
 <script type="text/javascript">
@@ -18,6 +19,11 @@ $(document).ready(function(){
 		$(this).find(".pulldown").hide();
 		$(this).find(".pulldown-nav").removeClass("hover");
 	});
+	var  screenHeight=document.documentElement.clientHeight;
+	var topHead=$(".top").css("height").substring(0,$(".top").css("height").length-2);
+	var menuHead=$("#menubar").css("height").substring(0,$("#menubar").css("height").length-2);
+	var frameHead=screenHeight -topHead -menuHead;
+	$("#mainFrame").css("height",frameHead+"px");
 	
 });
 </script>
@@ -97,6 +103,6 @@ $(document).ready(function(){
     </li>
   </ul>
 </div></div>
-<div class="content_box"><iframe  src="main_index.html" width="100%" height="700" scrolling="auto" frameborder="0" name="mam"></iframe></div>
+<iframe  src="main_index.html" width="100%" id="mainFrame"  scrolling="auto" frameborder="0" name="mam"></iframe>
 </body>
 </html>

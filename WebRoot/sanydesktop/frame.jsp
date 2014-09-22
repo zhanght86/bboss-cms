@@ -20,10 +20,10 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
-<pg:notin sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
+<pg:notin requestKey="loginstyle" scope="5,6">
 <link href="${pageContext.request.contextPath}/html/stylesheet/common.css" rel="stylesheet" type="text/css" />
 </pg:notin>
-<pg:in sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
+<pg:in requestKey="loginstyle" scope="5,6">
 <link href="${pageContext.request.contextPath}/html3/stylesheet/menu_left.css" rel="stylesheet" type="text/css" />
 </pg:in>
 <style>
@@ -54,14 +54,14 @@ $(document).ready(function(){
         <td width="170" valign="top" id="Tbasic2" height="100%">
         <sany:leftmenu target="left_rightFrame"/>        
         </td>
-        <pg:notin sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">
+        <pg:notin requestKey="loginstyle" scope="5,6">
          <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
             <tr>
               <td valign="middle"><a href="javascript:togglevisible('basic2')"><img src="${pageContext.request.contextPath}/html/images/expand.gif"  name="Ibasic2"/></a></td>
             </tr>
           </table></td>
         </pg:notin>
-        <pg:in sessionKey="LOGINSTYLE_CACHE_KEY" scope="5,6">  
+        <pg:in requestKey="loginstyle" scope="5,6">  
        <td width="9" class="more2" onclick="javascript:togglevisible('basic2')">
    <div id="Ibasic2"><img src="../html3/images/expand.png"  name="Ibasic2"/></div></td>
         </pg:in>      
