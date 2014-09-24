@@ -1,0 +1,737 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增来访单位</title>
+<link href="styles/pdp/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/selectlist1.js"></script>
+<script  type="text/javascript"  src="scripts/common.js"></script>
+
+<script language="javascript">
+ window.onresize=function()
+{
+	
+	resize(input1,content1);
+	resize(input2,content2);
+}
+window.onload=function()
+{
+	
+	outover(1)
+	outover(2)
+}
+/*******选择行程调出模块********/	
+function S_Check(obj)
+{
+	//var obj=document.getElementById(obj);
+	target=obj.value
+	for(var i=1;i<obj.length;i++)
+	{
+		value=obj.options[i].value;
+		document.getElementById(value).style.display="none"
+		if(target=="")
+		{
+		document.getElementById(value).style.display="none"	
+		}
+	}
+	document.getElementById(target).style.display="block"	
+}
+
+function S0_Check(obj)
+{
+	//var obj=document.getElementById(obj);
+	target=obj.value
+	for(var i=0;i<obj.length;i++)
+	{
+		value=obj.options[i].value;
+		document.getElementById(value).style.display="none"
+		if(target=="")
+		{
+		document.getElementById(value).style.display="none"	
+		}
+	}
+	document.getElementById(target).style.display="block"	
+}
+
+$(document).ready(function(){
+$(".bt_7").click(function(){
+   $("#trip").css("display","block")	
+ })
+ 
+/************资源出现删除按钮，点击后删除****************/
+$(".resource").find(".name").hover(
+	function(){
+	   $(this).css("cursor","pointer");
+	   $(this).next(".close").css({ "display":"block"})
+	},
+	function(){
+		  $(this).next(".close").css({"display":"none" }); 
+	})
+$(".resource").find(".close").hover(function()
+	{
+	  $(this).css("display","block")
+	})
+      $(".resource").find(".close").click(function()
+	{
+	  $(this).parent(".resource").remove();
+	})
+
+/*******复选框选中后才可以点击上面的图标进行资源匹配********/
+
+$('input[name="trip"]').attr("checked",false)
+$('input[name="trip"]').each(function() {
+  $(this).click(function(){
+	if($(this).attr("checked"))
+	{
+	   $("#resource_btn").removeClass("resource_btn_disabled").addClass("resource_btn")	
+	   $(this).parent().parent().css("background-color","#ffecb8");	
+	   $('#car').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '265px',
+		min: false,
+		title:'新增车辆',
+		lock: true, 
+		content: 'url:dialog/car.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#leader').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增预约领导',
+		lock: true, 
+		content: 'url:dialog/leader.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+		
+		$('#expert').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增预约技术专家',
+		lock: true, 
+		content: 'url:dialog/expert.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+		
+
+		$('#souvenir').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增纪念品',
+		lock: true, 
+		content: 'url:dialog/souvenir.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#camera').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增拍照/摄像',
+		lock: true, 
+		content: 'url:dialog/camera.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#reporter').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增记者',
+		lock: true, 
+		content: 'url:dialog/reporter.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });  
+	}	
+})	
+});	 
+});
+
+
+	
+</script>
+</head>
+<body>
+<div class="content_02">
+<div class="address">
+  <a>首页</a><span class="f1 md_6">&gt;</span><a>接待</a>
+</div>
+<div class="line"></div>
+<div class="s_d_content md_11 mt_0 pd_0">
+<div class="flowstep clearfix">
+  <ol class="flowstep-6">
+    <li class="step-first">
+      <div class="step-done">
+        <div class="step-name">
+          <a href="reception_ready.html" target="_self">基本信息</a>
+        </div>
+        <div class="step-no">
+          
+        </div>
+      </div>
+    </li>
+    <li>
+     <div class="step-done">
+      <div class="step-name">
+        <a href="reception_ready_person.html" target="_self">人员信息</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+     </div>
+    </li>
+    <li>
+    <div class="step-cur">
+      <div class="step-name">
+       <a href="reception_ready_trip.html" target="_self">行程资源</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+     </div>
+    </li>
+    <li>
+      <div class="step-name">
+        <a href="reception_ready_cost.html" target="_self">费用划分</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+     <li>
+      <div class="step-name">
+       <a href="reception_ready_task.html" target="_self">子任务</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li class="step-last">
+      <div class="step-name">
+         <a href="reception_ready_progress.html" target="_self">流程配置</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+  </ol>
+</div>
+
+  <div id="main1">
+        
+       <div  id="trip"  style="display:none">    
+        <div class="c_a_title">配置资源</div> 
+        <div class="c_a_form">
+             <div class="resource_btn_disabled clearfix" id="resource_btn">
+                <ul>
+                       <li><a href="#" id="car" ><div class="car"></div><span>车辆</span></a></li>
+                       <li><a href="#"  id="leader"><div class="leader"></div><span>预约领导</span></a></li>
+                       <li><a href="#"  id="expert"><div class="expert"></div><span>预约技术专家</span></a></li>
+                       <li><a href="#"  id="souvenir"><div class="souvenir"></div><span>纪念品</span></a></li>
+                       <li><a href="#"  id="camera"><div class="camera"></div><span>拍照/摄像</span></a></li>
+                       <li><a href="#"  id="reporter"><div class="reporter"></div><span>记者</span></a></li>
+                  </ul>
+            </div>
+            <table cellpadding="0" cellspacing="0" border="0" id="table_trip" class="table_blue ml_10 mar_30" >      
+            <tbody> 
+               <tr>
+                  <td colspan="5" ><span class="com_name fw_b ">2014-5-21</span> </td>
+               </tr>
+               <tr>
+                  <td width="160"><input type="checkbox"  name="trip"/><span class="ml_5">08:10 ~ 09:40</span></td>                                                                                              
+                  <td width="130">接站</td>
+                  <td  width="300">从某某机场乘坐飞机抵达长沙黄花机场</td>
+                  <td  width="140" > 
+                     <a href="#"><span class="c1">删除</span><span class="c1 ml_10">修改</span></a>
+                  </td> 
+                  <td  width="260" > 
+                  <div class="resource_list" style="position:relative">
+                  <div class="resource">
+                     <span class="name c1">预约领导</span>
+                     <span class="close" style="display:none"><img src="images/r_close.png"/></span>
+                  </div> 
+                  </div>
+                  </td>  
+                     
+               </tr>
+                
+            
+               <tr>
+                  <td colspan="3"><input type="checkbox" name="trip" /><span class="com_name fw_b ml_5 mt_10">全程</span>（整个接待过程中都需要使用的资源） </td>
+                  <td>&nbsp;</td>
+                  <td>  
+                  <div class="resource">
+                     <span class="name c1">车辆</span>
+                     <span class="close" style="display:none"><img src="images/r_close.png"/></span>
+                  </div>
+                  </td>
+                  
+               </tr>
+              
+          </tbody>
+       </table>
+       </div>
+       </div>      
+             
+         
+             <div class="c_a_title">新增行程</div> 
+              <div class="c_a_form">
+            <div class="form_li w300"> 
+             <span class="form_title w105">园区：</span></span>
+             <span class="form_content">
+               <select name="" class="w149">
+                 <option>星沙</option>
+                 <option>沈阳</option>
+                </select>
+             </span> 
+            </div> 
+            <div class="form_li1 w285" > 
+                 <span class="form_title w105"><span class="c3 md_6">*</span>日期：</span></span>
+                 <span class="form_content">
+                    <input class="Wdate w120" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="2013-4-15"/>
+                 </span>
+            </div>
+            <div class="form_li w300 clearfix"> 
+                 <span class="form_title w105"><span class="c3 md_6">*</span>时间：</span></span>
+                 <span class="form_content">
+                     <input class="Wdate w62" onClick="WdatePicker({dateFmt:'HH:MM'})"/>-<input class="Wdate w62" onClick="WdatePicker({dateFmt:'HH:MM'})"/>
+                 </span>
+            </div>
+            
+            <div class="form_li2 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>主要安排：</span></span>
+             <span class="form_content">
+               <select name="" class="w149" id="trip_check" onchange="S_Check(this)">
+                 <option value="">请选择</option>
+                 <option value="pick">接站</option>
+                 <option value="hotel">酒店</option>
+                 <option value="dinner">宴会</option>
+                 <option value="discussion">座谈</option>
+                 <option value="visit">参观</option>
+                 <option value="amuse">娱乐</option>
+                 <option value="send">送站</option> 
+                </select>
+             </span>  
+           </div>
+           
+            <div class="clearfix"></div>
+            
+           <div id="pick" style="display:none">
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>交通工具：</span></span>
+             <span class="form_content">
+               <select name="" class="w149" id="vehicle" onchange="S0_Check(this)">
+                 <option value="plane">飞机</option>
+                 <option value="train">火车</option>
+                 <option value="rain">高铁</option> 
+                 <option value="car">车辆</option>
+                </select>
+             </span>  
+           </div>
+            <div class="form_li1 w300"> 
+               <span class="form_title w105"><span class="c3 md_6">*</span>接机地点：</span></span>
+               <span class="form_content">
+                 <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+               </span> 
+            </div> 
+            <div class="form_li2 clearfix"> 
+               <span class="form_title w105">出发地点：</span></span>
+               <span class="form_content">
+                 <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+               </span> 
+            </div> 
+            <div class="form_li3 clearfix" id="plane" > 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写航班号" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)"  />   
+             </span>  
+            </div>
+            <div class="form_li3 clearfix" id="train" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写车次" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)"  />
+             </span>  
+            </div>
+            <div class="form_li3 clearfix" id="rain" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写车次" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)" id="rain" />   
+             </span>  
+            </div><div class="form_li3 clearfix" id="car" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content" >
+               <input  type="text" value="请填写车牌号" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)" id="car" />   
+             </span>  
+            </div>
+            <div class="form_li3 clearfix "> 
+             <span class="form_title w105">接机需要：</span>
+             <div class="form_content s_c_content ml_105 liw100"  id="resource">
+                  <ul>  
+                    <li><input name="single" type="checkbox"  class="ml_10"/>鲜花</li>
+                    <li><input name="single" type="checkbox" />接机牌</li>
+                    <li><input name="single" type="checkbox" />贵宾通道</li>
+                  </ul>
+              </div>
+             </div>
+             <div class="form_li3 clearfix "> 
+             <span class="form_title w105">其他：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span>  
+            </div>
+            <div class="form_li3 clearfix "> 
+             <span class="form_title w105">预计费用：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">元</span>
+             </span>  
+            </div>
+           </div>
+           <div id="hotel" style="display:none">
+            <div class="form_li w300"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>入住天数：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span>  
+           </div>
+           <div class="form_li2 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>星级：</span></span>
+             <span class="form_content">
+               <select name="" class="w149">
+                 <option>五星</option>
+                 <option>三星</option>
+                </select>
+             </span> 
+            </div> 
+            <div class="form_li w300"> 
+             <span class="form_title w105">入住地点要求：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div> 
+             <div class="form_li2 clearfix"> 
+             <span class="form_title w105">意向酒店：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/><a class="bt_3 ml_5"><span>查看协议酒店</span></a>
+             </span> 
+            </div>
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>房间数量：</span>
+             <div class="form_content ml_115">
+                <input  type="text" value="请填写套间数，单人间数，双人间数等" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)"/>
+              </div>
+             </div>
+             <div class="form_li3 clearfix "> 
+             <span class="form_title w105">房间布置：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span>  
+            </div>
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105">&nbsp;</span></span>
+             <span class="form_content">
+               <input  type="checkbox" value=""/><span class="fw_b">自费</span>
+             </span> 
+            </div>  
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">预计费用：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div>
+            </div>
+           <div id="dinner" style="display:none">
+             <div class="form_li3"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>餐次：</span>
+             <div class="form_content s_c_content ml_115 liw100"  id="resource">
+                  <ul>  
+                    <li><input  type="radio" value="" />早餐</li>
+                    <li><input  type="radio" value="" />中餐</li>
+                    <li><input  type="radio" value="" />晚餐</li>
+                  </ul>
+              </div>
+             </div>
+           <div class="form_li3"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>用餐人数：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div> 
+            <div class="form_li3 "> 
+             <span class="form_title w105">意向用餐地点：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div> 
+             <div class="form_li3"> 
+             <span class="form_title w105">饮食禁忌：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div>
+            
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">预计费用：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">元</span>
+             </span> 
+            </div>
+            </div>
+           <div id="discussion" style="display:none">
+            <div class="form_li3  clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>会议主题：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div> 
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">会议议程：</span></span>
+             <span class="form_content">
+               <textarea name="" cols="" rows="" class="w865 h100" style="margin-top:5px;" onfocus="Focus(this)"  onblur="Blur(this)"></textarea>
+             </span> 
+            </div>
+            <div class="form_li3  clearfix"> 
+             <span class="form_title w105">其他：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div>
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">预计费用：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">元</span>
+             </span> 
+            </div>
+            </div>
+           <div id="visit" style="display:none">
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>参观项目：</span></span>
+              <div class="form_content s_c_content ml_115 liw100" >
+                  <ul>  
+                    <li><input name="single" type="radio" />展厅</li>
+                    <li><input name="single" type="radio" />18号厂房</li>
+                    <li><input name="single" type="radio" />ECC</li>
+                    <li class="other" style="width:300px;">其他：<input  type="text" value=""  class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/></li>
+                  </ul>
+              </div> 
+            </div> 
+            <div class="form_li3  clearfix"> 
+             <span class="form_title w105">参观线路：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div>
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">参观内容：</span></span>
+             <span class="form_content">
+               <textarea name="" cols="" rows="" class="w865 h100" style="margin-top:5px;" onfocus="Focus(this)"  onblur="Blur(this)"></textarea>
+             </span> 
+            </div>
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">&nbsp;</span></span>
+             <span class="form_content">
+               <input  type="checkbox" value=""/><span class="fw_b">字幕</span>
+             </span> 
+            </div> 
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105">物资准备：</span></span>
+              <div class="form_content s_c_content ml_115 liw100"  id="resource">
+                  <ul> 
+                    <li><input name="single" type="checkbox" />矿泉水</li>
+                    <li><input name="single" type="checkbox" />安全帽</li>
+                    <li><input name="single" type="checkbox" />雨伞</li>
+                    <li><input name="single" type="checkbox" />集团画册</li>
+                    <li><input name="single" type="checkbox" />红毯</li>
+                  </ul>
+              </div> 
+            </div>
+           
+            <div class="form_li3 clearfix "> 
+             <span class="form_title w105">其他：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span>  
+            </div>
+            </div>
+           <div id="amuse" style="display:none">
+            <div class="form_li3 clearfix w1000"> 
+              <span class="form_title w105"><span class="c3 md_6">*</span>娱乐项目：</span></span>
+              <div class="form_content s_c_content ml_115 liw100 "  id="resource">
+                <div class="s_title fw_b w40 tleft">旅游</div>
+                <div class="s_c_content ml_50 clearfix">
+                  <ul>  
+                      <li><input name="single" type="checkbox"/>岳麓书院</li>
+                      <li><input name="single" type="checkbox"/>橘子洲</li>
+                      <li><input name="single" type="checkbox"/>省博物馆 </li>
+                      <li><input name="single" type="checkbox"/>韶山</li>
+                      <li><input name="single" type="checkbox"/>花明楼</li>
+                      <li><input name="single" type="checkbox"/>张家界</li>
+                      <li><input name="single" type="checkbox"/>杨开慧</li>
+                  </ul>
+                </div>
+                <div class="s_title fw_b w40 tleft">休闲</div>
+                <div class="s_c_content ml_50 clearfix">
+                  <ul>  
+                      <li><input name="single" type="checkbox"/>田汉大剧院</li>
+                      <li><input name="single" type="checkbox"/>足浴</li>
+                  </ul>
+                </div> 
+                <div class="s_title fw_b w40 tleft">其他</div>
+                <div class="s_c_content ml_50 clearfix">
+                  <ul>
+                    <li><input  type="text" value="" class="w285" onfocus="Focus(this)"  onblur="Blur(this)"/></li>
+                   </ul>
+                </div> 
+               </div>  
+              </div>
+              <div class="form_li3  clearfix"> 
+             <span class="form_title w105">准备事项：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div>
+              <div class="form_li3 clearfix"> 
+             <span class="form_title w105">&nbsp;</span></span>
+             <span class="form_content">
+               <input  type="checkbox" value=""/><span class="fw_b">自费</span>
+             </span> 
+            </div> 
+              <div class="form_li3 clearfix"> 
+             <span class="form_title w105">预计费用：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">元</span>
+             </span> 
+            </div> 
+            </div> 
+           <div id="send" style="display:none">
+            <div class="form_li3 clearfix"> 
+             <span class="form_title w105"><span class="c3 md_6">*</span>交通工具：</span></span>
+             <span class="form_content">
+               <select name="" class="w149" id="vehicle_s" onchange="S0_Check(this)">
+                 <option value="plane_s">飞机</option>
+                 <option value="train_s">火车</option>
+                 <option value="rain_s">高铁</option> 
+                 <option value="car_s">车辆</option>
+                </select>
+             </span>  
+           </div>
+             <div class="form_li3 clearfix"> 
+             <span class="form_title w105">送达地点：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w120" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span> 
+            </div> 
+            <div class="form_li3 clearfix" id="plane_s" > 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写航班号" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)"  />   
+             </span>  
+            </div>
+            <div class="form_li3 clearfix" id="train_s" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写车次" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)"  />
+             </span>  
+            </div>
+            <div class="form_li3 clearfix" id="rain_s" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content">
+               <input  type="text" value="请填写车次" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)" id="rain" />   
+             </span>  
+            </div><div class="form_li3 clearfix" id="car_s" style="display:none"> 
+             <span class="form_title w105">出行详情：</span></span>
+             <span class="form_content" >
+               <input  type="text" value="请填写车牌号" class="w865 color" onfocus="Focus(this)"  onblur="Blur(this)" id="car" />   
+             </span>  
+            </div>
+             <div class="form_li3 clearfix "> 
+             <span class="form_title w105">其他：</span></span>
+             <span class="form_content">
+               <input  type="text" value="" class="w865" onfocus="Focus(this)"  onblur="Blur(this)"/>
+             </span>  
+            </div>
+           </div>
+           </div>
+           
+           
+        <div class="ml_115 mt_10 mar_30">
+              <a class="bt_7" href="#"><span>新增并继续添加</span></a> <a class="bt_7" href="#"><span>完成</span></a>
+        </div>
+        
+  </div>
+
+</div>
+<div class="c_a_btn">
+  <div class="total_btn_center">
+   <a class="bt_4" href="reception_ready_cost.html"><span>费用划分</span></a>
+   <a class="bt_5" href="#"><span>暂存</span></a>
+   <a class="bt_5" href="#"><span>取消</span></a>
+  </div>  
+</div>
+</div>
+</body>
+</html>

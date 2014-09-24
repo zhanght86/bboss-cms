@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增来访单位</title>
+<link href="styles/pdp/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/selectlist1.js"></script>
+<script  type="text/javascript"  src="scripts/common.js"></script>
+
+<script language="javascript">
+ window.onresize=function()
+{
+	
+	resize(input1,content1);
+	resize(input2,content2);
+}
+window.onload=function()
+{
+	
+	outover(1)
+	outover(2)
+}
+function S_Check()
+{
+	var value=document.getElementById("trip_check").value;
+	alert(document.getElementById("trip_check").length)
+	document.getElementById(value).style.display="block"
+}
+
+
+
+
+
+	$(document).ready(function() 
+		{
+			$(".repection_list_title > a").click(function()
+			{
+				$(this).parent().next("div").slideToggle("slow").parents().siblings(".repection_content:visible").slideUp("slow");                            
+				$(this).css("display","none").siblings("a").css("display","block");
+				$(this).parent().toggleClass("bdb");			
+			});
+			
+		});
+	
+</script>
+</head>
+<body>
+
+
+
+<div class="content_02">
+<div class="address">
+  <a>首页</a><span class="f1 md_6">&gt;</span><a>接待</a>
+</div>
+<div class="line"></div>
+<div class="s_d_content md_11 mt_0 pd_0">
+<div class="flowstep clearfix">
+  <ol class="flowstep-6">
+    <li class="step-first">
+      <div class="step-done">
+        <div class="step-name">
+          <a href="reception_ready.html" target="_self">基本信息</a>
+        </div>
+        <div class="step-no">
+          
+        </div>
+      </div>
+    </li>
+    <li>
+     <div class="step-done">
+      <div class="step-name">
+        <a href="reception_ready_person.html" target="_self">人员信息</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+     </div>
+    </li>
+    <li>
+    <div class="step-done">
+      <div class="step-name">
+        <a href="reception_ready_trip.html" target="_self">行程资源</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+     </div>
+    </li>
+    <li>
+    <div  class="step-cur">
+      <div class="step-name">
+        <a href="reception_ready_cost.html" target="_self">费用划分</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </div>
+    </li>
+    <li>
+      
+      <div class="step-name">
+        <a href="reception_ready_task.html" target="_self">子任务</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+      
+    </li>
+    <li class="step-last">
+      <div class="step-name">
+         <a href="reception_ready_progress.html" target="_self">流程配置</a>
+      </div>
+      <div class="step-no"> 
+      </div>
+    </li>
+    
+  </ol>
+</div>
+
+
+<div id="main1" class="mar_30">
+      <div class="c_a_title">接待费用划分</div>
+      <div class="c_a_form">
+           <div class="w1000">
+              <div class="float1" style="text-align:left">总费用预算：
+              <span class="fz_22 c2">￥4730</span><span class="ml_10">亚太大区承担<span class="fw_b">4000</span>元，路机事业部承担<span class="fw_b">730元</span></span>
+              </div>
+              <div style="text-align:right;"><a class="bt_3" id="add_cost"><span>批量划分费用承担部门</span></a></div>
+            </div>
+         <table cellpadding="0" cellspacing="0" border="0" class="table_blue1 mt_10" >
+                               <!-- <thead>
+                                   <tr>
+                                      <th width="40"><input type="checkbox"/></th>
+                                      <th width="80">序号</th>                     
+                                      <th width="160">类别</th>
+                                      <th width="400">行程</th>
+                                      <th width="120">预计费用</th>
+                                      <th width="190">费用承担部门</th> 
+                                     
+                                   </tr>
+                                </thead>-->
+                                <tbody>
+                                   <tr>
+                                     <td width="40" ><input type="checkbox"/></th>
+                                     <td colspan="6" style="font-size:13px;"><span class="fw_b">星沙</span> </td>
+                                  </tr>
+                                   <tr>
+                                      <td width="40"><input type="checkbox"/></td>
+                                      <td width="70">1</td>              
+                                      <td width="200">车辆</td>
+                                      <td width="450">2014-5-21<span class="ml_10">09:10-09:40</span><span class="ml_10">接机</span></td> 
+                                      <td width="80">1000</td>
+                                      <td width="140" class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td>  
+                                      <td></td>   
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>2</td>              
+                                      <td>酒店 五星</td>
+                                      <td>2014-5-21<span class="ml_10">10:00-11:00</span><span class="ml_10">酒店入住</span></td>
+                                      <td>自费</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td> 
+                                      
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>3</td>              
+                                      <td>宴会</td>
+                                      <td>2014-5-21<span class="ml_10">12:00-13:00</span><span class="ml_10">中餐</span> </td>
+                                      <td>0</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td> 
+                                      
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>4</td>              
+                                      <td>座谈</td>
+                                      <td>2014-5-21<span class="ml_10">15:00-16:00</span><span class="ml_10">座谈交流</span></td>
+                                      <td>230</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td> 
+                                      
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>5</td>              
+                                      <td>参观</td>
+                                      <td>2014-5-21<span class="ml_10">16:00-16:30</span><span class="ml_10">参观展厅、18号厂房</span></td>
+                                      <td>0</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td> 
+                                      
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>6</td>              
+                                      <td>参观</td>
+                                      
+                                      <td>2014-5-21<span class="ml_10">16:30-17:00</span><span class="ml_10">参观企业控制中心</span></td>
+                                      
+                                      <td>0</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td> 
+                                      
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>7</td>              
+                                      <td>宴会</td>              
+                                      <td>2014-5-21<span class="ml_10">17:30-18:30</span><span class="ml_10">晚餐</span></td>
+                                      <td>2000</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td>   
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>8</td>              
+                                      <td>娱乐</td>              
+                                      <td>2014-5-21<span class="ml_10">17:30-18:30</span><span class="ml_10">晚餐</span></td>
+                                      <td>自费</td>
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td>   
+                                   </tr>
+                                   
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>9</td>              
+                                      <td>送机 飞机</td>
+                                      <td>2014-5-23<span class="ml_10">09:00-11:30</span><span class="ml_10">送机</span></td> 
+                                      <td>自费</td> 
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td>   
+                                   </tr>
+                                   <tr>
+                                      <td><input type="checkbox"/></td>
+                                      <td>10</td>              
+                                      <td>预约领导 梁林河</td>
+                                      <td>2014-5-21<span class="ml_10">15:00-16:00</span><span class="ml_10">座谈交流</span><br/>                                          2014-5-21<span class="ml_10">17:30-18:30</span><span class="ml_10">晚餐</span>
+                                      </td> 
+                                      <td>0</td> 
+                                      <td class="tright"><input type="text" class="w120 color"  value="选择费用承担部门" onfocus="Focus(this)"  onblur="Blur(this)"/></td>   
+                                   </tr>
+                                   
+                                   
+                                </tbody>
+                            </table> 
+                         
+      </div>
+</div>
+<div class="c_a_btn">
+    <div class="total_btn_center">
+    <a class="bt_4" href="reception_ready_task.html"><span>子任务</span></a>
+    <a class="bt_5" href="#"><span>暂存</span></a>
+    <a class="bt_5" href="#"><span>取消</span></a>
+    </div>  
+</div> 
+
+</div>
+</body>
+</html>

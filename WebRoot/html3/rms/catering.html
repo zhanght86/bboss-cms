@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>无标题文档</title>
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css"  media="screen and(max-device-width:1024px)" href="styles/main1024.css"/>
+<script  type="text/javascript"  src="scripts/jquery-1.5.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/checkbox.js"></script>
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script>
+$(document).ready(function(e) {
+    $(".ca_display a").not($(".uorder")).hover(
+	function()
+	{    $p=$(this).text();
+	     $(this).removeClass("order").addClass("order_hover");
+		 $(this).html("点击申请");
+		 $(this).attr("href","catering_application.html");
+	},
+	function()
+	{
+		$(this).addClass("order").removeClass("order_hover");
+		$(this).html($p);
+		$(this).removeAttr("href");
+	}
+	)
+});
+
+</script>
+
+</head>
+
+<body>
+<div class="content_02">
+  <div class="address"><a>首页</a><span class="f1 md_6">&gt;</span><a>会议室</a></div>
+  <div class="line"></div>
+  <div class="s_d_content md_11">
+            <div class="catering_search clearfix">
+               <ul class="float1">
+                    <input class="Wdate w386" type="text" onClick="WdatePicker()" value="2013-4-15(点菜需提前24小时预订)" />       
+                    <a class="bt_8"><span>搜索</span></a>
+               </ul>
+               <ul class="floatr">
+                   <a class="bt_8" href="catering_menu.html"><span>查看菜谱</span></a>
+                   <a class="bt_8" href="catering_plans.html"><span>查看套餐活动</span></a>
+                   <a class="bt_8"><span>查看优惠活动</span></a>
+               </ul>
+             </div>  
+            <div class="catering_tab mt_10" id="menu1">
+               <ul>
+                 <li><a href="#" class="current" onclick="setTabC(1,0)">包厢</a></li> 
+                 <li><a href="#" onclick="setTabC(1,1)">宴会厅</a></li>
+               </ul>
+            </div>
+            <ul class="catering_mark clearfix">
+                  <li class="mark"><span><em class="app_icon order"></em>可预订</span></li>
+                  <li class="mark"><span><em class="app_icon uorder"></em>不可预订</span></li>
+             </ul>
+            
+           <div class="catering_list" id="main1">
+              <ul>
+                <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+                  <li>
+                 <div class="s_l_module catering_module">
+                     <div class="nav">1号包厢</div>
+                     <div class="m_content c4">
+                       <p>
+                       <span class="mr_20">可容纳人数：10-24人 </span>
+                       <span  class="mr_20">最大桌数：2</span>
+                       <br/>
+                           包厢配置：液晶电视、空调、衣帽架、卫生间 <br/>
+                           备注：董事专用
+                       </p>
+                     </div>
+                     <div class="display_content">
+                     <div class="ca_display">
+                      <a class="order rline">中餐</a>
+                      <a class="uorder">晚餐</a>
+                     </div>
+                     </div>
+                 </div>  
+                </li>
+              </ul>
+              <ul style="display:none">1111111</ul>
+              
+              
+              
+            </div>
+         
+         
+         </div>
+    
+    
+
+</div>
+
+</body>
+</html>

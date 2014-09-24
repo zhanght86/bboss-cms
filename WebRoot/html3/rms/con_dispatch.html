@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>三一集团会议室调度</title>
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+</head>
+<body>
+<div class="content_02">
+    <div class="address"><a>首页</a><span class="f1 md_6">&gt;</span><a>会议室调度</a></div>
+    <div class="line"></div>
+    <div class="s_d_content md_11 pd_0 mt_10">
+            <div class="catering_tab tab_height" id="menu2">
+               <ul>
+                 <li><a href="#" class="current" onclick="setTabC(2,0)">基本信息</a></li>            
+                 <li><a href="#" onclick="setTabC(2,1)">审批流程</a></li>
+               </ul>
+            </div> 
+           <div id="main2">
+            <ul>
+               <div class="c_a_title">申请人信息</div>
+               <div class="c_a_form">
+                   <div class="form_li1">
+                      <span class="c_form_title">工号：</span>
+                      <span class="c_form_content">10005245</span>
+                   </div>
+                   <div class="form_li2">
+                      <span class="c_form_title">姓名：</span>
+                      <span class="c_form_content">侯锦蓉</span>
+                   </div>
+                    <div class="form_li1">
+                      <span class="c_form_title">手机号码：</span>
+                      <span class="c_form_content">13469251562</span>
+                   </div>
+                   <div class="form_li2">
+                      <span class="c_form_title">邮箱：</span>    
+                      <span class="c_form_content">houjr@sany.com.cn</span>
+                   </div>
+                    <div class="form_li3">
+                      <span class="c_form_title">费用承担部门：</span>    
+                      <span class="c_form_content">流程信息化总部   |  流程架构与优化部   |  人资财经科</span>
+                   </div>
+               </div>
+               <div class="c_a_title">会议室信息</div>
+               <div class="c_a_form">
+                   <div class="form_li3">
+                      <span class="c_form_title">申请会议室：</span>
+                      <span class="c_form_content">新研发楼305会议室 </span>
+                   </div>
+                  <div class="form_li3">
+                      <span class="c_form_title">会议类型：</span>
+                      <span class="c_form_content">内部会议1</span>
+                   </div>
+                    <div class="form_li3">
+                      <span class="c_form_title">视频会议：</span>
+                      <span class="c_form_content"><span class="mr_20">长沙</span><span class="mr_20">娄底中兴</span><span class="mr_20">益阳中阳</span></span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="c_form_title">会议主题：</span>    
+                      <span class="c_form_content">关于行政在线需求评审会议</span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="c_form_title">会议时间：</span>    
+                      <span class="c_form_content float1"><span class="mr_10">2014-05-05</span>8:00 到 10:00</span>
+                      <span class="c_form_title">时长：</span>   
+                      <span class="c_form_content"><span class="c2 fw">2h</span></span>  
+                   </div>
+                   <div class="form_li3">
+                      <span class="c_form_title">会议人数：</span>    
+                      <span class="c_form_content">20人</span>
+                   </div>
+                    <div class="form_li3">
+                      <span class="c_form_title">与会领导：</span>    
+                      <span class="c_form_content">贺东东</span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="c_form_title">卡座名单：</span>    
+                      <span class="c_form_content">贺东东</span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="c_form_title">相关附件：</span>    
+                      <span class="c_form_content file_content">内部会议1申请事由</span>
+                   </div>
+                   <div id="dispatch">
+                     <div class="form_li3">
+                      <span class="form_title"><span class="c3 md_6">*</span>接待员：</span>    
+                      <span class="form_content float1">
+                        <select name="" class="w80  mr_20">
+                           <option>陈星</option>   
+                        </select>
+                        <a class="bt_3 mt_3" id="dispatch_btn"><span>我要调度</span></a>
+                      </span>   
+                   </div>
+                   <div class="dispatch_content" >
+                   <div class="form_li3">
+                      <span class="form_title"><span class="c3 md_6">*</span>申请会议室：</span>
+                      <span class="form_content"><input name="conference_kind" type="text" value=""  class="w285"/></span>
+                      <a class="bt_3 mt_3"><span>选择会议室</span></a>
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title"><span class="c3 md_6">*</span>会议时间：</span>    
+                      <span class="form_content">
+                      <input class="Wdate" type="text" onClick="WdatePicker()" value="2013-4-15"/>
+                      <select name="" class="w80">
+                         <option>8:00</option>
+                         <option>8:30</option>
+                         <option>9:00</option>
+                         <option>9:30</option>
+                      </select>
+                      </span> 
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title">调度优惠：</span>    
+                      <span class="form_content float1"><input  type="text" class="w80 mt_5" /></span>
+                      <span class="form_title">说明：</span>    
+                      <span class="form_content"><select name="" class="w204">
+                         <option>接待部调整，适当优惠</option> 
+                      </select></span> 
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title">调度费用差：</span>    
+                      <span class="form_content">￥<span class="c2 fz_22">0</span></span>
+                   </div>
+                   <div class="dispatch_close"><img src="images/close.gif"/></div>
+                   </div>
+                   
+                   </div>
+                </div>
+            </ul>
+            <ul style="display:none">
+              <div class="module ta pd_10 mr_10">
+                 <img src="images/aa.png"/>
+              </div>
+              <table  border="0" cellpadding="0" cellspacing="0" class="table1">
+                  <tr>
+                    <th width="40">节点</th>
+                    <th width="60" >节点名</th>
+                    <th width="150">节点说明</th>
+                    <th>处理人</th>
+                    <th width="150">处理方式</th>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>提交</td>
+                    <td>提交维护申请</td>
+                    <td><a href="#">新增</a></td>
+                    <td>串行</td>
+                  </tr>
+                  <tr class="tr2">
+                    <td>20</td>
+                    <td>审核</td>
+                    <td>审核维护是否合理</td>
+                    <td><a href="#">新增</a></td>
+                    <td>串行（可设置多人）</td>
+                  </tr>
+                  <tr>
+                    <td>30</td>
+                    <td>审批</td>
+                    <td>确认维护诚信档案信息</td>
+                    <td><a href="#">新增</a></td>
+                    <td>串行（可设置多人）</td>
+                  </tr>
+                  <tr class="tr2">
+                    <td>40</td>
+                    <td>抄送</td>
+                    <td>抄送相关人员</td>
+                    <td><a href="#">新增</a></td>
+                    <td>抄送</td>
+                  </tr>
+              </table>  
+            </ul>
+            </div>
+    </div>
+    <div class="c_a_btn">
+<div class="total">
+总计：<span class="fz_22 mr_20">￥<span class="c2">100</span></span>
+     <span class="mr_20 c4">会议室费用：￥100</span>
+     <span class="mr_20 c4">视频费用 ：￥0</span>
+     <span class="c4">其他费用 ：￥0</span>
+</div>
+<div class="total_btn">
+  <a class="bt_4"><span>提 交</span></a>
+  <a class="bt_5"><span>暂 存</span></a>
+  <a class="bt_5"><span>取 消</span></a>
+</div>
+</div>
+</div>
+</body>
+</html>

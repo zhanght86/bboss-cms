@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+.stable {
+	border-collapse:collapse;
+	border-top: 1px solid #D2D0D1;
+	border-left: 1px solid #D2D0D1;
+	margin-bottom:10px;
+}
+
+.stable th {
+	line-height: 18px;
+	font-weight: bold;
+	padding:4px 4px;
+	border-bottom: 1px solid #CBC8C8;
+	border-right: 1px solid #CBC8C8;
+	background: #E8E8E8 url(../images/th_bg.jpg) repeat-x left top;
+	color:#666666;
+	text-align:center;
+	white-space:nowrap;	
+}
+.stable td {
+	line-height: 18px;
+	padding:3px 5px;
+	border-bottom: 1px solid #D2D0D1;
+	border-right: 1px solid #D2D0D1;
+	text-align: center;
+	color:#666666;
+	text-align:left;
+	white-space:nowrap;
+}
+
+.stable .td_left{
+	text-align:left; padding-left:10px;
+}
+.stable .td_right{
+	text-align:right; 
+}
+.stable .td_center{
+	text-align:center; 
+}
+.stable a{ padding:0 3px}
+/***********新增进度条样式**************/
+.box_select {
+	width:279px;
+	height: 31px;
+	padding:1px 7px 0px 3px;
+	position:relative;
+	/*left:20%;
+	margin-left:-50px;*/
+	background: url(../images/conference/look.gif) no-repeat 0px top; 
+}
+
+.xstooltip {
+	visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	font: normal 8pt sans-serif;
+	padding: 3px;
+	border: solid 1px;
+	background-color: #FFFFFF;
+}
+.progress_title{ text-align:center;font-size:18px; color:#333333;line-height:60px;font-weight:bold;font-family:"宋体";}
+

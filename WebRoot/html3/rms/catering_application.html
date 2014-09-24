@@ -1,0 +1,696 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="styles/pdp/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script  type="text/javascript"  src="scripts/selectlist.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/common.js"></script>
+<script language="javascript">
+ window.onresize=function()
+{
+	resize(input1,content1);
+	resize(input2,content2);
+}
+window.onload=function()
+{
+	bClick();
+	
+}
+$(document).ready(function(e) {
+    $("#checkMethods a").click(function()
+	{
+		$("#checkMethods a").addClass("bt_8");
+		$(this).addClass("bt_7").removeClass("bt_8");
+	})
+});
+</script>
+
+</head>
+
+<body>
+
+   
+   
+<div class="content_02">
+    <div class="address"><a>首页</a><span class="f1 md_6">&gt;</span><a>餐饮</a></div>
+    <div class="line"></div>
+    <div class="md_11 mt_10">
+               <div class="c_a_title md_0">申请人信息</div>
+               <div class="c_a_form clearfix">
+                   <div class="form_li">
+                      <span class="form_title"><span class="c3 md_6">*</span>工号：</span>
+                      <span class="form_content"><input type="text" value="10005245"  onfocus="Focus(this)"  onblur="Blur(this)"/><a class="bt_3 ml_5"><span>选择</span></a></span>
+                   </div>
+                   <div class="form_li2  clearfix">
+                      <span class="form_title">姓名：</span>
+                      <span class="form_content">侯锦蓉</span>
+                   </div>
+                   <div class="clearfix"></div>
+                    <div class="form_li">
+                      <span class="form_title"><span class="c3 md_6">*</span>手机号码：</span>
+                      <span class="form_content"><input type="text" value="13469251562"  onfocus="Focus(this)"  onblur="Blur(this)"/></span>
+                   </div>
+                   <div class="form_li2 clearfix">
+                      <span class="form_title">邮箱：</span>    
+                      <span class="form_content">houjr@sany.com.cn</span>
+                   </div>
+                    <div class="form_li3 clearfix">
+                      <span class="form_title">费用承担部门：</span>    
+                      <span class="form_content">流程信息化总部   |  流程架构与优化部   |  人资财经科</span>
+                   </div>
+               </div> 
+               
+               
+               <div class="c_a_title">餐饮预定信息</div>
+               
+               <div class="c_a_form clearfix mar_70">
+  
+                   <div class="form_li3 clearfix">
+                      <span class="form_title"><span class="c3 md_6">*</span>包厢：</span>
+                      <span class="form_content"><input name="conference_kind" type="text" value="18号包厢" onfocus="Focus(this)"  onblur="Blur(this)" class="w120" /><a class="bt_3 ml_5"><span>修改</span></a></span>   
+                   </div>
+                   <div class="form_li">
+                      <span class="form_title"><span class="c3 md_6">*</span>用餐日期：</span>
+                      <span class="form_content"><input class="Wdate" type="text" onClick="WdatePicker()" value="2013-4-15"/> </span>
+                   </div>
+                   <div class="form_li2 clearfix">
+                      <span class="form_title"><span class="c3 md_6">*</span>餐次：</span>
+                      <span class="form_content">
+                          <span class="mr_55"><input name="meal" type="radio" value=""  checked="checked"/>中餐</span>
+                          <span class="mr_55"><input name="meal" type="radio" value=""  checked="checked"/>晚餐</span>   
+                      </span>
+                   </div>
+                    <div class="form_li">
+                      <span class="form_title"><span class="c3 md_6">*</span>用餐人数：</span>
+                      <span class="form_content">
+                      <input type="text" value="" class="w120"  onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">人</span></span>
+                   </div>
+                   <div class="form_li2 clearfix">
+                      <span class="form_title"><span class="c3 md_6">*</span>预定桌数：</span>
+                      <span class="form_content">
+                          <input name="conference_kind" type="text" value="最多可定6桌"  class="w120 color" onfocus="Focus(this)"  onblur="Blur(this)"/>
+                      </span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title">参加领导：</span>    
+                      <span class="form_content"> 
+                        <input type='text' name='textfield' id='textfield' class="w70p" onfocus="Focus(this)"  onblur="Blur(this)"/>  
+                      </span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title">预定说明：</span>    
+                      <span class="form_content"> 
+                        <input type='text' name='textfield' id='textfield' class="w70p" onfocus="Focus(this)"  onblur="Blur(this)"/>  
+                      </span>
+                   </div>
+                   <div class="form_li3">
+                      <span class="form_title"></span>    
+                      <span class="form_content"> 
+                        <input type="checkbox"/><span class="ml_5">是否需要休息包厢</span> 
+                      </span>
+                   </div>
+                   
+                   <div class="form_li3">
+                      <span class="form_title">我的选择：</span>    
+                      <span class="form_content" id="checkMethods">
+                      <a class="bt_7" id="materingMenu"><span>我要点菜</span></a>
+                      <a class="bt_8" id="materingPlans"><span>我要套餐</span></a>
+                      <a class="bt_8" id="sideDishes"><span>帮我配菜</span></a>
+                      </span>
+                   </div>
+                   <div class="mt_10 ml_90 w948 check_menu_list">
+                      <p class="jiesuan_cost" style="padding-right:0px;"><span class="fw_b c4">总计：￥</span><span class="cost">1212.10</span>
+                         <a class="delete ml_10"><span class="c1"><em class="app_icon delete"></em>删除</span></a>
+                      </p> 
+                      <div class="ml_14 mt_7 check_menu">
+                          <ul>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                 <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                 <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                 <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                 </table>
+                              </li>
+                               
+                               
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                          </ul>      
+                       </div>
+                   </div>
+                   <div class="mt_10 ml_90 w948 check_plans_list">
+                      <p class="ml_14 float1 fSize18">普通套餐A</p>
+                      <p class="jiesuan_cost" style="padding-right:0px;">
+                         <span class="fw_b c4">总计：￥</span><span class="cost">1212.10</span>
+                         <a class="delete ml_10"><span class="c1"><em class="app_icon delete"></em>删除</span></a>
+                      </p> 
+                      <div class="ml_14 mt_7 check_menu">
+                          <ul>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                 <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                 <tr>
+                                     <th>菜品</th>	                           
+                                     <th width="12%">规格</th>
+                                     <th width="12%">数量</th>
+                                     <th width="12%">单价</th>
+                                     <th width="12%">&nbsp;</th>	                           
+                                  </tr>
+                                 </table>
+                              </li>
+                               
+                               
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                              <li>
+                                <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                                  <tr>
+                                     <td>铁板炒烤羊肉</td>
+                                     <td>例</td>	
+                                     <td>1</td>	
+                                     <td>78</td>	
+                                     <td>&nbsp;</td>	
+                                  </tr>
+                                 </table>
+                              </li>
+                          </ul>      
+                       </div>      
+                   </div> 
+                   <div>
+                      <div class="form_li3">
+                      <span class="form_title"><span class="c3 md_6">*</span>配餐标准：</span>    
+                      <span class="form_content"> 
+                        <input type="text" value="" class="w62"  onfocus="Focus(this)"  onblur="Blur(this)"/> 
+                        — 
+                        <input type="text" value="" class="w62"  onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">元/桌（不含酒水）</span>  
+                      </span>
+                   </div>
+                   </div>
+                  
+                  
+                   
+                   
+                   
+                </div>
+            
+            
+            </div>
+            <div class="c_a_btn">
+    
+    <div class="total_btn_center">
+      <a class="bt_4"><span>提 交</span></a>
+      <a class="bt_5"><span>暂 存</span></a>
+      <a class="bt_5"><span>取 消</span></a>
+    </div>
+  </div>      
+                  
+                   
+    </div>
+
+
+  
+</body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jquery隐藏滚动条</title>
+
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="styles/jscrollpane2.css" />
+
+<script type="text/javascript" src="scripts/jquery-1.8.0.js"></script>
+<script type="text/javascript" src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+
+<script type="text/javascript" src="scripts/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="scripts/jquery.jscrollpane.min.js"></script>
+
+
+<script type="text/javascript" src="scripts/common.js"></script>
+
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<style>
+body{overflow:hidden;overflow-y:hidden;}
+
+</style>
+
+<script>
+$(document).ready(function(e) {
+   rebox(); 
+   topNav()
+   var table=$(".cookChecked .service_table")
+   setTableRowColor(table)  
+});
+$(window).resize(function(){
+	rebox();
+})
+function rebox(){
+	  $(".service_box").height($(window).height()-321);
+	  $(".cookChecked").height($(window).height()-242);
+	  $('#cookChecked').jScrollPane({
+                       //showArrows: true,  //显示自动箭头
+                       mouseWheelSpeed:40, //鼠标速度(高度)
+                       scrollPagePercent:0.8 //page按钮翻页速度
+      });
+	
+}
+</script>
+</head>
+<body>
+
+   <div class="address"><a>首页</a><span class="f1 md_6">&gt;</span><a>餐饮</a></div>
+   <div class="line"></div>
+   <div class="s_d_content md_11"> 
+            <div class="service_right service_back">
+              <div class="smenu_checked" id="smenu_checked">
+                   <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                    <tr>
+                       <th width="40%">菜品</th>	                           
+                       <th width="12%">规格</th>
+                       <th width="12%">数量</th>
+                       <th width="12%">单价</th>
+                       <th width="12%">小计</th>	                           
+                    </tr>
+                    </table>
+                    <div id="cookChecked" class="cookChecked">
+                    <table cellpadding="0" cellspacing="0"  border="0" class="service_table">
+                    <tr>
+                       <td  width="40%">铁板炒烤羊肉</td>
+                       <td  width="12%">例</td>	
+                       <td  width="12%">1</td>	
+                       <td  width="12%">78</td>	
+                       <td  width="12%">78</td>	
+                    </tr>
+                    <tr>
+                       <td title="铁板炒烤羊肉111111">铁板炒烤羊肉111111</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr> 
+                    <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr> <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                    <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                    <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr> <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                     <tr>
+                       <td>铁板炒烤羊肉</td>
+                       <td>例</td>	
+                       <td>1</td>	
+                       <td>78</td>	
+                       <td>78</td>	
+                    </tr>
+                       
+                  </table>
+                  </div>
+              </div>
+              <div class="service_jiesuan">
+                   <p class="jiesuan_cost"><span class="fw_b c4">总计：￥</span><span class="cost">1212.10</span></p>   
+                   <a class="jiesuan">结算</a>
+              </div>
+              
+            </div> 
+            <div class="service_left">
+              <div class="service_back entry_box">
+                 <ul>
+                    <li class="entry"><a><em  class="app_icon kaitai"></em>开台</a></li>
+                    <li class="entry"><a><em class="app_icon zhuantai disabled"></em>转台</a></li>
+                    <li class="entry"><a><em class="app_icon  jiajian"></em>加减菜</a></li>
+                    <li class="entry"><a><em  class="app_icon dayin"></em>打印账单</a></li>
+                    <li class="entry"><a id="jiesuan"><em class="app_icon jiesuan"></em>结算</a></li>
+                    <li class="entry"><a><em class="app_icon shenqingdan"></em>申请单</a></li>
+                 </ul>
+               </div>
+               <div class="catering_tab mt_10" id="menu1">
+                   <ul>
+                     <li><a href="#" class="current" onclick="setTabC(1,0)">包厢</a></li> 
+                     <li><a href="#" onclick="setTabC(1,1)">宴会厅</a></li>
+                   </ul>
+                   <div class="floatr pdt_8 dinner">
+                   <input class="Wdate float1 w100" style="margin-right:5px" type="text" onClick="WdatePicker()" value="2013-4-15"/>
+                    <ul>
+                       <li class="select">中餐</li>
+                       <li>晚餐</li>
+                    </ul>
+                   </div>
+               </div>
+               <div class="service_back mt_10" id="main1">
+                <ul>
+                  <div class="service_box" id="serviceBox">
+                          <a  class="service_num"  id="menuChoose"  href="#">1</a>
+                          <a  class="service_num">2</a>
+                          <a  class="service_num"><span><em class="app_icon printer"></em>3</span></a>
+                          <a  class="service_num">4</a>
+                          <a  class="service_num">5</a>
+                          <a  class="selected">6</a>
+                          <a  class="service_num">7</a>
+                          <a  class="service_num">8</a>
+                          <a  class="service_num">9</a>
+                          <a  class="service_num">10</a>
+                          <a  class="service_num">11</a>
+                          <a  class="service_num"><span><em class="app_icon printer"></em>12</span></a>
+                          <a  class="service_num">13</a>
+                          <a  class="service_num">14</a>
+                          <a  class="service_num">15</a>
+                          <a  class="service_num">16</a>
+                          <a  class="service_num">17</a>
+                          <a  class="service_num">18</a>
+                          <a  class="service_num">19</a>
+                  </div>
+                  <div class="box_description">
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请人：</span></span> 
+                        <span class="service_content">候锦蓉<span class="ml_35">流程信息化总部</span><span class="ml_35 fw_b c1">13456985621</span></span>
+                    </div>
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请桌数：</span></span> 
+                        <span class="service_content">2</span>
+                    </div>
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请人：</span></span> 
+                        <span class="service_content">不吃辣，菜已清淡为主</span>
+                    </div>
+                  
+                  </div>
+               </ul>
+              
+                <ul style="display:none">
+                  <div class="service_box">
+                          <a  class="service_num">1</a>
+                          <a  class="service_num">2</a></li>
+                          <a  class="service_num">3</a>
+                          <a  class="selected">4</a>
+                          <a  class="service_num">5</a>  
+                  </div>
+                  <div class="box_description">
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请人：</span></span> 
+                        <span class="service_content">候锦蓉<span class="ml_35">流程信息化总部</span><span class="ml_35 fw_b c3">13456985621</span></span>
+                    </div>
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请桌数：</span></span> 
+                        <span class="service_content">2</span>
+                    </div>
+                    <div class="form_li3 clearfix">
+                        <span class="service_title"><span class="c4">申请人：</span></span> 
+                        <span class="service_content">不吃辣，菜已清淡为主</span>
+                    </div>
+                  
+                  </div>
+               </ul>
+               </div>
+               
+          
+          
+          
+          </div> 
+        </div>    
+		
+</body>
+</html>	

@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增来访单位</title>
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script  type="text/javascript"  src="scripts/selectlist1.js"></script>
+<script  type="text/javascript"  src="scripts/common.js"></script>
+
+<script language="javascript">
+ window.onresize=function()
+{
+	
+	resize(input1,content1);
+	resize(input2,content2);
+}
+window.onload=function()
+{
+	
+	outover(1)
+	outover(2)
+}
+
+$(document).ready(function(){
+    $(".bt_7").click(function(){
+	   $("#trip").css("display","block")	
+	 })
+	 
+	/************资源出现删除按钮，点击后删除****************/
+    $(".resource").find(".name").hover(
+	    function(){
+		   $(this).css("cursor","pointer");
+		   $(this).next(".close").css({ "display":"block"})
+	    },
+	    function(){
+			  $(this).next(".close").css({"display":"none" }); 
+	    })
+   $(".resource").find(".close").hover(function()
+	    {
+		  $(this).css("display","block")
+	    })
+	   $(".resource").find(".close").click(function()
+	    {
+		  $(this).parent(".resource").remove();
+	    })
+ 
+   /*******复选框选中后才可以点击上面的图标进行资源匹配********/
+   
+   $('input[name="trip"]').attr("checked",false)
+  $('input[name="trip"]').each(function() {
+	 $(this).click(function(){
+	if($(this).attr("checked"))
+	
+	{
+	   $("#resource_btn").removeClass("resource_btn_disabled").addClass("resource_btn")	
+	   $(this).parent().parent().css("background-color","#ffecb8");	
+	   
+	   $('#car').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '265px',
+		min: false,
+		title:'新增车辆',
+		lock: true, 
+		content: 'url:dialog/car.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#leader').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增预约领导',
+		lock: true, 
+		content: 'url:dialog/leader.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+		
+		$('#expert').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增预约技术专家',
+		lock: true, 
+		content: 'url:dialog/expert.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+		
+
+		$('#souvenir').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增纪念品',
+		lock: true, 
+		content: 'url:dialog/souvenir.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#camera').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增拍照/摄像',
+		lock: true, 
+		content: 'url:dialog/camera.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });
+
+		$('#reporter').dialog({  id:'iframeId',  max: false,
+		width: '700px', height: '220px',
+		min: false,
+		title:'新增记者',
+		lock: true, 
+		content: 'url:dialog/reporter.html',
+		okVal: '新增',
+		parent:this,
+		ok: function () { 
+			/* 这里要注意多层锁屏一定要加parent参数 */ 
+			$.dialog({ icon: 'success.gif',title:'新增成功',content: '新增成功', lock: true,  parent:this,
+		   ok: true, cancelVal: '关闭', cancel: function(){ 
+	
+		} 
+		}); 
+		},  
+		cancelVal: '关闭', 
+		cancel: true  });  
+	}
+	else if($('input[name="trip"]').attr("checked")==false)
+	{
+		//$(this).parent().parent().css("background-color","#fff");
+		//if($('input[name="trip"]').attr("checked")==false)
+		//{
+		  $("#resource_btn").removeClass("resource_btn").addClass("resource_btn_disabled")	 
+		//}
+		//else
+		//{
+		//  $("#resource_btn").removeClass("resource_btn_disabled").addClass("resource_btn")		
+		//}
+	}
+	
+	
+ })
+ 
+ 
+	
+	
+});
+	
+	 
+	
+		   
+		  
+		
+	 
+	 
+});
+
+
+	
+</script>
+</head>
+<body>
+
+
+
+<div class="content_02">
+<div class="address">
+  <a>首页</a><span class="f1 md_6">&gt;</span><a>接待</a>
+</div>
+<div class="line"></div>
+<div class="s_d_content md_11 mt_0 pd_0">
+<div class="flowstep clearfix">
+  <ol class="flowstep-6">
+    <li class="step-first">
+      <div class="step-cur">
+        <div class="step-name">
+           <a href="reception_ready.html" target="_self">基本信息</a>
+        </div>
+        <div class="step-no">    
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+        <a href="reception_ready_person.html" target="_self">人员信息</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+        <a href="reception_ready_trip.html" target="_self">行程资源</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+       <a href="reception_ready_cost.html" target="_self">费用划分</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+         <a href="reception_ready_task.html" target="_self">子任务</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li class="step-last">
+      <div class="step-name">
+        <a href="reception_ready_progress.html" target="_self">流程配置</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+    </li>
+  </ol>
+</div>
+<div id="main1">
+  <div class="c_a_title">填写基本信息</div>
+  <div class="c_a_form">
+    <div class="form_li3 clearfix">
+      <span class="form_title w105"><span class="c3 md_6">*</span>单位类别：</span> 
+      <span class="form_content">
+      <select name="" class="w149">
+        <option>请选择</option>
+        <option>客户</option>
+        <option>政府</option>
+        <option>团队</option>
+      </select>
+      </span>
+     <!-- <span class="c3 e_alarm"><img src="images/error.png" style="vertical-align:middle"/><span class="ml_5">请选择单位类别</span></span>-->
+    </div>
+    <div class="form_li w500">
+      <span class="form_title w105"><span class="c3 md_6">*</span>接待时间：</span> <span class="form_content">
+      <input class="Wdate w120" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" value="2013-4-15 10:25"/>
+      <span class="md_6">到</span>
+      <input class="Wdate w120" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})" value="2013-4-15 10:25"/>
+      </span>
+     <!-- <span class="e_alarm"><img src="images/error.png" style="vertical-align:middle"/><span class="ml_5">请选择单位类别</span></span>-->
+    </div>
+    <div class="form_li">
+      <span class="form_title w105"><span class="c3 md_6">*</span>接待级别：</span> <span class="form_content">
+      <select name="" class="w149">
+        <option>请选择</option>
+        <option>一般级别</option>
+        <option>V1</option>
+        <option>V2</option>
+        <option>V3</option>
+      </select>
+      </span>
+      <!--<span class="e_alarm"><img src="images/error.png" style="vertical-align:middle"/><span class="ml_5">请选择接待级别</span></span>-->
+    </div>
+    <div class="form_li3 w1000">
+      <span class="form_title w105">字幕（主题）：</span> <span class="form_content" >
+      <input name="conference_kind" type="text" value="请填写接待字幕" class="w865 color"  onfocus="Focus(this)"  onblur="Blur(this)"/>
+      </span>
+    </div>
+    <div class="form_li3 clearfix w1000">
+      <div class="form_title w105">
+        来访目的：
+      </div>
+      <div class="form_content ml_115 pop_btn">
+        <input type="button" class="btna"  style="width:100%;"  value="请选择" onclick="selectList(1)" id="input1" />
+      </div>
+      <div class="form_content pop_content clearfix" style="display:none;" id="content1" >
+        <div class="s_module clearfix">
+          <div class="w30 fw_b ml_10 float1">
+            交流
+          </div>
+          <div class="s_c_content ml_10 liw110">
+            <ul>
+              <li>
+                <input name="single" type="checkbox" value="高层互访"  onclick="check(1)"/>
+                高层互访</li>
+              <li>
+                <input name="single" type="checkbox" value="技术交流" onclick="check(1)"/>
+                技术交流</li>
+              <li>
+                <input name="single" type="checkbox" value="企业交流" onclick="check(1)">
+                企业交流 </li>
+              <li>
+                <input name="single" type="checkbox" value="管理经验交流" onclick="check(1)">
+                管理经验交流</li>
+              <li>
+                <input name="single" type="checkbox" value="政府考察" onclick="check(1)">
+                政府考察</li>
+            </ul>
+          </div>
+        </div>
+        <div class="s_module clearfix">
+          <div class="w30 fw_b ml_10 float1">
+            参观
+          </div>
+          <div class="s_c_content ml_10 liw110">
+            <ul>
+              <li>
+                <input name="single" type="checkbox" value="政府招商引资"  onclick="check(1)"/>
+                政府招商引资</li>
+              <li>
+                <input name="single" type="checkbox" value="厂区参观" onclick="check(1)"/>
+                厂区参观</li>
+              <li>
+                <input name="single" type="checkbox" value="专程旅游" onclick="check(1)">
+                专程旅游 </li>
+            </ul>
+          </div>
+        </div>
+        <div class="s_module clearfix">
+          <div class="w30 fw_b ml_10 float1">
+            产品
+          </div>
+          <div class="s_c_content ml_10 liw110">
+            <ul>
+              <li>
+                <input name="single" type="checkbox" value="专程提货" onclick="check(1)"/>
+                专程提货</li>
+              <li>
+                <input name="single" type="checkbox" value="设备考察" onclick="check(1)"/>
+                设备考察</li>
+              <li>
+                <input name="single" type="checkbox" value="二手设备考察" onclick="check(1)"/>
+                二手设备考察 </li>
+              <li>
+                <input name="single" type="checkbox" value="成交条件谈判" onclick="check(1)"/>
+                成交条件谈判</li>
+              <li>
+                <input name="single" type="checkbox" value="培训" onclick="check(1)"/>
+                培训</li>
+              <li>
+                <input name="single" type="checkbox" value="售后" onclick="check(1)"/>
+                售后</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form_li3 clearfix w1000">
+      <div class="form_title w105">
+        产品意向：
+      </div>
+      <div class="form_content ml_115 pop_btn">
+        <input type="button" class="btna"  style="width:100%;"  value="请填写" onclick="selectList(2)" id="input2" />
+      </div>
+    </div>
+    <div class="form_content pop_content clearfix"  id="content2" style="display:none">
+        <div class="s_module">
+          <div class="w80 fw_b ml_10 float1">
+            混凝土机械
+          </div>
+          <div class="s_c_content ml_10 liw230">
+            <ul>
+              <li>
+                <div class="name">
+                  泵车
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数"  onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  拖泵
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  搅拌车
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="s_module" >
+          <div class="w80 fw_b ml_10 float1">
+            筑路机械
+          </div>
+          <div class="s_c_content ml_10 liw230">
+            <ul>
+              <li>
+                <div class="name">
+                  摊铺机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  压路机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  平地机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  沥青搅拌站
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  铣刨机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+       <div class="s_module" >
+          <div class="w80 fw_b ml_10 float1">
+            筑路机械
+          </div>
+          <div class="s_c_content ml_10 liw230">
+            <ul>
+              <li>
+                <div class="name">
+                  摊铺机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  压路机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  平地机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  沥青搅拌站
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+              <li>
+                <div class="name">
+                  铣刨机
+                </div>
+                <div class="num">
+                  <input type="text" class="w30 color" value="台数" onfocus="Focus(this)"  onblur="Blur(this)" onchange="read(2)"/>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="form_li w500">
+          <span class="form_title">本次采购金额：</span> <span class="form_content">
+          <input name="" type="text" value="" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">万元</span>
+          </span>
+        </div>
+        <div class="form_li w500">
+          <span class="form_title">累计采购金额：</span> <span class="form_content">
+          <input name="" type="text" value="" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">万元</span>
+          </span>
+        </div>
+    </div>
+    <div class="form_li3">
+      <span class="form_title w105"><span class="c3 md_6">*</span>接待总人数：</span> <span class="form_content">
+      <input name="" type="text" value="含我方陪同人员"  class="w120 color error" onfocus="Focus(this)"  onblur="Blur(this)"/><span class="ml_5">人</span>
+      </span>
+      <span class="e_alarm mt_5"><img src="images/error.png" style="vertical-align:middle"/><span class="ml_5">请输入接待总人数</span></span>
+    </div>
+    <div class="form_li3">
+      <span class="form_title w105">相关附件：</span>    
+      <span class="form_content file_content">
+      
+        
+        <input type='text' name='textfield' id='textfield' class="w386"/>  
+        <a class="bt_3 mt_3"><span>浏览</span></a>
+        <a class="bt_3 mt_3"><span>上传</span></a>
+        <!-- <input type="file" name="fileField" class="file" id="fileField" size="28" 
+                 onchange="document.getElementById('textfield').value=this.value" />-->
+      </span>
+   </div>
+    <div class="form_li3"> 
+      <p class=" ml_115">深圳华为科技有限公司申请表<span class="c1 ml_71">删除</span></p>
+     
+   </div>
+  </div>
+  </div>
+</div>
+</div>
+ <div class="c_a_btn">
+  <div class="total_btn_center">
+   <a class="bt_4" href="reception_ready_person.html"><span>填写人员信息</span></a>
+   <a class="bt_5" href="#"><span>暂存</span></a>
+   <a class="bt_5" href="#"><span>取消</span></a>
+  </div>  
+</div>
+
+</body>
+</html>

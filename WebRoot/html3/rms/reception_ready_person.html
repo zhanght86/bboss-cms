@@ -1,0 +1,365 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增来访单位</title>
+<link href="styles/pdp/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<link href="styles/menu.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
+<script  type="text/javascript"  src="scripts/dialog.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+<script  type="text/javascript"  src="scripts/menu.js"></script>
+<script  type="text/javascript"  src="scripts/tab.js"></script>
+<script  type="text/javascript"  src="scripts/selectlist1.js"></script>
+<script  type="text/javascript"  src="scripts/common.js"></script>
+
+<script language="javascript">
+ window.onresize=function()
+{
+	
+	resize(input1,content1);
+	resize(input2,content2);
+}
+window.onload=function()
+{
+	
+	outover(1);
+	outover(2);
+	
+	
+}
+</script>
+</head>
+<body>
+
+
+
+<div class="content_02">
+<div class="address">
+  <a>首页</a><span class="f1 md_6">&gt;</span><a>接待</a>
+</div>
+<div class="line"></div>
+<div class="s_d_content md_11 mt_0 pd_0">
+<div class="flowstep clearfix">
+  <ol class="flowstep-6">
+    <li class="step-first">
+      <div class="step-done">
+        <div class="step-name">
+          <a href="reception_ready.html" target="_self">基本信息</a>
+        </div>
+        <div class="step-no">
+          
+        </div>
+      </div>
+    </li>
+    <li>
+     <div class="step-cur">
+      <div class="step-name">
+         <a href="reception_ready_person.html" target="_self">人员信息</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+     </div>
+    </li>
+    <li>
+      <div class="step-name">
+        <a href="reception_ready_trip.html" target="_self">行程资源</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+        <a href="reception_ready_cost.html" target="_self">费用划分</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li>
+      <div class="step-name">
+       <a href="reception_ready_task.html" target="_self">子任务</a>
+      </div>
+      <div class="step-no">
+       
+      </div>
+    </li>
+    <li class="step-last">
+      <div class="step-name">
+        <a href="reception_ready_progress.html" target="_self">流程配置</a>
+      </div>
+      <div class="step-no">
+        
+      </div>
+    </li>
+  </ol>
+</div>
+<div id="main1">
+  
+ <div class="c_a_title">
+    来访人员信息
+  </div>
+ <div class="c_a_form">
+     <a class="bt_7" href="#" id="visited_company" onclick="document.getElementById('person').style.display='block'"><span>新增来访单位</span></a> 
+  
+   <div  id="person" style="display:none">
+     <div class="reception_person mt_10 w1000" >
+          <div  class="repection_list_title">
+           <ul>
+              <li class="com_name fw_b c1">深圳华为科技有限公司 <a href="#" class="ml_10 fw" id="vcompany"><span class="c1">更多</span></a> <a href="#" class="ml_10 fw"><span class="c1">删除</span></a></li>
+              <li class="com_ind fw_b">责任营销代表：张三 / 13562124525</li>   
+              <li class="com_b"> <a class="bt_3" onclick="document.getElementById('a_person').style.display='block'"><span>新增来访人员</span></a>
+              <a class="bt_3" id="mperson"><span>导入来访人员</span></a></li>           
+           </ul>                        
+          </div>
+          <table cellpadding="0" cellspacing="0" border="0" class="table_blue w1000" style="display:none" id="a_person">
+            <thead>
+                <tr>
+                   <th><input type="checkbox"/></th>
+                   <th>姓名</th>
+                   <th>职位</th>
+                   <th>性别</th>
+                   <th>年龄</th>
+                   <th>电话</th>
+                   <th>来访次数</th>
+                   <th>主访人</th>
+                   <th>操作</th>
+                
+                
+                </tr>
+            
+            </thead>
+           
+           
+            <tbody>
+                <tr>
+                 
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">张三
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                  男
+                  </td>
+                  <td width="102">30</td>
+                  <td width="162">1354562315</td>
+                  <td width="102">2</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" width="80">
+                  <a><span class="c1">更多</span></a><a><span class="c1 ml_10">删除</span></a>
+                  </td>  
+                </tr>
+                <tr>
+                 
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122"><input type="text"  value="姓名" class="w100 color" onfocus="Focus(this)"  onblur="Blur(this)"/>
+                  
+                  </td>
+                  <td width="162"><input type="text"  value="职位" class="w120 color" onfocus="Focus(this)"  onblur="Blur(this)"/>
+                  </td>
+                  <td width="102">
+                  <select name="" class="w80">
+                    <option>男</option>
+                    <option>女</option>
+                  </select>
+                  </td>
+                  <td width="102"><input type="text"  value="年龄" class="w80 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                  <td width="162"><input type="text"  value="电话" class="w120 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                  <td width="102"><input type="text"  value="来访次数" class="w80 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                  <td width="102"><input type="checkbox" />主访人</td></td>
+                  <td class="tright" width="80">
+                  <input type="image"  class="mt_5" src="images/save.gif"/>
+                  <input type="image"  class="mt_5" src="images/delete.gif"/>
+                  </td>  
+                </tr>
+           </tbody>
+        </table> 
+     </div>
+     
+     
+      
+     
+     
+    <!--  <div class="reception_person mt_10 w1000">
+          <div  class="repection_list_title">
+           <ul>
+              <li class="check"><input type="checkbox"/></li>
+              <li class="com_name fw_b c1">深圳华为科技有限公司 <a href="#" class="ml_10 fw" id="vcompany">更多</a> <a href="#" class="ml_10 fw">删除</a></li>
+              <li class="com_ind fw_b">责任营销代表：张三 / 13562124525</li> 
+              <li class="com_b"><a class="bt_3"><span>新增来访人员</span></a>
+              <a class="bt_3" id="mperson"><span>导入来访人员</span></a></li>              
+           </ul>                        
+          </div> 
+          <table cellpadding="0" cellspacing="0" border="0" class="table_blue w1000">
+            <tbody>
+                
+               <tr>
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">候锦蓉
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                 女
+                  </td>
+                  <td width="102">27</td>
+                  <td width="162">12345678952</td>
+                  <td width="102">1</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" >
+                  <a href="#" id="rperson"><span class="c1">更多</span></a>
+                  <a href="#"><span class="c1 ml_10">删除</span></a>
+                  </td>  
+               </tr>
+                <tr>
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">候锦蓉
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                 女
+                  </td>
+                  <td width="102">27</td>
+                  <td width="162">12345678952</td>
+                  <td width="102">1</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" width="80">
+                  <a href="#" id="rperson"><span class="c1">更多</span></a>
+                  <a href="#"><span class="c1 ml_10">删除</span></a>
+                  </td>  
+               </tr>
+                <tr>
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">候锦蓉
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                 女
+                  </td>
+                  <td width="102">27</td>
+                  <td width="162">12345678952</td>
+                  <td width="102">1</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" width="80">
+                  <a href="#" id="rperson"><span class="c1">更多</span></a>
+                  <a href="#"><span class="c1 ml_10">删除</span></a>
+                  </td>  
+               </tr>
+                <tr>
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">候锦蓉
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                 女
+                  </td>
+                  <td width="102">27</td>
+                  <td width="162">12345678952</td>
+                  <td width="102">1</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" width="80">
+                  <a href="#" id="rperson"><span class="c1">更多</span></a>
+                  <a href="#"><span class="c1 ml_10">删除</span></a>
+                  </td>  
+               </tr>
+                <tr>
+                  <td width="35" class="tcenter"><input type="checkbox"/></td>                                                                                              
+                  <td width="122">候锦蓉
+                  
+                  </td>
+                  <td width="162">软件工程师
+                  </td>
+                  <td width="102">
+                 女
+                  </td>
+                  <td width="102">27</td>
+                  <td width="162">12345678952</td>
+                  <td width="102">1</td>
+                  <td width="102">主访人</td></td>
+                  <td class="tright" width="80">
+                  <a href="#" id="rperson"><span class="c1">更多</span></a>
+                  <a href="#"><span class="c1 ml_10">删除</span></a>
+                  </td>  
+               </tr>
+               
+               
+          </tbody>
+        </table>
+     
+     
+     
+     </div>  -->
+
+     <div class="reception_person mt_10 w1000">
+          <div  class="repection_list_title">
+           <ul> 
+              <li class="com_name fw_b c1">陪同人员信息 </li>
+           
+              <li class="com_b"> <a class="bt_3" onclick="document.getElementById('b_person').style.display='block'"><span>新增陪同人员</span></a>
+              <a class="bt_3" id="mperson"><span>导入陪同人员</span></a></li>           
+           </ul>                        
+          </div>
+         <table cellpadding="0" cellspacing="0" border="0" class="table_blue w1000 mar_70" id="b_person" style="display:none">
+           <thead>
+                <tr>
+                   <th><input type="checkbox"/></th>
+                   <th>姓名</th>
+                   <th>单位</th>
+                   <th>职位</th>
+                   <th>性别</th>
+                   <th>电话</th>
+                   <th>操作</th>
+                
+                
+                </tr>
+            
+            </thead>
+       
+          <tbody>
+             <tr>
+                <td  width="35"><input type="checkbox"/></td>                                                                                              
+                <td width="120"><input type="text"  value="姓名" class="w100 color error" onfocus="Focus(this)"  onblur="Blur(this)"/> 
+
+                </td>
+                <td width="271"><input type="text"  value="单位"  class="w261 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                <td width="160"><input type="text"  value="职位" class="w120 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                <td width="150"><select name="" class="w120">
+                  <option>男</option>
+                  <option>女</option>
+                </select></td>
+                <td width="155"><input type="text"  value="电话" class="w120 color" onfocus="Focus(this)"  onblur="Blur(this)"/></td>
+                <td width="80"  class="tright">
+                <input type="image"  class="mt_5" src="images/save.gif"/>
+                 <input type="image"  class="mt_5" src="images/delete.gif"/>
+                </td>  
+             </tr>
+          </tbody>
+      </table>
+     </div>
+   </div>
+    
+</div>
+</div>
+</div>
+<div class="c_a_btn">
+  <div class="total_btn_center">
+   <a class="bt_4" href="reception_ready_trip.html"><span>行程资源</span></a>
+   <a class="bt_5" href="#"><span>暂存</span></a>
+   <a class="bt_5" href="#"><span>取消</span></a>
+  </div>  
+</div>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="../styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  <div class="form_li3 clearfix"> 
+       <span class="form_title"><span class="c3 md_6">*</span>园区：</span></span>
+       <span class="form_content">
+         <select name="" class="w128">
+           <option>星沙</option>
+           <option>沈阳</option>
+          </select>
+       </span>
+       
+  </div>
+  <div class="form_li1"> 
+       <span class="form_title"><span class="c3 md_6">*</span>日期：</span></span>
+       <span class="form_content">
+          <input class="w120" type="text" />
+       </span>
+  </div>
+  <div class="form_li2"> 
+       <span class="form_title"><span class="c3 md_6">*</span>时间：</span></span>
+       <span class="form_content">
+           <input class="w60" type="text" />- <input class="w60" type="text" />
+       </span>
+  </div>
+  <div class="form_li3 clearfix "> 
+       <span class="form_title">地点：</span>
+       <span class="form_content"><input class="w72p"  type="text" /></span>
+  </div>
+  <div class="form_li3 clearfix "> 
+       <span class="form_title">内容：</span>
+       <span class="form_content"><input class="w72p"  type="text"/></span>
+  </div>
+  <script language="javascript">
+       function  rDisplay(n)
+	   {
+		  var rList=document.getElementById("resource").getElementsByTagName("input");
+		  var dList=document.getElementById("a"+n);
+		  dList.style.display="none";
+          for(var i=0;i<rList.length;i++)
+		  {
+			 
+			  if(rList[i].checked)
+			  {
+				      dList.style.display=i==n?"block":"none"
+			  }else if(rList[i].unchecked)
+			  {
+				      dList.style.display=i==n?"none":"block"
+			  }
+		  }   
+	   }
+  </script>
+  <div class="form_li3 clearfix "> 
+       <span class="form_title">资源：</span>
+       <div class="form_content s_c_content ml_105 liw110"  id="resource">
+            <ul>  
+              <li><input name="single" type="checkbox" onclick="rDisplay(0)"/>预约领导</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(1)"/>预约技术专家</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(2)"/>接送机</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(3)"/>车辆</li> 
+              <li><input name="single" type="checkbox" onclick="rDisplay(4)"/>酒店</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(5)"/>宴会</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(6)"/>座谈</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(7)"/>参观</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(8)"/>纪念品</li> 
+              <li><input name="single" type="checkbox" onclick="rDisplay(9)"/>车辆放行</li>
+              <li><input name="single" type="checkbox" onclick="rDisplay(10)"/>娱乐</li>
+            </ul>
+      </div>
+  </div>
+  <div id="a0"  class="md_11 clearfix pd_10 add_trip" style="display:none">
+  　　　<div class="form_li1 w100p"> 
+           <span class="form_title">类别：</span></span>
+           <span class="form_content">预约领导</span>    
+ 　　　 </div>
+ 　　　　<div class="form_li1 w100p"> 
+           <span class="form_title">姓名：</span></span>
+           <span class="form_content"><input class="w120" type="text" /></span>  
+ 　　　 </div>
+ 　　　　<div class="form_li1 w100p"> 
+           <span class="form_title">理由简述：</span></span>
+           <span class="form_content"><input class="w285" type="text" /></span>  
+ 　　　 </div>
+  </div>
+  <div id="a1" class="md_11 clearfix pd_10 add_trip" style="margin-top:10px; display:none">
+       　<div class="form_li1 w100p"> 
+           <span class="form_title">类别：</span></span>
+           <span class="form_content">预约技术专家</span>    
+ 　　　  </div>
+ 　　　　<div class="form_li1 w100p"> 
+           <span class="form_title">姓名：</span></span>
+           <span class="form_content"><input class="w120" type="text" /></span>  
+ 　　　 </div>
+ 　　　　<div class="form_li1 w100p"> 
+           <span class="form_title">理由简述：</span></span>
+           <span class="form_content"><input class="w285" type="text" /></span>  
+ 　　　 </div>
+  </div>
+  <div id="a2" class="md_11 clearfix pd_10 add_trip" style="margin-top:10px; display:none">
+        <div class="form_li1 w100p"> 
+           <span class="form_title">类别：</span></span>
+           <span class="form_content">接送机</span>    
+ 　　　  </div>
+ 　　　　<div class="form_li1 w100p"> 
+           <span class="form_title">航班号：</span></span>
+           <span class="form_content"><input class="w285" type="text"  value="VN 530T  15JAN T  HANPVG HK1  1025  1415" /></span>  
+ 　　　 </div>
+ 　　　　<div class="form_li3 clearfix">
+           <span class="form_title float1">所需物品：</span></span> 
+           <span class="form_content s_c_content  liw110 float1">
+             <ul>  
+              <li><input name="single" type="checkbox" />鲜花</li>
+              <li><input name="single" type="checkbox"/>接机牌</li>
+              <li><input name="single" type="checkbox"  checked="checked"/>贵宾通道</li>
+            </ul>
+           </span>  
+ 　　　 </div>
+     　<div class="form_li1 w100p"> 
+           <span class="form_title">预计费用：</span></span>
+           <span class="form_content"><input class="w120" type="text" /></span>  
+ 　　　 </div>
+  </div>
+  <div id="a3" style="display:none">4</div>
+  <div id="a4" style="display:none">5</div>
+  <div id="a5" style="display:none">6</div>
+  <div id="a6" style="display:none">7</div>
+  <div id="a7" style="display:none">8</div>
+  <div id="a8" style="display:none">9</div>
+  <div id="a9" style="display:none">10</div>
+  <div id="a10" style="display:none">11</div>
+</body>
+</html>

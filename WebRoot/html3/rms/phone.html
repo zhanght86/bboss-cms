@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新增来访单位</title>
+<link href="styles/main.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript"  src="scripts/jquery-1.7.2.min.js"></script>
+<script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
+
+<script  type="text/javascript" src="scripts/common.js"></script>
+<script type="text/javascript">
+$(function () {
+        $('#container1').highcharts({
+            chart: {
+                type: 'area',
+                spacingBottom: 20,
+				//backgroundColor:'#f4f4f4',
+				borderRadius:0
+            },
+            title: {
+                text: '电话会议当天申请情况 （同一时间段电话数<=50通）',
+				style:{
+					fontFamily:'microsoft yahei',
+					fontSize:'15px',
+					}
+            }, 
+            xAxis: {
+                categories: ['6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00','20:00', '21:00', '22:00', '23:00'],
+				style:{
+					fontFamily:"arial",
+					fontSize:"14px",
+				}
+            },
+            yAxis: {
+				
+                title: {
+                    text: '电话申请通数',
+					style:{
+					fontFamily:'microsoft yahei',
+					fontSize:"14px",
+					
+					
+					}
+                },
+                labels: {
+                    formatter: function() {
+                        return this.value;
+                    }
+                }
+            },
+			legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -30,
+                y: 40,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    this.x +': '+ this.y;
+                }
+            },
+            plotOptions: {
+                area: {
+                    fillOpacity: 0.5
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: '通数',
+				lineWidth:2,
+				color:'#5d9ef8',
+                data: [20, 10, 24, 34, 44, 20, 30, 20,10, 11, 14, 14, 15, 12, 13, 17, 30, 17]
+            }]
+        });
+    });
+    
+
+		</script>
+</head>
+<body>
+<div class="content_02">
+  <div class="address"><a>首页</a><span class="f1 md_6">&gt;</span><a>电话</a><span class="f1 md_6">&gt;</span><a>员工电话会议</a></div>
+  <div class="line"></div>
+  <div class="c_a_form md_10">
+    <div class="form_li3">
+      <span class="form_title w62">会议时间：</span>
+      <span class="form_content">
+        <input class="Wdate w120" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="2013-4-15"/>
+        <a class="bt_3"><span>查询</span></a>
+        <div class="floatr mt_6"><a class="bt_2 ml_140" href="phone_application.html"><span>申请电话会议</span></a></div>
+      </span>
+    </div>
+    <script src="scripts/highcharts.js"></script>
+    <div id="container1" style="height: 260px; margin: 0px auto;margin-top:5px;"></div>
+    <h4>当天申请记录</h4>
+    <div class="thback_table_div">&nbsp;</div>
+    <table cellpadding="0" cellspacing="0" border="0" class="mt_10 thback_table">
+        <thead>
+           <tr>
+              <th nowrap >序号</th>
+              <th nowrap>主题</th>                     
+              <th nowrap >会议时间</th>
+              <th nowrap >预定人</th>
+              <th nowraps>预定人部门</th>
+              <th nowrap >电话通数</th> 
+           </tr>
+        </thead>
+        <tbody>
+           <tr>
+              <td nowrap>1</td>              
+              <td nowrap>服务会议</td>
+              <td nowrap>07:00- 08:00</td> 
+              <td nowrap>肖婷丹</td>
+              <td nowrap>代理商</td>
+              <td nowrap>30</td>  
+           </tr>
+           <tr>
+              <td nowrap>2</td>              
+              <td nowrap>银行沟通会议第二场</td>
+              <td nowrap>08:00- 18:00 </td>
+              <td nowrap> 王瑜</td>
+              <td nowrap> 财务投资总部|资金管理部|</td>
+              <td nowrap> 15</td>   
+           </tr>
+           <tr>
+              <td nowrap>3</td>              
+              <td nowrap>公司代理商周例会</td>
+              <td nowrap> 08:55- 21:07                                                 </td>
+              <td nowrap>张黎明</td>
+              <td nowrap>三一重型装备有限公司|营销公司（一）|经营业务部</td>
+              <td nowrap>8</td> 
+           </tr>
+           <tr>
+              <td nowrap>4</td>              
+              <td nowrap>营销会议</td>
+              <td nowrap> 09:00- 12:14                     </td>
+              <td nowrap> 田瑛 </td>
+              <td nowrap>三一重型装备有限公司|矿机公司|营销公司</td>
+              <td nowrap>5</td>   
+           </tr>
+           <tr>
+             
+              <td nowrap>5</td>              
+              <td nowrap>商旅交流会议</td>
+              <td nowrap>15:00- 17:30</td>
+              <td nowrap>傅志红fuzhihong</td>
+              <td nowrap> 行政公关总部|综合管理部|商旅科</td>
+              <td nowrap>6</td>   
+           </tr>
+           <tr>
+              <td nowrap>6</td>              
+              <td nowrap>营销会议</td>
+              <td nowrap> 15:00- 18:10</td>
+              <td nowrap>田瑛 </td>
+              <td nowrap>三一重型装备有限公司|矿机公司|营销公司</td>
+              <td nowrap>5</td>   
+           </tr>
+           <tr>
+              <td nowrap>7</td>              
+              <td nowrap>客户服务部服务经理电话会议</td>              
+              <td nowrap> 18:30- 20:30</td>
+              <td nowrap>王宏凯</td>
+              <td nowrap>北京市三一重机有限公司|营销公司|客户服务部</td>
+              <td nowrap>30</td>    
+           </tr>
+           <tr>
+              <td nowrap>8</td>              
+              <td nowrap>亚太、南非大区7月份经营工作会议</td>              
+              <td nowrap> 20:00- 23:59</td>
+              <td nowrap>龙超武</td>
+              <td nowrap>泵送事业部|总经理办公室|文秘督办部</td>
+              <td nowrap>12</td>     
+           </tr>
+           <tr>
+              <td nowrap>9</td>              
+              <td nowrap>服务会议</td>
+              <td nowrap>21:00-22:30</td>                                                             
+              <td nowrap>曹诗诗</td>
+              <td nowrap>代理商</td>
+              <td nowrap>12</td>     
+           </tr> 
+         </tbody>
+      </table>
+  </div>
+</div>
+</body>
+</html>
