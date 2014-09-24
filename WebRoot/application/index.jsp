@@ -50,7 +50,7 @@
 		}
 		
 		if($("#app_mode_type").val() == ""){
-			alert("请选择应用类型");
+			alert("请选择部署类型");
 			return false;
 		}
 		if($("#todo_url").val() == ""){
@@ -70,7 +70,7 @@
 			id : 'add',
 			title : '新增应用',
 			width : 500,
-			height : 320,
+			height : 360,
 			content : 'url:' + "<%=request.getContextPath()%>/application/appTypeAdd.jsp"
 		});
 	}
@@ -201,26 +201,6 @@
 		});
 	}
 	
-	function picRefApp(){
-		var appName = "";
-		var appInfoId = "";
-		var appInfoRadio = $('input[name="appInfoRadio"]:checked');
-		if(appInfoRadio != null && appInfoRadio.length > 0){
-			appInfoId = $('input[name="appInfoRadio"]:checked').val();
-			appName = document.getElementById(appInfoId).childNodes[2].innerHTML;
-		}else{
-			alert("请先选择一条记录查看");
-			return;
-		}
-		$.dialog({
-			id : 'picRefApp',
-			title : appName+'应用图片选择',
-			width : 450,
-			height : 320,
-			content : 'url:' + "<%=request.getContextPath()%>/application/picRefApp.page?appInfoId="+appInfoId
-		});
-	}
-	
 	//上传应用图片
 	function uploadAppPic(){
 		$.dialog({
@@ -255,7 +235,7 @@
 	      								<td><input type="text" name="system_name" id="system_name" class="w120" /></td>
 	      								<th>应用编号：</th>
 	      								<td><input type="text" name="system_id" id="system_id" class="w120" /></td>
-	      								<th>应用类型：</th>
+	      								<th>部署类型：</th>
 										<td><select id='app_mode_type' name="app_mode_type" required="false"
 											style="width: 120px;">
 											<option value=""></option>

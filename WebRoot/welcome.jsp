@@ -21,13 +21,16 @@
 	*/
 	//window.location.href = 'login.jsp';
 	<%
-		String rpage = "login.jsp";
+		String rpage = "sanydesktop/index.page";
 		AccessControl control = AccessControl.getAccessControl();
 		if(control != null)
 		{
 			rpage = control.getIndexPage(request);
 			if(rpage == null || rpage.equals(""))
-				rpage = "login.jsp";
+				rpage = "sanydesktop/index.page";
+			if(rpage != null && 
+					(rpage.equals(request.getContextPath()) || rpage.equals(request.getContextPath() + "/")) )
+				rpage = "sanydesktop/index.page";
 		}
 	%>
 	window.location.href = '<%=rpage%>';

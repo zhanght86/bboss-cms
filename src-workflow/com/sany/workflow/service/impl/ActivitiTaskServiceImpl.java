@@ -97,20 +97,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 							.getNode_key() + "_groups", "");
 				}
 
-				// 串/并行切换(多实例)
-//				String isMulti = activitiNodeCandidateList.get(i).getIsMulti();
-//				if ("1".equals(isMulti)) {
-//					variableMap
-//							.put(activitiNodeCandidateList.get(i).getNode_key()
-//									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-//									MultiInstanceActivityBehavior.multiInstanceMode_sequential);
-//				} else if ("2".equals(isMulti)) {
-//					variableMap
-//							.put(activitiNodeCandidateList.get(i).getNode_key()
-//									+ MultiInstanceActivityBehavior.multiInstanceMode_variable_const,
-//									MultiInstanceActivityBehavior.multiInstanceMode_parallel);
-//				}
-
 			}
 		}
 
@@ -150,7 +136,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					} else {
 						activitiService.completeTaskWithReason(
 								task.getTaskId(), task.getCurrentUser(),
-								variableMap, task.getCompleteReason());
+								variableMap, "", "完成任务",
+								task.getCompleteReason());
 					}
 
 				} else {
@@ -163,7 +150,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					} else {
 						activitiService.completeTaskWithLocalVariablesReason(
 								task.getTaskId(), task.getCurrentUser(),
-								variableMap, task.getTaskDefKey(),
+								variableMap, task.getTaskDefKey(), "", "完成任务",
 								task.getCompleteReason());
 					}
 				}
@@ -180,7 +167,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 					} else {
 						activitiService.completeTaskWithReason(
-								task.getTaskId(), variableMap,
+								task.getTaskId(), variableMap, "", "完成任务",
 								task.getCompleteReason());
 					}
 
@@ -192,7 +179,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					} else {
 						activitiService.completeTaskLoadCommonParamsReason(
 								task.getTaskId(), variableMap,
-								task.getTaskDefKey(), task.getCompleteReason());
+								task.getTaskDefKey(), "", "完成任务",
+								task.getCompleteReason());
 					}
 				}
 			}
@@ -220,16 +208,16 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			Map<String, Object> variableMap = getVariableMap(nodeList,
 					nodevariableList);
 
-			String remark = task.getCompleteReason()
-					+ "<br/>备注:"
+			String remark = "["
 					+ activitiService.getUserInfoMap().getUserName(
-							task.getCurrentUser()) + "将任务驳回至["
+							task.getCurrentUser()) + "]将任务驳回至["
 					+ task.getToActName() + "]";
 
 			if (StringUtil.isNotEmpty(task.getCompleteReason())) {
 				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
 						variableMap, remark, task.getRejectToActId(),
-						rejectedtype == 1 ? true : false);
+						rejectedtype == 1 ? true : false, "驳回任务",
+						task.getCompleteReason());
 			} else {
 				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
 						variableMap, task.getRejectToActId(),
@@ -237,10 +225,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			}
 
 			// 日志记录驳回操作
-			activitiService.addDealTask(task.getTaskId(), activitiService
-					.getUserInfoMap().getUserName(task.getCurrentUser()), "1",
-					task.getProcessIntsId(), task.getProcessKey(), remark, task
-							.getRejectToActId(), task.getToActName());
+			activitiService.addDealTask(task.getTaskId(),
+					task.getCurrentUser(), activitiService.getUserInfoMap()
+							.getUserName(task.getCurrentUser()), "1", task
+							.getProcessIntsId(), task.getProcessKey(), task
+							.getCompleteReason(), "驳回任务", remark);
 
 			tm.commit();
 		} catch (Exception e) {

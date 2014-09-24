@@ -22,7 +22,9 @@
        	<th>超时提醒状况</th>
        	<th>处理人</th>
        	<th>签收人</th>
-       	<th>操作内容</th>
+       	<th>处理操作</th>
+       	<th>处理意见</th>
+       	<th>备注</th>
       </pg:header>	
 	<pg:list requestKey="taskHistorList">
 	   	<tr height="25px">
@@ -89,6 +91,18 @@
 				<pg:cell colName="ASSIGNEE_NAME"/>
 			</td>  
 	    	<td>
+				 <pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>
+				 <pg:notempty colName="BUSSINESS_OP" >
+				 	<pg:cell colName="BUSSINESS_OP" />
+				 </pg:notempty>
+			</td> 
+			<td>
+				 <pg:empty colName="BUSSINESS_REMARK" >&nbsp;</pg:empty>
+				 <pg:notempty colName="BUSSINESS_REMARK" >
+				 	<pg:cell colName="BUSSINESS_REMARK" />
+				 </pg:notempty>
+			</td> 
+			<td>
 	    	 <pg:empty colName="DELETE_REASON_" >
 	    	 	<pg:equal colName="IS_AUTO_COMPLETE" value="0">
 		    	 	<pg:equal colName="ACT_TYPE_" value="startEvent">流程开启</pg:equal>
@@ -105,7 +119,7 @@
 	    	 <pg:notempty colName="DELETE_REASON_" >
 	    		<pg:cell colName="DELETE_REASON_" />
 	    	 </pg:notempty>
-	    	</td>  
+	    	</td> 
 	    </tr>
 	 </pg:list>
 </table>

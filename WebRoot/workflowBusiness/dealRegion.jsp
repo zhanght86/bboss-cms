@@ -1,7 +1,18 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
-<pg:notin actual="${pagestate}" scope="1,5,6">
+<pg:notin actual="${pagestate}" scope="1,2,5,6">
+
+	<pg:in actual="${pagestate}" scope="4,7">
 	<div class="title_1">审批</div>
+	</pg:in>
+	
+	<pg:equal actual="${pagestate}" value="3">
+		<pg:notempty colName="isRecall">
+			<pg:equal colName="isRecall" value="1">
+				<div class="title_1">审批</div>
+			</pg:equal>
+		</pg:notempty>
+	</pg:equal>
 	
 	<table width="600" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
 		<pg:beaninfo requestKey="task" >
@@ -14,11 +25,23 @@
 			<input type="hidden" name="proOrderId" id="proOrderId" value="" />
 			
 			<%-- 查看状态，不显示通过，转办，驳回，废弃功能--%>
-			<pg:notin actual="${pagestate}" scope="3,5,6">
+			<pg:notin actual="${pagestate}" scope="5,6">
 			<tr>
+				<pg:in actual="${pagestate}" scope="4,7">
 				<th width="100"><span class="required" >*</span>处理结果</th>
+				</pg:in>
+				
+				<pg:equal actual="${pagestate}" value="3">
+					<pg:notempty colName="isRecall">
+						<pg:equal colName="isRecall" value="1">
+							<th width="100"><span class="required" >*</span>处理结果</th>
+						</pg:equal>
+					</pg:notempty>
+				</pg:equal>
+				
 				<td>
 			
+				<pg:notequal actual="${pagestate}" value="3" >
 				<input name="operateType" type="radio" value="pass" />通过
 				
 				<input name="operateType" type="radio" value="turnTo" />转办
@@ -34,25 +57,20 @@
 						<input name="operateType" type="radio" value="toEnd" />废弃
 					</pg:equal>
 				</pg:notempty>
+				</pg:notequal>
+				
+				<pg:in actual="${pagestate}" scope="3,7" >
+				<pg:notempty colName="isRecall">
+					<pg:equal colName="isRecall" value="1">
+						<input name="operateType" type="radio" value="recall" />撤回
+					</pg:equal>
+				</pg:notempty>
+				</pg:in>
 				
 				</td>
 			</tr>
 			</pg:notin>
 			
-			<%-- 第三方查看(不是当前节点的处理人)有撤回功能--%>
-			<pg:equal actual="${pagestate}" value="3" >
-			<pg:notempty colName="isRecall">
-				<pg:equal colName="isRecall" value="1">
-					<tr>
-						<th width="100">处理结果：</th>
-						<td>
-							<input name="operateType" type="radio" value="recall" />撤回
-						</td>
-					</tr>
-				</pg:equal>
-			</pg:notempty>
-			</pg:equal>
-		
 			<tr id="rejectto" style="display: none">
 				<th>驳回到：</th>
 				<td > 

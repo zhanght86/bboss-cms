@@ -54,12 +54,38 @@ public class ActivitiBusinessAction {
 	 */
 	public String toworkflowMain(ModelMap model) throws Exception {
 		String processKey = "Mms.return";
-		List<ActNode> actList = workflowService
-				.getWFNodeConfigInfoForCommon(processKey);
+		List<ActNode> actList = null;
+
+		// 读取暂存form表单数据是否存在
+		ProIns proIns = workflowService.getFormDatasByBusinessKey("流程开启设置3");
+		if (proIns != null) {
+			actList = proIns.getActs();
+			model.addAttribute("pagestate", "2");
+		} else {
+			actList = workflowService.getWFNodeConfigInfoForCommon(processKey);
+			model.addAttribute("pagestate", "1");
+		}
 		model.addAttribute("actList", actList);
-		model.addAttribute("pagestate", "1");
 		model.addAttribute("processKey", processKey);
 		return "path:toIndex";
+	}
+
+	/**
+	 * 暂存审批表单数据
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年8月20日
+	 */
+	public @ResponseBody
+	String tempSaveFormDatas(ProIns proIns, ModelMap model) throws Exception {
+		try {
+			workflowService.tempSaveFormDatas(proIns, "流程开启设置3", "Mms.return");
+			return "success";
+		} catch (Exception e) {
+			return "fail:" + e.getMessage();
+		}
 	}
 
 	/**
@@ -107,7 +133,7 @@ public class ActivitiBusinessAction {
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
 			workflowService
-					.startProc(proIns, "流程开启设置5", "Mms.return", paramMap);
+					.startProc(proIns, "流程开启设置3", "Mms.return", paramMap);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -126,8 +152,8 @@ public class ActivitiBusinessAction {
 			String taskId, String userId, ModelMap model) throws Exception {
 
 		workflowService.toDealTask("Mms.return",
-				"23d3e61e-3ca4-11e4-8581-4437e6999a31",
-				"05bfea8a-41ef-11e4-ba8c-4437e6999a31", model);
+				"d7268705-43e7-11e4-87d8-4437e6999a31",
+				"d752ee3f-43e7-11e4-87d8-4437e6999a31", model);
 		model.addAttribute("pagestate", WorkflowConstants.PRO_PAGESTATE_APPROVE);
 
 		return "path:toIndex";
@@ -144,8 +170,8 @@ public class ActivitiBusinessAction {
 	public String toViewTask(String processKey, String processId,
 			String taskId, String userId, ModelMap model) throws Exception {
 
-		workflowService.toViewTask("de6c2f66-3ed7-11e4-9c7e-4437e6999a31",
-				"测试3", "wangq81", model);
+		workflowService.toViewTask("7bf0d519-43e5-11e4-b17a-4437e6999a31",
+				"流程开启设置2", "chenm24", model);
 
 		return "path:toIndex";
 	}
@@ -160,9 +186,10 @@ public class ActivitiBusinessAction {
 	 * @throws Exception
 	 *             2014年9月19日
 	 */
-	public String approveWorkFlow(ProIns proIns, String processKey,
+	public @ResponseBody
+	String approveWorkFlow(ProIns proIns, String processKey,
 			Map<String, Object> paramMap) throws Exception {
-		
+
 		try {
 			workflowService.approveWorkFlow(proIns, processKey, paramMap);
 			return "success";

@@ -70,7 +70,7 @@ function InitWorkflowPage(){
 	// 申请页面，暂存后再申请页面，第一节点处理人为当前登录处理人
 	if(pagestate == '1' || pagestate == '2') {
 		$("#realnames1").html(userName);// 前台显示的值
-		$("#candidateName1").val(userId);//保存到后台需要的值
+		$("#candidateName1").val(userAccount);//保存到后台需要的值
 		$("#realName1").val(userName);//保存到后台需要的值
 		$("tr[id='protr1'] td:last").html('当前处理节点');
 		$("tr[id='protr1']").css("color","red");
@@ -98,7 +98,7 @@ function showChooseUsers(){
 	var nowTaskId = "";
 	
 	// 流程开启时默认第一个任务key
-	if (pagestate == 1) {
+	if (pagestate == 1 || pagestate == 2) {
 		nowTaskId = "usertask1";
 	}else {
 		nowTaskId = taskKey;
@@ -127,7 +127,7 @@ function setCandidate(node_key) {
 	var candidateName = $("#candidateName"+node_key).val();
 	if(!candidateName) candidateName='';
 	var url = ctx+"/workflowBusiness/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
+	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:480, content:'url:'+url}); 
 }
 
 //选择转办人
@@ -135,7 +135,7 @@ function delegateUsers(node_key){
 	var candidateName = $("#delegateUser").val();
 	if(!candidateName) candidateName='';
 	var url = ctx +"/workflowBusiness/chooseOrgUser.jsp?node_key=&candidateName="+candidateName+"&callBackFunc=updateAfterChoose"+"&index=1";
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:900,height:480, content:'url:'+url}); 
+	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:480, content:'url:'+url}); 
 }
 
 // 选择处理人后的业务逻辑方法
@@ -171,14 +171,14 @@ function checkoutPageElement(){
 		var check = $("input[name='operateType']:checked").val();
 		if(!check){
 			alert("请选择处理结果！");
-			return ;
+			return false;
 		}
 
 		if(check == 'turnTo'){
 			var duser = $("#delegateUser").val();
 			if(!duser||duser==''){
 				alert("请选择转办人！");
-				return ;
+				return false;
 			}
 		}
 	}
@@ -194,8 +194,10 @@ function checkoutPageElement(){
 				var rid = parseInt(sid) ;
 				var actName = $("tr[id='protr"+ rid +"'] td:eq(0)").text();
 				alert("节点["+actName+"]处理人不能为空！");
-				return ;
+				return false;
 			}
 		}
 	}
+	
+	return true;
 }

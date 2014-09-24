@@ -49,10 +49,29 @@ public class TaskInfo implements Serializable {
 	private String fromUser;// 转办/委托人
 
 	private String fromUserName;// 转办/委托人姓名
-	
+
 	private int isRecall;// 可撤回 0不能1能
 	private int isCancel;// 可驳回 0 不能 1 能
 	private int isDiscard;// 可废弃 0 不能 1 能
+
+	private String assignee;// 处理人
+	private String assigneeName;// 处理人名字
+
+	public String getAssigneeName() {
+		return assigneeName;
+	}
+
+	public void setAssigneeName(String assigneeName) {
+		this.assigneeName = assigneeName;
+	}
+
+	public String getAssignee() {
+		return assignee;
+	}
+
+	public void setAssignee(String assignee) {
+		this.assignee = assignee;
+	}
 
 	public int getIsRecall() {
 		return isRecall;

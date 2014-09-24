@@ -29,7 +29,7 @@
 						<td><pg:cell colName="system_secret_text" defaultValue="" /></td>
 					</tr>
 					<tr>
-						<th>待办类型：</th>
+						<th>待办来源：</th>
 						<td><%-- <pg:cell colName="pending_type" defaultValue="" /> --%>
 						<pg:equal colName="pending_type" value="1">GW</pg:equal>
 						<pg:equal colName="pending_type"  value="2">本地</pg:equal>
@@ -52,8 +52,12 @@
 						<td><pg:cell colName="app_url" defaultValue="" /></td>
 					</tr>
 					<tr>
-						<th>应用类型：</th>
+						<th>部署类型：</th>
 						<td><pg:cell colName="app_mode_type" defaultValue="" /></td>
+					</tr>
+					<tr>
+						<th>应用图片：</th>
+						<td><pg:cell colName="pic_name"  /></td>
 					</tr>
 					</pg:beaninfo>
 				</table>

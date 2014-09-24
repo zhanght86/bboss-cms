@@ -20,6 +20,16 @@ function getSystemSecret(){
 	});
 }
 
+function picRefApp(){
+	$.dialog({
+		id : 'picRefApp',
+		title : appName+'应用图片选择',
+		width : 450,
+		height : 320,
+		content : 'url:' + "<%=request.getContextPath()%>/application/picRefApp.page?appInfoId="+appInfoId
+	});
+}
+
 </script>
 <body >
 	<div class="form_box">
@@ -54,7 +64,7 @@ function getSystemSecret(){
 							required="true" maxlength="100" /><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
-						<th>待办类型：</th>
+						<th>待办来源：</th>
 						<td><!-- <input id="pending_type" name="pending_type" type="text"
 							value="" class="w120 input_default easyui-validatebox"
 							required="true" maxlength="100" /> -->
@@ -92,13 +102,20 @@ function getSystemSecret(){
 							required="true" maxlength="200" /><font color="red">*</font></td>
 					</tr>
 					<tr>
-						<th>应用类型：</th>
+						<th>部署类型：</th>
 						<td><select id='app_mode_type' name="app_mode_type" required="true"
 									style="width: 120px;">
 						    <option value="中央库应用">中央库应用</option>
 						    <option value="独立库应用">独立库应用</option>
 						    <option value="第三方应用">第三方应用</option>
 							</select></td>
+					</tr>
+					<tr>
+						<th>应用图片：</th>
+						<td><input type="text" id="pic_name" name="pic_name" style="width: 240px;"
+						value="<pg:cell colName="pic_name" />"/>
+						<a href="#" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>选择</span></a>
+						</td>
 					</tr>
 				</table>
 			</fieldset>

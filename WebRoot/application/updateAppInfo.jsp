@@ -69,7 +69,7 @@ function getSystemSecret(){
 							required="true" maxlength="100" style="width: 240px;"/><font id="re_secret_font" color="red">*</font></td>
 					</tr>
 					<tr>
-						<th>待办类型：</th>
+						<th>待办来源：</th>
 						<td><%-- <input id="pending_type" name="pending_type" type="text"
 							value="<pg:cell colName="pending_type" defaultValue="" />" class="w120 input_default easyui-validatebox"
 							required="true" maxlength="100" /> --%>
@@ -108,7 +108,7 @@ function getSystemSecret(){
 							required="true" maxlength="200" style="width: 240px;"/><font color="red">*</font></td>
 					</tr>
 					<tr>
-						<th>应用类型：</th>
+						<th>部署类型：</th>
 						<td><select id='app_mode_type' name="app_mode_type" required="true"
 									style="width: 120px;">
 							<option value="中央库应用">中央库应用</option>

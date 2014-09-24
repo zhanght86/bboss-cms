@@ -32,8 +32,8 @@
 					<tr>
 						<tr>
 						<th>父节点：</th>
-						<td><select class="easyui-combotree" id='parentBusinessType' required="true"
-									style="width: 120px;"><font color="red">*</font></td>
+						<td><select class="easyui-combotree" id='parentBusinessType' 
+									style="width: 120px;"></td>
 					</tr>
 					</tr>
 					<tr>

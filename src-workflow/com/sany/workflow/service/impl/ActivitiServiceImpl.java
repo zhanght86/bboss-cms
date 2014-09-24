@@ -132,9 +132,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void rejecttoPreTaskWithReson(String taskId,
-			Map<String, Object> variables, String rejectReason, int rejectedtype) {
+			Map<String, Object> variables, String rejectReason,
+			int rejectedtype, String bussinessop, String bussinessRemark) {
 		this.taskService.rejecttoPreTask(taskId, variables, rejectReason,
-				rejectedtype);
+				rejectedtype, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -152,8 +153,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * @param taskId
 	 */
 	public void rejecttoPreTaskWithReson(String taskId, String rejectReason,
-			int rejectedtype) {
-		this.taskService.rejecttoPreTask(taskId, rejectReason, rejectedtype);
+			int rejectedtype, String bussinessop, String bussinessRemark) {
+		this.taskService.rejecttoPreTask(taskId, rejectReason, rejectedtype,
+				bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -180,14 +182,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void rejecttoPreTask(String taskId, String username,
-			Map<String, Object> variables, String rejectReason, int rejectedtype) {
+			Map<String, Object> variables, String rejectReason,
+			int rejectedtype, String bussinessop, String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
 			this.taskService.rejecttoPreTask(taskId, variables, rejectReason,
-					rejectedtype);
+					rejectedtype, bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -219,14 +222,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void rejecttoPreTask(String taskId, String username,
-			String rejectReason, int rejectedtype) {
+			String rejectReason, int rejectedtype, String bussinessop,
+			String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			this.taskService
-					.rejecttoPreTask(taskId, rejectReason, rejectedtype);
+			this.taskService.rejecttoPreTask(taskId, rejectReason,
+					rejectedtype, bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -436,8 +440,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskWithReason(String taskId, Map<String, Object> map,
-			String completeReason) {
-		taskService.completeWithReason(taskId, map, completeReason);
+			String completeReason, String bussinessop, String bussinessRemark) {
+		taskService.completeWithReason(taskId, map, completeReason,bussinessop,bussinessRemark);
 	}
 
 	/**
@@ -457,8 +461,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * @param taskId
 	 * @param map
 	 */
-	public void completeTaskWithReason(String taskId, String completeReason) {
-		taskService.completeWithReason(taskId, completeReason);
+	public void completeTaskWithReason(String taskId, String completeReason,
+			String bussinessop, String bussinessRemark) {
+		taskService.completeWithReason(taskId, completeReason, bussinessop,
+				bussinessRemark);
 	}
 
 	/**
@@ -474,9 +480,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskWithDest(String taskId, Map<String, Object> map,
-			String destinationTaskKey, String completeReason) {
-		taskService.completeWithReason(taskId, map, destinationTaskKey,
-				completeReason);
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
+		taskService.completeWithReason(taskId, map, destinationTaskKey, reason,
+				bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -492,9 +499,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadOrgParamsReason(String taskId, String orgId,
-			String completeReason) {
+			String completeReason, String bussinessop, String bussinessRemark) {
 		completeTaskLoadOrgParamsReason(taskId, (Map<String, Object>) null,
-				orgId, completeReason);
+				orgId, completeReason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -512,9 +519,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadOrgParamsWithDest(String taskId, String orgId,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String completeReason,
+			String bussinessop, String bussinessRemark) {
 		completeTaskLoadOrgParamsReason(taskId, (Map<String, Object>) null,
-				orgId, destinationTaskKey, completeReason);
+				orgId, destinationTaskKey, completeReason,bussinessop,bussinessRemark);
 	}
 
 	/**
@@ -533,9 +541,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadOrgParamsReason(String taskId,
-			Map<String, Object> map, String orgId, String completeReason) {
+			Map<String, Object> map, String orgId, String completeReason,
+			String bussinessop, String bussinessRemark) {
 		completeTaskLoadOrgParamsReason(taskId, map, orgId, (String) null,
-				completeReason);
+				completeReason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -572,7 +581,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskLoadOrgParamsReason(String taskId,
 			Map<String, Object> map, String orgId, String destinationTaskKey,
-			String completeReason) {
+			String reason, String bussinessop, String bussinessRemark) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -591,7 +600,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 		}
 		// taskService = processEngine.getTaskService();
 		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey,
-				completeReason);
+				reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -609,10 +618,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
-			String bussinesstypeId, String completeReason) {
+			String bussinesstypeId, String reason, String bussinessop,
+			String bussinessRemark) {
 		completeTaskLoadBussinesstypeParamsReason(taskId,
 				(Map<String, Object>) null, bussinesstypeId, (String) null,
-				completeReason);
+				reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -630,11 +640,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadBussinesstypeParamsWithDest(String taskId,
-			String bussinesstypeId, String destinationTaskKey,
-			String completeReason) {
+			String bussinesstypeId, String destinationTaskKey, String reason,
+			String bussinessop, String bussinessRemark) {
 		completeTaskLoadBussinesstypeParamsReason(taskId,
 				(Map<String, Object>) null, bussinesstypeId,
-				destinationTaskKey, completeReason);
+				destinationTaskKey, reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -654,10 +664,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
-			Map<String, Object> map, String bussinesstypeId,
-			String completeReason) {
+			Map<String, Object> map, String bussinesstypeId, String reason,
+			String bussinessop, String bussinessRemark) {
 		completeTaskLoadBussinesstypeParamsReason(taskId, map, bussinesstypeId,
-				(String) null, completeReason);
+				(String) null, reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -697,7 +707,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskLoadBussinesstypeParamsReason(String taskId,
 			Map<String, Object> map, String bussinesstypeId,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -716,7 +727,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			paramsMap.putAll(map);
 		}
 		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey,
-				completeReason);
+				reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -732,9 +743,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadCommonParamsReason(String taskId,
-			String completeReason) {
+			String completeReason, String reason, String bussinessop,
+			String bussinessRemark) {
 		completeTaskLoadCommonParamsReason(taskId, (Map<String, Object>) null,
-				completeReason);
+				reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -752,9 +764,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadCommonParamsWithDest(String taskId,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
 		completeTaskLoadCommonParamsReason(taskId, (Map<String, Object>) null,
-				destinationTaskKey, completeReason);
+				destinationTaskKey, reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -771,9 +784,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadCommonParamsReason(String taskId,
-			Map<String, Object> map, String completeReason) {
-		completeTaskLoadCommonParamsReason(taskId, map, (String) null,
-				completeReason);
+			Map<String, Object> map, String reason, String bussinessop,
+			String bussinessRemark) {
+		completeTaskLoadCommonParamsReason(taskId, map, (String) null, reason,
+				bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -807,8 +821,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadCommonParamsReason(String taskId,
-			Map<String, Object> map, String destinationTaskKey,
-			String completeReason) {
+			Map<String, Object> map, String destinationTaskKey, String reason,
+			String bussinessop, String bussinessRemark) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -826,7 +840,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			paramsMap.putAll(map);
 		}
 		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey,
-				completeReason);
+				reason,bussinessop,bussinessRemark);
 	}
 
 	/**
@@ -846,9 +860,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskLoadParamsReason(String taskId, String business_id,
-			String business_type, String completeReason) {
+			String business_type, String reason, String bussinessop,
+			String bussinessRemark) {
 		completeTaskLoadParamsWithDest(taskId, business_id, business_type,
-				(String) null, completeReason);
+				(String) null, reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -869,9 +884,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskLoadParamsWithDest(String taskId,
 			String business_id, String business_type,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
 		completeTaskLoadParamsReason(taskId, (Map<String, Object>) null,
-				business_id, business_type, destinationTaskKey, completeReason);
+				business_id, business_type, destinationTaskKey, reason,
+				bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -894,9 +911,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskLoadParamsReason(String taskId,
 			Map<String, Object> map, String business_id, String business_type,
-			String completeReason) {
+			String reason, String bussinessop, String bussinessRemark) {
 		completeTaskLoadParamsReason(taskId, map, business_id, business_type,
-				(String) null, completeReason);
+				(String) null, reason, bussinessop, bussinessRemark);
 	}
 
 	/**
@@ -935,7 +952,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskLoadParamsReason(String taskId,
 			Map<String, Object> map, String business_id, String business_type,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String completeReason,
+			String bussinessop, String bussinessRemark) {
 		Task task = this.getTaskById(taskId);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 
@@ -953,7 +971,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			paramsMap.putAll(map);
 		}
 		taskService.completeWithReason(taskId, paramsMap, destinationTaskKey,
-				completeReason);
+				completeReason,bussinessop,bussinessRemark);
 	}
 
 	/**
@@ -981,13 +999,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskWithReason(String taskId, String username,
-			Map<String, Object> map, String completeReason) {
+			Map<String, Object> map, String reason, String bussinessop,
+			String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			taskService.completeWithReason(taskId, map, completeReason);
+			taskService.completeWithReason(taskId, map, reason, bussinessop,
+					bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1021,15 +1041,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskWithReason(String taskId, String username,
-			Map<String, Object> map, String destinationTaskKey,
-			String completeReason) {
+			Map<String, Object> map, String destinationTaskKey, String reason,
+			String bussinessop, String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
 			taskService.completeWithReason(taskId, map, destinationTaskKey,
-					completeReason);
+					reason, bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1063,13 +1083,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskByUser(String taskId, String username,
-			String completeReason) {
+			String reason, String bussinessop, String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
-			taskService.completeWithReason(taskId, completeReason);
+			taskService.completeWithReason(taskId, reason, bussinessop,
+					bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1121,14 +1142,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskByUserWithDest(String taskId, String username,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
 			taskService.completeWithDestReason(taskId, destinationTaskKey,
-					completeReason);
+					reason, bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1164,14 +1186,16 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	public void completeTaskWithLocalVariablesReason(String taskId,
-			String username, Map<String, Object> map, String completeReason) {
+			String username, Map<String, Object> map, String reason,
+			String bussinessop, String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
 
 			taskService.claim(taskId, username);
 
-			taskService.completeWithReason(taskId, map, completeReason);
+			taskService.completeWithReason(taskId, map, reason, bussinessop,
+					bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1208,7 +1232,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskWithLocalVariablesReason(String taskId,
 			String username, Map<String, Object> map,
-			String destinationTaskKey, String completeReason) {
+			String destinationTaskKey, String reason, String bussinessop,
+			String bussinessRemark) {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -1216,7 +1241,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			taskService.claim(taskId, username);
 
 			taskService.completeWithReason(taskId, map, destinationTaskKey,
-					completeReason);
+					reason, bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -1593,12 +1618,18 @@ public class ActivitiServiceImpl implements ActivitiService,
 				.processDefinitionKey(process_key).latestVersion()
 				.singleResult();
 
-		identityService.setAuthenticatedUserId(initor);
-
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceById(processDefinition.getId(),
-						candidateMap);
-		return processInstance;
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceById(processDefinition.getId(),
+							candidateMap);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
 	}
 
 	/**
@@ -1641,12 +1672,20 @@ public class ActivitiServiceImpl implements ActivitiService,
 				.processDefinitionKey(process_key).latestVersion()
 				.singleResult();
 
-		identityService.setAuthenticatedUserId(initor);
-
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceById(processDefinition.getId(),
-						candidateMap);
-		return processInstance;
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceById(processDefinition.getId(),
+							candidateMap);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
+		
+		
 	}
 
 	/**
@@ -1660,10 +1699,18 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public ProcessInstance startProcDef(Map<String, Object> map,
 			String process_key, String initor) {
-		identityService.setAuthenticatedUserId(initor);
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceByKey(process_key, map);
-		return processInstance;
+	
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceByKey(process_key, map);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
 	}
 
 	/**
@@ -1677,10 +1724,17 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key,
 			Map<String, Object> map, String initor) {
-		identityService.setAuthenticatedUserId(initor);
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceByKey(process_key, businessKey, map);
-		return processInstance;
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceByKey(process_key, businessKey, map);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
 	}
 
 	/**
@@ -1694,10 +1748,17 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 */
 	public ProcessInstance startProcDef(String process_key,
 			Map<String, Object> map, String initor) {
-		identityService.setAuthenticatedUserId(initor);
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceByKey(process_key, map);
-		return processInstance;
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceByKey(process_key, map);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
 	}
 
 	/**
@@ -1839,12 +1900,18 @@ public class ActivitiServiceImpl implements ActivitiService,
 				.processDefinitionKey(process_key).latestVersion()
 				.singleResult();
 
-		identityService.setAuthenticatedUserId(initor);
-
-		ProcessInstance processInstance = runtimeService
-				.startProcessInstanceById(processDefinition.getId(),
-						candidateMap);
-		return processInstance;
+		try
+		{
+			identityService.setAuthenticatedUserId(initor);
+			ProcessInstance processInstance = runtimeService
+					.startProcessInstanceById(processDefinition.getId(),
+							candidateMap);
+			return processInstance;
+		}
+		finally
+		{
+			identityService.setAuthenticatedUserId(null);
+		}
 	}
 
 	/**
@@ -3195,9 +3262,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 	 * 撤消流程实例 processInstanceId：要撤消的流程实例id deleteReason：撤消流程实例的原因
 	 */
 	public void cancleProcessInstance(String processInstanceId,
-			String deleteReason) {
+			String deleteReason,String bussinessop, String bussinessRemark) {
 		this.runtimeService.deleteProcessInstance(processInstanceId,
-				deleteReason);
+				bussinessRemark,bussinessop,deleteReason);
 	}
 
 	public List<Task> listTaskByProcessInstanceId(String processInstanceId) {
@@ -3388,7 +3455,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 	@Override
 	public void cancleProcessInstances(String processInstids,
 			String deleteReason, String taskId, String processKey,
-			String currentUser) {
+			String currentUser, String bussinessop, String bussinessRemark) {
 
 		String[] ids = processInstids.split(",");
 
@@ -3410,18 +3477,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 						continue;
 					}
 
-					String remark = "废弃流程&nbsp;&nbsp;&nbsp;&nbsp;"
-							+ deleteReason + "&nbsp;&nbsp;&nbsp;&nbsp;备注:"
-							+ getUserInfoMap().getUserName(currentUser)
-							+ "将任务废弃";
-
 					this.runtimeService.deleteProcessInstance(processInstid,
-							remark);
+							bussinessRemark, bussinessop, deleteReason);
 
 					// 日志记录废弃操作
-					addDealTask(taskId,
-							getUserInfoMap().getUserName(currentUser), "3",
-							processInstid, processKey, remark, "", "");
+					addDealTask(taskId, currentUser, getUserInfoMap()
+							.getUserName(currentUser), "3", processInstid,
+							processKey, deleteReason, bussinessop,
+							bussinessRemark);
 
 				}
 			}
@@ -3471,7 +3534,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 		// 流程完成，不需要进行逻辑删除
 		if (pi != null) {
 			// 停止流程实例在引擎中所有的逻辑关系
-			cancleProcessInstance(processInstid, "物理删除");
+			cancleProcessInstance(processInstid, "","删除流程","物理删除");
 		}
 
 		dbUtil.preparedDelete("delete From act_ru_event_subscr a where a.proc_inst_id_=?");
@@ -4452,13 +4515,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	@Override
-	public void addDealTask(String taskId, String dealUser, String dealType,
-			String processId, String processKey, String remark, String taskKey,
-			String taskName) throws Exception {
+	public void addDealTask(String taskId, String dealUser,
+			String dealUserName, String dealType, String processId,
+			String processKey, String dealReason, String bussinessop,
+			String bussinessRemark) throws Exception {
 
 		executor.insert("addDealTaskInfo_wf", UUID.randomUUID().toString(),
-				taskId, dealUser, dealType, processId, processKey,
-				new Timestamp(new Date().getTime()), remark, taskKey, taskName);
+				taskId, dealUser, dealUserName, dealType, processId,
+				processKey, new Timestamp(new Date().getTime()), dealReason,
+				bussinessop, bussinessRemark);
 	}
 
 	@Override
@@ -4525,7 +4590,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			if (map != null && map.get("ASSIGNEE_") != null) {
 				String assignee = (String) map.get("ASSIGNEE_");
 
-				if (!assignee.equals(userId)) {
+				if (!assignee.equals(userId) && !AccessControl.isAdmin(userId)) {
 
 					LogManager logMgr = SecurityDatabase.getLogManager();
 					String orgId = (String) userInfoMap.getUserAttribute(

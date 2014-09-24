@@ -23,8 +23,6 @@ public class TaskManager {
 
 	private String PROC_DEF_ID_;// 流程定义ID
 
-	private String NAME_;// 节点定义名称
-
 	private String PARENT_TASK_ID_;// 父节点实例ID
 
 	private String DESCRIPTION_;// 节点定义描述
@@ -50,6 +48,8 @@ public class TaskManager {
 	private String TASK_ID_;// 任务ID
 
 	private String CALL_PROC_INST_ID_;// 调用外部流程的流程实例ID
+
+	private String NAME_;// 节点定义名称
 
 	private String ACT_NAME_;// 节点定义名称
 
@@ -107,9 +107,36 @@ public class TaskManager {
 	private int isRecall;// 可撤回 0不能1能
 	private int isCancel;// 可驳回 0 不能 1 能
 	private int isDiscard;// 可废弃 0 不能 1 能
-	
-	private int IS_AUTO_COMPLETE;//是否自动完成
-	private String AUTO_HANDLER;//自动处理类
+
+	private int IS_AUTO_COMPLETE;// 是否自动完成
+	private String AUTO_HANDLER;// 自动处理类
+
+	private String BUSSINESS_OP;// 业务操作任务方式(通过，驳回，撤销等)
+	private String BUSSINESS_REMARK;// 业务处理意见
+
+	public String getNAME_() {
+		return NAME_;
+	}
+
+	public void setNAME_(String nAME_) {
+		NAME_ = nAME_;
+	}
+
+	public String getBUSSINESS_OP() {
+		return BUSSINESS_OP;
+	}
+
+	public void setBUSSINESS_OP(String bUSSINESS_OP) {
+		BUSSINESS_OP = bUSSINESS_OP;
+	}
+
+	public String getBUSSINESS_REMARK() {
+		return BUSSINESS_REMARK;
+	}
+
+	public void setBUSSINESS_REMARK(String bUSSINESS_REMARK) {
+		BUSSINESS_REMARK = bUSSINESS_REMARK;
+	}
 
 	public int getIS_AUTO_COMPLETE() {
 		return IS_AUTO_COMPLETE;
@@ -319,14 +346,6 @@ public class TaskManager {
 
 	public void setPROC_DEF_ID_(String pROC_DEF_ID_) {
 		PROC_DEF_ID_ = pROC_DEF_ID_;
-	}
-
-	public String getNAME_() {
-		return NAME_;
-	}
-
-	public void setNAME_(String nAME_) {
-		NAME_ = nAME_;
 	}
 
 	public String getPARENT_TASK_ID_() {

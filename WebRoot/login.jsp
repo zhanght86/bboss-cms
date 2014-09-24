@@ -4,7 +4,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.liferay.portlet.iframe.action.WebDes"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
-
+<%@page import="org.frameworkset.web.interceptor.AuthenticateFilter"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.config.ConfigManager,com.liferay.portlet.iframe.action.SSOUserMapping,org.frameworkset.web.servlet.support.RequestContextUtils"%>
 <%@ page import="com.frameworkset.platform.ca.CaProperties"%>
 <%@ page import="com.frameworkset.platform.ca.CAManager"%>
@@ -26,9 +26,22 @@ HttpSession session = request.getSession(false);
 	//	out.println("对不起！用户"+context_.getUserAccount() + "("+context_.getUserName()+")已经登录系统，请注销后再重新登录系统!");
 	//	return;
 	//}
+	
 	String u = "", p = "", ck = "";
+	boolean fromredirect = false;
 
-	String successRedirect = request.getParameter("successRedirect");
+	String successRedirect = request.getParameter(AuthenticateFilter.referpath_parametername);
+	if(successRedirect != null)
+	{
+		if((successRedirect.equals(request.getContextPath()) || successRedirect.equals(request.getContextPath() + "/") || successRedirect.equals("login.jsp")))
+		{
+			successRedirect = null;
+		}
+		else
+		{
+			fromredirect = true;
+		}
+	}
 	String language = request.getParameter("language");
 	boolean enable_login_validatecode = ConfigManager.getInstance()
 			.getConfigBooleanValue("enable_login_validatecode", true);
@@ -131,8 +144,11 @@ HttpSession session = request.getSession(false);
 							successRedirect = "sanydesktop/webindex.page";
 						}
 				}
-				AccessControl.recordIndexPage(request, successRedirect);
-				AccessControl.recordeSystemLoginPage(request, response);
+				if(!fromredirect)
+				{
+					AccessControl.recordIndexPage(request, successRedirect);
+					AccessControl.recordeSystemLoginPage(request, response);
+				}
 				response.sendRedirect(successRedirect);
 				return;
 			} else {
@@ -163,8 +179,11 @@ HttpSession session = request.getSession(false);
 							successRedirect = "sanydesktop/webindex.page";
 						}
 					}
-					AccessControl.recordIndexPage(request, successRedirect);
-					AccessControl.recordeSystemLoginPage(request, response);
+					if(!fromredirect)
+					{
+						AccessControl.recordIndexPage(request, successRedirect);
+						AccessControl.recordeSystemLoginPage(request, response);
+					}
 					response.sendRedirect(successRedirect);
 					return;
 				} else {
@@ -185,8 +204,11 @@ HttpSession session = request.getSession(false);
 						}
 								
 					}
-					AccessControl.recordIndexPage(request, successRedirect);
-					AccessControl.recordeSystemLoginPage(request, response);
+					if(!fromredirect)
+					{
+						AccessControl.recordIndexPage(request, successRedirect);
+						AccessControl.recordeSystemLoginPage(request, response);
+					}
 					response.sendRedirect(successRedirect);
 					return;
 				}
@@ -256,8 +278,11 @@ HttpSession session = request.getSession(false);
 								successRedirect = "sanydesktop/webindex.page";
 							}
 						}
-						AccessControl.recordIndexPage(request, successRedirect);
-						AccessControl.recordeSystemLoginPage(request, response);
+						if(!fromredirect)
+						{
+							AccessControl.recordIndexPage(request, successRedirect);
+							AccessControl.recordeSystemLoginPage(request, response);
+						}
 						response.sendRedirect(successRedirect);
 						return;
 					}
@@ -290,8 +315,11 @@ HttpSession session = request.getSession(false);
 					}
 							
 				}
-				AccessControl.recordIndexPage(request, successRedirect);
-				AccessControl.recordeSystemLoginPage(request, response);
+				if(!fromredirect)
+				{
+					AccessControl.recordIndexPage(request, successRedirect);
+					AccessControl.recordeSystemLoginPage(request, response);
+				}
 				response.sendRedirect(successRedirect);
 				return;
 			}
@@ -369,8 +397,11 @@ HttpSession session = request.getSession(false);
 						}
 
 					}
-					AccessControl.recordIndexPage(request, successRedirect);
-					AccessControl.recordeSystemLoginPage(request, response);
+					if(!fromredirect)
+					{
+						AccessControl.recordIndexPage(request, successRedirect);
+						AccessControl.recordeSystemLoginPage(request, response);
+					}
 					response.sendRedirect(successRedirect);
 					//response.sendRedirect("sysmanager/refactorwindow.jsp?subsystem_id=" + subsystem);
 				} catch (AccessException ex) {
@@ -660,6 +691,11 @@ DD_belatedPNG.fix('div');
 			<input name="macaddr_" type="hidden" />
 			<input name="machineName_" type="hidden" />
 			<input name="machineIp_" type="hidden" />
+			<pg:notempty actual="<%=successRedirect %>">
+				<input name="<%=AuthenticateFilter.referpath_parametername %>" type="hidden" value="<%=successRedirect%>"/>
+				
+				
+			</pg:notempty>
 			<ul class="c_log_right">
 				<%
 			  	if(errorMessage==null){

@@ -21,10 +21,10 @@ a.bt_entry, a.bt_entry span, a.bt_entry:hover, a.bt_entry:hover span,a.bt_reserv
 	font-size: 15px;
 	text-decoration: none;
 	background-color:#dcf0fd;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 a.bt_entry,a.bt_reservation,a.bt_away{margin:3px;}
 a.bt_entry:hover, a.bt_entry:hover span {
@@ -71,10 +71,10 @@ a.bt_approve, a.bt_approve span, a.bt_approve:hover, a.bt_approve:hover span {
 	text-decoration: none;
 	background:#dcf0fd;
 	padding:0 10px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 a.bt_approve {
 	cursor: hand;

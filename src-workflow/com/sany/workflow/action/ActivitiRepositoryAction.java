@@ -596,8 +596,8 @@ public class ActivitiRepositoryAction {
 			if ("1".equals(delType)) {
 				
 				activitiService.cancleProcessInstances(processInstIds,
-						deleteReason,"",processKey,AccessControl
-						.getAccessControl().getUserAccount());
+						"","",processKey,AccessControl
+						.getAccessControl().getUserAccount(),"删除流程",deleteReason);
 			} else {// 物理删除
 
 				activitiService.delProcessInstances(processInstIds);

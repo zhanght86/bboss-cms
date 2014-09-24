@@ -115,29 +115,29 @@ h6 {
 .submit_operation {
 	background: #aaa;
 	border-top: 1px solid #666;
-	height: 45px;
-	line-height: 35px;
-	padding: 3px 8px;
+	height: 42px;
+	line-height: 30px;
+	padding: 0 8px;
 	clear: both;
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	width: 100%;
-	filter: alpha(opacity=95);
-	-moz-opacity: 0.95;
-	-khtml-opacity: 0.95;
-	opacity: 0.95;
+	filter: alpha(opacity=80);
+	-moz-opacity: 0.80;
+	-khtml-opacity: 0.80;
+	opacity: 0.80;
 	text-align: center;
 }
 .bottom_area {
-	height: 55px;
+	height: 50px;
 }
 a.bt_submit, a.bt_save, a.bt_cancel, a.bt_next {
-	margin: 9px 0px;
+	margin: 6px 0px;
 	cursor: hand;
 }
 a.bt_save, a.bt_cancel {
-	margin: 9px;
+	margin: 6px 9px;
 }
 a.bt_route, a.bt_sany {
 	margin: 4px;
@@ -152,11 +152,11 @@ a.bt_submit, a.bt_submit span, a.bt_submit:hover, a.bt_submit:hover span, a.bt_s
 	font-size: 16px;
 	text-decoration: none;
 	font-weight: bold;
-	padding: 0 20px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	padding: 0 15px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 a.bt_route, a.bt_route span, a.bt_route:hover, a.bt_route:hover span, a.bt_sany, a.bt_sany span, a.bt_sany:hover, a.bt_sany:hover span {
 	padding: 0 10px;
@@ -216,10 +216,10 @@ a.bt_print, a.bt_print span, a.bt_print:hover, a.bt_print:hover span {
 	font-weight: bold; 
 	background:#cff3ff url(../images/print.png) no-repeat 3px 2px;
 	padding-left:40px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 	border:1px solid #42b9ff;
 }
 a.bt_print {
@@ -238,10 +238,10 @@ a.bt_add, a.bt_add span, a.bt_add:hover, a.bt_add:hover span {
 	font-size: 13px;
 	text-decoration: none;
 	font-weight: bold; background-color:#09f;  
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 a.bt_add {
 	cursor: hand;margin:5px;
@@ -258,10 +258,10 @@ a.bt_sany2, a.bt_sany2 span, a.bt_sany2:hover, a.bt_sany2:hover span {
 	font-size: 13px;
 	text-decoration: none;
 	font-weight: bold; background-color:#09f;  
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 a.bt_sany2 {
 	cursor: hand;margin:5px;
@@ -280,10 +280,10 @@ select{border:1px solid #ccc;}
 	font-size: 13px;
 	padding: 3px 5px;
 	border: 1px solid #ccc;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 }
 .select1 {
 	padding:3px 5px; border:1px solid #ccc;
@@ -326,7 +326,7 @@ select{border:1px solid #ccc;}
 	font-size: 13px;
 }
 .sany_table th {
-	text-align: left;
+	text-align: left; 
 }
 .sany_table2 th, .sany_table2 td {
 	padding: 3px 5px;
@@ -346,10 +346,10 @@ select{border:1px solid #ccc;}
 .right_operate{float:right; width:300px; text-align:right;}
 .top_operate{margin-top:5px;}
 .block_box{border:2px dashed #0099ff;padding:5px;margin:5px;}
-.search{margin:10px;padding:5px;border:1px solid #ccc; background-color:#FAFAFA;	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;}
+.search{margin:10px;padding:5px;border:1px solid #ccc; background-color:#FAFAFA;	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;}
 .sany_li,.sany_li2{width:183px;float:left;height:30px;}
 .sany_li2{width:366px;}
 .search .select1, .search .input1 {width:155px;}
@@ -363,10 +363,10 @@ a.bt_search, a.bt_search:hover{
 }
 a.bt_search {
 	cursor: hand;height: 25px;line-height:25px; float:left;margin-top:3px;width:50px; text-align:center;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius-topleft: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
 	border:1px solid #bcbcbc;
 }
 a.bt_search:hover{

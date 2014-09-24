@@ -22,7 +22,9 @@ public class ProIns {
 	private String rejectToActId;// 驳回节点key
 	private String toActName;// 驳回节点名称
 	private int isReturn;// 驳回后提交是否返回
+	private String dealOption;// 处理操作 (通过,驳回等)
 	private String dealReason;// 处理意见
+	private String dealRemak;// 备注(日志记录备注部分)
 	private String businessKey;// 业务单据号
 	private String businessType;// 业务类型，用于分类查询流程
 	private int enableEdit;// 是否可修改
@@ -36,6 +38,22 @@ public class ProIns {
 	private String nowTaskFromUser;// 实例当前任务的转办/委托用户
 	private String nowTaskToUser;// 实例当前任务的被转办/委托用户
 	private String toTaskKey;// 跳转到下个任务节点的key
+
+	public String getDealOption() {
+		return dealOption;
+	}
+
+	public void setDealOption(String dealOption) {
+		this.dealOption = dealOption;
+	}
+
+	public String getDealRemak() {
+		return dealRemak;
+	}
+
+	public void setDealRemak(String dealRemak) {
+		this.dealRemak = dealRemak;
+	}
 
 	public String getToTaskKey() {
 		return toTaskKey;

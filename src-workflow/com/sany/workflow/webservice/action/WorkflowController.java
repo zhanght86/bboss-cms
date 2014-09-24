@@ -543,8 +543,8 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-			activitiService.cancleProcessInstances(instancesIds, deleteReason,
-					"", processKey, currentUser);
+//			activitiService.cancleProcessInstances(instancesIds, deleteReason,
+//					"", processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("逻辑删除操作成功");
@@ -846,8 +846,8 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-			activitiService.cancleProcessInstances(instancesId, deleteReason,
-					taskId, processKey, currentUser);
+//			activitiService.cancleProcessInstances(instancesId, deleteReason,
+//					taskId, processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("废弃任务操作成功");
@@ -923,8 +923,8 @@ public class WorkflowController implements WorkflowService {
 					.createTaskQuery().processInstanceId(instancesId).list();
 
 			// 任务跳转到第一个节点
-			activitiService.completeTaskLoadCommonParamsWithDest(task.get(0)
-					.getId(), activties.get(1).getId(), cancelReason);
+//			activitiService.completeTaskLoadCommonParamsWithDest(task.get(0)
+//					.getId(), activties.get(1).getId(), cancelReason);
 
 			tm.commit();
 

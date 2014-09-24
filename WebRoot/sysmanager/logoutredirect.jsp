@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="org.frameworkset.web.interceptor.AuthenticateFilter"%>
 <%@ page  session="false" language="java" pageEncoding="UTF-8"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 
@@ -8,6 +10,8 @@
 	* 即login.jsp
 	* 同时用户还可指定退出的目的窗口，如果没有指定就退出到top窗口
 	*/	
+		String referer = request.getParameter(AuthenticateFilter.referpath_parametername); // REFRESH
+	
 	String redirect = request.getParameter("_redirectPath");//"http://172.16.17.26:9080";
 	if(redirect == null || redirect.trim().equals(""))
 	{
@@ -24,7 +28,21 @@
 	String target = request.getParameter("_redirecttarget");
 	if(target == null || target.trim().equals(""))
 		target = "top";
-	
+	if(StringUtil.isNotEmpty(referer) && StringUtil.isNotEmpty(redirect))
+	{
+		StringBuffer temp = new StringBuffer();
+		temp.append(redirect);
+		if(redirect.indexOf("?") >= 0)
+		{
+			 temp.append("&").append(AuthenticateFilter.referpath_parametername).append("=").append(URLEncoder.encode(referer, "UTF-8"));
+		}
+		else
+		{
+			temp.append("?").append(AuthenticateFilter.referpath_parametername).append("=").append(URLEncoder.encode(referer, "UTF-8"));
+		}
+		redirect = temp.toString();
+		
+	}
 %>
 
 <head>	

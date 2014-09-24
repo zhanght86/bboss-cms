@@ -25,7 +25,7 @@ public class HisTaskInfo implements Serializable {
 
 	private String EXECUTION_ID_; // 执行实例ID
 
-	private String NAME_;// 节点定义名称
+	private String ACT_NAME_;// 节点定义名称
 
 	private String DESCRIPTION_;// 节点定义描述
 
@@ -83,6 +83,26 @@ public class HisTaskInfo implements Serializable {
 	private int IS_AUTO_COMPLETE;// 是否自动完成
 
 	private String AUTO_HANDLER;// 自动处理类
+
+	private String BUSSINESS_OP;// 业务操作任务方式(通过，驳回，撤销等)
+
+	private String BUSSINESS_REMARK;// 业务处理意见
+
+	public String getBUSSINESS_OP() {
+		return BUSSINESS_OP;
+	}
+
+	public void setBUSSINESS_OP(String bUSSINESS_OP) {
+		BUSSINESS_OP = bUSSINESS_OP;
+	}
+
+	public String getBUSSINESS_REMARK() {
+		return BUSSINESS_REMARK;
+	}
+
+	public void setBUSSINESS_REMARK(String bUSSINESS_REMARK) {
+		BUSSINESS_REMARK = bUSSINESS_REMARK;
+	}
 
 	public int getIS_AUTO_COMPLETE() {
 		return IS_AUTO_COMPLETE;
@@ -156,12 +176,12 @@ public class HisTaskInfo implements Serializable {
 		EXECUTION_ID_ = eXECUTION_ID_;
 	}
 
-	public String getNAME_() {
-		return NAME_;
+	public String getACT_NAME_() {
+		return ACT_NAME_;
 	}
 
-	public void setNAME_(String nAME_) {
-		NAME_ = nAME_;
+	public void setACT_NAME_(String aCT_NAME_) {
+		ACT_NAME_ = aCT_NAME_;
 	}
 
 	public String getDESCRIPTION_() {

@@ -15,32 +15,34 @@
 	<!-- 工作流管理中查看明细列表  -->
 	<property name="selectTaskHistorById_wf">
 		<![CDATA[
-			SELECT A.ID_,
+			SELECT T.ID_,
 			       T.PROC_DEF_ID_,
 			       T.PROC_INST_ID_,
 			       T.EXECUTION_ID_,
 			       T.ACT_ID_ AS TASK_DEF_KEY_,
 			       T.TASK_ID_,
 			       T.CALL_PROC_INST_ID_,
-			       T.ACT_NAME_ AS NAME_,
-			       A.OWNER_,
-			       A.ASSIGNEE_,
-			       T.START_TIME_ AS START_TIME_,
-			       A.CLAIM_TIME_ AS CLAIM_TIME_,
-			       T.END_TIME_ AS END_TIME_,
-			       A.DELETE_REASON_,
+			       T.ACT_NAME_ ,
+			       T.OWNER_,
+			       T.ASSIGNEE_,
+			       T.START_TIME_ ,
+			       T.CLAIM_TIME_ ,
+			       T.END_TIME_ ,
+			       T.DELETE_REASON_,
 			       T.DURATION_,
-			       A.DURATION_NODE,
-			       A.IS_CONTAIN_HOLIDAY,
-			       A.ALERTTIME,
-			       A.OVERTIME,
-			       A.ADVANCESEND,
-			       A.OVERTIMESEND,
+			       T.DURATION_NODE,
+			       T.IS_CONTAIN_HOLIDAY,
+			       T.ALERTTIME,
+			       T.OVERTIME,
+			       T.ADVANCESEND,
+			       T.OVERTIMESEND,
 			       T.IS_AUTO_COMPLETE,
-			       T.AUTO_HANDLER
+			       T.AUTO_HANDLER,
+			       T.BUSSINESS_OP,
+			       T.BUSSINESS_REMARK,
+			       T.DELETE_REASON_
 			
 			  FROM ACT_HI_ACTINST T
-			  LEFT JOIN ACT_HI_TASKINST A ON T.TASK_ID_ = A.ID_
 			
 			 WHERE T.ACT_TYPE_='userTask'
 			      
@@ -93,20 +95,19 @@
 			  LEFT JOIN TD_WF_ACTIVITI_NODE_CANDIDATE T ON T.NODE_ID = N.ID
 			                                              
 			                                           AND T.BUSINESS_TYPE = #[businessType]
+			                                            #if($userLevel)
+													   	 AND T.BUSINESS_ID in 
+													   	 	(#foreach($org in $userLevel)  
+												             	#if($velocityCount == 0)  
+												                  	#[userLevel[$velocityCount]]  
+												             	#else  
+												                 	,#[userLevel[$velocityCount]]  
+												             	#end  
+										       		 		#end)
+													   #end
 			
 			 WHERE N.NODE_TYPE = 'userTask'
 			   AND N.PROCESS_KEY = #[processKey]
-			   
-			   #if($userLevel)
-			   	 AND T.BUSINESS_ID in 
-			   	 	(#foreach($org in $userLevel)  
-		             	#if($velocityCount == 0)  
-		                  	#[userLevel[$velocityCount]]  
-		             	#else  
-		                 	,#[userLevel[$velocityCount]]  
-		             	#end  
-       		 		#end)
-			   #end
 			   
 			 ORDER BY N.ORDER_NUM
 	        ]]>
@@ -570,6 +571,7 @@
 			       B.BUSINESS_KEY_ AS BUSINESSKEY,
 			       A.PROC_INST_ID_ AS INSTANCEID,
 			       A.PROC_DEF_ID_  AS DEFID,
+			       A.ASSIGNEE_     AS ASSIGNEE,
 			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
 			       A.CREATE_TIME_  AS CREATETIME,
 			       C.IS_RECALL     AS ISRECALL,
@@ -615,7 +617,7 @@
 			       A.PROC_INST_ID_,
 			       A.EXECUTION_ID_,
 			       A.PARENT_TASK_ID_,
-			       A.NAME_,
+			       A.NAME_ AS ACT_NAME_,
 			       A.DESCRIPTION_,
 			       A.OWNER_ AS ASSIGNEE_,
 			       B.TO_USER,
@@ -624,6 +626,7 @@
 			       B.CHANGETIME AS END_TIME_,
 			       A.DURATION_,
 			       B.DELEGATEREMARK AS DELETE_REASON_,
+			       '转办任务' AS BUSSINESS_OP,
 			       A.DURATION_NODE,
 			       A.ADVANCESEND,
 			       A.OVERTIMESEND,
@@ -686,6 +689,43 @@
 			 WHERE 	T.ACT_TYPE_ = 'userTask'  
 			   AND	T.PROC_INST_ID_ = ?
 			 ORDER BY T.START_TIME_
+		]]>
+	</property>
+	
+	<!-- 暂存表单数据  gw_tanx-->
+	<property name="saveFormData_wf">
+		<![CDATA[
+			INSERT INTO TD_WF_FORMCACHE
+			  (BUSINESSKEY, PROCESSKEY, WF_FORMDATA)
+			VALUES
+			  (?, ?, ?)
+		]]>
+	</property>
+	
+	<!-- 获取暂存审批表单数据  gw_tanx-->
+	<property name="getFormDatasByBusinessKey_wf">
+		<![CDATA[
+			SELECT A.BUSINESSKEY, A.PROCESSKEY, A.WF_FORMDATA AS FORMDATA
+			  FROM TD_WF_FORMCACHE A
+			  WHERE A.BUSINESSKEY = ?
+		]]>
+	</property>
+	
+	<!-- 删除暂存审批表单数据  gw_tanx-->
+	<property name="delFormDatasByBusinessKey_wf">
+		<![CDATA[
+			DELETE FROM TD_WF_FORMCACHE WHERE BUSINESSKEY = ?
+		]]>
+	</property>
+	
+	<!-- 根据任务id获取处理人列表  gw_tanx-->
+	<property name="getCandidatorOftask_wf">
+		<![CDATA[
+			SELECT I.USER_ID_,I.GROUP_ID_
+			  FROM ACT_RU_IDENTITYLINK I 
+			 WHERE 1=1
+			   and I.TYPE_ = 'candidate'
+			   and I.TASK_ID_=?
 		]]>
 	</property>
 	

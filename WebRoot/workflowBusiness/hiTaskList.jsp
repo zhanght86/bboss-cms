@@ -13,8 +13,20 @@
 			       value="<pg:cell colName="TASK_DEF_KEY_" />" />
 			       
 				<td><pg:cell colName="END_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
-				<td><pg:cell colName="NAME_" /></td>
+				<td><pg:cell colName="ACT_NAME_" /></td>
 				<td><pg:cell colName="ASSIGNEE_NAME" /></td>
+				<td>
+					<pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>
+					<pg:notempty colName="BUSSINESS_OP" >
+						<pg:cell colName="BUSSINESS_OP" />
+					</pg:notempty>
+				</td>
+				<td>
+					<pg:empty colName="BUSSINESS_REMARK" >&nbsp;</pg:empty>
+					<pg:notempty colName="BUSSINESS_REMARK" >
+						<pg:cell colName="BUSSINESS_REMARK" />
+					</pg:notempty>
+				</td>
 				<td>
 					<pg:empty colName="DELETE_REASON_" >
 						<pg:equal colName="IS_AUTO_COMPLETE" value="1">

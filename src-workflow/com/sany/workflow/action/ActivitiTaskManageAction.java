@@ -3,7 +3,6 @@ package com.sany.workflow.action;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -339,8 +338,9 @@ public class ActivitiTaskManageAction {
 	 */
 	public @ResponseBody
 	String signTask(String taskId, String processKey, ModelMap model) {
+		TransactionManager tm = new TransactionManager();
 		try {
-
+			tm.begin();
 			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
 					processKey);
 
@@ -348,14 +348,17 @@ public class ActivitiTaskManageAction {
 
 				activitiTaskService.signTaskByUser(taskId, AccessControl
 						.getAccessControl().getUserAccount());
-
+				tm.commit();
 				return "success";
 			} else {
+				tm.commit();
 				return "fail:您没有权限签收当前任务";
 			}
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -602,8 +605,13 @@ public class ActivitiTaskManageAction {
 					activitiService.claim(taskId, userAccount);
 				}
 
+				String dealRemak = "["
+						+ activitiService.getUserInfoMap().getUserName(
+								userAccount) + "]将任务废弃";
+
 				activitiService.cancleProcessInstances(processInstIds,
-						deleteReason, taskId, processKey, userAccount);
+						dealRemak, taskId, processKey, userAccount, "废弃任务",
+						deleteReason);
 
 				return "success";
 
@@ -708,48 +716,44 @@ public class ActivitiTaskManageAction {
 		TransactionManager tm = new TransactionManager();
 
 		try {
+			tm.begin();
 
-			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,
-					processKey);
+			// 获取流程实例信息
+			ProcessInst processInst = activitiService
+					.getProcessInstById(processId);
 
-			if (isAuthor) {
+			String userAccount = AccessControl.getAccessControl()
+					.getUserAccount();
 
-				tm.begin();
-
-				String currentUser = activitiService.getUserInfoMap()
-						.getUserName(
-								AccessControl.getAccessControl()
-										.getUserAccount());
-
-				// 获取第一人工节点信息
-				HistoricTaskInstance hiTask = activitiService
-						.getFirstTask(processId);
-
-				String remark = cancelTaskReason + "<br/>备注:" + currentUser
-						+ "将任务撤销至[" + hiTask.getName() + "]";
-
-				if (!activitiTaskService.isSignTask(taskId)) {
-					// 先签收
-					activitiService.claim(taskId, AccessControl
-							.getAccessControl().getUserAccount());
-				}
-
-				// 撤销任务
-				activitiService.completeTaskLoadCommonParamsWithDest(taskId,
-						hiTask.getTaskDefinitionKey(), remark);
-
-				// 日志记录撤销操作
-				activitiService.addDealTask(taskId, currentUser, "2",
-						processId, processKey, remark,
-						hiTask.getTaskDefinitionKey(), hiTask.getName());
+			// 权限判断(当前用户id==发起人)
+			if (processInst == null
+					|| !processInst.getSTART_USER_ID_().equals(userAccount)) {
 
 				tm.commit();
-
-				return "success";
-
-			} else {
 				return "fail:您没有权限撤销当前任务";
 			}
+
+			String currentUser = activitiService.getUserInfoMap().getUserName(
+					userAccount);
+
+			// 获取第一人工节点信息
+			ActivityImpl act = activitiService.getTaskService()
+					.findFirstNodeByDefKey(processKey);
+
+			String remark = "[" + currentUser + "]将任务撤销至["
+					+ act.getProperty("name") + "]";
+
+			// 撤销任务
+			activitiService.completeTaskLoadCommonParamsWithDest(taskId,
+					act.getId(), remark, "撤销任务", cancelTaskReason);
+
+			// 日志记录撤销操作
+			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
+					processId, processKey, cancelTaskReason, "撤销任务", remark);
+
+			tm.commit();
+
+			return "success";
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();

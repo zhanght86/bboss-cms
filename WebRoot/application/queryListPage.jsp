@@ -19,11 +19,11 @@
             <th>操作</th>
         	<th>应用编号</th>
 			<th>应用名称</th>
-			<th>待办类型</th>
+			<th>待办来源</th>
 			<th>启用待办</th>	
 			<th>待办URL</th>
 			<th>应用URL</th>
-			<th>应用类型</th>							
+			<th>部署类型</th>							
 			<th>创建人</th>
 			<th>创建时间</th>
 			<th>修改人</th>	

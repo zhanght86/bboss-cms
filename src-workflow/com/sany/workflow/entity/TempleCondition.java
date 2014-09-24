@@ -1,6 +1,5 @@
 package com.sany.workflow.entity;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import org.frameworkset.util.annotations.RequestParam;

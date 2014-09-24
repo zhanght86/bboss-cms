@@ -1,7 +1,6 @@
 package com.sany.workflow.entity;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * @todo 模板Bean

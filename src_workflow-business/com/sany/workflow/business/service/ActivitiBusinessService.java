@@ -148,6 +148,44 @@ public interface ActivitiBusinessService {
 			throws IOException;
 
 	/**
+	 * 暂存审批表单数据
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param businessKey
+	 *            业务主键
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数信息
+	 * @throws Exception
+	 *             2014年8月22日
+	 */
+	public void tempSaveFormDatas(ProIns proIns, String businessKey,
+			String processKey) throws Exception;
+
+	/**
+	 * 获取暂存审批表单数据
+	 * 
+	 * @param businessKey
+	 *            业务主键
+	 * @throws Exception
+	 *             2014年9月23日
+	 */
+	public ProIns getFormDatasByBusinessKey(String businessKey)
+			throws Exception;
+
+	/**
+	 * 删除暂存审批表单数据
+	 * 
+	 * @param businessKey
+	 *            业务主键
+	 * @throws Exception
+	 *             2014年9月23日
+	 */
+	public void delFormDatasByBusinessKey(String businessKey) throws Exception;
+
+	/**
 	 * 开启流程实例
 	 * 
 	 * @param proIns
@@ -391,13 +429,24 @@ public interface ActivitiBusinessService {
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
 
 	/**
-	 * 获取当前节点任务信息,根据业务key
+	 * 获取当前节点任务信息,根据业务key(没有权限判断)
+	 * 
+	 * @param bussinesskey
+	 * @return TaskInfo
+	 * @throws Exception
+	 *             2014年9月24日
+	 */
+	public  List<TaskInfo> getCurrentNodeInfoByBussinessKey(String bussinesskey)
+			throws Exception;
+
+	/**
+	 * 获取当前节点任务信息,根据业务key (有权限判断)
 	 * 
 	 * @param bussinesskey
 	 *            业务key
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
-	 * @return
+	 * @return 有权限的TaskInfo
 	 * @throws Exception
 	 *             2014年9月18日
 	 */

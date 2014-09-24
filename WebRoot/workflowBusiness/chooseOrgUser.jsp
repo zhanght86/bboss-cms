@@ -15,7 +15,35 @@
 }
 </style>
 <script type="text/javascript">
+
 $(document).ready(function(){
+	
+	$("#btnMoveUp,#btnMoveDown").click(function() {   
+        var $opt = $("#select2 option:selected");   
+        if (!$opt.length) return;   
+        if ($opt.length > 1 ) {
+        	alert('请选择一项移动');
+        	return;   
+        }
+        if (this.id == "btnMoveUp") 
+            $opt.prev().before($opt);   
+        else 
+            $opt.next().after($opt);   
+        });   
+	
+    //按Alt加上下鍵也可以移動   
+    $("#select2").keydown(function(evt) {   
+        if (!evt.altKey) return;   
+        var k = evt.which;
+        if (k == 38) { 
+        	$("#btnMoveUp").click(); 
+        	return false; 
+        }else { 
+        	if (k == 40) { 
+        		$("#btnMoveDown").click(); return false; 
+        	} 
+        }
+    });
 		 
 	$("#userName").keydown(function(event){
 		if(event.keyCode == 13){
@@ -78,6 +106,10 @@ function loadSelect(_select,data,func){
 	if(typeof  func == "function"){		func();	}
 }
 
+function containSpecial( s ) {  
+	var containSpecial = RegExp(/[(\ )(\_)(\%)]+/);      
+  return ( containSpecial.test(s) );      
+}
 
 function queryList(){
 	var userName = $("#userName").val();
@@ -85,6 +117,12 @@ function queryList(){
 		alert("请输入查询条件");
 		return;
 	}
+	
+	if(containSpecial(userName)){
+		alert('查询字符串含有非法字符集,请检查输入条件！');
+		return;
+	}
+	
 	var _url = '<%=request.getContextPath()%>/workflowBusiness/choose/queryUsers.page';
 	var datas = {"userName": userName,"pagesize":$("#rownums").val()};   
 	ajaxGet(_url,datas,loadSelect1,aotoChooseUserList);
@@ -103,6 +141,47 @@ function aotoChooseUserList(){
 		} */
 	}
 }
+
+/*
+function upMove(){
+	
+	if (null == $("#select2").val()) {
+		alert(1);
+		return false;
+	}
+	
+	if ($("#select2 option:selected").length > 1) {
+		alert('请选择一项移动');
+		return false;
+	}
+	
+	var optionIndex = $("#select2").get(0).selectedIndex;
+	
+	if (optionIndex > 0) {
+		$("#select2 option:selected").insertBefore($("#select2 option:selected").prev("option"));
+	}
+	
+}
+
+function downMove(){
+	if (null == $("#select2").val()) {
+		alert(2);
+		return false;
+	}
+	
+	if ($("#select2 option:selected").length > 1) {
+		alert('请选择一项移动');
+		return false;
+	}
+	
+	var optionLength = $("#select2")[0].options.length;
+	var optionIndex = $("#select2").get(0).selectedIndex;
+	
+	if (optionIndex < optionLength -1) {
+		$("#select2 option:selected").insertAfter($("#select2 option:selected").next("option"));
+	}
+}
+**/
 
 function setUsers(){
 	//var usernames='' ;
@@ -208,95 +287,99 @@ function init(usernames){
 	<input type="hidden" value="${param.candidateName}" name="candidateName" id="candidateName"/>
 	<input type="hidden" value="${param.node_key}" name="node_key" id="node_key"/>
 	<input type="hidden" value="${param.index}" name="index" id="index"/>
+	
 	<div region="west" split="true" title="组织结构"
 		style="width: 200px; height: 150px; padding1: 1px; overflow: auto;" id="org_tree">
 	</div>
+	
 	<div region="center" title="用户列表" split="true"
 		style="height: 800px; padding: 10px; background: #efefef;">
-				<div id="searchblock">
+			<div id="searchblock">
 				<div class="search_top">
 					<div class="right_top"></div>
 					<div class="left_top"></div>
 				</div>
 				<div class="search_box">
-						<table width="100%" border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td class="left_box"></td>
-								<td>
-									<table width="100%" border="0" cellpadding="0" cellspacing="0"
-										class="table2">
-										<tr>
-											<td><input id="userName" name="userName" type="text"
-												 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/> </td>
-											<th>显示</th>
-											<td>
-												<select class="w50" id="rownums">
-													<option value="50" selected>50</option>
-													<option value="100">100</option>
-													<option value="200">200</option>
-												</select>
-											</td>
-											<td>
-												<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span>查询</span>
-												</a>
-												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span>重置</span>
-												</a>
-												<input type="reset" id="reset" style="display:none"/>
-											</td>
-										</tr>
-									</table>
-								</td>
-								<td class="right_box"></td>
-							</tr>
-						</table>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td class="left_box"></td>
+							<td>
+								<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
+									<tr>
+										<td><input id="userName" name="userName" type="text"
+											 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/> </td>
+										<th>显示</th>
+										<td>
+											<select class="w50" id="rownums">
+												<option value="50" selected>50</option>
+												<option value="100">100</option>
+												<option value="200">200</option>
+											</select>
+										</td>
+										<td>
+											<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span>查询</span></a>
+											<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span>重置</span></a>
+											<input type="reset" id="reset" style="display:none"/>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td class="right_box"></td>
+						</tr>
+					</table>
 				</div>
+				
 				<div class="search_bottom">
 					<div class="right_bottom"></div>
 					<div class="left_bottom"></div>
 				</div>
 			</div>
-				<div id="userlistContainer1">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0"
-						class="select_table">
-						<tr>
-							<th width="30%" align="left">待选用户</th>
-							<td width="30%">&nbsp;</td>
-							<th width="30%" align="left">已选用户</th>
-						</tr>
-						<tr>
-							<td align="left">
-								<div id="userlist">
-									<select name="select1" size="15" multiple="multiple" id="select1"
-										style="width: 280px; height: 250px" onclick="showOrgInfo()"></select>
-								</div>	
-							<td align="center"><input type="button" name="button"
-								id="button" value=">"
-								onclick="move($('#select1'),$('#select2'))" /> <br /> <input
-								type="button" name="button3" id="button3" value="<"
-								onclick="move($('#select2'),$('#select1'))" /> <br /> <input
-								type="button" name="button4" id="button4" value=">>"
-								onclick="moveAll($('#select1'),$('#select2'))" /> <br /> <input
-								type="button" name="button5" id="button5" value="<<"
-								onclick="moveAll($('#select2'),$('#select1'))" /></td>
-							<td align="left">
+			
+			<div id="userlistContainer1">
+				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="select_table">
+					<tr>
+						<th width="30%" align="left">待选用户</th>
+						<td width="30%">&nbsp;</td>
+						<th width="30%" align="left">已选用户</th>
+					</tr>
+					<tr>
+						<td align="left">
+							<div id="userlist">
+								<select name="select1" size="15" multiple="multiple" id="select1"
+									style="width: 280px; height: 250px" onclick="showOrgInfo()"></select>
+							</div>	
+						<td align="center"><input type="button" name="button"
+							id="button" value=">"
+							onclick="move($('#select1'),$('#select2'))" /> <br /> <input
+							type="button" name="button3" id="button3" value="<"
+							onclick="move($('#select2'),$('#select1'))" /> <br /> <input
+							type="button" name="button4" id="button4" value=">>"
+							onclick="moveAll($('#select1'),$('#select2'))" /> <br /> <input
+							type="button" name="button5" id="button5" value="<<"
+							onclick="moveAll($('#select2'),$('#select1'))" /></td>
+						<td align="left">
 							<div id="chooseuserlist">
-							  <select name="select2" size="15"
+								<select name="select2" size="15"
 								 multiple="multiple" id="select2" style="width: 280px;height: 250px" onclick="showOrgInfo2()">	
-                              </select>
-                          </div>
-							</td>
-						</tr>
-						<tr>
-							<td ><div  id="selectDetail">工号:</br>登录名:</br>组织机构:</div></td>
-							<td></td>
-							<td colspan="2"><div  id="selectDetail2">工号:</br>登录名:</br>组织机构:</div></td>
-						</tr>
-						<tr>
-							<td colspan="3" align="center" height="40"><a href="javascript:submitData()"  class="bt_1"><span>确定</span></a></td>
-						</tr>
-					</table>
-				</div>
+	                             </select>
+	                        </div>
+						</td>
+						<td align="left">
+							<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∧" id="btnMoveUp" title="快速鍵: alt+向上" /> 
+							<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∨" id="btnMoveDown" title="快速鍵: alt+向下"/> 
+						</td>
+					</tr>
+					<tr>
+						<td ><div  id="selectDetail">工号:</br>登录名:</br>组织机构:</div></td>
+						<td></td>
+						<td colspan="2"><div  id="selectDetail2">工号:</br>登录名:</br>组织机构:</div></td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center" height="40"><a href="javascript:submitData()"  class="bt_1"><span>确定</span></a></td>
+					</tr>
+				</table>
 			</div>
+	</div>
 
 </body>
 </html>
