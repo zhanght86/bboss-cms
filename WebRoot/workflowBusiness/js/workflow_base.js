@@ -64,6 +64,18 @@ function initliteRequiredStar(objs){
 	}
 }
 
+//判断空节点
+function isNodeNull(){
+	
+	var listSize = $("#actListSize").val();
+	for (var i = 1;i <= listSize; i++) {
+		if ($("#candidateName"+i).val() == '') {
+			$("#realnames"+i).html("无审批人");// 前台显示的值
+		}
+	}
+}
+
+
 // 初始化工作流审批页面
 function InitWorkflowPage(){
 	
@@ -76,13 +88,8 @@ function InitWorkflowPage(){
 		$("tr[id='protr1']").css("color","red");
 	}
 	
-	// 判断空节点，赋值未‘无审批人’
-	var listSize = $("#actListSize").val();
-	for (var i = 1;i <= listSize; i++) {
-		if ($("#candidateName"+i).val() == '') {
-			$("#realnames"+i).html("无审批人");// 前台显示的值
-		}
-	}
+	//判断空节点，赋值未‘无审批人’
+	isNodeNull();
 	
 	//如果允许修改，显示审批人修改按钮
 	showChooseUsers();
@@ -143,8 +150,12 @@ function updateAfterChoose(accouts,realnames,node_key){
 	
 	if(!node_key){
 		if(accouts.indexOf(",") < 0){
-			$("#delegateUser").val(accouts);
-			$("#delegateUserName").val(realnames);
+			if (accouts == userAccount) {
+				alert('不能将任务转办给自己！');
+			}else {
+				$("#delegateUser").val(accouts);
+				$("#delegateUserName").val(realnames);
+			}
 		}else{
 			alert('只能选择1个转办人！')
 		}

@@ -36,6 +36,8 @@ public class HisTaskInfo implements Serializable {
 	private String OWNER_NAME;// 实际签收人姓名
 
 	private String ASSIGNEE_;// 签收人或委托人
+	
+	private String DEALUSER;// 处理人（判断撤销的）
 
 	private String ASSIGNEE_NAME;// 签收人姓名
 
@@ -87,6 +89,14 @@ public class HisTaskInfo implements Serializable {
 	private String BUSSINESS_OP;// 业务操作任务方式(通过，驳回，撤销等)
 
 	private String BUSSINESS_REMARK;// 业务处理意见
+
+	public String getDEALUSER() {
+		return DEALUSER;
+	}
+
+	public void setDEALUSER(String dEALUSER) {
+		DEALUSER = dEALUSER;
+	}
 
 	public String getBUSSINESS_OP() {
 		return BUSSINESS_OP;

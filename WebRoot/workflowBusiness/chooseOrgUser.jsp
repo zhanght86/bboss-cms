@@ -216,6 +216,7 @@ function submitData(){
 		W.${param.callBackFunc}($("#usernames").val(), $("#userRealnames").val(), node_key);
 	}
 	api.close();
+	W.isNodeNull();
 }
 function showOrgInfo(){
 	var opt = $("#select1").find('option:selected');
@@ -261,6 +262,7 @@ function moveAll(ObjSource, ObjTarget) {
 		ObjTarget.append(ObjSource.html());
 		ObjSource.empty();
 	}catch(e) {    
+		ObjSource.empty();
 	    alert(e);    
 	}	
 }

@@ -20,9 +20,10 @@
 <div class="main_contain">
 	<%--  后台保存需要的参数 --%>
 	<input type="hidden" id="processKey" name="processKey" value="${processKey}"/>
+	<input type="hidden" id="nowTaskKey" name="nowTaskKey" value="${task.taskDefKey}"/>
 	<input type="hidden" id="userName" name="userName" value="<sany:accesscontrol userattribute="userName"/>"/>
 	<input type="hidden" id="userAccount" name="userAccount" value="<sany:accesscontrol userattribute="userAccount"/>"/>
-
+	
     <%@ include file="dealRegion.jsp"%>
     
     <%@ include file="processPic.jsp"%>

@@ -436,7 +436,7 @@ public interface ActivitiBusinessService {
 	 * @throws Exception
 	 *             2014年9月24日
 	 */
-	public  List<TaskInfo> getCurrentNodeInfoByBussinessKey(String bussinesskey)
+	public List<TaskInfo> getCurrentNodeInfoByBussinessKey(String bussinesskey)
 			throws Exception;
 
 	/**

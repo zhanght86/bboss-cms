@@ -129,30 +129,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 				if (StringUtil.isEmpty(task.getTaskDefKey())) {
 
-					if (StringUtil.isEmpty(task.getCompleteReason())) {
-
-						activitiService.completeTask(task.getTaskId(),
-								task.getCurrentUser(), variableMap);
-					} else {
-						activitiService.completeTaskWithReason(
-								task.getTaskId(), task.getCurrentUser(),
-								variableMap, "", "完成任务",
-								task.getCompleteReason());
-					}
+					activitiService.completeTaskWithReason(task.getTaskId(),
+							task.getCurrentUser(), variableMap,
+							task.getCompleteRemark(), "完成任务",
+							task.getCompleteReason());
 
 				} else {
 
-					if (StringUtil.isEmpty(task.getCompleteReason())) {
-
-						activitiService.completeTaskWithLocalVariables(
-								task.getTaskId(), task.getCurrentUser(),
-								variableMap, task.getTaskDefKey());
-					} else {
-						activitiService.completeTaskWithLocalVariablesReason(
-								task.getTaskId(), task.getCurrentUser(),
-								variableMap, task.getTaskDefKey(), "", "完成任务",
-								task.getCompleteReason());
-					}
+					activitiService.completeTaskWithLocalVariablesReason(
+							task.getTaskId(), task.getCurrentUser(),
+							variableMap, task.getTaskDefKey(),
+							task.getCompleteRemark(), "完成任务",
+							task.getCompleteReason());
 				}
 
 				// 已签收任务处理
@@ -160,28 +148,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 				if (StringUtil.isEmpty(task.getTaskDefKey())) {
 
-					if (StringUtil.isEmpty(task.getCompleteReason())) {
-
-						activitiService.completeTask(task.getTaskId(),
-								variableMap);
-
-					} else {
-						activitiService.completeTaskWithReason(
-								task.getTaskId(), variableMap, "", "完成任务",
-								task.getCompleteReason());
-					}
+					activitiService.completeTaskWithReason(task.getTaskId(),
+							variableMap, task.getCompleteRemark(), "完成任务",
+							task.getCompleteReason());
 
 				} else {
-					if (StringUtil.isEmpty(task.getCompleteReason())) {
-						activitiService.completeTaskLoadCommonParams(
-								task.getTaskId(), variableMap,
-								task.getTaskDefKey());
-					} else {
-						activitiService.completeTaskLoadCommonParamsReason(
-								task.getTaskId(), variableMap,
-								task.getTaskDefKey(), "", "完成任务",
-								task.getCompleteReason());
-					}
+					activitiService.completeTaskLoadCommonParamsReason(
+							task.getTaskId(), variableMap,
+							task.getTaskDefKey(), task.getCompleteRemark(),
+							"完成任务", task.getCompleteReason());
 				}
 			}
 		} catch (Exception e) {
@@ -213,16 +188,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 							task.getCurrentUser()) + "]将任务驳回至["
 					+ task.getToActName() + "]";
 
-			if (StringUtil.isNotEmpty(task.getCompleteReason())) {
-				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
-						variableMap, remark, task.getRejectToActId(),
-						rejectedtype == 1 ? true : false, "驳回任务",
-						task.getCompleteReason());
-			} else {
-				activitiService.getTaskService().rejecttoTask(task.getTaskId(),
-						variableMap, task.getRejectToActId(),
-						rejectedtype == 1 ? true : false);
-			}
+			activitiService.getTaskService().rejecttoTask(task.getTaskId(),
+					variableMap, remark, task.getRejectToActId(),
+					rejectedtype == 1 ? true : false, "驳回任务",
+					task.getCompleteReason());
 
 			// 日志记录驳回操作
 			activitiService.addDealTask(task.getTaskId(),
@@ -671,13 +640,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String fromuserID, String userId, String reamrk) {
+			String processKey, String fromuserID, String userId, String reamrk,
+			String reason) {
 
 		try {
 
 			executor.insert("addNodeChangeInfo_wf", fromuserID, userId, taskId,
 					processIntsId, processKey,
-					new Timestamp(new Date().getTime()), reamrk);
+					new Timestamp(new Date().getTime()), reamrk, reason);
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -759,57 +729,62 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey) {
+
+		boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+		if (isAdmin) {
+			return true;
+		}
+
+		if (StringUtil.isEmpty(taskId)) {
+			return false;
+		}
+
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
 
-			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+			boolean haspermission = false;
 
-			if (isAdmin) {
-				tm.commit();
-				return true;
-			} else {
-				String currentAccount = AccessControl.getAccessControl()
-						.getUserAccount();
+			String currentAccount = AccessControl.getAccessControl()
+					.getUserAccount();
 
-				// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-				HistoricTaskInstance hisTask = activitiService
-						.getHistoryService().createHistoricTaskInstanceQuery()
-						.taskId(taskId).singleResult();
+			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+			TaskManager task = executor.queryObject(TaskManager.class,
+					"getHiTaskIdByTaskId", taskId);
 
-				if (StringUtil.isNotEmpty(hisTask.getAssignee())) {
+			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
 
-					if (currentAccount.equals(hisTask.getAssignee())) {
-						return true;
-					}
-
-				} else {
-					// 任务未签收，根据任务id查询任务可处理人
-					List<HashMap> candidatorList = executor.queryList(
-							HashMap.class, "getNodeCandidates_wf", taskId,
-							currentAccount);
-
-					if (candidatorList != null && candidatorList.size() > 0) {
-						return true;
-					}
+				if (currentAccount.equals(task.getASSIGNEE_())) {
+					haspermission = true;
 				}
 
+			} else {
+				// 任务未签收，根据任务id查询任务可处理人
+				List<HashMap> candidatorList = executor.queryList(
+						HashMap.class, "getNodeCandidates_wf", taskId,
+						currentAccount);
+
+				if (candidatorList != null && candidatorList.size() > 0) {
+					haspermission = true;
+				}
+			}
+
+			if (!haspermission) {
 				// 最后查看当前用户的委托关系
 				List<WfEntrust> entrustList = executor.queryList(
 						WfEntrust.class, "getEntrustRelation_wf",
-						currentAccount, processKey, new Timestamp(hisTask
-								.getStartTime().getTime()), new Timestamp(
-								hisTask.getStartTime().getTime()));
+						currentAccount, processKey, new Timestamp(task
+								.getSTART_TIME_().getTime()), new Timestamp(
+								task.getSTART_TIME_().getTime()));
 
-				if (entrustList == null || entrustList.size() == 0) {
-					tm.commit();
-					return false;
-				} else {
-					tm.commit();
-					return true;
+				if (entrustList != null && entrustList.size() > 0) {
+
+					haspermission = true;
 				}
 			}
+			tm.commit();
+			return haspermission;
 
 		} catch (Exception e) {
 			throw new ProcessException(e);

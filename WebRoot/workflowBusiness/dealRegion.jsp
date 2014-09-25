@@ -17,7 +17,6 @@
 	<table width="600" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
 		<pg:beaninfo requestKey="task" >
 			<input type="hidden" name="nowtaskId"  value="<pg:cell colName="taskId" />" />
-			<input type="hidden" name="nowTaskKey" value="<pg:cell colName="taskDefKey" />" />
 			<input type="hidden" name="proInsId" value="<pg:cell colName="instanceId" />" />
 			<input type="hidden" name="businessKey" value="<pg:cell colName="businessKey" />" />
 			<input type="hidden" name="nowTaskFromUser" id="nowTaskFromUser"  value="" />

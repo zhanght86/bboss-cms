@@ -43,7 +43,9 @@ public class TaskCondition {
 
 	private String taskDefKey;// 任务key
 
-	private String completeReason;// 处理结果
+	private String completeReason;// 处理原因
+
+	private String completeRemark;// 处理备注
 
 	private List<WfEntrust> entrustList;// 委托代办关系集合数据
 
@@ -60,6 +62,14 @@ public class TaskCondition {
 	private String rejectToActId;// 驳回到哪个节点
 
 	private String toActName;// 驳回节点名称
+
+	public String getCompleteRemark() {
+		return completeRemark;
+	}
+
+	public void setCompleteRemark(String completeRemark) {
+		this.completeRemark = completeRemark;
+	}
 
 	public String getToActName() {
 		return toActName;

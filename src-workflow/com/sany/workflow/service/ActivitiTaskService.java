@@ -131,7 +131,8 @@ public interface ActivitiTaskService {
 	 *            2014年7月14日
 	 */
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
-			String processKey, String fromuserID, String userId, String reamrk);
+			String processKey, String fromuserID, String userId, String reamrk,
+			String reason);
 
 	/**
 	 * 记录已处理委托任务信息

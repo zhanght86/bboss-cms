@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -22,8 +21,6 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.frameworkset.soa.ObjectSerializable;
 import org.frameworkset.web.servlet.ModelMap;
 
@@ -42,6 +39,7 @@ import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
@@ -58,8 +56,6 @@ import edu.emory.mathcs.backport.java.util.Collections;
  */
 public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		org.frameworkset.spi.DisposableBean {
-
-	private static Log logger = LogFactory.getLog(ActivitiBusinessImpl.class);
 
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
@@ -87,63 +83,56 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
 			String userAccount) {
+
+		if (StringUtil.isEmpty(taskId)) {
+			return false;
+		}
+
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
-
+			boolean haspermission = false;
 			userAccount = this.changeToDomainAccount(userAccount);
 
-			if (StringUtil.isEmpty(taskId)) {
+			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+			TaskManager task = executor.queryObject(TaskManager.class,
+					"getHiTaskIdByTaskId", taskId);
 
-				tm.commit();
-				return false;
+			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
 
-			} else {
+				if (userAccount.equals(task.getASSIGNEE_())) {
 
-				// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-				HistoricTaskInstance hisTask = activitiService
-						.getHistoryService().createHistoricTaskInstanceQuery()
-						.taskId(taskId).singleResult();
-
-				if (StringUtil.isNotEmpty(hisTask.getAssignee())) {
-
-					if (userAccount.equals(hisTask.getAssignee())) {
-
-						tm.commit();
-						return true;
-					}
-
-				} else {
-					// 任务未签收，根据任务id查询任务可处理人
-					List<HashMap> candidatorList = executor.queryList(
-							HashMap.class, "getNodeCandidates_wf", taskId,
-							userAccount);
-
-					if (candidatorList != null && candidatorList.size() > 0) {
-
-						tm.commit();
-						return true;
-					}
+					haspermission = true;
 				}
 
+			} else {
+				// 任务未签收，根据任务id查询任务可处理人
+				List<HashMap> candidatorList = executor.queryList(
+						HashMap.class, "getNodeCandidates_wf", taskId,
+						userAccount);
+
+				if (candidatorList != null && candidatorList.size() > 0) {
+
+					haspermission = true;
+				}
+			}
+
+			if (!haspermission) {
 				// 最后查看当前用户的委托关系
 				List<WfEntrust> entrustList = executor.queryList(
 						WfEntrust.class, "getEntrustRelation_wf", userAccount,
-						processKey, new Timestamp(hisTask.getStartTime()
-								.getTime()), new Timestamp(hisTask
-								.getStartTime().getTime()));
+						processKey, new Timestamp(task.getSTART_TIME_()
+								.getTime()), new Timestamp(task
+								.getSTART_TIME_().getTime()));
 
-				if (entrustList == null || entrustList.size() == 0) {
+				if (entrustList != null && entrustList.size() > 0) {
 
-					tm.commit();
-					return false;
-				} else {
-
-					tm.commit();
-					return true;
+					haspermission = true;
 				}
 			}
+			tm.commit();
+			return haspermission;
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -155,6 +144,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey,
 			String userAccount) {
+
+		if (AccessControl.isAdmin(userAccount)) {
+			return true;
+		}
+
 		TransactionManager tm = new TransactionManager();
 
 		try {
@@ -162,20 +156,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			userAccount = this.changeToDomainAccount(userAccount);
 
-			if (AccessControl.isAdmin(userAccount)) {
+			boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
+					userAccount);
 
-				tm.commit();
-				return true;
+			tm.commit();
 
-			} else {
-
-				boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
-						userAccount);
-
-				tm.commit();
-
-				return flag;
-			}
+			return flag;
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -204,9 +190,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				if (activtie.isMultiTask()) {
 					actNode.setIsMultiDefault(1);
 
-					if (actNode.getIsSequential() == 0) {// 多实例串行
+					if (actNode.getIsSequential() == 1) {// 多实例串行
 						actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
-					} else if (actNode.getIsSequential() == 1) {// 多实例并行
+					} else if (actNode.getIsSequential() == 0) {// 多实例并行
 						actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
 					}
 				} else {
@@ -215,14 +201,14 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					if (actNode.getIsMulti() == 0) {
 						actNode.setApproveType(WorkflowConstants.PRO_ACT_ONE);// 单实例
 					} else if (actNode.getIsMulti() == 1
-							&& actNode.getIsSequential() == 0) {// 多实例串行
+							&& actNode.getIsSequential() == 1) {// 多实例串行
 						actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
 					} else if (actNode.getIsMulti() == 1
-							&& actNode.getIsSequential() == 1) {// 多实例并行
+							&& actNode.getIsSequential() == 0) {// 多实例并行
 						actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
 					}
 				}
-
+				break;
 			}
 		}
 	}
@@ -427,14 +413,20 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	 * @param nodeList
 	 * @return 2014年5月27日
 	 */
-	private void getVariableMap(List<ActNode> actNodeList,
-			Map<String, Object> paramMap) {
-
+	private void getVariableMap(ProIns proIns, Map<String, Object> paramMap) {
+		
+		List<ActNode> actNodeList = proIns.getActs();
+		
 		// 流程参数
 		if (actNodeList != null && actNodeList.size() > 0) {
 
 			for (int i = 0; i < actNodeList.size(); i++) {
 				ActNode node = actNodeList.get(i);
+				
+				// 过滤当前节点处理人(当前节点处理人不能被修改)
+				if (node.getActId().equals(proIns.getNowTaskKey())) {
+					continue;
+				}
 
 				// 节点配置
 				if (StringUtil.isNotEmpty(node.getCandidateName())) {
@@ -484,7 +476,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
 
 			// 节点配置参数转换
-			getVariableMap(actNodeList, paramMap);
+			getVariableMap(proIns, paramMap);
 
 			// 控制参数变量转换
 			if (actNodeList != null && actNodeList.size() > 0) {
@@ -512,11 +504,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						} else if (WorkflowConstants.PRO_ACT_SEQ.equals(node
 								.getApproveType())) {// 多实例串行
 							nodeControl.setIS_MULTI(1);
-							nodeControl.setIS_SEQUENTIAL(0);
+							nodeControl.setIS_SEQUENTIAL(1);
 						} else if (WorkflowConstants.PRO_ACT_MUL.equals(node
 								.getApproveType())) {// 多实例并行
 							nodeControl.setIS_MULTI(1);
-							nodeControl.setIS_SEQUENTIAL(1);
+							nodeControl.setIS_SEQUENTIAL(0);
 						}
 						nodeControl.setNODE_DESCRIBE(node.getNodeDescribe());
 						nodeControl.setNODE_KEY(node.getActId());
@@ -600,8 +592,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					HisTaskInfo hti = taskList.get(j);
 
 					// 处理人转成中文名称
-					hti.setASSIGNEE_NAME(activitiService.userIdToUserName(
-							hti.getASSIGNEE_(), "2"));
+					if (StringUtil.isNotEmpty(hti.getDEALUSER())) {
+						hti.setASSIGNEE_NAME(activitiService.userIdToUserName(
+								hti.getDEALUSER(), "2"));
+					} else {
+						hti.setASSIGNEE_NAME(activitiService.userIdToUserName(
+								hti.getASSIGNEE_(), "2"));
+					}
 					// 判断是否超时
 					judgeOverTime(hti);
 					// 处理耗时
@@ -735,6 +732,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public ModelMap toDealTask(String processKey, String processId,
 			String taskId, ModelMap model) throws Exception {
 
+		// 判断当前任务是否存在
+		if (null == getCurrentNodeInfo(taskId)) {
+			throw new ProcessException("任务不存在");
+		}
+
 		model.addAttribute("processKey", processKey);
 
 		// 获取流程实例的处理记录
@@ -776,21 +778,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				return null;
 			}
 
-			if (nodeList != null && nodeList.size() > 0) {
-
-				for (int i = 0; i < nodeList.size(); i++) {
-
-					ActNode actNode = nodeList.get(i);
-					// 串并行判断
-					isParrealOrSequence(actNode, processKey);
-				}
-			}
-
 			// 根据流程实例ID 获取流程的参数变量信息
 			List<ActivitiVariable> variableList = executor.queryList(
 					ActivitiVariable.class, "getVariableListById_wf",
 					processInstId);
 
+			// 获取原始节点处理人
 			if (variableList != null && variableList.size() > 0) {
 
 				StringBuffer users = new StringBuffer();
@@ -819,6 +812,40 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					}
 					users.setLength(0);
 				}
+			}
+
+			// 获取当前节点所有处理人
+//			List<TaskInfo> taskList = getCurrentNodeInfoByProcessID(processInstId);
+//			String taskKey = taskList.get(0).getTaskDefKey();
+
+			for (int i = 0; i < nodeList.size(); i++) {
+
+				ActNode actNode = nodeList.get(i);
+
+				// 串并行判断
+				isParrealOrSequence(actNode, processKey);
+
+//				// 重置当前节点所有处理人
+//				if (actNode.getActId().equals(taskKey)) {
+//					StringBuffer userIds = new StringBuffer();
+//					StringBuffer userNames = new StringBuffer();
+//					for (int j = 0; j < taskList.size(); j++) {
+//						TaskInfo task = taskList.get(j);
+//						if (StringUtil.isNotEmpty(task.getAssignee())) {
+//
+//							if (j == 0) {
+//								userIds.append(task.getAssignee());
+//								userNames.append(task.getAssigneeName());
+//							} else {
+//								userIds.append(",").append(task.getAssignee());
+//								userNames.append(",").append(
+//										task.getAssigneeName());
+//							}
+//						}
+//					}
+//					actNode.setCandidateName(userIds.toString());
+//					actNode.setRealName(userNames.toString());
+//				}
 			}
 
 			tms.commit();
@@ -1020,7 +1047,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			proIns.setDealRemak(dealRemak);
 
 			// 节点配置参数转换
-			getVariableMap(proIns.getActs(), paramMap);
+			getVariableMap(proIns, paramMap);
 
 			completeTask(proIns, paramMap);
 
@@ -1042,60 +1069,32 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			if (StringUtil.isEmpty(proIns.getToTaskKey())) {
 
-				if (StringUtil.isEmpty(proIns.getDealReason())) {
-
-					activitiService.completeTask(proIns.getNowtaskId(),
-							proIns.getUserAccount(), paramMap);
-				} else {
-					activitiService.completeTaskWithReason(
-							proIns.getNowtaskId(), proIns.getUserAccount(),
-							paramMap, proIns.getDealRemak(),
-							proIns.getDealOption(), proIns.getDealReason());
-				}
+				activitiService.completeTaskWithReason(proIns.getNowtaskId(),
+						proIns.getUserAccount(), paramMap,
+						proIns.getDealRemak(), proIns.getDealOption(),
+						proIns.getDealReason());
 
 			} else {
 
-				if (StringUtil.isEmpty(proIns.getDealReason())) {
-
-					activitiService.completeTaskWithLocalVariables(
-							proIns.getNowtaskId(), proIns.getUserAccount(),
-							paramMap, proIns.getToTaskKey());
-				} else {
-					activitiService.completeTaskWithLocalVariablesReason(
-							proIns.getNowtaskId(), proIns.getUserAccount(),
-							paramMap, proIns.getToTaskKey(),
-							proIns.getDealRemak(), proIns.getDealOption(),
-							proIns.getDealReason());
-				}
+				activitiService.completeTaskWithLocalVariablesReason(
+						proIns.getNowtaskId(), proIns.getUserAccount(),
+						paramMap, proIns.getToTaskKey(), proIns.getDealRemak(),
+						proIns.getDealOption(), proIns.getDealReason());
 			}
 
 		} else {// 已签收
 
 			if (StringUtil.isEmpty(proIns.getToTaskKey())) {
 
-				if (StringUtil.isEmpty(proIns.getDealReason())) {
-
-					activitiService.completeTask(proIns.getNowtaskId(),
-							paramMap);
-
-				} else {
-					activitiService.completeTaskWithReason(
-							proIns.getNowtaskId(), paramMap,
-							proIns.getDealRemak(), proIns.getDealOption(),
-							proIns.getDealReason());
-				}
+				activitiService.completeTaskWithReason(proIns.getNowtaskId(),
+						paramMap, proIns.getDealRemak(),
+						proIns.getDealOption(), proIns.getDealReason());
 
 			} else {
-				if (StringUtil.isEmpty(proIns.getDealReason())) {
-					activitiService.completeTaskLoadCommonParams(
-							proIns.getNowtaskId(), paramMap,
-							proIns.getToTaskKey());
-				} else {
-					activitiService.completeTaskLoadCommonParamsReason(
-							proIns.getNowtaskId(), paramMap,
-							proIns.getToTaskKey(), proIns.getDealRemak(),
-							proIns.getDealOption(), proIns.getDealReason());
-				}
+				activitiService.completeTaskLoadCommonParamsReason(
+						proIns.getNowtaskId(), paramMap, proIns.getToTaskKey(),
+						proIns.getDealRemak(), proIns.getDealOption(),
+						proIns.getDealReason());
 			}
 
 		}
@@ -1127,8 +1126,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					+ "]将任务废弃";
 
 			activitiService.cancleProcessInstances(proIns.getProInsId(),
-					proIns.getDealReason(), proIns.getNowtaskId(), processKey,
-					userAccount, proIns.getDealOption(), dealRemak);
+					dealRemak, proIns.getNowtaskId(), processKey, userAccount,
+					proIns.getDealOption(), proIns.getDealReason());
 
 			tm.commit();
 
@@ -1245,7 +1244,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 在扩展表中添加转办记录
 			activitiTaskService.updateNodeChangeInfo(proIns.getNowtaskId(),
 					proIns.getProInsId(), processKey, userAccount,
-					delegateUser, dealRemak);
+					delegateUser, dealRemak, proIns.getDealReason());
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1329,7 +1328,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 			// 获取参数配置信息
-			getVariableMap(proIns.getActs(), paramMap);
+			getVariableMap(proIns, paramMap);
 
 			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
@@ -1344,18 +1343,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setDealRemak(dealRemak);
 			}
 
-			if (StringUtil.isNotEmpty(proIns.getDealReason())) {
-				activitiService.getTaskService().rejecttoTask(
-						proIns.getNowtaskId(), paramMap, proIns.getDealRemak(),
-						proIns.getRejectToActId(),
-						proIns.getIsReturn() == 1 ? true : false,
-						proIns.getDealOption(), proIns.getDealReason());
-			} else {
-				activitiService.getTaskService().rejecttoTask(
-						proIns.getNowtaskId(), paramMap,
-						proIns.getRejectToActId(),
-						proIns.getIsReturn() == 1 ? true : false);
-			}
+			activitiService.getTaskService().rejecttoTask(
+					proIns.getNowtaskId(), paramMap, proIns.getDealRemak(),
+					proIns.getRejectToActId(),
+					proIns.getIsReturn() == 1 ? true : false,
+					proIns.getDealOption(), proIns.getDealReason());
 
 			// 日志记录驳回操作
 			activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
@@ -1731,8 +1723,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 					if (authorFlag) {
 						// 当前审批人或者管理员查看
-						model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
-								WorkflowConstants.PRO_PAGESTATE_APPROVE);
+						model.addAttribute(
+								WorkflowConstants.PRO_PAGESTATE,
+								WorkflowConstants.PRO_PAGESTATE_APPLYER_AND_APPROVE);
 					} else {
 						// 当前用户
 						model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
@@ -1835,6 +1828,29 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		return taskInfo;
 	}
 
+	/**
+	 * 根据流程实例id获取当前任务
+	 * 
+	 * @param processID
+	 * @return 2014年9月25日
+	 */
+	private List<TaskInfo> getCurrentNodeInfoByProcessID(String processID)
+			throws Exception {
+		List<TaskInfo> list = new ArrayList<TaskInfo>();
+		// 根据流程实例ID获取运行任务
+		List<Task> taskList = activitiService
+				.listTaskByProcessInstanceId(processID);
+
+		for (int i = 0; i < taskList.size(); i++) {
+			Task task = taskList.get(i);
+			TaskInfo taskInfo = getCurrentNodeInfo(task.getId());
+			if (null != taskInfo) {
+				list.add(taskInfo);
+			}
+		}
+		return list;
+	}
+
 	@Override
 	public List<TaskInfo> getCurrentNodeInfoByBussinessKey(String bussinesskey)
 			throws Exception {
@@ -1843,19 +1859,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				"getProcessByBusinesskey_wf", bussinesskey);
 
 		if (inst != null) {
-			List<TaskInfo> list = new ArrayList<TaskInfo>();
-			// 根据流程实例ID获取运行任务
-			List<Task> taskList = activitiService
-					.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
-
-			for (int i = 0; i < taskList.size(); i++) {
-				Task task = taskList.get(i);
-				TaskInfo taskInfo = getCurrentNodeInfo(task.getId());
-				if (null != taskInfo) {
-					list.add(taskInfo);
-				}
-			}
-			return list;
+			return getCurrentNodeInfoByProcessID(inst.getPROC_INST_ID_());
 		} else {
 			return null;
 		}

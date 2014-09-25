@@ -3478,7 +3478,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 					}
 
 					this.runtimeService.deleteProcessInstance(processInstid,
-							bussinessRemark, bussinessop, deleteReason);
+							deleteReason, bussinessop, bussinessRemark);
 
 					// 日志记录废弃操作
 					addDealTask(taskId, currentUser, getUserInfoMap()
@@ -3787,6 +3787,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 实时任务中没有act_type_字段值，历史任务有
 			if (tm.getACT_TYPE_() == null
 					|| tm.getACT_TYPE_().equals("userTask")) {
+				
+				// 撤销动作，处理人转换(先判断是否是撤销，后面逻辑不变)
+				if (StringUtil.isNotEmpty(tm.getUSER_ID_())) {
+					tm.setASSIGNEE_(tm.getUSER_ID_());
+				}
 
 				if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
 
@@ -4440,8 +4445,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			TaskManager task = executor.queryObject(TaskManager.class,
 					"getTaskInfoByTaskId_wf", taskId);
 
-			// 任务列表数据处理(处理人/组，行转列)
-			dealTaskInfo(task);
+			if (null != task) {
+				// 任务列表数据处理(处理人/组，行转列)
+				dealTaskInfo(task);
+			}
 
 			return task;
 		} catch (Exception e) {
@@ -4614,6 +4621,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throw new ProcessException(e);
 		}
 
+	}
+	
+	/**
+	 *  备份表数据
+	 * 2014年9月25日
+	 */
+	public void backupDatasToWorktime(String processId){
+		
 	}
 
 }

@@ -284,12 +284,12 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 	color: #000;
 }
 .u_tab_hover {
-	background: #00a2ff;
+	background: #f5696c;
 	font-weight: bold;
 	color: #fff;
 	line-height: 30px;
 	margin-top: 2px;
-	border-color: #00a2ff;
+	border-color: #f5696c;
 	font-size: 16px;
 }
 #tab01 .u_tab_hover a {
@@ -301,7 +301,7 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 .ul_news {
 	margin: 0;
 	background-color: #fff;
-	border-top: 1px solid #00a2ff;
+	border-top: 1px solid #f5696c;
 	padding: 20px;
 }
 .table_list {
@@ -309,7 +309,7 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 	border-top: none;
 }
 .table_list th {
-	background-color: #888;
+	background-color: #f5696c;
 	color: #fff;
 	font-weight: normal;
 	font-size: 16px;
@@ -375,10 +375,10 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 .sany_table th {
 	text-align: left; 
 }
-.sany_table th{padding: 8px 10px;}
 .sany_table th, .sany_table td {
 	padding: 4px 10px;line-height:19px;
 }
+.sany_table th{padding:10px;}
 a.search_bt, a.search_bt span, a.search_bt:hover, a.search_bt:hover span {
 	background-color: #e4e4e4;
 	padding: 0 10px;
@@ -401,3 +401,12 @@ a.search_bt {
 a.search_bt:hover, a.search_bt:hover span {
 	background-color: #ccc; color:#000;
 }
+.flow_chart{height:50px;margin:30px 10px; line-height:24px;}
+.flow_1{float:left;padding:2px 15px;height:46px;border:1px solid #9e9e9e; background-color:#e9e9e9; text-align:center;font-weight:bold;}
+.flow_star{float:left;height:47px; width:62px;font-weight:bold;line-height:46px; text-align:center; background: url(../images/flow_star.png) no-repeat left top;}
+.flow_no{line-height:46px;}
+.flow_chart .flow_1.select_flow{background:#ddedfa;border:1px solid #2a77d4;}
+.flow_chart .flow_star.select_flow{ background: url(../images/flow_select.png) no-repeat left center;}
+.flow_1 .select_person{font-weight:normal;font-size:12px; }
+.flow_arrow{float:left;width:23px; height:47px; background:url(../images/flow_arrow.png) no-repeat left  center;}
+.select_tr{ color:#0098fe;font-weight:bold;}

@@ -403,8 +403,7 @@ public class ActivitiTaskManageAction {
 
 						activitiTaskService.addEntrustTaskInfo(task);
 
-						// 追加DELETE_REASON_字段信息
-						remark = "<br/>备注:["
+						remark = "["
 								+ activitiService.getUserInfoMap().getUserName(
 										task.getCreateUser())
 								+ "]的任务委托给["
@@ -413,12 +412,12 @@ public class ActivitiTaskManageAction {
 					}
 
 				} else {
-					remark = "<br/>备注:["
+					remark = "["
 							+ activitiService.getUserInfoMap().getUserName(
 									task.getCurrentUser()) + "]完成";
 				}
 
-				task.setCompleteReason(task.getCompleteReason() + remark);
+				task.setCompleteRemark(remark);
 
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
@@ -466,6 +465,11 @@ public class ActivitiTaskManageAction {
 
 		try {
 			tm.begin();
+
+			// 判断当前任务是否存在
+			if (null == activitiService.getTaskByTaskId(taskId)) {
+				throw new ProcessException("任务不存在");
+			}
 
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
@@ -527,6 +531,8 @@ public class ActivitiTaskManageAction {
 
 			return "path:dealTask";
 
+		} catch (ProcessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		} finally {
@@ -674,8 +680,7 @@ public class ActivitiTaskManageAction {
 				activitiService.delegateTask(task.getTaskId(),
 						task.getChangeUserId());
 
-				String reamrk = task.getCompleteReason()
-						+ "<br/>备注:["
+				String reamrk = "["
 						+ activitiService.getUserInfoMap().getUserName(
 								currentUser)
 						+ "]将任务转办给["
@@ -685,7 +690,8 @@ public class ActivitiTaskManageAction {
 				// 在扩展表中添加转办记录
 				activitiTaskService.updateNodeChangeInfo(task.getTaskId(),
 						task.getProcessIntsId(), task.getProcessKey(),
-						currentUser, task.getChangeUserId(), reamrk);
+						currentUser, task.getChangeUserId(), reamrk,
+						task.getCompleteReason());
 
 				tm.commit();
 

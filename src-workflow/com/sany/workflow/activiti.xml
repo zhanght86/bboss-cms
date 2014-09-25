@@ -331,6 +331,7 @@
 			       T.ACT_TYPE_,
 			       T.OWNER_,
 			       T.ASSIGNEE_,
+			       A.DEALUSER AS USER_ID_,
 			       T.START_TIME_,
 			       T.CLAIM_TIME_,
 			       T.END_TIME_,
@@ -349,6 +350,8 @@
 			       T.DELETE_REASON_
 			       
 			  FROM ACT_HI_ACTINST T
+			  LEFT JOIN TD_WF_DEAL_TASK A ON T.TASK_ID_ = A.TASKID
+                                    AND A.DEALTYPE = '2' -- 撤销
 			  
 			 WHERE 1=1 
 			  
@@ -2554,8 +2557,15 @@
 	<property name="addNodeChangeInfo_wf">
 		<![CDATA[
 			 INSERT INTO TD_WF_NODE_CHANGEINFO (FROM_USER,TO_USER,TASKID,PROCESS_ID,
-			 	PROCESS_KEY,CHANGETIME,DELEGATEREMARK) 
-			 	VALUES (?,?,?,?,?,?,?) 
+			 	PROCESS_KEY,CHANGETIME,DELEGATEREMARK,DELEGATEREASON) 
+			 	VALUES (?,?,?,?,?,?,?,?) 
+		]]>
+	</property>
+	
+	<!-- 根据任务id获取历史任务 -->
+	<property name="getHiTaskIdByTaskId">
+		<![CDATA[ 
+      		SELECT * FROM ACT_HI_TASKINST T WHERE T.ID_=?
 		]]>
 	</property>
 	
@@ -2781,8 +2791,8 @@
 			       CC.OVERTIME,
 			       CC.ADVANCESEND,
 			       CC.OVERTIMESEND,
-			       CC.BUSSINESS_OP,
-			       CC.BUSSINESS_REMARK,
+			       '转办任务' AS BUSSINESS_OP,
+			       AA.DELEGATEREASON AS BUSSINESS_REMARK,
 			       AA.DELEGATEREMARK AS DELETE_REASON_
 			  FROM TD_WF_NODE_CHANGEINFO AA
 			  LEFT JOIN ACT_HI_ACTINST CC ON CC.TASK_ID_ = AA.TASKID
