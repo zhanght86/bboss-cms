@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -3589,8 +3590,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		// 流程实例的处理工时扩展表
+		// 流程实例的控制参数扩展表
 		dbUtil.preparedDelete("delete From TD_WF_NODE_WORKTIME n where n.PROCESS_ID =?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		// 流程实例的控制参数备份扩展表
+		dbUtil.preparedDelete("delete From TD_WF_NODE_HI_WORKTIME n where n.PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
@@ -4623,12 +4629,28 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	}
 	
-	/**
-	 *  备份表数据
-	 * 2014年9月25日
-	 */
-	public void backupDatasToWorktime(String processId){
-		
+	@Override
+	public void backupDatasToWorktime(String processId) {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String backuptime = format.format(new Date());
+			Map datas = new HashMap();
+			datas.put("backuptime", backuptime);
+			datas.put("processId", processId);
+			executor.insertBean("backupWorktimeToHi_wf", datas);
+
+			executor.delete("deleteNodeWorktimeByProcesId_wf", processId);
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
 	}
 
 }

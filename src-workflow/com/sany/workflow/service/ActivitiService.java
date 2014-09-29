@@ -1643,4 +1643,13 @@ public interface ActivitiService {
 	 *             2014年9月22日
 	 */
 	public boolean isSignTask(String taskId, String userId);
+	
+	
+	/**
+	 * 归档TD_WF_NODE_WORKTIME表数据
+	 * 
+	 * @param processId
+	 *            2014年9月26日
+	 */
+	public void backupDatasToWorktime(String processId);
 }

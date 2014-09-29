@@ -17,6 +17,7 @@ import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.common.poolman.SQLParams;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.common.poolman.util.SQLManager;
 import com.frameworkset.orm.transaction.TransactionException;
@@ -1065,6 +1066,72 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	/**
 	 * 得到用户的自身直接资源，角色的自身直接资源。发生改变
 	 */
+	public AuthRole[] getSecurityrolesInResource(String resId,
+			String operName, String restypeId) throws ManagerException {
+//		if(true){
+//			throw new ManagerException("yichang !!");
+//		}
+		
+		List list = new ArrayList();
+//		String sql = "SELECT role_id,types FROM TD_SM_ROLERESOP WHERE     OP_ID = 'visible' AND RES_ID = 'businessDemo' AND RESTYPE_ID = 'column'";
+		String sql = "SELECT role_id,types FROM TD_SM_ROLERESOP WHERE     OP_ID = ? AND RES_ID = ? AND RESTYPE_ID = ?";
+		final List<AuthRole> authRoles = new ArrayList<AuthRole>();
+		try {
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					String types= origine.getString("types");
+					String role_id= origine.getString("role_id");
+					AuthRole role = new AuthRole();
+					role.setRoleId(role_id);
+					role.setRoleType(types);
+					
+					if(types.equals("role"))
+					{
+						Role r = RoleCacheManager.getInstance().getRoleByID(role_id);
+						if(r != null)
+							role.setRoleName(r.getRoleName());
+						else
+							return;
+					}
+					else if(types.equals("user"))
+					{
+						String userAccount = (String)UserCacheManager.getInstance().getUserAttributeByID(role_id,"userAccount");
+						if(userAccount != null)
+							role.setRoleName(userAccount);
+						else
+							return;
+					}
+					else if(types.equals("organization"))
+					{
+						Organization  org = OrgCacheManager.getInstance().getOrganization(role_id);
+						if(org != null)
+						{
+							String org_name = org.getOrgName();
+							role.setRoleName(org_name);
+						}
+						else
+							return;
+					}
+					authRoles.add(role);
+				}			
+			}, sql, operName,resId,restypeId);
+		} catch (SQLException e) {
+			throw new ManagerException(e.getMessage(),e);
+		}
+		if(authRoles.size() > 0)
+		{
+			AuthRole[] temp = new AuthRole[authRoles.size()];
+			authRoles.toArray(temp);
+			return temp;
+		}
+		else
+			return null;
+
+	}
+	
+	
 	public List getAllRoleHasPermissionInResource(String resId,
 			String operName, String restypeId) throws ManagerException {
 //		if(true){
@@ -1337,12 +1404,12 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	}
 
 	public boolean hasGrantedRoles(String resourceType, String resourceID) throws ManagerException{
-		String sql = "select count(*) from td_sm_roleresop where res_id='"
-				+ resourceID + "' and restype_id='" + resourceType + "'";
-		DBUtil dbUtil = new DBUtil();
+//		String sql = "select count(1) from td_sm_roleresop where res_id='"
+//				+ resourceID + "' and restype_id='" + resourceType + "'";
+		String sql = "select count(1) from td_sm_roleresop where res_id=? and restype_id=?";
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		try {
-			dbUtil.executeSelect(sql);
-			return dbUtil.getInt(0, 0) > 0;
+			return SQLExecutor.queryObject(int.class, sql, resourceID,resourceType) > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ManagerException("执行sql[ " + sql +"]失败：" + e.getMessage());

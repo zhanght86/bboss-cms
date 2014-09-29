@@ -30,14 +30,22 @@ function query(orgId){
 	queryList(orgId);
 		
 }
+
+function containSpecial( s ) {  
+	var containSpecial = RegExp(/[(\ )(\_)(\%)]+/);      
+  return ( containSpecial.test(s) );      
+}
 	
 function queryList(orgId){
-	var user_worknumber = $("#user_worknumber").val();
-	var user_realname = $("#user_realname").val();
-	var user_name = $("#user_name").val();
+	var user_name = $("#userName").val();
 	
-	if(orgId == '' && user_worknumber==''&&user_realname==''&&user_name==''){
+	if(orgId == '' && user_name==''){
 		alert("请输入查询条件");
+		return;
+	}
+	
+	if(containSpecial(user_name)){
+		alert('查询字符串含有非法字符集,请检查输入条件！');
 		return;
 	}
 		
@@ -45,8 +53,7 @@ function queryList(orgId){
 		
 		url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page",
 		type: "post",
-		data :{"org_id":orgId,"user_worknumber":user_worknumber,"user_realname":user_realname,
-			   "user_name":user_name,"pagesize":$("#rownums").val()},
+		data :{"org_id":orgId,"user_name":user_name,"pagesize":$("#rownums").val()},
 		dataType:"json",			
 		success: function(data){
 			
@@ -61,12 +68,15 @@ function queryList(orgId){
 						optionHtml += "<option value='"+data[i].user_name+"'>"+data[i].user_realname+"</option>";
 					 }
 				}
+				
 				$("#select1").append(optionHtml);
 				
-				if (orgId == null || orgId == '') {
+				if ((orgId == null || orgId == '') && data.length == 1) {
 					$("#select1").find('option').attr('selected','selected');
 					move($('#select1'),$('#select2'));
 				}
+			}else {
+				alert("无查询结果");
 			}
 		}
 	});
@@ -200,6 +210,39 @@ function selectOption(selector){
 	
 $(document).ready(function() {
 	
+	$("#btnMoveUp,#btnMoveDown").click(function() {   
+        var $opt = $("#select2 option:selected");   
+        if (!$opt.length) return;   
+        if ($opt.length > 1 ) {
+        	alert('请选择一项移动');
+        	return;   
+        }
+        if (this.id == "btnMoveUp") 
+            $opt.prev().before($opt);   
+        else 
+            $opt.next().after($opt);   
+        });   
+	
+    //按Alt加上下鍵也可以移動   
+    $("#select2").keydown(function(evt) {   
+        if (!evt.altKey) return;   
+        var k = evt.which;
+        if (k == 38) { 
+        	$("#btnMoveUp").click(); 
+        	return false; 
+        }else { 
+        	if (k == 40) { 
+        		$("#btnMoveDown").click(); return false; 
+        	} 
+        }
+    });
+		 
+	$("#userName").keydown(function(event){
+		if(event.keyCode == 13){
+			queryList('');
+		}
+	});
+	
 	 $("#org_tree").load("../taskConfig/task_config_common_org_tree.jsp");
 });
 </script>
@@ -226,19 +269,8 @@ $(document).ready(function() {
 									<table width="100%" border="0" cellpadding="0" cellspacing="0"
 										class="table2">
 										<tr>
-											<th>工号：</th>
-											<td><input id="user_worknumber" name="user_worknumber" type="text"
-													value="" class="w120"/></td>
-											<th>
-												姓名：
-											</th>
-											<td>
-												<input id="user_realname" name="user_realname" type="text"
-													value="" class="w120" />
-											</td>
-											<th>登陆名：</th>
-											<td><input id="user_name" name="user_name" type="text"
-													value="" class="w120"/></td>
+											<td><input id="userName" name="userName" type="text"
+											 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/></td>
 											<th>显示</th>
 											<td>
 												<select class="w50" id="rownums">
@@ -301,6 +333,10 @@ $(document).ready(function() {
 										<option value="<pg:cell colName='user_name'/>"><pg:cell colName="user_realname"/></option>
 									</pg:list>	
 								</select>
+							</td>
+							<td align="left">
+								<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∧" id="btnMoveUp" title="快速鍵: alt+向上" /> 
+								<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∨" id="btnMoveDown" title="快速鍵: alt+向下"/> 
 							</td>
 						</tr>
 						<tr>

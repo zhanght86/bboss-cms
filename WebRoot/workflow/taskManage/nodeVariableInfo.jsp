@@ -2,6 +2,7 @@
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 
 <%--流程参数table--%>
+<pg:notempty actual="${instVariableList}" >
 <table border="0" cellpadding="0" cellspacing="0" class="table3">
 	<tr >
 		<th rowspan="<pg:size actual='${instVariableList}' increament="1"/>" width="100"><strong>流程参数信息：</strong></th>
@@ -14,8 +15,7 @@
 		<th width="100"><strong>TEXT2_</strong></th>
 	</tr>
 		
-<pg:notempty actual="${instVariableList}" >
-<pg:list actual="${instVariableList}"  >
+	<pg:list actual="${instVariableList}"  >
 	<tr >
 		<td width="150"><pg:cell colName="NAME_"/></td>
 		<td width="95"><pg:cell colName="TYPE_"/></td>
@@ -50,34 +50,38 @@
 			<pg:empty colName="TEXT2_" >&nbsp;</pg:empty>
 		</td>
 	</tr>
-</pg:list>
-</pg:notempty>
+	</pg:list>
 </table>
+</pg:notempty>
 
 <%--节点控制参数table--%>
+<pg:notempty actual="${controlParamList}" >
 <table border="0" cellpadding="0" cellspacing="0" class="table3">
 	<tr >
 		<th rowspan="<pg:size actual='${controlParamList}' increament="1"/>" width="100"><strong>节点控制参数信息：</strong></th>
+		<th width="100"><strong>节点名称</strong></th>
 		<th width="100"><strong>节点KEY</strong></th>
 		<th width="160"><strong>节点描述</strong></th>
-		<th width="300"><strong>待办URL</strong></th>
+		<th width="300"><strong>待办URL</strong><br/>业务控制类</th>
 		<th width="500"><strong>控制参数</strong></th>
 	</tr>
 		
-<pg:notempty actual="${controlParamList}" >
-<pg:list actual="${controlParamList}"  >
+	<pg:list actual="${controlParamList}"  >
 	<tr >
+		<td width="100"><pg:cell colName="NODE_NAME"/></td>
 		<td width="100"><pg:cell colName="NODE_KEY"/></td>
 		<td width="160"><pg:cell colName="NODE_DESCRIBE"/></td>
-		<td width="300"><pg:cell colName="TASK_URL"/></td>
+		<td width="300">
+			<pg:cell colName="TASK_URL"/>
+			<br/>
+			<pg:cell colName="BUSSINESSCONTROLCLASS"/>
+		</td>
 		<td width="500">
 			<input type="checkbox" disabled <pg:equal colName="IS_VALID" value="1">checked </pg:equal> />是否有效 
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_EDIT" value="1">checked </pg:equal> />可修改
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_EDITAFTER" value="1">checked </pg:equal>/>可修改后续节点
-			
-			<input type="checkbox" disabled <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>后续节点自动审批
 			
@@ -94,9 +98,9 @@
 			<input type="checkbox" disabled <pg:equal colName="IS_SEQUENTIAL" value="1">checked </pg:equal>/>串行
 		</td>
 	</tr>
-</pg:list>
-</pg:notempty>
+	</pg:list>
 </table>
+</pg:notempty>
 							
 <%--当前节点参数table--%>
 <pg:notempty actual="${taskVariableMap}" >

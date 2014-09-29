@@ -82,6 +82,7 @@
         <column name="TASK_URL" size="500" type="VARCHAR" />
         <column name="NODE_DESCRIBE" size="4000" type="VARCHAR" />
         <column name="NODE_NAME" size="255" type="VARCHAR" />
+        <column name="BACKUPTIME" type="TIMESTAMP" />
     </table>
     <table name="TD_WF_PROC_MESSTEMPLATE">
         <column name="NOTICEID" primaryKey="true" required="true" size="100" type="VARCHAR"/>

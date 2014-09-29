@@ -47,7 +47,7 @@ public interface ActivitiConfigService {
 	 * @param pagesize
 	 * @return
 	 */
-	public ListInfo queryUsersForPage(User user, long offset,
+	public List<User> queryUsersForPage(User user, long offset,
 			int pagesize);
 	
 	/**
@@ -312,7 +312,7 @@ public interface ActivitiConfigService {
 	String saveNodevariable(List<Nodevariable> nodevariableList,
 			String business_id, String business_type, String process_key);
 	
-	public String saveNodeContralParam(NodeControlParam nodeControlParam,
+	public String saveNodeContralParam(List<NodeControlParam> nodeControlParamList,
 			String business_id, String business_type, String process_key);
 
 	void addProBusinessType(String processKey, String businessTypeId)  throws ActivitiConfigException;

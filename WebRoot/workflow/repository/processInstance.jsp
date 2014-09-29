@@ -32,8 +32,12 @@ $(document).ready(function() {
 	
 	queryList();
 			
-	$('#delBatchButton').click(function() {
-		delInst();
+	$('#logicDelBatchButton').click(function() {
+		logicDelInst();
+    });
+	
+	$('#physicalDelBatchButton').click(function() {
+		physicalDelInst();
     });
 	
 	$('#stBatchButton').click(function() {  
@@ -50,8 +54,8 @@ $(document).ready(function() {
 	
 });
 
-// 删除实例
-function delInst(){
+// 逻辑删除实例
+function logicDelInst(){
 	var ids="";
 	
 	$("#tb tr:gt(0)").each(function() {
@@ -65,9 +69,62 @@ function delInst(){
        return false;
     }
     
+  	//逻辑删除，要判断是否已经删除过
+	var isDelete = "";//流程完成，删除才有备注，用来判断是否能删除
+	$("#tb tr:gt(0)").each(function() {
+		if ($(this).find("#CK").get(0).checked == true) {
+			if ($(this).find("#END_TIME").val() != '') {
+				isDelete = "false";
+				return;
+			}
+	     }
+	});
+	    
+	if (isDelete == "false") {
+	    $.dialog.alert('已完成的流程不能删除');
+	    return;
+	}
+    
     var url="<%=request.getContextPath()%>/workflow/repository/delProcessInstance.jsp?ids="+ids
     		+"&processKey=${processKey}";
     $.dialog({ id:'iframeNewId', title:'填写删除原因',width:400,height:200, content:'url:'+url});  
+}
+
+//物理删除实例
+function physicalDelInst(){
+	var ids="";
+	
+	$("#tb tr:gt(0)").each(function() {
+		if ($(this).find("#CK").get(0).checked == true) {
+             ids=ids+$(this).find("#PROC_INST_ID_").val()+",";
+        }
+    });
+	
+    if(ids==""){
+       $.dialog.alert('请选择需要删除的流程！');
+       return false;
+    }
+    
+	$.dialog.confirm('确定要删除记录吗？删除后将不可恢复', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/repository/delInstancesForPhysics.page",
+			data :{"processInstIds":ids},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+			success : function(data){
+				if(data=="success"){
+		 			modifyQueryData();
+				}else{
+					alert("流程实例物理删除出错："+data);
+				}
+			}	
+		 });
+	},function(){});    
 }
 
 // 开始实例
@@ -310,7 +367,8 @@ function doreset(){
 						<a href="#" class="bt_small" id="stBatchButton"><span>开启</span></a>
 						<a href="#" class="bt_small" id="upBatchButton"><span>升级</span></a>
 					</pg:notempty>
-					<a href="#" class="bt_small" id="delBatchButton"><span>删除</span></a>
+					<a href="#" class="bt_small" id="logicDelBatchButton"><span>废弃流程</span></a>
+					<a href="#" class="bt_small" id="physicalDelBatchButton"><span>物理删除流程</span></a>
 				</div>
 					
 				<strong>实例列表</strong>

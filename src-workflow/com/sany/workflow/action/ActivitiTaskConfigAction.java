@@ -9,12 +9,14 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
@@ -109,61 +111,70 @@ public class ActivitiTaskConfigAction {
 	 * @param model
 	 * @return
 	 */
-	public String showActivitiNodeInfo(String processKey,
-			String business_id, String business_type, ModelMap model) throws Exception {
-	
-		List<ActivitiNodeCandidate> list = activitiConfigService.queryActivitiNodesCandidates(business_type, business_id, processKey);
-		for(int i=0;list != null && i<list.size();i++){
+	public String showActivitiNodeInfo(String processKey, String business_id,
+			String business_type, ModelMap model) throws Exception {
+
+		List<ActivitiNodeCandidate> list = activitiConfigService
+				.queryActivitiNodesCandidates(business_type, business_id,
+						processKey);
+		
+		for (int i = 0; list != null && i < list.size(); i++) {
 			ActivitiNodeCandidate activitiNodeCandidate = list.get(i);
-			//if(i==0){
-			//	activitiNodeCandidate.setCandidate_users_name("流程启动者");
-			//	activitiNodeCandidate.setCandidate_groups_name("流程启动者");
-				
-				
-		//	}
-			//else
-//			ActivitiNodeCandidate activitiNodeCandidate = activitiConfigService.queryActivitiNodeCandidate(processKey, list.get(i).getNode_key(), business_id, business_type);
-			
-		//	{
-				activitiNodeCandidate.setCandidate_groups_id(activitiNodeCandidate.getCandidate_groups_id());
-				activitiNodeCandidate.setCandidate_groups_name(activitiNodeCandidate.getCandidate_groups_name() != null?activitiNodeCandidate.getCandidate_groups_name().trim():"");
-				activitiNodeCandidate.setCandidate_users_id(activitiNodeCandidate.getCandidate_users_id());
-				activitiNodeCandidate.setCandidate_users_name(activitiNodeCandidate.getCandidate_users_name() != null?activitiNodeCandidate.getCandidate_users_name().trim():"");
-//				activitiNodeCandidate.setIs_edit_candidate(activitiNodeCandidate.getIs_edit_candidate());
-//				activitiNodeCandidate.setIs_valid(activitiNodeCandidate.getIs_valid());
-		//	}
+			activitiNodeCandidate.setCandidate_groups_id(activitiNodeCandidate
+					.getCandidate_groups_id());
+			activitiNodeCandidate
+					.setCandidate_groups_name(activitiNodeCandidate
+							.getCandidate_groups_name() != null ? activitiNodeCandidate
+							.getCandidate_groups_name().trim() : "");
+			activitiNodeCandidate.setCandidate_users_id(activitiNodeCandidate
+					.getCandidate_users_id());
+			activitiNodeCandidate.setCandidate_users_name(activitiNodeCandidate
+					.getCandidate_users_name() != null ? activitiNodeCandidate
+					.getCandidate_users_name().trim() : "");
 			activitiNodeCandidate.setBusiness_type(business_type);
 			activitiNodeCandidate.setBusiness_id(business_id);
-			
+
 		}
-		List<Nodevariable> nodevariableList = activitiConfigService.selectNodevariable(processKey, business_id, business_type);
-		/*List<Nodevariable> vrList = null;;
-		try {
-			vrList = activitiConfigService.loadVariableResource(processKey);
-			model.addAttribute("vrList",vrList);
-		} catch (ActivitiConfigException e) {
-			e.printStackTrace();
-		}*/
-		//nodevariableList.addAll(vrList);
+		List<Nodevariable> nodevariableList = activitiConfigService
+				.selectNodevariable(processKey, business_id, business_type);
 		model.addAttribute("nodevariableList", nodevariableList);
 		model.addAttribute("activitiNodeCandidateList", list);
 		model.addAttribute("business_id", business_id);
 		model.addAttribute("business_type", business_type);
 		model.addAttribute("process_key", processKey);
-		List<ActivitiNodeInfo> nodeInfoList = activitiConfigService.queryAllActivitiNodeInfo(processKey);
+		List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
+				.queryAllActivitiNodeInfo(processKey);
 		model.addAttribute("nodeInfoList", nodeInfoList);
-		if(nodevariableList==null||nodevariableList.isEmpty()){
-			model.addAttribute("loadvariableresource","true");
-		}else{
-			model.addAttribute("loadvariableresource","false");
+		if (nodevariableList == null || nodevariableList.isEmpty()) {
+			model.addAttribute("loadvariableresource", "true");
+		} else {
+			model.addAttribute("loadvariableresource", "false");
 		}
-		
+
+		return "path:nodeinfo";
+	}
+	
+	/** 跳转到控制参数配置页面
+	 * @param processKey
+	 * @param business_id
+	 * @param business_type
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 * 2014年9月26日
+	 */
+	public String toNodeControlParamConfig(String process_key,
+			String business_id, String business_type, ModelMap model)
+			throws Exception {
 		// 获取节点控制参数信息
 		List<NodeControlParam> contralParamList = activitiConfigService
-				.getNodeContralParamList(processKey, business_id, business_type);
-		model.addAttribute("contralParamList", contralParamList);
+				.getNodeContralParamList(process_key, business_id, business_type);
 		
-		return "path:nodeinfo";
+		model.addAttribute("contralParamList", contralParamList);
+		model.addAttribute("process_key", process_key);
+		model.addAttribute("business_id", business_id);
+		model.addAttribute("business_type", business_type);
+		return "path:toNodeControlParamConfig";
 	}
 	
 	public String queryUsers(User user,
@@ -190,23 +201,12 @@ public class ActivitiTaskConfigAction {
 	 */
 	public @ResponseBody
 	List<User> queryUsersToJson(
-			User user,long offset,int pagesize) {
-		if (user.getUser_realname() != null
-				&& !user.getUser_realname().equals("")) {
-			user.setUser_realname("%" + user.getUser_realname() + "%");
-		}
-		if (user.getUser_name() != null && !user.getUser_name().equals("")) {
+			User user,long offset,int pagesize) throws Exception{
+		if (StringUtils.isNotBlank(user.getUser_name())) {
 			user.setUser_name("%" + user.getUser_name() + "%");
 		}
-		if (user.getUser_worknumber() != null
-				&& !user.getUser_worknumber().equals("")) {
-			user.setUser_worknumber("%" + user.getUser_worknumber() + "%");
-		}
 		
-		ListInfo listInfo = activitiConfigService.queryUsersForPage(user,offset,pagesize);
-		List<User> userList = listInfo.getDatas();
-		
-		return userList;
+		return activitiConfigService.queryUsersForPage(user,offset,pagesize);
 	}
 	
 	/** 获取用户列表转成json
@@ -363,9 +363,9 @@ public class ActivitiTaskConfigAction {
 	 * 2014年8月29日
 	 */
 	public @ResponseBody
-	String submitNodeContralParam(NodeControlParam nodeControlParam,
+	String submitNodeContralParam(List<NodeControlParam> nodeControlParamList,
 			String business_id, String business_type, String process_key) {
-		return activitiConfigService.saveNodeContralParam(nodeControlParam,
+		return activitiConfigService.saveNodeContralParam(nodeControlParamList,
 				business_id, business_type, process_key);
 	}
 	

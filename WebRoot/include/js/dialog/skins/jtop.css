@@ -12,7 +12,7 @@ body{ _margin:0; }/*IE6 BUG*/
 .ui_lock_scroll body{ overflow:hidden; }
 
 /*结构层*/
-.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 "Microsoft YaHei", tahoma,arial,\5b8b\4f53,sans-serif; }
 table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:collapse; }
 .ui_border td,.ui_dialog td{ padding:0; }
 .ui_dialog{ background:#FFF; }
@@ -30,7 +30,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_icon_bg{ margin:20px 0 20px 15px; }
 
 /*标题纯CSS按钮开始 min 最小化，max最大化，res还原，rese恢复，close关闭*/
-.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;font-family:tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;}
 .ui_min b,.ui_max b,.ui_res_t,.ui_res_b{ display:block;position:absolute;overflow:hidden;cursor:pointer; }
 .ui_close{ font-weight:500;text-decoration:none;outline:0 none; }
 .ui_close:hover{ text-decoration:none; }

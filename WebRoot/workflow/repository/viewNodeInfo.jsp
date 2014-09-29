@@ -107,11 +107,11 @@ function trMoveToend(obj){
 		<pg:header>
 			<th>节点KEY</th>
 			<th>节点名称</th>
+			<th>操作</th>
 			<th>节点描述</th>
 			<th>处理工时<br/>(小时)</th>
 			<th>待办URL</th>
 			<th>控制参数</th>
-			<th>操作</th>
 		</pg:header>
 			
 		<pg:list requestKey="nodeList">
@@ -120,6 +120,12 @@ function trMoveToend(obj){
 				<input type="hidden" name="ORDER_NUM" class="ORDER_NUM" value="<pg:cell colName="ORDER_NUM"/>"/></td>
 				<td ><pg:cell colName="NODE_KEY"/></td>
 				<td ><pg:cell colName="NODE_NAME"/></td>
+				<td >
+			         <INPUT type="button" value="顶" onclick="trMoveTofirst(this)" />
+			         <INPUT type="button" value="↑"  onclick="trMove(this)" />
+			         <INPUT type="button" value="↓"  onclick="trMove(this)" />
+			         <INPUT type="button" value="底" onclick="trMoveToend(this)" />
+		        </td>
 				<td >
 					<span class="toolTip" title="<pg:cell colName="NODE_DESCRIBE"/>"><pg:cell colName="NODE_DESCRIBE" maxlength="8" replace="..."/></span>
 				</td>
@@ -148,13 +154,6 @@ function trMoveToend(obj){
 					</pg:notempty>
 					<pg:empty colName="IS_EDITAFTER">
 						<input type="checkbox" disabled />可修改后续节点
-					</pg:empty>
-					
-					<pg:notempty colName="IS_AUTO">
-						<input type="checkbox" disabled <pg:equal colName="IS_AUTO" value="1">checked </pg:equal>/>自动审批
-					</pg:notempty>
-					<pg:empty colName="IS_AUTO">
-						<input type="checkbox" disabled />自动审批
 					</pg:empty>
 					
 					<pg:notempty colName="IS_AUTOAFTER">
@@ -210,12 +209,6 @@ function trMoveToend(obj){
 				</td>
 				</pg:equal>
 				<pg:notequal colName="NODE_TYPE" value="userTask"><td>&nbsp;</td></pg:notequal>
-				<td >
-			         <INPUT type="button" value="顶" onclick="trMoveTofirst(this)" />
-			         <INPUT type="button" value="↑"  onclick="trMove(this)" />
-			         <INPUT type="button" value="↓"  onclick="trMove(this)" />
-			         <INPUT type="button" value="底" onclick="trMoveToend(this)" />
-		        </td>
 			</tr>
 		</pg:list>
 	</table>

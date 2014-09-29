@@ -91,16 +91,43 @@
 		             i18n:en_US="WEB UI Show" 
 		            id="WEB_UI_Show" used="true" showleftmenu="false"
 		             url="appbom/index.page">	
-		    <item name="列表"
-			i18n:en_US="web list" id="web_list"  menuType="type1">
-				<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
-				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<workspace>
-					<content>appbom/index.page</content>
-				</workspace>
-			
-			</item>  
+		   
+			<module name="接待系统" 
+		             i18n:en_US="RMS UI Show" 
+		            id="WEB_rms" used="true" showleftmenu="true">
+		            <item name="会议室"
+				i18n:en_US="web list" id="conference_rms"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/rms/conference.html</content>
+					</workspace>
+				
+				</item> 
+				
+				<item name="接待管理"
+				i18n:en_US="web list" id="reception_rms"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/rms/reception_ready.html</content>
+					</workspace>
+				
+				</item>	
+				<item name="电话会议"
+				i18n:en_US="web list" id="phone_rms"  showleftmenu="false" menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/rms/phone.html</content>
+					</workspace>
+				
+				</item>	
+				
+			</module>
 			<module name="物资出门" 
 		             i18n:en_US="MAM UI Show" 
 		            id="WEB_mam" used="true" showleftmenu="true">
@@ -125,7 +152,7 @@
 				
 				</item> 
 								 <item name="流程审批页面"
-				i18n:en_US="web list" id="entry"  showleftmenu="false"  menuType="type1">
+				i18n:en_US="web list" id="entryaudit"  showleftmenu="false"  menuType="type1">
 					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
 					<top>header.page</top>
 					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -202,7 +229,7 @@
 			</module>
 			<module name="差旅管理" 
 		             i18n:en_US="TAS UI Show" 
-		            id="WEB_mam" used="true" showleftmenu="true">	
+		            id="WEB_tas" used="true" showleftmenu="true">	
 				 <item name="我要出差页面申请"
 				i18n:en_US="web list" id="travel_requests" showleftmenu="false"  menuType="type1">
 					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
@@ -214,6 +241,16 @@
 				
 				</item> 
 			</module>
+			 <item name="列表"
+			i18n:en_US="web list" id="web_list"  menuType="type1">
+				<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+				<top>header.page</top>
+				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+				<workspace>
+					<content>appbom/index.page</content>
+				</workspace>
+			
+			</item>  
 			 <item name="列表1"
 			i18n:en_US="web list" id="web_list1" menuType="type1">
 				<mouseclickimg>html3/hrm/images/app3.png</mouseclickimg>

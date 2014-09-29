@@ -3,14 +3,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <div class="tabbox" id="tabbox">
-	<ul class="tab" id="menu0">
-		<li><a href="javascript:void(0)" class="current" onclick="setTab(0,0)"><span>处理人配置</span></a></li>
-		<li><a href="javascript:void(0)" onclick="setTab(0,1)"><span>参数配置</span></a></li>
-		<li><a href="javascript:void(0)" onclick="setTab(0,2)"><span>控制变量配置</span></a></li>
+	<ul class="tab" id="menu1">
+		<li><a href="javascript:void(0)" class="current" onclick="setTab(1,0)"><span>处理人配置</span></a></li>
+		<li><a href="javascript:void(0)" onclick="setTab(1,1,{frameid:'tab2iframe',framesrc:'${pageContext.request.contextPath}/workflow/config/toNodeControlParamConfig.page?process_key=${process_key}&business_id=${business_id}&business_type=${business_type}'})"><span>控制变量配置</span></a></li>
+		<li><a href="javascript:void(0)" onclick="setTab(1,2)"><span>参数配置</span></a></li>
 	</ul>
 </div>
 
-<div id="main0">
+<div id="main1">
 	
 	<ul id="tab1" style="display: block;">
 		<div>
@@ -25,8 +25,8 @@
 						<th>待办人</th>
 						<th>待办组</th>
 					</pg:header>
+					
 					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
-					<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
 						<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
 						<input type="hidden"
 							id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
@@ -55,20 +55,22 @@
 								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
 							</td>
 						</tr>
-						</pg:notin>
 					</pg:list>
 				</table>
 				
 				<div class="btnarea">
-					<a href="javascript:void(0)" class="bt_1" id="addButton"
-						onclick="doCandidateSubmit()"><span>确定</span></a> 
+					<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="doCandidateSubmit()"><span>确定</span></a> 
 				</div>
 			</form>
 			
 		</div>
 	</ul>
+	
+	<ul id="tab2" style="display: none;">
+		<iframe id="tab2iframe" frameborder="0" width="100%"  height="500" ></iframe>
+	</ul>
 
-	<ul id="tab2">
+	<ul id="tab3">
 		<div id="paramconig">
 			<div class="title_box">
 				<div class="rightbtn">
@@ -86,67 +88,16 @@
 				<div id="nodevariableContent">
 				</div>
 				<div class="btnarea">
-					<a href="javascript:void(0)" class="bt_1" id="addButton"
-						onclick="doParamSubmit()"><span>确定</span></a> 
+					<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="doParamSubmit()"><span>确定</span></a> 
 				</div>
 				</form>
 			</div>
 		</div>
 	</ul>
 	
-	<ul id="tab3">
-	
-		<div id="contralconig">
-			<form name="contralForm" id="contralForm" method="post">
-			
-				<input type="hidden" id="business_id" name="business_id" value="${business_id }"/>
-				<input type="hidden" id="business_type" name="business_type" value="${business_type }"/>
-				<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
-				
-				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
-					<pg:header>
-						<th>节点KEY</th>
-						<th>节点名称</th>
-						<th>处理工时/小时</th>
-						<th>节点描述</th>
-						<th>业务处理类</th>
-						<th>待办URL</th>
-						<th>操作</th>
-					</pg:header>
-					
-					<pg:list autosort="false" requestKey="contralParamList">
-						<tr>
-							<td><pg:cell colName="NODE_KEY"/></td>
-							<td><pg:cell colName="NODE_NAME"/></td>
-							<td id="DURATION_NODE<pg:cell colName="NODE_KEY"/>">
-							<pg:equal colName="DURATION_NODE" value="0">&nbsp;</pg:equal>
-							<pg:notequal colName="DURATION_NODE" value="0">
-								<pg:cell colName="DURATION_NODE"/>
-							</pg:notequal>
-							</td>
-							<td id="NODE_DESCRIBE<pg:cell colName="NODE_KEY"/>"><pg:cell colName="NODE_DESCRIBE"/></td>
-							<td id="BUSSINESSCONTROLCLASS<pg:cell colName="NODE_KEY"/>"><pg:cell colName="BUSSINESSCONTROLCLASS"/></td>
-							<td id="TASK_URL<pg:cell colName="NODE_KEY"/>"><pg:cell colName="TASK_URL"/></td>
-							<td>
-							<a href="javascript:void(0)" onclick="updateNodeControlParam('<pg:cell colName="NODE_KEY" />')">设置</a>
-							</td>
-						</tr>
-					</pg:list>
-				</table>
-					
-			</form>
-		</div>
-	</ul>
-	
 </div>
-<div id="sp" style="display:none">
-		<div style="color:#99BBE8;background:#fafafa;padding:5px;">选择节点</div>
-		<pg:list autosort="false" requestKey="nodeInfoList">
-			<input type="radio"  name="lang" value="<pg:cell colName='id'/>"/><span><pg:cell colName="node_name"></pg:cell></span><br/>
-		</pg:list>
-</div>
-<script type="text/javascript">
 
+<script type="text/javascript">
 // 清空选择
 function emptyChoose(id,type){
 	if (type=='1') {//清空用户
@@ -156,13 +107,6 @@ function emptyChoose(id,type){
 		$("#"+id+"_groups_id").val('');
 		$("#"+id+"_groups_name").val('');
 	}
-}
-
-function updateNodeControlParam(nodekey){
-	 var url="<%=request.getContextPath()%>/workflow/config/toUpdateNodeControlParam.page?"
-			 +"process_key=${process_key}&business_id=${business_id}&business_type=${business_type}"
-			 +"&taskKey="+nodekey+"&pageType=fromTemplet";
-	$.dialog({ id:'iframeNewId', title:'设置节点控制参数信息',width:580,height:600, content:'url:'+url});  
 }
 
 function setUser(node_key,users_id,users_name){

@@ -51,27 +51,30 @@ public class AppPermissionRoleMap extends PermissionRoleMap
 
     	AuthRole[] asecurityroles = null;
         try {
-            List list = SecurityDatabase.getRoleManager(getProviderType()).getAllRoleHasPermissionInResource(resource,action,resourceType);
-            if (list != null && list.size() > 0) {
+//            List list = SecurityDatabase.getRoleManager(getProviderType()).getAllRoleHasPermissionInResource(resource,action,resourceType);
+//            if (list != null && list.size() > 0) {
+//
+//                asecurityroles = new AuthRole[list.size()];
+//                for (int i = 0; i < list.size(); i++) {
+//                	asecurityroles[i] = new AuthRole();
+//                    asecurityroles[i].setRoleName(((Role) list.get(i)).getRoleName());
+//                    asecurityroles[i].setRoleType(((Role) list.get(i)).getRoleType());
+//                }
+//            }
+        	
+        	asecurityroles = SecurityDatabase.getRoleManager(getProviderType()).getSecurityrolesInResource(resource, action, resourceType);
 
-                asecurityroles = new AuthRole[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                	asecurityroles[i] = new AuthRole();
-                    asecurityroles[i].setRoleName(((Role) list.get(i)).getRoleName());
-                    asecurityroles[i].setRoleType(((Role) list.get(i)).getRoleType());
-                }
-            }
-
-            
+        	if(asecurityroles != null && asecurityroles.length == 0)
+        		asecurityroles = null;
         }
         //add by 20080721 gao.tang 添加ManagerException异常处理
         catch(ManagerException me){
-        	me.printStackTrace();
+        
 			throw new SecurityException(me);
 			
         }catch (Exception e) {
         	//add by 20080721 gao.tang 异常信息抛出
-        	e.printStackTrace();
+        
         	throw new SecurityException(e);
         }
         return asecurityroles;

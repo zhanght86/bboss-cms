@@ -15,7 +15,6 @@
 	cursor: pointer;
 	height: 17px;
 	width: 16px;
-	background-color: #82878A;
 }
 
 .WdateDiv .NavImgll a{
@@ -36,11 +35,11 @@
 }
 
 .WdateDiv #dpTitle{
-	height:20px; background-color:#82878A;
+	height:20px; background-color:#f5696c;
 	padding:2px;
 }
 
-.WdateDiv .yminput{margin:0;padding:0; background-color:#82878A;color:#fff;
+.WdateDiv .yminput{margin:0;padding:0; background-color:#f5696c;color:#fff;
 	text-align:center;border:none;
 	height:19px;
 	width:51px;margin-left:3px;
@@ -69,9 +68,9 @@
 }
 
 .WdateDiv .menuOn{
-	cursor:pointer;
-	color:#036;
-	background-color:#eee;
+	cursor: pointer;
+	color: #900;
+	background-color: #F4F4F4;
 }
 
 .WdateDiv .invalidMenu{

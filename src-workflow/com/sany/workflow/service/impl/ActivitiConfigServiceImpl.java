@@ -150,11 +150,11 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	 * @param pagesize
 	 * @return
 	 */
-	public ListInfo queryUsersForPage(User user, long offset, int pagesize) {
+	public List<User> queryUsersForPage(User user, long offset, int pagesize) {
 		try {
 			ListInfo listInfo = executor.queryListInfoBean(User.class,
 					"selectUsersByCondition", offset, pagesize, user);
-			return listInfo;
+			return listInfo.getDatas();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -745,34 +745,6 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			params.put("bussinessid", bussinessid);
 			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryProcessNodesCandidates", params);
 			
-//			if (list != null && list.size() > 0) {
-//				List<ActivityImpl> activties = activitiService
-//						.getActivitImplListByProcessKey(process_key);
-//
-//				for (int i = 0; i < list.size(); i++) {
-//					ActivitiNodeCandidate nodeInfo = list.get(i);
-//
-//					for (ActivityImpl activtie : activties) {
-//						if (activtie.getId().equals(nodeInfo.getNode_key())) {
-//
-//							if (activtie.isMultiTask()) {
-//								nodeInfo.setIS_MULTI_DEFAULT(1);
-//							} else {
-//								nodeInfo.setIS_MULTI_DEFAULT(0);
-//							}
-//							
-//							//邮件任务
-//							if (activtie.isMailTask()) {
-//								nodeInfo.setNode_type("mailTask");
-//								nodeInfo.setNodeTypeName("邮件任务");
-//							}
-//							
-//							break;
-//						}
-//					}
-//				}
-//			}
-			
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1058,23 +1030,32 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	}
 
 	@Override
-	public String saveNodeContralParam(NodeControlParam nodeControlParam, String business_id,
+	public String saveNodeContralParam(
+			List<NodeControlParam> nodeControlParamList, String business_id,
 			String business_type, String process_key) {
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
 
-			if (StringUtil.isNotEmpty(nodeControlParam.getID())) {
-				executor.delete("deleteNodeContralParam", nodeControlParam.getID());
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("process_key", process_key);
+			params.put("business_id", business_id);
+			params.put("business_type", business_type);
+
+			executor.deleteBean("deleteNodeContralParam", params);
+
+			for (int i = 0; i < nodeControlParamList.size(); i++) {
+				NodeControlParam nodeControlParam = nodeControlParamList.get(i);
+
+				nodeControlParam.setID(UUID.randomUUID().toString());
+				nodeControlParam.setBUSINESS_ID(business_id);
+				nodeControlParam.setBUSINESS_TYPE(business_type);
+				nodeControlParam.setDURATION_NODE(nodeControlParam
+						.getDURATION_NODE() * 60 * 60 * 1000);
 			}
 
-			nodeControlParam.setID(UUID.randomUUID().toString());
-			nodeControlParam.setBUSINESS_ID(business_id);
-			nodeControlParam.setBUSINESS_TYPE(business_type);
-			nodeControlParam.setDURATION_NODE(nodeControlParam.getDURATION_NODE()*60*60*1000);
-			
-			executor.insertBean("addNodeControlParam", nodeControlParam);
+			executor.insertBeans("addNodeControlParam", nodeControlParamList);
 
 			tm.commit();
 			return "success";

@@ -1,18 +1,10 @@
 ﻿@charset utf-8;
-/*
- * lhgdialog blue皮肤
- * (C) 2009-2011【一丝冰凉】, http://t.qq.com/yisibl, QQ:50167214
- * This is licensed under the GNU LGPL, version 2.1 or later.
- * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
- */
-/*==================制作新皮肤从这里开始复制==================*/
-/*基本重置*/
 body{ _margin:0; }/*IE6 BUG*/
 .ui_lock_scroll{ *overflow:hidden; }
 .ui_lock_scroll body{ overflow:hidden; }
 
 /*结构层*/
-.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 "Microsoft YaHei", tahoma,arial,\5b8b\4f53,sans-serif; }
 table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:collapse; }
 .ui_border td,.ui_dialog td{ padding:0; }
 .ui_dialog{ background:#FFF; }
@@ -21,7 +13,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_title{ overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;cursor:move;background:#DDD;-moz-user-select:none;-webkit-user-select:none;padding:0 100px 0 0; }
 .ui_title_buttons{ position:absolute;cursor:pointer;font-size:0;letter-spacing:-.5em; }
 
-/*对齐自适应*/
+/*对齐自适应*/ 
 .ui_main{ min-width:6em;min-width:0\9;text-align:center; }
 .ui_content{ display:inline-block;*display:inline;zoom:1;text-align:left; }
 .ui_content.ui_state_full{ display:block;width:100%;height:100%;margin:0;padding:0!important; }
@@ -30,7 +22,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_icon_bg{ margin:20px 0 20px 15px; }
 
 /*标题纯CSS按钮开始 min 最小化，max最大化，res还原，rese恢复，close关闭*/
-.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;font-family:tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;}
 .ui_min b,.ui_max b,.ui_res_t,.ui_res_b{ display:block;position:absolute;overflow:hidden;cursor:pointer; }
 .ui_close{ font-weight:500;text-decoration:none;outline:0 none; }
 .ui_close:hover{ text-decoration:none; }
@@ -44,19 +36,19 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 
 /*样式层开始*/
 .ui_inner{ background:#FFF; }
-.ui_title_bar{ width:100%;height:0;position:relative;bottom:24px;_bottom:0;_margin-top:-24px; }
+.ui_title_bar{ width:100%;height:0;position:relative;bottom:28px;_bottom:0;_margin-top:-28px; }
 .ui_title_buttons{ top:2px;right:0; }
-.ui_title{ display:block;font-weight:bold;height:22px;line-height:22px;line-height:24px\9;color:#FFF;background:none;font-size:14px; }
+.ui_title{ display:block;font-weight:bold;height:22px;line-height:22px;line-height:24px\9;padding-left:3px;color:#Fff;background:none;font-size:14px; }
 
 .ui_lt,.ui_rt,.ui_lb,.ui_rb,.ui_l,.ui_r{ background-image:url(blue/blue_s.png);background-repeat:no-repeat; }
-.ui_lt{ width:13px;height:33px;background-position:-114px -2px;_png:blue/ie6/ui_lt.png; }
-.ui_rt{ width:13px;height:33px;background-position:-129px -2px;_png:blue/ie6/ui_rt.png; }
+.ui_lt{ width:13px;height:42px;background-position:-114px -2px; _png:blue/ie6/ui_lt.png; }
+.ui_rt{ width:13px;height:42px;background-position:-129px -2px;_png:blue/ie6/ui_rt.png; }
 .ui_lb{ width:13px;height:13px;background-position:-144px -22px;_png:blue/ie6/ui_lb.png; }
 .ui_rb{ width:13px;height:13px;background-position:-144px -3px;_png:blue/ie6/ui_rb.png; }
 
-.ui_t,.ui_b{ background-image:url(blue/blue_s2.png);background-repeat:repeat-x; }
-.ui_t{ background-position: 0 0;_png:blue/ie6/ui_t.png; }
-.ui_b{ background-position: 0 -33px;_png:blue/ie6/ui_b.png; }
+.ui_t,.ui_b{ background-image:url(blue/blue_s2.png);background-repeat:repeat-x;}
+.ui_t{ height:42px; background-position: 0 0;_png:blue/ie6/ui_t.png;  }
+.ui_b{ background-position: 0 -44px;_png:blue/ie6/ui_b.png; }
 .ui_l,.ui_r{ background-repeat:repeat-y; }
 .ui_l{ background-position:0 0;_png:blue/ie6/ui_l.png; }
 .ui_r{ background-position:-15px 0;_png:blue/ie6/ui_r.png; }
@@ -76,8 +68,11 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_buttons{ white-space:nowrap;padding:4px 8px;text-align:right;background-color:#F6F6F6;border-top:solid 1px #DADEE5; }
 .ui_buttons input::-moz-focus-inner{ border:0;padding:0;margin:0; }
 
-.ui_buttons input{ padding:3px 10px 3px 12px;padding:5px 10px 2px 12px\0;*padding:4px 10px 2px 10px;margin-left:6px;cursor:pointer;display:inline-block; 
-text-align:center;line-height:1;height:23px;letter-spacing:3px;overflow:visible;color:#333;border:solid 1px #999;border-radius:3px;border-radius:0\9;background:#DDD;
+.ui_buttons input{ padding:1px 10px 3px 12px;padding:1px 10px 2px 12px\0;*padding:1px 10px 2px 10px;margin-left:6px;cursor:pointer;display:inline-block; 
+text-align:center;line-height:18px;height:23px;letter-spacing:3px;overflow:visible;color:#333;border:solid 1px #999;-moz-border-radius-topleft: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;border-radius:0\9;background:#DDD;
 background:linear-gradient(top,#FAFAFA,#E4E4E4);
 background:-moz-linear-gradient(top,#FAFAFA,#E4E4E4);
 background:-webkit-gradient(linear,0% 0%,0% 100%,from(#FAFAFA),to(#E4E4E4));

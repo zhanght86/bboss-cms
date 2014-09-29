@@ -76,7 +76,7 @@ function submitFormData(){
 </head>
 <body >
 
-<form action="" id="workflowForm">
+<form action="" id="workflowForm" method="post">
 	<div class="main_contain">
 	  <div class="u_tab_div2" id="tab">
 	    <div class="tab1"><span class="u_tab_hover"><a href="#">流程</a></span></div>

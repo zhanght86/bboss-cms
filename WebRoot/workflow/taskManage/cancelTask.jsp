@@ -71,7 +71,9 @@ function dosubmit(){
 				if (data != 'success') {
 					alert("撤销任务出错:"+data);
 				}else {
-					api.close();	
+					api.close();
+					W.api.close();
+					W.W.modifyQueryData();
 				}
 			}
 		 });

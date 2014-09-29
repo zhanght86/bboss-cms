@@ -60,7 +60,7 @@
 			      
 			   AND T.PROC_INST_ID_ = ?
 			
-			 ORDER BY T.START_TIME_, T.END_TIME_
+			 ORDER BY T.END_TIME_,T.START_TIME_
 		]]>
 	</property>
 
@@ -102,6 +102,17 @@
 			
 			  FROM TD_WF_ACTIVITI_NODE_INFO N
 			  LEFT JOIN TD_WF_CONTROLPARAM A ON A.NODE_ID = N.ID
+			  											AND A.BUSINESS_TYPE = #[businessType]
+			                                            #if($userLevel)
+													   	 AND A.BUSINESS_ID in 
+													   	 	(#foreach($org in $userLevel)  
+												             	#if($velocityCount == 0)  
+												                  	#[userLevel[$velocityCount]]  
+												             	#else  
+												                 	,#[userLevel[$velocityCount]]  
+												             	#end  
+										       		 		#end)
+													   #end
 			  LEFT JOIN TD_WF_ACTIVITI_NODE_CANDIDATE T ON T.NODE_ID = N.ID
 			                                              
 			                                           AND T.BUSINESS_TYPE = #[businessType]

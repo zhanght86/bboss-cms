@@ -46,6 +46,7 @@ import com.sany.application.entity.WfApp;
 import com.sany.application.service.AppcreateService;
 import com.sany.application.util.AppHelper;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
+import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.LoadProcess;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
@@ -416,6 +417,13 @@ public class ActivitiRepositoryAction {
 		}
 	}
 	
+	public void getProccessPicByProcessKey(String processKey,HttpServletResponse response) throws IOException {
+		if(processKey!=null&&!processKey.equals("")){
+			OutputStream out = response.getOutputStream();
+			activitiService.getProccessPicByProcessKey(processKey, out);
+		}
+	}
+	
 	/** 获取流程追踪图 gw_tanx
 	 * @param processId
 	 * @param response
@@ -568,10 +576,10 @@ public class ActivitiRepositoryAction {
 	public String toStartProcessInst(String processKey, ModelMap model) {
 		try {
 
-//			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
-//					.queryAllActivitiNodeInfo(processKey);
-//
-//			model.addAttribute("nodeInfoList", nodeInfoList);
+			List<ActivitiNodeInfo> nodeInfoList = activitiConfigService
+					.queryAllActivitiNodeInfo(processKey);
+
+			model.addAttribute("nodeInfoList", nodeInfoList);
 			model.addAttribute("process_key", processKey);
 			
 			return "path:startProcess";
@@ -579,36 +587,56 @@ public class ActivitiRepositoryAction {
 			throw new ProcessException(e);
 		}
 	}
-
-	/**删除流程实例 gw_tanx
+	
+	/**
+	 * 逻辑删除流程实例 gw_tanx
+	 * 
 	 * @param processInstIds
 	 * @param deleteReason
-	 * @param delType
-	 * @return
-	 * 2014年5月16日
+	 * @param processKey
+	 * @return 2014年9月28日
 	 */
 	public @ResponseBody
-	String delPorcessInstance(String processInstIds, String deleteReason,
-			String delType,String processKey) {
+	String delInstancesForLogic(String processInstIds, String deleteReason,
+			String processKey) {
 
 		try {
-			// 逻辑删除
-			if ("1".equals(delType)) {
-				
-				activitiService.cancleProcessInstances(processInstIds,
-						"","",processKey,AccessControl
-						.getAccessControl().getUserAccount(),"删除流程",deleteReason);
-			} else {// 物理删除
 
-				activitiService.delProcessInstances(processInstIds);
+			String userAccount = AccessControl.getAccessControl()
+					.getUserAccount();
 
-			}
-			
+			String dealRemak = "["
+					+ activitiService.getUserInfoMap().getUserName(userAccount)
+					+ "]将流程废弃";
+
+			activitiService.cancleProcessInstances(processInstIds, dealRemak,
+					"", processKey, AccessControl.getAccessControl()
+							.getUserAccount(), "废弃流程", deleteReason);
+
 			return "success";
 		} catch (Exception e) {
-			return "fail"+e.getMessage();
+			return "fail" + e.getMessage();
 		}
 
+	}
+
+	/**
+	 * 物理删除流程实例 gw_tanx
+	 * 
+	 * @param processInstIds
+	 * @return 2014年9月28日
+	 */
+	public @ResponseBody
+	String delInstancesForPhysics(String processInstIds) {
+
+		try {
+
+			activitiService.delProcessInstances(processInstIds);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
 	}
 	
 	/**

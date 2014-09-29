@@ -1036,13 +1036,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 									userAccount)
 							+ "]的任务委托给["
 							+ activitiService.getUserInfoMap().getUserName(
-									toUser) + "]完成";
+									toUser) + "]通过";
 				}
 
 			} else {
 				dealRemak = "["
 						+ activitiService.getUserInfoMap().getUserName(
-								userAccount) + "]完成";
+								userAccount) + "]通过";
 			}
 			proIns.setDealRemak(dealRemak);
 
@@ -1275,6 +1275,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			if (inst == null || !inst.getSTART_USER_ID_().equals(userAccount)) {
 				throw new ProcessException("您没有权限撤销任务！");
 			}
+//			HistoricTaskInstance hiTask = activitiService.getFirstTask(proIns
+//					.getProInsId());
 
 			ActivityImpl act = activitiService.getTaskService()
 					.findFirstNodeByDefKey(processKey);

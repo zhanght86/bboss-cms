@@ -357,7 +357,7 @@
 			  
 			 AND T.PROC_INST_ID_ = ?
 			
-			ORDER BY T.START_TIME_ ,T.END_TIME_
+			ORDER BY T.END_TIME_,T.START_TIME_ 
 		]]>
 	</property>
 	
@@ -1685,17 +1685,15 @@
 			inner join td_sm_organization org on oj.org_id=org.org_id
 			inner join td_sm_job j on oj.job_id = j.job_id
 			where 1=1 
+			
 			#if($org_id && !$org_id.equals(""))
 				and oj.org_id = #[org_id]
 			#end
-			#if($user_worknumber && !$user_worknumber.equals(""))
-				and u.user_worknumber like #[user_worknumber]
-			#end
-			#if($user_realname && !$user_realname.equals(""))
-				and u.user_realname like #[user_realname]
-			#end
+			
 			#if($user_name && !$user_name.equals(""))
-				and u.user_name like #[user_name]
+			 and ((u.user_worknumber like #[user_name]) or
+      			 (u.user_realname like #[user_name]) or 
+      			 (u.user_name like #[user_name]))
 			#end
 		]]>
 	</property>
@@ -1864,6 +1862,7 @@
 			#end
 			
 			 where n.process_key = #[process_key] 
+			 	and n.node_type = 'userTask'
 			order by n.order_num
 		]]>
 	</property>
@@ -2062,7 +2061,12 @@
 	
 	<property name="deleteNodeContralParam">
 		<![CDATA[
-			delete from td_wf_controlparam where id = ? 
+			delete from td_wf_controlparam
+			where node_id in (select id from td_wf_activiti_node_info where process_key=#[process_key])
+			#if($business_type && !$business_type.equals("0"))
+				and business_id=#[business_id] 
+			#end			
+			and business_type=#[business_type]
 		]]>
 	</property>
 	
@@ -2486,6 +2490,13 @@
 		]]>
 	</property>
 	
+	<!-- 删除流程实例的处理工时信息  gw_tanx -->
+	<property name="deleteNodeWorktimeByProcesId_wf">
+		<![CDATA[
+			 delete from TD_WF_NODE_WORKTIME where PROCESS_ID=?
+		]]>
+	</property>
+	
 	<!-- 删除任务转办关系表信息  gw_tanx -->
 	<property name="deleteNodeChangeInfoBykey">
 		<![CDATA[
@@ -2894,7 +2905,39 @@
 			       B.NODE_DESCRIBE,
 			       B.BUSSINESSCONTROLCLASS
 			  from td_wf_node_worktime b
+			  LEFT JOIN TD_WF_ACTIVITI_NODE_INFO A ON A.PROCESS_KEY = B.PROCESS_KEY
+                                      AND A.NODE_KEY = B.NODE_KEY
 			 where b.process_id = ?
+			 order by a.order_num
+		]]>
+	</property>
+	
+	<!-- 获取当前流程实例下节点控制信息  gw_tanx-->
+	<property name="getHiNodeControlParamByProcessId_wf">
+		<![CDATA[
+			select B.NODE_KEY,
+			       B.NODE_DESCRIBE,
+			       B.NODE_NAME,
+			       B.DURATION_NODE / 1000 / 60 / 60 AS DURATION_NODE,
+			       B.IS_VALID,
+			       B.IS_EDIT,
+			       B.IS_AUTO,
+			       B.IS_RECALL,
+			       B.IS_EDITAFTER,
+			       B.IS_DISCARD,
+			       B.IS_COPY,
+			       B.IS_CANCEL,
+			       B.IS_AUTOAFTER,
+			       B.IS_MULTI,
+			       B.IS_SEQUENTIAL,
+			       B.TASK_URL,
+			       B.NODE_DESCRIBE,
+			       B.BUSSINESSCONTROLCLASS
+			  from td_wf_node_hi_worktime b
+			  LEFT JOIN TD_WF_ACTIVITI_NODE_INFO A ON A.PROCESS_KEY = B.PROCESS_KEY
+                                      AND A.NODE_KEY = B.NODE_KEY
+			 where b.process_id = ?
+			 order by a.order_num
 		]]>
 	</property>
 	
@@ -2910,6 +2953,21 @@
 		<![CDATA[
 			SELECT A.ASSIGNEE_ FROM ACT_RU_TASK A
 		 	WHERE A.Id_ = ?
+		]]>
+	</property>
+	
+	<!-- TD_WF_NODE_WORKTIME表数据归档  gw_tanx-->
+	<property name="backupWorktimeToHi_wf-oracle">
+		<![CDATA[
+			INSERT INTO TD_WF_NODE_HI_WORKTIME
+  				(SELECT T.*,to_date(#[backuptime],'YYYY-MM-dd HH24:mi:ss') FROM TD_WF_NODE_WORKTIME T WHERE T.PROCESS_ID = #[processId])
+		]]>
+	</property>
+	
+	<property name="backupWorktimeToHi_wf-mysql">
+		<![CDATA[
+			INSERT INTO TD_WF_NODE_HI_WORKTIME
+  				(SELECT T.*,str_to_date(#[backuptime],'%Y-%m-%d %H-%i-%s') FROM TD_WF_NODE_WORKTIME T WHERE T.PROCESS_ID = #[processId])
 		]]>
 	</property>
 	

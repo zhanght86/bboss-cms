@@ -35,7 +35,8 @@ public interface RoleManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	public boolean deleteRole(Role role) throws ManagerException;
-
+	public AuthRole[] getSecurityrolesInResource(String resId,
+			String operName, String restypeId) throws ManagerException;
 	/**
 	 * 删除资源资源操作实例
 	 * 

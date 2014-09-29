@@ -12,6 +12,13 @@
 <head>
 <title>开启流程实例</title>
 <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+<style type="text/css">
+.a_bg_color{
+	color: white;
+    cursor:hand;
+	background-color: #191970
+}
+</style>
 </head>
 
 <body class="easyui-layout">
@@ -98,6 +105,9 @@ function doCandidateSubmit(){
 //添加模板
 function query(businessId,businessType,treename){
 	
+	$("a").removeClass("a_bg_color");
+	$("a[name='"+businessId+"']").addClass("a_bg_color"); 
+	
 	var url = "<%=request.getContextPath()%>/workflow/repository/getConfigTempleInfo.page?"
 		+"processKey=${process_key}&business_type="+businessType+"&business_id="+businessId;
 	$("#nodeInfoConfig").load(url,function(){loadjs()});
@@ -118,7 +128,7 @@ function emptyChoose(id,type){
 //新增参数配置行
 function addTr(){
 	var trHtml = "<tr class='replaceTr'><td><select name='node_id' id='node_id'>";
-	<pg:list requestKey="nodeConfigList">
+	<pg:list requestKey="nodeInfoList">
 		trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
 	</pg:list>
 	trHtml+="</select></td>";

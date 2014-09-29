@@ -988,39 +988,61 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	public List<NodeControlParam> getNodeControlParamByProcessId(
 			String processKey, String ProcessId) throws Exception {
 
-		List<NodeControlParam> list = executor.queryList(
-				NodeControlParam.class, "getNodeControlParamByProcessId_wf",
-				ProcessId);
+		List<NodeControlParam> list = null;
 
-		if (list != null && list.size() > 0) {
-			// 判断串并行
-			List<ActivityImpl> activties = activitiService
-					.getActivitImplListByProcessKey(processKey);
+		TransactionManager tm = new TransactionManager();
 
-			for (int i = 0; i < list.size(); i++) {
-				NodeControlParam param = list.get(i);
+		try {
+			tm.begin();
 
-				for (ActivityImpl activtie : activties) {
-					if (activtie.getId().equals(param.getNODE_KEY())) {
+			// 控制参数查归档表
+			list = executor.queryList(NodeControlParam.class,
+					"getHiNodeControlParamByProcessId_wf", ProcessId);
 
-						if (activtie.isMultiTask()) {
-							param.setIS_MULTI_DEFAULT(1);
-						} else {
-							param.setIS_MULTI_DEFAULT(0);
+			if (list == null || list.size() ==0) {
+
+				// 归档表没数据在查实时表
+				list = executor.queryList(NodeControlParam.class,
+						"getNodeControlParamByProcessId_wf", ProcessId);
+			}
+
+			if (list != null && list.size() > 0) {
+				// 判断串并行
+				List<ActivityImpl> activties = activitiService
+						.getActivitImplListByProcessKey(processKey);
+
+				for (int i = 0; i < list.size(); i++) {
+					NodeControlParam param = list.get(i);
+
+					for (ActivityImpl activtie : activties) {
+						if (activtie.getId().equals(param.getNODE_KEY())) {
+
+							if (activtie.isMultiTask()) {
+								param.setIS_MULTI_DEFAULT(1);
+								param.setIS_MULTI(1);
+							} else {
+								param.setIS_MULTI_DEFAULT(0);
+							}
+
+							// 邮件任务
+							if (activtie.isMailTask()) {
+								param.setNODE_TYPE("mailTask");
+							}
+
+							break;
 						}
-
-						// 邮件任务
-						if (activtie.isMailTask()) {
-							param.setNODE_TYPE("mailTask");
-						}
-
-						break;
 					}
 				}
 			}
-		}
 
-		return list;
+			tm.commit();
+			return list;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
 	}
 
 	@Override

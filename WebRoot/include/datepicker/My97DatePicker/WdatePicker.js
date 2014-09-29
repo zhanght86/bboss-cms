@@ -1,6 +1,5 @@
 /*
  * My97 DatePicker 4.8 Beta4
- * License: http://www.my97.net/dp/license.asp
  */
 var $dp,WdatePicker;(function(){var $={
 $langList:[
@@ -9,14 +8,8 @@ $langList:[
  {name:"zh-tw",charset:"GBK"}],
 $skinList:[
  {name:"default",charset:"gb2312"},
- {name:"whyGreen",charset:"gb2312"},
  {name:"blue",charset:"gb2312"},
- {name:"green",charset:"gb2312"},
- {name:"simple",charset:"gb2312"},
- {name:"ext",charset:"gb2312"},
- {name:"blueFresh",charset:"gb2312"},
- {name:"twoer",charset:"gb2312"},
- {name:"YcloudRed",charset:"gb2312"}],
+ {name:"red",charset:"gb2312"}],
 $wdate:true,
 $crossFrame:true,
 $preLoad:false,
@@ -33,11 +26,11 @@ dateFmt:"yyyy-MM-dd",
 realDateFmt:"yyyy-MM-dd",
 realTimeFmt:"HH:mm:ss",
 realFullFmt:"%Date %Time",
-minDate:"1900-01-01 00:00:00",
+minDate:"2004-01-01 00:00:00",
 maxDate:"2099-12-31 23:59:59",
 startDate:"",
 alwaysUseStartDate:false,
-yearOffset:1911,
+yearOffset:2004,
 firstDayOfWeek:0,
 isShowWeek:false,
 highLineWeekDay:true,

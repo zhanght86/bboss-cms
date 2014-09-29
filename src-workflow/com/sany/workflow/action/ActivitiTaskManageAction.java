@@ -270,14 +270,21 @@ public class ActivitiTaskManageAction {
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				int isRecall = processInst.getTaskList().get(0).getIsRecall();
-				if (isRecall == 1
-						&& processInst.getSUSPENSION_STATE_().equals("1")) {
-					if (processInst.getSTART_USER_ID_().equals(currentUser)
+				if (processInst.getSUSPENSION_STATE_().equals("1")) {
+					if ((isRecall == 1 && processInst.getSTART_USER_ID_()
+							.equals(currentUser))
 							|| AccessControl.getAccessControl().isAdmin()) {
 						model.addAttribute("isRecall", 1);
 						model.addAttribute("nowTaskId", processInst
 								.getTaskList().get(0).getID_());
 					}
+				}
+
+				// 如果是管理员查看，废弃功能要显示
+				if (AccessControl.getAccessControl().isAdmin()) {
+					model.addAttribute("isDiscard", 1);
+					model.addAttribute("nowTaskId", processInst.getTaskList()
+							.get(0).getID_());
 				}
 			}
 
@@ -466,8 +473,12 @@ public class ActivitiTaskManageAction {
 		try {
 			tm.begin();
 
+			// 当前任务节点信息
+			TaskManager task = activitiService.getTaskByTaskId(taskId);
+			model.addAttribute("task", task);
+
 			// 判断当前任务是否存在
-			if (null == activitiService.getTaskByTaskId(taskId)) {
+			if (null == task) {
 				throw new ProcessException("任务不存在");
 			}
 
@@ -490,10 +501,6 @@ public class ActivitiTaskManageAction {
 				model.addAttribute("nextNodeList", nextNodeList);
 			}
 
-			// 当前任务节点信息
-			TaskManager task = activitiService.getTaskByTaskId(taskId);
-			model.addAttribute("task", task);
-
 			// 可驳回的节点列表
 			List<ActivitiNodeInfo> backActNodeList = activitiService
 					.getBackActNode(processInstId, task.getTASK_DEF_KEY_());
@@ -511,13 +518,14 @@ public class ActivitiTaskManageAction {
 			model.addAttribute("nodeControlParamList", nodeControlParamList);
 
 			model.addAttribute("taskState", taskState);
-			model.addAttribute("taskId", taskId);
 			model.addAttribute("createUser", createUser);// 委托人
 			model.addAttribute("entrustUser", entrustUser);// 被委托人
 			model.addAttribute("processKey", processKey);
 			model.addAttribute("sysid", sysid);
 			model.addAttribute("currentUser", AccessControl.getAccessControl()
 					.getUserAccount());
+			model.addAttribute("isAdmin", AccessControl.getAccessControl()
+					.isAdmin());
 
 			// 预警、超时状态转义
 			Map<Integer, String> advanceSendMap = WorkFlowConstant
@@ -595,7 +603,7 @@ public class ActivitiTaskManageAction {
 	 */
 	public @ResponseBody
 	String discardTask(String processInstIds, String deleteReason,
-			String taskId, String processKey, String currentUser, ModelMap model) {
+			String taskId, String processKey, ModelMap model) {
 		try {
 
 			boolean isAuthor = activitiTaskService.judgeAuthority(taskId,

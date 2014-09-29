@@ -52,9 +52,9 @@ public class PlatformKPIServiceImpl implements KPIService {
 				return null;
 			String userAccount = candiates.iterator().next();
 			
-			FlowWarning bean;
+			 
 				//工号或域账户, 任务创建时间, 完成时间类型（0全年为工作日,1去除双休和法定节假日,2提出工作日休息时间）, 工时, 预警比例
-				bean = workTimeUtil.getCompleteAndWarnTime(userAccount, 
+			 FlowWarning	bean = workTimeUtil.getCompleteAndWarnTime(userAccount, 
 															taskCreateTime, 
 															nodeInfoEntity.getIS_CONTAIN_HOLIDAY(), 
 															nodeInfoEntity.getDURATION_NODE(), 
@@ -131,6 +131,14 @@ public class PlatformKPIServiceImpl implements KPIService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void archiveProcessRuntimedata(DelegateExecution currentexecution,
+			String processInstanceID) throws ActivitiException {
+		if(this.activitiService == null)
+			this.activitiService = WebApplicationContextUtils.getWebApplicationContext().getTBeanObject("activitiService", ActivitiService.class);
+		activitiService.backupDatasToWorktime(processInstanceID);
 	}
 
 }

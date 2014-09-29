@@ -17,7 +17,7 @@ table.ui_border, table.ui_dialog {
 *border-collapse:collapse;/*现代浏览器有bug，参见【一丝冰凉】微博*/
 	border-spacing:0;
 }
-.ui_content,.ui_title,.ui_buttons input{font:12px/1.333 tahoma,arial,\5b8b\4f53,sans-serif;}
+.ui_content,.ui_title,.ui_buttons input{font:12px/1.333 "Microsoft YaHei", tahoma,arial,\5b8b\4f53,sans-serif;}
 .ui_dialog { border:1px solid #6E6E6E; }
 .ui_border td, .ui_dialog td { padding:0; }
 
@@ -77,7 +77,7 @@ table.ui_border, table.ui_dialog {
 /*标题纯CSS按钮开始*/
 .ui_min, .ui_max, .ui_close, .ui_res{
 	text-decoration:none;
-	font:12px/1.333 tahoma,arial,\5b8b\4f53,sans-serif;
+	font:12px/1.333 "Microsoft YaHei", tahoma,arial,\5b8b\4f53,sans-serif;
 	letter-spacing: normal; /* reset IE < 8 */
 	text-align:center;
 	display:inline-block;

@@ -1,8 +1,4 @@
 ﻿/*!
- * lhgcore Dialog Plugin v4.1.1
- * Date: 2012-02-14 14:07:00
- * http://code.google.com/p/lhgdialog/
- * Copyright 2009-2012 LiHuiGang
  */
 
 ;(function( $, window, undefined ){
@@ -58,7 +54,7 @@ _getArgs = function( name )
 },
 
 /*! 取皮肤样式名，默认为 default */
-_skin = _getArgs('skin') || 'sany',
+_skin = _getArgs('skin') || 'chrome',
 
 /*! 获取 lhgdialog 可跨级调用的最高层的 window 对象和 document 对象 */
 _doc, _top = (function(w)

@@ -17,6 +17,9 @@
 
 <div id="main1" >
 	<ul id="tab1" style="display:block;">
+	
+		<img id="pic" src="${pageContext.request.contextPath}/workflow/repository/getProccessPicByProcessKey.page?processKey=${processKey}" />
+	
 		<div id="handlerConfig" >
 			<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 				<pg:header>
@@ -30,36 +33,34 @@
 				<input type="hidden" id="processKey" name="processKey" value="${processKey}"/>
 				
 				<pg:list requestKey="nodeConfigList">
-					<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
-						<tr class="replaceTr">
-						
-							<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
-								name="candidate_users_id" value="<pg:cell colName='candidate_users_id'/>" />
-							<input type="hidden" id="<pg:cell colName='node_key'/>_groups_id" 
-								name="candidate_groups_id" value="<pg:cell colName='candidate_groups_id'/>" />
-							<input type="hidden" name="node_id" value="<pg:cell colName='id'/>"/>
-							<input type="hidden" name="node_key" value="<pg:cell colName='node_key'/>" />
-							<td><pg:cell colName="node_key"></pg:cell></td>
-							<td><pg:cell colName="node_name"></pg:cell></td>
-							<td>
-								<input type="text" class="input1 w200" readonly
-									id="<pg:cell colName='node_key'/>_users_name" 
-									name="candidate_users_name" value="<pg:cell colName='candidate_users_name'/>" />
-								<a href="javascript:openChooseUsers('<pg:cell colName='node_key'/>')">选择</a>
-								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
-							</td>
-							<td>
-								<input type="text" class="input1 w200" readonly
-									id="<pg:cell colName='node_key'/>_groups_name" 
-									name="candidate_groups_name" value="<pg:cell colName='candidate_groups_name'/>"/>
-								<a href="javascript:openChooseGroups('<pg:cell colName='node_key'/>')">选择</a>
-								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
-							</td>
-							<td >
-								<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
-							</td>
-						</tr>
-					</pg:notin>
+					<tr class="replaceTr">
+					
+						<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
+							name="candidate_users_id" value="<pg:cell colName='candidate_users_id'/>" />
+						<input type="hidden" id="<pg:cell colName='node_key'/>_groups_id" 
+							name="candidate_groups_id" value="<pg:cell colName='candidate_groups_id'/>" />
+						<input type="hidden" name="node_id" value="<pg:cell colName='id'/>"/>
+						<input type="hidden" name="node_key" value="<pg:cell colName='node_key'/>" />
+						<td><pg:cell colName="node_key"></pg:cell></td>
+						<td><pg:cell colName="node_name"></pg:cell></td>
+						<td>
+							<input type="text" class="input1 w200" readonly
+								id="<pg:cell colName='node_key'/>_users_name" 
+								name="candidate_users_name" value="<pg:cell colName='candidate_users_name'/>" />
+							<a href="javascript:openChooseUsers('<pg:cell colName='node_key'/>')">选择</a>
+							<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
+						</td>
+						<td>
+							<input type="text" class="input1 w200" readonly
+								id="<pg:cell colName='node_key'/>_groups_name" 
+								name="candidate_groups_name" value="<pg:cell colName='candidate_groups_name'/>"/>
+							<a href="javascript:openChooseGroups('<pg:cell colName='node_key'/>')">选择</a>
+							<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
+						</td>
+						<td >
+							<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
+						</td>
+					</tr>
 				</pg:list>
 			</table>
 		</div>

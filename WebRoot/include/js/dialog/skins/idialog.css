@@ -12,7 +12,7 @@ body{ _margin:0; }/*IE6 BUG*/
 .ui_lock_scroll body{ overflow:hidden; }
 
 /*结构层*/
-.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_content,.ui_title,.ui_buttons input{ font:12px/1.333 "Microsoft YaHei", tahoma,arial,\5b8b\4f53,sans-serif; }
 table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:collapse; }
 .ui_border td,.ui_dialog td{ padding:0; }
 .ui_dialog{ background:#FFF; }
@@ -30,7 +30,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_icon_bg{ margin:20px 0 20px 15px; }
 
 /*标题纯CSS按钮开始 min 最小化，max最大化，res还原，rese恢复，close关闭*/
-.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;font-family:tahoma,arial,\5b8b\4f53,sans-serif; }
+.ui_min,.ui_max,.ui_close,.ui_res{ position:relative;text-decoration:none;letter-spacing:normal;text-align:center;display:inline-block;*display:inline;zoom:1;vertical-align:top;}
 .ui_min b,.ui_max b,.ui_res_t,.ui_res_b{ display:block;position:absolute;overflow:hidden;cursor:pointer; }
 .ui_close{ font-weight:500;text-decoration:none;outline:0 none; }
 .ui_close:hover{ text-decoration:none; }
@@ -45,7 +45,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 /*样式层开始*/
 .ui_inner{ background:#FFF; }
 .ui_title_bar{ width:100%;position:relative; }
-.ui_title{ display:block;height:26px;line-height:26px;border-bottom:1px solid #DDD\9;font-size:14px;font-weight:bold;color:#888;background:#FFF;background:none;padding-left:3px; }
+.ui_title{ display:block;height:26px;line-height:26px;border-bottom:1px solid #DDD\9;font-size:14px;font-weight:bold;color:#333;background:#FFF;background:none;padding-left:3px; }
 .ui_state_focus .ui_title{ color:#505050; }
 .ui_lt,.ui_rt,.ui_lb,.ui_rb,.ui_t,.ui_b,.ui_close { background-image:url(idialog/idialog_s.png);background-repeat:no-repeat; }
 .ui_lt{ width:15px;height:15px;background-position:0 0;_png:idialog/ie6/ui_lt.png; }
@@ -54,7 +54,7 @@ table.ui_border,table.ui_dialog{ width:auto;border-spacing:0;*border-collapse:co
 .ui_rb{ width:15px;height:15px;background-position:-15px -15px;_png:idialog/ie6/ui_rb.png; }
 .ui_t,.ui_b{ background-repeat:repeat-x; }
 .ui_t{ background-position:0 -30px;_png:idialog/ie6/ui_t.png; }
-.ui_b{ background-position:0 -45px;_png:idialog/ie6/ui_b.png; }
+.ui_b{ background-position:0 -45px;_png:idialog/ie6/ui_b.png;}
 .ui_l,.ui_r{ background-image:url(idialog/idialog_s2.png);background-repeat:repeat-y; }
 .ui_l{ background-position:left top;_png:idialog/ie6/ui_l.png; }
 .ui_r{ background-position:right bottom;_png:idialog/ie6/ui_r.png; }
@@ -95,7 +95,7 @@ background:radial-gradient(center,ellipse cover,#c8c8c8 10%,#FFFFFF 75%);/* W3C 
 }
 
 /*底部按钮样式*/
-.ui_buttons{ white-space:nowrap; padding:4px 8px; text-align:right; }
+.ui_buttons{ white-space:nowrap; padding:4px 8px; text-align:right;}
 .ui_buttons input::-moz-focus-inner{ border:0; padding:0; margin:0; }
 
 .ui_buttons input{ padding:2px 10px 2px 12px; padding:4px 10px 1px 12px\0; *padding:3px 10px 1px 10px; margin-left:6px; cursor:pointer; display:inline-block; 

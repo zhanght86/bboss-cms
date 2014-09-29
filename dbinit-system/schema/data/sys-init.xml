@@ -2622,7 +2622,8 @@ nocache
 
 							<list>
 								<property index="0"><![CDATA[create index op_org_idx on TD_SM_LOG (OP_ORGID)]]></property>
-
+								<property index="1"><![CDATA[CREATE INDEX index_ROLERESOP ON TD_SM_ROLERESOP (OP_ID,RES_ID,RESTYPE_ID)]]></property>
+ 
 							</list>
 						</property>
 					</map>

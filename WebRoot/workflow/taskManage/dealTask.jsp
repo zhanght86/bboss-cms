@@ -229,8 +229,13 @@
 								<input type="text" class="input1 w120" id="delegate_users_name" />
 								<a href="javascript:openChooseUsers('delegate')">选择</a>
 							</td>
-							<td width="200px;" align="center" id="discardTd">
+							
+							<td width="100px;" align="center" id="discardTd">
 								<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="discardTask()"><span>废弃</span></a>
+							</td>
+							
+							<td width="100px;" align="center" id="recallTd">
+								<a href="javascript:void(0)" class="bt_1" id="recallButton" onclick="recallTask()"><span>撤销</span></a>
 							</td>
 						</tr>
 					</table>
@@ -252,17 +257,23 @@ $(document).ready(function() {
 	}); 
 	
 	//是否有废弃功能
-	if ("${task.isDiscard}"=="1"){
+	if ("${task.isDiscard}"=="1" || "${isAdmin}" == "true"){
 		$("#discardTd").show();
 	}else{
 		$("#discardTd").hide();
 	}
 	//是否有驳回功能
-	if ("${task.isCancel}"=="1"){
+	if ("${task.isCancel}"=="1" || "${isAdmin}" == "true"){
 		$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
 		$("#cancelTd").show();
 	}else {
 		$("#cancelTd").hide();
+	}
+	//是否显示撤销功能
+	if ("${isAdmin}" == "true"){
+		$("#recallTd").show();
+	}else{
+		$("#recallTd").hide();
 	}
 	
 	initNodeTypeName();
@@ -392,6 +403,36 @@ function discardTask() {
 			}	
 		 });	
 	},function(){});   
+}
+
+//撤销任务
+function recallTask() {
+	
+	var cancelTaskReason = $.trim($("#completeReason").val());
+	
+	$.dialog.confirm('确定撤销任务吗？', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/taskManage/cancelTask.page",
+			data: {"processKey":'${processKey}',"processId":'${processId}',
+				   "taskId":'${task.ID_}',"cancelTaskReason":cancelTaskReason},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				if (data != 'success') {
+					alert("撤销任务出错:"+data);
+				}else {
+					W.modifyQueryData('${sysid}');
+					api.close();	
+				}
+			}
+		 });
+	},function(){});  
+	
 }
 
 //驳回任务
