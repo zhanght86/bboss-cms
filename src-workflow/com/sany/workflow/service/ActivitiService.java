@@ -745,6 +745,17 @@ public interface ActivitiService {
 	public void completeTaskLoadCommonParamsWithDest(String taskId,
 			String destinationTaskKey, String reason, String bussinessop,
 			String bussinessRemark);
+	
+	/** 撤销任务 gw_tanx
+	 * @param taskId
+	 * @param destinationTaskKey
+	 * @param reason
+	 * @param bussinessop
+	 * @param bussinessRemark
+	 * 2014年9月30日
+	 */
+	public void cancelTask(String taskId, String destinationTaskKey,
+			String reason, String bussinessop, String bussinessRemark);
 
 	/**
 	 * 完成任务(加载通用节点参数配置)

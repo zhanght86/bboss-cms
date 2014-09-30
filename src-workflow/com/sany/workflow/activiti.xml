@@ -2944,7 +2944,7 @@
 	<!-- 获取驳回日志记录  gw_tanx-->
 	<property name="getRejectlog_wf">
 		<![CDATA[
-			SELECT * FROM TD_WF_REJECTLOG T WHERE T.NEWTASKID=?
+			SELECT * FROM TD_WF_REJECTLOG T WHERE T.OPTYPE = 0 AND T.NEWTASKID=?
 		]]>
 	</property>
 	

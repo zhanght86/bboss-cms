@@ -758,8 +758,8 @@ public class ActivitiTaskManageAction {
 					+ act.getProperty("name") + "]";
 
 			// 撤销任务
-			activitiService.completeTaskLoadCommonParamsWithDest(taskId,
-					act.getId(), remark, "撤销任务", cancelTaskReason);
+			activitiService.cancelTask(taskId, act.getId(), remark, "撤销任务",
+					cancelTaskReason);
 
 			// 日志记录撤销操作
 			activitiService.addDealTask(taskId, userAccount, currentUser, "2",

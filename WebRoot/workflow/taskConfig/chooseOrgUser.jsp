@@ -38,6 +38,9 @@ function containSpecial( s ) {
 	
 function queryList(orgId){
 	var user_name = $("#userName").val();
+	if (orgId !=null && orgId !=""){
+		user_name = "";
+	}
 	
 	if(orgId == '' && user_name==''){
 		alert("请输入查询条件");
@@ -240,6 +243,7 @@ $(document).ready(function() {
 	$("#userName").keydown(function(event){
 		if(event.keyCode == 13){
 			queryList('');
+			return false;
 		}
 	});
 	
@@ -269,8 +273,10 @@ $(document).ready(function() {
 									<table width="100%" border="0" cellpadding="0" cellspacing="0"
 										class="table2">
 										<tr>
-											<td><input id="userName" name="userName" type="text"
-											 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/></td>
+											<td>
+											 <input id="userName" name="userName" type="text"
+											 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/>
+											 </td>
 											<th>显示</th>
 											<td>
 												<select class="w50" id="rownums">

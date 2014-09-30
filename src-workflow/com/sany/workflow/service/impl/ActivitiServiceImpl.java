@@ -770,6 +770,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		completeTaskLoadCommonParamsReason(taskId, (Map<String, Object>) null,
 				destinationTaskKey, reason, bussinessop, bussinessRemark);
 	}
+	
+	public void cancelTask(String taskId, String destinationTaskKey,
+			String reason, String bussinessop, String bussinessRemark) {
+		taskService.withdrawTask(taskId, (Map<String, Object>) null, reason,
+				destinationTaskKey, bussinessop, bussinessRemark);
+	}
 
 	/**
 	 * 完成任务(加载通用节点参数配置)
