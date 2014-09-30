@@ -796,9 +796,7 @@
 					<workspace>
 						<content>workflowBusiness/business/toworkflowMain.page</content>
 					</workspace>
-					<authoration>				 
-					 	<url>workflowBusiness/business/*.page</url>
-					</authoration>
+					
 				</item>
 				<item name="任务处理页面" id="taskDealPage" i18n:en_US="task DealPage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
@@ -806,9 +804,7 @@
 					<workspace>
 						<content>workflowBusiness/business/toDealTask.page</content>
 					</workspace>
-					<authoration>				 
-					 	<url>workflowBusiness/business/*.page</url>
-					</authoration>
+					
 				</item>
 				<item name="任务查看页面" id="taskViewPage" i18n:en_US="task ViewPage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
@@ -816,9 +812,7 @@
 					<workspace>
 						<content>workflowBusiness/business/toViewTask.page</content>
 					</workspace>
-					<authoration>				 
-					 	<url>workflowBusiness/business/*.page</url>
-					</authoration>
+					
 				</item>
 			</module>
 		</module>

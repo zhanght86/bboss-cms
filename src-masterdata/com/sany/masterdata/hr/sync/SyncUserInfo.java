@@ -34,6 +34,7 @@ import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
@@ -90,40 +91,39 @@ public class SyncUserInfo {
      */
     public void syncAllData() {
         logger.info("Sync user info started...");
-        String machinid = "";
-        machinid = SimpleStringUtil.getHostIP();
+        
     	try {
+    		
 			LogManager logMgr = SecurityDatabase.getLogManager();
-			
-//			String operContent = userName + "[" + userId + "] 退出["
-//					+ subsystem + "]";
-			// modified by hilary on 20101105,for fixing bug 13979,for logout's log  and login's log has same manner
+			//以下是以一个quartz任务执行日志记录为实例说明日志组件的使用方法
 			AccessControl control = AccessControl.getAccessControl();
-			String userAccount = "";
-			String operContent = "";
-			String machineID = "";
-			String orgID = "";
-			if(control == AccessControl.getGuest())
+			String userAccount = "";//操作账号
+			String operContent = "";//操作内容
+			String machineID = "";//操作主机标识
+			String orgID = "";//操作员所属部门id
+			if(control == AccessControl.getGuest())//匿名用户-guest，登录用户直接忽略这个条件进入下一个环节
 			{
-				machineID = machinid;
+				
+				machineID = SimpleStringUtil.getHostIP();
 				userAccount = "Quartz定时任务";
 				operContent = userAccount + "同步用户数据开始";
 			}
-			else
+			else //登录用户
 			{
 				userAccount = control.getUserAccount();
-				String userName = control.getUserName();
-				String subsystem = control.getCurrentSystemName();
-				machineID = control.getMachinedID();
+				String userName = control.getUserName();//操作员中文名称
+				String subsystem = control.getCurrentSystemName();//操作系统名称
+				machineID = control.getMachinedID();//客户端ip信息
+				Organization org = control.getChargeOrg();//获取当前用户所属机构
+				if(org != null)
+				{
+					orgID = org.getOrgId();
+				}
 				operContent = userAccount + "(" + userName + ") 从[" + subsystem + "]同步用户数据开始";
-			}
-			
-//			String operContent = userAccount + "(" + userName + ") 退出[" + subsystem + "]";
-			
-			String operSource = machineID;
-			String operModle = "主数据同步";
-			logMgr.log(userAccount,orgID,operModle,  operSource,
-					operContent ,"", Log.INSERT_OPER_TYPE);		
+			}			
+			String operModle = "主数据同步";//日志所属模块
+			logMgr.log(userAccount,orgID,operModle,  machineID,
+					operContent ,"", Log.INSERT_OPER_TYPE);			
 			
 		} catch (Exception e) {
 			//e.printStackTrace();
@@ -324,7 +324,7 @@ public class SyncUserInfo {
 			String orgID = "";
 			if(control == AccessControl.getGuest())
 			{
-				machineID = machinid;
+				machineID = SimpleStringUtil.getHostIP();
 				userAccount = "Quartz定时任务";
 				if(!isfailed)
 					operContent = userAccount + "同步用户数据结束";
@@ -350,9 +350,8 @@ public class SyncUserInfo {
 			
 //			String operContent = userAccount + "(" + userName + ") 退出[" + subsystem + "]";
 			
-			String operSource = machineID;
 			String operModle = "主数据同步";
-			logMgr.log(userAccount,orgID,operModle,  operSource,
+			logMgr.log(userAccount,orgID,operModle,  machineID,
 					operContent ,"", Log.INSERT_OPER_TYPE);		
 			
 		} catch (Exception e) {
