@@ -3,6 +3,7 @@ package com.sany.workflow.action;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -481,7 +482,7 @@ public class ActivitiTaskManageAction {
 			if (null == task) {
 				throw new ProcessException("任务不存在");
 			}
-
+			
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
 					.queryHistorTasks(processInstId);
@@ -749,16 +750,22 @@ public class ActivitiTaskManageAction {
 
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
-
+			
 			// 获取第一人工节点信息
-			ActivityImpl act = activitiService.getTaskService()
-					.findFirstNodeByDefKey(processKey);
-
+			TaskManager hiTask = activitiService.getFirstTask(processId);
+			
 			String remark = "[" + currentUser + "]将任务撤销至["
-					+ act.getProperty("name") + "]";
+					+ hiTask.getNAME_() + "]";
+			
+			// 获取第一人工节点信息
+//			ActivityImpl act = activitiService.getTaskService()
+//					.findFirstNodeByDefKey(processKey);
+
+//			String remark = "[" + currentUser + "]将任务撤销至["
+//					+ act.getProperty("name") + "]";
 
 			// 撤销任务
-			activitiService.cancelTask(taskId, act.getId(), remark, "撤销任务",
+			activitiService.cancelTask(taskId, hiTask.getTASK_DEF_KEY_(), remark, "撤销任务",
 					cancelTaskReason);
 
 			// 日志记录撤销操作

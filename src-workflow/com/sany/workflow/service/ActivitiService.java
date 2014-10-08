@@ -1340,7 +1340,7 @@ public interface ActivitiService {
 	 * @param processInstanceId
 	 * @return
 	 */
-	public HistoricTaskInstance getFirstTask(String processInstanceId);
+	public TaskManager getFirstTask(String processInstanceId);
 	
 	/**
 	 * 根据任务ID查询任务的待办人

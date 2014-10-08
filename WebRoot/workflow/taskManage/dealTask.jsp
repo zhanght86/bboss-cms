@@ -415,7 +415,7 @@ function recallTask() {
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/cancelTask.page",
-			data: {"processKey":'${processKey}',"processId":'${processId}',
+			data: {"processKey":'${processKey}',"processId":'${task.PROC_INST_ID_}',
 				   "taskId":'${task.ID_}',"cancelTaskReason":cancelTaskReason},
 			dataType : 'json',
 			async:false,

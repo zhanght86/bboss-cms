@@ -2580,6 +2580,16 @@
 		]]>
 	</property>
 	
+	<!-- 根据实例id获取历史任务 -->
+	<property name="getHiTaskIdByProcessId">
+		<![CDATA[ 
+      		select RES.*
+			  from ACT_HI_TASKINST RES
+			 WHERE RES.PROC_INST_ID_ = ?
+			 order by RES.START_TIME_ asc
+		]]>
+	</property>
+	
 	<!-- 根据任务id获取节点任务转办信息  gw_tanx -->
 	<property name="getNodeChangeInfo_wf">
 		<![CDATA[
@@ -2875,11 +2885,11 @@
 	<!-- 获取当前流程实例下处理过的节点集合  gw_tanx-->
 	<property name="getTaskKeyList_wf">
 		<![CDATA[
-			SELECT T.ACT_ID_, T.ACT_NAME_
+			SELECT DISTINCT T.ACT_ID_, T.ACT_NAME_
 			  FROM ACT_HI_ACTINST T
 			 WHERE 	T.ACT_TYPE_ = 'userTask'  
 			   AND	T.PROC_INST_ID_ = ?
-			 ORDER BY T.START_TIME_
+			 ORDER BY T.ACT_ID_
 		]]>
 	</property>
 	

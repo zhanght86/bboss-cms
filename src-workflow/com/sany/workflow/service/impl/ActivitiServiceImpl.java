@@ -3227,15 +3227,21 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 	
 	@Override
-	public HistoricTaskInstance getFirstTask(String processInstanceId) {
-		List<HistoricTaskInstance> taskList = historyService.createHistoricTaskInstanceQuery()
-				.processInstanceId(processInstanceId).orderByHistoricTaskInstanceStartTime().asc()
-				.list();
-		if (!CollectionUtils.isEmpty(taskList)) {
-			return taskList.get(0);
+	public TaskManager getFirstTask(String processInstanceId) {
+		try {
+
+			List<TaskManager> list = executor.queryList(TaskManager.class,
+					"getHiTaskIdByProcessId", processInstanceId);
+
+			if (!CollectionUtils.isEmpty(list)) {
+				return list.get(0);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 
-		return null;
 	}
 
 	public List<Task> getCurrentTaskList(String processInstanceId) {
@@ -4557,7 +4563,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 		// 去重复key
 		if (taskKeyList != null && taskKeyList.size() > 0) {
-			StringBuffer keys = new StringBuffer();
 
 			for (int i = 0; i < taskKeyList.size(); i++) {
 				HashMap map = taskKeyList.get(i);
@@ -4566,16 +4571,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 				if (taskKey.equals(currentTaskKey)) {
 					break;
-				}
-
-				if (keys.toString().contains(taskKey)) {
-					continue;
-				}
-
-				if (i == 0) {
-					keys.append(taskKey);
-				} else {
-					keys.append(",").append(taskKey);
 				}
 
 				ActivitiNodeInfo node = new ActivitiNodeInfo();

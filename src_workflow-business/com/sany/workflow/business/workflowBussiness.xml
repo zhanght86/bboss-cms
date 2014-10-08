@@ -162,21 +162,6 @@
 		]]>
 	</property>
 	
-	<!-- 获取节点信息（开启流程实例后）-->
-	<property name="getNodesInfo_wf">
-		<![CDATA[
-			SELECT A.NODE_KEY AS ACTID,
-			       A.NODE_NAME AS ACTNAME,
-			       A.DURATION_NODE / 1000 / 60 / 60 AS NODEWORKTIME
-			       A.TASK_URL AS TASKURL
-			
-			  FROM TD_WF_NODE_WORKTIME A
-			 WHERE A.NODE_TYPE = 'userTask'
-			   AND A.PROCESS_ID = ?
-			   AND A.PROCESS_KEY = ?
-		]]>
-	</property>
-	
 	<!-- 根据流程实例ID获取实例参数变量值 gw_tanx -->
 	<property name="getVariableListById_wf">
 		<![CDATA[
@@ -707,11 +692,11 @@
 	<!-- 获取当前流程实例下处理过的节点集合  gw_tanx-->
 	<property name="getTaskKeyList_wf">
 		<![CDATA[
-			SELECT T.ACT_ID_, T.ACT_NAME_
+			SELECT DISTINCT T.ACT_ID_, T.ACT_NAME_
 			  FROM ACT_HI_ACTINST T
 			 WHERE 	T.ACT_TYPE_ = 'userTask'  
 			   AND	T.PROC_INST_ID_ = ?
-			 ORDER BY T.START_TIME_
+			 ORDER BY T.ACT_ID_
 		]]>
 	</property>
 	

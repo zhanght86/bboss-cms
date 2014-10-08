@@ -30,11 +30,9 @@ public interface ActivitiBusinessService {
 	 *            任务id
 	 * @param processKey
 	 *            流程key
-	 * @param businessKey
-	 *            业务主键
 	 * @param userAccount
 	 *            当前用户
-	 * @return 2014年8月20日
+	 * @return 2014年9月29日
 	 */
 	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
 			String userAccount);
@@ -46,8 +44,6 @@ public interface ActivitiBusinessService {
 	 *            任务id
 	 * @param processKey
 	 *            流程key
-	 * @param businessKey
-	 *            业务主键
 	 * @param userAccount
 	 *            当前用户
 	 * @return 2014年8月20日
@@ -97,29 +93,17 @@ public interface ActivitiBusinessService {
 	 * 获取流程节点配置(已开启流程实例)
 	 * 
 	 * @param processKey
-	 *            流程key
+	 *            processKey
 	 * @param processInstId
 	 *            流程Id
+	 * @param taskId
+	 *            任务Id
 	 * @return
 	 * @throws Exception
-	 *             2014年8月21日
+	 *             2014年9月29日
 	 */
 	public List<ActNode> getWFNodeConfigInfoByCondition(String processKey,
 			String processInstId, String taskId) throws Exception;
-
-	/**
-	 * 获取流程节点信息(不带串并行切换信息)
-	 * 
-	 * @param processKey
-	 *            流程key
-	 * @param processInstId
-	 *            流程Id
-	 * @return
-	 * @throws Exception
-	 *             2014年8月21日
-	 */
-	public List<ActNode> getWFNodeInfoByCondition(String processKey,
-			String processInstId) throws Exception;
 
 	/**
 	 * 获取流程图片
@@ -203,17 +187,6 @@ public interface ActivitiBusinessService {
 			Map<String, Object> paramMap) throws Exception;
 
 	/**
-	 * 获取流程实例的处理记录(已完成的任务)
-	 * 
-	 * @param processId
-	 *            流程实例id
-	 * @return
-	 * @throws Exception
-	 *             2014年8月26日
-	 */
-	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception;
-
-	/**
 	 * 跳转至处理任务页面
 	 * 
 	 * @param processKey
@@ -222,9 +195,10 @@ public interface ActivitiBusinessService {
 	 *            流程实例id
 	 * @param taskId
 	 *            任务id
+	 * @param model
 	 * @return
 	 * @throws Exception
-	 *             2014年8月23日
+	 *             2014年9月29日
 	 */
 	public ModelMap toDealTask(String processKey, String processId,
 			String taskId, ModelMap model) throws Exception;
@@ -245,6 +219,47 @@ public interface ActivitiBusinessService {
 	 */
 	public ModelMap toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model) throws Exception;
+
+	/**
+	 * 获取流程实例的处理记录(已完成的任务)
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @return
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception;
+
+	/**
+	 * 审批处理任务(任务id)
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            节点配置参数
+	 * @throws Exception
+	 *             2014年8月29日
+	 */
+	public void approveWorkFlow(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 审批处理任务(业务key)
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            节点配置参数
+	 * @throws Exception
+	 *             2014年8月29日
+	 */
+	public void approveWorkFlowByBussinesskey(ProIns proIns, String processKey,
+			Map<String, Object> paramMap) throws Exception;
 
 	/**
 	 * 通过任务
@@ -373,50 +388,6 @@ public interface ActivitiBusinessService {
 	 */
 	public ListInfo getEntrustTaskList(String currentUser, String processKey,
 			long offset, int pagesize) throws Exception;
-
-	/**
-	 * 获取流程可驳回到的节点信息
-	 * 
-	 * @param processId
-	 *            流程实例id
-	 * @param currentTaskKey
-	 *            任务key ，如 usertask1
-	 * @return
-	 * @throws Exception
-	 *             2014年8月28日
-	 */
-	public List<ActNode> getBackActNode(String processId, String currentTaskKey)
-			throws Exception;
-
-	/**
-	 * 审批处理任务(任务id)
-	 * 
-	 * @param proIns
-	 *            流程实例参数类
-	 * @param processKey
-	 *            流程key
-	 * @param paramMap
-	 *            节点配置参数
-	 * @throws Exception
-	 *             2014年8月29日
-	 */
-	public void approveWorkFlow(ProIns proIns, String processKey,
-			Map<String, Object> paramMap) throws Exception;
-
-	/**
-	 * 审批处理任务(业务key)
-	 * 
-	 * @param proIns
-	 *            流程实例参数类
-	 * @param processKey
-	 *            流程key
-	 * @param paramMap
-	 *            节点配置参数
-	 * @throws Exception
-	 *             2014年8月29日
-	 */
-	public void approveWorkFlowByBussinesskey(ProIns proIns, String processKey,
-			Map<String, Object> paramMap) throws Exception;
 
 	/**
 	 * 获取当前节点任务信息,根据任务id

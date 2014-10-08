@@ -89,7 +89,7 @@ function submitFormData(){
 	    	
 	    </ul>
 	    <ul class="ul_news" style="display:none;">
-	    	<div class="tickets"></div>
+	    	<div class="tickets">业务页面</div>
 	    </ul>
 	    
 	   	<div class="bottom_area"></div>
