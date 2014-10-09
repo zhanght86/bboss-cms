@@ -60,7 +60,7 @@
 			      
 			   AND T.PROC_INST_ID_ = ?
 			
-			 ORDER BY T.END_TIME_,T.START_TIME_
+			 ORDER BY T.START_TIME_,T.END_TIME_
 		]]>
 	</property>
 
@@ -582,7 +582,8 @@
 			       A.CREATE_TIME_  AS CREATETIME,
 			       C.IS_RECALL     AS ISRECALL,
 			       C.IS_DISCARD    AS ISDISCARD,
-			       C.IS_CANCEL     AS ISCANCEL
+			       C.IS_CANCEL     AS ISCANCEL,
+			       C.IS_COPY       AS ISCOPY
 			
 			  FROM ACT_RU_TASK A
 			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_

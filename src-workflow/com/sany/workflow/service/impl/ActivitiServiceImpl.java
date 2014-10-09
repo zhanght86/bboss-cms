@@ -4637,10 +4637,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String backuptime = format.format(new Date());
+//			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			String backuptime = format.format(new Date());
 			Map datas = new HashMap();
-			datas.put("backuptime", backuptime);
+			datas.put("backuptime", new Timestamp(new Date().getTime()));
 			datas.put("processId", processId);
 			executor.insertBean("backupWorktimeToHi_wf", datas);
 

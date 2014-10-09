@@ -737,8 +737,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		try {
 			tms.begin();
 
-			List<ActNode> nodeList = getWFNodeInfoByCondition(processInstId,
-					processKey);
+			List<ActNode> nodeList = getWFNodeInfoByCondition(processKey,
+					processInstId);
 
 			// 获取当前节点所有处理人
 			// List<TaskInfo> taskList =
@@ -892,12 +892,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey)
-			throws Exception {
+	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey,
+			String typeId) throws Exception {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("processKey", processKey);
 		map.put("businessType", "2");
+		map.put("userLevel", new String[] { typeId });
 
 		return this.getWFNodeConfigInfo(processKey, map);
 	}
@@ -1201,9 +1202,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			if (inst == null || !inst.getSTART_USER_ID_().equals(userAccount)) {
 				throw new ProcessException("您没有权限撤销任务！");
 			}
-			
+
 			TaskManager hiTask = activitiService.getFirstTask(proIns
-					 .getProInsId());
+					.getProInsId());
 
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
@@ -1216,8 +1217,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 撤销任务
 			activitiService.completeTaskLoadCommonParamsWithDest(
-					proIns.getNowtaskId(), hiTask.getTASK_DEF_KEY_(), proIns.getDealRemak(),
-					proIns.getDealOption(), proIns.getDealReason());
+					proIns.getNowtaskId(), hiTask.getTASK_DEF_KEY_(),
+					proIns.getDealRemak(), proIns.getDealOption(),
+					proIns.getDealReason());
 
 			// 日志记录撤销操作
 			activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
@@ -1567,7 +1569,23 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} finally {
 			tm.release();
 		}
+	}
 
+	/**
+	 * 处理抄送任务
+	 * 
+	 * @param task
+	 *            2014年10月8日
+	 */
+	private void dealCopyTask(TaskInfo task, ModelMap model) {
+		if (null != task && task.getIsCopy() == 1) {
+			// 完成任务
+			activitiService.completeTaskWithReason(task.getTaskId(), null, "",
+					"抄送任务", "");
+			// 抄送节点，页面状态为第三方查看
+			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+					WorkflowConstants.PRO_PAGESTATE_SHOW);
+		}
 	}
 
 	@Override
@@ -1598,6 +1616,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		List<ActNode> backActNodeList = getBackActNode(task.getInstanceId(),
 				task.getTaskDefKey());
 		model.addAttribute("backActNodeList", backActNodeList);
+
+		// 页面状态
+		model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+				WorkflowConstants.PRO_PAGESTATE_APPROVE);
+
+		dealCopyTask(task, model);
 
 		return model;
 	}
@@ -1712,6 +1736,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					}
 				}
 
+				// 只有是当前审批人或者管理员才进行抄送任务判断
+				if (authorFlag) {
+					dealCopyTask(task, model);
+				}
 			} else {
 				// 流程结束查看
 				model.addAttribute(WorkflowConstants.PRO_PAGESTATE,

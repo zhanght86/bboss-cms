@@ -74,8 +74,8 @@ public interface ActivitiBusinessService {
 	 * @throws Exception
 	 *             2014年8月26日
 	 */
-	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey)
-			throws Exception;
+	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey,
+			String typeId) throws Exception;
 
 	/**
 	 * 获取流程通用节点配置 (还未开启流程实例前)

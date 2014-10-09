@@ -357,7 +357,7 @@
 			  
 			 AND T.PROC_INST_ID_ = ?
 			
-			ORDER BY T.END_TIME_,T.START_TIME_ 
+			ORDER BY T.START_TIME_,T.END_TIME_
 		]]>
 	</property>
 	
@@ -2967,17 +2967,53 @@
 	</property>
 	
 	<!-- TD_WF_NODE_WORKTIME表数据归档  gw_tanx-->
-	<property name="backupWorktimeToHi_wf-oracle">
+	<property name="backupWorktimeToHi_wf">
 		<![CDATA[
 			INSERT INTO TD_WF_NODE_HI_WORKTIME
-  				(SELECT T.*,to_date(#[backuptime],'YYYY-MM-dd HH24:mi:ss') FROM TD_WF_NODE_WORKTIME T WHERE T.PROCESS_ID = #[processId])
-		]]>
-	</property>
-	
-	<property name="backupWorktimeToHi_wf-mysql">
-		<![CDATA[
-			INSERT INTO TD_WF_NODE_HI_WORKTIME
-  				(SELECT T.*,str_to_date(#[backuptime],'%Y-%m-%d %H-%i-%s') FROM TD_WF_NODE_WORKTIME T WHERE T.PROCESS_ID = #[processId])
+			  (PROCESS_KEY,
+			   PROCESS_ID,
+			   NODE_TYPE,
+			   NODE_KEY,
+			   DURATION_NODE,
+			   IS_VALID,
+			   IS_EDIT,
+			   IS_AUTO,
+			   IS_RECALL,
+			   IS_EDITAFTER,
+			   IS_DISCARD,
+			   IS_COPY,
+			   IS_CANCEL,
+			   IS_AUTOAFTER,
+			   BUSSINESSCONTROLCLASS,
+			   TASK_URL,
+			   NODE_DESCRIBE,
+			   NODE_NAME,
+			   IS_MULTI,
+			   IS_SEQUENTIAL,
+			   BACKUPTIME)
+			  (SELECT PROCESS_KEY,
+			          PROCESS_ID,
+			          NODE_TYPE,
+			          NODE_KEY,
+			          DURATION_NODE,
+			          IS_VALID,
+			          IS_EDIT,
+			          IS_AUTO,
+			          IS_RECALL,
+			          IS_EDITAFTER,
+			          IS_DISCARD,
+			          IS_COPY,
+			          IS_CANCEL,
+			          IS_AUTOAFTER,
+			          BUSSINESSCONTROLCLASS,
+			          TASK_URL,
+			          NODE_DESCRIBE,
+			          NODE_NAME,
+			          IS_MULTI,
+			          IS_SEQUENTIAL,
+			   		  #[backuptime]
+			     FROM TD_WF_NODE_WORKTIME T
+			    WHERE T.PROCESS_ID = #[processId])
 		]]>
 	</property>
 	
