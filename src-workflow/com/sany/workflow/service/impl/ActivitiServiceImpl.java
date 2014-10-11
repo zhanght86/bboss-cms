@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -2507,14 +2506,21 @@ public class ActivitiServiceImpl implements ActivitiService,
 				// 任务开启时间是否在委托时间范围内标志
 				boolean flag = false;
 
-				// 时间在委托范围内，条件一：委托时间为空
+				// 时间在委托范围内
 				if (entrust.getStart_date() == null
 						&& entrust.getEnd_date() == null) {
 					flag = true;
-				}
-
-				// 时间在委托范围内，条件二：
-				if (entrust.getStart_date().before(tm.getSTART_TIME_())
+				} else if (entrust.getStart_date() == null
+						&& entrust.getEnd_date() != null
+						&& entrust.getEnd_date().after(tm.getSTART_TIME_())) {
+					flag = true;
+				} else if (entrust.getStart_date() != null
+						&& entrust.getEnd_date() == null
+						&& entrust.getStart_date().before(tm.getSTART_TIME_())) {
+					flag = true;
+				}else if (entrust.getStart_date() != null
+						&& entrust.getEnd_date() != null
+						&& entrust.getStart_date().before(tm.getSTART_TIME_())
 						&& entrust.getEnd_date().after(tm.getSTART_TIME_())) {
 					flag = true;
 				}
@@ -3690,6 +3696,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 						super_pi.getSTART_USER_ID_(), "1"));
 				pi.setSUPER_START_TIME_(super_pi.getSTART_TIME_());
 				pi.setSUPER_END_TIME_(super_pi.getEND_TIME_());
+				pi.setSUPER_BUSINESS_KEY_(super_pi.getBUSINESS_KEY_());
 			}
 
 			// 根据流程实例id获取任务信息
@@ -3811,6 +3818,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 					tm.setASSIGNEE_(tm.getUSER_ID_());
 				}
 
+				// 任务实际签收人 名称转换
+				tm.setOWNER_NAME(userIdToUserName(tm.getOWNER_(), "2"));
+				
 				if (StringUtil.isNotEmpty(tm.getASSIGNEE_())) {
 
 					// 任务已签收，处理人 = 签收人
@@ -4616,9 +4626,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 					logMgr.log(userId, orgId, "工作流", visitorial, operContent,
 							"签收任务", Log.OTHER_OPER_TYPE);
-					
-					throw new ProcessException("任务已被" + assignee + "签收");
-					
+
+					// throw new ProcessException("任务已被" + assignee + "签收");
+
 				}
 				return true;
 			} else {

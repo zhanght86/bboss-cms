@@ -105,7 +105,7 @@ function logout()
   </div>
 </div>
 <sany:menus level="3" enableindex="true"/>
-<div class="content_box"><iframe id="mainFrame" name="mainFrame" src="${mainurl}" width="100%" height="612" scrolling="auto" frameborder="0"></iframe></div>
+<div class="content_box"><iframe id="mainFrame" name="mainFrame" src="${mainurl}" width="100%" scrolling="auto" frameborder="0"></iframe></div>
 <pg:true  requestKey="showboot" >
 <div class="footer">
   <div class="left_footer"> <a href="ghp/index.html">全球招聘平台</a> | <a href="http://olm.sany.com.cn/SanyOLM/login.do?method=login">在线学习平台</a> | <a href="#" id="contact">联系我们 </a>| <a href="#">调查问卷</a> 

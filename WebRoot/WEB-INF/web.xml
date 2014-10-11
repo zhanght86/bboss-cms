@@ -169,6 +169,14 @@
 			<param-name>authorfailedurl</param-name>
 			<param-value>/common/jsp/authorfail.jsp</param-value>
 		</init-param>
+		<init-param>
+			<param-name>failedback</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>failedbackurlpattern</param-name>
+			<param-value>/sanydesktop/index.page,/sanydesktop/indexcommon.page</param-value>
+		</init-param>
 		 
   </filter>
 

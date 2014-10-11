@@ -57,14 +57,15 @@ public class ActivitiBusinessAction {
 		List<ActNode> actList = null;
 
 		// 读取暂存form表单数据是否存在
-		ProIns proIns = workflowService.getFormDatasByBusinessKey("test6");
+		ProIns proIns = workflowService.getFormDatasByBusinessKey("test7");
 		if (proIns != null) {
 			actList = proIns.getActs();
-			model.addAttribute("pagestate", "2");
+			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+					WorkflowConstants.PRO_PAGESTATE_READD);
 		} else {
-			actList = workflowService.getWFNodeConfigInfoForbussiness(processKey,
-					"d6b5460e-a979-f220-2529-ae341d3a0a73");
-			model.addAttribute("pagestate", "1");
+			actList = workflowService.getWFNodeConfigInfoForCommon(processKey);
+			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+					WorkflowConstants.PRO_PAGESTATE_INIT);
 		}
 		model.addAttribute("actList", actList);
 		model.addAttribute("processKey", processKey);
@@ -82,7 +83,7 @@ public class ActivitiBusinessAction {
 	public @ResponseBody
 	String tempSaveFormDatas(ProIns proIns, ModelMap model) throws Exception {
 		try {
-			workflowService.tempSaveFormDatas(proIns, "test6", "Mms.return");
+			workflowService.tempSaveFormDatas(proIns, "test7", "Mms.return");
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -133,7 +134,7 @@ public class ActivitiBusinessAction {
 	String startProc(ProIns proIns, ModelMap model) throws Exception {
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			workflowService.startProc(proIns, "test6", "Mms.return", paramMap);
+			workflowService.startProc(proIns, "test7", "Mms.return", paramMap);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -149,28 +150,28 @@ public class ActivitiBusinessAction {
 	 * @return 2014年8月23日
 	 */
 	public String toDealTask(String processKey, String processId,
-			String taskId, String userId, ModelMap model) throws Exception {
+			String taskId, ModelMap model) throws Exception {
 
 		workflowService.toDealTask("Mms.return",
-				"7f7f803b-4eca-11e4-a74f-4437e6999a31",
-				"01a2522c-4ecb-11e4-b4e9-4437e6999a31", model);
+				"e0a55b14-4f92-11e4-8489-4437e6999a31",
+				"505aebc0-4f93-11e4-8489-4437e6999a31", model);
 
 		return "path:toIndex";
 	}
 
 	/**
-	 * 跳转到处理任务页面
+	 * 跳转到查看任务页面
 	 * 
 	 * @param processKey
 	 * @param taskId
 	 * @param userId
 	 * @return 2014年8月23日
 	 */
-	public String toViewTask(String processKey, String processId,
-			String taskId, String userId, ModelMap model) throws Exception {
+	public String toViewTask(String taskId, String bussinessKey, String userId,
+			ModelMap model) throws Exception {
 
-		workflowService.toViewTask("c8a4fa07-4e9b-11e4-b7a3-4437e6999a31",
-				"test3", "qingl2", model);
+		workflowService.toViewTask("505aebc0-4f93-11e4-8489-4437e6999a31",
+				"test7", "qingl2", model);
 
 		return "path:toIndex";
 	}

@@ -53,10 +53,19 @@ public class ProcessInst {
 	private String SUPER_START_USER_ID_NAME;
 	private Timestamp SUPER_START_TIME_;// 父流程开启时间
 	private Timestamp SUPER_END_TIME_;// 父流程结束时间
+	private String SUPER_BUSINESS_KEY_;// 父流程业务主键
 	private String PARENT_ID_;// 父流程实例id （ACT_RU_EXECUTION表中字段）
 
 	private List<ActivitiVariable> variableList;// 变量参数集合
-	
+
+	public String getSUPER_BUSINESS_KEY_() {
+		return SUPER_BUSINESS_KEY_;
+	}
+
+	public void setSUPER_BUSINESS_KEY_(String sUPER_BUSINESS_KEY_) {
+		SUPER_BUSINESS_KEY_ = sUPER_BUSINESS_KEY_;
+	}
+
 	public String getSTART_USER_ID_NAME() {
 		return START_USER_ID_NAME;
 	}

@@ -1,4 +1,4 @@
 @charset "utf-8";
-.top,.contain_box,.notice_msg,#menubar #menus{width:985px;margin:0 auto;}
+.top,.contain_box,.notice_msg,#menubar #menus,.main_contain{width:985px;margin:0 auto;}
 .entry_top{width:985px; margin:0 auto; height:50px;}
 .contains{width:985px;margin:0 auto;}

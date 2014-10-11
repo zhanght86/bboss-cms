@@ -49,6 +49,10 @@ public class ActivitiTaskManageAction {
 
 		try {
 
+			model.addAttribute("currentAccount", activitiService
+					.userIdToUserName(AccessControl.getAccessControl()
+							.getUserAccount(), "2"));
+
 			model.addAttribute("processKey", processKey);
 
 			return "path:ontimeTaskManager";
@@ -481,7 +485,7 @@ public class ActivitiTaskManageAction {
 			if (null == task) {
 				throw new ProcessException("任务不存在");
 			}
-			
+
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
 					.queryHistorTasks(processInstId);
@@ -749,23 +753,23 @@ public class ActivitiTaskManageAction {
 
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
-			
+
 			// 获取第一人工节点信息
 			TaskManager hiTask = activitiService.getFirstTask(processId);
-			
-			String remark = "[" + currentUser + "]将任务撤销至["
-					+ hiTask.getNAME_() + "]";
-			
-			// 获取第一人工节点信息
-//			ActivityImpl act = activitiService.getTaskService()
-//					.findFirstNodeByDefKey(processKey);
 
-//			String remark = "[" + currentUser + "]将任务撤销至["
-//					+ act.getProperty("name") + "]";
+			String remark = "[" + currentUser + "]将任务撤销至[" + hiTask.getNAME_()
+					+ "]";
+
+			// 获取第一人工节点信息
+			// ActivityImpl act = activitiService.getTaskService()
+			// .findFirstNodeByDefKey(processKey);
+
+			// String remark = "[" + currentUser + "]将任务撤销至["
+			// + act.getProperty("name") + "]";
 
 			// 撤销任务
-			activitiService.cancelTask(taskId, hiTask.getTASK_DEF_KEY_(), remark, "撤销任务",
-					cancelTaskReason);
+			activitiService.cancelTask(taskId, hiTask.getTASK_DEF_KEY_(),
+					remark, "撤销任务", cancelTaskReason);
 
 			// 日志记录撤销操作
 			activitiService.addDealTask(taskId, userAccount, currentUser, "2",

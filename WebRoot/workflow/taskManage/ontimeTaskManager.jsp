@@ -33,7 +33,7 @@ $(document).ready(function() {
 //查看委托关系
 function getEntrustInfo(){
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewEntrustInfo.page";
-	$.dialog({ title:'查看委托信息',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'查看[${currentAccount}]授权信息',width:1100,height:620, content:'url:'+url});
 }
        
 //加载实时任务列表数据  
@@ -306,7 +306,7 @@ function sendMess(taskId,processKey,taskState,sentType){
 				
 				<div class="title_box">
 					<div class="rightbtn">
-						<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a>
+						<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>流程授权查看</span></a>
 					</div>
 						
 					<strong>实时任务列表</strong>

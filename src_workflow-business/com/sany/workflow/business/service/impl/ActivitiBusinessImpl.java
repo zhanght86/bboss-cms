@@ -178,39 +178,49 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	 * @param processKey
 	 *            流程key 2014年8月21日
 	 */
-	private void isParrealOrSequence(ActNode actNode, String processKey) {
-		// 获取流程定义XML中节点定义信息
-		List<ActivityImpl> activties = activitiService
-				.getActivitImplListByProcessKey(processKey);
+	private void isParrealOrSequence(List<ActNode> actNodeList,
+			String processKey) {
 
-		for (ActivityImpl activtie : activties) {
+		if (actNodeList != null && actNodeList.size() > 0) {
+			// 获取流程定义XML中节点定义信息
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
 
-			if (activtie.getId().equals(actNode.getActId())) {
+			for (int i = 0; i < actNodeList.size(); i++) {
 
-				if (activtie.isMultiTask()) {
-					actNode.setIsMultiDefault(1);
+				ActNode actNode = actNodeList.get(i);
 
-					if (actNode.getIsSequential() == 1) {// 多实例串行
-						actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
-					} else if (actNode.getIsSequential() == 0) {// 多实例并行
-						actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
-					}
-				} else {
-					actNode.setIsMultiDefault(0);
+				for (ActivityImpl activtie : activties) {
 
-					if (actNode.getIsMulti() == 0) {
-						actNode.setApproveType(WorkflowConstants.PRO_ACT_ONE);// 单实例
-					} else if (actNode.getIsMulti() == 1
-							&& actNode.getIsSequential() == 1) {// 多实例串行
-						actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
-					} else if (actNode.getIsMulti() == 1
-							&& actNode.getIsSequential() == 0) {// 多实例并行
-						actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
+					if (activtie.getId().equals(actNode.getActId())) {
+
+						if (activtie.isMultiTask()) {
+							actNode.setIsMultiDefault(1);
+
+							if (actNode.getIsSequential() == 1) {// 多实例串行
+								actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
+							} else if (actNode.getIsSequential() == 0) {// 多实例并行
+								actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
+							}
+						} else {
+							actNode.setIsMultiDefault(0);
+
+							if (actNode.getIsMulti() == 0) {
+								actNode.setApproveType(WorkflowConstants.PRO_ACT_ONE);// 单实例
+							} else if (actNode.getIsMulti() == 1
+									&& actNode.getIsSequential() == 1) {// 多实例串行
+								actNode.setApproveType(WorkflowConstants.PRO_ACT_SEQ);
+							} else if (actNode.getIsMulti() == 1
+									&& actNode.getIsSequential() == 0) {// 多实例并行
+								actNode.setApproveType(WorkflowConstants.PRO_ACT_MUL);
+							}
+						}
+						break;
 					}
 				}
-				break;
 			}
 		}
+
 	}
 
 	@Override
@@ -299,15 +309,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		List<ActNode> actNodeList = executor.queryListBean(ActNode.class,
 				"getWFNodeInfoList", map);
 
-		if (actNodeList != null && actNodeList.size() > 0) {
+		// 串并行判断
+		isParrealOrSequence(actNodeList, processKey);
 
-			for (int i = 0; i < actNodeList.size(); i++) {
-
-				ActNode actNode = actNodeList.get(i);
-				// 串并行判断
-				isParrealOrSequence(actNode, processKey);
-			}
-		}
 		return actNodeList;
 	}
 
@@ -740,40 +744,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			List<ActNode> nodeList = getWFNodeInfoByCondition(processKey,
 					processInstId);
 
-			// 获取当前节点所有处理人
-			// List<TaskInfo> taskList =
-			// getCurrentNodeInfoByProcessID(processInstId);
-			// String taskKey = taskList.get(0).getTaskDefKey();
-
-			for (int i = 0; i < nodeList.size(); i++) {
-
-				ActNode actNode = nodeList.get(i);
-
-				// 串并行判断
-				isParrealOrSequence(actNode, processKey);
-
-				// // 重置当前节点所有处理人
-				// if (actNode.getActId().equals(taskKey)) {
-				// StringBuffer userIds = new StringBuffer();
-				// StringBuffer userNames = new StringBuffer();
-				// for (int j = 0; j < taskList.size(); j++) {
-				// TaskInfo task = taskList.get(j);
-				// if (StringUtil.isNotEmpty(task.getAssignee())) {
-				//
-				// if (j == 0) {
-				// userIds.append(task.getAssignee());
-				// userNames.append(task.getAssigneeName());
-				// } else {
-				// userIds.append(",").append(task.getAssignee());
-				// userNames.append(",").append(
-				// task.getAssigneeName());
-				// }
-				// }
-				// }
-				// actNode.setCandidateName(userIds.toString());
-				// actNode.setRealName(userNames.toString());
-				// }
-			}
+			// 串并行判断
+			isParrealOrSequence(nodeList, processKey);
 
 			tms.commit();
 
@@ -1038,9 +1010,21 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String userAccount = this.changeToDomainAccount(proIns
 					.getUserAccount());
 
-			// 权限判断
-			if (!judgeAuthority(proIns.getNowtaskId(), processKey, userAccount)) {
-				throw new ProcessException("您没有权限废弃任务！");
+			// 获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByProcessId_wf", proIns.getProInsId());
+
+			// 权限判断(当前用户id==发起人)
+			if (inst == null) {
+				throw new ProcessException("流程已结束或不存在！");
+			}
+
+			if (!inst.getSTART_USER_ID_().equals(userAccount)) {
+				// 权限判断
+				if (!judgeAuthority(proIns.getNowtaskId(), processKey,
+						userAccount)) {
+					throw new ProcessException("您没有权限废弃任务！");
+				}
 			}
 
 			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
@@ -1545,9 +1529,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-
-			// String userAccount = this.changeToDomainAccount(proIns
-			// .getUserAccount());
 
 			TaskInfo nowTask = getCurrentNodeInfoByBussinessKey(
 					proIns.getBusinessKey(), proIns.getUserAccount());

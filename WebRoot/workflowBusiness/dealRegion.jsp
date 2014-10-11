@@ -23,7 +23,7 @@
 			<input type="hidden" name="nowTaskToUser" id="nowTaskToUser"  value="" />
 			<input type="hidden" name="proOrderId" id="proOrderId" value="" />
 			
-			<%-- 查看状态，不显示通过，转办，驳回，废弃功能--%>
+			<%-- 查看状态，不显示通过，转办，驳回功能--%>
 			<pg:notin actual="${pagestate}" scope="5,6">
 			<tr>
 				<pg:in actual="${pagestate}" scope="4,7">
@@ -31,39 +31,57 @@
 				</pg:in>
 				
 				<pg:equal actual="${pagestate}" value="3">
+					
 					<pg:notempty colName="isRecall">
 						<pg:equal colName="isRecall" value="1">
 							<th width="100"><span class="required" >*</span>处理结果</th>
 						</pg:equal>
+						
+						<pg:notempty colName="isDiscard">
+							<pg:notequal colName="isRecall" value="1">
+								<pg:equal colName="isDiscard" value="1">
+									<th width="100"><span class="required" >*</span>处理结果</th>
+								</pg:equal>
+							</pg:notequal>
+						</pg:notempty>
 					</pg:notempty>
+					
 				</pg:equal>
 				
 				<td>
 			
 				<pg:notequal actual="${pagestate}" value="3" >
-				<input name="operateType" type="radio" value="pass" />通过
-				
-				<input name="operateType" type="radio" value="turnTo" />转办
-				
-				<pg:notempty colName="isCancel">
-					<pg:equal colName="isCancel" value="1">
-						<input name="operateType" type="radio" value="reject" />驳回 
-					</pg:equal>
-				</pg:notempty>
-				
-				<pg:notempty colName="isDiscard">
-					<pg:equal colName="isDiscard" value="1">
-						<input name="operateType" type="radio" value="toEnd" />废弃
-					</pg:equal>
-				</pg:notempty>
+					<input name="operateType" type="radio" value="pass" />通过
+					
+					<input name="operateType" type="radio" value="turnTo" />转办
+					
+					<pg:notempty colName="isCancel">
+						<pg:equal colName="isCancel" value="1">
+							<input name="operateType" type="radio" value="reject" />驳回 
+						</pg:equal>
+					</pg:notempty>
+					
+					<pg:notempty colName="isDiscard">
+						<pg:equal colName="isDiscard" value="1">
+							<input name="operateType" type="radio" value="toEnd" />废弃
+						</pg:equal>
+					</pg:notempty>
 				</pg:notequal>
 				
 				<pg:in actual="${pagestate}" scope="3,7" >
-				<pg:notempty colName="isRecall">
-					<pg:equal colName="isRecall" value="1">
-						<input name="operateType" type="radio" value="recall" />撤回
+					<pg:equal actual="${pagestate}" value="3">
+						<pg:notempty colName="isDiscard">
+							<pg:equal colName="isDiscard" value="1">
+								<input name="operateType" type="radio" value="toEnd" />废弃
+							</pg:equal>
+						</pg:notempty>
 					</pg:equal>
-				</pg:notempty>
+					
+					<pg:notempty colName="isRecall">
+						<pg:equal colName="isRecall" value="1">
+							<input name="operateType" type="radio" value="recall" />撤回
+						</pg:equal>
+					</pg:notempty>
 				</pg:in>
 				
 				</td>
