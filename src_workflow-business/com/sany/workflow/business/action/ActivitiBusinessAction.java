@@ -57,7 +57,7 @@ public class ActivitiBusinessAction {
 		List<ActNode> actList = null;
 
 		// 读取暂存form表单数据是否存在
-		ProIns proIns = workflowService.getFormDatasByBusinessKey("test7");
+		ProIns proIns = workflowService.getFormDatasByBusinessKey("test1");
 		if (proIns != null) {
 			actList = proIns.getActs();
 			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
@@ -83,7 +83,7 @@ public class ActivitiBusinessAction {
 	public @ResponseBody
 	String tempSaveFormDatas(ProIns proIns, ModelMap model) throws Exception {
 		try {
-			workflowService.tempSaveFormDatas(proIns, "test7", "Mms.return");
+			workflowService.tempSaveFormDatas(proIns, "test1", "Mms.return");
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -134,7 +134,7 @@ public class ActivitiBusinessAction {
 	String startProc(ProIns proIns, ModelMap model) throws Exception {
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			workflowService.startProc(proIns, "test7", "Mms.return", paramMap);
+			workflowService.startProc(proIns, "test1", "Mms.return", paramMap);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -153,8 +153,8 @@ public class ActivitiBusinessAction {
 			String taskId, ModelMap model) throws Exception {
 
 		workflowService.toDealTask("Mms.return",
-				"e0a55b14-4f92-11e4-8489-4437e6999a31",
-				"505aebc0-4f93-11e4-8489-4437e6999a31", model);
+				"b22d19ff-50f4-11e4-b55d-4437e6999a31",
+				"b248df69-50f4-11e4-b55d-4437e6999a31", model);
 
 		return "path:toIndex";
 	}
@@ -170,9 +170,8 @@ public class ActivitiBusinessAction {
 	public String toViewTask(String taskId, String bussinessKey, String userId,
 			ModelMap model) throws Exception {
 
-		workflowService.toViewTask("505aebc0-4f93-11e4-8489-4437e6999a31",
-				"test7", "qingl2", model);
-
+		workflowService.toViewTask("122b7cd9-4ebe-11e4-a718-4437e6999f90",
+				"bug", "qingl2", model);
 		return "path:toIndex";
 	}
 

@@ -497,6 +497,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						nodeControl.setIS_CANCEL(node.getIsCancel());
 						nodeControl.setIS_COPY(node.getIsCopy());
 						nodeControl.setIS_DISCARD(node.getIsDiscard());
+						nodeControl.setIS_DISCARDED(node.getIsDiscarded());
 						nodeControl.setIS_EDIT(node.getIsEdit());
 						nodeControl.setIS_EDITAFTER(node.getIsEditAfter());
 						nodeControl.setIS_RECALL(node.getIsRecall());

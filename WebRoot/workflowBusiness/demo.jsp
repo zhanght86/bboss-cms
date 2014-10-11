@@ -71,7 +71,7 @@ function doreset(){
 	    </table>
   	</div>
   
-	<div class="title_1">入门责任人
+	<div class="title_1">
 
 		<div class="rightbtn">
 			<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>申请</span></a>

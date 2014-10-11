@@ -42,6 +42,7 @@
        		<th>任务名称</th>
        		<th>处理人</th>
        		<th>签收人</th>
+       		<th>OWNER</th>
        		<th>任务到达时间</th>
        		<th>处理工时</th>
        		<th>工时规则</th>
@@ -84,6 +85,7 @@
        		<td>
 	       		<pg:cell colName="ASSIGNEE_NAME"/>
        		</td>
+       		<td><pg:cell colName="OWNER_NAME" /></td>
        		<td><pg:cell colName="START_TIME_" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
        		<td><pg:cell colName="DURATION_NODE" /></td>
        		<td>

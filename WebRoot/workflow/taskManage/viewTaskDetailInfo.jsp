@@ -50,6 +50,7 @@
 										<th width="100"><strong>发起人</strong></th>
 										<th width="150"><strong>发起时间</strong></th>
 										<th width="150"><strong>结束时间</strong></th>
+										<th width="150"><strong>业务KEY</strong></th>
 									</tr>
 									<tr >
 										<td width="350"><pg:cell colName="PROC_INST_ID_"/></td>
@@ -76,6 +77,7 @@
 												&nbsp;
 											</pg:null>
 										</td>
+										<td width="150"><pg:cell colName="BUSINESS_KEY_"/></td>
 									</tr>
 									<pg:notempty colName="SUPER_PROCESS_INSTANCE_ID_" >
 									<tr >
@@ -84,6 +86,7 @@
 										<th width="100"><strong>发起人</strong></th>
 										<th width="150"><strong>发起时间</strong></th>
 										<th width="150"><strong>结束时间</strong></th>
+										<th width="150"><strong>业务KEY</strong></th>
 									</tr>
 									<tr>
 										<td width="350">
@@ -115,6 +118,7 @@
 												&nbsp;
 											</pg:null>
 										</td>
+										<td width="150"><pg:cell colName="BUSINESS_KEY_"/></td>
 									</tr>
 									</pg:notempty>
 								</table>
@@ -125,7 +129,7 @@
 										<tr >
 											<th rowspan="<pg:size actual="${processInst.taskList}" increament="1"/>" width="100"><strong>当前节点信息：</strong></th>
 											<th width="350"><strong>节点名称</strong></th>
-											<th colspan="3" width="377"><strong>处理人</strong></th>
+											<th colspan="3" width="368"><strong>处理人</strong></th>
 											<th width="150"><strong>签收人</strong></th>
 										</tr>
 										
@@ -133,7 +137,7 @@
 											<pg:list colName="taskList">
 											<tr >
 												<td width="350"><pg:cell colName="NAME_"/></td>
-												<td colspan="3" width="377">
+												<td colspan="3" width="368">
 													<pg:notempty colName="USER_ID_NAME" >
 														<pg:cell colName="USER_ID_NAME"/>
 													</pg:notempty>

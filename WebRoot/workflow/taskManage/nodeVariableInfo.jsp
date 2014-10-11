@@ -93,6 +93,8 @@
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
 			
+			<input type="checkbox" disabled <pg:equal colName="IS_DISCARDED" value="1">checked </pg:equal>/>可被废弃
+			
 			<input type="checkbox" disabled <pg:equal colName="IS_MULTI" value="1">checked </pg:equal>/>多实例
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_SEQUENTIAL" value="1">checked </pg:equal>/>串行

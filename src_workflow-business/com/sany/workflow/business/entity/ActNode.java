@@ -30,6 +30,7 @@ public class ActNode implements Serializable {
 	private int isRecall;// 可撤回 0不能1能
 	private int isCancel;// 可驳回 0 不能 1 能
 	private int isDiscard;// 可废弃 0 不能 1 能
+	private int isDiscarded;// 可被废弃 0 不能 1 能
 	private int isCopy;// 可抄送 0 不能 1 能
 	private int isMulti;// 多实例 0 单实例 1 多实例
 	private int isMultiDefault;// 默认多实例 0 不是 1 是
@@ -37,6 +38,14 @@ public class ActNode implements Serializable {
 	private String orgId;// 节点组织
 	private String taskUrl;// 待办URL
 	private String bussinessControlClass;// 业务控制类
+
+	public int getIsDiscarded() {
+		return isDiscarded;
+	}
+
+	public void setIsDiscarded(int isDiscarded) {
+		this.isDiscarded = isDiscarded;
+	}
 
 	public int getIsMultiDefault() {
 		return isMultiDefault;

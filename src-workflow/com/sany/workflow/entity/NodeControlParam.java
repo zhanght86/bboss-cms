@@ -37,6 +37,8 @@ public class NodeControlParam {
 	private int IS_CANCEL;// 可驳回 0 不能 1 能
 	@RequestParam(name = "${NODE_KEY}_IS_DISCARD")
 	private int IS_DISCARD;// 可废弃 0 不能 1 能
+	@RequestParam(name = "${NODE_KEY}_IS_DISCARDED")
+	private int IS_DISCARDED;// 可被废弃 0 不能 1 能
 	@RequestParam(name = "${NODE_KEY}_IS_COPY")
 	private int IS_COPY;// 可抄送 0 不能 1 能
 	@RequestParam(name = "${NODE_KEY}_IS_MULTI")
@@ -45,6 +47,14 @@ public class NodeControlParam {
 	private int IS_SEQUENTIAL;// 是否串行 0 串行 1 并行
 
 	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
+
+	public int getIS_DISCARDED() {
+		return IS_DISCARDED;
+	}
+
+	public void setIS_DISCARDED(int iS_DISCARDED) {
+		IS_DISCARDED = iS_DISCARDED;
+	}
 
 	private String TASK_URL;// 待办URL
 

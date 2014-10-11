@@ -76,6 +76,8 @@
 					</tr>
 					<tr>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
+						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARDED" id="IS_DISCARDED" value="1" <pg:equal colName="IS_DISCARDED" value="1">checked</pg:equal>/>可被废弃 </td>
+						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_MULTI" id="IS_MULTI" value="1" 
 							<pg:equal colName="IS_MULTI" value="1">checked</pg:equal> 
 							<pg:equal colName="IS_MULTI_DEFAULT" value="1">checked disabled </pg:equal>

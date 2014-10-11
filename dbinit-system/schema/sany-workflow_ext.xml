@@ -51,6 +51,7 @@
         <column name="IS_RECALL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_EDITAFTER" size="1" type="DECIMAL" default="0"/>
         <column name="IS_DISCARD" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_DISCARDED" size="1" type="DECIMAL" default="0"/>
         <column name="IS_COPY" size="1" type="DECIMAL" default="0"/>
         <column name="IS_CANCEL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_AUTOAFTER" size="1" type="DECIMAL" default="0"/>
@@ -73,6 +74,7 @@
         <column name="IS_RECALL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_EDITAFTER" size="1" type="DECIMAL" default="0"/>
         <column name="IS_DISCARD" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_DISCARDED" size="1" type="DECIMAL" default="0"/>
         <column name="IS_COPY" size="1" type="DECIMAL" default="0"/>
         <column name="IS_CANCEL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_AUTOAFTER" size="1" type="DECIMAL" default="0"/>
@@ -162,6 +164,7 @@
         <column name="IS_RECALL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_EDITAFTER" size="1" type="DECIMAL" default="0"/>
         <column name="IS_DISCARD" size="1" type="DECIMAL" default="0"/>
+        <column name="IS_DISCARDED" size="1" type="DECIMAL" default="0"/>
         <column name="IS_COPY" size="1" type="DECIMAL" default="0"/>
         <column name="IS_CANCEL" size="1" type="DECIMAL" default="0"/>
         <column name="IS_AUTOAFTER" size="1" type="DECIMAL" default="0"/>

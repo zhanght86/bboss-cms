@@ -3,15 +3,13 @@
 <pg:notin actual="${pagestate}" scope="1,2,5,6">
 
 	<pg:in actual="${pagestate}" scope="4,7">
-	<div class="title_1">审批</div>
+		<div class="title_1">审批</div>
 	</pg:in>
 	
 	<pg:equal actual="${pagestate}" value="3">
-		<pg:notempty colName="isRecall">
-			<pg:equal colName="isRecall" value="1">
-				<div class="title_1">审批</div>
-			</pg:equal>
-		</pg:notempty>
+		<pg:true actual="${task.isRecall eq 1 or task.isDiscarded eq 1}">
+		   <div class="title_1">审批</div>
+		</pg:true>
 	</pg:equal>
 	
 	<table width="600" border="0" cellpadding="0" cellspacing="0" class="sany_table2">
@@ -27,24 +25,14 @@
 			<pg:notin actual="${pagestate}" scope="5,6">
 			<tr>
 				<pg:in actual="${pagestate}" scope="4,7">
-				<th width="100"><span class="required" >*</span>处理结果</th>
+					<th width="100"><span class="required" >*</span>处理结果</th>
 				</pg:in>
 				
 				<pg:equal actual="${pagestate}" value="3">
-					
-					<pg:notempty colName="isRecall">
-						<pg:equal colName="isRecall" value="1">
-							<th width="100"><span class="required" >*</span>处理结果</th>
-						</pg:equal>
-						
-						<pg:notempty colName="isDiscard">
-							<pg:notequal colName="isRecall" value="1">
-								<pg:equal colName="isDiscard" value="1">
-									<th width="100"><span class="required" >*</span>处理结果</th>
-								</pg:equal>
-							</pg:notequal>
-						</pg:notempty>
-					</pg:notempty>
+				
+					<pg:true actual="${task.isRecall eq 1 or task.isDiscarded eq 1}">
+					   <th width="100"><span class="required" >*</span>处理结果</th>
+					</pg:true>
 					
 				</pg:equal>
 				
@@ -55,34 +43,30 @@
 					
 					<input name="operateType" type="radio" value="turnTo" />转办
 					
-					<pg:notempty colName="isCancel">
-						<pg:equal colName="isCancel" value="1">
-							<input name="operateType" type="radio" value="reject" />驳回 
-						</pg:equal>
-					</pg:notempty>
-					
-					<pg:notempty colName="isDiscard">
-						<pg:equal colName="isDiscard" value="1">
-							<input name="operateType" type="radio" value="toEnd" />废弃
-						</pg:equal>
-					</pg:notempty>
+					<pg:equal colName="isCancel" value="1">
+						<input name="operateType" type="radio" value="reject" />驳回 
+					</pg:equal>
+				
+					<pg:equal colName="isDiscard" value="1">
+						<input name="operateType" type="radio" value="toEnd" />废弃
+					</pg:equal>
 				</pg:notequal>
 				
-				<pg:in actual="${pagestate}" scope="3,7" >
-					<pg:equal actual="${pagestate}" value="3">
-						<pg:notempty colName="isDiscard">
-							<pg:equal colName="isDiscard" value="1">
-								<input name="operateType" type="radio" value="toEnd" />废弃
-							</pg:equal>
-						</pg:notempty>
+				<pg:equal actual="${pagestate}" value="3" >
+					<pg:equal colName="isDiscarded" value="1">
+						<input name="operateType" type="radio" value="toEnd" />废弃
 					</pg:equal>
-					
-					<pg:notempty colName="isRecall">
-						<pg:equal colName="isRecall" value="1">
-							<input name="operateType" type="radio" value="recall" />撤回
-						</pg:equal>
-					</pg:notempty>
-				</pg:in>
+				
+					<pg:equal colName="isRecall" value="1">
+						<input name="operateType" type="radio" value="recall" />撤回
+					</pg:equal>
+				</pg:equal>
+				
+				<pg:equal actual="${pagestate}" value="7" >
+					<pg:equal colName="isRecall" value="1">
+						<input name="operateType" type="radio" value="recall" />撤回
+					</pg:equal>
+				</pg:equal>
 				
 				</td>
 			</tr>
@@ -112,14 +96,12 @@
 			
 			<%-- 提交人查看，当前节点不可被撤销；第三方查看；流程结束查看；不显示处理意见--%>
 			<pg:equal actual="${pagestate}" value="3">
-				<pg:notempty colName="isRecall">
-				<pg:equal colName="isRecall" value="1">
-					<tr>
+				<pg:true actual="${task.isRecall eq 1 or task.isDiscarded eq 1}">
+				   	<tr>
 						<th>处理意见</th>
 						<td><textarea name="dealReason" class="textarea1 h_80" id="dealReason"></textarea></td>
 					</tr>
-				</pg:equal>
-				</pg:notempty>
+				</pg:true>
 			</pg:equal>
 			
 			<pg:notin actual="${pagestate}" scope="3,5,6">
@@ -128,7 +110,7 @@
 					<td><textarea name="dealReason" class="textarea1 h_80" id="dealReason"></textarea></td>
 				</tr>
 			</pg:notin>
-		
 		</pg:beaninfo>
 	</table>
+	
 </pg:notin>

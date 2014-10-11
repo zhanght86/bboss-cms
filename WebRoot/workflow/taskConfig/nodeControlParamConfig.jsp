@@ -68,6 +68,7 @@
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>后续节点自动审批</td>
 						</tr>
 						<tr>
+							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARDED" id="IS_DISCARDED" value="1" <pg:equal colName="IS_DISCARDED" value="1">checked</pg:equal>/>可被废弃 </td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_MULTI" id="IS_MULTI" value="1" 
 								<pg:equal colName="IS_MULTI" value="1">checked</pg:equal> 
 								<pg:equal colName="IS_MULTI_DEFAULT" value="1">checked disabled </pg:equal>

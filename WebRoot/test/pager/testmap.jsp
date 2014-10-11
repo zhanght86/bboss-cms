@@ -1,47 +1,48 @@
-<%@ page contentType="text/html; charset=GBK" language="java" import="test.*,java.util.*"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" import="test.*,java.util.*"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
 <%
-	//¹¹½¨map<String,PO>¶ÔÏó
+	//æ„å»ºmap<String,PO>å¯¹è±¡
 	TestBean bean = null;
-	Map<String,TestBean> mapbeans = new HashMap<String,TestBean>();
+	Map mapbeans = new HashMap();
 	bean = new TestBean();
 	bean.setId("uuid");
-	bean.setName("¶à¶à");
+	bean.setName("å¤šå¤š");
 	mapbeans.put(bean.getId(),bean);
 	
 	bean = new TestBean();
 	bean.setId("uuid1");
-	bean.setName("¶à¶à1");
+	bean.setName("å¤šå¤š1");
 	mapbeans.put(bean.getId(),bean);
 	bean = new TestBean();
 	bean.setId("uuid2");
-	bean.setName("¶à¶à2");
+	bean.setName("å¤šå¤š2");
 	mapbeans.put(bean.getId(),bean);
 	request.setAttribute("mapbeans",mapbeans);
 	
 	Map<String,String> mapstrings = new HashMap<String,String>();
-	mapstrings.put("id1","¶à¶à1");
-	mapstrings.put("id2","¶à¶à2");
-	mapstrings.put("id3","¶à¶à3");
-	mapstrings.put("id4","¶à¶à4");
+	mapstrings.put("id1","å¤šå¤š1");
+	mapstrings.put("id2","å¤šå¤š2");
+	mapstrings.put("id3","å¤šå¤š3");
+	mapstrings.put("id4","å¤šå¤š4");
+	mapbeans.put("inner", mapstrings);
 	request.setAttribute("mapstrings",mapstrings);
 %>
 <!-- 
-	²âÊÔÔÚlist±êÇ©ÉÏÖ±½ÓÖ´ĞĞÊı¾İ¿â£¬»ñÈ¡ÁĞ±íĞÅÏ¢ÊµÀı
-	statement:Êı¾İ¿â²éÑ¯Óï¾ä
-	dbname:²éÑ¯µÄÏàÓ¦Êı¾İ¿âÃû³Æ£¬ÔÚpoolman.xmlÎÄ¼şÖĞ½øĞĞÅäÖÃ
+	æµ‹è¯•åœ¨listæ ‡ç­¾ä¸Šç›´æ¥æ‰§è¡Œæ•°æ®åº“ï¼Œè·å–åˆ—è¡¨ä¿¡æ¯å®ä¾‹
+	statement:æ•°æ®åº“æŸ¥è¯¢è¯­å¥
+	dbname:æŸ¥è¯¢çš„ç›¸åº”æ•°æ®åº“åç§°ï¼Œåœ¨poolman.xmlæ–‡ä»¶ä¸­è¿›è¡Œé…ç½®
 -->
 <html>
 <head>
-<title>²âÊÔ»ñÈ¡mapĞÅÏ¢ÊµÀı</title>
+<title>æµ‹è¯•è·å–mapä¿¡æ¯å®ä¾‹</title>
 </head>
 <body>
 	<table>
-	    <h3>map<String,po>¶ÔÏóĞÅÏ¢µü´ú¹¦ÄÜ</h3>
+	    <h3>map<String,po>å¯¹è±¡ä¿¡æ¯è¿­ä»£åŠŸèƒ½</h3>
 		<pg:map requestKey="mapbeans">
-		
-			<tr class="cms_data_tr">
+			<pg:false typeof="java.util.Map">
+			<tr >
 				<td>
 					mapkey:<pg:mapkey/>
 				</td> 
@@ -52,16 +53,33 @@
 					name:<pg:cell colName="name" />
 				</td> 
 			</tr>
+			</pg:false>
+			<pg:true typeof="java.util.Map">
+			<tr >
+			    <td><table>
+				<pg:map>
+				    <tr>
+					    <td>outer mapkey use expressionï¼š<pg:cell expression="{0.mapkey}" /></td> 
+						<td>outer mapkey ï¼š<pg:mapkey index="0"/> , inner mapkey:<pg:mapkey/></td> 
+						<td>
+							inner value:<pg:cell/>
+						</td> 
+					</tr>	
+					
+				</pg:map>
+				</table></td>
+			 </tr>	
+			</pg:true>
 		</pg:map>
 		
 		
 	</table>
 	
 	<table>
-	    <h3>map<String,String>×Ö·û´®ĞÅÏ¢µü´ú¹¦ÄÜ</h3>
+	    <h3>map<String,String>å­—ç¬¦ä¸²ä¿¡æ¯è¿­ä»£åŠŸèƒ½</h3>
 		<pg:map requestKey="mapstrings">
 		
-			<tr class="cms_data_tr">
+			<tr >
 				<td>
 					mapkey:<pg:mapkey/>
 				</td> 

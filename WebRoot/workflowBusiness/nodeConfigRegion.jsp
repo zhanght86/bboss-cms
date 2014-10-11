@@ -31,6 +31,7 @@
 		             <input type="hidden" name="isRecall" id="isRecall<pg:rowid increament="1" />" value="<pg:cell colName="isRecall" />"/>
 		             <input type="hidden" name="isCancel" id="isCancel<pg:rowid increament="1" />" value="<pg:cell colName="isCancel" />"/>
 		             <input type="hidden" name="isDiscard" id="isDiscard<pg:rowid increament="1" />" value="<pg:cell colName="isDiscard" />"/>
+		             <input type="hidden" name="isDiscarded" id="isDiscarded<pg:rowid increament="1" />" value="<pg:cell colName="isDiscarded" />"/>
 		             <input type="hidden" name="isMulti" id="isMulti<pg:rowid increament="1" />" value="<pg:cell colName="isMulti" />"/>
 		             <input type="hidden" name="isMultiDefault" id="isMultiDefault<pg:rowid increament="1" />" value="<pg:cell colName="isMultiDefault" />"/>
 		             <input type="hidden" name="isSequential" id="isSequential<pg:rowid increament="1" />" value="<pg:cell colName="isSequential" />"/>
