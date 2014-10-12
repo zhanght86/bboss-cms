@@ -1,23 +1,21 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="test.*,java.util.*"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-
 <%
-	//构建map<String,PO>对象
 	TestBean bean = null;
-	Map mapbeans = new HashMap();
+	Map mapbeans = new HashMap();//定义一个map，值可能是TestBean类型也可能是另外一个map
 	bean = new TestBean();
 	bean.setId("uuid");
 	bean.setName("多多");
-	mapbeans.put(bean.getId(),bean);
+	mapbeans.put(bean.getId(),bean);//添加一个类型为TestBean的元素
 	
 	bean = new TestBean();
 	bean.setId("uuid1");
 	bean.setName("多多1");
-	mapbeans.put(bean.getId(),bean);
+	mapbeans.put(bean.getId(),bean);//添加一个类型为TestBean的元素
 	bean = new TestBean();
 	bean.setId("uuid2");
 	bean.setName("多多2");
-	mapbeans.put(bean.getId(),bean);
+	mapbeans.put(bean.getId(),bean);//添加一个类型为TestBean的元素
 	request.setAttribute("mapbeans",mapbeans);
 	
 	Map<String,String> mapstrings = new HashMap<String,String>();
@@ -25,7 +23,7 @@
 	mapstrings.put("id2","多多2");
 	mapstrings.put("id3","多多3");
 	mapstrings.put("id4","多多4");
-	mapbeans.put("inner", mapstrings);
+	mapbeans.put("inner", mapstrings);//添加一个类型为Map的元素
 	request.setAttribute("mapstrings",mapstrings);
 %>
 <!-- 
@@ -39,9 +37,9 @@
 </head>
 <body>
 	<table>
-	    <h3>map<String,po>对象信息迭代功能</h3>
+	    <h3>map<String,po>对象信息迭代功能,采用map标签输出map中的元素信息</h3>
 		<pg:map requestKey="mapbeans">
-			<pg:false typeof="java.util.Map">
+			<pg:true typeof="<%=test.TestBean.class %>">
 			<tr >
 				<td>
 					mapkey:<pg:mapkey/>
@@ -53,7 +51,7 @@
 					name:<pg:cell colName="name" />
 				</td> 
 			</tr>
-			</pg:false>
+			</pg:true>
 			<pg:true typeof="java.util.Map">
 			<tr >
 			    <td><table>
@@ -70,9 +68,7 @@
 				</table></td>
 			 </tr>	
 			</pg:true>
-		</pg:map>
-		
-		
+		</pg:map>		
 	</table>
 	
 	<table>
