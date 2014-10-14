@@ -14,9 +14,10 @@
  */
 package com.sany.masterdata.hr.sync;
 
-import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -58,6 +59,7 @@ public class SyncJobInfo {
     private MdmService mdmService;
     
     private ConfigSQLExecutor executor;
+    private static final Object dumy = new Object();
     
     /**
      * 同步所有机构数据
@@ -111,7 +113,7 @@ public class SyncJobInfo {
         try {
             List<MdmPosition> jobList = mdmService.getPositionList("19000101", "99000101", "1", "99999999");
             Set<String> orgKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmJobKey"));
-            
+            Map<String,Object> orjjobs = new HashMap<String,Object>();
             TransactionManager tm = new TransactionManager();
             PreparedDBUtil jobSavePre = new PreparedDBUtil();
             PreparedDBUtil jobOrgSavePre = new PreparedDBUtil();
@@ -130,7 +132,7 @@ public class SyncJobInfo {
                 for (MdmPosition temp : jobList) {
                     if (orgKeySet.contains(temp.getPositionId())) {
                         updateSize ++;
-                        addPreBatch(jobUpdatePre, jobOrgUpdatePre, temp);
+                        addPreBatch(jobUpdatePre, jobOrgUpdatePre, temp,orjjobs);
                         if (updateSize > BATCH_LIMIT) {
                             updateSize = 0;
                             jobUpdatePre.executePreparedBatch();
@@ -142,7 +144,7 @@ public class SyncJobInfo {
                         }
                     } else {
                         saveSize ++;
-                        addPreBatch(jobSavePre, jobOrgSavePre, temp);
+                        addPreBatch(jobSavePre, jobOrgSavePre, temp,orjjobs);
                         if (saveSize > BATCH_LIMIT) {
                             saveSize = 0;
                             jobSavePre.executePreparedBatch();
@@ -230,18 +232,24 @@ public class SyncJobInfo {
         logger.info("Sync job info finished...");
     }
     
-    private void addPreBatch(PreparedDBUtil jobPre, PreparedDBUtil jobOrgPre, MdmPosition temp) throws Exception {
+    private void addPreBatch(PreparedDBUtil jobPre, PreparedDBUtil jobOrgPre, MdmPosition temp,Map<String,Object> orgjobs) throws Exception {
         
         jobPre.setString(1, temp.getPositionText());
         jobPre.setString(2, temp.getPositionId());
         jobPre.addPreparedBatch();
         
         if (temp.getOrgId() != null) {
-        	SQLExecutor.delete(JOBORG_CLEAR_SQL, temp.getOrgId(),temp.getPositionId());
-            jobOrgPre.setString(1, temp.getOrgId());
-            jobOrgPre.setString(2, temp.getPositionRank());
-            jobOrgPre.setString(3, temp.getPositionId());
-            jobOrgPre.addPreparedBatch();
+        	String key = temp.getOrgId()+":"+temp.getPositionId();
+        	if(!orgjobs.containsKey(key))
+        	{
+	        	SQLExecutor.delete(JOBORG_CLEAR_SQL, temp.getOrgId(),temp.getPositionId());
+	            jobOrgPre.setString(1, temp.getOrgId());
+	            jobOrgPre.setString(2, temp.getPositionRank());
+	            jobOrgPre.setString(3, temp.getPositionId());
+	            jobOrgPre.addPreparedBatch();
+	            orgjobs.put(key, dumy);
+        	}
+        	
         }
     }
 

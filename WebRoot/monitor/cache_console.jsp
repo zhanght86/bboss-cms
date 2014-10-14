@@ -15,11 +15,7 @@
 	<div id="customContent">
 	    <sany:menupath />
 		<div class="title_box">
-			<strong>系统缓存管理
-			<dict:user userId="1" attribute="userName"/>
-<dict:user userId="1" />
-<dict:user userAccount="admin" attribute="userName" />
-<dict:user userAccount="admin"  /></strong>
+			<strong>系统缓存管理</strong>
 			<a  href="javascript:void(0)" class="bt_1 sp"
 											id="queryButton" onclick="clearAll()"><span>全部清除</span> </a> 
 			<a  href="javascript:void(0)" class="bt_1 sp"

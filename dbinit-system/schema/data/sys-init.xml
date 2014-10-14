@@ -2547,7 +2547,7 @@ nocache
   				USER_TYPE,REMARK1,REMARK2,REMARK3,REMARK4,REMARK5,PAST_TIME,DREDGE_TIME,LASTLOGIN_DATE,
   				WORKLENGTH,POLITICS,ISTAXMANAGER,LOGON_IP,CERT_SN)
 				values
-  				(1,1,'admin','0a989ebc4a77b56a6e2bb7b19d995d185ce44090c13e2984b7ecc6d446d4b61ea9991b76a4c2f04b1b4d244841449454','系统管理员',' ','M',' ',
+  				(1,1,'admin','E10ADC3949BA59ABBE56E057F20F883E','系统管理员',' ','M',' ',
   				' ','1',' ',' ',' ',' ',null,
   				' ',' ',' ',' ',2,null,null,
   				'0',' ',' ',' ',' ',' ',null,' ',null,
