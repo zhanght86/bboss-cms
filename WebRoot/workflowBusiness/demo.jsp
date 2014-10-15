@@ -12,39 +12,52 @@ $(document).ready(function() {
 	
 	$("#wait").hide();
 	
-	$("#entrustwait").hide();
-	
 	queryList();  
-	
-	queryEntrustList();
        		
-    $("#businessType").combotree({
-   		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
-   	});
-           	
 });
+
+// 开启流程实例
+function toStartProc() {
+	
+	var url="<%=request.getContextPath()%>/workflowBusiness/business/toworkflowMain.page?businessKey="
+	+"&processKey=${processKey}";
+	
+	$.dialog({ id:'iframeNewId', title:'申请流程页面',width:1000,height:700, content:'url:'+url});  
+}
 
 //加载实时任务列表数据  
 function queryList(){
-	var processIntsId = $("#queryForm #processIntsId").val();
-	var processKey = $("#queryForm #processKey").val();
-	var taskState = $("#queryForm #taskState").val();
-	var taskName = $("#queryForm #taskName").val();
-	var taskId = $("#queryForm #taskId").val();
-	var businessTypeId = $("#queryForm #businessType").combotree('getValue');
-	var businessKey = $("#queryForm #businessKey").val();
-	var appName = $("#queryForm #appName").val();
 	
-    $("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page #customContent", 
-    	{"processIntsId":processIntsId, "processKey":processKey,"taskState":taskState,"taskId":taskId,
-    	"taskName":taskName,"businessTypeId":businessTypeId,"businessKey":businessKey,"appName":appName},
-    	function(){});
+    $("#demoContainer").load("<%=request.getContextPath()%>/workflowBusiness/business/queryDemoData.page #demoContent", 
+    	{"businessKey":$("#businessKey").val(),"processKey":"${processKey}"},function(){});
     
 }
 
+// 处理业务单号
+function dealBusiness(businessKey,businessState){
+	if (businessState == '0') {
+		var url="<%=request.getContextPath()%>/workflowBusiness/business/toworkflowMain.page?businessKey="+businessKey
+		+"&processKey=${processKey}";
+		
+		$.dialog({ id:'iframeNewId', title:'申请流程',width:1000,height:700, content:'url:'+url});  
+	}else {
+		
+		var url="<%=request.getContextPath()%>/workflowBusiness/business/toViewTask.page?businessKey="+businessKey;
+		
+		if (businessState == '1') {
+			
+			$.dialog({ id:'iframeNewId', title:'处理任务',width:1000,height:700, content:'url:'+url});  
+			
+		}else {
+			
+			$.dialog({ id:'iframeNewId', title:'查看任务',width:1000,height:700, content:'url:'+url}); 
+			
+		}
+	}
+}
+
 function modifyQueryData(){
-	$("#ontimeContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryOntimeTaskData.page?"+$("#querystring").val()+" #customContent",function(){loadjs()});
-	$("#entrustContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryEntrustTaskData.page?"+$("#querystring").val()+" #entrustContent",function(){loadjs()});
+	$("#demoContainer").load("<%=request.getContextPath()%>/workflowBusiness/business/queryDemoData.page?"+$("#querystring").val()+" #demoContent",function(){loadjs()});
 }
 	
 function doreset(){
@@ -58,28 +71,26 @@ function doreset(){
 
 <div class="content_box" >
 	
-	<sany:menupath menuid="ontimeTask"/>
+	<sany:menupath menuid="materielProcess"/>
 		
 	<div class="search">
 		<table>
 			<tr><td>
-			    <div class="sany_li">
-			      <input name="" type="text"  class="input1" value="单号" onfocus="this.value=''" onblur="if(this.value==''){this.value='单号'}" />
+			    <div class="sany_li2">
+			      	业务单号<input id="businessKey" name="businessKey" type="text"  class="input1" value="" />
 			    </div> 
-			    <a href="#" class="bt_search"><span>查询</span></a>
+			    <a href="#" class="bt_search" onclick="queryList();"><span>查询</span></a>
 	    	</td></tr>
 	    </table>
   	</div>
   
 	<div class="title_1">
-
-		<div class="rightbtn">
-			<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>申请</span></a>
-		</div>
-			
-		<strong>演示列表</strong>
-		<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+		演示列表
+		
+		<div ><a href="#" class="bt_sany" onclick="toStartProc();">新增</a></div>
+		
 	</div>
+		<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />		
 	
 	<div id="demoContainer" style="overflow:auto"></div>
 			

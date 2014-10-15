@@ -29,6 +29,7 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.ActNode;
+import com.sany.workflow.business.entity.DemoEntiy;
 import com.sany.workflow.business.entity.FormCache;
 import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.ProIns;
@@ -1956,4 +1957,83 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		executor.delete("delFormDatasByBusinessKey_wf", businessKey);
 	}
 
+	@Override
+	public ListInfo queryDemoData(String processKey, String businessKey,
+			long offset, int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("processKey", processKey);
+			map.put("businessKey", businessKey);
+
+			ListInfo listInfo = executor.queryListInfoBean(DemoEntiy.class,
+					"getDemoList_wf", offset, pagesize, map);
+
+			List<DemoEntiy> demoList = listInfo.getDatas();
+
+			if (demoList != null && demoList.size() != 0) {
+
+				for (int i = 0; i < demoList.size(); i++) {
+					DemoEntiy de = demoList.get(i);
+
+					de.setSenderName(activitiService.getUserInfoMap()
+							.getUserName(de.getSender()));
+
+					if (StringUtil.isEmpty(de.getInstanceId())) {
+						de.setTitle(de.getBusinessKey() + "[暂存]");
+
+						de.setBusinessState(0);
+					} else {
+
+						if (StringUtil.isNotEmpty(de.getEndTime())) {
+							de.setTitle(de.getBusinessKey() + "[结束]");
+							de.setBusinessState(2);
+						} else {
+							de.setTitle(de.getBusinessKey() + "[运行中]");
+							de.setBusinessState(1);
+						}
+					}
+
+					// 获取任务及处理人
+					if (StringUtil.isNotEmpty(de.getInstanceId())) {
+
+						List<TaskInfo> taskList = getCurrentNodeInfoByProcessID(de
+								.getInstanceId());
+
+						if (null != taskList && taskList.size() > 0) {
+
+							StringBuffer users = new StringBuffer();
+
+							for (int j = 0; j < taskList.size(); j++) {
+
+								TaskInfo taskInfo = taskList.get(j);
+
+								if (j == 0) {
+									users.append(taskInfo.getAssignee());
+								} else {
+									users.append(",").append(
+											taskInfo.getAssignee());
+								}
+							}
+							de.setAssigneeName(activitiService.getUserInfoMap()
+									.getUserName(users.toString()));
+							de.setAssignee(users.toString());
+						}
+					}
+
+				}
+			}
+
+			tm.commit();
+
+			return listInfo;
+		} catch (Exception e) {
+			throw new Exception("获取demo业务单数据出错：" + e.getMessage());
+		} finally {
+			tm.release();
+		}
+	}
 }

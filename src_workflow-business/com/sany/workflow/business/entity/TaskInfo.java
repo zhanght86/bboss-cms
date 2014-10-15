@@ -53,7 +53,7 @@ public class TaskInfo implements Serializable {
 	private int isRecall;// 可撤回 0不能1能
 	private int isCancel;// 可驳回 0 不能 1 能
 	private int isDiscard;// 可废弃 0 不能 1 能
-	private int isDiscarded;// 可废弃 0 不能 1 能
+	private int isDiscarded;// 可被废弃 0 不能 1 能
 	private int isCopy;// 可抄送 0 不是 1 是
 
 	private String assignee;// 处理人

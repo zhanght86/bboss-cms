@@ -9,7 +9,7 @@
 <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/html3/js/tab.js"></script>
 
 <script type="text/javascript">
-
+var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
 	initliteRequiredStar('1,4');
 });
@@ -28,6 +28,9 @@ function submitForm0(){
 		 success:function(result){
 			unblockUI();
 			alert(result);
+			
+			api.close();
+ 			W.modifyQueryData();
 		 }
 	});	
 }
@@ -35,9 +38,11 @@ function submitForm0(){
 // 暂存审批表单临时数据
 function submitTempFormData () {
 	
-	$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/tempSaveFormDatas.page");
+	
+	$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/tempSaveFormDatas.page?businessKey=${businessKey}");
 
 	submitForm0();
+	
 }
 
 function submitFormData(){
@@ -49,7 +54,7 @@ function submitFormData(){
 		
 		if (checkoutPageElement()){
 			
-			$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/startProc.page");
+			$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/startProc.page?processKey=${processKey}&businessKey=${businessKey}");
 
 			submitForm0();
 			
@@ -58,15 +63,23 @@ function submitFormData(){
 	}
 	
 	// 审批人或提交人处理任务
-	if (pagestate == '3' || pagestate == '4'){
+	if (pagestate == '3' || pagestate == '4' || pagestate == '7'){
 		
 		if (checkoutPageElement()){
 			
-			$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/approveWorkFlow.page");
+			$("#workflowForm").attr("action","${pageContext.request.contextPath}/workflowBusiness/business/approveWorkFlow.page?processKey=${processKey}");
 
 			submitForm0();
 			
 		}
+		
+	}
+	
+	// 流程结束查看
+	if (pagestate == '6' ){
+		
+		api.close();
+		W.modifyQueryData();
 		
 	}
 	
@@ -95,10 +108,10 @@ function submitFormData(){
 	   	<div class="bottom_area"></div>
 	    <div class="submit_operation"> 
 		    <a href="#" class="bt_submit" onclick="submitFormData()"><span>确定</span></a> 
-		    <pg:equal actual="${pagestate}" value="1">
+		    <pg:in actual="${pagestate}" scope="1,2">
 		    <a href="#" class="bt_submit" onclick="submitTempFormData()"><span>暂存</span></a> 
-		    </pg:equal>
-		    <a href="#" class="bt_cancel"><span>取消</span></a> 
+		    </pg:in>
+		    <a href="#" class="bt_cancel" onclick="closeDlg()"><span>取消</span></a> 
 	    </div>
 	    
 	   </div>

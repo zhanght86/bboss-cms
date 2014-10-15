@@ -788,29 +788,13 @@
 			</module>
 			
 			<module name="业务演示" id="businessDemo" used="true" i18n:en_US="business Demo"
-				url="workflowBusiness/business/toworkflowMain.page" showleftmenu="true" popup="true">
+				url="workflowBusiness/business/toDemo.page" showleftmenu="true" popup="true">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<item name="申请流程页面" id="processApplyPage" i18n:en_US="process applyPage">
+				<item name="物料退料流程" id="materielProcess" i18n:en_US="materiel process">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<workspace>
-						<content>workflowBusiness/business/toworkflowMain.page</content>
-					</workspace>
-					
-				</item>
-				<item name="任务处理页面" id="taskDealPage" i18n:en_US="task DealPage">
-					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-					<top>header.page</top>
-					<workspace>
-						<content>workflowBusiness/business/toDealTask.page</content>
-					</workspace>
-					
-				</item>
-				<item name="任务查看页面" id="taskViewPage" i18n:en_US="task ViewPage">
-					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-					<top>header.page</top>
-					<workspace>
-						<content>workflowBusiness/business/toViewTask.page</content>
+						<content>workflowBusiness/business/toDemo.page</content>
 					</workspace>
 					
 				</item>

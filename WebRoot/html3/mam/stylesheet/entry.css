@@ -3,6 +3,7 @@ a:hover{color: #900;}
 /*right*/
 
 .left_top{float:left;width:280px;font-size:20px;color:#06f;line-height:50px;  }
+.entry_top{padding:0 10px;}
 .entry_top .left_top img{float:left;padding-right:4px;padding-top:5px}
 .reservation{color:#F60;}
 .away{color:#2ac600; width:800px;}
@@ -41,7 +42,7 @@ a:hover{color: #900;}
 .main_contain #tab02 .tab2  .u_tab{background:url(../images/arrow_tab22.png) no-repeat left top;margin-left:-25px; width:500px;}
 .main_contain #tab02 .tab2  .u_tab_hover{background:url(../images/arrow_tab22_2.png) no-repeat left top;margin-left:-25px; width:500px;}
 .main_contain #tab01 a,.main_contain #tab02 a{color:#fff;}
-.u_tab_div {font-weight: bold;height:31px; background:url(../images/dot11.png);}
+.u_tab_div {font-weight: bold;height:31px; background:url(../images/dot11.png);margin:0 10px;}
 .u_tab, .u_tab_no, .u_tab_hover {
 	float: left;
 	text-align: center;

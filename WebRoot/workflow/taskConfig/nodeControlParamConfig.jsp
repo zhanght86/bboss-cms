@@ -25,6 +25,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb2">
 		<pg:header>
 			<th>节点KEY</th>
+			<th>节点名称</th>
 			<th>处理工时<br/>(小时)</th>
 			<th>节点描述</th>
 			<th>待办URL</th>
@@ -37,6 +38,9 @@
 				<td>
 				<input type="hidden" id="NODE_ID" name="NODE_ID" value="<pg:cell colName="NODE_ID"/>"/>
 				<input type="hidden" name="NODE_KEY" id="NODE_KEY" value="<pg:cell colName="NODE_KEY"/>"/><pg:cell colName="NODE_KEY"/>
+				</td>
+				<td >
+					<pg:cell colName="NODE_NAME"/>
 				</td>
 				<td >
 					<input type="text" name="DURATION_NODE" value="<pg:cell colName="DURATION_NODE"/>" class="input1 w50" onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>

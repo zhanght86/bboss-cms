@@ -22,9 +22,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
+import bboss.org.jgroups.util.UUID;
+
+import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.ActNode;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.service.ActivitiBusinessService;
@@ -40,8 +45,39 @@ public class ActivitiBusinessAction {
 
 	private ActivitiBusinessService workflowService;
 
+	private String processKey = "Mms.return";
+
 	public String toIndex(ModelMap model) {
 		return "path:toIndex";
+	}
+
+	public String toDemo(ModelMap model) {
+		model.addAttribute("processKey", processKey);
+		return "path:toDemo";
+	}
+
+	/**
+	 * 获取业务单数据
+	 * 
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年10月11日
+	 */
+	public String queryDemoData(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			String processKey, String businessKey, ModelMap model)
+			throws Exception {
+
+		ListInfo listInfo = workflowService.queryDemoData(processKey,
+				businessKey, offset, pagesize);
+
+		model.addAttribute("listInfo", listInfo);
+
+		return "path:toDemoList";
 	}
 
 	/**
@@ -52,12 +88,12 @@ public class ActivitiBusinessAction {
 	 * @throws Exception
 	 *             2014年8月20日
 	 */
-	public String toworkflowMain(ModelMap model) throws Exception {
-		String processKey = "Mms.return";
+	public String toworkflowMain(String businessKey, String processKey,
+			ModelMap model) throws Exception {
 		List<ActNode> actList = null;
 
 		// 读取暂存form表单数据是否存在
-		ProIns proIns = workflowService.getFormDatasByBusinessKey("test1");
+		ProIns proIns = workflowService.getFormDatasByBusinessKey(businessKey);
 		if (proIns != null) {
 			actList = proIns.getActs();
 			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
@@ -69,6 +105,8 @@ public class ActivitiBusinessAction {
 		}
 		model.addAttribute("actList", actList);
 		model.addAttribute("processKey", processKey);
+
+		model.addAttribute("businessKey", businessKey);
 		return "path:toIndex";
 	}
 
@@ -81,9 +119,15 @@ public class ActivitiBusinessAction {
 	 *             2014年8月20日
 	 */
 	public @ResponseBody
-	String tempSaveFormDatas(ProIns proIns, ModelMap model) throws Exception {
+	String tempSaveFormDatas(ProIns proIns, String businessKey, ModelMap model)
+			throws Exception {
 		try {
-			workflowService.tempSaveFormDatas(proIns, "test1", "Mms.return");
+
+			if (StringUtil.isEmpty(businessKey)) {
+				businessKey = UUID.randomUUID().toString();
+			}
+			workflowService
+					.tempSaveFormDatas(proIns, businessKey, "Mms.return");
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -131,10 +175,17 @@ public class ActivitiBusinessAction {
 	 *             2014年8月20日
 	 */
 	public @ResponseBody
-	String startProc(ProIns proIns, ModelMap model) throws Exception {
+	String startProc(ProIns proIns, String businessKey, String processKey,
+			ModelMap model) throws Exception {
 		try {
+
+			if (StringUtil.isEmpty(businessKey)) {
+				businessKey = UUID.randomUUID().toString();
+			}
+
 			Map<String, Object> paramMap = new HashMap<String, Object>();
-			workflowService.startProc(proIns, "test1", "Mms.return", paramMap);
+			workflowService
+					.startProc(proIns, businessKey, processKey, paramMap);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();
@@ -152,9 +203,7 @@ public class ActivitiBusinessAction {
 	public String toDealTask(String processKey, String processId,
 			String taskId, ModelMap model) throws Exception {
 
-		workflowService.toDealTask("Mms.return",
-				"b22d19ff-50f4-11e4-b55d-4437e6999a31",
-				"b248df69-50f4-11e4-b55d-4437e6999a31", model);
+		workflowService.toDealTask(processKey, processId, taskId, model);
 
 		return "path:toIndex";
 	}
@@ -167,11 +216,10 @@ public class ActivitiBusinessAction {
 	 * @param userId
 	 * @return 2014年8月23日
 	 */
-	public String toViewTask(String taskId, String bussinessKey, String userId,
+	public String toViewTask(String taskId, String businessKey, String userId,
 			ModelMap model) throws Exception {
 
-		workflowService.toViewTask("122b7cd9-4ebe-11e4-a718-4437e6999f90",
-				"bug", "qingl2", model);
+		workflowService.toViewTask(taskId, businessKey, userId, model);
 		return "path:toIndex";
 	}
 

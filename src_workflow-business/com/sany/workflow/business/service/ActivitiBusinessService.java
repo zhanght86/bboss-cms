@@ -478,4 +478,17 @@ public interface ActivitiBusinessService {
 	 */
 	public boolean isStartProcByProcessId(String processId) throws Exception;
 
+	/**
+	 * demo演示实例获取业务单数据
+	 * 
+	 * @param processKey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年10月13日
+	 */
+	public ListInfo queryDemoData(String processKey, String businessKey,
+			long offset, int pagesize) throws Exception;
+
 }

@@ -4,14 +4,14 @@
 <database name="esb216">
 	<table name="esb_params">
         <column name="NODE_ID" primaryKey="true" required="true"
-            size="368" type="VARCHAR"/>
-        <column name="NAME" primaryKey="true" required="true" size="100" type="VARCHAR"/>
+            size="100" type="VARCHAR"/>
+        <column name="NAME" primaryKey="true" required="true" size="50" type="VARCHAR"/>
         <column name="VALUE" size="100" type="VARCHAR"/>
         <column name="PARAM_TYPE" primaryKey="true" required="true"
-            size="368" type="VARCHAR"/>
+            size="100" type="VARCHAR"/>
         <column default="0" name="ISBIGDATA" type="BIGINT"/>
         <column name="BIGDATA" type="LONGVARBINARY"/>
-        <column name="RN" primaryKey="true" required="true" type="BIGINT" default="0"/>
+        <column name="RN" primaryKey="true" required="true" type="DECIMAL" size="4" default="0"/>
     </table>
  <table name="TD_ESB_BUSINESS_LINE">
         <column name="BUSINESS_LINE_CODE" primaryKey="true"
@@ -226,18 +226,7 @@
         <column name="PARAM_OLD_VALUE" size="100" type="VARCHAR"/>
         <column name="REFRESH_FLAG" size="1" type="CHAR"/>
     </table>
-    <table name="ESB_PARAMS">
-        <column name="NODE_ID" primaryKey="true" required="true"
-            size="368" type="VARCHAR"/>
-        <column name="NAME" primaryKey="true" required="true" size="100" type="VARCHAR"/>
-        <column name="VALUE" size="100" type="VARCHAR"/>
-        <column name="PARAM_TYPE" primaryKey="true" required="true"
-            size="368" type="VARCHAR"/>
-        <column default="0" name="ISBIGDATA" size="20" type="DECIMAL"/>
-        <column name="BIGDATA" type="BLOB"/>
-        <column default="0" name="RN" primaryKey="true" required="true"
-            size="20" type="DECIMAL"/>
-    </table>
+   
     
     <table name="TD_ESB_BUSINESS_LINE">
         <column name="BUSINESS_LINE_CODE" primaryKey="true"
