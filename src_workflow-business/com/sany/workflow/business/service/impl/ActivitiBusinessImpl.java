@@ -827,6 +827,57 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
+			String userId, String orgId) throws Exception {
+
+		try {
+
+			if (StringUtil.isNotEmpty(userId)) {
+				return this.getWFNodeConfigInfoForOrg(processKey, userId);
+			}
+
+			if (StringUtil.isNotEmpty(orgId)) {
+				// 用户组织节点和层级
+				String userLevel = executor.queryObject(String.class,
+						"getUserLevelByOrgId", orgId);
+
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("userLevel", userLevel.split("\\|"));
+
+				return this.getWFNodeConfigInfoForOrg(processKey, map);
+			}
+
+			if (StringUtil.isEmpty(userId) && StringUtil.isEmpty(orgId)) {
+
+				return null;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("获取组织类型节点配置出错：" + e.getMessage());
+		}
+
+		return null;
+	}
+
+	private List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
+			HashMap<String, Object> map) throws Exception {
+
+		map.put("processKey", processKey);
+		map.put("businessType", "1");
+
+		List<ActNode> actNodeList = this.getWFNodeConfigInfo(processKey, map);
+
+		if (actNodeList != null && actNodeList.size() > 0) {
+
+			// 通过组织结构配置的流程，节点人为空采用默认配置的判断
+			return setNodeDefaultConfig(actNodeList,
+					(String[]) map.get("userLevel"));
+		} else {
+			return actNodeList;
+		}
+	}
+
+	@Override
+	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
 			String userId) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -834,32 +885,19 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			userId = changeToDomainAccount(userId);
 
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("processKey", processKey);
-			map.put("businessType", "1");
-
 			// 用户组织节点和层级
 			String userLevel = executor.queryObject(String.class,
 					"getUserLevel", userId);
 
-			map.put("userLevel", userLevel.split("\\|"));
-
-			List<ActNode> actNodeList = this.getWFNodeConfigInfo(processKey,
-					map);
-
 			tm.commit();
 
-			if (actNodeList != null && actNodeList.size() > 0) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("userLevel", userLevel.split("\\|"));
 
-				// 通过组织结构配置的流程，节点人为空采用默认配置的判断
-				return setNodeDefaultConfig(actNodeList,
-						(String[]) map.get("userLevel"));
-			} else {
-				return actNodeList;
-			}
+			return getWFNodeConfigInfoForOrg(processKey, map);
 
 		} catch (Exception e) {
-			throw new Exception("获取组织类型节点配置出错：" + e.getMessage());
+			throw new Exception("通过userId获取组织类型节点配置出错：" + e.getMessage());
 		} finally {
 			tm.release();
 		}

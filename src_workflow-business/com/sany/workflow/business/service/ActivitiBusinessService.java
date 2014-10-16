@@ -58,6 +58,22 @@ public interface ActivitiBusinessService {
 	 *            流程key
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param orgId
+	 *            用户所在部门组织id
+	 * @return
+	 * @throws Exception
+	 *             2014年10月15日
+	 */
+	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
+			String userId, String orgId) throws Exception;
+
+	/**
+	 * 获取流程组织结构类型节点配置 (还未开启流程实例前)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @return
 	 * @throws Exception
 	 *             2014年8月26日

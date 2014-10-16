@@ -197,27 +197,7 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 	background-color: #767676;
 	height: 30px;padding:10px;
 }
-#moquu_top {
-	z-index:2;
-	width:50px;
-	height:50px;
-	right:10px;
-	position:fixed;
-	cursor:pointer;
-	_position:absolute;
-	_bottom:auto;
-	_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))
-}
-#moquu_top {
-	bottom:40px;
-	_margin-top:516px;
-	background:url(../images/sbtn.png) 0 -101px;
-	width:50px;
-	height:50px
-}
-#moquu_top:hover {
-	background:url(../images/sbtn.png) -50px -101px
-}
+
 #wrap {
 	min-width: 985px;
 }
@@ -410,3 +390,4 @@ a.search_bt:hover, a.search_bt:hover span {
 .flow_1 .select_person{font-weight:normal;font-size:12px; }
 .flow_arrow{float:left;width:23px; height:47px; background:url(../images/flow_arrow.png) no-repeat left  center;}
 .select_tr{ color:#0098fe;font-weight:bold;}
+.performace_state .select1{width:70px;}

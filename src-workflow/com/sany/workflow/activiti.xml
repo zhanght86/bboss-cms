@@ -357,7 +357,7 @@
 			  
 			 AND T.PROC_INST_ID_ = ?
 			
-			ORDER BY T.START_TIME_,T.END_TIME_
+			ORDER BY T.END_TIME_LONG,T.START_TIME_LONG
 		]]>
 	</property>
 	
