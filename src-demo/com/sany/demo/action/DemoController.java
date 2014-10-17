@@ -121,5 +121,10 @@ public class DemoController {
 		
 	}
 	
+	public String fixedtable()
+	{
+		return "path:fixetable";
+	}
+	
 
 }

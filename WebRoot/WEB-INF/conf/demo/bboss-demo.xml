@@ -16,6 +16,7 @@
 		path:viewDemo="/demo/viewDemo.jsp"
 		path:queryDemos="/demo/demoList.jsp"
 		path:addPre="/demo/addDemo.jsp"
+		path:fixetable="/test/table.jsp"
 		f:demoServiceImpl="attr:sany.demo.demoServiceImpl"
 		class="com.sany.demo.action.DemoController" >
 	</property>

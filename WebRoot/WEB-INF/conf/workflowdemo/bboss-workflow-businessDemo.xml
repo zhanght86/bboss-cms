@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	<property name="/workflow/businessDemo/*.page"
+		f:workflowService="attr:workflow.business.ActivitiBusinessService" 
+		f:demoService="attr:workflow.demo.demoService"
+		path:toIndex="/workflowdemo/index.jsp"
+		path:toDemo="/workflowdemo/demo.jsp"
+		path:toDemoList="/workflowdemo/demoList.jsp"
+		class="com.sany.workflow.demo.action.BusinessDemoAction">
+	</property>
+	
+	<property name="workflow.demo.demoService" 
+		f:executor="attr:workflow.businessDemo.configsqlexecutor"
+		f:activitiService="attr:activitiService" 
+		f:workflowService="attr:workflow.business.ActivitiBusinessService" 
+		class="com.sany.workflow.demo.service.impl.BusinessDemoServiceImpl" />
+	
+	<property name="workflow.businessDemo.configsqlexecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/sany/workflow/demo/businessDemo.xml" />
+		</construction>
+	</property>
+		
+</properties>

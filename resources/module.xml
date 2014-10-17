@@ -241,51 +241,18 @@
 				
 				</item> 
 			</module>
-			 <item name="列表"
+			
+			 <item name="固定表头和固定列"
 			i18n:en_US="web list" id="web_list"  menuType="type1">
 				<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
 				<workspace>
-					<content>appbom/index.page</content>
+					<content>/demo/fixedtable.page</content>
 				</workspace>
 			
 			</item>  
-			 <item name="列表1"
-			i18n:en_US="web list" id="web_list1" menuType="type1">
-				<mouseclickimg>html3/hrm/images/app3.png</mouseclickimg>
-				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<workspace>
-					<content>appbom/index.page</content>
-				</workspace>
-			
-			</item>      
-			<module name="web前端展示1" 
-		             i18n:en_US="WEB UI Show" 
-		            id="WEB_UI_Show1" used="true"
-		             url="workflow/pending/pendingIndex.page">	
-			    <item name="列表2"
-				i18n:en_US="web list" id="web_list2" menuType="type1">
-					<mouseclickimg>html3/hrm/images/app4.png</mouseclickimg>
-					<top>header.page</top>
-					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-					<workspace>
-						<content>appbom/index.page</content>
-					</workspace>
-				
-				</item>     
-				<item name="列表3"
-				i18n:en_US="web list" id="web_list3" menuType="type2">
-					<mouseclickimg>html3/hrm/images/app5.png</mouseclickimg>
-					<top>header.page</top>
-					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-					<workspace>
-						<content>appbom/index.page</content>
-					</workspace>
-				
-				</item>      	 	
-		</module>	    	
+			 	
 		</module>	
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
 
@@ -788,13 +755,13 @@
 			</module>
 			
 			<module name="业务演示" id="businessDemo" used="true" i18n:en_US="business Demo"
-				url="workflowBusiness/business/toDemo.page" showleftmenu="true" popup="true">
+				url="workflow/businessDemo/toDemo.page" showleftmenu="true" popup="true">
 				<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<item name="物料退料流程" id="materielProcess" i18n:en_US="materiel process">
+				<item name="流程演示" id="processDemo" i18n:en_US="process Demo">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 					<top>header.page</top>
 					<workspace>
-						<content>workflowBusiness/business/toDemo.page</content>
+						<content>workflow/businessDemo/toDemo.page</content>
 					</workspace>
 					
 				</item>

@@ -6,9 +6,6 @@
 
 	<property name="/workflowBusiness/business/*.page"
 		f:workflowService="attr:workflow.business.ActivitiBusinessService" 
-		path:toIndex="/workflowBusiness/index.jsp"
-		path:toDemo="/workflowBusiness/demo.jsp"
-		path:toDemoList="/workflowBusiness/demoList.jsp"
 		class="com.sany.workflow.business.action.ActivitiBusinessAction">
 	</property>
 

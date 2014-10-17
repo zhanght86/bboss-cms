@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 获取业务单数据 平台演示用的  gw_tanx-->
+	<property name="getDemoList_wf">
+		<![CDATA[
+			SELECT F.BUSINESSKEY AS BUSINESSKEY,
+			       NULL          AS CREATETIME,
+			       NULL          AS ENDTIME,
+			       NULL          AS SENDER,
+			       NULL          AS REASON,
+			       NULL          AS INSTANCEID,
+			       NULL          AS NODENAME
+			  FROM TD_WF_FORMCACHE F
+			 WHERE F.PROCESSKEY = #[processKey]
+			 
+			 #if($businessKey && !$businessKey.equals(""))
+			 	AND F.BUSINESSKEY = #[businessKey]
+			 #end
+			
+			union all
+			
+			SELECT distinct A.BUSINESS_KEY_  AS BUSINESSKEY,
+			       			A.START_TIME_    AS CREATETIME,
+			      			A.END_TIME_      AS ENDTIME,
+			       			A.START_USER_ID_ AS SENDER,
+			       			A.DELETE_REASON_ AS REASON,
+			       			A.PROC_INST_ID_  AS INSTANCEID,
+			      			C.NAME_          AS NODENAME
+			
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			  LEFT JOIN ACT_RU_TASK C ON A.PROC_INST_ID_ = C.PROC_INST_ID_
+			
+			 WHERE 1 = 1
+       			 AND B.KEY_ = #[processKey]
+       			 
+       		 #if($businessKey && !$businessKey.equals(""))
+			 	AND A.BUSINESS_KEY_ = #[businessKey]
+			 #end
+       			 
+       		 ORDER BY CREATETIME DESC
+		]]>
+	</property>
+</properties>

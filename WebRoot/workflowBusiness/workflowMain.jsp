@@ -1,7 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%@ include file="/common/jsp/common-css-lhgdialog.jsp"%>
-<link href="${pageContext.request.contextPath}/html3/mam/stylesheet/entry.css" rel="stylesheet" type="text/css" />
  
 <script type="text/javaScript"> 
 	<%-- js可能需要的变量 --%>

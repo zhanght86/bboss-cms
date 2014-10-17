@@ -1,10 +1,5 @@
 
 <properties>
-   <property name="/workflow/sendMessage/*.freepage"
-		
-		f:messageService="attr:workflow.MessageService" 
-		class="com.sany.workflow.test.SendMessageTest">
-	</property>
 
   <!--测试环境-->
 	<property name="workflow.MessageService" factory-method="create"

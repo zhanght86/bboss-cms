@@ -36,9 +36,9 @@
 					
 				</pg:equal>
 				
-				<td>
-			
 				<pg:notequal actual="${pagestate}" value="3" >
+					<td>
+					
 					<input name="operateType" type="radio" value="pass" />通过
 					
 					<input name="operateType" type="radio" value="turnTo" />转办
@@ -50,9 +50,16 @@
 					<pg:equal colName="isDiscard" value="1">
 						<input name="operateType" type="radio" value="toEnd" />废弃
 					</pg:equal>
+					
+					</td>
 				</pg:notequal>
 				
 				<pg:equal actual="${pagestate}" value="3" >
+				
+					<pg:true actual="${task.isDiscarded eq 1 or task.isRecall eq 1}">
+						<td>
+					</pg:true>
+				
 					<pg:equal colName="isDiscarded" value="1">
 						<input name="operateType" type="radio" value="toEnd" />废弃
 					</pg:equal>
@@ -60,15 +67,21 @@
 					<pg:equal colName="isRecall" value="1">
 						<input name="operateType" type="radio" value="recall" />撤回
 					</pg:equal>
+						
+					<pg:true actual="${task.isDiscarded eq 1 or task.isRecall eq 1}">
+						</td>
+					</pg:true>	
+					
 				</pg:equal>
 				
 				<pg:equal actual="${pagestate}" value="7" >
 					<pg:equal colName="isRecall" value="1">
-						<input name="operateType" type="radio" value="recall" />撤回
+						<td>
+							<input name="operateType" type="radio" value="recall" />撤回
+						</td>
 					</pg:equal>
 				</pg:equal>
 				
-				</td>
 			</tr>
 			</pg:notin>
 			

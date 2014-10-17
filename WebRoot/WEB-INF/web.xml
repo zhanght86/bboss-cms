@@ -271,7 +271,9 @@
              /WEB-INF/conf/sanymbp/bboss-*.xml,
              /WEB-INF/conf/session/bboss-*.xml,
              /WEB-INF/conf/holiday/bboss-*.xml,
-             /WEB-INF/conf/workflowbusiness/bboss-*.xml
+             /WEB-INF/conf/workflowbusiness/bboss-*.xml,
+             /WEB-INF/conf/demo/bboss-*.xml,
+             /WEB-INF/conf/workflowdemo/bboss-*.xml
             </param-value>
         </init-param>
         <init-param>

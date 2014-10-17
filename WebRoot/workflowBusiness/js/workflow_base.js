@@ -175,6 +175,43 @@ function updateAfterChoose(accouts,realnames,node_key){
 	}
 }
 
+/**
+ * 修改节点审批人
+ * userlist         用户数组 userlist = [{userCode:'00001',userName:'用户1'},{userCode:'00002',userName:'用户2'}]
+ * nodeids        替换节点列表 nodeids =[2,3,4]
+ */
+function changeNodeUsers(userlist,nodeIds){
+	if (userlist.length > 0 && nodeIds.length > 0) {
+		var user ;
+		$.each(userlist, function(i) {
+			user = this;
+			$.each(nodeIds, function(j) {
+				changeNodeUser(user,this);
+			})
+		})
+	}
+}
+
+/**
+ * 修改节点审批人
+ * user         用户数组 user = {userCode:'00001',userName:'用户1'}
+ * nodeId        替换节点 
+ */
+function changeNodeUser(user,nodeId){
+	var selectedUser = $("#candidateName"+nodeId).val();
+	if(selectedUser&&selectedUser!=''){
+		if(selectedUser.indexOf(user.userCode) <0){
+			$("#candidateName"+nodeId).val(selectedUser +','+ user.userCode);
+			$("#realName"+nodeId).val($("#realName"+nodeId).val()+ "," + user.userName);
+			$("#realnames"+nodeId).html($("#realName"+nodeId).val()+ "," + user.userName);
+		}
+	}else{
+		$("#candidateName"+nodeId).val(user.userCode);
+		$("#realName"+nodeId).val(user.userName);
+		$("#realnames"+nodeId).html(user.userName);
+	}
+}
+
 //检查页面元素
 function checkoutPageElement(){
 	// 判断处理功能区域是否为空

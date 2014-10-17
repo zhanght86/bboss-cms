@@ -52,7 +52,21 @@ public interface ActivitiBusinessService {
 			String userAccount);
 
 	/**
-	 * 获取流程组织结构类型节点配置 (还未开启流程实例前)
+	 * (还未开启流程实例前)获取流程组织结构类型节点配置
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @return
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
+			String userId) throws Exception;
+
+	/**
+	 * (还未开启流程实例前)获取流程组织结构类型节点配置
 	 * 
 	 * @param processKey
 	 *            流程key
@@ -68,21 +82,39 @@ public interface ActivitiBusinessService {
 			String userId, String orgId) throws Exception;
 
 	/**
-	 * 获取流程组织结构类型节点配置 (还未开启流程实例前)
+	 * (还未开启流程实例前)1获取流程组织结构类型节点配置与通用配置的合集 2取组织结构类型节点配置中的处理人 3取通用配置中的控制参数
 	 * 
 	 * @param processKey
 	 *            流程key
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param orgId
+	 *            用户所在部门组织id
 	 * @return
 	 * @throws Exception
-	 *             2014年8月26日
+	 *             2014年10月15日
 	 */
-	public List<ActNode> getWFNodeConfigInfoForOrg(String processKey,
-			String userId) throws Exception;
+	public List<ActNode> getWFNodeConfigInfoForOrgAndCommmon(String processKey,
+			String userId, String orgId) throws Exception;
 
 	/**
-	 * 获取流程业务类型节点配置 (还未开启流程实例前)
+	 * (还未开启流程实例前) 1先已组织结构类型节点配置取处理人与控制参数配置 2如果前者没有再取通用配置里的处理人与控制参数配置
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param orgId
+	 *            用户所在部门组织id
+	 * @return
+	 * @throws Exception
+	 *             2014年10月15日
+	 */
+	public List<ActNode> getWFNodeConfigInfoForFirstOrgSecondCommmon(
+			String processKey, String userId, String orgId) throws Exception;
+
+	/**
+	 * (还未开启流程实例前)获取流程业务类型节点配置
 	 * 
 	 * @param processKey
 	 *            流程key
@@ -92,6 +124,30 @@ public interface ActivitiBusinessService {
 	 */
 	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey,
 			String typeId) throws Exception;
+
+	/**
+	 * (还未开启流程实例前)1获取流程业务类型节点配置与通用配置的合集 2取获取流程业务类型节点配置中的处理人 3取通用配置中的控制参数
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public List<ActNode> getWFNodeConfigInfoForbussinessAndCommmon(
+			String processKey, String typeId) throws Exception;
+
+	/**
+	 * (还未开启流程实例前)1先已流程业务类型节点配置取处理人与控制参数配置 2如果前者没有再取通用配置里的处理人与控制参数配置
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年8月26日
+	 */
+	public List<ActNode> getWFNodeConfigInfoForFirstbussinessSecondCommmon(
+			String processKey, String typeId) throws Exception;
 
 	/**
 	 * 获取流程通用节点配置 (还未开启流程实例前)
@@ -186,7 +242,7 @@ public interface ActivitiBusinessService {
 	public void delFormDatasByBusinessKey(String businessKey) throws Exception;
 
 	/**
-	 * 开启流程实例
+	 * 开启流程实例并完成第一任务
 	 * 
 	 * @param proIns
 	 *            流程实例参数类
@@ -201,6 +257,24 @@ public interface ActivitiBusinessService {
 	 */
 	public void startProc(ProIns proIns, String businessKey, String processKey,
 			Map<String, Object> paramMap) throws Exception;
+
+	/**
+	 * 开启流程实例,根据completeFirstTask参数决定是否完成第一个任务 true完成 false 不完成
+	 * 
+	 * @param proIns
+	 *            流程实例参数类
+	 * @param businessKey
+	 *            业务主键
+	 * @param processKey
+	 *            流程key
+	 * @param paramMap
+	 *            参数信息
+	 * @throws Exception
+	 *             2014年8月22日
+	 */
+	public void startProc(ProIns proIns, String businessKey, String processKey,
+			Map<String, Object> paramMap, boolean completeFirstTask)
+			throws Exception;
 
 	/**
 	 * 跳转至处理任务页面
@@ -493,18 +567,5 @@ public interface ActivitiBusinessService {
 	 *             2014年9月18日
 	 */
 	public boolean isStartProcByProcessId(String processId) throws Exception;
-
-	/**
-	 * demo演示实例获取业务单数据
-	 * 
-	 * @param processKey
-	 * @param offset
-	 * @param pagesize
-	 * @return
-	 * @throws Exception
-	 *             2014年10月13日
-	 */
-	public ListInfo queryDemoData(String processKey, String businessKey,
-			long offset, int pagesize) throws Exception;
 
 }
