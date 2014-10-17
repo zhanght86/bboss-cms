@@ -1,0 +1,37 @@
+@charset "utf-8";
+/* CSS Document */
+
+.notice_box {
+margin:20px;border:2px solid #ccc;padding:20px;font-family: "Microsoft YaHei";
+}
+.notice_type{font-weigth:bold; font-size:30px;float:right;width:200px; text-align:right; color:#fe0000; letter-spacing:4px;}
+.notice_box .top_title {height:40px;line-height:40px;padding: 10px;
+}
+.notice_box .notice_basic_msg {
+	font-size: 16px;
+	font-weight: bold;
+	height: 34px;
+	line-height: 34px; 
+	border-bottom:3px solid #fe0000;padding:0 10px;
+}
+.notice_box .notice_basic_msg .notice_code {
+	text-align: right;
+	float: right;
+	width: 200px;
+}
+.notice_title{font-weight:bold; text-align:center;font-size:24px;letter-spacing:4px;line-height:40px;padding:15px 10px;}
+.notice_box .issue {
+	font-weight: bold;
+	text-align: right;
+	padding-right:50px;
+	font-size:17px;
+	line-height:40px;
+}
+.notice_sent{font-size:18px;line-height:40px;}
+.notice_box p {
+	font-size: 16px;
+	line-height: 30px;
+	padding: 10px; text-indent:32px;}
+}
+.notice_person{margin-top:30px;}
+.notice_person,.notice_date{padding-right:50px; text-align:right;font-size:18px;line-height: 40px;}
