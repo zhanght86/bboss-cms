@@ -123,6 +123,7 @@
         <column name="CHANGETIME" primaryKey="true" required="true" type="TIMESTAMP"/>
         <column name="DELEGATEREMARK" size="255"  type="NVARCHAR"/>
         <column name="DELEGATEREASON" size="255"  type="NVARCHAR"/>
+        <column name="DELEGATETYPE" size="1" type="DECIMAL" default="0"/>
     </table>
     <table name="TD_WF_USER_SUBSCRIBE">
         <column name="USER_ID" primaryKey="true" required="true"
