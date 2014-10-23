@@ -9,6 +9,7 @@ import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
+import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entrust.entity.WfEntrust;
 
 /**
@@ -132,7 +133,7 @@ public interface ActivitiTaskService {
 	 */
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
 			String processKey, String fromuserID, String userId, String reamrk,
-			String reason);
+			String reason, int delegateType);
 
 	/**
 	 * 记录已处理委托任务信息
@@ -183,7 +184,7 @@ public interface ActivitiTaskService {
 	 */
 	public List<NodeControlParam> getNodeControlParamByProcessId(
 			String processKey, String ProcessId) throws Exception;
-	
+
 	/**
 	 * 获取驳回日志记录
 	 * 
@@ -194,5 +195,16 @@ public interface ActivitiTaskService {
 	 *             2014年9月5日
 	 */
 	public RejectLog getRejectlog(String taskId) throws Exception;
+
+	/**
+	 * 获取用户未处理的任务
+	 * 
+	 * @param userId
+	 *            域账号
+	 * @return
+	 * @throws Exception
+	 *             2014年10月22日
+	 */
+	public List<TaskManager> getUserNoDealTasks(String userId) throws Exception;
 
 }

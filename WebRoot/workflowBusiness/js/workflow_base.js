@@ -182,33 +182,27 @@ function updateAfterChoose(accouts,realnames,node_key){
  */
 function changeNodeUsers(userlist,nodeIds){
 	if (userlist.length > 0 && nodeIds.length > 0) {
-		var user ;
-		$.each(userlist, function(i) {
-			user = this;
-			$.each(nodeIds, function(j) {
-				changeNodeUser(user,this);
-			})
-		})
-	}
-}
-
-/**
- * 修改节点审批人
- * user         用户数组 user = {userCode:'00001',userName:'用户1'}
- * nodeId        替换节点 
- */
-function changeNodeUser(user,nodeId){
-	var selectedUser = $("#candidateName"+nodeId).val();
-	if(selectedUser&&selectedUser!=''){
-		if(selectedUser.indexOf(user.userCode) <0){
-			$("#candidateName"+nodeId).val(selectedUser +','+ user.userCode);
-			$("#realName"+nodeId).val($("#realName"+nodeId).val()+ "," + user.userName);
-			$("#realnames"+nodeId).html($("#realName"+nodeId).val()+ "," + user.userName);
+		
+		for (var i = 0;i< nodeIds.length;i++){
+			
+			var nodeId = nodeIds[i];
+			
+			for (var j = 0; j< userlist.length;j++) {
+				var user = userlist[j];
+				
+				if (j == 0) {
+					$("#candidateName"+nodeId).val('');
+					$("#candidateName"+nodeId).val(user.userCode);
+					$("#realName"+nodeId).val(user.userName);
+					$("#realnames"+nodeId).html(user.userName);
+				}else {
+					var selectedUser = $("#candidateName"+nodeId).val();
+					$("#candidateName"+nodeId).val(selectedUser +','+ user.userCode);
+					$("#realName"+nodeId).val($("#realName"+nodeId).val()+ "," + user.userName);
+					$("#realnames"+nodeId).html($("#realName"+nodeId).val());
+				}
+			}
 		}
-	}else{
-		$("#candidateName"+nodeId).val(user.userCode);
-		$("#realName"+nodeId).val(user.userName);
-		$("#realnames"+nodeId).html(user.userName);
 	}
 }
 

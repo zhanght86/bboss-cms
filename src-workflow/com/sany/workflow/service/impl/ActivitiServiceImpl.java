@@ -3556,75 +3556,75 @@ public class ActivitiServiceImpl implements ActivitiService,
 			cancleProcessInstance(processInstid, "","删除流程","物理删除");
 		}
 
-		dbUtil.preparedDelete("delete From act_ru_event_subscr a where a.proc_inst_id_=?");
+		dbUtil.preparedDelete("delete From act_ru_event_subscr where proc_inst_id_=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_ru_variable b where b.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_ru_variable where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_ru_job c where c.process_instance_id_=?");
+		dbUtil.preparedDelete("delete From act_ru_job where process_instance_id_=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_ru_identitylink d where d.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_ru_identitylink where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_ru_task e where e.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_ru_task where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_ru_execution f where f.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_ru_execution where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_varinst g where g.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_varinst where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_taskinst h where h.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_taskinst where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_procinst i where i.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_procinst where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_detail j where j.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_detail where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_comment k where k.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_comment where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_attachment l where l.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_attachment where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		dbUtil.preparedDelete("delete From act_hi_actinst m where m.proc_inst_id_ =?");
+		dbUtil.preparedDelete("delete From act_hi_actinst where proc_inst_id_ =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
 		// 流程实例的控制参数扩展表
-		dbUtil.preparedDelete("delete From TD_WF_NODE_WORKTIME n where n.PROCESS_ID =?");
+		dbUtil.preparedDelete("delete From TD_WF_NODE_WORKTIME where PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 		
 		// 流程实例的控制参数备份扩展表
-		dbUtil.preparedDelete("delete From TD_WF_NODE_HI_WORKTIME n where n.PROCESS_ID =?");
+		dbUtil.preparedDelete("delete From TD_WF_NODE_HI_WORKTIME where PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
 		// 转办关系记录表
-		dbUtil.preparedDelete("delete From TD_WF_NODE_CHANGEINFO o where o.PROCESS_ID =?");
+		dbUtil.preparedDelete("delete From TD_WF_NODE_CHANGEINFO where PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
 		// 委托任务处理记录表
-		dbUtil.preparedDelete("delete From TD_WF_ENTRUST_TASK p where p.PROCESS_ID =?");
+		dbUtil.preparedDelete("delete From TD_WF_ENTRUST_TASK where PROCESS_ID =?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 

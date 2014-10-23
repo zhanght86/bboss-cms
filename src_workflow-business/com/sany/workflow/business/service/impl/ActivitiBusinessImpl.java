@@ -578,7 +578,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.commit();
 
 		} catch (Exception e) {
-			throw new Exception(e);
+			throw new Exception("开启流程出错:" + e.getMessage());
 		} finally {
 			PlatformKPIServiceImpl.setWorktimelist(null);
 			tm.release();
@@ -1145,7 +1145,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						+ activitiService.getUserInfoMap().getUserName(
 								userAccount) + "]通过";
 			}
-			proIns.setDealRemak(dealRemak);
+
+			if (StringUtil.isEmpty(proIns.getDealRemak())) {
+
+				proIns.setDealRemak(dealRemak);
+
+			}
 
 			// 节点配置参数转换
 			getVariableMap(proIns, paramMap);
@@ -1345,20 +1350,23 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.delegateTask(proIns.getNowtaskId(), delegateUser);
 
 			// 备注
-			String dealRemak = "";
 			if (StringUtil.isEmpty(proIns.getDealRemak())) {
-				dealRemak = "["
+				String dealRemak = "["
 						+ activitiService.getUserInfoMap().getUserName(
 								userAccount)
 						+ "]将任务转办给["
 						+ activitiService.getUserInfoMap().getUserName(
 								delegateUser) + "]";
+				proIns.setDealRemak(dealRemak);
+
 			}
 
 			// 在扩展表中添加转办记录
-			activitiTaskService.updateNodeChangeInfo(proIns.getNowtaskId(),
-					proIns.getProInsId(), processKey, userAccount,
-					delegateUser, dealRemak, proIns.getDealReason());
+			activitiTaskService
+					.updateNodeChangeInfo(proIns.getNowtaskId(),
+							proIns.getProInsId(), processKey, userAccount,
+							delegateUser, proIns.getDealRemak(),
+							proIns.getDealReason(),0);
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1876,8 +1884,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public ModelMap toViewTask(String taskId, String bussinessKey,
-			String userId, ModelMap model) throws Exception {
-
+			String userId, ModelMap model, String processKey) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -1890,10 +1897,17 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				userAccount = AccessControl.getAccessControl().getUserAccount();
 			}
 
-			// 根据bussinessKey获取流程实例
-			ProcessInst inst = executor.queryObject(ProcessInst.class,
-					"getProcessByBusinesskey_wf", bussinessKey);
-			model.addAttribute("processKey", inst.getKEY_());
+			// 获取流程实例
+			ProcessInst inst = null;
+			if (StringUtil.isNotEmpty(processKey)) {
+				inst = executor.queryObject(ProcessInst.class,
+						"getProcessByKey_wf", bussinessKey, processKey);
+				model.addAttribute("processKey", processKey);
+			} else {
+				inst = executor.queryObject(ProcessInst.class,
+						"getProcessByBusinesskey_wf", bussinessKey);
+				model.addAttribute("processKey", inst.getKEY_());
+			}
 
 			// 获取流程实例的处理记录
 			List<HisTaskInfo> taskHistorList = getProcHisInfo(inst
@@ -2005,6 +2019,27 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model) throws Exception {
+		return toViewTask(taskId, bussinessKey, userId, model, null);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String userId, ModelMap model)
+			throws Exception {
+		// 当前任务节点信息
+		TaskInfo task = getCurrentNodeInfo(taskId);
+
+		// 判断当前任务是否存在
+		if (null == task) {
+			throw new ProcessException("任务不存在");
+		}
+
+		return toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey());
+	}
+
+	@Override
 	public void returnToNode(String nowTaskId, String currentUser,
 			Map<String, Object> map, String destinationTaskKey,
 			String completeReason) throws Exception {
@@ -2109,6 +2144,20 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public List<TaskInfo> getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey) throws Exception {
+		// 根据bussinessKey获取流程实例
+		ProcessInst inst = executor.queryObject(ProcessInst.class,
+				"getProcessByKey_wf", bussinesskey, processKey);
+
+		if (inst != null) {
+			return getCurrentNodeInfoByProcessID(inst.getPROC_INST_ID_());
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
 			String userId) throws Exception {
 
@@ -2163,11 +2212,79 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey, String userId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 当前用户转成域账号
+			userId = this.changeToDomainAccount(userId);
+
+			// 根据Key获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByKey_wf", bussinesskey, processKey);
+
+			if (inst != null) {
+
+				// 根据流程实例ID获取运行任务
+				List<Task> taskList = activitiService
+						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+
+				String nowTaskId = "";
+
+				for (int i = 0; i < taskList.size(); i++) {
+					Task task = taskList.get(i);
+
+					// 判断用户是不是当前审批人
+					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+							userId)) {
+
+						nowTaskId = task.getId();
+						break;
+					}
+				}
+
+				// 当前任务节点信息
+				TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
+
+				tm.commit();
+
+				return taskInfo;
+			} else {
+
+				tm.commit();
+				return null;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("根据key获取当前任务节点信息出错:" + e.getMessage());
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
 	public boolean isStartProcByBussinesskey(String bussinesskey)
 			throws Exception {
 
 		ProcessInst inst = executor.queryObject(ProcessInst.class,
 				"getProcessByBusinesskey_wf", bussinesskey);
+
+		if (inst != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isStartProcByKey(String bussinesskey, String processKey)
+			throws Exception {
+
+		ProcessInst inst = executor.queryObject(ProcessInst.class,
+				"getProcessByKey_wf", bussinesskey, processKey);
 
 		if (inst != null) {
 			return true;

@@ -588,6 +588,7 @@
 		<![CDATA[
 			SELECT A.ID_           AS TASKID,
 			       B.BUSINESS_KEY_ AS BUSINESSKEY,
+			       C.PROCESS_KEY   AS PROCESSKEY,
 			       A.PROC_INST_ID_ AS INSTANCEID,
 			       A.PROC_DEF_ID_  AS DEFID,
 			       A.ASSIGNEE_     AS ASSIGNEE,
@@ -603,7 +604,8 @@
 			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
 			  left join TD_WF_NODE_WORKTIME c on a.proc_inst_id_ = c.process_id
 			                                 and a.task_def_key_ = c.node_key
-			 WHERE A.Id_ = ?
+			 WHERE B.BUSINESS_KEY_ IS NOT NULL
+			 	 AND A.Id_ = ?
 		]]>
 	</property>
 	
@@ -682,6 +684,26 @@
 			  FROM ACT_HI_PROCINST A
 			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
 			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
+	<!-- 根据key获取流程实例  gw_tanx -->
+	<property name="getProcessByKey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
+			   AND B.KEY_=?
 		]]>
 	</property>
 	

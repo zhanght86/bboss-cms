@@ -302,7 +302,8 @@
 		  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
 		  LEFT JOIN TD_WF_NODE_WORKTIME C ON A.PROC_INST_ID_ = C.PROCESS_ID
                                  		  AND A.TASK_DEF_KEY_ = C.NODE_KEY
-		 WHERE A.Id_ = ?
+		 WHERE B.BUSINESS_KEY_ IS NOT NULL
+		 	AND A.Id_ = ?
 		]]>
 	</property>
 	
@@ -489,6 +490,83 @@
 			#end
 			
 			ORDER BY START_TIME_ DESC  
+		]]>
+	</property>
+	
+	<!-- 查询用户未处理的任务  gw_tanx-->
+	<property name="selectUserNoDealTasks_wf">
+		<![CDATA[
+		
+			-- 未签收任务
+			select distinct 1 as state,
+							B.KEY_,
+			                RES.DURATION_NODE,
+			                RES.IS_CONTAIN_HOLIDAY,
+			                RES.ALERTTIME,
+			                RES.OVERTIME,
+			                RES.ADVANCESEND,
+			                RES.OVERTIMESEND,
+			                RES.ID_,
+			                RES.REV_,
+			                RES.EXECUTION_ID_,
+			                RES.PROC_INST_ID_,
+			                RES.PROC_DEF_ID_,
+			                RES.NAME_,
+			                RES.PARENT_TASK_ID_,
+			                RES.DESCRIPTION_,
+			                RES.TASK_DEF_KEY_,
+			                RES.OWNER_,
+			                RES.ASSIGNEE_,
+			                RES.DELEGATION_,
+			                RES.PRIORITY_,
+			                RES.CREATE_TIME_ AS START_TIME_,
+			                RES.DUE_DATE_,
+			                RES.SUSPENSION_STATE_
+			  from ACT_RU_TASK RES
+			
+			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
+			 LEFT JOIN ACT_RE_PROCDEF B ON RES.PROC_DEF_ID_ = B.ID_
+			
+			 WHERE RES.ASSIGNEE_ is null
+			   and I.TYPE_ = 'candidate'
+			      
+			   and I.USER_ID_ = ?
+			
+			union
+			
+			-- 已签收任务
+			select 2 as state,
+			 	   C.KEY_,
+			       A.DURATION_NODE,
+			       A.IS_CONTAIN_HOLIDAY,
+			       A.ALERTTIME,
+			       A.OVERTIME,
+			       A.ADVANCESEND,
+			       A.OVERTIMESEND,
+			       A.ID_,
+			       A.REV_,
+			       A.EXECUTION_ID_,
+			       A.PROC_INST_ID_,
+			       A.PROC_DEF_ID_,
+			       A.NAME_,
+			       A.PARENT_TASK_ID_,
+			       A.DESCRIPTION_,
+			       A.TASK_DEF_KEY_,
+			       A.OWNER_,
+			       A.ASSIGNEE_,
+			       A.DELEGATION_,
+			       A.PRIORITY_,
+			       A.CREATE_TIME_ AS START_TIME_,
+			       A.DUE_DATE_,
+			       A.SUSPENSION_STATE_
+			  from ACT_RU_TASK a
+			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = a.PROC_DEF_ID_
+			
+			 WHERE 1 = 1
+			      
+			   and a.ASSIGNEE_ = ?
+			
+			 ORDER BY START_TIME_ DESC
 		]]>
 	</property>
 	
@@ -2569,8 +2647,8 @@
 	<property name="addNodeChangeInfo_wf">
 		<![CDATA[
 			 INSERT INTO TD_WF_NODE_CHANGEINFO (FROM_USER,TO_USER,TASKID,PROCESS_ID,
-			 	PROCESS_KEY,CHANGETIME,DELEGATEREMARK,DELEGATEREASON) 
-			 	VALUES (?,?,?,?,?,?,?,?) 
+			 	PROCESS_KEY,CHANGETIME,DELEGATEREMARK,DELEGATEREASON,DELEGATETYPE) 
+			 	VALUES (?,?,?,?,?,?,?,?,?) 
 		]]>
 	</property>
 	

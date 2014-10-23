@@ -14,6 +14,7 @@
  */
 package com.sany.workflow.demo.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +26,8 @@ import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
-import com.sany.workflow.demo.entity.DemoEntiy;
+import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
+import com.sany.workflow.demo.entity.DemoEntity;
 import com.sany.workflow.demo.service.BusinessDemoService;
 import com.sany.workflow.service.ActivitiService;
 
@@ -77,15 +79,15 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 			map.put("processKey", processKey);
 			map.put("businessKey", businessKey);
 
-			ListInfo listInfo = executor.queryListInfoBean(DemoEntiy.class,
+			ListInfo listInfo = executor.queryListInfoBean(DemoEntity.class,
 					"getDemoList_wf", offset, pagesize, map);
 
-			List<DemoEntiy> demoList = listInfo.getDatas();
+			List<DemoEntity> demoList = listInfo.getDatas();
 
 			if (demoList != null && demoList.size() != 0) {
 
 				for (int i = 0; i < demoList.size(); i++) {
-					DemoEntiy de = demoList.get(i);
+					DemoEntity de = demoList.get(i);
 
 					de.setSenderName(activitiService.getUserInfoMap()
 							.getUserName(de.getSender()));
@@ -143,5 +145,28 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 		} finally {
 			tm.release();
 		}
+	}
+
+	@Override
+	public boolean hasSonNodes(String parentID) {
+		try {
+			int count = executor
+					.queryObject(int.class, "hasSonNodes", parentID,parentID);
+			return count > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<BusinessDemoTreeEntity> getSonNodes(String parentID) {
+		try {
+			return executor.queryList(BusinessDemoTreeEntity.class,
+					"selectSonBusinessList", parentID,parentID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

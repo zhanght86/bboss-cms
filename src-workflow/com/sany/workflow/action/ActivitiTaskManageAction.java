@@ -55,6 +55,9 @@ public class ActivitiTaskManageAction {
 
 			model.addAttribute("processKey", processKey);
 
+			model.addAttribute("isAdmin", AccessControl.getAccessControl()
+					.isAdmin());
+
 			return "path:ontimeTaskManager";
 
 		} catch (Exception e) {
@@ -643,7 +646,7 @@ public class ActivitiTaskManageAction {
 	}
 
 	/**
-	 * 转办任务
+	 * 转办任务(将自己任务转办给别人)
 	 * 
 	 * @param taskId
 	 * @param userId
@@ -703,7 +706,7 @@ public class ActivitiTaskManageAction {
 				activitiTaskService.updateNodeChangeInfo(task.getTaskId(),
 						task.getProcessIntsId(), task.getProcessKey(),
 						currentUser, task.getChangeUserId(), reamrk,
-						task.getCompleteReason());
+						task.getCompleteReason(), 0);
 
 				tm.commit();
 
@@ -712,6 +715,72 @@ public class ActivitiTaskManageAction {
 			} else {
 				return "fail:您没有权限转办当前任务";
 			}
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		} finally {
+			tm.release();
+		}
+	}
+
+	/**
+	 * 转派任务(管理员权限，将A的任务转办给B)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param fromuser
+	 *            转派人
+	 * @param touser
+	 *            被转派人
+	 * @param model
+	 * @return 2014年10月22日
+	 */
+	public @ResponseBody
+	String delegateTasks(String processKey, String fromuser, String touser,
+			ModelMap model) {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			String currentUser = AccessControl.getAccessControl()
+					.getUserAccount();
+
+			// 获取转派人的所有任务
+			List<TaskManager> userTaskList = activitiTaskService
+					.getUserNoDealTasks(fromuser);
+
+			if (null != userTaskList && userTaskList.size() > 0) {
+
+				for (int i = 0; i < userTaskList.size(); i++) {
+					TaskManager task = userTaskList.get(i);
+					// 判断是否有没被签收
+					boolean isClaim = activitiTaskService.isSignTask(task
+							.getID_());
+					if (!isClaim) {
+						// 先签收
+						activitiService.claim(task.getID_(), currentUser);
+					}
+
+					// 再转办
+					activitiService.delegateTask(task.getID_(), touser);
+
+					String reamrk = "["
+							+ activitiService.getUserInfoMap().getUserName(
+									currentUser)
+							+ "]将任务转派给["
+							+ activitiService.getUserInfoMap().getUserName(
+									touser) + "]";
+
+					// 在扩展表中添加转办记录
+					activitiTaskService.updateNodeChangeInfo(task.getID_(),
+							task.getPROC_INST_ID_(), task.getKEY_(),
+							currentUser, touser, reamrk, "", 1);
+				}
+			}
+
+			tm.commit();
+
+			return "success";
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();

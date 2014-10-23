@@ -118,9 +118,11 @@ public interface ActivitiBusinessService {
 	 * 
 	 * @param processKey
 	 *            流程key
+	 * @param typeId
+	 *            业务类型id
 	 * @return
 	 * @throws Exception
-	 *             2014年8月26日
+	 *             2014年10月20日
 	 */
 	public List<ActNode> getWFNodeConfigInfoForbussiness(String processKey,
 			String typeId) throws Exception;
@@ -130,9 +132,11 @@ public interface ActivitiBusinessService {
 	 * 
 	 * @param processKey
 	 *            流程key
+	 * @param typeId
+	 *            业务类型id
 	 * @return
 	 * @throws Exception
-	 *             2014年8月26日
+	 *             2014年10月20日
 	 */
 	public List<ActNode> getWFNodeConfigInfoForbussinessAndCommmon(
 			String processKey, String typeId) throws Exception;
@@ -142,9 +146,11 @@ public interface ActivitiBusinessService {
 	 * 
 	 * @param processKey
 	 *            流程key
+	 * @param typeId
+	 *            业务类型id
 	 * @return
 	 * @throws Exception
-	 *             2014年8月26日
+	 *             2014年10月20日
 	 */
 	public List<ActNode> getWFNodeConfigInfoForFirstbussinessSecondCommmon(
 			String processKey, String typeId) throws Exception;
@@ -259,7 +265,7 @@ public interface ActivitiBusinessService {
 			Map<String, Object> paramMap) throws Exception;
 
 	/**
-	 * 开启流程实例,根据completeFirstTask参数决定是否完成第一个任务 true完成 false 不完成
+	 * 开启流程实例
 	 * 
 	 * @param proIns
 	 *            流程实例参数类
@@ -269,8 +275,10 @@ public interface ActivitiBusinessService {
 	 *            流程key
 	 * @param paramMap
 	 *            参数信息
+	 * @param completeFirstTask
+	 *            是否完成第一个任务 true完成 false 不完成
 	 * @throws Exception
-	 *             2014年8月22日
+	 *             2014年10月20日
 	 */
 	public void startProc(ProIns proIns, String businessKey, String processKey,
 			Map<String, Object> paramMap, boolean completeFirstTask)
@@ -309,6 +317,40 @@ public interface ActivitiBusinessService {
 	 */
 	public ModelMap toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTask(String taskId, String userId, ModelMap model)
+			throws Exception;
 
 	/**
 	 * 获取流程实例的处理记录(已完成的任务)
@@ -501,6 +543,20 @@ public interface ActivitiBusinessService {
 			throws Exception;
 
 	/**
+	 * 获取当前节点任务信息,根据业务key(没有权限判断)
+	 * 
+	 * @param bussinesskey
+	 *            业务key
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public List<TaskInfo> getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey) throws Exception;
+
+	/**
 	 * 获取当前节点任务信息,根据业务key (有权限判断)
 	 * 
 	 * @param bussinesskey
@@ -513,6 +569,22 @@ public interface ActivitiBusinessService {
 	 */
 	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
 			String userId) throws Exception;
+
+	/**
+	 * 获取当前节点任务信息,根据业务key (有权限判断)
+	 * 
+	 * @param bussinesskey
+	 *            业务key
+	 * @param processKey
+	 *            流程key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @return 有权限的TaskInfo
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey, String userId) throws Exception;
 
 	/**
 	 * 跳转到任意节点
@@ -555,6 +627,20 @@ public interface ActivitiBusinessService {
 	 *             2014年9月18日
 	 */
 	public boolean isStartProcByBussinesskey(String bussinesskey)
+			throws Exception;
+
+	/**
+	 * 根据KEY判断流程是否开启
+	 * 
+	 * @param bussinesskey
+	 *            业务key
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public boolean isStartProcByKey(String bussinesskey, String processKey)
 			throws Exception;
 
 	/**

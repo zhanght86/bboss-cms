@@ -640,13 +640,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public void updateNodeChangeInfo(String taskId, String processIntsId,
 			String processKey, String fromuserID, String userId, String reamrk,
-			String reason) {
+			String reason, int delegateType) {
 
 		try {
 
 			executor.insert("addNodeChangeInfo_wf", fromuserID, userId, taskId,
 					processIntsId, processKey,
-					new Timestamp(new Date().getTime()), reamrk, reason);
+					new Timestamp(new Date().getTime()), reamrk, reason,
+					delegateType);
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -998,7 +999,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			list = executor.queryList(NodeControlParam.class,
 					"getHiNodeControlParamByProcessId_wf", ProcessId);
 
-			if (list == null || list.size() ==0) {
+			if (list == null || list.size() == 0) {
 
 				// 归档表没数据在查实时表
 				list = executor.queryList(NodeControlParam.class,
@@ -1047,6 +1048,12 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public RejectLog getRejectlog(String taskId) throws Exception {
 		return executor.queryObject(RejectLog.class, "getRejectlog_wf", taskId);
+	}
+
+	@Override
+	public List<TaskManager> getUserNoDealTasks(String userId) throws Exception {
+		return executor.queryList(TaskManager.class,
+				"selectUserNoDealTasks_wf", userId, userId);
 	}
 
 }

@@ -39,6 +39,7 @@ public class XMLSelectTag extends XMLBaseTag
 	{
 		Select select = new Select();
 		select.setName(getName());
+		select.setID(getName());
 		select.setDisabled(this.isDisabled());
 		select.setExtend(this.getExtend());
 		select.setMultiple(multiple);

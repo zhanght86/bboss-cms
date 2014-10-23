@@ -30,6 +30,12 @@ $(document).ready(function() {
            	
 });
 
+// 转派任务
+function delegateTasks () {
+	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.jsp?processKey=${processKey}";
+	$.dialog({ title:'转派任务',width:300,height:200, content:'url:'+url});
+}
+
 //查看委托关系
 function getEntrustInfo(){
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewEntrustInfo.page";
@@ -306,6 +312,9 @@ function sendMess(taskId,processKey,taskState,sentType){
 				
 				<div class="title_box">
 					<div class="rightbtn">
+						<pg:true actual="${isAdmin}">
+							<a href="#" class="bt_small" onclick="delegateTasks();"><span>转派任务</span></a>
+						</pg:true>
 						<a href="#" class="bt_small" onclick="getEntrustInfo();"><span>流程授权查看</span></a>
 					</div>
 						

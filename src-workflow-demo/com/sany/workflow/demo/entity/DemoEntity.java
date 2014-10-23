@@ -13,7 +13,7 @@ import org.frameworkset.util.annotations.RequestParam;
  * @date 2014年8月27日
  * 
  */
-public class DemoEntiy implements Serializable {
+public class DemoEntity implements Serializable {
 
 	private static final long serialVersionUID = -4473752406812328499L;
 

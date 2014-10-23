@@ -1,6 +1,9 @@
 package com.sany.workflow.demo.service;
 
+import java.util.List;
+
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
 
 /**
  * 任务管理业务接口
@@ -23,5 +26,9 @@ public interface BusinessDemoService {
 	 */
 	public ListInfo queryDemoData(String processKey, String businessKey,
 			long offset, int pagesize) throws Exception;
+
+	public boolean hasSonNodes(String parentID);
+
+	public List<BusinessDemoTreeEntity> getSonNodes(String parentID);
 
 }

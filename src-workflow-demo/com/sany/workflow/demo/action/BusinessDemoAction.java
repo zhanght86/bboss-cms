@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.frameworkset.util.annotations.MapKey;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -28,17 +29,14 @@ import com.sany.workflow.demo.service.BusinessDemoService;
 public class BusinessDemoAction {
 
 	private ActivitiBusinessService workflowService;
-	
-	private BusinessDemoService demoService;
 
-	private String processKey = "Mms.return";
+	private BusinessDemoService demoService;
 
 	public String toIndex(ModelMap model) {
 		return "path:toIndex";
 	}
 
 	public String toDemo(ModelMap model) {
-		model.addAttribute("processKey", processKey);
 		return "path:toDemo";
 	}
 
@@ -58,8 +56,8 @@ public class BusinessDemoAction {
 			String processKey, String businessKey, ModelMap model)
 			throws Exception {
 
-		ListInfo listInfo = demoService.queryDemoData(processKey,
-				businessKey, offset, pagesize);
+		ListInfo listInfo = demoService.queryDemoData(processKey, businessKey,
+				offset, pagesize);
 
 		model.addAttribute("listInfo", listInfo);
 
@@ -129,6 +127,8 @@ public class BusinessDemoAction {
 	 *             2014年8月20日
 	 */
 	public @ResponseBody
+	// String startProc(ProIns proIns, String businessKey, String
+	// processKey,@MapKey(pattern="params.*") Map<String, Object> paramMap,
 	String startProc(ProIns proIns, String businessKey, String processKey,
 			ModelMap model) throws Exception {
 		try {
@@ -138,6 +138,7 @@ public class BusinessDemoAction {
 			}
 
 			Map<String, Object> paramMap = new HashMap<String, Object>();
+
 			workflowService
 					.startProc(proIns, businessKey, processKey, paramMap);
 			return "success";

@@ -16,14 +16,25 @@ $(document).ready(function() {
        		
 });
 
-// 开启流程实例
-function toStartProc() {
+// 选择流程
+function toSelectProc() {
+	
+	var url="<%=request.getContextPath()%>/workflowdemo/selectProcess.jsp?businessKey="
+	+"&processKey=${processKey}";
+	
+	$.dialog({ id:'iframeNewId1', title:'选择流程类型',width:300,height:400, content:'url:'+url});  
+	
+}
+
+//开启流程实例
+function toStartProc(processKey) {
 	
 	var url="<%=request.getContextPath()%>/workflow/businessDemo/toworkflowMain.page?businessKey="
-	+"&processKey=${processKey}";
+	+"&processKey="+processKey;
 	
 	$.dialog({ id:'iframeNewId', title:'申请流程页面',width:1000,height:700, content:'url:'+url});  
 }
+
 
 //加载实时任务列表数据  
 function queryList(){
@@ -34,10 +45,10 @@ function queryList(){
 }
 
 // 处理业务单号
-function dealBusiness(businessKey,businessState){
+function dealBusiness(businessKey,businessState,processKey){
 	if (businessState == '0') {
 		var url="<%=request.getContextPath()%>/workflow/businessDemo/toworkflowMain.page?businessKey="+businessKey
-		+"&processKey=${processKey}";
+		+"&processKey="+processKey;
 		
 		$.dialog({ id:'iframeNewId', title:'申请流程页面',width:1000,height:700, content:'url:'+url});  
 	}else {
@@ -87,7 +98,7 @@ function doreset(){
 	<div class="title_1">
 		演示列表
 		
-		<div ><a href="#" class="bt_sany" onclick="toStartProc();">新增</a></div>
+		<div ><a href="#" class="bt_sany" onclick="toSelectProc();">新增</a></div>
 		
 	</div>
 		<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />		
