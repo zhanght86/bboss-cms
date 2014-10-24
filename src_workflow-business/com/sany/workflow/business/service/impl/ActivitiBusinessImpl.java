@@ -1362,11 +1362,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 			// 在扩展表中添加转办记录
-			activitiTaskService
-					.updateNodeChangeInfo(proIns.getNowtaskId(),
-							proIns.getProInsId(), processKey, userAccount,
-							delegateUser, proIns.getDealRemak(),
-							proIns.getDealReason(),0);
+			activitiTaskService.updateNodeChangeInfo(proIns.getNowtaskId(),
+					proIns.getProInsId(), processKey, userAccount,
+					delegateUser, proIns.getDealRemak(),
+					proIns.getDealReason(), 0);
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1412,10 +1411,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 			// 撤销任务
-			activitiService.completeTaskLoadCommonParamsWithDest(
-					proIns.getNowtaskId(), hiTask.getTASK_DEF_KEY_(),
-					proIns.getDealRemak(), proIns.getDealOption(),
-					proIns.getDealReason());
+			activitiService.cancelTask(proIns.getNowtaskId(),
+					hiTask.getTASK_DEF_KEY_(), proIns.getDealRemak(),
+					proIns.getDealOption(), proIns.getDealReason());
 
 			// 日志记录撤销操作
 			activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
