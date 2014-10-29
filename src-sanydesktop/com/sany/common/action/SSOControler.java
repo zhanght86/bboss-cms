@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.util.FileCopyUtils;
 import org.frameworkset.util.annotations.AssertDToken;
+import org.frameworkset.util.annotations.AssertTicket;
 import org.frameworkset.web.token.TokenStore;
 
 import com.frameworkset.platform.config.ConfigManager;
@@ -26,18 +28,34 @@ import com.sany.webseal.LoginValidate.CommonInfo;
 import com.sany.webseal.LoginValidate.UimUserInfo;
 
 public class SSOControler {
+	private static Logger log = Logger.getLogger(SSOControler.class);
 
 	public String sso() {
 		return "path:sso";
 	}
 
+	@AssertTicket
+	public void ssowithticket(HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		_ssowithtoken(request,
+				response);
+	}
+	
+	@AssertDToken
+	public void ssowithtoken(HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		_ssowithtoken(request,
+				response);
+	}
 	/**
 	 * 强制要求系统必须携带令牌
 	 * 
 	 * @return
 	 */
-	@AssertDToken
-	public void ssowithtoken(HttpServletRequest request,
+	
+	public void _ssowithtoken(HttpServletRequest request,
 			HttpServletResponse response) {
 		// return "path:sso";
 		
@@ -131,6 +149,7 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
+						log.info("", e);
 						String msg = e.getMessage();
 						if(msg == null) msg = "";
 						response.sendRedirect(contextpath
@@ -172,7 +191,7 @@ public class SSOControler {
 
 			} catch (Exception e)// 检测失败,继续平台登录
 			{
-				e.printStackTrace();
+				log.info("", e);
 			}
 
 		}
@@ -250,6 +269,7 @@ public class SSOControler {
 						response.sendRedirect(successRedirect);
 						return;
 					} catch (Exception e) {
+						log.info("", e);
 						String msg = e.getMessage();
 						if(msg == null) msg = "";
 						response.sendRedirect(contextpath
@@ -290,7 +310,7 @@ public class SSOControler {
 				}
 
 			} catch (Throwable ex) {
-				ex.printStackTrace();
+				log.info("", ex);
 				String errorMessage = ex.getMessage();
 				if (errorMessage == null)
 					errorMessage = "";
@@ -299,8 +319,7 @@ public class SSOControler {
 				try {
 					FileCopyUtils.copy(errorMessage + ","+userName+"登陆失败，请确保输入的用户名和口令是否正确！", new OutputStreamWriter(response.getOutputStream(), "UTF-8"));
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.info("", e);
 				}
 				
 			}

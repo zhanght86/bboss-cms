@@ -32,8 +32,8 @@ $(document).ready(function() {
 
 // 转派任务
 function delegateTasks () {
-	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.jsp?processKey=${processKey}";
-	$.dialog({ title:'转派任务',width:300,height:200, content:'url:'+url});
+	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasksLog.jsp?processKey=${processKey}";
+	$.dialog({ title:'转派任务',width:1100,height:600, content:'url:'+url,maxState:true});
 }
 
 //查看委托关系

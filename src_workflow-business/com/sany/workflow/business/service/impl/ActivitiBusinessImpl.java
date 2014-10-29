@@ -1728,23 +1728,31 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
-	/**
-	 * 获取流程可驳回到的节点信息
-	 * 
-	 * @param processId
-	 *            流程实例id
-	 * @param currentTaskKey
-	 *            任务key ，如 usertask1
-	 * @return
-	 * @throws Exception
-	 *             2014年8月28日
-	 */
-	private List<ActNode> getBackActNode(String processId, String currentTaskKey)
+	public List<ActNode> getBackActNodeContainNoAssigner(String processId,
+			String currentTaskKey) throws Exception {
+		return _getBackActNode(processId, currentTaskKey, true);
+	}
+
+	public List<ActNode> getBackActNode(String processId, String currentTaskKey)
 			throws Exception {
+		return _getBackActNode(processId, currentTaskKey, false);
+	}
+
+	private List<ActNode> _getBackActNode(String processId,
+			String currentTaskKey, boolean shownoassignnodes) throws Exception {
 
 		// 获取当前流程实例下处理过的节点集合
-		List<HashMap> taskKeyList = executor.queryList(HashMap.class,
-				"getTaskKeyList_wf", processId);
+		List<HashMap> taskKeyList = null;
+
+		if (shownoassignnodes) {
+			// 包含自动通过节点
+			taskKeyList = executor.queryList(HashMap.class,
+					"getTaskKeyList_wf", processId);
+		} else {
+			// 不包含自动通过节点
+			taskKeyList = executor.queryList(HashMap.class,
+					"getTaskKeyListNoAssignerNodes_wf", processId);
+		}
 
 		List<ActNode> backActNodeList = new ArrayList<ActNode>();
 
@@ -1842,9 +1850,21 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
-	@Override
+	public ModelMap toDealTaskContainNoAssignerNodes(String processKey,
+			String processId, String taskId, ModelMap model) throws Exception {
+
+		return _toDealTask(processKey, processId, taskId, model, true);
+	}
+
 	public ModelMap toDealTask(String processKey, String processId,
 			String taskId, ModelMap model) throws Exception {
+
+		return _toDealTask(processKey, processId, taskId, model, false);
+	}
+
+	private ModelMap _toDealTask(String processKey, String processId,
+			String taskId, ModelMap model, boolean shownoassignnodes)
+			throws Exception {
 
 		// 当前任务节点信息
 		TaskInfo task = getCurrentNodeInfo(taskId);
@@ -1867,8 +1887,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		model.addAttribute("actList", actList);
 
 		// 可驳回的节点信息
-		List<ActNode> backActNodeList = getBackActNode(task.getInstanceId(),
-				task.getTaskDefKey());
+		List<ActNode> backActNodeList = _getBackActNode(task.getInstanceId(),
+				task.getTaskDefKey(), shownoassignnodes);
 		model.addAttribute("backActNodeList", backActNodeList);
 
 		// 页面状态
@@ -1880,9 +1900,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		return model;
 	}
 
-	@Override
-	public ModelMap toViewTask(String taskId, String bussinessKey,
-			String userId, ModelMap model, String processKey) throws Exception {
+	private ModelMap _toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey,
+			boolean shownoassignnodes) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -1965,8 +1985,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				model.addAttribute("task", task);
 
 				// 可驳回的节点信息
-				List<ActNode> backActNodeList = getBackActNode(
-						inst.getPROC_INST_ID_(), task.getTaskDefKey());
+				List<ActNode> backActNodeList = _getBackActNode(
+						inst.getPROC_INST_ID_(), task.getTaskDefKey(),
+						shownoassignnodes);
 				model.addAttribute("backActNodeList", backActNodeList);
 
 				// 当前用户是流程发起人
@@ -2017,9 +2038,48 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model,
+			String processKey) throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				true);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey) throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				false);
+	}
+
+	@Override
 	public ModelMap toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model) throws Exception {
-		return toViewTask(taskId, bussinessKey, userId, model, null);
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model)
+			throws Exception {
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String userId, ModelMap model) throws Exception {
+		// 当前任务节点信息
+		TaskInfo task = getCurrentNodeInfo(taskId);
+
+		// 判断当前任务是否存在
+		if (null == task) {
+			throw new ProcessException("任务不存在");
+		}
+
+		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey(), true);
 	}
 
 	@Override
@@ -2033,14 +2093,15 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			throw new ProcessException("任务不存在");
 		}
 
-		return toViewTask(taskId, task.getBusinessKey(), userId, model,
-				task.getProcessKey());
+		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey(), false);
 	}
 
 	@Override
 	public void returnToNode(String nowTaskId, String currentUser,
 			Map<String, Object> map, String destinationTaskKey,
-			String completeReason) throws Exception {
+			String completeReason, String bussinessop, String bussinessRemark)
+			throws Exception {
 
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -2050,7 +2111,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			currentUser = this.changeToDomainAccount(currentUser);
 
 			activitiService.completeTaskWithLocalVariablesReason(nowTaskId,
-					currentUser, map, destinationTaskKey, "", "", "");
+					currentUser, map, destinationTaskKey, completeReason,
+					bussinessop, bussinessRemark);
 
 			tm.commit();
 		} catch (Exception e) {

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.frameworkset.util.annotations.MapKey;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -127,8 +126,6 @@ public class BusinessDemoAction {
 	 *             2014年8月20日
 	 */
 	public @ResponseBody
-	// String startProc(ProIns proIns, String businessKey, String
-	// processKey,@MapKey(pattern="params.*") Map<String, Object> paramMap,
 	String startProc(ProIns proIns, String businessKey, String processKey,
 			ModelMap model) throws Exception {
 		try {

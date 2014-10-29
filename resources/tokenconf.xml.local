@@ -2,12 +2,13 @@
 	<!-- 令牌服务配置-->
 	<property name="token.TokenService" class="org.frameworkset.web.token.TokenService"
 		destroy-method="destroy">
-		<construction>
-			<property name="ticketdualtime" value="3600000"/>
+		
+			<property name="ticketdualtime" value="172800000"/>
 			<property name="temptokenlivetime" value="3600000"/>			
 			<property name="dualtokenlivetime" value="2592000000"/>
 			<property name="tokenscaninterval" value="1800000"/>
-			<property name="tokenstore" refid="attr:tokenStoreService"/>
+            <property name="tokenstore" refid="attr:tokenStoreService"/> 
+			<!-- <property name="tokenstore" value="mem"/> -->
 			
 			<!-- 
 			<property name="tokenstore" value="mongodb|org.frameworkset.web.token.MongodbTokenStore"/>
@@ -15,8 +16,9 @@
 			<property name="tokenstore" value="mem|org.frameworkset.web.token.MemTokenStore"/>-->
 			
 			<property name="enableToken" value="true"/>
-			<!-- 			<property name="ALGORITHM" value="ECIES"/> -->
-		</construction>
+<!-- 			<property name="ALGORITHM" value="ECIES"/> -->
+			<property name="tokenfailpath" value="/common/jsp/tokenfail.jsp"/>
+		
 	</property>
 	<property name="tokenStoreService" class="org.frameworkset.web.token.MongodbTokenStore">
 		<property name="validateApplication" class="com.sany.application.service.impl.SYSValidationApplication"/>

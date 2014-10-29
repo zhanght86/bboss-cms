@@ -57,10 +57,9 @@ function initliteRequiredStar(objs){
 	nodeStarNum = objs;// 存储页面节点序号
 	
 	var vs = objs.split(',');
-	var trs = $("#protable tr");
 	for(var j=0;j<vs.length;j++){
 		var req = vs[j];
-		$(trs[req]).find(".required").show();
+		$("#protr"+req).find(".required").show();
 	}
 }
 
@@ -226,15 +225,13 @@ function checkoutPageElement(){
 	}
 	
 	// 判断审批节点区域中处理人是否为空
-	var trs = $("#protable tr");
 	var vs = nodeStarNum.split(',');
 	if($.trim(nodeStarNum) != ''){
 		for(var j=0;j<vs.length;j++){
 			var sid = vs[j];
-			var spanname = $.trim($(trs[sid]).find("input[name^=realName]").val());
+			var spanname = $.trim($("#protr"+sid +" #realName"+sid).val());
 			if(sid!='0'&&( spanname == '' || spanname == '无审批人')){
-				var rid = parseInt(sid) ;
-				var actName = $("tr[id='protr"+ rid +"'] td:eq(0)").text();
+				var actName = $("#protr"+sid +" #actName"+sid).val();
 				alert("节点["+actName+"]处理人不能为空！");
 				return false;
 			}

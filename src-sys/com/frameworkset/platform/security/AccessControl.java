@@ -4920,24 +4920,16 @@ public class AccessControl implements AccessControlInf{
 		ResourceInfo resourceInfo = resourceManager.getResourceInfoByType(resourceType);
 		if(resourceInfo == null)
 			return cmPermissions;
-		String globalid = resourceInfo.getGlobalresourceid();
-		if(StringUtil.isNotEmpty(globalid))
-		{
-			cmresources.add(globalid);
-			
-		}
-		
 		OperationQueue operationQueue = resourceInfo.getOperationQueue();
-		if(operationQueue == null)
-			return cmPermissions;
-		for(int i = 0; i < cmresources.size(); i ++)
+		
+		for(int i = 0; operationQueue != null && operationQueue.size() > 0 && i < cmresources.size(); i ++)
 		{
 			String resid = cmresources.get(i);
 			List<String> ops = new ArrayList<String>();
 			for(int j = 0; j < operationQueue.size(); j ++)
 			{
 				Operation op = operationQueue.getOperation(j);
-				if(accesscontroler.checkPermission(resid, op.getId(), "cm"))
+				if(accesscontroler.checkPermission(resid, op.getId(), resourceType))
 				{
 					ops.add(op.getId());
 				}
@@ -4946,6 +4938,22 @@ public class AccessControl implements AccessControlInf{
 				cmPermissions.put(resid, ops);
 		}
 		
+		String globalid = resourceInfo.getGlobalresourceid();
+		if(StringUtil.isNotEmpty(globalid))
+		{
+			operationQueue = resourceInfo.getGlobalOperationQueue();
+			List<String> ops = new ArrayList<String>();
+			for(int j = 0; operationQueue != null && operationQueue.size() > 0 &&j < operationQueue.size(); j ++)
+			{
+				Operation op = operationQueue.getOperation(j);
+				if(accesscontroler.checkPermission(globalid, op.getId(), resourceType))
+				{
+					ops.add(op.getId());
+				}
+			}
+			if(ops.size()> 0)
+				cmPermissions.put(globalid, ops);
+		}		
 		
 		return cmPermissions;
 	}

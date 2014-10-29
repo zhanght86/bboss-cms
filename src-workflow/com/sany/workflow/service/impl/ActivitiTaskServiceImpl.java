@@ -17,6 +17,7 @@ import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
+import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
@@ -1056,4 +1057,99 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				"selectUserNoDealTasks_wf", userId, userId);
 	}
 
+	@Override
+	public ListInfo queryDelegateTasksLogData(DelegateTaskLog delegateTaskLog,
+			long offset, int pagesize) throws Exception {
+
+		if (StringUtil.isNotEmpty(delegateTaskLog.getProcessKey())) {
+			delegateTaskLog.setProcessKey("%" + delegateTaskLog.getProcessKey()
+					+ "%");
+		}
+
+		if (StringUtil.isNotEmpty(delegateTaskLog.getFromUser())) {
+			delegateTaskLog.setFromUser("%" + delegateTaskLog.getFromUser()
+					+ "%");
+		}
+
+		if (StringUtil.isNotEmpty(delegateTaskLog.getToUser())) {
+			delegateTaskLog.setToUser("%" + delegateTaskLog.getToUser() + "%");
+		}
+
+		ListInfo listInfo = executor.queryListInfoBean(DelegateTaskLog.class,
+				"selectDelegateTasksLogData_wf", offset, pagesize,
+				delegateTaskLog);
+
+		return listInfo;
+	}
+
+	@Override
+	public void delegateTasks(String processKey, String fromuser, String touser)
+			throws Exception {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			String currentUser = AccessControl.getAccessControl()
+					.getUserAccount();
+
+			// 获取用户未处理的任务
+			List<TaskManager> userTaskList = executor.queryList(
+					TaskManager.class, "selectUserNoDealTasks_wf", fromuser,
+					fromuser);
+
+			if (null != userTaskList && userTaskList.size() > 0) {
+
+				// 日志记录
+				String reamrk = "["
+						+ activitiService.getUserInfoMap().getUserName(
+								currentUser)
+						+ "]将["
+						+ activitiService.getUserInfoMap()
+								.getUserName(fromuser) + "]任务转派给["
+						+ activitiService.getUserInfoMap().getUserName(touser)
+						+ "]";
+
+				for (int i = 0; i < userTaskList.size(); i++) {
+
+					TaskManager task = userTaskList.get(i);
+
+					// 未签收
+					if ("1".equals(task.getState())) {
+						// 未签收(直接修改未签收的任务的处理人为touser)
+						executor.update("updateNoSignUserId_wf", touser,
+								fromuser);
+
+						// 在扩展表中添加转派记录
+						updateNodeChangeInfo(task.getID_(),
+								task.getPROC_INST_ID_(), task.getKEY_(),
+								currentUser, touser, reamrk, "", 1);
+
+					} else if ("2".equals(task.getState())) {
+
+						// 已签收
+						// activitiService.delegateTask(task.getID_(), touser);
+						executor.update("updateActHiTaskinstSignUserId_wf",
+								touser, fromuser);
+						executor.update("updateActHiActinstSignUserId_wf",
+								touser, fromuser);
+						executor.update("updateActRuTaskSignUserId_wf", touser,
+								fromuser);
+
+						// 在扩展表中添加转派记录
+						updateNodeChangeInfo(task.getID_(),
+								task.getPROC_INST_ID_(), task.getKEY_(),
+								currentUser, touser, reamrk, "", 2);
+					}
+
+				}
+			}
+
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+
+	}
 }

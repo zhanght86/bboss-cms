@@ -14,6 +14,7 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
+import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.ProcessInst;
@@ -724,6 +725,35 @@ public class ActivitiTaskManageAction {
 	}
 
 	/**
+	 * 获取转派日志记录数据
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param model
+	 * @return 2014年10月23日
+	 */
+	public String queryDelegateTasksLogData(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			DelegateTaskLog dekegateTaskLog, ModelMap model) {
+
+		try {
+
+			ListInfo listInfo = activitiTaskService.queryDelegateTasksLogData(
+					dekegateTaskLog, offset, pagesize);
+
+			model.addAttribute("listInfo", listInfo);
+
+			return "path:delegateTasksLogList";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	/**
 	 * 转派任务(管理员权限，将A的任务转办给B)
 	 * 
 	 * @param processKey
@@ -738,54 +768,15 @@ public class ActivitiTaskManageAction {
 	public @ResponseBody
 	String delegateTasks(String processKey, String fromuser, String touser,
 			ModelMap model) {
-		TransactionManager tm = new TransactionManager();
+
 		try {
-			tm.begin();
 
-			String currentUser = AccessControl.getAccessControl()
-					.getUserAccount();
-
-			// 获取转派人的所有任务
-			List<TaskManager> userTaskList = activitiTaskService
-					.getUserNoDealTasks(fromuser);
-
-			if (null != userTaskList && userTaskList.size() > 0) {
-
-				for (int i = 0; i < userTaskList.size(); i++) {
-					TaskManager task = userTaskList.get(i);
-					// 判断是否有没被签收
-					boolean isClaim = activitiTaskService.isSignTask(task
-							.getID_());
-					if (!isClaim) {
-						// 先签收
-						activitiService.claim(task.getID_(), currentUser);
-					}
-
-					// 再转办
-					activitiService.delegateTask(task.getID_(), touser);
-
-					String reamrk = "["
-							+ activitiService.getUserInfoMap().getUserName(
-									currentUser)
-							+ "]将任务转派给["
-							+ activitiService.getUserInfoMap().getUserName(
-									touser) + "]";
-
-					// 在扩展表中添加转办记录
-					activitiTaskService.updateNodeChangeInfo(task.getID_(),
-							task.getPROC_INST_ID_(), task.getKEY_(),
-							currentUser, touser, reamrk, "", 1);
-				}
-			}
-
-			tm.commit();
+			activitiTaskService.delegateTasks(processKey, fromuser, touser);
 
 			return "success";
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();
-		} finally {
-			tm.release();
 		}
 	}
 
@@ -826,7 +817,7 @@ public class ActivitiTaskManageAction {
 			// 获取第一人工节点信息
 			TaskManager hiTask = activitiService.getFirstTask(processId);
 
-			String remark = "[" + currentUser + "]将任务撤销至[" + hiTask.getNAME_()
+			String remark = "[" + currentUser + "]将任务撤回至[" + hiTask.getNAME_()
 					+ "]";
 
 			// 获取第一人工节点信息

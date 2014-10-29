@@ -170,7 +170,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
 			this.taskService.rejecttoPreTask(taskId, variables, rejectedtype);
 
 			tm.commit();
@@ -187,8 +189,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-
-			taskService.claim(taskId, username);
+			
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			this.taskService.rejecttoPreTask(taskId, variables, rejectReason,
 					rejectedtype, bussinessop, bussinessRemark);
 
@@ -209,8 +214,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-
-			taskService.claim(taskId, username);
+			
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			this.taskService.rejecttoPreTask(taskId, rejectedtype);
 
 			tm.commit();
@@ -227,8 +235,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-
-			taskService.claim(taskId, username);
+			
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			this.taskService.rejecttoPreTask(taskId, rejectReason,
 					rejectedtype, bussinessop, bussinessRemark);
 
@@ -993,7 +1004,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.complete(taskId, map);
 
 			tm.commit();
@@ -1011,7 +1025,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.completeWithReason(taskId, map, reason, bussinessop,
 					bussinessRemark);
 
@@ -1036,7 +1053,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.complete(taskId, map, destinationTaskKey);
 			tm.commit();
 		} catch (Exception e) {
@@ -1053,7 +1073,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.completeWithReason(taskId, map, destinationTaskKey,
 					reason, bussinessop, bussinessRemark);
 
@@ -1077,7 +1100,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.complete(taskId);
 
 			tm.commit();
@@ -1094,7 +1120,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.completeWithReason(taskId, reason, bussinessop,
 					bussinessRemark);
 
@@ -1136,7 +1165,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.completeWithDest(taskId, destinationTaskKey);
 
 			tm.commit();
@@ -1154,7 +1186,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
+			
 			taskService.completeWithDestReason(taskId, destinationTaskKey,
 					reason, bussinessop, bussinessRemark);
 
@@ -1179,7 +1214,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
 
 			taskService.complete(taskId, map);
 
@@ -1198,7 +1235,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
 
 			taskService.completeWithReason(taskId, map, reason, bussinessop,
 					bussinessRemark);
@@ -1224,7 +1263,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// taskService = processEngine.getTaskService();
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
 			// taskService.setVariablesLocal(taskId, map);
 			taskService.complete(taskId, map, destinationTaskKey);
 
@@ -1244,7 +1285,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			tm.begin();
 
-			taskService.claim(taskId, username);
+			if (!isSignTask(taskId,username)) {
+				taskService.claim(taskId, username);
+			}
 
 			taskService.completeWithReason(taskId, map, destinationTaskKey,
 					reason, bussinessop, bussinessRemark);

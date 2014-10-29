@@ -7,10 +7,6 @@
 <title>转派任务</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
-<script type="text/javascript">
-
-
-</script>
 </head>
 	
 <body>

@@ -39,7 +39,7 @@
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
-	<target name="jar-sources" description="jar sources">
+	<target name="jar-sources" depends="jar-workflow-sources" description="jar sources">
 				<echo>Generate the bboss-cms  library sources.jar ...</echo>
 				<jar jarfile="distrib/system-sources.jar" >
 					<manifest>				
@@ -54,10 +54,7 @@
 					<fileset dir="src-cms" includes="**/*.java"/>
 					<fileset dir="src-common" includes="**/*.java"/>
 					<fileset dir="src-dictionary" includes="**/*.java"/>
-					<fileset dir="src-workflow" includes="**/*.java"/>
-					<fileset dir="src_workflow-business" includes="**/*.java"/>
 					
-					<fileset dir="src-workflow-web" includes="**/*.java"/>
 					<fileset dir="src-sap" includes="**/*.java"/>
 					<fileset dir="src-ldap" includes="**/*.java"/>
 					<fileset dir="src-sanydesktop" includes="**/*.java"/>
@@ -71,6 +68,26 @@
 					
 				</jar>
 			</target>
+	<target name="jar-workflow-sources" description="jar workflow sources">
+					<echo>Generate the bboss-cms  library workflow-sources.jar ...</echo>
+					<jar jarfile="distrib/workflow-sources.jar" >
+						<manifest>				
+							<attribute name="Implementation-Version" value="${impl.version}" />
+							<attribute name="Specification-Version" value="${revision}" />
+							<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+							<attribute name="Implementation-ProductID" value="${impl.productID}" />
+							<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+							<attribute name="Compile-User" value="${username}" />
+						</manifest>
+						
+						<fileset dir="src-workflow" includes="**/*.java"/>
+						<fileset dir="src_workflow-business" includes="**/*.java"/>						
+						<fileset dir="src-workflow-web" includes="**/*.java"/>
+						<fileset dir="src-workflow-demo" includes="**/*.java"/>
+						
+						
+					</jar>
+				</target>
 	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>

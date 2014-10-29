@@ -14,8 +14,8 @@
 *
 *
 */
-String appid = "sim";
-String secret = "A75399B0158B6A1AABBF8F7C3211EB13";
+String appid = "tas";
+String secret = "2d66d96f-ada4-4e12-a4e4-f4541c0b4bea";
 
 String account = "marc";//如果使用工号则loginType为2，否则为1
 account = request.getParameter("account");
@@ -34,7 +34,7 @@ String tokenparamname = TokenStore.temptoken_param_name;
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
 //String url = "http://localhost:8080/context/hessian?service=tokenService";
-String url = "http://localhost:8080/SanyPDP/hessian?service=tokenService";
+String url = "http://10.0.15.223/SanyToken/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -44,31 +44,31 @@ String token = tokenService.genAuthTempToken(appid, secret, ticket);
 /**
 * webservice方式申请token
 */
-url = "http://localhost:8080/SanyPDP/cxfservices/tokenService";
-JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
-WSServiceClientFactory.setAddress(url);
-WSServiceClientFactory.setServiceClass(TokenService.class);
-tokenService = (TokenService)WSServiceClientFactory.create();
+//url = "http://10.0.15.223/SanyToken/cxfservices/tokenService";
+//JaxWsProxyFactoryBean WSServiceClientFactory = new  JaxWsProxyFactoryBean();
+//WSServiceClientFactory.setAddress(url);
+//WSServiceClientFactory.setServiceClass(TokenService.class);
+//tokenService = (TokenService)WSServiceClientFactory.create();
 //通过webservice根据账号或者工号获取ticket
 //String ticket = tokenService.genTicket(account, worknumber, appid, secret);
-token = tokenService.genAuthTempToken(appid, secret, ticket);
+//token = tokenService.genAuthTempToken(appid, secret, ticket);
 //token = tokenService.genDualToken(appid, secret, ticket);
 /**
 * http请求方式申请令牌
 */
-url = "http://localhost:8080/SanyPDP/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+//url = "http://10.0.15.223/SanyToken/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
 //url = "http://10.25.192.142:8080/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
-token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
+//token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 //通过http根据账号或者工号获取ticket
 //url = "http://10.25.192.142:8080/SanyPDP/token/genTicket.freepage?appid="+appid + "&secret="+secret + "&account="+account + "&worknumber="+worknumber;
 //String ticket = = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 
-org.frameworkset.web.servlet.context.WebApplicationContext  context = org.frameworkset.web.servlet.support.WebApplicationContextUtils.getWebApplicationContext();//获取实例
+//org.frameworkset.web.servlet.context.WebApplicationContext  context = org.frameworkset.web.servlet.support.WebApplicationContextUtils.getWebApplicationContext();//获取实例
 
 //通过以下方式获取mvc容器中的组件实例方法
-tokenService = context.getTBeanObject("/token/*.freepage", TokenService.class);
+//tokenService = context.getTBeanObject("/token/*.freepage", TokenService.class);
 //String ticket = tokenService.genTicket(account, worknumber, appid, secret);
-token = tokenService.genAuthTempToken(appid, secret, ticket);
+//token = tokenService.genAuthTempToken(appid, secret, ticket);
 
 out.println("<div>isGuest:"+AccessControl.getAccessControl().isGuest()+"</div>");
 out.println("<div>userAccount:"+AccessControl.getAccessControl().getUserAccount()+"</div>");
@@ -76,9 +76,11 @@ out.println("<div>userAccount:"+AccessControl.getAccessControl().getUserAccount(
 out.println("<div>账号token:"+tokenparamname + "=" + token+"</div>");
 
 String accounttokenrequest = "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
+String accountticketrequest = "_dt_ticket_=" + ticket + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
+
 //工号token
 
-token = tokenService.genAuthTempToken(appid, secret, ticket);
+//token = tokenService.genAuthTempToken(appid, secret, ticket);
 out.println("<div>工号token:"+tokenparamname + "=" + token+"</div>");
 
 String worknumbertokenrequest =  "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
@@ -88,6 +90,11 @@ String worknumbertokenrequest =  "_dt_token_=" + token + "&_dt_appid_=" + appid 
 <title>签名令牌-单点登录界面</title>
 </head>
 <body>
+<table>
+<tr><td>ticket sso</td></tr>
+<tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=accountticketrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单</a></td></tr>
+</table>
+<table>
 <table>
 <tr><td>账号登录</td></tr>
 <tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithtoken.page?<%=accounttokenrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单</a></td></tr>

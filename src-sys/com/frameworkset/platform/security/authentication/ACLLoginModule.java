@@ -160,10 +160,15 @@ public abstract class ACLLoginModule implements LoginModule {
             {
                 log.debug( "" + this.getClass().getName() + " login failed");
             }
-        } catch (Exception ioe) {
+        }
+        catch (LoginException ioe) {
 
-            log.error(ioe.getMessage(),ioe);
-            throw new LoginException(ioe.toString());
+           throw ioe;
+        } 
+        catch (Exception ioe) {
+
+           
+            throw new LoginException(ioe.getMessage(),ioe);
         } 
         throw new LoginException();
     }

@@ -1,16 +1,15 @@
 <!-- 令牌服务配置-->
 <property name="token.TokenService" class="org.frameworkset.web.token.TokenService">
-	<construction>		
+	
 		<property name="tokenstore" factory-class="com.caucho.hessian.client.HessianProxyFactory" factory-method="create">
 			<construction>
 				<property value="org.frameworkset.web.token.TokenStore"/>		
 				<property>
-					<![CDATA[http://10.0.15.38:9081/SanyToken/hessian?service=tokenStoreService&container=tokenconf.xml]]>
-				</property>	
-			</construction>
+					<![CDATA[http://10.0.15.223/SanyToken/hessian?service=tokenStoreService&container=tokenconf.xml]]>
+				</property>
+			</construction>			
 		</property>
+		<property name="client" value="true"/>
 		<property name="enableToken" value="true"/>
-	</construction>
+		<property name="tokenfailpath" value="/common/jsp/tokenfail.jsp"/>	
 </property>
-
-	

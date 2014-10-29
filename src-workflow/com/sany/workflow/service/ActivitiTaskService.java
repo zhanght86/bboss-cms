@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
+import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
@@ -206,5 +207,31 @@ public interface ActivitiTaskService {
 	 *             2014年10月22日
 	 */
 	public List<TaskManager> getUserNoDealTasks(String userId) throws Exception;
+
+	/**
+	 * 转派任务
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param fromuser
+	 *            转派人
+	 * @param touser
+	 *            被转派人
+	 * @throws Exception
+	 *             2014年10月24日
+	 */
+	public void delegateTasks(String processKey, String fromuser, String touser)
+			throws Exception;
+
+	/**
+	 * 根据条件获取转派日志列表数据,分页展示
+	 * 
+	 * @param task
+	 * @param offset
+	 * @param pagesize
+	 * @return 2014年6月18日
+	 */
+	public ListInfo queryDelegateTasksLogData(DelegateTaskLog delegateTaskLog,
+			long offset, int pagesize) throws Exception;
 
 }

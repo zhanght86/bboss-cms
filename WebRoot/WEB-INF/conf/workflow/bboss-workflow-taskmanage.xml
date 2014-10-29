@@ -14,6 +14,7 @@
 		path:viewTaskDetailInfo="/workflow/taskManage/viewTaskDetailInfo.jsp"
 		path:dealTask="/workflow/taskManage/dealTask.jsp" 
 		path:viewEntrustInfo="/workflow/taskManage/viewEntrustInfo.jsp" 
+		path:delegateTasksLogList="/workflow/taskManage/delegateTasksLogList.jsp" 
 		f:activitiService="attr:activitiService"
 		f:activitiTaskService="attr:workflow.task.activitiTaskService"
 		class="com.sany.workflow.action.ActivitiTaskManageAction">

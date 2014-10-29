@@ -91,32 +91,32 @@
 									</pg:header>
 										
 									<pg:list autosort="false" requestKey="nodeList">
-									<pg:notin colName="node_type" scope="startEvent,endEvent,serviceTask">
-										<tr>
-											<input type="hidden" id="<pg:cell colName='node_key'/>" 
-												name="node_key" value="<pg:cell colName='node_key'></pg:cell>" />
-											<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
-												name="node_users_id" value="<pg:cell colName='node_users_id'></pg:cell>" />
-											<td><pg:cell colName="node_key"></pg:cell></td>
-											<td><pg:cell colName="node_name"></pg:cell></td>
-											<td>
-												<input type="text" class="input1 w200" 
-													id="<pg:cell colName='node_key'/>_users_name" 
-													name="node_users_name" value="<pg:cell colName='node_users_name'/>" />
-												<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
-												<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
-											</td>
-											<td>
-												<input type="text" class="input1 w200"
-													id="" name="" value=""/>
-												<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
-												<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
-											</td>
-											<td >
-												<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
-											</td>
-										</tr>
-									</pg:notin>
+										<pg:equal colName="node_type" value="userTask">
+											<tr>
+												<input type="hidden" id="<pg:cell colName='node_key'/>" 
+													name="node_key" value="<pg:cell colName='node_key'></pg:cell>" />
+												<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
+													name="node_users_id" value="<pg:cell colName='node_users_id'></pg:cell>" />
+												<td><pg:cell colName="node_key"></pg:cell></td>
+												<td><pg:cell colName="node_name"></pg:cell></td>
+												<td>
+													<input type="text" class="input1 w200" 
+														id="<pg:cell colName='node_key'/>_users_name" 
+														name="node_users_name" value="<pg:cell colName='node_users_name'/>" />
+													<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
+													<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
+												</td>
+												<td>
+													<input type="text" class="input1 w200"
+														id="" name="" value=""/>
+													<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
+													<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
+												</td>
+												<td >
+													<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
+												</td>
+											</tr>
+										</pg:equal>
 									</pg:list>
 								</table>
 						</fieldset>

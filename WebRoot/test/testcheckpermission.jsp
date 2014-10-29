@@ -3,13 +3,11 @@
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 
 <%
-	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();
-	//com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getInstance();
-	
-	//if (!accesscontroler.checkAccess(request, response)){
-	//	return;
-	//}
-	boolean hasaddpermission = accesscontroler.checkPermission("testid","add","testresource");
+	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();	//获取平台当前用户会话对象
+	boolean hasdeletepermission = accesscontroler.checkPermission("globaltest",//资源id
+																"delete",//资源操作
+																"testresource"//资源类型
+																);
 	boolean hasupdatepermission = accesscontroler.checkPermission("testid","write","testresource");
 	boolean hasdeletepermission = accesscontroler.checkPermission("testid","delete","testresource");
 	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
@@ -17,7 +15,13 @@
 	boolean hasglobaltestdeletepermission = accesscontroler.checkPermission("globaltest","delete","testresource");
 	
 %>
+<pg:true actual="<%=hasaddpermission %>">
+	do something here...
+</pg:true>
 
+<pg:false actual="<%=hasaddpermission %>">
+	do something here...
+</pg:false>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>权限测试页面</title>
@@ -62,6 +66,12 @@
 				    <tr>
 						
 						<td colspan="7">
+						<pg:true actual="<%=hasdeletepermission %>">
+							<a href="#"  onclick="delteUse();">删除用户</a>
+						</pg:true>
+						<pg:false actual="<%=hasdeletepermission %>">
+							没有删除用户的权限
+						</pg:false>
 							has read testid permission：<%=hasreadpermission %> <a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp" target="_blank">测试url控制</a>
 						</td>
 					</tr>
