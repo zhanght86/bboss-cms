@@ -77,6 +77,7 @@ out.println("<div>账号token:"+tokenparamname + "=" + token+"</div>");
 
 String accounttokenrequest = "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
 String accountticketrequest = "_dt_ticket_=" + ticket + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
+String erroraccountticketrequest = "_dt_ticket_=w&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;//this is an error ticket;
 
 //工号token
 
@@ -93,6 +94,7 @@ String worknumbertokenrequest =  "_dt_token_=" + token + "&_dt_appid_=" + appid 
 <table>
 <tr><td>ticket sso</td></tr>
 <tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=accountticketrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单</a></td></tr>
+<tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=erroraccountticketrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单-错误的ticket</a></td></tr>
 </table>
 <table>
 <table>
