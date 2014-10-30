@@ -111,15 +111,15 @@ function checkBM(){
   function dosubmit2()
   {
 	  if($("#NAME_").val()==''){
-		  alert("请输入部署名称");
+		  $.dialog.alert("请输入部署名称",function(){});
 		  return;
 	  }
 	  if($("#processDef").val()==''){
-		 alert("请选择部署资源");
+		 $.dialog.alert("请选择部署资源",function(){});
 	 	 return;
 	  };
 	  if($('#businessType').combotree('getValue')==''){
-		 alert("请选择所属业务类型");
+		  $.dialog.alert("请选择所属业务类型",function(){});
 	  	return;
 	  };
 	  $('#businessTypeId').val($('#businessType').combotree('getValue'));

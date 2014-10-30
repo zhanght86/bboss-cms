@@ -5,15 +5,29 @@
 <title>三一集团会议室展示</title>
 <link href="styles/main.css" rel="stylesheet" type="text/css" />
 <link href="styles/menu.css" rel="stylesheet" type="text/css" />
-<script  type="text/javascript"  src="scripts/jquery-1.8.0.js"></script>
+<script  type="text/javascript"  src="../../include/jquery-1.4.2.min.js"></script>
 <script  type="text/javascript"  src="scripts/menu.js"></script>
 <script  type="text/javascript"  src="scripts/tab.js"></script>
 <script  type="text/javascript"  src="scripts/checkbox.js"></script>
 <script  type="text/javascript"  src="scripts/lhgdialog.min.js"></script>
 <script  type="text/javascript"  src="scripts/dialog.js"></script>
 <script  type="text/javascript"  src="scripts/WdatePicker.js"></script>
-<script>
-   
+<script  type="text/javascript">
+ $(document).ready(function() {
+	$.ajax({
+		   type: "POST",
+			url : "../../appbom/testAjax.page",
+			data :{"m":"200","n":"100"},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+			success : function(data){
+				alert(data)
+			}
+		  });
+	});
 
 </script>
 </head>

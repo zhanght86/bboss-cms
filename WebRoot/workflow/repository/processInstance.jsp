@@ -120,7 +120,7 @@ function physicalDelInst(){
 				if(data=="success"){
 		 			modifyQueryData();
 				}else{
-					alert("流程实例物理删除出错："+data);
+					$.dialog.alert("流程实例物理删除出错："+data,function(){});
 				}
 			}	
 		 });
@@ -152,7 +152,7 @@ function upBatchButton() {
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("流程实例升级出错："+data);
+					$.dialog.alert("流程实例升级出错："+data,function(){});
 				}else {
 					modifyQueryData();
 					close();	
@@ -209,7 +209,7 @@ function suspendProcess(processInstId){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("流程实例挂起出错："+data);
+					$.dialog.alert("流程实例挂起出错："+data,function(){});
 				}else {
 					modifyQueryData();
 					close();	
@@ -235,7 +235,7 @@ function activateProcess(processInstId){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("流程实例激活出错："+data);
+					$.dialog.alert("流程实例激活出错："+data,function(){});
 				}else {
 					modifyQueryData();
 					close();	

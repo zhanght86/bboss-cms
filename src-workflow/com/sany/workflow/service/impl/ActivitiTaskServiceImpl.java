@@ -1152,4 +1152,19 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 
 	}
+
+	@Override
+	public ActivitiNodeInfo getFirstUserNode(String processKey)
+			throws Exception {
+
+		ActivitiNodeInfo nodeInfo = executor.queryObject(
+				ActivitiNodeInfo.class, "getFirstUserNode_wf", processKey);
+
+		if (null == nodeInfo) {
+			nodeInfo = executor.queryObject(ActivitiNodeInfo.class,
+					"getDefaultFirstUserNode_wf", processKey);
+		}
+
+		return nodeInfo;
+	}
 }

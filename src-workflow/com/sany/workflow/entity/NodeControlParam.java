@@ -48,14 +48,6 @@ public class NodeControlParam {
 
 	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
 
-	public int getIS_DISCARDED() {
-		return IS_DISCARDED;
-	}
-
-	public void setIS_DISCARDED(int iS_DISCARDED) {
-		IS_DISCARDED = iS_DISCARDED;
-	}
-
 	private String TASK_URL;// 待办URL
 
 	private String NODE_DESCRIBE;// 节点描述
@@ -73,6 +65,25 @@ public class NodeControlParam {
 	private String PROCESS_ID;// 流程实例id
 
 	private int ORDER_NUM;// 排序字段
+
+	@RequestParam(name = "${NODE_KEY}_FIRST_USERNODE")
+	private int FIRST_USERNODE;// 第一人工节点 0不是1是
+	
+	public int getFIRST_USERNODE() {
+		return FIRST_USERNODE;
+	}
+
+	public void setFIRST_USERNODE(int fIRST_USERNODE) {
+		FIRST_USERNODE = fIRST_USERNODE;
+	}
+
+	public int getIS_DISCARDED() {
+		return IS_DISCARDED;
+	}
+
+	public void setIS_DISCARDED(int iS_DISCARDED) {
+		IS_DISCARDED = iS_DISCARDED;
+	}
 
 	public int getIS_MULTI_DEFAULT() {
 		return IS_MULTI_DEFAULT;

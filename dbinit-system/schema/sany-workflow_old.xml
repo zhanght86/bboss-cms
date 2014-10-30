@@ -39,6 +39,7 @@
         <column name="NODE_KEY" size="100" type="VARCHAR"/>
         <column name="NODE_NAME" size="100" type="VARCHAR"/>
         <column name="NODE_TYPE" size="100" type="VARCHAR" default="userTask"/>
+        <column name="FIRST_USERNODE" size="1" type="DECIMAL" default="0"/>
         <column name="ORDER_NUM" size="4" type="DECIMAL"/>
     </table>
 	 <table name="TD_WF_APP">

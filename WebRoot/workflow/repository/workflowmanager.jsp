@@ -91,7 +91,7 @@
 			excelType=1;
 		} 	
 		if(containSpecial(bm)|| containSpecial(app_name_en)||containSpecial(app_name)){
-			alert("查询字符串含有非法字符集,请检查输入条件");
+			$.dialog.alert("查询字符串含有非法字符集,请检查输入条件");
 			return;
 		}
 		

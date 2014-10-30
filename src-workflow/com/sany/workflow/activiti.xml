@@ -1642,7 +1642,8 @@
 	<property name="updateNodeOrderNum">
 		<![CDATA[
 			update td_wf_activiti_node_info 
-			   set order_num = #[ORDER_NUM]
+			   set order_num = #[ORDER_NUM],
+			   FIRST_USERNODE = #[FIRST_USERNODE]
 			 where id = #[ID]
 		]]>
 	</property>
@@ -3163,6 +3164,26 @@
 			   and a.ASSIGNEE_ = ?
 			
 			 ORDER BY START_TIME_ DESC
+		]]>
+	</property>
+	
+	<!-- 获取第一个人工任务节点  gw_tanx-->
+	<property name="getFirstUserNode_wf">
+		<![CDATA[
+			SELECT *
+			  FROM TD_WF_ACTIVITI_NODE_INFO T
+			 WHERE T.PROCESS_KEY = ?
+			   AND T.FIRST_USERNODE = 1
+		]]>
+	</property>
+	
+	<!-- 获取第一个人工任务节点  gw_tanx-->
+	<property name="getDefaultFirstUserNode_wf">
+		<![CDATA[
+			SELECT *
+			  FROM TD_WF_ACTIVITI_NODE_INFO T
+			 WHERE T.PROCESS_KEY = ?
+			   AND T.NODE_KEY= 'usertask1' 
 		]]>
 	</property>
 	

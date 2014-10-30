@@ -84,7 +84,7 @@
 					W.queryList();
 					api.close();
 				} else {
-					alert("新增业务类别失败："+responseText);
+					$.dialog.alert("新增业务类别失败："+responseText,function(){});
 				}
 			}
 		});

@@ -64,7 +64,7 @@ function dosubmit(){
 	var deleteReason = $("#deleteReason").val();
 	
 	if(deleteReason ==''){
-		alert("请填写删除原因");
+		$.dialog.alert("请填写删除原因",function(){});
 		return;
 	}
 	 

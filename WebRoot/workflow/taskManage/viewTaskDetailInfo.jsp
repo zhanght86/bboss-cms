@@ -238,7 +238,7 @@ function discardTask(taskId,processId,processKey){
 					api.close();
 		 			W.modifyQueryData();
 				}else{
-					alert("废弃任务出错："+data);
+					$.dialog.alert("废弃任务出错："+data,function(){});
 				}
 			}	
 		 });

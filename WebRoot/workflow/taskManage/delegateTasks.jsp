@@ -54,12 +54,12 @@ function delegateTasks(){
 	var fromuser = $.trim($("#delegate_from_users_id").val());
 	var touser = $.trim($("#delegate_to_users_id").val());
 	if (fromuser == '' || touser == ''){
-		alert("转派关系不能为空！");
+		$.dialog.alert("转派关系不能为空！",function(){});
 		return;
 	} 
 	
 	if (fromuser == touser) {
-		alert("转派人与被转派人不能是同一个人！");
+		$.dialog.alert("转派人与被转派人不能是同一个人！",function(){});
 		return;
 	}
 	
@@ -76,7 +76,7 @@ function delegateTasks(){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("转派任务出错:"+data);
+					$.dialog.alert("转派任务出错:",function(){});
 				}else {
 					W.modifyQueryData();
 					api.close();	

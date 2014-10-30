@@ -159,7 +159,7 @@ function openChooseGroups(node_key){
 			data: formToJson("#submitForm"),			
 			dataType:"json",			
 			success: function(data){
-			    alert(data);
+				$.dialog.alert(data,function(){});
 			  }
 			
 			});
@@ -175,7 +175,7 @@ function openChooseGroups(node_key){
 			data: formToJson("#submitParamForm"),			
 			dataType:"json",			
 			success: function(data){
-			    alert(data);
+				$.dialog.alert(data,function(){});
 			  }
 			
 			});

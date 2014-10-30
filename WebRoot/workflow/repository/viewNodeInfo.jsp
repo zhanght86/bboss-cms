@@ -9,6 +9,7 @@
  --%>	
 
 <script type="text/javascript">
+var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
 	//这是扩展Firefox下moveRows()这个方法，否则moveRows()是不被firefox支持
 	if (typeof Element != 'undefined') Element.prototype.moveRow = function (sourceRowIndex, targetRowIndex) {//执行扩展操作
@@ -30,7 +31,29 @@ $(document).ready(function() {
     
 });
 
+function makeOneCheck(obj) {
+	var radios = $(".FIRST_USERNODE");
+	for (var i=0; i<radios.length; i++) {
+		radios[i].checked = false;
+	}
+	$(obj).get(0).checked = true;
+}
+
 function saveSort(){
+	var FIRST_USERNODE_NUM = 0;
+	/**
+	$(".FIRST_USERNODE").each(function() {
+		if ($(this).get(0).checked == true) {
+			FIRST_USERNODE_NUM ++;
+        }
+    });
+	
+	if (FIRST_USERNODE_NUM > 1) {
+		W.$.dialog.alert("只能设置一个默认撤回节点，保存失败",function(){},api);
+		return;
+	}
+	*/
+	
 	var ORDER_NUM = $(".ORDER_NUM");
 	ORDER_NUM.each(function(i){
        $(this).val(i);
@@ -47,9 +70,9 @@ function saveSort(){
 			},
 		success : function(data){
 			if (data != 'success') {
-				alert("保存节点顺序出错："+data);
+				W.$.dialog.alert("保存节点顺序出错："+data,function(){},api);
 			}else {
-				alert("节点顺序修改成功");
+				W.$.dialog.alert("节点顺序修改成功",function(){},api);
 			}
 		}
 	 });
@@ -105,6 +128,7 @@ function trMoveToend(obj){
 <form id="nodesortForm" method="post" action="">
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" id="tab" class="stable">
 		<pg:header>
+			<th>默认撤<br/>回节点</th>
 			<th>节点KEY</th>
 			<th>节点名称</th>
 			<th>操作</th>
@@ -116,7 +140,11 @@ function trMoveToend(obj){
 			
 		<pg:list requestKey="nodeList">
 			<tr >
-				<input type="hidden" name="ID" value="<pg:cell colName="ID"/>"/></td>
+				<td ><input type="radio" class="FIRST_USERNODE" name="<pg:cell colName='NODE_KEY'/>_FIRST_USERNODE" value="1"
+				id="FIRST_USERNODE" onclick="makeOneCheck(this)"
+				<pg:equal colName="FIRST_USERNODE" value="1">checked</pg:equal> />
+				<input type="hidden" name="ID" value="<pg:cell colName="ID"/>"/>
+				<input type="hidden" name="NODE_KEY" value="<pg:cell colName="NODE_KEY"/>"/>
 				<input type="hidden" name="ORDER_NUM" class="ORDER_NUM" value="<pg:cell colName="ORDER_NUM"/>"/></td>
 				<td ><pg:cell colName="NODE_KEY"/></td>
 				<td ><pg:cell colName="NODE_NAME"/></td>

@@ -35,6 +35,7 @@ import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.business.util.WorkflowConstants;
+import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.ProcessInst;
@@ -1398,21 +1399,25 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// throw new ProcessException("您没有权限撤销任务！");
 			// }
 
-			TaskManager hiTask = activitiService.getFirstTask(proIns
-					.getProInsId());
+			// TaskManager hiTask = activitiService.getFirstTask(proIns
+			// .getProInsId());
+
+			// 获取第一个人工节点
+			ActivitiNodeInfo nodeInfo = activitiTaskService
+					.getFirstUserNode(processKey);
 
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
 
 			if (StringUtil.isEmpty(proIns.getDealRemak())) {
 				String remark = "[" + currentUser + "]将任务撤回至["
-						+ hiTask.getNAME_() + "]";
+						+ nodeInfo.getNode_name() + "]";
 				proIns.setDealRemak(remark);
 			}
 
 			// 撤销任务
 			activitiService.cancelTask(proIns.getNowtaskId(),
-					hiTask.getTASK_DEF_KEY_(), proIns.getDealRemak(),
+					nodeInfo.getNode_key(), proIns.getDealRemak(),
 					proIns.getDealOption(), proIns.getDealReason());
 
 			// 日志记录撤销操作

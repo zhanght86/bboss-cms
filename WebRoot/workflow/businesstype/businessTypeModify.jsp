@@ -79,7 +79,7 @@
 	function dosubmit() {
 		$("#parentId").val($("#parentBusinessType").combotree('getValue'));
 		if($("#parentId").val()==$("#businessId").val()){
-			alert("不能选择自己作为父节点");
+			$.dialog.alert("不能选择自己作为父节点",function(){});
 			return;
 		}
 		$.ajax({
@@ -105,7 +105,7 @@
 						W.queryList();
 						api.close();
 				} else {
-					alert("修改业务类别失败："+responseText);
+					$.dialog.alert("修改业务类别失败："+responseText,function(){});
 				}
 			}
 		});

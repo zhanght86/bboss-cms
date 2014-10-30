@@ -52,12 +52,12 @@ function queryList(){
 	var count_end_time = $("#count_end_time").val();
 	
 	if (realName == '' && orgId == '') {
-		alert('【所在部门】与【姓名】不能同时为空');
+		$.dialog.alert("【所在部门】与【姓名】不能同时为空",function(){});
 		return;
 	}
 	
 	if (count_start_time == '' || count_end_time == '') {
-		alert('统计日期时间不能为空');
+		$.dialog.alert("统计日期时间不能为空",function(){});
 		return;
 	}
 	

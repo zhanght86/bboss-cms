@@ -234,4 +234,16 @@ public interface ActivitiTaskService {
 	public ListInfo queryDelegateTasksLogData(DelegateTaskLog delegateTaskLog,
 			long offset, int pagesize) throws Exception;
 
+	/**
+	 * 获取第一个人工任务节点
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年10月29日
+	 */
+	public ActivitiNodeInfo getFirstUserNode(String processKey)
+			throws Exception;
+
 }

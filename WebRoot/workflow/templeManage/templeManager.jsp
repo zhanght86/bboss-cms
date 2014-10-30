@@ -96,11 +96,11 @@ function delTemples () {
 			},
 		success : function(data){
 			if (data == 'fail') {
-				alert("模板已被引用不能被删除！");
+				$.dialog.alert("模板已被引用不能被删除！",function(){});
 			}else if (data == 'success') {
 				queryList();
 			}else {
-				alert("删除模板出错："+data);
+				$.dialog.alert("删除模板出错："+data,function(){});
 			}
 		}	
 	 });

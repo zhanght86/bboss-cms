@@ -814,11 +814,14 @@ public class ActivitiTaskManageAction {
 			String currentUser = activitiService.getUserInfoMap().getUserName(
 					userAccount);
 
-			// 获取第一人工节点信息
-			TaskManager hiTask = activitiService.getFirstTask(processId);
+			// 获取第一个人工节点
+			ActivitiNodeInfo nodeInfo = activitiTaskService
+					.getFirstUserNode(processKey);
 
-			String remark = "[" + currentUser + "]将任务撤回至[" + hiTask.getNAME_()
-					+ "]";
+			// TaskManager hiTask = activitiService.getFirstTask(processId);
+
+			String remark = "[" + currentUser + "]将任务撤回至["
+					+ nodeInfo.getNode_name() + "]";
 
 			// 获取第一人工节点信息
 			// ActivityImpl act = activitiService.getTaskService()
@@ -828,8 +831,8 @@ public class ActivitiTaskManageAction {
 			// + act.getProperty("name") + "]";
 
 			// 撤销任务
-			activitiService.cancelTask(taskId, hiTask.getTASK_DEF_KEY_(),
-					remark, "撤销任务", cancelTaskReason);
+			activitiService.cancelTask(taskId, nodeInfo.getNode_key(), remark,
+					"撤销任务", cancelTaskReason);
 
 			// 日志记录撤销操作
 			activitiService.addDealTask(taskId, userAccount, currentUser, "2",

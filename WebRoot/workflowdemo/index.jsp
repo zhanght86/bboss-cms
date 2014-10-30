@@ -28,12 +28,13 @@ function submitForm0(){
 		 },
 		 success:function(result){
 			unblockUI();
-			if (result="success") {
-				alert("保存成功");
+			if (result=="success") {
+				$.dialog.alert("保存成功",function(){
+					api.close();
+		 			W.modifyQueryData();
+				});
 			}
 			
-			api.close();
- 			W.modifyQueryData();
 		 }
 	});	
 }
@@ -78,8 +79,8 @@ function submitFormData(){
 		
 	}
 	
-	// 流程结束查看
-	if (pagestate == '6' ){
+	// 第三方查看或流程结束查看
+	if ( pagestate == '5' || pagestate == '6' ){
 		
 		api.close();
 		W.modifyQueryData();

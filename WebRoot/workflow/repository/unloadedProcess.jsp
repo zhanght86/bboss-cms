@@ -140,7 +140,7 @@ function initWfAppSelect(){
 function loadProcess() {
 	
 	if($('#businessType').combotree('getValue')==''){
-		 alert("请选择所属业务类型");
+		$.dialog.alert("请选择所属业务类型");
 	  	return;
 	  }
 	

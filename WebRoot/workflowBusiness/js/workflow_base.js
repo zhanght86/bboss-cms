@@ -150,13 +150,13 @@ function updateAfterChoose(accouts,realnames,node_key){
 	if(!node_key){
 		if(accouts.indexOf(",") < 0){
 			if (accouts == userAccount) {
-				alert('不能将任务转办给自己！');
+				$.dialog.alert('不能将任务转办给自己！',function(){});
 			}else {
 				$("#delegateUser").val(accouts);
 				$("#delegateUserName").val(realnames);
 			}
 		}else{
-			alert('只能选择1个转办人！')
+			$.dialog.alert('只能选择1个转办人！',function(){});
 		}
 	}else{
 		$("#candidateName"+node_key).val(accouts);
@@ -211,14 +211,14 @@ function checkoutPageElement(){
 	if($("input[name='operateType']").length!=0){
 		var check = $("input[name='operateType']:checked").val();
 		if(!check){
-			alert("请选择处理结果！");
+			$.dialog.alert("请选择处理结果！",function(){});
 			return false;
 		}
 
 		if(check == 'turnTo'){
 			var duser = $("#delegateUser").val();
 			if(!duser||duser==''){
-				alert("请选择转办人！");
+				$.dialog.alert("请选择转办人！",function(){});
 				return false;
 			}
 		}
@@ -232,7 +232,7 @@ function checkoutPageElement(){
 			var spanname = $.trim($("#protr"+sid +" #realName"+sid).val());
 			if(sid!='0'&&( spanname == '' || spanname == '无审批人')){
 				var actName = $("#protr"+sid +" #actName"+sid).val();
-				alert("节点["+actName+"]处理人不能为空！");
+				$.dialog.alert("节点["+actName+"]处理人不能为空！",function(){});
 				return false;
 			}
 		}

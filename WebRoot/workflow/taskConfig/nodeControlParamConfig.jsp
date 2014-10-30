@@ -118,9 +118,9 @@ function doContralFormSubmit(){
 		},
 		success : function(data){
 			if(data=="success"){
-				alert("节点控制参数保存成功");
+				$.dialog.alert("节点控制参数保存成功",function(){});
 			}else{
-				alert("保存节点控制参数出错"+data);
+				$.dialog.alert("保存节点控制参数出错"+data,function(){});
 			}
 		}	
 	 });

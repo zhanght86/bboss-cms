@@ -27,13 +27,14 @@ body {
 	margin-top: -38px;
 }
 .title_top {
-	font-size: 24px;
+	font-size: 20px;
 	line-height: 40px;
 	font-weight: bold;
 	text-align: center;
 	color: #333;
 	padding: 5px;
 }
+.title_top .ml_20{margin-left:20px;}
 .next_button a {
 	float: right;
 	width: 100px;
@@ -43,6 +44,7 @@ body {
 	color: #333;
 	font-weight: normal;
 	margin-bottom: 10px;
+	margin-top:10px
 }
 .next_button a:hover {
 	background: #ccc;
@@ -282,7 +284,7 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 	margin: 0;
 	background-color: #fff;
 	border-top: 1px solid #f5696c;
-	padding: 20px;
+	/*padding: 20px;*/
 }
 .table_list {
 	border: 1px solid #ccc;
@@ -298,10 +300,58 @@ a.bt_approval3:hover, a.bt_approval3:hover span {
 	line-height: 20px;
 }
 .table_list td {
-	padding: 10px; background-color:#fff;font-size:14px;
+	padding: 10px;font-size:14px;
 	border-top: 1px solid #ccc;
 }
+.table_list .tr_bg{background-color:#f2f2f2}
+td.tright{text-align:right}
+.td_title{line-height:36px;}
+.tbold{font-weight:bold}
+.mb_10{margin-bottom:10px}
+.table_td_list,.table_td_list2{border:none}
+.table_td_list td{
+	padding: 10px;
+	font-size:14px;
+	border-top:none;
+	border-bottom: 1px solid #aeaeae;
+	border-right: 1px solid #aeaeae;
+	font-weight:bold
+}
+.table_td_list2 th
+{
+   border-bottom:1px solid #aeaeae;
+   text-align:left;
+   padding:10px;
+   background-color:#fff;
+   color:#313131;
+   font-weight:bold;
+   font-size:14px
+}
+.table_td_list2 td
+{
+   text-align:left;
+   padding:3px 10px;
+   border-top:none
+}
+.table_td_list3 th
+{
+   text-align:right;
+   padding:5px 5px 5px 0px;
+   background-color:#f2f2f2;
+   color:#313131;
+   font-weight:bold;
+   font-size:14px;
+   line-height:20px;
+}
+.table_td_list3 td
+{
+   text-align:left;
+  padding:5px 5px 5px 0px;
+   border-top:none;
+   line-height:20px;
+}
 
+.md_10{margin:0px 10px}
 /*button*/
 .bt1 .bt_1, .bt2 .bt_2, .bt3 .bt_3 {
 	display: block;
@@ -391,3 +441,4 @@ a.search_bt:hover, a.search_bt:hover span {
 .flow_arrow{float:left;width:23px; height:47px; background:url(../images/flow_arrow.png) no-repeat left  center;}
 .select_tr{ color:#0098fe;font-weight:bold;}
 .performace_state .select1{width:70px;}
+.required{margin:0px 5px;color:#fe0000}

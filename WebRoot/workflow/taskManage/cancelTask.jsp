@@ -51,7 +51,7 @@ function dosubmit(){
 	var cancelTaskReason = $.trim($("#cancelTaskReason").val());
 	
 	if(cancelTaskReason ==''){
-		alert("请填写撤销原因");
+		W.$.dialog.alert("请填写撤销原因",function(){},api);
 		return;
 	}
 	 
@@ -69,7 +69,7 @@ function dosubmit(){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("撤销任务出错:"+data);
+					W.$.dialog.alert("撤销任务出错:"+data,function(){},api);
 				}else {
 					api.close();
 					W.api.close();

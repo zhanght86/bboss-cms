@@ -93,7 +93,7 @@ function doCandidateSubmit(){
 		dataType:"json",			
 		success: function(data){
 			if (data != 'success') {
-				alert("流程实例开启出错："+data);
+				$.dialog.alert("流程实例开启出错："+data,function(){});
 			}else {
 				W.queryList();
 				api.close();	

@@ -311,12 +311,12 @@ function delegateTask(){
 	var userid = $.trim($("#delegate_users_id").val());
 	var currentUser = $.trim($("#currentUser").val());
 	if (userid == ''){
-		alert("请选择转办处理人！");
+		$.dialog.alert("请选择转办处理人！",function(){});
 		return;
 	} 
 	
 	if (currentUser == userid) {
-		alert("不能转办给自己！");
+		$.dialog.alert("不能转办给自己！",function(){});
 		return;
 	}
 	
@@ -335,7 +335,7 @@ function delegateTask(){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("转办任务出错:"+data);
+					$.dialog.alert("转办任务出错:"+data,function(){});
 				}else {
 					W.modifyQueryData('${sysid}');
 					api.close();	
@@ -361,7 +361,7 @@ function exeTask(){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("通过任务出错:"+data);
+					$.dialog.alert("通过任务出错:"+data,function(){});
 				}else {
 					W.modifyQueryData('${sysid}');
 					api.close();	
@@ -377,7 +377,7 @@ function discardTask() {
 	
 	var deleteReason = $.trim($("#completeReason").val());
 	if (deleteReason == ''){
-		alert("请填写废弃原因，在处理意见中填写！");
+		$.dialog.alert("请填写废弃原因，在处理意见中填写！",function(){});
 		return;
 	} 
 	
@@ -395,7 +395,7 @@ function discardTask() {
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("废弃任务出错:"+data);
+					$.dialog.alert("废弃任务出错:"+data,function(){});
 				}else {
 					W.modifyQueryData('${sysid}');
 					api.close();	
@@ -424,7 +424,7 @@ function recallTask() {
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("撤销任务出错:"+data);
+					$.dialog.alert("撤销任务出错:"+data,function(){});
 				}else {
 					W.modifyQueryData('${sysid}');
 					api.close();	
@@ -451,7 +451,7 @@ function rejectToPreTask(){
 				},
 			success : function(data){
 				if (data != 'success') {
-					alert("驳回任务出错:"+data);
+					$.dialog.alert("驳回任务出错:"+data,function(){});
 				}else {
 					W.modifyQueryData('${sysid}');
 					api.close();	

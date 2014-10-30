@@ -171,6 +171,16 @@
 					</workspace>
 				
 				</item> 
+				<item name="表格控件"
+				i18n:en_US="web list" id="table"  showleftmenu="true"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/mam/table2.html</content>
+					</workspace>
+				
+				</item> 
 			</module>
 			<module name="人力资源管理系统" 
 		             i18n:en_US="HRM UI Show" 

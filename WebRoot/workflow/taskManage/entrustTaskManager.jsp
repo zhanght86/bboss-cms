@@ -50,7 +50,7 @@ function modifyQueryEntrustData(){
 function signTask(taskId,SuspensionState) {
 	
 	if (SuspensionState == '2'){
-		alert("当前流程已被挂起,不能签收！");
+		$.dialog.alert("当前流程已被挂起,不能签收！",function(){});
 		return ;
 	}
 	
@@ -65,7 +65,7 @@ function signTask(taskId,SuspensionState) {
 			},
 		success : function(data){
 			if (data != 'success') {
-				alert("流程实例签收出错："+data);
+				$.dialog.alert("流程实例签收出错："+data,function(){});
 			}else {
 				modifyQueryEntrustData();
 			}
@@ -77,7 +77,7 @@ function signTask(taskId,SuspensionState) {
 function doTask(taskId,SuspensionState,processInstId,taskState){
 	
 	if (SuspensionState == '2'){
-		alert("当前流程已被挂起,不能处理！");
+		$.dialog.alert("当前流程已被挂起,不能处理！"+data,function(){});
 		return ;
 	}
 	

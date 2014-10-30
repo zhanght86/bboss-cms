@@ -77,7 +77,7 @@
 			excelType=1;
 		} 	
 		if(containSpecial(bm)|| containSpecial(app_name_en)||containSpecial(app_name)){
-			alert("查询字符串含有非法字符集,请检查输入条件");
+			$.dialog.alert("查询字符串含有非法字符集,请检查输入条件");
 			return;
 		}
 		
@@ -128,7 +128,7 @@
 				},
 			success : function(data){
 				if ("success" == data) {
-					$.dialog.alert('操作成功！');
+					$.dialog.alert("操作成功！");
 					modifyQueryData();
 				} else {
 					$.dialog.alert('操作失败！当前流程已经为停止状态，无法重复操作');
@@ -378,7 +378,7 @@
 		}
 		
 		if(subData.length <= 0){
-			alert("未选择流程默认授权所有流程");
+			$.dialog.alert("未选择流程默认授权所有流程");
 		}
 		
 		W.chooseSelectedData(subData);

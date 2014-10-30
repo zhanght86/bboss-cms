@@ -189,12 +189,12 @@ function dosubmit(){
 	}
 	
 	if ($.trim(templeTitle) == ""){
-		alert("模板标题不能为空！");
+		$.dialog.alert("模板标题不能为空！",function(){});
 		return;
 	}	 
 	
 	if ($.trim(templeContent) == "") {
-		alert("模板内容不能为空！");
+		$.dialog.alert("模板内容不能为空！",function(){});
 		return;
 	}
 	

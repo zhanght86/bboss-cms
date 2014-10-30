@@ -50,18 +50,18 @@ function dealBusiness(businessKey,businessState,processKey){
 		var url="<%=request.getContextPath()%>/workflow/businessDemo/toworkflowMain.page?businessKey="+businessKey
 		+"&processKey="+processKey;
 		
-		$.dialog({ id:'iframeNewId', title:'申请流程页面',width:1000,height:700, content:'url:'+url});  
+		$.dialog({ id:'iframeNewId', title:'申请流程页面('+businessKey+')',width:1000,height:700, content:'url:'+url});  
 	}else {
 		
 		var url="<%=request.getContextPath()%>/workflow/businessDemo/toViewTask.page?businessKey="+businessKey;
 		
 		if (businessState == '1') {
 			
-			$.dialog({ id:'iframeNewId', title:'处理任务页面',width:1000,height:700, content:'url:'+url});  
+			$.dialog({ id:'iframeNewId', title:'处理任务页面('+businessKey+')',width:1000,height:700, content:'url:'+url});  
 			
 		}else {
 			
-			$.dialog({ id:'iframeNewId', title:'处理任务页面',width:1000,height:700, content:'url:'+url}); 
+			$.dialog({ id:'iframeNewId', title:'处理任务页面('+businessKey+')',width:1000,height:700, content:'url:'+url}); 
 			
 		}
 	}

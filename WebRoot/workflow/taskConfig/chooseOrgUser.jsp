@@ -43,12 +43,12 @@ function queryList(orgId){
 	}
 	
 	if(orgId == '' && user_name==''){
-		alert("请输入查询条件");
+		$.dialog.alert("请输入查询条件",function(){});
 		return;
 	}
 	
 	if(containSpecial(user_name)){
-		alert('查询字符串含有非法字符集,请检查输入条件！');
+		$.dialog.alert("查询字符串含有非法字符集,请检查输入条件！",function(){});
 		return;
 	}
 		
@@ -79,7 +79,7 @@ function queryList(orgId){
 					move($('#select1'),$('#select2'));
 				}
 			}else {
-				alert("无查询结果");
+				$.dialog.alert("无查询结果",function(){});
 			}
 		}
 	});
@@ -217,7 +217,7 @@ $(document).ready(function() {
         var $opt = $("#select2 option:selected");   
         if (!$opt.length) return;   
         if ($opt.length > 1 ) {
-        	alert('请选择一项移动');
+        	$.dialog.alert("请选择一项移动",function(){});
         	return;   
         }
         if (this.id == "btnMoveUp") 

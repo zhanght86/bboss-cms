@@ -62,7 +62,7 @@ function validateInfo()
 		&& (gd == "" || gd.length<1 || gd.replace(/\s/g,"")=="")
 		)
 	{
-		alert('查询条件不能为空!');
+		$.dialog.alert("查询条件不能为空!",function(){});
 		return false;
 	}
 	
@@ -72,7 +72,7 @@ function validateInfo()
 		}
 	else if(!re.test(gn))
 	{
-		alert('用户组名称不能有非数字、中文、字母的字符');
+		$.dialog.alert("用户组名称不能有非数字、中文、字母的字符",function(){});
 		return false; 
 	}
 	
@@ -82,7 +82,7 @@ function validateInfo()
 		}
 	else if(!re.test(gd))
 	{
-		alert('用户组描述不能有非数字、中文、字母的字符');
+		$.dialog.alert("用户组描述不能有非数字、中文、字母的字符",function(){});
 		return false; 
 	}
 	groupForm.action = "groupInfo.jsp";

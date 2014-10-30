@@ -84,7 +84,7 @@
 			  
 			  entrustInfoId = $('input[name="entrustInfoRadio"]:checked').val();
 		  }else{
-			  alert("请先选择一条记录查看");
+			  $.dialog.alert("请先选择一条记录查看",function(){});
 			  
 			  return;
 		  }
@@ -137,7 +137,7 @@
 				  
 				  entrustInfoId = $('input[name="entrustInfoRadio"]:checked').val();
 			  }else{
-				  alert("请先选择一条记录查看");
+				  $.dialog.alert("请先选择一条记录查看",function(){});
 				  
 				  return;
 			  }
@@ -159,7 +159,7 @@
 		  if(entrustInfoRadio != null && entrustInfoRadio.length > 0){
 			  entrustInfoId = $('input[name="entrustInfoRadio"]:checked').val();
 		  }else{
-			  alert("请先选择一条记录修改");
+			  $.dialog.alert("请先选择一条记录修改",function(){});
 			  return;
 		  }
 		  
