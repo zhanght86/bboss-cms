@@ -163,14 +163,6 @@ function updateAfterChoose(accouts,realnames,node_key){
 		$("#realName"+node_key).val(realnames);
 		$("#realnames"+node_key).html(realnames);
 		
-		var candNodes = $("form").data("saveCandNode");
-		if(candNodes){
-			for(var j=0;j<candNodes.length;j++){
-				if(node_key == candNodes[j]){
-					saveCandi(node_key,accouts,realnames);
-				}
-			}
-		}
 	}
 }
 

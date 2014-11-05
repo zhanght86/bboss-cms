@@ -579,7 +579,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.commit();
 
 		} catch (Exception e) {
-			throw new Exception("开启流程出错:" + e.getMessage());
+			throw new Exception("开启流程出错:" + e);
 		} finally {
 			PlatformKPIServiceImpl.setWorktimelist(null);
 			tm.release();
@@ -849,10 +849,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				String userLevel = executor.queryObject(String.class,
 						"getUserLevelByOrgId", orgId);
 
-				HashMap<String, Object> map = new HashMap<String, Object>();
-				map.put("userLevel", userLevel.split("\\|"));
+				if (StringUtil.isNotEmpty(userLevel)) {
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("userLevel", userLevel.split("\\|"));
 
-				return this.getWFNodeConfigInfoForOrg(processKey, map);
+					return this.getWFNodeConfigInfoForOrg(processKey, map);
+
+				} else {
+
+					return null;
+				}
 			}
 
 			if (StringUtil.isEmpty(userId) && StringUtil.isEmpty(orgId)) {
@@ -861,7 +867,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("获取组织类型节点配置出错：" + e.getMessage());
+			throw new Exception("获取组织类型节点配置出错：" + e);
 		}
 
 		return null;
@@ -900,13 +906,18 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.commit();
 
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("userLevel", userLevel.split("\\|"));
+			if (StringUtil.isNotEmpty(userLevel)) {
 
-			return getWFNodeConfigInfoForOrg(processKey, map);
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("userLevel", userLevel.split("\\|"));
+
+				return getWFNodeConfigInfoForOrg(processKey, map);
+			} else {
+				return null;
+			}
 
 		} catch (Exception e) {
-			throw new Exception("通过userId获取组织类型节点配置出错：" + e.getMessage());
+			throw new Exception("通过userId获取组织类型节点配置出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -925,22 +936,30 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			if (StringUtil.isNotEmpty(userId)) {
 				orgNodeList = this
 						.getWFNodeConfigInfoForOrg(processKey, userId);
-			} else {
 
-				if (StringUtil.isNotEmpty(orgId)) {
-					// 用户组织节点和层级
-					String userLevel = executor.queryObject(String.class,
-							"getUserLevelByOrgId", orgId);
+				tm.commit();
+			} else if (StringUtil.isEmpty(userId)
+					&& StringUtil.isNotEmpty(orgId)) {
+				// 用户组织节点和层级
+				String userLevel = executor.queryObject(String.class,
+						"getUserLevelByOrgId", orgId);
+
+				if (StringUtil.isNotEmpty(userLevel)) {
 
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("userLevel", userLevel.split("\\|"));
 
 					orgNodeList = this.getWFNodeConfigInfoForOrg(processKey,
 							map);
+
+					tm.commit();
+
+				} else {
+
+					tm.commit();
+					return null;
 				}
 			}
-
-			tm.commit();
 
 			if (null == orgNodeList) {
 				return null;
@@ -949,11 +968,20 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				List<ActNode> commonNodeList = this
 						.getWFNodeConfigInfoForCommon(processKey);
 
-				return filterNodeConfig(orgNodeList, commonNodeList);
+				// 必须取交集集合
+				if (null == commonNodeList || commonNodeList.size() == 0) {
+
+					return null;
+
+				} else {
+
+					return filterNodeConfig(orgNodeList, commonNodeList);
+				}
+
 			}
 
 		} catch (Exception e) {
-			throw new Exception("获取组织类型节点配置出错1：" + e.getMessage());
+			throw new Exception("获取组织类型节点配置出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -973,6 +1001,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			if (StringUtil.isNotEmpty(userId)) {
 				orgNodeList = this
 						.getWFNodeConfigInfoForOrg(processKey, userId);
+
+				tm.commit();
 			} else {
 
 				if (StringUtil.isNotEmpty(orgId)) {
@@ -980,15 +1010,21 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					String userLevel = executor.queryObject(String.class,
 							"getUserLevelByOrgId", orgId);
 
-					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("userLevel", userLevel.split("\\|"));
+					if (StringUtil.isNotEmpty(userLevel)) {
 
-					orgNodeList = this.getWFNodeConfigInfoForOrg(processKey,
-							map);
+						HashMap<String, Object> map = new HashMap<String, Object>();
+						map.put("userLevel", userLevel.split("\\|"));
+
+						orgNodeList = this.getWFNodeConfigInfoForOrg(
+								processKey, map);
+						tm.commit();
+					} else {
+
+						tm.commit();
+						return null;
+					}
 				}
 			}
-
-			tm.commit();
 
 			if (null == orgNodeList) {
 				return this.getWFNodeConfigInfoForCommon(processKey);
@@ -997,7 +1033,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("获取组织类型节点配置出错1：" + e.getMessage());
+			throw new Exception("获取组织类型节点配置出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1044,17 +1080,40 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public List<ActNode> getWFNodeConfigInfoForbussinessAndCommmon(
 			String processKey, String typeId) throws Exception {
 
-		List<ActNode> bussinessNodeList = getWFNodeConfigInfoForbussiness(
-				processKey, typeId);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
 
-		if (null == bussinessNodeList) {
-			return null;
-		} else {
+			List<ActNode> bussinessNodeList = getWFNodeConfigInfoForbussiness(
+					processKey, typeId);
 
-			List<ActNode> commonNodeList = this
-					.getWFNodeConfigInfoForCommon(processKey);
+			if (null == bussinessNodeList) {
 
-			return filterNodeConfig(bussinessNodeList, commonNodeList);
+				tm.commit();
+				return null;
+
+			} else {
+
+				List<ActNode> commonNodeList = this
+						.getWFNodeConfigInfoForCommon(processKey);
+				tm.commit();
+
+				// 必须取交集集合
+				if (null == commonNodeList || commonNodeList.size() == 0) {
+
+					return null;
+
+				} else {
+
+					return filterNodeConfig(bussinessNodeList, commonNodeList);
+				}
+
+			}
+
+		} catch (Exception e) {
+			throw new Exception("获取组织类型节点配置出错：" + e);
+		} finally {
+			tm.release();
 		}
 	}
 
@@ -1073,7 +1132,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("获取组织类型节点配置出错1：" + e.getMessage());
+			throw new Exception("获取组织类型节点配置出错：" + e);
 		}
 	}
 
@@ -1163,7 +1222,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception("处理任务出错：" + e.getMessage());
+			throw new Exception("处理任务出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1253,7 +1312,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception("废弃任务出错：" + e.getMessage());
+			throw new Exception("废弃任务出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1372,7 +1431,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception("转办任务出错:" + e.getMessage());
+			throw new Exception("转办任务出错:" + e);
 		} finally {
 			tm.release();
 		}
@@ -1431,7 +1490,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception("撤销任务出错:" + e.getMessage());
+			throw new Exception("撤销任务出错:" + e);
 		} finally {
 			tm.release();
 		}
@@ -1580,7 +1639,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			return taskNum;
 
 		} catch (Exception e) {
-			throw new Exception("获取用户待办任务总数出错：" + e.getMessage());
+			throw new Exception("获取用户待办任务总数出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1617,7 +1676,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.commit();
 			return entrustTaskNum;
 		} catch (Exception e) {
-			throw new Exception("获取用户委托任务总数出错：" + e.getMessage());
+			throw new Exception("获取用户委托任务总数出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1667,7 +1726,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			return listInfo;
 		} catch (Exception e) {
-			throw new Exception("获取待办任务数据出错：" + e.getMessage());
+			throw new Exception("获取待办任务数据出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1727,7 +1786,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("获取待办任务数据出错：" + e.getMessage());
+			throw new Exception("获取待办任务数据出错：" + e);
 		} finally {
 			tm.release();
 		}
@@ -1823,6 +1882,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				throw new ProcessException("任务不存在或您没有权限处理当前任务");
 			} else {
 				proIns.setNowtaskId(nowTask.getTaskId());
+				proIns.setProInsId(nowTask.getInstanceId());
 			}
 
 			approveWorkFlow(proIns, processKey, paramMap);
@@ -2036,7 +2096,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			return model;
 		} catch (Exception e) {
-			throw new Exception("查看跳转查询数据出错:" + e.getMessage());
+			throw new Exception("查看跳转查询数据出错:" + e);
 		} finally {
 			tm.release();
 		}
@@ -2121,7 +2181,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.commit();
 		} catch (Exception e) {
-			throw new Exception("跳转到任意节点出错:" + e.getMessage());
+			throw new Exception("跳转到任意节点出错:" + e);
 		} finally {
 			tm.release();
 		}
@@ -2270,7 +2330,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("根据业务key获取当前任务节点信息出错:" + e.getMessage());
+			throw new Exception("根据业务key获取当前任务节点信息出错:" + e);
 		} finally {
 			tm.release();
 		}
@@ -2324,7 +2384,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" + e.getMessage());
+			throw new Exception("根据key获取当前任务节点信息出错:" + e);
 		} finally {
 			tm.release();
 		}

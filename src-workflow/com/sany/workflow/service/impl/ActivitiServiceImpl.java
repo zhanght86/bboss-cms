@@ -3671,8 +3671,18 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 
-		// 委托任务处理记录表
+		// 处理任务记录表
 		dbUtil.preparedDelete(" delete from TD_WF_DEAL_TASK where PROCESS_ID=?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		// 任意跳转记录表
+		dbUtil.preparedDelete(" delete from TD_WF_REJECTLOG where PROCESS_ID=?");
+		dbUtil.setString(1, processInstid);
+		dbUtil.addPreparedBatch();
+		
+		// 任意跳转归档表
+		dbUtil.preparedDelete(" delete from TD_WF_HI_REJECTLOG where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
 

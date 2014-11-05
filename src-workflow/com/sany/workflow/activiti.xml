@@ -2940,6 +2940,7 @@
 			       B.IS_RECALL,
 			       B.IS_EDITAFTER,
 			       B.IS_DISCARD,
+			       B.IS_DISCARDED,
 			       B.IS_COPY,
 			       B.IS_CANCEL,
 			       B.IS_AUTOAFTER,

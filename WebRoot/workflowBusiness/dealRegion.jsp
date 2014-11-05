@@ -40,14 +40,14 @@
 				
 				<input name="operateType" type="radio" value="pass" />通过
 				
-				<input name="operateType" type="radio" value="turnTo" />转办
+				<input name="operateType" type="radio" value="turnto" />转办
 				
 				<pg:equal colName="isCancel" value="1">
 					<input name="operateType" type="radio" value="reject" />驳回 
 				</pg:equal>
 			
 				<pg:equal colName="isDiscard" value="1">
-					<input name="operateType" type="radio" value="toEnd" />废弃
+					<input name="operateType" type="radio" value="toend" />废弃
 				</pg:equal>
 				
 				<pg:equal actual="${pagestate}" value="7" >
@@ -66,7 +66,7 @@
 				</pg:true>
 			
 				<pg:equal colName="isDiscarded" value="1">
-					<input name="operateType" type="radio" value="toEnd" />废弃
+					<input name="operateType" type="radio" value="toend" />废弃
 				</pg:equal>
 			
 				<pg:equal colName="isRecall" value="1">
@@ -90,7 +90,7 @@
 			<tr id="rejectto" style="display: none">
 				<th>驳回到：</th>
 				<td > 
-					<select name="rejectToActId" id="rejectToActId" onchange="setActName()">
+					<select name="rejectToActId" id="rejectToActId">
 						<pg:list requestKey="backActNodeList">
 							<option value="<pg:cell colName="actId"/>"><pg:cell colName="actName"/></option>
 						</pg:list>

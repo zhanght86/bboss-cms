@@ -2,10 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css"  href="../stylesheet/basic.css"/>
-<link rel="stylesheet" type="text/css"  href="../stylesheet/jscrollpane2.css" />
-<script type="text/javascript"   src="../js/jquery-1.8.2.min.js"></script>
-<script type="text/javascript"   src="../datepicker/My97DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet"  type="text/css"   href="../stylesheet/basic.css"/>
+<link rel="stylesheet"  type="text/css"   href="../stylesheet/left_menu.css" type="text/css" />
+<link rel="stylesheet"  type="text/css"   href="../stylesheet/jscrollpane2.css" />
+                                    
+<script language="javascript" type="text/javascript" src="../../include/datepicker/My97DatePicker/WdatePicker.js"></script>
+
+
+<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
+
+
+
 <script type="text/javascript"   src="../js/jquery.mousewheel.js" ></script>
 <script type="text/javascript"   src="../js/jquery.jscrollpane.min.js"></script>
 <script type="text/javascript"   src="../js/tableScroll.js"></script>
@@ -42,16 +49,15 @@ $(document).ready(function() {
 	  var parent=$("#search_button").parent();
 	  $("#senior_search_button").toggle(
 	  function()
-	  {    var seniorHeight=$("#senior_search_content").height();
-	       alert(seniorHeight)
-		   $("#senior_search_content").css("display","block")
+	  {    
+	       var seniorHeight=$("#senior_search_content").height();
+	       $("#senior_search_content").css("display","block")
 		   $("#search_button").appendTo($("#senior_search_content").find("div:last"));
 		   $(this).addClass(".bt_senior_select");
 		   $(".tableClone").css({"top": $("#tableTotal").offset().top})
-			 $(".jspHorizontalBar").css({
-			 "top":$("#tableTotal").height()+$("#tableTotal").offset().top,
-			 
-		});
+		   $(".jspHorizontalBar").css({
+			 "top":$("#tableTotal").height()+$("#tableTotal").offset().top,	 
+		   });
 					 
 	  },
 	  function()
@@ -61,12 +67,12 @@ $(document).ready(function() {
 		   $("#search_button").appendTo(parent);
 		   $(this).removeClass(".bt_senior_select");
 		   $(".tableClone").css({"top": $("#tableTotal").offset().top})
-			 $(".jspHorizontalBar").css({
-			 "top":$("#tableTotal").height()+$("#tableTotal").offset().top
-			 
-		});
+		   $(".jspHorizontalBar").css({
+			 "top":$("#tableTotal").height()+$("#tableTotal").offset().top 
+		   });
 		  
 	  })
+	  
    
    
    
@@ -145,11 +151,7 @@ $("table").find("tr").hover(
      
       <a   href="javascript:void(0)" class="bt_senior_search" id="senior_search_button"
       style="position:absolute;right:10px;bottom:8px;"><span>高级搜素</span></a>
-     
-     
-     
-      
-      
+
      <div style="clear:both;"></div>
     </div>  
  <div class="list_box">
@@ -190,91 +192,91 @@ $("table").find("tr").hover(
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 1 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 2 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 3 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 4 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 5 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 6 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 7 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 8 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 9 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 10 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 11 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 12</td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 13 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 14 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
      <tr>
        <td><input id="id616189" value="c7ee2713-cc2b-497a-af02-72078a8334c1" type="checkbox" name="mm"  onclick="checkItem(this, 'mmAll')" state="2" /></td>
        <td> 15 </td>
        <td>31400051/20885756</td>
-       <td><a href="#">查看</a>  <a href="#">修改</a></td>
+       <td><a href="#">修改</a>   <a href="#">删除</a>  </td>
      </tr>
     
     </table>
