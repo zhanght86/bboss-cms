@@ -197,4 +197,21 @@ public class BusinessDemoAction {
 			return "fail:" + e.getMessage();
 		}
 	}
+
+	/**
+	 * 处理任务
+	 * 
+	 * @param proIns
+	 * @param processKey
+	 * @param paramMap
+	 * @return
+	 * @throws Exception
+	 *             2014年9月19日
+	 */
+	public @ResponseBody(datatype = "json")
+	List<String> getBusinessKeyList(String businessKey, ModelMap model)
+			throws Exception {
+
+		return demoService.getBusinessKeyList(businessKey);
+	}
 }

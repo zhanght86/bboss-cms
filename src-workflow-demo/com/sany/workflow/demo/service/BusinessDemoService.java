@@ -31,4 +31,6 @@ public interface BusinessDemoService {
 
 	public List<BusinessDemoTreeEntity> getSonNodes(String parentID);
 
+	public List<String> getBusinessKeyList(String businessKey) throws Exception;
+
 }

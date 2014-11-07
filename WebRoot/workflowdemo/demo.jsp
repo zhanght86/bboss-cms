@@ -6,15 +6,46 @@
 <title>业务演示</title>
 <%@ include file="/common/jsp/common-css-lhgdialog.jsp"%>
 <script language="javascript" type="text/javascript" src="${pageContext.request.contextPath}/html3/js/tab.js"></script>
+<script type='text/javascript' src="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.css" />
 
 <script type="text/javascript">
+var ctx			=	"${pageContext.request.contextPath}";	
 $(document).ready(function() {
 	
 	$("#wait").hide();
 	
-	queryList();  
-       		
+	queryList(); 
+	
+	 $("#businessKey").focus(function(){
+		 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyList.page";
+         $.post(url,{},function(data){
+             initAutoComplete(data);
+         },"json");
+     });
+
 });
+
+function initAutoComplete(data){
+	
+	$("#businessKey").autocomplete(data , {
+         minChars:1,
+         width:165,
+         dataType:"json",
+         matchContains: true,
+         cacheLength : 10,
+         matchSubset : true,
+         formatItem: function(row, i, max) {
+         	return "<I>"+row[0]+"</I>";
+         },
+         formatMatch: function(row, i, max) {
+              return row[0];
+         },
+         formatResult: function(row) {
+              return row[0];
+         }
+     });
+ }
 
 // 选择流程
 function toSelectProc() {

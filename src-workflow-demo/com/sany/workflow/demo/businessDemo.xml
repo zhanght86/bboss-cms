@@ -106,4 +106,15 @@
 			       (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = a.process_key)
 		]]>
 	</property>
+	
+	<property name="getBusinessKeyList">
+		<![CDATA[
+			select t.business_key_ from act_hi_procinst t
+			
+			 #if($businessKey && !$businessKey.equals(""))
+			 	where t.business_key_ like #[businessKey]
+			 #end
+		]]>
+	</property>
+	
 </properties>

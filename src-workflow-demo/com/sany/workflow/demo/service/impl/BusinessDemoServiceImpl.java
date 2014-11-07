@@ -150,8 +150,8 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 	@Override
 	public boolean hasSonNodes(String parentID) {
 		try {
-			int count = executor
-					.queryObject(int.class, "hasSonNodes", parentID,parentID);
+			int count = executor.queryObject(int.class, "hasSonNodes",
+					parentID, parentID);
 			return count > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -163,10 +163,22 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 	public List<BusinessDemoTreeEntity> getSonNodes(String parentID) {
 		try {
 			return executor.queryList(BusinessDemoTreeEntity.class,
-					"selectSonBusinessList", parentID,parentID);
+					"selectSonBusinessList", parentID, parentID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<String> getBusinessKeyList(String businessKey) throws Exception {
+		HashMap<String, String> param = new HashMap<String, String>();
+
+		if (StringUtil.isNotEmpty(businessKey)) {
+			param.put("businessKey", "%" + businessKey + "%");
+		}
+
+		return executor
+				.queryListBean(String.class, "getBusinessKeyList", param);
 	}
 }

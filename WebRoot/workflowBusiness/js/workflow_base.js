@@ -12,13 +12,14 @@ $(document).ready(function(){
 	
 	//如果是驳回按钮，显示驳回至节点
 	$("input[name=operateType]").click( function () { 
-		if($(this).val()=='reject'){
+		var op = $(this).val();
+		if(op=='reject'){
 			$("input[name=toActName]").val($("select[id=rejectToActId] option:selected").text());
 			$("#rejectto").show();
 		}else{
 			$("#rejectto").hide(); 
 		}
-		if($(this).val()=='turnTo'){
+		if(op=='turnto' || op == 'turnTo'){
 			$("#delegateTr").show();
 		}else{
 			$("#delegateTr").hide(); 
@@ -207,7 +208,7 @@ function checkoutPageElement(){
 			return false;
 		}
 
-		if(check == 'turnTo'){
+		if(check == 'turnto'){
 			var duser = $("#delegateUser").val();
 			if(!duser||duser==''){
 				$.dialog.alert("请选择转办人！",function(){});
