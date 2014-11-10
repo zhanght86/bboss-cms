@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
+import com.sany.workflow.demo.entity.ListData;
+import com.sany.workflow.demo.entity.PageData;
 
 /**
  * 任务管理业务接口
@@ -31,6 +33,10 @@ public interface BusinessDemoService {
 
 	public List<BusinessDemoTreeEntity> getSonNodes(String parentID);
 
-	public List<String> getBusinessKeyList(String businessKey) throws Exception;
+	public PageData getBusinessKeyList(String businessKey, int limit)
+			throws Exception;
+
+	public List<ListData> getBusinessKeyList(String businessKey)
+			throws Exception;
 
 }

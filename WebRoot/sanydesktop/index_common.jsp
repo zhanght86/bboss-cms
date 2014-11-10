@@ -74,6 +74,9 @@ function logout()
 	)
 }
 </script>
+<style>
+html{overflow:hidden}
+</style>
 </head>
 <body>
 <div id="wrap">

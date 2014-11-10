@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.frameworkset.util.annotations.PagerParam;
+import org.frameworkset.util.annotations.RequestParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
@@ -17,6 +18,8 @@ import com.sany.workflow.business.entity.ActNode;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.business.util.WorkflowConstants;
+import com.sany.workflow.demo.entity.ListData;
+import com.sany.workflow.demo.entity.PageData;
 import com.sany.workflow.demo.service.BusinessDemoService;
 
 /**
@@ -209,8 +212,26 @@ public class BusinessDemoAction {
 	 *             2014年9月19日
 	 */
 	public @ResponseBody(datatype = "json")
-	List<String> getBusinessKeyList(String businessKey, ModelMap model)
-			throws Exception {
+	PageData getBusinessKeyPageList(
+			String businessKey, int limit,
+			ModelMap model) throws Exception {
+
+		return demoService.getBusinessKeyList(businessKey, limit);
+	}
+
+	/**
+	 * 处理任务
+	 * 
+	 * @param proIns
+	 * @param processKey
+	 * @param paramMap
+	 * @return
+	 * @throws Exception
+	 *             2014年9月19日
+	 */
+	public @ResponseBody(datatype = "json")
+	List<ListData> getBusinessKeyList(String businessKey, int limit,
+			ModelMap model) throws Exception {
 
 		return demoService.getBusinessKeyList(businessKey);
 	}

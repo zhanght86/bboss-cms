@@ -109,7 +109,7 @@
 	
 	<property name="getBusinessKeyList">
 		<![CDATA[
-			select t.business_key_ from act_hi_procinst t
+			select t.business_key_ ,t.proc_inst_id_ from act_hi_procinst t
 			
 			 #if($businessKey && !$businessKey.equals(""))
 			 	where t.business_key_ like #[businessKey]

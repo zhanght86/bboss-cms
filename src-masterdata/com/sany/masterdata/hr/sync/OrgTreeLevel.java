@@ -103,7 +103,7 @@ public class OrgTreeLevel {
         if (temp.getOrgTreeLevel() != null && temp.getOrgTreeLevel().equals("")) {
             return;
         } else if (temp.getParentId().equals(TREE_BASE)) {
-            temp.setOrgTreeLevel(TREE_BASE + CUT_UP + temp.getOrgSn());
+            temp.setOrgTreeLevel(TREE_BASE + CUT_UP + temp.getOrgId());
         } else {
             getTreeLevel(orgMap, temp.getParentId());
             if(orgMap.get(temp.getParentId()) != null)

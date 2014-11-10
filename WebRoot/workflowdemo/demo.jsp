@@ -10,42 +10,67 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.css" />
 
 <script type="text/javascript">
-var ctx			=	"${pageContext.request.contextPath}";	
 $(document).ready(function() {
 	
 	$("#wait").hide();
 	
-	queryList(); 
+	queryList();
 	
-	 $("#businessKey").focus(function(){
-		 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyList.page";
-         $.post(url,{},function(data){
-             initAutoComplete(data);
-         },"json");
-     });
+ 	 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyPageList.page";
+ 		$("#businessKey").autocomplete(url , {
+ 	         minChars:1,//自动完成激活之前填入的最小字符 
+ 	         width:175,
+ 	         max:20,
+ 	         dataType:"json",
+ 	         extraParams: {    
+ 	        	 businessKey: function(){return $("#businessKey").val()}
+ 	         },
+ 	         scroll : true,//是否显示滚动条
+ 	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
+ 	         cacheLength : 30, //缓存结果队列长度 
+ 	         valuefiled:"business_key_",
+ 	         //下拉列表格式   
+ 	         formatItem: function(row, i, max) {
+ 	         	return "<I>"+row.business_key_+"</I>";
+ 	         },
+ 	         //与这些相匹配
+ 	         formatMatch: function(row, i, max) {
+ 	              return row;
+ 	         }
+ 	     }).result(function(event,row,formatted){//通过result函数可进对数据进行其他操作
+ 	    	 // $("#idCard").val(row.card);
+ 	     });
+
+	
+	 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyList.page";
+        $.post(url,{},function(data){
+            initAutoComplete(data);
+        },"json");
+    
 
 });
 
 function initAutoComplete(data){
 	
-	$("#businessKey").autocomplete(data , {
+	$("#businessKey1").autocomplete(data , {
          minChars:1,
-         width:165,
+         width:175,
          dataType:"json",
          matchContains: true,
          cacheLength : 10,
-         matchSubset : true,
+         valuefiled:"business_key_",
+         max:30,
+         //下拉列表格式   
          formatItem: function(row, i, max) {
-         	return "<I>"+row[0]+"</I>";
+         	return "<I>"+row.business_key_+"</I> -- <I>"+row.proc_inst_id_+"</I>";
          },
+         //与这些相匹配
          formatMatch: function(row, i, max) {
-              return row[0];
-         },
-         formatResult: function(row) {
-              return row[0];
+              return row;
          }
      });
  }
+
 
 // 选择流程
 function toSelectProc() {
@@ -119,7 +144,8 @@ function doreset(){
 		<table>
 			<tr><td>
 			    <div class="sany_li2">
-			      	业务单号<input id="businessKey" name="businessKey" type="text"  class="input1" value="" />
+			      	业务单号<input id="businessKey" name="businessKey" type="text" class="input1" style="width: 165px;" value="" />
+			      	业务单号<input id="businessKey1" name="businessKey1" type="text" class="input1" style="width: 165px;" value="" />
 			    </div> 
 			    <a href="#" class="bt_search" onclick="queryList();"><span>查询</span></a>
 	    	</td></tr>

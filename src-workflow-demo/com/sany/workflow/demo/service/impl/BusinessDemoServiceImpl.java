@@ -28,6 +28,8 @@ import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
 import com.sany.workflow.demo.entity.DemoEntity;
+import com.sany.workflow.demo.entity.ListData;
+import com.sany.workflow.demo.entity.PageData;
 import com.sany.workflow.demo.service.BusinessDemoService;
 import com.sany.workflow.service.ActivitiService;
 
@@ -171,14 +173,37 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 	}
 
 	@Override
-	public List<String> getBusinessKeyList(String businessKey) throws Exception {
+	public PageData getBusinessKeyList(String businessKey, int limit)
+			throws Exception {
 		HashMap<String, String> param = new HashMap<String, String>();
 
 		if (StringUtil.isNotEmpty(businessKey)) {
 			param.put("businessKey", "%" + businessKey + "%");
 		}
 
-		return executor
-				.queryListBean(String.class, "getBusinessKeyList", param);
+		ListInfo listInfo = executor.queryListInfoBean(ListData.class,
+				"getBusinessKeyList", 0, limit, param);
+		PageData pageData = new PageData();
+		if (null != listInfo) {
+			pageData.setDatas(listInfo.getDatas());
+			pageData.setTotalsize(listInfo.getTotalSize());
+		}
+
+		return pageData;
+	}
+
+	@Override
+	public List<ListData> getBusinessKeyList(String businessKey)
+			throws Exception {
+		HashMap<String, String> param = new HashMap<String, String>();
+
+		if (StringUtil.isNotEmpty(businessKey)) {
+			param.put("businessKey", "%" + businessKey + "%");
+		}
+
+		List<ListData> listInfo = executor.queryListBean(ListData.class,
+				"getBusinessKeyList", param);
+
+		return listInfo;
 	}
 }

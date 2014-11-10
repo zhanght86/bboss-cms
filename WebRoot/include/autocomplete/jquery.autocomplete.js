@@ -369,16 +369,18 @@ $.Autocompleter = function(input, options) {
 				port: "autocomplete" + input.name,
 				dataType: options.dataType,
 				url: options.url,
+				type: "POST",// 20141107
 				data: $.extend({
-					q: lastWord(term),
+					//q: lastWord(term),
 					limit: options.max
-				}, extraParams),
+				}, extraParams),				
 				success: function(data) {
-					var parsed = options.parse && options.parse(data) || parse(data);
+					var parsed = parse(data);
 					cache.add(term, parsed);
 					success(term, parsed);
 				}
 			});
+			
 		} else {
 			// if we have a failure, we need to empty the list -- this prevents the the [TAB] key from selecting the last successful match
 			select.emptyList();
@@ -388,17 +390,48 @@ $.Autocompleter = function(input, options) {
 	
 	function parse(data) {
 		var parsed = [];
-		var rows = data.split("\n");
+		//var rows = data.split("\n");  20141107
+		var rows ;
+		if(!data.totalsize)
+		{
+			rows = data;			
+		}
+		else
+		{
+			rows = data.datas;			
+		}
 		for (var i=0; i < rows.length; i++) {
-			var row = $.trim(rows[i]);
+			var row =  rows[i];
 			if (row) {
-				row = row.split("|");
-				parsed[parsed.length] = {
-					data: row,
-					value: row[0],
-					result: options.formatResult && options.formatResult(row, row[0]) || row[0]
-				};
+				if(options.valuefiled)
+				{
+					var filedvalue = row[options.valuefiled];
+					parsed[parsed.length] = {
+							data: row,
+							value: filedvalue,
+							result: options.formatResult && options.formatResult(row, filedvalue) || filedvalue
+						};
+				}
+				else
+				{
+					parsed[parsed.length] = {
+							data: row,
+							value: row,
+							result: options.formatResult && options.formatResult(row, row) || row
+						};
+				}
+				
 			}
+		}
+		
+		if(!data.totalsize)
+		{
+					
+			parsed['totalsize'] = rows.length;
+		}
+		else
+		{					
+			parsed['totalsize'] = data.totalsize;
 		}
 		return parsed;
 	};
@@ -416,7 +449,7 @@ $.Autocompleter.defaults = {
 	minChars: 1,
 	delay: 400,
 	matchCase: false,
-	matchSubset: true,
+	matchSubset: false,
 	matchContains: false,
 	cacheLength: 10,
 	max: 100,
@@ -475,12 +508,17 @@ $.Autocompleter.Cache = function(options) {
 		stMatchSets[""] = [];
 		
 		// loop through the array and create a lookup structure
+		var valuefiled = options.valuefiled;
 		for ( var i = 0, ol = options.data.length; i < ol; i++ ) {
-			var rawValue = options.data[i];
+			var rowdata = options.data[i];
 			// if rawValue is a string, make an array otherwise just reference the array
-			rawValue = (typeof rawValue == "string") ? [rawValue] : rawValue;
-			
-			var value = options.formatMatch(rawValue, i+1, options.data.length);
+			//rawValue = (typeof rawValue == "string") ? [rawValue] : rawValue;
+			var rawValue;
+			if(valuefiled)
+				rawValue = rowdata[valuefiled];
+			else 
+				rawValue = rowdata;
+			var value = options.formatMatch?options.formatMatch(rawValue, i+1, options.data.length):rawValue;
 			if ( value === false )
 				continue;
 				
@@ -492,9 +530,11 @@ $.Autocompleter.Cache = function(options) {
 			// if the match is a string
 			var row = {
 				value: value,
-				data: rawValue,
-				result: options.formatResult && options.formatResult(rawValue) || value
+				data: rowdata,
+				result: options.formatResult && options.formatResult(rowdata,value) || value
 			};
+			
+			
 			
 			// push the current match into the set list
 			stMatchSets[firstChar].push(row);
@@ -549,14 +589,20 @@ $.Autocompleter.Cache = function(options) {
 							}
 						});
 					}
-				}				
+				}	
+				csub['totalsize'] = csub.length;
 				return csub;
 			} else 
 			// if the exact item exists, use it
 			if (data[q]){
 				return data[q];
-			} else
-			if (options.matchSubset) {
+			} 
+			else 
+			{
+				return null;
+			}
+				
+			/**if (options.matchSubset) {
 				for (var i = q.length - 1; i >= options.minChars; i--) {
 					var c = data[q.substr(0, i)];
 					if (c) {
@@ -566,11 +612,12 @@ $.Autocompleter.Cache = function(options) {
 								csub[csub.length] = x;
 							}
 						});
+						csub['totalsize'] = csub.length;
 						return csub;
 					}
 				}
 			}
-			return null;
+			return null;*/
 		}
 	};
 };
@@ -592,7 +639,8 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	function init() {
 		if (!needsInit)
 			return;
-		element = $("<div/>")
+//		element = $("<div />") 20141110
+		element = $("<div id=div_"+input.id+" />")
 		.hide()
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
@@ -665,6 +713,9 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	
 	function fillList() {
 		list.empty();
+		
+		$("#li_"+input.id).remove(); //清除底部统计条数 20141107
+		
 		var max = limitNumberOfItems(data.length);
 		for (var i=0; i < max; i++) {
 			if (!data[i])
@@ -674,6 +725,12 @@ $.Autocompleter.Select = function (options, input, select, config) {
 				continue;
 			var li = $("<li/>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_even" : "ac_odd").appendTo(list)[0];
 			$.data(li, "ac_data", data[i]);
+			
+			//增加统计条数 20141107
+			if (i == max -1 ) {
+				var li = $("<li id='li_"+input.id+"' />").html("显示 "+max+" 匹配记录(共"+data['totalsize']+"个)").appendTo("#div_"+input.id);
+				$.data(li, "ac_data", data[i]);
+			}
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
