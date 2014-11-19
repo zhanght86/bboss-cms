@@ -1134,8 +1134,8 @@ public class WorkflowController implements WorkflowService {
 
 		try {
 
-			activitiTaskService.rejectToPreTask(task,
-					activitiNodeCandidateList, nodevariableList, rejectedType);
+//			activitiTaskService.rejectToPreTask(task,
+//					activitiNodeCandidateList, nodevariableList, rejectedType);
 
 			rr.setResultCode("1");
 			rr.setResultMess("驳回任务操作成功");
@@ -1336,8 +1336,8 @@ public class WorkflowController implements WorkflowService {
 			}
 
 			// 完成任务
-			activitiTaskService.completeTask(task, activitiNodeCandidateList,
-					nodevariableList);
+//			activitiTaskService.completeTask(task, activitiNodeCandidateList,
+//					nodevariableList);
 
 			rr.setResultCode("1");
 			rr.setResultMess("通过任务操作成功");

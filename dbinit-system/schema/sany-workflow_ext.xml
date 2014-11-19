@@ -61,6 +61,9 @@
         <column name="TASK_URL" size="500" type="VARCHAR" />
         <column name="NODE_DESCRIBE" size="4000" type="VARCHAR" />
         <column name="NODE_NAME" size="255" type="VARCHAR" />
+        <column name="COPYUSERS" size="4000" type="VARCHAR" />
+        <column name="COPYORGS" size="4000" type="VARCHAR" />
+        <column name="COPYERSCNNAME" size="4000" type="VARCHAR" />
     </table>
     <table name="TD_WF_NODE_HI_WORKTIME">
         <column name="PROCESS_KEY" size="200" type="NVARCHAR"/>
@@ -85,6 +88,9 @@
         <column name="NODE_DESCRIBE" size="4000" type="VARCHAR" />
         <column name="NODE_NAME" size="255" type="VARCHAR" />
         <column name="BACKUPTIME" type="TIMESTAMP" />
+         <column name="COPYUSERS" size="4000" type="VARCHAR" />
+        <column name="COPYORGS" size="4000" type="VARCHAR" />
+        <column name="COPYERSCNNAME" size="4000" type="VARCHAR" />
     </table>
     <table name="TD_WF_PROC_MESSTEMPLATE">
         <column name="NOTICEID" primaryKey="true" required="true" size="100" type="VARCHAR"/>
@@ -181,5 +187,33 @@
         <column name="PROCESSKEY" size="255" type="NVARCHAR"/>
         <column name="WF_FORMDATA" type="CLOB"/>
     </table>
+    
+<!--     <table name="TD_WF_COPYTASK"> -->
+<!--         <column name="ID" size="100" primaryKey="true" required="true" type="VARCHAR"/> -->
+<!--         <column name="COPERTYPE" size="1" type="DECIMAL" default="0"/> -->
+<!--         <column name="COPER" size="255" type="VARCHAR"/> -->
+<!--         <column name="PROCESS_ID" size="100" type="NVARCHAR"/> -->
+<!--         <column name="PROCESS_KEY" size="200" type="NVARCHAR"/> -->
+<!--         <column name="BUSINESSKEY" size="255" type="NVARCHAR"/> -->
+<!--         <column name="COPYTIME" type="TIMESTAMP"/> -->
+<!--         <column name="ACT_ID" size="64" type="NVARCHAR"/> -->
+<!--         <column name="ACT_NAME" size="255" type="NVARCHAR"/> -->
+<!--         <column name="ACT_INSTID" size="64" type="NVARCHAR"/> -->
+<!--     </table> -->
+<!--     <table name="TD_WF_HI_COPYTASK"> -->
+<!--         <column name="ID" size="100" primaryKey="true" required="true" type="VARCHAR"/> -->
+<!--         <column name="copyid" size="100" type="VARCHAR"/> -->
+<!--         <column name="COPORG" size="255" type="VARCHAR"/> -->
+<!--         <column name="COPER" size="255" type="VARCHAR"/> -->
+<!--         <column name="PROCESS_ID" size="100" type="NVARCHAR"/> -->
+<!--         <column name="PROCESS_KEY" size="200" type="NVARCHAR"/> -->
+<!--         <column name="BUSINESSKEY" size="255" type="NVARCHAR"/> -->
+<!--         <column name="COPYTIME" type="TIMESTAMP"/> -->
+<!--         <column name="READTIME" type="TIMESTAMP"/> -->
+<!--         <column name="ACT_ID" size="64" type="NVARCHAR"/> -->
+<!--         <column name="ACT_NAME" size="255" type="NVARCHAR"/> -->
+<!--         <column name="ACT_INSTID" size="64" type="NVARCHAR"/> -->
+<!--         <column name="COPERCNNAME" size="255" type="NVARCHAR"/> -->
+<!--     </table> -->
    
 </database>

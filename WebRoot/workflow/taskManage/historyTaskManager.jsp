@@ -17,8 +17,12 @@
 $(document).ready(function() {
 
 	$("#wait").hide();
+	
+	$("#hiCopywait").hide();
        		
 	queryList();   
+	
+	queryHiCopyList();
        		
     $('#delBatchButton').click(function() {
            delBatch();
@@ -29,7 +33,14 @@ $(document).ready(function() {
    	});
            	
 });
-       
+
+//加载已抄送列表数据  
+function queryHiCopyList(){
+	
+    $("#hiCopyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryHiCopyTaskData.page #hiCopyContent", 
+    	{"process_key":"${processKey}"},function(){loadjs();});
+}
+
 //加载实时任务列表数据  
 function queryList(){
 	var processIntsId = $("#processIntsId").val();
@@ -152,6 +163,40 @@ function doreset(){
 			</div>
 			
 			<div id="historyContainer" style="overflow:auto"></div>
+			
+			<%--已读抄送任务div --%>
+			<div id="hiCopyDiv" >
+				<!-- <div id="searchblock" >
+					
+						<div class="search_top">
+							<div class="right_top"></div>
+							<div class="left_top"></div>
+						</div>
+						
+						<div class="search_box">
+							<form id="hiCopyForm" name="hiCopyForm">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								</table>
+							</form>
+						</div>
+						
+						<div class="search_bottom">
+							<div class="right_bottom"></div>
+							<div class="left_bottom"></div>
+						</div>
+					</div> -->
+					
+					<div class="title_box">
+						<div class="rightbtn"></div>
+							
+						<strong>抄送任务列表</strong>
+						<img id="hiCopywait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+					</div>
+					
+					<div id="hiCopyContainer" style="overflow:auto"></div>
+			
+			</div>
+			
 		</div>
 	</div>
 </body>

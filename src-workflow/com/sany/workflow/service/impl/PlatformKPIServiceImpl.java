@@ -110,6 +110,9 @@ public class PlatformKPIServiceImpl implements KPIService {
 			param.setNODE_NAME(controlParam.getNODE_NAME());
 			param.setPROCESS_ID(processInstanceId);
 			param.setPROCESS_KEY(controlParam.getPROCESS_KEY());
+			param.setCopyersCNName(controlParam.getCOPYERSCNNAME());
+			param.setCopyOrgs(controlParam.getCOPYORGS());
+			param.setCopyUsers(controlParam.getCOPYUSERS());
 			
 			return param;
 			

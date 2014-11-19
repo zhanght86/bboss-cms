@@ -39,7 +39,16 @@ function makeOneCheck(obj) {
 	$(obj).get(0).checked = true;
 }
 
-function saveSort(){
+function setIsCopy(obj,nodekey) {
+	if (obj.value != '0') {
+		$("#"+nodekey+"_isCopyShow").attr("checked",true);
+	}else {
+		$("#"+nodekey+"_isCopyShow").attr("checked",false);
+	}
+	
+}
+
+function saveSort(){isCopyShow
 	var FIRST_USERNODE_NUM = 0;
 	/**
 	$(".FIRST_USERNODE").each(function() {
@@ -70,9 +79,9 @@ function saveSort(){
 			},
 		success : function(data){
 			if (data != 'success') {
-				W.$.dialog.alert("保存节点顺序出错："+data,function(){},api);
+				W.$.dialog.alert("保存出错："+data,function(){},api);
 			}else {
-				W.$.dialog.alert("节点顺序修改成功",function(){},api);
+				W.$.dialog.alert("保存成功",function(){},api);
 			}
 		}
 	 });
@@ -129,6 +138,7 @@ function trMoveToend(obj){
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" id="tab" class="stable">
 		<pg:header>
 			<th>默认撤<br/>回节点</th>
+			<th>抄送节点</th>
 			<th>节点KEY</th>
 			<th>节点名称</th>
 			<th>操作</th>
@@ -140,13 +150,27 @@ function trMoveToend(obj){
 			
 		<pg:list requestKey="nodeList">
 			<tr >
-				<td ><input type="radio" class="FIRST_USERNODE" name="<pg:cell colName='NODE_KEY'/>_FIRST_USERNODE" value="1"
+				<td class="td_center"><input type="radio" class="FIRST_USERNODE" name="<pg:cell colName='NODE_KEY'/>_FIRST_USERNODE" value="1"
 				id="FIRST_USERNODE" onclick="makeOneCheck(this)"
 				<pg:equal colName="FIRST_USERNODE" value="1">checked</pg:equal> />
 				<input type="hidden" name="ID" value="<pg:cell colName="ID"/>"/>
 				<input type="hidden" name="NODE_KEY" value="<pg:cell colName="NODE_KEY"/>"/>
 				<input type="hidden" name="ORDER_NUM" class="ORDER_NUM" value="<pg:cell colName="ORDER_NUM"/>"/></td>
-				<td ><pg:cell colName="NODE_KEY"/></td>
+				<td >
+					<pg:equal colName="NODE_TYPE" value="userTask">
+						<select id="IS_COPY" name="<pg:cell colName="NODE_KEY"/>_IS_COPY" onchange="setIsCopy(this,'<pg:cell colName="NODE_KEY"/>')">
+							<option value="0" <pg:equal colName="IS_COPY" value="0">selected</pg:equal>>普通节点</option>
+							<option value="1" <pg:equal colName="IS_COPY" value="1">selected</pg:equal>>抄送节点</option>
+							<option value="2" <pg:equal colName="IS_COPY" value="2">selected</pg:equal>>通知节点</option>
+						</select>
+					</pg:equal>
+					<pg:notequal colName="NODE_TYPE" value="userTask">
+						<select id="IS_COPY" name="IS_COPY" >
+							<option value="0" selected>普通节点</option>
+						</select>
+					</pg:notequal>
+				</td>
+				<td class="td_center"><pg:cell colName="NODE_KEY"/></td>
 				<td ><pg:cell colName="NODE_NAME"/></td>
 				<td >
 			         <INPUT type="button" value="顶" onclick="trMoveTofirst(this)" />
@@ -214,13 +238,6 @@ function trMoveToend(obj){
 						<input type="checkbox" disabled />可废弃
 					</pg:empty>
 					
-					<pg:notempty colName="IS_COPY">
-						<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
-					</pg:notempty>
-					<pg:empty colName="IS_COPY">
-						<input type="checkbox" disabled />可抄送
-					</pg:empty>
-					
 					<pg:notempty colName="IS_MULTI">
 						<input type="checkbox" disabled <pg:equal colName="IS_MULTI" value="1">checked </pg:equal>/>多实例
 					</pg:notempty>
@@ -234,6 +251,8 @@ function trMoveToend(obj){
 					<pg:empty colName="IS_SEQUENTIAL">
 						<input type="checkbox" disabled />串行
 					</pg:empty>
+					
+					<input type="checkbox"  id="<pg:cell colName="NODE_KEY"/>_isCopyShow" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
 				</td>
 				</pg:equal>
 				<pg:notequal colName="NODE_TYPE" value="userTask"><td>&nbsp;</td></pg:notequal>

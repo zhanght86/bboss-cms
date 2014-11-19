@@ -2,45 +2,46 @@ package com.sany.workflow.entity;
 
 import java.sql.Timestamp;
 
+import org.frameworkset.util.annotations.RequestParam;
+
 public class Nodevariable {
-	
+	@RequestParam(name = "variable_id")
 	private String id;
-	
+	@RequestParam(name = "variable_processKey")
 	private String processKey;
-	
+	@RequestParam(name = "variable_node_key")
 	private String node_key;
-	
+	@RequestParam(name = "variable_business_id")
 	private String business_id;
-	
+	@RequestParam(name = "variable_business_type")
 	private String business_type;
-	
+	@RequestParam(name = "variable_node_id")
 	private String node_id;
-	
-	
+	@RequestParam(name = "variable_param_name")
 	private String param_name;
-	
+	@RequestParam(name = "variable_param_value")
 	private String param_value;
-	
+	@RequestParam(name = "variable_param_type")
 	private String param_type;
-	
+	@RequestParam(name = "variable_param_blob_value")
 	private String param_blob_value;
-	
+	@RequestParam(name = "variable_param_clob_value")
 	private String param_clob_value;
-	
+	@RequestParam(name = "variable_param_time_value")
 	private Timestamp param_time_value;
-	
+	@RequestParam(name = "variable_param_row_number")
 	private String param_row_number;
-	
+	@RequestParam(name = "variable_owner_type")
 	private int owner_type;
-	
+	@RequestParam(name = "variable_param_des")
 	private String param_des;
-	
+	@RequestParam(name = "variable_node_name")
 	private String node_name;
-	
+	@RequestParam(name = "variable_is_edit_param")
 	private int is_edit_param;
+	@RequestParam(name = "variable_rowno_")
 	private int rowno_;
-	
-	
+
 	public String getId() {
 		return id;
 	}
@@ -48,7 +49,6 @@ public class Nodevariable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
 
 	public String getProcessKey() {
 		return processKey;
@@ -81,7 +81,6 @@ public class Nodevariable {
 	public void setNode_id(String node_id) {
 		this.node_id = node_id;
 	}
-
 
 	public String getParam_name() {
 		return param_name;
@@ -186,7 +185,5 @@ public class Nodevariable {
 	public void setRowno_(int rowno_) {
 		this.rowno_ = rowno_;
 	}
-	
-	
 
 }

@@ -116,7 +116,7 @@ function getTreeDate(){
 			if (data) {
 				treeData = data;
 			} else {
-				$.dialog.alert('查询应用菜单异常');
+				W.$.dialog.alert('查询应用菜单异常');
 			}
 		}	
 	 });
@@ -139,8 +139,14 @@ function initWfAppSelect(){
 
 function loadProcess() {
 	
+	if("${empty unloadProcesses}" == "true") {
+		W.$.dialog.alert("没有需要装载的数据");
+		return ;
+	}
+	
+	
 	if($('#businessType').combotree('getValue')==''){
-		$.dialog.alert("请选择所属业务类型");
+		W.$.dialog.alert("请选择所属业务类型");
 	  	return;
 	  }
 	

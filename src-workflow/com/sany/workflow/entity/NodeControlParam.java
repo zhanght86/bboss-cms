@@ -39,14 +39,20 @@ public class NodeControlParam {
 	private int IS_DISCARD;// 可废弃 0 不能 1 能
 	@RequestParam(name = "${NODE_KEY}_IS_DISCARDED")
 	private int IS_DISCARDED;// 可被废弃 0 不能 1 能
-	@RequestParam(name = "${NODE_KEY}_IS_COPY")
-	private int IS_COPY;// 可抄送 0 不能 1 能
 	@RequestParam(name = "${NODE_KEY}_IS_MULTI")
 	private int IS_MULTI;// 是否多实例 0 单实例 1 多实例
 	@RequestParam(name = "${NODE_KEY}_IS_SEQUENTIAL")
 	private int IS_SEQUENTIAL;// 是否串行 0 串行 1 并行
 
 	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
+	@RequestParam(name = "${NODE_KEY}_IS_COPY")
+	private int IS_COPY;// 可抄送 0 不能 1 能
+
+	private String COPYUSERS;// 抄送用户
+
+	private String COPYORGS;// 抄送部门
+
+	private String COPYERSCNNAME;// 抄送用户+部门名称
 
 	private String TASK_URL;// 待办URL
 
@@ -68,7 +74,7 @@ public class NodeControlParam {
 
 	@RequestParam(name = "${NODE_KEY}_FIRST_USERNODE")
 	private int FIRST_USERNODE;// 第一人工节点 0不是1是
-	
+
 	public int getFIRST_USERNODE() {
 		return FIRST_USERNODE;
 	}
@@ -291,6 +297,30 @@ public class NodeControlParam {
 
 	public void setNODE_DESCRIBE(String nODE_DESCRIBE) {
 		NODE_DESCRIBE = nODE_DESCRIBE;
+	}
+
+	public String getCOPYUSERS() {
+		return COPYUSERS;
+	}
+
+	public void setCOPYUSERS(String cOPYUSERS) {
+		COPYUSERS = cOPYUSERS;
+	}
+
+	public String getCOPYORGS() {
+		return COPYORGS;
+	}
+
+	public void setCOPYORGS(String cOPYORGS) {
+		COPYORGS = cOPYORGS;
+	}
+
+	public String getCOPYERSCNNAME() {
+		return COPYERSCNNAME;
+	}
+
+	public void setCOPYERSCNNAME(String cOPYERSCNNAME) {
+		COPYERSCNNAME = cOPYERSCNNAME;
 	}
 
 }

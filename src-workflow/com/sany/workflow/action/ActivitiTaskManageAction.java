@@ -216,6 +216,75 @@ public class ActivitiTaskManageAction {
 	}
 
 	/**
+	 * 加载未读抄送任务数据
+	 * 
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param process_key
+	 * @param businesskey
+	 * @param model
+	 * @return 2014年11月17日
+	 */
+	public String queryCopyTaskData(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			String process_key, String businesskey, ModelMap model) {
+
+		try {
+
+			ListInfo copyTaskList = activitiTaskService.getUserCopyTasks(
+					process_key, businesskey, offset, pagesize);
+
+			model.addAttribute("copyTaskList", copyTaskList);
+
+			return "path:copyTaskList";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
+	}
+
+	/**
+	 * 加载已读抄送任务数据
+	 * 
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param process_key
+	 * @param businesskey
+	 * @param model
+	 * @return 2014年11月17日
+	 */
+	public String queryHiCopyTaskData(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			String process_key, String businesskey, ModelMap model) {
+
+		try {
+
+			ListInfo hiCopyTaskList = activitiTaskService
+					.getUserReaderCopyTasks(process_key, businesskey, offset,
+							pagesize);
+
+			model.addAttribute("hiCopyTaskList", hiCopyTaskList);
+
+			return "path:hiCopyTaskList";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
+	}
+
+	/**
 	 * 查看特定流程的任务管理信息
 	 * 
 	 * @param processKey
@@ -434,13 +503,14 @@ public class ActivitiTaskManageAction {
 
 				task.setCompleteRemark(remark);
 
+				// 完成任务
+				activitiTaskService.completeTask(task,
+						activitiNodeCandidateList, nodevariableList,
+						nodeControlParamList);
+
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
-
-				// 完成任务
-				activitiTaskService.completeTask(task,
-						activitiNodeCandidateList, nodevariableList);
 
 				tm.commit();
 
@@ -583,13 +653,13 @@ public class ActivitiTaskManageAction {
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
 
+				activitiTaskService.rejectToPreTask(task,
+						activitiNodeCandidateList, nodevariableList,
+						nodeControlParamList, rejectedtype);
+
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
-
-				activitiTaskService.rejectToPreTask(task,
-						activitiNodeCandidateList, nodevariableList,
-						rejectedtype);
 
 				return "success";
 			} else {
@@ -902,6 +972,99 @@ public class ActivitiTaskManageAction {
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();
+		}
+	}
+
+	/**
+	 * 删除变量参数
+	 * 
+	 * @param variableId
+	 * @param model
+	 *            2014年11月11日
+	 */
+	public @ResponseBody
+	String delVariable(String variableId, ModelMap model) {
+
+		try {
+			activitiTaskService.delVariable(variableId);
+
+			return "success";
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+
+	/**
+	 * 完成抄送任务
+	 * 
+	 * @param copyId
+	 * @param model
+	 * @return 2014年11月14日
+	 */
+	public String viewCopyTask(String processInstId, String copyId,
+			ModelMap model) {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			// 记录阅读人
+			String user = AccessControl.getAccessControl().getUserAccount();
+
+			activitiService.getTaskService().completeCopyTask(copyId, user);
+
+			// 获取流程实例信息
+			ProcessInst processInst = activitiService
+					.getProcessInstById(processInstId);
+			model.addAttribute("processInst", processInst);
+
+			if (processInst != null) {
+				// 获取流程实例的处理记录
+				List<TaskManager> taskHistorList = activitiService
+						.queryHistorTasks(processInstId);
+
+				model.addAttribute("taskHistorList", taskHistorList);
+
+				// 获取流程所有参数
+				List<ActivitiVariable> instVariableList = activitiService
+						.getInstVariableInfoById(processInstId);
+
+				model.addAttribute("instVariableList", instVariableList);
+
+				// 获取当前活动级别参数
+				Object[] arryObj = activitiService
+						.getCurTaskVariableInfoById(processInstId);
+
+				model.addAttribute("taskVariableMap", arryObj[0]);
+				model.addAttribute("variableRownum",
+						Integer.parseInt(arryObj[1] + "") + 1);// 加标题行
+				model.addAttribute("instanceRownum", arryObj[1]);
+
+				// 获取流程实例下所有人工节点控制参数信息
+				List<NodeControlParam> controlParamList = activitiTaskService
+						.getNodeControlParamByProcessId(processInst.getKEY_(),
+								processInstId);
+				model.addAttribute("controlParamList", controlParamList);
+
+				// 预警、超时状态转义
+				Map<Integer, String> advanceSendMap = WorkFlowConstant
+						.getAdvanceSend();
+				Map<Integer, String> overtimeSendMap = WorkFlowConstant
+						.getOvertimeSend();
+				model.addAttribute("advanceSendMap", advanceSendMap);
+				model.addAttribute("overtimeSendMap", overtimeSendMap);
+			}
+
+			tm.commit();
+
+			return "path:viewTaskDetailInfo";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
 		}
 	}
 

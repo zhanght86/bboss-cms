@@ -22,6 +22,7 @@
        	<th>超时提醒状况</th>
        	<th>处理人</th>
        	<th>签收人</th>
+       	<th>已阅人</th>
        	<th>处理操作</th>
        	<th>处理意见</th>
        	<th>备注</th>
@@ -90,6 +91,9 @@
 		    	</td>  
 		    	<td>
 					<pg:cell colName="ASSIGNEE_NAME"/>
+				</td>  
+				<td>
+					<pg:cell colName="readedCopyTaskNames"/>
 				</td>  
 		    	<td>
 					 <pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>

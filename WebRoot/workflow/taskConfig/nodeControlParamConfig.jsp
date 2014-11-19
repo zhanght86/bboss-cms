@@ -60,14 +60,13 @@
 				<td>
 					<table border="0" cellpadding="0" cellspacing="0" class="table6" >
 						<tr>
-							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_VALID" id="IS_VALID" value="1" <pg:equal colName="IS_VALID" value="1">checked</pg:equal>/>是否有效</td>
+							<%-- <td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_VALID" id="IS_VALID" value="1" <pg:equal colName="IS_VALID" value="1">checked</pg:equal>/>是否有效</td> --%>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_EDIT" id="IS_EDIT" value="1" <pg:equal colName="IS_EDIT" value="1">checked</pg:equal>/>可修改 </td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_CANCEL" id="IS_CANCEL" value="1" <pg:equal colName="IS_CANCEL" value="1">checked</pg:equal>/>可驳回</td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_EDITAFTER" id="IS_EDITAFTER" value="1" <pg:equal colName="IS_EDITAFTER" value="1">checked</pg:equal>/>可修改后续节点</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_RECALL" id="IS_RECALL" value="1" <pg:equal colName="IS_RECALL" value="1">checked</pg:equal>/>可被撤回 </td>
-							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_COPY" id="IS_COPY" value="1" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送</td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARD" id="IS_DISCARD" value="1" <pg:equal colName="IS_DISCARD" value="1">checked</pg:equal>/>可废弃</td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>后续节点自动审批</td>
 						</tr>
@@ -80,8 +79,9 @@
 							</td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_SEQUENTIAL" id="IS_SEQUENTIAL" value="1" 
 								<pg:equal colName="IS_SEQUENTIAL" value="1">checked</pg:equal> />串行
+								
+								<input type="checkbox" disabled  <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
 							</td>
-							<td>&nbsp;</td>
 						</tr>
 					</table>
 					

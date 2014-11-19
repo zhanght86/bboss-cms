@@ -68,7 +68,14 @@
 var api = frameElement.api, W = api.opener;
 // 选择用户
 function openChooseUsers(node_key){
-	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?users="+$("#"+node_key+"_users_id").val()+"&node_key="+node_key+"&user_realnames="+$("#"+node_key+"_users_name").val();
+	//alert(node_key);
+	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
+			+"process_key=${process_key}&users="+$('#'+node_key+'_users_id').val()
+			+"&user_realnames="+$('#'+node_key+'_users_name').val()
+			+"&org_id="+$('#'+node_key+'_org_id').val()
+			+"&org_name="+$('#'+node_key+'_org_name').val()
+			+"&all_names="+$('#'+node_key+'_all_names').val()
+			+"&node_key="+node_key
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
 }
 // 选择组
@@ -83,6 +90,14 @@ function openChooseGroups(node_key){
 }
 
 function doCandidateSubmit(){
+	
+	var businessKey = $.trim($("#businessKey").val());
+	
+	if (businessKey == '') {
+		$.dialog.alert("业务主题不能为空",function(){});
+		return ;
+	}
+	
 	$.ajax({
 
 		url: "<%=request.getContextPath()%>/workflow/repository/startPorcessInstance.page",
@@ -116,9 +131,12 @@ function query(businessId,businessType,treename){
 
 //清空选择
 function emptyChoose(id,type){
-	if (type=='1') {//清空用户
+	if (type=='1') {//清空用户或组
 		$("#"+id+"_users_id").val('');
 		$("#"+id+"_users_name").val('');
+		$("#"+id+"_org_id").val('');
+		$("#"+id+"_org_name").val('');
+		$("#"+id+"_all_names").val('');
 	}else {//清空组
 		$("#"+id+"_groups_id").val('');
 		$("#"+id+"_groups_name").val('');
@@ -127,14 +145,14 @@ function emptyChoose(id,type){
 
 //新增参数配置行
 function addTr(){
-	var trHtml = "<tr class='replaceTr'><td><select name='node_id' id='node_id'>";
+	var trHtml = "<tr class='replaceTr'><td><select name='variable_node_id' id='node_id'>";
 	<pg:list requestKey="nodeInfoList">
-		trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
+		trHtml+="<option value='<pg:cell colName='id'/>'><pg:cell colName='node_name'/></option>";
 	</pg:list>
 	trHtml+="</select></td>";
-	trHtml+="<td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
-	trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
-	trHtml+="<td><input type='text' class='input1 w200' name='param_des'/></td>";
+	trHtml+="<td><input type='text' class='input1 w20' name='variable_param_name' class='checkClass'/></td>";
+	trHtml+="<td><input type='text' class='input1 w20' name='variable_param_value'/></td>";
+	trHtml+="<td><input type='text' class='input1 w200' name='variable_param_des'/></td>";
 	trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
 	$("#tb3").append(trHtml);
 	$(".bt").click(function(){

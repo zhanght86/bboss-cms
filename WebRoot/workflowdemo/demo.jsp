@@ -16,19 +16,21 @@ $(document).ready(function() {
 	
 	queryList();
 	
+	<%-- 分页查询数据--%>
  	 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyPageList.page";
  		$("#businessKey").autocomplete(url , {
  	         minChars:1,//自动完成激活之前填入的最小字符 
  	         width:175,
- 	         max:20,
+ 	         max:20,// 最多显示多少条记录
  	         dataType:"json",
+ 	         // 扩展字段
  	         extraParams: {    
  	        	 businessKey: function(){return $("#businessKey").val()}
  	         },
  	         scroll : true,//是否显示滚动条
  	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
  	         cacheLength : 30, //缓存结果队列长度 
- 	         valuefiled:"business_key_",
+ 	         valuefiled:"business_key_",// 默认显示实体哪个属性
  	         //下拉列表格式   
  	         formatItem: function(row, i, max) {
  	         	return "<I>"+row.business_key_+"</I>";
@@ -58,7 +60,7 @@ function initAutoComplete(data){
          dataType:"json",
          matchContains: true,
          cacheLength : 10,
-         valuefiled:"business_key_",
+         valuefiled:"business_key_",// 默认显示实体哪个属性
          max:30,
          //下拉列表格式   
          formatItem: function(row, i, max) {

@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.Group;
@@ -51,6 +50,15 @@ public interface ActivitiConfigService {
 			int pagesize);
 	
 	/**
+	 * 根据查询条件查询用户分页列表
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public List<User> queryUsersAndOrgToJson(User user, long offset,
+			int pagesize)throws Exception;
+	
+	/**
 	 * 获取单个用户信息
 	 * @param offset
 	 * @param pagesize
@@ -64,6 +72,14 @@ public interface ActivitiConfigService {
 	 * @return
 	 */
 	public List<User> queryUsersByNames(String usernames);
+	
+	/** 判断是否抄送节点 gw_tanx
+	 * @param nodeKey 节点key
+	 * @param processKey 流程key
+	 * @return
+	 * 2014年11月10日
+	 */
+	public boolean isCopyNode(String nodeKey,String processKey)throws Exception;
 	
 	/**
 	 * 根据一组用户名查询CandidateGroup

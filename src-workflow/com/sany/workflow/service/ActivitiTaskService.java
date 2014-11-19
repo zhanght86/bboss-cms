@@ -45,7 +45,8 @@ public interface ActivitiTaskService {
 	 */
 	public void completeTask(TaskCondition task,
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList);
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList);
 
 	/**
 	 * 驳回任务
@@ -56,7 +57,8 @@ public interface ActivitiTaskService {
 	 */
 	public void rejectToPreTask(TaskCondition task,
 			List<ActivitiNodeInfo> nodeList,
-			List<Nodevariable> nodevariableList, int rejectedtype);
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList, int rejectedtype);
 
 	/**
 	 * 驳回任务
@@ -245,5 +247,42 @@ public interface ActivitiTaskService {
 	 */
 	public ActivitiNodeInfo getFirstUserNode(String processKey)
 			throws Exception;
+
+	/**
+	 * 删除变量参数
+	 * 
+	 * @param variableId
+	 * @throws Exception
+	 *             2014年11月11日
+	 */
+	public void delVariable(String variableId) throws Exception;
+
+	/**
+	 * 分页获取抄送任务
+	 * 
+	 * @param process_key
+	 * @param businesskey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年11月17日
+	 */
+	public ListInfo getUserCopyTasks(String process_key, String businesskey,
+			long offset, int pagesize) throws Exception;
+
+	/**
+	 * 分页获取已读抄送任务
+	 * 
+	 * @param process_key
+	 * @param businesskey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年11月18日
+	 */
+	public ListInfo getUserReaderCopyTasks(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception;
 
 }

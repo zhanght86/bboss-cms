@@ -162,6 +162,49 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	}
 	
 	/**
+	 * 根据查询条件查询用户列表和下级部门列表
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public List<User> queryUsersAndOrgToJson(User user, long offset,
+			int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+
+			tm.begin();
+			
+			List<User> userOrgList = new ArrayList<User>();
+
+			// 用户列表
+			ListInfo listInfo = executor.queryListInfoBean(User.class,
+					"selectUsersByCondition", offset, pagesize, user);
+			
+			if (null != listInfo.getDatas()) {
+				userOrgList.addAll(listInfo.getDatas());
+			}
+			
+			// 部门列表
+			if (StringUtil.isNotEmpty(user.getOrg_id())) {
+				List<User> orgList = executor.queryList(User.class,
+						"selectOrgsByCondition", user.getOrg_id(),
+						user.getOrg_id());
+
+				userOrgList.addAll(orgList);
+			}
+
+			tm.commit();
+			return userOrgList;
+			
+		} catch (Exception e) {
+			throw new Exception ("查询数据列表出错:"+e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	/**
 	 * 根据查询条件查询用户列表
 	 * @param offset
 	 * @param pagesize
@@ -559,17 +602,17 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	public String saveNodevariable(List<Nodevariable> nodevariableList,String business_id,String business_type,String process_key){
 		TransactionManager tm = new TransactionManager();
 		try{
-			for(int ii=0;nodevariableList != null && ii<nodevariableList.size();ii++){
-				Nodevariable b = nodevariableList.get(ii);
-				b.setRowno_(ii);
-				if(b!=null&&b.getNode_id()!=null){
-					if(b.getParam_name()==null||b.getParam_name().isEmpty()){
-						
-						return "参数名称不能为空";
-					}
-
-				}
-			}
+//			for(int ii=0;nodevariableList != null && ii<nodevariableList.size();ii++){
+//				Nodevariable b = nodevariableList.get(ii);
+//				b.setRowno_(ii);
+//				if(b!=null&&b.getNode_id()!=null){
+//					if(b.getParam_name()==null||b.getParam_name().isEmpty()){
+//						
+//						return "参数名称不能为空";
+//					}
+//
+//				}
+//			}
 			tm.begin();
 			
 
@@ -1033,6 +1076,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	public String saveNodeContralParam(
 			List<NodeControlParam> nodeControlParamList, String business_id,
 			String business_type, String process_key) {
+		
 		TransactionManager tm = new TransactionManager();
 
 		try {
@@ -1068,80 +1112,86 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	@Override
 	public List<NodeControlParam> getNodeContralParamList(String processKey,
 			String business_id, String business_type) throws Exception {
-		try {
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("process_key", processKey);
-			params.put("business_id", business_id);
-			params.put("business_type", business_type);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("process_key", processKey);
+		params.put("business_id", business_id);
+		params.put("business_type", business_type);
 
-			List<NodeControlParam> list = executor.queryListBean(
-					NodeControlParam.class, "queryNodeContralParam_wf", params);
-			
-			if (list != null && list.size() > 0) {
-				List<ActivityImpl> activties = activitiService
-						.getActivitImplListByProcessKey(processKey);
+		List<NodeControlParam> list = executor.queryListBean(
+				NodeControlParam.class, "queryNodeContralParam_wf", params);
 
-				for (int i = 0; i < list.size(); i++) {
-					NodeControlParam nodeInfo = list.get(i);
+		if (list != null && list.size() > 0) {
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
 
-					for (ActivityImpl activtie : activties) {
-						if (activtie.getId().equals(nodeInfo.getNODE_KEY())) {
+			for (int i = 0; i < list.size(); i++) {
+				NodeControlParam nodeInfo = list.get(i);
 
-							if (activtie.isMultiTask()) {
-								nodeInfo.setIS_MULTI_DEFAULT(1);
-							} else {
-								nodeInfo.setIS_MULTI_DEFAULT(0);
-							}
-							
-							break;
+				for (ActivityImpl activtie : activties) {
+					if (activtie.getId().equals(nodeInfo.getNODE_KEY())) {
+
+						if (activtie.isMultiTask()) {
+							nodeInfo.setIS_MULTI_DEFAULT(1);
+						} else {
+							nodeInfo.setIS_MULTI_DEFAULT(0);
 						}
+
+						break;
 					}
 				}
 			}
-			
-			return list;
-		} catch (Exception e) {
-			return null;
 		}
+
+		return list;
 	}
 
 	@Override
 	public NodeControlParam getNodeContralParam(String processKey,
 			String business_id, String business_type, String taskKey)
 			throws Exception {
-		try {
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("process_key", processKey);
-			params.put("business_id", business_id);
-			params.put("business_type", business_type);
-			params.put("taskKey", taskKey);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("process_key", processKey);
+		params.put("business_id", business_id);
+		params.put("business_type", business_type);
+		params.put("taskKey", taskKey);
 
-			NodeControlParam controlParam = executor.queryObjectBean(
-					NodeControlParam.class, "queryNodeContralParam_wf", params);
-			
-			if (controlParam != null){
-				List<ActivityImpl> activties = activitiService
-						.getActivitImplListByProcessKey(processKey);
-				
-				for (ActivityImpl activtie : activties) {
-					if (activtie.getId().equals(taskKey)) {
-						if (activtie.isMultiTask()) {
-							controlParam.setIS_MULTI_DEFAULT(1);
-						} else {
-							controlParam.setIS_MULTI_DEFAULT(0);
-						}
+		NodeControlParam controlParam = executor.queryObjectBean(
+				NodeControlParam.class, "queryNodeContralParam_wf", params);
+
+		if (controlParam != null) {
+			List<ActivityImpl> activties = activitiService
+					.getActivitImplListByProcessKey(processKey);
+
+			for (ActivityImpl activtie : activties) {
+				if (activtie.getId().equals(taskKey)) {
+					if (activtie.isMultiTask()) {
+						controlParam.setIS_MULTI_DEFAULT(1);
+					} else {
+						controlParam.setIS_MULTI_DEFAULT(0);
 					}
 				}
 			}
-
-			return controlParam;
-		} catch (Exception e) {
-			return null;
 		}
+
+		return controlParam;
 	}
 
 	@Override
 	public void saveNodeOrderNum(List<NodeControlParam> controlParamList) throws Exception{
 		executor.updateBeans("updateNodeOrderNum", controlParamList);
+	}
+
+	@Override
+	public boolean isCopyNode(String nodeKey, String processKey)
+			throws Exception {
+
+		NodeControlParam controlParam = executor.queryObject(
+				NodeControlParam.class, "iscopynode_wf", nodeKey, processKey);
+
+		if (null != controlParam && controlParam.getIS_COPY() == 1) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

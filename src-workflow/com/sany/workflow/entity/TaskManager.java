@@ -113,6 +113,8 @@ public class TaskManager {
 
 	private String BUSSINESS_OP;// 业务操作任务方式(通过，驳回，撤销等)
 	private String BUSSINESS_REMARK;// 业务处理意见
+	
+	private String readedCopyTaskNames;//已读任务名单
 
 	public String getNAME_() {
 		return NAME_;
@@ -506,6 +508,14 @@ public class TaskManager {
 
 	public void setGROUP_ID(String gROUP_ID) {
 		GROUP_ID = gROUP_ID;
+	}
+
+	public String getReadedCopyTaskNames() {
+		return readedCopyTaskNames;
+	}
+
+	public void setReadedCopyTaskNames(String readedCopyTaskNames) {
+		this.readedCopyTaskNames = readedCopyTaskNames;
 	}
 
 }

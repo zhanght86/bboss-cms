@@ -7,12 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.impl.persistence.entity.CopyTaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeInfo;
@@ -64,7 +68,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	 */
 	private Map<String, Object> getVariableMap(
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList) {
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList) {
 
 		Map<String, Object> variableMap = new HashMap<String, Object>();
 
@@ -72,31 +77,74 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		if (activitiNodeCandidateList != null
 				&& activitiNodeCandidateList.size() > 0) {
 			for (int i = 0; i < activitiNodeCandidateList.size(); i++) {
-				// 用户
-				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-						.getNode_users_id())) {
+				ActivitiNodeInfo nodeCandidate = activitiNodeCandidateList
+						.get(i);
 
-					variableMap
-							.put(activitiNodeCandidateList.get(i).getNode_key()
-									+ "_users", activitiNodeCandidateList
-									.get(i).getNode_users_id());
+				// 过滤抄送节点
+				if (nodeCandidate.getIs_copy() == 0) {
+					// 用户
+					if (!StringUtil.isEmpty(nodeCandidate.getNode_users_id())) {
+
+						variableMap.put(nodeCandidate.getNode_key() + "_users",
+								nodeCandidate.getNode_users_id());
+					} else {
+						variableMap.put(nodeCandidate.getNode_key() + "_users",
+								"");
+					}
+
+					// 组
+					if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
+							.getNode_groups_id())) {
+						variableMap.put(
+								nodeCandidate.getNode_key() + "_groups",
+								nodeCandidate.getNode_groups_id());
+					} else {
+						variableMap.put(
+								nodeCandidate.getNode_key() + "_groups", "");
+					}
 				} else {
-					variableMap.put(activitiNodeCandidateList.get(i)
-							.getNode_key() + "_users", "");
-				}
+					for (int j = 0; j < nodeControlParamList.size(); j++) {
+						NodeControlParam controlParam = nodeControlParamList
+								.get(j);
 
-				// 组
-				if (!StringUtil.isEmpty(activitiNodeCandidateList.get(i)
-						.getNode_groups_id())) {
-					variableMap.put(activitiNodeCandidateList.get(i)
-							.getNode_key() + "_groups",
-							activitiNodeCandidateList.get(i)
-									.getNode_groups_id());
-				} else {
-					variableMap.put(activitiNodeCandidateList.get(i)
-							.getNode_key() + "_groups", "");
-				}
+						if (!controlParam.getNODE_KEY().equals(
+								nodeCandidate.getNode_key())) {
+							continue;
+						}
 
+						controlParam.setIS_COPY(nodeCandidate.getIs_copy());
+						controlParam.setCOPYUSERS(nodeCandidate
+								.getNode_users_id());
+						controlParam.setCOPYORGS(nodeCandidate
+								.getNode_orgs_id());
+
+						if (StringUtil.isNotEmpty(nodeCandidate
+								.getNode_users_id())
+								&& StringUtil.isNotEmpty(nodeCandidate
+										.getNode_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getNode_users_name()
+									+ ","
+									+ nodeCandidate.getNode_orgs_name());
+
+						} else if (StringUtil.isEmpty(nodeCandidate
+								.getNode_users_id())
+								&& StringUtil.isNotEmpty(nodeCandidate
+										.getNode_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getNode_orgs_name());
+
+						} else if (StringUtil.isNotEmpty(nodeCandidate
+								.getNode_users_id())
+								&& StringUtil.isEmpty(nodeCandidate
+										.getNode_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getNode_users_name());
+						} else {
+							controlParam.setCOPYERSCNNAME("");
+						}
+					}
+				}
 			}
 		}
 
@@ -116,13 +164,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public void completeTask(TaskCondition task,
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList) {
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList) {
 
 		try {
 
 			// 获取参数配置信息
 			Map<String, Object> variableMap = getVariableMap(
-					activitiNodeCandidateList, nodevariableList);
+					activitiNodeCandidateList, nodevariableList,
+					nodeControlParamList);
 
 			// 未签收任务处理
 			if ("1".equals(task.getTaskState())) {
@@ -168,7 +218,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public void rejectToPreTask(TaskCondition task,
 			List<ActivitiNodeInfo> nodeList,
-			List<Nodevariable> nodevariableList, int rejectedtype) {
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList, int rejectedtype) {
 
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -181,7 +232,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 			// 获取参数配置信息
 			Map<String, Object> variableMap = getVariableMap(nodeList,
-					nodevariableList);
+					nodevariableList, nodeControlParamList);
 
 			String remark = "["
 					+ activitiService.getUserInfoMap().getUserName(
@@ -235,10 +286,47 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				ActivitiNodeInfo nodeInfo = nodeList.get(i);
 
 				// 节点处理工时转换
-				if (nodeInfo.getDURATION_NODE() != null) {
-					long worktime = Long.parseLong(nodeInfo.getDURATION_NODE());
-					nodeInfo.setDURATION_NODE(StringUtil
-							.formatTimeToString(worktime));
+				// if (nodeInfo.getDuration_node() != null) {
+				// long worktime = Long.parseLong(nodeInfo.getDuration_node());
+				// nodeInfo.setDuration_node(StringUtil
+				// .formatTimeToString(worktime));
+				// }
+
+				// 抄送节点去worktime获取处理人
+				if (nodeInfo.getIs_copy() != 0) {
+					nodeInfo.setNode_users_id(nodeInfo.getCopyusers());
+					nodeInfo.setNode_orgs_id(nodeInfo.getCopyorgs());
+
+					if (StringUtil.isNotEmpty(nodeInfo.getCopyerscnname())) {
+						if (StringUtil.isNotEmpty(nodeInfo.getCopyusers())
+								&& StringUtil
+										.isNotEmpty(nodeInfo.getCopyorgs())) {
+
+							String usersName = activitiService
+									.userIdToUserName(nodeInfo.getCopyusers(),
+											"1");
+							nodeInfo.setNode_users_name(usersName);
+							nodeInfo.setNode_orgs_name(nodeInfo
+									.getCopyerscnname().substring(
+											usersName.length() + 1));
+
+						} else if (StringUtil.isEmpty(nodeInfo.getCopyusers())
+								&& StringUtil
+										.isNotEmpty(nodeInfo.getCopyorgs())) {
+							nodeInfo.setNode_users_name("");
+							nodeInfo.setNode_orgs_name(nodeInfo
+									.getCopyerscnname());
+						} else if (StringUtil.isNotEmpty(nodeInfo
+								.getCopyusers())
+								&& StringUtil.isEmpty(nodeInfo.getCopyorgs())) {
+							nodeInfo.setNode_users_name(nodeInfo
+									.getCopyerscnname());
+							nodeInfo.setNode_orgs_name("");
+						} else {
+							nodeInfo.setNode_users_name("");
+							nodeInfo.setNode_orgs_name("");
+						}
+					}
 				}
 			}
 
@@ -453,6 +541,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					ActivitiVariable variable = variableList.get(i);
 
 					Nodevariable node = new Nodevariable();
+					node.setId(variable.getID_());
 					node.setParam_name(variable.getNAME_());
 					node.setParam_value(variable.getTEXT_());
 
@@ -1166,5 +1255,117 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 
 		return nodeInfo;
+	}
+
+	@Override
+	public void delVariable(String variableId) throws Exception {
+		executor.delete("delVariable_wf", variableId);
+	}
+
+	@Override
+	public ListInfo getUserCopyTasks(String process_key, String businesskey,
+			long offset, int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+
+			ListInfo copyTaskList = null;
+
+			if (!isAdmin) {
+
+				String user = AccessControl.getAccessControl().getUserAccount();
+				String orgid = (String) UserCacheManager.getInstance()
+						.getUserAttribute(user, "mainOrg");
+				Organization org = OrgCacheManager.getInstance()
+						.getOrganization(orgid);
+				String orgtreelevel = org.getOrgtreelevel();
+
+				String[] arrayOrg = orgtreelevel.split("\\|");
+				List<String> orgs = new ArrayList<String>();
+				for (int i = arrayOrg.length - 1; i >= 0; i--) {
+					if (!arrayOrg[i].equals("0")) {
+						orgs.add(arrayOrg[i]);
+					}
+				}
+
+				copyTaskList = activitiService.getTaskService()
+						.getUserCopyTasks(user, orgs, process_key, businesskey,
+								offset, pagesize);
+			} else {
+				copyTaskList = activitiService.getTaskService()
+						.getAdminCopyTasks(process_key, businesskey, offset,
+								pagesize);
+			}
+
+			// 转中文名
+			List<CopyTaskEntity> copylist = copyTaskList.getDatas();
+			if (copylist != null && copylist.size() > 0) {
+				for (int i = 0; i < copylist.size(); i++) {
+					CopyTaskEntity copyTask = copylist.get(i);
+					// 用户
+					if (copyTask.getCopertype() == 0) {
+						copyTask.setCoperCNName(activitiService
+								.getUserInfoMap().getUserName(
+										copyTask.getCoper()));
+
+					} else {
+						// 部门
+						Organization org = OrgCacheManager.getInstance()
+								.getOrganization(copyTask.getCoper());
+						copyTask.setCoperCNName(org.getOrgName());
+
+					}
+
+				}
+			}
+			tm.commit();
+			return copyTaskList;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public ListInfo getUserReaderCopyTasks(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+
+			ListInfo hiCopyTaskList = null;
+
+			if (!isAdmin) {
+
+				String user = AccessControl.getAccessControl().getUserAccount();
+
+				hiCopyTaskList = activitiService.getTaskService()
+						.getUserReaderCopyTasks(user, process_key, businesskey,
+								offset, pagesize);
+
+			} else {
+				hiCopyTaskList = activitiService.getTaskService()
+						.getAdminUserReaderCopyTasks(process_key, businesskey,
+								offset, pagesize);
+			}
+
+			tm.commit();
+			return hiCopyTaskList;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
 	}
 }

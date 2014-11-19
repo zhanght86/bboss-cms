@@ -53,6 +53,10 @@ public class ActivitiNodeCandidate {
 	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
 	
 	private String nodeTypeName;//类型名称
+	
+	private int is_copy;//是否抄送节点
+
+	private NodeControlParam nodeControlParam;// 节点控制变量参数
 
 	public int getIS_MULTI_DEFAULT() {
 		return IS_MULTI_DEFAULT;
@@ -61,9 +65,7 @@ public class ActivitiNodeCandidate {
 	public void setIS_MULTI_DEFAULT(int iS_MULTI_DEFAULT) {
 		IS_MULTI_DEFAULT = iS_MULTI_DEFAULT;
 	}
-
-	private NodeControlParam nodeControlParam;// 节点控制变量参数
-
+	
 	public String getNodeTypeName() {
 		return nodeTypeName;
 	}
@@ -262,6 +264,14 @@ public class ActivitiNodeCandidate {
 
 	public void setCandidate_roles_name(String candidate_roles_name) {
 		this.candidate_roles_name = candidate_roles_name;
+	}
+
+	public int getIs_copy() {
+		return is_copy;
+	}
+
+	public void setIs_copy(int is_copy) {
+		this.is_copy = is_copy;
 	}
 
 }

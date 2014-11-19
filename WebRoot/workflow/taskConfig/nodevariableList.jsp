@@ -13,16 +13,14 @@
 	<pg:list autosort="false" requestKey="nodevariablelist">
 		<tr>
 			<td><pg:cell colName="node_name"></pg:cell>
-				<input type="hidden" id="node_id" name="node_id"value="<pg:cell colName='node_id'/>" />
-				<input type="hidden" value="<pg:cell colName='param_name'/>" name="param_name"/>
+				<input type="hidden" id="node_id" name="variable_node_id" value="<pg:cell colName='node_id'/>" />
+				<input type="hidden" name="variable_param_name" value="<pg:cell colName='param_name'/>" />
 			</td>
 			<td><pg:cell colName="param_name"></pg:cell>
 			</td>
-			<td><input type="text" class="input1 w20"
-				value="<pg:cell colName='param_value'/>" name="param_value"/></td>
-			<td><input type="text" class="input1 w200"
-				value="<pg:cell colName='param_des'/>" name="param_des"/></td>
-			<td><select name="is_edit_param">
+			<td><input type="text" class="input1 w20" name="variable_param_value" value="<pg:cell colName='param_value'/>" /></td>
+			<td><input type="text" class="input1 w200" name="variable_param_des" value="<pg:cell colName='param_des'/>" /></td>
+			<td><select name="variable_is_edit_param">
 					<pg:equal colName="is_edit_param" value="0">
 						<option value="0" selected>是</option>
 						<option value="1">否</option>
@@ -32,7 +30,7 @@
 						<option value="1" selected>否</option>
 					</pg:equal>
 			</select></td>
-			<td><a href="javascript:void(0);" class="bt"><span>删除</span></a>
+			<td><a href="javascript:void(0);" class="bt" ><span>删除</span></a>
 			</td>
 		</tr>
 	</pg:list>

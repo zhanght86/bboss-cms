@@ -55,8 +55,8 @@
 			<td>
 				<table border="0" cellpadding="0" cellspacing="0" class="table6" >
 					<tr>
-						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
-						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_VALID" id="IS_VALID" value="1" <pg:equal colName="IS_VALID" value="1">checked</pg:equal>/>是否有效</td>
+					<%--<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
+						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_VALID" id="IS_VALID" value="1" <pg:equal colName="IS_VALID" value="1">checked</pg:equal>/>是否有效</td> --%>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_EDIT" id="IS_EDIT" value="1" <pg:equal colName="IS_EDIT" value="1">checked</pg:equal>/>可修改 </td>
 						<td><input type="checkbox" <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
@@ -67,8 +67,6 @@
 					<tr>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_RECALL" id="IS_RECALL" value="1" <pg:equal colName="IS_RECALL" value="1">checked</pg:equal>/>可被撤回 </td>
-						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
-						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_COPY" id="IS_COPY" value="1" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送</td>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARD" id="IS_DISCARD" value="1" <pg:equal colName="IS_DISCARD" value="1">checked</pg:equal>/>可废弃</td>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
@@ -83,11 +81,14 @@
 							<pg:equal colName="IS_MULTI_DEFAULT" value="1">checked disabled </pg:equal>
 							onclick="changeNodeTypeName('<pg:cell colName='NODE_KEY'/>')"/>多实例
 						</td>
-						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
+						<td>
+						<input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_SEQUENTIAL" id="IS_SEQUENTIAL" value="1" 
 							<pg:equal colName="IS_SEQUENTIAL" value="1">checked</pg:equal> onclick="changeNodeTypeName('<pg:cell colName='NODE_KEY'/>')"/>串行
+						<input type="hidden" name="<pg:cell colName='NODE_KEY'/>_IS_COPY" 
+						id="IS_COPY" <pg:equal colName="IS_COPY" value="1">value="1"</pg:equal>/>
+						<input disabled	type="checkbox" value="1" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
 						</td>
-						<td>&nbsp;</td>
 					</tr>
 				</table>
 				

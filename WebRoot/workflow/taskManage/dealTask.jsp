@@ -86,7 +86,7 @@
 										<th>节点KEY</th>
 										<th>节点名称</th>
 										<th>待办人</th>
-										<th>待办组</th>
+										<!-- <th>待办组</th> -->
 										<th>节点类型</th>
 									</pg:header>
 										
@@ -95,23 +95,59 @@
 											<tr>
 												<input type="hidden" id="<pg:cell colName='node_key'/>" 
 													name="node_key" value="<pg:cell colName='node_key'></pg:cell>" />
+												<input type="hidden" name="is_copy" value="<pg:cell colName='is_copy'/>" />
+												
 												<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
-													name="node_users_id" value="<pg:cell colName='node_users_id'></pg:cell>" />
+													name="node_users_id" value="<pg:cell colName='node_users_id'/>" />
+													
+												<input type="hidden" id="<pg:cell colName='node_key'/>_users_name" 
+													name="node_users_name" value="<pg:cell colName='node_users_name'/>" />
+													
+												<input type="hidden" id="<pg:cell colName='node_key'/>_groups_id" 
+													name="node_groups_id" value="<pg:cell colName='node_groups_id'/>" />
+													
+												<input type="hidden" id="<pg:cell colName='node_key'/>_org_id" 
+													name="node_orgs_id" value="<pg:cell colName='node_orgs_id'/>" />
+													
+												<input type="hidden" id="<pg:cell colName='node_key'/>_org_name" 
+													name="node_orgs_name"value="<pg:cell colName='node_orgs_name'/>" />	
+													
+													
 												<td><pg:cell colName="node_key"></pg:cell></td>
 												<td><pg:cell colName="node_name"></pg:cell></td>
 												<td>
-													<input type="text" class="input1 w200" 
-														id="<pg:cell colName='node_key'/>_users_name" 
-														name="node_users_name" value="<pg:cell colName='node_users_name'/>" />
+													<pg:empty colName="node_orgs_name">
+														<pg:notempty colName="node_users_name">
+															<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names"  
+															style="width: 600px;" readonly 
+															><pg:cell colName='node_users_name'/></textarea>
+														</pg:notempty>
+														<pg:empty colName="node_users_name">
+															<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names"  
+															style="width: 600px;" readonly></textarea>
+														</pg:empty>
+													</pg:empty>
+													<pg:notempty colName="node_orgs_name">
+														<pg:notempty colName="node_users_name">
+															<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names" 
+															style="width: 600px;" readonly 
+															><pg:cell colName='node_users_name'/>,<pg:cell colName='node_orgs_name'/></textarea>
+														</pg:notempty>
+														<pg:empty colName="node_users_name">
+															<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names" 
+															style="width: 600px;" readonly 
+															><pg:cell colName='node_orgs_name'/></textarea>
+														</pg:empty>
+													</pg:notempty>
 													<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
 													<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
 												</td>
-												<td>
+												<%-- <td>
 													<input type="text" class="input1 w200"
 														id="" name="" value=""/>
 													<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
 													<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
-												</td>
+												</td> --%>
 												<td >
 													<span id="<pg:cell colName='node_key'/>_nodeTypeName"><pg:cell colName="nodeTypeName"/></span>
 												</td>
@@ -157,13 +193,10 @@
 									</pg:header>
 									
 									<pg:list autosort="false" requestKey="nodevariableList">
-										<input type="hidden" name="param_name" value="<pg:cell colName='param_name'/>" />
 										<tr>
-											<td><pg:cell colName="param_name"></pg:cell></td>
-											<td><input type="text" class="input1 w20"
-												value="<pg:cell colName='param_value'/>" name="param_value"/></td>
-											<td><a href="javascript:void(0);" class="bt"><span>删除</span></a>
-											</td>
+											<td><input type="hidden" name="variable_param_name" value="<pg:cell colName='param_name'/>" /><pg:cell colName="param_name"/></td>
+											<td><input type="text"   name="variable_param_value" value="<pg:cell colName='param_value'/>" class="input1 w20" /></td>
+											<td><a href="#" onclick="javascript:delVariable(this,'<pg:cell colName='id'/>');"><span>删除</span></a></td>
 										</tr>
 									</pg:list>
 								</table>
@@ -281,9 +314,12 @@ $(document).ready(function() {
 
 //清空选择
 function emptyChoose(id,type){
-	if (type=='1') {//清空用户
+	if (type=='1') {//清空用户或组
 		$("#"+id+"_users_id").val('');
 		$("#"+id+"_users_name").val('');
+		$("#"+id+"_org_id").val('');
+		$("#"+id+"_org_name").val('');
+		$("#"+id+"_all_names").val('');
 	}else {//清空组
 		$("#"+id+"_groups_id").val('');
 		$("#"+id+"_groups_name").val('');
@@ -292,9 +328,18 @@ function emptyChoose(id,type){
 
 //选择用户
 function openChooseUsers(node_key){
-	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?users="+$("#"+node_key+"_users_id").val()+"&node_key="+node_key+"&user_realnames="+$("#"+node_key+"_users_name").val();
+	//alert(node_key);
+	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
+			+"process_key=${processKey}&users="+$('#'+node_key+'_users_id').val()
+			+"&user_realnames="+$('#'+node_key+'_users_name').val()
+			+"&org_id="+$('#'+node_key+'_org_id').val()
+			+"&org_name="+$('#'+node_key+'_org_name').val()
+			+"&all_names="+$('#'+node_key+'_all_names').val()
+			+"&node_key="+node_key
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
+	
 }
+
 // 选择组
 function openChooseGroups(node_key){
 	var url = "<%=request.getContextPath()%>/workflow/config/toChooseGroupPage.page?groups="
@@ -484,15 +529,40 @@ function initNodeTypeName() {
 	</pg:list>
 }
 
+// 删除变量参数
+function delVariable(obj,variableId) {
+	if (variableId != '') {
+		$.dialog.confirm('确定要删除参数吗？', function(){
+			
+			$.ajax({
+		 	 	type: "POST",
+				url : "<%=request.getContextPath()%>/workflow/taskManage/delVariable.page",
+				data: {"variableId":variableId},
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+					 	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+					},
+				success : function(data){
+					if (data != 'success') {
+						$.dialog.alert("删除变量参数出错:"+data,function(){});
+					}else {
+						$(obj).parent('td').parent('tr').remove();	
+					}
+				}	
+			 });	
+		},function(){});   
+	}else {
+		$(obj).parent('td').parent('tr').remove();
+	}
+}
+
 function addTr(){
 	var trHtml="";
-	trHtml+="<tr><td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
-	trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
-	trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
+	trHtml+="<tr><td><input type='text' class='input1 w20' name='variable_param_name' class='checkClass'/></td>";
+	trHtml+="<td><input type='text' class='input1 w20' name='variable_param_value'/></td>";
+	trHtml+="<td><a href='javascript:void(0);' onclick=\"delVariable(this,'')\">删除</a></td></tr>";
 	$("#tb1").append(trHtml);
-	$(".bt").click(function(){
-		$(this).parent('td').parent('tr').remove();
-	});
 }
 
 </script>

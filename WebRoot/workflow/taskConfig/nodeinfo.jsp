@@ -23,37 +23,66 @@
 						<th>节点KEY</th>
 						<th>节点名称</th>
 						<th>待办人</th>
-						<th>待办组</th>
+						<!-- <th>待办组</th> -->
 					</pg:header>
 					
 					<pg:list autosort="false" requestKey="activitiNodeCandidateList">
 						<input type="hidden" id="process_key" name="process_key" value="${process_key }"/>
-						<input type="hidden"
-							id="<pg:cell colName='node_key'/>_users_id" name="candidate_users_id"
-							value="<pg:cell colName='candidate_users_id'></pg:cell>" />
-						<input type="hidden"
-							id="<pg:cell colName='node_key'/>_groups_id" name="candidate_groups_id"
-							value="<pg:cell colName='candidate_groups_id'></pg:cell>" />
+						
+						<input type="hidden" id="<pg:cell colName='node_key'/>_users_id" 
+							name="candidate_users_id" value="<pg:cell colName='candidate_users_id'/>" />
+							
+						<input type="hidden" id="<pg:cell colName='node_key'/>_users_name" 
+							name="candidate_users_name" value="<pg:cell colName='candidate_users_name'/>" />
+							
+						<input type="hidden" id="<pg:cell colName='node_key'/>_groups_id" 
+							name="candidate_groups_id" value="<pg:cell colName='candidate_groups_id'/>" />
+							
+						<input type="hidden" id="<pg:cell colName='node_key'/>_org_id" 
+							name="candidate_orgs_id" value="<pg:cell colName='candidate_orgs_id'/>" />
+							
+						<input type="hidden" id="<pg:cell colName='node_key'/>_org_name" 
+							name="candidate_orgs_name"value="<pg:cell colName='candidate_orgs_name'/>" />
+							
 						<input type="hidden" id="node_id" name="node_id" value="<pg:cell colName='id'/>"/>
-						<input type="hidden" name="business_id" value="<pg:cell colName='business_id'/>"/>
-						<input type="hidden" name="business_type" value="<pg:cell colName='business_type'/>"/>
+						<input type="hidden" name="business_id" value="${business_id }"/>
+						<input type="hidden" name="business_type" value="${business_type }"/>
 						<tr>
 							<td><pg:cell colName="node_key"></pg:cell></td>
 							<td><pg:cell colName="node_name"></pg:cell></td>
-							<td><input type="text"
-								id="<pg:cell colName='node_key'/>_users_name" name="candidate_users_name"
-								value="<pg:cell colName='candidate_users_name'></pg:cell>"
-								 class="input1 w200" readonly/>
+							<td>
+								<pg:empty colName="candidate_orgs_name">
+									<pg:notempty colName="candidate_users_name">
+										<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names"  
+										style="width: 600px;" readonly 
+										><pg:cell colName='candidate_users_name'/></textarea>
+									</pg:notempty>
+									<pg:empty colName="candidate_users_name">
+										<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names"  
+										style="width: 600px;" readonly></textarea>
+									</pg:empty>
+								</pg:empty>
+								<pg:notempty colName="candidate_orgs_name">
+									<pg:notempty colName="candidate_users_name">
+										<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names" 
+										style="width: 600px;" readonly 
+										><pg:cell colName='candidate_users_name'/>,<pg:cell colName='candidate_orgs_name'/></textarea>
+									</pg:notempty>
+									<pg:empty colName="candidate_users_name">
+										<textarea rows="8" cols="50" id="<pg:cell colName='node_key'/>_all_names" 
+										style="width: 600px;" readonly 
+										><pg:cell colName='candidate_orgs_name'/></textarea>
+									</pg:empty>
+								</pg:notempty>
 								<a href="javascript:openChooseUsers('<pg:cell colName="node_key"/>')">选择</a>
 								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','1')">清空</a>
 							</td>
-							<td><input type="text"
-								id="<pg:cell colName='node_key'/>_groups_name" name="candidate_groups_name"
-								value="<pg:cell colName='candidate_groups_name'></pg:cell>"
-								 class="input1 w200" readonly/>
+							<%-- <td><input type="text" id="<pg:cell colName='node_key'/>_groups_name" 
+								name="candidate_groups_name" value="<pg:cell colName='candidate_groups_name'/>"
+								class="input1 w200" readonly/>
 								<a href="javascript:openChooseGroups('<pg:cell colName="node_key"/>')">选择</a>
 								<a href="javascript:emptyChoose('<pg:cell colName="node_key"/>','2')">清空</a>
-							</td>
+							</td> --%>
 						</tr>
 					</pg:list>
 				</table>
@@ -100,9 +129,12 @@
 <script type="text/javascript">
 // 清空选择
 function emptyChoose(id,type){
-	if (type=='1') {//清空用户
+	if (type=='1') {//清空用户或组
 		$("#"+id+"_users_id").val('');
 		$("#"+id+"_users_name").val('');
+		$("#"+id+"_org_id").val('');
+		$("#"+id+"_org_name").val('');
+		$("#"+id+"_all_names").val('');
 	}else {//清空组
 		$("#"+id+"_groups_id").val('');
 		$("#"+id+"_groups_name").val('');
@@ -122,7 +154,13 @@ function setGroup(node_key,groups_id,groups_name){
 var api = frameElement.api;
 function openChooseUsers(node_key){
 	//alert(node_key);
-	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?users="+$("#"+node_key+"_users_id").val()+"&node_key="+node_key+"&user_realnames="+$("#"+node_key+"_users_name").val();
+	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
+			+"process_key=${process_key}&users="+$('#'+node_key+'_users_id').val()
+			+"&user_realnames="+$('#'+node_key+'_users_name').val()
+			+"&org_id="+$('#'+node_key+'_org_id').val()
+			+"&org_name="+$('#'+node_key+'_org_name').val()
+			+"&all_names="+$('#'+node_key+'_all_names').val()
+			+"&node_key="+node_key;
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
 	
 }
@@ -182,7 +220,7 @@ function openChooseGroups(node_key){
 	}
 	
 	function loadNodevariableData(){
-		$("#nodevariableContent").load("queryNodevariable.page?business_id="+$("#business_id").val()+"&business_type="+$("#business_type").val()+"&processKey="+$("#process_key").val());
+		$("#nodevariableContent").load("queryNodevariable.page?variable_business_id="+$("#business_id").val()+"&variable_business_type="+$("#business_type").val()+"&variable_processKey="+$("#process_key").val());
 	}
 	
 	function loadVariableResource(){
@@ -198,18 +236,16 @@ function openChooseGroups(node_key){
 	function addTr(){
 		var businessId = $("#business_id").val();
 		var businessType = $("#business_type").val();
-		var trHtml = "<tr><td><select name='node_id' id='node_id'>";
+		var trHtml = "<tr><td><select name='variable_node_id' id='node_id'>";
 		<pg:list  requestKey="nodeInfoList">
-			trHtml+="<option value='<pg:cell colName="id"/>'><pg:cell colName="node_name"/></option>";
+			trHtml+="<option value='<pg:cell colName='id'/>'><pg:cell colName='node_name'/></option>";
 		</pg:list>
 		trHtml+="</select></td>";
-		trHtml+="<td><input type='text' class='input1 w20' name='param_name' class='checkClass'/></td>";
-		trHtml+="<td><input type='text' class='input1 w20' name='param_value'/></td>";
-		trHtml+="<td><input type='text' class='input1 w200' name='param_des'/></td>";
-		trHtml+="<td><select name='is_edit_param'><option value='0' selected>是</option><option value='1'>否</option></select></td>";
+		trHtml+="<td><input type='text' class='input1 w20' name='variable_param_name' class='checkClass'/></td>";
+		trHtml+="<td><input type='text' class='input1 w20' name='variable_param_value'/></td>";
+		trHtml+="<td><input type='text' class='input1 w200' name='variable_param_des'/></td>";
+		trHtml+="<td><select name='variable_is_edit_param'><option value='0' selected>是</option><option value='1'>否</option></select></td>";
 		trHtml+="<td><a href='javascript:void(0);' class='bt'>删除</a></td></tr>";
-		//trHtml+="<input type='hidden' name='business_id' value='"+businessId+"'/>";
-		//trHtml+="<input type='hidden' name='business_type' value='"+businessType+"'/>";
 		$("#tb1").append(trHtml);
 		$(".bt").click(function(){
 			$(this).parent('td').parent('tr').remove();

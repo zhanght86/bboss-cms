@@ -43,15 +43,81 @@ function queryList(orgId){
 	}
 	
 	if(orgId == '' && user_name==''){
-		$.dialog.alert("请输入查询条件",function(){});
+		W.$.dialog.alert("请输入查询条件",function(){});
 		return;
 	}
 	
 	if(containSpecial(user_name)){
-		$.dialog.alert("查询字符串含有非法字符集,请检查输入条件！",function(){});
+		W.$.dialog.alert("查询字符串含有非法字符集,请检查输入条件！",function(){});
 		return;
 	}
+	
+	// 抄送节点
+	if ($("#iscopy").val() == 'true') {
+		queryUserAndOrgList(orgId,user_name);
+	}else {
+		queryUserList(orgId,user_name);
+	}
 		
+}
+
+function queryUserAndOrgList (orgId,user_name) {
+	$.ajax({
+		
+		url: "<%=request.getContextPath()%>/workflow/config/queryUsersAndOrgToJson.page",
+		type: "post",
+		data :{"org_id":orgId,"user_name":user_name,"pagesize":$("#rownums").val()},
+		dataType:"json",			
+		success: function(data){
+			
+			if (data != null) {
+				$("#select1").find('option').remove();
+				
+				var optionHtml = '';
+				for(var i=0; i< data.length; i++){
+					var userName = data[i].user_name;
+					var userRealname = data[i].user_realname;
+					if (userName != null && userName != '') {
+						var isExit =SelectIsExitItem($("#select2"),userName);
+						
+						 if (!isExit) {
+							optionHtml += "<option value='U_"+userName+"'>"+userRealname+"</option>";
+						 }
+						 continue;
+					}
+					
+					var orgid = data[i].org_id;
+					var orgName = data[i].org_name;
+					if (orgid !=null && orgid != '') {
+						var isExit =SelectIsExitItem($("#select2"),orgid);
+						
+						 if (!isExit) {
+							optionHtml += "<option value='D_"+orgid+"'>"+orgName+"</option>";
+						 }
+						 continue;
+					}
+					
+				}
+				
+				$("#select1").append(optionHtml);
+				
+				if ((orgId == null || orgId == '') && data.length == 1) {
+					$("#select1").find('option').attr('selected','selected');
+					move($('#select1'),$('#select2'));
+				}
+			}
+			/* else {
+				W.$.dialog.alert("无查询结果",function(){});
+			} */
+		},
+		error :function (er){
+			alert("查询列表出错");
+		}
+	});
+}
+
+// 查询用户列表
+function queryUserList (orgId,user_name) {
 	$.ajax({
 		
 		url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page",
@@ -78,14 +144,14 @@ function queryList(orgId){
 					$("#select1").find('option').attr('selected','selected');
 					move($('#select1'),$('#select2'));
 				}
-			}else {
-				$.dialog.alert("无查询结果",function(){});
 			}
+			/* else {
+				W.$.dialog.alert("无查询结果",function(){});
+			} */
 		}
 	});
-	
 }
-	
+
 function setUsers(){
 	var usernames='' ;
 	var user_realnames='';
@@ -100,24 +166,81 @@ function setUsers(){
 	} 
 	$("#usernames").val(usernames);
 	$("#user_realnames").val(user_realnames);
+	$("#all_names").val(user_realnames);
+}
+	
+function setUsersAndOrgs(){
+	var usernames='' ;
+	var user_realnames='';
+	var orgid = '';
+	var orgname = '';
+	
+	for (var i = 0; i < $("#select2").find('option').length; i++) { 
+		
+		var key = $("#select2").find('option')[i].value;
+		var value = $("#select2").find('option')[i].innerHTML;
+		
+			
+		if (key.substr(0,2) == "U_") {//用户
+			
+			if (usernames != '') {
+				usernames += "," + key.substr(2);
+				user_realnames += "," + value;
+			}else {
+				usernames = key.substr(2);
+				user_realnames = value;
+			}
+			
+		}else if (key.substr(0,2) == "D_") {//部门
+			
+			if (orgid != '') {
+				orgid += "," + key.substr(2);
+				orgname += "," + value;
+			}else {
+				orgid = key.substr(2);
+				orgname = value;
+			}
+		}
+	} 
+	$("#usernames").val(usernames);
+	$("#user_realnames").val(user_realnames);
+	$("#org_id").val(orgid);
+	$("#org_name").val(orgname);
+	
+	if (usernames != '' && orgid != ''){
+		$("#all_names").val(user_realnames + "," + orgname);
+	}else if (usernames != '' && orgid == ''){
+		$("#all_names").val(user_realnames);
+	}else if (usernames == '' && orgid != '') {
+		$("#all_names").val(orgname);
+	}else {
+		$("#all_names").val('');
+	}
+	
 }
 	
 	
 function submitData(){
-	setUsers();
+	
 	var node_key = $("#node_key").val();
+	
+	//抄送节点
+	if ($("#iscopy").val() == 'true') {
+		setUsersAndOrgs();
+	}else {
+		setUsers();
+	}
+	
 	W.$("#"+node_key+"_users_id").val($("#usernames").val());
 	W.$("#"+node_key+"_users_name").val($("#user_realnames").val());
+	W.$("#"+node_key+"_all_names").val($("#all_names").val());
+	W.$("#"+node_key+"_org_id").val($("#org_id").val());
+	W.$("#"+node_key+"_org_name").val($("#org_name").val());
+	
+	W.$("#"+node_key+"_all_names").attr("title",$("#all_names").val());
 	api.close();
 }
 
-function showOrgInfo(){
-	var detail=$("#select1").find('option:selected').val();
-	if(detail)
-	$("#selectDetail").html("工号:"+$("#"+detail+"user_worknumber").val()+"<br/>登陆名:"+detail+"<br/>组织机构："+$("#"+detail+"org_name").val()+$("#"+detail+"job_name").val());
-}
-	
-	 
 /* 添加选择的项 */
 function move(ObjSource, ObjTarget) {
 	var sourceName =ObjSource.attr("id");
@@ -180,7 +303,12 @@ function moveAll(ObjSource, ObjTarget) {
 function SelectIsExitItem(objSelect, objItemValue) {        
     var isExit = false;
     for (var i = 0; i < objSelect.find('option').length; i++) {   
-        if (objSelect.find('option')[i].value == objItemValue) {        
+    	var objSelectValue = objSelect.find('option')[i].value;
+    	
+    	// 操作节点，用户以U_开头，部门以D_开头
+        if (objSelectValue == objItemValue 
+        		|| objSelectValue == 'U_'+objItemValue 
+        		|| objSelectValue == 'D_'+objItemValue) {        
             isExit = true;        
             break;        
          }
@@ -189,6 +317,11 @@ function SelectIsExitItem(objSelect, objItemValue) {
 }
 
 function getUserInfo(userName,obj){
+	
+	if ($("#iscopy").val() == 'true') {
+		userName = userName.substr(2);//抄送节点过滤"U_"或"D_"
+	}
+	
 	$.ajax({
 		
 		url: "<%=request.getContextPath()%>/workflow/config/getUserInfo.page",
@@ -208,7 +341,9 @@ function getUserInfo(userName,obj){
 function selectOption(selector){
 	
 	var detail=$("#"+selector).find('option:selected').val();
-	getUserInfo(detail,$("#"+selector+"Detail"));
+	if(detail) {
+		getUserInfo(detail,$("#"+selector+"Detail"));
+	}
 }
 	
 $(document).ready(function() {
@@ -217,7 +352,7 @@ $(document).ready(function() {
         var $opt = $("#select2 option:selected");   
         if (!$opt.length) return;   
         if ($opt.length > 1 ) {
-        	$.dialog.alert("请选择一项移动",function(){});
+        	W.$.dialog.alert("请选择一项移动",function(){});
         	return;   
         }
         if (this.id == "btnMoveUp") 
@@ -254,6 +389,11 @@ $(document).ready(function() {
 	<input type="hidden" value="${usernames }" name="usernames" id="usernames"/>
 	<input type="hidden" value="${node_key }" name="node_key" id="node_key"/>
 	<input type="hidden" value="${user_realnames }" name="user_realnames" id="user_realnames"/>
+	<input type="hidden" value="${iscopy }" name="iscopy" id="iscopy"/>
+	<input type="hidden" value="${org_id }" name="org_id" id="org_id"/>
+	<input type="hidden" value="${org_name }" name="org_name" id="org_name"/>
+	<input type="hidden" value="${all_names }" name="all_names" id="all_names"/>
+	
 	<div region="west" split="true" title="组织结构"
 		style="width: 200px; height: 150px; padding1: 1px; overflow: auto;" id="org_tree">
 	</div>
@@ -275,8 +415,8 @@ $(document).ready(function() {
 										<tr>
 											<td>
 											 <input id="userName" name="userName" type="text"
-											 value="工号 / 姓名 / 域账号" onfocus="this.value='';" size="50"/>
-											 </td>
+											 value="工号/姓名/域账号" onfocus="this.value='';" size="50"/>
+											</td>
 											<th>显示</th>
 											<td>
 												<select class="w50" id="rownums">
@@ -311,7 +451,7 @@ $(document).ready(function() {
 						class="select_table">
 						<tr>
 							<th width="40%">待选用户</th>
-							<td width="20%">&nbsp;</td>
+							<td width="40%">&nbsp;</td>
 							<th width="40%">已选用户</th>
 						</tr>
 						<tr>
@@ -335,9 +475,19 @@ $(document).ready(function() {
 							<td align="right">
 								<select name="select2" size="25" onclick="selectOption('select2');"
 								multiple="multiple" id="select2" style="width: 220px;height: 400px">
-									<pg:list requestKey="chooseuserlist">
-										<option value="<pg:cell colName='user_name'/>"><pg:cell colName="user_realname"/></option>
-									</pg:list>	
+									<pg:true actual="${iscopy}">
+										<pg:list requestKey="userList">
+											<option value="U_<pg:cell colName="user_name"/>"><pg:cell colName="user_realname"/></option>
+										</pg:list>	
+										<pg:list requestKey="orgList">
+											<option value="D_<pg:cell colName="org_id"/>"><pg:cell colName="org_name"/></option>
+										</pg:list>
+									</pg:true>
+									<pg:false actual="${iscopy}">
+										<pg:list requestKey="userList">
+											<option value="<pg:cell colName="user_name"/>"><pg:cell colName="user_realname"/></option>
+										</pg:list>
+									</pg:false>	
 								</select>
 							</td>
 							<td align="left">

@@ -20,11 +20,19 @@ $(document).ready(function() {
 	
 	$("#entrustwait").hide();
 	
+	$("#copywait").hide();
+	
 	queryList();  
 	
 	queryEntrustList();
+	
+	queryCopyList();
        		
-    $("#businessType").combotree({
+    $("#queryForm #businessType").combotree({
+   		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
+   	});
+    
+    $("#entrustForm #businessType").combotree({
    		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
    	});
            	
@@ -229,6 +237,25 @@ function sendMess(taskId,processKey,taskState,sentType){
 	},function(){});  
 }
 
+//加载抄送任务列表数据  
+function queryCopyList(){
+    $("#copyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryCopyTaskData.page #copyContent", 
+       {"process_key":"${processKey}"},function(){});
+}
+
+function modifyCopyTaskData(){
+	$("#copyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryCopyTaskData.page?"+$("#querystring").val()+" #copyContent",function(){loadjs()});
+}
+
+
+// 完成抄送任务
+function viewCopyTask(processInstId,id){
+	
+	var url="<%=request.getContextPath()%>/workflow/taskManage/viewCopyTask.page?processInstId="+processInstId+"&copyId="+id;
+	$.dialog({ title:'明细查看',width:1100,height:700, content:'url:'+url,maxState:true});
+	
+}
+
 </script>
 </head>
 
@@ -332,82 +359,112 @@ function sendMess(taskId,processKey,taskState,sentType){
 			<div id="entrustDiv" >
 				<div id="searchblock" >
 					
-						<div class="search_top">
-							<div class="right_top"></div>
-							<div class="left_top"></div>
-						</div>
-						
-						<div class="search_box">
-							<form id="entrustForm" name="entrustForm">
-								<table width="100%" border="0" cellspacing="0" cellpadding="0">
-									<tr>
-										<td class="left_box"></td>
-										<td>
-											<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
-												<tr>
-													<th>任务ID：</th>
-													<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
-													<th>任务名称：</th>
-													<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
-													<th>签收状态：</th>
-													<td>
-														<select id="taskState" name="taskState" class="select1" style="width: 125px;">
-														    <option value="0" selected>全部</option>
-															<option value="1">未签收</option>
-															<option value="2">已签收</option>
-														</select>
-													</td>
-													<th>业务类型：</th>
-													<td>
-														<select class="easyui-combotree" id='businessType' name="businessType" required="false"
-																style="width: 120px;">
-													</td>
-													<td style="text-align:center" rowspan="3" >
-														<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryEntrustList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-														<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doEntrustReset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
-														<input type="reset" id="entrustReset" style="display:none"/>
-													</td>
-												</tr>
-												<tr>
-													<th>流程实例ID：</th>
-													<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
-													<th>业务主题：</th>
-													<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
-													<th>流程key：</th>
-													<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
-														<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
-													</td>
-													<th>委托人：</th>
-													<td><input id="assignee" name="assignee" type="text" class="w120"/></td>
-												</tr>
-												<tr>
-													<th>应用：</th>
-													<td><input id="appName" name="appName" type="text" class="w120"/></td>
-												</tr>
-											</table>
-										</td>
-										<td class="right_box"></td>
-									</tr>
-								</table>
-							</form>
-						</div>
-						
-						<div class="search_bottom">
-							<div class="right_bottom"></div>
-							<div class="left_bottom"></div>
-						</div>
+					<div class="search_top">
+						<div class="right_top"></div>
+						<div class="left_top"></div>
 					</div>
 					
-					<div class="title_box">
-						<div class="rightbtn">
-							<!-- <a href="#" class="bt_small" onclick="getEntrustInfo();"><span>委托关系</span></a> -->
-						</div>
+					<div class="search_box">
+						<form id="entrustForm" name="entrustForm">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td class="left_box"></td>
+									<td>
+										<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
+											<tr>
+												<th>任务ID：</th>
+												<td><input id="taskId" name="taskId" type="text" class="w120"/></td>
+												<th>任务名称：</th>
+												<td><input id="taskName" name="taskName" type="text" class="w120"/></td>
+												<th>签收状态：</th>
+												<td>
+													<select id="taskState" name="taskState" class="select1" style="width: 125px;">
+													    <option value="0" selected>全部</option>
+														<option value="1">未签收</option>
+														<option value="2">已签收</option>
+													</select>
+												</td>
+												<th>业务类型：</th>
+												<td>
+													<select class="easyui-combotree" id='businessType' name="businessType" required="false"
+															style="width: 120px;">
+												</td>
+												<td style="text-align:center" rowspan="3" >
+													<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryEntrustList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+													<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doEntrustReset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+													<input type="reset" id="entrustReset" style="display:none"/>
+												</td>
+											</tr>
+											<tr>
+												<th>流程实例ID：</th>
+												<td><input id="processIntsId" name="processIntsId" type="text" class="w120"/></td>
+												<th>业务主题：</th>
+												<td><input id="businessKey" name="businessKey" type="text" class="w120"/></td>
+												<th>流程key：</th>
+												<td><input id="processKey" name="processKey" type="text" class="w120" value="${processKey}"
+													<pg:notempty actual="${processKey}" > disabled</pg:notempty>/>
+												</td>
+												<th>委托人：</th>
+												<td><input id="assignee" name="assignee" type="text" class="w120"/></td>
+											</tr>
+											<tr>
+												<th>应用：</th>
+												<td><input id="appName" name="appName" type="text" class="w120"/></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+						
+					<div class="search_bottom">
+						<div class="right_bottom"></div>
+						<div class="left_bottom"></div>
+					</div>
+				</div>
+					
+				<div class="title_box">
+					<div class="rightbtn"></div>
 							
-						<strong>委托任务列表</strong>
-						<img id="entrustwait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+					<strong>委托任务列表</strong>
+					<img id="entrustwait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+				</div>
+					
+				<div id="entrustContainer" style="overflow:auto"></div>
+			
+			</div>
+			
+			<%--抄送任务div --%>
+			<div id="copyDiv" >
+			<!-- 	<div id="searchblock" >
+					
+					<div class="search_top">
+						<div class="right_top"></div>
+						<div class="left_top"></div>
 					</div>
 					
-					<div id="entrustContainer" style="overflow:auto"></div>
+					<div class="search_box">
+						<form id="copyForm" name="copyForm">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							</table>
+						</form>
+					</div>
+					
+					<div class="search_bottom">
+						<div class="right_bottom"></div>
+						<div class="left_bottom"></div>
+					</div>
+				</div> -->
+				
+				<div class="title_box">
+					<div class="rightbtn"></div>
+						
+					<strong>抄送任务列表</strong>
+					<img id="copywait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+				</div>
+				
+				<div id="copyContainer" style="overflow:auto"></div>
 			
 			</div>
 			

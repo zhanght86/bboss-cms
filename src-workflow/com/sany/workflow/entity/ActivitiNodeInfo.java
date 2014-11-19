@@ -21,22 +21,42 @@ public class ActivitiNodeInfo {
 	private String node_users_id;
 
 	private String node_users_name;
+	
+	private String node_orgs_id;
+
+	private String node_orgs_name;
 
 	private String node_param_id;
 
 	private String node_param_value;
 
 	private String isMulti;// 0不是多实例1串行多实例2并行多实例
-	
+
 	private int IS_MULTI_DEFAULT;// 默认多实例 0 否 1 是
 
-	private String DURATION_NODE;// 处理工时
-	
+	private String duration_node;// 处理工时
+
 	private String node_describe;// 节点描述
+
+	private String taskUrl;// 待办URL
+
+	private String nodeTypeName;// 类型名称
 	
-	private String taskUrl;//待办URL
+	private int is_copy;//是否抄送节点
 	
-	private String nodeTypeName;//类型名称
+	private String copyusers;// 抄送用户
+
+	private String copyorgs;// 抄送部门
+
+	private String copyerscnname;// 抄送用户+部门名称
+	
+	public String getDuration_node() {
+		return duration_node;
+	}
+
+	public void setDuration_node(String duration_node) {
+		this.duration_node = duration_node;
+	}
 
 	public int getIS_MULTI_DEFAULT() {
 		return IS_MULTI_DEFAULT;
@@ -68,14 +88,6 @@ public class ActivitiNodeInfo {
 
 	public void setNode_describe(String node_describe) {
 		this.node_describe = node_describe;
-	}
-
-	public String getDURATION_NODE() {
-		return DURATION_NODE;
-	}
-
-	public void setDURATION_NODE(String dURATION_NODE) {
-		DURATION_NODE = dURATION_NODE;
 	}
 
 	public String getIsMulti() {
@@ -180,5 +192,53 @@ public class ActivitiNodeInfo {
 
 	public void setNode_type(String node_type) {
 		this.node_type = node_type;
+	}
+
+	public int getIs_copy() {
+		return is_copy;
+	}
+
+	public void setIs_copy(int is_copy) {
+		this.is_copy = is_copy;
+	}
+
+	public String getNode_orgs_id() {
+		return node_orgs_id;
+	}
+
+	public void setNode_orgs_id(String node_orgs_id) {
+		this.node_orgs_id = node_orgs_id;
+	}
+
+	public String getNode_orgs_name() {
+		return node_orgs_name;
+	}
+
+	public void setNode_orgs_name(String node_orgs_name) {
+		this.node_orgs_name = node_orgs_name;
+	}
+
+	public String getCopyusers() {
+		return copyusers;
+	}
+
+	public void setCopyusers(String copyusers) {
+		this.copyusers = copyusers;
+	}
+
+	public String getCopyorgs() {
+		return copyorgs;
+	}
+
+	public void setCopyorgs(String copyorgs) {
+		this.copyorgs = copyorgs;
+	}
+
+	public String getCopyerscnname() {
+		return copyerscnname;
+	}
+
+	public void setCopyerscnname(String copyerscnname) {
+		this.copyerscnname = copyerscnname;
 	}
 }
