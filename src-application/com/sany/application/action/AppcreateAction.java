@@ -16,12 +16,9 @@ package com.sany.application.action;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-
-import net.fiyu.edit.TimeStamp;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -34,7 +31,6 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
-import com.frameworkset.util.StringUtil;
 import com.sany.application.entity.WfApp;
 import com.sany.application.entity.WfPic;
 import com.sany.application.service.AppcreateService;
@@ -180,9 +176,6 @@ public class AppcreateAction {
 				}else{
 					wfApp.setCreator((AccessControl.getAccessControl().getUserName()));
 				}
-				
-				// 票据时间毫秒转换
-				wfApp.setTickettime(wfApp.getTickettime() * 60 * 60 * 1000);
 				
 				appcreateService.saveWfApp(wfApp);
 			} catch (Exception e) {

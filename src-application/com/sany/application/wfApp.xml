@@ -54,7 +54,7 @@
 			       A.PENDING_TYPE,
 			       A.PENDING_USED,
 			       A.PIC_NAME,
-			       A.TICKETTIME / 1000 / 60 / 60 AS TICKETTIME
+			       A.TICKETTIME 
 			FROM TD_WF_APP A
 			where 1=1
 				#if($id && !$id.equals(""))
@@ -97,7 +97,7 @@
 			       A.PENDING_TYPE,
 			       A.PENDING_USED,
 			       A.PIC_NAME,
-			       A.TICKETTIME / 1000 / 60 / 60 AS TICKETTIME
+			       A.TICKETTIME 
 			FROM TD_WF_APP A
 			 where a.id = ?
 		]]>

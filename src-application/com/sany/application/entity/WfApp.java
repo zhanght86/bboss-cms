@@ -44,7 +44,7 @@ public class WfApp {
 	
 	private String pending_used;
 	
-	private double tickettime;// 票据失效时间
+	private long tickettime;// 票据失效时间
 
 	public String getPending_type() {
 		return pending_type;
@@ -208,13 +208,14 @@ public class WfApp {
 		this.sso_url = sso_url;
 	}
 
-	public double getTickettime() {
+	public long getTickettime() {
 		return tickettime;
 	}
 
-	public void setTickettime(double tickettime) {
+	public void setTickettime(long tickettime) {
 		this.tickettime = tickettime;
 	}
+
 
 
 

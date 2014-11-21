@@ -18,7 +18,7 @@
 				    <pg:beaninfo requestKey="wfApp" >
 					<tr>
 						<th>应用编号：</th>
-						<td width=140px><pg:cell colName="system_id" defaultValue="" /></td>
+						<td width=240px><pg:cell colName="system_id" defaultValue="" /></td>
 					</tr>
 					<tr>
 						<th>应用名称：</th>
@@ -61,7 +61,7 @@
 					</tr>
 					<tr>
 						<th>票据时间：</th>
-						<td><pg:cell colName="tickettime"  />小时</td>
+						<td><pg:cell colName="tickettime"  />毫秒</td>
 					</tr>
 					</pg:beaninfo>
 				</table>

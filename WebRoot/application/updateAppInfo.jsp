@@ -123,7 +123,7 @@ function getSystemSecret(){
 						<th>票据时间：</th>
 						<td>
 						<input type="text" name="tickettime" value="<pg:cell colName="tickettime"/>" style="width: 240px;"
-						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>小时
+						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>毫秒
 						</td>
 					</tr>
 					</pg:beaninfo>
@@ -248,15 +248,8 @@ function getSystemSecret(){
 	}
 	
 	function chkPrice(obj){
-		obj.value = obj.value.replace(/[^\d.]/g,""); 
+		obj.value = obj.value.replace(/[^\d]/g,""); 
 		//必须保证第一位为数字而不是. 
-		obj.value = obj.value.replace(/^\./g,""); 
-		//保证只有出现一个.而没有多个. 
-		obj.value = obj.value.replace(/\.{2,}/g,"."); 
-		//小数点后面保留一位小数
-		obj.value = obj.value.replace(/\.\d\d/g,"."); 
-		//保证.只出现一次，而不能出现两次以上 
-		obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
 	} 
 
 	function chkLast(obj){ 
