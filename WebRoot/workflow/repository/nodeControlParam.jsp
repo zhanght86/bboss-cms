@@ -70,7 +70,7 @@
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARD" id="IS_DISCARD" value="1" <pg:equal colName="IS_DISCARD" value="1">checked</pg:equal>/>可废弃</td>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>
-						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>后续节点自动审批</td>
+						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>处理人一致自动审批</td>
 					</tr>
 					<tr>
 						<td><input <pg:equal actual="${task.TASK_DEF_KEY_}" expressionValue="{NODE_KEY}">disabled</pg:equal>

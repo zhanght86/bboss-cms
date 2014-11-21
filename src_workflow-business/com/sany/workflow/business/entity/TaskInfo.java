@@ -55,6 +55,7 @@ public class TaskInfo implements Serializable {
 	private int isDiscard;// 可废弃 0 不能 1 能
 	private int isDiscarded;// 可被废弃 0 不能 1 能
 	private int isCopy;// 可抄送 0 不是 1 是
+	private int isAutoafter;// 后续节点自动审批（前后任务处理人一致） 0 不是 1 是
 
 	private String assignee;// 处理人
 	private String assigneeName;// 处理人名字
@@ -241,6 +242,14 @@ public class TaskInfo implements Serializable {
 
 	public void setFromUserName(String fromUserName) {
 		this.fromUserName = fromUserName;
+	}
+
+	public int getIsAutoafter() {
+		return isAutoafter;
+	}
+
+	public void setIsAutoafter(int isAutoafter) {
+		this.isAutoafter = isAutoafter;
 	}
 
 }

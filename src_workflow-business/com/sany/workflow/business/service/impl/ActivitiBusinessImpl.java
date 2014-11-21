@@ -15,7 +15,9 @@ import java.util.Map;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
+import org.activiti.engine.impl.persistence.entity.CopyTaskEntity;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ReadUserNames;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
@@ -26,6 +28,9 @@ import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.ActNode;
@@ -190,6 +195,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			for (int i = 0; i < actNodeList.size(); i++) {
 
 				ActNode actNode = actNodeList.get(i);
+
+				if (actNode.getIsCopy() != 0) {
+					actNode.setApproveType(WorkflowConstants.PRO_ACT_COP);// 抄送
+					continue;
+				}
 
 				for (ActivityImpl activtie : activties) {
 
@@ -413,18 +423,84 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	/**
+	 * 控制参数实体属性设置
+	 * 
+	 * @param proIns
+	 *            2014年11月19日
+	 */
+	private void setNodeControlParam(ProIns proIns,
+			List<NodeControlParam> controlParamList, String processKey) {
+		List<ActNode> actNodeList = proIns.getActs();
+
+		// 控制参数变量转换
+		if (actNodeList != null && actNodeList.size() > 0) {
+
+			for (int i = 0; i < actNodeList.size(); i++) {
+				ActNode node = actNodeList.get(i);
+
+				if (StringUtil.isNotEmpty(node.getActId())) {
+					NodeControlParam nodeControl = new NodeControlParam();
+
+					// 抄送节点
+					if (node.getIsCopy() != 0) {
+						nodeControl.setCOPYUSERS(node.getCandidateName());
+						nodeControl.setCOPYORGS(node.getCandidateOrgId());
+						nodeControl.setCOPYERSCNNAME(node.getRealName());
+					}
+
+					nodeControl.setDURATION_NODE(node.getNodeWorkTime());
+					nodeControl.setIS_AUTO(node.getIsAuto());
+					nodeControl.setIS_AUTOAFTER(node.getIsAutoAfter());
+					nodeControl.setIS_CANCEL(node.getIsCancel());
+					nodeControl.setIS_COPY(node.getIsCopy());
+					nodeControl.setIS_DISCARD(node.getIsDiscard());
+					nodeControl.setIS_DISCARDED(node.getIsDiscarded());
+					nodeControl.setIS_EDIT(node.getIsEdit());
+					nodeControl.setIS_EDITAFTER(node.getIsEditAfter());
+					nodeControl.setIS_RECALL(node.getIsRecall());
+					nodeControl.setIS_VALID(node.getIsValid());
+					if (WorkflowConstants.PRO_ACT_ONE.equals(node
+							.getApproveType())) {// 单实例
+						nodeControl.setIS_MULTI(0);
+						nodeControl.setIS_SEQUENTIAL(0);
+					} else if (WorkflowConstants.PRO_ACT_SEQ.equals(node
+							.getApproveType())) {// 多实例串行
+						nodeControl.setIS_MULTI(1);
+						nodeControl.setIS_SEQUENTIAL(1);
+					} else if (WorkflowConstants.PRO_ACT_MUL.equals(node
+							.getApproveType())) {// 多实例并行
+						nodeControl.setIS_MULTI(1);
+						nodeControl.setIS_SEQUENTIAL(0);
+					}
+					nodeControl.setNODE_DESCRIBE(node.getNodeDescribe());
+					nodeControl.setNODE_KEY(node.getActId());
+					nodeControl.setNODE_NAME(node.getActName());
+					nodeControl.setPROCESS_KEY(processKey);
+					nodeControl.setTASK_URL(node.getTaskUrl());
+					nodeControl.setBUSSINESSCONTROLCLASS(node
+							.getBussinessControlClass());
+
+					controlParamList.add(nodeControl);
+				}
+			}
+		}
+	}
+
+	/**
 	 * 获取流程节点参数配置信息
 	 * 
-	 * @param nodeList
-	 * @return 2014年5月27日
+	 * @param proIns
+	 * @param paramMap
+	 * @param nodeControlParamList
+	 *            2014年11月19日
 	 */
 	private void getVariableMap(ProIns proIns, Map<String, Object> paramMap) {
 
 		List<ActNode> actNodeList = proIns.getActs();
 
-		// 流程参数
 		if (actNodeList != null && actNodeList.size() > 0) {
 
+			// 节点处理人转域账号
 			for (int i = 0; i < actNodeList.size(); i++) {
 				ActNode node = actNodeList.get(i);
 
@@ -433,30 +509,35 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					continue;
 				}
 
-				// 节点配置
-				if (StringUtil.isNotEmpty(node.getCandidateName())) {
+				// 过滤抄送节点，只有普通节点处理人存变量表
+				if (node.getIsCopy() == 0) {
 
-					String[] userId = node.getCandidateName().split(",");
+					// 节点配置
+					if (StringUtil.isNotEmpty(node.getCandidateName())) {
 
-					StringBuffer accounts = new StringBuffer();
-					if (userId.length > 0) {
+						String[] userId = node.getCandidateName().split(",");
 
-						for (int j = 0; j < userId.length; j++) {
+						StringBuffer accounts = new StringBuffer();
+						if (userId.length > 0) {
 
-							if (j == 0) {
-								accounts.append(changeToDomainAccount(userId[j]));
-							} else {
-								accounts.append(",").append(
-										changeToDomainAccount(userId[j]));
+							for (int j = 0; j < userId.length; j++) {
+
+								if (j == 0) {
+									accounts.append(changeToDomainAccount(userId[j]));
+								} else {
+									accounts.append(",").append(
+											changeToDomainAccount(userId[j]));
+								}
 							}
+						} else {
+							accounts.append(changeToDomainAccount(userId[0]));
 						}
+						paramMap.put(node.getActId() + "_users",
+								accounts.toString());
 					} else {
-						accounts.append(changeToDomainAccount(userId[0]));
+						paramMap.put(node.getActId() + "_users", "");
 					}
-					paramMap.put(node.getActId() + "_users",
-							accounts.toString());
-				} else {
-					paramMap.put(node.getActId() + "_users", "");
+
 				}
 
 			}
@@ -481,59 +562,14 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 当前流程发起人，转域账号
 			String currentUser = changeToDomainAccount(proIns.getUserAccount());
 
-			List<ActNode> actNodeList = proIns.getActs();
-
 			// 节点控制参数信息
 			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
 
 			// 节点配置参数转换
 			getVariableMap(proIns, paramMap);
 
-			// 控制参数变量转换
-			if (actNodeList != null && actNodeList.size() > 0) {
-
-				for (int i = 0; i < actNodeList.size(); i++) {
-					ActNode node = actNodeList.get(i);
-
-					if (StringUtil.isNotEmpty(node.getActId())) {
-						NodeControlParam nodeControl = new NodeControlParam();
-
-						nodeControl.setDURATION_NODE(node.getNodeWorkTime());
-						nodeControl.setIS_AUTO(node.getIsAuto());
-						nodeControl.setIS_AUTOAFTER(node.getIsAutoAfter());
-						nodeControl.setIS_CANCEL(node.getIsCancel());
-						nodeControl.setIS_COPY(node.getIsCopy());
-						nodeControl.setIS_DISCARD(node.getIsDiscard());
-						nodeControl.setIS_DISCARDED(node.getIsDiscarded());
-						nodeControl.setIS_EDIT(node.getIsEdit());
-						nodeControl.setIS_EDITAFTER(node.getIsEditAfter());
-						nodeControl.setIS_RECALL(node.getIsRecall());
-						nodeControl.setIS_VALID(node.getIsValid());
-						if (WorkflowConstants.PRO_ACT_ONE.equals(node
-								.getApproveType())) {// 单实例
-							nodeControl.setIS_MULTI(0);
-							nodeControl.setIS_SEQUENTIAL(0);
-						} else if (WorkflowConstants.PRO_ACT_SEQ.equals(node
-								.getApproveType())) {// 多实例串行
-							nodeControl.setIS_MULTI(1);
-							nodeControl.setIS_SEQUENTIAL(1);
-						} else if (WorkflowConstants.PRO_ACT_MUL.equals(node
-								.getApproveType())) {// 多实例并行
-							nodeControl.setIS_MULTI(1);
-							nodeControl.setIS_SEQUENTIAL(0);
-						}
-						nodeControl.setNODE_DESCRIBE(node.getNodeDescribe());
-						nodeControl.setNODE_KEY(node.getActId());
-						nodeControl.setNODE_NAME(node.getActName());
-						nodeControl.setPROCESS_KEY(processKey);
-						nodeControl.setTASK_URL(node.getTaskUrl());
-						nodeControl.setBUSSINESSCONTROLCLASS(node
-								.getBussinessControlClass());
-
-						controlParamList.add(nodeControl);
-					}
-				}
-			}
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
 
 			// kpi设值
 			PlatformKPIServiceImpl.setWorktimelist(controlParamList);
@@ -550,30 +586,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					processInstance.getId(), controlParamList);
 
 			if (completeFirstTask) {
-				// 获取流程第一个任务节点
-				Task task = activitiService.getCurrentTask(processInstance
-						.getId());
 
-				if (StringUtil.isEmpty(proIns.getDealOption())) {
-					proIns.setDealOption("提交任务");
-				}
+				proIns.setBusinessKey(businessKey);
 
-				if (StringUtil.isEmpty(proIns.getDealRemak())) {
-					String remark = "["
-							+ activitiService.getUserInfoMap().getUserName(
-									currentUser) + "]提交";
-					proIns.setDealRemak(remark);
-				}
-
-				if (!isSignTask(task.getId(), task.getAssignee())) {
-					// 先签收
-					activitiService.claim(task.getId(), task.getAssignee());
-				}
-
-				// 完成任务
-				activitiService.completeTaskWithReason(task.getId(), null,
-						proIns.getDealRemak(), proIns.getDealOption(),
-						proIns.getDealReason());
+				// 自动完成任务
+				autoCompleteTask(proIns);
 			}
 
 			tm.commit();
@@ -584,6 +601,57 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			PlatformKPIServiceImpl.setWorktimelist(null);
 			tm.release();
 		}
+	}
+
+	/**
+	 * 自动完成任务
+	 * 
+	 * @param proIns
+	 * @throws Exception
+	 *             2014年11月20日
+	 */
+	private void autoCompleteTask(ProIns proIns) throws Exception {
+
+		// 获取流程当前任务节点
+		TaskInfo task = getCurrentNodeInfoByBussinessKey(
+				proIns.getBusinessKey(), proIns.getUserAccount());
+
+		if (null != task) {
+
+			if (StringUtil.isEmpty(proIns.getDealOption())) {
+				proIns.setDealOption("提交任务");
+			}
+
+			if (StringUtil.isEmpty(proIns.getDealRemak())) {
+				String remark = "["
+						+ activitiService.getUserInfoMap().getUserName(
+								proIns.getUserAccount()) + "]提交";
+				proIns.setDealRemak(remark);
+			}
+
+			if (!isSignTask(task.getTaskId(), task.getAssignee())) {
+				// 先签收
+				activitiService.claim(task.getTaskId(), task.getAssignee());
+			}
+
+			// 完成任务
+			activitiService.completeTaskWithReason(task.getTaskId(), null,
+					proIns.getDealRemak(), proIns.getDealOption(),
+					proIns.getDealReason());
+
+			// 后续节点自动审批
+			if (task.getIsAutoafter() == 1
+					&& task.getAssignee().equals(proIns.getUserAccount())) {
+
+				// 过滤流程开启自动通过第一个任务的处理意见
+				if (null == proIns.getOperateType()) {
+					proIns.setOperateType("pass");
+					proIns.setDealReason("前后任务处理人一致，自动通过");
+				}
+				autoCompleteTask(proIns);
+			}
+		}
+
 	}
 
 	@Override
@@ -618,6 +686,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					judgeOverTime(hti);
 					// 处理耗时
 					handleDurationTime(hti);
+					// 已阅抄送人
+					readedCopyTasks(hti);
 				}
 
 			}
@@ -630,6 +700,30 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			throw new ProcessException(e);
 		} finally {
 			tms.release();
+		}
+	}
+
+	/**
+	 * 获取已阅用户
+	 * 
+	 * @param tm
+	 *            2014年11月17日
+	 */
+	private void readedCopyTasks(HisTaskInfo hti) {
+		try {
+
+			Object obj = executor.queryObject(Object.class,
+					"iscopynodeByProcessId_wf", hti.getPROC_INST_ID_(),
+					hti.getTASK_DEF_KEY_());
+
+			if (obj != null) {// 抄送节点
+				hti.setASSIGNEE_NAME(this.getCopyTaskReadUserNames(
+						hti.getID_(),
+						WorkflowConstants.SHOW_READEDCOPYTASK_LIMIT));
+			}
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
 		}
 	}
 
@@ -784,6 +878,44 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			if (nodeList == null) {
 				tms.commit();
 				return null;
+			}
+
+			// 抄送节点处理人或部门转换
+			for (int i = 0; i < nodeList.size(); i++) {
+
+				ActNode ani = nodeList.get(i);
+
+				if (ani.getIsCopy() != 0) {
+					String realName = ani.getRealName();
+					// 用户名称+部门名称拆分到对应字段
+					if (StringUtil.isNotEmpty(realName)) {
+						if (StringUtil.isNotEmpty(ani.getCandidateName())
+								&& StringUtil.isNotEmpty(ani
+										.getCandidateOrgId())) {
+
+							String usersName = activitiService
+									.userIdToUserName(ani.getCandidateName(),
+											"1");
+							ani.setCandidateCNName(usersName);
+							ani.setCandidateOrgName(realName
+									.substring(usersName.length() + 1));
+
+						} else if (StringUtil.isEmpty(ani.getCandidateName())
+								&& StringUtil.isNotEmpty(ani
+										.getCandidateOrgId())) {
+							ani.setCandidateCNName("");
+							ani.setCandidateOrgName(realName);
+						} else if (StringUtil
+								.isNotEmpty(ani.getCandidateName())
+								&& StringUtil.isEmpty(ani.getCandidateOrgId())) {
+							ani.setCandidateCNName(realName);
+							ani.setCandidateOrgName("");
+						} else {
+							ani.setCandidateCNName("");
+							ani.setCandidateOrgName("");
+						}
+					}
+				}
 			}
 
 			// 根据流程实例ID 获取流程的参数变量信息
@@ -1156,6 +1288,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.begin();
 
+			// 获取当前任务信息
+			TaskInfo currentTask = getCurrentNodeInfoByBussinessKey(
+					proIns.getBusinessKey(), proIns.getUserAccount());
+
 			// 当前用户转成域账号
 			String userAccount = this.changeToDomainAccount(proIns
 					.getUserAccount());
@@ -1215,9 +1351,34 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 节点配置参数转换
 			getVariableMap(proIns, paramMap);
 
+			// 节点控制参数信息
+			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
+
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
+
 			completeTask(proIns, paramMap);
 
+			// 记录节点控制变量与流程实例关联
+			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
+					controlParamList);
+
 			tm.commit();
+
+			// 获取当前任务信息
+			TaskInfo nextTask = getCurrentNodeInfoByBussinessKey(
+					proIns.getBusinessKey(), proIns.getUserAccount());
+
+			// 后续节点处理人是否一致，一致就可以自动通过
+			if (currentTask.getIsAutoafter() == 1
+					&& userAccount.equals(nextTask.getAssignee())) {
+
+				// 清除上一任务的处理意见和意见备注
+				proIns.setDealRemak("");
+				proIns.setDealReason("前后任务处理人一致，自动通过");
+
+				autoCompleteTask(proIns);
+			}
 
 		} catch (ProcessException e) {
 			throw e;
@@ -1421,6 +1582,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			}
 
+			// 节点控制参数信息
+			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
+
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
+
+			// 记录节点控制变量与流程实例关联
+			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
+					controlParamList);
+
 			// 在扩展表中添加转办记录
 			activitiTaskService.updateNodeChangeInfo(proIns.getNowtaskId(),
 					proIns.getProInsId(), processKey, userAccount,
@@ -1496,68 +1667,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
-	// public void cancelTask(ProIns proIns, String processKey, String
-	// initorUser,
-	// String currentUser) throws Exception {
-	// TransactionManager tm = new TransactionManager();
-	//
-	// try {
-	// tm.begin();
-	//
-	// // 当前用户转成域账号
-	// String userAccount = this.changeToDomainAccount(initorUser);
-	// String currentUserAccount = null;
-	// if (initorUser.equals(currentUser)) {
-	// currentUserAccount = userAccount;
-	//
-	// } else {
-	// currentUserAccount = this.changeToDomainAccount(currentUser);
-	// }
-	//
-	// // 获取流程实例
-	// ProcessInst inst = executor.queryObject(ProcessInst.class,
-	// "getProcessByProcessId_wf", proIns.getProInsId());
-	//
-	// // 权限判断(当前用户id==发起人)
-	// if (inst == null || !inst.getSTART_USER_ID_().equals(userAccount)) {
-	// throw new ProcessException("您没有权限撤销任务！");
-	// }
-	//
-	// TaskManager hiTask = activitiService.getFirstTask(proIns
-	// .getProInsId());
-	//
-	// String currentUserName = activitiService.getUserInfoMap()
-	// .getUserName(currentUserAccount);
-	//
-	// if (StringUtil.isEmpty(proIns.getDealRemak())) {
-	// String remark = "[" + currentUserName + "]将任务撤回至["
-	// + hiTask.getNAME_() + "]";
-	// proIns.setDealRemak(remark);
-	// }
-	//
-	// // 撤销任务
-	// activitiService.completeTaskLoadCommonParamsWithDest(
-	// proIns.getNowtaskId(), hiTask.getTASK_DEF_KEY_(),
-	// proIns.getDealRemak(), proIns.getDealOption(),
-	// proIns.getDealReason());
-	//
-	// // 日志记录撤销操作
-	// activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
-	// currentUser, "2", proIns.getProInsId(), processKey,
-	// proIns.getDealReason(), proIns.getDealOption(),
-	// proIns.getDealRemak());
-	//
-	// tm.commit();
-	//
-	// } catch (ProcessException e) {
-	// throw e;
-	// } catch (Exception e) {
-	// throw new Exception("撤销任务出错:" + e.getMessage());
-	// } finally {
-	// tm.release();
-	// }
-	// }
-
 	@Override
 	public void rejectToPreTask(ProIns proIns, String processKey,
 			Map<String, Object> paramMap) throws Exception {
@@ -1604,6 +1713,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					"1", proIns.getProInsId(), processKey,
 					proIns.getDealReason(), proIns.getDealOption(),
 					proIns.getDealRemak());
+
+			// 节点控制参数信息
+			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
+
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
+
+			// 记录节点控制变量与流程实例关联
+			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
+					controlParamList);
 
 			tm.commit();
 
@@ -1904,16 +2023,17 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	 * @param task
 	 *            2014年10月8日
 	 */
-	private void dealCopyTask(TaskInfo task, ModelMap model) {
-		if (null != task && task.getIsCopy() == 1) {
-			// 完成任务
-			activitiService.completeTaskWithReason(task.getTaskId(), null, "",
-					"抄送任务", "");
-			// 抄送节点，页面状态为第三方查看
-			model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
-					WorkflowConstants.PRO_PAGESTATE_SHOW);
-		}
-	}
+	// private void dealCopyTask(ProcessInst inst) {
+	// if (null != task && task.getIsCopy() == 1) {
+	// // 完成任务
+	// // this.completeCopyTask(copytaskid, copyuser);
+	// activitiService.completeTaskWithReason(task.getTaskId(), null, "",
+	// "抄送任务", "");
+	// // 抄送节点，页面状态为第三方查看
+	// model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
+	// WorkflowConstants.PRO_PAGESTATE_SHOW);
+	// }
+	// }
 
 	public ModelMap toDealTaskContainNoAssignerNodes(String processKey,
 			String processId, String taskId, ModelMap model) throws Exception {
@@ -1960,7 +2080,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
 				WorkflowConstants.PRO_PAGESTATE_APPROVE);
 
-		dealCopyTask(task, model);
+		// 抄送不会生成待办 20141119
+		// dealCopyTask(task, model);
 
 		return model;
 	}
@@ -1991,6 +2112,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 						"getProcessByBusinesskey_wf", bussinessKey);
 				model.addAttribute("processKey", inst.getKEY_());
 			}
+
+			// 抄送任务处理
+			// dealCopyTask(inst);
 
 			// 获取流程实例的处理记录
 			List<HisTaskInfo> taskHistorList = getProcHisInfo(inst
@@ -2082,10 +2206,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					}
 				}
 
-				// 只有是当前审批人或者管理员才进行抄送任务判断
-				if (authorFlag) {
-					dealCopyTask(task, model);
-				}
 			} else {
 				// 流程结束查看
 				model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
@@ -2431,6 +2551,20 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public boolean isCopyNodeByKey(String nodeKey, String processKey)
+			throws Exception {
+
+		NodeControlParam controlParam = executor.queryObject(
+				NodeControlParam.class, "iscopynode_wf", nodeKey, processKey);
+
+		if (null != controlParam && controlParam.getIS_COPY() == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public void tempSaveFormDatas(ProIns proIns, String businessKey,
 			String processKey) throws Exception {
 
@@ -2464,4 +2598,139 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		executor.delete("delFormDatasByBusinessKey_wf", businessKey);
 	}
 
+	@Override
+	public void completeCopyTask(String copytaskid, String copyuser)
+			throws Exception {
+		activitiService.getTaskService().completeCopyTask(copytaskid, copyuser);
+	}
+
+	@Override
+	public ListInfo getUserCopyTasksByKey(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+
+			ListInfo copyTaskList = null;
+
+			if (!isAdmin) {
+
+				String user = AccessControl.getAccessControl().getUserAccount();
+				String orgid = (String) UserCacheManager.getInstance()
+						.getUserAttribute(user, "mainOrg");
+				Organization org = OrgCacheManager.getInstance()
+						.getOrganization(orgid);
+				String orgtreelevel = org.getOrgtreelevel();
+
+				String[] arrayOrg = orgtreelevel.split("\\|");
+				List<String> orgs = new ArrayList<String>();
+				for (int i = arrayOrg.length - 1; i >= 0; i--) {
+					if (!arrayOrg[i].equals("0")) {
+						orgs.add(arrayOrg[i]);
+					}
+				}
+
+				copyTaskList = activitiService.getTaskService()
+						.getUserCopyTasks(user, orgs, process_key, businesskey,
+								offset, pagesize);
+			} else {
+				copyTaskList = activitiService.getTaskService()
+						.getAdminCopyTasks(process_key, businesskey, offset,
+								pagesize);
+			}
+
+			// 转中文名
+			List<CopyTaskEntity> copylist = copyTaskList.getDatas();
+			if (copylist != null && copylist.size() > 0) {
+				for (int i = 0; i < copylist.size(); i++) {
+					CopyTaskEntity copyTask = copylist.get(i);
+					// 用户
+					if (copyTask.getCopertype() == 0) {
+						copyTask.setCoperCNName(activitiService
+								.getUserInfoMap().getUserName(
+										copyTask.getCoper()));
+
+					} else {
+						// 部门
+						Organization org = OrgCacheManager.getInstance()
+								.getOrganization(copyTask.getCoper());
+						copyTask.setCoperCNName(org.getOrgName());
+
+					}
+
+				}
+			}
+			tm.commit();
+			return copyTaskList;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public ListInfo getUserReaderCopyTasksByKey(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+
+			ListInfo hiCopyTaskList = null;
+
+			if (!isAdmin) {
+
+				String user = AccessControl.getAccessControl().getUserAccount();
+
+				hiCopyTaskList = activitiService.getTaskService()
+						.getUserReaderCopyTasks(user, process_key, businesskey,
+								offset, pagesize);
+
+			} else {
+				hiCopyTaskList = activitiService.getTaskService()
+						.getAdminUserReaderCopyTasks(process_key, businesskey,
+								offset, pagesize);
+			}
+
+			tm.commit();
+			return hiCopyTaskList;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public String getCopyTaskReadUserNames(String actinstid) throws Exception {
+		return activitiService.getTaskService().getCopyTaskReadUserNames(
+				actinstid);
+	}
+
+	@Override
+	public String getCopyTaskReadUserNames(String actinstid, int limit)
+			throws Exception {
+		ReadUserNames userNames = activitiService.getTaskService()
+				.getCopyTaskReadUserNames(actinstid, limit);
+
+		return userNames.getReadUserNames();
+
+	}
+
+	@Override
+	public ListInfo getCopyTaskReadUsersByActid(String actinstid, long offset,
+			int pagesize) throws Exception {
+		return activitiService.getTaskService().getCopyTaskReadUsers(actinstid,
+				offset, pagesize);
+	}
 }

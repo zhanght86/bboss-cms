@@ -57,6 +57,8 @@ function showNodeStatus(){
 function initliteRequiredStar(objs){
 	nodeStarNum = objs;// 存储页面节点序号
 	
+	$(".required").hide();
+	
 	var vs = objs.split(',');
 	for(var j=0;j<vs.length;j++){
 		var req = vs[j];
@@ -130,25 +132,51 @@ function showChooseUsers(){
 }
 
 //选择处理人
-function setCandidate(node_key) {
+function setCandidate(node_key){
+	//处理人id/域账号/工号
 	var candidateName = $("#candidateName"+node_key).val();
-	if(!candidateName) candidateName='';
-	var url = ctx+"/workflowBusiness/chooseOrgUser.jsp?node_key="+node_key+"&candidateName="+candidateName+"&callBackFunc=updateAfterChoose";
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:480, content:'url:'+url}); 
+	//处理人中文名
+	var candidateCNName = $("#candidateCNName"+node_key).val();
+	//处理人名称+部门名称
+	var realName = $("#realName"+node_key).val();
+	//处理部门id
+	var candidateOrgId = $("#candidateOrgId"+node_key).val();
+	//处理部门名称
+	var candidateOrgName = $("#candidateOrgName"+node_key).val();
+	
+	var url = encodeURI(ctx+"/workflowBusiness/choose/toChooseUserPage.page?processKey="+$('#processKey').val()
+			+"&candidateName="+candidateName
+			+"&candidateCNName="+candidateCNName
+			+"&candidateOrgId="+candidateOrgId
+			+"&candidateOrgName="+candidateOrgName
+			+"&realName="+realName
+			+"&nodekey="+node_key
+			+"&callBackFunc=updateAfterChoose");
+	$.dialog({ id:'nodeInfoIframe', title:'选择处理人',width:1000,height:650, content:'url:'+url}); 
+	
 }
 
 //选择转办人
-function delegateUsers(node_key){		
-	var candidateName = $("#delegateUser").val();
-	if(!candidateName) candidateName='';
-	var url = ctx +"/workflowBusiness/chooseOrgUser.jsp?node_key=&candidateName="+candidateName+"&callBackFunc=updateAfterChoose"+"&index=1";
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:480, content:'url:'+url}); 
+function delegateUsers(node_key){
+	
+	var url = ctx+"/workflowBusiness/choose/toChooseUserPage.page?processKey="+$('#processKey').val()
+	+"&callBackFunc=updateAfterChoose&index=1";
+	
+	$.dialog({ id:'nodeInfoIframe', title:'选择转办人',width:1000,height:650, content:'url:'+url}); 
 }
 
-// 选择处理人后的业务逻辑方法
-function updateAfterChoose(accouts,realnames,node_key){
+/** 选择处理人后的业务逻辑方法
+ * @param accouts 处理人id
+ * @param realnames 处理人名称
+ * @param allnames 处理人名称+部门名称
+ * @param orgids 部门id
+ * @param orgnames 部门名称
+ * @param node_key 节点数，如‘1,2,3’
+ */
+function updateAfterChoose(accouts,realnames,allnames,orgids,orgnames,node_key){
 	
 	if(!node_key){
+		// 转办判断
 		if(accouts.indexOf(",") < 0){
 			if (accouts == userAccount) {
 				$.dialog.alert('不能将任务转办给自己！',function(){});
@@ -160,11 +188,18 @@ function updateAfterChoose(accouts,realnames,node_key){
 			$.dialog.alert('只能选择1个转办人！',function(){});
 		}
 	}else{
+		
 		$("#candidateName"+node_key).val(accouts);
-		$("#realName"+node_key).val(realnames);
-		$("#realnames"+node_key).html(realnames);
+		$("#candidateCNName"+node_key).val(realnames);
+		$("#realName"+node_key).val(allnames);
+		$("#candidateOrgId"+node_key).val(orgids);
+		$("#candidateOrgName"+node_key).val(orgnames);
+		
+		$("#realnames"+node_key).html(allnames);
 		
 	}
+	
+	isNodeNull();
 }
 
 /**
@@ -232,4 +267,13 @@ function checkoutPageElement(){
 	}
 	
 	return true;
+}
+
+// 查看抄送节点明细
+function viewCopyTaskInfo(actid) {
+	
+	var url = ctx+"/workflowBusiness/business/getUserReaderCopyTasks.page?actinstid="+actid;
+	
+	$.dialog({ id:'nodeInfoIframe', title:'已阅明细',width:500,height:400, content:'url:'+url}); 
+
 }

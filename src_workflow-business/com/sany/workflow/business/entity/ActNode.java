@@ -18,7 +18,10 @@ public class ActNode implements Serializable {
 	private String actId;// 节点ID 如：usertask1，usertask2
 	private String actName;// 节点名称
 	private String candidateName;// 审批人，工号或登录名，多人用“，”分割
-	private String realName;// 审批人姓名，多人用“，”分割
+	private String candidateCNName;// 审批人中文名
+	private String realName;// 审批人+部门名称
+	private String candidateOrgId;// 抄送部门
+	private String candidateOrgName;// 抄送部门名称
 	private String nodeDescribe;// 节点描述
 	private String approveType;// 审批类型
 	private double nodeWorkTime;// 节点工时（小时）
@@ -221,6 +224,30 @@ public class ActNode implements Serializable {
 
 	public void setBussinessControlClass(String bussinessControlClass) {
 		this.bussinessControlClass = bussinessControlClass;
+	}
+
+	public String getCandidateOrgName() {
+		return candidateOrgName;
+	}
+
+	public void setCandidateOrgName(String candidateOrgName) {
+		this.candidateOrgName = candidateOrgName;
+	}
+
+	public String getCandidateCNName() {
+		return candidateCNName;
+	}
+
+	public void setCandidateCNName(String candidateCNName) {
+		this.candidateCNName = candidateCNName;
+	}
+
+	public String getCandidateOrgId() {
+		return candidateOrgId;
+	}
+
+	public void setCandidateOrgId(String candidateOrgId) {
+		this.candidateOrgId = candidateOrgId;
 	}
 
 }

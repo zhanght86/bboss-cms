@@ -37,7 +37,25 @@
 
 	<property name="selectWfAppList">
 		<![CDATA[
-			select a.* from td_wf_app a
+			SELECT A.ID,
+			       A.SYSTEM_ID,
+			       A.SYSTEM_NAME,
+			       A.WF_PUBLISHED_URL,
+			       A.WF_MANAGE_URL,
+			       A.APP_MODE_TYPE,
+			       A.CREATOR,
+			       A.CREATE_DATE,
+			       A.UPDATE_PERSON,
+			       A.UPDATE_DATE,
+			       A.TODO_URL,
+			       A.APP_URL,
+			       A.SYSTEM_SECRET,
+			       A.SYSTEM_SECRET_TEXT,
+			       A.PENDING_TYPE,
+			       A.PENDING_USED,
+			       A.PIC_NAME,
+			       A.TICKETTIME / 1000 / 60 / 60 AS TICKETTIME
+			FROM TD_WF_APP A
 			where 1=1
 				#if($id && !$id.equals(""))
 					and a.id = #[id] 
@@ -62,7 +80,26 @@
 	
 	<property name="selectWfApp">
 		<![CDATA[
-			select a.* from td_wf_app a where a.id = ?
+			SELECT A.ID,
+			       A.SYSTEM_ID,
+			       A.SYSTEM_NAME,
+			       A.WF_PUBLISHED_URL,
+			       A.WF_MANAGE_URL,
+			       A.APP_MODE_TYPE,
+			       A.CREATOR,
+			       A.CREATE_DATE,
+			       A.UPDATE_PERSON,
+			       A.UPDATE_DATE,
+			       A.TODO_URL,
+			       A.APP_URL,
+			       A.SYSTEM_SECRET,
+			       A.SYSTEM_SECRET_TEXT,
+			       A.PENDING_TYPE,
+			       A.PENDING_USED,
+			       A.PIC_NAME,
+			       A.TICKETTIME / 1000 / 60 / 60 AS TICKETTIME
+			FROM TD_WF_APP A
+			 where a.id = ?
 		]]>
 	</property>
 	
@@ -89,10 +126,10 @@
 		<![CDATA[
 			insert into td_wf_app 
 				(ID, SYSTEM_ID, SYSTEM_NAME, WF_PUBLISHED_URL, WF_MANAGE_URL, APP_MODE_TYPE, CREATOR, CREATE_DATE,
-			     TODO_URL, APP_URL, SYSTEM_SECRET, SYSTEM_SECRET_TEXT,PENDING_TYPE,PENDING_USED) 
+			     TODO_URL, APP_URL, SYSTEM_SECRET, SYSTEM_SECRET_TEXT,PENDING_TYPE,PENDING_USED,TICKETTIME) 
 			values
 				(#[id], #[system_id], #[system_name], #[wf_published_url], #[wf_manage_url], #[app_mode_type],#[creator],#[create_date],
-			     #[todo_url], #[app_url], #[system_secret], #[system_secret_text],#[pending_type],#[pending_used])
+			     #[todo_url], #[app_url], #[system_secret], #[system_secret_text],#[pending_type],#[pending_used],#[tickettime])
 		]]>
 	</property>
 	
@@ -101,7 +138,8 @@
 			update td_wf_app
 			    set id=#[id],SYSTEM_ID=#[system_id],SYSTEM_NAME=#[system_name],APP_MODE_TYPE=#[app_mode_type],
 			    TODO_URL=#[todo_url],APP_URL=#[app_url],UPDATE_PERSON=#[update_person],UPDATE_DATE=#[update_date],
-			    SYSTEM_SECRET=#[system_secret],SYSTEM_SECRET_TEXT=#[system_secret_text],PENDING_TYPE=#[pending_type],PENDING_USED=#[pending_used]
+			    SYSTEM_SECRET=#[system_secret],SYSTEM_SECRET_TEXT=#[system_secret_text],PENDING_TYPE=#[pending_type],
+			    PENDING_USED=#[pending_used],TICKETTIME=#[tickettime]
 			    where id=#[id]
 				
 		]]>

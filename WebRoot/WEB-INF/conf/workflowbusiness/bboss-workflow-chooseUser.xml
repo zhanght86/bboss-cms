@@ -6,6 +6,8 @@
 
 	<property name="/workflowBusiness/choose/*.page"
 		f:chooseUserService="attr:workflow.choose.ChooseUserService" 
+		f:workflowService="attr:workflow.business.ActivitiBusinessService" 
+		path:chooseusers="/workflowBusiness/chooseOrgUser.jsp"
 		class="com.sany.workflow.business.action.ChooseUserAction">
 	</property>
 

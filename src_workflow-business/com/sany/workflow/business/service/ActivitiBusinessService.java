@@ -730,6 +730,20 @@ public interface ActivitiBusinessService {
 	public boolean isStartProcByProcessId(String processId) throws Exception;
 
 	/**
+	 * 是否抄送节点
+	 * 
+	 * @param nodeKey
+	 *            节点key
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年11月18日
+	 */
+	public boolean isCopyNodeByKey(String nodeKey, String processKey)
+			throws Exception;
+
+	/**
 	 * 驳回列表(显示没有设置处理人的节点)
 	 * 
 	 * @param processId
@@ -756,5 +770,80 @@ public interface ActivitiBusinessService {
 	 */
 	public List<ActNode> getBackActNode(String processId, String currentTaskKey)
 			throws Exception;
+
+	/**
+	 * 完成抄送任务
+	 * 
+	 * @param copytaskid
+	 *            抄送任务id
+	 * @param copyuser
+	 *            抄送人
+	 * @return
+	 * @throws Exception
+	 *             2014年11月19日
+	 */
+	public void completeCopyTask(String copytaskid, String copyuser)
+			throws Exception;
+
+	/**
+	 * 获取根据活动任务id获取任务的阅读记录中文名称
+	 * 
+	 * @param actinstid
+	 *            活动任务id
+	 * @return
+	 */
+	public String getCopyTaskReadUserNames(String actinstid) throws Exception;
+
+	/**
+	 * 分页获取根据活动任务id获取任务的阅读记录中文名称
+	 * 
+	 * @param actinstid
+	 *            活动任务id
+	 * @return
+	 */
+	public String getCopyTaskReadUserNames(String actinstid, int limit)
+			throws Exception;
+
+	/**
+	 * 分页获取抄送任务
+	 * 
+	 * @param process_key
+	 * @param businesskey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年11月17日
+	 */
+	public ListInfo getUserCopyTasksByKey(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception;
+
+	/**
+	 * 根据活动id分页获取已阅抄送任务
+	 * 
+	 * @param process_key
+	 * @param businesskey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年11月17日
+	 */
+	public ListInfo getCopyTaskReadUsersByActid(String actinstid, long offset,
+			int pagesize) throws Exception;
+
+	/**
+	 * 分页获取已读抄送任务
+	 * 
+	 * @param process_key
+	 * @param businesskey
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 * @throws Exception
+	 *             2014年11月18日
+	 */
+	public ListInfo getUserReaderCopyTasksByKey(String process_key,
+			String businesskey, long offset, int pagesize) throws Exception;
 
 }

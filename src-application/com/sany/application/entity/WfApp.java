@@ -43,6 +43,8 @@ public class WfApp {
 	private String pending_type;
 	
 	private String pending_used;
+	
+	private double tickettime;// 票据失效时间
 
 	public String getPending_type() {
 		return pending_type;
@@ -205,5 +207,15 @@ public class WfApp {
 	public void setSso_url(String sso_url) {
 		this.sso_url = sso_url;
 	}
+
+	public double getTickettime() {
+		return tickettime;
+	}
+
+	public void setTickettime(double tickettime) {
+		this.tickettime = tickettime;
+	}
+
+
 
 }

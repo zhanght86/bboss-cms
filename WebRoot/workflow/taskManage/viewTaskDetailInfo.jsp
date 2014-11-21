@@ -210,12 +210,6 @@ $(document).ready(function() {
 	 	    
 });
 
-// 重写关闭事件
-function closeDlg(isflush){
-	W.modifyCopyTaskData();
-	api.close();
-}
-
 //撤销任务
 function recallTask(taskId,processId,processKey){
 	

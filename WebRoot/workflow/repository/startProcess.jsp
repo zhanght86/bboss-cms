@@ -69,13 +69,13 @@ var api = frameElement.api, W = api.opener;
 // 选择用户
 function openChooseUsers(node_key){
 	//alert(node_key);
-	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
+	var url = encodeURI("<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
 			+"process_key=${process_key}&users="+$('#'+node_key+'_users_id').val()
 			+"&user_realnames="+$('#'+node_key+'_users_name').val()
 			+"&org_id="+$('#'+node_key+'_org_id').val()
 			+"&org_name="+$('#'+node_key+'_org_name').val()
 			+"&all_names="+$('#'+node_key+'_all_names').val()
-			+"&node_key="+node_key
+			+"&node_key="+node_key);
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
 }
 // 选择组

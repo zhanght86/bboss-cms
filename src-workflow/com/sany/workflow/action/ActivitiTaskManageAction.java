@@ -1014,7 +1014,7 @@ public class ActivitiTaskManageAction {
 			String user = AccessControl.getAccessControl().getUserAccount();
 
 			activitiService.getTaskService().completeCopyTask(copyId, user);
-
+			
 			// 获取流程实例信息
 			ProcessInst processInst = activitiService
 					.getProcessInstById(processInstId);

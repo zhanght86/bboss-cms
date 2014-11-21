@@ -68,7 +68,7 @@
 						<tr>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_RECALL" id="IS_RECALL" value="1" <pg:equal colName="IS_RECALL" value="1">checked</pg:equal>/>可被撤回 </td>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARD" id="IS_DISCARD" value="1" <pg:equal colName="IS_DISCARD" value="1">checked</pg:equal>/>可废弃</td>
-							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>后续节点自动审批</td>
+							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_AUTOAFTER" id="IS_AUTOAFTER" value="1" <pg:equal colName="IS_AUTOAFTER" value="1">checked</pg:equal>/>处理人一致自动审批</td>
 						</tr>
 						<tr>
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_DISCARDED" id="IS_DISCARDED" value="1" <pg:equal colName="IS_DISCARDED" value="1">checked</pg:equal>/>可被废弃 </td>

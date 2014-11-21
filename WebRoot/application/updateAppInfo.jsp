@@ -119,6 +119,13 @@ function getSystemSecret(){
 						<input type="hidden" id="app_mode_type_hidden" value="<pg:cell colName="app_mode_type" defaultValue="" />" />
 						<input type="hidden" id="id" name="id" value="<pg:cell colName="id" defaultValue="" />" />
 					</tr>
+					<tr>
+						<th>票据时间：</th>
+						<td>
+						<input type="text" name="tickettime" value="<pg:cell colName="tickettime"/>" style="width: 240px;"
+						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>小时
+						</td>
+					</tr>
 					</pg:beaninfo>
 				</table>
 			</fieldset>
@@ -238,6 +245,25 @@ function getSystemSecret(){
 	
 	function doreset() {
 		$("#reset").click();
+	}
+	
+	function chkPrice(obj){
+		obj.value = obj.value.replace(/[^\d.]/g,""); 
+		//必须保证第一位为数字而不是. 
+		obj.value = obj.value.replace(/^\./g,""); 
+		//保证只有出现一个.而没有多个. 
+		obj.value = obj.value.replace(/\.{2,}/g,"."); 
+		//小数点后面保留一位小数
+		obj.value = obj.value.replace(/\.\d\d/g,"."); 
+		//保证.只出现一次，而不能出现两次以上 
+		obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+	} 
+
+	function chkLast(obj){ 
+		// 如果出现非法字符就截取掉 
+		if(obj.value.substr((obj.value.length - 1), 1) == '.') {
+			obj.value = obj.value.substr(0,(obj.value.length - 1)); 
+		}
 	}
 	
 </script>

@@ -48,7 +48,7 @@ function setIsCopy(obj,nodekey) {
 	
 }
 
-function saveSort(){isCopyShow
+function saveSort(){
 	var FIRST_USERNODE_NUM = 0;
 	/**
 	$(".FIRST_USERNODE").each(function() {
@@ -209,10 +209,10 @@ function trMoveToend(obj){
 					</pg:empty>
 					
 					<pg:notempty colName="IS_AUTOAFTER">
-						<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>后续节点自动审批
+						<input type="checkbox" disabled <pg:equal colName="IS_AUTOAFTER" value="1">checked </pg:equal>/>处理人一致自动审批
 					</pg:notempty>
 					<pg:empty colName="IS_AUTOAFTER">
-						<input type="checkbox" disabled />后续节点自动审批
+						<input type="checkbox" disabled />处理人一致自动审批
 					</pg:empty>
 					
 					<br/>

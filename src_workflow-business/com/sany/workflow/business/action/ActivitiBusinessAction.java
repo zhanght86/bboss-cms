@@ -19,7 +19,13 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.frameworkset.util.annotations.PagerParam;
+import org.frameworkset.util.annotations.ResponseBody;
+import org.frameworkset.web.servlet.ModelMap;
+
+import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
+import com.sany.workflow.service.ProcessException;
 
 /**
  * @todo 工作流业务管理类
@@ -61,6 +67,40 @@ public class ActivitiBusinessAction {
 			OutputStream out = response.getOutputStream();
 			workflowService.getProccessActivePic(processInstId, out);
 		}
+	}
+
+	/**
+	 * 加载已读抄送任务数据
+	 * 
+	 * @param sortKey
+	 * @param desc
+	 * @param offset
+	 * @param pagesize
+	 * @param process_key
+	 * @param businesskey
+	 * @param model
+	 * @return 2014年11月17日
+	 */
+	public String getUserReaderCopyTasks(
+			@PagerParam(name = PagerParam.SORT, defaultvalue = "") String sortKey,
+			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
+			@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
+			String actinstid, ModelMap model) {
+
+		try {
+
+			ListInfo hiCopyTaskList = workflowService
+					.getCopyTaskReadUsersByActid(actinstid, offset, pagesize);
+
+			model.addAttribute("hiCopyTaskList", hiCopyTaskList);
+
+			return "path:hiCopyTaskList";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+
 	}
 
 }

@@ -174,11 +174,16 @@ public class AppcreateAction {
 		
 		if(wfApp != null){
 			try {
+				
 				if(StringUtils.isNotEmpty(wfApp.getId())){
 					wfApp.setUpdate_person(AccessControl.getAccessControl().getUserName());
 				}else{
 					wfApp.setCreator((AccessControl.getAccessControl().getUserName()));
 				}
+				
+				// 票据时间毫秒转换
+				wfApp.setTickettime(wfApp.getTickettime() * 60 * 60 * 1000);
+				
 				appcreateService.saveWfApp(wfApp);
 			} catch (Exception e) {
 				logger.error(e);

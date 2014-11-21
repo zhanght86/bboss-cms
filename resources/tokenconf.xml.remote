@@ -10,6 +10,8 @@
 			</construction>			
 		</property>
 		<property name="client" value="true"/>
+		<property name="appid" value="pdp"/>
+		<property name="secret" value="47430a44-2f5a-4fdb-a5b1-c3544230739f"/>
 		<property name="enableToken" value="true"/>
 		<property name="tokenfailpath" value="/common/jsp/tokenfail.jsp"/>	
 </property>

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <properties>
 
+	<!-- 获取用户信息 gw_tanx -->
+	<property name="selectUsersByUserName_wf">
+		<![CDATA[
+			select u.user_id ,u.user_name ,u.user_realname ,u.user_worknumber  
+			,org.org_name ,j.job_name
+			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
+			inner join td_sm_organization org on oj.org_id=org.org_id
+			inner join td_sm_job j on oj.job_id = j.job_id
+			where 1=1 
+				and u.user_name = ?
+		]]>
+	</property>
+
 	<property name="queryUserByCode">
 	<![CDATA[
 		select a.*,c.* 
@@ -20,17 +33,27 @@
 			inner join td_sm_job j on oj.job_id = j.job_id
 			where 1=1 
 			
-			#if($orgs && !$orgs.equals(""))
-				and oj.org_id = #[orgs]
+			#if($org_id && !$org_id.equals(""))
+				and oj.org_id = #[org_id]
 			#end
 			
-			#if($userName && !$userName.equals(""))
-			 and ((u.user_worknumber like #[userName]) or
-      			 (u.user_realname like #[userName]) or 
-      			 (u.user_name like #[userName]))
+			#if($user_name && !$user_name.equals(""))
+			 and ((u.user_worknumber like #[user_name]) or
+      			 (u.user_realname like #[user_name]) or 
+      			 (u.user_name like #[user_name]))
 			#end
 			
 	]]>
+	</property>
+	
+	<property name="selectOrgsByCondition">
+		<![CDATA[
+		select t.org_id, t.org_name
+			   from td_sm_organization t
+			  where t.parent_id = ?
+			     or t.org_id = ?
+			   order by t.org_id
+		]]>
 	</property>
 
 	<property name="queryUsersByUsername">

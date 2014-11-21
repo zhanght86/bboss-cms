@@ -39,6 +39,18 @@ TokenService tokenService = (TokenService) factory.create(TokenService.class, ur
 //通过hessian根据账号或者工号获取ticket
 
 String ticket = tokenService.genTicket(account, worknumber, appid, secret);
+
+
+//hessian服务方式申请token
+HessianProxyFactory factory = new HessianProxyFactory();
+//String url = "http://localhost:8080/context/hessian?service=tokenService";
+String url = "http://10.0.15.223/SanyToken/hessian?service=checktokenService";
+org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
+org.frameworkset.web.token.ws.TokenCheckResponse tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket);
+System.out.println(tokenCheckResponse.getResultcode());
+System.out.println(tokenCheckResponse.getUserAccount());
+System.out.println(tokenCheckResponse.getWorknumber());
+
 String token = tokenService.genAuthTempToken(appid, secret, ticket);
 //token = tokenService.genDualToken(appid, secret, ticket);
 /**
@@ -75,16 +87,16 @@ out.println("<div>userAccount:"+AccessControl.getAccessControl().getUserAccount(
 
 out.println("<div>账号token:"+tokenparamname + "=" + token+"</div>");
 
-String accounttokenrequest = "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
-String accountticketrequest = "_dt_ticket_=" + ticket + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
-String erroraccountticketrequest = "_dt_ticket_=w&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;//this is an error ticket;
+String accounttokenrequest = "_dt_token_=" + token ;
+String accountticketrequest = "_dt_ticket_=" + ticket ;
+String erroraccountticketrequest = "_dt_ticket_=w";//this is an error ticket;
 
 //工号token
 
 //token = tokenService.genAuthTempToken(appid, secret, ticket);
 out.println("<div>工号token:"+tokenparamname + "=" + token+"</div>");
 
-String worknumbertokenrequest =  "_dt_token_=" + token + "&_dt_appid_=" + appid + "&_dt_appid_secret="+secret;
+String worknumbertokenrequest =  "_dt_token_=" + token ;
  %>
 <html>
 <head>

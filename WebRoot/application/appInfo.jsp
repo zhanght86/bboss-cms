@@ -59,6 +59,10 @@
 						<th>应用图片：</th>
 						<td><pg:cell colName="pic_name"  /></td>
 					</tr>
+					<tr>
+						<th>票据时间：</th>
+						<td><pg:cell colName="tickettime"  />小时</td>
+					</tr>
 					</pg:beaninfo>
 				</table>
 			</fieldset>

@@ -26,6 +26,7 @@
 			<th>部署类型</th>							
 			<th>创建人</th>
 			<th>创建时间</th>
+			<th>票据时间</br>(小时)</th>
 			<th>修改人</th>	
 			<th>修改时间</th>
        	</pg:header>
@@ -55,6 +56,7 @@
 				<td align="center"><pg:cell colName="app_mode_type" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="creator" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="create_date" dateformat="yyyy-MM-dd HH:mm:ss" defaultValue="" /></td>
+				<td align="center"><pg:cell colName="tickettime" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="update_person" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="update_date" dateformat="yyyy-MM-dd HH:mm:ss" defaultValue="" /></td>
         	</tr>

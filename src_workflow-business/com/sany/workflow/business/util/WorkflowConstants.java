@@ -95,5 +95,9 @@ public class WorkflowConstants {
 	public static final String PRO_ACT_EDITAFTER ="10";
 	/**流程节点参数说明   本节点能否被修改 */
 	public static final String PRO_ACT_CANEDIT ="10";
+	
+	
+	/** 显示已阅抄送记录数*/
+	public static final Integer SHOW_READEDCOPYTASK_LIMIT= 100;  
 
 }

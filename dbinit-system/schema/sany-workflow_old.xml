@@ -61,6 +61,7 @@
         <column name="PENDING_TYPE" size="8" type="VARCHAR"/>
         <column default="0" name="PENDING_USED" size="8" type="VARCHAR"/>
         <column name="PIC_NAME" size="128" type="VARCHAR"/>
+        <column name="TICKETTIME" size="19" type="DECIMAL" default="0"/>
     </table>
     <table name="TD_WF_APP_PROC_RELATION">
         <column name="ID" primaryKey="true" required="true" size="64" type="VARCHAR"/>

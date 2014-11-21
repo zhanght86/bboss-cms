@@ -9,9 +9,9 @@
 		<table id="protable" border="0" cellpadding="0" cellspacing="0" class="sany_table">
 			<tr>
 				<th>节点名</th>
-				<th>处理人员</th>
+				<th style="width: 30%">处理人员</th>
 				<th>处理方式</th>
-				<th>节点描述</th>
+				<th style="width: 20%">节点描述</th>
 				<th>处理工时(小时)</th>
 				<th>节点状态</th>
 			</tr>
@@ -21,8 +21,11 @@
 		            <input type="hidden" name="actId" id="actId<pg:rowid increament="1" />" nvl="<pg:cell colName="isEdit" />"
 		               value="<pg:cell colName="actId" />"  con="<pg:rowid increament="1" />" />
 		             <input type="hidden" name="actName" id="actName<pg:rowid increament="1" />" value="<pg:cell colName="actName" />"/>
-		             <input type="hidden" name="candidateName" id="candidateName<pg:rowid increament="1" />" value="<pg:cell colName="candidateName" />" /> 
+		             <input type="hidden" name="candidateName" id="candidateName<pg:rowid increament="1" />" value="<pg:cell colName="candidateName" />" />
+		             <input type="hidden" name="candidateCNName" id="candidateCNName<pg:rowid increament="1" />" value="<pg:cell colName="candidateCNName" />" /> 
 		             <input type="hidden" name="realName" id="realName<pg:rowid increament="1" />" value="<pg:cell colName="realName" />" />
+		             <input type="hidden" name="candidateOrgId" id="candidateOrgId<pg:rowid increament="1" />" value="<pg:cell colName="candidateOrgId" />" /> 
+		             <input type="hidden" name="candidateOrgName" id="candidateOrgName<pg:rowid increament="1" />" value="<pg:cell colName="candidateOrgName" />" />
 		             <input type="hidden" name="isValid" id="isValid<pg:rowid increament="1" />" value="<pg:cell colName="isValid" />"/>
 		             <input type="hidden" name="isEdit" id="isEdit<pg:rowid increament="1" />" value="<pg:cell colName="isEdit" />"/>
 		             <input type="hidden" name="isEditAfter" id="isEditAfter<pg:rowid increament="1" />" value="<pg:cell colName="isEditAfter" />"/>
@@ -45,7 +48,7 @@
 				      <pg:cell colName="actName" /> 
 			      </td>
 			      <td>
-				      <span id="realnames<pg:rowid increament="1" />">
+				      <span id="realnames<pg:rowid increament="1" />" >
 					     <pg:cell colName="realName" />
 				      </span> 
 					  <a href="javascript:setCandidate(<pg:rowid increament="1" />)" name="chooseUsersa" style="display: none;"><font color="#0a70ed">[选择]</font></a>
@@ -55,16 +58,7 @@
 			      	  <pg:equal colName="approveType" value="0" >单实例  串行</pg:equal>
 		       		  <pg:equal colName="approveType" value="10" >多实例  串行</pg:equal>
 		       		  <pg:equal colName="approveType" value="20" >多实例  并行</pg:equal>
-		       		  
-		       		  <!-- 
-				   	<select name="approveType" id="approveType<pg:rowid increament="1"/>" >
-				      	<pg:equal colName="isMultiDefault" value="0">
-				      	<option <pg:equal colName="approveType" value="0">selected</pg:equal> value="0">单实例</option>
-				      	</pg:equal>
-				      	<option <pg:equal colName="approveType" value="10">selected</pg:equal> value="10">多实例  串行</option>
-				      	<option <pg:equal colName="approveType" value="20">selected</pg:equal> value="20">多实例  并行</option>
-				  	</select>
-				  	 -->
+		       		  <pg:equal colName="approveType" value="40" >抄送</pg:equal>
 			      </td>
 			      <td>
 				      <pg:empty colName="nodeDescribe">&nbsp;</pg:empty>

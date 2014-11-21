@@ -1,15 +1,18 @@
 package com.sany.workflow.business.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.frameworkset.platform.sysmgrcore.entity.User;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.SysUser;
 import com.sany.workflow.business.service.ChooseUserService;
+import com.sany.workflow.entity.User;
 
 /**
  * 选择组织用户实现类
@@ -30,45 +33,69 @@ public class ChooseUserImpl implements ChooseUserService,
 
 	}
 
-	@Override
-	public SysUser queryUserByCode(String code) throws SQLException {
-		SysUser user = null;
-		List<SysUser> list = executor.queryList(SysUser.class,
-				"queryUserByCode", code);
-		if (list != null && list.size() > 0) {
-			user = list.get(0);
-		}
-		return user;
+	/**
+	 * 根据查询条件查询用户列表
+	 * 
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
+	public User getUserInfo(String userName) throws Exception {
+		return executor.queryObject(User.class, "selectUsersByUserName_wf",
+				userName);
 	}
 
 	@Override
-	public List<User> selectUsersByCondition(User user, long offset,
-			int pagesize) throws SQLException {
+	public List<User> queryUsersForPage(User user, long offset, int pagesize)
+			throws Exception {
 		ListInfo listInfo = executor.queryListInfoBean(User.class,
 				"selectUsersByCondition", offset, pagesize, user);
-
 		return listInfo.getDatas();
 	}
 
+	/**
+	 * 根据查询条件查询用户列表和下级部门列表
+	 * 
+	 * @param offset
+	 * @param pagesize
+	 * @return
+	 */
 	@Override
-	public List<User> queryUsersByUsernames(String usernames)
-			throws SQLException {
-		List<String> usernameslist = Arrays.asList(usernames.split(","));
-		Map<String, List<String>> param = new HashMap<String, List<String>>();
-		param.put("usernames", usernameslist);
+	public List<User> queryUsersAndOrgToJson(User user, long offset,
+			int pagesize) throws Exception {
 
-		List<User> users = executor.queryListBean(User.class,
-				"queryUsersByUsername", param);
+		TransactionManager tm = new TransactionManager();
+		try {
 
-		return users;
+			tm.begin();
 
-	}
+			List<User> userOrgList = new ArrayList<User>();
 
-	@Override
-	public List<User> selectUsersByCondition(User user) throws SQLException {
+			// 用户列表
+			ListInfo listInfo = executor.queryListInfoBean(User.class,
+					"selectUsersByCondition", offset, pagesize, user);
 
-		return executor.queryListBean(User.class, "selectUsersByCondition",
-				user);
+			if (null != listInfo.getDatas()) {
+				userOrgList.addAll(listInfo.getDatas());
+			}
+
+			// 部门列表
+			if (StringUtil.isNotEmpty(user.getOrg_id())) {
+				List<User> orgList = executor.queryList(User.class,
+						"selectOrgsByCondition", user.getOrg_id(),
+						user.getOrg_id());
+
+				userOrgList.addAll(orgList);
+			}
+
+			tm.commit();
+			return userOrgList;
+
+		} catch (Exception e) {
+			throw new Exception("查询数据列表出错:" + e);
+		} finally {
+			tm.release();
+		}
 	}
 
 }

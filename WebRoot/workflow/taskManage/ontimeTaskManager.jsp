@@ -247,12 +247,11 @@ function modifyCopyTaskData(){
 	$("#copyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryCopyTaskData.page?"+$("#querystring").val()+" #copyContent",function(){loadjs()});
 }
 
-
 // 完成抄送任务
 function viewCopyTask(processInstId,id){
 	
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewCopyTask.page?processInstId="+processInstId+"&copyId="+id;
-	$.dialog({ title:'明细查看',width:1100,height:700, content:'url:'+url,maxState:true});
+	$.dialog({ close:modifyCopyTaskData,title:'明细查看',width:1100,height:700, content:'url:'+url,maxState:true});
 	
 }
 

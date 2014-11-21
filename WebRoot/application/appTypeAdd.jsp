@@ -117,6 +117,13 @@ function picRefApp(){
 						<a href="#" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>选择</span></a>
 						</td>
 					</tr>
+					<tr>
+						<th>票据时间：</th>
+						<td>
+						<input type="text" name="tickettime" value="2" style="width: 240px;"
+						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>小时
+						</td>
+					</tr>
 				</table>
 			</fieldset>
 			<div class="btnarea">
@@ -216,7 +223,7 @@ function picRefApp(){
 						api.close();
 					}, api);
 				} else {
-					w.$.dialog.alert(responseText, function() {
+					W.$.dialog.alert(responseText, function() {
 					}, api);
 				}
 			}
@@ -225,6 +232,25 @@ function picRefApp(){
 	
 	function doreset() {
 		$("#reset").click();
+	}
+	
+	function chkPrice(obj){
+		obj.value = obj.value.replace(/[^\d.]/g,""); 
+		//必须保证第一位为数字而不是. 
+		obj.value = obj.value.replace(/^\./g,""); 
+		//保证只有出现一个.而没有多个. 
+		obj.value = obj.value.replace(/\.{2,}/g,"."); 
+		//小数点后面保留一位小数
+		obj.value = obj.value.replace(/\.\d\d/g,"."); 
+		//保证.只出现一次，而不能出现两次以上 
+		obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$","."); 
+	} 
+
+	function chkLast(obj){ 
+		// 如果出现非法字符就截取掉 
+		if(obj.value.substr((obj.value.length - 1), 1) == '.') {
+			obj.value = obj.value.substr(0,(obj.value.length - 1)); 
+		}
 	}
 	
 </script>
