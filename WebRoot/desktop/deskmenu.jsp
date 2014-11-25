@@ -118,6 +118,7 @@ if(customtype != null && customtype.equals("default"))
 							<tree:tree tree="role_column_tree" node="role_column_tree.node"
 								imageFolder="/sysmanager/images/tree_images" collapse="true"
 								includeRootNode="false" mode="static-dynamic">
+								<tree:param name="customtype" />
 								<tree:checkbox name="menupath" />
 								<tree:treedata
 									treetype="com.frameworkset.platform.esb.datareuse.common.action.DeskTopMenuTree"
