@@ -44,17 +44,20 @@
 								<td width="150"><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 								<th width="100"><strong>状态:</strong></th>
 								<td width="150">
-									<pg:true colName="validate">有效</pg:true>
-						       		<pg:false colName="validate">无效</pg:false>
+									<pg:true colName="validate"  evalbody="true"><pg:yes>有效</pg:yes><pg:no>无效<pg:/no></pg:true>
 					       		</td>
 							</tr>
 							<tr>
 								<th width="60"><strong>Cookie HttpOnly:</strong></th>
-								<td width="300" ><pg:true colName="httpOnly">启用</pg:true>
-	       		<pg:false colName="httpOnly"><span style=" color: red;">关闭</span></pg:false></td>	
+								<td width="300" ><pg:true colName="httpOnly" evalbody="true">
+									<pg:yes>启用</pg:yes>
+									<pg:no><span style=" color: red;">关闭</span></pg:no>
+								</pg:true>
+	       						</td>	
 								<th width="60"><strong>Cookie Secure:</strong></th>
-								<td width="300" colspan="10"><pg:true colName="secure">启用</pg:true>
-	       		<pg:false colName="secure"><span style=" color: red;">关闭</span></pg:false></td>									
+								<td width="300" colspan="10"><pg:true colName="secure" evalbody="true"><pg:yes>启用</pg:yes>
+									<pg:no><span style=" color: red;">关闭</span></pg:no></pg:true>
+	       						</td>									
 							</tr>
 							<tr>
 								<th width="60"><strong>请求地址:</strong></th>
