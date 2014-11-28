@@ -44,7 +44,7 @@
 								<td width="150"><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 								<th width="100"><strong>状态:</strong></th>
 								<td width="150">
-									<pg:true colName="validate"  evalbody="true"><pg:yes>有效</pg:yes><pg:no>无效<pg:/no></pg:true>
+									<pg:true colName="validate"  evalbody="true"><pg:yes>有效</pg:yes><pg:no>无效</pg:no></pg:true>
 					       		</td>
 							</tr>
 							<tr>

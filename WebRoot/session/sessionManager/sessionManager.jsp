@@ -184,7 +184,7 @@ function delSession (sessionid) {
 				 $.dialog.alert("删除session失败："+data);
 			}else {
 				queryList();
-				close();	
+				
 			}
 		}	
 	 });
@@ -231,7 +231,7 @@ function delApp()
 			if (data != 'success') {
 				 $.dialog.alert("删除"+$("#app_key").val()+"应用失败："+data);
 			}else {
-				close();	
+				
 			reloadpage();
 				
 				
@@ -269,7 +269,7 @@ function delAllSessions () {
 				 $.dialog.alert("清空"+$("#app_key").val()+"应用下所有session失败："+data);
 			}else {
 				queryList();
-				close();	
+				
 			}
 		}	
 	 });
