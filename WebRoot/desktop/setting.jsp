@@ -15,23 +15,14 @@ boolean isadmin = AccessControl.getAccessControl().isAdmin();
 </head>
 <body style="overflow-y:hidden">
 <tab:tabContainer id="jbxxtab-container" selectedTabPaneId="jbxxtab">
-	<tab:tabPane id="jbxxtab" tabTitle="桌面快捷" lazeload="true">
-		<tab:iframe  id="frame4" src="${webAppPath}/desktop/deskmenu.jsp" frameborder="0"
-										 width="100%" height="380">
-		</tab:iframe>
-	</tab:tabPane>
 	
 	<tab:tabPane id="jbxxtab5" tabTitle="桌面快捷项排序" lazeload="false">
 		<tab:iframe  id="frame5" src="${webAppPath}/desktop/desktopsort.page?isdefault=false" frameborder="0"
 										 width="100%" height="380">
 		</tab:iframe>
 	</tab:tabPane>
+	
 	<pg:true actual="<%=isadmin%>">
-		<tab:tabPane id="defaultjbxxtab" tabTitle="缺省桌面快捷" lazeload="false">
-			<tab:iframe  id="frame9" src="${webAppPath}/desktop/deskmenu.jsp?customtype=default" frameborder="0"
-											 width="100%" height="380">
-			</tab:iframe>
-		</tab:tabPane>
 		<tab:tabPane id="jbxxtab10" tabTitle="缺省快捷项排序" lazeload="false">
 		<tab:iframe  id="frame10" src="${webAppPath}/desktop/desktopsort.page?isdefault=true" frameborder="0"
 										 width="100%" height="380">

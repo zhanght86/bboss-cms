@@ -1357,13 +1357,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 控制参数实体转换
 			setNodeControlParam(proIns, controlParamList, processKey);
 
-			completeTask(proIns, paramMap);
-
 			// 记录节点控制变量与流程实例关联
 			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
 					controlParamList);
 
-			tm.commit();
+			completeTask(proIns, paramMap);
 
 			// 获取当前任务信息
 			TaskInfo nextTask = getCurrentNodeInfoByBussinessKey(
@@ -1379,6 +1377,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 				autoCompleteTask(proIns);
 			}
+
+			tm.commit();
 
 		} catch (ProcessException e) {
 			throw e;
@@ -1562,6 +1562,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			}
 
+			// 节点控制参数信息
+			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
+
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
+
+			// 记录节点控制变量与流程实例关联
+			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
+					controlParamList);
+
 			if (!isSignTask(proIns.getNowtaskId(), userAccount)) {
 				// 先签收
 				activitiService.claim(proIns.getNowtaskId(), userAccount);
@@ -1581,16 +1591,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setDealRemak(dealRemak);
 
 			}
-
-			// 节点控制参数信息
-			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
-
-			// 控制参数实体转换
-			setNodeControlParam(proIns, controlParamList, processKey);
-
-			// 记录节点控制变量与流程实例关联
-			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
-					controlParamList);
 
 			// 在扩展表中添加转办记录
 			activitiTaskService.updateNodeChangeInfo(proIns.getNowtaskId(),
@@ -1701,6 +1701,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setDealRemak(dealRemak);
 			}
 
+			// 节点控制参数信息
+			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
+
+			// 控制参数实体转换
+			setNodeControlParam(proIns, controlParamList, processKey);
+
+			// 记录节点控制变量与流程实例关联
+			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
+					controlParamList);
+
 			activitiService.getTaskService().rejecttoTask(
 					proIns.getNowtaskId(), paramMap, proIns.getDealRemak(),
 					proIns.getRejectToActId(),
@@ -1713,16 +1723,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					"1", proIns.getProInsId(), processKey,
 					proIns.getDealReason(), proIns.getDealOption(),
 					proIns.getDealRemak());
-
-			// 节点控制参数信息
-			List<NodeControlParam> controlParamList = new ArrayList<NodeControlParam>();
-
-			// 控制参数实体转换
-			setNodeControlParam(proIns, controlParamList, processKey);
-
-			// 记录节点控制变量与流程实例关联
-			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
-					controlParamList);
 
 			tm.commit();
 

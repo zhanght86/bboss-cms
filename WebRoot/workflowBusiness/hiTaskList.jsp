@@ -25,7 +25,19 @@
 				<td><pg:cell colName="END_TIME_"  dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 				<td><pg:cell colName="ACT_NAME_" /></td>
 				<td>
-					<pg:equal colName="IS_AUTO_COMPLETE" value="2">
+					<pg:equal colName="IS_AUTO_COMPLETE" value="2" evalbody="true" >
+						<pg:yes>
+							<pg:notempty colName="ASSIGNEE_NAME">
+								已阅：<pg:cell colName="ASSIGNEE_NAME" /> 
+								<a href="javascript:viewCopyTaskInfo('<pg:cell colName="ID_" />')" name="" ><font id="copytaskFont" color="#0a70ed">[明细]</font></a>
+							</pg:notempty>
+						</pg:yes>
+						<pg:no>
+							<pg:cell colName="ASSIGNEE_NAME" />
+						</pg:no>
+					</pg:equal>
+					
+				<%-- 	<pg:equal colName="IS_AUTO_COMPLETE" value="2">
 						<pg:notempty colName="ASSIGNEE_NAME">
 							已阅：<pg:cell colName="ASSIGNEE_NAME" /> 
 							<a href="javascript:viewCopyTaskInfo('<pg:cell colName="ID_" />')" name="" ><font id="copytaskFont" color="#0a70ed">[明细]</font></a>
@@ -33,27 +45,52 @@
 					</pg:equal>
 					<pg:notequal colName="IS_AUTO_COMPLETE" value="2">
 						<pg:cell colName="ASSIGNEE_NAME" />
-					</pg:notequal>
+					</pg:notequal> --%>
 				</td>
 				<td>
-					<pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>
+					<pg:empty colName="BUSSINESS_OP" evalbody="true">
+						<pg:yes>
+							&nbsp;
+						</pg:yes>
+						<pg:no>
+							<pg:cell colName="BUSSINESS_OP" />
+						</pg:no>
+					</pg:empty>
+				<%-- 	<pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>
 					<pg:notempty colName="BUSSINESS_OP" >
 						<pg:cell colName="BUSSINESS_OP" />
-					</pg:notempty>
+					</pg:notempty> --%>
 				</td>
 				<td>
-					<pg:empty colName="BUSSINESS_REMARK" >&nbsp;</pg:empty>
+					<pg:empty colName="BUSSINESS_REMARK" evalbody="true">
+						<pg:yes>
+							&nbsp;
+						</pg:yes>
+						<pg:no>
+							<pg:cell colName="BUSSINESS_REMARK" />
+						</pg:no>
+					</pg:empty>
+					<%-- <pg:empty colName="BUSSINESS_REMARK" >&nbsp;</pg:empty>
 					<pg:notempty colName="BUSSINESS_REMARK" >
 						<pg:cell colName="BUSSINESS_REMARK" />
-					</pg:notempty>
+					</pg:notempty> --%>
 				</td>
 				<td>
-					<pg:notequal colName="IS_AUTO_COMPLETE" value="1">
+					<pg:equal colName="IS_AUTO_COMPLETE" value="1" evalbody="true">
+						<pg:yes>
+							系统自动完成任务
+						</pg:yes>
+						<pg:no>
+							<pg:cell colName="DELETE_REASON_" />
+						</pg:no>
+					</pg:equal>
+					
+					<%-- <pg:notequal colName="IS_AUTO_COMPLETE" value="1">
 			    		<pg:cell colName="DELETE_REASON_" />
 		    		</pg:notequal>
 		    		<pg:equal colName="IS_AUTO_COMPLETE" value="1">
 			    		系统自动完成任务
-		    		</pg:equal>
+		    		</pg:equal> --%>
 				</td>
 			</tr>
 		</pg:list>

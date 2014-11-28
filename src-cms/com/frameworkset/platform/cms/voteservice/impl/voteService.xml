@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+<property name="queryVoteNameByTitleId">
+		<![CDATA[
+		select name from TD_CMS_VOTE_TITLE where id = ?
+		]]>
+	</property>
+
+<property name="queryAnswerContent">
+		<![CDATA[
+		select c.* ,d.title quesContent from 
+			(
+			
+			select a.USER_ID userId , a.title_id voteId , b.name voteName , a.QUES_ID quesId ,a.content answerContent , a.OPTION_ID optionId,a.QUES_TYPE quesType 
+			
+			from TD_CMS_VOTE_MOBILE_ANSWER a left join TD_CMS_VOTE_TITLE b on a.TITLE_ID = b.ID where a.TITLE_ID = ?
+			
+			) c left join TD_CMS_VOTE_QUESTIONS d on c.quesId = d.id
+			
+			order by c.userId,  c.quesId , c.optionId
+		]]>
+	</property>
+
+<property name="saveVoteDetail">
+		<![CDATA[
+		insert into TD_CMS_VOTE_MOBILE_ANSWER (ID,USER_ID,TITLE_ID,QUES_ID,QUES_TYPE,OPTION_ID,CONTENT)values (?,?,?,?,?,?,?)
+		]]>
+	</property>
+	
+	<!-- 根据试卷id获取试卷题目 -->
+	<property name="getQuestionTitleById">
+		<![CDATA[
+		SELECT C.TITLE,C.ID
+		  FROM TD_CMS_VOTE_TQ D
+		  LEFT JOIN TD_CMS_VOTE_QUESTIONS C ON C.ID = D.QUESIONT_ID
+		 WHERE D.TITLE_ID = ?
+		 ORDER BY C.ID
+		]]>
+	</property>
+	
+	
+	
+</properties>

@@ -198,8 +198,8 @@
 		//	document.all("titleName").focus();
 			return;
 		}
-		if(document.all("titleName").value.length>100)
-		{
+		
+		if(document.all("titleName").value.length>100){
 		  alert("问卷名称字数不能超过100！");
 		  return false;
 		}
@@ -209,10 +209,12 @@
 		//	document.all("channelName").focus();
 			return;
 		}
+		
 		if(document.all("depart_id").value==""){
 			alert("所属部门不能为空！");
 			return;
 		}
+		
 		document.all("ipStartString").value = "";
 		document.all("ipEndString").value = "";
 		
@@ -232,6 +234,7 @@
 			}
 			document.all("ipStartString").value += ipCtrlStartArray[i].value+";";
 		}
+		
 		for (var i=0;i<ipCtrlEndArray.length;i++){
 			if (!checkIP(ipCtrlEndArray[i].value)){
 				alert("IP地址格式不对!!，只能输入数字和“.”,格式为XXX.XXX.XXX.XXX 例如：192.168.0.1");
@@ -263,8 +266,7 @@
 				return;
 			}
 			var todayTime = "<%=todayTime%>";
-			if(document.all("timeCtrlEnd").value<todayTime.substring(0,10))
-			{
+			if(document.all("timeCtrlEnd").value<todayTime.substring(0,10)){
 			  alert("时间段不应小于当前时间！");
 			  return false;
 			}
@@ -276,8 +278,7 @@
 		//}
 		 eWebEditor1.setMode('EDIT');
          form1.content.value=HTMLEncode(eWebEditor1.eWebEditor.document.body.innerHTML);
-         if(form1.content.value.lenght<1)
-         {
+         if(form1.content.value.lenght<1){
            alert("问卷描述不能为空！");
            return false;
          }
@@ -291,13 +292,19 @@
 			var qstion = document.all(tblName+"Qstion").value.replace(/\?/gi,'');
 			var qstion_id = document.all(tblName+"Qstion_id").value;
 			var voteCount = document.all(tblName+"VoteCount").value;
+			
+			// 20141125 可以单独保存问卷信息
+			if (qstion.replace(/ /gi,'')=="") {
+				continue;
+			}
+			
 			if (qstion.replace(/ /gi,'')==""){
 				alert("请填写问题！");
 			//	document.all(tblName+"Qstion").focus();
 				return;
 			}
-			if(document.all(tblName+"Qstion").value.length>100)
-			{
+			
+			if(document.all(tblName+"Qstion").value.length>100){
 			  alert("问题字数不能超过100！");
 			  return false;
 			}
@@ -309,6 +316,7 @@
 					break;
 				}
 			}
+			
 			if (styleChckbx[1]!=null){
 				alert("请指定回答方式！");
 			//	styleChckbx[0].focus();
@@ -319,29 +327,28 @@
 			var optionString = "";
 			var countString = "";
 			var option_id = "";
-			if(styleChckbx!=2)
-			{
-			var optionText = document.getElementsByName(tblName+"Option");
-			var countText = document.getElementsByName(tblName+"Count");
-			var option_idText = document.getElementsByName(tblName+"Option_id");
-			if (styleChckbx!=2 && (optionText==null||optionText.length==0)){
-				alert("请填入选项信息！");
-				return;
-			}
-			for (var j=0;j<optionText.length;j++){
-				if (optionText[j].value.replace(/ /gi,'')==""){
+			if(styleChckbx!=2){
+				var optionText = document.getElementsByName(tblName+"Option");
+				var countText = document.getElementsByName(tblName+"Count");
+				var option_idText = document.getElementsByName(tblName+"Option_id");
+				if (styleChckbx!=2 && (optionText==null||optionText.length==0)){
 					alert("请填入选项信息！");
-				//	optionText[j].focus();
 					return;
 				}
-				optionString += optionText[j].value
-								.replace(/;/gi,',')
-								.replace(/\>/gi,'》')
-								.replace(/\</gi,'《')
-								.replace(/'/gi,'`')+";";
-				option_id += option_idText[j].value + ";";
-				countString += countText[j].value + ";";
-			}
+				for (var j=0;j<optionText.length;j++){
+					if (optionText[j].value.replace(/ /gi,'')==""){
+						alert("请填入选项信息！");
+					//	optionText[j].focus();
+						return;
+					}
+					optionString += optionText[j].value
+									.replace(/;/gi,',')
+									.replace(/\>/gi,'》')
+									.replace(/\</gi,'《')
+									.replace(/'/gi,'`')+";";
+					option_id += option_idText[j].value + ";";
+					countString += countText[j].value + ";";
+				}
 			}
 			qstion = qstion.replace(/\>/gi,'》').replace(/\</gi,'《');
 			questionString += "<"+qstion+"'"+qstion_id+"'"+voteCount+"'"+styleChckbx+"'"+optionString+"'"+option_id+"'"+countString+">";
@@ -483,7 +490,7 @@
 						问卷名称：
 					</td>
 					<td>
-						<input name="titleName" type="text" maxlength="200" style="width:400px;"><font color="red">*问卷标题字数不能超过100字</font>
+						<input name="titleName" type="text" maxlength="200" style="width:400px;"><font color="red">*问卷标题字数不能超过100</font>
 					</td>
 				</tr>
 				<!-- <tr>
@@ -658,7 +665,7 @@
 					</td>
 				</tr>
 				<%}else{%>
-			    <tr>
+			   <tr>
 			    	<td width="15%" align="right">
 			    		主题图片：
 			    	</td>
@@ -760,11 +767,17 @@
 								</td>
 								<td>
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="0" onClick="return changeStyle('qstionTbl1')">
-									单选
+									单选并统计票数
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="1" onClick="return changeStyle('qstionTbl1')">
-									多选
+									多选并统计票数
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="2" onClick="return clearOption('qstionTbl1')">
 									自由回答
+									
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="3" onClick="return changeStyle('qstionTbl1')">
+									单选
+
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="4" onClick="return changeStyle('qstionTbl1')">
+									多选
 								</td>
 							</tr>
 							<tr>
@@ -827,7 +840,7 @@
 	}
 	
 	function getQstionTblScript(tblName){
-		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"Qstion_id' id='"+tblName+"Qstion_id' type='hidden' value='0' size='5'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
+		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"Qstion_id' id='"+tblName+"Qstion_id' type='hidden' value='0' size='5'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选并统计票数<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选并统计票数 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='3' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='4' onClick='return changeStyle(\""+tblName+"\")'>多选</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
 		return questionTable;
 	}
 	
@@ -889,56 +902,59 @@
 				}
 				
 				List questions = oneTitle.getQuestions();
-				Question  qstion = (Question)questions.get(0);
-				%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
-				checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");
-				document.all("qstionTbl1VoteCount").value = "<%=qstion.getVotecount()%>";
-				document.all("qstionTbl1Qstion_id").value="<%=qstion.getId()%>";<%
-				if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
-					List items = qstion.getItems();
-					Item item = (Item)items.get(0);
-					%>document.all("qstionTbl1AddBtn").disabled = false;
-					document.all("qstionTbl1DelBtn").disabled = false;
-					addOption("qstionTbl1");
-					document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";
-					document.all("qstionTbl1Count").value = "<%=item.getCount()%>";
-					document.all("qstionTbl1Option_id").value = "<%=item.getId()%>";
-					<%
-					for (int j=1;j<items.size();j++){
-						item = (Item)items.get(j);
-						%>addOption("qstionTbl1");
-						document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";
-						document.all("qstionTbl1Count")[<%=j%>].value = "<%=item.getCount()%>";
-						document.all("qstionTbl1Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
-					}
-				}
 				
-				for (int i=1;i<questions.size();i++){
-					qstion = (Question)questions.get(i);
-					%>addQuestion();
-					var tblNm = "qstionTbl"+tableIndex;
-					document.all(tblNm+"AddBtn").disabled = true;
-					document.all(tblNm+"DelBtn").disabled = true;
-					document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
-					checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");
-					document.all(tblNm+"VoteCount").value="<%=qstion.getVotecount()%>";
-					document.all(tblNm+"Qstion_id").value="<%=qstion.getId()%>";<%
+				if (null != questions && questions.size() > 0){
+					Question  qstion = (Question)questions.get(0);
+					%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
+					checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");
+					document.all("qstionTbl1VoteCount").value = "<%=qstion.getVotecount()%>";
+					document.all("qstionTbl1Qstion_id").value="<%=qstion.getId()%>";<%
 					if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
 						List items = qstion.getItems();
 						Item item = (Item)items.get(0);
-						%>document.all(tblNm+"AddBtn").disabled = false;
-						document.all(tblNm+"DelBtn").disabled = false;
-						addOption(tblNm);
-						document.all(tblNm+"Option").value = "<%=item.getOptions()%>";
-						document.all(tblNm+"Count").value = "<%=item.getCount()%>";
-						document.all(tblNm+"Option_id").value = "<%=item.getId()%>";
+						%>document.all("qstionTbl1AddBtn").disabled = false;
+						document.all("qstionTbl1DelBtn").disabled = false;
+						addOption("qstionTbl1");
+						document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";
+						document.all("qstionTbl1Count").value = "<%=item.getCount()%>";
+						document.all("qstionTbl1Option_id").value = "<%=item.getId()%>";
 						<%
 						for (int j=1;j<items.size();j++){
 							item = (Item)items.get(j);
-							%>addOption(tblNm);
-							document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";
-							document.all(tblNm+"Count")[<%=j%>].value = "<%=item.getCount()%>";
-							document.all(tblNm+"Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
+							%>addOption("qstionTbl1");
+							document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";
+							document.all("qstionTbl1Count")[<%=j%>].value = "<%=item.getCount()%>";
+							document.all("qstionTbl1Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
+						}
+					}
+					
+					for (int i=1;i<questions.size();i++){
+						qstion = (Question)questions.get(i);
+						%>addQuestion();
+						var tblNm = "qstionTbl"+tableIndex;
+						document.all(tblNm+"AddBtn").disabled = true;
+						document.all(tblNm+"DelBtn").disabled = true;
+						document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
+						checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");
+						document.all(tblNm+"VoteCount").value="<%=qstion.getVotecount()%>";
+						document.all(tblNm+"Qstion_id").value="<%=qstion.getId()%>";<%
+						if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
+							List items = qstion.getItems();
+							Item item = (Item)items.get(0);
+							%>document.all(tblNm+"AddBtn").disabled = false;
+							document.all(tblNm+"DelBtn").disabled = false;
+							addOption(tblNm);
+							document.all(tblNm+"Option").value = "<%=item.getOptions()%>";
+							document.all(tblNm+"Count").value = "<%=item.getCount()%>";
+							document.all(tblNm+"Option_id").value = "<%=item.getId()%>";
+							<%
+							for (int j=1;j<items.size();j++){
+								item = (Item)items.get(j);
+								%>addOption(tblNm);
+								document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";
+								document.all(tblNm+"Count")[<%=j%>].value = "<%=item.getCount()%>";
+								document.all(tblNm+"Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
+							}
 						}
 					}
 				}

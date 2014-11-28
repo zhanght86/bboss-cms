@@ -9,6 +9,12 @@
 		]]>
 	</property>
 	
+	<property name="deldeskmenu">
+		<![CDATA[
+			delete FROM TD_SM_DESKMENU WHERE userid=#[userid] and MENUPATH=#[menupath]
+		]]>
+	</property>
+	
 	<property name="insertDESKMENUs">
 		<![CDATA[
 			insert into TD_SM_DESKMENU (userid,menupath,subsystem) values(#[userid],#[menupath],#[subsystem])

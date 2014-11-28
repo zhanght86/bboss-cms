@@ -17,9 +17,7 @@ String path = request.getContextPath();
 <html>
   <head>
     <title></title>
-   	<%@ include file="/common/jsp/commonCssScript.jsp"%>
-		<%@ include file="/common/jsp/jqureyEasyui.jsp"%>
-		<%@ include file="/common/scripts/dialog/dialog.include.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<script type="text/javascript">
 		//这是扩展Firefox下moveRows()这个方法，否则moveRows()是不被firefox支持
 		 if (typeof Element != 'undefined') Element.prototype.moveRow = function (sourceRowIndex, targetRowIndex) {//执行扩展操作
@@ -150,41 +148,112 @@ String path = request.getContextPath();
 	  
 	}
 	
+	// 新增桌面快捷菜单
+	function addItem() {
+		var url = "";
+		if ('${isdefault}' ==  'true') {
+			 url = "<%=path%>/desktop/deskmenu.jsp?customtype=default";
+		}else {
+			 url = "<%=path%>/desktop/deskmenu.jsp";
+		}
+		$.dialog({ id:'addItem', title:'新增桌面快捷菜单',width:400,height:450, content:'url:'+url}); 
+	}
+	
+	// 删除桌面快捷菜单
+	function delItem() {
+		var userid = '';
+		if ('${isdefault}' ==  'false') {
+			userid = '1';
+		}else {
+			userid = '-1';
+		}
+		
+		var ids="";
+		
+		$("#tab tr:gt(0)").each(function() {
+			if ($(this).find("#CK").get(0).checked == true) {
+	             ids=ids+$(this).find("#CK").val()+",";
+	        }
+	    });
+		
+	    if(ids==""){
+	       $.dialog.alert('请选择需要删除的菜单！');
+	       return false;
+	    }
+	    
+		$.dialog.confirm('确定要删除吗？', function(){
+			
+			$.ajax({
+		 	 	type: "POST",
+				url : "deldeskmenu.page",
+				data :{"ids":ids,"userid":userid},
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+					XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				},
+				success : function(data){
+					if(data=="success"){
+						 window.location.href = window.location.href ; 
+					}else{
+						$.dialog.alert("删除桌面快捷菜单出错："+data,function(){});
+					}
+				}	
+			 });
+		},function(){});    
+	}
+	
 	
 	</script>
 </head>
 <body>
-   <form action="" id="menusort" method="post" >
-   <table style="table-layout:fixed;word-break:break-all" class="Ctable" id="tab">
-     <tr>
-     <td width="150" nowrap="nowrap" class="c3" >菜单名称</td>
-     <td width="500" nowrap="nowrap" class="c3" >菜单路径</td>
-     <td width="50"  nowrap="nowrap" class="c3" >子系统</td>
-     <td width="200" align="center" nowrap="nowrap" class="c3">操作</td>
-     </tr>
-     <pg:list requestKey="menulist">
-       <tr height="100%">
-         <td width="150" ><pg:cell colName="menuname"/>
-         <input type="hidden" name="menuname" value="<pg:cell colName="menuname"/>"/>
-         <input type="hidden" name="userid"  value="<pg:cell colName="userid"/>"/></td>
-         <td width="500"><pg:cell colName="menupath"/>
-         <input type="hidden" name="menupath" value="<pg:cell colName="menupath"/>"/>
-         </td>
-         <td width="50"><pg:cell colName="subsystem"/>
-         <input type="hidden" name="subsystem" value="<pg:cell colName="subsystem"/>"/>
-         <input type="hidden" name="item_order" class="item_order" value="<pg:cell colName="item_order"/>"/></td>
-         <td width="200">
-         <INPUT type="button" value="顶" onclick="trMoveTofirst(this)" />
-         <INPUT type="button" value="↑"  onclick="trMove(this)" />
-         <INPUT type="button" value="↓"  onclick="trMove(this)" />
-         <INPUT type="button" value="底" onclick="trMoveToend(this)" />
-         </td>
-       </tr> 
-     </pg:list>
-   </table>
-   </form>
+	<button onclick="addItem()" class="button">新增</button>
+	<button onclick="delItem()" class="button">删除</button>
 	<button onclick="saveSort()" class="button">保存</button>
 	<button onclick="sortByMenuName()" class="button" >按名称升序</button>
+	
+   <form action="" id="menusort" method="post" >
+	   <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tab" class="stable">
+	     <tr>
+	     	 <th align=center>
+	     	 	<input id="CKA" name="CKA" type="checkbox" onClick="checkAll('CKA','CK')">
+	     	 </th>
+		     <th nowrap="nowrap" >菜单名称</td>
+		     <th nowrap="nowrap" >菜单路径</td>
+		     <th nowrap="nowrap" >子系统</td>
+		     <th nowrap="nowrap" >操作</td>
+	     </tr>
+	     
+	     <pg:list requestKey="menulist">
+	       <tr >
+	       	 <td class="td_center">
+                <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="menupath" />"/>
+             </td>
+	         <td >
+	         	<pg:cell colName="menuname"/>
+	         	<input type="hidden" name="menuname" value="<pg:cell colName="menuname"/>"/>
+	         	<input type="hidden" name="userid"  value="<pg:cell colName="userid"/>"/>
+	         </td>
+	         <td >
+	         	<pg:cell colName="menupath"/>
+	         	<input type="hidden" name="menupath" value="<pg:cell colName="menupath"/>"/>
+	         </td>
+	         <td >
+	         	<pg:cell colName="subsystem"/>
+	         	<input type="hidden" name="subsystem" value="<pg:cell colName="subsystem"/>"/>
+	         	<input type="hidden" name="item_order" class="item_order" value="<pg:cell colName="item_order"/>"/>
+	         </td>
+	         <td >
+		         <INPUT type="button" value="顶" onclick="trMoveTofirst(this)" />
+		         <INPUT type="button" value="↑"  onclick="trMove(this)" />
+		         <INPUT type="button" value="↓"  onclick="trMove(this)" />
+		         <INPUT type="button" value="底" onclick="trMoveToend(this)" />
+	         </td>
+	       </tr> 
+	     </pg:list>
+	   </table>
+   </form>
+   
 	<!-- <SCRIPT LANGUAGE="JavaScript">tabHide(1)</SCRIPT> -->
 </body>
 </html>

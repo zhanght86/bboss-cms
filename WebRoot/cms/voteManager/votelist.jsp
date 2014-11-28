@@ -61,6 +61,25 @@
 		}
 	}
 	
+	function newqs()
+	{
+		var w=window.showModalDialog('questionnairenew.jsp?channel=<%=request.getParameter("channel")%>',window,'dialogWidth:800px;dialogHeight:600px;center:yes;status:no;scroll:yes;help:no');
+	 	if(document.all("surveyTitle").value.length>0||document.all("channelName").value.length>0||document.all("deptID").value.length>0||
+	       document.all("channelid").value.length>0||document.all("createDateFrom").value.length>0||
+	       document.all("createDateTo").value.length>0||document.all("active")[2].checked != true)
+	       {
+	         if(w=='ok')
+	           cleanpart();
+	       }
+	     else{
+	     if(w=='ok')
+	     {
+	 	   location.reload(); 
+	 	  }
+	 	}   
+	
+	}
+	
 	function newq()
 	{
 		var w=window.showModalDialog('questionnaire.jsp?channel=<%=request.getParameter("channel")%>',window,'dialogWidth:800px;dialogHeight:600px;center:yes;status:no;scroll:yes;help:no');
@@ -80,6 +99,23 @@
 	
 	}
 
+	function modifynew(id){
+		var w=window.showModalDialog('questionnairenew.jsp?id='+id+'&channel=<%=request.getParameter("channel")%>',window,'dialogWidth:800px;dialogHeight:600px;center:yes;status:no;scroll:yes;help:no');
+	 	if(document.all("surveyTitle").value.length>0||document.all("channelName").value.length>0||document.all("deptID").value.length>0||
+	       document.all("channelid").value.length>0||document.all("createDateFrom").value.length>0||
+	       document.all("createDateTo").value.length>0||document.all("active")[2].checked != true)
+	       {
+	         if(w=='ok')
+	           cleanpart();
+	       }
+	     else{
+	       if(w=='ok')
+	       {
+	 	     location.reload();
+	 	   } 
+	 	}   
+	}
+	
 	function modify(id){
 		var w=window.showModalDialog('questionnaire.jsp?id='+id+'&channel=<%=request.getParameter("channel")%>',window,'dialogWidth:800px;dialogHeight:600px;center:yes;status:no;scroll:yes;help:no');
 	 	if(document.all("surveyTitle").value.length>0||document.all("channelName").value.length>0||document.all("deptID").value.length>0||
@@ -108,6 +144,11 @@
 	 {
 	    window.showModalDialog('voteListView.jsp?id='+id,window,'dialogWidth:800px;dialogHeight:600px;center:yes;status:no;scroll:yes;help:no');
 	 }
+	  
+	  function exportExcel(id){
+		  window.location.href="<%=request.getContextPath()%>/voteMobile/newExportExcel.freepage?titleId="+id;
+		 return;
+	  }
 	
    </SCRIPT>
   <%
@@ -236,8 +277,10 @@
 									 &&accesscontroler.checkPermission("wscpManager","create","wscpTitleManager")))
 					 {
 		            %>
-					<a style="cursor:hand" onClick="newq()">
+		            <a style="cursor:hand" onClick="newqs()">
 					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增问卷</div></a>
+					<a style="cursor:hand" onClick="newq()">
+					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增题目</div></a>
 					<%
 					}
 					if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","delete","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","delete","wscpTitleManager")))
@@ -403,8 +446,11 @@
 					               {
 					               ff = true;
 		                       %>
+								<a style="cursor:hand;color:#0000cc" href="#" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
+								修改问卷</a>
+								
 								<a style="cursor:hand;color:#0000cc" href="#" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
-								修改</a>
+								修改题目</a>
 								
 								<%
 								}
@@ -431,7 +477,9 @@
 								{
 								 %>无权限<%
 								}
-								%>
+								%>|
+								<a style="cursor:hand;color:#0000cc" href="#" onclick="exportExcel('<pg:cell colName='id' defaultValue=''/>')"/>
+								导出提交答案</a>
 								</td>
 																
 							</tr>

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.frameworkset.util.annotations.PagerParam;
-import org.frameworkset.util.annotations.RequestParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 

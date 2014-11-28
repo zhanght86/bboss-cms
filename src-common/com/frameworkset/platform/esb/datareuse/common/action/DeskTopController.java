@@ -364,6 +364,28 @@ public class DeskTopController {
 		return "ok";
 	}
 	
+	/** 删除桌面快捷
+	 * @param ids 桌面快捷路劲
+	 * @param userid 1不是默认 -1 默认
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 * 2014年11月28日
+	 */
+	public @ResponseBody String deldeskmenu(String ids, String userid,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			
+			deskTopMenuShorcutManager.delteDeskmenu(ids, userid);
+			
+			return "success";
+		}catch (Exception e ){
+			return "fail:"+e.getMessage();
+		}
+	}
+	
 	public @ResponseBody String updatedefaultdeskmenu(List<DeskTopMenuBean> list,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -403,6 +425,7 @@ public class DeskTopController {
 			}
 		}
 		view.addObject("menulist", list);
+		view.addObject("isdefault",isdefault);
 		return view;
 	}
 	

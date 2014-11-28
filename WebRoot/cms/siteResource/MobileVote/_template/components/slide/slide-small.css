@@ -1,0 +1,23 @@
+
+#bimg { overflow: hidden; height:180px;width:300px;}
+#info {FONT-WEIGHT: bold; FONT-SIZE: 14px; LINE-height: 24px; TEXT-ALIGN: center; }
+.lkff A {color: #fff; TEXT-DECORATION: none;}
+.lkff A:hover {color: #fff; TEXT-DECORATION: none}
+#simg {PADDING-LEFT: 9px;}
+#simg div {FONT-SIZE: 12px; background: #d6d6d6; float: left; width: 12px; cursor: pointer; color: #fff; LINE-height: 18px; MARGIN-RIGHT: 1px; height: 18px; TEXT-ALIGN: center}
+#simg .f1 {background: #6f6f6f;}
+.dis {DISPLAY: block;}
+.undis {DISPLAY: none;}
+.lkff {width: 180px;}
+#font_hd {MARGIN-TOP: 3px; background: #343434; width: 100%; height: 20px}
+#font_hd TD {overflow: hidden; height: 20px}
+.pic {overflow: hidden}
+.pic .dis A {DISPLAY: block; font-size: 26px; vertical-align: middle; overflow: hidden; width: 300px; FONT-FAMILY: Arial; height: 180px; TEXT-ALIGN: left;}
+.pic .dis A:hover {text-decoration: underline;}
+.pic .dis a img { width:300px; height:180px; vertical-align:middle;;border:0px}
+#font_hd TD A {FONT-SIZE: 12px; width: 200px; LINE-height: 20px; height: 20px;MARGIN-left: 10px;}
+#top_pictures {height: 180px; width: 300px; position: relative;}
+#top_pictures .dis {position: absolute; top: 0; left: 0;}
+div#simg-wrap {width: auto; background: transparent; float: right; padding-right: 5px;}
+
+

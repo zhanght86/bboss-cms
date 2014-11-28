@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sysmenu name="spplatform" left_width="300" top_height="48" showhidden="true" showhidden_width="10" 
+<sysmenu name="spplatform" left_width="200" top_height="48" showhidden="true" showhidden_width="10" 
 	 messagesource="messages_module">
 	<description>内容管理系统平台</description>
 	<!--

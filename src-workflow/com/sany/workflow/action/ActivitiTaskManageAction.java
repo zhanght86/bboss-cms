@@ -503,14 +503,14 @@ public class ActivitiTaskManageAction {
 
 				task.setCompleteRemark(remark);
 
+				// 保存控制变量参数
+				activitiService.addNodeWorktime(task.getProcessKey(),
+						task.getProcessIntsId(), nodeControlParamList);
+
 				// 完成任务
 				activitiTaskService.completeTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						nodeControlParamList);
-
-				// 保存控制变量参数
-				activitiService.addNodeWorktime(task.getProcessKey(),
-						task.getProcessIntsId(), nodeControlParamList);
 
 				tm.commit();
 
@@ -653,13 +653,13 @@ public class ActivitiTaskManageAction {
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
 
-				activitiTaskService.rejectToPreTask(task,
-						activitiNodeCandidateList, nodevariableList,
-						nodeControlParamList, rejectedtype);
-
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
+
+				activitiTaskService.rejectToPreTask(task,
+						activitiNodeCandidateList, nodevariableList,
+						nodeControlParamList, rejectedtype);
 
 				return "success";
 			} else {
@@ -1014,7 +1014,7 @@ public class ActivitiTaskManageAction {
 			String user = AccessControl.getAccessControl().getUserAccount();
 
 			activitiService.getTaskService().completeCopyTask(copyId, user);
-			
+
 			// 获取流程实例信息
 			ProcessInst processInst = activitiService
 					.getProcessInstById(processInstId);

@@ -325,33 +325,38 @@ function SelectIsExitItem(objSelect, objItemValue) {
     return isExit;        
 }
 
-function getUserInfo(userName,obj){
-	
-	if ($("#iscopy").val() == 'true') {
-		userName = userName.substr(2);//抄送节点过滤"U_"或"D_"
-	}
-	
-	$.ajax({
-		
-		url: "<%=request.getContextPath()%>/workflowBusiness/choose/getUserInfo.page",
-		type: "post",
-		data :{"userName":userName},
-		dataType:"json",			
-		success: function(data){
-			if (data != null) {
-				obj.html("工号:"+data.user_worknumber+"("+data.job_name+")<br/>登陆名:"+data.user_name+"<br/>组织机构："+data.org_name);
-			}else {
-				obj.html("工号:</br>登陆名:</br>组织机构:</div>");
-			}
-		}
-	});
-}
-
 function selectOption(selector){
 	
-	var detail=$("#"+selector).find('option:selected').val();
-	if (detail) {
-		getUserInfo(detail,$("#"+selector+"Detail"));
+	var userName=$("#"+selector).find('option:selected').val();
+	
+	if(userName) {
+		var obj = $("#"+selector+"Detail");
+		var prefix = userName.substr(0,2);
+		
+		if (prefix == "D_"){
+			var orgName = $("#"+selector).find('option:selected').html();
+			obj.html("编号:"+userName.substr(2)+"<br/>组织机构："+orgName);
+		}else {
+			
+			if (prefix == "U_") {
+				userName = userName.substr(2);
+			}
+			
+			$.ajax({
+				
+				url: "<%=request.getContextPath()%>/workflowBusiness/choose/getUserInfo.page",
+				type: "post",
+				data :{"userName":userName},
+				dataType:"json",			
+				success: function(data){
+					if (data != null) {
+						obj.html("工号:"+data.user_worknumber+"("+data.job_name+")<br/>登陆名:"+data.user_name+"<br/>组织机构："+data.org_name);
+					}else {
+						obj.html("工号:</br>登陆名:</br>组织机构:</div>");
+					}
+				}
+			});
+		}
 	}
 }
 	
@@ -509,14 +514,15 @@ $(document).ready(function() {
 								<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∨" id="btnMoveDown" title="快速鍵: alt+向下"/> 
 							</td>
 						</tr>
-						<tr>
-							<td colspan="2"><div class="treesearch" id="select1Detail">工号:</br>登陆名:</br>组织机构:</div></td>
-							<td colspan="2"><div class="treesearch" id="select2Detail">工号:</br>登陆名:</br>组织机构:</div></td>
-						</tr>
-						<tr>
-							<td colspan="3" align="center" height="40"><a href="javascript:submitData()"  class="bt_1"><span>确定</span></a></td>
+						<tr style="height: 60px;">
+							<td colspan="2"><div id="select1Detail"></td>
+							<td colspan="2"><div id="select2Detail"></td>
 						</tr>
 					</table>
+					
+					<div align="center" style="padding:5px;border-top: 1px solid #ccc;">
+						<a href="javascript:submitData()"  class="bt_1"><span>确定</span></a>
+					</div>
 				</div>
 			</div>
 

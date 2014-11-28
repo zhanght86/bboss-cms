@@ -8,12 +8,6 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.frameworkset.util.annotations.PagerParam;
-
-import com.frameworkset.platform.esb.datareuse.common.entity.BackgroundImage;
-import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopBackGround;
-import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopMenuBean;
-import com.frameworkset.platform.esb.datareuse.common.entity.ItemMenuCustom;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.FieldRowHandler;
@@ -21,20 +15,41 @@ import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.esb.datareuse.common.entity.BackgroundImage;
+import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopBackGround;
+import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopMenuBean;
+import com.frameworkset.platform.esb.datareuse.common.entity.ItemMenuCustom;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 
 public class DeskTopMenuShorcutManager {
 
 	private String dbname = null;
 	private ConfigSQLExecutor executor = null;
+	
+	public void delteDeskmenu(String ids, String userid)throws Exception {
+		if (StringUtil.isNotEmpty(ids)) {
+			String[] arrayIds = ids.split(",");
+			
+			List<DeskTopMenuBean> list = new ArrayList<DeskTopMenuBean>();
+			
+			for (int i = 0; i < arrayIds.length;i++) {
+				DeskTopMenuBean bean = new DeskTopMenuBean();
+				bean.setUserid(userid);
+				bean.setMenupath(arrayIds[i]);
+				list.add(bean);
+			}
+			executor.deleteBeans(dbname, "deldeskmenu", list);
+		}
+		
+	}
 
 	public void update(List<DeskTopMenuBean> list, String userid,
 			String subsystem) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			String sql = "cleardeskmenu";
-			executor.deleteWithDBName(dbname, sql, userid, subsystem);
+			
 			if (list != null && list.size() > 0) {
 				for (int i = 0; i < list.size(); i++) {
 					DeskTopMenuBean bean = list.get(i);
@@ -42,8 +57,10 @@ public class DeskTopMenuShorcutManager {
 					bean.setSubsystem(subsystem);
 
 				}
-				sql = "insertDESKMENUs";
-				executor.insertBeans(dbname, sql, list);
+				
+				executor.deleteBeans(dbname, "deldeskmenu", list);
+				
+				executor.insertBeans(dbname, "insertDESKMENUs", list);
 			}
 			tm.commit();
 		} catch (TransactionException e) {

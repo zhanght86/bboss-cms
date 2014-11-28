@@ -243,7 +243,7 @@ function checkoutPageElement(){
 			return false;
 		}
 
-		if(check == 'turnto'){
+		if(check == 'turnto' || check == 'turnTo'){
 			var duser = $("#delegateUser").val();
 			if(!duser||duser==''){
 				$.dialog.alert("请选择转办人！",function(){});

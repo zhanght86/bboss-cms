@@ -3,8 +3,7 @@
 	import="com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl"%>
 <%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ include file="/common/jsp/accessControl.jsp"%>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree"%>
+<%@ include file="/common/jsp/importtaglib.jsp"%>
 <%
 String customtype = request.getParameter("customtype");
 String url = "updatedeskmenu.page";
@@ -22,11 +21,11 @@ if(customtype != null && customtype.equals("default"))
 		<pg:config enablecontextmenu="false"/>
 	
 		
-		<%@ include file="/include/css.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		
 		
 		<script>
-		
+		var api = frameElement.api, W = api.opener;
 		function blockUI(msgContent){
 			if (!msgContent){
 				msgContent = '正在处理，请稍候...';
@@ -60,7 +59,8 @@ if(customtype != null && customtype.equals("default"))
 				    	//去掉遮罩	
 						unblockUI();
 						$.messager.alert("提示对话框" , "设置成功");	
-						 window.parent.frames[1].location.href = window.parent.frames[1].location.href ; 
+						W.location.href = W.location.href ; 
+						api.close();
 				    }
 				});	
 			}
@@ -98,7 +98,7 @@ if(customtype != null && customtype.equals("default"))
 			
 		</script>
 	</head>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" scroll="auto">
 		<form name="myform" method="post" id="myform">
 			<div id="contentborder">
 
