@@ -2,14 +2,15 @@ package com.frameworkset.filter;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.ca.CAManager;
 import com.frameworkset.platform.ca.CaProperties;
 import com.frameworkset.platform.ca.CookieProperties;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.orm.transaction.TransactionManager;
 
 /**
  * 
@@ -41,10 +42,11 @@ public class BSServletRequestListener implements javax.servlet.ServletRequestLis
 			//是否启用了CA认证中心
 			if(CaProperties.CA_LOGIN_SERVER){
 				try {
-					String cert_sn = (String)request.getSession().getAttribute(CookieProperties.CERT_SN);
+					HttpSession session = request.getSession(false);
+					String cert_sn = session != null?(String)session.getAttribute(CookieProperties.CERT_SN):null;
 					if(cert_sn != null){
 						if(!cert_sn.equals(CAManager.getCookieValue(request, CookieProperties.CERT_SN))){
-							request.getSession().invalidate();
+							session.invalidate();
 						}	
 					}
 				} catch (Exception e) {

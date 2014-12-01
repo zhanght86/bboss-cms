@@ -296,7 +296,7 @@ public class ContainerImpl implements Container{
 	
 	public void init(Context context) throws ContainerException {
 		this.request = context.getRequestContext().getRequest();
-		this.session = context.getRequestContext().getRequest().getSession();
+		this.session = context.getRequestContext().getRequest().getSession(false);
 		this.response =context.getRequestContext().getResponse();
 		this.cmsrequest = InternalImplConverter.getInternalRequest(request);
 		this.cmsresponse = InternalImplConverter.getInternalResponse(response);		

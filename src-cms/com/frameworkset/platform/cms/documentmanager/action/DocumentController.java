@@ -123,7 +123,7 @@ public class DocumentController {
 			news.setNews(newsList);
 			Container container = new ContainerImpl();
 	//		String siteName = site.getSecondName();
-			container.init(condition.getSite(), request, request.getSession(), response);
+			container.init(condition.getSite(), request, request.getSession(false), response);
 			news.setChannelIndex(container.getPublishedChannelUrlByDisplayName(condition.getChannel()));
 			news.setSiteIndex(container.getPulishedSiteIndexUrlBySiteName(condition.getSite()));
 			news.setSitedomain(container.getPulishedSiteDomainBySiteName(condition.getSite()));
@@ -194,7 +194,7 @@ public class DocumentController {
 				Map<Integer,Object> idx = new HashMap<Integer,Object>();
 				Container container = new ContainerImpl();
 				String siteName = site.getSecondName();
-				container.init(siteName, request, request.getSession(), response);
+				container.init(siteName, request, request.getSession(false), response);
 	
 				for (Object obj : newsList.getDatas()) {
 					Document document = (Document) obj;
@@ -265,7 +265,7 @@ public class DocumentController {
 		if (!CollectionUtils.isEmpty(reportsList.getDatas())) {
 			Container container = new ContainerImpl();
 			String siteName = ((Document) reportsList.getDatas().get(0)).getSiteName();
-			container.init(siteName, request, request.getSession(), response);
+			container.init(siteName, request, request.getSession(false), response);
 
 			for (Object obj : reportsList.getDatas()) {
 				Document document = (Document) obj;
@@ -303,7 +303,7 @@ public class DocumentController {
 		if (!CollectionUtils.isEmpty(videosList.getDatas())) {
 			Container container = new ContainerImpl();
 			String siteName = ((Document) videosList.getDatas().get(0)).getSiteName();
-			container.init(siteName, request, request.getSession(), response);
+			container.init(siteName, request, request.getSession(false), response);
 
 			for (Object obj : videosList.getDatas()) {
 				Document document = (Document) obj;
@@ -334,7 +334,7 @@ public class DocumentController {
 		if (!CollectionUtils.isEmpty(videosLadder.getDatas())) {
 			Container container = new ContainerImpl();
 			String siteName = ((Document) videosLadder.getDatas().get(0)).getSiteName();
-			container.init(siteName, request, request.getSession(), response);
+			container.init(siteName, request, request.getSession(false), response);
 
 			for (Object obj : videosLadder.getDatas()) {
 				Document document = (Document) obj;

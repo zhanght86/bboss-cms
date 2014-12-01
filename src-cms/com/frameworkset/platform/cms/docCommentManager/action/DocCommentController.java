@@ -202,7 +202,7 @@ public class DocCommentController {
 			Container container = new ContainerImpl();
 //			
 			NComentList docCommentList = docCommentManager.getSiteCommnetList(n);
-			container.init(site, request, request.getSession(), response);
+			container.init(site, request, request.getSession(false), response);
 			if (!CollectionUtils.isEmpty(docCommentList.getComments())) {
 				for (DocComment docComment : docCommentList.getComments()) {
 					String documentUrl= container.getPublishedDocumentUrl(new Integer(docComment.getDocId()).toString());
@@ -231,7 +231,7 @@ public class DocCommentController {
 		
 		try {
 			Container container = new ContainerImpl();
-			container.init(site, request, request.getSession(), response);
+			container.init(site, request, request.getSession(false), response);
 			NComentList docCommentList = docCommentManager.getChannelCommnetList(channel,n);
 			if (!CollectionUtils.isEmpty(docCommentList.getComments())) {
 				for (DocComment docComment : docCommentList.getComments()) {

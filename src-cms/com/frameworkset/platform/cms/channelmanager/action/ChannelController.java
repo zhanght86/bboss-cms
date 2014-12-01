@@ -71,7 +71,7 @@ public class ChannelController {
 		if (!CollectionUtils.isEmpty(reportsList.getDatas())) {
 			Container container = new ContainerImpl();
 			String siteName = ((Channel) reportsList.getDatas().get(0)).getSiteName();
-			container.init(siteName, request, request.getSession(), response);
+			container.init(siteName, request, request.getSession(false), response);
 
 			for (Object obj : reportsList.getDatas()) {
 				Channel channel = (Channel) obj;
