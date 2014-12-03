@@ -590,7 +590,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setBusinessKey(businessKey);
 
 				// 自动完成任务
-				autoCompleteTask(proIns);
+				autoCompleteTask(proIns, processKey);
 			}
 
 			tm.commit();
@@ -610,11 +610,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	 * @throws Exception
 	 *             2014年11月20日
 	 */
-	private void autoCompleteTask(ProIns proIns) throws Exception {
+	private void autoCompleteTask(ProIns proIns, String processKey)
+			throws Exception {
 
 		// 获取流程当前任务节点
-		TaskInfo task = getCurrentNodeInfoByBussinessKey(
-				proIns.getBusinessKey(), proIns.getUserAccount());
+		TaskInfo task = getCurrentNodeInfoByKey(proIns.getBusinessKey(),
+				processKey, proIns.getUserAccount());
 
 		if (null != task) {
 
@@ -648,7 +649,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.setOperateType("pass");
 					proIns.setDealReason("前后任务处理人一致，自动通过");
 				}
-				autoCompleteTask(proIns);
+				autoCompleteTask(proIns, processKey);
 			}
 		}
 
@@ -747,6 +748,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				taskList.addAll(delegateTaskList);
 
 				Collections.sort(taskList, new Comparator<HisTaskInfo>() {
+
 					public int compare(HisTaskInfo a, HisTaskInfo b) {
 
 						Timestamp starttime = a.getEND_TIME_() == null ? new Timestamp(
@@ -1289,8 +1291,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.begin();
 
 			// 获取当前任务信息
-			TaskInfo currentTask = getCurrentNodeInfoByBussinessKey(
-					proIns.getBusinessKey(), proIns.getUserAccount());
+			TaskInfo currentTask = getCurrentNodeInfoByKey(
+					proIns.getBusinessKey(), processKey,
+					proIns.getUserAccount());
 
 			// 当前用户转成域账号
 			String userAccount = this.changeToDomainAccount(proIns
@@ -1364,8 +1367,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			completeTask(proIns, paramMap);
 
 			// 获取当前任务信息
-			TaskInfo nextTask = getCurrentNodeInfoByBussinessKey(
-					proIns.getBusinessKey(), proIns.getUserAccount());
+			TaskInfo nextTask = getCurrentNodeInfoByKey(
+					proIns.getBusinessKey(), processKey,
+					proIns.getUserAccount());
 
 			// 后续节点处理人是否一致，一致就可以自动通过
 			if (currentTask.getIsAutoafter() == 1
@@ -1375,7 +1379,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setDealRemak("");
 				proIns.setDealReason("前后任务处理人一致，自动通过");
 
-				autoCompleteTask(proIns);
+				autoCompleteTask(proIns, processKey);
 			}
 
 			tm.commit();
@@ -1387,6 +1391,15 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} finally {
 			tm.release();
 		}
+	}
+
+	public void completeTask(String processKey, String BusinessKey,
+			String taskId, String businessop, String businessReason,
+			String businessRemark) throws Exception {
+
+		activitiService.getTaskService().completeWithReason(taskId,
+				new HashMap(), businessReason, businessop, businessRemark);
+
 	}
 
 	private void completeTask(ProIns proIns, Map<String, Object> paramMap)
@@ -1477,6 +1490,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} finally {
 			tm.release();
 		}
+	}
+
+	@Override
+	public void discardTask(String processId, String processKey, String taskId,
+			String userAccount, String businessop, String businessReason,
+			String businessRemark) throws Exception {
+
+		activitiService.cancleProcessInstances(processId, businessRemark,
+				taskId, processKey, userAccount, businessop, businessReason);
+
 	}
 
 	/**
@@ -1609,6 +1632,33 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public void delegateTask(String processId, String processKey,
+			String taskId, String delegateUser, String currentUser,
+			String businessop, String businessReason, String businessRemark)
+			throws Exception {
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 再转办
+			activitiService.delegateTask(taskId, delegateUser);
+
+			// 在扩展表中添加转办记录
+			activitiTaskService.updateNodeChangeInfo(taskId, processId,
+					processKey, currentUser, delegateUser, businessRemark,
+					businessReason, 0);
+
+			tm.commit();
+		} catch (ProcessException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new Exception("转办任务出错:" + e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
 	public void cancelTask(ProIns proIns, String processKey) throws Exception {
 		TransactionManager tm = new TransactionManager();
 
@@ -1655,6 +1705,45 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					currentUser, "2", proIns.getProInsId(), processKey,
 					proIns.getDealReason(), proIns.getDealOption(),
 					proIns.getDealRemak());
+
+			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new Exception("撤销任务出错:" + e);
+		} finally {
+			tm.release();
+		}
+	}
+
+	@Override
+	public void cancelTask(String processId, String processKey, String taskId,
+			String nodeKey, String userAccount, String businessop,
+			String businessReason) throws Exception {
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			// 获取第一个人工节点
+			ActivitiNodeInfo nodeInfo = activitiTaskService
+					.getFirstUserNode(processKey);
+
+			String currentUser = activitiService.getUserInfoMap().getUserName(
+					userAccount);
+
+			String businessRemark = "[" + currentUser + "]将任务撤回至["
+					+ nodeInfo.getNode_name() + "]";
+
+			// 撤销任务
+			activitiService.cancelTask(taskId, nodeKey, businessRemark,
+					businessop, businessReason);
+
+			// 日志记录撤销操作
+			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
+					processId, processKey, businessReason, businessop,
+					businessRemark);
 
 			tm.commit();
 
@@ -1734,6 +1823,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.release();
 		}
 	}
+
 
 	@Override
 	public int getMyselfTaskNum(String currentUser, String processKey)
@@ -1994,8 +2084,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		try {
 			tm.begin();
 
-			TaskInfo nowTask = getCurrentNodeInfoByBussinessKey(
-					proIns.getBusinessKey(), proIns.getUserAccount());
+			TaskInfo nowTask = getCurrentNodeInfoByKey(proIns.getBusinessKey(),
+					processKey, proIns.getUserAccount());
 
 			if (nowTask == null) {
 				throw new ProcessException("任务不存在或您没有权限处理当前任务");

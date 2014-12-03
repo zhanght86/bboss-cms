@@ -479,6 +479,28 @@ public interface ActivitiBusinessService {
 			Map<String, Object> paramMap) throws Exception;
 
 	/**
+	 * 通过任务 (原始API)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param BusinessKey
+	 *            业务key
+	 * @param taskId
+	 *            任务Id
+	 * @param businessop
+	 *            操作类型
+	 * @param businessReason
+	 *            操作原因
+	 * @param businessRemark
+	 *            操作备注
+	 * @throws Exception
+	 *             2014年12月1日
+	 */
+	public void completeTask(String processKey, String BusinessKey,
+			String taskId, String businessop, String businessReason,
+			String businessRemark) throws Exception;
+
+	/**
 	 * 废弃任务
 	 * 
 	 * @param proIns
@@ -491,6 +513,30 @@ public interface ActivitiBusinessService {
 	 *             2014年8月26日
 	 */
 	public void discardTask(ProIns proIns, String processKey) throws Exception;
+
+	/**
+	 * 废弃任务
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param processKey
+	 *            流程key
+	 * @param taskId
+	 *            任务id
+	 * @param userAccount
+	 *            用户域账号
+	 * @param businessop
+	 *            操作类型
+	 * @param businessReason
+	 *            操作原因
+	 * @param businessRemark
+	 *            操作备注
+	 * @throws Exception
+	 *             2014年12月1日
+	 */
+	public void discardTask(String processId, String processKey, String taskId,
+			String userAccount, String businessop, String businessReason,
+			String businessRemark) throws Exception;
 
 	/**
 	 * 转办任务
@@ -507,6 +553,33 @@ public interface ActivitiBusinessService {
 	public void delegateTask(ProIns proIns, String processKey) throws Exception;
 
 	/**
+	 * 转办任务
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param processKey
+	 *            流程key
+	 * @param taskId
+	 *            任务id
+	 * @param delegateUser
+	 *            被转办人域账号
+	 * @param currentUser
+	 *            当前用户/转办人域账号
+	 * @param businessop
+	 *            操作类型
+	 * @param businessReason
+	 *            操作原因
+	 * @param businessRemark
+	 *            操作备注
+	 * @throws Exception
+	 *             2014年12月1日
+	 */
+	public void delegateTask(String processId, String processKey,
+			String taskId, String delegateUser, String currentUser,
+			String businessop, String businessReason, String businessRemark)
+			throws Exception;
+
+	/**
 	 * 撤销任务
 	 * 
 	 * @param proIns
@@ -517,6 +590,32 @@ public interface ActivitiBusinessService {
 	 *             2014年8月26日
 	 */
 	public void cancelTask(ProIns proIns, String processKey) throws Exception;
+
+	/**
+	 * 撤销任务
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param processKey
+	 *            流程key
+	 * @param taskId
+	 *            任务id
+	 * @param nodeKey
+	 *            节点key
+	 * @param userAccount
+	 *            当前用户域账号
+	 * @param businessop
+	 *            操作类型
+	 * @param businessReason
+	 *            操作原因
+	 * @param businessRemark
+	 *            操作备注
+	 * @throws Exception
+	 *             2014年12月1日
+	 */
+	public void cancelTask(String processId, String processKey, String taskId,
+			String nodeKey, String userAccount, String businessop,
+			String businessReason) throws Exception;
 
 	/**
 	 * 驳回任务

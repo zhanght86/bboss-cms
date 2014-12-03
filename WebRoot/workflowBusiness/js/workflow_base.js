@@ -71,7 +71,7 @@ function isNodeNull(){
 	
 	var listSize = $("#actListSize").val();
 	for (var i = 1;i <= listSize; i++) {
-		if ($("#candidateName"+i).val() == '') {
+		if ($("#candidateName"+i).val() == '' && $("#candidateOrgId"+i).val() == '') {
 			$("#realnames"+i).html("无审批人");// 前台显示的值
 		}
 	}
