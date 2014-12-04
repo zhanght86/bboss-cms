@@ -3,6 +3,8 @@ package com.sany.application.service;
 import java.io.File;
 import java.util.List;
 
+import org.frameworkset.web.token.AppValidateResult;
+
 import com.frameworkset.util.ListInfo;
 import com.sany.application.entity.WfApp;
 import com.sany.application.entity.WfPic;
@@ -41,7 +43,7 @@ public interface AppcreateService {
     /**
      * 验证应用口令
      */
-    public Boolean validateAppSecret(String appid,String secret)  throws Exception;
+    public AppValidateResult validateAppSecret(String appid,String secret)  throws Exception;
     
     /**
      * 删除应用

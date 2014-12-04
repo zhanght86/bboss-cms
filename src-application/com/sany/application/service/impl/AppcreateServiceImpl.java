@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.frameworkset.web.token.AppValidateResult;
+import org.frameworkset.web.token.Application;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.FieldRowHandler;
+import com.frameworkset.common.poolman.handle.RowHandler;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
 import com.sany.application.entity.WfApp;
@@ -40,7 +44,7 @@ public class AppcreateServiceImpl implements AppcreateService {
         }
         listInfo = executor
                 .queryListInfoBean(WfApp.class, "selectWfAppList", offset, pagesize, condition);
-
+        
         return listInfo;
 	}
 	
@@ -153,10 +157,24 @@ public class AppcreateServiceImpl implements AppcreateService {
     }
 
 	@Override
-	public Boolean validateAppSecret(String appid,String secret) throws Exception {
+	public AppValidateResult validateAppSecret(String appid,String secret) throws Exception {
 		secret = EncrpyPwd.encodePassword(secret);
-		int result = executor.queryObject(int.class, "validateAppSecret", appid,secret);
-		return result > 0;
+		AppValidateResult result = executor.queryObjectByRowHandler(new RowHandler<AppValidateResult>(){
+
+			@Override
+			public void handleRow(AppValidateResult rowValue, Record record)
+					throws Exception {
+				rowValue.setResult(true);
+				Application app = new Application();
+				app.setAppid(record.getString("SYSTEM_ID"));
+				app.setSecret(record.getString("SYSTEM_SECRET"));
+				app.setTicketlivetime(record.getLong("TICKETTIME"));
+				rowValue.setApplication(app);
+			}
+			
+		},AppValidateResult.class, "validateAppSecret", appid,secret);
+		return result;
+		
 	}
 
 	@Override

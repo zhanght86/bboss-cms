@@ -147,7 +147,7 @@
 	
 	<property name="validateAppSecret">
 		<![CDATA[
-			select count(1) from td_wf_app where SYSTEM_ID=? and SYSTEM_SECRET=?
+			select SYSTEM_ID,SYSTEM_SECRET,TICKETTIME from td_wf_app where SYSTEM_ID=? and SYSTEM_SECRET=?
 		]]>
 	</property>
 	

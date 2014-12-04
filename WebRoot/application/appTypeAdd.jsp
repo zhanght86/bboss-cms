@@ -120,8 +120,8 @@ function picRefApp(){
 					<tr>
 						<th>票据时间：</th>
 						<td>
-						<input type="text" name="tickettime" value="2" style="width: 240px;"
-						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>毫秒
+						<input type="text" name="tickettime" value="-2" style="width: 240px;"
+						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>毫秒(-2为默认值，表示读取系统全局配置的时间，一般默认为2天) 
 						</td>
 					</tr>
 				</table>

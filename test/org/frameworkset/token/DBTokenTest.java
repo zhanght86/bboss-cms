@@ -4,20 +4,24 @@ import org.frameworkset.security.ecc.ECCHelper;
 import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
 import org.frameworkset.web.token.TokenStore;
+import org.frameworkset.web.token.ws.CheckTokenService;
+import org.frameworkset.web.token.ws.TokenCheckResponse;
+import org.frameworkset.web.token.ws.TokenService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.caucho.hessian.client.HessianProxyFactory;
 import com.sany.application.service.impl.SYSValidationApplication;
 
 public class DBTokenTest {
 	private static DBTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
-	private String appid = "sim";
-	private String secret = "A75399B0158B6A1AABBF8F7C3211EB13";
+	private String appid = "pdp";
+	private String secret = "47430a44-2f5a-4fdb-a5b1-c3544230739f";
 	
-	@Before
+	
 	public void init() throws Exception
 	{
 		mongodbTokenStore = new DBTokenStore();
@@ -114,5 +118,75 @@ public class DBTokenTest {
 					
 		}
 	}
+	
+	 @org.junit.Test
+	    public void testServiceticket() throws Exception
+	    {
+	    	TokenCheckResponse response = checkTicket(genTicket());
+	    }
+	    
+	    public String genTicket() throws Exception
+
+	    {
+
+//	         String appid = "pdp";
+//
+//	         String secret = "ED6F601E3ABC7BA35836C56141AF8351";
+//
+//	         String account = "marc";//如果使用工号则loginType为2，否则为1
+//
+//	         String worknumber = "10006857";
+
+	         //hessian服务方式申请token
+
+	         HessianProxyFactory factory = new HessianProxyFactory();
+
+	         //String url = "http://localhost:8080/context/hessian?service=tokenService";
+
+	         String url = "http://pdp.sany.com.cn:8080/hessian?service=tokenService";
+
+	         TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
+
+	         //通过hessian根据账号或者工号获取ticket
+
+
+
+	         String ticket = tokenService.genTicket(account, worknumber, appid, secret);
+
+	         return ticket;
+
+	    }
+
+	    
+
+	    public TokenCheckResponse checkTicket(String ticket) throws Exception
+
+	    {
+
+//	         String appid = "tas";
+//
+//	         String secret = "ED6F601E3ABC7BA35836C56141AF8351";
+
+	         //hessian服务方式申请token
+
+	         HessianProxyFactory factory = new HessianProxyFactory();
+
+	         //String url = "http://localhost:8080/context/hessian?service=tokenService";
+
+	         String url = "http://pdp.sany.com.cn:8080/hessian?service=checktokenService";
+
+	         org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
+
+	         org.frameworkset.web.token.ws.TokenCheckResponse tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket);
+
+	         System.out.println(tokenCheckResponse.getResultcode());
+
+	         System.out.println(tokenCheckResponse.getUserAccount());
+
+	         System.out.println(tokenCheckResponse.getWorknumber());
+
+	         return tokenCheckResponse;
+
+	    }
 
 }

@@ -16,6 +16,7 @@
 package com.sany.application.service.impl;
 
 import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.web.token.AppValidateResult;
 import org.frameworkset.web.token.TokenException;
 import org.frameworkset.web.token.TokenStore;
 import org.frameworkset.web.token.ValidateApplication;
@@ -35,6 +36,44 @@ public class SYSValidationApplication implements ValidateApplication{
 	private AppcreateService service = null;
 	@Override
 	public boolean checkApp(String appid, String secret) throws TokenException {
+//		try {
+//			if(service == null)
+//			{
+//				synchronized(this)
+//				{
+//					if(service == null)
+//					{
+//						BaseApplicationContext context = org.frameworkset.web.servlet.support.WebApplicationContextUtils.getWebApplicationContext();
+//						if(context != null)
+//						{
+//							service = context.getTBeanObject("application.appcreateService", AppcreateService.class);
+//						}
+//					}
+//				}
+//			}
+//			
+//			if(service != null)
+//			{
+//				return service.validateAppSecret(appid, secret);							
+//			}
+//			else
+//				return true;
+//		} catch (TokenException e) {
+//			throw e;
+//		} catch (Exception e) {
+//			throw new TokenException(TokenStore.ERROR_CODE_APPVALIDATERROR,e);
+//		}
+		AppValidateResult result = validateApp(appid, secret);
+		if(result == null || !result.getResult())
+			return false;
+		else
+		{
+			return true;
+		}
+	}
+	@Override
+	public AppValidateResult validateApp(String appid, String secret)
+			throws TokenException {
 		try {
 			if(service == null)
 			{
@@ -56,7 +95,7 @@ public class SYSValidationApplication implements ValidateApplication{
 				return service.validateAppSecret(appid, secret);							
 			}
 			else
-				return true;
+				return null;
 		} catch (TokenException e) {
 			throw e;
 		} catch (Exception e) {
