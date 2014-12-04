@@ -999,9 +999,9 @@ public class AccessControl implements AccessControlInf{
 		/**
 		 * 如果ie session相互干扰时需要给出提示,不允许用户登录
 		 */
-		session = request.getSession();
+		session = request.getSession(false);
 		
-		Map temp = (Map)session.getAttribute(PRINCIPAL_INDEXS);
+		Map temp = session != null ?(Map)session.getAttribute(PRINCIPAL_INDEXS):null;
 		
 		 this.log("userAccount.login",request);
 		if(temp != null )
@@ -1075,6 +1075,8 @@ public class AccessControl implements AccessControlInf{
 	
 	public String getSessionID()
 	{
+		if(session == null)
+			return null;
 		return (String)this.session.getAttribute(SESSIONID_CACHE_KEY);
 	}
 	
@@ -1187,6 +1189,8 @@ public class AccessControl implements AccessControlInf{
 			if(machineIP == null || machineIP.trim().equals(""))
 				machineIP = StringUtil.getClientIP(request);
 		}
+		if(session == null)
+			session = request.getSession();
 		session.setAttribute(REMOTEADDR_CACHE_KEY, machineIP);
 		/**
 		 * 获取客服端网卡的mac地址
@@ -1481,13 +1485,14 @@ public class AccessControl implements AccessControlInf{
 		credentialIndexs = new HashMap();
 		this.request = request;
 		this.response = response;
-		session = request.getSession();
+		session = request.getSession(false);
 		
 		try {
 			innerlogon(callbackHandler,
 					userName,
 					 true,false);	
-			session.setAttribute(AccessControl.SESSIONID_FROMCLIENT_KEY, new Boolean(true));
+			if(session != null)
+				session.setAttribute(AccessControl.SESSIONID_FROMCLIENT_KEY, new Boolean(true));
 			return true;
 		} catch (LoginException ex) {
 //			principalIndexs = null;
@@ -2815,6 +2820,8 @@ public class AccessControl implements AccessControlInf{
 		
 
 		try {
+			if(session == null)
+				return;
 			Map principals = (Map) session.getAttribute(PRINCIPAL_INDEXS);
 
 			if (principals == null) {
