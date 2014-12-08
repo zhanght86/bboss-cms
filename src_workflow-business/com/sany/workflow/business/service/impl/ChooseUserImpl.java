@@ -98,4 +98,52 @@ public class ChooseUserImpl implements ChooseUserService,
 		}
 	}
 
+	@Override
+	public SysUser queryUserByCode(String code) throws SQLException {
+		SysUser user = null;
+		List<SysUser> list = executor.queryList(SysUser.class,
+				"queryUserByCode", code);
+		if (list != null && list.size() > 0) {
+			user = list.get(0);
+		}
+		return user;
+	}
+
+	@Override
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> selectUsersByCondition(
+			com.frameworkset.platform.sysmgrcore.entity.User user, long offset,
+			int pagesize) throws SQLException {
+		ListInfo listInfo = executor.queryListInfoBean(
+				com.frameworkset.platform.sysmgrcore.entity.User.class,
+				"selectUsersByCondition", offset, pagesize, user);
+
+		return listInfo.getDatas();
+	}
+
+	@Override
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> queryUsersByUsernames(
+			String usernames) throws SQLException {
+		List<String> usernameslist = Arrays.asList(usernames.split(","));
+		Map<String, List<String>> param = new HashMap<String, List<String>>();
+		param.put("usernames", usernameslist);
+
+		List<com.frameworkset.platform.sysmgrcore.entity.User> users = executor
+				.queryListBean(
+						com.frameworkset.platform.sysmgrcore.entity.User.class,
+						"queryUsersByUsername", param);
+
+		return users;
+
+	}
+
+	@Override
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> selectUsersByCondition(
+			com.frameworkset.platform.sysmgrcore.entity.User user)
+			throws SQLException {
+
+		return executor.queryListBean(
+				com.frameworkset.platform.sysmgrcore.entity.User.class,
+				"selectUsersByCondition", user);
+	}
+
 }

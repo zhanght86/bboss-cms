@@ -16,8 +16,22 @@ import com.sany.workflow.entity.User;
  */
 public interface ChooseUserService {
 
+	public SysUser queryUserByCode(String code) throws SQLException;
+
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> selectUsersByCondition(
+			com.frameworkset.platform.sysmgrcore.entity.User user, long offset,
+			int pagesize) throws SQLException;
+
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> selectUsersByCondition(
+			com.frameworkset.platform.sysmgrcore.entity.User user)
+			throws SQLException;
+
+	public List<com.frameworkset.platform.sysmgrcore.entity.User> queryUsersByUsernames(
+			String usernames) throws SQLException;
+
 	/**
 	 * 获取单个用户信息
+	 * 
 	 * @param offset
 	 * @param pagesize
 	 * @return

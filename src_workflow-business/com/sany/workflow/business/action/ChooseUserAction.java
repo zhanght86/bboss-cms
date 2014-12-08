@@ -1,5 +1,6 @@
 package com.sany.workflow.business.action;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.business.service.ChooseUserService;
@@ -30,6 +32,81 @@ public class ChooseUserAction {
 	private ActivitiBusinessService workflowService;
 
 	private static Logger logger = Logger.getLogger(ChooseUserAction.class);
+
+	public @ResponseBody
+	List<com.frameworkset.platform.sysmgrcore.entity.User> queryUsers(
+			String orgId, String userName, long offset, int pagesize) {
+
+		try {
+			com.frameworkset.platform.sysmgrcore.entity.User user = new com.frameworkset.platform.sysmgrcore.entity.User();
+			if (StringUtils.isNotBlank(orgId)) {
+				user.setOrgs(orgId);
+			} else if (StringUtils.isNotBlank(userName)) {
+				user.setUserName("%" + userName + "%");
+			}
+
+			List<com.frameworkset.platform.sysmgrcore.entity.User> userList = chooseUserService
+					.selectUsersByCondition(user, offset, pagesize);
+
+			if (userList != null && userList.size() > 0) {
+				for (com.frameworkset.platform.sysmgrcore.entity.User u : userList) {
+					u.setOrgName(FunctionDB.getUserorgjobinfos(u.getUserId()));
+				}
+			}
+			return userList;
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public @ResponseBody
+	List<com.frameworkset.platform.sysmgrcore.entity.User> queryUsersByOrgId(
+			String orgId) {
+
+		try {
+			com.frameworkset.platform.sysmgrcore.entity.User user = new com.frameworkset.platform.sysmgrcore.entity.User();
+			if (StringUtils.isNotBlank(orgId)) {
+				user.setOrgs(orgId);
+			}
+
+			List<com.frameworkset.platform.sysmgrcore.entity.User> userList = chooseUserService
+					.selectUsersByCondition(user);
+
+			if (userList != null && userList.size() > 0) {
+				for (com.frameworkset.platform.sysmgrcore.entity.User u : userList) {
+					u.setOrgName(FunctionDB.getUserorgjobinfos(u.getUserId()));
+				}
+			}
+			return userList;
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+			return null;
+		}
+	}
+
+	public @ResponseBody
+	List<com.frameworkset.platform.sysmgrcore.entity.User> queryUsersByUsernames(
+			String usernames) {
+		try {
+			if (StringUtils.isNotEmpty(usernames)) {
+				List<com.frameworkset.platform.sysmgrcore.entity.User> userList = chooseUserService
+						.queryUsersByUsernames(usernames);
+
+				if (userList != null && userList.size() > 0) {
+					for (com.frameworkset.platform.sysmgrcore.entity.User u : userList) {
+						u.setOrgName(FunctionDB.getUserorgjobinfos(u
+								.getUserId()));
+					}
+				}
+
+				return userList;
+			}
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		}
+		return null;
+	}
 
 	/**
 	 * 获取用户列表转成json
@@ -106,8 +183,8 @@ public class ChooseUserAction {
 			tm.begin();
 
 			// 判断是否是抄送节点
-			boolean iscopy = workflowService.isCopyNodeByKey("usertask"+nodekey,
-					processKey);
+			boolean iscopy = workflowService.isCopyNodeByKey("usertask"
+					+ nodekey, processKey);
 			model.addAttribute("iscopy", iscopy);
 
 			// 已选列表中的用户

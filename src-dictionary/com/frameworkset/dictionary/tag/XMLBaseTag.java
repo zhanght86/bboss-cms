@@ -244,15 +244,23 @@ public class XMLBaseTag extends CellTag
             }
 
         }
-        else if(this.actual !=null)
+        else
         {
-        	defaultValue = actual;
+        	Object v = getObjectValue();
+        	if(v != null)
+        		defaultValue = v;
+        		
         }
+        
+//        if(this.actual !=null)
+//        {
+//        	defaultValue = actual;
+//        }
 
-		if(defaultValue == null)
-		{
-			defaultValue = getObjectValue();
-		}
+//		if(defaultValue == null)
+//		{
+//			defaultValue = getObjectValue();
+//		}
 		if(defaultValue == null && getName() != null)
 		{		    
 			Object temp = request.getAttribute(getName());

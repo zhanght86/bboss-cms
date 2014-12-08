@@ -24,6 +24,7 @@
 	]]>
 	</property>
 
+	<!-- 兼容老系统 User对象有两种 -->
 	<property name="selectUsersByCondition">
 	<![CDATA[
 		select u.user_id ,u.user_name ,u.user_realname ,u.user_worknumber  
@@ -37,10 +38,20 @@
 				and oj.org_id = #[org_id]
 			#end
 			
+			#if($orgs && !$orgs.equals(""))
+				and oj.org_id = #[orgs]
+			#end
+			
 			#if($user_name && !$user_name.equals(""))
 			 and ((u.user_worknumber like #[user_name]) or
       			 (u.user_realname like #[user_name]) or 
       			 (u.user_name like #[user_name]))
+			#end
+			
+			#if($userName && !$userName.equals(""))
+			 and ((u.user_worknumber like #[userName]) or
+      			 (u.user_realname like #[userName]) or 
+      			 (u.user_name like #[userName]))
 			#end
 			
 	]]>
