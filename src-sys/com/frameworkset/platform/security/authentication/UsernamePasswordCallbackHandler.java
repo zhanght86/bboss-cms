@@ -39,6 +39,13 @@ public class UsernamePasswordCallbackHandler extends ACLCallbackHandler {
         this.request = request;
         this.response = response;
     }
+    
+    public UsernamePasswordCallbackHandler(String userName ,HttpServletRequest request,HttpServletResponse response) {
+        this.userName = userName;
+       
+        this.request = request;
+        this.response = response;
+    }
 
 //    /**
 //     * <p> Retrieve or display the information requested in the provided

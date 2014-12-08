@@ -2,8 +2,6 @@ package com.frameworkset.platform.security.authorization;
 
 import java.security.Principal;
 
-import com.frameworkset.platform.security.authentication.Subject;
-
 
 /**
  * <p>Title: </p>
@@ -41,13 +39,13 @@ public class AuthPrincipal implements Principal,java.io.Serializable {
     {
     	
     }
-    public AuthPrincipal(String name,Subject subject,String loginModuleName)
+    public AuthPrincipal(String name,String loginModuleName)
     {
         this.name = name;
         this.loginModuleName = loginModuleName;
     }
     
-    public AuthPrincipal(String name,Subject subject,String loginModuleName,String userID)
+    public AuthPrincipal(String name ,String loginModuleName,String userID)
     {
         this.name = name;
         this.loginModuleName = loginModuleName;

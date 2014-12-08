@@ -18,14 +18,11 @@ package com.frameworkset.platform.security.authentication;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.security.auth.AuthPermission;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -64,12 +61,12 @@ public class SimpleLoginContext {
     private boolean subjectProvided = false;
     private boolean loginSucceeded = false;
     private transient CallbackHandler callbackHandler;
+    private ACLLoginModule module = null;
     private Map state = new HashMap();
 
     private LoginModuleInfoQueue moduleQueue;
 
 
-    private ModuleInfo[] moduleStack;
     private transient ClassLoader contextClassLoader = null;
     private static final Class[] PARAMS = { };
 
@@ -93,25 +90,69 @@ public class SimpleLoginContext {
      */
     private void init(String name) throws LoginException {
 
-        java.lang.SecurityManager sm = System.getSecurityManager();
-        if (sm != null) {
-            sm.checkPermission(new AuthPermission
-                                ("createLoginContext." + name));
-        }
+       
 
-        if (name == null)
-            throw new LoginException
-                (ResourcesMgr.getString("Invalid null input: name"));
-        if(this.appName == null && this.moduleName == null)
-        {
-            moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+       
+        
+        moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
+        
+
+        LoginModuleInfo moduleInfo = this.moduleQueue.getLoginModuleInfo(0);
+		
+        
+
+        if (subject == null) {
+            subject = new Subject();
         }
-        else
-        {
-            moduleQueue = ConfigManager.getInstance().getApplicationInfo(appName).getLoginModuleInfos();
-        }
+        
+   
+        		
+        
+
+            try {
 
 
+                // instantiate the LoginModule
+
+
+               
+              
+
+            // instantiate the LoginModule
+
+            Class c = Class.forName
+                        (moduleInfo.getLoginModule());
+
+            Constructor constructor = c.getConstructor(PARAMS);
+            Object[] args = { };
+
+            // allow any object to be a LoginModule
+            // as long as it conforms to the interface
+            module = (ACLLoginModule)constructor.newInstance(args);
+            
+            //检测登录模块是否是ACLLoginModule类型的模块，如果是设置登录模块的名称
+                         
+        	module.setLoginModuleName(moduleInfo.getName());
+        	module.setRegistTable(moduleInfo.getRegistTable());
+              module.initialize(subject, callbackHandler);
+
+        }
+            catch (InstantiationException ie) {
+                //ie.printStackTrace();
+                throw new LoginException(ResourcesMgr.getString
+                        ("unable to instantiate LoginModule: ") +
+                        ie.getMessage());
+            } catch (ClassNotFoundException cnfe) {
+                //cnfe.printStackTrace();
+                throw new LoginException(ResourcesMgr.getString
+                        ("unable to find LoginModule class: ") +
+                        cnfe.getMessage());
+            } catch (IllegalAccessException iae) {
+                //iae.printStackTrace();
+                throw new LoginException(ResourcesMgr.getString
+                        ("unable to access LoginModule: ") +
+                        iae.getMessage());
+            }  
         // get the Configuration
 //        if (config == null) {
 //            config = (Configuration)java.security.AccessController.doPrivileged
@@ -121,6 +162,25 @@ public class SimpleLoginContext {
 //                }
 //            });
 //        }
+            catch (IllegalArgumentException e) {
+            	  //iae.printStackTrace();
+                throw new LoginException(ResourcesMgr.getString
+                        ("IllegalArgumentException: ") +
+                        e);
+			} catch (InvocationTargetException e) {
+				  //iae.printStackTrace();
+                throw new LoginException(ResourcesMgr.getString
+                        ("InvocationTargetException: ") +
+                        e.getTargetException());
+			} catch (NoSuchMethodException e) {
+				 throw new LoginException(ResourcesMgr.getString
+	                        ("NoSuchMethodException: ") +
+	                        e);
+			} catch (SecurityException e) {
+				throw new LoginException(ResourcesMgr.getString
+                        ("SecurityException: ") +
+                        e);
+			}
 
         // get the LoginModules configured for this application
 //        AppConfigurationEntry[] entries = config.getAppConfigurationEntry(name);
@@ -139,24 +199,10 @@ public class SimpleLoginContext {
 //                throw new LoginException(form.format(source));
 //            }
 //        }
-        moduleStack = new ModuleInfo[moduleQueue.size()];
-        //复制
-        for (int i = 0; i < moduleQueue.size(); i++) {
-            // clone returned array
-//            moduleStack[i] = new ModuleInfo
-//                                (new AppConfigurationEntry
-//                                        (entries[i].getLoginModuleName(),
-//                                        entries[i].getControlFlag(),
-//                                        entries[i].getOptions()),
-//                                null);
-            moduleStack[i] = new ModuleInfo
-                                (moduleQueue.getLoginModuleInfo(i),
-                                null);
-
-        }
+       
 
 
-        contextClassLoader = Thread.currentThread().getContextClassLoader();
+//        contextClassLoader = Thread.currentThread().getContextClassLoader();
 //                (ClassLoader)java.security.AccessController.doPrivileged
 //                (new java.security.PrivilegedAction() {
 //                public Object run() {
@@ -216,13 +262,23 @@ public class SimpleLoginContext {
      */
     public SimpleLoginContext(String name, CallbackHandler callbackHandler)
     throws LoginException {
+    	 if (callbackHandler == null)
+             throw new LoginException(ResourcesMgr.getString
+                                 ("invalid null CallbackHandler provided"));
+         this.callbackHandler = callbackHandler;
         init(name);
-        if (callbackHandler == null)
-            throw new LoginException(ResourcesMgr.getString
-                                ("invalid null CallbackHandler provided"));
-        this.callbackHandler = callbackHandler;
+       
     }
-
+    public SimpleLoginContext(String name, CallbackHandler callbackHandler,Subject subject)
+    	    throws LoginException {
+    	    	 if (callbackHandler == null)
+    	             throw new LoginException(ResourcesMgr.getString
+    	                                 ("invalid null CallbackHandler provided"));
+    	         this.callbackHandler = callbackHandler;
+    	         this.subject = subject;
+    	        init(name);
+    	       
+    	    }
     
 
     /**
@@ -300,213 +356,84 @@ public class SimpleLoginContext {
         }
     }
     
+    
     private void _invoke(String action) throws LoginException
     {
     	
 
-        if (subject == null) {
-            subject = new Subject();
-        }
+       
         
-        LoginException firstError = null;
-        LoginException firstRequiredError = null;
-        boolean success = false;
-
-        for (int i = 0; i < moduleStack.length; i++) {
+   
+        		
+        
 
             try {
 
-                int mIndex = 0;
-                Method[] methods = null;
 
-                if (moduleStack[i].module != null) {//如果登录模块已经初始化，直接提取所有登录模块可访问方法
-                   
-                } else {//初始化登陆模块，提取所有登录模块可访问方法
+                // instantiate the LoginModule
 
-                    // instantiate the LoginModule
-
-                    Class c = Class.forName
-                                (moduleStack[i].getLoginModuleInfo().getLoginModule(),
-                                true,
-                                contextClassLoader);
-
-                    Constructor constructor = c.getConstructor(PARAMS);
-                    Object[] args = { };
-
-                    // allow any object to be a LoginModule
-                    // as long as it conforms to the interface
-                    moduleStack[i].module = (LoginModule)constructor.newInstance(args);
-                    //检测登录模块是否是ACLLoginModule类型的模块，如果是设置登录模块的名称
-                    if(moduleStack[i].module instanceof ACLLoginModule)
-                    {
-                        ((ACLLoginModule)moduleStack[i].module)
-                                .setLoginModuleName(moduleStack[i].getLoginModuleInfo().getName());
-                        ((ACLLoginModule)moduleStack[i].module)
-                                .setRegistTable(moduleStack[i].getLoginModuleInfo().getRegistTable());
-
-                    }
 
                    
-                    CallbackHandler handler = callbackHandler;
-                    //如果登录模块指定了特定的回调函数，则使用特定的回调函数对登录模块进行初始化
-                    if(moduleStack[i].getLoginModuleInfo().getCallBackHandler() != null
-                       && !moduleStack[i].getLoginModuleInfo().getCallBackHandler().equals(""))
-                    {
-                        try
-                        {
-                            handler = (CallbackHandler) Class.forName(
-                                    moduleStack[i].getLoginModuleInfo().
-                                    getCallBackHandler()).newInstance();
-                        }
-                        catch(Exception e)
-                        {
-                            log.error("",e);
-                            handler = callbackHandler;
-                        }
-                    }
-
-                    Object[] initArgs = {subject,
-                                        handler
-                                        };//options(java.util.Map) is null
-                    // invoke the LoginModule initialize method
-                    moduleStack[i].module.initialize(subject, handler);
-                   
-                }
 
              
 
                 // set up the arguments to be passed to the LoginModule method
-                Object[] args = { };
                 boolean status = false;
                 // invoke the LoginModule method
                 if(action.equals(LOGIN_METHOD))
                 {
-                	status = moduleStack[i].module.login();
+                	status =  module.login();
                 }
                 else if(action.equals(COMMIT_METHOD))
                 {
-                	status = moduleStack[i].module.commit();
+                	status =  module.commit();
                 }
                 else if(action.equals(ABORT_METHOD))
                 {
-                	status = moduleStack[i].module.abort();
+                	status =  module.abort();
                 }
                 else if(action.equals(LOGOUT_METHOD))
                 {
-                	status = moduleStack[i].module.logout();
+                	status =  module.logout();
                 }
 
                 //方法返回值为true,表示方法执行成功，做SUFFICIENT检查
                 if (status == true) {
 
-                    // if SUFFICIENT, return if no prior REQUIRED errors
-                    if (moduleStack[i].getLoginModuleInfo().getControlFlag().equals(LoginModuleControlFlag.SUFFICIENT.controlFlag)
-                     &&
-                        firstRequiredError == null) {
-
-                        //if (log != null)
-                            log.debug(action+" SUFFICIENT success");
-                        return;
-                    }
-                    log.debug(action+"  success");
-                    success = true;
+                   
+                                        return;
                 } else {
                    log.debug(action+" failed.");
                 }
 
-            } catch (NoSuchMethodException nsme) {
-                //nsme.printStackTrace();
-                MessageFormat form = new MessageFormat(ResourcesMgr.getString
-                        ("unable to instantiate LoginModule, module, because " +
-                        "it does not provide a no-argument constructor"));
-                Object[] source = {moduleStack[i].entry.getLoginModule()};
-                throw new LoginException(form.format(source));
-            } catch (InstantiationException ie) {
-                //ie.printStackTrace();
-                throw new LoginException(ResourcesMgr.getString
-                        ("unable to instantiate LoginModule: ") +
-                        ie.getMessage());
-            } catch (ClassNotFoundException cnfe) {
-                //cnfe.printStackTrace();
-                throw new LoginException(ResourcesMgr.getString
-                        ("unable to find LoginModule class: ") +
-                        cnfe.getMessage());
-            } catch (IllegalAccessException iae) {
-                //iae.printStackTrace();
-                throw new LoginException(ResourcesMgr.getString
-                        ("unable to access LoginModule: ") +
-                        iae.getMessage());
-            } catch (InvocationTargetException ite) {
+            }catch (LoginException e) {
+            	throw e;
+				
+			}
+        	catch (Exception ite) {
                 //ite.printStackTrace();
 
                 // failure cases
                 LoginException le;
-//                if (ite.getTargetException() instanceof javax.security.auth.login.LoginException) {
-//                    le = (LoginException)ite.getTargetException();
-//                } else 
-                {
-                    // capture an unexpected LoginModule exception
-//                    java.io.StringWriter sw = new java.io.StringWriter();
-//                    ite.getCause().printStackTrace
-//                                                (new java.io.PrintWriter(sw));
-//                    sw.flush();
-//                    le = new LoginException(sw.toString());
-                	if(ite.getTargetException() instanceof LoginException)
+
+               
+ 
+                	if(ite instanceof LoginException)
                 	{
-                		le = (LoginException)ite.getTargetException();
+                		le = (LoginException)ite ;
                 	}
                 	else
                 	{
-                		le = new LoginException(ite.getTargetException().getMessage(),ite.getTargetException());
+                		le = new LoginException(ite .getMessage(),ite );
                 	}
                     
-                }
+                	throw le;
 
-                //如果是REQUISITE，那么立即抛出异常
-                if(action.equals(LOGIN_METHOD) || action.equals(COMMIT_METHOD))
-                {
-	                if (moduleStack[i].entry.getControlFlag().equals(
-	                    LoginModuleControlFlag.REQUISITE.controlFlag)) {
-	
-	                    log.debug(action+" REQUISITE failure");
-	
-	                    // if REQUISITE, then immediately throw an exception
-	//                    if (methodName.equals(ABORT_METHOD) ||
-	//                        methodName.equals(LOGOUT_METHOD)) {
-	//                        if (firstRequiredError == null)
-	//                            firstRequiredError = le;
-	//                    } else 
-	                    {
-	                        throwException(firstRequiredError, le);
-	                    }
-	
-	                } else if (moduleStack[i].entry.getControlFlag().equals(LoginModuleControlFlag.REQUIRED.controlFlag)) {
-	
-	                    log.debug(action+" REQUIRED failure");
-	
-	                    // mark down that a REQUIRED module failed
-	                    if (firstRequiredError == null)
-	                        firstRequiredError = le;
-	
-	                } else {
-	
-	                    log.debug(action+" OPTIONAL failure");
-	
-	                    // mark down that an OPTIONAL module failed
-	                    if (firstError == null)
-	                        firstError = le;
-	                }
-                }
-            } catch (LoginException e) {
-            	throw e;
-				
-			}
-            catch (Exception e) {
-            	throw new LoginException(e);
-				
-			}
+               
+            }
+           
             
-        }
+        
     }
 
     /**
@@ -531,10 +458,7 @@ public class SimpleLoginContext {
      * @exception LoginException if the logout fails.
      */
     public void logout() throws LoginException {
-        if (subject == null) {
-            throw new LoginException(ResourcesMgr.getString
-                ("null subject - logout called before login"));
-        }
+        
 
         this._invoke(LOGOUT_METHOD);
     }
@@ -565,31 +489,7 @@ public class SimpleLoginContext {
 
    
 
-    /**
-     * LoginModule information -
-     *		incapsulates Configuration info and actual module instances
-     */
-    private static class ModuleInfo implements Serializable{
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		LoginModuleInfo entry;
-        LoginModule module;
-
-        ModuleInfo(LoginModuleInfo newEntry, LoginModule newModule) {
-            this.entry = newEntry;
-            this.module = newModule;
-        }
-
-        public LoginModuleInfo getLoginModuleInfo() {
-            return this.entry;
-        }
-
-        public LoginModule getModule() {
-            return this.module;
-        }
-    }
+   
 
     /**
      * This class represents whether or not a <code>LoginModule</code>

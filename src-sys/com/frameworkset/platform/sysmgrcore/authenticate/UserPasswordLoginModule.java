@@ -263,4 +263,10 @@ public class UserPasswordLoginModule extends ACLLoginModule
         checkCallBack.setUserAttribute("userIsvalid", user.getUserIsvalid() + "");
         
     }
+
+	@Override
+	public void logoutCallback(String userName,
+			CheckCallBackWrapper checkCallBackWrapper) {
+//		System.out.println("我退出了。。。。。");
+	}
 }

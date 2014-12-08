@@ -16,10 +16,6 @@
 package com.frameworkset.platform.security.authentication;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.frameworkset.platform.security.authorization.AuthPrincipal;
 
 /**
  * <p>Title: Subject.java</p> 
@@ -31,31 +27,31 @@ import com.frameworkset.platform.security.authorization.AuthPrincipal;
  * @version 3.8.0
  */
 public class Subject {
-	private List<Credential>  credentials;
-	private List<Principal>  principals;
+	private Credential  credential;
+	private  Principal   principal;
 	public Subject()
 	{
-		credentials = new ArrayList<Credential>();
-		principals = new ArrayList<Principal>();
+//		credential = new ArrayList<Credential>();
+//		principal = new ArrayList<Principal>();
 	}
-	public List<Credential> getCredentials() {
-		return credentials;
+	public Credential getCredential() {
+		return credential;
 	}
-	public void setCredentials(List<Credential> credentials) {
-		this.credentials = credentials;
+	public void setCredential(Credential credential) {
+		this.credential = credential;
 	}
-	public List<Principal> getPrincipals() {
-		return principals;
+	public Principal getPrincipal() {
+		return principal;
 	}
-	public void setPrincipals(List<Principal> principals) {
-		this.principals = principals;
+	public void setPrincipal( Principal principal) {
+		this.principal = principal;
 	}
 	public void addAuthPrincipal(Principal authPrincipal)
 	{
-		this.principals.add(authPrincipal);
+		this.principal =authPrincipal;
 	}
 	public void addCredential(Credential credential)
 	{
-		this.credentials.add(credential);
+		this.credential =credential;
 	}
 }

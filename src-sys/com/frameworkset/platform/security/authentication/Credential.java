@@ -26,7 +26,7 @@ public class Credential implements Refreshable,Destroyable,java.io.Serializable{
     {
     	
     }
-    public Credential(CheckCallBack checkCallBack,String loginModule,Subject subject)
+    public Credential(CheckCallBack checkCallBack,String loginModule )
     {
         this.checkCallBack = checkCallBack;
         this.loginModule = loginModule;

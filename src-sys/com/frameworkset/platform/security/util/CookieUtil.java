@@ -1,6 +1,7 @@
 package com.frameworkset.platform.security.util;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,8 +90,8 @@ public class CookieUtil implements Serializable{
         String t_credentials = principals_credentials[1];
 
        
-        Map principalIdxs = new HashMap();
-        Map credentialIdxs = new HashMap();
+        Principal principalIdxs = null;
+        Credential credentialIdxs = null;
         String principals[] = StringUtil.split(t_principals,principalRegexExpress);
 
 
@@ -100,9 +101,8 @@ public class CookieUtil implements Serializable{
             AuthPrincipal authPrincipal = new AuthPrincipal(identitys[1],null,
                      identitys[0]);
             log.debug(authPrincipal);
-          
-            principalIdxs.put(authPrincipal.getLoginModuleName(),
-                              authPrincipal);
+            principalIdxs = authPrincipal;
+            
         }
 
         String credentials[] = StringUtil.split(t_credentials,credential_splitRegexExpress);
@@ -118,9 +118,9 @@ public class CookieUtil implements Serializable{
                 checkCallBack.setUserAttribute(attribute[0],attribute[1]);
             }
 
-            Credential credential = new Credential(checkCallBack,c_messages[0],null);
+            Credential credential = new Credential(checkCallBack,c_messages[0]);
           
-            credentialIdxs.put(credential.getLoginModule(),credential);
+            credentialIdxs = credential;
         }
         return new Object[] {principalIdxs,credentialIdxs};
     }

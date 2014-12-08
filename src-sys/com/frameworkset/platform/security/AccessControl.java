@@ -126,7 +126,6 @@ public class AccessControl implements AccessControlInf{
 	public static final String MACHINENAME_CACHE_KEY = "MACHINENAME_CACHE_KEY";
 	public static final String LOGINSTYLE_CACHE_KEY = "LOGINSTYLE_CACHE_KEY";
 	
-	public static final String SESSIONID_CACHE_KEY = "SESSIONID_CACHE_KEY";
 	public static final String SERVER_IP_KEY = "SERVER_IP_KEY";
 	public static final String SERVER_PORT_KEY = "SERVER_PORT_KEY";
 
@@ -551,9 +550,7 @@ public class AccessControl implements AccessControlInf{
 
 	private Subject subject;
 
-	private Map principalIndexs = null;
 
-	private Map credentialIndexs = null;
 
 	private String moduleName;
 
@@ -1001,7 +998,7 @@ public class AccessControl implements AccessControlInf{
 		 */
 		session = request.getSession(false);
 		
-		Map temp = session != null ?(Map)session.getAttribute(PRINCIPAL_INDEXS):null;
+		Principal temp = (Principal) (session != null ?(Map)session.getAttribute(PRINCIPAL_INDEXS):null);
 		
 		 this.log("userAccount.login",request);
 		if(temp != null )
@@ -1052,8 +1049,7 @@ public class AccessControl implements AccessControlInf{
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
 				userName, password,userTypes,request,response);
 
-		principalIndexs = new HashMap();
-		credentialIndexs = new HashMap();
+	 
 		
 		this.request = request;
 		this.response = response;
@@ -1077,7 +1073,7 @@ public class AccessControl implements AccessControlInf{
 	{
 		if(session == null)
 			return null;
-		return (String)this.session.getAttribute(SESSIONID_CACHE_KEY);
+		return this.session.getId();
 	}
 	
 	private void guestlogin()
@@ -1086,32 +1082,25 @@ public class AccessControl implements AccessControlInf{
 				BaseAuthorizationTable.guest, BaseAuthorizationTable.password,null,request,response);
 		
 		try {
-			credentialIndexs = new HashMap();
-			principalIndexs = new HashMap();
+			
 			SimpleLoginContext loginContext = new SimpleLoginContext("base",
 					callbackHandler);
 			loginContext.login();
 			subject = loginContext.getSubject();
-			Iterator credentials = subject.getCredentials().iterator();
-			for (; credentials.hasNext();) {
-				Credential credential = (Credential) credentials.next();
-				if (credential.isCurrent()) {
+			 
+				Credential credential = subject.getCredential();
+				
 //					CheckCallBack.AttributeQueue attributeQueue = credential
 //							.getCheckCallBack().getAttributeQueue();				
-					credentialIndexs.put(credential.getLoginModule(),
-							credential);					
-					if (credential.getLoginModule().equals(this.moduleName))
-						this.credential = credential;
-				}
+				 				
+				this.credential = credential;
+				
 
-			}
-			for (Iterator principals = subject.getPrincipals().iterator(); principals.hasNext();) {
-				AuthPrincipal principal = (AuthPrincipal) principals.next();
-				principalIndexs.put(principal.getLoginModuleName(), principal);
-				if (principal.getLoginModuleName().equals(this.moduleName))
-					this.principal = principal;
+			 
+				AuthPrincipal principal = (AuthPrincipal)subject.getPrincipal();
+				this.principal = principal;
 		
-			}
+			 
 		} catch (LoginException e) {
 			
 			e.printStackTrace();
@@ -1200,7 +1189,7 @@ public class AccessControl implements AccessControlInf{
 		 
 		session.setAttribute(MACADDR_CACHE_KEY, macaddr);
 		session.setAttribute(AccessControl.MACHINENAME_CACHE_KEY, machineName);
-		session.setAttribute(SESSIONID_CACHE_KEY,session.getId());
+		
 		/**
 		 * 1 other
 		 * 2 other
@@ -1218,10 +1207,8 @@ public class AccessControl implements AccessControlInf{
 		StringBuffer credentialCookie = new StringBuffer();
 		boolean flag = false;
 		boolean enablecookie = this.enablecookie();
-		Iterator credentials = subject.getCredentials().iterator();
-		for (; credentials.hasNext();) {
-			Credential credential = (Credential) credentials.next();
-			if (credential.isCurrent()) {
+		
+			  credential = (Credential) subject.getCredential();
 //				CheckCallBack.AttributeQueue attributeQueue = credential
 //						.getCheckCallBack().getAttributeQueue();
 				Map<String,Attribute> callBacks = credential.getCheckCallBack().getCallBacks();
@@ -1250,37 +1237,31 @@ public class AccessControl implements AccessControlInf{
 						}
 					}
 				}
-				credentialIndexs.put(credential.getLoginModule(),
-						credential);
 				
-				if (credential.getLoginModule().equals(this.moduleName))
-					this.credential = credential;
+			 
 
-			}
+			 
 
-		}
+		 
 		flag = false;
 		
-		for (Iterator principals = subject.getPrincipals().iterator(); principals
-				.hasNext();) {
-			AuthPrincipal principal = (AuthPrincipal) principals.next();
-			principalIndexs.put(principal.getLoginModuleName(), principal);
+		 
+			  principal = (AuthPrincipal)subject.getPrincipal();
 			
-			if (principal.getLoginModuleName().equals(this.moduleName))
-				this.principal = principal;
+			
 //			log("enablecookie:" + enablecookie);
 			if (enablecookie) {
 				if (!flag) {
-					ssoCookie.append(principal.getLoginModuleName()).append(
+					ssoCookie.append(((AuthPrincipal)principal).getLoginModuleName()).append(
 							IDENTITY_SPLIT).append(principal.getName());
 					flag = true;
 				} else {
 					ssoCookie.append(PRINCIPAL_SPLIT).append(
-							principal.getLoginModuleName()).append(
+							((AuthPrincipal)principal).getLoginModuleName()).append(
 							IDENTITY_SPLIT).append(principal.getName());
 				}
 			}
-		}
+		
 		if (enablecookie) {
 			if (ssoCookie.length() > 0) {
 				ssoCookie.insert(0, "encrypt=false" + HEAD_SPLIT);
@@ -1289,9 +1270,9 @@ public class AccessControl implements AccessControlInf{
 			}
 		}
 		// 添加用户的所有身份索引到session中
-		session.setAttribute(PRINCIPAL_INDEXS, principalIndexs);
+		session.setAttribute(PRINCIPAL_INDEXS, this.principal);
 		// 添加用户的所有属性到session中
-		session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
+		session.setAttribute(CREDENTIAL_INDEXS, this.credential);
 		String subsystem_id = request.getParameter(SUBSYSTEM_ID);
 		if (subsystem_id == null || subsystem_id.equals(""))
 			subsystem_id = getDefaultSUBSystemID();
@@ -1481,8 +1462,7 @@ public class AccessControl implements AccessControlInf{
 		UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
 				userName, password, userTypes,request,response);
 
-		principalIndexs = new HashMap();
-		credentialIndexs = new HashMap();
+	 
 		this.request = request;
 		this.response = response;
 		session = request.getSession(false);
@@ -1568,11 +1548,18 @@ public class AccessControl implements AccessControlInf{
 			this.request = c.getRequest();
 			this.response = c.getResponse();		
 			this.session = c.getSession();			
-			this.principalIndexs = c.principalIndexs;
+			 
 			// 添加用户的所有属性到session中
-			this.credentialIndexs = this.principalIndexs;
+			 
 			this.principal = c.principal;
 			this.credential = c.credential;
+			if(this.principal != null)
+			{
+				this.subject = new Subject();
+				
+				this.subject.setCredential(credential);
+				this.subject.setPrincipal(principal);
+			}
 			return true;
 		}
 //		boolean isLogin = checkAccess(request, response, null, true);
@@ -1675,7 +1662,7 @@ public class AccessControl implements AccessControlInf{
 		if(userTypes == null || userTypes.length == 0)
 			return true;
 		
-		Credential dd = (Credential) credentialIndexs.get(this.moduleName);
+		Credential dd = this.credential;
 		String _userType = (String) dd.getCheckCallBack().getUserAttribute(
 				"LOGINCONTEXT.USERTYPE");
 		if (_userType != null && !_userType.equals("")) {
@@ -1777,18 +1764,15 @@ public class AccessControl implements AccessControlInf{
 	{
 		try
 		{
-			principalIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+			this.principal = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 			// 添加用户的所有属性到session中
-			credentialIndexs = (Map) session.getAttribute(CREDENTIAL_INDEXS);
+			this.credential = (Credential) session.getAttribute(CREDENTIAL_INDEXS);
 	
-			if (this.principalIndexs != null) {
+			if (this.principal != null) {
 				current.set(this);
-				this.principal = (Principal) principalIndexs.get(moduleName);
+				 
 			}
-			if (this.credentialIndexs != null) {
-				this.credential = (Credential) credentialIndexs
-						.get(this.moduleName);
-			}
+			 
 //			String sessionid = (String)session.getAttribute(SESSIONID_CACHE_KEY);
 //			Boolean fromclient =  (Boolean)session.getAttribute(SESSIONID_FROMCLIENT_KEY);
 	//		if (principal != null
@@ -1835,7 +1819,7 @@ public class AccessControl implements AccessControlInf{
 //			}
 			return false;
 		}
-		if(principalIndexs != null)
+		if(this.principal != null)
 			return true;
 		else
 			return false;
@@ -1977,15 +1961,16 @@ public class AccessControl implements AccessControlInf{
 				Object[] messages = cookieUtil.refactorPricipal(ssoCookie);
 
 				if (messages != null) {
-					principalIndexs = (Map) messages[0];
-					credentialIndexs = (Map) messages[1];
-					subject = (Subject) messages[2];
-					this.principal = (Principal)principalIndexs.get(this.moduleName);
-					this.credential = (Credential)this.credentialIndexs.get(this.moduleName);
+					this.principal = (Principal) messages[0];
+					this.credential = (Credential) messages[1];
+					subject = new Subject();
+					subject.setCredential(credential);
+					subject.setPrincipal(principal);
+					
 					// 添加用户的所有身份索引到session中
-					session.setAttribute(PRINCIPAL_INDEXS, principalIndexs);
+					session.setAttribute(PRINCIPAL_INDEXS, principal);
 					// 添加用户的所有属性到session中
-					session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
+					session.setAttribute(CREDENTIAL_INDEXS, credential);
 					ret = 3;
 					return ret;
 
@@ -2117,10 +2102,10 @@ public class AccessControl implements AccessControlInf{
 			return unprotectedCheck(redirectPath,userTypes);
 			
 		}
-		principalIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+		principal = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 		// 添加用户的所有属性到session中
-		credentialIndexs = (Map) session.getAttribute(CREDENTIAL_INDEXS);
-		if (principalIndexs == null ) // 如果没有当前用户的会话信息，则判断cookie中是否有当前用户的登录信息
+		credential = (Credential) session.getAttribute(CREDENTIAL_INDEXS);
+		if (principal == null ) // 如果没有当前用户的会话信息，则判断cookie中是否有当前用户的登录信息
 		{
 			int ret = unlogincheck();
 			if(ret == 1) //无cookie，或者客服端登陆失败
@@ -2165,16 +2150,24 @@ public class AccessControl implements AccessControlInf{
 				return innerRedirect(redirectPath);
 			}
 		}
+		else
+		{
+			this.subject = new Subject();
+			
+			this.subject.setCredential(credential);
+			this.subject.setPrincipal(principal);
+		}
+		{
+			
+		}
 //		else // 如果有已经登陆会话信息，直接获取用户的会话信息
 		{
 			
 //			// mmmm
 //			String sessionid_ = (String)session.getAttribute(SESSIONID_CACHE_KEY);
 //			Boolean fromclient =  (Boolean)session.getAttribute(SESSIONID_FROMCLIENT_KEY);
-			this.principal = (Principal) principalIndexs.get(moduleName);
-			if (this.credentialIndexs != null) {
-				this.credential = (Credential) credentialIndexs
-						.get(this.moduleName);
+			if (this.credential != null) {
+				 
 			} 
 			else 
 			{
@@ -2404,19 +2397,10 @@ public class AccessControl implements AccessControlInf{
 		this.session = session;
 		// onlineUser =
 		// (OnLineUser)session.getServletContext().getAttribute("onlineUser");
-		principalIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+		principal  = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 		// 添加用户的所有属性到session中
-		credentialIndexs = (Map) session.getAttribute(CREDENTIAL_INDEXS);
+		credential  = (Credential) session.getAttribute(CREDENTIAL_INDEXS);
 
-		if (this.principalIndexs != null)
-			this.principal = (Principal) principalIndexs.get(moduleName);
-		// else
-		// {
-		//
-		// }
-		if (this.credentialIndexs != null)
-			this.credential = (Credential) credentialIndexs
-					.get(this.moduleName);
 		return true;
 	}
 
@@ -2454,11 +2438,9 @@ public class AccessControl implements AccessControlInf{
 				log("Check Permission failed: session is null.",request);
 				return false;
 			}
-			this.principalIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
-			this.credentialIndexs = (Map) session
+			this.principal  = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
+			this.credential  = (Credential) session
 					.getAttribute(CREDENTIAL_INDEXS);
-			this.principal = (Principal) principalIndexs.get(ConfigManager
-					.getInstance().getModuleName());
 			String resourceType = ConfigManager.getInstance().getResourceInfo()
 			.getId();
 
@@ -2822,7 +2804,7 @@ public class AccessControl implements AccessControlInf{
 		try {
 			if(session == null)
 				return;
-			Map principals = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+			Principal principals = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 
 			if (principals == null) {
 
@@ -2932,17 +2914,15 @@ public class AccessControl implements AccessControlInf{
 		try
 		{
 //			log("Enter logoutdirect from session destroyed event.   session id is:"+session.getId(),null);
-			Map principalsIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+			Principal principal_ = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 	
-			if (principalsIndexs == null) {	
+			if (principal_ == null) {	
 				log("Unknowken user logoutdirect from session destroyed event.",null);
 				return;
 			}
 			String address = (String) session
 			.getAttribute(AccessControl.REMOTEADDR_CACHE_KEY);
-			log_info("User[" + principalsIndexs + "] logoutdirect from session destroyed event at [" + address + "].session id is "+session.getId(),null);
-			AuthPrincipal principal_ = (AuthPrincipal) principalsIndexs
-					.get(ConfigManager.getInstance().getModuleName());
+			log_info("User[" + principal_ + "] logoutdirect from session destroyed event at [" + address + "].session id is "+session.getId(),null);
 			try {
 				
 				String userName = principal_.getName();
@@ -3165,9 +3145,9 @@ public class AccessControl implements AccessControlInf{
 				
 				return;
 			}
-			Map principalsIndexs = (Map) session.getAttribute(PRINCIPAL_INDEXS);
+//			Principal principalsIndexs = (Principal) session.getAttribute(PRINCIPAL_INDEXS);
 
-			if (principalsIndexs == null) {
+			if (this.principal == null) {
 				if(redirected )
 				{
 					log_info("Unknown user Logout from system on " + new java.util.Date() + ". session id is " + session.getId(),request);
@@ -3187,7 +3167,17 @@ public class AccessControl implements AccessControlInf{
 			//log.debug("Logout from page["+ request.getRequestURI() +"]: \r\n\tUser["+ this.getUserAccount() + "," + getUserName() + "] logout.");
 			
 			
+			
+			
+				
+				
 			String userAccount = this.getUserAccount();
+			UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
+					userAccount,  request,response);
+			SimpleLoginContext loginContext = new SimpleLoginContext("base",
+					callbackHandler,this.subject);
+			
+			loginContext.logout();
 			String subsystem = getCurrentSystemName();
 //			String subsystemcookieid = SUBSYSTEM_COOKIE + "_" + userAccount;
 			
@@ -3622,7 +3612,7 @@ public class AccessControl implements AccessControlInf{
 			LoginContext.resetUserAttribute(request,credential.getCheckCallBack(), userAttribute);
 //			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
 //			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
-			session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
+			session.setAttribute(CREDENTIAL_INDEXS, credential);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3637,7 +3627,7 @@ public class AccessControl implements AccessControlInf{
 //			LoginModuleInfoQueue moduleQueue = ConfigManager.getInstance().getDefaultApplicationInfo().getLoginModuleInfos();
 //			credential.getCheckCallBack().setUserAttribute(userAttribute, value);
 			
-			session.setAttribute(CREDENTIAL_INDEXS, credentialIndexs);
+			session.setAttribute(CREDENTIAL_INDEXS, credential);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

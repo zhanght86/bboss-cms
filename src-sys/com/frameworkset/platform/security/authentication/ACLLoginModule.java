@@ -7,6 +7,7 @@ import java.security.Principal;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -190,18 +191,17 @@ public abstract class ACLLoginModule implements LoginModule {
 
         // If this login module succeeded too, then add the new principal
         // to the subject (if it does not already exist)
-        principal = new AuthPrincipal(username, this.subject,loginModuleName);
+        principal = new AuthPrincipal(username, loginModuleName);
         /**
          * 如果登录时设置了用户的类型则保存用户的类型到上下文变量中
          */
         if(this.userTypes != null && this.userTypes.length != 0)
         	checkCallBack.setUserAttribute("LOGINCONTEXT.USERTYPE",userTypes);
-        credential = new Credential(checkCallBack,loginModuleName,subject);
+        credential = new Credential(checkCallBack,loginModuleName );
         
         //往subject中添加用户身份
-        if (!(subject.getPrincipals().contains(principal))) {
-            subject.addAuthPrincipal(principal);
-        }
+        subject.addAuthPrincipal(principal);
+        
         //往subject中添加用户身份令牌
         subject.addCredential(credential);
         log.debug( "" + this.getClass().getName() + " commit SUCCESS");
@@ -244,12 +244,19 @@ public abstract class ACLLoginModule implements LoginModule {
      * @roseuid 43FD4F8600FA
      */
     public boolean logout() throws LoginException {
-        if(principal != null)
-        {
-            subject.getPrincipals().remove(principal);
-        }
-        if(credential != null)
-            subject.getCredentials().remove(this.credential);
+    	CheckCallBackWrapper checkCallBackWrapper = new CheckCallBackWrapper(checkCallBack,callbackHandler.getRequest(),callbackHandler.getResponse());
+    	try {
+			logoutCallback(username,checkCallBackWrapper);
+		} catch (Exception e) {
+			
+		}
+//        if(principal != null)
+//        {
+//            subject.getPrincipals().remove(principal);
+//        }
+//        if(credential != null)
+//            subject.getCredentials().remove(this.credential);
+    	this.subject = null;
         loginSuccess = false;
         username = null;
         principal = null;
@@ -258,6 +265,15 @@ public abstract class ACLLoginModule implements LoginModule {
         log.debug( "" + this.getClass().getName() + " logout SUCCESS");
         return true;
 
+    }
+    /**
+     * 用户登出系统时，回调函数方法，登录插件可以根据实际情况覆盖这个方法
+     * @param userName
+     * @param checkCallBackWrapper
+     */
+    public void logoutCallback(String userName,CheckCallBackWrapper checkCallBackWrapper)
+    {
+    	
     }
 
     /**
