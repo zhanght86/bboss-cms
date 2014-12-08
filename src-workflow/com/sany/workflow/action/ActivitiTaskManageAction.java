@@ -873,12 +873,16 @@ public class ActivitiTaskManageAction {
 			String userAccount = AccessControl.getAccessControl()
 					.getUserAccount();
 
-			// 权限判断(当前用户id==发起人)
-			if (processInst == null
-					|| !processInst.getSTART_USER_ID_().equals(userAccount)) {
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
 
-				tm.commit();
-				return "fail:您没有权限撤销当前任务";
+			if (!isAdmin) {
+				// 权限判断(当前用户id==发起人)
+				if (processInst == null
+						|| !processInst.getSTART_USER_ID_().equals(userAccount)) {
+
+					tm.commit();
+					return "fail:您没有权限撤销当前任务";
+				}
 			}
 
 			String currentUser = activitiService.getUserInfoMap().getUserName(
