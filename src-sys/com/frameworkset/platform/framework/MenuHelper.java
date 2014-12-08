@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.frameworkset.security.AccessControlInf;
+import org.frameworkset.spi.BaseApplicationContext;
 
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
@@ -2051,9 +2052,9 @@ public class MenuHelper  {
 		}
 
 		@Override
-		public void parserVarible() {
+		public void parserVarible(BaseApplicationContext propertiesContext) {
 			// TODO Auto-generated method stub
-			item.parserVarible();
+			item.parserVarible( propertiesContext);
 		}
 
 		@Override

@@ -7,7 +7,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
+import org.jfree.util.Log;
+
+import com.frameworkset.util.StringUtil;
 
 /**
  * <p>
@@ -37,7 +42,7 @@ public class Item extends BaseMenuItem {
 	private String main;
 	private String left;
 	private String left_cols = "30";
-	
+	private static final Logger log = Logger.getLogger(Item.class);
 	
 	
 	private String navigatorToolbar;
@@ -353,7 +358,7 @@ public class Item extends BaseMenuItem {
 
 
 
-	public void parserVarible() {
+	public void parserVarible(BaseApplicationContext propertiesContext) {
 		String workspaceContent = this.getWorkspaceContent();
 		String workspaceToolbar = this.getWorkspaceToolbar();
 		String navigatorContent = this.getNavigatorContent();
@@ -363,17 +368,122 @@ public class Item extends BaseMenuItem {
 		String top = this.getTop();
 		String left = this.getLeft();
 		
-		workspaceContentItemUrlStruction = parseItemUrlStruction(workspaceContent);
-		workspaceToolbarItemUrlStruction  = parseItemUrlStruction(workspaceToolbar);
-		navigatorContentItemUrlStruction = parseItemUrlStruction(navigatorContent);
-		navigatorToolbarItemUrlStruction = parseItemUrlStruction(navigatorToolbar);
-		statusContentItemUrlStruction = parseItemUrlStruction(statusContent);
-		statusToolbarItemUrlStruction = parseItemUrlStruction(statusToolbar);
-		topItemUrlStruction = parseItemUrlStruction(top);
-		leftItemUrlStruction = parseItemUrlStruction(left);
+		ItemUrlStruction temp = parseItemUrlStruction(workspaceContent,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setWorkspaceContent(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				workspaceContentItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+			
+		temp  = parseItemUrlStruction(workspaceToolbar,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setWorkspaceToolbar(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				workspaceToolbarItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(navigatorContent,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setNavigatorContent(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				navigatorContentItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(navigatorToolbar,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setNavigatorToolbar(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				navigatorToolbarItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(statusContent,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setStatusContent(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				statusContentItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(statusToolbar,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setStatusToolbar(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				statusToolbarItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(top,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setTop(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				topItemUrlStruction = temp;
+				temp = null;
+			}
+		}
+		temp = parseItemUrlStruction(left,propertiesContext);
+		if(temp != null)
+		{
+			if(temp.getTrueUrl() != null)
+			{
+				this.setLeft(temp.getTrueUrl());
+				temp = null;
+			}
+			else
+			{
+				leftItemUrlStruction = temp;
+				temp = null;
+			}
+		}
 	}
 
-	public static ItemUrlStruction parseItemUrlStruction(String url) {
+	public static ItemUrlStruction parseItemUrlStruction(String url,BaseApplicationContext propertiesContext) {
 		if(url == null || url.trim().length() == 0)
 			return null;
 		int len = url.length();
@@ -385,6 +495,7 @@ public class Item extends BaseMenuItem {
 
 		List<Variable> variables = new ArrayList<Variable>();
 		int varcount = 0;
+		boolean hasproperty = false;
 		List<String> tokens = new ArrayList<String>();
 		while (i < len) {
 			if (url.charAt(i) == '#') {
@@ -425,16 +536,32 @@ public class Item extends BaseMenuItem {
 						token.append("#[]");
 						continue;
 					} else {
-						Variable variable = new Variable();
-						variable.setPosition(varcount);
-						variable.setVariableName(var.toString());
-						variables.add(variable);
-						tokens.add(token.toString());
-						token.setLength(0);
+						String vname = var.toString();
+						if(vname.startsWith("p:"))
+						{
+							hasproperty = true;
+							vname = vname.substring(2);
+							String pvalue = propertiesContext.getProperty(vname);
+							if(pvalue != null && !pvalue.equals(""))
+								token.append(pvalue);
+							else
+								log.debug("p:"+vname + " in " + url + " don't defined correct in config file " + propertiesContext.getConfigfile());
+						}
+						else
+						{
+							Variable variable = new Variable();
+							variable.setPosition(varcount);
+							variable.setVariableName(var.toString());
+							variables.add(variable);
+							tokens.add(token.toString());
+							token.setLength(0);							
+							varcount++;
+							
+						}
 						var.setLength(0);
-						varcount++;
 						varstart = false;
 						i++;
+						
 					}
 				} else {
 					var.append(url.charAt(i));
@@ -460,11 +587,27 @@ public class Item extends BaseMenuItem {
 		}
 
 		if (variables.size() == 0)
-			return null;
+		{
+			if(hasproperty)
+			{
+				ItemUrlStruction itemUrlStruction = new ItemUrlStruction();
+				StringBuffer trueUrl = new StringBuffer();
+				for(String temp :tokens)
+				{
+					trueUrl.append(temp);
+				}
+				itemUrlStruction.setTrueUrl(trueUrl.toString());
+				return itemUrlStruction;
+			}
+			else
+			{
+				return null;
+			}
+		}
 		else {
 			ItemUrlStruction itemUrlStruction = new ItemUrlStruction();
 			itemUrlStruction.setTokens(tokens);
-			itemUrlStruction.setVariables(variables);
+			itemUrlStruction.setVariables(variables);			
 			return itemUrlStruction;
 		}
 
@@ -552,6 +695,7 @@ public class Item extends BaseMenuItem {
 	public static class ItemUrlStruction {
 		private List<String> tokens;
 		private List<Variable> variables;
+		private String trueUrl;
 
 		public List<String> getTokens() {
 			return tokens;
@@ -569,17 +713,26 @@ public class Item extends BaseMenuItem {
 			this.variables = variables;
 		}
 
+		public String getTrueUrl() {
+			return trueUrl;
+		}
+
+		public void setTrueUrl(String trueUrl) {
+			this.trueUrl = trueUrl;
+		}
+
 	}
 
 	public static class Variable {
 		private String variableName;
-
+	
 		public String getVariableName() {
 			return variableName;
 		}
 
 		public void setVariableName(String variableName) {
 			this.variableName = variableName;
+			
 		}
 
 		public int getPosition() {
@@ -589,11 +742,14 @@ public class Item extends BaseMenuItem {
 		public void setPosition(int position) {
 			this.position = position;
 		}
+		
 
 		private int position;
+		
 	}
 
 	public static void main(String[] args) {
+		System.out.println("p:aaa".substring(2));
 		String url = "http://localhost:80/detail.html?user=#[account]&password=#[password]love";
 		
 		 url =
@@ -612,7 +768,7 @@ public class Item extends BaseMenuItem {
 //			 "#[account";
 		 System.out.println("url:"+url);
 		// Item item = new Item();
-		ItemUrlStruction a = Item.parseItemUrlStruction(url);
+		ItemUrlStruction a = Item.parseItemUrlStruction(url,null);
 		// Map<String,String> map = new HashMap<String, String>();
 		// map.put("account", "aaa");
 		// map.put("password", "123");

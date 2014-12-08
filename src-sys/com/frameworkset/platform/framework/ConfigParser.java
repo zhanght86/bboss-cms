@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
 import org.xml.sax.Attributes;
 
 import com.frameworkset.platform.config.ConfigManager;
@@ -61,6 +63,7 @@ public class ConfigParser extends I18nXMLParser  {
     private String navigator_width="20%";
     private String workspace_height="75%";
     private String showhidden = "true";
+    private BaseApplicationContext propertiesContext = null; 
     /**
      * 一级items是否显示左侧菜单，true显示，false不显示
      */
@@ -155,6 +158,14 @@ public class ConfigParser extends I18nXMLParser  {
         	 String las = attributes.getValue("languages");
              if(las != null && !las.equals(""))
              	this.languages = this.converLocales(las);
+            
+        }
+        else if(name.equals("property"))
+        {
+        	
+        	 String propertyFile = attributes.getValue("file");
+             if(propertyFile != null && !propertyFile.equals(""))
+             	this.propertiesContext = DefaultApplicationContext.getApplicationContext(propertyFile);
             
         }
         else if(name.toLowerCase().equals("subsystem"))
@@ -582,7 +593,7 @@ public class ConfigParser extends I18nXMLParser  {
         	}
         	if(name.equals("item") || name.toLowerCase().equals("publicitem")){
         		Item item = (Item)this.traceStack.pop();
-        		item.parserVarible();
+        		item.parserVarible(this.propertiesContext);
         	}
         	else
         	{
@@ -590,6 +601,10 @@ public class ConfigParser extends I18nXMLParser  {
         	}
         	
             
+        }
+        else if(name.equals("property"))
+        {
+        	
         }
         else if(name.toLowerCase().equals("url"))
         {

@@ -961,6 +961,7 @@ public class Framework implements ResourceInitial,MessageSource {
 		}
 	}
 	
+
 	public static String combinationItemUrlStruction(
 			ItemUrlStruction itemUrlStruction,AccessControlInf control) {
 
@@ -976,20 +977,18 @@ public class Framework implements ResourceInitial,MessageSource {
 		for (int i = 0; i < tokens.size(); i++) {
 			url.append(tokens.get(i));
 			if (i < variables.size()) {
-				var = variables.get(i);
+				var = variables.get(i);				
 				if(control != null)
 					varvalue = control.getUserAttribute(var.getVariableName());
 				if (varvalue != null)
 					url.append(varvalue);
-				else {
-
-				}
 			}
 		}
 
 		return url.toString();
 
 	}
+	
 
 	public static String getLeft(Item item,AccessControl control){
 		if(!item.hasLeftVaribale()){
