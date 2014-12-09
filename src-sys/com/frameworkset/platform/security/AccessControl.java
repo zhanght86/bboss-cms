@@ -998,7 +998,7 @@ public class AccessControl implements AccessControlInf{
 		 */
 		session = request.getSession(false);
 		
-		Principal temp = (Principal) (session != null ?(Map)session.getAttribute(PRINCIPAL_INDEXS):null);
+		Principal temp =  (session != null ?(Principal)session.getAttribute(PRINCIPAL_INDEXS):null);
 		
 		 this.log("userAccount.login",request);
 		if(temp != null )
