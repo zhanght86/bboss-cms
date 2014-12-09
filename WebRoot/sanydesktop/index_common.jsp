@@ -44,6 +44,26 @@ $(document).ready(function(){
 		$(this).find(".pulldown").hide();
 		$(this).find(".pulldown-nav").removeClass("hover");
 	});
+	resizemainFrame();
+	$(window).resize(function(){
+		resizemainFrame();
+	});
+	//window.onresize=resizemainFrame();
+	
+});
+function logout()
+{
+	$.dialog.confirm("<pg:message code='sany.pdp.index.check.signout'/>",
+		function(){
+			parent.location='../logout.jsp';
+		    flag = false;
+		 },
+		function(){},'','<pg:message code="sany.pdp.common.confirm"/>'
+	)
+}
+
+function resizemainFrame()
+{
 	var  screenHeight=document.documentElement.clientHeight;
 	var topHead=$(".top").css("height").substring(0,$(".top").css("height").length-2);
 	var menuHead=$("#menubar").css("height").substring(0,$("#menubar").css("height").length-2);
@@ -59,18 +79,8 @@ $(document).ready(function(){
 	</pg:false>
 	
 	$("#mainFrame").css("height",frameHead+"px");
-	
-});
-function logout()
-{
-	$.dialog.confirm("<pg:message code='sany.pdp.index.check.signout'/>",
-		function(){
-			parent.location='../logout.jsp';
-		    flag = false;
-		 },
-		function(){},'','<pg:message code="sany.pdp.common.confirm"/>'
-	)
 }
+
 </script>
 <style>
 html{overflow:hidden}
