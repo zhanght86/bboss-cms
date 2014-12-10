@@ -34,6 +34,7 @@ public class XMLBaseTag extends CellTag
     private static Logger log = Logger.getLogger(XMLBaseTag.class);
     
     protected AccessControl accesscontroler = null;
+    private boolean defaultCell;
     protected String defaultName = "";
     protected String splittoken = "#$";
     
@@ -246,7 +247,7 @@ public class XMLBaseTag extends CellTag
         }
         else
         {
-        	Object v = getObjectValue();
+        	Object v = _getObjectValue(defaultCell);
         	if(v != null)
         		defaultValue = v;
         		
@@ -347,6 +348,7 @@ public class XMLBaseTag extends CellTag
 		this.checkPermission = false;
 		defaultName = "";
 		splittoken = "#$";
+		defaultCell = false;
 		return ret;
 	}
 
@@ -394,6 +396,14 @@ public class XMLBaseTag extends CellTag
 	 */
 	public void setDefaultName(String defaultName) {
 		this.defaultName = defaultName;
+	}
+
+	public boolean isDefaultCell() {
+		return defaultCell;
+	}
+
+	public void setDefaultCell(boolean defaultCell) {
+		this.defaultCell = defaultCell;
 	}
 
 }
