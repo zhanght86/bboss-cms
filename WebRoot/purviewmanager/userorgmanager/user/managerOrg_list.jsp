@@ -115,7 +115,7 @@
 
 					<tr>
 						<td colspan="4">
-							<iframe name="orgList" src="managerOrg_list_iframe.jsp?userId=<%=userId%>" style="width:100%" height="100%" scrolling="no" frameborder="0" marginwidth="1" marginheight="1">
+							<iframe name="orgList" src="managerOrg_list_iframe.jsp?userId=<%=userId%>" style="width:100%" height="700" scrolling="auto" frameborder="0" marginwidth="1" marginheight="1">
 							</iframe>
 						</td>
 					</tr>

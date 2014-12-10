@@ -1202,7 +1202,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 				permission.setName(name);
 				permission.setAuto(obj.get("AUTO")==null?0:Integer.parseInt(obj.get("AUTO").toString()));
 				if(obj.get("AUTHORIZATION_STIME")!=null)
-				   permission.setSDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(obj.get("AUTHORIZATION_STIME").toString()));
+				   permission.setSDate((java.util.Date)obj.get("AUTHORIZATION_STIME"));
 				
 				permission.setResTypeId(obj.get("RESTYPE_ID")==null?"":obj.get("RESTYPE_ID").toString());
 				permission.setOpId(obj.get("OP_ID")==null?"":obj.get("OP_ID").toString());
