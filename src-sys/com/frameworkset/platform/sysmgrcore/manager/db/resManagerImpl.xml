@@ -62,12 +62,117 @@
   order by e.restype_id,e.role_id,e.res_id,e.res_name,e.op_id
 		]]>
 	</property>
+	
+	<property name="getUserRes-mysql">	
+		<![CDATA[
+     select  * from 
+     (
+      select a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自用户自身角色【' , b.role_name , '】')  as jobname,
+             a.AUTHORIZATION_STIME,a.auto   
+      from td_sm_roleresop a,td_sm_role b 
+      where a.types='role' and a.role_id=b.role_id and  a.role_id in (select  b.role_id from td_sm_userrole b where b.user_id= '1')
+      union 
+         select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自【' , o.remark5 , '】机构的角色【' , b.role_name || '】') as jobname,
+                 a.AUTHORIZATION_STIME,a.auto  
+         from td_sm_orgrole c left join td_sm_organization o on c.org_id=o.org_id,td_sm_roleresop a,td_sm_role b  
+         where a.role_id=c.role_id and a.types='role' and c.role_id=b.role_id and c.org_id in 
+             (select  org_id from td_sm_userjoborg where user_id ='1') 
+      union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自【' , g.group_name , '】用户组角色【' , b.role_name , '】') as jobname,
+                   a.AUTHORIZATION_STIME,a.auto  
+             from td_sm_grouprole d left join td_sm_group g on d.group_id=g.group_id,td_sm_roleresop a,td_sm_role b 
+             where a.role_id=d.role_id and d.role_id=b.role_id and a.types='role' and d.group_id in 
+                  (select  group_id from td_sm_usergroup  where user_id = '1') 
+      union select a.restype_id, a.res_id, a.res_name, a.op_id, a.types,a.role_id ,concat('来自岗位【' , infos.job_name , '】的角色【' , b.role_name , '】') as jobname,
+                   a.AUTHORIZATION_STIME,a.auto 
+            from (select aa.role_id, aa.job_id, job.job_name from td_sm_orgjobrole aa , td_sm_userjoborg bb ,  td_sm_job job 
+                   where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id and bb.user_id=1 )infos ,
+                  td_sm_roleresop a,td_sm_role b 
+            where a.role_id=infos.role_id and a.types='role' and a.role_id=b.role_id 
+     union select a.restype_id,a.res_id, a.res_name,a.op_id,a.types, a.role_id,'用户自身资源' as jobname,a.AUTHORIZATION_STIME,a.auto  
+           from td_sm_roleresop a 
+            where a.types='user' and a.role_id='1' 
+     union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id,concat('来自机构【' , b.org_name , '】') as jobname,
+                   a.AUTHORIZATION_STIME,a.auto  
+           from td_sm_roleresop a 
+           left join td_sm_organization b 
+           on a.role_id = b.org_id  
+           where a.types='organization' and a.role_id in (select  org_id from td_sm_userjoborg where user_id ='1')   
+    union select a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id, concat('普通角色:' , b.role_name) as jobname,
+          a.AUTHORIZATION_STIME,a.auto 
+          from td_sm_roleresop a 
+          inner join td_sm_role b on a.role_id = b.role_id 
+          where b.role_name='roleofeveryone' and a.types = 'role' 
+  ) e where 1 = 1 
+   #if($restypeId && !$restypeId.equals(""))				
+		and restype_id = #[orgId] 
+   #end
+   #if($resId && !$resId.equals(""))				
+		 and res_id like #[resId] 
+   #end
+   #if($resName && !$resName.equals(""))				
+		and resName like #[resName] 
+   #end
+   
+   #if($op_id && !$op_id.equals(""))				
+		and op_id = #[op_id] 
+   #end 
+   #if($auto && !$auto.equals(""))	
+       #if($auto.equals("0"))			
+		and (auto = '0' or auto is null)
+	  #else
+	   and auto = #[auto]
+	  #end
+   #end
+  order by e.restype_id,e.role_id,e.res_id,e.res_name,e.op_id
+		]]>
+	</property>
 
 <property name="getOrgRes">	
 	 <![CDATA[
      select * from
      (
        select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,'来自机构角色【' || b.role_name || '】' AS jobname,
+               a.AUTHORIZATION_STIME,a.auto
+       from td_sm_roleresop a,td_sm_role b 
+       where a.types='role' and a.role_id in(select role_id from td_sm_orgrole where org_id=#[id] ) 
+             and a.role_id=b.role_id
+       union 
+          select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,'机构自身拥有的资源' AS jobname,
+                  a.AUTHORIZATION_STIME,a.auto 
+          from td_sm_roleresop a 
+          left join td_sm_organization b 
+          on a.role_id=b.org_id 
+          where 1 = 1 and a.types='organization' and a.role_id=#[id]
+     ) e where 1 = 1 
+   #if($restypeId && !$restypeId.equals(""))				
+		and restype_id = #[orgId] 
+   #end
+   #if($resId && !$resId.equals(""))				
+		 and res_id like #[resId] 
+   #end
+   #if($resName && !$resName.equals(""))				
+		and resName like #[resName] 
+   #end
+   
+   #if($op_id && !$op_id.equals(""))				
+		and op_id = #[op_id] 
+   #end 
+   #if($auto && !$auto.equals(""))	
+       #if($auto.equals("0"))			
+		and (auto = '0' or auto is null)
+	  #else
+	   and auto = #[auto]
+	  #end
+   #end
+  order by e.restype_id,e.role_id,e.res_id,e.res_name,e.op_id
+		]]>
+	</property>
+	
+<property name="getOrgRes-mysql">	
+	 <![CDATA[
+     select * from
+     (
+       select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自机构角色【' , b.role_name , '】') AS jobname,
                a.AUTHORIZATION_STIME,a.auto
        from td_sm_roleresop a,td_sm_role b 
        where a.types='role' and a.role_id in(select role_id from td_sm_orgrole where org_id=#[id] ) 
@@ -136,6 +241,42 @@
 	<property name="getOrgjobRes">	
 	 <![CDATA[
   select a.*,'来自角色【' || r.role_name || '】' as jobname 
+  from ( 
+     select rp.restype_id,rp.res_id,rp.res_name,rp.op_id,rp.types,rp.role_id,rp.AUTHORIZATION_STIME,rp.auto 
+     from td_sm_roleresop rp
+     inner join td_sm_orgjobrole ojr 
+     on rp.role_id = ojr.role_id 
+     where ojr.org_id=#[orgid] and ojr.job_id=#[jobid]  and rp.types='role' 
+    )a 
+  left join  td_sm_role r on a.role_id = r.role_id
+  where 1 = 1
+   #if($restypeId && !$restypeId.equals(""))				
+		and restype_id = #[orgId] 
+   #end
+   #if($resId && !$resId.equals(""))				
+		 and res_id like #[resId] 
+   #end
+   #if($resName && !$resName.equals(""))				
+		and resName like #[resName] 
+   #end
+   
+   #if($op_id && !$op_id.equals(""))				
+		and op_id = #[op_id] 
+   #end 
+   #if($auto && !$auto.equals(""))	
+       #if($auto.equals("0"))			
+		and (auto = '0' or auto is null)
+	  #else
+	   and auto = #[auto]
+	  #end 
+   #end
+ order by restype_id,a.role_id,res_id,res_name,op_id
+		]]>
+	</property>
+	
+	<property name="getOrgjobRes-mysql">	
+	 <![CDATA[
+  select a.*,concat('来自角色【' , r.role_name , '】') as jobname 
   from ( 
      select rp.restype_id,rp.res_id,rp.res_name,rp.op_id,rp.types,rp.role_id,rp.AUTHORIZATION_STIME,rp.auto 
      from td_sm_roleresop rp
