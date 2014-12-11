@@ -1111,9 +1111,9 @@ public class AccessControl implements AccessControlInf{
 	public String getMachineName()
 	{
 		String machineName = null;
-		if(session != null)
+		if(this.credential != null)
 		{
-			machineName = (String)session.getAttribute(AccessControl.MACHINENAME_CACHE_KEY);
+			machineName = (String)this.credential.getCheckCallBack().getUserAttribute(AccessControl.MACHINENAME_CACHE_KEY);
 			
 		}
 		if(machineName == null)
@@ -1129,7 +1129,8 @@ public class AccessControl implements AccessControlInf{
 	}
 	public static String getLoginStyle(HttpServletRequest request)
 	{
-		HttpSession session = request.getSession(false);
+//		HttpSession session = request.getSession(false);
+		AccessControl  control = AccessControl.getAccessControl();
 		/**
 		 * 1 other
 		 * 2 other
@@ -1137,7 +1138,7 @@ public class AccessControl implements AccessControlInf{
 		 * 4 WEBIsany
 		 * 5 common
 		 */
-		String loginstyle = session != null ?(String)session.getAttribute(AccessControl.LOGINSTYLE_CACHE_KEY):null;
+		String loginstyle = !control.isGuest() ?(String)control.getUserAttribute(AccessControl.LOGINSTYLE_CACHE_KEY):null;
 		if(loginstyle == null)
 		{
 			
@@ -1180,38 +1181,54 @@ public class AccessControl implements AccessControlInf{
 		}
 		if(session == null)
 			session = request.getSession();
-		session.setAttribute(REMOTEADDR_CACHE_KEY, machineIP);
-		/**
-		 * 获取客服端网卡的mac地址
-		 */
-		String macaddr = request.getParameter("macaddr_");
-		String machineName = request.getParameter("machineName_");
-		 
-		session.setAttribute(MACADDR_CACHE_KEY, macaddr);
-		session.setAttribute(AccessControl.MACHINENAME_CACHE_KEY, machineName);
 		
-		/**
-		 * 1 other
-		 * 2 other
-		 * 3 ISany
-		 * 4 WEBIsany
-		 * 5 common
-		 */
-		String loginPath = request.getParameter("loginPath");
-		if(StringUtil.isEmpty(loginPath))
-		{
-			loginPath = "5";
-		}
-		session.setAttribute(LOGINSTYLE_CACHE_KEY,loginPath);
+		
+	
 		StringBuffer ssoCookie = new StringBuffer();
 		StringBuffer credentialCookie = new StringBuffer();
 		boolean flag = false;
 		boolean enablecookie = this.enablecookie();
 		
 			  credential = (Credential) subject.getCredential();
+			  principal = (AuthPrincipal)subject.getPrincipal();
+			  /**
+				 * 1 other
+				 * 2 other
+				 * 3 ISany
+				 * 4 WEBIsany
+				 * 5 common
+				 */
+				String loginPath = request.getParameter("loginPath");
+				if(StringUtil.isEmpty(loginPath))
+				{
+					loginPath = "5";
+				}
+//				session.setAttribute(LOGINSTYLE_CACHE_KEY,loginPath);
+				credential.getCheckCallBack().setUserAttribute(LOGINSTYLE_CACHE_KEY, loginPath);
+//				session.setAttribute(REMOTEADDR_CACHE_KEY, machineIP);
+				credential.getCheckCallBack().setUserAttribute(REMOTEADDR_CACHE_KEY, machineIP);
+				/**
+				 * 获取客服端网卡的mac地址
+				 */
+				String macaddr = request.getParameter("macaddr_");
+				String machineName = request.getParameter("machineName_");
+				 
+//				session.setAttribute(MACADDR_CACHE_KEY, macaddr);
+				credential.getCheckCallBack().setUserAttribute(MACADDR_CACHE_KEY, macaddr);
+//				session.setAttribute(AccessControl.MACHINENAME_CACHE_KEY, machineName);
+				credential.getCheckCallBack().setUserAttribute(MACHINENAME_CACHE_KEY, machineName);
+				String subsystem_id = request.getParameter(SUBSYSTEM_ID);
+				if (subsystem_id == null || subsystem_id.equals(""))
+					subsystem_id = getDefaultSUBSystemID();
+				// 将用户登录的子系统模块名称添加到session中
+				session.setAttribute(Framework.SUBSYSTEM, subsystem_id);
+				// 添加用户的所有身份索引到session中
+						session.setAttribute(PRINCIPAL_INDEXS, this.principal);
+						// 添加用户的所有属性到session中
+						session.setAttribute(CREDENTIAL_INDEXS, this.credential);
 //				CheckCallBack.AttributeQueue attributeQueue = credential
 //						.getCheckCallBack().getAttributeQueue();
-				Map<String,Attribute> callBacks = credential.getCheckCallBack().getCallBacks();
+				Map<String,Object> callBacks = credential.getCheckCallBack().getCallBacks();
 				if(enablecookie)
 				{
 					if (callBacks.size() > 0) {
@@ -1223,7 +1240,7 @@ public class AccessControl implements AccessControlInf{
 						credentialCookie.append(credential.getLoginModule())
 								.append(CREDENTIAL_ATTRIBUTE_SPLIT);
 						boolean _flag = false;
-						Iterator<Entry<String, Attribute>>  it = callBacks.entrySet().iterator();
+						Iterator<Entry<String, Object>>  it = callBacks.entrySet().iterator();
 						
 						while (it.hasNext()) {
 							if (!_flag) {
@@ -1231,9 +1248,10 @@ public class AccessControl implements AccessControlInf{
 							} else {
 								credentialCookie.append(ATTRIBUTE_SPLIT);
 							}
-							CheckCallBack.Attribute attr = it.next().getValue();
-							credentialCookie.append(attr.getName()).append("=")
-									.append(attr.getValue());
+							Entry<String, Object> entry = it.next();
+							Object attr =entry.getValue();
+							credentialCookie.append(entry.getKey()).append("=")
+									.append(attr);
 						}
 					}
 				}
@@ -1245,8 +1263,7 @@ public class AccessControl implements AccessControlInf{
 		 
 		flag = false;
 		
-		 
-			  principal = (AuthPrincipal)subject.getPrincipal();
+			
 			
 			
 //			log("enablecookie:" + enablecookie);
@@ -1269,16 +1286,8 @@ public class AccessControl implements AccessControlInf{
 						credentialCookie);
 			}
 		}
-		// 添加用户的所有身份索引到session中
-		session.setAttribute(PRINCIPAL_INDEXS, this.principal);
-		// 添加用户的所有属性到session中
-		session.setAttribute(CREDENTIAL_INDEXS, this.credential);
-		String subsystem_id = request.getParameter(SUBSYSTEM_ID);
-		if (subsystem_id == null || subsystem_id.equals(""))
-			subsystem_id = getDefaultSUBSystemID();
-		// 将用户登录的子系统模块名称添加到session中
-		session.setAttribute(Framework.SUBSYSTEM, subsystem_id);
-
+		
+		
 		if (enablecookie) {
 
 			try
@@ -1315,10 +1324,10 @@ public class AccessControl implements AccessControlInf{
 		String operSource = this.getMachinedID();
 		log_info("User[" + this.getUserAccount() + ","+ getUserName() + "] login from [" +operSource +"].session id is " + session.getId(),request);
 		//log.info("User[" + this.getUserAccount() + "," + getUserName() + "] login from [" +operSource +"].");
-		String serverIp = request.getServerName();
-		String serverport = request.getServerPort() + "";
-		session.setAttribute(SERVER_IP_KEY,serverIp);
-		session.setAttribute(SERVER_PORT_KEY,serverport);
+//		String serverIp = request.getServerName();
+//		String serverport = request.getServerPort() + "";
+//		session.setAttribute(SERVER_IP_KEY,serverIp);
+//		session.setAttribute(SERVER_PORT_KEY,serverport);
 //		if(recordonlineuser)
 //		{
 //			onlineUser.valueBound(session.getId(), getUserAccount(), machineIP,
@@ -1389,9 +1398,9 @@ public class AccessControl implements AccessControlInf{
 	public String getRemoteAddr()
 	{
 		String ip = null;
-		if(session != null)
+		if(this.credential != null)
 		{
-			ip = (String)session.getAttribute(REMOTEADDR_CACHE_KEY);
+			ip = (String)this.credential.getCheckCallBack().getUserAttribute(REMOTEADDR_CACHE_KEY);
 		}
 		if(ip == null)
 			return "";
@@ -2920,9 +2929,9 @@ public class AccessControl implements AccessControlInf{
 				log("Unknowken user logoutdirect from session destroyed event.",null);
 				return;
 			}
-			String address = (String) session
-			.getAttribute(AccessControl.REMOTEADDR_CACHE_KEY);
-			log_info("User[" + principal_ + "] logoutdirect from session destroyed event at [" + address + "].session id is "+session.getId(),null);
+//			String address = (String) session
+//			.getAttribute(AccessControl.REMOTEADDR_CACHE_KEY);
+			log_info("User[" + principal_ + "] logoutdirect from session destroyed event.session id is "+session.getId(),null);
 			try {
 				
 				String userName = principal_.getName();
@@ -3220,7 +3229,7 @@ public class AccessControl implements AccessControlInf{
 
 			String userName = this.getUserName();
 			
-			String machineIP = (String)session.getAttribute(REMOTEADDR_CACHE_KEY);
+			String machineIP = (String)this.credential.getCheckCallBack().getUserAttribute(REMOTEADDR_CACHE_KEY);
 			String orgID = this.getChargeOrgId();
 //			onlineUser.valueUnbound(session.getId(), userAccount, machineIP,(String)session.getAttribute(MACADDR_CACHE_KEY));
 
@@ -4671,8 +4680,9 @@ public class AccessControl implements AccessControlInf{
 
 	public String getMacAddr() {
 		String macaddr =null;
-		if(session != null)
-			macaddr = (String)this.session.getAttribute(AccessControl.MACADDR_CACHE_KEY);
+		if(credential != null)
+//			macaddr = (String)this.session.getAttribute(AccessControl.MACADDR_CACHE_KEY);
+			macaddr = (String)this.credential.getCheckCallBack().getUserAttribute(AccessControl.MACADDR_CACHE_KEY);
 		if(macaddr == null)
 			return "";
 		return macaddr;

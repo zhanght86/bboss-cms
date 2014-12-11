@@ -5,8 +5,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute;
-
 public class CheckCallBackWrapper {
 	private CheckCallBack checkCallBack;
 	private HttpServletRequest request;
@@ -27,7 +25,7 @@ public class CheckCallBackWrapper {
 	    	
 	        return checkCallBack.getUserAttribute(userAttribute);
 	    }
-	    public Map<String,Attribute> getCallBacks()
+	    public Map<String,Object> getCallBacks()
 	    {
 	    	return checkCallBack.getCallBacks();
 	    }

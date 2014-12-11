@@ -24,24 +24,24 @@ public class CheckCallBack implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	private String loginModule;
-    private Map<String,Attribute> callBacks = new HashMap<String,Attribute>();
+    private Map<String,Object> callBacks = new HashMap<String,Object>();
 //    private AttributeQueue  list = new AttributeQueue();
     public Object getUserAttribute(String userAttribute)
     {
-    	Attribute attr = (Attribute)callBacks.get(userAttribute);
-    	if(attr == null)
-    		return null;
-        return attr.getValue();
+    	Object attr = (Object)callBacks.get(userAttribute);
+//    	if(attr == null)
+//    		return null;
+        return attr;
     }
-    public Map<String,Attribute> getCallBacks()
+    public Map<String,Object> getCallBacks()
     {
     	return this.callBacks;
     }
     public void setUserAttribute(String userAttribute,Object value)
     {
-        Attribute attribute = new Attribute(userAttribute,value);
+//        Attribute attribute = new Attribute(userAttribute,value);
 //        this.list.add(attribute);
-        callBacks.put(userAttribute,attribute);
+        callBacks.put(userAttribute,value);
     }
 
 //    public AttributeQueue getAttributeQueue()

@@ -196,6 +196,21 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 				ActNode actNode = actNodeList.get(i);
 
+				// 前台展示
+				if (StringUtil.isNotEmpty(actNode.getCandidateName())
+						&& StringUtil.isNotEmpty(actNode.getCandidateOrgId())) {
+					actNode.setRealName(actNode.getCandidateCNName() + ","
+							+ actNode.getCandidateOrgName());
+				} else if (StringUtil.isNotEmpty(actNode.getCandidateName())
+						&& StringUtil.isEmpty(actNode.getCandidateOrgId())) {
+					actNode.setRealName(actNode.getCandidateCNName());
+				} else if (StringUtil.isEmpty(actNode.getCandidateName())
+						&& StringUtil.isNotEmpty(actNode.getCandidateOrgId())) {
+					actNode.setRealName(actNode.getCandidateOrgName());
+				} else {
+					actNode.setRealName("");
+				}
+
 				if (actNode.getIsCopy() != 0) {
 					actNode.setApproveType(WorkflowConstants.PRO_ACT_COP);// 抄送
 					continue;
@@ -403,7 +418,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				ActNode node = oldActNodeList.get(k);
 
 				if (orgid.equals(node.getOrgId())
-						&& StringUtil.isNotEmpty(node.getCandidateName())) {
+						&& (StringUtil.isNotEmpty(node.getCandidateName()) || StringUtil
+								.isNotEmpty(node.getCandidateOrgId()))) {
 					newActNodeList.add(node);
 
 					outFlag = true;
@@ -945,8 +961,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 							if (av.getNAME_().equals(users.toString())) {
 
 								ani.setCandidateName(av.getTEXT_());
-								ani.setRealName(activitiService
+								ani.setCandidateCNName(activitiService
 										.userIdToUserName(av.getTEXT_(), "1"));
+//								ani.setRealName(activitiService
+//										.userIdToUserName(av.getTEXT_(), "1"));
 							}
 
 						}
@@ -1192,7 +1210,22 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			ActNode actNode = nodeList.get(i);
 
 			commonActNode.setCandidateName(actNode.getCandidateName());
-			commonActNode.setRealName(actNode.getRealName());
+			if (StringUtil.isNotEmpty(actNode.getCandidateCNName())
+					&& StringUtil.isNotEmpty(actNode.getCandidateOrgName())) {
+				commonActNode.setRealName(actNode.getCandidateCNName() + ","
+						+ actNode.getCandidateOrgName());
+			} else if (StringUtil.isNotEmpty(actNode.getCandidateCNName())
+					&& StringUtil.isEmpty(actNode.getCandidateOrgName())) {
+				commonActNode.setRealName(actNode.getCandidateCNName());
+			} else if (StringUtil.isEmpty(actNode.getCandidateCNName())
+					&& StringUtil.isNotEmpty(actNode.getCandidateOrgName())) {
+				commonActNode.setRealName(actNode.getCandidateOrgName());
+			} else {
+				commonActNode.setRealName("");
+			}
+
+			commonActNode.setCandidateOrgId(actNode.getCandidateOrgId());
+			commonActNode.setCandidateOrgName(actNode.getCandidateOrgName());
 		}
 
 		return commonNodeList;
@@ -1372,7 +1405,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.getUserAccount());
 
 			// 后续节点处理人是否一致，一致就可以自动通过
-			if (currentTask.getIsAutoafter() == 1
+			if (null != nextTask && currentTask.getIsAutoafter() == 1
 					&& userAccount.equals(nextTask.getAssignee())) {
 
 				// 清除上一任务的处理意见和意见备注
@@ -1823,7 +1856,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			tm.release();
 		}
 	}
-
 
 	@Override
 	public int getMyselfTaskNum(String currentUser, String processKey)

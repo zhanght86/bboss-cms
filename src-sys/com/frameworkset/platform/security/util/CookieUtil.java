@@ -2,8 +2,6 @@ package com.frameworkset.platform.security.util;
 
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.security.auth.Subject;
 
