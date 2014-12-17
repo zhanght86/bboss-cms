@@ -19,6 +19,12 @@
 	<subsystem name="移动门户" i18n:en_US="移动门户" id="mbp" module="module-mbp.xml"
 		baseuri="http://localhost:7000/creatorcms" 
 		logoutredirect="/sanymbp/login.page"/>
+	
+	<!-- 可以配置一些菜单变量,
+	菜单路径配置中除了可以配置#[userAccount]类的变量，还可以配置#[p:userAccount]类型变量，p:开头的变量的值可以从属性文件中获取，属性文件的配置方法是：
+	
+	 -->
+	<property file="urls.xml"/>	
 		
 	<!-- 
 		系统菜单国际化规范：
@@ -79,12 +85,27 @@
 				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>-->				 
 			</authoration>
 		</publicitem>
-			<module name="统一待办" 
+		<module name="统一待办" 
 		             i18n:en_US="Line Information Query" 
 		            id="veh_line_query" used="true"
 		           option="{popup:true,width:700,height:500,maxstate:true}"
 		             url="workflow/pending/pendingIndex.page" menuType="type1">	
 				<mouseclickimg>html3/hrm/images/app1.png</mouseclickimg>	
+		</module>
+		
+		<module name="路径变量" 
+		             i18n:en_US="pathvariable" 
+		            id="pathvariable" used="true"
+		             url="workflow/pending/pendingIndex.page" menuType="type1">	
+				  <item name="路径变量演示"
+				i18n:en_US="pathvariable demo" id="pathvariabledemo"  showleftmenu="false" menuType="type1">
+					
+					<top>header.page</top>
+					<workspace>
+						<content>#[p:hrmappurl]/html3/rms/conference.html?aaa=#[userAccount]</content>
+					</workspace>
+				
+				</item> 
 		</module>
 		
 		<module name="web前端展示" 

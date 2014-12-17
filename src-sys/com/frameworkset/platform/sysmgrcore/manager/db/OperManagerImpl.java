@@ -10,6 +10,9 @@ import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 
 import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
 import com.frameworkset.platform.sysmgrcore.entity.Opergpoper;
 import com.frameworkset.platform.sysmgrcore.entity.Opergprestype;
@@ -449,23 +452,31 @@ public class OperManagerImpl extends EventHandle implements OperManager {
 			String resId, String restypeId) throws ManagerException {
 		List list = new ArrayList();
 
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 
-		String sql = "select * from TD_SM_ROLERESOP where RES_ID ='" + resId
-				+ "' and RESTYPE_ID='" + restypeId + "' and role_id='" + roleId
-				+ "' and types='" + roleType + "'";
-		list = new ArrayList();
+		String sql = "select * from TD_SM_ROLERESOP where RES_ID =? and RESTYPE_ID=? and role_id=? and types=?";
+		
 		try {
-			dbUtil.executeSelect(sql);
-			for (int i = 0; i < dbUtil.size(); i++) {
+			dbUtil.preparedSelect(sql);
+			dbUtil.setString(1, resId);
+			dbUtil.setString(2, restypeId);
+			dbUtil.setString(3, roleId);
+			dbUtil.setString(4, roleType);
+			list = dbUtil.executePreparedForList(RoleresopKey.class, new RowHandler<RoleresopKey>(){
 
-				RoleresopKey id = new RoleresopKey();
-				id.setOpId(dbUtil.getString(i, "op_id"));
-				id.setResId(dbUtil.getString(i, "res_id"));
-				id.setRestypeId(dbUtil.getString(i, "restype_id"));
-				id.setRoleId(dbUtil.getString(i, "role_id"));
-				list.add(id);
-			}
+				@Override
+				public void handleRow(RoleresopKey rowValue, Record dbUtil)
+						throws Exception {
+					
+					rowValue.setOpId(dbUtil.getString(  "op_id"));
+					rowValue.setResId(dbUtil.getString(  "res_id"));
+					rowValue.setRestypeId(dbUtil.getString(  "restype_id"));
+					rowValue.setRoleId(dbUtil.getString(  "role_id"));
+					
+				}
+				
+			});
+			
 
 		} catch (SQLException e) {
 			throw new ManagerException(e.getMessage());

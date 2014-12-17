@@ -368,7 +368,7 @@ document.forms[0].machineIp_.value=unescape(IPAddr);
                 <td height="28">&nbsp;</td>
               </tr>
               <tr>
-                <td height="27" colspan="2"><div class="copyrightbox">长沙三一集团计算机系统集成有限公司 CopyRight 2007&nbsp;::::::::::::::::::::<a href="http://www.chinacreator.com" target="_blank">访问三一集团网站</a></div></td>
+                <td height="27" colspan="2"><div class="copyrightbox"> CopyRight 2007&nbsp;::::::::::::::::::::<a href="http://www.bbossgroups.com" target="_blank">访问三一集团网站</a></div></td>
                 </tr>
             </table>
           </div></td>

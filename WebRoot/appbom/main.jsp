@@ -353,7 +353,7 @@ $(document).ready(function() {
 });
 
 function queryList(){	
-	$("#custombackContainer").load("queryListAppBom.page #customContent",function(){loadjs();suitHeight();})
+	$("#custombackContainer").load("queryListAppBom.page #customContent",function(){})
 }
 function exportExcel(){	 
 	var bm=$("#bm_query").val();

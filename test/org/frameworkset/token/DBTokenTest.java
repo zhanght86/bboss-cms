@@ -5,6 +5,7 @@ import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
 import org.frameworkset.web.token.TokenStore;
 import org.frameworkset.web.token.ws.CheckTokenService;
+import org.frameworkset.web.token.ws.TicketGetResponse;
 import org.frameworkset.web.token.ws.TokenCheckResponse;
 import org.frameworkset.web.token.ws.TokenService;
 import org.junit.Assert;
@@ -18,8 +19,9 @@ public class DBTokenTest {
 	private static DBTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
-	private String appid = "pdp";
-	private String secret = "47430a44-2f5a-4fdb-a5b1-c3544230739f";
+	private String appid = "hrm";
+	private String secret = "0b61dde1-d9bc-4108-a2c5-c32d09d8adb9";
+	 String server = "http://token.sany.com.cn:85/SanyToken";
 	
 	
 	public void init() throws Exception
@@ -122,9 +124,25 @@ public class DBTokenTest {
 	 @org.junit.Test
 	    public void testServiceticket() throws Exception
 	    {
-	    	TokenCheckResponse response = checkTicket(genTicket());
+		    String ticket = genTicket();
+	    	TokenCheckResponse response = checkTicket(ticket);
+	    	refreshTicket(ticket) ;
+	    	destroyTicket(ticket);
+	    	checkTicket(ticket);
+	    	refreshTicket(ticket) ;
 	    }
-	    
+	 
+	 @org.junit.Test
+	    public void testHRMticket() throws Exception
+	    {
+		    String ticket ="656a868f-2ee5-4d15-af84-8009b8d5cf85";
+	    	TokenCheckResponse response = checkTicket(ticket);
+//	    	refreshTicket(ticket) ;
+//	    	destroyTicket(ticket);
+//	    	checkTicket(ticket);
+//	    	refreshTicket(ticket) ;
+	    }
+	    //656a868f-2ee5-4d15-af84-8009b8d5cf85
 	    public String genTicket() throws Exception
 
 	    {
@@ -143,7 +161,7 @@ public class DBTokenTest {
 
 	         //String url = "http://localhost:8080/context/hessian?service=tokenService";
 
-	         String url = "http://pdp.sany.com.cn:8080/hessian?service=tokenService";
+	         String url = server + "/hessian?service=tokenService";
 
 	         TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 
@@ -173,7 +191,7 @@ public class DBTokenTest {
 
 	         //String url = "http://localhost:8080/context/hessian?service=tokenService";
 
-	         String url = "http://pdp.sany.com.cn:8080/hessian?service=checktokenService";
+	         String url = server + "/hessian?service=checktokenService";
 
 	         org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
 
@@ -186,6 +204,53 @@ public class DBTokenTest {
 	         System.out.println(tokenCheckResponse.getWorknumber());
 
 	         return tokenCheckResponse;
+
+	    }
+	    
+	    
+	    public void refreshTicket(String ticket) throws Exception
+
+	    {
+
+	    	  HessianProxyFactory factory = new HessianProxyFactory();
+
+		         //String url = "http://localhost:8080/context/hessian?service=tokenService";
+
+		         String url = server + "/hessian?service=tokenService";
+
+		         TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
+
+		         //通过hessian根据账号或者工号获取ticket
+
+
+
+	         TicketGetResponse tokenCheckResponse = tokenService.refreshTicket(ticket,appid, secret );
+
+	         System.out.println("refresh result:"+tokenCheckResponse.getResultcode());
+
+
+	    }
+	    
+	    public void destroyTicket(String ticket) throws Exception
+
+	    {
+
+	    	  HessianProxyFactory factory = new HessianProxyFactory();
+
+		         //String url = "http://localhost:8080/context/hessian?service=tokenService";
+
+		         String url = server + "/hessian?service=tokenService";
+
+		         TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
+
+		         //通过hessian根据账号或者工号获取ticket
+
+
+
+	         TicketGetResponse tokenCheckResponse = tokenService.destroyTicket(ticket,appid, secret );
+
+	         System.out.println("destroyTicket:"+tokenCheckResponse.getResultcode());
+
 
 	    }
 

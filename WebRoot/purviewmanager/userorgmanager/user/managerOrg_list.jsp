@@ -3,7 +3,7 @@
 * <p>Title: 用户管理机构列表查询页面</p>
 * <p>Description: 用户管理机构列表查询页面</p>
 * <p>Copyright: Copyright (c) 2008</p>
-* <p>Company: chinacreator</p>
+* <p>Company: bboss</p>
 * @Date 2008-3-22
 * @author liangbing.tao
 * @version 1.0
@@ -48,8 +48,8 @@
 	<head>
 		<title>用户【<%=userRealName%>】可管理的部门列表</title>
 		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
-		<script language="JavaScript" src="../../../include/pager.js" type="text/javascript"></script>
-		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<script language="JavaScript">
 		function resetSearch()
 		{
@@ -64,7 +64,7 @@
 			tablesFrame[0].src = "managerOrg_list_iframe.jsp?userId=<%=userId%>&orgName=" + orgName + "&orgnumber=" + orgnumber;
 		}
 	</script>
-	<body class="contentbodymargin" scroll="no">
+	<body class="contentbodymargin" scroll="auto">
 		<div id="searchblock">
 				<div class="search_top">
 					<div class="right_top"></div>
@@ -115,7 +115,7 @@
 
 					<tr>
 						<td colspan="4">
-							<iframe name="orgList" src="managerOrg_list_iframe.jsp?userId=<%=userId%>" style="width:100%" height="700" scrolling="auto" frameborder="0" marginwidth="1" marginheight="1">
+							<iframe name="orgList" src="managerOrg_list_iframe.jsp?userId=<%=userId%>" style="width:100%" height="400" scrolling="auto" frameborder="0" marginwidth="1" marginheight="1">
 							</iframe>
 						</td>
 					</tr>

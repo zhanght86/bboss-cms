@@ -3,7 +3,7 @@
  * <p>Title: 机构岗位下的角色设置处理页面</p>
  * <p>Description: 机构岗位下的角色设置处理页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-18
  * @author da.wei
  * @version 1.0

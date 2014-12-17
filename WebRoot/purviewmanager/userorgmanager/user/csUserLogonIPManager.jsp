@@ -3,7 +3,7 @@
  * <p>Title: CS用户登录管理</p>
  * <p>Description: CS用户登录管理</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-4-12
  * @author peng.yang
  * @version 1.0

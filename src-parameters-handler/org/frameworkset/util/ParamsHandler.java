@@ -1343,7 +1343,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @seecom.chinacreator.mq.client.MqNodeServiceInf#
+	 * @seecom.frameworkset.platform.mq.client.MqNodeServiceInf#
 	 * getInitConnectionParamsMapProperty()
 	 */
 	public List<Pro> getInitNodeParams(String... properMapnames) {
@@ -1372,7 +1372,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.chinacreator.mq.client.MqNodeServiceInf#insertConParams(java.lang
+	 * com.frameworkset.platform.mq.client.MqNodeServiceInf#insertConParams(java.lang
 	 * .String, java.util.List)
 	 */
 	public boolean insertNodeParams(int NODE_ID, List<Pro> newparamvalues,

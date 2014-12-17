@@ -933,7 +933,7 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public List getUsersListOfRoleInOrg(String roleid, String orgId) throws ManagerException;
 	
-	
+	public ListInfo getUsersListInfoOfRole(String roleid,long offset,int pagesize) throws ManagerException ;
 	/**
 	 * 保存用户的排序
 	 * @param orgId

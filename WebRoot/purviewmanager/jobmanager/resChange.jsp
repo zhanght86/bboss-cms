@@ -3,7 +3,7 @@
  * <p>Title: 获得资源操作</p>
  * <p>Description: 获得资源操作 </p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-26
  * @author baowen.liu
  * @version 1.0

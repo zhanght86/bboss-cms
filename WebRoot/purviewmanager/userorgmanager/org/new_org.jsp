@@ -4,7 +4,7 @@
  * <p>Title: 新增一级机构</p>
  * <p>Description: 新增一级机构页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-17
  * @author da.wei
  * @version 1.0

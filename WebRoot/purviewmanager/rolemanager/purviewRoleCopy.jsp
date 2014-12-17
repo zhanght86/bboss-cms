@@ -3,7 +3,7 @@
  * <p>Title: 权限复制</p>
  * <p>Description: 权限复制主页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-18
  * @author da.wei
  * @version 1.0

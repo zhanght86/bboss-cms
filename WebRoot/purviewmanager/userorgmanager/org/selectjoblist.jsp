@@ -3,7 +3,7 @@
  * <p>Title: 岗位主界面</p>
  * <p>Description: 岗位主界面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2012-06-21
  * @author biaoping.yin
  * @version 1.0

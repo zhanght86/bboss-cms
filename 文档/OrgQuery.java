@@ -1,9 +1,9 @@
-package com.chinacreator.sysmgrcore.purviewmanager.db;
+package com.frameworkset.platform.sysmgrcore.purviewmanager.db;
 
 import java.sql.SQLException;
 
-import com.chinacreator.sysmgrcore.manager.db.GroupManagerImpl;
-import com.chinacreator.sysmgrcore.manager.db.OrgManagerImpl;
+import com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 

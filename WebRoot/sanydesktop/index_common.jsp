@@ -16,7 +16,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>三一人力资源管理系统--首页</title>
+<title><%=AccessControl.getAccessControl().getCurrentSystemName() %></title>
 <link href="../html3/stylesheet/basic.css" rel="stylesheet" type="text/css" />
 
 <link href="../html3/stylesheet/menu.css" rel="stylesheet" type="text/css" />
@@ -89,7 +89,7 @@ html{overflow:hidden}
 <body>
 <div id="wrap">
 <div  class="top">
-  <div class="logo_top" >三一集团人力资源管理系统</div>
+  <div class="logo_top" ><%=AccessControl.getAccessControl().getCurrentSystemName() %></div>
       <div class="right_info">审批事项：<a href="#" >10</a>条 | 
       通知：<a href="#" >2</a>条 | </div>
   <div class="info">

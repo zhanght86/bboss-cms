@@ -3,7 +3,7 @@
  * <p>Title: 用户信息查看页面</p>
  * <p>Description: 用户信息查看页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-24
  * @author baowen.liu
  * @version 1.0

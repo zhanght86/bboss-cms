@@ -3,7 +3,7 @@
  * <p>Title: 角色授权处理页面 </p>
  * <p>Description: 批量角色授权处理页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-21
  * @author liangbing.tao
  * @version 1.0
@@ -181,7 +181,7 @@ function deleteall(){
 	      roleDelId[i++]=document.all("roleId").options[m].value;
           document.all("roleId").options[m]=null;
     } 
-    send_request('delUserRoleAlot.jsp?roleDelId='+roleDelId+'&id='+id); 
+    send_request('delUserRoleAlot.jsp?orgId=<%=orgId%>&roleDelId='+roleDelId+'&id='+id); 
 }
       
 function addall(){
@@ -212,7 +212,7 @@ function deleterole(){
         }
  	}
  	if(size > 0){
-	 	send_request('delUserRoleAlot.jsp?roleDelId='+roleDelId+'&id='+id);
+	 	send_request('delUserRoleAlot.jsp?orgId=<%=orgId%>&roleDelId='+roleDelId+'&id='+id);
 	 }else{
 	 	parent.$.dialog.alert("<pg:message code='sany.pdp.to.choose.roles'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	 }
@@ -225,7 +225,7 @@ function changebox(){
     for (var i=0;i<len;i++){	      
         roleId[i]=document.all("roleId").options[i].value;
     }    		
-	send_request('saveUserRoleAlot.jsp?roleId='+roleId+'&id='+id);
+	send_request('saveUserRoleAlot.jsp?orgId=<%=orgId%>&roleId='+roleId+'&id='+id);
 }
 
 function send_request(url){
@@ -287,7 +287,7 @@ function processRequest(){
 	
 }
 </SCRIPT>
-   <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+   <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 </head>
 <body class="contentbodymargin" scroll="no">
 	<div id="">

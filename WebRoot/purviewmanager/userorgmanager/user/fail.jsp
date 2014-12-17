@@ -3,7 +3,7 @@
  * <p>Title: 操作失败页面</p>
  * <p>Description: 操作失败页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-18
  * @author liangbing.tao
  * @version 1.0

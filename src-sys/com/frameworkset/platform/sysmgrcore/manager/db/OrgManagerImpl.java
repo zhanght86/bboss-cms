@@ -488,10 +488,21 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	
 	public Organization getOrgById(String orgId) throws ManagerException {
 		try {
-			String sql = "select * from td_sm_organization where ORG_ID='" + orgId + "'";
-			DBUtil dBUtil = new DBUtil();
-			dBUtil.executeSelect(sql);
-			return dbutilToOrganziation(dBUtil);
+			String sql = "select * from td_sm_organization where ORG_ID=?";
+			PreparedDBUtil dBUtil = new PreparedDBUtil();
+			dBUtil.preparedSelect(sql);
+			dBUtil.setString(1,orgId);
+			Organization o = (Organization) dBUtil.executePreparedForObject(Organization.class,new RowHandler<Organization>(){
+
+				@Override
+				public void handleRow(Organization rowValue, Record record)
+						throws Exception {
+					dbutilToOrganziation(rowValue,record);
+					
+				}
+				
+			});
+			return o;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -501,10 +512,21 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	
 	public Organization getOrgByName(String orgName) throws ManagerException {
 		try {
-			String sql = "select * from td_sm_organization where ORG_NAME='" + orgName + "'";
-			DBUtil dBUtil = new DBUtil();
-			dBUtil.executeSelect(sql);
-			return dbutilToOrganziation(dBUtil);
+			String sql = "select * from td_sm_organization where ORG_NAME=?";
+			PreparedDBUtil dBUtil = new PreparedDBUtil();
+			dBUtil.preparedSelect(sql);
+			dBUtil.setString(1,orgName);
+			Organization o = (Organization) dBUtil.executePreparedForObject(Organization.class,new RowHandler<Organization>(){
+
+				@Override
+				public void handleRow(Organization rowValue, Record record)
+						throws Exception {
+					dbutilToOrganziation(rowValue,record);
+					
+				}
+				
+			});
+			return o;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -712,15 +734,30 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 //			}
 //		}
 		if(user != null){
+//			StringBuffer sql = new StringBuffer()
+//				.append("select * from td_sm_organization where org_id in(")
+//				.append("select org_id from td_sm_userjoborg where user_id='")
+//				.append(user.getUserId()).append("') order by ORG_SN asc ");
 			StringBuffer sql = new StringBuffer()
-				.append("select * from td_sm_organization where org_id in(")
-				.append("select org_id from td_sm_userjoborg where user_id='")
-				.append(user.getUserId()).append("') order by ORG_SN asc ");
-			DBUtil db = new DBUtil();
+			.append("select * from td_sm_organization where org_id in(")
+			.append("select org_id from td_sm_userjoborg where user_id=?) order by ORG_SN asc ");
+			
+			PreparedDBUtil db = new PreparedDBUtil();
 			try {
 				
-				db.executeSelect(sql.toString());
-				list = dbutilToOrganziationList(db);
+				db.preparedSelect(sql.toString());
+				db.setInt(1, user.getUserId());
+				list = db.executePreparedForList(Organization.class, new RowHandler<Organization>(){
+
+					@Override
+					public void handleRow(Organization rowValue, Record record)
+							throws Exception {
+						dbutilToOrganziation(rowValue, record) ;
+						
+					}
+					
+				});
+				//list = dbutilToOrganziationList(db);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -829,7 +866,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	 * @return
 	 * @throws SQLException 
 	 */
-	private Organization dbutilToOrganziation(Organization org,Record dBUtil) throws SQLException
+	public static  Organization dbutilToOrganziation(Organization org,Record dBUtil) throws SQLException
 	{
 	
 			
@@ -3073,13 +3110,15 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 		if(userId==null || "".equalsIgnoreCase(userId) || userId.trim().length()==0) return orgs;
 		orgs = new ArrayList();
 		StringBuffer sql = new StringBuffer().append("select t.org_id from td_sm_orgmanager t ")
-		.append("where t.user_id=").append(userId);
-		DBUtil db = new DBUtil();
+		.append("where t.user_id=?");
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql.toString());
-			for(int i = 0; i < db.size(); i++){
-				orgs.add(db.getString(i, "org_id"));
-			}
+			db.preparedSelect(sql.toString());
+			db.setInt(1, Integer.parseInt(userId));
+			orgs = db.executePreparedForList(String.class);
+//			for(int i = 0; i < db.size(); i++){
+//				orgs.add(db.getString(i, "org_id"));
+//			}
 		} catch (SQLException e) {
 			e.printStackTrace();			
 		}

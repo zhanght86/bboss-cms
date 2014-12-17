@@ -3,7 +3,7 @@
  * <p>Title: 用户组用户操作界面</p>
  * <p>Description:对用户组中用户操作</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-18
  * @author liangbing.tao
  * @version 1.0

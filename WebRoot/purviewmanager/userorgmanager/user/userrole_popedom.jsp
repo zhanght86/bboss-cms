@@ -3,7 +3,7 @@
  * <p>Title: 用户角色权限查询列表</p>
  * <p>Description: 用户角色权限查询列表</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-22
  * @author liangbing.tao
  * @version 1.0

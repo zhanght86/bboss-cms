@@ -245,28 +245,28 @@
 	   
 	    <property name="orgadministratorimpl_addOrgAdmin3">
 	
-		<![CDATA[select count(user_id) from td_sm_userrole e where e.user_id=? and e.role_id=3
+		<![CDATA[select count(user_id) from td_sm_userrole e where e.user_id=? and e.role_id='3'
 		]]>
 	
 	   </property>
 	   
 	    <property name="orgadministratorimpl_addOrgAdmin4">
 	
-		<![CDATA[insert into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,3,?)
+		<![CDATA[insert into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,'3',?)
 		]]>
 	
 	   </property>
 	   
 	   <property name="orgadministratorimpl_addOrgAdmin5">
 	
-		<![CDATA[select count(user_id)  from td_sm_userrole e where e.user_id=? and e.role_id=4
+		<![CDATA[select count(user_id)  from td_sm_userrole e where e.user_id=? and e.role_id='4'
 		]]>
 	
 	   </property>
 	   
 	   <property name="orgadministratorimpl_addOrgAdmin6">
 	
-		<![CDATA[insert  into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,4,?)
+		<![CDATA[insert  into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,'4',?)
 		]]>
 	
 	   </property>

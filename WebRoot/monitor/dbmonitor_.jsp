@@ -3,7 +3,7 @@
  * <p>Title: 监控连接池信息</p>
  * <p>Description: 连接池使用情况</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-9-8
  * @author gao.tang
  * @version 1.0
@@ -47,13 +47,8 @@
 		</script>
 		</head>
 
-	<body class="contentbodymargin" onload="" scroll="no">
-	
+	<body>	
 	<div align="right"><input type="button" class="input" value="刷新页面" onclick="flushBotton()"></div>
-	
-		
-	
-	
 	<tab:tabContainer id="singleMonitorinfo" selectedTabPaneId="<%%=selectedds %>">
 	<% 
 		//List poollist = new ArrayList();

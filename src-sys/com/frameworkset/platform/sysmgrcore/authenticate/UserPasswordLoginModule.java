@@ -267,6 +267,6 @@ public class UserPasswordLoginModule extends ACLLoginModule
 	@Override
 	public void logoutCallback(String userName,
 			CheckCallBackWrapper checkCallBackWrapper) {
-//		System.out.println("我退出了。。。。。");
+		System.out.println("我退出了。。。。。");
 	}
 }

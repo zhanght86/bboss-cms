@@ -7,7 +7,7 @@
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2006-9-15
  * @author gao.tang
  * @version 1.0
@@ -38,8 +38,8 @@
 <html>
 <head>    
   <title>属性容器</title>
-  <link rel="stylesheet" type="text/css" href="../css/treeview.css"> 
-  <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
+  <%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <script language="Javascript">
 function saveReadorgname(){
 	var checkValues = "";

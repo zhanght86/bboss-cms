@@ -19,11 +19,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
+import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.util.ListInfo;
 
 /**
  * <p>Title: SecurityManagerController.java</p>
@@ -38,7 +43,14 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  * @version 1.0
  */
 public class SecurityManagerController {
-	
+	public String queryGrantUserList(String roleid,@PagerParam(name = PagerParam.OFFSET) long offset,
+			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,ModelMap model) throws ManagerException
+	{
+		UserManager um = SecurityDatabase.getUserManager();
+		ListInfo listinfo = um.getUsersListInfoOfRole(roleid,offset,pagesize);
+		model.addAttribute("allusers", listinfo);
+		return "path:allusers";
+	}
 	/**
 	 * 角色管理＝资源操作授予＝站点应用授权 add xinwang.jiao
 	 * 

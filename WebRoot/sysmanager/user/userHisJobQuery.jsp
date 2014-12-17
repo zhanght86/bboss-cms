@@ -8,7 +8,7 @@
  * <p>Title: 用户历史任职情况</p>
  * <p>Description: 用户历史任职情况</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-9-9
  * @author gao.tang
  * @version 1.0

@@ -3,7 +3,7 @@
  * <p>Title: 监控系统环境配置信息 总信息页面</p>
  * <p>Description: 监控bs数据库配置信息与在线用户信息</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-9-8
  * @author gao.tang
  * @version 1.0

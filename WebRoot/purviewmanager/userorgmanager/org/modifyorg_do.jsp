@@ -3,7 +3,7 @@
  * <p>Title: 修改机构信息页面</p>
  * <p>Description: 修改机构信息提交处理页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-17
  * @author da.wei
  * @version 1.0

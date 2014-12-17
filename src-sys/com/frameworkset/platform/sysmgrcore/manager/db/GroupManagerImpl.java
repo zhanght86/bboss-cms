@@ -21,6 +21,8 @@ import org.frameworkset.event.EventImpl;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.common.tag.pager.ListInfo;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
@@ -565,12 +567,35 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 //				logger.error(e);
 //			}
 //		}
+//		String sql = "select * from td_sm_group where group_id in(select group_id from td_sm_usergroup "
+//			+ "where user_id='" + user.getUserId() + "')";
 		String sql = "select * from td_sm_group where group_id in(select group_id from td_sm_usergroup "
-			+ "where user_id='" + user.getUserId() + "')";
-		DBUtil db = new DBUtil();
+				+ "where user_id=?)";
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
-			list = dbutilToGroupList(db);
+			db.preparedSelect(sql);
+			db.setInt(1, user.getUserId());
+			list = db.executePreparedForList(Group.class, new RowHandler<Group>(){
+
+				@Override
+				public void handleRow(Group group, Record db)
+						throws Exception {
+				
+					group.setGroupId(db.getInt(  "GROUP_ID"));
+					group.setGroupName(db.getString(  "GROUP_NAME"));
+					group.setGroupDesc(db.getString(  "GROUP_DESC"));
+					group.setRemark1(db.getString(  "REMARK1"));
+					group.setRemark2(db.getString(  "REMARK2"));
+					group.setRemark3(db.getString(  "REMARK3"));
+					group.setRemark4(db.getString(  "REMARK4"));
+					group.setRemark5(db.getString(  "REMARK5"));
+					group.setParentId(db.getInt(  "PARENT_ID"));
+					group.setOwner_id(db.getInt(  "OWNER_ID"));
+					
+				}
+				
+			});
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

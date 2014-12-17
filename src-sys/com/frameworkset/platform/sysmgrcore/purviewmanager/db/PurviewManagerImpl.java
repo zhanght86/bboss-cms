@@ -35,12 +35,13 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.BussinessCheck;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.DefaultBussinessCheckImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.PurviewManager;
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLParams;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.util.SQLResult;
-
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
 
@@ -66,6 +67,7 @@ import com.frameworkset.orm.transaction.TransactionManager;
  * @version 1.0
  */
 public class PurviewManagerImpl extends EventHandle implements PurviewManager {
+	private static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml"); 
 	private static BussinessCheck bussinessCheck;
 	private SQLUtil sqlUtilInsert = SQLUtil
 			.getInstance("org/frameworkset/insert.xml");
@@ -1130,8 +1132,8 @@ public class PurviewManagerImpl extends EventHandle implements PurviewManager {
 	public boolean saveRoleListRoleresop(String opId, String resType_id,
 			String[] checkValues, String[] un_checkValues, String role_id,
 			String types) {
-		DBUtil del_db = new DBUtil();
-		DBUtil add_db = new DBUtil();
+//		DBUtil del_db = new DBUtil();
+//		DBUtil add_db = new DBUtil();
 		boolean state = false;
 		int arrlength = 0;
 		int un_arrlength = 0;
@@ -1151,30 +1153,38 @@ public class PurviewManagerImpl extends EventHandle implements PurviewManager {
 			resName[i] = arr[1];
 		}
 		// 未选中项删除操作
-		String un_resId = "";
+		String[] un_resId = new String[un_arrlength];
 		for (int i = 0; i < un_arrlength; i++) {
 			String un_checkValue = un_checkValues[i];
 			String[] un_arr = un_checkValue.split("#");
-			if ("".equals(un_resId)) {
-				un_resId = "'" + un_arr[0] + "'";
-			} else {
-				un_resId += "," + "'" + un_arr[0] + "'";
-			}
+			un_resId[i] = un_arr[0];
+//			if ("".equals(un_resId)) {
+//				un_resId = "'" + un_arr[0] + "'";
+//			} else {
+//				un_resId += "," + "'" + un_arr[0] + "'";
+//			}
 		}
 		// 创建事务
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			if (!"".equals(un_resId)) {
-				StringBuffer del_sql = new StringBuffer().append(
-						"delete from td_sm_roleresop where role_id='").append(
-						role_id).append("' ").append("and op_id='")
-						.append(opId).append("' and restype_id='").append(
-								resType_id).append("' and types='").append(
-								types).append("' and res_id in(").append(
-								un_resId).append(")");
-
-				del_db.executeDelete(del_sql.toString());
+			if (un_resId.length > 0) {
+				SQLParams params = new SQLParams();
+				params.addSQLParam("role_id", role_id, SQLParams.STRING);
+				params.addSQLParam("opId", opId, SQLParams.STRING);
+				params.addSQLParam("resType_id", resType_id, SQLParams.STRING);
+				params.addSQLParam("types", types, SQLParams.STRING);
+				params.addSQLParam("un_resId", un_resId, SQLParams.OBJECT);
+				executor.deleteBean("saveRoleListRoleresop_delete", params);
+//				StringBuffer del_sql = new StringBuffer().append(
+//						"delete from td_sm_roleresop where role_id='").append(
+//						role_id).append("' ").append("and op_id='")
+//						.append(opId).append("' and restype_id='").append(
+//								resType_id).append("' and types='").append(
+//								types).append("' and res_id in(").append(
+//								un_resId).append(")");
+//
+//				del_db.executeDelete(del_sql.toString());
 			}
 			// 添加选中资源
 			StringBuffer add_sql = new StringBuffer();

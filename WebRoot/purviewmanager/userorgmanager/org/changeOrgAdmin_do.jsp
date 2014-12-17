@@ -3,7 +3,7 @@
  * <p>Title: 机构管理员设置处理页面</p>
  * <p>Description: 机构管理员设置处理页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-17
  * @author da.wei
  * @version 1.0
@@ -36,6 +36,7 @@ String openModle=RequestContextUtils.getI18nMessage("sany.pdp.organization.manag
 String userName = accesscontroler.getUserName();
 LogManager logManager = SecurityDatabase.getLogManager(); 		
 String userName_log = "";
+boolean result = true;
 for(int i = 0; i < userIds.length; i++){
 	if(!"".equals(userName_log)){
 		userName_log += "," + SecurityDatabase.getUserManager().getUserById(userIds[i]).getUserRealname();
@@ -46,7 +47,7 @@ for(int i = 0; i < userIds.length; i++){
 
 if(tag.equals("add")){
 	try{
- 		orgAdministrator.addOrgAdmin(userIds, orgId1, accesscontroler.getUserID());
+ 		result = orgAdministrator.addOrgAdmin(userIds, orgId1, accesscontroler.getUserID());
  		//log start
 		OrgManager orgManager = SecurityDatabase.getOrgManager();
 		Organization org = orgManager.getOrgById(orgId1);	
@@ -71,7 +72,7 @@ else if(tag.equals("delete")){
 		Organization org = orgManager.getOrgById(orgId1);			
 		operContent=RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.user.admin.cancel.log", new Object[] {userName, userName_log, org.getOrgName()}, request);
 		logManager.log(accesscontroler.getUserAccount(),operContent,openModle,operSource,"");         
-		orgAdministrator.deleteOrgAdmin(userIds, orgId1);
+		result = orgAdministrator.deleteOrgAdmin(userIds, orgId1);
 	}catch(Exception e){
 		e.printStackTrace();
  		exceptionMessage = e.getMessage();
@@ -82,5 +83,9 @@ else if(tag.equals("delete")){
         }
 	}
 }
+
+if(!result)
+	throw new Exception();
+
 %>
 

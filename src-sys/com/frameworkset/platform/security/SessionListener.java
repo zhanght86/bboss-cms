@@ -1,6 +1,6 @@
 package com.frameworkset.platform.security;
 
-import java.util.Map;
+import java.security.Principal;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -17,7 +17,7 @@ public class SessionListener implements javax.servlet.http.HttpSessionAttributeL
 	public void sessionDestroyed(HttpSessionEvent event) {
 		HttpSession session =  (HttpSession)event.getSource();
 
-		Map principals = (Map) session
+		Principal principals = (Principal) session
         .getAttribute(AccessControl.PRINCIPAL_INDEXS);
 		if(principals != null)
 		{

@@ -86,7 +86,10 @@ public abstract class ACLLoginModule implements LoginModule {
         this.subject = subject;
         this.callbackHandler = callbackHandler;
         this.loginSuccess = false;
-        this.checkCallBack = new CheckCallBack();
+        if(subject == null || subject.getCredential() == null || subject.getCredential().getCheckCallBack() == null)
+        	this.checkCallBack = new CheckCallBack();
+        else
+        	this.checkCallBack = subject.getCredential().getCheckCallBack();
         username = null;
         userTypes = null;
         //this.loginModuleName = null;
@@ -244,6 +247,7 @@ public abstract class ACLLoginModule implements LoginModule {
      * @roseuid 43FD4F8600FA
      */
     public boolean logout() throws LoginException {
+    	
     	CheckCallBackWrapper checkCallBackWrapper = new CheckCallBackWrapper(checkCallBack,callbackHandler.getRequest(),callbackHandler.getResponse());
     	try {
 			logoutCallback(username,checkCallBackWrapper);

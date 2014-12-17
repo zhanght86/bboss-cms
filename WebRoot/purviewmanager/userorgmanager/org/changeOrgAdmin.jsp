@@ -3,7 +3,7 @@
  * <p>Title: 机构管理员设置页面</p>
  * <p>Description: 机构管理员设置页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-17
  * @author da.wei
  * @version 1.0
@@ -244,7 +244,7 @@
 			}
 			else
 			{
-				W.$.dialog.alert("<pg:message code='sany.pdp.server.error'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+				W.$.dialog.alert("处理失败，请联系管理!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			}
 			//document.all("button1").disabled = false;
 			//document.all("button2").disabled = false;

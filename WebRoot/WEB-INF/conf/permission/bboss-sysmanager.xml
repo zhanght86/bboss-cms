@@ -21,6 +21,7 @@
 	</property>
 	
 	<property name="/accessmanager/*.page"		
+	    path:allusers="/purviewmanager/rolemanager/allroleusers.jsp"
 		class="com.frameworkset.platform.cms.security.SecurityManagerController" >
 	</property>
 	

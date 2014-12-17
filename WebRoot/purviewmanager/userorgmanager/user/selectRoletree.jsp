@@ -9,7 +9,7 @@
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-6-17
  * @author gao.tang
  * @version 1.0

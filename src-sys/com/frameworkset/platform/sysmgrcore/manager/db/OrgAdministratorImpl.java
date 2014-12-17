@@ -2,7 +2,9 @@ package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.RollbackException;
 
@@ -11,6 +13,13 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.RowHandler;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
@@ -18,12 +27,6 @@ import com.frameworkset.platform.sysmgrcore.entity.UserJobs;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.OrgAdministrator;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.poolman.Record;
-import com.frameworkset.common.poolman.SQLExecutor;
-import com.frameworkset.common.poolman.handle.NullRowHandler;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -52,7 +55,7 @@ import com.frameworkset.util.ListInfo;
 public class OrgAdministratorImpl extends EventHandle implements
 		OrgAdministrator {
 
-	
+	private static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml"); 
 	public static SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
 	/**
 	 * 获取机构管理员列表，包含机构的本级管理员的集合
@@ -275,8 +278,9 @@ public class OrgAdministratorImpl extends EventHandle implements
 //						+ "select count(user_id) as totalsize from td_sm_orgmanager e where e.user_id='"
 //						+ userIds[i] + "' and e.org_id='" + orgId + "'";
 //				dBUtil0.addBatch(sql);
+				int _userId = Integer.parseInt(userIds[i].trim());
 				String sql1 = sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin");
-				int hasset = SQLExecutor.queryObject(int.class, sql1, userIds[i],orgId);
+				int hasset = SQLExecutor.queryObject(int.class, sql1, _userId,orgId);
 //				prepareddbutil1.preparedSelect(sql1);
 //				prepareddbutil1.setString(1, userIds[i]);
 //				prepareddbutil1.setString(2,orgId);
@@ -284,7 +288,7 @@ public class OrgAdministratorImpl extends EventHandle implements
 				if(hasset<=0)
 				{
 					String sql2 = sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin2");
-					SQLExecutor.insert(sql2, userIds[i],orgId);
+					SQLExecutor.insert(sql2, _userId,orgId);
 //					PreparedDBUtil prepareddbutil2 = new PreparedDBUtil();
 //					prepareddbutil2.preparedInsert(sql2);
 //					prepareddbutil2.setString(1, userIds[i]);
@@ -303,14 +307,15 @@ public class OrgAdministratorImpl extends EventHandle implements
 //				dBUtil0.addBatch(sql0);
 				
 				String sql3 = sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin3");
-				hasset = SQLExecutor.queryObject(int.class, sql3, userIds[i]);
+				
+				hasset = SQLExecutor.queryObject(int.class, sql3, _userId);
 //				prepareddbutil3.preparedSelect(sql3);
 //				prepareddbutil3.setString(1, userIds[i]);
 //				prepareddbutil3.executePrepared();
 				if(hasset<=0)
 				{
 					String sql4 = sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin4");
-					SQLExecutor.insert(sql4, userIds[i],curUserId);
+					SQLExecutor.insert(sql4, _userId,curUserId);
 //					PreparedDBUtil prepareddbutil4 = new PreparedDBUtil();
 //					prepareddbutil4.preparedInsert(sql4);
 //					prepareddbutil4.setString(1, userIds[i]);
@@ -329,14 +334,14 @@ public class OrgAdministratorImpl extends EventHandle implements
 //				dBUtil0.addBatch(sql1);
 				
 				String sql5 = sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin5");
-				hasset = SQLExecutor.queryObject(int.class, sql5, userIds[i]);
+				hasset = SQLExecutor.queryObject(int.class, sql5, _userId);
 //				prepareddbutil5.preparedSelect(sql5);
 //				prepareddbutil5.setString(1, userIds[i]);
 //				prepareddbutil5.executePrepared();
 				if(hasset<=0)
 				{
 					String sql6 =sqlUtilInsert.getSQL("orgadministratorimpl_addOrgAdmin6");
-					SQLExecutor.insert(sql6, userIds[i],curUserId);
+					SQLExecutor.insert(sql6, _userId,curUserId);
 //					PreparedDBUtil prepareddbutil6 = new PreparedDBUtil();
 //					prepareddbutil6.preparedInsert(sql6);
 //					prepareddbutil6.setString(1, userIds[i]);
@@ -434,30 +439,62 @@ public class OrgAdministratorImpl extends EventHandle implements
 		if (userIds == null || userIds.length == 0 || orgId == null
 				|| orgId.equals(""))
 			return false;
-		DBUtil dBUtil = new DBUtil();
-		DBUtil dBUtil0 = new DBUtil();
+		PreparedDBUtil dBUtil = new PreparedDBUtil();
+		
+		PreparedDBUtil dBUtil0 = null;
 		TransactionManager tm = new TransactionManager();
 		try {
+			
 			tm.begin();
+			String sql1 = "delete from td_sm_userrole  where user_id=? and role_id=?";
+			dBUtil.preparedDelete(sql1);
+			boolean needDeleteRole = false;
 			for (int i = 0; i < userIds.length; i++) {
-				String sql = "delete from td_sm_orgmanager where user_id='"
-						+ userIds[i] + "' and org_id='" + orgId + "'";
-				dBUtil0.executeDelete(sql);
+				int userID_ = Integer.parseInt(userIds[i]);
+//				String sql = "delete from td_sm_orgmanager where user_id='"
+//						+ userIds[i] + "' and org_id='" + orgId + "'";
+//				dBUtil0.executeDelete(sql);
+				String sql = "delete from td_sm_orgmanager where user_id=? and org_id=?";
+				dBUtil0 = new PreparedDBUtil();
+				dBUtil0.preparedDelete(sql);
+				dBUtil0.setInt(1, userID_);
+				dBUtil0.setString(2, orgId);
+				dBUtil0.executePrepared();
+				dBUtil0 = new PreparedDBUtil();
 
-				String sql0 = "select * from td_sm_orgmanager where user_id='"
-						+ userIds[i] + "'";
-				dBUtil0.executeSelect(sql0);
+//				String sql0 = "select * from td_sm_orgmanager where user_id='"
+//						+ userIds[i] + "'";
+//				dBUtil0.executeSelect(sql0);
+				
+				String sql0 = "select * from td_sm_orgmanager where user_id=?";
+				dBUtil0.preparedSelect(sql0);
+				dBUtil0.setInt(1, userID_);
+				dBUtil0.executePrepared();
+//				dBUtil0.executeSelect(sql0);
+				
+//				if (dBUtil0.size() == 0) {
+//					String sql1 = "delete from td_sm_userrole  where user_id='"
+//							+ userIds[i] + "' and role_id='3'";
+//					dBUtil.addBatch(sql1);
+//
+//					String sql2 = "delete from td_sm_userrole  where user_id='"
+//							+ userIds[i] + "' and role_id='4'";
+//					dBUtil.addBatch(sql2);
+//				}
 				if (dBUtil0.size() == 0) {
-					String sql1 = "delete from td_sm_userrole  where user_id='"
-							+ userIds[i] + "' and role_id='3'";
-					dBUtil.addBatch(sql1);
-
-					String sql2 = "delete from td_sm_userrole  where user_id='"
-							+ userIds[i] + "' and role_id='4'";
-					dBUtil.addBatch(sql2);
+					needDeleteRole = true;
+					dBUtil.setInt(1, userID_);
+					dBUtil.setString(2, "3");
+					dBUtil.addPreparedBatch();
+//					String sql2 = "delete from td_sm_userrole  where user_id='"
+//							+ userIds[i] + "' and role_id='4'";
+					dBUtil.setInt(1, userID_);
+					dBUtil.setString(2, "4");
+					dBUtil.addPreparedBatch();
 				}
 			}
-			dBUtil.executeBatch();
+			if(needDeleteRole)
+				dBUtil.executePreparedBatch();
 			tm.commit();
 
 			Event event = new EventImpl(userIds + "/" + orgId,
@@ -616,8 +653,7 @@ public class OrgAdministratorImpl extends EventHandle implements
 	public ListInfo getAllManagerOrgsOfUserByID(String userId, String orgName,
 			String orgnumber, long offset, int maxPagesize)
 			throws ManagerException {
-		List list = new ArrayList();
-		ListInfo listInfo = new ListInfo();
+	
 		/*StringBuffer all_orgs = new StringBuffer()
 				.append("select * from td_sm_organization where org_id in (")
 				.append(
@@ -627,44 +663,69 @@ public class OrgAdministratorImpl extends EventHandle implements
 				.append("o.org_id = om.org_id and om.user_id='").append(userId)
 				.append("') ").append(
 						" connect by prior org.org_id = org.parent_id) ");*/
-		String concat_ = DBUtil.getDBAdapter().concat(" org_tree_level","'|%' ");
-		StringBuffer all_orgs = new StringBuffer()
-		           .append(" select * from td_sm_organization where org_id in (select distinct t.org_id")
-		           .append(" from td_sm_organization t where t.org_tree_level like  (select ").append(concat_).append(" from")
-		           .append(" TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id = '")
-		           .append(userId).append("') or t.org_id in (select e.org_id from TD_SM_ORGANIZATION e,td_sm_orgmanager ow where e.org_id=ow.org_id and ow.user_id = '")
-		           .append(userId).append("')")
-		           .append(")");
-//		System.out.println(all_orgs.toString());
-
+		Map parmas = new HashMap();
+		parmas.put("userId", Integer.parseInt(userId));
 		if (orgName != null && !orgName.equals("")) {
-			all_orgs.append("and remark5 like '%").append(orgName)
-					.append("%' ");
+			orgName = "%"+orgName+"%";
+			parmas.put("orgName", orgName);
 		}
 		if (orgnumber != null && !orgnumber.equals("")) {
-			all_orgs.append("and ORGNUMBER like '%").append(orgnumber).append(
-					"%' ");
+			orgnumber = "%"+orgnumber+"%";
+			parmas.put("orgnumber", orgnumber);
 		}
-//    System.out.println("all_orgs.toString()"+all_orgs.toString());
-		DBUtil dBUtil = new DBUtil();
+		
+		
 		try {
-			dBUtil.executeSelect(all_orgs.toString(), offset, maxPagesize);
-			if (dBUtil.size() > 0) {
-				for (int i = 0; i < dBUtil.size(); i++) {
+			ListInfo listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<Organization>(){
 
-					Organization organization = OrgCacheManager.getInstance()
-							.getOrganization(dBUtil.getString(i, "org_id"));
-					if (organization != null) {
-						list.add(organization);
-					}
-				}
-			}
-			listInfo.setDatas(list);
-			listInfo.setTotalSize(dBUtil.getTotalSize());
+				@Override
+				public void handleRow(Organization rowValue, Record record)
+						throws Exception {
+					
+					OrgManagerImpl.dbutilToOrganziation(rowValue, record);
+				}},Organization.class, "getAllManagerOrgsOfUserByID", offset, maxPagesize, parmas);
+			return listInfo;
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new ManagerException(e);
 		}
-		return listInfo;
+//		String concat_ = DBUtil.getDBAdapter().concat(" org_tree_level","'|%' ");
+//		StringBuffer all_orgs = new StringBuffer()
+//		           .append(" select * from td_sm_organization where org_id in (select distinct t.org_id")
+//		           .append(" from td_sm_organization t where t.org_tree_level like  (select ").append(concat_).append(" from")
+//		           .append(" TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id = '")
+//		           .append(userId).append("') or t.org_id in (select e.org_id from TD_SM_ORGANIZATION e,td_sm_orgmanager ow where e.org_id=ow.org_id and ow.user_id = '")
+//		           .append(userId).append("')")
+//		           .append(")");
+////		System.out.println(all_orgs.toString());
+//
+//		if (orgName != null && !orgName.equals("")) {
+//			all_orgs.append("and remark5 like '%").append(orgName)
+//					.append("%' ");
+//		}
+//		if (orgnumber != null && !orgnumber.equals("")) {
+//			all_orgs.append("and ORGNUMBER like '%").append(orgnumber).append(
+//					"%' ");
+//		}
+////    System.out.println("all_orgs.toString()"+all_orgs.toString());
+//		DBUtil dBUtil = new DBUtil();
+//		try {
+//			dBUtil.executeSelect(all_orgs.toString(), offset, maxPagesize);
+//			if (dBUtil.size() > 0) {
+//				for (int i = 0; i < dBUtil.size(); i++) {
+//
+//					Organization organization = OrgCacheManager.getInstance()
+//							.getOrganization(dBUtil.getString(i, "org_id"));
+//					if (organization != null) {
+//						list.add(organization);
+//					}
+//				}
+//			}
+//			listInfo.setDatas(list);
+//			listInfo.setTotalSize(dBUtil.getTotalSize());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return listInfo;
 	}
 
 	/**

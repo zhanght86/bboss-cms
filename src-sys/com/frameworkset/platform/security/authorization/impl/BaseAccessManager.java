@@ -271,6 +271,7 @@ public abstract class BaseAccessManager implements AccessManager {
             String resourceType)
     {
     	//update 20080721 gao.tang 如果抛出SecurityException异常返回false
+    	//to fixed:20141217 yinbp
     	try {
 			return accessContext.getPermissionRoleMap().hasGrantRole(role,resource,resourceType);
 		} catch (SecurityException e) {

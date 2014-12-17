@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import com.frameworkset.orm.annotation.Column;
 
 /*
- * Copyright:chinacreator
+ * Copyright:bboss
  * author:qian.wang
  * Date:4.2.2011
  */

@@ -3,7 +3,7 @@
  * <p>Title: 角色隶属机构的后台处理页面</p>
  * <p>Description: 角色隶属机构的后台处理页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-25
  * @author liangbing.tao
  * @version 1.0

@@ -3,7 +3,7 @@
  * <p>Title: 岗位机构树页面</p>
  * <p>Description: 岗位机构树页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-25
  * @author baowen.liu
  * @version 1.0

@@ -77,11 +77,10 @@ import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.SubSystem;
 import com.frameworkset.platform.resource.ResourceManager;
-import com.frameworkset.platform.security.authentication.CheckCallBack;
-import com.frameworkset.platform.security.authentication.CheckCallBack.Attribute;
 import com.frameworkset.platform.security.authentication.Credential;
 import com.frameworkset.platform.security.authentication.LoginContext;
 import com.frameworkset.platform.security.authentication.LoginException;
+import com.frameworkset.platform.security.authentication.LogoutCallbackHandler;
 import com.frameworkset.platform.security.authentication.SimpleLoginContext;
 import com.frameworkset.platform.security.authentication.Subject;
 import com.frameworkset.platform.security.authentication.UsernamePasswordCallbackHandler;
@@ -3181,7 +3180,14 @@ public class AccessControl implements AccessControlInf{
 				
 				
 			String userAccount = this.getUserAccount();
-			UsernamePasswordCallbackHandler callbackHandler = new UsernamePasswordCallbackHandler(
+			if(subject == null)
+			{
+				subject = new Subject();
+				subject.setCredential(credential);
+				subject.setPrincipal(principal);
+			}
+			
+			LogoutCallbackHandler callbackHandler = new LogoutCallbackHandler(
 					userAccount,  request,response);
 			SimpleLoginContext loginContext = new SimpleLoginContext("base",
 					callbackHandler,this.subject);

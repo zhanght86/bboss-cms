@@ -174,7 +174,7 @@
 	<%if(isAdminOrOrgManager){ %>
 	<div class="mcontent">
 		<div id="searchblock">
-			<div  class="search_top" >
+			<div class="search_top" >
 	    		<div class="right_top"></div>
 	    		<div class="left_top"></div>
      		</div>

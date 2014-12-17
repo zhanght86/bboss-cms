@@ -3,7 +3,7 @@
  * <p>Title: 角色机构列表查询</p>
  * <p>Description:角色机构列表查询</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-4-14
  * @author liangbing.tao
  * @version 1.0

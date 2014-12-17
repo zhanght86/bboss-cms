@@ -360,5 +360,96 @@ select user_id,user_name,user_realname,USER_MOBILETEL1,password_updatetime,Passw
 					and t.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( 
 					select userjoborg1_.user_id from td_sm_userjoborg userjoborg1_ where user1_.USER_ID= userjoborg1_.user_id)) order by user_id
 ]]>					
-</property>					
+</property>		
+
+<property name="updateLkYjZt">
+  <![CDATA[
+   update dtjf.t_zt_zdry_cklkyjqbxx y set y.sjqszt = '5'
+  where y.yjlx='2' 
+  and y.ldxxbh in (
+  #foreach($ldxxbh in $ldxxbhs)
+             #if($velocityCount == 0)
+             #[ldxxbhs[$velocityCount]]
+                #else
+                    ,#[ldxxbhs[$velocityCount]]
+             #end
+            #end      
+  )
+  ]]>
+</property>
+
+<property name="deleteUserrole">
+		<![CDATA[
+delete from td_sm_userrole where user_id =#[userId]
+					 and role_id in(#foreach($roleid in $roleIds)
+		             #if($velocityCount == 0) #[roleIds[$velocityCount]]
+			         #else ,#[roleIds[$velocityCount]]
+			         #end
+		            #end)
+]]>					
+</property>	
+
+<property name="getAllManagerOrgsOfUserByID">
+		<![CDATA[
+ select * from td_sm_organization where org_id in 
+ (select distinct t.org_id  from td_sm_organization t where 
+	 t.org_tree_level like  (select  org_tree_level || '|%' from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id = #[userId] )
+	 or t.org_id in (select e.org_id from TD_SM_ORGANIZATION e,td_sm_orgmanager ow where e.org_id=ow.org_id and ow.user_id = #[userId]))
+	 #if($orgName && !$orgName.equals("")) 
+	   and remark5 like #[orgName]
+	 #end	
+	#if($orgnumber && !$orgnumber.equals("")) 
+	   and ORGNUMBER like #[orgnumber]
+	#end
+]]>					
+</property>		
+
+<property name="getAllManagerOrgsOfUserByID-mysql">
+		<![CDATA[
+ select * from td_sm_organization where org_id in 
+ (select distinct t.org_id  from td_sm_organization t where 
+	 t.org_tree_level like  (select concat(org_tree_level , '|%')  from TD_SM_ORGANIZATION c,td_sm_orgmanager om  where c.org_id = om.org_id and om.user_id = #[userId] )
+	 or t.org_id in (select e.org_id from TD_SM_ORGANIZATION e,td_sm_orgmanager ow where e.org_id=ow.org_id and ow.user_id = #[userId]))
+	 #if($orgName  && !$orgName.equals("")) 
+	   and remark5 like #[orgName]
+	 #end	
+	#if($orgnumber  && !$orgnumber.equals("")) 
+	   and ORGNUMBER like #[orgnumber]
+	#end
+]]>					
+</property>	
+
+<property name="deleteUsersOfRole">
+		<![CDATA[
+delete from td_sm_userrole where role_id=#[roleid] and user_id in (#foreach($userid in $userids)
+	 #if($velocityCount == 0) #[userids[$velocityCount]]
+			         #else ,#[userids[$velocityCount]]
+			         #end
+#end
+)
+]]>					
+</property>		
+<property name="grantRoleresop_delete">
+		<![CDATA[
+ delete from td_sm_roleresop where RES_ID=#[resid] and  RESTYPE_ID=#[restypeid]
+				    and TYPES=#[roletype] and role_id in (
+				#foreach($roleid in $roleids)
+				 #if($velocityCount == 0) #[roleids[$velocityCount]]
+			         #else ,#[roleids[$velocityCount]]
+			         #end
+#end
+)
+]]>					
+</property>			
+
+<property name="saveRoleListRoleresop_delete">
+		<![CDATA[
+delete from td_sm_roleresop where role_id=#[role_id] and op_id=#[opId] and restype_id=#[resType_id] and types=#[types] and res_id in (
+#foreach($dd in $un_resId)
+				 #if($velocityCount == 0) #[un_resId[$velocityCount]]
+			         #else ,#[un_resId[$velocityCount]]
+			         #end
+#end)	
+								]]>					
+</property>										
 </properties>	   

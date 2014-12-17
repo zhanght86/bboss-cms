@@ -3,7 +3,7 @@
  * <p>Title: 角色授予用户页面</p>
  * <p>Description: 角色授予用户页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-24
  * @author liangbing.tao
  * @version 1.0
@@ -12,7 +12,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%@ page import="com.frameworkset.platform.security.*"  %>
 <%@ page import="java.util.List,
@@ -92,8 +92,10 @@
 		<title>属性容器</title>
 		<SCRIPT LANGUAGE="JavaScript"> 	
 		var api = parent.frameElement.api, W = api.opener;
-		
-			function addRole(){	
+		$(document).ready(function() {
+			$("#allusers").load("<%=request.getContextPath()%>/accessmanager/queryGrantUserList.page #users",{roleid:'<%=roleId%>'},function(){});
+		});
+			function addRole(){
 			   var n=document.all("userIds").options.length-1;
 			    var selectusers = "";
 
@@ -427,6 +429,10 @@
 						</tr>
 						<tr class="tabletop">
 						    <td  align="center">&nbsp;</td>
+						  </tr>
+						  
+						  <tr class="tabletop">
+						    <td  align="center" id="allusers" colspan="3"></td>
 						  </tr>
 					</table>
 				</form>

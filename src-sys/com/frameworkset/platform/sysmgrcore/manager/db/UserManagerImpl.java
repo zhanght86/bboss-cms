@@ -22,6 +22,7 @@ import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.MoreListInfo;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
@@ -73,6 +74,7 @@ import com.frameworkset.util.StringUtil;
 public class UserManagerImpl extends EventHandle implements UserManager {
 	
 	private SQLUtil sqlUtil = SQLUtil.getInstance("org/frameworkset/insert.xml");
+	private static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml"); 
 
 	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 
@@ -2351,6 +2353,65 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	}
 	
 	/**
+	 * 获取角色对应的用户列表
+	 * 
+	 * @param role
+	 * @return
+	 * @throws ManagerException
+	 */
+	public ListInfo getUsersListInfoOfRole(String roleid,long offset,int pagesize) throws ManagerException {
+		List list = new ArrayList();
+
+		if (roleid != null && roleid.length() > 0) {
+			String userssql = "select a.* from td_sm_user a inner join td_sm_userrole b on a.user_id = b.user_id and b.role_id=?";
+			
+			PreparedDBUtil dbUtil = new PreparedDBUtil();
+			
+			try {
+				dbUtil.preparedSelect(userssql, offset, pagesize);
+				dbUtil.setString(1, roleid);
+				list = dbUtil.executePreparedForList(UserJobs.class,new RowHandler<UserJobs>(){
+
+					@Override
+					public void handleRow(UserJobs user, Record dbUtil)
+							throws Exception {
+						int userid = dbUtil.getInt(  "user_id");
+						int isvalid = dbUtil.getInt(  "USER_ISVALID");
+
+//						User user = new User();
+						user.setUserId(new Integer(userid));
+						user.setUserName(dbUtil.getString(  "USER_NAME"));
+						user.setUserRealname(dbUtil.getString(  "USER_REALNAME"));
+						user.setUserSex(dbUtil.getString(  "USER_SEX"));
+						user.setWorkNumber(dbUtil.getString(  "USER_WORKNUMBER"));
+						user.setUserMobiletel1(dbUtil.getString( 
+								"USER_MOBILETEL1"));
+						
+						user.setUserEmail(dbUtil.getString(  "USER_EMAIL"));
+						user.setUserType(dbUtil.getString(  "USER_TYPE"));
+					
+						String orgjob = FunctionDB.getUserorgjobinfos(userid);
+						user.setJobName(orgjob);
+//						user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+						
+					}
+					
+				});
+				
+				ListInfo ret = new ListInfo();
+				ret.setDatas(list);
+				ret.setTotalSize(dbUtil.getLongTotalSize());
+				return ret;
+			} catch (SQLException e) {
+				throw new ManagerException("获取角色的用户列表失败[roleid=" + roleid
+						+ "]：" + e.getMessage());
+			}
+		}
+
+		return  null;
+	}
+	
+	/**
 	 * 获取当前机构的当前角色对应的用户列表
 	 * 
 	 * @param role
@@ -2359,37 +2420,69 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	 */
 	public List getUsersListOfRoleInOrg(String roleid, String orgId) throws ManagerException {
 		List list = new ArrayList();
+		if(orgId == null)
+			return list;
 		if (roleid != null && roleid.length() > 0) {
 			String userssql = 
 					"select distinct a.* from td_sm_user a " +
-					"inner join td_sm_userrole b on a.user_id = b.user_id and b.role_id='" + roleid + "' " +
-					"inner join td_sm_userjoborg c on a.user_id = c.user_id and c.org_id='" + orgId + "'";
-			DBUtil dbUtil = new DBUtil();
+					"inner join td_sm_userrole b on a.user_id = b.user_id and b.role_id=? inner join td_sm_userjoborg c on a.user_id = c.user_id and c.org_id=?";
+			PreparedDBUtil dbUtil = new PreparedDBUtil();
 			try {
-				dbUtil.executeSelect(userssql);
-				for (int i = 0; i < dbUtil.size(); i++) {
-					int userid = dbUtil.getInt(i, "user_id");
-					int isvalid = dbUtil.getInt(i, "USER_ISVALID");
+				dbUtil.preparedSelect(userssql);
+				dbUtil.setString(1, roleid);
+				dbUtil.setString(2, orgId);
+				list = dbUtil.executePreparedForList(User.class, new RowHandler<User>(){
 
-					User user = new User();
-					user.setUserId(new Integer(userid));
-					user.setUserName(dbUtil.getString(i, "USER_NAME"));
-					user.setUserRealname(dbUtil.getString(i, "USER_REALNAME"));
-					user.setUserPassword(dbUtil.getString(i, " USER_PASSWORD"));
-					user.setUserSex(dbUtil.getString(i, "USER_SEX"));
-					user.setUserMobiletel1(dbUtil.getString(i,
-							"USER_MOBILETEL1"));
-					user.setUserMobiletel2(dbUtil.getString(i,
-							"USER_MOBILETEL2"));
-					user.setUserIsvalid(new Integer(isvalid));
-					user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
-					user.setUserType(dbUtil.getString(i, "USER_TYPE"));
-					user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
-					user.setPasswordDualedTime(dbUtil.getInt(i, "Password_DualTime"));
-					user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+					@Override
+					public void handleRow(User user, Record dbUtil)
+							throws Exception {
+						int userid = dbUtil.getInt(  "user_id");
+						int isvalid = dbUtil.getInt(  "USER_ISVALID");
+
+//						User user = new User();
+						user.setUserId(new Integer(userid));
+						user.setUserName(dbUtil.getString(  "USER_NAME"));
+						user.setUserRealname(dbUtil.getString(  "USER_REALNAME"));
+						user.setUserPassword(dbUtil.getString(  " USER_PASSWORD"));
+						user.setUserSex(dbUtil.getString(  "USER_SEX"));
+						user.setUserMobiletel1(dbUtil.getString( 
+								"USER_MOBILETEL1"));
+						user.setUserMobiletel2(dbUtil.getString( 
+								"USER_MOBILETEL2"));
+						user.setUserIsvalid(new Integer(isvalid));
+						user.setUserEmail(dbUtil.getString(  "USER_EMAIL"));
+						user.setUserType(dbUtil.getString(  "USER_TYPE"));
+						user.setPasswordUpdatetime(dbUtil.getTimestamp(  "password_updatetime"));
+						user.setPasswordDualedTime(dbUtil.getInt(  "Password_DualTime"));
+//						user.setPasswordExpiredTime((Timestamp)getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+						
+						
+					}
 					
-					list.add(user);
-				}
+				});
+//				for (int i = 0; i < dbUtil.size(); i++) {
+//					int userid = dbUtil.getInt(i, "user_id");
+//					int isvalid = dbUtil.getInt(i, "USER_ISVALID");
+//
+//					User user = new User();
+//					user.setUserId(new Integer(userid));
+//					user.setUserName(dbUtil.getString(i, "USER_NAME"));
+//					user.setUserRealname(dbUtil.getString(i, "USER_REALNAME"));
+//					user.setUserPassword(dbUtil.getString(i, " USER_PASSWORD"));
+//					user.setUserSex(dbUtil.getString(i, "USER_SEX"));
+//					user.setUserMobiletel1(dbUtil.getString(i,
+//							"USER_MOBILETEL1"));
+//					user.setUserMobiletel2(dbUtil.getString(i,
+//							"USER_MOBILETEL2"));
+//					user.setUserIsvalid(new Integer(isvalid));
+//					user.setUserEmail(dbUtil.getString(i, "USER_EMAIL"));
+//					user.setUserType(dbUtil.getString(i, "USER_TYPE"));
+//					user.setPasswordUpdatetime(dbUtil.getTimestamp(i, "password_updatetime"));
+//					user.setPasswordDualedTime(dbUtil.getInt(i, "Password_DualTime"));
+//					user.setPasswordExpiredTime((Timestamp)this.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+//					
+//					list.add(user);
+//				}
 			} catch (SQLException e) {
 				throw new ManagerException("获取当前机构的当前角色的用户列表失败[roleid=" + roleid
 						+ "]：" + e.getMessage());
@@ -3603,21 +3696,27 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	public boolean delAlotUserRole(String[] ids, String[] roleid)
 			throws ManagerException {
 		boolean b = false;
-		DBUtil dbl = new DBUtil();
+		PreparedDBUtil dbl = new PreparedDBUtil();
 		try {
 			if (ids != null && roleid != null && roleid.length > 0 && ids.length > 0) {
+				String sql = "delete from td_sm_userrole where user_id = ? and role_id = ?";
+				dbl.preparedDelete(sql);
+				
 				for (int i = 0; i < ids.length; i++)
 				{
 					int id = Integer.parseInt(ids[i]);
 					for (int j = 0; j < roleid.length; j++) {
 						
 
-						String sql = "delete from td_sm_userrole where user_id = "
-								+ id + " and role_id = '" + roleid[j] + "'";
-						dbl.addBatch(sql);
+//						String sql = "delete from td_sm_userrole where user_id = "
+//								+ id + " and role_id = '" + roleid[j] + "'";
+						dbl.setInt(1, id);
+						dbl.setString(2, roleid[j]);
+						
+						dbl.addPreparedBatch();
 					}
 				}
-				dbl.executeBatch();
+				dbl.executePreparedBatch();
 				b = true;
 				Event event = new EventImpl("",
 						ACLEventType.USER_ROLE_INFO_CHANGE);
@@ -4093,6 +4192,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		PreparedDBUtil pe = new PreparedDBUtil();
 		PreparedDBUtil pe_ = new PreparedDBUtil();
 		try {
+			int userId_i = Integer.parseInt(userId);
 //			StringBuffer sql = new StringBuffer();
 			for (int i = 0; i < roleIds.length; i++) {
 //				String roleId = roleIds[i];
@@ -4118,7 +4218,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				
 				String sql = sqlUtil.getSQL("userManagerImpl_addUserrole");
 				pe.preparedSelect(sql);
-				pe.setString(1, userId);
+				pe.setInt(1, userId_i);
 				pe.setString(2, roleIds[i]);
 				pe.executePrepared();
 				
@@ -4126,7 +4226,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				{
 					String sql_ = sqlUtil.getSQL("userManagerImpl_addUserrole_");
 					pe_.preparedInsert(sql_);
-					pe_.setString(1, userId);
+					pe_.setInt(1, userId_i);
 					pe_.setString(2, roleIds[i]);
 					pe_.setString(3, currentUserId);
 					pe_.executePrepared();
@@ -4193,19 +4293,27 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	 */
 	public void deleteUserrole(String userId, String[] roleIds,String roleTypes)throws ManagerException {
 		DBUtil db = new DBUtil();
+		if(roleIds == null || roleIds.length == 0)
+		{
+			return ;
+		}
 		try {
-			StringBuffer sql = new StringBuffer(
-					"delete from td_sm_userrole where user_id = ").append(userId)
-					.append(" and role_id in(");
-			for (int i = 0; i < roleIds.length; i++) {
-				if (i == 0)
-					sql.append(roleIds[i]);
-				else
-					sql.append(",").append(roleIds[i]);
-			}
-			sql.append(")");
-			db.executeDelete(sql.toString());
-			sql.setLength(0);
+//			StringBuffer sql = new StringBuffer(
+//					"delete from td_sm_userrole where user_id = ").append(userId)
+//					.append(" and role_id in(");
+//			for (int i = 0; i < roleIds.length; i++) {
+//				if (i == 0)
+//					sql.append(roleIds[i]);
+//				else
+//					sql.append(",").append(roleIds[i]);
+//			}
+//			sql.append(")");
+//			db.executeDelete(sql.toString());
+//			sql.setLength(0);
+			Map params = new HashMap();
+			params.put("userId", userId);
+			params.put("roleIds", roleIds);
+			executor.deleteBean("deleteUserrole", params);
 			//递归回收
 //			ResManager resManager = new ResManagerImpl();
 //			for(int i=0;i<roleIds.length;i++){

@@ -48,6 +48,7 @@ String url = "http://10.0.15.223/SanyToken/hessian?service=checktokenService";
 org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
 org.frameworkset.web.token.ws.TokenCheckResponse tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket);
 System.out.println(tokenCheckResponse.getResultcode());
+System.out.println(tokenCheckResponse.isValidateResult());
 System.out.println(tokenCheckResponse.getUserAccount());
 System.out.println(tokenCheckResponse.getWorknumber());
 

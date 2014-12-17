@@ -3,7 +3,7 @@
  * <p>Title: 用户隶属岗位保存页面</p>
  * <p>Description: 用户隶属岗位保存页面</p>
  * <p>Copyright: Copyright (c) 2008</p>
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-22
  * @author liangbing.tao
  * @version 1.0

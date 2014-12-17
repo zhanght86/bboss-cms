@@ -12,6 +12,7 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
@@ -54,6 +55,7 @@ import com.frameworkset.util.ListInfo;
  */
 public class RoleManagerImpl extends EventHandle implements RoleManager {
 	
+	private static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml"); 
 
 	/**
 	 * 
@@ -385,6 +387,22 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		return role;
 		
 	}
+	private void getRole(Role role,Record dBUtil) throws SQLException{
+		
+				
+		
+		role.setRemark1(dBUtil.getString(  "remark1"));
+		role.setRemark2(dBUtil.getString(  "remark2"));
+		role.setRemark3(dBUtil.getString(  "remark3"));
+		role.setRoleDesc(dBUtil.getString(  "ROLE_DESC"));
+		role.setRoleId(dBUtil.getString(  "ROLE_ID"));
+		role.setRoleName(dBUtil.getString( "ROLE_NAME"));
+		role.setRoleType(dBUtil.getString(  "ROLE_TYPE"));
+		role.setRoleUsage(dBUtil.getString(  "ROLE_USAGE"));
+		role.setOwner_id(dBUtil.getInt( "owner_id"));
+		 
+		
+	}
 	
 	private List getRoles(DBUtil dBUtil) throws SQLException{
 		if(dBUtil.size() == 0)
@@ -414,16 +432,27 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		
 		Role role = null;
 		try {
-			String sql = "select * from td_sm_role where role_id = '" + roleid + "'";
+			String sql = "select * from td_sm_role where role_id = ?";
 			
-			DBUtil dbUtil = new DBUtil();
-			dbUtil.executeSelect(sql);
-			role = this.getRole(dbUtil);
+			PreparedDBUtil dbUtil = new PreparedDBUtil();
+			dbUtil.preparedSelect(sql);
+			dbUtil.setString(1, roleid);
+			role = (Role) dbUtil.executePreparedForObject(Role.class,new RowHandler<Role>(){
+
+				@Override
+				public void handleRow(Role rowValue, Record record)
+						throws Exception {
+					getRole(rowValue,record);
+					
+				}
+				
+			});
+		
 			
 
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -434,16 +463,27 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		
 		Role role = null;
 		try {
-			String sql = "select * from td_sm_role where ROLE_NAME = '" + roleName + "'";
+			String sql = "select * from td_sm_role where ROLE_NAME = ?";
 			
-			DBUtil dbUtil = new DBUtil();
-			dbUtil.executeSelect(sql);
-			role = this.getRole(dbUtil);
+			PreparedDBUtil dbUtil = new PreparedDBUtil();
+			dbUtil.preparedSelect(sql);
+			dbUtil.setString(1, roleName);
+			dbUtil.executePrepared();
+			role = (Role) dbUtil.executePreparedForObject(Role.class,new RowHandler<Role>(){
+
+				@Override
+				public void handleRow(Role rowValue, Record record)
+						throws Exception {
+					getRole(rowValue,record);
+					
+				}
+				
+			});
 			
 
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -1247,29 +1287,43 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	 */
 	public List getRoleList(Organization org) throws ManagerException {
 		List list = new ArrayList();
-		String sql = "select * from td_sm_role t where t.role_id in " + 
-						"(" + 
-						"select d.role_id from td_sm_orgrole d where d.org_id='" + org.getOrgId() + "'" + 
-						")" +
-						" order by t.role_name";
-		DBUtil dBUtil = new DBUtil();
+		String sql = "select * from td_sm_role t where t.role_id in (select d.role_id from td_sm_orgrole d where d.org_id=?) order by t.role_name";
+		PreparedDBUtil dBUtil = new PreparedDBUtil();
 		try{
-			dBUtil.executeSelect(sql);
-			if(dBUtil.size() > 0){
-				for(int i=0;i<dBUtil.size();i++)
-				{
-					Role role = new Role();					
-					role.setRemark1(dBUtil.getString(i, "remark1"));
-					role.setRemark2(dBUtil.getString(i, "remark2"));
-					role.setRemark3(dBUtil.getString(i, "remark3"));
-					role.setRoleDesc(dBUtil.getString(i, "ROLE_DESC"));
-					role.setRoleId(dBUtil.getString(i, "ROLE_ID"));
-					role.setRoleName(dBUtil.getString(i, "ROLE_NAME"));
-					role.setRoleType(dBUtil.getString(i, "ROLE_TYPE"));
-					role.setRoleUsage(dBUtil.getString(i, "ROLE_USAGE"));
-					list.add(role);
+			dBUtil.preparedSelect(sql);
+			dBUtil.setString(1, org.getOrgId());
+			list = dBUtil.executePreparedForList(Role.class, new RowHandler<Role>(){
+
+				@Override
+				public void handleRow(Role role, Record dBUtil)
+						throws Exception {
+					role.setRemark1(dBUtil.getString(  "remark1"));
+					role.setRemark2(dBUtil.getString(  "remark2"));
+					role.setRemark3(dBUtil.getString(  "remark3"));
+					role.setRoleDesc(dBUtil.getString(  "ROLE_DESC"));
+					role.setRoleId(dBUtil.getString(  "ROLE_ID"));
+					role.setRoleName(dBUtil.getString(  "ROLE_NAME"));
+					role.setRoleType(dBUtil.getString(  "ROLE_TYPE"));
+					role.setRoleUsage(dBUtil.getString(  "ROLE_USAGE"));
+					
 				}
-			}							
+				
+			});
+//			if(dBUtil.size() > 0){
+//				for(int i=0;i<dBUtil.size();i++)
+//				{
+//					Role role = new Role();					
+//					role.setRemark1(dBUtil.getString(i, "remark1"));
+//					role.setRemark2(dBUtil.getString(i, "remark2"));
+//					role.setRemark3(dBUtil.getString(i, "remark3"));
+//					role.setRoleDesc(dBUtil.getString(i, "ROLE_DESC"));
+//					role.setRoleId(dBUtil.getString(i, "ROLE_ID"));
+//					role.setRoleName(dBUtil.getString(i, "ROLE_NAME"));
+//					role.setRoleType(dBUtil.getString(i, "ROLE_TYPE"));
+//					role.setRoleUsage(dBUtil.getString(i, "ROLE_USAGE"));
+//					list.add(role);
+//				}
+//			}							
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -1387,15 +1441,25 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			return true;
 		if (roleid != null && !roleid.equals("")) {
 			try {
-				String deleteroleuser = "delete from td_sm_userrole where role_id="
-						+ roleid + " and user_id in (" + build(userids) + ")";
-				DBUtil dbUtil = new DBUtil();
-				dbUtil.executeDelete(deleteroleuser);
+				int[] ids = new int[userids.length];
+				for(int i =0;i < userids.length; i ++)
+				{
+					ids[i] = Integer.parseInt(userids[i]);
+				}
+				SQLParams params = new SQLParams();
+				params.addSQLParam("roleid", roleid, SQLParams.STRING);
+				params.addSQLParam("userids", ids, SQLParams.OBJECT);
+				this.executor.deleteBean("deleteUsersOfRole", params);
+//				String deleteroleuser = "delete from td_sm_userrole where role_id="
+//						+ roleid + " and user_id in (" + build(userids) + ")";
+//				DBUtil dbUtil = new DBUtil();
+//				dbUtil.executeDelete(deleteroleuser);
 				Event event = new EventImpl(roleid,
 						ACLEventType.USER_ROLE_INFO_CHANGE);
 				super.change(event);
 				return true;
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new ManagerException("删除角色用户失败：" + e.getMessage());
 			}
 		}
@@ -1913,21 +1977,35 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 //			logger.error(e);
 //			throw new ManagerException(e.getMessage());
 //		}
-		DBUtil db = new DBUtil();
-		String sql = "select b.* from td_sm_userrole a,td_sm_role b where a.role_id=b.role_id and user_id='"+user.getUserId()+"' order by b.ROLE_TYPE,b.ROLE_NAME";
+		PreparedDBUtil db = new PreparedDBUtil();
+//		String sql = "select b.* from td_sm_userrole a,td_sm_role b where a.role_id=b.role_id and user_id='"+user.getUserId()+"' order by b.ROLE_TYPE,b.ROLE_NAME";
+		String sql = "select b.* from td_sm_userrole a,td_sm_role b where a.role_id=b.role_id and user_id=? order by b.ROLE_TYPE,b.ROLE_NAME";
 		try {
-			db.executeSelect(sql);
-			Role role = null;
-			if(db.size() > 0){
-				list = new ArrayList();
-				for(int i = 0; i < db.size(); i++){
-					role = new Role();
-					role.setRoleId(db.getString(i,"role_id"));
-					role.setRoleName(db.getString(i,"role_name"));
-					role.setRoleType(db.getString(i,"role_type"));
-					list.add(role);
+			db.preparedSelect(sql);
+			db.setInt(1, user.getUserId());
+			list = db.executePreparedForList(Role.class, new RowHandler<Role>() {
+
+				@Override
+				public void handleRow(Role role, Record record)
+						throws Exception {
+					role.setRoleId(record.getString( "role_id"));
+					role.setRoleName(record.getString( "role_name"));
+					role.setRoleType(record.getString( "role_type"));
+					
 				}
-			}
+			});
+			
+//			Role role = null;
+//			if(db.size() > 0){
+//				list = new ArrayList();
+//				for(int i = 0; i < db.size(); i++){
+//					role = new Role();
+//					role.setRoleId(db.getString(i,"role_id"));
+//					role.setRoleName(db.getString(i,"role_name"));
+//					role.setRoleType(db.getString(i,"role_type"));
+//					list.add(role);
+//				}
+//			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -1937,15 +2015,18 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	public boolean hasGrantRole(AuthRole role, String resource,
 			String resourceType) throws ManagerException {
 		boolean r = false;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		String sql = "";
 		try {
-			sql = "select count(*) from td_sm_roleresop where role_id='"
-					+ role.getRoleId() + "' and types='" + role.getRoleType()
-					+ "' " + "and RES_ID='" + resource + "' and RESTYPE_ID='"
-					+ resourceType + "'";
-			db.executeSelect(sql);
-			if (db.getInt(0, 0) > 0) {
+			sql = "select count(1) from td_sm_roleresop where role_id=? and types=? and RES_ID=? and RESTYPE_ID=?";
+//			db.preparedSelect(sql);
+//			db.setString(1, role.getRoleId());
+//			db.setString(2, role.getRoleType());
+//			db.setString(3, resource);
+//			db.setString(4, resourceType);
+//			db.executePrepared();
+			int count = SQLExecutor.queryObject(int.class, sql, role.getRoleId(),role.getRoleType(),resource,resourceType);
+			if (count > 0) {
 				r = true;
 			}
 		} catch (SQLException e) {
@@ -2136,7 +2217,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		
 		boolean b = false;
 		PreparedDBUtil pd = new PreparedDBUtil();
-		DBUtil db = new DBUtil();
+		
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -2144,32 +2225,38 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			
 			if(needdelete || opids == null || opids.length == 0)
 			{
-				sql.append("delete from td_sm_roleresop where RES_ID='");
-				sql.append(resid)
-				   .append("' and " )
-				   .append( "RESTYPE_ID='" )
-				   .append( restypeid )
-				   .append( "' and TYPES='")
-				   .append(roletype)
-				   .append("' and role_id in (");
-				
-				for(int i = 0; i < roleids.length; i ++)
-				{
-					if(i == 0)
-					{
-						sql.append("'").append(roleids[i] )
-						   .append("'");
-					}
-					else
-					{
-						sql.append(",'").append(roleids[i] )
-						   .append("'");
-					}
-					
-					
-				}
-				sql.append(")");
-				db.executeDelete(sql.toString());
+				SQLParams params = new SQLParams();
+				params.addSQLParam("resid", resid, SQLParams.STRING);
+				params.addSQLParam("restypeid", restypeid, SQLParams.STRING);
+				params.addSQLParam("roletype", roletype, SQLParams.STRING);
+				params.addSQLParam("roleids", roleids, SQLParams.OBJECT);
+				executor.deleteBean("grantRoleresop_delete", params);
+//				sql.append("delete from td_sm_roleresop where RES_ID='");
+//				sql.append(resid)
+//				   .append("' and " )
+//				   .append( "RESTYPE_ID='" )
+//				   .append( restypeid )
+//				   .append( "' and TYPES='")
+//				   .append(roletype)
+//				   .append("' and role_id in (");
+//				
+//				for(int i = 0; i < roleids.length; i ++)
+//				{
+//					if(i == 0)
+//					{
+//						sql.append("'").append(roleids[i] )
+//						   .append("'");
+//					}
+//					else
+//					{
+//						sql.append(",'").append(roleids[i] )
+//						   .append("'");
+//					}
+//					
+//					
+//				}
+//				sql.append(")");
+//				db.executeDelete(sql.toString());
 //				db.addBatch(sql.toString());
 //				sql.setLength(0);
 			}
@@ -2566,19 +2653,20 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		if (userids == null || userids.length == 0 || roleid == null
 				|| roleid.length() == 0)
 			return;
-		StringBuffer front = new StringBuffer(
-				"insert into td_sm_userrole(role_id,user_id) values(");
-		front.append(roleid).append(",");
+		String front = "insert into td_sm_userrole(role_id,user_id) values(?,?)";
+		
 		int len = front.length();
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			
+			db.preparedInsert(front.toString());
 			for (int i = 0; i < userids.length; i++) {
-				front.append(userids[i]).append(")");
-				db.addBatch(front.toString());
-				front.setLength(len);
+				db.setString(1, roleid);
+				db.setInt(2, Integer.parseInt(userids[i]));
+				
+				db.addPreparedBatch();
+				
 			}
-			db.executeBatch();
+			db.executePreparedBatch();
 			
 			Event event = new EventImpl("",ACLEventType.USER_ROLE_INFO_CHANGE);
 			super.change(event,true);
@@ -2589,8 +2677,6 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			}
 			throw new ManagerException("批量授予角色用户失败[roleid=]" + roleid
 					+ ",[userids=" + users.toString() + "]:" + e.getMessage());
-		}finally{
-			db.resetBatch();
 		}
 
 	}
@@ -2726,22 +2812,34 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	 * 通过用户ID获取用户岗位对应的角色 2007.11.01---gao.tang
 	 */
 	public List getJobRoleByList (String userId) throws ManagerException {
-		List list = new ArrayList();
+		List list = null;
 		StringBuffer hsql = new StringBuffer();
 		hsql.append("select role_id,role_name,ROLE_TYPE from td_sm_role  where role_id in (")
-			.append("select a.role_id from td_sm_orgjobrole a inner join td_sm_userjoborg b on a.org_id = b.org_id and a.job_id = b.job_id where b.user_id=")
-			.append(userId)
-			.append(") order by ROLE_TYPE,role_name");
-		DBUtil dbUtil = new DBUtil();
+			.append("select a.role_id from td_sm_orgjobrole a inner join td_sm_userjoborg b on a.org_id = b.org_id and a.job_id = b.job_id where b.user_id=?) order by ROLE_TYPE,role_name");
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		try {
-			dbUtil.executeSelect(hsql.toString());
-			for(int i = 0; i < dbUtil.size(); i++){
-				UserJobRole userJobRole = new UserJobRole();
-				userJobRole.setRoleId(dbUtil.getString(i, "role_id"));
-				userJobRole.setRoleName(dbUtil.getString(i, "role_name"));
-				userJobRole.setRoleType(dbUtil.getString(i, "ROLE_TYPE"));
-				list.add(userJobRole);
-			} 
+			dbUtil.preparedSelect(hsql.toString());
+			dbUtil.setInt(1, Integer.parseInt(userId));
+			list = dbUtil.executePreparedForList(UserJobRole.class, new RowHandler<UserJobRole>(){
+
+				@Override
+				public void handleRow(UserJobRole userJobRole, Record record)
+						throws Exception {
+					// TODO Auto-generated method stub
+					userJobRole.setRoleId(record.getString(  "role_id"));
+					userJobRole.setRoleName(record.getString(  "role_name"));
+					userJobRole.setRoleType(record.getString(  "ROLE_TYPE"));
+				}
+				
+			});
+			
+//			for(int i = 0; i < dbUtil.size(); i++){
+//				UserJobRole userJobRole = new UserJobRole();
+//				userJobRole.setRoleId(dbUtil.getString(i, "role_id"));
+//				userJobRole.setRoleName(dbUtil.getString(i, "role_name"));
+//				userJobRole.setRoleType(dbUtil.getString(i, "ROLE_TYPE"));
+//				list.add(userJobRole);
+//			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

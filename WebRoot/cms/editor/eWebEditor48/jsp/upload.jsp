@@ -633,7 +633,7 @@ nAutoDir = Integer.valueOf(aStyleConfig[21]).intValue();
 
 sUploadDir = aStyleConfig[3];// "cms/siteResource/"
 
-//modify by chinacreator xinwang.jiao 2007-9-10
+//modify by bboss xinwang.jiao 2007-9-10
 /*
 if (!sUploadDir.substring(0, 1).equals("/")) {
 	sUploadDir = "../" + sUploadDir;

@@ -1742,7 +1742,7 @@ public class UserManagerImpl extends BaseUserManager {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	public List getUsersListOfRoleInOrg(String roleid, String orgId) throws ManagerException {
 		// TODO Auto-generated method stub
 		return null;

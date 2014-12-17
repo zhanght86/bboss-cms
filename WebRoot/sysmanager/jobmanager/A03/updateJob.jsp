@@ -6,7 +6,7 @@
  *
  * <p>Copyright: Copyright (c) 2008</p>
  *
- * <p>Company: chinacreator</p>
+ * <p>Company: bboss</p>
  * @Date 2008-3-17
  * @author gao.tang
  * @version 1.0

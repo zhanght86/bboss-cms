@@ -836,4 +836,11 @@ public class BaseUserManager extends EventHandle implements UserManager {
 		return null;
 	}
 
+	@Override
+	public ListInfo getUsersListInfoOfRole(String roleid, long offset,
+			int pagesize) throws ManagerException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
