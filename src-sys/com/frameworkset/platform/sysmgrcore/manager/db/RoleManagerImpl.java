@@ -468,7 +468,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			PreparedDBUtil dbUtil = new PreparedDBUtil();
 			dbUtil.preparedSelect(sql);
 			dbUtil.setString(1, roleName);
-			dbUtil.executePrepared();
+			
 			role = (Role) dbUtil.executePreparedForObject(Role.class,new RowHandler<Role>(){
 
 				@Override

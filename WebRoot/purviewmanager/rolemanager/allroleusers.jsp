@@ -37,7 +37,12 @@
                 <td><span class="toolTip" title="<pg:cell colName="userName"/>"><pg:cell colName="userName"  /></span></td>
                  <td> <pg:cell colName="workNumber" /> </td>
                 <td> <pg:cell colName="userRealname" /> </td>
-        		<td><pg:cell colName="userSex" /></td>    
+        		<td><pg:case colName="userSex">
+        			<pg:equal value="M">男</pg:equal>
+        			<pg:equal value="F">女</pg:equal>
+        			<pg:other>未知</pg:other>
+        			</pg:case>
+        		</td>    
         		<td><pg:cell colName="jobName" /></td>       
                
         </tr>
