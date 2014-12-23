@@ -62,7 +62,6 @@ import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.holiday.area.util.WorkTimeUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.Log;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
@@ -113,7 +112,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 	private ManagementService managementService;// 用于管理定时任务
 	private IdentityService identityService;// 用于管理组织结构
 	private ActivitiRelationService activitiRelationService;// 应用管理
-	private WorkTimeUtil workTimeUtil;
 
 	public UserInfoMap getUserInfoMap() {
 		return userInfoMap;
@@ -2369,8 +2367,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			// 数据查看权限管控
 			task.setAdmin(AccessControl.getAccessControl().isAdmin());
-			// 当前用户登录id
-			task.setAssignee(AccessControl.getAccessControl().getUserAccount());
+			
+			if (!AccessControl.getAccessControl().isAdmin()) {
+				// 当前用户登录id
+				task.setAssignee(AccessControl.getAccessControl().getUserAccount());
+			}
 
 			if (StringUtil.isNotEmpty(task.getProcessIntsId())) {
 				task.setProcessIntsId("%" + task.getProcessIntsId() + "%");

@@ -1,8 +1,11 @@
 package com.frameworkset.platform.sysmgrcore.manager;
 
+import org.frameworkset.remote.EventUtils;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.event.IocLifeCycleEventListener;
 import org.frameworkset.task.TaskService;
+
+import com.frameworkset.platform.sysmgrcore.purviewmanager.CacheManager;
 
 public class SYSIocLifeCycleEventListener implements IocLifeCycleEventListener {
 
@@ -15,6 +18,9 @@ public class SYSIocLifeCycleEventListener implements IocLifeCycleEventListener {
 		// 初始化任务管理服务
 		TaskService service = TaskService.getTaskService();
 		service.startService();
+		CacheManager.registRefreshEventListener();
+		//启动分布式事件服务
+		EventUtils.init();  
 
 	}
 

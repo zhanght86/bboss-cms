@@ -363,7 +363,7 @@
 			       T.ACT_TYPE_,
 			       T.OWNER_,
 			       T.ASSIGNEE_,
-			       A.DEALUSER AS USER_ID_,
+			      -- A.DEALUSER AS USER_ID_,
 			       T.START_TIME_,
 			       T.CLAIM_TIME_,
 			       T.END_TIME_,
@@ -382,8 +382,8 @@
 			       T.DELETE_REASON_
 			       
 			  FROM ACT_HI_ACTINST T
-			  LEFT JOIN TD_WF_DEAL_TASK A ON T.TASK_ID_ = A.TASKID
-                                    AND A.DEALTYPE = '2' -- 撤销
+			 -- LEFT JOIN TD_WF_DEAL_TASK A ON T.TASK_ID_ = A.TASKID
+                                  --  AND A.DEALTYPE = '2' -- 撤销
 			  
 			 WHERE 1=1 
 			  
@@ -419,8 +419,8 @@
 				 WHERE RES.ASSIGNEE_ is null
 				   		and I.TYPE_ = 'candidate'
 				   
-				   #if($isAdmin == false)
-				   		and (I.USER_ID_ = #[assignee])
+				   #if($assignee && !$assignee.equals(""))
+				  	and (I.USER_ID_ = #[assignee])
 				   #end
 				   
 				   #if($processIntsId && !$processIntsId.equals(""))
@@ -481,10 +481,10 @@
 				         
 				  WHERE 1=1
 				  
-				  #if($isAdmin == false)
-				   	and a.ASSIGNEE_ = #[assignee]
+				  #if($assignee && !$assignee.equals(""))
+				  	and a.ASSIGNEE_ = #[assignee]
 				  #else
-				    and a.ASSIGNEE_ is not null
+				  	and a.ASSIGNEE_ is not null
 				  #end
 				  
 				  #if($processIntsId && !$processIntsId.equals(""))
@@ -3271,6 +3271,13 @@
 			  FROM TD_WF_ACTIVITI_NODE_INFO T
 			 WHERE T.PROCESS_KEY = ?
 			   AND T.NODE_KEY= 'usertask1' 
+		]]>
+	</property>
+	
+	<!-- 分页获取处理人名字  gw_tanx-->
+	<property name="getUserPageList_wf">
+		<![CDATA[
+			SELECT A.* FROM TD_SM_USER A WHERE A.USER_REALNAME like #[assignee]
 		]]>
 	</property>
 	

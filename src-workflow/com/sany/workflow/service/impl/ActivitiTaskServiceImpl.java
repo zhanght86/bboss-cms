@@ -25,9 +25,11 @@ import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
+import com.sany.workflow.entity.PageData;
 import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
+import com.sany.workflow.entity.User;
 import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
@@ -1367,5 +1369,27 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		} finally {
 			tm.release();
 		}
+	}
+
+	@Override
+	public PageData getUserPageList(String assigneeName, int limit)
+			throws Exception {
+		
+		HashMap<String, String> param = new HashMap<String, String>();
+
+		if (StringUtil.isNotEmpty(assigneeName)) {
+			param.put("assignee", assigneeName + "%");
+		}
+
+		ListInfo listInfo = executor.queryListInfoBean(User.class,
+				"getUserPageList_wf", 0, limit, param);
+		
+		PageData pageData = new PageData();
+		if (null != listInfo) {
+			pageData.setDatas(listInfo.getDatas());
+			pageData.setTotalsize(listInfo.getTotalSize());
+		}
+		
+		return pageData;
 	}
 }

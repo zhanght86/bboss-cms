@@ -8,6 +8,7 @@ import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
+import com.sany.workflow.entity.PageData;
 import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
@@ -285,4 +286,15 @@ public interface ActivitiTaskService {
 	public ListInfo getUserReaderCopyTasks(String process_key,
 			String businesskey, long offset, int pagesize) throws Exception;
 
+	/**
+	 * 分页获取处理人名字
+	 * 
+	 * @param assignee
+	 * @param limit
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年12月22日
+	 */
+	public PageData getUserPageList(String assigneeName, int limit) throws Exception;
 }

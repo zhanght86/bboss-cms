@@ -17,6 +17,7 @@ import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
+import com.sany.workflow.entity.PageData;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
@@ -58,7 +59,7 @@ public class ActivitiTaskManageAction {
 
 			model.addAttribute("isAdmin", AccessControl.getAccessControl()
 					.isAdmin());
-
+			
 			return "path:ontimeTaskManager";
 
 		} catch (Exception e) {
@@ -1070,6 +1071,13 @@ public class ActivitiTaskManageAction {
 		} finally {
 			tm.release();
 		}
+	}
+
+	public @ResponseBody(datatype = "json")
+	PageData getUserPageList(String assigneeName, int limit, ModelMap model)
+			throws Exception {
+
+		return activitiTaskService.getUserPageList(assigneeName, limit);
 	}
 
 }

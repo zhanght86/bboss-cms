@@ -325,7 +325,7 @@ public abstract class PermissionRoleMap implements Listener {
 //                prMap.remove(appPermission);
 //            }
             removeResourceToRole(null);
-            removeRoleToResource("");
+//            removeRoleToResource("");
             prMap.clear();
             this.resourceMap.clear();
             resourceRoleMaps.clear();
