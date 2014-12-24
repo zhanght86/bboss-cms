@@ -42,7 +42,7 @@ public class CacheManager  implements Listener<String>{
 	public static void registRefreshEventListener()
 	{
 		
-		NotifiableFactory.getNotifiable().addListener(new CacheManager(), cacheRefreshEvent);
+		NotifiableFactory.addListener(new CacheManager(), cacheRefreshEvent);
 	}
 
 	@Override
