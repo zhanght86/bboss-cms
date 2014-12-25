@@ -93,7 +93,10 @@
 					<pg:cell colName="ASSIGNEE_NAME"/>
 				</td>  
 				<td>
-					<pg:cell colName="readedCopyTaskNames"/>
+					<pg:notempty colName="readedCopyTaskNames">
+						已阅：<pg:cell colName="readedCopyTaskNames" /> 
+						<a href="javascript:viewCopyTaskInfo('<pg:cell colName="ID_" />')" name="" ><font id="copytaskFont" color="#0a70ed">[明细]</font></a>
+					</pg:notempty>
 				</td>  
 		    	<td>
 					 <pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>

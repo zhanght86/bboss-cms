@@ -151,6 +151,7 @@
         <column name="DEALREMARK" size="255" type="NVARCHAR"/>
         <column name="DEALOPTION" size="255" type="NVARCHAR"/>
         <column name="DEALREASON" size="255" type="NVARCHAR"/>
+        <column name="BATCHNUM" size="64" type="NVARCHAR"/>
     </table>
     
     <table name="TD_WF_APP_PIC">

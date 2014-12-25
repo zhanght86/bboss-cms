@@ -2,7 +2,10 @@ package com.sany.workflow.demo.service;
 
 import java.util.List;
 
+import org.frameworkset.util.annotations.ResponseBody;
+
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
 import com.sany.workflow.demo.entity.ListData;
 import com.sany.workflow.demo.entity.PageData;
@@ -38,5 +41,8 @@ public interface BusinessDemoService {
 
 	public List<ListData> getBusinessKeyList(String businessKey)
 			throws Exception;
+
+	public List<HisTaskInfo> getHisTaskInfo(String businessKey,
+			boolean filterLog) throws Exception;
 
 }

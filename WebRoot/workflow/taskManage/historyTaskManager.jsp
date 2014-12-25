@@ -12,6 +12,9 @@
 <title>历史任务管理</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type='text/javascript' src="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.css" />
+
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -31,6 +34,33 @@ $(document).ready(function() {
     $("#businessType").combotree({
    		url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
    	});
+    
+    <%-- 自动匹配用户名称--%>
+	 var url="<%=request.getContextPath()%>/workflow/taskManage/getUserPageList.page";
+		$("#queryForm #assignee").autocomplete(url , {
+	         minChars:1,//自动完成激活之前填入的最小字符 
+	         width:120,
+	         max:20,// 最多显示多少条记录
+	         dataType:"json",
+	         // 扩展字段
+	         extraParams: {    
+	        	 assigneeName: function(){return $("#queryForm #assignee").val()}
+	         },
+	         scroll : true,//是否显示滚动条
+	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
+	         cacheLength : 30, //缓存结果队列长度 
+	         valuefiled:"user_realname",// 默认显示实体哪个属性
+	         //下拉列表格式   
+	         formatItem: function(row, i, max) {
+	         	return "<I>"+row.user_realname+"("+row.user_name+")</I>";
+	         },
+	         //与这些相匹配
+	         formatMatch: function(row, i, max) {
+	              return row;
+	         }
+	     }).result(function(event,row,formatted){//通过result函数可进对数据进行其他操作
+	     		$("#queryForm #assignee").val(row.user_name);
+	     });
            	
 });
 
@@ -52,10 +82,12 @@ function queryList(){
 	var createUser = $("#createUser").val();
 	var entrustUser = $("#entrustUser").val();
 	var appName = $("#appName").val();
+	var assignee = $("#queryForm #assignee").val();
 	
     $("#historyContainer").load("<%=request.getContextPath()%>/workflow/taskManage/queryHistoryTaskData.page #customContent", 
-    	{"processIntsId":processIntsId, "processKey":processKey,"taskId":taskId,"taskName":taskName,"businessTypeId":businessTypeId,
-    	"businessKey":businessKey,"createUser":createUser,"entrustUser":entrustUser,"appName":appName},
+    	{"processIntsId":processIntsId, "processKey":processKey,"taskId":taskId,"taskName":taskName,
+    	"businessTypeId":businessTypeId,"businessKey":businessKey,"createUser":createUser,
+    	"entrustUser":entrustUser,"appName":appName, "assignee":assignee},
     	function(){loadjs();});
 }
 
@@ -136,10 +168,23 @@ function doreset(){
 											</td>
 										</tr>
 										<tr>
-										<pg:empty actual="${processKey}">
-											<th>应用：</th>
-											<td><input id="appName" name="appName" type="text" class="w120"/></td>
-										</pg:empty>
+											<th>处理人：</th>
+											<td>
+												<pg:true actual="${isAdmin}" evalbody="true">
+													<pg:yes>
+														<input id="assignee" name="assignee" type="text" class="w120" />
+													</pg:yes>
+													<pg:no>
+														<input id="assignee" name="assignee" type="text"
+															class="w120" value="${currentAccount}" disabled/>
+													</pg:no>
+												</pg:true>
+											</td>
+											
+											<pg:empty actual="${processKey}">
+												<th>应用：</th>
+												<td><input id="appName" name="appName" type="text" class="w120"/></td>
+											</pg:empty>
 										</tr>
 									</table>
 								</td>

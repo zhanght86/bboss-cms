@@ -9,9 +9,9 @@
 		<table id="protable" border="0" cellpadding="0" cellspacing="0" class="sany_table">
 			<tr>
 				<th>节点名</th>
-				<th style="width: 30%">处理人员</th>
+				<th style="width: 20%">处理人员</th>
 				<th>处理方式</th>
-				<th style="width: 20%">节点描述</th>
+				<th style="width: 30%">节点描述</th>
 				<th>处理工时(小时)</th>
 				<th>节点状态</th>
 			</tr>

@@ -302,6 +302,25 @@ public interface ActivitiBusinessService {
 			String taskId, ModelMap model) throws Exception;
 
 	/**
+	 * 跳转至处理任务页面 (不显示没有设置处理人的节点)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param processId
+	 *            流程实例id
+	 * @param taskId
+	 *            任务id
+	 * @param model
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年9月29日
+	 */
+	public ModelMap toDealTask(String processKey, String processId,
+			String taskId, ModelMap model, boolean filterLog) throws Exception;
+
+	/**
 	 * 跳转至处理任务页面 (显示没有设置处理人的节点)
 	 * 
 	 * @param processKey
@@ -319,6 +338,58 @@ public interface ActivitiBusinessService {
 			String processId, String taskId, ModelMap model) throws Exception;
 
 	/**
+	 * 跳转至处理任务页面 (显示没有设置处理人的节点)
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param processId
+	 *            流程实例id
+	 * @param taskId
+	 *            任务id
+	 * @param model
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年9月29日
+	 */
+	public ModelMap toDealTaskContainNoAssignerNodes(String processKey,
+			String processId, String taskId, ModelMap model, boolean filterLog)
+			throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTask(String taskId, String userId, ModelMap model)
+			throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTask(String taskId, String userId, ModelMap model,
+			boolean filterLog) throws Exception;
+
+	/**
 	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
 	 * 
 	 * @param taskId
@@ -334,6 +405,98 @@ public interface ActivitiBusinessService {
 	 */
 	public ModelMap toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, boolean filterLog) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param processKey
+	 *            流程key
+	 * @return
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param processKey
+	 *            流程key
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年10月21日
+	 */
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey, boolean filterLog)
+			throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String userId, ModelMap model) throws Exception;
+
+	/**
+	 * 跳转至查看任务页面(显示没有设置处理人的节点)
+	 * 
+	 * @param taskId
+	 *            任务id
+	 * @param userId
+	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
+	 * @param model
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年8月31日
+	 */
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String userId, ModelMap model, boolean filterLog) throws Exception;
 
 	/**
 	 * 跳转至查看任务页面(显示没有设置处理人的节点)
@@ -363,18 +526,18 @@ public interface ActivitiBusinessService {
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @param model
-	 * @param processKey
-	 *            流程key
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
 	 * @return
 	 * @throws Exception
-	 *             2014年10月21日
+	 *             2014年8月31日
 	 */
 	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
 			String bussinessKey, String userId, ModelMap model,
-			String processKey) throws Exception;
+			boolean filterLog) throws Exception;
 
 	/**
-	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
+	 * 跳转至查看任务页面(显示没有设置处理人的节点)
 	 * 
 	 * @param taskId
 	 *            任务id
@@ -389,38 +552,31 @@ public interface ActivitiBusinessService {
 	 * @throws Exception
 	 *             2014年10月21日
 	 */
-	public ModelMap toViewTask(String taskId, String bussinessKey,
-			String userId, ModelMap model, String processKey) throws Exception;
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model,
+			String processKey) throws Exception;
 
 	/**
 	 * 跳转至查看任务页面(显示没有设置处理人的节点)
 	 * 
 	 * @param taskId
 	 *            任务id
+	 * @param bussinessKey
+	 *            业务主键key
 	 * @param userId
 	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
 	 * @param model
+	 * @param processKey
+	 *            流程key
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
 	 * @return
 	 * @throws Exception
-	 *             2014年8月31日
+	 *             2014年10月21日
 	 */
 	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
-			String userId, ModelMap model) throws Exception;
-
-	/**
-	 * 跳转至查看任务页面(不显示没有设置处理人的节点)
-	 * 
-	 * @param taskId
-	 *            任务id
-	 * @param userId
-	 *            用户id，可以是工号或用户名等，需要与代办查询条件等一致即可
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 *             2014年8月31日
-	 */
-	public ModelMap toViewTask(String taskId, String userId, ModelMap model)
-			throws Exception;
+			String bussinessKey, String userId, ModelMap model,
+			String processKey, boolean filterLog) throws Exception;
 
 	/**
 	 * 获取流程实例的处理记录(已完成的任务)
@@ -432,6 +588,19 @@ public interface ActivitiBusinessService {
 	 *             2014年8月26日
 	 */
 	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception;
+
+	/**
+	 * 获取流程实例的处理记录(已完成的任务)
+	 * 
+	 * @param processId
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年12月25日
+	 */
+	public List<HisTaskInfo> getProcHisInfo(String processId, boolean filterLog)
+			throws Exception;
 
 	/**
 	 * 审批处理任务(任务id)

@@ -41,14 +41,14 @@ $(document).ready(function() {
     
     <%-- 自动匹配用户名称--%>
 	 var url="<%=request.getContextPath()%>/workflow/taskManage/getUserPageList.page";
-		$("#queryForm #assigneeName").autocomplete(url , {
+		$("#queryForm #assignee").autocomplete(url , {
 	         minChars:1,//自动完成激活之前填入的最小字符 
 	         width:120,
 	         max:20,// 最多显示多少条记录
 	         dataType:"json",
 	         // 扩展字段
 	         extraParams: {    
-	        	 assigneeName: function(){return $("#queryForm #assigneeName").val()}
+	        	 assigneeName: function(){return $("#queryForm #assignee").val()}
 	         },
 	         scroll : true,//是否显示滚动条
 	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
@@ -63,7 +63,7 @@ $(document).ready(function() {
 	              return row;
 	         }
 	     }).result(function(event,row,formatted){//通过result函数可进对数据进行其他操作
-	    	 $("#queryForm #assignee").val(row.user_name);
+	     		$("#queryForm #assignee").val(row.user_name);
 	     });
            	
 });
@@ -77,7 +77,7 @@ function delegateTasks () {
 //查看委托关系
 function getEntrustInfo(){
 	var url="<%=request.getContextPath()%>/workflow/taskManage/viewEntrustInfo.page";
-	$.dialog({ title:'查看[${currentAccount}]授权信息',width:1100,height:620, content:'url:'+url});
+	$.dialog({ title:'查看[${currentAccountName}]授权信息',width:1100,height:620, content:'url:'+url});
 }
        
 //加载实时任务列表数据  
@@ -353,14 +353,13 @@ function viewCopyTask(processInstId,id){
 												<td>
 													<pg:true actual="${isAdmin}" evalbody="true">
 														<pg:yes>
-															<input id="assigneeName" name="assigneeName" type="text" class="w120" />
+															<input id="assignee" name="assignee" type="text" class="w120" />
 														</pg:yes>
 														<pg:no>
-															<input id="assigneeName" name="assigneeName" type="text"
+															<input id="assignee" name="assignee" type="text"
 																class="w120" value="${currentAccount}" disabled/>
 														</pg:no>
 													</pg:true>
-													<input id="assignee" name="assignee" type="hidden" class="w120" />
 												</td>
 											</tr>
 											

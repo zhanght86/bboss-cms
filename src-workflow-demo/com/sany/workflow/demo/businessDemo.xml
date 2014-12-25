@@ -117,4 +117,23 @@
 		]]>
 	</property>
 	
+	<!-- 根据业务主键获取流程实例  gw_tanx -->
+	<property name="getProcessByBusinesskey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
 </properties>

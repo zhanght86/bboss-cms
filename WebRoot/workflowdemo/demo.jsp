@@ -25,7 +25,7 @@ $(document).ready(function() {
  	         dataType:"json",
  	         // 扩展字段
  	         extraParams: {    
- 	        	 businessKey: function(){return $("#businessKey").val()}
+ 	        	businessKey: function(){return $("#businessKey").val()}
  	         },
  	         scroll : true,//是否显示滚动条
  	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
@@ -105,13 +105,13 @@ function queryList(){
 // 处理业务单号
 function dealBusiness(businessKey,businessState,processKey){
 	if (businessState == '0') {
-		var url="<%=request.getContextPath()%>/workflow/businessDemo/toworkflowMain.page?businessKey="+businessKey
-		+"&processKey="+processKey;
+		var url= encodeURI("<%=request.getContextPath()%>/workflow/businessDemo/toworkflowMain.page?businessKey="+businessKey
+		+"&processKey="+processKey);
 		
 		$.dialog({ id:'iframeNewId', title:'申请流程页面('+businessKey+')',width:1000,height:700, content:'url:'+url});  
 	}else {
 		
-		var url="<%=request.getContextPath()%>/workflow/businessDemo/toViewTask.page?businessKey="+businessKey;
+		var url=encodeURI("<%=request.getContextPath()%>/workflow/businessDemo/toViewTask.page?businessKey="+businessKey);
 		
 		if (businessState == '1') {
 			

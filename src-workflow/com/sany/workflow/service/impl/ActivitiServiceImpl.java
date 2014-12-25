@@ -3395,6 +3395,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 
 			tm.begin();
+			
+			if (StringUtil.isEmpty(processInstCondition.getStartUser())) {
+				// 当前用户登录id
+				processInstCondition.setStartUser(AccessControl.getAccessControl().getUserAccount());
+			}
 
 			// 流程实例ID
 			if (StringUtil.isNotEmpty(processInstCondition.getWf_Inst_Id())) {
@@ -3522,15 +3527,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 					if (pi == null) {
 						continue;
 					}
-
-					this.runtimeService.deleteProcessInstance(processInstid,
-							deleteReason, bussinessop, bussinessRemark);
-
+					
 					// 日志记录废弃操作
 					addDealTask(taskId, currentUser, getUserInfoMap()
 							.getUserName(currentUser), "3", processInstid,
 							processKey, deleteReason, bussinessop,
 							bussinessRemark);
+
+					this.runtimeService.deleteProcessInstance(processInstid,
+							deleteReason, bussinessop, bussinessRemark);
 
 				}
 			}
@@ -4667,10 +4672,46 @@ public class ActivitiServiceImpl implements ActivitiService,
 			String processKey, String dealReason, String bussinessop,
 			String bussinessRemark) throws Exception {
 
-		executor.insert("addDealTaskInfo_wf", UUID.randomUUID().toString(),
-				taskId, dealUser, dealUserName, dealType, processId,
-				processKey, new Timestamp(new Date().getTime()), dealReason,
-				bussinessop, bussinessRemark);
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 通过流程实例ID，获取流程当前所有的任务id
+			List<String> taskIdList = executor.queryList(String.class, "getTaskIdByProcessId_wf",
+					processId);
+
+			List<Map> paramList = new ArrayList<Map>();
+			if (null != taskIdList && taskIdList.size() > 0) {
+				String batchNum = UUID.randomUUID().toString();
+
+				for (int i = 0; i < taskIdList.size(); i++) {
+					Map datas = new HashMap();
+					datas.put("uuid", UUID.randomUUID().toString());
+					datas.put("taskId", taskIdList.get(i) + "");
+					datas.put("dealUser", dealUser);
+					datas.put("dealUserName", dealUserName);
+					datas.put("dealType", dealType);
+					datas.put("processId", processId);
+					datas.put("processKey", processKey);
+					datas.put("dealtime", new Timestamp(new Date().getTime()));
+					datas.put("dealReason", dealReason);
+					datas.put("bussinessop", bussinessop);
+					datas.put("bussinessRemark", bussinessRemark);
+					datas.put("batchNum", batchNum);
+					paramList.add(datas);
+				}
+			}
+
+			executor.insertBeans("addDealTaskInfo_wf", paramList);
+			
+			tm.commit();
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+
 	}
 
 	@Override

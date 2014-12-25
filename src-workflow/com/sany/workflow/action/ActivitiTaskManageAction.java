@@ -51,15 +51,19 @@ public class ActivitiTaskManageAction {
 
 		try {
 
-			model.addAttribute("currentAccount", activitiService
-					.userIdToUserName(AccessControl.getAccessControl()
-							.getUserAccount(), "2"));
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+			String currentAccount = AccessControl.getAccessControl()
+					.getUserAccount();
+
+			model.addAttribute("currentAccountName",
+					activitiService.userIdToUserName(currentAccount, "2"));
+
+			model.addAttribute("currentAccount", currentAccount);
 
 			model.addAttribute("processKey", processKey);
 
-			model.addAttribute("isAdmin", AccessControl.getAccessControl()
-					.isAdmin());
-			
+			model.addAttribute("isAdmin", isAdmin);
+
 			return "path:ontimeTaskManager";
 
 		} catch (Exception e) {
@@ -504,14 +508,14 @@ public class ActivitiTaskManageAction {
 
 				task.setCompleteRemark(remark);
 
-				// 保存控制变量参数
-				activitiService.addNodeWorktime(task.getProcessKey(),
-						task.getProcessIntsId(), nodeControlParamList);
-
 				// 完成任务
 				activitiTaskService.completeTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						nodeControlParamList);
+				
+				// 保存控制变量参数
+				activitiService.addNodeWorktime(task.getProcessKey(),
+						task.getProcessIntsId(), nodeControlParamList);
 
 				tm.commit();
 
@@ -653,7 +657,7 @@ public class ActivitiTaskManageAction {
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
-
+				
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
@@ -661,7 +665,7 @@ public class ActivitiTaskManageAction {
 				activitiTaskService.rejectToPreTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						nodeControlParamList, rejectedtype);
-
+				
 				return "success";
 			} else {
 				return "fail: 您没有权限驳回当前任务";
@@ -904,14 +908,14 @@ public class ActivitiTaskManageAction {
 
 			// String remark = "[" + currentUser + "]将任务撤销至["
 			// + act.getProperty("name") + "]";
+			
+			// 日志记录撤销操作
+			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
+					processId, processKey, cancelTaskReason, "撤销任务", remark);
 
 			// 撤销任务
 			activitiService.cancelTask(taskId, nodeInfo.getNode_key(), remark,
 					"撤销任务", cancelTaskReason);
-
-			// 日志记录撤销操作
-			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
-					processId, processKey, cancelTaskReason, "撤销任务", remark);
 
 			tm.commit();
 

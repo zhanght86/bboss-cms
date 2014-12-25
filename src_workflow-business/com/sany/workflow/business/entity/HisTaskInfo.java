@@ -18,6 +18,8 @@ public class HisTaskInfo implements Serializable {
 	private static final long serialVersionUID = -4473752406812328499L;
 
 	private String ID_;
+	
+	private String batchNum;// 批次，主要是针对并行任务进行撤销，驳回，废弃的操作，视为同一批次，便于过滤日志
 
 	private String PROC_INST_ID_;// 流程实例ID
 
@@ -360,6 +362,14 @@ public class HisTaskInfo implements Serializable {
 
 	public void setOvertimesend(int overtimesend) {
 		this.overtimesend = overtimesend;
+	}
+
+	public String getBatchNum() {
+		return batchNum;
+	}
+
+	public void setBatchNum(String batchNum) {
+		this.batchNum = batchNum;
 	}
 
 }

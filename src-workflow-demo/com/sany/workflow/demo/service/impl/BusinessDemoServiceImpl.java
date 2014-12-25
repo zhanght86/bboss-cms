@@ -24,6 +24,7 @@ import org.activiti.engine.task.Task;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
+import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.demo.entity.BusinessDemoTreeEntity;
@@ -31,6 +32,7 @@ import com.sany.workflow.demo.entity.DemoEntity;
 import com.sany.workflow.demo.entity.ListData;
 import com.sany.workflow.demo.entity.PageData;
 import com.sany.workflow.demo.service.BusinessDemoService;
+import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.service.ActivitiService;
 
 /**
@@ -205,5 +207,16 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 				"getBusinessKeyList", param);
 
 		return listInfo;
+	}
+
+	@Override
+	public List<HisTaskInfo> getHisTaskInfo(String businessKey,
+			boolean filterLog) throws Exception {
+
+		ProcessInst inst = executor.queryObject(ProcessInst.class,
+				"getProcessByBusinesskey_wf", businessKey);
+
+		return workflowService.getProcHisInfo(inst.getPROC_INST_ID_(),
+				filterLog);
 	}
 }

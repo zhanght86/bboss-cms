@@ -497,6 +497,12 @@ public class ActivitiRepositoryAction {
 		try {
 			List versionList = activitiService.getProcessVersionList(processKey);
 			
+			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+			String currentAccount = AccessControl.getAccessControl()
+					.getUserAccount();
+			
+			model.addAttribute("isAdmin", isAdmin);
+			model.addAttribute("currentAccount", currentAccount);
 			model.addAttribute("versionList", versionList);
 			model.addAttribute("processKey", processKey);
 			

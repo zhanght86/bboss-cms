@@ -14,6 +14,7 @@ import bboss.org.jgroups.util.UUID;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.ActNode;
+import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.service.ActivitiBusinessService;
 import com.sany.workflow.business.util.WorkflowConstants;
@@ -174,6 +175,8 @@ public class BusinessDemoAction {
 			ModelMap model) throws Exception {
 
 		workflowService.toViewTask(taskId, businessKey, userId, model);
+
+		model.addAttribute("businessKey", businessKey);
 		return "path:toIndex";
 	}
 
@@ -211,8 +214,7 @@ public class BusinessDemoAction {
 	 *             2014年9月19日
 	 */
 	public @ResponseBody(datatype = "json")
-	PageData getBusinessKeyPageList(
-			String businessKey, int limit,
+	PageData getBusinessKeyPageList(String businessKey, int limit,
 			ModelMap model) throws Exception {
 
 		return demoService.getBusinessKeyList(businessKey, limit);
@@ -234,4 +236,29 @@ public class BusinessDemoAction {
 
 		return demoService.getBusinessKeyList(businessKey);
 	}
+
+	/**
+	 * 获取日志记录
+	 * 
+	 * @param processInstId
+	 *            流程实例id
+	 * @param filterLog
+	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
+	 * @return
+	 * @throws Exception
+	 *             2014年12月25日
+	 */
+	public String getHisTaskInfo(String businessKey, boolean filterLog,
+			ModelMap model) throws Exception {
+		
+		List<HisTaskInfo> taskHistorList = demoService.getHisTaskInfo(
+				businessKey, filterLog);
+		
+		model.addAttribute("taskHistorList", taskHistorList);
+		
+		model.addAttribute("filterLog", filterLog);
+		
+		return "path:hiTaskList";
+	}
+
 }

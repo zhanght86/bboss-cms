@@ -10,6 +10,7 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.service.ActivitiBusinessService;
@@ -116,7 +117,10 @@ public class ChooseUserAction {
 	 */
 	public @ResponseBody
 	User getUserInfo(String userName) throws Exception {
-		return chooseUserService.getUserInfo(userName);
+		userName = AccessControl.getUserAccounByWorknumberOrUsername(userName);
+		User user = chooseUserService.getUserInfo(userName);
+		user.setOrg_name(FunctionDB.getUserorgjobinfos(Integer.parseInt(user.getUser_id())));
+		return user;
 	}
 
 	public @ResponseBody

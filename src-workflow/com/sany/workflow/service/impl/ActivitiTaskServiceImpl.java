@@ -240,18 +240,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					+ activitiService.getUserInfoMap().getUserName(
 							task.getCurrentUser()) + "]将任务驳回至["
 					+ task.getToActName() + "]";
-
-			activitiService.getTaskService().rejecttoTask(task.getTaskId(),
-					variableMap, remark, task.getRejectToActId(),
-					rejectedtype == 1 ? true : false, "驳回任务",
-					task.getCompleteReason());
-
+			
 			// 日志记录驳回操作
 			activitiService.addDealTask(task.getTaskId(),
 					task.getCurrentUser(), activitiService.getUserInfoMap()
 							.getUserName(task.getCurrentUser()), "1", task
 							.getProcessIntsId(), task.getProcessKey(), task
 							.getCompleteReason(), "驳回任务", remark);
+
+			activitiService.getTaskService().rejecttoTask(task.getTaskId(),
+					variableMap, remark, task.getRejectToActId(),
+					rejectedtype == 1 ? true : false, "驳回任务",
+					task.getCompleteReason());
 
 			tm.commit();
 		} catch (Exception e) {
@@ -444,15 +444,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-
+			
 			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
 			String currentAccount = AccessControl.getAccessControl()
 					.getUserAccount();
 
 			// 数据查看权限管控
 			task.setAdmin(isAdmin);
-			// 当前用户登录id
-			task.setAssignee(currentAccount);
+			
+			if (!isAdmin) {
+				// 当前用户登录id
+				task.setAssignee(currentAccount);
+			}
 
 			if (StringUtil.isNotEmpty(task.getProcessIntsId())) {
 				task.setProcessIntsId("%" + task.getProcessIntsId() + "%");
@@ -1318,8 +1321,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						// 部门
 						Organization org = OrgCacheManager.getInstance()
 								.getOrganization(copyTask.getCoper());
-						copyTask.setCoperCNName(org.getOrgName());
-
+						if (org != null) {
+							copyTask.setCoperCNName(org.getOrgName());
+						}
 					}
 
 				}

@@ -514,7 +514,7 @@ $(document).ready(function() {
 								<input type="button" style="width: 30px; height: 40px; margin: 0px 10px 30px" value="∨" id="btnMoveDown" title="快速鍵: alt+向下"/> 
 							</td>
 						</tr>
-						<tr style="height: 60px;">
+						<tr style="height: 80px;">
 							<td colspan="2"><div id="select1Detail"></td>
 							<td colspan="2"><div id="select2Detail"></td>
 						</tr>

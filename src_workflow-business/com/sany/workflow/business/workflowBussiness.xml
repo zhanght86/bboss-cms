@@ -49,45 +49,44 @@
 	<!-- 工作流管理中查看明细列表  -->
 	<property name="selectTaskHistorById_wf">
 		<![CDATA[
-			SELECT T.ID_,
-			       T.PROC_DEF_ID_,
-			       T.PROC_INST_ID_,
-			       T.EXECUTION_ID_,
-			       T.ACT_ID_ AS TASK_DEF_KEY_,
-			       T.TASK_ID_,
-			       T.CALL_PROC_INST_ID_,
-			       T.ACT_NAME_ ,
-			       T.OWNER_,
-			       T.ASSIGNEE_,
-			       A.DEALUSER,
-			       T.START_TIME_ ,
-			       T.CLAIM_TIME_ ,
-			       T.END_TIME_ ,
-			       T.DELETE_REASON_,
-			       T.DURATION_,
-			       T.DURATION_NODE,
-			       T.IS_CONTAIN_HOLIDAY,
-			       T.ALERTTIME,
-			       T.OVERTIME,
-			       T.ADVANCESEND,
-			       T.OVERTIMESEND,
-			       T.IS_AUTO_COMPLETE,
-			       T.AUTO_HANDLER,
-			       T.BUSSINESS_OP,
-			       T.BUSSINESS_REMARK,
-			       T.DELETE_REASON_
-			
-			  FROM ACT_HI_ACTINST T
-			  LEFT JOIN TD_WF_DEAL_TASK A ON T.TASK_ID_ = A.TASKID
-                                    AND A.DEALTYPE = '2' -- 撤销
-			
-			 WHERE T.ACT_TYPE_='userTask'
-			      
-			   AND T.END_TIME_ IS NOT NULL
-			      
-			   AND T.PROC_INST_ID_ = ?
-			
-			 ORDER BY T.START_TIME_LONG,T.END_TIME_LONG
+		SELECT B.BATCHNUM           BATCHNUM,
+		       B.DEALUSER           DEALUSER,
+		       T.ID_                ID_,
+		       T.PROC_DEF_ID_       PROC_DEF_ID_,
+		       T.PROC_INST_ID_      PROC_INST_ID_,
+		       T.ACT_ID_            AS TASK_DEF_KEY_,
+		       T.TASK_ID_           TASK_ID_,
+		       T.ACT_NAME_          ACT_NAME_,
+		       T.OWNER_             OWNER_,
+		       T.ASSIGNEE_          ASSIGNEE_,
+		       T.START_TIME_        START_TIME_,
+		       T.CLAIM_TIME_        CLAIM_TIME_,
+		       T.END_TIME_          END_TIME_,
+		       T.DURATION_          DURATION,
+		       T.DURATION_NODE      DURATION_NODE,
+		       T.IS_CONTAIN_HOLIDAY IS_CONTAIN_HOLIDAY,
+		       T.ALERTTIME          ALERTTIME,
+		       T.OVERTIME           OVERTIME,
+		       T.ADVANCESEND        ADVANCESEND,
+		       T.OVERTIMESEND       OVERTIMESEND,
+		       T.IS_AUTO_COMPLETE   IS_AUTO_COMPLETE,
+		       T.AUTO_HANDLER       AUTO_HANDLER,
+		       T.BUSSINESS_OP       BUSSINESS_OP,
+		       T.BUSSINESS_REMARK   BUSSINESS_REMARK,
+		       T.DELETE_REASON_     DELETE_REASON_,
+		       T.END_TIME_LONG      END_TIME_LONG,
+		       T.START_TIME_LONG    START_TIME_LONG
+		
+		  FROM ACT_HI_ACTINST T
+		  LEFT JOIN TD_WF_DEAL_TASK B ON T.TASK_ID_ = B.TASKID
+		
+		 WHERE T.ACT_TYPE_ = 'userTask'
+		      
+		   AND T.END_TIME_ IS NOT NULL
+		      
+		   AND T.PROC_INST_ID_ = ?
+		
+		 ORDER BY t.START_TIME_LONG, t.END_TIME_LONG
 		]]>
 	</property>
 

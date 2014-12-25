@@ -12,6 +12,9 @@
 <title>流程实例信息</title>
 <%@ include file="/common/jsp/css.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type='text/javascript' src="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.css" />
+
 <%-- 
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/jquery.multiselect.css" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/style.css" />
@@ -51,6 +54,33 @@ $(document).ready(function() {
 	$("#businessType").combotree({
 	   url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
 	});
+	
+	<%-- 自动匹配用户名称--%>
+	 var url="<%=request.getContextPath()%>/workflow/taskManage/getUserPageList.page";
+		$("#startUser").autocomplete(url , {
+	         minChars:1,//自动完成激活之前填入的最小字符 
+	         width:120,
+	         max:20,// 最多显示多少条记录
+	         dataType:"json",
+	         // 扩展字段
+	         extraParams: {    
+	        	 assigneeName: function(){return $("#startUser").val()}
+	         },
+	         scroll : true,//是否显示滚动条
+	         matchContains: true, //包含匹配，就是data参数里的数据，是否只要包含文本框里的数据就显示 
+	         cacheLength : 30, //缓存结果队列长度 
+	         valuefiled:"user_realname",// 默认显示实体哪个属性
+	         //下拉列表格式   
+	         formatItem: function(row, i, max) {
+	         	return "<I>"+row.user_realname+"("+row.user_name+")</I>";
+	         },
+	         //与这些相匹配
+	         formatMatch: function(row, i, max) {
+	              return row;
+	         }
+	     }).result(function(event,row,formatted){//通过result函数可进对数据进行其他操作
+	     		$("#startUser").val(row.user_name);
+	     });
 	
 });
 
@@ -177,11 +207,12 @@ function queryList(){
 	var wf_version = $("#wf_version").combobox('getValues');
 	var businessTypeId = $("#businessType").combotree('getValue');
 	var wf_app_name = $("#wf_app_name").val();
+	var startUser = $("#startUser").val();
 	
 	$("#instanceContainer").load("<%=request.getContextPath()%>/workflow/repository/queryProcessIntsByKey.page? #customContent", 
 		{"wf_key":wf_key,"wf_Inst_Id":wf_Inst_Id,"wf_start_time1":wf_start_time1,"wf_start_time2":wf_start_time2,
 		"wf_end_time1":wf_end_time1,"wf_end_time2":wf_end_time2,"wf_state":wf_state,"wf_versions":wf_version,
-		"wf_business_key":wf_business_key,"businessTypeId":businessTypeId,"wf_app_name":wf_app_name},
+		"wf_business_key":wf_business_key,"businessTypeId":businessTypeId,"wf_app_name":wf_app_name,"startUser":startUser},
 		function(){loadjs();});
 }
 
@@ -340,13 +371,25 @@ function doreset(){
 												<select class="easyui-combotree" id='businessType' name="businessType" required="false"
 														style="width: 120px;">
 											</td>
-											<pg:empty actual="${processKey}" >
-												<th>应用：</th>
-												<td>
-													<input id="wf_app_name" name="wf_app_name" type="text" class="w120" />
-												</td>
-											</pg:empty>
+											<th>发起人：</th>
+											<td>
+												<pg:true actual="${isAdmin}" evalbody="true">
+													<pg:yes>
+														<input id="startUser" name="startUser" type="text" class="w120" />
+													</pg:yes>
+													<pg:no>
+														<input id="startUser" name="startUser" type="text" class="w120" 
+															class="w120" value="${currentAccount}" disabled/>
+													</pg:no>
+												</pg:true>
+											</td>
 										</tr>
+										<pg:empty actual="${processKey}" >
+											<tr>
+												<th>应用：</th>
+												<td><input id="wf_app_name" name="wf_app_name" type="text" class="w120" /></td>
+											</tr>
+										</pg:empty>
 									</table>
 								</td>
 								<td class="right_box"></td>

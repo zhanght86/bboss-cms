@@ -13,6 +13,7 @@
 var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
 	initliteRequiredStar('1,4');
+	showLogStyle('1');
 });
 
 function submitForm0(){
@@ -89,6 +90,25 @@ function submitFormData(){
 	
 }
 
+// 切换显示审批记录的样式
+function showLogStyle(style){
+	var filterLog = false;
+	var styleHtml ='';
+	
+	// 合并并行节点产生的撤销、驳回、废弃日志记录
+	if (style == '1') {
+		filterLog = true;
+	}else if (style == '0') {// 不合并
+		filterLog = false;
+	}
+	
+	var url = "<%=request.getContextPath()%>/workflow/businessDemo/getHisTaskInfo.page?"
+		+"businessKey=${businessKey}&filterLog="+filterLog;
+		
+	$("#logInfo").load(url,function(){loadjs()});
+	
+}
+
 </script>
 </head>
 <body >
@@ -102,7 +122,7 @@ function submitFormData(){
 	  
 	  <div id="tabCon01">
 	    <ul class="ul_news">
-	    	<%@ include file="../../workflowBusiness/workflowMain.jsp"%>
+	    	<%@ include file="workflowMain.jsp"%>
 	    	
 	    </ul>
 	    <ul class="ul_news" style="display:none;">

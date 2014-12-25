@@ -127,6 +127,10 @@
 		  
 			WHERE 1=1
 			
+			#if($startUser && !$startUser.equals(""))
+				AND A.START_USER_ID_ = #[startUser]
+			#end
+			
 			#if($wf_key && !$wf_key.equals(""))
 				AND B.KEY_ like #[wf_key]
 			#end
@@ -1138,6 +1142,10 @@
               LEFT JOIN TD_WF_ENTRUST_TASK F ON A.ID_ = F.TASKID
                  
 			 WHERE A.END_TIME_ IS NOT NULL
+			 
+			  #if($assignee && !$assignee.equals(""))
+				AND A.ASSIGNEE_=#[assignee]
+			  #end
 			 
 			  #if($processKey && !$processKey.equals(""))
 				AND C.KEY_ like #[processKey]
@@ -2960,9 +2968,12 @@
 					   DEALTIME,
 					   DEALREMARK,
 					   DEALOPTION,
-					   DEALREASON)
+					   DEALREASON,
+					   batchNum)
 					VALUES
-					  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+					  ( #[uuid],#[taskId], #[dealUser], #[dealUserName],
+					   #[dealType], #[processId], #[processKey], #[dealtime], 
+					   #[dealReason], #[bussinessop], #[bussinessRemark],#[batchNum])
 		]]>
 	</property>
 	
@@ -3277,7 +3288,17 @@
 	<!-- 分页获取处理人名字  gw_tanx-->
 	<property name="getUserPageList_wf">
 		<![CDATA[
-			SELECT A.* FROM TD_SM_USER A WHERE A.USER_REALNAME like #[assignee]
+			SELECT A.* FROM TD_SM_USER A WHERE A.USER_REALNAME LIKE #[assignee]
+			    OR A.USER_NAME LIKE #[assignee]
+		]]>
+	</property>
+	
+	<!-- 获取当前流程下的所有任务id  gw_tanx-->
+	<property name="getTaskIdByProcessId_wf">
+		<![CDATA[
+			SELECT a.id_
+			  FROM ACT_RU_TASK A
+			 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
 	

@@ -246,6 +246,15 @@ function discardTask(taskId,processId,processKey){
 	
 }
 
+//查看抄送节点明细
+function viewCopyTaskInfo(actid) {
+	
+	var url = "<%=request.getContextPath()%>/workflowBusiness/business/getUserReaderCopyTasks.page?actinstid="+actid;
+	
+	$.dialog({ id:'nodeInfoIframe', title:'已阅明细',width:500,height:400, content:'url:'+url}); 
+
+}
+
 
 //轨迹回放
 function reBack(){

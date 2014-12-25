@@ -60,6 +60,9 @@ public class ProcessInstCondition {
 	// 应用
 	private String wf_app_name;
 
+	// 流程发起人
+	private String startUser;
+
 	public String getWf_app_name() {
 		return wf_app_name;
 	}
@@ -154,6 +157,14 @@ public class ProcessInstCondition {
 
 	public void setWf_denf_id(String wf_denf_id) {
 		this.wf_denf_id = wf_denf_id;
+	}
+
+	public String getStartUser() {
+		return startUser;
+	}
+
+	public void setStartUser(String startUser) {
+		this.startUser = startUser;
 	}
 
 }

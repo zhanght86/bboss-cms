@@ -57,7 +57,7 @@ function showNodeStatus(){
 function initliteRequiredStar(objs){
 	nodeStarNum = objs;// 存储页面节点序号
 	
-	$(".required").hide();
+	$("#protable .required").hide();
 	
 	var vs = objs.split(',');
 	for(var j=0;j<vs.length;j++){
@@ -264,6 +264,12 @@ function checkoutPageElement(){
 				return false;
 			}
 		}
+	}
+	
+	// 判断处理意见是否超出字数范围（大概字数1000）
+	if($("#dealReason").length!=0 && ($("#dealReason").val()).length > 1000){
+		$.dialog.alert("处理意见字数太多，超过范围！",function(){});
+		return false;
 	}
 	
 	return true;

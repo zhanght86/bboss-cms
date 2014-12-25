@@ -5,7 +5,16 @@
 	
 	<input type="hidden" id="hiTaskSzie" name="hiTaskSzie" value="<pg:size requestKey="taskHistorList"/>"/>
 	
-	<div class="title_1">审批记录</div>
+	<div class="title_1" id="logStyle">审批记录 
+		<pg:true actual="${filterLog}" evalbody="true">
+			<pg:yes>
+				<a href="javascript:showLogStyle('0')"><font color="#0a70ed">[不合并重复记录]</font></a>
+			</pg:yes>
+			<pg:no>
+				<a href="javascript:showLogStyle('1')"><font color="#0a70ed">[合并重复记录]</font></a>
+			</pg:no>
+		</pg:true>
+	</div>
 	
 	<table id="hiprotable" border="0" cellpadding="0" cellspacing="0" class="sany_table">
 			<tr>
@@ -37,15 +46,6 @@
 						</pg:no>
 					</pg:equal>
 					
-				<%-- 	<pg:equal colName="IS_AUTO_COMPLETE" value="2">
-						<pg:notempty colName="ASSIGNEE_NAME">
-							已阅：<pg:cell colName="ASSIGNEE_NAME" /> 
-							<a href="javascript:viewCopyTaskInfo('<pg:cell colName="ID_" />')" name="" ><font id="copytaskFont" color="#0a70ed">[明细]</font></a>
-						</pg:notempty>
-					</pg:equal>
-					<pg:notequal colName="IS_AUTO_COMPLETE" value="2">
-						<pg:cell colName="ASSIGNEE_NAME" />
-					</pg:notequal> --%>
 				</td>
 				<td>
 					<pg:empty colName="BUSSINESS_OP" evalbody="true">
@@ -56,10 +56,6 @@
 							<pg:cell colName="BUSSINESS_OP" />
 						</pg:no>
 					</pg:empty>
-				<%-- 	<pg:empty colName="BUSSINESS_OP" >&nbsp;</pg:empty>
-					<pg:notempty colName="BUSSINESS_OP" >
-						<pg:cell colName="BUSSINESS_OP" />
-					</pg:notempty> --%>
 				</td>
 				<td>
 					<pg:empty colName="BUSSINESS_REMARK" evalbody="true">
@@ -70,10 +66,6 @@
 							<pg:cell colName="BUSSINESS_REMARK" />
 						</pg:no>
 					</pg:empty>
-					<%-- <pg:empty colName="BUSSINESS_REMARK" >&nbsp;</pg:empty>
-					<pg:notempty colName="BUSSINESS_REMARK" >
-						<pg:cell colName="BUSSINESS_REMARK" />
-					</pg:notempty> --%>
 				</td>
 				<td>
 					<pg:equal colName="IS_AUTO_COMPLETE" value="1" evalbody="true">
@@ -85,12 +77,6 @@
 						</pg:no>
 					</pg:equal>
 					
-					<%-- <pg:notequal colName="IS_AUTO_COMPLETE" value="1">
-			    		<pg:cell colName="DELETE_REASON_" />
-		    		</pg:notequal>
-		    		<pg:equal colName="IS_AUTO_COMPLETE" value="1">
-			    		系统自动完成任务
-		    		</pg:equal> --%>
 				</td>
 			</tr>
 		</pg:list>

@@ -671,8 +671,46 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	}
 
+	/**
+	 * 过滤日志
+	 * 
+	 * @param taskList
+	 * @return 2014年12月25日
+	 */
+	private List<HisTaskInfo> filterLog(List<HisTaskInfo> taskList) {
+		if (null != taskList && taskList.size() > 0) {
+			List<HisTaskInfo> newTaskInfoList = new ArrayList<HisTaskInfo>();
+
+			String batchNum = "";
+			for (int i = 0; i < taskList.size(); i++) {
+				HisTaskInfo hti = taskList.get(i);
+
+				// 批次为空，肯定不是驳回、撤销、废弃操作,不需要过滤
+				if (StringUtil.isEmpty(hti.getBatchNum())) {
+					newTaskInfoList.add(hti);
+				} else {
+					// 过滤批次相同操作的日志
+					if (!batchNum.equals(hti.getBatchNum())) {
+						newTaskInfoList.add(hti);
+						batchNum = hti.getBatchNum();
+					}
+
+				}
+			}
+			return newTaskInfoList;
+		} else {
+			return null;
+		}
+	}
+
 	@Override
 	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception {
+		return getProcHisInfo(processId, true);
+	}
+
+	@Override
+	public List<HisTaskInfo> getProcHisInfo(String processId, boolean filterLog)
+			throws Exception {
 		TransactionManager tms = new TransactionManager();
 
 		try {
@@ -682,23 +720,37 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			List<HisTaskInfo> taskList = executor.queryList(HisTaskInfo.class,
 					"selectTaskHistorById_wf", processId);
 
+			List<HisTaskInfo> newtaskList = null;
+			if (filterLog) {
+				// 过滤日志
+				newtaskList = filterLog(taskList);
+			} else {
+				newtaskList = taskList;
+			}
+
 			// 转办记录与历史记录排序
-			delegateTaskInfo(taskList, processId);
+			delegateTaskInfo(newtaskList, processId);
 
-			if (taskList != null && taskList.size() != 0) {
+			if (newtaskList != null && newtaskList.size() != 0) {
 
-				for (int j = 0; j < taskList.size(); j++) {
+				for (int j = 0; j < newtaskList.size(); j++) {
 
-					HisTaskInfo hti = taskList.get(j);
+					HisTaskInfo hti = newtaskList.get(j);
 
 					// 处理人转成中文名称
-					if (StringUtil.isNotEmpty(hti.getDEALUSER())) {
-						hti.setASSIGNEE_NAME(activitiService.userIdToUserName(
-								hti.getDEALUSER(), "2"));
+					if (filterLog) {
+						if (StringUtil.isNotEmpty(hti.getDEALUSER())) {
+							hti.setASSIGNEE_NAME(activitiService
+									.userIdToUserName(hti.getDEALUSER(), "2"));
+						} else {
+							hti.setASSIGNEE_NAME(activitiService
+									.userIdToUserName(hti.getASSIGNEE_(), "2"));
+						}
 					} else {
 						hti.setASSIGNEE_NAME(activitiService.userIdToUserName(
 								hti.getASSIGNEE_(), "2"));
 					}
+
 					// 判断是否超时
 					judgeOverTime(hti);
 					// 处理耗时
@@ -711,7 +763,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tms.commit();
 
-			return taskList;
+			return newtaskList;
 
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -963,8 +1015,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 								ani.setCandidateName(av.getTEXT_());
 								ani.setCandidateCNName(activitiService
 										.userIdToUserName(av.getTEXT_(), "1"));
-//								ani.setRealName(activitiService
-//										.userIdToUserName(av.getTEXT_(), "1"));
+								// ani.setRealName(activitiService
+								// .userIdToUserName(av.getTEXT_(), "1"));
 							}
 
 						}
@@ -2139,39 +2191,40 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
-	/**
-	 * 处理抄送任务
-	 * 
-	 * @param task
-	 *            2014年10月8日
-	 */
-	// private void dealCopyTask(ProcessInst inst) {
-	// if (null != task && task.getIsCopy() == 1) {
-	// // 完成任务
-	// // this.completeCopyTask(copytaskid, copyuser);
-	// activitiService.completeTaskWithReason(task.getTaskId(), null, "",
-	// "抄送任务", "");
-	// // 抄送节点，页面状态为第三方查看
-	// model.addAttribute(WorkflowConstants.PRO_PAGESTATE,
-	// WorkflowConstants.PRO_PAGESTATE_SHOW);
-	// }
-	// }
-
+	@Override
 	public ModelMap toDealTaskContainNoAssignerNodes(String processKey,
 			String processId, String taskId, ModelMap model) throws Exception {
 
-		return _toDealTask(processKey, processId, taskId, model, true);
+		return _toDealTask(processKey, processId, taskId, model, true, true);
 	}
 
+	@Override
+	public ModelMap toDealTaskContainNoAssignerNodes(String processKey,
+			String processId, String taskId, ModelMap model, boolean filterLog)
+			throws Exception {
+
+		return _toDealTask(processKey, processId, taskId, model, true,
+				filterLog);
+	}
+
+	@Override
 	public ModelMap toDealTask(String processKey, String processId,
 			String taskId, ModelMap model) throws Exception {
 
-		return _toDealTask(processKey, processId, taskId, model, false);
+		return _toDealTask(processKey, processId, taskId, model, false, true);
+	}
+
+	@Override
+	public ModelMap toDealTask(String processKey, String processId,
+			String taskId, ModelMap model, boolean filterLog) throws Exception {
+
+		return _toDealTask(processKey, processId, taskId, model, false,
+				filterLog);
 	}
 
 	private ModelMap _toDealTask(String processKey, String processId,
-			String taskId, ModelMap model, boolean shownoassignnodes)
-			throws Exception {
+			String taskId, ModelMap model, boolean shownoassignnodes,
+			boolean filterLog) throws Exception {
 
 		// 当前任务节点信息
 		TaskInfo task = getCurrentNodeInfo(taskId);
@@ -2185,7 +2238,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		model.addAttribute("processKey", processKey);
 
 		// 获取流程实例的处理记录
-		List<HisTaskInfo> taskHistorList = getProcHisInfo(task.getInstanceId());
+		List<HisTaskInfo> taskHistorList = getProcHisInfo(task.getInstanceId(),
+				filterLog);
 		model.addAttribute("taskHistorList", taskHistorList);
 
 		// 获取流程节点配置信息
@@ -2210,7 +2264,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	private ModelMap _toViewTask(String taskId, String bussinessKey,
 			String userId, ModelMap model, String processKey,
-			boolean shownoassignnodes) throws Exception {
+			boolean shownoassignnodes, boolean filterLog) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -2239,8 +2293,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// dealCopyTask(inst);
 
 			// 获取流程实例的处理记录
-			List<HisTaskInfo> taskHistorList = getProcHisInfo(inst
-					.getPROC_INST_ID_());
+			List<HisTaskInfo> taskHistorList = getProcHisInfo(
+					inst.getPROC_INST_ID_(), filterLog);
 			model.addAttribute("taskHistorList", taskHistorList);
 
 			// 流程未完成
@@ -2345,51 +2399,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
-			String bussinessKey, String userId, ModelMap model,
-			String processKey) throws Exception {
-
-		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
-				true);
-	}
-
-	@Override
-	public ModelMap toViewTask(String taskId, String bussinessKey,
-			String userId, ModelMap model, String processKey) throws Exception {
-
-		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
-				false);
-	}
-
-	@Override
-	public ModelMap toViewTask(String taskId, String bussinessKey,
-			String userId, ModelMap model) throws Exception {
-		return _toViewTask(taskId, bussinessKey, userId, model, null, false);
-	}
-
-	@Override
-	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
-			String bussinessKey, String userId, ModelMap model)
-			throws Exception {
-		return _toViewTask(taskId, bussinessKey, userId, model, null, false);
-	}
-
-	@Override
-	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
-			String userId, ModelMap model) throws Exception {
-		// 当前任务节点信息
-		TaskInfo task = getCurrentNodeInfo(taskId);
-
-		// 判断当前任务是否存在
-		if (null == task) {
-			throw new ProcessException("任务不存在");
-		}
-
-		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
-				task.getProcessKey(), true);
-	}
-
-	@Override
 	public ModelMap toViewTask(String taskId, String userId, ModelMap model)
 			throws Exception {
 		// 当前任务节点信息
@@ -2401,7 +2410,117 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 
 		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
-				task.getProcessKey(), false);
+				task.getProcessKey(), false, true);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String userId, ModelMap model,
+			boolean filterLog) throws Exception {
+		// 当前任务节点信息
+		TaskInfo task = getCurrentNodeInfo(taskId);
+
+		// 判断当前任务是否存在
+		if (null == task) {
+			throw new ProcessException("任务不存在");
+		}
+
+		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey(), false, filterLog);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model) throws Exception {
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false,
+				true);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, boolean filterLog) throws Exception {
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false,
+				filterLog);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey) throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				false, true);
+	}
+
+	@Override
+	public ModelMap toViewTask(String taskId, String bussinessKey,
+			String userId, ModelMap model, String processKey, boolean filterLog)
+			throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				false, filterLog);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String userId, ModelMap model) throws Exception {
+		// 当前任务节点信息
+		TaskInfo task = getCurrentNodeInfo(taskId);
+
+		// 判断当前任务是否存在
+		if (null == task) {
+			throw new ProcessException("任务不存在");
+		}
+
+		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey(), true, true);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String userId, ModelMap model, boolean filterLog) throws Exception {
+		// 当前任务节点信息
+		TaskInfo task = getCurrentNodeInfo(taskId);
+
+		// 判断当前任务是否存在
+		if (null == task) {
+			throw new ProcessException("任务不存在");
+		}
+
+		return _toViewTask(taskId, task.getBusinessKey(), userId, model,
+				task.getProcessKey(), true, filterLog);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model,
+			String processKey) throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				true, true);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model,
+			String processKey, boolean filterLog) throws Exception {
+
+		return _toViewTask(taskId, bussinessKey, userId, model, processKey,
+				true, filterLog);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model)
+			throws Exception {
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false,
+				true);
+	}
+
+	@Override
+	public ModelMap toViewTaskContainNoAssignerNodes(String taskId,
+			String bussinessKey, String userId, ModelMap model,
+			boolean filterLog) throws Exception {
+		return _toViewTask(taskId, bussinessKey, userId, model, null, false,
+				filterLog);
 	}
 
 	@Override
@@ -2431,6 +2550,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	@Override
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
+
+		if (StringUtil.isEmpty(taskId)) {
+			return null;
+		}
 
 		TaskInfo taskInfo = executor.queryObject(TaskInfo.class,
 				"getTaskInfoByTaskId_wf", taskId);
@@ -2583,9 +2706,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String processKey, String userId) throws Exception {
 
 		TransactionManager tm = new TransactionManager();
+
 		try {
 			tm.begin();
-
+			TaskInfo taskInfo = null;
 			// 当前用户转成域账号
 			userId = this.changeToDomainAccount(userId);
 
@@ -2613,17 +2737,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					}
 				}
 
-				// 当前任务节点信息
-				TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
+				if (StringUtil.isNotEmpty(nowTaskId)) {
+					// 当前任务节点信息
+					taskInfo = getCurrentNodeInfo(nowTaskId);
+				}
 
-				tm.commit();
-
-				return taskInfo;
-			} else {
-
-				tm.commit();
-				return null;
 			}
+
+			tm.commit();
+
+			return taskInfo;
 
 		} catch (Exception e) {
 			throw new Exception("根据key获取当前任务节点信息出错:" + e);
