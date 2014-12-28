@@ -83,7 +83,7 @@
 		<!-- for cluster -->
 		
 	</property>
-	<property name="taskconfig" enable="true">
+	<property name="taskconfig" enable="false">
 		<list>
 			<property name="定时任务执行器" taskid="default"
 				class="org.frameworkset.task.DefaultScheduleService" used="true">

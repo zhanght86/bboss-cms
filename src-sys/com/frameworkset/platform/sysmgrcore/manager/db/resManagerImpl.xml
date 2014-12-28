@@ -6,33 +6,33 @@
       select a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,'来自用户自身角色【' || b.role_name || '】'  as jobname,
              a.AUTHORIZATION_STIME,a.auto   
       from td_sm_roleresop a,td_sm_role b 
-      where a.types='role' and a.role_id=b.role_id and  a.role_id in (select  b.role_id from td_sm_userrole b where b.user_id= '1')
+      where a.types='role' and a.role_id=b.role_id and  a.role_id in (select  b.role_id from td_sm_userrole b where b.user_id= #[id])
       union 
          select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,'来自【' || o.remark5 || '】机构的角色【' || b.role_name || '】' as jobname,
                  a.AUTHORIZATION_STIME,a.auto  
          from td_sm_orgrole c left join td_sm_organization o on c.org_id=o.org_id,td_sm_roleresop a,td_sm_role b  
          where a.role_id=c.role_id and a.types='role' and c.role_id=b.role_id and c.org_id in 
-             (select  org_id from td_sm_userjoborg where user_id ='1') 
+             (select  org_id from td_sm_userjoborg where user_id =#[id]) 
       union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,'来自【' || g.group_name || '】用户组角色【' || b.role_name || '】' as jobname,
                    a.AUTHORIZATION_STIME,a.auto  
              from td_sm_grouprole d left join td_sm_group g on d.group_id=g.group_id,td_sm_roleresop a,td_sm_role b 
              where a.role_id=d.role_id and d.role_id=b.role_id and a.types='role' and d.group_id in 
-                  (select  group_id from td_sm_usergroup  where user_id = '1') 
+                  (select  group_id from td_sm_usergroup  where user_id = #[id]) 
       union select a.restype_id, a.res_id, a.res_name, a.op_id, a.types,a.role_id ,'来自岗位【' || infos.job_name || '】的角色【' || b.role_name || '】' as jobname,
                    a.AUTHORIZATION_STIME,a.auto 
             from (select aa.role_id, aa.job_id, job.job_name from td_sm_orgjobrole aa , td_sm_userjoborg bb ,  td_sm_job job 
-                   where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id and bb.user_id=1 )infos ,
+                   where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id and bb.user_id=#[id] )infos ,
                   td_sm_roleresop a,td_sm_role b 
             where a.role_id=infos.role_id and a.types='role' and a.role_id=b.role_id 
      union select a.restype_id,a.res_id, a.res_name,a.op_id,a.types, a.role_id,'用户自身资源' as jobname,a.AUTHORIZATION_STIME,a.auto  
            from td_sm_roleresop a 
-            where a.types='user' and a.role_id='1' 
+            where a.types='user' and a.role_id=#[id] 
      union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id,'来自机构【' || b.org_name || '】' as jobname,
                    a.AUTHORIZATION_STIME,a.auto  
            from td_sm_roleresop a 
            left join td_sm_organization b 
            on a.role_id = b.org_id  
-           where a.types='organization' and a.role_id in (select  org_id from td_sm_userjoborg where user_id ='1')   
+           where a.types='organization' and a.role_id in (select  org_id from td_sm_userjoborg where user_id =#[id])   
     union select a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id, '普通角色:' || b.role_name as jobname,
           a.AUTHORIZATION_STIME,a.auto 
           from td_sm_roleresop a 
@@ -40,7 +40,7 @@
           where b.role_name='roleofeveryone' and a.types = 'role' 
   ) e where 1 = 1 
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -70,33 +70,33 @@
       select a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自用户自身角色【' , b.role_name , '】')  as jobname,
              a.AUTHORIZATION_STIME,a.auto   
       from td_sm_roleresop a,td_sm_role b 
-      where a.types='role' and a.role_id=b.role_id and  a.role_id in (select  b.role_id from td_sm_userrole b where b.user_id= '1')
+      where a.types='role' and a.role_id=b.role_id and  a.role_id in (select  b.role_id from td_sm_userrole b where b.user_id= #[id])
       union 
          select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自【' , o.remark5 , '】机构的角色【' , b.role_name || '】') as jobname,
                  a.AUTHORIZATION_STIME,a.auto  
          from td_sm_orgrole c left join td_sm_organization o on c.org_id=o.org_id,td_sm_roleresop a,td_sm_role b  
          where a.role_id=c.role_id and a.types='role' and c.role_id=b.role_id and c.org_id in 
-             (select  org_id from td_sm_userjoborg where user_id ='1') 
+             (select  org_id from td_sm_userjoborg where user_id =#[id]) 
       union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types,a.role_id,concat('来自【' , g.group_name , '】用户组角色【' , b.role_name , '】') as jobname,
                    a.AUTHORIZATION_STIME,a.auto  
              from td_sm_grouprole d left join td_sm_group g on d.group_id=g.group_id,td_sm_roleresop a,td_sm_role b 
              where a.role_id=d.role_id and d.role_id=b.role_id and a.types='role' and d.group_id in 
-                  (select  group_id from td_sm_usergroup  where user_id = '1') 
+                  (select  group_id from td_sm_usergroup  where user_id = #[id]) 
       union select a.restype_id, a.res_id, a.res_name, a.op_id, a.types,a.role_id ,concat('来自岗位【' , infos.job_name , '】的角色【' , b.role_name , '】') as jobname,
                    a.AUTHORIZATION_STIME,a.auto 
             from (select aa.role_id, aa.job_id, job.job_name from td_sm_orgjobrole aa , td_sm_userjoborg bb ,  td_sm_job job 
-                   where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id and bb.user_id=1 )infos ,
+                   where aa.org_id=bb.org_id and aa.job_id=bb.job_id and job.job_id=bb.job_id and bb.user_id=#[id] )infos ,
                   td_sm_roleresop a,td_sm_role b 
             where a.role_id=infos.role_id and a.types='role' and a.role_id=b.role_id 
      union select a.restype_id,a.res_id, a.res_name,a.op_id,a.types, a.role_id,'用户自身资源' as jobname,a.AUTHORIZATION_STIME,a.auto  
            from td_sm_roleresop a 
-            where a.types='user' and a.role_id='1' 
+            where a.types='user' and a.role_id=#[id] 
      union select  a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id,concat('来自机构【' , b.org_name , '】') as jobname,
                    a.AUTHORIZATION_STIME,a.auto  
            from td_sm_roleresop a 
            left join td_sm_organization b 
            on a.role_id = b.org_id  
-           where a.types='organization' and a.role_id in (select  org_id from td_sm_userjoborg where user_id ='1')   
+           where a.types='organization' and a.role_id in (select  org_id from td_sm_userjoborg where user_id =#[id])   
     union select a.restype_id,a.res_id,a.res_name,a.op_id,a.types, a.role_id, concat('普通角色:' , b.role_name) as jobname,
           a.AUTHORIZATION_STIME,a.auto 
           from td_sm_roleresop a 
@@ -104,7 +104,7 @@
           where b.role_name='roleofeveryone' and a.types = 'role' 
   ) e where 1 = 1 
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -145,7 +145,7 @@
           where 1 = 1 and a.types='organization' and a.role_id=#[id]
      ) e where 1 = 1 
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -186,7 +186,7 @@
           where 1 = 1 and a.types='organization' and a.role_id=#[id]
      ) e where 1 = 1 
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -215,7 +215,7 @@
    from td_sm_roleresop e 
    where 1 = 1 and e.types='role' and e.role_id=#[id]
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -251,7 +251,7 @@
   left join  td_sm_role r on a.role_id = r.role_id
   where 1 = 1
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 
@@ -287,7 +287,7 @@
   left join  td_sm_role r on a.role_id = r.role_id
   where 1 = 1
    #if($restypeId && !$restypeId.equals(""))				
-		and restype_id = #[orgId] 
+		and restype_id = #[restypeId] 
    #end
    #if($resId && !$resId.equals(""))				
 		 and res_id like #[resId] 

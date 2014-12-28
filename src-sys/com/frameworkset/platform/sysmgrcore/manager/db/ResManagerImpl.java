@@ -1160,7 +1160,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 			try {
 				listInfo  = executor_.queryListInfoBean(HashMap.class, "getUserRes", offset, maxItems, paramMap);
 			} catch (SQLException e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		}
 		// 查机构资源
@@ -1168,7 +1168,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 			try {
 				listInfo  = executor_.queryListInfoBean(HashMap.class, "getOrgRes", offset, maxItems, paramMap);
 			} catch (SQLException e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		}
 		// 查角色资源
@@ -1176,7 +1176,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 			try {
 				listInfo  = executor_.queryListInfoBean(HashMap.class, "getRoleRes", offset, maxItems, paramMap);
 			} catch (SQLException e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		}
 		//查询机构岗位资源
@@ -1186,7 +1186,7 @@ public class ResManagerImpl extends EventHandle implements ResManager {
 			try {
 				listInfo  = executor_.queryListInfoBean(HashMap.class, "getOrgjobRes", offset, maxItems, paramMap);
 			} catch (SQLException e) {
-				logger.error(e);
+				logger.error("",e);
 			}
 		}
 		try {
