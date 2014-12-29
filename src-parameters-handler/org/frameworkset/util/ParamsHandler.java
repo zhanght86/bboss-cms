@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -34,9 +35,16 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.event.Event;
+import org.frameworkset.event.EventHandle;
+import org.frameworkset.event.EventImpl;
+import org.frameworkset.event.Listener;
+import org.frameworkset.event.NotifiableFactory;
+import org.frameworkset.event.SimpleEventType;
 import org.frameworkset.spi.ApplicationContext;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BeanNameAware;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
 import org.frameworkset.spi.assemble.ProMap;
@@ -71,10 +79,12 @@ import com.frameworkset.util.ValueObjectUtil;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
+public class ParamsHandler implements org.frameworkset.spi.InitializingBean,Listener<Map<String,Serializable>>,BeanNameAware {
 	
 	private static final Logger log = Logger.getLogger(ParamsHandler.class);
 	private static Map<String,ParamsHandler> handlers = new HashMap<String,ParamsHandler>();
+	private String beanName;
+	private SimpleEventType eventtype ;
 	static{
 	 BaseApplicationContext.addShutdownHook(new Runnable() {
 			
@@ -501,7 +511,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	
 	
 	
-	public boolean cleanCaches(Map<String,Object> keys)
+	public boolean cleanCaches(Map<String,Serializable> keys)
 	{
 		if(keys == null || keys.size() == 0) return false;
 		Iterator<String> it = keys.keySet().iterator();
@@ -556,8 +566,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		List<Param> paramList = params.getParams();
 		
 		PreparedDBUtil dbutil = new PreparedDBUtil();
-		Object t = new Object();
-		Map<String, Object> trace = new HashMap<String, Object>();
+		java.io.Serializable t = new Integer(1);
+		Map<String, Serializable> trace = new HashMap<String, Serializable>();
 
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -682,7 +692,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 			}
 			dbutil.executePreparedBatch();
 			tm.commit();
-			cleanCaches(trace);
+//			cleanCaches(trace);
+			EventHandle.sendEvent(new EventImpl<Map<String, Serializable>>(trace,this.eventtype));
 			trace = null;
 			return true;
 		
@@ -1531,6 +1542,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		this.applicationContext = ApplicationContext
 				.getApplicationContext(this.configContextPath);
+		eventtype = new SimpleEventType("org_frameworkset_util_"+this.beanName);
+		NotifiableFactory.addListener(this, eventtype);
 	}
 
 	public static void insertParams(Map<String, String> paramsMap,
@@ -1692,5 +1705,16 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean {
 		} catch (Exception e) {
 			throw new ParamException(e);
 		}
+	}
+	@Override
+	public void handle(Event<Map<String,Serializable>> e) {
+		Map<String,Serializable> data = e.getSource();
+		this.cleanCaches(data);
+		
+	}
+	@Override
+	public void setBeanName(String name) {
+		this.beanName = name;
+		
 	}
 }
