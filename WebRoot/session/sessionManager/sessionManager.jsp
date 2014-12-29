@@ -61,7 +61,9 @@ $(document).ready(function() {
 });
        
 //加载实时任务列表数据  
-function queryList(){
+function queryList(reset){
+	if(reset)
+		doreset();
 	
 	var appkey = $("#app_key").val();
 	var sessionid = $("#sessionid").val();
@@ -156,7 +158,7 @@ function doClickTreeNode(app_id,selectedNode){
 	$("#app_query_th").html("&nbsp;");
    	$("#wf_app_name_td").html("&nbsp;");
 
-	queryList();
+	queryList(true);
 } 
 
 function sessionInfo(sessionid){
