@@ -12,6 +12,7 @@ import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -469,13 +470,13 @@ public class ActivitiTaskManageAction {
 		TransactionManager tm = new TransactionManager();
 
 		try {
-
+			tm.begin();
 			boolean isAuthor = activitiTaskService.judgeAuthority(
 					task.getTaskId(), task.getProcessKey());
-
+			String result = "success";
 			if (isAuthor) {
 
-				tm.begin();
+				
 
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
@@ -507,23 +508,51 @@ public class ActivitiTaskManageAction {
 				}
 
 				task.setCompleteRemark(remark);
-
+				// 保存控制变量参数
+				activitiService.addNodeWorktime(task.getProcessKey(),
+						task.getProcessIntsId(), nodeControlParamList);
 				// 完成任务
 				activitiTaskService.completeTask(task,
 						activitiNodeCandidateList, nodevariableList,
 						nodeControlParamList);
+
+				/**注释掉，需要先保存控制参数，再完成任务 2014-12-31 by biaoping.yin*/
+//				// 保存控制变量参数
+//				activitiService.addNodeWorktime(task.getProcessKey(),
+//						task.getProcessIntsId(), nodeControlParamList);
+				//下一个任务处理人相同，自动完成任务逻辑 2014-12-31 by biaoping.yin
+				NodeControlParam currrentNodeControlParam = this.activitiService.getNodeControlParamByTaskID(task.getProcessIntsId(), task.getTaskId());
 				
-				// 保存控制变量参数
-				activitiService.addNodeWorktime(task.getProcessKey(),
-						task.getProcessIntsId(), nodeControlParamList);
+				if(currrentNodeControlParam != null)
+				{
+				
+					if(currrentNodeControlParam.getIS_AUTOAFTER() == 1)
+					{
+						// 获取当前任务信息
+						TaskInfo nextTask = this.activitiTaskService.getCurrentNodeInfoByProcessInstanceid(task.getProcessIntsId(), currentUser);
+						
+						// 后续节点处理人是否一致，一致就可以自动通过
+						if (null != nextTask 
+								&& currentUser.equals(nextTask.getAssignee())) {
+		
+							// 清除上一任务的处理意见和意见备注
+		//					proIns.setDealRemak("");
+		//					proIns.setDealReason("前后任务处理人一致，自动通过");
+							activitiTaskService.autoCompleteTask(nextTask, "pass", "", "前后任务处理人一致，自动通过", task.getProcessIntsId(), currentUser);
+		//					autoCompleteTask(proIns, processKey);
+						}
+					}
+				}
+				
 
-				tm.commit();
-
-				return "success";
+				result = "success";
 
 			} else {
-				return "fail:您没有权限处理当前任务";
+				
+				result = "fail:您没有权限处理当前任务";
 			}
+			tm.commit();
+			return result;
 
 		} catch (Exception e) {
 			return "fail" + e.getMessage();

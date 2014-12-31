@@ -3,6 +3,7 @@ package com.sany.workflow.service;
 import java.util.List;
 
 import com.frameworkset.util.ListInfo;
+import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
@@ -297,4 +298,19 @@ public interface ActivitiTaskService {
 	 *             2014年12月22日
 	 */
 	public PageData getUserPageList(String assigneeName, int limit) throws Exception;
+	public String changeToDomainAccount(String userId);
+	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey, String userId) throws Exception;
+	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
+			String userAccount);
+	public boolean judgeAuthority(String taskId, String processKey,
+			String userAccount) ;
+	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
+	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
+			String userId) throws Exception;
+	
+	public TaskInfo getCurrentNodeInfoByProcessInstanceid(String processinstanceid,
+			String userId) throws Exception ;
+	public boolean isSignTask(String taskId, String userId) throws Exception;
+	public void autoCompleteTask(TaskInfo task,String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser) throws Exception;
 }

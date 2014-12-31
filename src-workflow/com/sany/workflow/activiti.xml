@@ -309,7 +309,32 @@
 		 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
-	
+	<!-- 根据任务id获取当前任务信息,自动完成任务或者业务处理完成任务时调用  -->
+	<property name="getTaskInfoByTaskId_wf_forautocomplete">
+		<![CDATA[
+			SELECT A.ID_           AS TASKID,
+			       B.BUSINESS_KEY_ AS BUSINESSKEY,
+			       C.PROCESS_KEY   AS PROCESSKEY,
+			       A.PROC_INST_ID_ AS INSTANCEID,
+			       A.PROC_DEF_ID_  AS DEFID,
+			       A.ASSIGNEE_     AS ASSIGNEE,
+			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
+			       A.CREATE_TIME_  AS CREATETIME,
+			       C.IS_RECALL     AS ISRECALL,
+			       C.IS_DISCARD    AS ISDISCARD,
+			       C.IS_DISCARDED  AS ISDISCARDED,
+			       C.IS_CANCEL     AS ISCANCEL,
+			       C.IS_COPY       AS ISCOPY,
+			       C.IS_AUTOAFTER  AS ISAUTOAFTER
+			
+			  FROM ACT_RU_TASK A
+			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  left join TD_WF_NODE_WORKTIME c on a.proc_inst_id_ = c.process_id
+			                                 and a.task_def_key_ = c.node_key
+			 WHERE B.BUSINESS_KEY_ IS NOT NULL
+			 	 AND A.Id_ = ?
+		]]>
+	</property>
 	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
 	<property name="getTaskInfoByTaskId_wf">
 		<![CDATA[
@@ -2455,6 +2480,16 @@
 		]]>
 	</property>
 	
+	<!-- 获取节点控制参数信息 gw_tanx -->
+	<property name="getNodeControlParamByTaskID">
+		<![CDATA[
+			SELECT A.*
+			  FROM TD_WF_NODE_WORKTIME A,ACT_HI_TASKINST B
+			 WHERE A.PROCESS_ID = ? and B.ID_=?
+			   AND A.NODE_KEY = B.TASK_DEF_KEY_ 
+		]]>
+	</property>
+	
 	<!-- 添加流程消息提示方式记录  gw_tanx -->
 	<property name="insertProTemplate_wf">
 		<![CDATA[
@@ -3301,5 +3336,84 @@
 			 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
+	
+	<!-- 根据key获取流程实例  gw_tanx -->
+	<property name="getProcessByKey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
+			   AND B.KEY_=?
+		]]>
+	</property>
+	
+	<!-- 根据流程实例id获取流程实例  gw_tanx -->
+	<property name="getProcessByProcessId_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.PROC_INST_ID_ = ?
+		]]>
+	</property>
+	<!-- 根据任务id获取历史任务 -->
+	<property name="getHiTaskIdByTaskId">
+		<![CDATA[ 
+      		SELECT * FROM ACT_HI_TASKINST T WHERE T.ID_=?
+		]]>
+	</property>
+	
+		<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
+	<property name="getNodeCandidates_wf">
+		<![CDATA[
+			SELECT *
+			  FROM ACT_RU_IDENTITYLINK I 
+			 WHERE 1=1
+			   and I.TYPE_ = 'candidate'
+			   and I.TASK_ID_=?
+			   and I.USER_ID_=?
+		]]>
+	</property>
+	
+	
+	
+	<!-- 根据业务主键获取流程实例  gw_tanx -->
+	<property name="getProcessByBusinesskey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
 	
 </properties>

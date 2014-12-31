@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.activiti.engine.impl.persistence.entity.CopyTaskEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Task;
 
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
@@ -19,6 +20,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
+import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -26,6 +28,7 @@ import com.sany.workflow.entity.NoHandleTask;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.Nodevariable;
 import com.sany.workflow.entity.PageData;
+import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.RejectLog;
 import com.sany.workflow.entity.TaskCondition;
 import com.sany.workflow.entity.TaskManager;
@@ -1396,4 +1399,368 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		
 		return pageData;
 	}
+	
+	/**
+	 * 工号转域账号
+	 * 
+	 * @param userId
+	 *            2014年8月22日
+	 */
+	public String changeToDomainAccount(String userId) {
+
+		return AccessControl.getUserAccounByWorknumberOrUsername(userId);
+
+	}
+	
+	
+	@Override
+	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
+			String processKey, String userId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			
+			TaskInfo taskInfo = null;
+		
+
+			// 根据Key获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByKey_wf", bussinesskey, processKey);
+
+			taskInfo = _getCurrentNodeInfoByProcessInstanceid(  inst,
+					  userId);
+
+			tm.commit();
+
+			return taskInfo;
+
+		} catch (Exception e) {
+			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+		} finally {
+			tm.release();
+		}
+	}
+	private TaskInfo _getCurrentNodeInfoByProcessInstanceid(ProcessInst inst,
+			String userId) throws Exception {
+		
+			TaskInfo taskInfo = null;
+		try
+		{
+			// 当前用户转成域账号
+			userId = this.changeToDomainAccount(userId);
+
+			 
+
+			if (inst != null) {
+
+				// 根据流程实例ID获取运行任务
+				List<Task> taskList = activitiService
+						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+
+				String nowTaskId = "";
+
+				for (int i = 0; i < taskList.size(); i++) {
+					Task task = taskList.get(i);
+
+					// 判断用户是不是当前审批人
+					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+							userId)) {
+
+						nowTaskId = task.getId();
+						break;
+					}
+				}
+
+				if (StringUtil.isNotEmpty(nowTaskId)) {
+					// 当前任务节点信息
+					taskInfo = getCurrentNodeInfo(nowTaskId);
+				}
+
+			}
+
+			 
+
+			return taskInfo;
+
+		} catch (Exception e) {
+			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+		} 
+	}
+	@Override
+	public TaskInfo getCurrentNodeInfoByProcessInstanceid(String processinstanceid,
+			String userId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			TaskInfo taskInfo = null;
+			// 根据Key获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+								"getProcessByProcessId_wf",processinstanceid);
+			taskInfo = _getCurrentNodeInfoByProcessInstanceid(  inst,
+					  userId);
+
+			tm.commit();
+
+			return taskInfo;
+
+		} catch (Exception e) {
+			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+		} finally {
+			tm.release();
+		}
+	}
+	
+	@Override
+	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
+
+		if (StringUtil.isEmpty(taskId)) {
+			return null;
+		}
+
+		TaskInfo taskInfo = executor.queryObject(TaskInfo.class,
+				"getTaskInfoByTaskId_wf_forautocomplete", taskId);
+
+		// 处理人行转列
+		if (null != taskInfo) {
+			if (StringUtil.isNotEmpty(taskInfo.getAssignee())) {
+				taskInfo.setAssigneeName(activitiService.getUserInfoMap()
+						.getUserName(taskInfo.getAssignee()));
+			} else {
+				// 任务未签收，根据任务id查询任务可处理人
+				List<HashMap> candidatorList = executor.queryList(
+						HashMap.class, "getCandidatorOftask_wf",
+						taskInfo.getTaskId());
+
+				StringBuffer users = new StringBuffer();
+
+				if (candidatorList != null && candidatorList.size() != 0) {
+
+					for (int k = 0; k < candidatorList.size(); k++) {
+						HashMap candidatorMap = candidatorList.get(k);
+
+						String userId = (String) candidatorMap.get("USER_ID_");
+						if (StringUtil.isNotEmpty(userId)) {
+
+							if (k == 0) {
+								users.append(userId);
+							} else {
+								users.append(",").append(userId);
+							}
+						}
+					}
+					taskInfo.setAssigneeName(activitiService.getUserInfoMap()
+							.getUserName(users.toString()));
+					taskInfo.setAssignee(users.toString());
+				}
+			}
+		}
+
+		return taskInfo;
+	}
+	@Override
+	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
+			String userAccount) {
+
+		if (StringUtil.isEmpty(taskId)) {
+			return false;
+		}
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			boolean haspermission = false;
+			userAccount = this.changeToDomainAccount(userAccount);
+
+			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+			TaskManager task = executor.queryObject(TaskManager.class,
+					"getHiTaskIdByTaskId", taskId);
+
+			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
+
+				if (userAccount.equals(task.getASSIGNEE_())) {
+
+					haspermission = true;
+				}
+
+			} else {
+				// 任务未签收，根据任务id查询任务可处理人
+				List<HashMap> candidatorList = executor.queryList(
+						HashMap.class, "getNodeCandidates_wf", taskId,
+						userAccount);
+
+				if (candidatorList != null && candidatorList.size() > 0) {
+
+					haspermission = true;
+				}
+			}
+
+			if (!haspermission) {
+				// 最后查看当前用户的委托关系
+				List<WfEntrust> entrustList = executor.queryList(
+						WfEntrust.class, "getEntrustRelation_wf", userAccount,
+						processKey, new Timestamp(task.getSTART_TIME_()
+								.getTime()), new Timestamp(task
+								.getSTART_TIME_().getTime()));
+
+				if (entrustList != null && entrustList.size() > 0) {
+
+					haspermission = true;
+				}
+			}
+			tm.commit();
+			return haspermission;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	@Override
+	public boolean judgeAuthority(String taskId, String processKey,
+			String userAccount) {
+
+		if (AccessControl.isAdmin(userAccount)) {
+			return true;
+		}
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+
+			userAccount = this.changeToDomainAccount(userAccount);
+
+			boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
+					userAccount);
+
+			tm.commit();
+
+			return flag;
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+	}
+	@Override
+	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
+			String userId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 当前用户转成域账号
+			userId = this.changeToDomainAccount(userId);
+
+			// 根据bussinessKey获取流程实例
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByBusinesskey_wf", bussinesskey);
+
+			if (inst != null) {
+
+				// 根据流程实例ID获取运行任务
+				List<Task> taskList = activitiService
+						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+
+				String nowTaskId = "";
+
+				for (int i = 0; i < taskList.size(); i++) {
+					Task task = taskList.get(i);
+
+					// 判断用户是不是当前审批人
+					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+							userId)) {
+
+						nowTaskId = task.getId();
+						break;
+					}
+				}
+
+				// 当前任务节点信息
+				TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
+
+				tm.commit();
+
+				return taskInfo;
+			} else {
+
+				tm.commit();
+				return null;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("根据业务key获取当前任务节点信息出错:" + e);
+		} finally {
+			tm.release();
+		}
+	}
+	public void autoCompleteTask(String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser)
+			throws Exception 
+	{
+		TaskInfo task = getCurrentNodeInfoByProcessInstanceid(processInstanceID, currentUser);
+		autoCompleteTask(  task,  dealOption,  dealRemak,   dealReason,   processInstanceID,  currentUser);
+	}
+	@Override
+	public boolean isSignTask(String taskId, String userId) throws Exception {
+		return activitiService.isSignTask(taskId, userId);
+	}
+	/**
+	 * 自动完成任务
+	 * 
+	 * @param proIns
+	 * @throws Exception
+	 *             2014年11月20日
+	 */
+	public void autoCompleteTask(TaskInfo task,String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser)
+			throws Exception {
+
+		// 获取流程当前任务节点
+//		TaskInfo task = getCurrentNodeInfoByProcessInstanceid(processInstanceID, currentUser);
+
+		if (null != task) {
+
+//			if (StringUtil.isEmpty(proIns.getDealOption())) {
+//				proIns.setDealOption("提交任务");
+//			}
+
+			if (StringUtil.isEmpty(dealRemak)) {
+				dealRemak = "["
+						+ activitiService.getUserInfoMap().getUserName(
+								currentUser) + "]的任务被自动完成";
+//				proIns.setDealRemak(remark);
+			}
+
+			if (!isSignTask(task.getTaskId(), task.getAssignee())) {
+				// 先签收
+				activitiService.claim(task.getTaskId(), task.getAssignee());
+			}
+
+			// 完成任务
+			activitiService.completeTaskWithReason(task.getTaskId(), null,
+					dealRemak, dealOption,
+					dealReason,true);
+
+			// 后续节点自动审批
+			if (task.getIsAutoafter() == 1
+					&& task.getAssignee().equals(currentUser)) {
+
+//				// 过滤流程开启自动通过第一个任务的处理意见
+//				if (null == proIns.getOperateType()) {
+////					proIns.setOperateType("pass");
+//					dealReason = "前后任务处理人一致，自动通过";
+//				}
+				autoCompleteTask(  dealOption,  dealRemak,   dealReason,   processInstanceID,  currentUser);
+			}
+		}
+
+	}
+
 }

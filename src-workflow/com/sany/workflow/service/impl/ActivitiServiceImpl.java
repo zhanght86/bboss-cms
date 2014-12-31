@@ -450,8 +450,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskWithReason(String taskId, Map<String, Object> map,
 			String completeReason, String bussinessop, String bussinessRemark) {
+		completeTaskWithReason(taskId, map,
+				completeReason, bussinessop, bussinessRemark,false);
+	}
+	
+	public void completeTaskWithReason(String taskId, Map<String, Object> map,
+			String completeReason, String bussinessop, String bussinessRemark,boolean autocomplete) {
 		taskService.completeWithReason(taskId, map, completeReason,
-				bussinessop, bussinessRemark);
+				bussinessop, bussinessRemark, autocomplete);
 	}
 
 	/**
@@ -4752,6 +4758,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 			throws Exception {
 		return executor.queryObject(NodeControlParam.class,
 				"getNodeContralParam_wf", processId, taskKey);
+	}
+	
+	@Override
+	public NodeControlParam getNodeControlParamByTaskID(String processId, String taskid)
+			throws Exception {
+		return executor.queryObject(NodeControlParam.class,
+				"getNodeControlParamByTaskID", processId, taskid);
 	}
 
 	@Override

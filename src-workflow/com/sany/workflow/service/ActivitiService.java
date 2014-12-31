@@ -486,7 +486,17 @@ public interface ActivitiService {
 	 */
 	public void completeTaskWithReason(String taskId, Map<String, Object> map,
 			String completeReason, String bussinessop, String bussinessRemark);
-	
+	/**
+	 * 完成任务
+	 * @param taskId
+	 * @param map
+	 * @param completeReason
+	 * @param bussinessop
+	 * @param bussinessRemark
+	 * @param autocomplete 任务是否是自动完成，true 是，false，否
+	 */
+	public void completeTaskWithReason(String taskId, Map<String, Object> map,			
+			String completeReason, String bussinessop, String bussinessRemark,boolean autocomplete) ;
 	/**
 	 * 完成任务(普通)
 	 * 
@@ -1663,4 +1673,6 @@ public interface ActivitiService {
 	 *            2014年9月26日
 	 */
 	public void backupDatasToWorktime(String processId);
+	public NodeControlParam getNodeControlParamByTaskID(String processId, String taskid)
+			throws Exception;
 }

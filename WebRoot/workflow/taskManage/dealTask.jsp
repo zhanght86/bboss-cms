@@ -25,7 +25,7 @@
 		<input type="hidden" id="createUser" name="createUser" value="${createUser}" />
 		<input type="hidden" id="entrustUser" name="entrustUser" value="${entrustUser}" />
 		<input type="hidden" id="currentUser" name="currentUser" value="${currentUser}" />
-	
+		
 		<fieldset >
 			<legend><strong>基本信息</strong></legend>
 			<pg:beaninfo requestKey="task">
