@@ -54,17 +54,19 @@ $(document).ready(function(){
         <td width="170" valign="top" id="Tbasic2" height="100%">
         <sany:leftmenu target="left_rightFrame"/>        
         </td>
-        <pg:notin requestKey="loginstyle" scope="5,6">
-         <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
-            <tr>
-              <td valign="middle"><a href="javascript:togglevisible('basic2')"><img src="${pageContext.request.contextPath}/html/images/expand.gif"  name="Ibasic2"/></a></td>
-            </tr>
-          </table></td>
-        </pg:notin>
-        <pg:in requestKey="loginstyle" scope="5,6">  
-       <td width="9" class="more2" onclick="javascript:togglevisible('basic2')">
-   <div id="Ibasic2"><img src="../html3/images/expand.png"  name="Ibasic2"/></div></td>
-        </pg:in>      
+        <pg:notin requestKey="loginstyle" scope="5,6" evalbody="true">
+        	<pg:yes>
+	         <td width="9" class="more2"><table  border="0" cellspacing="0" cellpadding="0" height="100%">
+	            <tr>
+	              <td valign="middle"><a href="javascript:togglevisible('basic2')"><img src="${pageContext.request.contextPath}/html/images/expand.gif"  name="Ibasic2"/></a></td>
+	            </tr>
+	          </table></td>
+        	</pg:yes>
+            <pg:no>  
+		       <td width="9" class="more2" onclick="javascript:togglevisible('basic2')">
+		   		<div id="Ibasic2"><img src="../html3/images/expand.png"  name="Ibasic2"/></div></td>
+        	</pg:no>
+        </pg:notin>	      
         <td valign="top" height="100%">
         <iframe src="${selectUrl }" name="left_rightFrame" id="left_rightFrame" frameborder="0" style="width:100%; height:99% "></iframe>        
         </td>
