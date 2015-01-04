@@ -86,8 +86,8 @@
 						type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_SEQUENTIAL" id="IS_SEQUENTIAL" value="1" 
 							<pg:equal colName="IS_SEQUENTIAL" value="1">checked</pg:equal> onclick="changeNodeTypeName('<pg:cell colName='NODE_KEY'/>')"/>串行
 						<input type="hidden" name="<pg:cell colName='NODE_KEY'/>_IS_COPY" 
-						id="IS_COPY" <pg:equal colName="IS_COPY" value="1">value="1"</pg:equal>/>
-						<input disabled	type="checkbox" value="1" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
+						id="IS_COPY" <pg:in colName="IS_COPY" scope="1,2">value="1"</pg:in>/>
+						<input disabled	type="checkbox" value="1" <pg:in colName="IS_COPY"  scope="1,2">checked</pg:in>/>可抄送
 						</td>
 					</tr>
 				</table>

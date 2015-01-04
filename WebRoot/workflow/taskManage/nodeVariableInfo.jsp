@@ -91,7 +91,7 @@
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_DISCARD" value="1">checked </pg:equal>/>可废弃
 			
-			<input type="checkbox" disabled <pg:equal colName="IS_COPY" value="1">checked </pg:equal>/>可抄送
+			<input type="checkbox" disabled <pg:in colName="IS_COPY" scope="1,2">checked </pg:in>/>可抄送
 			
 			<input type="checkbox" disabled <pg:equal colName="IS_DISCARDED" value="1">checked </pg:equal>/>可被废弃
 			

@@ -251,8 +251,7 @@ function trMoveToend(obj){
 					<pg:empty colName="IS_SEQUENTIAL">
 						<input type="checkbox" disabled />串行
 					</pg:empty>
-					
-					<input type="checkbox" disabled id="<pg:cell colName="NODE_KEY"/>_isCopyShow" <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
+					<input type="checkbox" disabled id="<pg:cell colName="NODE_KEY"/>_isCopyShow" <pg:in colName="IS_COPY"  scope="1,2">checked</pg:in>/>可抄送
 				</td>
 				</pg:equal>
 				<pg:notequal colName="NODE_TYPE" value="userTask"><td>&nbsp;</td></pg:notequal>

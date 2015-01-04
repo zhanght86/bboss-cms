@@ -1,6 +1,7 @@
 package com.sany.workflow.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
@@ -45,10 +46,7 @@ public interface ActivitiTaskService {
 	 * @param nodeList
 	 *            2014年5月27日
 	 */
-	public void completeTask(TaskCondition task,
-			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList);
+	public void completeTask(TaskCondition task,Map<String, Object> variableMap);
 
 	/**
 	 * 驳回任务
@@ -57,10 +55,7 @@ public interface ActivitiTaskService {
 	 * @param nodeList
 	 *            2014年5月27日
 	 */
-	public void rejectToPreTask(TaskCondition task,
-			List<ActivitiNodeInfo> nodeList,
-			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList, int rejectedtype);
+	public void rejectToPreTask(TaskCondition task,Map<String, Object> variableMap, int rejectedtype);
 
 	/**
 	 * 驳回任务
@@ -313,4 +308,15 @@ public interface ActivitiTaskService {
 			String userId) throws Exception ;
 	public boolean isSignTask(String taskId, String userId) throws Exception;
 	public void autoCompleteTask(TaskInfo task,String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser) throws Exception;
+	
+	/**
+	 * 获取流程节点参数配置信息(准备流程处理人和变量参数及控制参数)
+	 * 
+	 * @param nodeList
+	 * @return 2014年5月27日
+	 */
+	public Map<String, Object> getVariableMap(
+			List<ActivitiNodeInfo> activitiNodeCandidateList,
+			List<Nodevariable> nodevariableList,
+			List<NodeControlParam> nodeControlParamList) throws Exception;
 }

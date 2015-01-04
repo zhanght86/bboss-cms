@@ -80,7 +80,7 @@
 							<td><input type="checkbox" name="<pg:cell colName='NODE_KEY'/>_IS_SEQUENTIAL" id="IS_SEQUENTIAL" value="1" 
 								<pg:equal colName="IS_SEQUENTIAL" value="1">checked</pg:equal> />串行
 								
-								<input type="checkbox" disabled  <pg:equal colName="IS_COPY" value="1">checked</pg:equal>/>可抄送
+								<input type="checkbox" disabled <pg:in colName="IS_COPY" scope="1,2">checked</pg:in>/>可抄送
 							</td>
 						</tr>
 					</table>

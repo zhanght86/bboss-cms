@@ -65,16 +65,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	}
 
-	/**
-	 * 获取流程节点参数配置信息
-	 * 
-	 * @param nodeList
-	 * @return 2014年5月27日
-	 */
-	private Map<String, Object> getVariableMap(
+	@Override
+	public Map<String, Object> getVariableMap(
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList) {
+			List<NodeControlParam> nodeControlParamList) throws Exception{
 
 		Map<String, Object> variableMap = new HashMap<String, Object>();
 
@@ -167,17 +162,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void completeTask(TaskCondition task,
-			List<ActivitiNodeInfo> activitiNodeCandidateList,
-			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList) {
+	public void completeTask(TaskCondition task,Map<String, Object> variableMap) {
 
 		try {
 
-			// 获取参数配置信息
-			Map<String, Object> variableMap = getVariableMap(
-					activitiNodeCandidateList, nodevariableList,
-					nodeControlParamList);
+//			// 获取参数配置信息
+//			Map<String, Object> variableMap = getVariableMap(
+//					activitiNodeCandidateList, nodevariableList,
+//					nodeControlParamList);
 
 			// 未签收任务处理
 			if ("1".equals(task.getTaskState())) {
@@ -221,10 +213,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void rejectToPreTask(TaskCondition task,
-			List<ActivitiNodeInfo> nodeList,
-			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList, int rejectedtype) {
+	public void rejectToPreTask(TaskCondition task,Map<String, Object> variableMap, int rejectedtype) {
 
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -235,9 +224,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				activitiService.claim(task.getTaskId(), task.getCurrentUser());
 			}
 
-			// 获取参数配置信息
-			Map<String, Object> variableMap = getVariableMap(nodeList,
-					nodevariableList, nodeControlParamList);
+//			// 获取参数配置信息
+//			Map<String, Object> variableMap = getVariableMap(nodeList,
+//					nodevariableList, nodeControlParamList);
 
 			String remark = "["
 					+ activitiService.getUserInfoMap().getUserName(

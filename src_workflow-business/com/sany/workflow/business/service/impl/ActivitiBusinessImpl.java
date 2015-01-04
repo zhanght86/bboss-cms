@@ -45,7 +45,6 @@ import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.NodeControlParam;
 import com.sany.workflow.entity.ProcessInst;
 import com.sany.workflow.entity.TaskCondition;
-import com.sany.workflow.entity.TaskManager;
 import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
@@ -605,6 +604,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			if (completeFirstTask) {
 
+				String remark = "["
+						+ activitiService.getUserInfoMap().getUserName(
+								proIns.getUserAccount()) + "]提交";
+				
+				proIns.setDealRemak(remark);
+				
 				proIns.setBusinessKey(businessKey);
 
 				// 自动完成任务
@@ -682,6 +687,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.setOperateType("pass");
 					proIns.setDealReason("前后任务处理人一致，自动通过");
 				}
+				
+				proIns.setDealRemak("");
+				
 				autoCompleteTask(proIns, processKey);
 			}
 		}
@@ -2824,7 +2832,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		NodeControlParam controlParam = executor.queryObject(
 				NodeControlParam.class, "iscopynode_wf", nodeKey, processKey);
 
-		if (null != controlParam && controlParam.getIS_COPY() == 1) {
+		if (null != controlParam && controlParam.getIS_COPY() != 0) {
 			return true;
 		} else {
 			return false;

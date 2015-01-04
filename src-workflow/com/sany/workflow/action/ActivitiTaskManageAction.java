@@ -508,13 +508,17 @@ public class ActivitiTaskManageAction {
 				}
 
 				task.setCompleteRemark(remark);
+				
+				Map<String, Object> variableMap = activitiTaskService
+						.getVariableMap(activitiNodeCandidateList,
+								nodevariableList, nodeControlParamList);
+				
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
+
 				// 完成任务
-				activitiTaskService.completeTask(task,
-						activitiNodeCandidateList, nodevariableList,
-						nodeControlParamList);
+				activitiTaskService.completeTask(task,variableMap);
 
 				/**注释掉，需要先保存控制参数，再完成任务 2014-12-31 by biaoping.yin*/
 //				// 保存控制变量参数
@@ -687,13 +691,15 @@ public class ActivitiTaskManageAction {
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
 				
+				Map<String, Object> variableMap = activitiTaskService
+						.getVariableMap(activitiNodeCandidateList,
+								nodevariableList, nodeControlParamList);
+				
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
 
-				activitiTaskService.rejectToPreTask(task,
-						activitiNodeCandidateList, nodevariableList,
-						nodeControlParamList, rejectedtype);
+				activitiTaskService.rejectToPreTask(task,variableMap,rejectedtype);
 				
 				return "success";
 			} else {
