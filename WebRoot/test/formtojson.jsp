@@ -30,7 +30,7 @@ function doCandidateSubmit(){
 		type: "post",
 		
 		data: formToJson("#submitForm1"),			
-		datatype:"json",			
+		dataType:"json",			
 		success: function(data){
 		    alert(data);
 		  }

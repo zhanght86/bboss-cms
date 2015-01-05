@@ -447,10 +447,10 @@
 	
 		
 
-		<module name="系统管理" id="sysmanager" used="true" showleftmenu="true"  i18n:en_US="System Manage">
+		<module name="系统管理" id="sysmanager" used="true" showleftmenu="false"  i18n:en_US="System Manage">
 		
 			<description>系统管理</description>
-			<item name="权限管理" id="purviewmanager" default="true" area="main" i18n:en_US="Authoration Manage" >
+			<item name="权限管理" id="purviewmanager" default="true" i18n:en_US="Authoration Manage" >
 				<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
 				<top>headersimple.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
@@ -487,7 +487,7 @@
 				
 			</item>
 
-			<item name="用户查询" id="userquery" area="main" i18n:en_US="User Query">
+			<item name="用户查询" id="userquery"   i18n:en_US="User Query">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
@@ -501,7 +501,7 @@
 				</authoration>
 				
 			</item>
-			<item name="资源查询" id="resquery" area="main" i18n:en_US="Resource Query">
+			<item name="资源查询" id="resquery"   i18n:en_US="Resource Query">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
@@ -515,7 +515,7 @@
 				</authoration>
 			</item>
 
-			<item name="日志查询" id="logquery" area="main" i18n:en_US="Log Query">
+			<item name="日志查询" id="logquery"   i18n:en_US="Log Query">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
 				<!-- <top>perspective_toolbar.jsp</top> -->
