@@ -100,8 +100,8 @@ function showAddressBook(){
     <td height="104" valign=middle><table width="100%" border="0" cellspacing="0" cellpadding="0">
      <tr>
         <td width="58"><img src="images/main_banner_left.jpg" width="586" height="120"></td>
-        <td background="images/main_banner_right.gif"><div style=" float:left; width:auto;margin:10px; padding:4px;background-color:#7596BF;  font-size:12px;"><a href="#" onClick="window.open('../sysmanager/user/userManager.do?method=getUserInfo','','width=750,height=600,resizable=no left=250 top=170');"><font style="color:#FFFFFF;"><strong>个人资料</strong></font></a></div>
-              <div style=" float:left; width:auto;margin:10px; padding:4px;background-color:#7596BF;font-size:12px;"><a href="#" onClick="window.open('../sysmanager/password/modifySelfPassword.jsp','','width=700,height=450,resizable=no left=250 top=170');"><font style="color:#FFFFFF;"><strong>个人密码修改</strong></font></a></div></td>
+        <td background="images/main_banner_right.gif"><div style=" float:left; width:auto;margin:10px; padding:4px;background-color:#7596BF;  font-size:12px;"><a href="javascript:void" onClick="window.open('../sysmanager/user/userManager.do?method=getUserInfo','','width=750,height=600,resizable=no left=250 top=170');"><font style="color:#FFFFFF;"><strong>个人资料</strong></font></a></div>
+              <div style=" float:left; width:auto;margin:10px; padding:4px;background-color:#7596BF;font-size:12px;"><a href="javascript:void" onClick="window.open('../sysmanager/password/modifySelfPassword.jsp','','width=700,height=450,resizable=no left=250 top=170');"><font style="color:#FFFFFF;"><strong>个人密码修改</strong></font></a></div></td>
       </tr>
     </table></td>
   </tr>
@@ -132,10 +132,10 @@ function showAddressBook(){
             <td width="22"><img src="images/Main_B_left.gif" width="22" height="79"></td>
             <td background="images/main_B_bg.gif"><table width="auto" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="65"><!--<a href="#"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="#"><img src="images/Main_B_botton2.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="#"><img src="images/Main_B_botton3.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="#"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton2.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton3.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
                   <td width="65"><!--&nbsp; --></td>
                 </tr> 
             </table></td>

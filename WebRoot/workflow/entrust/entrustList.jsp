@@ -44,13 +44,13 @@
     		<td><pg:cell colName="end_date" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
     		<td><pg:cell colName="create_date" dateformat="yyyy-MM-dd HH:mm:ss" /></td>
     		<td>
-    			<pg:equal colName="wf_entrust_type" value="选择流程委托"><a href="#" onclick="viewEntrustInfo('<pg:cell colName="id"/>');">部分委托</a></pg:equal>
+    			<pg:equal colName="wf_entrust_type" value="选择流程委托"><a href="javascript:void" onclick="viewEntrustInfo('<pg:cell colName="id"/>');">部分委托</a></pg:equal>
     			<pg:equal colName="wf_entrust_type" value="全部委托">全部委托</pg:equal>
     		</td>    
        		<td><pg:cell colName="sts" /></td>
        		<td>
-       			<pg:equal colName="sts" value="有效"><a href="#" onclick="unUseEntrustInfo('<pg:cell colName="id"/>','失效');">失效</a></pg:equal>
-       			<pg:equal colName="sts" value="失效"><a href="#" onclick="unUseEntrustInfo('<pg:cell colName="id"/>','有效');">生效</a></pg:equal>
+       			<pg:equal colName="sts" value="有效"><a href="javascript:void" onclick="unUseEntrustInfo('<pg:cell colName="id"/>','失效');">失效</a></pg:equal>
+       			<pg:equal colName="sts" value="失效"><a href="javascript:void" onclick="unUseEntrustInfo('<pg:cell colName="id"/>','有效');">生效</a></pg:equal>
        		</td>
         </tr>
 	 </pg:list>

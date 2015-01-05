@@ -107,7 +107,7 @@
 	            </tr>
 	            <tr>
 	              <td>&nbsp;</td>
-	              <td class="bt_position"><a href="#" class="bt_1" onClick='sub()'><span>评论</span></a></td>
+	              <td class="bt_position"><a href="javascript:void" class="bt_1" onClick='sub()'><span>评论</span></a></td>
 	            </tr>
 	          </table>
 	        </div>

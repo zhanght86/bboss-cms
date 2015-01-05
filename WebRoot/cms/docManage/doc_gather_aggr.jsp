@@ -633,7 +633,7 @@ var api = frameElement.api, W = api.opener;
 																		Template tp = chnl.getDetailTemplateOfChannel(channelId);
 																		String tname = (tp==null?"还没有设置":tp.getName());
 																		%>
-																		继承所属频道的细览模板(<span class="red_star"><%=tname%></span>)	  <a href="#" onClick="preview()" ><u>预览</u></a>	
+																		继承所属频道的细览模板(<span class="red_star"><%=tname%></span>)	  <a href="javascript:void" onClick="preview()" ><u>预览</u></a>	
 							                </td>
 							                </tr>
 											<tr>

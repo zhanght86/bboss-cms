@@ -444,7 +444,7 @@
 																		String tname = (tp==null?"还没有设置":tp.getName());
 																		%>
 																		继承所属频道的细览模板(<span class="red_star"><%=tname%></span>)	  
-																		<!--<a href="#" onClick="preview()" ><u>预览</u></a>-->
+																		<!--<a href="javascript:void" onClick="preview()" ><u>预览</u></a>-->
 							                </td>
 							                </tr>
 							                <tr>
@@ -455,7 +455,7 @@
 												<td height="26">&nbsp;</td>
 												<td height="23" colspan="2">
 													<!--<img align=absMiddle border=0 height=12 src="../images/text-correlated.gif" width=14 >
-													<a id=tab2 href="#" onclick=tabClick(2) ><u>[相关文档]</u></a>-->												</td>
+													<a id=tab2 href="javascript:void" onclick=tabClick(2) ><u>[相关文档]</u></a>-->												</td>
 									        </tr>
 				              		  </table>					              	</td>
 					            </tr>

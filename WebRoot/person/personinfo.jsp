@@ -269,8 +269,8 @@ function storeUser()
 									</tr>
 								</table>
 					<div class="btnarea" >
-								<a href="#" class="bt_1" onclick="storeUser()"><span><pg:message code="sany.pdp.common.ok"/></span></a> 
-								<a href="#"	class="bt_2" onclick="UserInfoForm.reset();"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+								<a href="javascript:void" class="bt_1" onclick="storeUser()"><span><pg:message code="sany.pdp.common.ok"/></span></a> 
+								<a href="javascript:void"	class="bt_2" onclick="UserInfoForm.reset();"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 					</div>	
 					<table width="100%" align="center" border="0" cellpadding="0"
 						cellspacing="0">

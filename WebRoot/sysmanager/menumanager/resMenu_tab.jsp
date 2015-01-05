@@ -120,6 +120,14 @@
 										</td>
 									</tr>
 								</pg:equal>
+								<tr>
+								<td width="124" height="28" class="detailtitle">
+									showleftmenu:
+								</td>
+								<td class="detailcontent">
+									${menu.showleftmenu}
+								</td>
+							</tr>
 							</pg:in>
 							<pg:equal actual="${menuType}" value="subSystem">
 								<tr>
@@ -155,14 +163,7 @@
 									</td>
 								</tr>
 							</pg:equal>
-							<tr>
-								<td width="124" height="28" class="detailtitle">
-									showleftmenu:
-								</td>
-								<td class="detailcontent">
-									${menu.showleftmenu}
-								</td>
-							</tr>
+							
 						</pg:in>
 						<pg:equal actual="${menuType}" value="framework">
 							<tr>

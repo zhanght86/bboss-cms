@@ -31,7 +31,7 @@
                 <td><pg:cell colName="moduleCode"/></td>
                 <td style="display:none;"><pg:cell colName="moduleCode"/></td>  
         		<td><pg:cell colName="timeSpent" /></td>
-        		<td><a href="#" onclick="modifyOrIncrementRecord('<pg:cell colName="id" />','modify')">修改</a></td>
+        		<td><a href="javascript:void" onclick="modifyOrIncrementRecord('<pg:cell colName="id" />','modify')">修改</a></td>
 
         </tr>
 	 </pg:list>

@@ -117,7 +117,7 @@ scrollbar-track-color: #E9EDF3;
 		<td >
 		    <pg:equalandupper colName="writeDocs" value="1">			
 <!--				<a href="docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=1" title="查看"  target="_self"><pg:cell colName="writeDocs" defaultValue=""/></a>-->
-				<a href="#" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=1',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="writeDocs" defaultValue=""/></a>
+				<a href="javascript:void" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=1',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="writeDocs" defaultValue=""/></a>
 			</pg:equalandupper>
 			<pg:equal colName="writeDocs" value="0">			
 				<pg:cell colName="writeDocs" defaultValue=""/>
@@ -126,7 +126,7 @@ scrollbar-track-color: #E9EDF3;
 		<td >
 			<pg:equalandupper colName="auditDocs" value="1">			
 <!--				<a href="docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=2" title="查看"  target="_self"><pg:cell colName="auditDocs" defaultValue=""/></a>-->
-				<a href="#" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=2',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="auditDocs" defaultValue=""/></a>
+				<a href="javascript:void" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=2',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="auditDocs" defaultValue=""/></a>
 			</pg:equalandupper>
 			<pg:equal colName="auditDocs" value="0">			
 				<pg:cell colName="auditDocs" defaultValue=""/>
@@ -135,7 +135,7 @@ scrollbar-track-color: #E9EDF3;
 		<td >
 			<pg:equalandupper colName="publishDocs" value="1">			
 <!--				<a href="docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=3" title="查看"  target="_self"><pg:cell colName="publishDocs" defaultValue=""/></a>-->
-				<a href="#" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=3',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="publishDocs" defaultValue=""/></a>
+				<a href="javascript:void" onClick="openWin('docStatistic_list.jsp?startDate=<%=startDate%>&endDate=<%=endDate%>&userId=<pg:cell colName="userId" defaultValue=""/>&flag=3',screen.availWidth-200,screen.availHeight-200)" title="查看"  target="_self"><pg:cell colName="publishDocs" defaultValue=""/></a>
 			</pg:equalandupper>
 			<pg:equal colName="publishDocs" value="0">			
 				<pg:cell colName="publishDocs" defaultValue=""/>

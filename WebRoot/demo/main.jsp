@@ -163,7 +163,7 @@
 												&nbsp;
 											</th>
 											<td>
-												<a href="#" class="bt_1" id="queryButton"><span>查询</span>
+												<a href="javascript:void" class="bt_1" id="queryButton"><span>查询</span>
 												</a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span>重置</span>
 												</a>
@@ -184,8 +184,8 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton"><span>添加</span></a>
-				<a href="#" class="bt_small" id="delBatchButton"><span>删除</span></a>				
+				<a href="javascript:void" class="bt_small" id="addButton"><span>添加</span></a>
+				<a href="javascript:void" class="bt_small" id="delBatchButton"><span>删除</span></a>				
 				
 				</div>
 				

@@ -4,8 +4,8 @@
 
 <%
 	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();	//获取平台当前用户会话对象
-	boolean hasdeletepermission = accesscontroler.checkPermission("globaltest",//资源id
-																"delete",//资源操作
+	boolean hasaddpermission = accesscontroler.checkPermission("globaltest",//资源id
+																"add",//资源操作
 																"testresource"//资源类型
 																);
 	boolean hasupdatepermission = accesscontroler.checkPermission("testid","write","testresource");
@@ -13,7 +13,8 @@
 	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
 	boolean hasglobaltestreadpermission = accesscontroler.checkPermission("globaltest","read","testresource");
 	boolean hasglobaltestdeletepermission = accesscontroler.checkPermission("globaltest","delete","testresource");
-	
+	java.util.Map<String,java.util.List<String>> permissions = accesscontroler.getResourcePermissions(accesscontroler, "testresource");
+	out.println(permissions);
 %>
 <pg:true actual="<%=hasaddpermission %>">
 	do something here...
@@ -67,7 +68,7 @@
 						
 						<td colspan="7">
 						<pg:true actual="<%=hasdeletepermission %>">
-							<a href="#"  onclick="delteUse();">删除用户</a>
+							<a href="javascript:void"  onclick="delteUse();">删除用户</a>
 						</pg:true>
 						<pg:false actual="<%=hasdeletepermission %>">
 							没有删除用户的权限
@@ -93,7 +94,7 @@
 						
 						<td colspan="7">
 							选择用户：<input type="text" value="yinbp" name="userName" id="userName"> 
-							<a href="#"  onclick="selectUser();">选择</a>
+							<a href="javascript:void"  onclick="selectUser();">选择</a>
 						</td>
 					</tr>
 					

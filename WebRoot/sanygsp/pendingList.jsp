@@ -33,7 +33,7 @@ function() {
 	<div data-role="page">
 
 		<div data-role="header">
-			<a href="#" data-rel="back" id="backlink" data-icon="back"> <pg:message	code="sany.gsp.common.backlink" /></a>
+			<a href="javascript:void" data-rel="back" id="backlink" data-icon="back"> <pg:message	code="sany.gsp.common.backlink" /></a>
 			<h1><pg:message	code="sany.gsp.pending.approve" /></h1>
 			<a href="${ctx}/sanymbp/index.page" data-ajax="false"
 				id="mainpage" data-icon="home" data-iconpos="notext"

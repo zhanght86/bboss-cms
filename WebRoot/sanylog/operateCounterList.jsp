@@ -50,7 +50,7 @@
         		<td><pg:cell colName="operTime" dateformat="yyyy-MM-dd  HH:mm:ss"/></td>
         		<td><pg:cell colName="operateIp" /></td>                             
         		<td><pg:cell colName="browserType"  /></td>
-        		<td ><a href="#" onclick="checkOperateDetail('<pg:cell colName="operateId" />')">查看</a></td>  
+        		<td ><a href="javascript:void" onclick="checkOperateDetail('<pg:cell colName="operateId" />')">查看</a></td>  
         </tr>
 	 </pg:list>
     </table>

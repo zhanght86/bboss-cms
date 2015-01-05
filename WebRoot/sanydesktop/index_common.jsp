@@ -90,8 +90,8 @@ html{overflow:hidden}
 <div id="wrap">
 <div  class="top">
   <div class="logo_top" ><%=AccessControl.getAccessControl().getCurrentSystemName() %></div>
-      <div class="right_info">审批事项：<a href="#" >10</a>条 | 
-      通知：<a href="#" >2</a>条 | </div>
+      <div class="right_info">审批事项：<a href="javascript:void" >10</a>条 | 
+      通知：<a href="javascript:void" >2</a>条 | </div>
   <div class="info">
     <ul>
       <li class="info-i has-pulldown"> <em class="f-icon pull-arrow"></em> 
@@ -119,7 +119,7 @@ html{overflow:hidden}
 <div class="content_box"><iframe id="mainFrame" name="mainFrame" src="${mainurl}" width="100%" scrolling="auto" frameborder="0"></iframe></div>
 <pg:true  requestKey="showboot" >
 <div class="footer">
-  <div class="left_footer"> <a href="ghp/index.html">全球招聘平台</a> | <a href="http://olm.sany.com.cn/SanyOLM/login.do?method=login">在线学习平台</a> | <a href="#" id="contact">联系我们 </a>| <a href="#">调查问卷</a> 
+  <div class="left_footer"> <a href="ghp/index.html">全球招聘平台</a> | <a href="http://olm.sany.com.cn/SanyOLM/login.do?method=login">在线学习平台</a> | <a href="javascript:void" id="contact">联系我们 </a>| <a href="javascript:void">调查问卷</a> 
   </div>
  <span class="copy_right"> <script type="text/javascript">
 		copyright=new Date();

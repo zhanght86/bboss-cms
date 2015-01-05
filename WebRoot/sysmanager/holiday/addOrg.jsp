@@ -79,8 +79,8 @@ function orgClick(orgid, orgname) {
 	           </tr>
 			   
 		</table>
-		            <a href="#" class="bt_2"  onclick="confirm()"><span>保存</span></a>
-					<a href="#" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
+		            <a href="javascript:void" class="bt_2"  onclick="confirm()"><span>保存</span></a>
+					<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
 		<div  id="treediv" >
 			<fieldset>
 			  <legend>组织机构树</legend>

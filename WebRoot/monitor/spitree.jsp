@@ -38,7 +38,7 @@
     	           imageFolder="/monitor/tree_images/"
     	           collapse="true"
     			   includeRootNode="true"
-    			   href="#"
+    			   href="javascript:void"
     			   target="configfileDetail" 
     			   mode="static-dynamic"> 
     			   <tree:treedata treetype="org.frameworkset.spi.monitor.SPITree"

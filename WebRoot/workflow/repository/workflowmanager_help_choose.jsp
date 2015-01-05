@@ -476,8 +476,8 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<!-- <a href="#" class="bt_small" id="addButton" onclick="javascript:selectedSel();"><span>选择</span></a>  -->
-				<!--  <a href="#" class="bt_small" id="exportButton"><span>导出</span></a>
+				<!-- <a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:selectedSel();"><span>选择</span></a>  -->
+				<!--  <a href="javascript:void" class="bt_small" id="exportButton"><span>导出</span></a>
 				<!--<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>-->
 				</div>
@@ -492,8 +492,8 @@
 			<div id="searchblock">
 				<div class="title_box">
 					<div class="rightbtn">
-					<a href="#" class="bt_small" id="addButton" onclick="subSelectedData();"><span>确认选择</span></a>
-					<!--<a href="#" class="bt_small" id="exportButton" onclick="delAllProcRow();"><span>全部删除</span></a>
+					<a href="javascript:void" class="bt_small" id="addButton" onclick="subSelectedData();"><span>确认选择</span></a>
+					<!--<a href="javascript:void" class="bt_small" id="exportButton" onclick="delAllProcRow();"><span>全部删除</span></a>
 					<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 					<input  type="radio" name="excelType"  >2007</input>-->
 					</div>

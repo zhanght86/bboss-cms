@@ -304,8 +304,8 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton" onclick="javascript:showAddJob()"><span><pg:message code="sany.pdp.jobmanage.add.job"/></span></a>
-				<a href="#" class="bt_small" id="delBatchButton" onclick="javascript:deletejob()"><span><pg:message code="sany.pdp.jobmanage.delete.job"/></span></a>
+				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:showAddJob()"><span><pg:message code="sany.pdp.jobmanage.add.job"/></span></a>
+				<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="javascript:deletejob()"><span><pg:message code="sany.pdp.jobmanage.delete.job"/></span></a>
 				</div>
 			</div>
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">

@@ -372,7 +372,7 @@ function setHoliday(processKey,value) {
 				<div class="left_menu" style="width:193px;">
 				    <ul>
 				    	<li class="select_links">
-				    		<a href="#">应用查询：</a><input type="input" style="width:100px;" name="app_query" id="app_query" onKeyUp="sortAppTree()" />
+				    		<a href="javascript:void">应用查询：</a><input type="input" style="width:100px;" name="app_query" id="app_query" onKeyUp="sortAppTree()" />
 				    		<ul style="display: block;" id="app_tree_module">
 				    			
 				    		</ul>
@@ -441,10 +441,10 @@ function setHoliday(processKey,value) {
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.add"/></span></a>
-				<a href="#" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
-				<a href="#" class="bt_small" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
-				<!--  <a href="#" class="bt_small" id="exportButton"><span>导出</span></a>
+				<a href="javascript:void" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.add"/></span></a>
+				<a href="javascript:void" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
+				<a href="javascript:void" class="bt_small" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
+				<!--  <a href="javascript:void" class="bt_small" id="exportButton"><span>导出</span></a>
 				<!--<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>-->
 				</div>

@@ -39,9 +39,9 @@
 				<pg:empty colName="pendingSubscribe" >未订阅</pg:empty>
 				</td>
                 <td>
-                <a href="#" onclick="confirm(this,'1')" id="<pg:cell colName="id"/>_sub" ><span>订阅</span></a>
+                <a href="javascript:void" onclick="confirm(this,'1')" id="<pg:cell colName="id"/>_sub" ><span>订阅</span></a>
                 &nbsp;&nbsp;|&nbsp;&nbsp;
-                <a href="#" onclick="confirm(this,'0')" id="<pg:cell colName="id"/>_cancel"><span>取消</span></a>
+                <a href="javascript:void" onclick="confirm(this,'0')" id="<pg:cell colName="id"/>_cancel"><span>取消</span></a>
                 </td>
                 
         </tr>

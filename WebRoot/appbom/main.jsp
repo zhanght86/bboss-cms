@@ -148,7 +148,7 @@
 												&nbsp;
 											</th>
 											<td>
-												<a href="#" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span>
+												<a href="javascript:void" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span>
 												</a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span>
 												</a>
@@ -280,7 +280,7 @@
 			 </div>	
 			 <div class="button_operate">
 			   <input type="checkbox" id="check"  onclick="senior()" style="vertical-align:middle"/><span style="margin-right:20px;">高级搜索</span>
-			   <a href="#" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+			   <a href="javascript:void" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
 			   <a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 			   <input type="reset" id="reset" style="display:none"/>
 	        </div>	
@@ -299,9 +299,9 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.operation.new"/></span></a>
-				<a href="#" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.operation.batch"/> <pg:message code="sany.pdp.common.operation.delete"/></span></a>
-				<a href="#" class="bt_small" id="exportButton"><span><pg:message code="sany.pdp.common.operation.export"/></span></a>
+				<a href="javascript:void" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.operation.new"/></span></a>
+				<a href="javascript:void" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.operation.batch"/> <pg:message code="sany.pdp.common.operation.delete"/></span></a>
+				<a href="javascript:void" class="bt_small" id="exportButton"><span><pg:message code="sany.pdp.common.operation.export"/></span></a>
 				<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>
 				</div>

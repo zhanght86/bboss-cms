@@ -101,36 +101,25 @@ function haveSelect(elName){
 	}
 	return isSelect;
 }	
-
 //静态分页置标
+//将图片转换成分页置标
+function setPageTagNone(eWebEditor){
+	var ewebeditor48 = document.getElementById(eWebEditor).contentWindow.document.getElementById("eWebEditor");
+	var arPageTags = ewebeditor48.document.all("_CMSPage");
+	if(arPageTags == null)return;
+	if(arPageTags.length){
+		for(var i =arPageTags.length-1; i>=0; i--){
+			var objPageTag = arPageTags[i];
+			if(objPageTag == null)continue;
 
-	function setPageTagNone(eWebEditor){
-		var ewebeditor =  document.getElementById(eWebEditor).contentWindow.document.getElementById("eWebEditor").contentWindow;
-		var arPageTags = ewebeditor.document.all("_CMSPage");
-		if(arPageTags == null)return;
-		if(arPageTags.length){
-			for(var i =arPageTags.length-1; i>=0; i--){
-				var objPageTag = arPageTags[i];
-				if(objPageTag == null)continue;
-
-				var pageTag = ewebeditor.document.createElement("CMS_PAGE_SEPARATOR");		
-				//pageTag.innerHTML = "TRS静态分页置标";
-				objPageTag.replaceNode(pageTag);
-			}
-		}else{
-			var pageTag =ewebeditor.document.createElement("CMS_PAGE_SEPARATOR");		
+			var pageTag = ewebeditor48.document.createElement("CMS_PAGE_SEPARATOR");		
 			//pageTag.innerHTML = "TRS静态分页置标";
-			arPageTags.replaceNode(pageTag);
+			objPageTag.replaceNode(pageTag);
 		}
+	}else{
+		var pageTag = ewebeditor48.document.createElement("CMS_PAGE_SEPARATOR");		
+		//pageTag.innerHTML = "TRS静态分页置标";
+		arPageTags.replaceNode(pageTag);
+	}
 
-	}
-	
-	// 替换特殊字符
-	function ContentHTMLEncode1(text){		       
-		text = text.replace(/&/g, "&amp;") ;
-		text = text.replace(/"/g, "&quot;") ;
-		text = text.replace(/</g, "&lt;") ;
-		text = text.replace(/>/g, "&gt;") ;
-		text = text.replace(/'/g, "&#39;") ;
-		return text;
-	}
+}

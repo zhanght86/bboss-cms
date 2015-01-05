@@ -176,8 +176,8 @@
 							%>
 						</td>
 						<td>
-							<a href="#" class="bt_1" id="addButton" onclick="javascript:sub()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-							<a href="#" class="bt_2" id="delBatchButton" onclick="javascript:doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+							<a href="javascript:void" class="bt_1" id="addButton" onclick="javascript:sub()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+							<a href="javascript:void" class="bt_2" id="delBatchButton" onclick="javascript:doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 							<input type="reset" id="reset" style="display: none;" />
 						</td>
 						</tr>

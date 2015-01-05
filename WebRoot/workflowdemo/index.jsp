@@ -116,8 +116,8 @@ function showLogStyle(style){
 <form action="" id="workflowForm" method="post">
 	<div class="main_contain">
 	  <div class="u_tab_div2" id="tab">
-	    <div class="tab1"><span class="u_tab_hover"><a href="#">流程</a></span></div>
-	    <div class="tab2"><span class="u_tab"><a href="#">内容</a></span></div>
+	    <div class="tab1"><span class="u_tab_hover"><a href="javascript:void">流程</a></span></div>
+	    <div class="tab2"><span class="u_tab"><a href="javascript:void">内容</a></span></div>
 	  </div>
 	  
 	  <div id="tabCon01">
@@ -131,11 +131,11 @@ function showLogStyle(style){
 	    
 	   	<div class="bottom_area"></div>
 	    <div class="submit_operation"> 
-		    <a href="#" class="bt_submit" onclick="submitFormData()"><span>确定</span></a> 
+		    <a href="javascript:void" class="bt_submit" onclick="submitFormData()"><span>确定</span></a> 
 		    <pg:in actual="${pagestate}" scope="1,2">
-		    <a href="#" class="bt_submit" onclick="submitTempFormData()"><span>暂存</span></a> 
+		    <a href="javascript:void" class="bt_submit" onclick="submitTempFormData()"><span>暂存</span></a> 
 		    </pg:in>
-		    <a href="#" class="bt_cancel" onclick="closeDlg()"><span>取消</span></a> 
+		    <a href="javascript:void" class="bt_cancel" onclick="closeDlg()"><span>取消</span></a> 
 	    </div>
 	    
 	   </div>

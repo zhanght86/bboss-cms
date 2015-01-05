@@ -446,10 +446,10 @@
 					               {
 					               ff = true;
 		                       %>
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
 								修改问卷</a>
 								
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
 								修改题目</a>
 								
 								<%
@@ -460,7 +460,7 @@
 					               ff = true;
 		                       %>
 		                       |
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="havealook('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="havealook('<pg:cell colName='id' defaultValue=''/>')"/>
 								预览</a>
 								
 								<%
@@ -470,7 +470,7 @@
 					               {
 					                ff = true;
 		                       %>|
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="getResult('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="getResult('<pg:cell colName='id' defaultValue=''/>')"/>
 								统计</a>
 								<%}
 								if(!ff)
@@ -478,7 +478,7 @@
 								 %>无权限<%
 								}
 								%>|
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="exportExcel('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="exportExcel('<pg:cell colName='id' defaultValue=''/>')"/>
 								导出提交答案</a>
 								</td>
 																

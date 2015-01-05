@@ -245,7 +245,7 @@ function check_form(){
 
 
 <map name="Map"><area shape="rect" coords="1,4,80,25" href="site_right.jsp" >
-<area shape="rect" coords="80,-2,81,3" href="#"><area shape="rect" coords="87,3,153,23" href="site_right1.jsp">
+<area shape="rect" coords="80,-2,81,3" href="javascript:void"><area shape="rect" coords="87,3,153,23" href="site_right1.jsp">
 <area shape="rect" coords="160,3,224,32" href="site_right2.jsp" >
 <area shape="rect" coords="160,3,224,32" href="site_right3.jsp" >
 <area shape="rect" coords="160,3,224,32" href="site_right4.jsp" >

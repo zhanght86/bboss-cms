@@ -96,7 +96,7 @@ var setting = {
 						
 					</tr>
 					<tr>
-					<th><a href="#" class="bt_small" id="addButton" onclick="javascript:getNextTime()"><span>获取完成时间:</span></a></th>
+					<th><a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:getNextTime()"><span>获取完成时间:</span></a></th>
 					<td id="theNextTime"></td>
 					</tr>
 				</table>

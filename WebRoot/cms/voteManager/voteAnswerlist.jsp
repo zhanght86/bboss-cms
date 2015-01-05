@@ -260,7 +260,7 @@
 					               //if(accesscontroler.checkPermission("dchmanager1","adviceaudit","answerManager"))
 					               {
 		                       %>
-								<a style="cursor:hand;color:#0000cc" href="#" onclick="audit('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="audit('<pg:cell colName='id' defaultValue=''/>')"/>
 								意见审核</a>
 								<%}else{%>无权限<%}%>
 								</td>							

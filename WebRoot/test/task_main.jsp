@@ -14,9 +14,9 @@
 <div id="order_detail" style="display:block">
         <div class="tabbox">
           <ul class="tab" id="menu0">
-            <li><a href="#" class="current" onclick="setTab(0,0)"><span>审核</span></a></li>
-            <li><a href="#" onclick="setTab(0,1)"><span>领料申请单详细信息</span></a></li>
-            <li><a href="#" onclick="setTab(0,2)"><span>流程图</span></a></li>
+            <li><a href="javascript:void" class="current" onclick="setTab(0,0)"><span>审核</span></a></li>
+            <li><a href="javascript:void" onclick="setTab(0,1)"><span>领料申请单详细信息</span></a></li>
+            <li><a href="javascript:void" onclick="setTab(0,2)"><span>流程图</span></a></li>
             </ul>
         </div>
         <div id="main0">

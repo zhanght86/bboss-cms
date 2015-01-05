@@ -56,9 +56,9 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton" onclick="javascript:add()"><span>新增</span></a>
+				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:add()"><span>新增</span></a>
 				<!--  
-				<a href="#" class="bt_small" id="delBatchButton" onclick="javascript:batchDelete()"><span>批量删除</span></a>
+				<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="javascript:batchDelete()"><span>批量删除</span></a>
 				-->
 				</div>
 				

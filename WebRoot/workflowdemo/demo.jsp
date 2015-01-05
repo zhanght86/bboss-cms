@@ -149,7 +149,7 @@ function doreset(){
 			      	业务单号<input id="businessKey" name="businessKey" type="text" class="input1" style="width: 165px;" value="" />
 			      	业务单号<input id="businessKey1" name="businessKey1" type="text" class="input1" style="width: 165px;" value="" />
 			    </div> 
-			    <a href="#" class="bt_search" onclick="queryList();"><span>查询</span></a>
+			    <a href="javascript:void" class="bt_search" onclick="queryList();"><span>查询</span></a>
 	    	</td></tr>
 	    </table>
   	</div>
@@ -157,7 +157,7 @@ function doreset(){
 	<div class="title_1">
 		演示列表
 		
-		<div ><a href="#" class="bt_sany" onclick="toSelectProc();">新增</a></div>
+		<div ><a href="javascript:void" class="bt_sany" onclick="toSelectProc();">新增</a></div>
 		
 	</div>
 		<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />		

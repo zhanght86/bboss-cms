@@ -109,7 +109,7 @@ function doreset(){
 		
 		<div class="title_box">
 			<div class="rightbtn">
-				<a href="#" class="bt_small" onclick="delegateTasks();"><span>转派</span></a>
+				<a href="javascript:void" class="bt_small" onclick="delegateTasks();"><span>转派</span></a>
 			</div>
 				
 			<strong>转派日志列表</strong>

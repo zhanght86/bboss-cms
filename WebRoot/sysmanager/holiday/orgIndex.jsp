@@ -72,8 +72,8 @@ var areaId = '${param.areaId}';
 		<div class="mcontent">
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="#" class="bt_small" id="addButton" onclick="javascript:addOrg('${param.areaId}');"><span>新增部门</span></a>
-				<a href="#" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
+				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:addOrg('${param.areaId}');"><span>新增部门</span></a>
+				<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
 				</div>
 				
 				<strong>区域列表</strong>				

@@ -563,8 +563,8 @@
 								    </select>
 				</td>
 				<td>
-		            <a href="#" class="bt_1" onClick="queryUser()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-		            <a href="#" class="bt_2" onClick="userList.reset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a></td>
+		            <a href="javascript:void" class="bt_1" onClick="queryUser()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+		            <a href="javascript:void" class="bt_2" onClick="userList.reset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a></td>
 				</td>
 				</tr>				
 	          </table>
@@ -585,31 +585,31 @@
 				if(accesscontroler.checkPermission("orgunit",
                  		"newdeluser", AccessControl.ORGUNIT_RESOURCE)){
 			%>
-				<a href="#" class="bt_small" onClick="newUser()"><span><pg:message code="sany.pdp.add.user"/></span></a>
-				<a href="#" class="bt_small" onClick="quiteDelUser()"><span><pg:message code="sany.pdp.delete"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="newUser()"><span><pg:message code="sany.pdp.add.user"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="quiteDelUser()"><span><pg:message code="sany.pdp.delete"/></span></a>
 			<%
 				}
 			%>        						
-				<a href="#" class="bt_small" onClick="orderUser()"><span><pg:message code="sany.pdp.sort.user"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="orderUser()"><span><pg:message code="sany.pdp.sort.user"/></span></a>
 			<%
      						if(accesscontroler.checkPermission("orgunit",
                         		"usermanager", AccessControl.ORGUNIT_RESOURCE)){
      					%>							
-				<a href="#" class="bt_small" onClick="foldUser()"><span><pg:message code="sany.pdp.move.in.user"/></span></a>
-				<a href="#" class="bt_small" onClick="addorg(1)"><span><pg:message code="sany.pdp.move.out.user"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="foldUser()"><span><pg:message code="sany.pdp.move.in.user"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="addorg(1)"><span><pg:message code="sany.pdp.move.out.user"/></span></a>
 			<%
 				}
 			%>
-				<a href="#" class="bt_small" onClick="roleUser(1)"><span><pg:message code="sany.pdp.sys.role.authorize"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="roleUser(1)"><span><pg:message code="sany.pdp.sys.role.authorize"/></span></a>
 				<%if(isJobOpen){ %>
-				<a href="#" class="bt_small" onClick="jobUser(1)"><span><pg:message code="sany.pdp.sys.post.authorize"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="jobUser(1)"><span><pg:message code="sany.pdp.sys.post.authorize"/></span></a>
 				<% }%>
 			<%
      						if(accesscontroler.checkPermission("orgunit",
                         		"purset", AccessControl.ORGUNIT_RESOURCE)){
      		%>	
-				<a href="#" class="bt_small" onClick="operUser(1)"><span><pg:message code="sany.pdp.sys.purview.authorize"/></span></a>
-				<a href="#" class="bt_small" onClick="purviewReclaimUsers()"><span><pg:message code="sany.pdp.sys.purview.recycle"/></span></a>	
+				<a href="javascript:void" class="bt_small" onClick="operUser(1)"><span><pg:message code="sany.pdp.sys.purview.authorize"/></span></a>
+				<a href="javascript:void" class="bt_small" onClick="purviewReclaimUsers()"><span><pg:message code="sany.pdp.sys.purview.recycle"/></span></a>	
 			<%
 				}
 			%>	

@@ -174,9 +174,9 @@ function delTemples () {
 			
 			<div class="title_box">
 				<div class="rightbtn">
-					<a href="#" class="bt_small" id="paramButton"><span>参数管理</span></a>
-					<a href="#" class="bt_small" id="addButton"><span>新增</span></a>
-					<a href="#" class="bt_small" id="delBatchButton"><span>删除</span></a>
+					<a href="javascript:void" class="bt_small" id="paramButton"><span>参数管理</span></a>
+					<a href="javascript:void" class="bt_small" id="addButton"><span>新增</span></a>
+					<a href="javascript:void" class="bt_small" id="delBatchButton"><span>删除</span></a>
 				</div>
 					
 				<strong>模板列表</strong>

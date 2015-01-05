@@ -165,7 +165,7 @@
 			if(accessControl.checkPermission(orgId,"orgroleset",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="orgroles()"><u>角色授予</u></a> | 
+			<a href="javascript:void" onclick="orgroles()"><u>角色授予</u></a> | 
 			<%
 			}
 			%>
@@ -173,7 +173,7 @@
 			if(accessControl.checkPermission(orgId,"orgresset",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="orgRess()"><u>权限授予</u></a> |
+			<a href="javascript:void" onclick="orgRess()"><u>权限授予</u></a> |
 			<%
 			}
 			%>
@@ -181,7 +181,7 @@
 			if(accessControl.checkPermission(orgId,"editsuborg",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="modifyorg()"><u>修改机构</u></a> | 
+			<a href="javascript:void" onclick="modifyorg()"><u>修改机构</u></a> | 
 			<%
 			}
 			%>
@@ -189,7 +189,7 @@
 			if(accessControl.checkPermission(orgId,"deletesuborg",AccessControl.ORGUNIT_RESOURCE) && !state)
 			{
 			%>
-			<a href="#" onclick="deleteorg()"><u>删除机构</u></a> | 
+			<a href="javascript:void" onclick="deleteorg()"><u>删除机构</u></a> | 
 			<%
 			}
 			%>
@@ -197,7 +197,7 @@
 			if(accessControl.checkPermission(orgId,"addsuborg",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="createorg()"><u>新建子机构</u></a> |
+			<a href="javascript:void" onclick="createorg()"><u>新建子机构</u></a> |
 			<%
 			}
 			%>
@@ -205,7 +205,7 @@
 			if(accessControl.checkPermission(orgId,"adduser",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="createuser()"><u>新增用户</u></a> |
+			<a href="javascript:void" onclick="createuser()"><u>新增用户</u></a> |
 			<%
 			}
 			%>
@@ -214,7 +214,7 @@
 			if(accessControl.checkPermission(orgId,"deleteuser",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="deluser();return false;"><u>彻底删除</u></a> |
+			<a href="javascript:void" onclick="deluser();return false;"><u>彻底删除</u></a> |
 			<%
 			}
 			%>
@@ -223,7 +223,7 @@
 			if(accessControl.checkPermission(orgId,"adduser",AccessControl.ORGUNIT_RESOURCE))
 			{
 			%>
-			<a href="#" onclick="folduser()"><u>调入用户</u></a> 
+			<a href="javascript:void" onclick="folduser()"><u>调入用户</u></a> 
 			<%
 			}
 			%>
@@ -231,7 +231,7 @@
 			//if(accessControl.checkPermission(orgId,"changeorgadmin",AccessControl.ORGUNIT_RESOURCE))
 			//{
 			%>
-			<!-- <a href="#" onclick="changeorgadmin()"><u>设置管理员</u></a></div>-->
+			<!-- <a href="javascript:void" onclick="changeorgadmin()"><u>设置管理员</u></a></div>-->
 			<%
 			//}
 			%>
@@ -239,7 +239,7 @@
 			<hr size="1">
 			<div align="left">&nbsp;
 			 <!--| 
-			<a href="#" onclick="createorg()"><u>添加用户</u></a>--></div>
+			<a href="javascript:void" onclick="createorg()"><u>添加用户</u></a>--></div>
 			</td>
 		</tr>
 		<pg:listdata dataInfo="OrgSubUserList" keyName="OrgSubUserList"/>

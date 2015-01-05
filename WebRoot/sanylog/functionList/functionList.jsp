@@ -34,8 +34,8 @@
         		<td><pg:cell colName="estimateUser" /></td>  
         		<td><pg:cell colName="estimateOper" /></td>  
         		<td><pg:cell colName="timeSpent" /></td>
-        		<td><a href="#" onclick="deleteRecord('<pg:cell colName="id" />')">删除</a></td>
-        		<td><a href="#" onclick="modifyOrIncrementRecord('<pg:cell colName="id" />','modify')">修改</a></td>
+        		<td><a href="javascript:void" onclick="deleteRecord('<pg:cell colName="id" />')">删除</a></td>
+        		<td><a href="javascript:void" onclick="modifyOrIncrementRecord('<pg:cell colName="id" />','modify')">修改</a></td>
         </tr>
 	 </pg:list>
     </table>

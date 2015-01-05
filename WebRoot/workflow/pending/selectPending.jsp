@@ -109,7 +109,7 @@ function findPic(picName){
   </ul>
 </div>
 <div class="foot_position"></div>
-<div class="foot_button"><a href="#" onclick="CloseDlg()"><img src="images/cancel.gif" width="78" height="34" alt="取消" /></a>
- <a href="#" onclick="submit()"><img src="images/submit.gif" width="78" height="34" alt="确认" /></a></div>
+<div class="foot_button"><a href="javascript:void" onclick="CloseDlg()"><img src="images/cancel.gif" width="78" height="34" alt="取消" /></a>
+ <a href="javascript:void" onclick="submit()"><img src="images/submit.gif" width="78" height="34" alt="确认" /></a></div>
 </body>
 </html>

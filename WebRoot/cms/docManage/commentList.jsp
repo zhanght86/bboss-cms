@@ -2,7 +2,7 @@
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 
 <div id="customContent">
-<div class="comment_title"><div class="comment_num"><a href="#">已有<span class="red_num" >${total }</span>条评论</a></div>
+<div class="comment_title"><div class="comment_num"><a href="javascript:void">已有<span class="red_num" >${total }</span>条评论</a></div>
           评论</div>
 	<pg:equal actual="${docCommentList.totalSize}" value="0" >
 		<div style="text-align: center;padding-top:10px;">

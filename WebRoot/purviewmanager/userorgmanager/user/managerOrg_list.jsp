@@ -92,8 +92,8 @@
 							<input type="text" name="orgnumber" value="<%=orgnumber%>" size="35">
 						</td>
 						<td style="text-align:right">
-							<a href="#" class="bt_1" id="addButton" onclick="javascript:sub()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-				<a href="#" class="bt_2" id="delBatchButton" onclick="javascript:resetSearch()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+							<a href="javascript:void" class="bt_1" id="addButton" onclick="javascript:sub()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+				<a href="javascript:void" class="bt_2" id="delBatchButton" onclick="javascript:resetSearch()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 						</td>
 					</tr>
 				</table>

@@ -56,7 +56,7 @@
 						<tr class="tr" height=30>
 							<td class="td" >
 							<td align="center">
-									<a href="#" onclick="findUserGroup()"><pg:message code="sany.pdp.groupmanage.group.query"/></a>
+									<a href="javascript:void" onclick="findUserGroup()"><pg:message code="sany.pdp.groupmanage.group.query"/></a>
 							</td>
 							<% 
 								if (accesscontroler.checkPermission("globalgroup",
@@ -65,7 +65,7 @@
 								
 								
 								<td align="center">
-									<a href="#" onclick="newFirstGroup()"><pg:message code="sany.pdp.groupmanage.new"/></a>
+									<a href="javascript:void" onclick="newFirstGroup()"><pg:message code="sany.pdp.groupmanage.new"/></a>
 								</td>
 							<% 
 								}

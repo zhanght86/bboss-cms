@@ -190,9 +190,9 @@ function openChoose(){
               		
               </table>
               <div class="btnarea" >
-			  	<a href="#" class="bt_1"  name="save"  onclick="dosubmit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
-				<a href="#"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
-				<a href="#"	class="bt_2"  name="label2"  onclick="randgen()"><span><pg:message code="sany.pdp.personcenter.person.password.generate"/></span></a>
+			  	<a href="javascript:void" class="bt_1"  name="save"  onclick="dosubmit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
+				<a href="javascript:void"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+				<a href="javascript:void"	class="bt_2"  name="label2"  onclick="randgen()"><span><pg:message code="sany.pdp.personcenter.person.password.generate"/></span></a>
 			</div>	
      </form>
 </div>

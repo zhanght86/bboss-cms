@@ -6,11 +6,11 @@
 --%>
 <%@ page language="java"  pageEncoding="utf-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
-<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+
 <title>参数设置</title>
 <script language="javascript">
 	//增加一行
@@ -56,9 +56,9 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="right">
-					<a href="#" onclick="addRow()" class="bt_2" ><span>+</span></a> 
-					<a href="#" onclick="deleteRow()" class="bt_2" ><span>-</span></a>
-					<a href="#" onclick="doSubmit()" class="bt_1" ><span>保存</span></a>
+					<a href="javascript:void" onclick="addRow()" class="bt_2" ><span>+</span></a> 
+					<a href="javascript:void" onclick="deleteRow()" class="bt_2" ><span>-</span></a>
+					<a href="javascript:void" onclick="doSubmit()" class="bt_1" ><span>保存</span></a>
 				</td>
 			</tr>
 		</table>

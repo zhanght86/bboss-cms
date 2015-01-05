@@ -393,7 +393,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=aa%>" hideFocus onClick="checkAll(this,0,<%=users.length+roles.length%>,<%=aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=users[aa]%>"/>
@@ -485,7 +485,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=users.length+aa%>" hideFocus onClick="checkAll(this,0,<%=users.length+roles.length%>,<%=users.length+aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=roles[aa]%>"/>
@@ -580,7 +580,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=aa%>" hideFocus onClick="checkAll(this,1,<%=users.length+roles.length%>,<%=aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=users[aa]%>"/>
@@ -672,7 +672,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=users.length+aa%>" hideFocus onClick="checkAll(this,1,<%=users.length+roles.length%>,<%=users.length+aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=roles[aa]%>"/>
@@ -768,7 +768,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=aa%>" hideFocus onClick="checkAll(this,2,<%=users.length+roles.length%>,<%=aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=users[aa]%>"/>
@@ -860,7 +860,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=users.length+aa%>" hideFocus onClick="checkAll(this,2,<%=users.length+roles.length%>,<%=users.length+aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=roles[aa]%>"/>
@@ -956,7 +956,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=aa%>" hideFocus onClick="checkAll(this,3,<%=users.length+roles.length%>,<%=aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=users[aa]%>"/>
@@ -1048,7 +1048,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=users.length+aa%>" hideFocus onClick="checkAll(this,3,<%=users.length+roles.length%>,<%=users.length+aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=roles[aa]%>"/>
@@ -1144,7 +1144,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=aa%>" hideFocus onClick="checkAll(this,4,<%=users.length+roles.length%>,<%=aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=users[aa]%>"/>
@@ -1236,7 +1236,7 @@ scrollbar-track-color: #E9EDF3;}
 							<input type="checkbox" id="<%=users.length+aa%>" hideFocus onClick="checkAll(this,4,<%=users.length+roles.length%>,<%=users.length+aa%>)"/>
 						</td>
 						<td align="center">
-							<a href="#" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
+							<a href="javascript:void" onclick="del(<%=users.length+roles.length%>,<%=users.length+aa%>)"><u>删除</u></a>
 						</td>
 						<td align="center">
 						<input type="hidden" name="curuserid" value="<%=roles[aa]%>"/>

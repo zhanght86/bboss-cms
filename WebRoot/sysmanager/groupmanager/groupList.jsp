@@ -36,7 +36,7 @@
 					<tr>
 						<td height="34">
 							<div align="center">
-								<a href="#" onclick="findGroup();">组织查询</a>
+								<a href="javascript:void" onclick="findGroup();">组织查询</a>
 							</div>
 						</td>
 					</tr>

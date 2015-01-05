@@ -195,9 +195,9 @@ function openCustomMenu(){
 <div id="scrollWrap" >
 <ul id="scrollMsg"> 
 <!-- 
-<li><a href="#">关于7月25号小候鸟活动的说明（2014-07-24）</a></li>
-		<li><a href="#">关于绩效比例上及中上比例提高的说明（2014-06-28）</a></li>
-		<li><a href="#">关于半年度述职的填写说明（2014-06-01）</a></li>
+<li><a href="javascript:void">关于7月25号小候鸟活动的说明（2014-07-24）</a></li>
+		<li><a href="javascript:void">关于绩效比例上及中上比例提高的说明（2014-06-28）</a></li>
+		<li><a href="javascript:void">关于半年度述职的填写说明（2014-06-01）</a></li>
  -->		
 </ul>
 </div>
@@ -205,45 +205,45 @@ function openCustomMenu(){
 <div class="index_contain">
   <div class="side_bar">
     <div class="title_right">
-      <div class="more_style"><a href="#">更多></a></div>
+      <div class="more_style"><a href="javascript:void">更多></a></div>
       <img src="../html3/hrm/images/right1.png" width="13" height="14"  align="absmiddle"/>待办事宜</div>
-    <div class="right_content">审批类：<span class="num"><a href="#">15</a></span>条<br/>
-      通知类：<span class="num"><a href="#">2</a></span>条</div>
+    <div class="right_content">审批类：<span class="num"><a href="javascript:void">15</a></span>条<br/>
+      通知类：<span class="num"><a href="javascript:void">2</a></span>条</div>
     <div class="title_right">
-      <div class="more_style"><a href="#" id="more_policy" target="_blank">更多></a></div>
+      <div class="more_style"><a href="javascript:void" id="more_policy" target="_blank">更多></a></div>
       <img src="../html3/hrm/images/right2.png" width="15" height="14" align="absmiddle"/>办事指南</div>
     <div class="right_content" id="policy">
     <!--   <ul>
       
-        <li><a href="#">内部竞聘流程</a></li>
-        <li><a href="#">岗位调动流程</a></li>
-        <li><a href="#">离职流程</a></li>
-        <li><a href="#">大事福利领取流程[三一重工]</a></li>
-        <li><a href="#">大事福利领取流程[昆山重机]</a></li>
+        <li><a href="javascript:void">内部竞聘流程</a></li>
+        <li><a href="javascript:void">岗位调动流程</a></li>
+        <li><a href="javascript:void">离职流程</a></li>
+        <li><a href="javascript:void">大事福利领取流程[三一重工]</a></li>
+        <li><a href="javascript:void">大事福利领取流程[昆山重机]</a></li>
         
       </ul> -->
     </div>
     <div class="title_right">
-      <div class="more_style"><a href="#" id="moreCommonDoc" target="_blank">更多></a></div>
+      <div class="more_style"><a href="javascript:void" id="moreCommonDoc" target="_blank">更多></a></div>
       <img src="../html3/hrm/images/right3.png" width="14" height="12" align="absmiddle" />常用表格下载</div>
     <div class="right_content"  id="commonDoc">
     <!-- 
       <ul>
-        <li><a href="#">内部竞聘人员面试录用申请表</a></li>
-        <li><a href="#">解除劳动合同申请书（新修订）...</a></li>
-        <li><a href="#">离职交接清单（职能类）</a></li>
-        <li><a href="#"> 离职交接清单（研发/管理类） </a></li>
-        <li><a href="#">计划生育证明（已婚未育）</a> </li>
+        <li><a href="javascript:void">内部竞聘人员面试录用申请表</a></li>
+        <li><a href="javascript:void">解除劳动合同申请书（新修订）...</a></li>
+        <li><a href="javascript:void">离职交接清单（职能类）</a></li>
+        <li><a href="javascript:void"> 离职交接清单（研发/管理类） </a></li>
+        <li><a href="javascript:void">计划生育证明（已婚未育）</a> </li>
       </ul>
        -->
     </div>
   </div>
   <div class="index_left">
     <div class="top_h">
-      <div class="left_h">成长值：<span class="num"><a href="#">289</a></span></div>
+      <div class="left_h">成长值：<span class="num"><a href="javascript:void">289</a></span></div>
       <div class="content_h"> 张雅，早上好，祝您今天工作有个好心情！<br/>
         我是小H，很高兴为您服务，有任何问题请点击我，我不会偷懒哦！<br/>
-        您目前有<span class="num"><a href="#">15</a></span>条待办，<span class="num"><a href="#">2</a></span>条通知，及时处理会帮助我成长哦！ </div>
+        您目前有<span class="num"><a href="javascript:void">15</a></span>条待办，<span class="num"><a href="javascript:void">2</a></span>条通知，及时处理会帮助我成长哦！ </div>
     </div>
     <div class="index_title">
       <div class="operate_right"><img src="../html3/hrm/images/quick.png"  width="16" height="16" align="absmiddle" />
@@ -253,45 +253,45 @@ function openCustomMenu(){
       <!-- 
     <div class="application">
       <ul>
-        <li><a href="#"><img src="../html3/images/app1.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app1.png" width="56" height="52" /><br />
           新建请假单</a></li>
-        <li><a href="#"><img src="../html3/images/app2.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app2.png" width="56" height="52" /><br />
           新建加班单</a></li>
-        <li><a href="#"><img src="../html3/images/app3.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app3.png" width="56" height="52" /><br />
           新建绩效合约</a></li>
-        <li><a href="#"><img src="../html3/images/app4.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app4.png" width="56" height="52" /><br />
           新建述职报告</a></li>
       </ul>
     </div>
     <div class="application">
       <ul>
-        <li><a href="#"><img src="../html3/images/app5.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app5.png" width="56" height="52" /><br />
           查询工资单</a></li>
-        <li><a href="#"><img src="../html3/images/app6.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app6.png" width="56" height="52" /><br />
           查询个人档案</a></li>
-        <li><a href="#"><img src="../html3/images/app7.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app7.png" width="56" height="52" /><br />
           查询调休余额</a></li>
-        <li><a href="#"><img src="../html3/images/app8.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app8.png" width="56" height="52" /><br />
           我的申请单</a></li>
-        <li><a href="#"><img src="../html3/images/app9.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app9.png" width="56" height="52" /><br />
           查询下属薪酬</a></li>
-        <li><a href="#"><img src="../html3/images/app10.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app10.png" width="56" height="52" /><br />
           查询下属绩效</a></li>
-        <li><a href="#"><img src="../html3/images/app11.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app11.png" width="56" height="52" /><br />
           下属合同到期日</a></li>
       </ul>
     </div>
     <div class="application">
       <ul>
-        <li><a href="#"><img src="../html3/images/app12.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app12.png" width="56" height="52" /><br />
           绩效处理</a></li>
-        <li><a href="#"><img src="../html3/images/app13.png" width="56" height="52" /><br />
+        <li><a href="javascript:void"><img src="../html3/images/app13.png" width="56" height="52" /><br />
           述职处理</a></li>
       </ul>
     </div>
     -->
     <div class="index_title">
-      <div class="operate_right"><img src="../html3/hrm/images/quick2.png"  width="16" height="16" align="absmiddle" /><a href="#">查看所有申请事项</a></div>
+      <div class="operate_right"><img src="../html3/hrm/images/quick2.png"  width="16" height="16" align="absmiddle" /><a href="javascript:void">查看所有申请事项</a></div>
       我的待审申请</div>
     <div class="index_list">
       <div class="tableContainer">
@@ -313,7 +313,7 @@ function openCustomMenu(){
               <td width="300">5月27日的事假申请</td>
               <td width="100">部门领导审批</td>
               <td width="100">邱华 龙兵</td>
-              <td width="150"><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td width="150"><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
             <tr>
               <td>2</td>
@@ -321,7 +321,7 @@ function openCustomMenu(){
               <td>5月26日的调休申请</td>
               <td>部门领导审批</td>
               <td>邱华 龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
             <tr>
               <td>3</td>
@@ -329,7 +329,7 @@ function openCustomMenu(){
               <td>5月20日-5月25日的年假申请</td>
               <td>部门领导审批</td>
               <td>邱华 龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
             <tr>
               <td>4</td>
@@ -337,7 +337,7 @@ function openCustomMenu(){
               <td>5月18日的加班申请</td>
               <td>部门领导审批</td>
               <td>邱华 龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
             <tr>
               <td>5</td>
@@ -345,7 +345,7 @@ function openCustomMenu(){
               <td>第二季度绩效合约提交申请</td>
               <td>部门领导审批</td>
               <td>邱华 龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a></td>
             </tr>
             <tr>
               <td>6</td>
@@ -353,7 +353,7 @@ function openCustomMenu(){
               <td>第一季度绩效合约总结</td>
               <td>部门领导审批</td>
               <td>邱华 龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
             <tr>
               <td>7</td>
@@ -361,7 +361,7 @@ function openCustomMenu(){
               <td>5月16日的加班申请</td>
               <td>部门领导审批</td>
               <td>龙兵</td>
-              <td><a href="#">催办</a> <a href="#">撤回</a> <a href="#">废弃</a></td>
+              <td><a href="javascript:void">催办</a> <a href="javascript:void">撤回</a> <a href="javascript:void">废弃</a></td>
             </tr>
           </table>
         </div>
@@ -369,7 +369,7 @@ function openCustomMenu(){
     </div>
     
     <div class="index_title">
-      <div class="operate_right"><img src="../html3/hrm/images/quick3.png"  width="16" height="16" align="absmiddle" /><a href="#">查看内部竞聘列表</a></div>
+      <div class="operate_right"><img src="../html3/hrm/images/quick3.png"  width="16" height="16" align="absmiddle" /><a href="javascript:void">查看内部竞聘列表</a></div>
       内部应聘</div>
     <div class="index_list">
       <div class="tableContainer">
@@ -397,7 +397,7 @@ function openCustomMenu(){
               <td width="60">0年</td>
               <td width="70">珠海</td>
               <td width="70">2014-07-27</td>
-              <td width="80"><a href="#">收藏</a> <a href="#">竞聘</a></td>
+              <td width="80"><a href="javascript:void">收藏</a> <a href="javascript:void">竞聘</a></td>
             </tr>
             <tr>
               <td>2</td>
@@ -408,7 +408,7 @@ function openCustomMenu(){
               <td>2年</td>
               <td>长沙</td>
               <td>2014-07-23</td>
-              <td><a href="#">收藏</a> <a href="#">竞聘</a></td>
+              <td><a href="javascript:void">收藏</a> <a href="javascript:void">竞聘</a></td>
             </tr>
             <tr>
               <td>3</td>
@@ -419,7 +419,7 @@ function openCustomMenu(){
               <td>2年</td>
               <td>北非</td>
               <td>2014-07-22</td>
-              <td><a href="#">收藏</a> <a href="#">竞聘</a></td>
+              <td><a href="javascript:void">收藏</a> <a href="javascript:void">竞聘</a></td>
             </tr>
             <tr>
               <td>4</td>
@@ -430,7 +430,7 @@ function openCustomMenu(){
               <td>0年</td>
               <td>珠海</td>
               <td>2014-07-22</td>
-              <td><a href="#">收藏</a> <a href="#">竞聘</a></td>
+              <td><a href="javascript:void">收藏</a> <a href="javascript:void">竞聘</a></td>
             </tr>
             <tr>
               <td>5</td>
@@ -441,7 +441,7 @@ function openCustomMenu(){
               <td>2年</td>
               <td>珠海</td>
               <td>2014-07-22</td>
-              <td><a href="#">收藏</a> <a href="#">竞聘</a></td>
+              <td><a href="javascript:void">收藏</a> <a href="javascript:void">竞聘</a></td>
             </tr>
           </table>
         </div>

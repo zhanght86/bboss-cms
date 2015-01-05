@@ -79,7 +79,7 @@ function openChoose(){
               			<td width="60%">
               				<input type="text" name="loginName" id="loginName" validator="stringLegal" cnname="<pg:message code='sany.pdp.personcenter.person.loginname'/>" size="25"  class="w120" />
               				          				
-              				&nbsp;&nbsp;<a href="#"  class="bt_2" onclick="openChoose()"><span><pg:message code="sany.pdp.personcenter.person.select"/></span></a>
+              				&nbsp;&nbsp;<a href="javascript:void"  class="bt_2" onclick="openChoose()"><span><pg:message code="sany.pdp.personcenter.person.select"/></span></a>
               			</td>
               		</tr>
               		<tr>
@@ -102,9 +102,9 @@ function openChoose(){
               		</tr>
               </table>
               <div class="btnarea" >
-			  	<a href="#" class="bt_1"  name="save"  onclick="cacForm.submit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
-				<a href="#"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.cancel"/></span></a>
-				<a href="#"	class="bt_2"  name="label2"  onclick="randgen()"><span><pg:message code="sany.pdp.personcenter.person.password.generate"/></span></a>
+			  	<a href="javascript:void" class="bt_1"  name="save"  onclick="cacForm.submit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
+				<a href="javascript:void"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.cancel"/></span></a>
+				<a href="javascript:void"	class="bt_2"  name="label2"  onclick="randgen()"><span><pg:message code="sany.pdp.personcenter.person.password.generate"/></span></a>
 			</div>	
      </form>
 </div>

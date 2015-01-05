@@ -71,7 +71,7 @@ html,body {
 	<div  class="top">
     <div class="logo_top"><img src="../html/images/top_logo.jpg" width="300" height="31" /></div>
     <div class="log_message">
-	<span class="blue1"> <%=accesscontroler.getUserName()%></span>，欢迎您　<a href="#" class="zhuxiao" onclick="logout()">注销</a></div>
+	<span class="blue1"> <%=accesscontroler.getUserName()%></span>，欢迎您　<a href="javascript:void" class="zhuxiao" onclick="logout()">注销</a></div>
 	</div>
 	<sany:menus/>
 </div>

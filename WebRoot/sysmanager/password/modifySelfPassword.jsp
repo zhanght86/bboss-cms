@@ -121,8 +121,8 @@ function resetpwd(){
               		</tr>
               </table>
               <div class="btnarea" >
-			  	<a href="#" class="bt_1"  name="save"  onclick="cacForm.submit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
-				<a href="#"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+			  	<a href="javascript:void" class="bt_1"  name="save"  onclick="cacForm.submit()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
+				<a href="javascript:void"	class="bt_2"  name="label2"  onclick="resetpwd()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
 			</div>	
     </form>
 </div>

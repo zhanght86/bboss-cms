@@ -71,7 +71,7 @@
 		        <td background="../../../image/title_bj_1.jpg"><span class="STYLE2">&nbsp;</span>
 		          <div  onClick="window.close();"  style=" cursor:hand; text-decoration:underline" align="center"></div></td>
 		        <td background="../../../image/title_bj_1.jpg"><div align="center"><span class="STYLE2"></div></td>
-		        <td background="../../../image/title_bj_1.jpg"><a href="#"></a></td>
+		        <td background="../../../image/title_bj_1.jpg"><a href="javascript:void"></a></td>
 		        <td width="7">&nbsp;</td>
 		      </tr>
 	    	</table>

@@ -196,7 +196,7 @@
 										<tr>
 											<td><input type="hidden" name="variable_param_name" value="<pg:cell colName='param_name'/>" /><pg:cell colName="param_name"/></td>
 											<td><input type="text"   name="variable_param_value" value="<pg:cell colName='param_value'/>" class="input1 w20" /></td>
-											<td><a href="#" onclick="javascript:delVariable(this,'<pg:cell colName='id'/>');"><span>删除</span></a></td>
+											<td><a href="javascript:void" onclick="javascript:delVariable(this,'<pg:cell colName='id'/>');"><span>删除</span></a></td>
 										</tr>
 									</pg:list>
 								</table>

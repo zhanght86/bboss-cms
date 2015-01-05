@@ -44,7 +44,7 @@
         		<td><pg:cell colName="browserUser" /></td>  
         		<td><pg:cell colName="browserIp" /></td>  
         		<td><pg:cell colName="browserTime"  dateformat="yyyy-MM-dd  HH:mm:ss"/></td>
-        		<td style="display: none"><a href="#" onclick="checkBrowserDetail('<pg:cell colName="browserId" />')">查看</a></td>    
+        		<td style="display: none"><a href="javascript:void" onclick="checkBrowserDetail('<pg:cell colName="browserId" />')">查看</a></td>    
         </tr>
 	 </pg:list>
     </table>

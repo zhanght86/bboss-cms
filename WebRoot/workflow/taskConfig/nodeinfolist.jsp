@@ -27,7 +27,7 @@
 					<td><pg:cell colName="candidate_users_name"/></td>
 					<td><pg:cell colName="candidate_groups_name"/></td>
 					<td>
-						<a href="#">选择</a>
+						<a href="javascript:void">选择</a>
 					</td>
 				</tr>
 			</pg:list>

@@ -77,7 +77,7 @@ html,body {
 </div>
 
 <div id="dycontent">
-<%=info %>  <a href="#" class="zhuxiao" onclick="logout()">注销</a> 
+<%=info %>  <a href="javascript:void" class="zhuxiao" onclick="logout()">注销</a> 
 </div>
 
 <div id="dyfoot">

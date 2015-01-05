@@ -564,7 +564,7 @@ DD_belatedPNG.fix('div');
 					
 				</select>
 				</li>
-				<li class="log_bts" ><a href="#" class="log_bt c_20"  onclick="saveName()"><span>Long in</span></a><a href="#" class="log_bt log_cancel" onclick="reset()" ><span>Reset</span></a></li>
+				<li class="log_bts" ><a href="javascript:void" class="log_bt c_20"  onclick="saveName()"><span>Long in</span></a><a href="javascript:void" class="log_bt log_cancel" onclick="reset()" ><span>Reset</span></a></li>
 			</ul>
 			</form>			
 			<div class="Zclear"></div> 			

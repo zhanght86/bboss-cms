@@ -232,7 +232,7 @@
 	<body style="autoflow-y:scroll;">
 		<div class="date_content mt_10"  id="date_top">			
 		 <div class="check_year"><strong>请选择年份:&nbsp;&nbsp;</strong><select id="year" name="year"  maxlength="50" onchange="initArrangeTable(value)"></select>
-		 <a href="#" id="setDefault" onclick="saveDefaultSetting()" class="bt_1" title="设置全年周一至周五为工作日，周六，周日双休"><span>保存默认配置</span></a>
+		 <a href="javascript:void" id="setDefault" onclick="saveDefaultSetting()" class="bt_1" title="设置全年周一至周五为工作日，周六，周日双休"><span>保存默认配置</span></a>
 		 </div>
          
           <div class="explain">
