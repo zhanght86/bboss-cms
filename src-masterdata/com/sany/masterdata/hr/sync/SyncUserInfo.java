@@ -259,7 +259,11 @@ public class SyncUserInfo {
 //                                userJobOrgSavePre.preparedUpdate(USERORGJOB_SAVE_SQL);
 //                            }
 //                        }
-                        
+                    	if(newUsers.containsKey(temp.getUserNo()))
+            			{
+                    		continue;
+            			}
+                    	newUsers.put(temp.getUserNo(), dump);
                     	saveSize ++;
                     	addPreBatch(userSavePre, userOrgSavePre, userJobOrgSavePre, temp, newUsers,fixeduserorginfos,false);
                         if (saveSize > BATCH_LIMIT) {
