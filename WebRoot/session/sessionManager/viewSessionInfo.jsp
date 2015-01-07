@@ -121,6 +121,6 @@ if(!$.browser.msie) {
 
 </script>
 
-</script>
+
 </head>
 </html>

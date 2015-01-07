@@ -49,7 +49,7 @@
 
 	<body>	
 	<div align="right"><input type="button" class="input" value="刷新页面" onclick="flushBotton()"></div>
-	<tab:tabContainer id="singleMonitorinfo" selectedTabPaneId="<%%=selectedds %>">
+	<tab:tabContainer id="singleMonitorinfo" selectedTabPaneId="<%=selectedds %>">
 	<% 
 		//List poollist = new ArrayList();
 		DBUtil dbUtil = new DBUtil();
@@ -142,10 +142,12 @@
 					  %>
 					<tr><td colspan="3">
 						<%if(!isExternal){ %>
-						数据源：<%=poolname %> 的链接情况
+						数据源：<%=poolname %> 的链接情况 
+						 <a href="dbmonitor_activitedetail.jsp?ds=<%=poolname %>" target="deailactive">看实时链接信息</a>
 						<%}else{ %>
 						外部数据源：<%=poolname %> 的链接情况
 						<%} %>
+						
 					</td>
 					</tr>
 					<tr class="tr">

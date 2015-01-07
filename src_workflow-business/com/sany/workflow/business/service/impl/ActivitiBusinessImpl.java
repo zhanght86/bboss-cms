@@ -89,92 +89,94 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
 			String userAccount) {
 
-//		if (StringUtil.isEmpty(taskId)) {
-//			return false;
-//		}
-//
-//		TransactionManager tm = new TransactionManager();
-//
-//		try {
-//			tm.begin();
-//			boolean haspermission = false;
-//			userAccount = this.changeToDomainAccount(userAccount);
-//
-//			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-//			TaskManager task = executor.queryObject(TaskManager.class,
-//					"getHiTaskIdByTaskId", taskId);
-//
-//			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
-//
-//				if (userAccount.equals(task.getASSIGNEE_())) {
-//
-//					haspermission = true;
-//				}
-//
-//			} else {
-//				// 任务未签收，根据任务id查询任务可处理人
-//				List<HashMap> candidatorList = executor.queryList(
-//						HashMap.class, "getNodeCandidates_wf", taskId,
-//						userAccount);
-//
-//				if (candidatorList != null && candidatorList.size() > 0) {
-//
-//					haspermission = true;
-//				}
-//			}
-//
-//			if (!haspermission) {
-//				// 最后查看当前用户的委托关系
-//				List<WfEntrust> entrustList = executor.queryList(
-//						WfEntrust.class, "getEntrustRelation_wf", userAccount,
-//						processKey, new Timestamp(task.getSTART_TIME_()
-//								.getTime()), new Timestamp(task
-//								.getSTART_TIME_().getTime()));
-//
-//				if (entrustList != null && entrustList.size() > 0) {
-//
-//					haspermission = true;
-//				}
-//			}
-//			tm.commit();
-//			return haspermission;
-//
-//		} catch (Exception e) {
-//			throw new ProcessException(e);
-//		} finally {
-//			tm.release();
-//		}
-		return this.activitiTaskService.judgeAuthorityNoAdmin(taskId, processKey, userAccount);
+		// if (StringUtil.isEmpty(taskId)) {
+		// return false;
+		// }
+		//
+		// TransactionManager tm = new TransactionManager();
+		//
+		// try {
+		// tm.begin();
+		// boolean haspermission = false;
+		// userAccount = this.changeToDomainAccount(userAccount);
+		//
+		// // 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+		// TaskManager task = executor.queryObject(TaskManager.class,
+		// "getHiTaskIdByTaskId", taskId);
+		//
+		// if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
+		//
+		// if (userAccount.equals(task.getASSIGNEE_())) {
+		//
+		// haspermission = true;
+		// }
+		//
+		// } else {
+		// // 任务未签收，根据任务id查询任务可处理人
+		// List<HashMap> candidatorList = executor.queryList(
+		// HashMap.class, "getNodeCandidates_wf", taskId,
+		// userAccount);
+		//
+		// if (candidatorList != null && candidatorList.size() > 0) {
+		//
+		// haspermission = true;
+		// }
+		// }
+		//
+		// if (!haspermission) {
+		// // 最后查看当前用户的委托关系
+		// List<WfEntrust> entrustList = executor.queryList(
+		// WfEntrust.class, "getEntrustRelation_wf", userAccount,
+		// processKey, new Timestamp(task.getSTART_TIME_()
+		// .getTime()), new Timestamp(task
+		// .getSTART_TIME_().getTime()));
+		//
+		// if (entrustList != null && entrustList.size() > 0) {
+		//
+		// haspermission = true;
+		// }
+		// }
+		// tm.commit();
+		// return haspermission;
+		//
+		// } catch (Exception e) {
+		// throw new ProcessException(e);
+		// } finally {
+		// tm.release();
+		// }
+		return this.activitiTaskService.judgeAuthorityNoAdmin(taskId,
+				processKey, userAccount);
 	}
 
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey,
 			String userAccount) {
-//
-//		if (AccessControl.isAdmin(userAccount)) {
-//			return true;
-//		}
-//
-//		TransactionManager tm = new TransactionManager();
-//
-//		try {
-//			tm.begin();
-//
-//			userAccount = this.changeToDomainAccount(userAccount);
-//
-//			boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
-//					userAccount);
-//
-//			tm.commit();
-//
-//			return flag;
-//
-//		} catch (Exception e) {
-//			throw new ProcessException(e);
-//		} finally {
-//			tm.release();
-//		}
-		return this.activitiTaskService.judgeAuthority(taskId, processKey, userAccount);
+		//
+		// if (AccessControl.isAdmin(userAccount)) {
+		// return true;
+		// }
+		//
+		// TransactionManager tm = new TransactionManager();
+		//
+		// try {
+		// tm.begin();
+		//
+		// userAccount = this.changeToDomainAccount(userAccount);
+		//
+		// boolean flag = judgeAuthorityNoAdmin(taskId, processKey,
+		// userAccount);
+		//
+		// tm.commit();
+		//
+		// return flag;
+		//
+		// } catch (Exception e) {
+		// throw new ProcessException(e);
+		// } finally {
+		// tm.release();
+		// }
+		return this.activitiTaskService.judgeAuthority(taskId, processKey,
+				userAccount);
 	}
 
 	/**
@@ -607,9 +609,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				String remark = "["
 						+ activitiService.getUserInfoMap().getUserName(
 								proIns.getUserAccount()) + "]提交";
-				
+
 				proIns.setDealRemak(remark);
-				
+
 				proIns.setBusinessKey(businessKey);
 
 				// 自动完成任务
@@ -640,9 +642,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		TaskInfo task = getCurrentNodeInfoByKey(proIns.getBusinessKey(),
 				processKey, proIns.getUserAccount());
 
-		autoCompleteTask( task,  proIns,   processKey);
+		autoCompleteTask(task, proIns, processKey);
 	}
-	
+
 	/**
 	 * 自动完成任务
 	 * 
@@ -650,10 +652,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	 * @throws Exception
 	 *             2014年11月20日
 	 */
-	private void autoCompleteTask(TaskInfo task,ProIns proIns, String processKey)
-			throws Exception {
-
-		
+	private void autoCompleteTask(TaskInfo task, ProIns proIns,
+			String processKey) throws Exception {
 
 		if (null != task) {
 
@@ -676,7 +676,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 完成任务
 			activitiService.completeTaskWithReason(task.getTaskId(), null,
 					proIns.getDealRemak(), proIns.getDealOption(),
-					proIns.getDealReason(),true);
+					proIns.getDealReason(), true);
 
 			// 后续节点自动审批
 			if (task.getIsAutoafter() == 1
@@ -687,9 +687,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.setOperateType("pass");
 					proIns.setDealReason("前后任务处理人一致，自动通过");
 				}
-				
+
 				proIns.setDealRemak("");
-				
+
 				autoCompleteTask(proIns, processKey);
 			}
 		}
@@ -1476,21 +1476,21 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			completeTask(proIns, paramMap);
 
-			if( currentTask.getIsAutoafter() == 1)
-			{
+			if (currentTask.getIsAutoafter() == 1) {
 				// 获取当前任务信息
 				TaskInfo nextTask = getCurrentNodeInfoByKey(
 						proIns.getBusinessKey(), processKey,
 						proIns.getUserAccount());
-	
+
 				// 后续节点处理人是否一致，一致就可以自动通过
-				if (null != nextTask && userAccount.equals(nextTask.getAssignee())) {
-	
+				if (null != nextTask
+						&& userAccount.equals(nextTask.getAssignee())) {
+
 					// 清除上一任务的处理意见和意见备注
 					proIns.setDealRemak("");
 					proIns.setDealReason("前后任务处理人一致，自动通过");
-	
-					autoCompleteTask(nextTask,proIns, processKey);
+
+					autoCompleteTask(nextTask, proIns, processKey);
 				}
 			}
 
@@ -1807,16 +1807,16 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				proIns.setDealRemak(remark);
 			}
 
-			// 撤销任务
-			activitiService.cancelTask(proIns.getNowtaskId(),
-					nodeInfo.getNode_key(), proIns.getDealRemak(),
-					proIns.getDealOption(), proIns.getDealReason());
-
 			// 日志记录撤销操作
 			activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
 					currentUser, "2", proIns.getProInsId(), processKey,
 					proIns.getDealReason(), proIns.getDealOption(),
 					proIns.getDealRemak());
+
+			// 撤销任务
+			activitiService.cancelTask(proIns.getNowtaskId(),
+					nodeInfo.getNode_key(), proIns.getDealRemak(),
+					proIns.getDealOption(), proIns.getDealReason());
 
 			tm.commit();
 
@@ -1848,14 +1848,14 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String businessRemark = "[" + currentUser + "]将任务撤回至["
 					+ nodeInfo.getNode_name() + "]";
 
-			// 撤销任务
-			activitiService.cancelTask(taskId, nodeKey, businessRemark,
-					businessop, businessReason);
-
 			// 日志记录撤销操作
 			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
 					processId, processKey, businessReason, businessop,
 					businessRemark);
+
+			// 撤销任务
+			activitiService.cancelTask(taskId, nodeKey, businessRemark,
+					businessop, businessReason);
 
 			tm.commit();
 
@@ -1912,18 +1912,18 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
 					controlParamList);
 
-			activitiService.getTaskService().rejecttoTask(
-					proIns.getNowtaskId(), paramMap, proIns.getDealRemak(),
-					proIns.getRejectToActId(),
-					proIns.getIsReturn() == 1 ? true : false,
-					proIns.getDealOption(), proIns.getDealReason());
-
 			// 日志记录驳回操作
 			activitiService.addDealTask(proIns.getNowtaskId(), userAccount,
 					activitiService.getUserInfoMap().getUserName(userAccount),
 					"1", proIns.getProInsId(), processKey,
 					proIns.getDealReason(), proIns.getDealOption(),
 					proIns.getDealRemak());
+
+			activitiService.getTaskService().rejecttoTask(
+					proIns.getNowtaskId(), paramMap, proIns.getDealRemak(),
+					proIns.getRejectToActId(),
+					proIns.getIsReturn() == 1 ? true : false,
+					proIns.getDealOption(), proIns.getDealReason());
 
 			tm.commit();
 
@@ -2578,49 +2578,49 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
 
-//		if (StringUtil.isEmpty(taskId)) {
-//			return null;
-//		}
-//
-//		TaskInfo taskInfo = executor.queryObject(TaskInfo.class,
-//				"getTaskInfoByTaskId_wf", taskId);
-//
-//		// 处理人行转列
-//		if (null != taskInfo) {
-//			if (StringUtil.isNotEmpty(taskInfo.getAssignee())) {
-//				taskInfo.setAssigneeName(activitiService.getUserInfoMap()
-//						.getUserName(taskInfo.getAssignee()));
-//			} else {
-//				// 任务未签收，根据任务id查询任务可处理人
-//				List<HashMap> candidatorList = executor.queryList(
-//						HashMap.class, "getCandidatorOftask_wf",
-//						taskInfo.getTaskId());
-//
-//				StringBuffer users = new StringBuffer();
-//
-//				if (candidatorList != null && candidatorList.size() != 0) {
-//
-//					for (int k = 0; k < candidatorList.size(); k++) {
-//						HashMap candidatorMap = candidatorList.get(k);
-//
-//						String userId = (String) candidatorMap.get("USER_ID_");
-//						if (StringUtil.isNotEmpty(userId)) {
-//
-//							if (k == 0) {
-//								users.append(userId);
-//							} else {
-//								users.append(",").append(userId);
-//							}
-//						}
-//					}
-//					taskInfo.setAssigneeName(activitiService.getUserInfoMap()
-//							.getUserName(users.toString()));
-//					taskInfo.setAssignee(users.toString());
-//				}
-//			}
-//		}
-//
-//		return taskInfo;
+		// if (StringUtil.isEmpty(taskId)) {
+		// return null;
+		// }
+		//
+		// TaskInfo taskInfo = executor.queryObject(TaskInfo.class,
+		// "getTaskInfoByTaskId_wf", taskId);
+		//
+		// // 处理人行转列
+		// if (null != taskInfo) {
+		// if (StringUtil.isNotEmpty(taskInfo.getAssignee())) {
+		// taskInfo.setAssigneeName(activitiService.getUserInfoMap()
+		// .getUserName(taskInfo.getAssignee()));
+		// } else {
+		// // 任务未签收，根据任务id查询任务可处理人
+		// List<HashMap> candidatorList = executor.queryList(
+		// HashMap.class, "getCandidatorOftask_wf",
+		// taskInfo.getTaskId());
+		//
+		// StringBuffer users = new StringBuffer();
+		//
+		// if (candidatorList != null && candidatorList.size() != 0) {
+		//
+		// for (int k = 0; k < candidatorList.size(); k++) {
+		// HashMap candidatorMap = candidatorList.get(k);
+		//
+		// String userId = (String) candidatorMap.get("USER_ID_");
+		// if (StringUtil.isNotEmpty(userId)) {
+		//
+		// if (k == 0) {
+		// users.append(userId);
+		// } else {
+		// users.append(",").append(userId);
+		// }
+		// }
+		// }
+		// taskInfo.setAssigneeName(activitiService.getUserInfoMap()
+		// .getUserName(users.toString()));
+		// taskInfo.setAssignee(users.toString());
+		// }
+		// }
+		// }
+		//
+		// return taskInfo;
 		return this.activitiTaskService.getCurrentNodeInfo(taskId);
 	}
 
@@ -2679,110 +2679,112 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
 			String userId) throws Exception {
 
-//		TransactionManager tm = new TransactionManager();
-//		try {
-//			tm.begin();
-//
-//			// 当前用户转成域账号
-//			userId = this.changeToDomainAccount(userId);
-//
-//			// 根据bussinessKey获取流程实例
-//			ProcessInst inst = executor.queryObject(ProcessInst.class,
-//					"getProcessByBusinesskey_wf", bussinesskey);
-//
-//			if (inst != null) {
-//
-//				// 根据流程实例ID获取运行任务
-//				List<Task> taskList = activitiService
-//						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
-//
-//				String nowTaskId = "";
-//
-//				for (int i = 0; i < taskList.size(); i++) {
-//					Task task = taskList.get(i);
-//
-//					// 判断用户是不是当前审批人
-//					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
-//							userId)) {
-//
-//						nowTaskId = task.getId();
-//						break;
-//					}
-//				}
-//
-//				// 当前任务节点信息
-//				TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
-//
-//				tm.commit();
-//
-//				return taskInfo;
-//			} else {
-//
-//				tm.commit();
-//				return null;
-//			}
-//
-//		} catch (Exception e) {
-//			throw new Exception("根据业务key获取当前任务节点信息出错:" + e);
-//		} finally {
-//			tm.release();
-//		}
-		return this.activitiTaskService.getCurrentNodeInfoByBussinessKey(bussinesskey, userId);
+		// TransactionManager tm = new TransactionManager();
+		// try {
+		// tm.begin();
+		//
+		// // 当前用户转成域账号
+		// userId = this.changeToDomainAccount(userId);
+		//
+		// // 根据bussinessKey获取流程实例
+		// ProcessInst inst = executor.queryObject(ProcessInst.class,
+		// "getProcessByBusinesskey_wf", bussinesskey);
+		//
+		// if (inst != null) {
+		//
+		// // 根据流程实例ID获取运行任务
+		// List<Task> taskList = activitiService
+		// .listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+		//
+		// String nowTaskId = "";
+		//
+		// for (int i = 0; i < taskList.size(); i++) {
+		// Task task = taskList.get(i);
+		//
+		// // 判断用户是不是当前审批人
+		// if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+		// userId)) {
+		//
+		// nowTaskId = task.getId();
+		// break;
+		// }
+		// }
+		//
+		// // 当前任务节点信息
+		// TaskInfo taskInfo = getCurrentNodeInfo(nowTaskId);
+		//
+		// tm.commit();
+		//
+		// return taskInfo;
+		// } else {
+		//
+		// tm.commit();
+		// return null;
+		// }
+		//
+		// } catch (Exception e) {
+		// throw new Exception("根据业务key获取当前任务节点信息出错:" + e);
+		// } finally {
+		// tm.release();
+		// }
+		return this.activitiTaskService.getCurrentNodeInfoByBussinessKey(
+				bussinesskey, userId);
 	}
 
 	@Override
 	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
 			String processKey, String userId) throws Exception {
 
-//		TransactionManager tm = new TransactionManager();
-//
-//		try {
-//			tm.begin();
-//			TaskInfo taskInfo = null;
-//			// 当前用户转成域账号
-//			userId = this.changeToDomainAccount(userId);
-//
-//			// 根据Key获取流程实例
-//			ProcessInst inst = executor.queryObject(ProcessInst.class,
-//					"getProcessByKey_wf", bussinesskey, processKey);
-//
-//			if (inst != null) {
-//
-//				// 根据流程实例ID获取运行任务
-//				List<Task> taskList = activitiService
-//						.listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
-//
-//				String nowTaskId = "";
-//
-//				for (int i = 0; i < taskList.size(); i++) {
-//					Task task = taskList.get(i);
-//
-//					// 判断用户是不是当前审批人
-//					if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
-//							userId)) {
-//
-//						nowTaskId = task.getId();
-//						break;
-//					}
-//				}
-//
-//				if (StringUtil.isNotEmpty(nowTaskId)) {
-//					// 当前任务节点信息
-//					taskInfo = getCurrentNodeInfo(nowTaskId);
-//				}
-//
-//			}
-//
-//			tm.commit();
-//
-//			return taskInfo;
-//
-//		} catch (Exception e) {
-//			throw new Exception("根据key获取当前任务节点信息出错:" + e);
-//		} finally {
-//			tm.release();
-//		}
-		return this.activitiTaskService.getCurrentNodeInfoByKey(bussinesskey, processKey, userId);
+		// TransactionManager tm = new TransactionManager();
+		//
+		// try {
+		// tm.begin();
+		// TaskInfo taskInfo = null;
+		// // 当前用户转成域账号
+		// userId = this.changeToDomainAccount(userId);
+		//
+		// // 根据Key获取流程实例
+		// ProcessInst inst = executor.queryObject(ProcessInst.class,
+		// "getProcessByKey_wf", bussinesskey, processKey);
+		//
+		// if (inst != null) {
+		//
+		// // 根据流程实例ID获取运行任务
+		// List<Task> taskList = activitiService
+		// .listTaskByProcessInstanceId(inst.getPROC_INST_ID_());
+		//
+		// String nowTaskId = "";
+		//
+		// for (int i = 0; i < taskList.size(); i++) {
+		// Task task = taskList.get(i);
+		//
+		// // 判断用户是不是当前审批人
+		// if (judgeAuthorityNoAdmin(task.getId(), inst.getKEY_(),
+		// userId)) {
+		//
+		// nowTaskId = task.getId();
+		// break;
+		// }
+		// }
+		//
+		// if (StringUtil.isNotEmpty(nowTaskId)) {
+		// // 当前任务节点信息
+		// taskInfo = getCurrentNodeInfo(nowTaskId);
+		// }
+		//
+		// }
+		//
+		// tm.commit();
+		//
+		// return taskInfo;
+		//
+		// } catch (Exception e) {
+		// throw new Exception("根据key获取当前任务节点信息出错:" + e);
+		// } finally {
+		// tm.release();
+		// }
+		return this.activitiTaskService.getCurrentNodeInfoByKey(bussinesskey,
+				processKey, userId);
 	}
 
 	@Override
