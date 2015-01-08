@@ -30,8 +30,8 @@ String sname = "";
 	{
 		sname = "数据库："+dbname+" 的链接情况";
 		 PoolMonitorServiceImpl pm = new  PoolMonitorServiceImpl();
-		 Connection con = DBUtil.getConection();
-		 Statement smt = con.createStatement();
+		 //Connection con = DBUtil.getConection();
+		// Statement smt = con.createStatement();
 		 //smt.executeQuery("select 1 from dual");
 		 //con.close();
 		 //smt.close();
