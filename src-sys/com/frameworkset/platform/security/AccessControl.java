@@ -2090,9 +2090,12 @@ public class AccessControl implements AccessControlInf{
 //			String puid = request.getParameter("uid");
 //			String LocalServerPort = request.getServerPort() + "";
 			
-			log("Session is null, Check page["+ request.getRequestURI() + this.getParameters(request) +"] will go to login.jsp." ,request);
+			
 			if(protect)
+			{
+				log("Session is null, Check page["+ request.getRequestURI() + this.getParameters(request) +"] will go to login.jsp." ,request);
 				return innerRedirect(redirectPath);
+			}
 			else
 				return false;
 		}
