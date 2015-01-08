@@ -1,3 +1,5 @@
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="com.frameworkset.common.poolman.monitor.PoolmanStatic"%>
 <%@page import="com.frameworkset.common.poolman.monitor.PoolMonitorServiceImpl"%>
 <%@page import="com.frameworkset.common.poolman.monitor.AbandonedTraceExt"%>
@@ -28,7 +30,11 @@ String sname = "";
 	{
 		sname = "数据库："+dbname+" 的链接情况";
 		 PoolMonitorServiceImpl pm = new  PoolMonitorServiceImpl();
-		 //DBUtil.getConection().createStatement().executeQuery("select 1 from dual");
+		 Connection con = DBUtil.getConection();
+		 Statement smt = con.createStatement();
+		 //smt.executeQuery("select 1 from dual");
+		 //con.close();
+		 //smt.close();
 		 java.util.List<AbandonedTraceExt> traceobjects = pm.getGoodTraceObjects(dbname);
 		 request.setAttribute("traceobjects", traceobjects);  
 	 	
@@ -75,9 +81,7 @@ String sname = "";
 			<tr>
 			 
 			<td>label:<pg:cell colName="label"/><br>
-			    dburl:<pg:cell colName="dburl"/><br>
-			     autocommit:<pg:cell colName="autocommit"/><br>
-			     readOnly:<pg:cell colName="readOnly"/><br>			    
+			    dburl:<pg:cell colName="dburl"/><br>			        
 			    创建时间：<pg:cell colName="createTime" dateformat="yyyy-MM-dd HH:mm:ss"/><br>
 			    最后使用时间：<pg:cell colName="lastUsed" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 			<td><pre name='code' class='java'> <pg:cell colName="stackInfo" htmlEncode='true'/> </pre></td></tr>

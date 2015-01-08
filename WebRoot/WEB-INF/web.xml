@@ -147,7 +147,8 @@
 		  /passward/modifyExpiredPassword.page,
 		  /passward/generateImageCode.page,
 		  /common/jsp/tokenfail.jsp,
-		  /sanymbp/login.page
+		  /sanymbp/login.page,
+		  /monitor/dbmonitor_activitedetail.jsp
     	   </param-value>
     </init-param>
     <init-param>
