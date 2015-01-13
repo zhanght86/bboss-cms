@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.platform.security.AccessControl"%>
 <%
 /*
  * <p>Title: 监控连接池信息</p>

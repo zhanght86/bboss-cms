@@ -72,8 +72,11 @@ druid.lang = function() {
 		'ConnectionHoldTimeHistogram' : ['ConnectionHoldTimeHistogram', '连接持有时间分布'],
 		'ClobOpenCount' : ['ClobOpenCount', 'Clob打开次数'],
 		'BlobOpenCount' : ['BlobOpenCount', 'Blob打开次数'],
-		
-		'UserNameDesc' : ['Specify the username used when creating a new connection.', '指定建立连接是使用的用户名'],
+		'ActiveConnectionStackTrace' : ['ActiveConnection StackTrace', '活跃连接堆栈查看'],
+		'PollingConnectionInfo' : ['PollingConnection Info', '连接池中连接信息'],
+		'SQLList' : ['SQL List', 'sql列表'],
+				
+		'UserNameDesc' : ['Specify the username used when creating a new connection.', '指定建立连接时使用的用户名'],
 		'URLDesc' : ['The JDBC driver connection URL', 'jdbc连接字符串'],
 		'DbTypeDesc' : ['database type', '数据库类型'],
 		'DriverClassNameDesc' : ['The fully qualifed name of the JDBC driver class', 'jdbc驱动的类名'],
@@ -201,6 +204,12 @@ druid.lang = function() {
 		'WhiteListSize':['WhiteListSize', '白名单长度'],
 		'SyntaxErrrorCount':['SyntaxErrrorCount', '语法错误次数'],
 		'TableName':['TableName', '表名'],
+		'TableNumber':['Number','序号'],
+		
+		'Sample':['Sample','样本'],
+		'ExecuteCount':['ExecuteCount','执行数'],
+		'FetchRowCount':['FetchRowCount','读取行数'],
+		'SQLUpdateCount':['UpdateCount','更新行数'],
 		
 		'SelectCount':['SelectCount', 'Select数'],
 		'SelectIntoCount':['SelectIntoCount', 'SelectInto数'],
@@ -215,6 +224,11 @@ druid.lang = function() {
 		'DeleteDataCount':['DeleteDataCount', '删除数据行数'],
 		'UpdateDataCount':['UpdateDataCount', '更新数据行数'],
 		'FetchRowCount':['FetchRowCount', '读取行数'],
+		'WallStat':['Wall Stat', '防御统计'],
+		'TableStat':['Table Stat', '表访问统计'],
+		'FunctionStat':['Function Stat', '函数调用统计'],
+    'SQLStatWhiteList':['SQL Stat - White List', 'SQL防御统计 - 白名单'],
+    'SQLStatBlackList':['SQL Stat - Black List', 'SQL防御统计 - 黑名单'],
 		/**session-detail*/
 		'SESSIONID':['SESSIONID', 'SESSIONID'],
 		'UserAgent':['UserAgent', 'UserAgent'],
@@ -229,7 +243,8 @@ druid.lang = function() {
 		'RequestTimeMillis':['RequestTimeMillis', '请求时间'],
 		'JdbcExecutePeak':['JdbcExecutePeak', 'jdbc执行峰值'],
 		'JdbcFetchRowPeak':['JdbcFetchRowPeak', 'jdbc查询取回行数峰值'],
-		'JdbcUpdatePeak':['JdbcUpdatePeak', 'jdbc更新峰值']
+		'JdbcUpdatePeak':['JdbcUpdatePeak', 'jdbc更新峰值'],
+		'Histogram':['Histogram','区间分布']
 		
 	};
 	

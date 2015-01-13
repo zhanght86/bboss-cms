@@ -153,7 +153,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-model-5.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12.jar" sourcepath="WebRoot/WEB-INF/lib/activiti-engine-5.12-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/druid-0.2.23-20130715.145141-15.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cxf-2.7.6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-jaxws_2.2_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.ws.rs-api-2.0-m10.jar"/>
