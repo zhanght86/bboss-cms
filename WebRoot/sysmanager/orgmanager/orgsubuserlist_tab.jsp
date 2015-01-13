@@ -1,7 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
 <%@ include file="../base/scripts/panes.jsp"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.OrgManager"%>

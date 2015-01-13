@@ -9,7 +9,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.apache.struts.action.ActionForm;
 
 /**
  * A class that represents a row in the td_sm_res table. You can customize the
@@ -18,11 +17,6 @@ import org.apache.struts.action.ActionForm;
  * MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractRes implements Serializable {
-    /**
-     * The cached hash code value for this instance. Settting to 0 triggers
-     * re-calculation.
-     */
-    private int hashValue = 0;
 
     /** The composite primary key value. */
     private String resId;
@@ -250,7 +244,6 @@ public abstract class AbstractRes implements Serializable {
      * @param resId
      */
     public void setResId(String resId) {
-        this.hashValue = 0;
         this.resId = resId;
     }
 
@@ -941,23 +934,7 @@ public abstract class AbstractRes implements Serializable {
         return true;
     }
 
-    /**
-     * Implementation of the hashCode method conforming to the Bloch pattern
-     * with the exception of array properties (these are very unlikely primary
-     * key types).
-     * 
-     * @return int
-     */
-    public int hashCode() {
-        if (this.hashValue == 0) {
-            int result = 17;
-            int resIdValue = this.getResId() == null ? 0 : this.getResId()
-                    .hashCode();
-            result = result * 37 + resIdValue;
-            this.hashValue = result;
-        }
-        return this.hashValue;
-    }
+    
     /**
      * @return Returns the restypeName.
      */

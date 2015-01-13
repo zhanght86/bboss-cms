@@ -8,8 +8,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 
 import java.io.Serializable;
 
-import org.apache.struts.action.ActionForm;
-
 /**
  * A class that represents a row in the TD_SM_OPERGROUP table. 
  * You can customize the behavior of this class by editing the class, {@link TdSmOpergroup()}.
@@ -18,8 +16,6 @@ import org.apache.struts.action.ActionForm;
 public abstract class AbstractOpergroup 
     implements Serializable
 {
-    /** The cached hash code value for this instance.  Settting to 0 triggers re-calculation. */
-    private int hashValue = 0;
 
     /** The composite primary key value. */
     private java.lang.String groupId;
@@ -61,7 +57,6 @@ public abstract class AbstractOpergroup
      */
     public void setGroupId(java.lang.String groupId)
     {
-        this.hashValue = 0;
         this.groupId = groupId;
     }
 
@@ -123,20 +118,4 @@ public abstract class AbstractOpergroup
         return true;
     }
 
-    /**
-     * Implementation of the hashCode method conforming to the Bloch pattern with
-     * the exception of array properties (these are very unlikely primary key types).
-     * @return int
-     */
-    public int hashCode()
-    {
-        if (this.hashValue == 0)
-        {
-            int result = 17;
-            int groupIdValue = this.getGroupId() == null ? 0 : this.getGroupId().hashCode();
-            result = result * 37 + groupIdValue;
-            this.hashValue = result;
-        }
-        return this.hashValue;
-    }
 }

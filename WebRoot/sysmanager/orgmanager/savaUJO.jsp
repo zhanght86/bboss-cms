@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="../include/global1.jsp"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.OrgManAction,com.frameworkset.util.StringUtil" %>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.OrgManAction"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.LogManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>

@@ -25,7 +25,6 @@
 	com.frameworkset.platform.sysmgrcore.manager.JobManager,
 	com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase,
 	com.frameworkset.platform.sysmgrcore.manager.UserManager,java.util.*,
-	com.frameworkset.platform.sysmgrcore.web.struts.action.JobManagerAction,
 	java.util.List"%>
 <%	
 	  AccessControl control = AccessControl.getInstance();

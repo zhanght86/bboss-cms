@@ -10,7 +10,7 @@ import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 
-public class GroupAction extends BasicAction implements Serializable{
+public class GroupAction   implements Serializable{
 	private Logger logger = Logger.getLogger(GroupAction.class.getName());
 
 	public GroupAction() {

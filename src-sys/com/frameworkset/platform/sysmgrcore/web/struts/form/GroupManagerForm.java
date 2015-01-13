@@ -3,8 +3,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.struts.action.ActionForm;
-
 /**
  * @author feng.jing
  * GroupManagerForm.java

@@ -1,7 +1,6 @@
 <%@ include file="../include/global1.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ include file="../base/scripts/panes.jsp"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>

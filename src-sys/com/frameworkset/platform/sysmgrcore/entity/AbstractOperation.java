@@ -9,7 +9,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.apache.struts.action.ActionForm;
 
 /**
  * A class that represents a row in the td_sm_operations table. You can
@@ -18,11 +17,7 @@ import org.apache.struts.action.ActionForm;
  * file that is synchronized * by MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractOperation  implements Serializable {
-    /**
-     * The cached hash code value for this instance. Settting to 0 triggers
-     * re-calculation.
-     */
-    private int hashValue = 0;
+ 
 
     /** The composite primary key value. */
     private String opId;
@@ -162,7 +157,7 @@ public abstract class AbstractOperation  implements Serializable {
      * @param opId
      */
     public void setOpId(String opId) {
-        this.hashValue = 0;
+      
         this.opId = opId;
     }
 
@@ -331,21 +326,5 @@ public abstract class AbstractOperation  implements Serializable {
         return true;
     }
 
-    /**
-     * Implementation of the hashCode method conforming to the Bloch pattern
-     * with the exception of array properties (these are very unlikely primary
-     * key types).
-     * 
-     * @return int
-     */
-    public int hashCode() {
-        if (this.hashValue == 0) {
-            int result = 17;
-            int opIdValue = this.getOpId() == null ? 0 : this.getOpId()
-                    .hashCode();
-            result = result * 37 + opIdValue;
-            this.hashValue = result;
-        }
-        return this.hashValue;
-    }
+    
 }

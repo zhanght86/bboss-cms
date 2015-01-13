@@ -5,12 +5,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 /**
  * MyEclipse Struts Creation date: 03-15-2006
  * 
@@ -52,26 +46,7 @@ public class GroupInfoForm implements Serializable{
 
 	// --------------------------------------------------------- Methods
 
-	/**
-	 * Method validate
-	 * 
-	 * @param mapping
-	 * @param request
-	 * @return ActionErrors
-	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) {
-		return null;
-	}
-
-	/**
-	 * Method reset
-	 * 
-	 * @param mapping
-	 * @param request
-	 */
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-	}
+	 
 
 	/**
 	 * Returns the groupDesc.

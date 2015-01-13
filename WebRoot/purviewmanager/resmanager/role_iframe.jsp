@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ page import="com.frameworkset.platform.security.*,com.frameworkset.platform.config.model.*"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>

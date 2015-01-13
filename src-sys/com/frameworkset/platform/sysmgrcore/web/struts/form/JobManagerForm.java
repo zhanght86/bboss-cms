@@ -6,12 +6,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 /** 
  * MyEclipse Struts
  * Creation date: 03-10-2006
@@ -37,23 +31,7 @@ public class JobManagerForm  implements Serializable{
 		this.jobList=jobList;
 	}
 	
-	public ActionErrors validate(
-		ActionMapping mapping,
-		HttpServletRequest request) {
-
-		
-		return null;
-	}
-
-	/** 
-	 * Method reset
-	 * @param mapping
-	 * @param request
-	 */                                                                                
-	public void reset(ActionMapping mapping, HttpServletRequest request) {
-
-	
-	}
+	 
 
 }
 

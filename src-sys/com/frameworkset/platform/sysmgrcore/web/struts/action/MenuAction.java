@@ -17,7 +17,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenu;
 
-public class MenuAction extends BasicAction{
+public class MenuAction {
 //	菜单管理－－菜单授权情况
 	public static String editRoleOper(String resId,String resTypeId,
 			String opId,String checked,String title,String isRecursion,String menuPath,String types) {

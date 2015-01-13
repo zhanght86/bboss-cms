@@ -2,11 +2,9 @@ package com.frameworkset.platform.sysmgrcore.web.struts.action;
 
 import java.io.Serializable;
 
-import org.apache.struts.actions.DispatchAction;
-
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
-import com.frameworkset.common.poolman.DBUtil;
 
 /**
  * 资源管理＝＝资源操作授予＝＝角色操作的保存
@@ -15,7 +13,7 @@ import com.frameworkset.common.poolman.DBUtil;
  * @file RoleOperAction.java
  * @Created on: Apr 14, 2006
  */
-public class RoleOperAction extends DispatchAction implements Serializable {
+public class RoleOperAction   implements Serializable {
 	
 	
 	

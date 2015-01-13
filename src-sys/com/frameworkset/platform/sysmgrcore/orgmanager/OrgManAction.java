@@ -5,10 +5,6 @@ import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.actions.DispatchAction;
 
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
@@ -29,7 +25,7 @@ import com.frameworkset.proxy.Interceptor;
  * @author biaoping.yin
  * @version 1.0
  */
-public class OrgManAction extends DispatchAction implements Serializable{
+public class OrgManAction implements Serializable{
     public OrgManAction() {
     }
 

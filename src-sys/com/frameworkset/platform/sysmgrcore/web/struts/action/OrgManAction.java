@@ -1,40 +1,21 @@
 package com.frameworkset.platform.sysmgrcore.web.struts.action;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
 
-import com.frameworkset.platform.config.model.Operation;
-import com.frameworkset.platform.resource.ResourceManager;
-import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
-import com.frameworkset.platform.sysmgrcore.entity.Orgjob;
 import com.frameworkset.platform.sysmgrcore.entity.Orgrole;
 import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.manager.JobManager;
-import com.frameworkset.platform.sysmgrcore.manager.LogGetNameById;
-import com.frameworkset.platform.sysmgrcore.manager.LogManager;
-import com.frameworkset.platform.sysmgrcore.manager.OrgAdministrator;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
-import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl;
-import com.frameworkset.platform.sysmgrcore.web.struts.form.OrgJobForm;
-import com.frameworkset.common.poolman.DBUtil;
 
 /**
  * <p>
@@ -56,7 +37,7 @@ import com.frameworkset.common.poolman.DBUtil;
  * @author hongyu.deng
  * @version 1.0
  */
-public class OrgManAction extends BasicAction {
+public class OrgManAction   {
 	private Logger logger = Logger.getLogger(OrgManAction.class.getName());
 
 	public OrgManAction() {
@@ -589,263 +570,7 @@ public class OrgManAction extends BasicAction {
 //		return (mapping.findForward("info"));
 //	}
 
-	public ActionForward deletesuborg(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		String[] id = request.getParameterValues("ID");
-		String parentId = "";
-		String orgids_log= "";
-		if (id != null) {
-			for (int i = 0; i < id.length; i++) {
-				Organization org = orgManager.getOrgById(id[i]);
-				parentId = org.getParentId();
-				orgManager.deleteOrg(org);
-			}
-			
-		}
-		String params = request.getParameter("queryString");
-		return this.getActionForward(mapping, "suborglist", params);
-
-	}
-
-	public ActionForward deletesubuser(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
-        String openModle="机构管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-		UserManager userManager = SecurityDatabase.getUserManager();
-		String[] id = request.getParameterValues("ID");
-
-		String orgId = request.getParameter("orgId");
-		request.setAttribute("orgId", orgId);
-		String userids_log ="";
-		if (id != null) {
-			for (int i = 0; i < id.length; i++) {
-				User user = userManager.getUserById(id[i]);
-				userids_log +=LogGetNameById.getUserNameByUserId(id[i])+" ";
-				userManager.deleteUser(user);
-			}
-			//--	
-			operContent="删除用户:"+userids_log; 
-			 description="";
-	        logManager.log(control.getUserAccount()+":"+userName,operContent,openModle,operSource,description);       
-			//--
-		}
-
-		return mapping.findForward("orgsubuserlist");
-
-	}
-
-	public ActionForward modifyOrgInfo(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		String orgId = request.getParameter("orgId");
-		Organization org = orgManager.getOrgById(orgId);
-		request.setAttribute("updateOrgInfo", org);
-		if("iscms".equals(request.getParameter("iscms")))
-			return mapping.findForward("updateCMSOrgInfo");
-		return mapping.findForward("updateOrgInfo");
-	}
-
-	/**
-	 * 机构转移动作
-	 * */
-	public ActionForward tranOrg(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		String parentId = request.getParameter("parentId");
-		String orgId = request.getParameter("orgId");
-		
-		//如果转移机构和新父机构相同，返回
-		if(parentId.equals(orgId)){
-			request.setAttribute("isOk","1");
-			return mapping.findForward("tranorg");
-		}
-		
-		//记录日志
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
-        String openModle="机构管理";
-        String userName = control.getUserName();
-        LogManager logManager = SecurityDatabase.getLogManager(); 
-        operContent=userName+"  将机构："+LogGetNameById.getOrgNameByOrgId(orgId)+" 转移到机构："+LogGetNameById.getOrgNameByOrgId(parentId)+" 下"; 
-        logManager.log(control.getUserAccount()+":"+userName,operContent,openModle,operSource,""); 
-		//---------------END
-        
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		Organization parentorg = orgManager.getOrgById(parentId);
-		Organization org = orgManager.getOrgById(orgId);
-		List list = orgManager.getChildOrgList(org, true);
-		
-		// 判断转移机构是否是新父机构的父机构
-		boolean same = false;
-		if ((list != null) && (list.size() > 0)) {
-			for (int i = 0; i < list.size(); i++) {
-				Organization neworg = (Organization) list.get(i);
-				if (neworg.getOrgId().equals(parentId)) {
-					same = true;
-					continue;
-				}
-			}
-		}
-
-		String tranParentId = org.getParentId();
-		String layer ="";
-		if(parentorg==null || parentorg.getLayer()==null){
-			layer ="1";
-		}
-		else
-		{
-			layer = parentorg.getLayer();
-			layer = String.valueOf(Integer.parseInt(layer) + 1);
-		}
-		
-		org.setParentId(parentId);
-		org.setLayer(layer);
-		orgManager.storeOrg(org);
-		
-		// 若有父子关系则作特殊处理
-		if (same) {
-			parentorg.setParentId(tranParentId);
-			orgManager.storeOrg(parentorg);
-		}
-		
-		request.setAttribute("isOk","2");
-		ActionForward forward = mapping.findForward("tranorg");
-		StringBuffer path = new StringBuffer(forward.getPath());
-		boolean isQuery = (path.indexOf("?") >= 0);
-
-		if (isQuery) {
-			path
-					.append("&updateorgId=" + orgId + "&updateparentId="
-							+ parentId);
-		} else {
-			path
-					.append("?updateorgId=" + orgId + "&updateparentId="
-							+ parentId);
-		}
-		return new ActionForward(path.toString());
-
-	}
-
-	/**
-	 * 得到角色列表和该机构下拥有角色列表
-	 * 
-	 * @param mapping
-	 *            ActionMapping
-	 * @param form
-	 *            ActionForm
-	 * @param request
-	 *            HttpServletRequest
-	 * @param response
-	 *            HttpServletResponse
-	 * @return ActionForward
-	 * @throws Exception
-	 */
-	public ActionForward getRoleList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		String orgId = request.getParameter("orgId");
-		RoleManager roleManager = SecurityDatabase.getRoleManager();
-		AccessControl accessControl = AccessControl.getInstance();
-		accessControl.checkAccess(request, response);
-		accessControl.isAdmin();
-		Organization org = new Organization();
-		org.setOrgId(orgId);
-		
-		List existRole = roleManager.getRoleList(org);//获取机构已有的角色列表
-		List list = roleManager.getRoleList();//获取所有角色的列表
-
-		//角色列表加权限判断，筛选有权限的角色列表
-		List allRole = new ArrayList();
-		for (int i = 0; list != null && i < list.size(); i++) {
-			Role role = (Role) list.get(i);
-			if (accessControl.checkPermission(role.getRoleId(),
-					AccessControl.WRITE_PERMISSION,
-					AccessControl.ROLE_RESOURCE)
-					|| accessControl.checkPermission(role.getRoleId(),
-							AccessControl.READ_PERMISSION,
-							AccessControl.ROLE_RESOURCE)) {
-
-				//不能出现默认角色：admin,roleforeveryone,orgmanager/ admin能看见admin角色
-				if(Integer.parseInt(role.getRoleId()) == 1 && "1".equals(accessControl.getUserID())){
-					allRole.add(role);
-				}
-				if(Integer.parseInt(role.getRoleId()) > 4)
-				{
-					allRole.add(role);
-				}				
-			}
-		}
-		
-		request.setAttribute("allRole", allRole);
-		request.setAttribute("existRole", existRole);
-
-		return mapping.findForward("roleDetail");
-	}
-
-	public ActionForward storeOrgRole(ActionMapping mapping, OrgJobForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
-        String openModle="机构管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-		HttpSession session = request.getSession();
-		RoleManager roleManager = SecurityDatabase.getRoleManager();
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		OrgJobForm orgJobForm = (OrgJobForm) form;
-		Organization org = orgManager.getOrgById(orgJobForm.getOrgId());
-		orgManager.deleteOrgrole(org);
-
-		String[] roleid = orgJobForm.getRoleId();		
-
-		for (int i = 0; (roleid != null) && (i < roleid.length); i++) {
-			Role role = roleManager.getRoleById( roleid[i]);
-			if (role != null) {
-				Orgrole orgrole = new Orgrole();
-				orgrole.setOrganization(org);
-				orgrole.setRole(role);
-				
-				orgManager.storeOrgrole(orgrole);		
-
-			}
-		}
-		//--
-		operContent="添加机构组，机构编号："+LogGetNameById.getOrgNameByOrgId(orgJobForm.getOrgId())+" ,角色："+LogGetNameById.getRoleNamesByRoleIds(roleid); 
-		 description="";
-        logManager.log(control.getUserAccount()+":"+userName,operContent,openModle,operSource,description);       
-		//--
-
-		List existRole = roleManager.getRoleList(org);
-		List allRole = roleManager.getRoleList();
-		request.setAttribute("allRole", allRole);
-		request.setAttribute("existRole", existRole);
-
-		return mapping.findForward("roleDetail");
-
-	}
+	 
 
 	/**
 	 * 机构管理中保存机构角色，ajax－－
@@ -956,76 +681,7 @@ public class OrgManAction extends BasicAction {
 		return true;
 	}
 	
-	/**
-	 * 得到某一机构的用户列表和该机构下拥有的用户列表
-	 * 
-	 * @param mapping
-	 *            ActionMapping
-	 * @param form
-	 *            ActionForm
-	 * @param request
-	 *            HttpServletRequest
-	 * @param response
-	 *            HttpServletResponse
-	 * @return ActionForward
-	 * @throws Exception
-	 */
-	public ActionForward getUserList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		HttpSession session = request.getSession();
-		String orgId=request.getParameter("orgId");
-		String orgId1=request.getParameter("orgId1");//选中的机构Id
-		String jobId=request.getParameter("jobId");
-		session.setAttribute("orgId1",orgId1);
-		session.setAttribute("jobId",jobId);
-		UserManager userManager = SecurityDatabase.getUserManager();
-		JobManager jobManager=SecurityDatabase.getJobManager();
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		Organization org = orgManager.getOrgById(orgId);
-		Organization org1 = orgManager.getOrgById(orgId1);
-//		Job job=jobManager.getJob("jobId",jobId);
-		Job job=jobManager.getJobById(jobId);
-		if (org != null) {
-			List allUser = new ArrayList();
-			DBUtil db = new DBUtil();
-			 String sql="select a.USER_ID,a.USER_SN,a.USER_NAME,a.USER_PASSWORD,a.USER_REALNAME,a.USER_WORKNUMBER,"+
-	           "a.USER_PINYIN,a.USER_SEX,a.USER_HOMETEL,a.USER_WORKTEL,a.USER_MOBILETEL1,a.USER_MOBILETEL2,"+
-	           "a.USER_FAX,a.USER_OICQ,a.USER_BIRTHDAY,a.USER_EMAIL,a.USER_ADDRESS,a.USER_POSTALCODE,a.USER_IDCARD,"+
-	           "a.USER_ISVALID,a.USER_REGDATE,a.USER_LOGINCOUNT,a.USER_TYPE,a.REMARK1,a.REMARK2,a.REMARK3,a.REMARK4,"+
-	           "a.REMARK5,max(b.same_job_user_sn) aa,max(b.job_sn) bb "+
-	            " from td_sm_user a, td_sm_userjoborg b "+
-	            "where a.user_id = b.user_id and b.org_id='"+orgId+"' "+
-	            "group by a.USER_ID,a.USER_SN,a.USER_NAME,a.USER_PASSWORD,a.USER_REALNAME,a.USER_WORKNUMBER,"+
-	            "a.USER_PINYIN,a.USER_SEX,a.USER_HOMETEL,a.USER_WORKTEL,a.USER_MOBILETEL1,a.USER_MOBILETEL2,"+
-	            "a.USER_FAX,a.USER_OICQ,a.USER_BIRTHDAY,a.USER_EMAIL,a.USER_ADDRESS,a.USER_POSTALCODE,a.USER_IDCARD,"+
-	            "a.USER_ISVALID,a.USER_REGDATE,a.USER_LOGINCOUNT,a.USER_TYPE,a.REMARK1,"+
-	            "a.REMARK2,a.REMARK3,a.REMARK4,a.REMARK5 "+
-	            " order by bb asc,aa asc";  
-			 db.executeSelect(sql);
-			 for(int i=0;i<db.size();i++){
-				 User user=new User();
-				 int userid=db.getInt(i,"user_id");
-				 user.setUserId(new Integer(userid));
-				 user.setUserName(db.getString(i,"USER_NAME"));
-				 user.setUserRealname(db.getString(i,"USER_REALNAME"));
-				 allUser.add(user);
-
-			 }
-			 
-			 
-			List existUser = userManager.getUserList(org1,job);//根据机构岗位得用户列表
-			if (allUser == null) {
-				allUser = new ArrayList();
-			}
-			if (existUser == null) {
-				existUser = new ArrayList();
-			}
-			request.setAttribute("allUser", allUser);
-			request.setAttribute("existUser", existUser);
-		}
-		return mapping.findForward("userlist1");
-	}
+	 
 	
 	/**
 	 * 存储用户机构岗位关系（调入人员选择框） //no static
@@ -1103,28 +759,7 @@ public class OrgManAction extends BasicAction {
 	}
 	
 	
-	/**
-	 * 得到离散用户列表
-	 */
-	public ActionForward getDicList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		HttpSession session = request.getSession();
-		String jobId = request.getParameter("jobId");
-		String orgId1 = request.getParameter("orgId1");
-		UserManager userManager = SecurityDatabase.getUserManager();
-		JobManager jobManager=SecurityDatabase.getJobManager();
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-	
-		Organization org1 = orgManager.getOrgById(orgId1);
-//		Job job=jobManager.getJob("jobId",jobId);
-		Job job=jobManager.getJobById(jobId);
-		List allUser = userManager.getDicList();
-		List existUser = userManager.getUserList(org1,job);//根据机构岗位得用户列表
-		request.setAttribute("allUser", allUser);
-		request.setAttribute("existUser", existUser);
-		return mapping.findForward("dict");
-	}
+	 
 	/**
 	 * 删除用户机构岗位关系（调入人员选择框）
 	 */
@@ -1211,94 +846,6 @@ public class OrgManAction extends BasicAction {
 		}else
 			return "error";
 	}
-	public ActionForward getChargeList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		String resId=request.getParameter("resId");
-		String orgId=request.getParameter("orgId");
-		request.setAttribute("resId",resId);
-		return mapping.findForward("charge");
-	}
-	
-	public ActionForward savecharge(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {//设置主管处室和主管岗位
-		
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
-        String openModle="机构管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-        
-		DBUtil db = new DBUtil();
-		String[] orgid = request.getParameterValues("ID");
-		HttpSession session = request.getSession();
-		String resId =  (String)session.getAttribute("resId");
-		String[] tmp = resId.split(":");
-		String orgid1 = tmp[0]; //主管处室
-		String jobid = tmp[1]; //主管岗位
-		request.setAttribute("orgId",orgid1);
-		request.setAttribute("jobId",jobid);
-		String orgids_log ="";
-		if (orgid != null) {
-			for (int i = 0; i < orgid.length; i++) {
-				
-				String sql="update TD_SM_ORGANIZATION set CHARGEORGID='"+ orgid1 +"'," +
-						"SATRAPJOBID='"+ jobid +"' where ORG_ID = '"+ orgid[i] +"'";
-				orgids_log +=LogGetNameById.getOrgNameByOrgId(orgid[i])+" ";
-				db.executeInsert(sql);
-			}
-			//--
-			operContent="设置主管处室和主管岗位,岗位："+LogGetNameById.getJobNameByJobId(jobid)+",相关的机构："+orgids_log; 
-			 description="";
-	        logManager.log(control.getUserAccount()+":"+userName,operContent,openModle,operSource,description);       
-			//--
-		}
-		
-		return mapping.findForward("budget");
-	}
-	public ActionForward deletecharge(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {//设置主管处室和主管岗位
-		
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
-        String openModle="机构管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-        
-        
-		DBUtil db = new DBUtil();
-		String[] orgid = request.getParameterValues("ID");
-		HttpSession session = request.getSession();
-		String resId =  (String)session.getAttribute("resId");
-		request.setAttribute("resId",resId);
-		String orgids_log="";
-		if (orgid != null) {
-			for (int i = 0; i < orgid.length; i++) {
-				
-				String sql="update TD_SM_ORGANIZATION set CHARGEORGID=''," +
-						"SATRAPJOBID='' where ORG_ID = '"+ orgid[i] +"'";
-				orgids_log+=LogGetNameById.getOrgNameByOrgId(orgid[i])+" ";
-				db.executeInsert(sql);
-			}
-			//--
-			operContent="取消主管处室和主管岗位，相关的机构有："+orgids_log; 
-			 description="";
-	        logManager.log(control.getUserAccount()+":"+userName,operContent,openModle,operSource,description);       
-			//--
-		}
-		return mapping.findForward("budget");
-	}
+	 
 
 }

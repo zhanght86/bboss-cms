@@ -2,8 +2,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 
 import java.io.Serializable;
 
-import org.apache.struts.action.ActionForm;
-
 /**
  * 资源管理＝＝资源操作授予＝＝角色操作的保存
  * @author 

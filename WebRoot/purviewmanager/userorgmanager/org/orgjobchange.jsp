@@ -16,7 +16,6 @@
 	response.setDateHeader("max-age", 0); 
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.OrgJobAction"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.LogManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>

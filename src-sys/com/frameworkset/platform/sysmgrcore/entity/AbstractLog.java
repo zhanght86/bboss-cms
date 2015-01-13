@@ -3,7 +3,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import org.apache.struts.action.ActionForm;
 
 /**
  * A class that represents a row in the td_sm_user table. You can customize the
@@ -16,11 +15,6 @@ public abstract class AbstractLog  implements Serializable {
 	{
 		
 	}
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
 
 	/** The composite primary key value. */
 	private Integer logId;
@@ -81,7 +75,6 @@ public abstract class AbstractLog  implements Serializable {
 	}
 
 	public void setLogId(Integer logId) {
-		this.hashValue = 0;
 		this.logId = logId;
 	}
 
@@ -170,23 +163,6 @@ public abstract class AbstractLog  implements Serializable {
         return true;
     }
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			int logIdValue = this.getLogId() == null ? 0 : this.getLogId()
-					.hashCode();
-			result = result * 37 + logIdValue;
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
 
 	public String getEndDate() {
 		return endDate;

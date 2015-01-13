@@ -1,36 +1,15 @@
 package com.frameworkset.platform.sysmgrcore.web.struts.action;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.actions.DispatchAction;
 import org.frameworkset.spi.SPIException;
 
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.entity.Job;
-import com.frameworkset.platform.sysmgrcore.entity.OrgJobName;
-import com.frameworkset.platform.sysmgrcore.entity.Organization;
-import com.frameworkset.platform.sysmgrcore.entity.User;
-import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
-import com.frameworkset.platform.sysmgrcore.manager.JobManager;
-import com.frameworkset.platform.sysmgrcore.manager.LogGetNameById;
-import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
-import com.frameworkset.platform.sysmgrcore.web.struts.form.UserOrgManagerForm;
-import com.frameworkset.common.poolman.DBUtil;
 
 /**
  * <p>
@@ -52,193 +31,14 @@ import com.frameworkset.common.poolman.DBUtil;
  * @author feng.jing
  * @version 1.0
  */
-public class UserOrgManagerAction extends DispatchAction  implements Serializable {
+public class UserOrgManagerAction    implements Serializable {
 	public UserOrgManagerAction() {
 	}
 
 	private static Logger log = Logger.getLogger(UserOrgManagerAction.class
 			.getName());
 
-	public ActionForward getOrgList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		DBUtil db = new DBUtil(); 
-		String uid2 = request.getParameter("userId");
-		 request.setAttribute("userId",uid2);
-		 Integer uid = Integer.valueOf(uid2);
-		 String orgId = request.getParameter("orgId");
-		 request.setAttribute("orgId",orgId);
-		 OrgManager orgManager = SecurityDatabase.getOrgManager();
-		 UserManager userManager = SecurityDatabase.getUserManager();
-		 User user1 = userManager.getUserById(uid.toString());
-		 Organization ch = orgManager.getMainOrganizationOfUser(user1.getUserName());
-//    	 System.out.println(ch);
-//		 System.out.println("||||||||||||||||||"+ch.getRemark5());
-		 if(ch==null || ch.equals("null")){
-			 request.setAttribute("orgname","未设主机构！");
-		 }else{
-			 request.setAttribute("orgname",ch.getRemark5());
-			 request.setAttribute("mainOrgId",ch.getOrgId());//将主机构的id传到页面上,da.wei
-			 
-		 }
-		 
-		try {
-			if (uid == null) {
-				return mapping.findForward("noUser");
-			}
-
-			UserOrgManagerForm userOrgForm = null;
-			User user = new User();
-			user.setUserId(uid);
-			List existOrg = new ArrayList();
-			JobManager jobManager = SecurityDatabase.getJobManager();
-//			Job job = jobManager.getJob("jobId", "1"); 
-			Job job = jobManager.getJobById("1"); 
-			
-//			user = userManager.loadAssociatedSet(uid.toString(),
-//					UserManager.ASSOCIATED_USERJOBORGSET);
-			if (user != null) {
-//				Iterator iterator = user.getUserjoborgSet().iterator();
-//				while (iterator.hasNext()) {
-//					userOrgForm = new UserOrgManagerForm();
-//					Userjoborg userjoborg = (Userjoborg) iterator.next();
-//					
-//					userOrgForm.setOrgId(userjoborg.getOrg().getOrgId() + ";"
-//							+ userjoborg.getJob().getJobId());
-//					
-//					userOrgForm.setOrgName(userjoborg.getOrg().getOrgName()
-//							+ "(" + userjoborg.getJob().getJobName() + ")");
-//					userOrgForm.setRemark5(userjoborg.getOrg().getRemark5()
-//							+ "(" + userjoborg.getJob().getJobName() + ")"); 
-//					existOrg.add(userOrgForm);
-//				}
-				String sql ="select org_id,job_id from td_sm_userjoborg where user_id ="+ uid2 +"";
-				db.executeSelect(sql);
-				for (int i = 0; i < db.size(); i++) {
-				Organization org1 = orgManager.getOrgById(db.getString(i,"org_id"));
-//				Job job1 = jobManager.getJob("jobId",db.getString(i,"job_id"));
-				Job job1 = jobManager.getJobById(db.getString(i,"job_id"));
-				OrgJobName ojn = new OrgJobName();
-				ojn.setOrgId(db.getString(i,"org_id")+";"+db.getString(i,"job_id"));
-				
-//				不是取getOrgName,而是要remark5,weida200709121817
-//				ojn.setRemark5("("+ org1.getOrgName()+")"+ job1.getJobName());
-				ojn.setRemark5("("+ org1.getRemark5() + ")" + job1.getJobName());
-				
-				existOrg.add(ojn);
-	        }
-				request.setAttribute("existOrg", existOrg);
-				request.setAttribute("jobid", job.getJobId());
-				
-			} else {
-				return mapping.findForward("noUser");
-			}
-		} catch (Exception e) {
-			return mapping.findForward("fail");
-		}
-			return mapping.findForward("orgDetail");
-	}
-
-	/**
-	 * 获取机构列表包括用户已经属于的机构
-	 * 
-	 * @param mapping
-	 *            ActionMapping
-	 * @param form
-	 *            ActionForm
-	 * @param request
-	 *            HttpServletRequest
-	 * @param response
-	 *            HttpServletResponse
-	 * @return ActionForward
-	 * @throws Exception
-	 */
-	public ActionForward storeUserOrg(ActionMapping mapping, UserOrgManagerForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=control.getMachinedID();//request.getRemoteAddr();
-        String openModle="用户管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-        
-		HttpSession session = request.getSession();
-		Integer uid = (Integer) session.getAttribute("currUserId");
-		if (uid == null) {
-			return mapping.findForward("noUser");
-		}
-		UserOrgManagerForm userOrgForm = (UserOrgManagerForm) form;
-		String[] orgIdName = userOrgForm.getOrgList();
-		UserManager userManager = SecurityDatabase.getUserManager();
-		User user = userManager.getUserById(uid.toString());
-		List existOrg = new ArrayList();
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		try {
-			if (user != null) {
-				JobManager jobManager = SecurityDatabase.getJobManager();
-				String orgId;
-				String jobId;
-				userManager.deleteUserjoborg(user);
-				
-				////-- 日志用到的局部变量
-				String orgIds_log = "";
-				String jobIds_log = "";
-				////
-				for (int i = 0; orgIdName != null && i < orgIdName.length; i++) {
-					String[] tmp = orgIdName[i].split(";");
-					orgId = tmp[0];
-					jobId = tmp[1];
-					orgIds_log += LogGetNameById.getOrgNameByOrgId(orgId)+" ";
-					jobIds_log += LogGetNameById.getJobNameByJobId(jobId)+" ";
-					Organization org = orgManager.getOrgById(orgId);
-//					Job job = jobManager.getJob("jobId", jobId);
-					Job job = jobManager.getJobById(jobId);				
-					if (org != null && job != null) {
-						Userjoborg u = new Userjoborg();
-						u.setOrg(org);
-						u.setUser(user);
-						u.setJob(job);
-						userManager.storeUserjoborg(u);
-					}
-				}
-				
-				//--添加用户时候写日志	
-				operContent="存储用户岗位机构,用户："+user.getUserName()+" 机构:"+orgIds_log+" 岗位:"+jobIds_log; 
-				
-				 description="";
-		        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);       
-				//--
-
-			}
-
-			// update session
-			userManager = SecurityDatabase.getUserManager();
-			user = userManager.loadAssociatedSet(uid.toString(),
-					UserManager.ASSOCIATED_USERJOBORGSET);
-
-			Iterator iterator = user.getUserjoborgSet().iterator();
-			while (iterator.hasNext()) {
-				userOrgForm = new UserOrgManagerForm();
-				Userjoborg userjoborg = (Userjoborg) iterator.next();
-				userOrgForm.setOrgId(userjoborg.getOrg().getOrgId() + ";"
-						+ userjoborg.getJob().getJobId());
-				userOrgForm.setOrgName(userjoborg.getOrg().getOrgName() + "("
-						+ userjoborg.getJob().getJobName() + ")");
-				existOrg.add(userOrgForm);
-			}
-			request.setAttribute("existOrg", existOrg);
-			return mapping.findForward("orgDetail");
-		} catch (Exception e) {
-			log.error(e);
-			return mapping.findForward("fail");
-		}
-	}
+	  
 
 	/**
 	 * add by hongyu.deng(by ajax to storeanddelete userOrg relation the
@@ -347,104 +147,7 @@ public class UserOrgManagerAction extends DispatchAction  implements Serializabl
 
 	}
 
-	/**
-	 * 删除一个机构
-	 * 
-	 * @param mapping
-	 *            ActionMapping
-	 * @param form
-	 *            ActionForm
-	 * @param request
-	 *            HttpServletRequest
-	 * @param response
-	 *            HttpServletResponse
-	 * @return ActionForward
-	 * @throws Exception
-	 */
-	public ActionForward deleteUserOrg(ActionMapping mapping, UserOrgManagerForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		//---------------START--
-		AccessControl control = AccessControl.getInstance();
-		control.checkAccess(request,response);
-		String operContent="";        
-        String operSource=control.getMachinedID();
-        String openModle="用户管理";
-        String userName = control.getUserName();
-        String description="";
-        LogManager logManager = SecurityDatabase.getLogManager(); 		
-		//---------------END
-		HttpSession session = request.getSession();
-		Integer uid = (Integer) session.getAttribute("currUserId");
-		if (uid == null) {
-			return mapping.findForward("noUser");
-		}
-		try {
-			UserManager userManager = SecurityDatabase.getUserManager();
-			User user = userManager.getUserById(uid.toString());
-			UserOrgManagerForm userOrgForm = (UserOrgManagerForm) form;
-			String[] all = userOrgForm.getOrgList();
-			List existOrg = new ArrayList();
-			OrgManager orgManager = SecurityDatabase.getOrgManager();
-
-			if (user != null) {
-				JobManager jobManager = SecurityDatabase.getJobManager();
-				
-				////-- 日志用到的局部变量
-				String orgNames_log = "";
-				String jobNames_log = "";
-				////
-				for (int i = 0; all != null && i < all.length; i++) {
-					String[] tmp = all[i].split(";");
-					String orgId = tmp[0];					
-					String jobId = tmp[1];
-					orgNames_log += LogGetNameById.getOrgNameByOrgId(orgId)+"";
-					jobNames_log += LogGetNameById.getJobNameByJobId(jobId)+"";
-//					Job job = jobManager.getJob("jobId", jobId);
-					Job job = jobManager.getJobById(jobId);
-					Organization org = orgManager.getOrgById(orgId);
-					if (job != null && org != null) {
-						Userjoborg u = new Userjoborg();
-						u.setOrg(org);
-						u.setUser(user);
-						u.setJob(job);
-						userManager.deleteUserjoborg(u);
-					}
-				}
-				
-				
-				//--添加用户时候写日志	
-				operContent="删除用户与用户机构岗位,用户："+user.getUserName()+" 机构："+orgNames_log+" 岗位："+jobNames_log; 
-				
-				 description="";
-		        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);       
-				//--
-			}
-			// update session
-			userManager = SecurityDatabase.getUserManager();
-			user = userManager.loadAssociatedSet(uid.toString(),
-					UserManager.ASSOCIATED_USERJOBORGSET);
-
-			Iterator iterator = user.getUserjoborgSet().iterator();
-			while (iterator.hasNext()) {
-				userOrgForm = new UserOrgManagerForm();
-				Userjoborg userjoborg = (Userjoborg) iterator.next();
-				userOrgForm.setOrgId(userjoborg.getOrg().getOrgId() + ";"
-						+ userjoborg.getJob().getJobId());
-				userOrgForm.setOrgName(userjoborg.getOrg().getOrgName() + "("
-						+ userjoborg.getJob().getJobName() + ")");
-				existOrg.add(userOrgForm);
-			}
-			request.setAttribute("existOrg", existOrg);
-			// request.setAttribute("jobid", job.getJobId());
-			request.setAttribute("flag", "1");
-
-			return mapping.findForward("orgDetail");
-		} catch (Exception e) {
-			log.error(e);
-			return mapping.findForward("fail");
-		}
-	}
+	 
 	
 	
 	public static String storeSetupOrg(Integer uid, String orgIdNames)
@@ -477,42 +180,7 @@ public class UserOrgManagerAction extends DispatchAction  implements Serializabl
 	
 	}
 	
-	public ActionForward getAllOrgList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		
-			String[] id = request.getParameterValues("checkBoxOne");
-			
-            request.setAttribute("id", id);
-
-		
-//		System.out.println("aaaaaaaaaaa");
-		return mapping.findForward("batch2org");		
-	}
-	
-	public ActionForward getbatchOrgList(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {		
-		
-		String orgId=request.getParameter("orgId");
-//		System.out.println("........................"+orgId);
-		request.setAttribute("orgId",orgId);
-		String userId=request.getParameter("uid");
-		request.setAttribute("uid",userId);
-		String username = request.getParameter("username");
-		request.setAttribute("username",username);
-//		System.out.println("........................"+userId);
-		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		
-		JobManager jobManager=SecurityDatabase.getJobManager();
-		Organization org = orgManager.getOrgById(orgId);
-	
-		List allOrg =jobManager.getJobList(org);		//根据机构取岗位列表
-		request.setAttribute("allOrg", allOrg);
-
-		return mapping.findForward("batchorg");
-		
-	}
+	 
 	/**
 	 * 批量用户加入机构
 	 * @param ids

@@ -2,7 +2,6 @@
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld"%>
 <%@ include file="../include/global1.jsp"%>
 <%@ include file="../base/scripts/panes.jsp"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.OrgManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>

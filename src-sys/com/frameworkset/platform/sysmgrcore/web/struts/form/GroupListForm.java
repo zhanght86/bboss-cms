@@ -7,12 +7,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 /**
  * MyEclipse Struts Creation date: 03-14-2006
  * 
@@ -39,26 +33,7 @@ public class GroupListForm implements Serializable{
         groupOfLabelAndValues = new Vector();
     }
 
-    /**
-     * Method validate
-     * 
-     * @param mapping
-     * @param request
-     * @return ActionErrors
-     */
-    public ActionErrors validate(ActionMapping mapping,
-            HttpServletRequest request) {
-        return null;
-    }
-
-    /**
-     * Method reset
-     * 
-     * @param mapping
-     * @param request
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request) {
-    }
+     
 
     /**
      * @return 返回 selectGroup。

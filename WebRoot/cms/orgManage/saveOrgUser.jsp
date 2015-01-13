@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.UserJobManagerAction"%>
 <%@ page import="com.frameworkset.util.StringUtil"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.LogManager"%>

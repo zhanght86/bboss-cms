@@ -3,7 +3,6 @@
 
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.OperManager,com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.UserManager"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.RoleManagerAction"%>
 <%@ page import="java.util.*, com.frameworkset.platform.sysmgrcore.entity.*,com.frameworkset.platform.sysmgrcore.manager.OrgManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>

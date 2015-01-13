@@ -8,7 +8,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 
 import java.io.Serializable;
 
-import org.apache.struts.action.ActionForm;
 
 /**
  * A class that represents a row in the TD_SM_OPERGROUP table. 
@@ -18,11 +17,6 @@ import org.apache.struts.action.ActionForm;
 public abstract class AbstractOpergpry 
     implements Serializable
 {
-    /**
-     * The cached hash code value for this instance. Settting to 0 triggers
-     * re-calculation.
-     */
-    private int hashValue = 0;
 
     /** The simple primary key value. */
     private OpergpryKey id = new OpergpryKey();
@@ -120,7 +114,6 @@ public abstract class AbstractOpergpry
      * @param id
      */
     public void setId(OpergpryKey id) {
-        this.hashValue = 0;
         this.id = id;
     }
 
@@ -143,23 +136,4 @@ public abstract class AbstractOpergpry
         return true;
     }
 
-    /**
-     * Implementation of the hashCode method conforming to the Bloch pattern
-     * with the exception of array properties (these are very unlikely primary
-     * key types).
-     * 
-     * @return int
-     */
-    public int hashCode() {
-        if (this.hashValue == 0) {
-            int result = 17;
-            if (this.getId() == null) {
-                result = super.hashCode();
-            } else {
-                result = this.getId().hashCode();
-            }
-            this.hashValue = result;
-        }
-        return this.hashValue;
-    }
 }

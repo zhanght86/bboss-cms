@@ -16,11 +16,6 @@ import java.sql.Timestamp;
  * file that is synchronized * by MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractUserjoborg implements Serializable {
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
 
 	/** The simple primary key value. */
 	private UserjoborgKey id = new UserjoborgKey();;
@@ -86,7 +81,6 @@ public abstract class AbstractUserjoborg implements Serializable {
 	 * @param id
 	 */
 	public void setId(UserjoborgKey id) {
-		this.hashValue = 0;
 		this.id = id;
 	}
 
@@ -109,25 +103,6 @@ public abstract class AbstractUserjoborg implements Serializable {
 		return true;
 	}
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			if (this.getId() == null) {
-				result = super.hashCode();
-			} else {
-				result = this.getId().hashCode();
-			}
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
 
 	/**
 	 * @return 返回 job。

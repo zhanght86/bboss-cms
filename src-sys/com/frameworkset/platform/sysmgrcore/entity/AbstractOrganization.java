@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.struts.action.ActionForm;
-
 /**
  * A class that represents a row in the td_sm_organization table. You can
  * customize the behavior of this class by editing the class,
@@ -23,11 +21,7 @@ import org.apache.struts.action.ActionForm;
  */
 public abstract class AbstractOrganization  implements
 		Serializable {
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
+ 
 
 	/** The composite primary key value. */
 	private String orgId;
@@ -274,7 +268,7 @@ public abstract class AbstractOrganization  implements
 	 * @param orgId
 	 */
 	public void setOrgId(String orgId) {
-		this.hashValue = 0;
+		 
 		this.orgId = orgId;
 	}
 
@@ -554,23 +548,7 @@ public abstract class AbstractOrganization  implements
 		return true;
 	}
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			int orgIdValue = this.getOrgId() == null ? 0 : this.getOrgId()
-					.hashCode();
-			result = result * 37 + orgIdValue;
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
+	 
 
 	public String getOrgdesc() {
 		return orgdesc;

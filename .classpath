@@ -103,8 +103,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/portal-axisClient.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/qdox.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/rsslibj-1_0RC2.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/struts.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/struts-legacy.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/swarmcache-1.0rc2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/swizzle-stream.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/swtgraphics2d.jar"/>
@@ -195,9 +193,10 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sany-message.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3.jar" sourcepath="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar" sourcepath="/bboss-core"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rpc.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgroups-3.6.1.Final.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

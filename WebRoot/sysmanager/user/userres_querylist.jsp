@@ -27,7 +27,7 @@ function getOperateType(id){
 <div id="changeColor">
 			<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.BrowseResList" keyName="BrowseResList"/> 
 			<!--分页显示开始,分页标签初始化-->
-			<pg:pager maxPageItems="20" scope="request" data="BrowseResList" isList="false">
+			<pg:pager maxPageItems="10" scope="request" data="BrowseResList" isList="false">
 				<pg:param name="restypeId"/>
 				<pg:param name="resId"/>
 				<pg:param name="resName"/>
@@ -86,7 +86,7 @@ function getOperateType(id){
 							</tr>
 						</pg:list>
 					</table>
-					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+					<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10"/></div>
 				</pg:notequal>
 			</pg:pager>
 	</form>	

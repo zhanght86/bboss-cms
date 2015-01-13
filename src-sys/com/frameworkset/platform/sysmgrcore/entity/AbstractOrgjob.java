@@ -8,7 +8,6 @@ package com.frameworkset.platform.sysmgrcore.entity;
 
 import java.io.Serializable;
 
-import org.apache.struts.action.ActionForm;
 
 /**
  * A class that represents a row in the td_sm_orgjob table. You can customize
@@ -17,11 +16,6 @@ import org.apache.struts.action.ActionForm;
  * MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractOrgjob  implements Serializable {
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
 
 	/** The simple primary key value. */
 	private OrgjobKey id = new OrgjobKey();
@@ -107,7 +101,6 @@ public abstract class AbstractOrgjob  implements Serializable {
 	 * @param id
 	 */
 	public void setId(OrgjobKey id) {
-		this.hashValue = 0;
 		this.id = id;
 	}
 
@@ -130,25 +123,6 @@ public abstract class AbstractOrgjob  implements Serializable {
 		return true;
 	}
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			if (this.getId() == null) {
-				result = super.hashCode();
-			} else {
-				result = this.getId().hashCode();
-			}
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
 
 	public Integer getJobSn() {
 		return jobSn;

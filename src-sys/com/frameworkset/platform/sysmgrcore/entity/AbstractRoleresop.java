@@ -15,11 +15,6 @@ import java.io.Serializable;
  * by MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractRoleresop implements Serializable {
-    /**
-     * The cached hash code value for this instance. Settting to 0 triggers
-     * re-calculation.
-     */
-    private int hashValue = 0;
 
     /** The simple primary key value. */
     private RoleresopKey id = new RoleresopKey();
@@ -164,7 +159,6 @@ public abstract class AbstractRoleresop implements Serializable {
      * @param id
      */
     public void setId(RoleresopKey id) {
-        this.hashValue = 0;
         this.id = id;
     }
 
@@ -187,25 +181,6 @@ public abstract class AbstractRoleresop implements Serializable {
         return true;
     }
 
-    /**
-     * Implementation of the hashCode method conforming to the Bloch pattern
-     * with the exception of array properties (these are very unlikely primary
-     * key types).
-     * 
-     * @return int
-     */
-    public int hashCode() {
-        if (this.hashValue == 0) {
-            int result = 17;
-            if (this.getId() == null) {
-                result = super.hashCode();
-            } else {
-                result = this.getId().hashCode();
-            }
-            this.hashValue = result;
-        }
-        return this.hashValue;
-    }
     /**
      * @return Returns the resName.
      */

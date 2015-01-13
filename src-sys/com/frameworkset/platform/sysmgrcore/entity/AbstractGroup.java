@@ -16,11 +16,6 @@ import java.util.Set;
  * MyEclipse Hibernate tool integration.
  */
 public abstract class AbstractGroup implements Serializable {
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
 
 	/** The composite primary key value. */
 	private int groupId;
@@ -193,7 +188,6 @@ public abstract class AbstractGroup implements Serializable {
 	 * @param groupId
 	 */
 	public void setGroupId(int groupId) {
-		this.hashValue = 0;
 		this.groupId = groupId;
 	}
 
@@ -342,21 +336,6 @@ public abstract class AbstractGroup implements Serializable {
 		
 	}
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			result = result * 37 + this.groupId;
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
 
 	public int getOwner_id() {
 		return owner_id;

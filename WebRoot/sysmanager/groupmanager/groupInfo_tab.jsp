@@ -10,7 +10,6 @@
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-template" prefix="template"%>
 <%@ taglib uri="http://jakarta.apache.org/struts/tags-nested" prefix="nested"%>
-<%@ page import="com.frameworkset.platform.sysmgrcore.web.struts.action.ResourceAction"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.RoleManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.GroupManager,com.frameworkset.platform.sysmgrcore.manager.OperManager"%>

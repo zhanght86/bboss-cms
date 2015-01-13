@@ -17,11 +17,6 @@ import java.util.Set;
  * @@org.jboss.cache.aop.AopMarker
  */
 public abstract class AbstractRole implements Serializable {
-	/**
-	 * The cached hash code value for this instance. Settting to 0 triggers
-	 * re-calculation.
-	 */
-	private int hashValue = 0;
 
 	/** The composite primary key value. */
 	private String roleId;
@@ -143,7 +138,6 @@ public abstract class AbstractRole implements Serializable {
 	 * @param roleId
 	 */
 	public void setRoleId(String roleId) {
-		this.hashValue = 0;
 		this.roleId = roleId;
 	}
 
@@ -294,21 +288,4 @@ public abstract class AbstractRole implements Serializable {
 		return true;
 	}
 
-	/**
-	 * Implementation of the hashCode method conforming to the Bloch pattern
-	 * with the exception of array properties (these are very unlikely primary
-	 * key types).
-	 * 
-	 * @return int
-	 */
-	public int hashCode() {
-		if (this.hashValue == 0) {
-			int result = 17;
-			int roleIdValue = this.getRoleId() == null ? 0 : this.getRoleId()
-					.hashCode();
-			result = result * 37 + roleIdValue;
-			this.hashValue = result;
-		}
-		return this.hashValue;
-	}
 }

@@ -2,12 +2,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 
 import java.io.Serializable;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-
 public class SchedularForm  implements Serializable
 {
 
@@ -262,26 +256,7 @@ public class SchedularForm  implements Serializable
         this.schedularID = schedularID;
     }
 
-    public ActionErrors validate(ActionMapping mapping,
-            HttpServletRequest request)
-    {
-
-        ActionErrors errors = new ActionErrors();
-        return errors;
-    }
-
-    /**
-     * Method reset
-     * 
-     * @param mapping
-     * @param request
-     */
-    public void reset(ActionMapping mapping, HttpServletRequest request)
-    {
-
-        // throw new UnsupportedOperationException(
-        // "Generated method 'reset(...)' not implemented.");
-    }
+    
 
     public int getStatus()
     {

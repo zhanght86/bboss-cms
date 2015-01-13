@@ -2,8 +2,6 @@ package com.frameworkset.platform.sysmgrcore.web.struts.form;
 
 import java.io.Serializable;
 
-import org.apache.struts.action.ActionForm;
-
 /**
  * <p>Title: </p>
  *
