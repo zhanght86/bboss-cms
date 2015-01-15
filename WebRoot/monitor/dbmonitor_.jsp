@@ -83,6 +83,9 @@
 						
 						<%if(metadata.getDatasourceFile().startsWith("druid") ) {%>
 						   <a href="../druid/index.html" target="m">查看监控信息</a>
+						<%}  else if(metadata.getDatasourceFile().startsWith("dbcp") ) {%>
+						 
+						 <a href="dbmonitor_activitedetail.jsp?ds=<%=poolname %>" target="deailactive">查看实时链接信息</a>
 						<%} %>
 						
 						
