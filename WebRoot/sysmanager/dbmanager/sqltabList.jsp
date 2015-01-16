@@ -14,12 +14,7 @@
 	<head>
 		<title>属性容器</title>
 		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../css/contentpage.css">
-		<link rel="stylesheet" type="text/css" href="../css/tab.winclassic.css">
-		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../sysmanager/css/contentpage.css">
-		<link rel="stylesheet" type="text/css" href="../sysmanager/css/tab.winclassic.css">
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
+		
 
 
  <%
@@ -59,7 +54,7 @@
 	{
 		//执行sql语句
 		DBUtil db = new DBUtil();
-		db.execute(dsource,sql);
+		db.executeSelect(dsource,sql,0,1);
 		ResultSetMetaData resultMeta = db.getMeta();
 		
 		if(resultMeta != null) 

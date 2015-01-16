@@ -49,32 +49,18 @@
 	<head>
 		<title>属性容器</title>
 		<%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../css/contentpage.css">
-		<link rel="stylesheet" type="text/css"
-			href="../css/tab.winclassic.css">
-			
+		 
+		 
 			
 		<tab:tabConfig/>
-		<script language="JavaScript" src="common.js" type="text/javascript"></script>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
-		<script language="javascript" src="../scripts/selectTime.js"></script>
-		<script language="JavaScript" src="../include/pager.js"
-			type="text/javascript"></script>
-		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript"
-			src="<%=request.getContextPath()%>/public/datetime/calender_date.js"></script>
-		<script language="JavaScript"
-			src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
-		<script type="text/javascript" src="../../public/datetime/calender.js"
-			language="javascript"></script>
-		<script type="text/javascript"
-			src="../../public/datetime/calender_date.js" language="javascript"></script>
+		 
+		 
 		<SCRIPT language="javascript">
 			  var win;
 			  var featrue = "dialogWidth=600px;dialogHeight=500px;scroll=yes;status=no;titlebar=no;toolbar=no;maximize=yes;minimize=0;help=0;dialogLeft="+(screen.availWidth-600)/2+";dialogTop="+(screen.availHeight-500)/2;
 			  function getTables(e)
 			  {
-		      	var dsource = document.all.dsource.value;
+		      	var dsource = document.getElementById("dsource").value;
 		        if(dsource !="")
 		        {
 					var path = "select_tableName.jsp?dsource=" + dsource + "&tablename=" + e.value;
@@ -89,10 +75,11 @@
 						if(e.value != win)
 						{
 							e.value=win;
+							var query = document.getElementById("query");
 							//在获取表名的提交表单,从而确定是表的字段类型(注意:存在问题)
-							document.query.action = "tablesmanager.jsp";
-							document.query.target = "";
-							document.query.submit();
+							 query.action = "tablesmanager.jsp";
+							 query.target = "";
+							query.submit();
 						}
 					}
 				}
@@ -100,8 +87,8 @@
 			
 			function getFields(obj,index,targetObject)
 			{
-				var dsource = query.dsource.value;
-				var dname = query.table_name.value;
+				var dsource = document.getElementById("dsource").value;
+				var dname =  document.getElementById("table_name").value;
 				if(dsource=='')
 				{
 					alert('请先选择数据库!!!!');
@@ -400,22 +387,27 @@
 			
 			function checkData()
 			{
-				if(query.dsource.value=="" )
+					var dsource = document.getElementById("dsource").value;
+					var query = document.getElementById("query");
+					var table_name = document.getElementById("table_name").value;
+				if(dsource=="" )
 				{
 					alert('请选择数据源!!!');
+					document.getElementById("dsource").focus();
 					return ;
 				}
-				if(query.table_name.value=="")
+				if(table_name=="")
 				{
 					alert('请选择数据表!!!');
+					document.getElementById("table_name").focus();
 					return ;
 				}
 				
 				if(validate("pageSize") == true)
 				{
 					document.getElementById("numCount").value = num;
-					document.query.action = "selectedtabList.jsp";
-					document.query.target = "queryList";
+					 query.action = "selectedtabList.jsp";
+					 query.target = "queryList";
 					query.submit();
 				}
 				else
@@ -427,22 +419,26 @@
 			
 			function checkSQLData()
 			{
-				if(sqlQuery.dsource2.value=="" )
+			    var dsource2 = document.getElementById("dsource2").value;	
+				if(dsource2=="" )
 				{
 					alert('请选择数据源!!!');
+					document.getElementById("dsource2").focus();
 					return ;
 				}
-				if(sqlQuery.sqlContent.value=="" || sqlQuery.sqlContent.value.trim()=="")
+				 var sqlContent = document.getElementById("sqlContent").value;	
+				if(sqlContent=="" || sqlContent.trim()=="")
 				{
 					alert('SQL语句不能为空!!!');
-					sqlQuery.sqlContent.focus();
+					document.getElementById("sqlContent").focus();
 					return ;
 				}
 				
 				if(validate("pageSize2")==true)
 				{
-					document.sqlQuery.action = "sqltabList.jsp";
-					document.sqlQuery.target = "sqlList";
+					var sqlQuery = document.getElementById("sqlQuery")
+					 sqlQuery.action = "sqltabList.jsp";
+					 sqlQuery.target = "sqlList";
 					sqlQuery.submit();
 				}
 				else
@@ -484,7 +480,7 @@
 	<body>
 		<tab:tabContainer id="foo-menu-container" selectedTabPaneId="query-menu">
 			<tab:tabPane id="query-menu" tabTitle="快速查询" lazeload="true">
-				<form name="query" action="" method="post">
+				<form name="query" id="query" action="" method="post">
 					<input type="hidden" name="numCount" id="numCount"/>
 					<table cellspacing="1" cellpadding="0" border="0"
 						bordercolor="#EEEEEE" width=98% class="thin">
@@ -500,8 +496,8 @@
 						<tr>
 							<td colspan="1" height='30' valign='middle' align="center">
 								数据源：
-								<select name="dsource">
-									<option>--请选择数据源--
+								<select name="dsource" id="dsource">
+									<option value="">--请选择数据源--
 									<%
 										DBUtil db = new DBUtil();
 										Enumeration dbPoolNameEnum = db.getAllPoolnames();
@@ -528,7 +524,7 @@
 															onclick="getTables(this)" size="35" />
 						  </td>
 						  <td colspan="1" height='30' valign='middle' align="center">
-								每页显示记录数:<input name="pageSize" type="text" value="6" size="15"/>
+								每页显示记录数:<input name="pageSize" id="pageSize" type="text" value="6" size="15"/>
 						  </td>
 						 <td colspan="1" height='30' valign='middle' align="center">
 							<input name="search" type="button" class="input" value="查询" onClick="checkData()"/>
@@ -574,7 +570,7 @@
 			</tab:tabPane>
 			
 			<tab:tabPane id="sql-menu" tabTitle="数据库管理" lazeload="true">
-				<form name="sqlQuery" action="" method="post">
+				<form name="sqlQuery" id="sqlQuery" action="" method="post">
 					<input type="hidden" name="numCount" id="numCount"/>
 					<table cellspacing="1" cellpadding="0" border="0"
 						bordercolor="#EEEEEE" width=98% class="thin">
@@ -590,8 +586,8 @@
 						<tr>
 							<td colspan="1" height='30' valign='middle' align="center" width="35%" nowrap>
 								数据源：
-								<select name="dsource2">
-									<option>--请选择数据源--
+								<select name="dsource2" id="dsource2">
+									<option value="">--请选择数据源--
 									<%
 										DBUtil db2 = new DBUtil();
 										Enumeration dbPoolNameEnum2 = db2.getAllPoolnames();
@@ -611,7 +607,7 @@
 								</select>
 							</td>
 							<td colspan="1" valign='middle' align="center" width="15%" nowrap>
-								每页显示记录数:&nbsp;<input name="pageSize2" type="text" value="6" size="8"/>
+								每页显示记录数:&nbsp;<input name="pageSize2" id="pageSize2" type="text" value="6" size="8"/>
 							</td>
 							<td colspan="1" height='30' valign='middle' align="center" width="*" nowrap>
 								<input name="search" type="button" class="input" value="执行" onClick="checkSQLData()"/>
@@ -624,12 +620,13 @@
 								SQL语句:
 							</td>
 							<td colspan="2" valign='middle'>
-								<textarea rows="5" name="sqlContent" cols="85"></textarea>
+								<textarea rows="5" name="sqlContent" id="sqlContent" cols="85"></textarea>
 							</td>
 						</tr>
 					</table>
 					<br/>
-				<tab:iframe id="sqlList" name="sqlList" src="" frameborder="0" width="99%" height="350px"/>
+				<tab:iframe  id="sqlList" name="sqlList"  src="javascript:void" frameborder="0" width="99%" height="350px"/>	
+				 
 			</tab:tabPane>
 			
 			<tab:tabPane id="tableinfo-menu" tabTitle="主键生成机制管理" lazeload="true">
