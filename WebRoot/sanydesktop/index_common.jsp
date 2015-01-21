@@ -28,7 +28,7 @@
 <link href="../html3/stylesheet/top2.css" rel="stylesheet" type="text/css" />
 </pg:false>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lhgdialog.js?skin=sany"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lhgdialog.js?skin=chrome"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/menubase.js?userName=<%= appName%>&appName =<%=userName %>&selecemenu=${selectedmenuid}"></script>
 <script type="text/javascript" src="../html3/js/menu.js"></script>
