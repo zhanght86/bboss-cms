@@ -28,7 +28,7 @@
 	{
 		selectedds = "";
 	}
-	
+	String rootpath = request.getContextPath();
 	
 %>
 
@@ -37,6 +37,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>bboss连接池使用情况与配置信息</title>
 <%@ include file="/include/css.jsp"%>
+	<link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/contentpage.css">
+		<link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/tab.winclassic.css">
 		<tab:tabConfig/>	
 		 
 		<script type="text/javascript" language="Javascript">
@@ -48,7 +50,7 @@
 		</script>
 		</head>
 
-	<body>	
+	<body class="contentbodymargin" scroll="auto">	
 	<div align="right"><input type="button" class="input" value="刷新页面" onclick="flushBotton()"></div>
 	<tab:tabContainer id="singleMonitorinfo" selectedTabPaneId="<%=selectedds %>">
 	<% 
@@ -64,7 +66,7 @@
 	<tab:tabPane id="<%=poolname %>" tabTitle="<%=title%>" >
 	
  
-	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="1" class="thin">
+	<table width="100%" class="thin">
 					<tr>
 					<table>
 					<% 
