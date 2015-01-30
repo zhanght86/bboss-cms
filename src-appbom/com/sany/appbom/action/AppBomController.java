@@ -35,6 +35,7 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.frameworkset.util.ListInfo;
 import com.sany.appbom.entity.AppBom;
 import com.sany.appbom.entity.AppBomCondition;
+import com.sany.appbom.service.AppBomException;
 import com.sany.appbom.service.AppBomServiceImpl;
 
 public class AppBomController {
@@ -56,20 +57,14 @@ public class AppBomController {
 		return "path:indexFixed";
 	}
 
-	public @ResponseBody String delete(AppBom bean,ModelMap model) {
-		service.delete(bean);
+	public @ResponseBody String delete(String id,ModelMap model) throws AppBomException {
+		service.delete(id);
 		return "success";
 	}	
-	public @ResponseBody String deletebatch(String ids,ModelMap model) {
-		String idKey[]=ids.split(",");
-		List<AppBom>beans =new ArrayList<AppBom>();
-		AppBom bom=null;
-		for(String id:idKey){
-			bom=new AppBom();
-			bom.setId(id);
-			beans.add(bom);
-		}
-		service.deletebatch(beans);
+	public @ResponseBody String deletebatch(String ids,ModelMap model) throws AppBomException {
+		String[] idKey=ids.split(",");
+		 
+		service.deletebatch(idKey);
 		return "success";
 	}
 
@@ -85,7 +80,7 @@ public class AppBomController {
 				return "path:updatePre";
 			}
 			
-			AppBom bean=service.uniqueResult(id);
+			AppBom bean=service.getAppBom(id);
 			model.addAttribute("appbom", bean);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,7 +97,7 @@ public class AppBomController {
 				return "path:viewBom";
 			}
 			
-			AppBom bean=service.uniqueResult(id);
+			AppBom bean=service.getAppBom(id);
 			model.addAttribute("appbom", bean);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,7 +107,7 @@ public class AppBomController {
 
 		return "path:viewBom";
 	}
-	public @ResponseBody String update(AppBom bean, ModelMap model) {
+	public @ResponseBody String update(AppBom bean, ModelMap model) throws AppBomException {
 		boolean result=service.update(bean);
 		if(! result){
 			return "error";
@@ -121,7 +116,7 @@ public class AppBomController {
 
 	}
 	
-	public @ResponseBody String addBom(AppBom bean, ModelMap model) {
+	public @ResponseBody String addBom(AppBom bean, ModelMap model) throws AppBomException {
 		boolean result=service.addBom(bean);
 		if(! result){
 			return "error";
@@ -133,7 +128,7 @@ public class AppBomController {
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) long offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-			AppBomCondition appcondition, ModelMap model){
+			AppBomCondition appcondition, ModelMap model) throws AppBomException{
 		ListInfo datas=null;
 		String app_name=null,app_name_en=null,bm=null;
 	
@@ -158,7 +153,7 @@ public class AppBomController {
 			@PagerParam(name = PagerParam.DESC, defaultvalue = "false") boolean desc,
 			@PagerParam(name = PagerParam.OFFSET) long offset,
 			@PagerParam(name = PagerParam.PAGE_SIZE, defaultvalue = "10") int pagesize,
-			AppBomCondition appcondition, ModelMap model){
+			AppBomCondition appcondition, ModelMap model) throws AppBomException{
 		ListInfo datas=null;
 		String app_name=null,app_name_en=null,bm=null;
 	
@@ -183,25 +178,22 @@ public class AppBomController {
 	 * @param 
 	 * @param 
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public @ResponseBody String CheckBmExist(String bm,String id,ModelMap model) {
+	public @ResponseBody String CheckBmExist(String bm ,ModelMap model) throws AppBomException {
 		
-		try {
-			Map map=new HashMap();
-			map.put("id",id);
-			map.put("bm", bm);
-			int cnt=service.checkBmExist(map);
+		 
+		 
+			int cnt=service.checkBmExist(bm);
 			if(cnt==0){
 				return "0";
 			}else{
 				return "1";
 			}
 				
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		 
 
-		return "1";
+		 
 	}
 	/**
 	 * 判断导出是否有记录
@@ -237,7 +229,7 @@ public class AppBomController {
 	 * 导出Excel
 	 */
 	public void  exportExcel(AppBomCondition appcondition,ModelMap model,
-			HttpServletRequest request,HttpServletResponse response) {
+			HttpServletRequest request,HttpServletResponse response) throws AppBomException {
 		
 		List<AppBom> beans = null;
 		String app_name=null,app_name_en=null,bm=null;

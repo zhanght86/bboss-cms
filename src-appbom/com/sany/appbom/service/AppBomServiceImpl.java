@@ -14,9 +14,7 @@
  */
 package com.sany.appbom.service;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -36,32 +34,34 @@ public class AppBomServiceImpl {
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
 	/**
-	 * 根据主键删除台账信息
+	 * 用同样的sql只删一条记录，根据主键删除台账信息
+	 * @throws AppBomException 
 	 */
-	public boolean delete(AppBom bean) {
+	public boolean delete(String id) throws AppBomException {
 		try {
-			executor.deleteBean("deleteByKeys", bean);
+			executor.delete("deleteByKey", id);
 		} catch (Throwable e) {
-			e.printStackTrace();
-			return false;
+			throw new AppBomException("delete appbom failed::id="+id,e);
 		}
 		return true ;
 	}
 
 	/**
-	 * 批量删除台账
+	 * 用同样的sql批量删除记录，受事务管理控制，如果有记录删除失败，则全部回滚之前的记录，当然也可以不要事务，也就是出错后
+	 * 前面的记录成功、后面的记录不入库
 	 * @param beans
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public boolean deletebatch(List<AppBom> beans) {
+	public boolean deletebatch(String ... ids) throws AppBomException {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			executor.deleteBeans("deleteByKeys", beans);
+			executor.deleteByKeys("deleteByKey", ids);
 			tm.commit();
 		} catch (Throwable e) {
 			
-			return false;
+			throw new AppBomException("batch delete appbom failed::ids="+ids,e);
 		}
 		finally
 		{
@@ -74,101 +74,53 @@ public class AppBomServiceImpl {
 	 * 根据主键查找唯一记录
 	 * @param idmap
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public AppBom uniqueResult(String id){
+	public AppBom getAppBom(String id) throws AppBomException{
 		try{
 		AppBom bean=executor.queryObject(AppBom.class, "selectById", id);
 		return bean;
 		}catch(Throwable e){
-			
+			throw new AppBomException("get appbom failed:id="+id,e);
 		}
-		return null;
+		 
 	}
 	/**
 	 * 修改记录（先删后增）
 	 * @param bean
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public boolean update(AppBom bean) {
-		TransactionManager tm = new TransactionManager();
+	public boolean update(AppBom bean) throws AppBomException {
+		
 		try {
-			String uuid=null;
-			if(bean.getId()==null||"".equals(bean.getId())){
-				return false;
-			}
-			uuid=bean.getId();
-			tm.begin();
-			executor.deleteBean("deleteByKeys", bean);
-			executor.insertBean("batchsave", bean);
-			tm.commit();
-			
+			executor.updateBean("updateAppBom", bean);
 		} catch (Throwable e) {
 			
-			return false;
-		}
-		finally
-		{
-			tm.release();
+			throw new AppBomException("update appbom failed:id="+bean.getId(),e);
 		}
 		return true;
 	}
 	
-	/**
-	 * 修改记录（先删后增），测试事务失败处理行为
-	 * @param bean
-	 * @return
-	 */
-	public boolean updateFaultTest(AppBom bean) {
-		TransactionManager tm = new TransactionManager();
-		try {
-			String uuid=null;
-			if(bean.getId()==null||"".equals(bean.getId())){
-				return false;
-			}
-			uuid=bean.getId();
-			tm.begin();
-			String bim = bean.getBm();
-			bean.setBm(bean.getBm()+bean.getBm() + "+bean.getBm()+bean.getBm()+bean.getBm()+bean.getBm()+bean.getBm()");
-			try {
-				executor.updateBean("update", bean);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-//			
-			bean.setBm(bim);
-//			uuid=java.util.UUID.randomUUID().toString();
-//			bean.setId(uuid);			
-			executor.deleteBean("deleteByKeys", bean);
-			executor.insertBean("batchsave", bean);
-			tm.commit();
-			
-		} catch (Throwable e) {
-			e.printStackTrace();
-			return false;
-		}
-		finally
-		{
-			tm.release();
-		}
-		return true;
-	}
+	
 	/**
 	 * 增加台账
 	 * @param bean
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public boolean addBom(AppBom bean) {
+	public boolean addBom(AppBom bean) throws AppBomException {
 		
 		try {
-			String uuid="";
-			if(bean.getId()==null||"".equals(bean.getId())){
-				uuid=java.util.UUID.randomUUID().toString();
-				bean.setId(uuid);
-			}
+			//通过PrimaryKey注解自动生成主键id
+//			String uuid="";
+//			if(bean.getId()==null||"".equals(bean.getId())){
+//				uuid=DBUtil.getPool().getIdGenerator().getNextId();
+//				bean.setId(uuid);
+//			}
 			executor.insertBean("batchsave", bean);
 		} catch (Throwable e) {
-			return false;
+			throw new AppBomException("add appbom failed:",e);
 		}
 		return true;
 	}
@@ -178,13 +130,14 @@ public class AppBomServiceImpl {
 	 * @param pagesize 每页记录数
 	 * @param appcondition
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public ListInfo queryListInfoBean(long offset, int pagesize, AppBomCondition appcondition ){
+	public ListInfo queryListInfoBean(long offset, int pagesize, AppBomCondition appcondition ) throws AppBomException{
 		ListInfo datas=null;
 		try{
 			datas=executor.moreListInfoBean(AppBom.class,"queryListAppBom", offset, pagesize, appcondition);
-		}catch(SQLException e){
-			e.printStackTrace();
+		}catch(Exception e){
+			throw new AppBomException("pagine query appbom failed:",e);
 		}
 		return datas;
 	}
@@ -192,14 +145,15 @@ public class AppBomServiceImpl {
 	 * 根据条件查找所有记录，不分页
 	 * @param appcondition
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public List<AppBom> queryListBean( AppBomCondition appcondition ){
+	public List<AppBom> queryListBean( AppBomCondition appcondition ) throws AppBomException{
 		
 		List<AppBom> beans = null;
 		try{
 			beans=executor.queryListBean(AppBom.class,"queryListAppBom", appcondition);
-		}catch(SQLException e){
-			e.printStackTrace();
+		}catch(Exception e){
+			throw new AppBomException("query appbom failed:",e);
 		}
 		return beans;
 	}
@@ -207,13 +161,14 @@ public class AppBomServiceImpl {
 	 * 根据条件查找所有记录条数
 	 * @param appcondition
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public int queryCntByCondition( AppBomCondition appcondition ){
+	public int queryCntByCondition( AppBomCondition appcondition ) throws AppBomException{
 		int cnt=0;
 		try{
 			cnt=executor.queryTFieldBean(int.class,"queryCntByCondition", appcondition);
-		}catch(SQLException e){
-			e.printStackTrace();
+		}catch(Exception e){
+			throw new AppBomException("count appbom failed:",e);
 		}
 		return cnt;
 	}
@@ -222,13 +177,14 @@ public class AppBomServiceImpl {
 	 * 判断编码是否存在
 	 * @param map
 	 * @return
+	 * @throws AppBomException 
 	 */
-	public int checkBmExist(Map map){
+	public int checkBmExist(String bm) throws AppBomException{
 		int cnt=0;
 		try{
-			cnt=executor.queryTFieldBean(int.class, "CheckBmExist", map);
-		}catch(SQLException e){
-			e.printStackTrace();
+			cnt=executor.queryTField(int.class, "CheckBmExist", bm);
+		}catch(Exception e){
+			throw new AppBomException("check Bm Exist failed:",e);
 		}
 		return cnt;
 	}

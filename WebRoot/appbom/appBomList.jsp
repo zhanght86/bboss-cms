@@ -53,26 +53,32 @@
         		<td><pg:cell colName="apply_domain" /></td>       
                 <td><span class="toolTip" title="<pg:cell colName="description"/>"><pg:cell colName="description" maxlength="8" replace="..."/></span></td>  
            		<td>
-           		<pg:equal colName="soft_level" value="1">一级</pg:equal>
-                <pg:equal colName="soft_level" value="2">二级</pg:equal>
-                <pg:equal colName="soft_level" value="3">三级</pg:equal>
-                <pg:equal colName="soft_level" value="10">待定</pg:equal>
+           		<pg:case  colName="soft_level">
+	           		<pg:equal value="1">一级</pg:equal>
+	                <pg:equal value="2">二级</pg:equal>
+	                <pg:equal value="3">三级</pg:equal>
+	                <pg:equal value="10">待定</pg:equal>
+                </pg:case>
                 </td>	   
            		<td>
-                        <pg:equal colName="state" value="1">在用</pg:equal>
-                        <pg:equal colName="state" value="2">试运行</pg:equal>
-                        <pg:equal colName="state" value="3">升级研发中</pg:equal>
-                        <pg:equal colName="state" value="4">停用</pg:equal>
-                        <pg:equal colName="state" value="5">暂用</pg:equal>
-                        <pg:equal colName="state" value="6">研发中</pg:equal>
-                        <pg:equal colName="state" value="7">试验中</pg:equal>
+           			<pg:case  colName="state">
+                        <pg:equal value="1">在用</pg:equal>
+                        <pg:equal value="2">试运行</pg:equal>
+                        <pg:equal value="3">升级研发中</pg:equal>
+                        <pg:equal value="4">停用</pg:equal>
+                        <pg:equal value="5">暂用</pg:equal>
+                        <pg:equal value="6">研发中</pg:equal>
+                        <pg:equal value="7">试验中</pg:equal>
+                      </pg:case>   
                 </td>	   	  
            		<td>
-           				<pg:equal colName="rd_type" value="1">自研</pg:equal>
-                		<pg:equal colName="rd_type" value="2">外购</pg:equal>
-                        <pg:equal colName="rd_type" value="3">免费</pg:equal>
-                        <pg:equal colName="rd_type" value="4">试用</pg:equal>
-                        <pg:equal colName="rd_type" value="5">外购+定制</pg:equal>
+           		<pg:case  colName="rd_type">
+           				<pg:equal value="1">自研</pg:equal>
+                		<pg:equal value="2">外购</pg:equal>
+                        <pg:equal value="3">免费</pg:equal>
+                        <pg:equal value="4">试用</pg:equal>
+                        <pg:equal value="5">外购+定制</pg:equal>
+                 </pg:case>          
                 </td>		  
                 <td><pg:cell colName="struct_mode" maxlength="8" replace="..."/></td>	  
            		<td><pg:cell colName="soft_language" maxlength="8" replace="..."/></td>  

@@ -62,22 +62,24 @@
 							<td>
 								<select id="soft_level" name="soft_level" class="select1"
 									style="width: 125px;">
+									<pg:case  colName="soft_level" >
 									<option value="1"
-										<pg:equal colName="soft_level" value="1">selected</pg:equal>>
+										<pg:equal value="1">selected</pg:equal>>
 										一级
 									</option>
 									<option value="2"
-										<pg:equal colName="soft_level" value="2">selected</pg:equal>>
+										<pg:equal value="2">selected</pg:equal>>
 										二级
 									</option>
 									<option value="3"
-										<pg:equal colName="soft_level" value="3">selected</pg:equal>>
+										<pg:equal value="3">selected</pg:equal>>
 										三级
 									</option>
 									<option value="10"
-										<pg:equal colName="soft_level" value="10">selected</pg:equal>>
+										<pg:equal value="10">selected</pg:equal>>
 										待定
 									</option>
+									</pg:case>
 								</select>
 							</td>
 
@@ -95,34 +97,36 @@
 							<td>
 								<select id="state" name="state" class="select1"
 									style="width: 125px;">
+									<pg:case colName="state">
 									<option value="1"
-										<pg:equal colName="state" value="1">selected</pg:equal>>
+										<pg:equal value="1">selected</pg:equal>>
 										在用
 									</option>
 									<option value="2"
-										<pg:equal colName="state" value="2">selected</pg:equal>>
+										<pg:equal value="2">selected</pg:equal>>
 										试运行
 									</option>
 									<option value="3"
-										<pg:equal colName="state" value="3">selected</pg:equal>>
+										<pg:equal value="3">selected</pg:equal>>
 										升级研发中
 									</option>
 									<option value="4"
-										<pg:equal colName="state" value="4">selected</pg:equal>>
+										<pg:equal value="4">selected</pg:equal>>
 										停用
 									</option>
 									<option value="5"
-										<pg:equal colName="state" value="5">selected</pg:equal>>
+										<pg:equal value="5">selected</pg:equal>>
 										暂用
 									</option>
 									<option value="6"
-										<pg:equal colName="state" value="6">selected</pg:equal>>
+										<pg:equal value="6">selected</pg:equal>>
 										研发中
 									</option>
 									<option value="7"
-										<pg:equal colName="state" value="7">selected</pg:equal>>
+										<pg:equal value="7">selected</pg:equal>>
 										试验中
 									</option>
+									</pg:case>
 								</select>
 							</td>
 						</tr>
@@ -183,26 +187,23 @@
 					</th>
 					<td>
 						<select id="rd_type" name="rd_type" style="width: 125px;">
-							<option value="1"
-								<pg:equal colName="rd_type" value="1">selected</pg:equal>>
+						<pg:case colName="rd_type">
+							<option value="1" <pg:equal   value="1">selected</pg:equal>>
 								自研
 							</option>
-							<option value="2"
-								<pg:equal colName="rd_type" value="2">selected</pg:equal>>
+							<option value="2" <pg:equal   value="2">selected</pg:equal>>
 								外购
 							</option>
-							<option value="3"
-								<pg:equal colName="rd_type" value="3">selected</pg:equal>>
+							<option value="3" <pg:equal value="3">selected</pg:equal>>
 								免费
 							</option>
-							<option value="4"
-								<pg:equal colName="rd_type" value="4">selected</pg:equal>>
+							<option value="4" <pg:equal   value="4">selected</pg:equal>>
 								试用
 							</option>
-							<option value="5"
-								<pg:equal colName="rd_type" value="5">selected</pg:equal>>
+							<option value="5" <pg:equal   value="5">selected</pg:equal>>
 								外购+定制
 							</option>
+						</pg:case>	
 						</select>
 					</td>
 					</tr>
@@ -290,22 +291,20 @@
 						</th>
 						<td>
 							<select id="plan_type" name="plan_type" style="width: 125px;">
-								<option value="1"
-									<pg:equal colName="plan_type" value="1">selected</pg:equal>>
+								<pg:case colName="plan_type">
+								<option value="1" <pg:equal value="1">selected</pg:equal>>
 									目标
 								</option>
-								<option value="2"
-									<pg:equal colName="plan_type" value="2">selected</pg:equal>>
+								<option value="2" <pg:equal value="2">selected</pg:equal>>
 									演进
 								</option>
-								<option value="3"
-									<pg:equal colName="plan_type" value="3">selected</pg:equal>>
+								<option value="3" <pg:equal value="3">selected</pg:equal>>
 									临时
 								</option>
-								<option value="10"
-									<pg:equal colName="plan_type" value="10">selected</pg:equal>>
+								<option value="10" <pg:equal value="10">selected</pg:equal>>
 									待定
 								</option>
+								</pg:case>
 							</select>
 						</td>
 						<th>
@@ -342,22 +341,20 @@
 						</th>
 						<td colspan=3>
 							<select id="manage_scope" name="manage_scope">
-								<option value="1"
-									<pg:equal colName="manage_scope" value="1">selected</pg:equal>>
+							<pg:case colName="manage_scope">
+								<option value="1" <pg:equal value="1">selected</pg:equal>>
 									管理列表
 								</option>
-								<option value="2"
-									<pg:equal colName="manage_scope" value="2">selected</pg:equal>>
+								<option value="2" <pg:equal value="2">selected</pg:equal>>
 									管理软件+版本号
 								</option>
-								<option value="3"
-									<pg:equal colName="manage_scope" value="3">selected</pg:equal>>
+								<option value="3" <pg:equal value="3">selected</pg:equal>>
 									管理软件+版本号+测试
 								</option>
-								<option value="4"
-									<pg:equal colName="manage_scope" value="4">selected</pg:equal>>
+								<option value="4" <pg:equal value="4">selected</pg:equal>>
 									管理软件+版本号+测试+UI
 								</option>
+							</pg:case>
 							</select>
 						</td>
 					</tr>

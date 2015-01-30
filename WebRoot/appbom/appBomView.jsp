@@ -36,10 +36,12 @@
 						<tr height="25px">	
 							<th >级别：</th>
 							<td >
-								<pg:equal colName="soft_level" value="1">一级</pg:equal>
-				                <pg:equal colName="soft_level" value="2">二级</pg:equal>
-				                <pg:equal colName="soft_level" value="3">三级</pg:equal>
-				                <pg:equal colName="soft_level" value="10">待定</pg:equal>
+							<pg:case colName="soft_level" >
+								<pg:equal value="1">一级</pg:equal>
+				                <pg:equal value="2">二级</pg:equal>
+				                <pg:equal value="3">三级</pg:equal>
+				                <pg:equal value="10">待定</pg:equal>
+				            </pg:case>    
 							</td>
 
 							<th width=85px >应用功能域：</th>
@@ -48,13 +50,15 @@
 								状态：
 							</th>
 							<td>
-								    <pg:equal colName="state" value="1">在用</pg:equal>
-			                        <pg:equal colName="state" value="2">试运行</pg:equal>
-			                        <pg:equal colName="state" value="3">升级研发中</pg:equal>
-			                        <pg:equal colName="state" value="4">停用</pg:equal>
-			                        <pg:equal colName="state" value="5">暂用</pg:equal>
-			                        <pg:equal colName="state" value="6">研发中</pg:equal>
-			                        <pg:equal colName="state" value="7">试验中</pg:equal>
+							<pg:case colName="state" >
+								    <pg:equal value="1">在用</pg:equal>
+			                        <pg:equal value="2">试运行</pg:equal>
+			                        <pg:equal value="3">升级研发中</pg:equal>
+			                        <pg:equal value="4">停用</pg:equal>
+			                        <pg:equal value="5">暂用</pg:equal>
+			                        <pg:equal value="6">研发中</pg:equal>
+			                        <pg:equal value="7">试验中</pg:equal>
+			                </pg:case>            
 							</td>
 						</tr>
 						<tr height="25px">
@@ -82,11 +86,13 @@
 						<td width=140px><pg:cell colName="soft_language"/></td>	
 						<th width=70px>研发类型：</th>
 						<td width=140px>
-							<pg:equal colName="rd_type" value="1">自研</pg:equal>
-	                		<pg:equal colName="rd_type" value="2">外购</pg:equal>
-	                        <pg:equal colName="rd_type" value="3">免费</pg:equal>
-	                        <pg:equal colName="rd_type" value="4">试用</pg:equal>
-	                        <pg:equal colName="rd_type" value="5">外购+定制</pg:equal>
+						<pg:case colName="rd_type">
+							<pg:equal value="1">自研</pg:equal>
+	                		<pg:equal value="2">外购</pg:equal>
+	                        <pg:equal value="3">免费</pg:equal>
+	                        <pg:equal value="4">试用</pg:equal>
+	                        <pg:equal value="5">外购+定制</pg:equal>
+	                    </pg:case>    
 						</td>
 					</tr>
 					<tr height="30px">
@@ -122,10 +128,12 @@
 					<td ><pg:cell colName="sys_manager"/></td>
          			<th>规划类型：</th>
 					<td >  
-						<pg:equal colName="plan_type" value="1">目标</pg:equal>
-                        <pg:equal colName="plan_type" value="2">演进</pg:equal>
-                        <pg:equal colName="plan_type" value="3">临时</pg:equal>
-                        <pg:equal colName="plan_type" value="10">待定</pg:equal>
+					<pg:case colName="plan_type">
+						<pg:equal value="1">目标</pg:equal>
+                        <pg:equal value="2">演进</pg:equal>
+                        <pg:equal value="3">临时</pg:equal>
+                        <pg:equal value="10">待定</pg:equal>
+                    </pg:case>        
 	                </td>
 		             <th>演进策略：</th>
 		             <td colspan=3 ><pg:cell colName="evolve_strategy"/></td>
@@ -140,11 +148,13 @@
 					<tr height="25px">
 						<th>研发管理范围：</th>	
 		             	<td colspan=3>
-			                <pg:equal colName="manage_scope" value="1">管理列表</pg:equal>
-	                        <pg:equal colName="manage_scope" value="2">管理软件+版本号</pg:equal>
-	                        <pg:equal colName="manage_scope" value="3">管理软件+版本号+测试</pg:equal>
-	                        <pg:equal colName="manage_scope" value="4">管理软件+版本号+测试+UI</pg:equal>
-	                        <pg:equal colName="manage_scope" value="5">管理软件+版本号+UI</pg:equal>
+		             	<pg:case colName="manage_scope">
+			                <pg:equal value="1">管理列表</pg:equal>
+	                        <pg:equal value="2">管理软件+版本号</pg:equal>
+	                        <pg:equal value="3">管理软件+版本号+测试</pg:equal>
+	                        <pg:equal value="4">管理软件+版本号+测试+UI</pg:equal>
+	                        <pg:equal value="5">管理软件+版本号+UI</pg:equal>
+	                    </pg:case>        
 		                </td>
 					</tr>
 					<tr >

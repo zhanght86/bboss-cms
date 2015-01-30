@@ -14,8 +14,11 @@
  */
 package com.sany.appbom.entity;
 
+import com.frameworkset.orm.annotation.PrimaryKey;
+
 
 public class AppBom {
+	  @PrimaryKey
 	  private String id ;	  
 	  private String bm;
 	  private String app_name_en;

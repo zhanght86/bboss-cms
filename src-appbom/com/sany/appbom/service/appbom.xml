@@ -36,15 +36,26 @@ values
 	</property>
 	
 	
-	<property name="update">
+	<property name="updateAppBom">
 		<![CDATA[
-			update td_app_bom set bm=#[bm] where id=#[id]
+		update td_app_bom set bm=#[bm], app_name_en=#[app_name_en], app_name=#[app_name], apply_domain=#[apply_domain], 
+  description=#[description], soft_level=#[soft_level], supplier=#[supplier], 
+  start_year=#[start_year], state=#[state], rd_type=#[rd_type], version_no=#[version_no], domain_url=#[domain_url],
+   struct_mode=#[struct_mode], soft_language=#[soft_language], develop_tool=#[develop_tool], db_type=#[db_type], 
+  department_develop=#[department_develop], product_manager=#[product_manager], department_maintain=#[department_maintain], sys_manager=#[sys_manager], plan_type=#[plan_type], 
+  evolve_strategy=#[evolve_strategy], evolve_plan=#[evolve_plan], evolve_depart=#[evolve_depart], manage_scope=#[manage_scope], main_description=#[main_description]  where id=#[id]
 		]]>
 	</property>
 	
 	<property name="deleteByKeys">
 		<![CDATA[
 			delete from TD_APP_BOM where id=#[id]
+		]]>
+	</property>
+	
+	<property name="deleteByKey">
+		<![CDATA[
+			delete from TD_APP_BOM where id=?
 		]]>
 	</property>
 	<property name="deleteAll">
@@ -66,10 +77,7 @@ values
 	</property>
 	<property name="CheckBmExist">
 		<![CDATA[
-			select count(1) from TD_APP_BOM where 1=1 and bm=#[bm]
-			#if($id && !$id.equals(""))
-				and id <> #[id]
-			#end
+			select count(1) from TD_APP_BOM where 1=1 and bm=?
 		]]>
 	</property>
 	
