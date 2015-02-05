@@ -1,20 +1,22 @@
 <poolman>
-<datasource>
+ <datasource>
 
 		<dbname>bspf</dbname>
 		<loadmetadata>false</loadmetadata>
 		<enablejta>true</enablejta>
-		<jndiName>druid_datasource_jndiname</jndiName>
-		<datasourceFile>druid.xml</datasourceFile>
+		<jndiName>dbcp_datasource_jndiname</jndiName>
+		<datasourceFile>dbcp.xml</datasourceFile>
 		<autoprimarykey>false</autoprimarykey>
 		<showsql>false</showsql>
 		<keygenerate>composite</keygenerate>
+
 	</datasource>
+
 	
 <datasource external="true">
 
     <dbname>datareuse</dbname>
-    <externaljndiName>druid_datasource_jndiname</externaljndiName>
+    <externaljndiName>dbcp_datasource_jndiname</externaljndiName>
 	<showsql>true</showsql>
 
   </datasource>

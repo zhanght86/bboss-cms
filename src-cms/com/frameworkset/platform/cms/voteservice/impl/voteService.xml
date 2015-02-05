@@ -10,22 +10,69 @@
 
 <property name="queryAnswerContent">
 		<![CDATA[
-		select c.* ,d.title quesContent from 
-			(
+			select c.*, d.title quesContent
+			  from (
+			        
+			        select a.USER_ID userId,
+			                a.title_id voteId,
+			                b.name voteName,
+			                a.qid quesId,
+			                case d.style
+			                  when 2 then
+			                   to_char(a.answer)
+			                  else
+			                   c.options
+			                end answerContent,
+			                a.item_id optionId,
+			                a.type quesType
+			        
+			          from td_cms_vote_answer a
+			          left join TD_CMS_VOTE_TITLE b on a.title_id = b.ID
+			          left join Td_Cms_Vote_Items c on a.item_id = c.id
+			          left join td_cms_vote_questions d on a.qid = d.id
+			        
+			         where a.TITLE_ID = ?
+			        
+			        ) c
+			  left join TD_CMS_VOTE_QUESTIONS d on c.quesId = d.id
 			
-			select a.USER_ID userId , a.title_id voteId , b.name voteName , a.QUES_ID quesId ,a.content answerContent , a.OPTION_ID optionId,a.QUES_TYPE quesType 
-			
-			from TD_CMS_VOTE_MOBILE_ANSWER a left join TD_CMS_VOTE_TITLE b on a.TITLE_ID = b.ID where a.TITLE_ID = ?
-			
-			) c left join TD_CMS_VOTE_QUESTIONS d on c.quesId = d.id
-			
-			order by c.userId,  c.quesId , c.optionId
+			 order by c.userId, c.quesId, c.optionId
 		]]>
 	</property>
 
-<property name="saveVoteDetail">
+<!-- <property name="saveVoteDetail">
 		<![CDATA[
 		insert into TD_CMS_VOTE_MOBILE_ANSWER (ID,USER_ID,TITLE_ID,QUES_ID,QUES_TYPE,OPTION_ID,CONTENT)values (?,?,?,?,?,?,?)
+		]]>
+	</property> -->
+	
+	<property name="saveVoteDetail">
+		<![CDATA[
+			INSERT INTO TD_CMS_VOTE_ANSWER
+				  (ANSER_ID,
+				   QID,
+				   TYPE,
+				   ITEM_ID,
+				   WHO_IP,
+				   WHEN,
+				   ISBIGTITLE,
+				   STATE,
+				   ANSWER,
+				   TITLE_ID,
+				   USER_ID)
+				VALUES
+				  (#[ANSER_ID],
+				   #[QID],
+				   #[TYPE],
+				   #[ITEM_ID],
+				   #[WHO_IP],
+				   sysdate,
+				   #[ISBIGTITLE],
+				   #[STATE],
+				   #[ANSWER],
+				   #[TITLE_ID],
+				   #[USER_ID])	
+	
 		]]>
 	</property>
 	
@@ -35,11 +82,38 @@
 		SELECT C.TITLE,C.ID
 		  FROM TD_CMS_VOTE_TQ D
 		  LEFT JOIN TD_CMS_VOTE_QUESTIONS C ON C.ID = D.QUESIONT_ID
-		 WHERE D.TITLE_ID = ?
+		 WHERE c.style <> 5 
+		 AND D.TITLE_ID = ?
 		 ORDER BY C.ID
 		]]>
 	</property>
 	
+	<!--获取投票列表-->
+
+	<property name="queryVoteList">
+		<![CDATA[
+		select vt.id,vt.name,tc.time_end,d.disposedep from TD_CMS_VOTE_TITLE vt,td_cms_vote_timectrl tc,TD_COMM_EMAIL_DISPOSEDEP d where 
+		vt.ACTIVE =1 
+		and vt.siteid=?
+		and tc.title_id=vt.id
+		and vt.depart_id = d.id
+		and tc.time_end > sysdate
+    	and tc.time_start < sysdate
+		and vt.id not in(select TITLE_ID from TD_CMS_VOTE_ANSWER where USER_ID =?)
+		]]>
+	</property>
 	
+	<property name="queryVoteCount">
+		<![CDATA[
+		select count(1) from TD_CMS_VOTE_TITLE vt,td_cms_vote_timectrl tc,TD_COMM_EMAIL_DISPOSEDEP d where 
+		vt.ACTIVE =1 
+		and vt.siteid=?
+		and tc.title_id=vt.id
+		and vt.depart_id = d.id
+		and tc.time_end > sysdate
+    	and tc.time_start < sysdate
+		and vt.id not in(select TITLE_ID from TD_CMS_VOTE_ANSWER where USER_ID =?)
+		]]>
+	</property>
 	
 </properties>

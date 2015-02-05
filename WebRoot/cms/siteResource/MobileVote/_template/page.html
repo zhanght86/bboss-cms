@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,7 +16,7 @@
 <script type="text/javascript" src="script/until.js"></script>	
 
 <script type="text/javascript">
-    var  selected_title_id=2;
+    var  selected_title_id=<cms:siteparam name="pager"/>;
     var  user_id=21018438;
     //接收参数
     function getParas(){
@@ -122,7 +122,9 @@ function doVote(titleId,len){
 	}
 
 	var datas={
-  		"strOptionID":id
+  		"strOptionID":id,
+  		"userId":user_id,
+  		"titleId":titleId
   	};
   	var questionId="";
   	for(var k=0;k<len;k++){
@@ -139,22 +141,23 @@ function doVote(titleId,len){
 				"detail":dataDetail,
 				"userId":user_id
 		}
-	$.getJSON(saveVoteDetailUrl, details,
+	/* $.getJSON(saveVoteDetailUrl, details,
 						function(data) {   
 			             	
 			        	}
-					);
+					); */
 		$.getJSON(dovoteurl, datas,
 				function(data) {   
 	             	if (data == "success") {
 		             	alert("投票成功");
-						getbbsvoteDetail(titleId);
+						//getbbsvoteDetail(titleId);
+		             	returnListPage();
 	             	} else {
 						if(data!=""){
 							alert(data);
 						}
 	             	}
-	             	returnListPage();
+	             	
 	        	}
 			);
 		

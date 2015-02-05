@@ -134,16 +134,5 @@ value:http://localhost:8081/SanyPDP
        
     </table>
     
-    <table name="TD_CMS_VOTE_MOBILE_ANSWER">
-        <column name="ID" primaryKey="true" required="true"
-            size="100" type="VARCHAR"/>      
-        <column name="USER_ID" size="16" type="VARCHAR"/>
-        <column name="TITLE_ID" size="80" type="VARCHAR"/>
-        <column name="QUES_ID" size="64" type="VARCHAR"/>
-        <column name="QUES_TYPE" size="16" type="VARCHAR"/>
-        <column name="OPTION_ID" size="16" type="VARCHAR"/>
-        <column name="CONTENT" size="1000" type="VARCHAR"/>
-    </table>
-    
     
 </database>

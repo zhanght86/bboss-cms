@@ -277,10 +277,12 @@
 									 &&accesscontroler.checkPermission("wscpManager","create","wscpTitleManager")))
 					 {
 		            %>
-		            <a style="cursor:hand" onClick="newqs()">
-					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增问卷</div></a>
+		           <!--  
+		           	gw_tanx 20150204
+		           <a style="cursor:hand" onClick="newqs()">
+					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增问卷</div></a> -->
 					<a style="cursor:hand" onClick="newq()">
-					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增题目</div></a>
+					<div class="DocumentOper"><img src="../images/new_doc.gif" class="operStyle">新增问卷</div></a>
 					<%
 					}
 					if(flag ||(request.getParameter("channel").equals("网上调查")&&accesscontroler.checkPermission("dchmanager","delete","titleManager"))||(request.getParameter("channel").equals("网上测评")&&accesscontroler.checkPermission("wscpManager","delete","wscpTitleManager")))
@@ -446,11 +448,13 @@
 					               {
 					               ff = true;
 		                       %>
+								<%-- 
+									gw_tanx 20150204
 								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
 								修改问卷</a>
-								
+								 --%>
 								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
-								修改题目</a>
+								修改问卷</a>
 								
 								<%
 								}

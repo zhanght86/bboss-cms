@@ -58,16 +58,27 @@ public class QuestionsTag extends BaseCellTag {
 				str.append("<script language='javascript'>questionids+=','+"+String.valueOf(dataSet.getInt("id"))+";</script>");
 				str.append("<strong>"+dataSet.getString("title")+"</strong>");
 				Input checkbox = new Input();
+				/* gw_tanx 20150204 增加单选和多选的预览情况
+				 * if (dataSet.getInt("style") == 1
+						|| dataSet.getInt("style") == 0 ) {*/
 				if (dataSet.getInt("style") == 1
-						|| dataSet.getInt("style") == 0) {
+						|| dataSet.getInt("style") == 0 || dataSet.getInt("style") == 3|| dataSet.getInt("style") == 4) {
 					List options = (ArrayList) dataSet.getValue("items");
 					LI li = new LI();
 					for (int i = 0; i < options.size(); i++) {
 						checkbox = new Input();
 						Item item = (Item) options.get(i);
-						if (dataSet.getInt("style") == 1)
+						
+						/*
+						 * gw_tanx 20150204 增加单选和多选的预览情况
+						 * if (dataSet.getInt("style") == 1 )
 							checkbox.setType("checkbox");
-						if (dataSet.getInt("style") == 0)
+						if (dataSet.getInt("style") == 0 )
+							checkbox.setType("radio");*/
+						
+						if (dataSet.getInt("style") == 1 || dataSet.getInt("style") == 4)
+							checkbox.setType("checkbox");
+						if (dataSet.getInt("style") == 0 || dataSet.getInt("style") == 3)
 							checkbox.setType("radio");
 
 						checkbox.setTagText(item.getOptions());
@@ -90,7 +101,9 @@ public class QuestionsTag extends BaseCellTag {
 						str.append(li.toString()+hidden.toString());
 					}
 
-				} else {
+				} else if (dataSet.getInt("style") == 5) {
+					
+				}else {
 					Input hidden = new Input();
 					hidden.setType("hidden");
 					hidden.setID("textareaids");

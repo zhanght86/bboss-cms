@@ -48,7 +48,8 @@
 				<cms:outline datatype="questions" channel="<%=id%>">
 					<tr>
 						<td>
-							<strong><cms:rowid increament="1"/>. </strong><cms:question optionstyle="list-style:none;" textareastyle="width:300;height:100"/>
+							<%-- gw_tanx 20150204 <strong><cms:rowid increament="1"/>. </strong><cms:question optionstyle="list-style:none;" textareastyle="width:300;height:100"/> --%>
+							<cms:question optionstyle="list-style:none;" textareastyle="width:300;height:100"/>
 							<p>
 						</td>
 					</tr>

@@ -14,6 +14,8 @@ public class Title {
 
 	private int ipRepeat;
 	
+	private int userRepeat;
+	
 	private String state;
 
 	private int active;
@@ -21,6 +23,8 @@ public class Title {
 	private int isTop;
 
 	private int timeGap;
+	
+	private int userTimeGap;
 
 	private int founderID;
 	private String foundDate;
@@ -225,6 +229,23 @@ public class Title {
 	public void setDepart_name(String depart_name) {
 		this.depart_name = depart_name;
 	}
+
+	public int getUserRepeat() {
+		return userRepeat;
+	}
+
+	public void setUserRepeat(int userRepeat) {
+		this.userRepeat = userRepeat;
+	}
+
+	public int getUserTimeGap() {
+		return userTimeGap;
+	}
+
+	public void setUserTimeGap(int userTimeGap) {
+		this.userTimeGap = userTimeGap;
+	}
+
 
 
 	

@@ -89,7 +89,7 @@
 %>
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>无标题文档</title>
+		<title>问卷管理</title>
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<META HTTP-EQUIV="pragma" CONTENT="no-cache">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
@@ -327,11 +327,14 @@
 			var optionString = "";
 			var countString = "";
 			var option_id = "";
-			if(styleChckbx!=2){
+			//if(styleChckbx!=2 ){  gw_tanx 20150204
+			if(styleChckbx!=2 && styleChckbx!=5){
+				
 				var optionText = document.getElementsByName(tblName+"Option");
 				var countText = document.getElementsByName(tblName+"Count");
 				var option_idText = document.getElementsByName(tblName+"Option_id");
-				if (styleChckbx!=2 && (optionText==null||optionText.length==0)){
+				//if (styleChckbx!=2 && (optionText==null||optionText.length==0)){ gw_tanx 20150204
+				if ((styleChckbx!=2 || styleChckbx!=5)&& (optionText==null||optionText.length==0)){
 					alert("请填入选项信息！");
 					return;
 				}
@@ -376,13 +379,13 @@
 		return true;
 	}
 	
-	function chkTimeGap(){
-		var repeatChkbx= document.all("can_repeat");
+	function chkTimeGap(checkboxName,selectName){
+		var repeatChkbx= document.all(checkboxName);
 		if (repeatChkbx.checked){
-			document.all("selectGap").disabled = false;
+			document.all(selectName).disabled = false;
 		}else{
-			document.all("selectGap").options[0].selected = true;
-			document.all("selectGap").disabled = true;
+			document.all(selectName).options[0].selected = true;
+			document.all(selectName).disabled = true;
 		}
 	}
 	
@@ -447,7 +450,7 @@
 	
 	%>
 	<pg:pager scope="request" statement="<%=sql%>" title="分页" dbname="bspf" isList="true">				
-			<pg:notify>当前没有记录</pg:notify>
+			<%-- <pg:notify>当前没有记录</pg:notify>	gw_tanx 20150204 --%>
 			<pg:list>
              <% 
 			 channel_id_hidden = dataSet.getString("channel_id");
@@ -501,7 +504,7 @@
 					<td>
 						<textarea id="content" name="content" cols="63" rows="10"></textarea><font color="red">*问卷描述字数不能超过500字</font>
 					</td>
-				</tr>-->
+				</tr> -->
 				<!-- <tr>
 					<td align="right">
 						所属频道：
@@ -557,9 +560,95 @@
 						&nbsp;
 					</td>
 					<td>
-					    <input type="checkbox" name="can_repeat" value="0"  onClick="return chkTimeGap();">
+					    <input type="checkbox" id="can_repeat" name="can_repeat" value="0"  onClick="return chkTimeGap('can_repeat','selectGap');">
 						相同IP不可重复投票 时间间隔
-						<select name="selectGap" disabled>
+						<select id="selectGap" name="selectGap" >
+							<option value="-1">
+								无限
+							</option>
+							<option value="1">
+								1
+							</option>
+							<option value="2">
+								2
+							</option>
+							<option value="3">
+								3
+							</option>
+							<option value="4">
+								4
+							</option>
+							<option value="5">
+								5
+							</option>
+							<option value="6">
+								6
+							</option>
+							<option value="7">
+								7
+							</option>
+							<option value="8">
+								8
+							</option>
+							<option value="9">
+								9
+							</option>
+							<option value="10">
+								10
+							</option>
+							<option value="11">
+								11
+							</option>
+							<option value="12">
+								12
+							</option>
+							<option value="13">
+								13
+							</option>
+							<option value="14">
+								14
+							</option>
+							<option value="15">
+								15
+							</option>
+							<option value="16">
+								16
+							</option>
+							<option value="17">
+								17
+							</option>
+							<option value="18">
+								18
+							</option>
+							<option value="19">
+								19
+							</option>
+							<option value="20">
+								20
+							</option>
+							<option value="21">
+								21
+							</option>
+							<option value="22">
+								22
+							</option>
+							<option value="23">
+								23
+							</option>
+							<option value="24">
+								24
+							</option>
+						</select>小时
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&nbsp;
+					</td>
+					<td>
+					    <input type="checkbox" id="userCanRepeat" name="userCanRepeat" value="0"  onClick="return chkTimeGap('userCanRepeat','selectUserGap');">
+						相同账号不允许重复投票
+						<select id="selectUserGap" name="selectUserGap" >
 							<option value="-1">
 								无限
 							</option>
@@ -778,6 +867,9 @@
 
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="4" onClick="return changeStyle('qstionTbl1')">
 									多选
+									
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="5" onClick="return clearOption('qstionTbl1')">
+									分组标题
 								</td>
 							</tr>
 							<tr>
@@ -840,7 +932,8 @@
 	}
 	
 	function getQstionTblScript(tblName){
-		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"Qstion_id' id='"+tblName+"Qstion_id' type='hidden' value='0' size='5'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选并统计票数<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选并统计票数 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='3' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='4' onClick='return changeStyle(\""+tblName+"\")'>多选</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
+		
+		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"Qstion_id' id='"+tblName+"Qstion_id' type='hidden' value='0' size='5'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选并统计票数<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选并统计票数 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='3' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='4' onClick='return changeStyle(\""+tblName+"\")'>多选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='5' onClick='return clearOption(\""+tblName+"\")'>分组标题</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
 		return questionTable;
 	}
 	
@@ -864,14 +957,29 @@
 				if (oneTitle.getIpRepeat()==0){
 					%>
 					document.all("can_repeat").checked=true;
-					chkTimeGap();
+					chkTimeGap("can_repeat","selectGap");
 					selectValue("selectGap","<%=oneTitle.getTimeGap()%>");
 					<%
 				}else
 				{
 				  %>
 				  document.all("can_repeat").checked=false;
-					chkTimeGap();
+				  chkTimeGap("can_repeat","selectGap");
+					//document.all("selectGap").disable=false;
+					<%
+				}
+				
+				if (oneTitle.getUserRepeat()==0){
+					%>
+					document.all("userCanRepeat").checked=true;
+					chkTimeGap("userCanRepeat","selectUserGap");
+					selectValue("selectUserGap","<%=oneTitle.getUserTimeGap()%>");
+					<%
+				}else
+				{
+				  %>
+				  document.all("userCanRepeat").checked=false;
+				  chkTimeGap("userCanRepeat","selectUserGap");
 					//document.all("selectGap").disable=false;
 					<%
 				}

@@ -5,9 +5,13 @@
 package com.sany.test;
 
 import java.lang.reflect.Constructor;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +25,13 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.ClassUtil;
+import org.frameworkset.web.token.TokenStore;
+import org.frameworkset.web.token.ws.CheckTokenService;
+import org.frameworkset.web.token.ws.TokenCheckResponse;
+import org.frameworkset.web.token.ws.TokenService;
 
+import com.caucho.hessian.client.HessianProxyFactory;
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.annotation.TransactionType;
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -34,6 +44,26 @@ import com.sany.workflow.service.impl.ActivitiServiceImpl;
  * @author gw_yuel
  */
 public class TestSrv {
+	@org.junit.Test
+	public void testHttp() throws Exception
+	{
+		String appid = "pdp";
+		String secret = "19dceb8b-c874-46e4-9af6-e5ddc8aac6ca";
+		String uri = "http://pdp.sany.com.cn:8080/SanyPDP";
+		String account = "marc";//如果使用工号则loginType为2，否则为1
+		String worknumber = "10006857";
+		String tokenparamname = TokenStore.temptoken_param_name;
+		HessianProxyFactory factory = new HessianProxyFactory();
+		//String url = "http://localhost:8080/context/hessian?service=tokenService";
+		String url = uri +"/hessian?service=tokenService";
+		TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
+		//通过hessian根据账号或者工号获取ticket
+
+		String ticket = tokenService.genTicket(account, worknumber, appid, secret);
+		url = uri +"/token/genAuthTempToken.freepage?appid="+appid + "&secret="+secret + "&ticket="+ticket;
+		//url = "http://10.25.192.142:8080/SanyPDP/token/genDualToken.freepage?appid="+appid + "&secret="+secret + "&account="+account;
+		String token = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
+	}
 
 	@org.junit.Test
 	public void test()
@@ -47,7 +77,19 @@ public class TestSrv {
 		System.out.println(f1.lastModified() );
 		System.out.println(f.lastModified() == f1.lastModified());
 	}
-	
+	@org.junit.Test
+	public void testdate() throws SQLException
+	{
+//		for(int i=6; i <100; i ++)
+//		{
+//			SQLExecutor.insert("insert into Accounts values ( ? , ?, 10000 )", "account"+i,"owner"+i);
+//		}
+		SQLExecutor.delete("delete from newTable");
+		SQLExecutor.insert("insert into newTable(col1,col2) values ( ?,?)", new java.sql.Date(new Date().getTime()),new Timestamp(new Date().getTime()));
+		Date date = SQLExecutor.queryObject(Date.class, "select col2 from newTable") ;
+		date = SQLExecutor.queryObject(Date.class, "select col1 from newTable") ;
+		System.out.println(date);
+	}
 
 	@org.junit.Test
 	public void aatest() throws SQLException
@@ -63,6 +105,7 @@ public class TestSrv {
      *
      */
     public static void main(String[] args) {
+    	long dd = Long.MAX_VALUE;
         checkTwo();
     }
 
@@ -483,4 +526,26 @@ public class TestSrv {
 		}
     	//System.out.println(System.getProperties());
     }
+    @org.junit.Test
+    public void encodepassword()
+    {
+    	String p = com.frameworkset.platform.security.authentication.EncrpyPwd.encodePassword("123456");
+    	System.out.println(p);
+    }
+    @org.junit.Test
+   public void t()
+   {
+	   try {
+			 Connection con = DBUtil.getConection();
+			 Statement smt = con.createStatement();
+			 smt.executeQuery("select 1 from dual");
+			 con.close();
+			 smt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+   }
+
+
 }

@@ -1,3 +1,8 @@
 <properties>
 	<property name="mailsend" class="org.frameworkset.mail.MailSend"/>
+	<properties>
+   <property name="WSServiceClient" factory-class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean" 
+     factory-method="create" f:serviceClass="com.sany.greatwall.WorkFlowService"
+     f:address="http://10.0.15.164:8080/sany-greatwall-web/services/wsworkflowservice"/> 
+</properties> 
 </properties>

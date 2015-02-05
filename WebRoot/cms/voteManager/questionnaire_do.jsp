@@ -82,6 +82,14 @@
     			oneTitle.setIpRepeat(0);
     			oneTitle.setTimeGap(Integer.parseInt((String)request.getParameter("selectGap")));
     		}
+    		if (request.getParameter("user_repeat")==null){
+    			oneTitle.setUserRepeat(1);
+    			oneTitle.setUserTimeGap(-1);
+    		}
+    		else{
+    			oneTitle.setUserRepeat(0);
+    			oneTitle.setUserTimeGap(Integer.parseInt((String)request.getParameter("selectUserGap")));
+    		}
     		if ("".equals((String)request.getParameter("titleID"))){
     			oneTitle.setFounderID(Integer.parseInt(accessControl.getUserID()));
     			if(voteMgr.insertSurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){

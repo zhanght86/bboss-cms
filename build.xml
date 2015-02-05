@@ -824,7 +824,21 @@
 	<target name="jar-cms" depends="compile-all" description="generate the cms library cms.jar">
 		<echo>Generate the cms library cms.jar ...</echo>
 		<jar jarfile="${distrib}/cms.jar" basedir="classes-all" 
-			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/*">
+			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/*"
+			excludes="com/frameworkset/platform/cms/votemanager/ws/*">
+			<manifest>
+				
+				<attribute name="Implementation-Version" value="${impl.version}" />
+				<attribute name="Specification-Version" value="${revision}" />
+				<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+				<attribute name="Implementation-ProductID" value="${impl.productID}" />
+				<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+				<attribute name="Compile-User" value="${username}" />
+			</manifest>
+		</jar>
+		
+		<jar jarfile="${distrib}/cms-vote.jar" basedir="classes-all" 
+					includes="com/frameworkset/platform/cms/votemanager/ws/*">
 			<manifest>
 				
 				<attribute name="Implementation-Version" value="${impl.version}" />

@@ -761,6 +761,8 @@
         <column name="ISBIGTITLE" size="1" type="DECIMAL"/>
         <column default="0" name="STATE" size="1" type="DECIMAL"/>
         <column name="ANSWER" type="CLOB"/>
+        <column name="TITLE_ID" size="80" type="VARCHAR"/>
+        <column name="USER_ID" size="100" type="VARCHAR"/>
         <foreign-key foreignTable="TD_CMS_VOTE_QUESTIONS">
             <reference foreign="ID" local="QID"/>
         </foreign-key>
@@ -815,6 +817,8 @@
         <column name="PICPATH" size="500" type="VARCHAR"/>
         <column name="DEPART_ID" size="20" type="VARCHAR"/>
         <column default="1" name="ISLOOK" size="22" type="DECIMAL"/>
+        <column default="0" name="USER_REPEAT" size="1" type="DECIMAL"/>
+        <column name="USER_TIME_GAP" size="22" type="DECIMAL"/>
     </table>
     <table name="TD_CMS_VOTE_TQ">
         <column name="TITLE_ID" primaryKey="true" required="true"

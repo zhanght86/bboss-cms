@@ -283,6 +283,7 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 					             					//comm = comm + "  ";
 					             					comm = comm + "<div class=\"ml_10\"><textarea  name=\"text"+titleId+"_"+q+"\" id=questionId"+data.questions[q].id+" ></textarea><\div>";
 								             		//comm = comm + "    <br/>  ";
+								             		comm = comm + "  </ul> ";
 					             				}else if(data.questions[q].style=="3"){
 						             				for(var i=0;i<data.questions[q].items.length;i++){
 						             					if(data.questions[q].items[i].options.indexOf("other")>=0){

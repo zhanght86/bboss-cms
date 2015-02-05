@@ -69,7 +69,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	public Map<String, Object> getVariableMap(
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList,
-			List<NodeControlParam> nodeControlParamList) throws Exception{
+			List<NodeControlParam> nodeControlParamList) throws Exception {
 
 		Map<String, Object> variableMap = new HashMap<String, Object>();
 
@@ -162,14 +162,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void completeTask(TaskCondition task,Map<String, Object> variableMap) {
+	public void completeTask(TaskCondition task, Map<String, Object> variableMap) {
 
 		try {
 
-//			// 获取参数配置信息
-//			Map<String, Object> variableMap = getVariableMap(
-//					activitiNodeCandidateList, nodevariableList,
-//					nodeControlParamList);
+			// // 获取参数配置信息
+			// Map<String, Object> variableMap = getVariableMap(
+			// activitiNodeCandidateList, nodevariableList,
+			// nodeControlParamList);
 
 			// 未签收任务处理
 			if ("1".equals(task.getTaskState())) {
@@ -213,7 +213,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void rejectToPreTask(TaskCondition task,Map<String, Object> variableMap, int rejectedtype) {
+	public void rejectToPreTask(TaskCondition task,
+			Map<String, Object> variableMap, int rejectedtype) {
 
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -224,15 +225,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				activitiService.claim(task.getTaskId(), task.getCurrentUser());
 			}
 
-//			// 获取参数配置信息
-//			Map<String, Object> variableMap = getVariableMap(nodeList,
-//					nodevariableList, nodeControlParamList);
+			// // 获取参数配置信息
+			// Map<String, Object> variableMap = getVariableMap(nodeList,
+			// nodevariableList, nodeControlParamList);
 
 			String remark = "["
 					+ activitiService.getUserInfoMap().getUserName(
 							task.getCurrentUser()) + "]将任务驳回至["
 					+ task.getToActName() + "]";
-			
+
 			// 日志记录驳回操作
 			activitiService.addDealTask(task.getTaskId(),
 					task.getCurrentUser(), activitiService.getUserInfoMap()
@@ -436,14 +437,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			
+
 			boolean isAdmin = AccessControl.getAccessControl().isAdmin();
 			String currentAccount = AccessControl.getAccessControl()
 					.getUserAccount();
 
 			// 数据查看权限管控
 			task.setAdmin(isAdmin);
-			
+
 			if (!isAdmin) {
 				// 当前用户登录id
 				task.setAssignee(currentAccount);
@@ -1370,7 +1371,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public PageData getUserPageList(String assigneeName, int limit)
 			throws Exception {
-		
+
 		HashMap<String, String> param = new HashMap<String, String>();
 
 		if (StringUtil.isNotEmpty(assigneeName)) {
@@ -1379,16 +1380,16 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 		ListInfo listInfo = executor.queryListInfoBean(User.class,
 				"getUserPageList_wf", 0, limit, param);
-		
+
 		PageData pageData = new PageData();
 		if (null != listInfo) {
 			pageData.setDatas(listInfo.getDatas());
 			pageData.setTotalsize(listInfo.getTotalSize());
 		}
-		
+
 		return pageData;
 	}
-	
+
 	/**
 	 * 工号转域账号
 	 * 
@@ -1400,8 +1401,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		return AccessControl.getUserAccounByWorknumberOrUsername(userId);
 
 	}
-	
-	
+
 	@Override
 	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
 			String processKey, String userId) throws Exception {
@@ -1410,16 +1410,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 		try {
 			tm.begin();
-			
+
 			TaskInfo taskInfo = null;
-		
 
 			// 根据Key获取流程实例
 			ProcessInst inst = executor.queryObject(ProcessInst.class,
 					"getProcessByKey_wf", bussinesskey, processKey);
 
-			taskInfo = _getCurrentNodeInfoByProcessInstanceid(  inst,
-					  userId);
+			taskInfo = _getCurrentNodeInfoByProcessInstanceid(inst, userId);
 
 			tm.commit();
 
@@ -1431,16 +1429,14 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
+
 	private TaskInfo _getCurrentNodeInfoByProcessInstanceid(ProcessInst inst,
 			String userId) throws Exception {
-		
-			TaskInfo taskInfo = null;
-		try
-		{
+
+		TaskInfo taskInfo = null;
+		try {
 			// 当前用户转成域账号
 			userId = this.changeToDomainAccount(userId);
-
-			 
 
 			if (inst != null) {
 
@@ -1469,17 +1465,16 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 			}
 
-			 
-
 			return taskInfo;
 
 		} catch (Exception e) {
 			throw new Exception("根据key获取当前任务节点信息出错:" + e);
-		} 
+		}
 	}
+
 	@Override
-	public TaskInfo getCurrentNodeInfoByProcessInstanceid(String processinstanceid,
-			String userId) throws Exception {
+	public TaskInfo getCurrentNodeInfoByProcessInstanceid(
+			String processinstanceid, String userId) throws Exception {
 
 		TransactionManager tm = new TransactionManager();
 
@@ -1488,9 +1483,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			TaskInfo taskInfo = null;
 			// 根据Key获取流程实例
 			ProcessInst inst = executor.queryObject(ProcessInst.class,
-								"getProcessByProcessId_wf",processinstanceid);
-			taskInfo = _getCurrentNodeInfoByProcessInstanceid(  inst,
-					  userId);
+					"getProcessByProcessId_wf", processinstanceid);
+			taskInfo = _getCurrentNodeInfoByProcessInstanceid(inst, userId);
 
 			tm.commit();
 
@@ -1502,7 +1496,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
-	
+
 	@Override
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
 
@@ -1550,6 +1544,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 		return taskInfo;
 	}
+
 	@Override
 	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
 			String userAccount) {
@@ -1610,6 +1605,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
+
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey,
 			String userAccount) {
@@ -1638,6 +1634,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
+
 	@Override
 	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
 			String userId) throws Exception {
@@ -1691,16 +1688,21 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
-	public void autoCompleteTask(String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser)
-			throws Exception 
-	{
-		TaskInfo task = getCurrentNodeInfoByProcessInstanceid(processInstanceID, currentUser);
-		autoCompleteTask(  task,  dealOption,  dealRemak,   dealReason,   processInstanceID,  currentUser);
+
+	public void autoCompleteTask(String dealOption, String dealRemak,
+			String dealReason, String processInstanceID, String currentUser)
+			throws Exception {
+		TaskInfo task = getCurrentNodeInfoByProcessInstanceid(
+				processInstanceID, currentUser);
+		autoCompleteTask(task, dealOption, dealRemak, dealReason,
+				processInstanceID, currentUser);
 	}
+
 	@Override
 	public boolean isSignTask(String taskId, String userId) throws Exception {
 		return activitiService.isSignTask(taskId, userId);
 	}
+
 	/**
 	 * 自动完成任务
 	 * 
@@ -1708,23 +1710,26 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	 * @throws Exception
 	 *             2014年11月20日
 	 */
-	public void autoCompleteTask(TaskInfo task,String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser)
-			throws Exception {
+	public void autoCompleteTask(TaskInfo task, String dealOption,
+			String dealRemak, String dealReason, String processInstanceID,
+			String currentUser) throws Exception {
 
 		// 获取流程当前任务节点
-//		TaskInfo task = getCurrentNodeInfoByProcessInstanceid(processInstanceID, currentUser);
+		// TaskInfo task =
+		// getCurrentNodeInfoByProcessInstanceid(processInstanceID,
+		// currentUser);
 
 		if (null != task) {
 
-//			if (StringUtil.isEmpty(proIns.getDealOption())) {
-//				proIns.setDealOption("提交任务");
-//			}
+			// if (StringUtil.isEmpty(proIns.getDealOption())) {
+			// proIns.setDealOption("提交任务");
+			// }
 
 			if (StringUtil.isEmpty(dealRemak)) {
 				dealRemak = "["
 						+ activitiService.getUserInfoMap().getUserName(
 								currentUser) + "]的任务被自动完成";
-//				proIns.setDealRemak(remark);
+				// proIns.setDealRemak(remark);
 			}
 
 			if (!isSignTask(task.getTaskId(), task.getAssignee())) {
@@ -1734,19 +1739,19 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 			// 完成任务
 			activitiService.completeTaskWithReason(task.getTaskId(), null,
-					dealRemak, dealOption,
-					dealReason,true);
+					dealRemak, dealOption, dealReason, true);
 
 			// 后续节点自动审批
 			if (task.getIsAutoafter() == 1
 					&& task.getAssignee().equals(currentUser)) {
 
-//				// 过滤流程开启自动通过第一个任务的处理意见
-//				if (null == proIns.getOperateType()) {
-////					proIns.setOperateType("pass");
-//					dealReason = "前后任务处理人一致，自动通过";
-//				}
-				autoCompleteTask(  dealOption,  dealRemak,   dealReason,   processInstanceID,  currentUser);
+				// // 过滤流程开启自动通过第一个任务的处理意见
+				// if (null == proIns.getOperateType()) {
+				// // proIns.setOperateType("pass");
+				// dealReason = "前后任务处理人一致，自动通过";
+				// }
+				autoCompleteTask(dealOption, dealRemak, dealReason,
+						processInstanceID, currentUser);
 			}
 		}
 

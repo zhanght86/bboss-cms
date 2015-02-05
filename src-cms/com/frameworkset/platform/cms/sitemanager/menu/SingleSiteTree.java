@@ -249,6 +249,8 @@ public class SingleSiteTree extends COMTree implements java.io.Serializable {
 				}
 
 				Site site = (Site) smi.getSiteInfo(siteid);
+				if(site == null)
+					return true;
 				String siteName = site.getName();
 				String siteId = "" + site.getSiteId();
 				Map map = new HashMap();

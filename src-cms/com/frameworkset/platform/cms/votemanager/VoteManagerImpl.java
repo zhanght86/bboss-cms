@@ -410,8 +410,13 @@ public class VoteManagerImpl implements VoteManager {
 	public int insertSurvey(Title title,String account,String userName,String ipAddress) throws SPIException, ManagerException, VoteManagerException {
 		try {
 			PreparedDBUtil conn = new PreparedDBUtil();
-			String sqlInsert = "insert into td_cms_vote_title(content,name,siteid,ip_repeat,time_gap,founder_id,picpath,depart_id,ctime,id)" +
-					" values(?,?,?,?,?,?,?,?,sysdate,?)";
+			/*
+			 * gw_tanx 20150204
+			 * String sqlInsert = "insert into td_cms_vote_title(content,name,siteid,ip_repeat,time_gap,founder_id,picpath,depart_id,ctime,id)" +
+					" values(?,?,?,?,?,?,?,?,sysdate,?)";*/
+			
+			String sqlInsert = "insert into td_cms_vote_title(content,name,siteid,ip_repeat,time_gap,founder_id,picpath,depart_id,ctime,id,USER_REPEAT,USER_TIME_GAP)" +
+					" values(?,?,?,?,?,?,?,?,sysdate,?,?,?)";
 			
 			long id = conn.getNextPrimaryKey("td_cms_vote_title") ;
 			
@@ -425,6 +430,8 @@ public class VoteManagerImpl implements VoteManager {
 			conn.setString(7,title.getPicpath());
 			conn.setString(8,title.getDepart_id());
 			conn.setLong(9,id);
+			conn.setInt(10,title.getUserRepeat());
+			conn.setInt(11,title.getUserTimeGap());
 			conn.executePrepared() ;
 			
 			int titleID = (int) id ;
@@ -564,9 +571,19 @@ public class VoteManagerImpl implements VoteManager {
 //			conn.executePrepared();
 			
 			String sql = "";
-			sql = "update td_cms_vote_title set name='"+title.getName()+"',siteid="+title.getSiteid()+","
+			/* gw_tanx 20140204
+			 * sql = "update td_cms_vote_title set name='"+title.getName()+"',siteid="+title.getSiteid()+","
 			      +"ip_repeat="+title.getIpRepeat()+",time_gap="+title.getTimeGap()+",picpath='"+title.getPicpath()+"',"
-			      +"content=?,depart_id=?,ctime=to_date('"+title.getFoundDate()+"','yyyy-mm-dd hh24:mi:ss') where id =?";
+			      +"content=?,depart_id=?,ctime=to_date('"+title.getFoundDate()+"','yyyy-mm-dd hh24:mi:ss'),"
+			      + "USER_REPEAT = "+ title.getUserRepeat()+","
+			      + "USER_TIME_GAP = "+ title.getUserTimeGap()
+			      + " where id =?";*/
+			sql = "update td_cms_vote_title set name='"+title.getName()+"',siteid="+title.getSiteid()+","
+				      +"ip_repeat="+title.getIpRepeat()+",time_gap="+title.getTimeGap()+",picpath='"+title.getPicpath()+"',"
+				      +"content=?,depart_id=?,ctime=to_date('"+title.getFoundDate()+"','yyyy-mm-dd hh24:mi:ss'),"
+				      + "USER_REPEAT = "+ title.getUserRepeat()+","
+				      + "USER_TIME_GAP = "+ title.getUserTimeGap()
+				      + " where id =?";
 			conn.preparedUpdate(sql);
 			conn.setClob(1,title.getContent(),"content");
 			conn.setString(2,title.getDepart_id());
@@ -916,7 +933,6 @@ public class VoteManagerImpl implements VoteManager {
 
 		}
 	}
-	
 	/**
 	 * 投票
 	 * 
@@ -924,6 +940,15 @@ public class VoteManagerImpl implements VoteManager {
 	 * @return
 	 */
 	public int doVote(String strOptionID,String ip) throws VoteManagerException {
+		return doVote(strOptionID,ip,"","");
+	}
+	/**
+	 * 投票
+	 * 
+	 * @param titleID
+	 * @return
+	 */
+	public int doVote(String strOptionID,String ip,String user_id,String titleId) throws VoteManagerException {
 		try {
 			String[] optionIDs = strOptionID.split(";");
 			DBUtil dbUtil = new DBUtil();
@@ -943,8 +968,8 @@ public class VoteManagerImpl implements VoteManager {
 			for (int i=0;i<dbUtil.size();i++){
 				DBUtil db = new DBUtil();
 				long id = DBUtil.getNextPrimaryKey("TD_CMS_VOTE_ANSWER");
-				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID)values" +
-						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+")";
+				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID,USER_ID,TITLE_ID)values" +
+						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+",'"+user_id+"','"+titleId+"')";
 				db.executeInsert(sql);
 			}
 			
@@ -956,6 +981,7 @@ public class VoteManagerImpl implements VoteManager {
 
 		}
 	}
+	
 	/**
 	 * 投票
 	 * 
@@ -963,6 +989,16 @@ public class VoteManagerImpl implements VoteManager {
 	 * @return
 	 */
 	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip) throws VoteManagerException{
+		return doVote(strOptionID,questionAnswer,ip,"","");
+	}
+	
+	/**
+	 * 投票
+	 * 
+	 * @param strOptionId 单选，多选答案,question文本答案<问题编号，问题答案>,IP地址
+	 * @return
+	 */
+	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip,String user_id,String titleId) throws VoteManagerException{
 		TransactionManager tm = new TransactionManager();
 		try {
 		
@@ -986,14 +1022,14 @@ public class VoteManagerImpl implements VoteManager {
 			for (int i=0;i<dbUtil.size();i++){
 				DBUtil db = new DBUtil();
 				long id = DBUtil.getNextPrimaryKey("TD_CMS_VOTE_ANSWER");
-				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID)values" +
-						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+")";
+				sql = "insert into TD_CMS_VOTE_ANSWER(ANSER_ID,QID,TYPE,WHO_IP,WHEN,ITEM_ID,USER_ID,TITLE_ID)values" +
+						"("+id+","+dbUtil.getInt(i,"qid")+",0,'"+ip+"',sysdate,"+dbUtil.getInt(i,"id")+",'"+user_id+"','"+titleId+"')";
 				db.executeInsert(sql);
 			}
 			Iterator<Map.Entry<String, String>> it=questionAnswer.entrySet().iterator();
 			while(it.hasNext()){
 				Map.Entry<String, String> map=it.next();
-				doAnswer(Integer.parseInt(map.getKey()),map.getValue(),ip);
+				doAnswer(Integer.parseInt(map.getKey()),map.getValue(),ip,user_id,titleId);
 			}
 			tm.commit();
 			return 1;
@@ -1044,6 +1080,7 @@ public class VoteManagerImpl implements VoteManager {
 		}
 		return ret;
 	}
+	
 	/**
 	 * 投票
 	 * 
@@ -1051,6 +1088,17 @@ public class VoteManagerImpl implements VoteManager {
 	 * @return
 	 */
 	public int doAnswer(int qID,String answer,String ip) throws VoteManagerException {
+		return doAnswer(qID,answer,ip,"","");
+	}
+	
+		
+	/**
+	 * 投票
+	 * 
+	 * @param titleID
+	 * @return
+	 */
+	public int doAnswer(int qID,String answer,String ip,String user_id,String titleID) throws VoteManagerException {
 		try {
 			DBUtil dbUtil = new DBUtil();
 			
@@ -1060,8 +1108,8 @@ public class VoteManagerImpl implements VoteManager {
 			PreparedDBUtil conn = new PreparedDBUtil();
 			answerid=Integer.parseInt(conn.getNextStringPrimaryKey("td_cms_vote_answer"));
 			StringBuffer sqlBuffer = new StringBuffer();
-			sqlBuffer.append("insert into td_cms_vote_answer(ANSWER,QID,TYPE,WHO_IP,WHEN,ANSER_ID)values");
-			sqlBuffer.append("(?,?,1,?,sysdate,?)");
+			sqlBuffer.append("insert into td_cms_vote_answer(ANSWER,QID,TYPE,WHO_IP,WHEN,ANSER_ID,TITLE_ID,USER_ID)values");
+			sqlBuffer.append("(?,?,1,?,sysdate,?,?,?)");
 			//sql = "insert into td_cms_vote_answer(ANSWER,QID,TYPE,WHO_IP,WHEN)values" +
 			//		"('"+answer+"',"+qID+",1,'"+ip+"',sysdate)";
 			conn.preparedInsert(sqlBuffer.toString());
@@ -1069,6 +1117,8 @@ public class VoteManagerImpl implements VoteManager {
 			conn.setInt(2,qID);
 			conn.setString(3,ip);
 			conn.setInt(4,answerid);
+			conn.setString(5,titleID);
+			conn.setString(6,user_id);
 			conn.executePrepared();
 			//dbUtil.executeInsert(sql);
  

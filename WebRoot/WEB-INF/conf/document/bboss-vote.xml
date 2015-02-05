@@ -12,6 +12,13 @@
 		class="com.frameworkset.platform.cms.voteservice.impl.VoteMobileServiceImpl"
 		/>
 		
+		<property name="vote.ws.service"
+		f:voteService="attr:vote.mobile.service"
+		ws:servicePort="voteService"    
+    	hessian:servicePort="voteService"  
+		class="com.frameworkset.platform.cms.votemanager.VoteWebServiceImpl"
+		/>
+		
 	<property name="vote.mobile.configsqlexecutor"		
 		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
 		<construction>

@@ -105,10 +105,27 @@ public interface VoteManager {
 	/**
 	 * 投票
 	 * 
+	 * @param titleID
+	 * @return
+	 */
+	public int doVote(String strOptionID,String ip,String user_id,String titleId) throws VoteManagerException;
+	
+	/**
+	 * 投票
+	 * 
 	 * @param strOptionId 单选，多选答案,question文本答案<问题编号，问题答案>,IP地址
 	 * @return
 	 */
 	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip) throws VoteManagerException;
+	
+	/**
+	 * 投票
+	 * 
+	 * @param strOptionId 单选，多选答案,question文本答案<问题编号，问题答案>,IP地址
+	 * @return
+	 */
+	public int doVote(String strOptionID,Map<String,String>questionAnswer,String ip,String user_id,String titleId) throws VoteManagerException;
+	
 	
 	/**
 	 * 投票
@@ -131,6 +148,14 @@ public interface VoteManager {
 	 * @return
 	 */
 	public int doAnswer(int qID,String answer,String ip) throws VoteManagerException;
+	
+	/**
+	 * 投票
+	 * 
+	 * @param titleID
+	 * @return
+	 */
+	public int doAnswer(int qID,String answer,String ip,String user_id,String titleId) throws VoteManagerException;
 	
 	/**
 	 * 

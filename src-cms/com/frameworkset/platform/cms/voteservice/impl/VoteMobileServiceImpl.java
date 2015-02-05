@@ -13,27 +13,48 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
+import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.platform.cms.bean.ExcelBean;
+import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.platform.cms.votemanager.ws.VoteTitle;
 import com.frameworkset.platform.cms.voteservice.VoteMobileService;
 
 public class VoteMobileServiceImpl implements VoteMobileService {
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
+
 	@Override
-	public void saveVoteDetail(String userId,String id, String titleId, String qid,
-			String type, String oid, String content) throws Exception {
-		executor.insert("saveVoteDetail",  id,userId, titleId,  qid, type,  oid,  content);
+	public void saveVoteDetail(String userId, String ip, String titleId,
+			String qid, String type, String oid, String content)
+			throws Exception {
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("ANSER_ID",
+				DBUtil.getNextStringPrimaryKey("td_cms_vote_answer"));
+		paramMap.put("QID", qid);
+		paramMap.put("TYPE", type);
+		paramMap.put("ITEM_ID", oid);
+		paramMap.put("ANSWER", content);
+		paramMap.put("TITLE_ID", titleId);
+		paramMap.put("USER_ID", userId);
+		paramMap.put("WHO_IP", ip);
+
+		// executor.insert("saveVoteDetail", id,userId, titleId, qid, type, oid,
+		// content); gw_tanx 20150204
+		executor.insertBean("saveVoteDetail", paramMap);
 	}
+
 	@Override
 	public List<ExcelBean> queryAnswerContent(String titleId) throws Exception {
-		
-		return executor.queryList(ExcelBean.class, "queryAnswerContent", titleId);
+
+		return executor.queryList(ExcelBean.class, "queryAnswerContent",
+				titleId);
 	}
-	
+
 	@Override
-	public List<Map<String, String>> getQuestionTitleById(String titleId) throws Exception {
+	public List<Map<String, String>> getQuestionTitleById(String titleId)
+			throws Exception {
 
 		final List<Map<String, String>> titleList = new ArrayList<Map<String, String>>();
 
@@ -52,7 +73,7 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 
 		return titleList;
 	}
-	
+
 	/**
 	 * 过滤答案数据
 	 * 
@@ -73,6 +94,7 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 			// 初始化对象
 			if (StringUtil.isEmpty(tempUserId)) {
 				map = new HashMap<String, String>();
+				tempUserId = bean.getUserId();
 			}
 
 			if (bean.getUserId().equals(tempUserId)
@@ -80,11 +102,12 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 				map.put(bean.getQuesId(), bean.getAnswerContent());// key：题目id，value：题目答案
 			} else {
 				// 保存换人前用户的工号
-				map.put("USERID", bean.getUserId());
+				map.put("USERID", tempUserId);
 				// 人员不一致，保存的员工工号和所做的题目
 				contentList.add(map);
 				// 重置对象
 				map = new HashMap<String, String>();
+				tempUserId = bean.getUserId();
 			}
 
 			// 最后一条数据
@@ -94,12 +117,12 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 			}
 		}
 	}
-	
+
 	@Override
 	public void setExcelData(Workbook workbook,
 			List<Map<String, String>> titleList, List<ExcelBean> answerList)
 			throws Exception {
-		
+
 		Sheet sheet = null;
 		sheet = (XSSFSheet) workbook.getSheetAt(0);
 
@@ -146,60 +169,92 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 		}
 
 	}
-	
+
 	@Override
 	public void setExcelData(Workbook workbook, List<ExcelBean> list)
 			throws Exception {
-		try{
-			Sheet sheet=null;
-			CellStyle cellStyle=null; 
-			Font font=null;
-			
-				 sheet =(XSSFSheet)workbook.getSheetAt(0);
-				 cellStyle=(XSSFCellStyle)workbook.createCellStyle();
-				 if(null != list && list.size()>0){
-					 for(int i=0;i<list.size();i++){
-						 ExcelBean bom=list.get(i);
-						 Row row=null;
-						 row = sheet.createRow(i+1);	 
-						 row.setHeight((short)450);
-						 row.createCell(0).setCellValue(bom.getUserId());
-						 row.createCell(1).setCellValue(bom.getVoteId());
-						 row.createCell(2).setCellValue(bom.getVoteName());
-						 row.createCell(3).setCellValue(bom.getQuesId());
-						 row.createCell(4).setCellValue(bom.getQuesContent());
-						 row.createCell(5).setCellValue(bom.getQuesType());
-						 row.createCell(6).setCellValue(getTypeName(bom.getQuesType()));
-						 row.createCell(7).setCellValue(bom.getOptionId());
-						 row.createCell(8).setCellValue(bom.getAnswerContent());
-						 
-					 }
-				 }
-			
-		}catch(Exception e){
+		try {
+			Sheet sheet = null;
+			CellStyle cellStyle = null;
+			Font font = null;
+
+			sheet = (XSSFSheet) workbook.getSheetAt(0);
+			cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+			if (null != list && list.size() > 0) {
+				for (int i = 0; i < list.size(); i++) {
+					ExcelBean bom = list.get(i);
+					Row row = null;
+					row = sheet.createRow(i + 1);
+					row.setHeight((short) 450);
+					row.createCell(0).setCellValue(bom.getUserId());
+					row.createCell(1).setCellValue(bom.getVoteId());
+					row.createCell(2).setCellValue(bom.getVoteName());
+					row.createCell(3).setCellValue(bom.getQuesId());
+					row.createCell(4).setCellValue(bom.getQuesContent());
+					row.createCell(5).setCellValue(bom.getQuesType());
+					row.createCell(6).setCellValue(
+							getTypeName(bom.getQuesType()));
+					row.createCell(7).setCellValue(bom.getOptionId());
+					row.createCell(8).setCellValue(bom.getAnswerContent());
+
+				}
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			
-		}finally{
+
+		} finally {
 
 		}
 	}
-	private String getTypeName(String type){
-		if("0".equals(type)){
+
+	private String getTypeName(String type) {
+		if ("0".equals(type)) {
 			return "单选并统计投票";
-		}else  if("1".equals(type)){
+		} else if ("1".equals(type)) {
 			return "多选并统计投票";
-		}else  if("2".equals(type)){
+		} else if ("2".equals(type)) {
 			return "自由回答";
-		}else  if("3".equals(type)){
+		} else if ("3".equals(type)) {
 			return "单选";
-		}else  if("4".equals(type)){
+		} else if ("4".equals(type)) {
 			return "多选";
 		}
 		return "";
 	}
+
 	@Override
 	public String queryVoteNameByTitleId(String titleId) throws Exception {
-		
+
 		return executor.queryField("queryVoteNameByTitleId", titleId);
+	}
+
+	@Override
+	public List<VoteTitle> getVoteListByWorkNo(String userWorkNumber,
+			String siteName) {
+
+		try {
+			long siteID = CMSUtil.getSiteCacheManager()
+					.getSiteByEname(siteName).getSiteId();
+
+			return executor.queryList(VoteTitle.class, "queryVoteList", siteID,
+					userWorkNumber);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	@Override
+	public String getVoteCount(String userWorkNumber, String siteName) {
+		try {
+
+			long siteID = CMSUtil.getSiteCacheManager()
+					.getSiteByEname(siteName).getSiteId();
+
+			return executor
+					.queryField("queryVoteCount", siteID, userWorkNumber);
+		} catch (Exception e) {
+			return "0";
+		}
 	}
 }

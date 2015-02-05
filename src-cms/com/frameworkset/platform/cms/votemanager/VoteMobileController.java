@@ -17,10 +17,8 @@ package com.frameworkset.platform.cms.votemanager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +31,7 @@ import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.platform.cms.bean.ExcelBean;
 import com.frameworkset.platform.cms.voteservice.VoteMobileService;
+import com.frameworkset.util.StringUtil;
 
 /**
  * @author xusy3
@@ -52,7 +51,7 @@ public class VoteMobileController {
 	 * @return String
 	 * @throws Exception Exception
 	 */
-	public @ResponseBody(datatype="jsonp") void saveVoteDetail(String titleId,String detail,String userId) {
+	public @ResponseBody(datatype="jsonp") void saveVoteDetail(String titleId,String detail,String userId,HttpServletRequest request) {
 		
 		if(null != detail && !"".equals(detail)){
 			String [] beans = detail.split(";");
@@ -62,9 +61,10 @@ public class VoteMobileController {
 				String type = paras[1].split(":")[1];
 				String oid = paras[2].split(":").length>1?paras[2].split(":")[1]:"";
 				String content = paras[3].split(":")[1];
-				String id = UUID.randomUUID().toString();
+//				String id = UUID.randomUUID().toString();
+				String ip = StringUtil.getClientIP(request);
 				try{
-					voteMobileService.saveVoteDetail(userId,id,titleId,qid,type,oid,content);
+					voteMobileService.saveVoteDetail(userId,ip,titleId,qid,type,oid,content);
 				}catch(Exception e){
 					log.error("工号为："+userId+"，问卷号："+titleId+",题号:"+qid+",选项号:"+oid+",内容："+content+"，保存失败", e);
 				}

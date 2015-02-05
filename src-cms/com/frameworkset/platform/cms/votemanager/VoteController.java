@@ -118,7 +118,7 @@ public class VoteController {
 	 * @return String
 	 * @throws Exception Exception
 	 */
-	public @ResponseBody(datatype="jsonp") String doVote(String strOptionID,HttpServletRequest request) {
+	public @ResponseBody(datatype="jsonp") String doVote(String strOptionID,String userId,String titleId,HttpServletRequest request) {
 		try {
 			String ip=com.frameworkset.util.StringUtil.getClientIP(request);
 			voteManager  = new VoteManagerImpl();
@@ -144,7 +144,7 @@ public class VoteController {
 				}
 				//System.out.println(param+"="+);
 			}
-			voteManager.doVote(strOptionID,textQuestion, ip);
+			voteManager.doVote(strOptionID,textQuestion, ip,userId,titleId);
 			return "success";
 		} catch (Exception e) {
 			return null;
