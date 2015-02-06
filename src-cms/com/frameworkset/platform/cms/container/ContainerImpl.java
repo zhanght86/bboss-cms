@@ -35,6 +35,7 @@ public class ContainerImpl implements Container{
 	CMSServletRequest cmsrequest;
 	CMSServletResponse cmsresponse; 
 	Context context = null;
+	private boolean inited;
 	
 	public static final int LINK_FROM_WEBPRJS = 1;
 	public static final int LINK_FROM_TEMPLATE = 2;
@@ -78,7 +79,9 @@ public class ContainerImpl implements Container{
 	 */
 	private void check() throws ContainerException
 	{
-		if(request == null)
+		if(inited)
+			return;
+		if(request == null )
 			throw new ContainerException("容器未初始化异常，请调用方法[init]进行初始化。");
 			
 	}
@@ -295,13 +298,16 @@ public class ContainerImpl implements Container{
 	}
 	
 	public void init(Context context) throws ContainerException {
-		this.request = context.getRequestContext().getRequest();
-		this.session = context.getRequestContext().getRequest().getSession(false);
-		this.response =context.getRequestContext().getResponse();
-		this.cmsrequest = InternalImplConverter.getInternalRequest(request);
-		this.cmsresponse = InternalImplConverter.getInternalResponse(response);		
+		if(context.getRequestContext() != null)
+		{
+			this.request = context.getRequestContext().getRequest();
+			this.session = context.getRequestContext().getRequest().getSession(false);
+			this.response =context.getRequestContext().getResponse();
+			this.cmsrequest = InternalImplConverter.getInternalRequest(request);
+			this.cmsresponse = InternalImplConverter.getInternalResponse(response);		
+		}
 		this.context = context;
-		
+		this.inited = true;
 		
 	}
 	

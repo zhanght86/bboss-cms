@@ -9,14 +9,17 @@ import com.frameworkset.platform.cms.bean.ExcelBean;
 import com.frameworkset.platform.cms.votemanager.ws.VoteTitle;
 
 public interface VoteMobileService {
-	public void saveVoteDetail(String userId,String ip,String titleId,String qid,String type,String oid,String content)throws Exception;
-	
-	public List<ExcelBean> queryAnswerContent(String titleId)throws Exception;
-	
-	public void  setExcelData(Workbook workbook, List<ExcelBean> list)throws Exception;
-	
-	public String queryVoteNameByTitleId(String titleId)throws Exception;
-	
+	public void saveVoteDetail(String userId, String ip, String titleId,
+			String qid, String type, String oid, String content)
+			throws Exception;
+
+	public List<ExcelBean> queryAnswerContent(String titleId) throws Exception;
+
+	public void setExcelData(Workbook workbook, List<ExcelBean> list)
+			throws Exception;
+
+	public String queryVoteNameByTitleId(String titleId) throws Exception;
+
 	/**
 	 * 根据试卷id获取试卷题目
 	 * 
@@ -42,7 +45,10 @@ public interface VoteMobileService {
 	public void setExcelData(Workbook workbook,
 			List<Map<String, String>> titleList, List<ExcelBean> answerList)
 			throws Exception;
+
 	public List<VoteTitle> getVoteListByWorkNo(String userWorkNumber,
-			String siteName) ;
-	public String getVoteCount(String userWorkNumber, String siteName) ;
+			long siteID) throws Exception;
+
+	public String getVoteCount(String userWorkNumber, String siteName)
+			throws Exception;
 }

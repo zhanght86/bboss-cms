@@ -20,6 +20,8 @@ public class VoteTitle implements Serializable {
 
 	private String disposedep;
 
+	private String voteUrl;
+
 	public String getId() {
 		return id;
 	}
@@ -58,6 +60,14 @@ public class VoteTitle implements Serializable {
 
 	public void setTimeEndStr(String timeEndStr) {
 		this.timeEndStr = timeEndStr;
+	}
+
+	public String getVoteUrl() {
+		return voteUrl;
+	}
+
+	public void setVoteUrl(String voteUrl) {
+		this.voteUrl = voteUrl;
 	}
 
 }

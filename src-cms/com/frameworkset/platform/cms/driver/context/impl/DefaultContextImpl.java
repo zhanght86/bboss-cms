@@ -69,6 +69,8 @@ public class DefaultContextImpl extends BaseContextImpl {
 	
 	public CMSRequestContext getRequestContext()
 	{
+		if(this.parentContext == null)
+			return null;
 		return this.parentContext.getRequestContext();
 	}
 	public DefaultContextImpl(Context parent)
@@ -105,6 +107,22 @@ public class DefaultContextImpl extends BaseContextImpl {
 		}
 		
 	}
+	
+	public DefaultContextImpl(Site site) {		 
+		try {
+			this.siteID = site.getSiteId()+"";
+			this.siteinfo = site;
+			this.siteDir = siteinfo.getSiteDir();
+			this.dbName = siteinfo.getDbName();		
+			this.domain = siteinfo.getWebHttp();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		
+	}
+
 
 	/**
 	 * 

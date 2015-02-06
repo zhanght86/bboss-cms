@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 import com.frameworkset.platform.cms.votemanager.ws.VoteTitle;
-import com.frameworkset.platform.cms.voteservice.VoteMobileService;
+import com.frameworkset.platform.cms.votemanager.ws.VoteWebService;
 
 /**
  * 
@@ -21,24 +21,24 @@ import com.frameworkset.platform.cms.voteservice.VoteMobileService;
 public class TestVoteWS {
 	private String context = "http://127.0.0.1:8080/SanyPDP/";
 	// hessian服务方式
-	private VoteMobileService hassianService = null;
+	private VoteWebService hassianService = null;
 	// webservice方式
-	private VoteMobileService cxfService = null;
+	private VoteWebService cxfService = null;
 
 	@Before
 	public void init() throws Exception {
 		// hessian服务方式
 		HessianProxyFactory factory = new HessianProxyFactory();
 		String url = context + "hessian?service=voteService";
-		hassianService = (VoteMobileService) factory.create(
-				VoteMobileService.class, url);
+		hassianService = (VoteWebService) factory.create(
+				VoteWebService.class, url);
 
 		// webservice方式
 		String cxfUrl = context + "cxfservices/voteService";
 		JaxWsProxyFactoryBean WSServiceClientFactory = new JaxWsProxyFactoryBean();
 		WSServiceClientFactory.setAddress(cxfUrl);
-		WSServiceClientFactory.setServiceClass(VoteMobileService.class);
-		cxfService = (VoteMobileService) WSServiceClientFactory.create();
+		WSServiceClientFactory.setServiceClass(VoteWebService.class);
+		cxfService = (VoteWebService) WSServiceClientFactory.create();
 
 	}
 
@@ -50,7 +50,7 @@ public class TestVoteWS {
 	
 	@Test
 	public void testGetVoteListByWorkNo() throws Exception {
-		List<VoteTitle> list = hassianService.getVoteListByWorkNo("21018438", "MobileVote");
+		List<VoteTitle> list = hassianService.getVoteListByWorkNo("21018438", "MobileVote","投票频道");
 		System.out.println(list.size());
 	}
 }

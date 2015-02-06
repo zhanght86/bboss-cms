@@ -231,30 +231,19 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 
 	@Override
 	public List<VoteTitle> getVoteListByWorkNo(String userWorkNumber,
-			String siteName) {
+			long siteID) throws Exception {
 
-		try {
-			long siteID = CMSUtil.getSiteCacheManager()
-					.getSiteByEname(siteName).getSiteId();
-
-			return executor.queryList(VoteTitle.class, "queryVoteList", siteID,
-					userWorkNumber);
-		} catch (Exception e) {
-			return null;
-		}
+		return executor.queryList(VoteTitle.class, "queryVoteList", siteID,
+				userWorkNumber);
 	}
 
 	@Override
-	public String getVoteCount(String userWorkNumber, String siteName) {
-		try {
+	public String getVoteCount(String userWorkNumber, String siteName)
+			throws Exception {
 
-			long siteID = CMSUtil.getSiteCacheManager()
-					.getSiteByEname(siteName).getSiteId();
+		long siteID = CMSUtil.getSiteCacheManager().getSiteByEname(siteName)
+				.getSiteId();
 
-			return executor
-					.queryField("queryVoteCount", siteID, userWorkNumber);
-		} catch (Exception e) {
-			return "0";
-		}
+		return executor.queryField("queryVoteCount", siteID, userWorkNumber);
 	}
 }

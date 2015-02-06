@@ -13,7 +13,8 @@ public interface VoteWebService {
 	public @WebResult(name = "votes", partName = "partVotes")
 	List<VoteTitle> getVoteListByWorkNo(
 			@WebParam(name = "workNo", partName = "partWorkNo") String workNo,
-			@WebParam(name = "siteName", partName = "partSiteName") String siteName);
+			@WebParam(name = "siteName", partName = "partSiteName") String siteName,
+			@WebParam(name = "channel", partName = "partChannel") String channel);
 
 	// 获取投票待办数
 	public @WebResult(name = "voteCount", partName = "partVoteCount")
