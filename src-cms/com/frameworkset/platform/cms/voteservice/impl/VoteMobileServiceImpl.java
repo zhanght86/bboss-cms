@@ -84,8 +84,12 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 	 */
 	private void filterExceDate(List<ExcelBean> answerList,
 			List<Map<String, String>> contentList) {
-		// 行转列数据
+		// 临时比较对象-用户id
 		String tempUserId = "";
+		// 临时比较对象-问题id
+		String tempQid = "";
+		// 多选题答案
+		StringBuffer contents = new StringBuffer();
 
 		Map<String, String> map = null;
 		for (int i = 0; i < answerList.size(); i++) {
@@ -95,23 +99,47 @@ public class VoteMobileServiceImpl implements VoteMobileService {
 			if (StringUtil.isEmpty(tempUserId)) {
 				map = new HashMap<String, String>();
 				tempUserId = bean.getUserId();
+				tempQid = bean.getQuesId();
 			}
 
-			if (bean.getUserId().equals(tempUserId)
-					|| StringUtil.isEmpty(tempUserId)) {
-				map.put(bean.getQuesId(), bean.getAnswerContent());// key：题目id，value：题目答案
+			if (bean.getUserId().equals(tempUserId)) {
+
+				// 判断是否有多个答案
+				if (bean.getQuesId().equals(tempQid)) {
+					contents.append(bean.getAnswerContent()).append(",");
+				} else {
+					// 先保存前面题目的所有答案
+					map.put(tempQid,
+							contents.toString().substring(0,
+									contents.toString().lastIndexOf(",")));// key：题目id，value：题目答案
+					// 然后重置判断条件
+					tempQid = bean.getQuesId();
+					contents.setLength(0);
+					contents.append(bean.getAnswerContent()).append(",");
+
+				}
 			} else {
 				// 保存换人前用户的工号
 				map.put("USERID", tempUserId);
+				// 保存题目答案
+				map.put(tempQid,
+						contents.toString().substring(0,
+								contents.toString().lastIndexOf(",")));
 				// 人员不一致，保存的员工工号和所做的题目
 				contentList.add(map);
-				// 重置对象
+				// 重置判断条件
 				map = new HashMap<String, String>();
 				tempUserId = bean.getUserId();
+				tempQid = bean.getQuesId();
+				contents.setLength(0);
+				contents.append(bean.getAnswerContent()).append(",");
 			}
 
 			// 最后一条数据
 			if (i == answerList.size() - 1) {
+				map.put(tempQid,
+						contents.toString().substring(0,
+								contents.toString().lastIndexOf(",")));
 				map.put("USERID", bean.getUserId());
 				contentList.add(map);
 			}

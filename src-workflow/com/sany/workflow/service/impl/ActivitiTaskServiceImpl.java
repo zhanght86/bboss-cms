@@ -21,6 +21,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.TaskInfo;
+import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -1755,6 +1756,77 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			}
 		}
 
+	}
+
+	@Override
+	public void udpNodeAssignee(List<ActivitiNodeInfo> nodeList,
+			String processId) throws Exception {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 普通节点List
+			List<Map<String, String>> commonNodeList = new ArrayList<Map<String, String>>();
+
+			// 抄送或通知节点List
+			List<Map<String, String>> noticeNodeList = new ArrayList<Map<String, String>>();
+
+			// 筛选节点
+			if (nodeList != null && nodeList.size() > 0) {
+				for (ActivitiNodeInfo node : nodeList) {
+					if (node.getIs_copy() == 0) {// 普通节点
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("nodeDealers", node.getNode_users_id());
+						map.put("nodeKey", node.getNode_key() + "_users");
+						map.put("processId", processId);
+						commonNodeList.add(map);
+					} else {
+						// 抄送或通知节点
+
+						if (StringUtil.isNotEmpty(node.getNode_users_id())
+								&& StringUtil
+										.isNotEmpty(node.getNode_orgs_id())) {
+							node.setCopyerscnname(node.getNode_users_name()
+									+ "," + node.getNode_orgs_name());
+
+						} else if (StringUtil.isEmpty(node.getNode_users_id())
+								&& StringUtil
+										.isNotEmpty(node.getNode_orgs_id())) {
+							node.setCopyerscnname(node.getNode_orgs_name());
+
+						} else if (StringUtil.isNotEmpty(node
+								.getNode_users_id())
+								&& StringUtil.isEmpty(node.getNode_orgs_id())) {
+							node.setCopyerscnname(node.getNode_users_name());
+						} else {
+							node.setCopyerscnname("");
+						}
+
+						Map<String, String> map = new HashMap<String, String>();
+						map.put("copyUsers", node.getNode_users_id());
+						map.put("copyOrgs", node.getNode_orgs_id());
+						map.put("copyersCnname", node.getCopyerscnname());
+						map.put("nodeKey", node.getNode_key());
+						map.put("processId", processId);
+						noticeNodeList.add(map);
+					}
+				}
+			}
+
+			// 修改普通节点处理人信息
+			executor.updateBeans("udpNodeAssignee_wf", commonNodeList);
+
+			// 修改抄送、通知节点处理人信息
+			executor.updateBeans("udpNodeWorktime_wf", noticeNodeList);
+
+			tm.commit();
+
+		} catch (Exception e) {
+			throw new Exception("修改未产生待办任务的节点处理人出错:" + e);
+		} finally {
+			tm.release();
+		}
 	}
 
 }

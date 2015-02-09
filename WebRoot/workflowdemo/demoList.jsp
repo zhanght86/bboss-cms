@@ -60,6 +60,10 @@
 			    		<pg:notempty colName="assigneeName"><pg:cell colName="assigneeName" /></pg:notempty>
 		            </td> 
 		            <td class="td_center">
+		            	<pg:equal colName="businessState" value="1">
+		            	<a href="javascript:void(0)" onclick="toUdpNodeAssignee('<pg:cell colName="businessKey" />','<pg:cell colName="processKey" />')">调整</a>
+		            	</pg:equal>
+		            	
 		            	<a href="javascript:void(0)" onclick="dealBusiness('<pg:cell colName="businessKey" />','<pg:cell colName="businessState" />','<pg:cell colName="processKey" />')">
 		   				<pg:equal colName="businessState" value="0">申请</pg:equal>         	
 		            	<pg:equal colName="businessState" value="1">处理</pg:equal>         

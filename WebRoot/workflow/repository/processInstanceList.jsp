@@ -131,13 +131,14 @@
 		            <td class="td_center">
 		            	<pg:notempty colName="SUSPENSION_STATE_" >
 			             	<pg:equal colName="SUSPENSION_STATE_" value="1">
-			                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="suspendProcess('<pg:cell colName="PROC_INST_ID_" />')">挂起</a>|
+			                	<a href="javascript:void(0)" onclick="suspendProcess('<pg:cell colName="PROC_INST_ID_" />')">挂起</a>|
 							</pg:equal>
 							<pg:equal colName="SUSPENSION_STATE_" value="2">
-			                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="activateProcess('<pg:cell colName="PROC_INST_ID_" />')">激活</a>|
+			                	<a href="javascript:void(0)" onclick="activateProcess('<pg:cell colName="PROC_INST_ID_" />')">激活</a>|
 							</pg:equal>
+							<a href="javascript:void(0)" onclick="toUdpNodeAssignee('<pg:cell colName="KEY_" />','<pg:cell colName="PROC_INST_ID_" />')">调整</a>|
 						</pg:notempty>
-		                <a href="javascript:void(0)" id="viewProcessInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
+		                <a href="javascript:void(0)" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
 		            </td>    
 		        </tr>
 		 	</pg:equalandlower>
@@ -196,13 +197,14 @@
 		            <td class="td_center" rowspan="<pg:size colName="taskList"/>">
 		            	<pg:notempty colName="SUSPENSION_STATE_" >
 			             	<pg:equal colName="SUSPENSION_STATE_" value="1">
-			                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="suspendProcess('<pg:cell colName="PROC_INST_ID_" />')">挂起</a>|
+			                	<a href="javascript:void(0)" onclick="suspendProcess('<pg:cell colName="PROC_INST_ID_" />')">挂起</a>|
 							</pg:equal>
 							<pg:equal colName="SUSPENSION_STATE_" value="2">
-			                	<a href="javascript:void(0)" id="viewProcessInfo" onclick="activateProcess('<pg:cell colName="PROC_INST_ID_" />')">激活</a>|
+			                	<a href="javascript:void(0)" onclick="activateProcess('<pg:cell colName="PROC_INST_ID_" />')">激活</a>|
 							</pg:equal>
+							<a href="javascript:void(0)" onclick="toUdpNodeAssignee('<pg:cell colName="KEY_" />','<pg:cell colName="PROC_INST_ID_" />')">调整</a>|
 						</pg:notempty>
-		                <a href="javascript:void(0)" id="viewProcessInfo" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
+		                <a href="javascript:void(0)" onclick="viewDetailInfo('<pg:cell colName="PROC_INST_ID_" />')">详情</a>
 		            </td>    
 		        </tr>
 		        

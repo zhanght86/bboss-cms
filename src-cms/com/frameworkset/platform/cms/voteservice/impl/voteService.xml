@@ -24,7 +24,7 @@
 			                   c.options
 			                end answerContent,
 			                a.item_id optionId,
-			                a.type quesType
+			                d.style quesType
 			        
 			          from td_cms_vote_answer a
 			          left join TD_CMS_VOTE_TITLE b on a.title_id = b.ID

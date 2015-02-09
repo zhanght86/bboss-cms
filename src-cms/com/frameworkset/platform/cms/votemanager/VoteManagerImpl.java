@@ -707,7 +707,8 @@ public class VoteManagerImpl implements VoteManager {
 							+ qids.get(i).toString()
 							+ ",'"
 							+ item.getOptions()
-							+ "',"+item.getCount()+","
+//							+ "',"+item.getCount()+"," gw_tanx 20150207 统计清零
+							+ "',0,"
 							+ itemID +") ";
 					db.addBatch(sqlInsert);
 				}

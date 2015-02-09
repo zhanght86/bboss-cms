@@ -15,22 +15,9 @@
 <script type='text/javascript' src="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/include/autocomplete/jquery.autocomplete.css" />
 
-<%-- 
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/jquery.multiselect.css" />
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/demo/selectgrid/styleSheet/style.css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/demo/selectgrid/Script/jquery-ui.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/demo/selectgrid/Script/jquery.multiselect.js"></script>
---%>
 <script type="text/javascript">
 
 $(document).ready(function() {
-	<%--
-	$("#s1").multiselect({
-		selectedList: 3,
-		show: ["blind", 200],
-		hide: ["blind", 200]
-	});
-	--%>
 	$("#wait").hide();
 	
 	queryList();
@@ -276,6 +263,14 @@ function activateProcess(processInstId){
      },function(){
      		
      });
+}
+
+//调整(修改节点处理人)
+function toUdpNodeAssignee(processKey,processId) {
+	var url=encodeURI("<%=request.getContextPath()%>/workflow/taskManage/toNodeAssignee.page"
+			+ "?processKey="+processKey
+			+ "&processId="+processId);
+	$.dialog({ title:'调整节点处理人',width:1100,height:620, content:'url:'+url});
 }
 
 function doreset(){

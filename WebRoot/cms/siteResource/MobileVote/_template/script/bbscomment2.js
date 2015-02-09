@@ -213,7 +213,8 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 				             		for (var i=0; i<data.length; i++) {
 					             		
 					             		if(selected_title_id == data[i].id){
-					             			comm = comm +  "<div class=\"re_title\">"+data[i].name+" ["+data[i].foundDate+"]<br/></div>";
+					             			comm = comm +  "<div class=\"re_title\">"+data[i].name+" ["+data[i].foundDate+"]";
+					             			comm = comm + "<br/><h4> "+data[i].content+" </h4></div> " ;
 						             		comm = comm + "<div id=\"vote_"+data[i].id+"\"> </div> " ;
 					             		}
 					             		

@@ -551,42 +551,44 @@
 				}
 				
 				List questions = oneTitle.getQuestions();
-				Question  qstion = (Question)questions.get(0);
-				%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
-				checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");<%
-				if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
-					List items = qstion.getItems();
-					Item item = (Item)items.get(0);
-					%>document.all("qstionTbl1AddBtn").disabled = false;
-					document.all("qstionTbl1DelBtn").disabled = false;
-					addOption("qstionTbl1");
-					document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";<%
-					for (int j=1;j<items.size();j++){
-						item = (Item)items.get(j);
-						%>addOption("qstionTbl1");
-						document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";<%
-					}
-				}
-				
-				for (int i=1;i<questions.size();i++){
-					qstion = (Question)questions.get(i);
-					%>addQuestion();
-					var tblNm = "qstionTbl"+tableIndex;
-					document.all(tblNm+"AddBtn").disabled = true;
-					document.all(tblNm+"DelBtn").disabled = true;
-					document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
-					checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");<%
+				if (questions!=null && questions.size() > 0) {
+					Question  qstion = (Question)questions.get(0);
+					%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
+					checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");<%
 					if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
 						List items = qstion.getItems();
 						Item item = (Item)items.get(0);
-						%>document.all(tblNm+"AddBtn").disabled = false;
-						document.all(tblNm+"DelBtn").disabled = false;
-						addOption(tblNm);
-						document.all(tblNm+"Option").value = "<%=item.getOptions()%>";<%
+						%>document.all("qstionTbl1AddBtn").disabled = false;
+						document.all("qstionTbl1DelBtn").disabled = false;
+						addOption("qstionTbl1");
+						document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";<%
 						for (int j=1;j<items.size();j++){
 							item = (Item)items.get(j);
-							%>addOption(tblNm);
-							document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";<%
+							%>addOption("qstionTbl1");
+							document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";<%
+						}
+					}
+				
+					for (int i=1;i<questions.size();i++){
+						qstion = (Question)questions.get(i);
+						%>addQuestion();
+						var tblNm = "qstionTbl"+tableIndex;
+						document.all(tblNm+"AddBtn").disabled = true;
+						document.all(tblNm+"DelBtn").disabled = true;
+						document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
+						checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");<%
+						if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
+							List items = qstion.getItems();
+							Item item = (Item)items.get(0);
+							%>document.all(tblNm+"AddBtn").disabled = false;
+							document.all(tblNm+"DelBtn").disabled = false;
+							addOption(tblNm);
+							document.all(tblNm+"Option").value = "<%=item.getOptions()%>";<%
+							for (int j=1;j<items.size();j++){
+								item = (Item)items.get(j);
+								%>addOption(tblNm);
+								document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";<%
+							}
 						}
 					}
 				}

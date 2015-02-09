@@ -21,11 +21,18 @@
     //接收参数
     function getParas(){
     	var strHref = window.document.location.href;
+    	//http://localhost:8080/SanyPDP/sitepublish/vote/default.htm?id=title&user=10006673
     	if(strHref.split("?").length>1){
-    		selected_title_id = strHref.split("?")[1].split("&")[0].split("=")[1];
-    		user_id = strHref.split("?")[1].split("&")[1].split("=")[1];
+    		var paramArray = strHref.split("?")[1].split("&");
+    		for (var i = 0; i< paramArray.length;i++) {
+    			var paramStr = paramArray[i].split("=");
+    			if (paramStr[0] == "id") {
+    				selected_title_id = paramStr[1];
+    			}else if (paramStr[0] == "userId") {
+    				user_id = paramStr[1];
+    			}
+    		}
     	}
-		
     }
 
 	var commentlisturl = "<cms:siteparam name="appcontext"/>/vote/getTitleNList.freepage?jsonp_callback=?";		
@@ -149,7 +156,7 @@ function doVote(titleId,len){
 		$.getJSON(dovoteurl, datas,
 				function(data) {   
 	             	if (data == "success") {
-		             	alert("投票成功");
+		             	alert("提交成功");
 						//getbbsvoteDetail(titleId);
 		             	returnListPage();
 	             	} else {

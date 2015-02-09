@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
+import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
@@ -46,7 +47,7 @@ public interface ActivitiTaskService {
 	 * @param nodeList
 	 *            2014年5月27日
 	 */
-	public void completeTask(TaskCondition task,Map<String, Object> variableMap);
+	public void completeTask(TaskCondition task, Map<String, Object> variableMap);
 
 	/**
 	 * 驳回任务
@@ -55,7 +56,8 @@ public interface ActivitiTaskService {
 	 * @param nodeList
 	 *            2014年5月27日
 	 */
-	public void rejectToPreTask(TaskCondition task,Map<String, Object> variableMap, int rejectedtype);
+	public void rejectToPreTask(TaskCondition task,
+			Map<String, Object> variableMap, int rejectedtype);
 
 	/**
 	 * 驳回任务
@@ -292,23 +294,34 @@ public interface ActivitiTaskService {
 	 * @throws Exception
 	 *             2014年12月22日
 	 */
-	public PageData getUserPageList(String assigneeName, int limit) throws Exception;
+	public PageData getUserPageList(String assigneeName, int limit)
+			throws Exception;
+
 	public String changeToDomainAccount(String userId);
+
 	public TaskInfo getCurrentNodeInfoByKey(String bussinesskey,
 			String processKey, String userId) throws Exception;
+
 	public boolean judgeAuthorityNoAdmin(String taskId, String processKey,
 			String userAccount);
+
 	public boolean judgeAuthority(String taskId, String processKey,
-			String userAccount) ;
+			String userAccount);
+
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception;
+
 	public TaskInfo getCurrentNodeInfoByBussinessKey(String bussinesskey,
 			String userId) throws Exception;
-	
-	public TaskInfo getCurrentNodeInfoByProcessInstanceid(String processinstanceid,
-			String userId) throws Exception ;
+
+	public TaskInfo getCurrentNodeInfoByProcessInstanceid(
+			String processinstanceid, String userId) throws Exception;
+
 	public boolean isSignTask(String taskId, String userId) throws Exception;
-	public void autoCompleteTask(TaskInfo task,String dealOption,String dealRemak, String dealReason, String processInstanceID,String currentUser) throws Exception;
-	
+
+	public void autoCompleteTask(TaskInfo task, String dealOption,
+			String dealRemak, String dealReason, String processInstanceID,
+			String currentUser) throws Exception;
+
 	/**
 	 * 获取流程节点参数配置信息(准备流程处理人和变量参数及控制参数)
 	 * 
@@ -319,4 +332,17 @@ public interface ActivitiTaskService {
 			List<ActivitiNodeInfo> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList,
 			List<NodeControlParam> nodeControlParamList) throws Exception;
+
+	/**
+	 * 修改未产生待办节点的处理人
+	 * 
+	 * @param nodeList
+	 *            节点处理人信息
+	 * @param processId
+	 *            流程实例ID
+	 * @throws Exception
+	 *             2015年2月7日
+	 */
+	public void udpNodeAssignee(List<ActivitiNodeInfo> nodeList,
+			String processId) throws Exception;
 }

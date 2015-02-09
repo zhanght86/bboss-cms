@@ -9,6 +9,7 @@
 		path:toDemo="/workflowdemo/demo.jsp"
 		path:toDemoList="/workflowdemo/demoList.jsp"
 		path:hiTaskList="/workflowdemo/hiTaskList.jsp"
+		path:toUdpNodeAssignee="/workflowdemo/udpNodeAssignee.jsp"
 		class="com.sany.workflow.demo.action.BusinessDemoAction">
 	</property>
 	

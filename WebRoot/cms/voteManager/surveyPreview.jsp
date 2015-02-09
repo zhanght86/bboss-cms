@@ -39,7 +39,7 @@
 		<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F3F4F9" align="center">
 	<p>
 		<tr><td align="center"><div style="font-family: '黑体';font-weight: bold;font-size: 24px;">
-		<cms:survey /></div><p></td></tr>
+		<cms:survey type="name"/></div><p></td></tr>
 		<tr><td style="color: #0000CC;" align="center">
 		<cms:survey type="content"/></td></tr>
 		</table>

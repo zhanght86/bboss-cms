@@ -95,7 +95,6 @@ public class VoteMobileController {
 	                    in.close();
 	                }
 	                catch (IOException e) {
-	                    throw new RuntimeException(e.getMessage(), e);
 	                }
 	            }
 		}
@@ -135,7 +134,6 @@ public class VoteMobileController {
 				try {
 					in.close();
 				} catch (IOException e) {
-					throw new RuntimeException(e.getMessage(), e);
 				}
 			}
 		}

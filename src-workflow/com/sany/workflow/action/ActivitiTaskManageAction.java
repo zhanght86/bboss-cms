@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -13,6 +14,7 @@ import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
+import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -476,8 +478,6 @@ public class ActivitiTaskManageAction {
 			String result = "success";
 			if (isAuthor) {
 
-				
-
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
@@ -508,51 +508,54 @@ public class ActivitiTaskManageAction {
 				}
 
 				task.setCompleteRemark(remark);
-				
+
 				Map<String, Object> variableMap = activitiTaskService
 						.getVariableMap(activitiNodeCandidateList,
 								nodevariableList, nodeControlParamList);
-				
+
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
 
 				// 完成任务
-				activitiTaskService.completeTask(task,variableMap);
+				activitiTaskService.completeTask(task, variableMap);
 
-				/**注释掉，需要先保存控制参数，再完成任务 2014-12-31 by biaoping.yin*/
-//				// 保存控制变量参数
-//				activitiService.addNodeWorktime(task.getProcessKey(),
-//						task.getProcessIntsId(), nodeControlParamList);
-				//下一个任务处理人相同，自动完成任务逻辑 2014-12-31 by biaoping.yin
-				NodeControlParam currrentNodeControlParam = this.activitiService.getNodeControlParamByTaskID(task.getProcessIntsId(), task.getTaskId());
-				
-				if(currrentNodeControlParam != null)
-				{
-				
-					if(currrentNodeControlParam.getIS_AUTOAFTER() == 1)
-					{
+				/** 注释掉，需要先保存控制参数，再完成任务 2014-12-31 by biaoping.yin */
+				// // 保存控制变量参数
+				// activitiService.addNodeWorktime(task.getProcessKey(),
+				// task.getProcessIntsId(), nodeControlParamList);
+				// 下一个任务处理人相同，自动完成任务逻辑 2014-12-31 by biaoping.yin
+				NodeControlParam currrentNodeControlParam = this.activitiService
+						.getNodeControlParamByTaskID(task.getProcessIntsId(),
+								task.getTaskId());
+
+				if (currrentNodeControlParam != null) {
+
+					if (currrentNodeControlParam.getIS_AUTOAFTER() == 1) {
 						// 获取当前任务信息
-						TaskInfo nextTask = this.activitiTaskService.getCurrentNodeInfoByProcessInstanceid(task.getProcessIntsId(), currentUser);
-						
+						TaskInfo nextTask = this.activitiTaskService
+								.getCurrentNodeInfoByProcessInstanceid(
+										task.getProcessIntsId(), currentUser);
+
 						// 后续节点处理人是否一致，一致就可以自动通过
-						if (null != nextTask 
+						if (null != nextTask
 								&& currentUser.equals(nextTask.getAssignee())) {
-		
+
 							// 清除上一任务的处理意见和意见备注
-		//					proIns.setDealRemak("");
-		//					proIns.setDealReason("前后任务处理人一致，自动通过");
-							activitiTaskService.autoCompleteTask(nextTask, "pass", "", "前后任务处理人一致，自动通过", task.getProcessIntsId(), currentUser);
-		//					autoCompleteTask(proIns, processKey);
+							// proIns.setDealRemak("");
+							// proIns.setDealReason("前后任务处理人一致，自动通过");
+							activitiTaskService.autoCompleteTask(nextTask,
+									"pass", "", "前后任务处理人一致，自动通过",
+									task.getProcessIntsId(), currentUser);
+							// autoCompleteTask(proIns, processKey);
 						}
 					}
 				}
-				
 
 				result = "success";
 
 			} else {
-				
+
 				result = "fail:您没有权限处理当前任务";
 			}
 			tm.commit();
@@ -690,17 +693,18 @@ public class ActivitiTaskManageAction {
 				String currentUser = AccessControl.getAccessControl()
 						.getUserAccount();
 				task.setCurrentUser(currentUser);
-				
+
 				Map<String, Object> variableMap = activitiTaskService
 						.getVariableMap(activitiNodeCandidateList,
 								nodevariableList, nodeControlParamList);
-				
+
 				// 保存控制变量参数
 				activitiService.addNodeWorktime(task.getProcessKey(),
 						task.getProcessIntsId(), nodeControlParamList);
 
-				activitiTaskService.rejectToPreTask(task,variableMap,rejectedtype);
-				
+				activitiTaskService.rejectToPreTask(task, variableMap,
+						rejectedtype);
+
 				return "success";
 			} else {
 				return "fail: 您没有权限驳回当前任务";
@@ -943,7 +947,7 @@ public class ActivitiTaskManageAction {
 
 			// String remark = "[" + currentUser + "]将任务撤销至["
 			// + act.getProperty("name") + "]";
-			
+
 			// 日志记录撤销操作
 			activitiService.addDealTask(taskId, userAccount, currentUser, "2",
 					processId, processKey, cancelTaskReason, "撤销任务", remark);
@@ -1117,6 +1121,73 @@ public class ActivitiTaskManageAction {
 			throws Exception {
 
 		return activitiTaskService.getUserPageList(assigneeName, limit);
+	}
+
+	/**
+	 * 跳转到修改后续节点处理人界面
+	 * 
+	 * @param nodeName
+	 * @param nodeValue
+	 * @param processId
+	 * @return 2015年1月29日
+	 */
+	public String toNodeAssignee(String processKey, String processId,
+			ModelMap model) {
+
+		try {
+
+			// 当前流程实例下所有节点信息
+			List<ActivitiNodeInfo> nodeList = activitiTaskService
+					.getNodeInfoById(processKey, processId);
+
+			// 获取当前任务key
+			Task task = activitiService.getCurrentTask(processId);
+
+			// 获取当前节点之前的节点
+			List<ActivitiNodeInfo> backActNodeList = activitiService
+					.getBackActNode(processId, task.getTaskDefinitionKey());
+
+			// 需过滤的节点（不能修改的节点）
+			StringBuffer filterNode = new StringBuffer();
+			if (backActNodeList != null && backActNodeList.size() > 0) {
+				for (ActivitiNodeInfo nodeInfo : backActNodeList) {
+					filterNode.append(nodeInfo.getNode_key() + ",");
+				}
+			}
+			filterNode.append(task.getTaskDefinitionKey());
+
+			model.addAttribute("nodeList", nodeList);
+			model.addAttribute("filterNode", filterNode.toString());
+			model.addAttribute("processId", processId);
+			model.addAttribute("processKey", processKey);
+
+			return "path:udpNodeAssignee";
+
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		}
+	}
+
+	/**
+	 * 修改未产生待办任务的节点处理人
+	 * 
+	 * @param nodeName
+	 * @param nodeValue
+	 * @param processId
+	 * @return 2015年1月29日
+	 */
+	public @ResponseBody
+	String udpNodeAssignee(List<ActivitiNodeInfo> nodeList, String processId) {
+
+		try {
+
+			activitiTaskService.udpNodeAssignee(nodeList, processId);
+
+			return "success";
+
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
 	}
 
 }

@@ -3010,4 +3010,50 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		return activitiService.getTaskService().getCopyTaskReadUsers(actinstid,
 				offset, pagesize);
 	}
+
+	@Override
+	public void udpNodeAssignees(List<ActNode> acts, String processId)
+			throws Exception {
+
+		if (acts != null && acts.size() > 0) {
+			List<ActivitiNodeInfo> nodeList = new ArrayList<ActivitiNodeInfo>();
+
+			for (ActNode node : acts) {
+				ActivitiNodeInfo nodeInfo = new ActivitiNodeInfo();
+				nodeInfo.setNode_key(node.getActId());
+				nodeInfo.setNode_users_id(node.getCandidateName());
+				nodeInfo.setNode_users_name(node.getCandidateCNName());
+				nodeInfo.setNode_orgs_id(node.getCandidateOrgId());
+				nodeInfo.setNode_orgs_name(node.getCandidateOrgName());
+				nodeInfo.setNode_users_id(node.getCandidateName());
+				nodeInfo.setIs_copy(node.getIsCopy());
+
+				nodeList.add(nodeInfo);
+			}
+
+			activitiTaskService.udpNodeAssignee(nodeList, processId);
+		}
+
+	}
+
+	@Override
+	public void udpNodeAssignee(ActNode node, String processId)
+			throws Exception {
+
+		List<ActivitiNodeInfo> nodeList = new ArrayList<ActivitiNodeInfo>();
+		ActivitiNodeInfo nodeInfo = new ActivitiNodeInfo();
+
+		nodeInfo.setNode_key(node.getActId());
+		nodeInfo.setNode_users_id(node.getCandidateName());
+		nodeInfo.setNode_users_name(node.getCandidateCNName());
+		nodeInfo.setNode_orgs_id(node.getCandidateOrgId());
+		nodeInfo.setNode_orgs_name(node.getCandidateOrgName());
+		nodeInfo.setNode_users_id(node.getCandidateName());
+		nodeInfo.setIs_copy(node.getIsCopy());
+
+		nodeList.add(nodeInfo);
+
+		activitiTaskService.udpNodeAssignee(nodeList, processId);
+
+	}
 }

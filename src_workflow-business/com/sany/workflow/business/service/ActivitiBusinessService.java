@@ -1114,4 +1114,29 @@ public interface ActivitiBusinessService {
 	public ListInfo getUserReaderCopyTasksByKey(String process_key,
 			String businesskey, long offset, int pagesize) throws Exception;
 
+	/**
+	 * 修改未产生待办节点的处理人(修改多个节点)
+	 * 
+	 * @param acts
+	 *            需要修改的节点信息
+	 * @param processId
+	 *            流程实例ID
+	 * @throws Exception
+	 *             2015年2月7日
+	 */
+	public void udpNodeAssignees(List<ActNode> acts, String processId)
+			throws Exception;
+
+	/**
+	 * 修改未产生待办节点的处理人(修改一个节点)
+	 * 
+	 * @param actNode
+	 *            单个节点信息
+	 * @param processId
+	 * @throws Exception
+	 *             2015年2月7日
+	 */
+	public void udpNodeAssignee(ActNode actNode, String processId)
+			throws Exception;
+
 }

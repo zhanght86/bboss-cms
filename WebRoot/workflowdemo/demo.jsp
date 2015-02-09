@@ -72,6 +72,14 @@ function initAutoComplete(data){
          }
      });
  }
+ 
+//调整(修改节点处理人)
+function toUdpNodeAssignee(businessKey,processKey) {
+	var url=encodeURI("<%=request.getContextPath()%>/workflow/businessDemo/toNodeAssignee.page"
+			+ "?businessKey="+businessKey
+			+ "&processKey="+processKey);
+	$.dialog({ title:'调整节点处理人',width:500,height:350, content:'url:'+url});
+}
 
 
 // 选择流程

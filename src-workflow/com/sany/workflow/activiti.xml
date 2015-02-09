@@ -3416,5 +3416,27 @@
 		]]>
 	</property>
 	
+	<!-- 修改未产生待办任务节点的处理人  gw_tanx -->
+	<property name="udpNodeAssignee_wf">
+		<![CDATA[
+			UPDATE ACT_RU_VARIABLE
+			    SET TEXT_ = #[nodeDealers]
+			  WHERE NAME_ = #[nodeKey]
+			    AND PROC_INST_ID_ = #[processId]
+		]]>
+	</property>
+	
+	<!-- 修改未产生待办任务抄送节点的处理人  gw_tanx -->
+	<property name="udpNodeWorktime_wf">
+		<![CDATA[
+			UPDATE TD_WF_NODE_WORKTIME
+			   SET COPYUSERS = #[copyUsers], 
+			       COPYORGS = #[copyOrgs], 
+			       COPYERSCNNAME = #[copyersCnname]
+			 WHERE PROCESS_ID = #[processId]
+			   AND NODE_KEY = #[nodeKey]
+		]]>
+	</property>
+	
 	
 </properties>

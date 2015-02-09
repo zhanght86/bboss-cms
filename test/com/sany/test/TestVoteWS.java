@@ -50,7 +50,7 @@ public class TestVoteWS {
 	
 	@Test
 	public void testGetVoteListByWorkNo() throws Exception {
-		List<VoteTitle> list = hassianService.getVoteListByWorkNo("21018438", "MobileVote","投票频道");
+		List<VoteTitle> list = hassianService.getVoteListByWorkNo("10005873", "MobileVote","vote1");
 		System.out.println(list.size());
 	}
 }

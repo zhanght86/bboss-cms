@@ -17,6 +17,7 @@
 		path:copyTaskList="/workflow/taskManage/copyTaskList.jsp" 
 		path:hiCopyTaskList="/workflow/taskManage/readedCopyTaskList.jsp" 
 		path:delegateTasksLogList="/workflow/taskManage/delegateTasksLogList.jsp" 
+		path:udpNodeAssignee="/workflow/repository/udpNodeAssignee.jsp"
 		f:activitiService="attr:activitiService"
 		f:activitiTaskService="attr:workflow.task.activitiTaskService"
 		class="com.sany.workflow.action.ActivitiTaskManageAction">
