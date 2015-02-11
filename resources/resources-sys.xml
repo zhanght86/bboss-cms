@@ -26,7 +26,7 @@
 	<group id="testgroup" name="测试权限组" >
         <operation id="read" priority="10" name="可读">
         	<authoration>		 	
-			 	<url>/test/testresopurlpermissionread.jsp</url>
+			 	<url>/test/testresopurlpermissionread.jsp{"resource":"opCode"|"required":true}</url>
 			</authoration>
         </operation>
 		<operation id="write" priority="20" name="可写" />
@@ -55,7 +55,7 @@
 				如果带了则按照resource匹配规则来控制url访问权限，true标识必须带资源码，如果没带直接阻止url访问。
         	 -->
 			<authoration>				 
-			 	<url><![CDATA[/test/testopurlpermissiondelete.jsp{"resource":"orgCode"|"required":true}]]></url>
+			 	<url><![CDATA[/test/testopurlpermissiondelete.jsp]]></url>
 			</authoration>
 		</operation>
 		

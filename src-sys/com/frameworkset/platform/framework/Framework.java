@@ -35,6 +35,7 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
 import com.frameworkset.platform.security.authorization.impl.PermissionToken;
 import com.frameworkset.platform.security.authorization.impl.PermissionTokenMap;
+import com.frameworkset.platform.security.authorization.impl.ResourceToken;
 import com.frameworkset.util.DaemonThread;
 import com.frameworkset.util.FileUtil;
 import com.frameworkset.util.ResourceInitial;
@@ -498,12 +499,12 @@ public class Framework implements ResourceInitial,MessageSource {
 					if(it.getWorkspaceContent() != null && !it.getWorkspaceContent().equals(""))
 					{
 						
-						permissionTokenMap.addPermissionToken(it.getWorkspaceContent(),this.getSystemid(), token);
+						permissionTokenMap.addPermissionToken(PermissionTokenMap.buildResourceToken(it.getWorkspaceContent()),this.getSystemid(), token);
 					}
 					if(it.getAuthorResources() != null)
 					{
-						List<String> authorResources = it.getAuthorResources();
-						for(String authorResource:authorResources)
+						List<ResourceToken> authorResources = it.getAuthorResources();
+						for(ResourceToken authorResource:authorResources)
 						{
 							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
 						}
@@ -517,12 +518,12 @@ public class Framework implements ResourceInitial,MessageSource {
 					if(it.getUrl() != null && !it.getUrl().equals(""))
 					{
 						
-						permissionTokenMap.addPermissionToken(it.getUrl(),this.getSystemid(), token);
+						permissionTokenMap.addPermissionToken(PermissionTokenMap.buildResourceToken(it.getUrl()),this.getSystemid(), token);
 					}
 					if(it.getAuthorResources() != null)
 					{
-						List<String> authorResources = it.getAuthorResources();
-						for(String authorResource:authorResources)
+						List<ResourceToken> authorResources = it.getAuthorResources();
+						for(ResourceToken authorResource:authorResources)
 						{
 							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
 						}
@@ -535,15 +536,15 @@ public class Framework implements ResourceInitial,MessageSource {
 				PermissionToken token = new PermissionToken("column", "publicItem",
 						"visible");
 				
-				permissionTokenMap.addUnprotectedPermissionToken(publicItem.getWorkspaceContent(), this.getSystemid(), token);
+				permissionTokenMap.addUnprotectedPermissionToken(PermissionTokenMap.buildResourceToken(publicItem.getWorkspaceContent()), this.getSystemid(), token);
 				String isanypage = publicItem.getWorkspacecontentExtendAttribute("isany");
 				if(isanypage == null)
 					isanypage = "jf.jsp";
-				permissionTokenMap.addUnprotectedPermissionToken(isanypage , this.getSystemid(), token);
+				permissionTokenMap.addUnprotectedPermissionToken(PermissionTokenMap.buildResourceToken(isanypage) , this.getSystemid(), token);
 				if(publicItem.getAuthorResources() != null)
 				{
-					List<String> authorResources = publicItem.getAuthorResources();
-					for(String authorResource:authorResources)
+					List<ResourceToken> authorResources = publicItem.getAuthorResources();
+					for(ResourceToken authorResource:authorResources)
 					{
 						permissionTokenMap.addUnprotectedPermissionToken(authorResource,this.getSystemid(), token);
 					}

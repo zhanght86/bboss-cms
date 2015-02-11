@@ -17,11 +17,11 @@
 	out.println(permissions);
 %>
 <pg:true actual="<%=hasaddpermission %>">
-	do something here...
+	true do something here...
 </pg:true>
 
 <pg:false actual="<%=hasaddpermission %>">
-	do something here...
+	false do something here...
 </pg:false>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -73,7 +73,7 @@
 						<pg:false actual="<%=hasdeletepermission %>">
 							没有删除用户的权限
 						</pg:false>
-							has read testid permission：<%=hasreadpermission %> <a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp" target="_blank">测试url控制</a>
+							has read testid permission：<%=hasreadpermission %> <a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid" target="_blank">测试url控制</a>
 						</td>
 					</tr>
 					<tr>

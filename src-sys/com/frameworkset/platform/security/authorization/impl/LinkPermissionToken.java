@@ -33,6 +33,7 @@ public class LinkPermissionToken {
 	private String url;
 	private boolean unprotected;
 	private List<PermissionToken> permissionTokens;
+	private List<List<P>> paramConditions;
 	public LinkPermissionToken(String url, boolean unprotected,
 			List<PermissionToken> permissionTokens) {
 		super();
@@ -51,6 +52,12 @@ public class LinkPermissionToken {
 	}
 	public List<PermissionToken> getPermissionTokens() {
 		return permissionTokens;
+	}
+	public List<List<P>> getParamConditions() {
+		return paramConditions;
+	}
+	public void setParamConditions(List<List<P>> paramConditions) {
+		this.paramConditions = paramConditions;
 	}
 
 }

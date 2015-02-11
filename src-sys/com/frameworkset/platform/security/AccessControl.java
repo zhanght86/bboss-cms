@@ -90,7 +90,9 @@ import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.AuthUser;
 import com.frameworkset.platform.security.authorization.impl.AppSecurityCollaborator;
 import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
+import com.frameworkset.platform.security.authorization.impl.P;
 import com.frameworkset.platform.security.authorization.impl.PermissionToken;
+import com.frameworkset.platform.security.authorization.impl.PermissionTokenRegion;
 import com.frameworkset.platform.security.context.AppAccessContext;
 import com.frameworkset.platform.security.util.CookieUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -4797,15 +4799,86 @@ public class AccessControl implements AccessControlInf{
 	}
 
 
-	public boolean evalResource( PermissionToken token) {
+	public boolean evalResource(   PermissionToken token) {
 		return _evalResource( token,request);
 	}
-	public static boolean _evalResource( PermissionToken token,HttpServletRequest request) {
-		if(!token.containCondition())
+	public int compareParams(List<P> paramConditions)
+	{
+		if(paramConditions == PermissionTokenRegion.dual)
+			return 1;
+		boolean requestcontainparams = false;
+		for(P p:paramConditions)
 		{
-			return true;
+			String value = request.getParameter(p.getName());
+			if(value != null)
+			{
+				requestcontainparams = true;
+				if(!value.equals(p.getValue()))
+				{
+					
+					return 0;
+				}
+			}
+			else
+			{
+				if(requestcontainparams )
+				{
+					return 0;
+				}
+			}
+			
 		}
-		else						
+		if(requestcontainparams)
+			return 1;
+		else
+		{
+			return 2;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param token
+	 * @return 0:参数匹配不成功，1:参数匹配成功 2:没有设置相关的参数 
+	 */
+	public int compareParams(PermissionToken token)
+	{
+		if(!token.hasParamCondition())//带参数的token排在最前面，都已经比较过了，没有匹配的值，没有参数时，自然返回true
+			return 1;
+		List<P> params = token.getParamConditions();
+		
+		boolean requestcontainparams = false;
+		for(P p:params)
+		{
+			String value = request.getParameter(p.getName());
+			if(value != null)
+			{
+				requestcontainparams = true;
+				if(!value.equals(p.getValue()))
+				{
+					
+					return 0;
+				}
+			}
+			else
+			{
+				if(requestcontainparams )
+				{
+					return 0;
+				}
+			}
+			
+		}
+		if(requestcontainparams)
+			return 1;
+		else
+		{
+			return 2;
+		}
+		
+	}
+	public boolean _evalResource(  PermissionToken token,HttpServletRequest request) {
+								
 		{
 			String resourceParamName = token.getResouceAuthCodeParamName();
 			if(resourceParamName == null || resourceParamName.equals(""))
@@ -4826,7 +4899,8 @@ public class AccessControl implements AccessControlInf{
 					{
 						return false;
 					}
-					return token.getResourcedID().equals(rid);
+//					return token.getResourcedID().equals(rid);
+					return checkPermission(rid, token.getOperation(),token.getResourceType());
 				}
 				else
 				{

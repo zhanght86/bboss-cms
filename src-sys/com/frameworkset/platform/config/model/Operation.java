@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.frameworkset.platform.security.AuthorResource;
+import com.frameworkset.platform.security.authorization.impl.ResourceToken;
 import com.frameworkset.platform.util.I18nResource;
 
 /**
@@ -191,7 +192,7 @@ public class Operation extends I18nResource {
 		
 	}
 	
-	public List<String> getAuthoresouresList()
+	public List<ResourceToken> getAuthoresouresList()
 	{
 		return this.authorResource.getAuthorResources();
 	}

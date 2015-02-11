@@ -15,6 +15,8 @@
  */
 package com.frameworkset.platform.security.authorization.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,21 +40,44 @@ public class PermissionToken {
 	private String resourcedID;
 	private Map<String,Object> conditions;
 	private String resouceAuthCodeParamName;
+	private String operation;
+	private boolean hasParamCondition;
+	private boolean useResourceAuthCode;
+	private boolean resouceAuthCodeRequired = true;
+	/**
+	 * 权限码，也就是url后面跟随的参数值，如果资源操作都匹配，但是参数不匹配，同样不允许访问
+	 */
+	private List<P> paramConditions;
+	public PermissionToken addParamCondition(String name,String value)
+	{
+		if(paramConditions == null)
+			paramConditions = new ArrayList<P>();
+		P p = new P();
+		p.setName(name);
+		p.setValue(value);
+		this.paramConditions.add(p);
+		return this;
+	}
 	public String getResouceAuthCodeParamName() {
 		return resouceAuthCodeParamName;
 	}
 
 
-
+	public boolean hasParamCondition()
+	{
+		return hasParamCondition;
+	}
 	public boolean isResouceAuthCodeRequired() {
 		return resouceAuthCodeRequired;
 	}
-	private boolean resouceAuthCodeRequired = true;
+	
 	public void setConditions(Map<String, Object> conditions) {
 		this.conditions = conditions;
 		if(conditions != null)
 		{
 			this.resouceAuthCodeParamName = (String)this.conditions.get(PermissionTokenMap.RESOURCE_PARAMNAME);
+			if(this.resouceAuthCodeParamName != null && !this.resouceAuthCodeParamName.equals(""))
+				useResourceAuthCode = true;
 			Boolean temp = (Boolean)this.conditions.get("required");
 			if(temp != null)
 			{
@@ -61,7 +86,10 @@ public class PermissionToken {
 		}
 	}
 
-	
+	public boolean useResourceAuthCode()
+	{
+		return useResourceAuthCode;
+	}
 	
 	public Map<String, Object> getConditions() {
 		return conditions;
@@ -83,7 +111,14 @@ public class PermissionToken {
 		this.resourcedID = resourcedID;
 		this.operation = operation;
 	}
-	private String operation;
+	public PermissionToken(String resourceType, 
+			String operation) {
+		super();
+		this.resourceType = resourceType;
+		
+		this.operation = operation;
+	}
+	
 	public String getResourceType() {
 		return resourceType;
 	}
@@ -92,6 +127,15 @@ public class PermissionToken {
 	}
 	public String getOperation() {
 		return operation;
+	}
+	public List<P> getParamConditions() {
+		return paramConditions;
+	}
+	public void setHasParamCondition(boolean hasParamCondition) {
+		this.hasParamCondition = hasParamCondition;
+	}
+	public void setParamConditions(List<P> paramConditions) {
+		this.paramConditions = paramConditions;
 	}
 
 }

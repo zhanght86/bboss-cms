@@ -22,10 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.util.StringUtil;
-
 /**
  * <p>Title: PermissionTokenRegion.java</p>
  *
@@ -47,70 +43,31 @@ public class PermissionTokenRegion {
 	
 	private Map<RID,List<PermissionToken>> resourcTokenMap;
 	
-	private Map<String,Map<RID,Object>> regionUnprotectedResourcTokenMap;
+	private Map<String,Map<RID,List<P>>> regionUnprotectedResourcTokenMap;
 	
-	private Map<RID,Object> resourcUnprotectedTokenMap;
+	
 	public PermissionTokenRegion ()
 	{
 		regionResourcTokenMap = new HashMap<String,Map<RID,List<PermissionToken>>>();
 		resourcTokenMap = new HashMap<RID,List<PermissionToken>>();
 		
-		regionUnprotectedResourcTokenMap = new HashMap<String,Map<RID,Object>>();		
-		resourcUnprotectedTokenMap = new HashMap<RID,Object>();
+		regionUnprotectedResourcTokenMap = new HashMap<String,Map<RID,List<P>>>();		
+		
 	}
-	public void addPermissionToken(String url,PermissionToken token)
+	
+	
+	
+	public void addPermissionToken(ResourceToken url,String region,PermissionToken token)
 	{
 		if(url == null || url.equals(""))
 			return;
-		if(!url.startsWith("/"))
-		{
-			url = "/"+url;
-		}
-		int idx = url.indexOf("?");
-		if(idx > 0)
-		{
-			url = url.substring(0,idx);
-		}
-			
-		Map<RID,List<PermissionToken>> resourceTokens = resourcTokenMap;
+		token.setConditions(url.getConditions());
 		
-		RID rid = new RID(url,true);
-		List<PermissionToken> tokens = resourceTokens.get(rid);
-		if(tokens == null)
-		{
-			tokens = new ArrayList<PermissionToken>();
-			resourceTokens.put(rid, tokens);
-					
-		}
-		tokens.add(token);
+		//解析url资源中对应的参数，作为权限判断的依据，除了识别url外，有权限外，还需要识别参数的值是否匹配，这样才能决定是否有访问权限
 		
-	}
-	public void addPermissionToken(String url,String region,PermissionToken token)
-	{
-		if(url == null || url.equals(""))
-			return;
-		if(!url.startsWith("/"))
-		{
-			url = "/"+url;
-		}
-		int idx = url.indexOf("?");
-		if(idx > 0)
-		{
-			url = url.substring(0,idx);
-		}
 		
-		idx = url.indexOf("{");
-		if(idx > 0)
-		{
-			String temp = url;
-			url = temp.substring(0,idx);
-			String condition = temp.substring(idx);
-			condition = condition.replace('|', ',');
-			HashMap map = StringUtil.json2Object(condition,HashMap.class);
-			if(map != null && map.size() > 0)
-				token.setConditions(map);
-			
-		}
+		token.setHasParamCondition(url.hasParamCondition());
+		token.setParamConditions(url.getParamConditions());
 		Map<RID,List<PermissionToken>> resourceTokens = this.regionResourcTokenMap.get(region);
 		if(resourceTokens == null)
 		{
@@ -118,7 +75,7 @@ public class PermissionTokenRegion {
 			this.regionResourcTokenMap.put(region, resourceTokens);
 		}
 		
-		RID rid = new RID(url,true);
+		RID rid = new RID(url.getUrl(),true);
 		List<PermissionToken> tokens = resourceTokens.get(rid);
 		if(tokens == null)
 		{
@@ -126,8 +83,10 @@ public class PermissionTokenRegion {
 			resourceTokens.put(rid, tokens);
 					
 		}
-		tokens.add(token);
-		
+		if(!token.hasParamCondition())
+			tokens.add(token);
+		else //带参数的url资源优先做权限检测，如果url中带了相应的参数，但是参数值不匹配，则直接阻止对url的访问
+			tokens.add(0,token);
 	}
 	
 	public void resetPermission()
@@ -148,11 +107,11 @@ public class PermissionTokenRegion {
 			}
 			regionResourcTokenMap.clear();
 		}
-		this.resourcUnprotectedTokenMap.clear();
-		Iterator<Entry<String, Map<RID, Object>>> uentries = this.regionUnprotectedResourcTokenMap.entrySet().iterator();
+		
+		Iterator<Entry<String, Map<RID, List<P>>>> uentries = this.regionUnprotectedResourcTokenMap.entrySet().iterator();
 		while(uentries.hasNext())
 		{
-			Entry<String, Map<RID, Object>> entry = uentries.next();
+			Entry<String, Map<RID, List<P>>> entry = uentries.next();
 			entry.getValue().clear();
 		}
 		this.regionUnprotectedResourcTokenMap.clear();
@@ -168,185 +127,76 @@ public class PermissionTokenRegion {
 				resourceTokens.clear();
 			
 		}
-		Map<RID,Object> resourceTokens = this.regionUnprotectedResourcTokenMap.get(region);
+		Map<RID,List<P>> resourceTokens = this.regionUnprotectedResourcTokenMap.get(region);
 		if(resourceTokens != null)
 			resourceTokens.clear();
 	}
 	
-	public boolean isUnprotectedURL(RID rid)
+	public List<List<P>> isUnprotectedURL(RID rid)
 	{
-		boolean successed = false;
-		if(resourcUnprotectedTokenMap.size() > 0 && this.resourcUnprotectedTokenMap.containsKey(rid))
+	
+		List<List<P>> ps = new ArrayList<List<P>>();
+		
+		
+		Iterator<Entry<String, Map<RID, List<P>>>> uentries = this.regionUnprotectedResourcTokenMap.entrySet().iterator();
+		while(uentries.hasNext())
 		{
-			successed = true;
-		}
-		else 
-		{
-			Iterator<Entry<String, Map<RID, Object>>> uentries = this.regionUnprotectedResourcTokenMap.entrySet().iterator();
-			while(uentries.hasNext())
+			Entry<String, Map<RID, List<P>>> entry = uentries.next();
+			if(entry.getValue().containsKey(rid))
 			{
-				Entry<String, Map<RID, Object>> entry = uentries.next();
-				if(entry.getValue().containsKey(rid))
+				List<P> tps =  entry.getValue().get(rid);
+				if(tps !=null && tps == dual)
 				{
-					successed = true;
-					break;
+					if(!ps.contains(tps))
+						ps.add(tps);
 				}
-					
+				else if(tps != null && tps.size() > 0)
+				{
+					ps.add(0,tps);
+				}
+				
+				
 			}
+				
 		}
-		return successed;
+		
+		if(ps.size() == 0)
+			return null;
+		else 
+			return ps;
 	}
 	private class Flag
 	{
 		boolean touched = false;
 	}
-	/**
-	 * 判断url资源是否有访问权限,模式和精确匹配，精确匹配优先
-	 * @param url
-	 * @param resourceType
-	 * @return
-	 */
-	public boolean checkUrlPermission(String url,String resourceType)
-	{
-		if (!ConfigManager.getInstance().securityEnabled() )
-			return true;
-		Map<RID,List<PermissionToken>> resourceTokens = this.resourcTokenMap;
-		if((resourceTokens.size() == 0) 
-				&& (this.regionResourcTokenMap.size() == 0) 
-				//&& this.regionUnprotectedResourcTokenMap.size() == 0 && this.resourcUnprotectedTokenMap.size() == 0
-				)
-		{
-			if (BaseAccessManager._allowIfNoRequiredRoles(resourceType))
-				return true;
-			return true;
-		}
-		RID rid = new RID(url);
-		Boolean successed = isUnprotectedURL(rid);
-		if(successed)
-			return true;
-		Flag flag = new Flag();
-		if(resourceTokens.size() > 0)
-		{
-			List<PermissionToken> tokens = resourceTokens.get(rid);
-			
-			if(tokens == null)
-			{		
-				
-				successed = checkRegionUrlPermission( rid, resourceType,flag);
-			}
-			else
-			{
-				flag.touched = true;
-				for(PermissionToken token:tokens)
-				{
-					if(AccessControl.getAccessControl().checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
-					{
-						successed = true;
-						break;
-					}
-				}
-				if(!successed)
-				{
-					successed = checkRegionUrlPermission( rid, resourceType,flag);
-				}
-			}
-		}
-		else
-		{
-			successed = checkRegionUrlPermission( rid, resourceType,flag);
-		}
-		if(flag.touched)
-			return successed;
-		else
-			return true;
-		
-	}
-	private Boolean checkRegionUrlPermission(RID rid,String resourceType,Flag flag)
-	{
-		if((this.regionResourcTokenMap == null || this.regionResourcTokenMap.size() == 0))
-			return true;
-		Iterator<Entry<String, Map<RID, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();
-		Boolean successed = new Boolean(false);
-label:	while(entries.hasNext())
-		{
-			Entry<String, Map<RID, List<PermissionToken>>> entry = entries.next();
-			Map<RID, List<PermissionToken>> resourceTokens = entry.getValue();
-			List<PermissionToken> tokens = resourceTokens.get(rid);
-			if(tokens == null)
-			{		
-				
-				continue;
-			}
-			else
-			{
-				flag.touched = true;
-				for(PermissionToken token:tokens)
-				{
-					if(AccessControl.getAccessControl().checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
-					{
-						successed = true;
-						break label;
-					}
-				}
-			}
-		}
-		return successed;
-		
-		
-	}
 	
 	
 	
-	/**
-	 * 判断url资源是否有访问权限
-	 * @param url
-	 * @param resourceType
-	 * @return
-	 */
-	public boolean checkUrlPermission(String url)
-	{
-		return checkUrlPermission(url,"column");		
-	}
-	private static Object dual = new Object();
-	public void addUnprotectedPermissionToken(String url, String region,
+	
+	
+	public static final List<P> dual = new ArrayList<P>();
+	public void addUnprotectedPermissionToken(ResourceToken url, String region,
 			PermissionToken token) {
-		if(url == null || url.equals(""))
-			return;
-		if(!url.startsWith("/"))
-		{
-			url = "/"+url;
-		}
-		int idx = url.indexOf("?");
-		if(idx > 0)
-		{
-			url = url.substring(0,idx);
-		}
-		Map<RID,Object> regionTokenMap = this.regionUnprotectedResourcTokenMap.get(region);
+		
+		List<P> paramConditions = url.getParamConditions();
+		
+		
+		Map<RID,List<P>> regionTokenMap = this.regionUnprotectedResourcTokenMap.get(region);
 		if(regionTokenMap == null)
 		{
-			regionTokenMap = new HashMap<RID,Object>();
+			regionTokenMap = new HashMap<RID,List<P>>();
 			this.regionUnprotectedResourcTokenMap.put(region,regionTokenMap);
 		}
-		regionTokenMap.put(new RID(url,true), dual);
+		if(paramConditions == null || paramConditions.size() == 0)
+			regionTokenMap.put(new RID(url.getUrl(),true), dual);
+		else
+		{
+			regionTokenMap.put(new RID(url.getUrl(),true), paramConditions);
+		}
 		
 	}
 	
-	public void addUnprotectedPermissionToken(String url, 
-			PermissionToken token) {
-		if(url == null || url.equals(""))
-			return;
-		if(!url.startsWith("/"))
-		{
-			url = "/"+url;
-		}
-		int idx = url.indexOf("?");
-		if(idx > 0)
-		{
-			url = url.substring(0,idx);
-		}
-		this.resourcUnprotectedTokenMap.put(new RID(url,true), dual);
-		
-	}
+	
 	
 	public List<PermissionToken> getAllURLToken(RID rid) {
 		List<PermissionToken> ptokens = new ArrayList<PermissionToken>();

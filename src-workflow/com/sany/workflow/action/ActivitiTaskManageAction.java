@@ -14,7 +14,6 @@ import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
-import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;

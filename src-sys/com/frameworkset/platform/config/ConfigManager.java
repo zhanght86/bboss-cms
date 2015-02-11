@@ -44,6 +44,7 @@ import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTa
 import com.frameworkset.platform.security.authorization.impl.PermissionRoleMap;
 import com.frameworkset.platform.security.authorization.impl.PermissionToken;
 import com.frameworkset.platform.security.authorization.impl.PermissionTokenMap;
+import com.frameworkset.platform.security.authorization.impl.ResourceToken;
 import com.frameworkset.platform.security.context.AccessContext;
 import com.frameworkset.platform.sysmgrcore.entity.Res;
 import com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl;
@@ -293,7 +294,7 @@ public class ConfigManager implements ResourceInitial {
     			AuthorResource ar = op.getAuthorResource();
     			if(ar != null)
     			{
-    				List<String> ars = ar.getAuthorResources();
+    				List<ResourceToken> ars = ar.getAuthorResources();
     				if(ars != null)
     				{
 	    				for(int j = 0;  j < ars.size(); j ++)
@@ -312,16 +313,7 @@ public class ConfigManager implements ResourceInitial {
     		
     		OperationQueue operationQueue = resource.getOperationQueue();
     		List<Res> dbres = null;
-    		ResManagerImpl resManagerImpl = new ResManagerImpl();
-			try {
-				dbres = resManagerImpl.getChildResListByType(resourceType);
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(dbres == null || dbres.size() == 0)
-				return ;
+    		boolean query = false;
     		if(operationQueue != null && operationQueue.size() > 0)
     		{ 
     			for(int i = 0; i < operationQueue.size(); i ++)
@@ -330,18 +322,42 @@ public class ConfigManager implements ResourceInitial {
         			AuthorResource ar = op.getAuthorResource();
         			if(ar != null)
         			{
-        				List<String> ars = ar.getAuthorResources();
+        				List<ResourceToken> ars = ar.getAuthorResources();
         				
         				for(int j = 0; ars != null && j < ars.size(); j ++)
         				{
-        					for(int k = 0; dbres != null && k < dbres.size(); k ++)
+        					ResourceToken rt = ars.get(j);
+        					if(rt.useResourceAuthCode())
         					{
-        						Res dr = dbres.get(k);
-        						PermissionToken token = new PermissionToken(resourceType, dr.getTitle(),
+        						PermissionToken token = new PermissionToken(resourceType, 
             							op.getId());
             					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
         					}
-        					
+        					else
+        					{
+        						if(!query)
+        						{
+        							query = true;
+	        			    		ResManagerImpl resManagerImpl = new ResManagerImpl();
+	        						try {
+	        							dbres = resManagerImpl.getChildResListByType(resourceType);
+	        							
+	        						} catch (Exception e) {
+	        							// TODO Auto-generated catch block
+	        							e.printStackTrace();
+	        						}
+	        						
+        						}
+        						if(dbres == null || dbres.size() == 0)
+        							continue;
+	        					for(int k = 0; dbres != null && k < dbres.size(); k ++)
+	        					{
+	        						Res dr = dbres.get(k);
+	        						PermissionToken token = new PermissionToken(resourceType, dr.getTitle(),
+	            							op.getId());
+	            					permissionTokenMap.addPermissionToken(ars.get(j),region, token);
+	        					}
+        					}
         				}
         			}
     			}

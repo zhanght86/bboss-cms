@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.util.StringUtil;
 
 /**
  * <p>Title: PermissionTokenMap.java</p>
@@ -97,22 +98,12 @@ public class PermissionTokenMap {
 		this.nullURLLinkPermissionLimit = nullURLLinkPermissionLimit;
 		
 	}
-	public void addPermissionToken(String url,PermissionToken token)
-	{
-		String resourctType = token.getResourceType();
-		
-		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
-		if(resourceTokens == null)
-		{
-			resourceTokens = new PermissionTokenRegion();
-			this.resourcTokenMap.put(resourctType, resourceTokens);
-		}
-		resourceTokens.addPermissionToken(url, token);
-		
-	}
+
 	
-	public void addPermissionToken(String url,String region,PermissionToken token)
+	public void addPermissionToken(ResourceToken url,String region,PermissionToken token)
 	{
+		if(url == null)
+			return;
 		String resourctType = token.getResourceType();
 		
 		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
@@ -126,7 +117,7 @@ public class PermissionTokenMap {
 		
 		
 	}
-	public void addUnprotectedPermissionToken(String url,String region,PermissionToken token)
+	public void addUnprotectedPermissionToken(ResourceToken url,String region,PermissionToken token)
 	{
 		String resourctType = token.getResourceType();
 		
@@ -141,21 +132,7 @@ public class PermissionTokenMap {
 		
 		
 	}
-	public void addUnprotectedPermissionToken(String url,PermissionToken token)
-	{
-		String resourctType = token.getResourceType();
-		
-		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
-		if(resourceTokens == null)
-		{
-			resourceTokens = new PermissionTokenRegion();
-			this.resourcTokenMap.put(resourctType, resourceTokens);
-		}
-		resourceTokens.addUnprotectedPermissionToken(url, token);
-		
-		
-		
-	}
+	
 	public void resetPermissionByResourceType(String resourctType)
 	{
 		PermissionTokenRegion resourceTokens = this.resourcTokenMap.get(resourctType);
@@ -223,27 +200,56 @@ public class PermissionTokenMap {
 			return true;
 		if(AccessControl.getAccessControl().isAdmin())
 			return true;
-		LinkPermissionToken ptokens = scanUrlPermissionTokens(url);
-		
-		if(NULL_PERMISSIONTOKENS == ptokens || ptokens.isUnprotected())
-			return true;
-		else
+		LinkPermissionToken ptokens = scanUnprotectedUrlPermissionTokens(url);
+		 AccessControl control = AccessControl.getAccessControl();
+		if(ptokens != null && ptokens != NULL_PERMISSIONTOKENS)//不受保护资源，还需要判断配置的参数值是否匹配，如果参数值不匹配则继续进行有权限
 		{
-			boolean successed = false;
-			AccessControl control = AccessControl.getAccessControl();
-			for(PermissionToken token:ptokens.getPermissionTokens())
+			
+			 List<List<P>> paramConditions = ptokens.getParamConditions();
+			 if(paramConditions == null || paramConditions.size() == 0)
+				 return true;
+			
+			 for(List<P> params:paramConditions)
+			 {
+				int result = control.compareParams(params);//参数匹配或者，1表示参数全匹配，2表示没有设置参数					
+				if(result == 1  )
+				{
+					return true;
+				}
+			 }
+		}
+		
+		
+		ptokens = scanUrlPermissionTokens(url);
+		
+		if(NULL_PERMISSIONTOKENS == ptokens)
+			return true;
+		boolean successed = false;
+		for(PermissionToken token:ptokens.getPermissionTokens())
+		{
+			int result = control.compareParams(token);//参数匹配或者，1表示参数全匹配，2表示没有设置参数
+			
+			if((result == 1 || result == 2 ) )
 			{
-				if(control.checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
+				if(token.useResourceAuthCode())
 				{
 					if(control.evalResource(token))
 					{
-						successed = true;
+						successed = true;						
 						break;
+						
+						
 					}
 				}
+				else if(control.checkPermission(token.getResourcedID(), token.getOperation(), token.getResourceType()))
+				{
+					successed = true;						
+					break;
+				}
 			}
-			return successed;
 		}
+		return successed;
+		
 		
 				
 	}
@@ -254,23 +260,87 @@ public class PermissionTokenMap {
 		{
 			return ptokens;
 		}
+		
+		
 		else
 		{
-			ptokens = this.unprotectedURLLinkPermissions.get(url);
+			ptokens = this.nullURLLinkPermissions.get(url);
+			return ptokens;
+			
 		}
+		
+	}
+	
+	private LinkPermissionToken _getUnprotedtedToken(String url)
+	{
+		
+		
+		return this.unprotectedURLLinkPermissions.get(url);
+		
+		
+	}
+	private Object scanlock = new Object();
+	private Object unprotectedscanlock = new Object();
+	private LinkPermissionToken scanUnprotectedUrlPermissionTokens(String url) {
+		LinkPermissionToken ptokens = _getUnprotedtedToken(url);
+		
 		
 		if(ptokens != null)
 		{
 			return ptokens;
-		}
+		}	
 		else
 		{
-			ptokens = this.nullURLLinkPermissions.get(url);
-		}
-		return ptokens;
-		
+			RID id = new RID(url);
+			synchronized(unprotectedscanlock)
+			{
+				ptokens = _getUnprotedtedToken(url);
+				if(ptokens != null)
+				{
+					return ptokens;
+				}
+				Iterator<Entry<String, PermissionTokenRegion>> resources = this.resourcTokenMap.entrySet().iterator();
+				//首先进行url的未受保护资源扫描
+				List<List<P>> allps = null;
+				while(resources.hasNext())
+				{
+					Entry<String, PermissionTokenRegion> entry = resources.next();
+					PermissionTokenRegion region = entry.getValue();
+					List<List<P>> ps = region.isUnprotectedURL(id);
+					if(ps != null)
+					{
+						if(allps == null)
+							allps = new ArrayList<List<P>>();
+						allps.addAll(ps);	
+						
+						
+						
+						break;
+					}
+						
+				}
+				if(allps != null)
+				{
+					ptokens = new LinkPermissionToken(url,true,null);
+					if(unprotectedURLLinkPermissionLimit > 0 && this.unprotectedURLLinkPermissions.size() > this.unprotectedURLLinkPermissionLimit)
+					{
+						this.unprotectedURLLinkPermissions.clear();
+					}
+					ptokens.setParamConditions(allps);
+					
+					
+				}
+				else
+				{
+					ptokens = NULL_PERMISSIONTOKENS;
+					
+				}
+				this.unprotectedURLLinkPermissions.put(url, ptokens);
+				
+			}
+			return ptokens;
+		}		
 	}
-	private Object scanlock = new Object();
 	/**
 	 * 扫描系统中和url相关的所有url资源
 	 * @param url
@@ -294,23 +364,7 @@ public class PermissionTokenMap {
 					return ptokens;
 				}
 				Iterator<Entry<String, PermissionTokenRegion>> resources = this.resourcTokenMap.entrySet().iterator();
-				//首先进行url的未受保护资源扫描
-				while(resources.hasNext())
-				{
-					Entry<String, PermissionTokenRegion> entry = resources.next();
-					PermissionTokenRegion region = entry.getValue();
-					if(region.isUnprotectedURL(id))
-					{
-						ptokens = new LinkPermissionToken(url,true,null);
-						if(unprotectedURLLinkPermissionLimit > 0 && this.unprotectedURLLinkPermissions.size() > this.unprotectedURLLinkPermissionLimit)
-						{
-							this.unprotectedURLLinkPermissions.clear();
-						}
-						this.unprotectedURLLinkPermissions.put(url, ptokens);
-						break;
-					}
-						
-				}
+				
 				if(ptokens == null )//如果不是未受保护资源，则扫描所有区域的相关资源
 				{
 					resources = this.resourcTokenMap.entrySet().iterator();
@@ -377,7 +431,8 @@ public class PermissionTokenMap {
 						&& first.getResourcedID().equals(second.getResourcedID())
 						&& first.getResourceType().equals(second.getResourceType()))
 				{	
-					removePermissionTokens.add(second);
+					if(issameParams(first,second))
+						removePermissionTokens.add(second);
 				}
 			}
 			
@@ -388,6 +443,50 @@ public class PermissionTokenMap {
 		}
 		
 		
+	}
+	/**
+	 * 比较资源标识、资源操作、资源类型都相同的两个token的参数是否相同
+	 * @param first
+	 * @param second
+	 * @return
+	 */
+	private boolean issameParams(PermissionToken first,PermissionToken second)
+	{
+		if(!first.hasParamCondition() && !second.hasParamCondition())
+			return true;
+		else if(!first.hasParamCondition() && second.hasParamCondition())
+			return false;
+		else if(first.hasParamCondition() && !second.hasParamCondition())
+			return false;
+		else
+		{
+			if(first.getParamConditions().size() != second.getParamConditions().size())
+				return false;
+			List<P> firstPS = first.getParamConditions();
+			List<P> secondPS = second.getParamConditions();
+			boolean contain = true;
+			for(P fp:firstPS)
+			{
+				boolean in = false;
+				for(P sp:secondPS)
+				{
+					if(fp.getName().equals(sp.getName()) && fp.getValue().equals(sp.getValue()))
+					{
+						in = true;
+						break; 
+					}
+							
+				}
+				if(!in)
+				{
+					contain = false;
+					break;
+				}
+				
+			}
+			return contain;
+			
+		}
 	}
 	public void destory() {
 		if(nullURLLinkPermissions != null)
@@ -411,6 +510,79 @@ public class PermissionTokenMap {
 			unprotectedURLLinkPermissions = null;
 		}
 		
+	}
+	
+	public static  ResourceToken buildResourceToken(String url)
+	{
+		if(url == null || url.equals(""))
+			return null;
+		ResourceToken resourceToken = new ResourceToken();
+		if(!url.startsWith("/"))
+		{
+			url = "/"+url;
+		}
+		int idx = url.indexOf("?");
+		//解析url资源中对应的参数，作为权限判断的依据，除了识别url外，有权限外，还需要识别参数的值是否匹配，这样才能决定是否有访问权限
+		String params = null;
+		if(idx > 0)
+		{
+			params = url.substring(idx+1);
+			List<P> ps = evalparamcondition(  params);
+			resourceToken.setParamConditions(ps);
+			url = url.substring(0,idx);
+			 
+		}
+		
+		idx = url.indexOf("{");
+		if(idx > 0)
+		{
+			String temp = url;
+			url = temp.substring(0,idx);
+			String condition = temp.substring(idx);
+			condition = condition.replace('|', ',');
+			HashMap map = StringUtil.json2Object(condition,HashMap.class);
+			if(map != null && map.size() > 0)
+				resourceToken.setConditions(map);
+			
+		}
+		resourceToken.setUrl(url);
+		return resourceToken;
+	}
+	
+	public static List<P> evalparamcondition(String params)
+	{
+		if(params == null || params.equals(""))
+			return null;
+		String[] ps = params.split("&");
+		
+		List<P> params_ = new ArrayList<P>();
+		for(int i = 0; i < ps.length; i++)
+		{
+			String param = ps[i];
+			String[] param_ = param.split("=");
+			if(param_.length == 2)
+			{
+				if(!(param_[1].contains("#[") && param_[1].contains("]")))//忽略参数变量条件，否则无法正确识别权限
+				{
+					P p = new P();
+					p.setName(param_[0]);
+					p.setValue(param_[1]);
+					params_.add(p);
+					
+				}
+			}
+			else
+			{
+				P p = new P();
+				p.setName(param_[0]);
+				p.setValue("");
+				params_.add(p);
+			}
+		}
+		if(params_.size() > 0)
+			return params_;
+		else 
+			return null;
 	}
 
 }

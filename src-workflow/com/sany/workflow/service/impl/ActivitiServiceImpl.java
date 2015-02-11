@@ -3402,9 +3402,16 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			tm.begin();
 			
+			
+			
 			if (StringUtil.isEmpty(processInstCondition.getStartUser())) {
 				// 当前用户登录id
 				processInstCondition.setStartUser(AccessControl.getAccessControl().getUserAccount());
+			}else {
+				// 管理员查所有
+				if (AccessControl.isAdmin(processInstCondition.getStartUser())){
+					processInstCondition.setStartUser("");
+				}
 			}
 
 			// 流程实例ID
