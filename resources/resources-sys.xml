@@ -26,12 +26,24 @@
 	<group id="testgroup" name="测试权限组" >
         <operation id="read" priority="10" name="可读">
         	<authoration>		 	
+			 	<url>/test/testresopurlpermissionread.jsp{"resource":"opCode"|"required":true}?code=aaa</url>
+			</authoration>
+        </operation>
+		<operation id="write" priority="20" name="可写" >
+        	<authoration>		 	
+			 	<url>/test/testresopurlpermissionread.jsp{"resource":"opCode"|"required":true}?code=bbb</url>
+			</authoration>
+        </operation>
+		<operation id="delete" priority="30" name="删除" >
+        	<authoration>		 	
 			 	<url>/test/testresopurlpermissionread.jsp{"resource":"opCode"|"required":true}</url>
 			</authoration>
         </operation>
-		<operation id="write" priority="20" name="可写" />
-		<operation id="delete" priority="30" name="删除" />
-		<operation id="add" priority="30" name="添加" />
+		<operation id="add" priority="30" name="添加"  >
+        	<authoration>		 	
+			 	<url>/test/testresopurlpermissionread.jsp{"resource":"opCode"|"required":true}?code=ccc</url>
+			</authoration>
+        </operation>
      </group>
      <group id="globaltestgroup" name="全局测试权限组" >
         <operation id="read" priority="10" name="可读" >

@@ -41,18 +41,23 @@ public class PermissionTokenRegion {
 	 */
 	private Map<String,Map<RID,List<PermissionToken>>> regionResourcTokenMap;
 	
-	private Map<RID,List<PermissionToken>> resourcTokenMap;
+//	private Map<RID,List<PermissionToken>> resourcTokenMap;
+	/**
+	 *
+	 *@Deprecated 
+	 *@see unprotectedResourcTokenMap 
+	 */	
 	
-	private Map<String,Map<RID,List<P>>> regionUnprotectedResourcTokenMap;
+	private Map<String,Map<RID,List<P>>> regionUnprotectedResourcTokenMap;//冗余对象，
+	private PermissionTokenMap permissionTokenMap;
 	
-	
-	public PermissionTokenRegion ()
+	public PermissionTokenRegion (PermissionTokenMap permissionTokenMap)
 	{
 		regionResourcTokenMap = new HashMap<String,Map<RID,List<PermissionToken>>>();
-		resourcTokenMap = new HashMap<RID,List<PermissionToken>>();
+//		resourcTokenMap = new HashMap<RID,List<PermissionToken>>();
 		
 		regionUnprotectedResourcTokenMap = new HashMap<String,Map<RID,List<P>>>();		
-		
+		this.permissionTokenMap = permissionTokenMap;
 	}
 	
 	
@@ -91,10 +96,10 @@ public class PermissionTokenRegion {
 	
 	public void resetPermission()
 	{
-		if(resourcTokenMap != null)
-		{
-			resourcTokenMap.clear();
-		}
+//		if(resourcTokenMap != null)
+//		{
+//			resourcTokenMap.clear();
+//		}
 		
 		if(regionResourcTokenMap != null)
 		{
@@ -136,27 +141,34 @@ public class PermissionTokenRegion {
 	{
 	
 		List<List<P>> ps = new ArrayList<List<P>>();
-		
-		
 		Iterator<Entry<String, Map<RID, List<P>>>> uentries = this.regionUnprotectedResourcTokenMap.entrySet().iterator();
 		while(uentries.hasNext())
 		{
 			Entry<String, Map<RID, List<P>>> entry = uentries.next();
-			if(entry.getValue().containsKey(rid))
+			
+			Map<RID, List<P>> tokens = entry.getValue();
+			Iterator<Entry<RID, List<P>>> its = tokens.entrySet().iterator();
+			while(its.hasNext())
 			{
-				List<P> tps =  entry.getValue().get(rid);
-				if(tps !=null && tps == dual)
+				Entry<RID, List<P>> rentry = its.next();
+				if(rentry.getKey().match(rid))
 				{
-					if(!ps.contains(tps))
+					List<P> tps =  rentry.getValue();
+					if(tps !=null && tps == dual)
+					{
 						ps.add(tps);
+					}
+					else if(tps != null && tps.size() > 0)
+					{
+						ps.add(0,tps);
+					}
 				}
-				else if(tps != null && tps.size() > 0)
-				{
-					ps.add(0,tps);
-				}
-				
 				
 			}
+			
+				
+				
+			
 				
 		}
 		
@@ -165,11 +177,7 @@ public class PermissionTokenRegion {
 		else 
 			return ps;
 	}
-	private class Flag
-	{
-		boolean touched = false;
-	}
-	
+
 	
 	
 	
@@ -187,11 +195,12 @@ public class PermissionTokenRegion {
 			regionTokenMap = new HashMap<RID,List<P>>();
 			this.regionUnprotectedResourcTokenMap.put(region,regionTokenMap);
 		}
+		RID key = new RID(url.getUrl(),true);
 		if(paramConditions == null || paramConditions.size() == 0)
-			regionTokenMap.put(new RID(url.getUrl(),true), dual);
+			regionTokenMap.put(key, dual);
 		else
 		{
-			regionTokenMap.put(new RID(url.getUrl(),true), paramConditions);
+			regionTokenMap.put(key, paramConditions);
 		}
 		
 	}
@@ -200,22 +209,22 @@ public class PermissionTokenRegion {
 	
 	public List<PermissionToken> getAllURLToken(RID rid) {
 		List<PermissionToken> ptokens = new ArrayList<PermissionToken>();
-		if(resourcTokenMap.size() > 0)
-		{
-			List<PermissionToken> tokens = new ArrayList<PermissionToken>();
-			Iterator<Entry<RID, List<PermissionToken>>> resources = resourcTokenMap.entrySet().iterator();
-			while(resources.hasNext())
-			{
-				Entry<RID, List<PermissionToken>> entry = resources.next();
-				if(entry.getKey().match(rid))
-					tokens.addAll(entry.getValue());
-			}
-			if(tokens.size() > 0)
-			{
-				ptokens.addAll(tokens);
-				
-			}
-		}
+//		if(resourcTokenMap.size() > 0)
+//		{
+//			List<PermissionToken> tokens = new ArrayList<PermissionToken>();
+//			Iterator<Entry<RID, List<PermissionToken>>> resources = resourcTokenMap.entrySet().iterator();
+//			while(resources.hasNext())
+//			{
+//				Entry<RID, List<PermissionToken>> entry = resources.next();
+//				if(entry.getKey().match(rid))
+//					tokens.addAll(entry.getValue());
+//			}
+//			if(tokens.size() > 0)
+//			{
+//				ptokens.addAll(tokens);
+//				
+//			}
+//		}
 		if((this.regionResourcTokenMap == null || this.regionResourcTokenMap.size() == 0))
 			return ptokens;
 		Iterator<Entry<String, Map<RID, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();		

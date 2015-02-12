@@ -1006,19 +1006,33 @@ public class VoteManagerImpl implements VoteManager {
 			String[] optionIDs = strOptionID.split(";");
 			DBUtil dbUtil = new DBUtil();
 			
+			tm.begin();
+			
+			//  修改td_cms_vote_items表数据
+			for (int i=0;i<optionIDs.length;i++){
+				dbUtil.addBatch("update td_cms_vote_items set count=count+1 where ID=" + optionIDs[i]);
+			}
+			
+			// 修改td_cms_vote_questions表数据
+			for (int i = 0; i < optionIDs.length; i++) {
+				dbUtil.addBatch("update td_cms_vote_questions set votecount=votecount+1 where ID = (select qid from td_cms_vote_items where ID="
+						+ optionIDs[i] +")");
+			}
+			dbUtil.executeBatch();
+			
 			String ids = "";
 			for (int i=0;i<optionIDs.length;i++){
 				ids += " or ID=" + optionIDs[i];
 			}
+			/*
 			
-			tm.begin();
 			String sql = "update td_cms_vote_items set count=count+1 where  1=2"+ids;
 			dbUtil.executeUpdate(sql);
 			
 			sql = "update td_cms_vote_questions set votecount=votecount+1 where  ID in (select qid from td_cms_vote_items where 1=2"+ids+")";
-			dbUtil.executeUpdate(sql);
+			dbUtil.executeUpdate(sql);*/
 			
-			sql = "select QID,0,'"+ip+"',sysdate,ID from TD_CMS_VOTE_ITEMS where  1=2"+ids;
+			String sql = "select QID,0,sysdate,ID from TD_CMS_VOTE_ITEMS where  1=2"+ids;
 			dbUtil.executeSelect(sql);
 			for (int i=0;i<dbUtil.size();i++){
 				DBUtil db = new DBUtil();

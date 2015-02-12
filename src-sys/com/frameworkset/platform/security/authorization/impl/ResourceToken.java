@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ResourceToken {
 	private String url;
+	private String origineUrl;
 	private String resourceAuthCode;
 	private boolean requiredAuthCode;
 	private boolean useResourceAuthCode;
@@ -78,5 +79,18 @@ public class ResourceToken {
 	public boolean hasParamCondition()
 	{
 		return this.hasParamCondition;
+	}
+
+	public String getOrigineUrl() {
+		return origineUrl;
+	}
+
+	public void setOrigineUrl(String origineUrl) {
+		this.origineUrl = origineUrl;
+	}
+	
+	public String toString()
+	{
+		return this.origineUrl;
 	}
 }

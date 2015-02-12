@@ -153,20 +153,33 @@ function doVote(titleId,len){
 			             	
 			        	}
 					); */
-		$.getJSON(dovoteurl, datas,
-				function(data) {   
-	             	if (data == "success") {
-		             	alert("提交成功");
-						//getbbsvoteDetail(titleId);
-		             	returnListPage();
-	             	} else {
-						if(data!=""){
-							alert(data);
-						}
-	             	}
+		$("#submitBtn").attr("class","submit ui-state-disabled");
+		$("#cancelBtn").attr("class","submit ui-state-disabled");
+		
+		$.mobile.loading( "show", {
+			  text: "正在提交..",
+			  textVisible: true,
+			  theme: "z",
+			  html: ""
+		});			
+					
+		$.getJSON(dovoteurl, datas,function(data) {   
+			$.mobile.loading( "hide" );
+			
+			$("#submitBtn").attr("class","submit");
+			$("#cancelBtn").attr("class","cancel");
+			
+           	if (data == "success") {
+            	alert("提交成功");
+			//getbbsvoteDetail(titleId);
+            	returnListPage();
+           	} else {
+				if(data!=""){
+					alert(data);
+				}
+           	}
 	             	
-	        	}
-			);
+      	});
 		
 		
 		}

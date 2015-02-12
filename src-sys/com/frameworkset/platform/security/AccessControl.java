@@ -4804,77 +4804,77 @@ public class AccessControl implements AccessControlInf{
 	}
 	public int compareParams(List<P> paramConditions)
 	{
-		if(paramConditions == PermissionTokenRegion.dual)
-			return 1;
-		boolean requestcontainparams = false;
-		for(P p:paramConditions)
+		
+		int nullcount = 0;
+		
+		
+		boolean success = true;
+	
+		for(int i = 0; i < paramConditions.size(); i ++)
 		{
+			P p = paramConditions.get(i);
 			String value = request.getParameter(p.getName());
 			if(value != null)
 			{
-				requestcontainparams = true;
+			
 				if(!value.equals(p.getValue()))
 				{
 					
-					return 0;
+					success = false;
+					
 				}
 			}
 			else
 			{
-				if(requestcontainparams )
-				{
-					return 0;
-				}
+				nullcount ++;
 			}
 			
 		}
-		if(requestcontainparams)
-			return 1;
-		else
-		{
-			return 2;
-		}
+		if(nullcount > 0)
+			return 2;	
+		return success?1:0;
 	}
 	
 	/**
 	 * 
 	 * @param token
-	 * @return 0:参数匹配不成功，1:参数匹配成功 2:没有设置相关的参数 
+	 * @return 0:参数匹配不成功，1:参数匹配成功 2:没有设置相关的参数 ,3:没有参数
 	 */
 	public int compareParams(PermissionToken token)
 	{
 		if(!token.hasParamCondition())//带参数的token排在最前面，都已经比较过了，没有匹配的值，没有参数时，自然返回true
-			return 1;
+			return 3;
 		List<P> params = token.getParamConditions();
+		int nullcount = 0;
 		
-		boolean requestcontainparams = false;
-		for(P p:params)
+		
+		boolean success = true;
+	
+		for(int i = 0; i < params.size(); i ++)
 		{
+			P p = params.get(i);
 			String value = request.getParameter(p.getName());
 			if(value != null)
 			{
-				requestcontainparams = true;
+			
 				if(!value.equals(p.getValue()))
 				{
 					
-					return 0;
+					success = false;
+					
 				}
 			}
 			else
 			{
-				if(requestcontainparams )
-				{
-					return 0;
-				}
+				nullcount ++;
 			}
 			
 		}
-		if(requestcontainparams)
-			return 1;
-		else
-		{
-			return 2;
-		}
+		if(nullcount > 0)
+			return 2;	
+		return success?1:0;
+		
+		
 		
 	}
 	public boolean _evalResource(  PermissionToken token,HttpServletRequest request) {

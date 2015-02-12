@@ -73,7 +73,10 @@
 						<pg:false actual="<%=hasdeletepermission %>">
 							没有删除用户的权限
 						</pg:false>
-							has read testid permission：<%=hasreadpermission %> <a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid" target="_blank">测试url控制</a>
+						    has read testid permission：<%=hasreadpermission %> error code parameter value:null<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid" target="_blank">测试url控制1</a><br>
+							has read testid permission：<%=hasreadpermission %> correct code parameter value:bbb<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=bbb" target="_blank">测试url控制2</a><br>
+							has read testid permission：<%=hasreadpermission %> error code parameter value:ccc<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=ccc" target="_blank">测试url控制3</a><br>
+							has read testid permission：<%=hasreadpermission %> correct code parameter value:aaa<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=aaa" target="_blank">测试url控制4</a>
 						</td>
 					</tr>
 					<tr>

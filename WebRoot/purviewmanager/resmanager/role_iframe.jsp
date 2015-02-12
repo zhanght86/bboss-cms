@@ -274,6 +274,7 @@
 					<pg:param name="types" value="role" />
 					<pg:param name="isBatch" />
 					<pg:param name="resName2" />
+					<pg:param name="isGlobal" />				
 					
 
 					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
