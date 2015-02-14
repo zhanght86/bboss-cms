@@ -583,24 +583,27 @@ public interface ActivitiBusinessService {
 	 * 
 	 * @param processId
 	 *            流程实例id
+	 * @param processKey
 	 * @return
 	 * @throws Exception
 	 *             2014年8月26日
 	 */
-	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception;
+	public List<HisTaskInfo> getProcHisInfo(String processId, String processKey)
+			throws Exception;
 
 	/**
 	 * 获取流程实例的处理记录(已完成的任务)
 	 * 
 	 * @param processId
+	 * @param processKey
 	 * @param filterLog
 	 *            是否合并并行节点的任务撤销、驳回、废弃的日志
 	 * @return
 	 * @throws Exception
 	 *             2014年12月25日
 	 */
-	public List<HisTaskInfo> getProcHisInfo(String processId, boolean filterLog)
-			throws Exception;
+	public List<HisTaskInfo> getProcHisInfo(String processId,
+			String processKey, boolean filterLog) throws Exception;
 
 	/**
 	 * 审批处理任务(任务id)
@@ -1139,4 +1142,18 @@ public interface ActivitiBusinessService {
 	public void udpNodeAssignee(ActNode actNode, String processId)
 			throws Exception;
 
+	/**
+	 * 统一待办任务数据维护
+	 * 
+	 * @param processId
+	 *            流程实例id
+	 * @param lastOp
+	 *            前一次处理类型
+	 * @param lastOperName
+	 *            前一次处理人
+	 * @throws Exception
+	 *             2015年2月12日
+	 */
+	public void addTodoTask(String processId, String lastOp, String lastOperName)
+			throws Exception;
 }

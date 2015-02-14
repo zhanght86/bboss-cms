@@ -45,6 +45,7 @@ import org.activiti.engine.impl.identity.UserInfoMap;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.ReadUserNames;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
@@ -450,12 +451,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	public void completeTaskWithReason(String taskId, Map<String, Object> map,
 			String completeReason, String bussinessop, String bussinessRemark) {
-		completeTaskWithReason(taskId, map,
-				completeReason, bussinessop, bussinessRemark,false);
+		completeTaskWithReason(taskId, map, completeReason, bussinessop,
+				bussinessRemark, false);
 	}
-	
+
 	public void completeTaskWithReason(String taskId, Map<String, Object> map,
-			String completeReason, String bussinessop, String bussinessRemark,boolean autocomplete) {
+			String completeReason, String bussinessop, String bussinessRemark,
+			boolean autocomplete) {
 		taskService.completeWithReason(taskId, map, completeReason,
 				bussinessop, bussinessRemark, autocomplete);
 	}
@@ -2373,10 +2375,11 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 			// 数据查看权限管控
 			task.setAdmin(AccessControl.getAccessControl().isAdmin());
-			
+
 			if (!AccessControl.getAccessControl().isAdmin()) {
 				// 当前用户登录id
-				task.setAssignee(AccessControl.getAccessControl().getUserAccount());
+				task.setAssignee(AccessControl.getAccessControl()
+						.getUserAccount());
 			}
 
 			if (StringUtil.isNotEmpty(task.getProcessIntsId())) {
@@ -3401,15 +3404,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 		try {
 
 			tm.begin();
-			
-			
-			
+
 			if (StringUtil.isEmpty(processInstCondition.getStartUser())) {
 				// 当前用户登录id
-				processInstCondition.setStartUser(AccessControl.getAccessControl().getUserAccount());
-			}else {
+				processInstCondition.setStartUser(AccessControl
+						.getAccessControl().getUserAccount());
+			} else {
 				// 管理员查所有
-				if (AccessControl.isAdmin(processInstCondition.getStartUser())){
+				if (AccessControl.isAdmin(processInstCondition.getStartUser())) {
 					processInstCondition.setStartUser("");
 				}
 			}
@@ -3540,7 +3542,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 					if (pi == null) {
 						continue;
 					}
-					
+
 					// 日志记录废弃操作
 					addDealTask(taskId, currentUser, getUserInfoMap()
 							.getUserName(currentUser), "3", processInstid,
@@ -3687,12 +3689,12 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.preparedDelete(" delete from TD_WF_HI_REJECTLOG where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
-		
+
 		// 抄送任务表
 		dbUtil.preparedDelete(" delete from TD_WF_COPYTASK where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
-		
+
 		// 已阅抄送任务表
 		dbUtil.preparedDelete(" delete from TD_WF_HI_COPYTASK where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
@@ -3739,8 +3741,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 获取流程实例信息
 			ProcessInst pi = executor.queryObject(ProcessInst.class,
 					"queryProInstByProcessID_wf", processInstId);
-			
-			if (null == pi ){
+
+			if (null == pi) {
 				return null;
 			}
 
@@ -3792,7 +3794,27 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	@Override
-	public List<TaskManager> queryHistorTasks(String processInstId) {
+	public Map<String, Object> queryCopynodeByProcessKey(String processKey)
+			throws Exception {
+
+		final Map<String, Object> copynodes = new HashMap<String, Object>();
+		final Object dual = new Object();
+
+		executor.queryByNullRowHandler(new NullRowHandler() {
+
+			@Override
+			public void handleRow(Record record) throws Exception {
+				copynodes.put(record.getString("NODE_KEY"), dual);
+
+			}
+
+		}, "querycopynodeByProcessKey", processKey);
+
+		return copynodes;
+	}
+
+	@Override
+	public List<TaskManager> queryHistorTasks(String processInstId,String processKey) {
 
 		TransactionManager tms = new TransactionManager();
 
@@ -3802,6 +3824,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 			// 历史任务记录
 			List<TaskManager> taskList = executor.queryList(TaskManager.class,
 					"selectTaskHistorById_wf", processInstId);
+			
+			// 获取流程抄送节点
+			Map<String, Object> copyKeyMap = queryCopynodeByProcessKey(processKey);
 
 			// 转办记录与历史记录排序
 			delegateTaskInfo(taskList, processInstId);
@@ -3821,7 +3846,14 @@ public class ActivitiServiceImpl implements ActivitiService,
 					// 处理耗时
 					handleDurationTime(tm);
 					// 已阅抄送人
-					readedCopyTasks(tm);
+					if (copyKeyMap.containsKey(tm.getTASK_DEF_KEY_())) {
+						ReadUserNames userNames = this.taskService
+								.getCopyTaskReadUserNames(
+										tm.getID_(),
+										WorkFlowConstant.SHOW_READEDCOPYTASK_LIMIT);
+
+						tm.setASSIGNEE_NAME(userNames.getReadUserNames());
+					}
 				}
 
 			}
@@ -3861,29 +3893,6 @@ public class ActivitiServiceImpl implements ActivitiService,
 					tdr.setTO_USER_NAME(userIdToUserName(tdr.getTO_USER(), "2"));
 				}
 				tm.setDelegateTaskList(tdRelationList);
-			}
-
-		} catch (Exception e) {
-			throw new ProcessException(e);
-		}
-	}
-
-	/**
-	 * 获取已阅用户
-	 * 
-	 * @param tm
-	 *            2014年11月17日
-	 */
-	public void readedCopyTasks(TaskManager tm) {
-		try {
-
-			Object obj = executor.queryObject(Object.class,
-					"iscopynodeByProcessId_wf", tm.getPROC_INST_ID_(),
-					tm.getACT_ID_());
-
-			if (obj != null) {//抄送节点
-				tm.setReadedCopyTaskNames(this.getTaskService()
-						.getCopyTaskReadUserNames(tm.getID_()));
 			}
 
 		} catch (Exception e) {
@@ -4690,8 +4699,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 			tm.begin();
 
 			// 通过流程实例ID，获取流程当前所有的任务id
-			List<String> taskIdList = executor.queryList(String.class, "getTaskIdByProcessId_wf",
-					processId);
+			List<String> taskIdList = executor.queryList(String.class,
+					"getTaskIdByProcessId_wf", processId);
 
 			List<Map> paramList = new ArrayList<Map>();
 			if (null != taskIdList && taskIdList.size() > 0) {
@@ -4716,7 +4725,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 			}
 
 			executor.insertBeans("addDealTaskInfo_wf", paramList);
-			
+
 			tm.commit();
 
 		} catch (Exception e) {
@@ -4766,10 +4775,10 @@ public class ActivitiServiceImpl implements ActivitiService,
 		return executor.queryObject(NodeControlParam.class,
 				"getNodeContralParam_wf", processId, taskKey);
 	}
-	
+
 	@Override
-	public NodeControlParam getNodeControlParamByTaskID(String processId, String taskid)
-			throws Exception {
+	public NodeControlParam getNodeControlParamByTaskID(String processId,
+			String taskid) throws Exception {
 		return executor.queryObject(NodeControlParam.class,
 				"getNodeControlParamByTaskID", processId, taskid);
 	}
@@ -4836,6 +4845,21 @@ public class ActivitiServiceImpl implements ActivitiService,
 		} finally {
 			tm.release();
 		}
+	}
+
+	@Override
+	public boolean isCopyNode(String nodeKey, String processKey)
+			throws Exception {
+
+		int controlParam = executor.queryObject(int.class, "iscopynode_wf",
+				nodeKey, processKey);
+
+		if (controlParam > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 
 }

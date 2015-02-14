@@ -68,9 +68,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	private ActivitiTaskService activitiTaskService;
 
+	// private CommonBusinessTrigger commonTrigger;
+
 	@Override
 	public void destroy() throws Exception {
-		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -393,7 +395,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		}
-
 		return newActNodeList;
 	}
 
@@ -564,6 +565,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	}
 
+	@Override
 	public void startProc(ProIns proIns, String businessKey, String processKey,
 			Map<String, Object> paramMap) throws Exception {
 		startProc(proIns, businessKey, processKey, paramMap, true);
@@ -604,20 +606,27 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.addNodeWorktime(processKey,
 					processInstance.getId(), controlParamList);
 
+			// 维护统一待办任务
+			this.addTodoTask(processInstance.getId(), "发起流程", activitiService
+					.getUserInfoMap().getUserName(proIns.getUserAccount()));
+
 			if (completeFirstTask) {
 
 				String remark = "["
 						+ activitiService.getUserInfoMap().getUserName(
 								proIns.getUserAccount()) + "]提交";
 
-				proIns.setDealRemak(remark);
-
 				proIns.setBusinessKey(businessKey);
-
+				proIns.setDealRemak(remark);
 				// 自动完成任务
 				autoCompleteTask(proIns, processKey);
 			}
 
+			// TODO: 创建统一待办页面 luoh19
+			// if(true){
+			// commonBusinessTrigger.createCommonOrder(proIns, businessKey,
+			// processKey, paramMap, completeFirstTask);
+			// }
 			tm.commit();
 
 		} catch (Exception e) {
@@ -678,6 +687,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.getDealRemak(), proIns.getDealOption(),
 					proIns.getDealReason(), true);
 
+			// 维护统一待办任务
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), "");
+
 			// 后续节点自动审批
 			if (task.getIsAutoafter() == 1
 					&& task.getAssignee().equals(proIns.getUserAccount())) {
@@ -729,13 +741,14 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public List<HisTaskInfo> getProcHisInfo(String processId) throws Exception {
-		return getProcHisInfo(processId, true);
+	public List<HisTaskInfo> getProcHisInfo(String processId, String processKey)
+			throws Exception {
+		return getProcHisInfo(processId, processKey, true);
 	}
 
 	@Override
-	public List<HisTaskInfo> getProcHisInfo(String processId, boolean filterLog)
-			throws Exception {
+	public List<HisTaskInfo> getProcHisInfo(String processId,
+			String processKey, boolean filterLog) throws Exception {
 		TransactionManager tms = new TransactionManager();
 
 		try {
@@ -744,6 +757,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 历史任务记录
 			List<HisTaskInfo> taskList = executor.queryList(HisTaskInfo.class,
 					"selectTaskHistorById_wf", processId);
+
+			// 获取流程抄送节点
+			Map<String, Object> copyKeyMap = activitiService
+					.queryCopynodeByProcessKey(processKey);
 
 			List<HisTaskInfo> newtaskList = null;
 			if (filterLog) {
@@ -781,7 +798,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					// 处理耗时
 					handleDurationTime(hti);
 					// 已阅抄送人
-					readedCopyTasks(hti);
+					if (copyKeyMap.containsKey(hti.getTASK_DEF_KEY_())) {
+
+						hti.setASSIGNEE_NAME(this.getCopyTaskReadUserNames(
+								hti.getID_(),
+								WorkflowConstants.SHOW_READEDCOPYTASK_LIMIT));
+					}
 				}
 
 			}
@@ -794,30 +816,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			throw new ProcessException(e);
 		} finally {
 			tms.release();
-		}
-	}
-
-	/**
-	 * 获取已阅用户
-	 * 
-	 * @param tm
-	 *            2014年11月17日
-	 */
-	private void readedCopyTasks(HisTaskInfo hti) {
-		try {
-
-			Object obj = executor.queryObject(Object.class,
-					"iscopynodeByProcessId_wf", hti.getPROC_INST_ID_(),
-					hti.getTASK_DEF_KEY_());
-
-			if (obj != null) {// 抄送节点
-				hti.setASSIGNEE_NAME(this.getCopyTaskReadUserNames(
-						hti.getID_(),
-						WorkflowConstants.SHOW_READEDCOPYTASK_LIMIT));
-			}
-
-		} catch (Exception e) {
-			throw new ProcessException(e);
 		}
 	}
 
@@ -842,6 +840,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 				Collections.sort(taskList, new Comparator<HisTaskInfo>() {
 
+					@Override
 					public int compare(HisTaskInfo a, HisTaskInfo b) {
 
 						Timestamp starttime = a.getEND_TIME_() == null ? new Timestamp(
@@ -1505,12 +1504,31 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
+	@Override
 	public void completeTask(String processKey, String BusinessKey,
 			String taskId, String businessop, String businessReason,
 			String businessRemark) throws Exception {
 
-		activitiService.getTaskService().completeWithReason(taskId,
-				new HashMap(), businessReason, businessop, businessRemark);
+		TransactionManager tm = new TransactionManager();
+		try {
+
+			tm.begin();
+
+			activitiService.getTaskService().completeWithReason(taskId,
+					new HashMap(), businessReason, businessop, businessRemark);
+
+			TaskInfo taskInfo = this.getCurrentNodeInfo(taskId);
+
+			// 维护统一待办任务
+			this.addTodoTask(taskInfo.getInstanceId(), businessop, "");
+
+			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
+		} finally {
+			tm.release();
+		}
 
 	}
 
@@ -1550,6 +1568,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			}
 
 		}
+
+		// 维护统一待办任务
+		this.addTodoTask(
+				proIns.getProInsId(),
+				proIns.getDealOption(),
+				activitiService.getUserInfoMap().getUserName(
+						proIns.getUserAccount()));
 	}
 
 	@Override
@@ -1593,6 +1618,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					dealRemak, proIns.getNowtaskId(), processKey, userAccount,
 					proIns.getDealOption(), proIns.getDealReason());
 
+			// 维护统一待办任务
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), "");
+
 			tm.commit();
 
 		} catch (ProcessException e) {
@@ -1609,8 +1637,25 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			String userAccount, String businessop, String businessReason,
 			String businessRemark) throws Exception {
 
-		activitiService.cancleProcessInstances(processId, businessRemark,
-				taskId, processKey, userAccount, businessop, businessReason);
+		TransactionManager tm = new TransactionManager();
+		try {
+
+			tm.begin();
+
+			activitiService
+					.cancleProcessInstances(processId, businessRemark, taskId,
+							processKey, userAccount, businessop, businessReason);
+
+			// 维护统一待办任务
+			this.addTodoTask(processId, businessop, "");
+
+			tm.commit();
+
+		} catch (ProcessException e) {
+			throw e;
+		} finally {
+			tm.release();
+		}
 
 	}
 
@@ -1733,6 +1778,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					delegateUser, proIns.getDealRemak(),
 					proIns.getDealReason(), 0);
 
+			// 维护统一待办任务
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
+					activitiService.getUserInfoMap().getUserName(userAccount));
+
 			tm.commit();
 		} catch (ProcessException e) {
 			throw e;
@@ -1759,6 +1808,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiTaskService.updateNodeChangeInfo(taskId, processId,
 					processKey, currentUser, delegateUser, businessRemark,
 					businessReason, 0);
+
+			// 维护统一待办任务
+			this.addTodoTask(processId, businessop, activitiService
+					.getUserInfoMap().getUserName(delegateUser));
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1818,6 +1871,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					nodeInfo.getNode_key(), proIns.getDealRemak(),
 					proIns.getDealOption(), proIns.getDealReason());
 
+			// 维护统一待办任务
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
+					currentUser);
+
 			tm.commit();
 
 		} catch (ProcessException e) {
@@ -1856,6 +1913,9 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			// 撤销任务
 			activitiService.cancelTask(taskId, nodeKey, businessRemark,
 					businessop, businessReason);
+
+			// 维护统一待办任务
+			this.addTodoTask(processId, businessop, currentUser);
 
 			tm.commit();
 
@@ -1924,6 +1984,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.getRejectToActId(),
 					proIns.getIsReturn() == 1 ? true : false,
 					proIns.getDealOption(), proIns.getDealReason());
+
+			// 维护统一待办任务
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
+					activitiService.getUserInfoMap().getUserName(userAccount));
 
 			tm.commit();
 
@@ -2112,11 +2176,13 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		}
 	}
 
+	@Override
 	public List<ActNode> getBackActNodeContainNoAssigner(String processId,
 			String currentTaskKey) throws Exception {
 		return _getBackActNode(processId, currentTaskKey, true);
 	}
 
+	@Override
 	public List<ActNode> getBackActNode(String processId, String currentTaskKey)
 			throws Exception {
 		return _getBackActNode(processId, currentTaskKey, false);
@@ -2164,6 +2230,53 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
+	public void addTodoTask(String processId, String lastOp, String lastOper)
+			throws Exception {
+
+		// commonTrigger.addTodoTask(processId, lastOp, lastOper);
+
+		// TransactionManager tm = new TransactionManager();
+		//
+		// try {
+		//
+		// tm.begin();
+		//
+		// executor.delete("deleteTodoTaskByCondition_wf", processId);
+		//
+		// // 获取正在运行的任务信息
+		// List<TaskInfo> taskInfoList =
+		// getCurrentNodeInfoByProcessID(processId);
+		//
+		// // 流程未结束
+		// if (taskInfoList != null && taskInfoList.size() > 0) {
+		//
+		// ProcessInst inst = executor.queryObject(ProcessInst.class,
+		// "getProcessByProcessId_wf", processId);
+		//
+		// // 增加参数
+		// for (TaskInfo task : taskInfoList) {
+		// task.setSender(inst.getSTART_USER_ID_());
+		// task.setSenderName(activitiService.getUserInfoMap()
+		// .getUserName(inst.getSTART_USER_ID_()));
+		// task.setLastOp(lastOp);
+		// task.setLastOperName(lastOper);
+		// }
+		//
+		// executor.insertBeans("addTodoTask_wf", taskInfoList);
+		//
+		// }
+		//
+		// tm.commit();
+		//
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// throw new Exception("统一待办任务维护出错：" + e);
+		// } finally {
+		// tm.release();
+		// }
+	}
+
+	@Override
 	public void approveWorkFlow(ProIns proIns, String processKey,
 			Map<String, Object> paramMap) throws Exception {
 
@@ -2185,6 +2298,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			dealLogInfo(proIns);
 			this.delegateTask(proIns, processKey);
 		}
+		// TODO: 触发统一待办业务待办修改
+		// this.commonBusinessTrigger.modifyCommonOrder(proIns, processKey,
+		// paramMap);
+
 	}
 
 	@Override
@@ -2266,7 +2383,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 		// 获取流程实例的处理记录
 		List<HisTaskInfo> taskHistorList = getProcHisInfo(task.getInstanceId(),
-				filterLog);
+				processKey, filterLog);
 		model.addAttribute("taskHistorList", taskHistorList);
 
 		// 获取流程节点配置信息
@@ -2321,7 +2438,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 获取流程实例的处理记录
 			List<HisTaskInfo> taskHistorList = getProcHisInfo(
-					inst.getPROC_INST_ID_(), filterLog);
+					inst.getPROC_INST_ID_(), processKey, filterLog);
 			model.addAttribute("taskHistorList", taskHistorList);
 
 			// 流程未完成
@@ -2567,6 +2684,12 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					currentUser, map, destinationTaskKey, completeReason,
 					bussinessop, bussinessRemark);
 
+			TaskInfo taskInfo = this.getCurrentNodeInfo(nowTaskId);
+
+			// 维护统一待办任务
+			this.addTodoTask(taskInfo.getInstanceId(), bussinessop,
+					activitiService.getUserInfoMap().getUserName(currentUser));
+
 			tm.commit();
 		} catch (Exception e) {
 			throw new Exception("跳转到任意节点出错:" + e);
@@ -2650,6 +2773,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	@Override
 	public List<TaskInfo> getCurrentNodeInfoByBussinessKey(String bussinesskey)
 			throws Exception {
+
 		// 根据bussinessKey获取流程实例
 		ProcessInst inst = executor.queryObject(ProcessInst.class,
 				"getProcessByBusinesskey_wf", bussinesskey);
@@ -2831,14 +2955,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public boolean isCopyNodeByKey(String nodeKey, String processKey)
 			throws Exception {
 
-		NodeControlParam controlParam = executor.queryObject(
-				NodeControlParam.class, "iscopynode_wf", nodeKey, processKey);
-
-		if (null != controlParam && controlParam.getIS_COPY() != 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return activitiService.isCopyNode(nodeKey, processKey);
 	}
 
 	@Override

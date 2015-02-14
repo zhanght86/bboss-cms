@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.task.Task;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
@@ -23,7 +22,6 @@ import com.sany.workflow.business.util.WorkflowConstants;
 import com.sany.workflow.demo.entity.ListData;
 import com.sany.workflow.demo.entity.PageData;
 import com.sany.workflow.demo.service.BusinessDemoService;
-import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.service.ProcessException;
 
 /**

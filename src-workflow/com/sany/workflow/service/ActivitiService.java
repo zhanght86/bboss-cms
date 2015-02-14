@@ -1082,7 +1082,7 @@ public interface ActivitiService {
 	 * @return
 	 * 2014年5月19日
 	 */
-	public List<TaskManager> queryHistorTasks(String processInstId);
+	public List<TaskManager> queryHistorTasks(String processInstId,String processKey);
 	
 	/**
 	 * 获得历史任务实例 by用户名
@@ -1674,5 +1674,26 @@ public interface ActivitiService {
 	 */
 	public void backupDatasToWorktime(String processId);
 	public NodeControlParam getNodeControlParamByTaskID(String processId, String taskid)
+			throws Exception;
+	
+	/** 判断单个节点是否抄送节点
+	 * @param nodeKey
+	 * @param processKey
+	 * @return
+	 * @throws Exception
+	 * 2015年2月13日
+	 */
+	public boolean isCopyNode(String nodeKey, String processKey)
+			throws Exception;
+	
+	/**
+	 * 获取流程下抄送节点
+	 * 
+	 * @param processKey
+	 * @return
+	 * @throws Exception
+	 *             2015年2月13日
+	 */
+	public Map<String, Object> queryCopynodeByProcessKey(String processKey)
 			throws Exception;
 }

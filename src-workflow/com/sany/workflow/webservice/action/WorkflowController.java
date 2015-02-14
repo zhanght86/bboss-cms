@@ -408,8 +408,9 @@ public class WorkflowController implements WorkflowService {
 					String isMulti = (String) map.get("isMulti");
 					node.setIsMulti(isMulti);
 
-//					double durationNode = Double.parseDouble(map.get("durationNode")+"");
-//					node.setDuration_node(durationNode);
+					// double durationNode =
+					// Double.parseDouble(map.get("durationNode")+"");
+					// node.setDuration_node(durationNode);
 
 					activitiNodeCandidateList.add(node);
 				}
@@ -452,8 +453,8 @@ public class WorkflowController implements WorkflowService {
 
 		try {
 
-//			activitiService.startPorcessInstance(processKey, businessKey,
-//					currentUser, activitiNodeCandidateList, nodevariableList);
+			// activitiService.startPorcessInstance(processKey, businessKey,
+			// currentUser, activitiNodeCandidateList, nodevariableList);
 
 			rr.setResultCode("1");
 			rr.setResultMess("开启实例操作成功");
@@ -543,8 +544,9 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-//			activitiService.cancleProcessInstances(instancesIds, deleteReason,
-//					"", processKey, currentUser);
+			// activitiService.cancleProcessInstances(instancesIds,
+			// deleteReason,
+			// "", processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("逻辑删除操作成功");
@@ -678,7 +680,7 @@ public class WorkflowController implements WorkflowService {
 
 		try {
 			List<TaskManager> taskHistorList = activitiService
-					.queryHistorTasks(instancesId);
+					.queryHistorTasks(instancesId, "");
 
 			List<NodeTaskInfo> nodeList = new ArrayList<NodeTaskInfo>();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -846,8 +848,8 @@ public class WorkflowController implements WorkflowService {
 		}
 
 		try {
-//			activitiService.cancleProcessInstances(instancesId, deleteReason,
-//					taskId, processKey, currentUser);
+			// activitiService.cancleProcessInstances(instancesId, deleteReason,
+			// taskId, processKey, currentUser);
 
 			rr.setResultCode("1");
 			rr.setResultMess("废弃任务操作成功");
@@ -923,8 +925,8 @@ public class WorkflowController implements WorkflowService {
 					.createTaskQuery().processInstanceId(instancesId).list();
 
 			// 任务跳转到第一个节点
-//			activitiService.completeTaskLoadCommonParamsWithDest(task.get(0)
-//					.getId(), activties.get(1).getId(), cancelReason);
+			// activitiService.completeTaskLoadCommonParamsWithDest(task.get(0)
+			// .getId(), activties.get(1).getId(), cancelReason);
 
 			tm.commit();
 
@@ -1010,8 +1012,8 @@ public class WorkflowController implements WorkflowService {
 			activitiService.delegateTask(taskId, toUserId);
 
 			// 添加转办记录
-//			activitiTaskService.updateNodeChangeInfo(taskId, instancesId,
-//					processKey, fromUserId, toUserId);
+			// activitiTaskService.updateNodeChangeInfo(taskId, instancesId,
+			// processKey, fromUserId, toUserId);
 
 			tm.commit();
 
@@ -1134,8 +1136,8 @@ public class WorkflowController implements WorkflowService {
 
 		try {
 
-//			activitiTaskService.rejectToPreTask(task,
-//					activitiNodeCandidateList, nodevariableList, rejectedType);
+			// activitiTaskService.rejectToPreTask(task,
+			// activitiNodeCandidateList, nodevariableList, rejectedType);
 
 			rr.setResultCode("1");
 			rr.setResultMess("驳回任务操作成功");
@@ -1336,8 +1338,8 @@ public class WorkflowController implements WorkflowService {
 			}
 
 			// 完成任务
-//			activitiTaskService.completeTask(task, activitiNodeCandidateList,
-//					nodevariableList);
+			// activitiTaskService.completeTask(task, activitiNodeCandidateList,
+			// nodevariableList);
 
 			rr.setResultCode("1");
 			rr.setResultMess("通过任务操作成功");

@@ -2,32 +2,6 @@
 
 <properties>
 
-	<!-- 判断是否是抄送节点 -->
-	<property name="iscopynode_wf">
-		<![CDATA[
-			SELECT *
-			  FROM TD_WF_ACTIVITI_NODE_INFO A
-			 WHERE A.NODE_KEY = ?
-			   AND A.PROCESS_KEY = ?
-		]]>
-	</property>
-	
-	<!-- 判断是否是抄送节点 -->
-	<property name="iscopynodeByProcessId_wf">
-		<![CDATA[
-			SELECT *
-			  FROM TD_WF_ACTIVITI_NODE_INFO A
-			 WHERE EXISTS
-			 (SELECT T.KEY_
-			          FROM ACT_HI_TASKINST B
-			          LEFT JOIN ACT_RE_PROCDEF T ON B.PROC_DEF_ID_ = T.ID_
-			         WHERE B.PROC_INST_ID_ = ?
-			           AND A.PROCESS_KEY = T.KEY_)
-			   AND A.NODE_KEY = ?
-			AND A.IS_COPY =1
-		]]>
-	</property>
-	
 	<!-- 获取用户特定状态下的任务待办数 -->
 	<property name="getTaskIdByBusinessKey">
 		<![CDATA[ 
@@ -626,6 +600,7 @@
 			       A.PROC_DEF_ID_  AS DEFID,
 			       A.ASSIGNEE_     AS ASSIGNEE,
 			       A.TASK_DEF_KEY_ AS TASKDEFKEY,
+			       A.NAME_         AS TASKNAME,
 			       A.CREATE_TIME_  AS CREATETIME,
 			       C.IS_RECALL     AS ISRECALL,
 			       C.IS_DISCARD    AS ISDISCARD,

@@ -120,6 +120,7 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 						if (null != taskList && taskList.size() > 0) {
 
 							StringBuffer users = new StringBuffer();
+							StringBuffer userNames = new StringBuffer();
 
 							for (int j = 0; j < taskList.size(); j++) {
 
@@ -132,8 +133,31 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 											taskInfo.getAssignee());
 								}
 							}
-							de.setAssigneeName(activitiService.getUserInfoMap()
-									.getUserName(users.toString()));
+
+							// 处理人域账号转中文名称
+							String[] arrayAssignee = users.toString()
+									.split(",");
+							if (arrayAssignee.length > 1) {
+								for (int k = 0; k < arrayAssignee.length; k++) {
+									if (k == 0) {
+										userNames.append(activitiService
+												.getUserInfoMap().getUserName(
+														arrayAssignee[k]));
+									} else {
+										userNames
+												.append(",")
+												.append(activitiService
+														.getUserInfoMap()
+														.getUserName(
+																arrayAssignee[k]));
+									}
+								}
+								de.setAssigneeName(userNames.toString());
+							} else {
+								de.setAssigneeName(activitiService
+										.getUserInfoMap().getUserName(
+												users.toString()));
+							}
 							de.setAssignee(users.toString());
 						}
 					}
@@ -216,7 +240,12 @@ public class BusinessDemoServiceImpl implements BusinessDemoService {
 		ProcessInst inst = executor.queryObject(ProcessInst.class,
 				"getProcessByBusinesskey_wf", businessKey);
 
-		return workflowService.getProcHisInfo(inst.getPROC_INST_ID_(),
-				filterLog);
+		if (null != inst) {
+			return workflowService.getProcHisInfo(inst.getPROC_INST_ID_(),
+					inst.getKEY_(), filterLog);
+		} else {
+			return null;
+		}
+
 	}
 }

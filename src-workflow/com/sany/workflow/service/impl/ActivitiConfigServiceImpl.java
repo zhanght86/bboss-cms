@@ -1184,14 +1184,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	@Override
 	public boolean isCopyNode(String nodeKey, String processKey)
 			throws Exception {
+		
+		return activitiService.isCopyNode(nodeKey, processKey);
 
-		NodeControlParam controlParam = executor.queryObject(
-				NodeControlParam.class, "iscopynode_wf", nodeKey, processKey);
-
-		if (null != controlParam && controlParam.getIS_COPY() != 0) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

@@ -141,4 +141,7 @@ public class WorkFlowConstant {
 
 		return overtimeSendMap;
 	}
+	
+	/** 显示已阅抄送记录数*/
+	public static final Integer SHOW_READEDCOPYTASK_LIMIT= 10;  
 }

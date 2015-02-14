@@ -375,7 +375,7 @@ public class ActivitiTaskManageAction {
 			if (processInst != null) {
 				// 获取流程实例的处理记录
 				List<TaskManager> taskHistorList = activitiService
-						.queryHistorTasks(processInstId);
+						.queryHistorTasks(processInstId, processInst.getKEY_());
 
 				model.addAttribute("taskHistorList", taskHistorList);
 
@@ -602,7 +602,7 @@ public class ActivitiTaskManageAction {
 
 			// 获取流程实例的处理记录
 			List<TaskManager> taskHistorList = activitiService
-					.queryHistorTasks(processInstId);
+					.queryHistorTasks(processInstId, processKey);
 			model.addAttribute("taskHistorList", taskHistorList);
 
 			// 当前流程实例下所有节点信息
@@ -1070,7 +1070,7 @@ public class ActivitiTaskManageAction {
 			if (processInst != null) {
 				// 获取流程实例的处理记录
 				List<TaskManager> taskHistorList = activitiService
-						.queryHistorTasks(processInstId);
+						.queryHistorTasks(processInstId, processInst.getKEY_());
 
 				model.addAttribute("taskHistorList", taskHistorList);
 
