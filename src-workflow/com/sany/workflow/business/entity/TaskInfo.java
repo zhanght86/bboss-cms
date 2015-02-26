@@ -32,6 +32,8 @@ public class TaskInfo implements Serializable {
 
 	private String taskDefKey;// 任务key
 
+	private String taskName;// 任务节点名称
+
 	private String businessKey;// 业务主题key
 
 	private String instanceId;// 流程实例id
@@ -59,6 +61,12 @@ public class TaskInfo implements Serializable {
 
 	private String assignee;// 处理人
 	private String assigneeName;// 处理人名字
+
+	private String lastOp;// 前一次处理类型
+
+	private String lastOperName;// 前一次处理人
+
+	private String dealerWorkNo;// 处理人工号
 
 	public int getIsDiscarded() {
 		return isDiscarded;
@@ -250,6 +258,38 @@ public class TaskInfo implements Serializable {
 
 	public void setIsAutoafter(int isAutoafter) {
 		this.isAutoafter = isAutoafter;
+	}
+
+	public String getLastOp() {
+		return lastOp;
+	}
+
+	public void setLastOp(String lastOp) {
+		this.lastOp = lastOp;
+	}
+
+	public String getLastOperName() {
+		return lastOperName;
+	}
+
+	public void setLastOperName(String lastOperName) {
+		this.lastOperName = lastOperName;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
+
+	public String getDealerWorkNo() {
+		return dealerWorkNo;
+	}
+
+	public void setDealerWorkNo(String dealerWorkNo) {
+		this.dealerWorkNo = dealerWorkNo;
 	}
 
 }

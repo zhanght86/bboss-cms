@@ -30,6 +30,7 @@
     <property name="userInfoMap" class="com.frameworkset.platform.sysmgrcore.purviewmanager.PDPUserInfoMapImpl"/>
      <property name="KPIService" class="com.sany.workflow.service.impl.PlatformKPIServiceImpl"/>
      <property name="enableMixMultiUserTask" value="true"/>
+     
   </property>
     <property name="beanFactory" 
 			  factory-class="org.frameworkset.web.servlet.support.WebApplicationContextUtils" 
@@ -54,4 +55,6 @@
 <!-- 			<property upgradecallback="com.sany.test.TestUpgradeCallback"/>			 -->
 		</list>
 	</property>
+	 <property name="enablebussinesstrigger" value="false"/>
+	
 </properties>

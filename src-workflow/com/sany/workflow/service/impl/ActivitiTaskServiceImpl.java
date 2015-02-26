@@ -1520,6 +1520,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						taskInfo.getTaskId());
 
 				StringBuffer users = new StringBuffer();
+				StringBuffer userNames = new StringBuffer();
 
 				if (candidatorList != null && candidatorList.size() != 0) {
 
@@ -1531,13 +1532,17 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 							if (k == 0) {
 								users.append(userId);
+								userNames.append(activitiService
+										.getUserInfoMap().getUserName(userId));
 							} else {
 								users.append(",").append(userId);
+								userNames.append(",").append(
+										activitiService.getUserInfoMap()
+												.getUserName(userId));
 							}
 						}
 					}
-					taskInfo.setAssigneeName(activitiService.getUserInfoMap()
-							.getUserName(users.toString()));
+					taskInfo.setAssigneeName(userNames.toString());
 					taskInfo.setAssignee(users.toString());
 				}
 			}

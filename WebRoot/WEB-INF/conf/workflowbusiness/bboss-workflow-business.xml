@@ -13,13 +13,27 @@
 	<property name="workflow.business.ActivitiBusinessService" 
 		f:executor="attr:workflow.business.configsqlexecutor"
 		f:activitiService="attr:activitiService" 
+		f:commonTrigger = "attr:workflow.business.commonTrigger"
 		f:activitiTaskService="attr:workflow.task.activitiTaskService" 
 		class="com.sany.workflow.business.service.impl.ActivitiBusinessImpl" />
-
+		
 	<property name="workflow.business.configsqlexecutor"
 		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
 		<construction>
 			<property value="com/sany/workflow/business/workflowBussiness.xml" />
+		</construction>
+	</property>
+	
+	<property name="workflow.business.commonTrigger" 
+		f:executor="attr:workflow.business.triggerSqlexecutor"
+		f:activitiService="attr:activitiService" 
+		f:activitiTaskService="attr:workflow.task.activitiTaskService" 
+		class="com.sany.workflow.business.service.impl.CommonBusinessTrigger" />
+		
+	<property name="workflow.business.triggerSqlexecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/sany/workflow/business/commonBusiness.xml" />
 		</construction>
 	</property>
 	

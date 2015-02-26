@@ -3407,8 +3407,15 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			if (StringUtil.isEmpty(processInstCondition.getStartUser())) {
 				// 当前用户登录id
-				processInstCondition.setStartUser(AccessControl
-						.getAccessControl().getUserAccount());
+				if(AccessControl.getAccessControl().isAdmin())// 管理员查所有
+				{
+					processInstCondition.setStartUser("");
+				}
+				else
+				{
+					processInstCondition.setStartUser(AccessControl.getAccessControl().getUserAccount());
+				}
+				
 			} else {
 				// 管理员查所有
 				if (AccessControl.isAdmin(processInstCondition.getStartUser())) {

@@ -24,6 +24,8 @@ import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.soa.ObjectSerializable;
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -39,6 +41,7 @@ import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
+import com.sany.workflow.business.service.CommonBusinessTriggerService;
 import com.sany.workflow.business.util.WorkflowConstants;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
@@ -51,7 +54,7 @@ import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import java.util.Collections;
 
 /**
  * @todo 工作流业务实现类
@@ -60,7 +63,8 @@ import edu.emory.mathcs.backport.java.util.Collections;
  * 
  */
 public class ActivitiBusinessImpl implements ActivitiBusinessService,
-		org.frameworkset.spi.DisposableBean {
+		org.frameworkset.spi.DisposableBean,
+		org.frameworkset.spi.InitializingBean {
 
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
@@ -68,7 +72,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	private ActivitiTaskService activitiTaskService;
 
-	// private CommonBusinessTrigger commonTrigger;
+	private CommonBusinessTriggerService commonTrigger;
 
 	@Override
 	public void destroy() throws Exception {
@@ -606,9 +610,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.addNodeWorktime(processKey,
 					processInstance.getId(), controlParamList);
 
-			// 维护统一待办任务
-			this.addTodoTask(processInstance.getId(), "发起流程", activitiService
-					.getUserInfoMap().getUserName(proIns.getUserAccount()));
+			// 创建统一业务订单
+			proIns.setProInsId(processInstance.getId());
+			commonTrigger.createCommonOrder(proIns, businessKey, processKey,
+					paramMap, completeFirstTask);
 
 			if (completeFirstTask) {
 
@@ -622,11 +627,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				autoCompleteTask(proIns, processKey);
 			}
 
-			// TODO: 创建统一待办页面 luoh19
-			// if(true){
-			// commonBusinessTrigger.createCommonOrder(proIns, businessKey,
-			// processKey, paramMap, completeFirstTask);
-			// }
 			tm.commit();
 
 		} catch (Exception e) {
@@ -2233,7 +2233,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public void addTodoTask(String processId, String lastOp, String lastOper)
 			throws Exception {
 
-		// commonTrigger.addTodoTask(processId, lastOp, lastOper);
+		commonTrigger.addTodoTask(processId, lastOp, lastOper);
 
 		// TransactionManager tm = new TransactionManager();
 		//
@@ -3171,6 +3171,22 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		nodeList.add(nodeInfo);
 
 		activitiTaskService.udpNodeAssignee(nodeList, processId);
+
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		BaseApplicationContext context = DefaultApplicationContext
+				.getApplicationContext("activiti.cfg.xml");
+		boolean enablebussinesstrigger = context.getBooleanProperty(
+				"enablebussinesstrigger", false);
+		if (this.commonTrigger != null) {
+			commonTrigger = new CommonBusinessTriggerServiceWraper(
+					commonTrigger, enablebussinesstrigger);
+		} else {
+			commonTrigger = new CommonBusinessTriggerServiceWraper(null,
+					enablebussinesstrigger);
+		}
 
 	}
 }
