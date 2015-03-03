@@ -21,7 +21,6 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.TaskInfo;
-import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -1425,7 +1424,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+			throw new Exception("根据key获取当前任务节点信息出错:" , e);
 		} finally {
 			tm.release();
 		}
@@ -1469,7 +1468,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+			throw new Exception("根据key获取当前任务节点信息出错:",e);
 		}
 	}
 
@@ -1492,7 +1491,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" + e);
+			throw new Exception("根据key获取当前任务节点信息出错:" , e);
 		} finally {
 			tm.release();
 		}
@@ -1519,8 +1518,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						HashMap.class, "getCandidatorOftask_wf",
 						taskInfo.getTaskId());
 
-				StringBuffer users = new StringBuffer();
-				StringBuffer userNames = new StringBuffer();
+				StringBuilder users = new StringBuilder();
+				StringBuilder userNames = new StringBuilder();
 
 				if (candidatorList != null && candidatorList.size() != 0) {
 
@@ -1689,7 +1688,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("根据业务key获取当前任务节点信息出错:" + e);
+			throw new Exception("根据业务key获取当前任务节点信息出错:" , e);
 		} finally {
 			tm.release();
 		}
@@ -1828,7 +1827,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.commit();
 
 		} catch (Exception e) {
-			throw new Exception("修改未产生待办任务的节点处理人出错:" + e);
+			throw new Exception("修改未产生待办任务的节点处理人出错:", e);
 		} finally {
 			tm.release();
 		}

@@ -313,8 +313,8 @@ function sub(commentposturl,docId,channelId,commenturl,n,isall) {
 					             		
 					             		comm = comm + " </div> "; 
 					             		comm = comm + "<div class=\"re_button\">" +
-					             				      "<a class=\"cancel\" href=\"javascript:void(0);\" onclick='returnListPage()'>取消</a>" +
-					             					  "<a class=\"submit\" href=\"javascript:void(0);\" onclick='doVote("+titleId+","+data.questions.length+")'>提交</a>" +
+					             				      "<a class=\"cancel\" href=\"javascript:void(0);\" id=\"cancelBtn\" onclick='returnListPage()'>取消</a>" +
+					             					  "<a class=\"submit\" href=\"javascript:void(0);\" id=\"submitBtn\" onclick='doVote("+titleId+","+data.questions.length+")'>提交</a>" +
 					             					  "</div>";
 			             		}
 		             		}

@@ -38,7 +38,7 @@ public class ProIns {
 	private String nowTaskFromUser;// 实例当前任务的转办/委托用户
 	private String nowTaskToUser;// 实例当前任务的被转办/委托用户
 	private String toTaskKey;// 跳转到下个任务节点的key
-
+	private transient TaskInfo nowTask;
 	public String getDealOption() {
 		return dealOption;
 	}
@@ -221,6 +221,14 @@ public class ProIns {
 
 	public void setProOrderId(String proOrderId) {
 		this.proOrderId = proOrderId;
+	}
+
+	public TaskInfo getNowTask() {
+		return nowTask;
+	}
+
+	public void setNowTask(TaskInfo nowTask) {
+		this.nowTask = nowTask;
 	}
 
 }

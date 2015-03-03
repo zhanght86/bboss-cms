@@ -75,7 +75,7 @@
 	      </table>
     </div>
     
-	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
+	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" numberpre="&nbsp;" numberend="" sizescope="10,20,50,100"/></div>
 
     </pg:pager>
 </pg:notempty> 

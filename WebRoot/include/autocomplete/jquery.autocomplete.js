@@ -519,9 +519,9 @@ $.Autocompleter.Cache = function(options) {
 			else 
 				rawValue = rowdata;
 			var value = options.formatMatch?options.formatMatch(rawValue, i+1, options.data.length):rawValue;
-			if ( value === false )
+			if ( value === false || value == null)
 				continue;
-				
+			
 			var firstChar = value.charAt(0).toLowerCase();
 			// if no lookup array for this character exists, look it up now
 			if( !stMatchSets[firstChar] ) 

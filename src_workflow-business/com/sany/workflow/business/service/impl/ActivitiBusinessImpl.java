@@ -1398,12 +1398,33 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		try {
 
 			tm.begin();
-
-			// 获取当前任务信息
-			TaskInfo currentTask = getCurrentNodeInfoByKey(
-					proIns.getBusinessKey(), processKey,
-					proIns.getUserAccount());
-
+			TaskInfo currentTask = proIns.getNowTask();
+			if(currentTask == null)
+			{
+				/**
+				 * 修复超级管理员无法完成业务demo任务的缺陷 by yinbp 20150228 开始
+				 */
+				// 获取当前任务信息
+				if(StringUtil.isEmpty(proIns.getNowtaskId()))
+				{
+				    currentTask = getCurrentNodeInfoByKey(
+						proIns.getBusinessKey(), processKey,
+						proIns.getUserAccount());
+				}
+				else
+				{
+					if(judgeAuthority(proIns.getNowtaskId(), processKey,
+							proIns.getUserAccount()))
+						currentTask = this.getCurrentNodeInfo(proIns.getNowtaskId());
+				}
+				if(currentTask == null)
+				{
+					throw new ProcessException("任务不存在或您没有权限处理当前任务");
+				}
+			}
+			/**
+			 * 修复超级管理员无法完成业务demo任务的缺陷 by yinbp 20150228 结束
+			 */
 			// 当前用户转成域账号
 			String userAccount = this.changeToDomainAccount(proIns
 					.getUserAccount());
@@ -1498,7 +1519,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new Exception("处理任务出错：" + e);
+			
+			throw new Exception("处理任务出错：", e);
 		} finally {
 			tm.release();
 		}
@@ -2320,6 +2342,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			} else {
 				proIns.setNowtaskId(nowTask.getTaskId());
 				proIns.setProInsId(nowTask.getInstanceId());
+				proIns.setNowTask(nowTask);
 			}
 
 			approveWorkFlow(proIns, processKey, paramMap);

@@ -12,6 +12,7 @@
 	<head>
   <%!/**
    * 针对HTML的特殊字符转义
+
    * @param value String
    * @return String
    */
@@ -58,30 +59,36 @@
             String todayTime = null;
             String strOutput = null;
             Calendar calendar = Calendar.getInstance();
-            strOutput = "" + calendar.get(1); //年
+            strOutput = "" + calendar.get(1); //年
+
             int n = calendar.get(2) + 1;
-            if (n < 10) //月
+            if (n < 10) //月
+
                 strOutput = strOutput + "-0" + n;
             else
                 strOutput = strOutput + "-" + n;
             n = calendar.get(5);
-            if (n < 10) //日
+            if (n < 10) //日
+
                 strOutput = strOutput + "-0" + n;
             else
                 strOutput = strOutput + "-" + n;
 
             n = calendar.get(11);
-            if (n < 10) //时
+            if (n < 10) //时
+
                 strOutput = strOutput + " 0" + n;
             else
                 strOutput = strOutput + " " + n;
             n = calendar.get(12);
-            if (n < 10) //分
+            if (n < 10) //分
+
                 strOutput = strOutput + ":0" + n;
             else
                 strOutput = strOutput + ":" + n;
             n = calendar.get(13);
-            if (n < 10) //秒
+            if (n < 10) //秒
+
                 strOutput = strOutput + ":0" + n;
             else
                 strOutput = strOutput + ":" + n; 
@@ -89,7 +96,7 @@
 %>
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>无标题文档</title>
+		<title>问卷管理</title>
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<META HTTP-EQUIV="pragma" CONTENT="no-cache">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
@@ -198,8 +205,8 @@
 		//	document.all("titleName").focus();
 			return;
 		}
-		if(document.all("titleName").value.length>100)
-		{
+		
+		if(document.all("titleName").value.length>100){
 		  alert("问卷名称字数不能超过100！");
 		  return false;
 		}
@@ -209,10 +216,12 @@
 		//	document.all("channelName").focus();
 			return;
 		}
+		
 		if(document.all("depart_id").value==""){
 			alert("所属部门不能为空！");
 			return;
 		}
+		
 		document.all("ipStartString").value = "";
 		document.all("ipEndString").value = "";
 		
@@ -232,6 +241,7 @@
 			}
 			document.all("ipStartString").value += ipCtrlStartArray[i].value+";";
 		}
+		
 		for (var i=0;i<ipCtrlEndArray.length;i++){
 			if (!checkIP(ipCtrlEndArray[i].value)){
 				alert("IP地址格式不对!!，只能输入数字和“.”,格式为XXX.XXX.XXX.XXX 例如：192.168.0.1");
@@ -263,8 +273,7 @@
 				return;
 			}
 			var todayTime = "<%=todayTime%>";
-			if(document.all("timeCtrlEnd").value<todayTime.substring(0,10))
-			{
+			if(document.all("timeCtrlEnd").value<todayTime.substring(0,10)){
 			  alert("时间段不应小于当前时间！");
 			  return false;
 			}
@@ -276,8 +285,7 @@
 		//}
 		 eWebEditor1.setMode('EDIT');
          form1.content.value=HTMLEncode(eWebEditor1.eWebEditor.document.body.innerHTML);
-         if(form1.content.value.lenght<1)
-         {
+         if(form1.content.value.lenght<1){
            alert("问卷描述不能为空！");
            return false;
          }
@@ -289,14 +297,21 @@
 			var tblName = tableNameArray[i];
 			//get question
 			var qstion = document.all(tblName+"Qstion").value.replace(/\?/gi,'');
+			var qstion_id = document.all(tblName+"Qstion_id").value;
 			var voteCount = document.all(tblName+"VoteCount").value;
+			
+			// 20141125 可以单独保存问卷信息
+			if (qstion.replace(/ /gi,'')=="") {
+				continue;
+			}
+			
 			if (qstion.replace(/ /gi,'')==""){
 				alert("请填写问题！");
 			//	document.all(tblName+"Qstion").focus();
 				return;
 			}
-			if(document.all(tblName+"Qstion").value.length>100)
-			{
+			
+			if(document.all(tblName+"Qstion").value.length>100){
 			  alert("问题字数不能超过100！");
 			  return false;
 			}
@@ -308,6 +323,7 @@
 					break;
 				}
 			}
+			
 			if (styleChckbx[1]!=null){
 				alert("请指定回答方式！");
 			//	styleChckbx[0].focus();
@@ -317,30 +333,35 @@
 			
 			var optionString = "";
 			var countString = "";
-			if(styleChckbx!=2)
-			{
-			var optionText = document.getElementsByName(tblName+"Option");
-			var countText = document.getElementsByName(tblName+"Count");
-			if (styleChckbx!=2 && (optionText==null||optionText.length==0)){
-				alert("请填入选项信息！");
-				return;
-			}
-			for (var j=0;j<optionText.length;j++){
-				if (optionText[j].value.replace(/ /gi,'')==""){
+			var option_id = "";
+			//if(styleChckbx!=2 ){  gw_tanx 20150204
+			if(styleChckbx!=2 && styleChckbx!=5){
+				
+				var optionText = document.getElementsByName(tblName+"Option");
+				var countText = document.getElementsByName(tblName+"Count");
+				var option_idText = document.getElementsByName(tblName+"Option_id");
+				//if (styleChckbx!=2 && (optionText==null||optionText.length==0)){ gw_tanx 20150204
+				if ((styleChckbx!=2 || styleChckbx!=5)&& (optionText==null||optionText.length==0)){
 					alert("请填入选项信息！");
-				//	optionText[j].focus();
 					return;
 				}
-				optionString += optionText[j].value
-								.replace(/;/gi,',')
-								.replace(/\>/gi,'》')
-								.replace(/\</gi,'《')
-								.replace(/'/gi,'`')+";";
-				countString += countText[j].value + ";";
-			}
+				for (var j=0;j<optionText.length;j++){
+					if (optionText[j].value.replace(/ /gi,'')==""){
+						alert("请填入选项信息！");
+					//	optionText[j].focus();
+						return;
+					}
+					optionString += optionText[j].value
+									.replace(/;/gi,',')
+									.replace(/\>/gi,'》')
+									.replace(/\</gi,'《')
+									.replace(/'/gi,'`')+";";
+					option_id += option_idText[j].value + ";";
+					countString += countText[j].value + ";";
+				}
 			}
 			qstion = qstion.replace(/\>/gi,'》').replace(/\</gi,'《');
-			questionString += "<"+qstion+"'"+voteCount+"'"+styleChckbx+"'"+optionString+"'"+countString+">";
+			questionString += "<"+qstion+"'"+qstion_id+"'"+voteCount+"'"+styleChckbx+"'"+optionString+"'"+option_id+"'"+countString+">";
 		}
 		document.all("questionString").value= questionString;
 		document.all("actionType").value= "save";
@@ -365,13 +386,13 @@
 		return true;
 	}
 	
-	function chkTimeGap(){
-		var repeatChkbx= document.all("can_repeat");
+	function chkTimeGap(checkboxName,selectName){
+		var repeatChkbx= document.all(checkboxName);
 		if (repeatChkbx.checked){
-			document.all("selectGap").disabled = false;
+			document.all(selectName).disabled = false;
 		}else{
-			document.all("selectGap").options[0].selected = true;
-			document.all("selectGap").disabled = true;
+			document.all(selectName).options[0].selected = true;
+			document.all(selectName).disabled = true;
 		}
 	}
 	
@@ -425,7 +446,7 @@
 	    {
 	    	picPath = oneTitle.getPicpath();
 	    	System.out.println(picPath);
-	    	ctime = oneTitle.getFoundDate().substring(0,19);
+	    	ctime = oneTitle.getFoundDate().substring(0,10);
 	    	depart = oneTitle.getDepart_id();
 	    	content = oneTitle.getContent();
 	    	content = filterStr(content);
@@ -433,9 +454,10 @@
 	}
 	String channel_id_hidden = "";
 	String sql = "select channel_id from td_cms_channel where DISPLAY_NAME='"+request.getParameter("channel")+"'";
+	
 	%>
 	<pg:pager scope="request" statement="<%=sql%>" title="分页" dbname="bspf" isList="true">				
-			<pg:notify>当前没有记录</pg:notify>
+			<%-- <pg:notify>当前没有记录</pg:notify>	gw_tanx 20150204 --%>
 			<pg:list>
              <% 
 			 channel_id_hidden = dataSet.getString("channel_id");
@@ -472,21 +494,23 @@
 			<table border="0" cellpadding="0" cellspacing="0" bgcolor="#F3F4F9" >
 				<tr>
 					<td align="right">
-						问卷名称：
+						问卷名称：
+
 					</td>
 					<td>
-						<input name="titleName" type="text" maxlength="200" style="width:400px;"><font color="red">*问卷标题字数不能超过100字</font>
+						<input name="titleName" type="text" maxlength="200" style="width:400px;"><font color="red">*问卷标题字数不能超过100</font>
 					</td>
 				</tr>
 				<!-- <tr>
 					<td align="right">
-						问卷描述：
+						问卷描述：
+
 
 					</td>
 					<td>
 						<textarea id="content" name="content" cols="63" rows="10"></textarea><font color="red">*问卷描述字数不能超过500字</font>
 					</td>
-				</tr>-->
+				</tr> -->
 				<!-- <tr>
 					<td align="right">
 						所属频道：
@@ -503,16 +527,30 @@
 						所属部门：
 					</td>
 					<td>
+							
 												<!--分页显示开始,分页标签初始化-->
-											<pg:pager  scope="request" statement="select id,DISPOSEDEP from TD_COMM_EMAIL_DISPOSEDEP where usestate=0 and id not in(select depart_id from TD_CMS_VOTE_TITLE a,td_cms_channel b,td_cms_channel_vote c where a.id=c.VOTE_TITLE_ID and b.channel_id=c.CHANNEL_ID and b.name='网上测评') order by seq" isList="true">				
+												
 												<select name="depart_id">
-												<OPTION value="">--请选择网上测评部门--</OPTION><font color="#FF0000">*</font>
-												<pg:list>
-												<option value="<pg:cell colName="id"/>"><pg:cell colName="DISPOSEDEP"/>
+												<OPTION value="">--请选择网上调查部门--</OPTION><font color="#FF0000">*</font>
+												<pg:list statement="select id,disposedep from TD_COMM_EMAIL_DISPOSEDEP" dbname="bspf">
+												<%
+													String ID = dataSet.getString("id");
+													String disposedep1=dataSet.getString("disposedep");
+													if(depart.equals(ID))
+													{
+														check = "selected";
+													}
+													else
+													{
+														check="";
+													}
+												%>
+												<option value='<%=ID%>' <%=check%>>
+												<%=disposedep1%>
 												</option>
 												</pg:list>
 												</select><font color="red">*</font>
-					            			</pg:pager>
+					            			
 					</td>
 				</tr>
 				<tr>
@@ -528,9 +566,95 @@
 						&nbsp;
 					</td>
 					<td>
-					    <input type="checkbox" name="can_repeat" value="0"  onClick="return chkTimeGap();">
+					    <input type="checkbox" id="can_repeat" name="can_repeat" value="0"  onClick="return chkTimeGap('can_repeat','selectGap');">
 						相同IP不可重复投票 时间间隔
-						<select name="selectGap" disabled>
+						<select id="selectGap" name="selectGap" >
+							<option value="-1">
+								无限
+							</option>
+							<option value="1">
+								1
+							</option>
+							<option value="2">
+								2
+							</option>
+							<option value="3">
+								3
+							</option>
+							<option value="4">
+								4
+							</option>
+							<option value="5">
+								5
+							</option>
+							<option value="6">
+								6
+							</option>
+							<option value="7">
+								7
+							</option>
+							<option value="8">
+								8
+							</option>
+							<option value="9">
+								9
+							</option>
+							<option value="10">
+								10
+							</option>
+							<option value="11">
+								11
+							</option>
+							<option value="12">
+								12
+							</option>
+							<option value="13">
+								13
+							</option>
+							<option value="14">
+								14
+							</option>
+							<option value="15">
+								15
+							</option>
+							<option value="16">
+								16
+							</option>
+							<option value="17">
+								17
+							</option>
+							<option value="18">
+								18
+							</option>
+							<option value="19">
+								19
+							</option>
+							<option value="20">
+								20
+							</option>
+							<option value="21">
+								21
+							</option>
+							<option value="22">
+								22
+							</option>
+							<option value="23">
+								23
+							</option>
+							<option value="24">
+								24
+							</option>
+						</select>小时
+					</td>
+				</tr>
+				<tr>
+					<td>
+						&nbsp;
+					</td>
+					<td>
+					    <input type="checkbox" id="userCanRepeat" name="userCanRepeat" value="0"  onClick="return chkTimeGap('userCanRepeat','selectUserGap');">
+						相同账号不允许重复投票
+						<select id="selectUserGap" name="selectUserGap" >
 							<option value="-1">
 								无限
 							</option>
@@ -611,7 +735,8 @@
 				</tr>
 				<tr>
 			    	<td width="15%" align="right">
-			    		创建时间：
+			    		创建时间：
+
 			    	</td>
 			    	<td>
 			    	<%
@@ -626,7 +751,8 @@
 			    <%if(ctime.length()<10){%>
 			    <tr>
 					<td width="15%" align="right">
-						选择图片：
+						选择图片：
+
 
 					</td>
 					<td>
@@ -636,9 +762,10 @@
 					</td>
 				</tr>
 				<%}else{%>
-			    <tr>
+			   <tr>
 			    	<td width="15%" align="right">
-			    		主题图片：
+			    		主题图片：
+
 			    	</td>
 			    	<td>
 			    		<input type="hidden" name="dispicpath" >
@@ -652,7 +779,8 @@
 			   
 				<tr>
 					<td width="15%" align="right">
-						更改图片：
+						更改图片：
+
 					</td>
 					<td>
 						<input type="hidden" name="hiddenPath" value="<%=picPath%>">
@@ -664,6 +792,7 @@
 				 <tr>
 					<td align="right">
 						可投票时间段：
+
 
 					</td>
 					<td  align="left">
@@ -696,6 +825,7 @@
 				</tr>
 				<tr><td align="right">
 						问卷描述：
+
 					</td>
 					<td colspan="3"></td>
 					</tr>
@@ -729,25 +859,38 @@
 
 								</td>
 								<td>
-									<input name="qstionTbl1Qstion" id="qstionTbl1Qstion" type="text" size="80"><input name="qstionTbl1VoteCount" id="qstionTbl1VoteCount" type="hidden" size="5"><font color="red">*字数不能超过100</font>
+									<input name="qstionTbl1Qstion" id="qstionTbl1Qstion" type="text" size="80"><input name="qstionTbl1Qstion_id" id="qstionTbl1Qstion_id" type="hidden" size=5><input name="qstionTbl1VoteCount" id="qstionTbl1VoteCount" type="hidden" size="5"><font color="red">*字数不能超过100</font>
 								</td>
 							</tr>
 							<tr>
 								<td align="right">
-									回答方式：
+									回答方式：
+
 								</td>
 								<td>
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="0" onClick="return changeStyle('qstionTbl1')">
-									单选
+									单选并统计票数
+
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="1" onClick="return changeStyle('qstionTbl1')">
-									多选
+									多选并统计票数
+
 									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="2" onClick="return clearOption('qstionTbl1')">
 									自由回答
+									
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="3" onClick="return changeStyle('qstionTbl1')">
+									单选
+
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="4" onClick="return changeStyle('qstionTbl1')">
+									多选
+									
+									<input type="radio" name="qstionTbl1Style" id="qstionTbl1Style" value="5" onClick="return clearOption('qstionTbl1')">
+									分组标题
 								</td>
 							</tr>
 							<tr>
 								<td>
-									选项：
+									选项：
+
 								</td>
 								<td>
 									<input type="button" name="qstionTbl1AddBtn" value="添加选项" onclick="return addOption('qstionTbl1')"  class="cms_button">
@@ -805,12 +948,13 @@
 	}
 	
 	function getQstionTblScript(tblName){
-		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
+		
+		var questionTable = "<table width='100%'  name='"+tblName+"' id='"+tblName+"' ><tr><td ><strong>题目：</strong></td><td ><input name='"+tblName+"Qstion' id='"+tblName+"Qstion' type='text' size='80'><input name='"+tblName+"Qstion_id' id='"+tblName+"Qstion_id' type='hidden' value='0' size='5'><input name='"+tblName+"VoteCount' id='"+tblName+"VoteCount' type='hidden' value='0' size='5'><input type='button' name='Submit42' value='删除' onclick=\"return delQstion('"+tblName+"')\"  class='cms_button'></td></tr><tr><td>回答方式：</td><td><input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='0' onClick='return changeStyle(\""+tblName+"\")'>单选并统计票数<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='1' onClick='return changeStyle(\""+tblName+"\")'>多选并统计票数 <input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='2' onClick='return clearOption(\""+tblName+"\")'>自由回答<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='3' onClick='return changeStyle(\""+tblName+"\")'>单选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='4' onClick='return changeStyle(\""+tblName+"\")'>多选<input type='radio' name='"+tblName+"Style' id='"+tblName+"Style' value='5' onClick='return clearOption(\""+tblName+"\")'>分组标题</td></tr><tr><td>选项：</td><td><input type='button' name='"+tblName+"AddBtn' value='添加选项' onclick='return addOption(\""+tblName+"\")'  class='cms_button'><input type='button'name='"+tblName+"DelBtn' value='删除选项' onclick='return delOption(\""+tblName+"\")'  class='cms_button'></td></tr><tr><td>&nbsp;</td><td><table name='"+tblName+"OptinTbl' id='"+tblName+"OptinTbl'><tbody></tbody></table></td></table></td></tr></table>";
 		return questionTable;
 	}
 	
 	function getOptionTblScript(tblName){
-		var op = "*<input type='checkbox' name='"+tblName+"Chkbx' id='"+tblName+"Chkbx' value='checkbox'><input name='"+tblName+"Option' id='"+tblName+"Option' type='text' size='50'><input name='"+tblName+"Count' id='"+tblName+"Count' type='hidden' value='0' size='5'>";
+		var op = "*<input type='checkbox' name='"+tblName+"Chkbx' id='"+tblName+"Chkbx' value='checkbox'><input name='"+tblName+"Option' id='"+tblName+"Option' type='text' size='50'><input name='"+tblName+"Option_id' id='"+tblName+"Option_id' type='hidden' value='0' size='5'><input name='"+tblName+"Count' id='"+tblName+"Count' type='hidden' value='0' size='5'>";
 		return op;
 	}
 	
@@ -822,21 +966,36 @@
 			%>document.all("titleID").value="<%=id%>";<%
 			if (oneTitle != null){
 				%>document.all("titleName").value = "<%=oneTitle.getName()%>";
-				document.all("ctime").value = "<%=oneTitle.getFoundDate().substring(0,19)%>";
+				document.all("ctime").value = "<%=oneTitle.getFoundDate().substring(0,10)%>";
 				//document.all("channelName").value = "<%=oneTitle.getChannelName()%>";
 				//document.all("channelid").value = "<%=oneTitle.getChannelID()%>";<%
 				
 				if (oneTitle.getIpRepeat()==0){
 					%>
 					document.all("can_repeat").checked=true;
-					chkTimeGap();
+					chkTimeGap("can_repeat","selectGap");
 					selectValue("selectGap","<%=oneTitle.getTimeGap()%>");
 					<%
 				}else
 				{
 				  %>
 				  document.all("can_repeat").checked=false;
-					chkTimeGap();
+				  chkTimeGap("can_repeat","selectGap");
+					//document.all("selectGap").disable=false;
+					<%
+				}
+				
+				if (oneTitle.getUserRepeat()==0){
+					%>
+					document.all("userCanRepeat").checked=true;
+					chkTimeGap("userCanRepeat","selectUserGap");
+					selectValue("selectUserGap","<%=oneTitle.getUserTimeGap()%>");
+					<%
+				}else
+				{
+				  %>
+				  document.all("userCanRepeat").checked=false;
+				  chkTimeGap("userCanRepeat","selectUserGap");
 					//document.all("selectGap").disable=false;
 					<%
 				}
@@ -867,47 +1026,59 @@
 				}
 				
 				List questions = oneTitle.getQuestions();
-				Question  qstion = (Question)questions.get(0);
-				%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
-				checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");
-				document.all("qstionTbl1VoteCount").value = "<%=qstion.getVotecount()%>";<%
-				if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
-					List items = qstion.getItems();
-					Item item = (Item)items.get(0);
-					%>document.all("qstionTbl1AddBtn").disabled = false;
-					document.all("qstionTbl1DelBtn").disabled = false;
-					addOption("qstionTbl1");
-					document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";
-					document.all("qstionTbl1Count").value = "<%=item.getCount()%>";<%
-					for (int j=1;j<items.size();j++){
-						item = (Item)items.get(j);
-						%>addOption("qstionTbl1");
-						document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";
-						document.all("qstionTbl1Count").value = "<%=item.getCount()%>";<%
-					}
-				}
 				
-				for (int i=1;i<questions.size();i++){
-					qstion = (Question)questions.get(i);
-					%>addQuestion();
-					var tblNm = "qstionTbl"+tableIndex;
-					document.all(tblNm+"AddBtn").disabled = true;
-					document.all(tblNm+"DelBtn").disabled = true;
-					document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
-					checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");<%
+				if (null != questions && questions.size() > 0){
+					Question  qstion = (Question)questions.get(0);
+					%>document.all("qstionTbl1Qstion").value = "<%=qstion.getTitle()%>";
+					checkRadiobox("qstionTbl1Style","<%=qstion.getStyle()%>");
+					document.all("qstionTbl1VoteCount").value = "<%=qstion.getVotecount()%>";
+					document.all("qstionTbl1Qstion_id").value="<%=qstion.getId()%>";<%
 					if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
 						List items = qstion.getItems();
 						Item item = (Item)items.get(0);
-						%>document.all(tblNm+"AddBtn").disabled = false;
-						document.all(tblNm+"DelBtn").disabled = false;
-						addOption(tblNm);
-						document.all(tblNm+"Option").value = "<%=item.getOptions()%>";
-						document.all(tblNm+"Count").value = "<%=item.getCount()%>";<%
+						%>document.all("qstionTbl1AddBtn").disabled = false;
+						document.all("qstionTbl1DelBtn").disabled = false;
+						addOption("qstionTbl1");
+						document.all("qstionTbl1Option").value = "<%=item.getOptions()%>";
+						document.all("qstionTbl1Count").value = "<%=item.getCount()%>";
+						document.all("qstionTbl1Option_id").value = "<%=item.getId()%>";
+						<%
 						for (int j=1;j<items.size();j++){
 							item = (Item)items.get(j);
-							%>addOption(tblNm);
-							document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";
-							document.all(tblNm+"Count")[<%=j%>].value = "<%=item.getCount()%>";<%
+							%>addOption("qstionTbl1");
+							document.all("qstionTbl1Option")[<%=j%>].value = "<%=item.getOptions()%>";
+							document.all("qstionTbl1Count")[<%=j%>].value = "<%=item.getCount()%>";
+							document.all("qstionTbl1Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
+						}
+					}
+					
+					for (int i=1;i<questions.size();i++){
+						qstion = (Question)questions.get(i);
+						%>addQuestion();
+						var tblNm = "qstionTbl"+tableIndex;
+						document.all(tblNm+"AddBtn").disabled = true;
+						document.all(tblNm+"DelBtn").disabled = true;
+						document.all(tblNm+"Qstion").value = "<%=qstion.getTitle()%>";
+						checkRadiobox(tblNm+"Style","<%=qstion.getStyle()%>");
+						document.all(tblNm+"VoteCount").value="<%=qstion.getVotecount()%>";
+						document.all(tblNm+"Qstion_id").value="<%=qstion.getId()%>";<%
+						if (qstion.getStyle()!=2 && qstion.getItems().size()>0){
+							List items = qstion.getItems();
+							Item item = (Item)items.get(0);
+							%>document.all(tblNm+"AddBtn").disabled = false;
+							document.all(tblNm+"DelBtn").disabled = false;
+							addOption(tblNm);
+							document.all(tblNm+"Option").value = "<%=item.getOptions()%>";
+							document.all(tblNm+"Count").value = "<%=item.getCount()%>";
+							document.all(tblNm+"Option_id").value = "<%=item.getId()%>";
+							<%
+							for (int j=1;j<items.size();j++){
+								item = (Item)items.get(j);
+								%>addOption(tblNm);
+								document.all(tblNm+"Option")[<%=j%>].value = "<%=item.getOptions()%>";
+								document.all(tblNm+"Count")[<%=j%>].value = "<%=item.getCount()%>";
+								document.all(tblNm+"Option_id")[<%=j%>].value = "<%=item.getId()%>";<%
+							}
 						}
 					}
 				}

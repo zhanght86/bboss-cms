@@ -48,7 +48,7 @@ $(document).ready(function() {
         $.post(url,{},function(data){
             initAutoComplete(data);
         },"json");
-    
+	
 
 });
 
@@ -161,16 +161,21 @@ function doreset(){
 	    	</td></tr>
 	    </table>
   	</div>
-  
-	<div class="title_1">
-		演示列表
+	
+	<div class="list_box">
+	
+		<div class="title_1">
+			演示列表
+			
+			<div ><a href="javascript:void" class="bt_sany" onclick="toSelectProc();">新增</a></div>
 		
-		<div ><a href="javascript:void" class="bt_sany" onclick="toSelectProc();">新增</a></div>
+		</div>
 		
-	</div>
 		<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />		
 	
-	<div id="demoContainer" style="overflow:auto"></div>
+		<div id="demoContainer" style="overflow:auto"></div>
+		
+	</div>
 			
 			
 </div>
