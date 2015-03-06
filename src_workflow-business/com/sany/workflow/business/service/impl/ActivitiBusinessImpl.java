@@ -1399,26 +1399,22 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.begin();
 			TaskInfo currentTask = proIns.getNowTask();
-			if(currentTask == null)
-			{
+			if (currentTask == null) {
 				/**
 				 * 修复超级管理员无法完成业务demo任务的缺陷 by yinbp 20150228 开始
 				 */
 				// 获取当前任务信息
-				if(StringUtil.isEmpty(proIns.getNowtaskId()))
-				{
-				    currentTask = getCurrentNodeInfoByKey(
-						proIns.getBusinessKey(), processKey,
-						proIns.getUserAccount());
-				}
-				else
-				{
-					if(judgeAuthority(proIns.getNowtaskId(), processKey,
+				if (StringUtil.isEmpty(proIns.getNowtaskId())) {
+					currentTask = getCurrentNodeInfoByKey(
+							proIns.getBusinessKey(), processKey,
+							proIns.getUserAccount());
+				} else {
+					if (judgeAuthority(proIns.getNowtaskId(), processKey,
 							proIns.getUserAccount()))
-						currentTask = this.getCurrentNodeInfo(proIns.getNowtaskId());
+						currentTask = this.getCurrentNodeInfo(proIns
+								.getNowtaskId());
 				}
-				if(currentTask == null)
-				{
+				if (currentTask == null) {
 					throw new ProcessException("任务不存在或您没有权限处理当前任务");
 				}
 			}
@@ -1519,7 +1515,6 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		} catch (ProcessException e) {
 			throw e;
 		} catch (Exception e) {
-			
 			throw new Exception("处理任务出错：", e);
 		} finally {
 			tm.release();
@@ -1527,7 +1522,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	}
 
 	@Override
-	public void completeTask(String processKey, String BusinessKey,
+	public void completeTask(String processKey, String businessKey,
 			String taskId, String businessop, String businessReason,
 			String businessRemark) throws Exception {
 
@@ -1539,10 +1534,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.getTaskService().completeWithReason(taskId,
 					new HashMap(), businessReason, businessop, businessRemark);
 
-			TaskInfo taskInfo = this.getCurrentNodeInfo(taskId);
+			ProcessInst inst = executor.queryObject(ProcessInst.class,
+					"getProcessByBusinesskey_wf", businessKey);
 
 			// 维护统一待办任务
-			this.addTodoTask(taskInfo.getInstanceId(), businessop, "");
+			this.addTodoTask(inst.getPROC_INST_ID_(), businessop, "");
 
 			tm.commit();
 
