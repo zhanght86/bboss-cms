@@ -914,6 +914,8 @@
 			<fileset dir="${webroot}/"/>
 		</copy>
 		<delete dir="${distrib}/WebRoot/WEB-INF/classes"/>
+		<delete dir="${distrib}/WebRoot/sitepublish"/>
+		<delete dir="${distrib}/WebRoot/sitepulishtemp"/>
 		<mkdir dir="${distrib}/WebRoot/WEB-INF/classes"/>
 		<copy todir="${distrib}/WebRoot/WEB-INF/classes">
 			<fileset dir="${source}/resources" includes="**/*" 
