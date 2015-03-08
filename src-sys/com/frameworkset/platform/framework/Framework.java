@@ -86,7 +86,7 @@ public class Framework implements ResourceInitial,MessageSource {
 //			
 		}
 	}
-	private boolean monitered = false;
+//	private boolean monitered = false;
 	private ServletContext servletContext;
 	private static Logger log = Logger.getLogger(Framework.class);
 	 private Map<String,Locale> languages;
@@ -407,7 +407,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	}
 	private static Object mlock = new Object();
 	public void monitor(String configFile) {
-		if (menu_monitor && !monitered) {
+		if (menu_monitor ) {
 			if(listen == null)
 			{
 				synchronized(mlock)
@@ -422,7 +422,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				}
 			}
 			listen.addFile(configFile, this);			
-			this.monitered = true;
+			
 		}
 
 	}
@@ -624,8 +624,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			buildFramework( config);
 			Map temp_sys = config.getSubsystems();
 			synSubsystems(temp_sys);
-			if (!this.monitered)
-				this.monitor(this.configFile);
+			this.monitor(this.configFile);
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);
 		}
@@ -675,8 +674,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				buildFramework( config);
 				this.subsystems = config.getSubsystems();
 				initSubSystems();
-				if(!this.monitered )
-					this.monitor(configFile);
+				this.monitor(configFile);
 			} catch (Exception ex) {
 				log.error(ex.getMessage(), ex);
 			}
@@ -1708,12 +1706,13 @@ public class Framework implements ResourceInitial,MessageSource {
 	 * 
 	 */
 	private void stop() {
-		this.listen.stopped();
+//		this.listen.stopped();
+		listen.removeFile(this.configFile);
 		//listen.interrupt();
 //		listen.stop();
 		if(log != null)
 			log.debug("uninstalling module[" + this + "]");
-		this.monitered = false;
+		
 		this.messagesource = null;
 		this.messagesourcefiles = null;
 		if (this.subsystemFrameworks != null && !subsystemFrameworks.isEmpty()) {
