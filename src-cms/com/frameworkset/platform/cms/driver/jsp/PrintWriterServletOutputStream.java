@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletOutputStream;
 
-import sun.io.ByteToCharGBK;
+
 
 public class PrintWriterServletOutputStream extends ServletOutputStream implements java.io.Serializable {
 
