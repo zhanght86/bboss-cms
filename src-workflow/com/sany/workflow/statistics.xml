@@ -522,7 +522,7 @@
 			SELECT A.NAME_         AS NODENAME,
 			       A.DURATION_NODE AS DURATIONNODE,
 			       A.DURATION_     AS DURATION,
-			       B.REMARK        AS REMARK,
+			       B.DEALREASON        AS REMARK,
 			       A.START_TIME_   AS STARTTIME,
 			       A.END_TIME_     AS ENDTIME,
 			       A.PROC_INST_ID_ AS PROCESSID,
