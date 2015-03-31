@@ -92,7 +92,12 @@ public class XMLRadioTag extends XMLBaseTag
 	@Override
 	public int doEndTag() throws JspException {
 		// TODO Auto-generated method stub
-		this.vertical = null;
+		
 		return super.doEndTag();
+	}
+	@Override
+	public void doFinally() {
+		this.vertical = null;
+		super.doFinally();
 	}
 }

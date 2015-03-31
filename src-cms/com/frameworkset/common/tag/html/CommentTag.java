@@ -73,4 +73,10 @@ public class CommentTag extends CMSBaseTag {
 	public void setStyle(String style) {
 		this.style = style;
 	}
+
+	@Override
+	public void doFinally() {
+		style="";
+		super.doFinally();
+	}
 }

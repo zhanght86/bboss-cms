@@ -194,8 +194,14 @@ public class SiteURLTag extends CMSBaseCellTag {
 
 	@Override
 	public int doEndTag() throws JspException {
-		this.link = null;
+		
 		return super.doEndTag();
+	}
+
+	@Override
+	public void doFinally() {
+		this.link = null;
+		super.doFinally();
 	}
 
 }

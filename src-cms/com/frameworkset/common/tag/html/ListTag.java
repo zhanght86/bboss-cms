@@ -8,7 +8,7 @@ import com.frameworkset.platform.search.SearchService;
 import com.frameworkset.common.tag.BaseTag;
 
 
-public class ListTag extends BaseTag implements Serializable{
+public class ListTag extends BaseTag {
 	/////////////////////////////////////////////////////////
 
 	private String name;
@@ -89,9 +89,7 @@ public class ListTag extends BaseTag implements Serializable{
 	}	
  }
 	public void release(){
-		/*This method is totally optional,but it's a good habit to include
-		 * it so you don't forget it when you really need it.
-		 */
+		super.release();
 	}
 
 	public String getType() {
@@ -107,6 +105,18 @@ public class ListTag extends BaseTag implements Serializable{
 
 	public void setDatasource(String datasource) {
 		this.datasource = datasource;
+	}
+
+	@Override
+	public void doFinally() {
+		 name = null;
+
+			 type= null;
+			 datasource= null;
+			 left= 0;
+			 top= 0;
+			  width= 0;
+		super.doFinally();
 	}
 	
 }

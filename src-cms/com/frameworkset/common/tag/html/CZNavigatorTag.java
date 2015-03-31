@@ -436,6 +436,35 @@ public class CZNavigatorTag extends CMSBaseTag{
 		this.fontColor = fontColor;
 	}
 
+	@Override
+	public void doFinally() {
+		style = "text";
+		 channel = null;
+		column_num = 3;	
+		 homePageStr = "首页";
+		 divName = "navDivPart";
+		 target = "_self";
+		 menuBorderImg = "";
+		 bgColor = "#ED383B";
+		colWidth = 65;
+		subColWidth = 50;
+		totalWidth = 800;	
+		subWidth = 280;	
+		height = 26;
+		paddingLeft = 0;
+		paddingRight = 0;
+		  showSiteName = false; 
+		//wei.li新增
+		 fontColor = "#ffffff";
+		//
+		
+//		 bgImage = "";
+//		 onMouseOverColor = "#FAFAFA";
+//		 onMouseOverImage = "";
+		 subBgColor = "#F5F5F5";
+		super.doFinally();
+	}
+
 
 	
 	

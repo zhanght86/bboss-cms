@@ -146,10 +146,7 @@ public class XMLSelectTag extends XMLBaseTag
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
-		this.textValue = null;
-		this.multiple = false;
-		textValueCode = null;
-		textNAN = "NaN";
+		
 		return ret;
 	}
 
@@ -175,5 +172,14 @@ public class XMLSelectTag extends XMLBaseTag
 
 	public void setTextNAN(String textNAN) {
 		this.textNAN = textNAN;
+	}
+
+	@Override
+	public void doFinally() {
+		this.textValue = null;
+		this.multiple = false;
+		textValueCode = null;
+		textNAN = "NaN";
+		super.doFinally();
 	}
 }

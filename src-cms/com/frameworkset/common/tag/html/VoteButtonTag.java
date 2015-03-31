@@ -53,6 +53,14 @@ public class VoteButtonTag extends CMSBaseTag {
 		this.style = style;
 	}
 
+	@Override
+	public void doFinally() {
+		style = "";
+
+		 classname = "";
+		super.doFinally();
+	}
+
 }
 
 /*VoteManager vote = new VoteManager();

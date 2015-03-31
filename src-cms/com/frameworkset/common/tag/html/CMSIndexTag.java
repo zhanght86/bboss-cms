@@ -325,6 +325,28 @@ public class CMSIndexTag extends CMSSupportTag{
 	public void setStyle(String style) {
 		this.style = style;
 	}
+
+	@Override
+	public void doFinally() {
+		    prevstr = "上一页";
+		     nextstr = "下一页";
+		    firststr = "首页";
+		     laststr = "尾页";
+		     jumpToStr = "跳转";
+		     currentPage = 0;
+		   
+		      totalPage = 0;   
+		      tagnumber = 0;
+		    /**
+		     * 外加样式名称 
+		     */
+		     classname = "";
+		    /**
+		     * 定义内部样式
+		     */
+		     style = "";
+		super.doFinally();
+	}
 	
 
 

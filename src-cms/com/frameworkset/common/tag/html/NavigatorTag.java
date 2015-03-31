@@ -442,6 +442,29 @@ public class NavigatorTag extends CMSBaseTag{
 		String[] abc = new String[5];
 	}
 
+	@Override
+	public void doFinally() {
+		level = 1;
+		 siteid = "";
+		  style = ""; 
+		 layout = "normal";
+		 channel = "";
+		  bgColor = "";
+		 bgImage = "";
+		onMouseOverColor = "#FAFAFA";
+		onMouseOverImage = "";
+		subBgColor = "#F5F5F5";
+		subBgImage = "";
+		menuBorderImg = "";
+		levelDegree = 1;
+		colWidth = 84;
+		totalWidth = 800;	
+		column_num = 0;	
+		height = 26;
+		fontsize = 14;
+		super.doFinally();
+	}
+
 
 	
 	

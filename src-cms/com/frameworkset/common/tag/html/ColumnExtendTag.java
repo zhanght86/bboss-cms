@@ -139,7 +139,7 @@ public class ColumnExtendTag extends BaseCellTag {
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
-		this.extenddatas = null;
+		
 		return ret;
 	}
 
@@ -159,6 +159,7 @@ public class ColumnExtendTag extends BaseCellTag {
 		// TODO Auto-generated method stub
 		super.doFinally();
 		process = false;
+		this.extenddatas = null;
 	}
 
 }

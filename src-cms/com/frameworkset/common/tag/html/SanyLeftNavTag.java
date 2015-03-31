@@ -249,6 +249,7 @@ public class SanyLeftNavTag extends CMSBaseTag{
 		channel = "";
 		target = "_self";
 		level = 3;
+		 
 		super.doFinally();
 	}
 

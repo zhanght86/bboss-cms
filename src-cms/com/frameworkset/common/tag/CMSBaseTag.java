@@ -117,12 +117,7 @@ public class CMSBaseTag extends BaseTag  {
 	}
 	
 	public int doEndTag() throws JspException{
-		context = null;
-		cmsrequest = null;
-		cmsresponse = null;
-		channeldir = null;
-		channel = null;
-		site = null;
+		
 		return super.doEndTag();
 	}
 
@@ -132,6 +127,17 @@ public class CMSBaseTag extends BaseTag  {
 
 	public void setChannel(String channel) {
 		this.channel = channel;
+	}
+
+	@Override
+	public void doFinally() {
+		context = null;
+		cmsrequest = null;
+		cmsresponse = null;
+		channeldir = null;
+		channel = null;
+		site = null;
+		super.doFinally();
 	}
 	
 //	/**

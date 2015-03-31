@@ -154,4 +154,26 @@ public class ImageTag extends BaseCellTag {
 		this.title = title;
 	}
 
+
+
+	@Override
+	public void doFinally() {
+		border = 0;
+
+		 width = null;
+
+		 height = null;
+		
+		 alt = null;
+		
+		 align = null;
+		
+		 onClick = null;
+		
+		 onDblClick = null;
+		
+		 title = null;
+		super.doFinally();
+	}
+
 }

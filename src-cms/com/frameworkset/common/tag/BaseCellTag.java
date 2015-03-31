@@ -264,6 +264,12 @@ public abstract class BaseCellTag extends CellTag {
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
+		
+		return ret;
+	}
+
+	@Override
+	public void doFinally() {
 		context = null;
 		
 //		cmsrequest = null;
@@ -272,7 +278,7 @@ public abstract class BaseCellTag extends CellTag {
 //		channel = null ;
 		listTag = null;
 		dataSet = null;
-		return ret;
+		super.doFinally();
 	}
 
 	

@@ -125,5 +125,12 @@ public class MetasTag extends CMSBaseTag {
 	public int doEndTag() throws JspException{		
 		return super.doEndTag();
 	}
+
+	@Override
+	public void doFinally() {
+		 metas = null;
+		contents = null;
+		super.doFinally();
+	}
 	
 }

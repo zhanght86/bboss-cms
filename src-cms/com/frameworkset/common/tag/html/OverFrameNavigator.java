@@ -413,4 +413,31 @@ public class OverFrameNavigator extends CMSBaseTag{
 	
 	}
 
+	@Override
+	public void doFinally() {
+		impl = new ChannelManagerImpl();
+		 container = new ContainerImpl();
+	      tagUtil = new CMSTagUtil();
+		  level = 1;
+		siteid = "";
+		style = ""; 
+		channel = "";
+		bgColor = ""; 
+		bgImage = "";
+		onMouseOverColor = "#FAFAFA"; 
+		onMouseOverImage = "";
+		subBgColor = "#F5F5F5";  
+		subBgImage = "";
+		menuBorderImg = "";
+		subOutImg = "images/menuico_on.gif";
+		subOverImg = "images/menuico_over.gif";
+		levelDegree = 1;
+		colWidth = 84;
+		totalWidth = 800;	
+		column_num = 0;	
+		height = 26;
+		fontsize = 12; 
+		super.doFinally();
+	}
+
 }

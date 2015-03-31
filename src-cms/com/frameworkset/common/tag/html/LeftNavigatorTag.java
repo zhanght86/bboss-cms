@@ -282,6 +282,21 @@ public class LeftNavigatorTag extends CMSBaseTag{
 		this.nextMenuPrompt = nextMenuPrompt;
 	}
 
+	@Override
+	public void doFinally() {
+		siteid = "";		
+		 channel = "";
+		 displayName = "";
+		 width = "200";
+		 parentBgColor = "";
+		 childBgColor = "";
+		 onMouseOver = "";
+		 nextMenuPrompt = ">>";
+		  column_num = 1;	
+		  levelDegree = 1;
+		super.doFinally();
+	}
+
 
 
 	

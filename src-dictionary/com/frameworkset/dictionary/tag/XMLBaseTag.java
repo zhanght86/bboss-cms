@@ -340,15 +340,7 @@ public class XMLBaseTag extends CellTag
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
-		this.data = null;
-		this.defaultValue = null;
-		this.t_value = null;
-		this.name = null;
-		this.style = null;
-		this.checkPermission = false;
-		defaultName = "";
-		splittoken = "#$";
-		defaultCell = false;
+		
 		return ret;
 	}
 
@@ -404,6 +396,20 @@ public class XMLBaseTag extends CellTag
 
 	public void setDefaultCell(boolean defaultCell) {
 		this.defaultCell = defaultCell;
+	}
+
+	@Override
+	public void doFinally() {
+		this.data = null;
+		this.defaultValue = null;
+		this.t_value = null;
+		this.name = null;
+		this.style = null;
+		this.checkPermission = false;
+		defaultName = "";
+		splittoken = "#$";
+		defaultCell = false;
+		super.doFinally();
 	}
 
 }

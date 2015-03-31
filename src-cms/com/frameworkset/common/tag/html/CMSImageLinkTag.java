@@ -370,6 +370,20 @@ public class CMSImageLinkTag extends BaseCellTag {
 	
 		return sb;
 	}
+	@Override
+	public void doFinally() {
+		  width = -1;
+		  height = -1;
+		  astyle = null;
+		  imgstyle= null;
+		  imgalt= null;
+		  border = 0;
+		  target = null;
+		  aclassname = null;	
+		  imgclassname = null;
+		  isZoom = "false"; 
+		super.doFinally();
+	}
 
 	
 

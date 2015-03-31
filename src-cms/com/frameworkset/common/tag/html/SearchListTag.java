@@ -108,5 +108,17 @@ public class SearchListTag extends BaseTag implements Serializable{
 	public void setDatasource(String datasource) {
 		this.datasource = datasource;
 	}
+
+	@Override
+	public void doFinally() {
+		 name = null;
+
+			 type = null;
+			  datasource = null;
+			left = 0;
+			top = 0;
+			width = 0;
+		super.doFinally();
+	}
 	
 }

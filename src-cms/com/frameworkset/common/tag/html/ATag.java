@@ -171,6 +171,13 @@ public class ATag extends BaseCellTag {
 	public int doEndTag() throws JspException {
 
 		
+		
+		
+		return super.doEndTag();
+	}
+	@Override
+	public void doFinally() {
+		// TODO Auto-generated method stub
 		/**
 		 * 重置标签属性，避免属性的值被保留下来，影响标签的正常功能
 		 */
@@ -183,10 +190,9 @@ public class ATag extends BaseCellTag {
 		this.href = null;
 		this.textColname = null;
 		this.maxlength = -1;
-		
-		return super.doEndTag();
+		super.doFinally();
 	}
-	
+
 	public String getClassname() {
 		return classname;
 	}
@@ -243,5 +249,6 @@ public class ATag extends BaseCellTag {
 		this.text = text;
 	}
 
+	
 
 }

@@ -82,5 +82,14 @@ public class ExtColumnTag extends CMSBaseTag{
 		this.document_id = document_id;
 	}
 
+
+
+	@Override
+	public void doFinally() {
+		document_id="";
+		  column_name="";
+		super.doFinally();
+	}
+
 	
 }

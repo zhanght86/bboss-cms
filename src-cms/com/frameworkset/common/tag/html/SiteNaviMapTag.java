@@ -227,4 +227,17 @@ public class SiteNaviMapTag extends CMSBaseTag {
 	public void setBorder(String border) {
 		this.border = border;
 	}
+
+	@Override
+	public void doFinally() {
+		site = "";
+		  channel = null;
+		  width = "";
+		  border = "";
+		  align = "";
+		  style = "";
+		  classname = "";
+		  outputStrng = "";
+		super.doFinally();
+	}
 }

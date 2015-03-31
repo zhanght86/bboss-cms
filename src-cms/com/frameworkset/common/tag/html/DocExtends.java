@@ -15,10 +15,6 @@
  */
 package com.frameworkset.common.tag.html;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -27,7 +23,6 @@ import javax.servlet.jsp.JspException;
 
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
-import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 
 /**
  * <p>DocExtends.java</p>
@@ -81,8 +76,7 @@ public class DocExtends  extends BaseCellTag {
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
-		this.extenddatas = null;
-		this.currentdocExtValue = null;
+		
 		return ret;
 	}
 
@@ -99,6 +93,20 @@ public class DocExtends  extends BaseCellTag {
 		{
 			return SKIP_BODY;
 		}
+	}
+
+
+
+	@Override
+	public void doFinally() {
+		this.extenddatas = null;
+		this.currentdocExtValue = null;
+		 currentdocExtValue = null;
+			
+
+			  extenddatas = null;
+			  extenddataIterator = null;
+		super.doFinally();
 	}
 
 }

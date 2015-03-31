@@ -369,6 +369,36 @@ public class FlashNewsTag extends CMSListTag{
 		this.htmlencode = htmlencode;
 	}
 
+	@Override
+	public void doFinally() {
+		cssVmpath = "css/imageNews.css";
+		target = "_self";
+		isMarquee = null;  
+		 m_second = 3;
+		 count = 5;
+		 imgWidth = 240;
+		 imgHeight=180; 
+		
+		/**
+		 * Added by biaoping.yin on 2007.12.20
+		 */
+		
+		classname = null;  
+		 maxlength = 0;  
+		replace = null;  
+		 htmlencode = false; 
+		 htmldecode = false; 
+			
+		
+		/**
+		 * 
+		 * true:   获得图片新闻频道下所有最近发布图片
+		 * false:  获得普通频道下所有发布的带主题图片的文档图片
+		 */
+		isLatest = "true" ;
+		super.doFinally();
+	}
+
 
 	
 	

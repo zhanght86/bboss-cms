@@ -152,9 +152,15 @@ public class XMLItemvalueTag extends XMLBaseTag
 	@Override
 	public int doEndTag() throws JspException {
 		// TODO Auto-generated method stub
+		
+		return super.doEndTag();
+	}
+
+	@Override
+	public void doFinally() {
 		this.itemName = null;
 		this.defaultItemValue = null;
-		return super.doEndTag();
+		super.doFinally();
 	}
 
 }

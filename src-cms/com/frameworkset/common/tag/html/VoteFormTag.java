@@ -77,4 +77,18 @@ public class VoteFormTag extends CMSBaseTag {
 	public void setChannel(String channel) {
 		this.channel = channel;
 	}
+
+	@Override
+	public void doFinally() {
+	
+		super.doFinally();
+		/**
+		 * 问卷id
+		 */
+		  id = "";
+		/**
+		 * 频道显示名称，用来指定展示的问卷所属的频道
+		 */
+		  channel = "";
+	}
 }

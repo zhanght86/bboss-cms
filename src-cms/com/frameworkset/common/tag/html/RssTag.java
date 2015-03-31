@@ -269,4 +269,25 @@ public class RssTag extends CMSSupportTag {
 		this.site = site;
 	}
 
+	@Override
+	public void doFinally() {
+		channel = null;
+		
+		/**
+		 * 站点的英文名称
+		 */
+		 site = null;
+
+		 rsslink = null;
+
+		 rssimage = null;
+
+		 target = null;
+
+		 style = null;
+
+		 classname = null;
+		super.doFinally();
+	}
+
 }

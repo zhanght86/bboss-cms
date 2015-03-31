@@ -261,4 +261,24 @@ public class ChnlGuideTag extends CMSBaseTag {
 	</TR>
 	</table>
  **/
+
+	@Override
+	public void doFinally() {
+		  outputStrng = "";
+		  channelid = "";
+		  liImgSrc = "";
+		  picWidth = "";
+		  picHeight = "";
+		  bgcolor = "";
+		  dateStyle = "";
+		  liTxtStyle = "";
+		  maxTxtLnth = "";
+		  width = "";
+		  height = "";
+		  count = "";
+		  chnlPath = "";
+		  dateShow = true;
+		  rowspan = 4;
+		super.doFinally();
+	}
 }

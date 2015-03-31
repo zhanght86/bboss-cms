@@ -172,4 +172,16 @@ public class VoteTag extends BaseCellTag {
 		this.width = width;
 	}
 
+
+	@Override
+	public void doFinally() {
+		 voteids = "";
+
+			  width = "";
+			
+			  trheight = "";
+
+		super.doFinally();
+	}
+
 }

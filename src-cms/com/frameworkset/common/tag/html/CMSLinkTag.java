@@ -407,6 +407,12 @@ public class CMSLinkTag extends BaseCellTag {
 
 	@Override
 	public int doEndTag() throws JspException {
+		
+		return super.doEndTag();
+	}
+
+	@Override
+	public void doFinally() {
 		link = null;
 		target = null;
 		setcolor = true;
@@ -418,6 +424,6 @@ public class CMSLinkTag extends BaseCellTag {
 		 * 配合使用
 		 */
 		useTitle = false;
-		return super.doEndTag();
+		super.doFinally();
 	}
 }

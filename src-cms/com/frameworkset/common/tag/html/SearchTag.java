@@ -533,4 +533,34 @@ public class SearchTag extends CMSBaseTag {
 		this.target = target;
 	}
 
+	@Override
+	public void doFinally() {
+		textStyle = "";
+		  searchType = "2";
+		  textSize = "12";
+		  buttonStyle = "";
+		  buttonValue = "";
+		  img = "";
+		  imgHeigth = "";
+		  imgWidth = "";
+		  imgStyle = "";
+		
+		  hasFiledSelect = "0";
+		 selectSize = null;
+		  field = "查询所有字段,按内容查询,按标题查询,按描述查询,按关键字查询";				//内容,标题,描述,关键字(必须包含这些字样)
+		
+		  hasAdvancedSearch = "0";
+		  advancedButtonValue = "高级";
+		  advancedImg = "";
+		
+		  brFlag = "0";			//换行标志,将“搜索”和“高级”按钮换到另一行显示
+		
+		  tableBgcolor = "#FFFFFF";		//表格背景颜色
+		  tableBorder = "0";				//表格线宽
+		    target = null;
+		
+		  indexName = null;
+		super.doFinally();
+	}
+
 }

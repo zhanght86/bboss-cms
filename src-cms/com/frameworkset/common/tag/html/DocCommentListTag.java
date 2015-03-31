@@ -72,4 +72,13 @@ public class DocCommentListTag extends CMSBaseTag {
 	public void setWidth(String width) {
 		this.width = width;
 	}
+	@Override
+	public void doFinally() {
+		 frameBorder = 0;
+			  width = null;
+			  height = null;
+			  style = null;
+			  scrolling = "auto";
+		super.doFinally();
+	}
 }

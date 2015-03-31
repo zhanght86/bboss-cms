@@ -132,4 +132,13 @@ public class ImageRollTag extends FlashNewsTag{
 		this.speed = speed;
 	}
 
+
+	@Override
+	public void doFinally() {
+		 contentWidth = "480"; 
+			 contentHeight = "180";
+			  speed = "1";
+		super.doFinally();
+	}
+
 }

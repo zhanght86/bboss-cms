@@ -146,8 +146,13 @@ public class XMLItemnameTag extends XMLBaseTag
 	public int doEndTag() throws JspException {
 		// TODO Auto-generated method stub
 		
-		this.itemValue = null;
+		
 		return super.doEndTag();
+	}
+	@Override
+	public void doFinally() {
+		this.itemValue = null;
+		super.doFinally();
 	}
 
 

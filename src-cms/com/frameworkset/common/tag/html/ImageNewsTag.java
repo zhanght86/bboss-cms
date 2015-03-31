@@ -291,4 +291,21 @@ public class ImageNewsTag extends CMSListTag{
 		return super.doEndTag();
 	}
 
+	@Override
+	public void doFinally() {
+		cssVmpath = "css/imageNews.css";
+		 target = "_self";
+		 isMarquee = null;
+		 m_second = 0;	
+		 imgWidth = 240;
+		 imgHeight=180;
+		/**
+		 * 
+		 * true:   获得图片新闻频道下所有最近发布图片
+		 * false:  获得普通频道下所有发布的带主题图片的文档图片
+		 */
+		 isLatest = "true" ;
+		super.doFinally();
+	}
+
 }

@@ -414,6 +414,20 @@ public class QuestionsTag extends BaseCellTag {
 		this.channel = channel;
 	}
 
+	@Override
+	public void doFinally() {
+		optionstyle = "";
+		
+		  textareastyle = "";
+		
+		  channel = "";
+
+		  count = -1;
+
+		  id = "";
+		super.doFinally();
+	}
+
 }
 
 /**/

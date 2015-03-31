@@ -79,4 +79,12 @@ public class FlashTag extends BaseCellTag{
 	public void setPageContext(PageContext pageContext){
 		super.setPageContext(pageContext);	
 	}
+
+	@Override
+	public void doFinally() {
+		width ="200px";
+		
+		  height="100px";
+		super.doFinally();
+	}
 }

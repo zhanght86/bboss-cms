@@ -86,5 +86,13 @@ public class ParentChannelInfoTag extends ChannelInfoTag {
 		this.level = level;
 	}
 
+
+
+	@Override
+	public void doFinally() {
+		level = 1;
+		super.doFinally();
+	}
+
 	
 }

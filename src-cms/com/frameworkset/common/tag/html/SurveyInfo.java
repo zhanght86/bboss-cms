@@ -85,4 +85,11 @@ public class SurveyInfo extends CMSBaseTag {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+
+	@Override
+	public void doFinally() {
+		type = "";
+		super.doFinally();
+	}
 }

@@ -119,13 +119,7 @@ public class CMSMoreTag extends CMSSupportTag {
 	}
 	
 	public int doEndTag()throws JspException{
-		if(this.listTag != null){
-			//在listTag里面执行
-			//在回调完more.generatorMoreScript()后
-			//执行more.clearParameter()
-		}else{
-			this.clearParameter();
-		}
+		
 		return super.doEndTag();
 	}
 	
@@ -396,6 +390,18 @@ public class CMSMoreTag extends CMSSupportTag {
 
 	public void setSite(String site) {
 		this.site = site;
+	}
+
+	@Override
+	public void doFinally() {
+		if(this.listTag != null){
+			//在listTag里面执行
+			//在回调完more.generatorMoreScript()后
+			//执行more.clearParameter()
+		}else{
+			this.clearParameter();
+		}
+		super.doFinally();
 	}
 	
 }

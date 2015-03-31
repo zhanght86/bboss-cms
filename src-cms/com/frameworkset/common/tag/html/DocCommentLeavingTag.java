@@ -90,4 +90,10 @@ public class DocCommentLeavingTag extends CMSBaseTag {
 	public void setWidth(String width) {
 		this.width = width;
 	}
+	@Override
+	public void doFinally() {
+		 width = null;
+			  height = null;
+		super.doFinally();
+	}
 }

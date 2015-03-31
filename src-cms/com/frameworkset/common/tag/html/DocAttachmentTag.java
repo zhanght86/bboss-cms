@@ -222,9 +222,8 @@ public class DocAttachmentTag extends BaseCellTag {
 	{
 		int ret = super.doEndTag();
 		/* style 被清空 连续多个附件的时候 modify by ge.tao */
-		style = "";
-		target = "";
-		this.setColName(null);
+	
+		
 		return ret;
 	}
 
@@ -298,5 +297,31 @@ public class DocAttachmentTag extends BaseCellTag {
 
 	public void setSrcfield(String src) {
 		this.srcfield = src;
+	}
+
+
+
+	@Override
+	public void doFinally() {
+		style = "";
+		  target = "";
+		
+		  extend = "";
+		
+		
+		/**
+		 * 文档下载展示的文字
+		 */
+		  download = "";
+		  downloadpic= "";
+		
+		/**
+		 * 下载附件或者多媒体文件
+		 * scr=="attachment" 附件
+		 * src=="media" 多媒体
+		 */
+		 srcfield= "";
+		 this.setColName(null);
+		super.doFinally();
 	}
 }

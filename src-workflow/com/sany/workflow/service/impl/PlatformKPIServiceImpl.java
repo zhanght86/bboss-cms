@@ -149,12 +149,13 @@ public class PlatformKPIServiceImpl implements KPIService {
 	 */
 	private String filterOrg(String orgs) throws Exception {
 		try {
-			StringBuffer newOrgs = new StringBuffer();
+			StringBuilder newOrgs = new StringBuilder();
 			// 过滤多个部门
 			if (StringUtil.isNotEmpty(orgs) && orgs.indexOf(",") > -1) {
+
 				// 判断部门之间是否有层级关系，('50527225', '50524186', '50524052',
 				// '50020025', '50020020')
-				StringBuffer comparedOrg = new StringBuffer();
+				StringBuilder comparedOrg = new StringBuilder();
 				String[] arrayOrg = orgs.split(",");
 
 				for (int i = 0; i < arrayOrg.length; i++) {
@@ -193,8 +194,12 @@ public class PlatformKPIServiceImpl implements KPIService {
 					}
 
 				}
+
+				return newOrgs.toString();
+			} else {
+				return orgs;
 			}
-			return newOrgs.toString();
+
 		} catch (Exception e) {
 			throw new Exception("抄送节点过滤部门出错：" + e.getMessage(), e);
 		}

@@ -222,12 +222,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 
 	public int doEndTag() throws JspException {
 		int ret = super.doEndTag();
-		property = null;
-		displayname = null;
-		site = null;
-		linktype = null;
-		imagestyle = null;
-		imageextend = null;
+		
 		return ret;
 	}
 
@@ -287,6 +282,17 @@ public class ChannelInfoTag extends CMSBaseTag {
 			e.printStackTrace();
 		}
 		return chnl;
+	}
+
+	@Override
+	public void doFinally() {
+		property = null;
+		displayname = null;
+		site = null;
+		linktype = null;
+		imagestyle = null;
+		imageextend = null;
+		super.doFinally();
 	}
 
 }

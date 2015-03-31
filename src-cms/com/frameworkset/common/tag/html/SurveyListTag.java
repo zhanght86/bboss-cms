@@ -77,4 +77,14 @@ public class SurveyListTag extends BaseCellTag {
 	public void setTarget(String target) {
 		this.target = target;
 	}
+
+	@Override
+	public void doFinally() {
+		style = "";
+		  addr = "";
+		  maxlength = 20;
+		  replacemark="...";
+		  target = "_blank";
+		super.doFinally();
+	}
 }

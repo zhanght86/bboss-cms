@@ -247,13 +247,19 @@ public class CurrentPosTag extends CMSBaseTag {
 
 	@Override
 	public int doEndTag() throws JspException {
+		
+		return super.doEndTag();
+	}
+
+	@Override
+	public void doFinally() {
 		content = null;
 		
 		target="";
 		style = "";
 		currentPosPrompt = "当前位置： ";
 		indexPrompt = "首页";
-		return super.doEndTag();
+		super.doFinally();
 	}
 
 

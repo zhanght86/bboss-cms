@@ -564,18 +564,7 @@ public class CMSListTag extends PagerDataSet {
 				e.printStackTrace();
 			}
 		}
-		this.document = null;
-		this.channel = null;
-		datatype = "default";
-		this.count = 0;
-		this.site = null;
-		this.more = null;
-		this.indexTag = null;
-		this.context = null;
-		this.docType = null;
-		this.rssTag = null;
-		this.config = null;
-		this.params = null;
+		
 		int ret = super.doEndTag();
 		
 		
@@ -655,5 +644,22 @@ public class CMSListTag extends PagerDataSet {
 
 	public void setConfig(String config) {
 		this.config = config;
+	}
+
+	@Override
+	public void doFinally() {
+		this.document = null;
+		this.channel = null;
+		datatype = "default";
+		this.count = 0;
+		this.site = null;
+		this.more = null;
+		this.indexTag = null;
+		this.context = null;
+		this.docType = null;
+		this.rssTag = null;
+		this.config = null;
+		this.params = null;
+		super.doFinally();
 	}
 }

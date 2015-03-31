@@ -53,4 +53,18 @@ public class CMSTDMoreTag extends CMSMoreTag {
 		this.rowspan = rowspan;
 	}
 
+	@Override
+	public void doFinally() {
+		if(this.listTag != null){
+			//在listTag里面执行
+			//在回调完more.generatorMoreScript()后
+			//执行more.clearParameter()
+		}else{
+			colspan = -1;
+			
+			rowspan = -1;
+		}
+		super.doFinally();
+	}
+
 }

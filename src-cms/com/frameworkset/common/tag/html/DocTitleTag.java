@@ -59,4 +59,12 @@ public class DocTitleTag extends CMSBaseTag {
 	public void setSize(String size) {
 		this.size = size;
 	}
+
+	@Override
+	public void doFinally() {
+		style = "";
+		 color = "";
+		 size = "";
+		super.doFinally();
+	}
 }

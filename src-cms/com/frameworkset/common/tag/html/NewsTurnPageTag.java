@@ -125,6 +125,15 @@ public class NewsTurnPageTag extends  CMSSupportTag{
 		return listTag.getRowcount();
 	}
 
+	@Override
+	public void doFinally() {
+		prevstr = "上一页";
+	      nextstr = "下一页";
+	      currentpage = 1;
+	      totalpage = 10; 
+		super.doFinally();
+	}
+
 	
 
 }

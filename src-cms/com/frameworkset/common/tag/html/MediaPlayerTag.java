@@ -112,4 +112,16 @@ public class MediaPlayerTag extends BaseCellTag {
 		this.autostart = autostart;
 	}
 
+	@Override
+	public void doFinally() {
+		filename = "";
+
+		  width = "200";
+
+		  height = "200";
+		
+		  autostart = "true";
+		super.doFinally();
+	}
+
 }

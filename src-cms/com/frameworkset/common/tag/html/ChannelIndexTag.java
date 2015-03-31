@@ -155,4 +155,16 @@ public class ChannelIndexTag extends BaseCellTag {
 		this.property = property;
 	}
 
+	@Override
+	public void doFinally() {
+		  style = "";
+
+		  type = "channelindex";
+		
+		  mouseOverEvent = "";
+		
+		  property = null;
+		super.doFinally();
+	}
+
 }

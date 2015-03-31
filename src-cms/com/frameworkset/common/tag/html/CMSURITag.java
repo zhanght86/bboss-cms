@@ -102,8 +102,7 @@ public class CMSURITag	extends CMSBaseCellTag
 
 	@Override
 	public int doEndTag() throws JspException {
-		link = "";
-		this.base = null;
+		
 		return super.doEndTag();
 	}
 

@@ -234,11 +234,18 @@ public class BaseExtendTag extends BaseCellTag{
 	public int doEndTag() throws JspException
 	{
 		int ret = super.doEndTag();
+		
+		return ret;
+	}
+
+
+	@Override
+	public void doFinally() {
 		this.extenddatas = null;
 		process = false;
 		docExtValue = null;
 		isclob = false;
-		return ret;
+		super.doFinally();
 	}
 
 }
