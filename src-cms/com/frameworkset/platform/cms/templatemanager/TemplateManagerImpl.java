@@ -517,7 +517,8 @@ public class TemplateManagerImpl implements TemplateManager{
  	   PreparedDBUtil conn = new PreparedDBUtil(); 
  	   String  sql = "";	   
  	   try {
- 		
+ 		if(templateid == null || templateid.equals(""))
+ 			return null;
  		 sql = "select a.*,b.user_name from td_cms_template a inner join  td_sm_user b on a.createuser = b.user_id and template_id=?";
  		 conn.preparedSelect(sql);
  		 conn.setInt(1, Integer.parseInt(templateid));
@@ -546,8 +547,8 @@ public class TemplateManagerImpl implements TemplateManager{
  		 } 	
  		
  		} catch (Exception e) {
- 			System.out.print("取模板信息出错!"+e);
- 			throw new TemplateManagerException(e.getMessage());
+ 			log.error("取模板信息出错!",e);
+ 			return null;
  		} 
     }   
      

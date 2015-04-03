@@ -21,6 +21,8 @@ try{
 	String siteId   = request.getParameter("siteId");
 	String channelId = request.getParameter("channelId");
 	//String channelName = request.getParameter("channelName");
+	String oId = request.getParameter("oId");
+	String dId = request.getParameter("dId");
 	String tId = request.getParameter("tId");
 	String type = request.getParameter("type");
 	//String tName = request.getParameter("tName");
@@ -29,39 +31,96 @@ try{
 		Site site = sm.getSiteInfo(siteId) ;
 	 ChannelManager cm = new ChannelManagerImpl();
 	 RecursivePublishManagerImpl imp =new RecursivePublishManagerImpl();
-	
-	if (type.equals("1")) {
-	    Channel channel=cm.getChannelInfo(channelId);
-		int orachanneltemplateid=channel.getOutlineTemplateId();
-		cm.updateChannelOutputTemplateId(Integer.parseInt(channelId),Integer.parseInt(tId));
-		//频道概览模板更新
-		if(orachanneltemplateid!=0 && orachanneltemplateid!=Integer.parseInt(tId))
+	if(type == null)//为模板修改和设置操作
+	{
+		if (oId != null && !oId.equals("")) {
+		    Channel channel=cm.getChannelInfo(channelId);
+			int orachanneltemplateid=channel.getOutlineTemplateId();
+			int newoid = Integer.parseInt(oId);
+			if(orachanneltemplateid != newoid)
+			{
+				cm.updateChannelOutputTemplateId(Integer.parseInt(channelId),newoid);
+				//频道概览模板更新
+				if(orachanneltemplateid!=0)
+				{
+				  imp.deleteChannelOutRelation(channelId,site);
+				}
+			}
+			
+		} 
+		if (dId != null && !dId.equals("")) {
+		//频道细览模板更新
+		    Channel channel=cm.getChannelInfo(channelId);
+			int oradetailTemplateId=channel.getDetailTemplateId();
+			int newdid = Integer.parseInt(dId);
+			if(oradetailTemplateId != newdid)
+			{
+			    cm.updateChannelDetailTemplateId(Integer.parseInt(channelId),newdid);
+			    if(oradetailTemplateId!=0)
+				{
+				  imp.deleteChannelDetailRelation(channelId,site);
+				}
+			}
+		    
+		} 
+		if(null!=tId && !tId.equals(""))
 		{
-		  imp.deleteChannelOutRelation(channelId,site);
+			int templateId = -1;
+			 templateId = Integer.parseInt(tId);
+			int oraIndexTemplateId=site.getIndexTemplateId();//获取原来站点的模板id
+			site.setIndexTemplateId(templateId);
+			sm.updateSite(site);
+			if(oraIndexTemplateId!=0 && templateId!= oraIndexTemplateId)
+		  {
+		    //如果不为空且修改前后模板不同,调用删除站点在递归发布关系表中的关系方法
+		     imp.deletesiteRelation(siteId);
+		  }
+		}
+	}
+	else//为模板清空操作
+	{
+		if (oId != null && !oId.equals("")) 
+		{
+			Channel channel=cm.getChannelInfo(channelId);
+			int orachanneltemplateid=channel.getOutlineTemplateId();
+			
+			cm.updateChannelOutputTemplateId(Integer.parseInt(channelId),0);
+			//频道概览模板更新
+			if(orachanneltemplateid!=0)
+			{
+			  imp.deleteChannelOutRelation(channelId,site);
+			}
+			
 		}
 		
-	} else if (type.equals("2")) {
-	//频道细览模板更新
-	    Channel channel=cm.getChannelInfo(channelId);
-		int oradetailTemplateId=channel.getDetailTemplateId();
-	    cm.updateChannelDetailTemplateId(Integer.parseInt(channelId),Integer.parseInt(tId));
-	    if(oradetailTemplateId!=0 && oradetailTemplateId!=Integer.parseInt(tId))
+		if (dId != null && !dId.equals("")) 
 		{
-		  imp.deleteChannelDetailRelation(channelId,site);
+			Channel channel=cm.getChannelInfo(channelId);
+			int oradetailTemplateId=channel.getDetailTemplateId();			 
+		    cm.updateChannelDetailTemplateId(Integer.parseInt(channelId),0);
+		    if(oradetailTemplateId!=0)
+			{
+			  imp.deleteChannelDetailRelation(channelId,site);
+			}
+			 
+			
 		}
-	    
-	} else {
-		int templateId = -1;
-		if(null!=tId && !tId.equals("")) templateId = Integer.parseInt(tId);
-		int oraIndexTemplateId=site.getIndexTemplateId();//获取原来站点的模板id
-		site.setIndexTemplateId(templateId);
-		sm.updateSite(site);
-		if(oraIndexTemplateId!=0 && templateId!= oraIndexTemplateId)
-	  {
-	    //如果不为空且修改前后模板不同,调用删除站点在递归发布关系表中的关系方法
-	     imp.deletesiteRelation(siteId);
-	  }
- 	}
+		
+		if(null!=tId && !tId.equals(""))
+		{
+			int templateId = -1;
+			 
+			int oraIndexTemplateId=site.getIndexTemplateId();//获取原来站点的模板id
+			site.setIndexTemplateId(0);
+			sm.updateSite(site);
+			if(oraIndexTemplateId!=0  )
+		  {
+		    //如果不为空且修改前后模板不同,调用删除站点在递归发布关系表中的关系方法
+		     imp.deletesiteRelation(siteId);
+		  }
+		}
+	}
+ 	 
 %>
 	<script>
 		alert("模板更新成功！");

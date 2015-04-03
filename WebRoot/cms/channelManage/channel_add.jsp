@@ -19,8 +19,12 @@
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
 
-	String siteName = request.getParameter("siteName");
+	//String siteName = request.getParameter("siteName");
+	
 	String siteId   = request.getParameter("siteId");
+	Site site = SiteCacheManager.getInstance().getSite(siteId);
+	
+	String siteName = site.getSecondName()+"-" +site.getName();
 	if(siteId==null || siteId.trim().length()==0){
 	%>
 		<script language="javascript" type="text/javascript">
@@ -31,10 +35,16 @@
 		return;
 	}
 	String parentChannelId   = request.getParameter("channelId");
-	String parentChannelName = request.getParameter("channelName");
-	if(parentChannelId == null || parentChannelId.trim().length()==0){
+	Channel channel = SiteCacheManager.getInstance().getChannelCacheManager(siteId).getChannel(parentChannelId);
+	String parentChannelName =null ;
+	//String parentChannelName = request.getParameter("channelName");
+	if(channel == null  ){
 		parentChannelId = "";
 		parentChannelName = "";
+	}
+	else
+	{
+		parentChannelName =channel.getDisplayName() + "-" +  channel.getName() ;
 	}
 %>
 <html>

@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*" %>
@@ -9,6 +10,7 @@
 <%@ page import="com.frameworkset.platform.security.*"%>
 <%@ page import="com.frameworkset.platform.cms.templatemanager.*" %>
 <%@ page import="com.frameworkset.platform.cms.container.*" %>
+<%@ page import="com.frameworkset.platform.cms.channelmanager.*" %>
 
 <%
 	AccessControl accesscontroler = AccessControl.getInstance();
@@ -20,8 +22,18 @@
 	String tName = "";
 	String tId = "";
 	
-	String channelName = request.getParameter("channelName");
+	 
 	String channelId = request.getParameter("channelId");
+	Channel channel = SiteCacheManager.getInstance().getChannelCacheManager(siteId).getChannel(channelId);
+	String channelName =null ;
+	if(channel == null  ){
+		 
+		channelName = "";
+	}
+	else
+	{
+		channelName =channel.getDisplayName() + "-" +  channel.getName() ;
+	}
 	String outlineTemplateName = request.getParameter("outlineTemplateName");
 	String otId = request.getParameter("otId");
 	String detailTemplateName = request.getParameter("detailTemplateName");
@@ -32,7 +44,8 @@
 	
 	if(null!=isSite && isSite.equals("is")){
 		tId = request.getParameter("stId");
-		tName = request.getParameter("stName");
+		
+	
 		if(tId.equals("") || tId == null){
 			Template t = siteManager.getIndexTemplate(siteId);
 			//判断是否存在模板
@@ -44,12 +57,36 @@
 				channelName = siteManager.getSiteInfo(siteId).getName();
 			}
 		}
+		else
+		{
+			try
+			{
+			    TemplateManager tpltMng = new TemplateManagerImpl();
+			    Template t = tpltMng.getTemplateInfo(otId);
+				if(t!=null)
+					tName = t.getName(); 
+			}catch(Exception e)
+			{
+				System.out.println("xx"+siteId);
+				e.printStackTrace();
+			}
+		}
 		//System.out.println("SID: "+siteId+"     tName: "+tName+"    type: "+type+"    action: "+action+"    channelName: "+channelName);
 	} else {
 		if(null!=outlineTemplateName && !outlineTemplateName.equals("")){
-			tName = outlineTemplateName;
+			 TemplateManager tpltMng = new TemplateManagerImpl();
+			    Template t = tpltMng.getTemplateInfo(otId);
+			    if(t!= null)
+					tName = t.getName();
+			    else
+			    	tName = "当前没有选择任何模板";
 		} else if (null!=detailTemplateName && !detailTemplateName.equals("")) {
-			tName = detailTemplateName;
+			TemplateManager tpltMng = new TemplateManagerImpl();
+		    Template t = tpltMng.getTemplateInfo(dtId);
+		    if(t!= null)
+				tName = t.getName();
+		    else
+		    	tName = "当前没有选择任何模板";
 		} else {
 			tName = "当前没有选择任何模板";
 		}
@@ -74,7 +111,11 @@
 	
 	String title = "";
 	if(channelName == null) channelName = siteManager.getSiteInfo(siteId).getName();
-	title = "【"+channelName+"】-- "+typeName+"设置";
+	title = "【"+channelName+"】-- "+typeName+"设置" ;
+	typeName = URLEncoder.encode(URLEncoder.encode(typeName,"UTF-8"),"UTF-8");
+	tName = URLEncoder.encode(URLEncoder.encode(tName,"UTF-8"),"UTF-8");
+	
+	channelName = URLEncoder.encode(URLEncoder.encode(channelName,"UTF-8"),"UTF-8");
 %>
 <TITLE><%=title%></TITLE>
 <frameset rows="70,*" frameborder="no" border="0" framespacing="0">

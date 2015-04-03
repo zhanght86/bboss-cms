@@ -78,12 +78,22 @@ function checkForm(){
 }
 function save()
 {
-	siteForm.action="../channelManage/channel_templateSet_do.jsp?type=0&tId="
+	siteForm.action="../channelManage/channel_templateSet_do.jsp?tId="
 						+siteForm.siteTemplateId.value+"&tName="
 						+siteForm.siteTemplateName.value
 						+"&siteId=<%=siteId%>";
 	siteForm.submit();
-	if(flag)window.close();
+	
+
+}
+
+function clearSiteTemplate()
+{
+	siteForm.action="../channelManage/channel_templateSet_do.jsp?type=del&tId="
+						+siteForm.siteTemplateId.value
+						+"&siteId=<%=siteId%>";
+	siteForm.submit();
+	
 
 }
 function preview()
@@ -140,6 +150,9 @@ function setSiteTemplate()
 						<input name="siteTemplateId" id="siteTemplateId" type="hidden" value="<%=stId%>" />
 						<input name="siteTemplateName" id="siteTemplateName" type="text" style="width:110px" 　class="cms_text" disabled value="<%=stName%>" />
 						<input class="Channel_5wordsBtn" type="button" value="选 择" id="btsetSiteTemplate" name="btsetSiteTemplate" onClick="setSiteTemplate()" />
+						<pg:notempty actual="<%=stId%>"><input class="Channel_5wordsBtn" type="button" value="清除" 
+								id="btSetChannelOutlineTemplateId" name="btSetChannelOutlineTemplateId" 
+								onClick="clearSiteTemplate()" /></pg:notempty>		
 						<input class="Channel_5wordsBtn" type="button" value="预 览" id="siteTemplatePreview" name="siteTemplatePreview" onClick="preview()">
 					</td>
 				</tr>

@@ -88,13 +88,14 @@ function send(){
 	}
 	if(fileFlag == "" || fileFlag == "media")//多媒体文件
 	{
-		pattern=/\.(rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb|flv)$/i;
+		//pattern=/\.(rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb|flv|ppt|pptx|pdf|docx|doc|txt|xls|xlsx|rar|zip|z+)$/i;
+		pattern=/\.(exe|cmd|ini)$/i;
 		if(filename.search(/\S/)==-1){
 			alert("请选择一个多媒体文件!");
 			return;
 		}
-		if(!pattern.test(filename)){
-			alert("这里只能上传后缀名为rm|mp3|wav|mid|midi|ra|avi|mpg|mpeg|asf|asx|wma|mov|wmv|rmvb|flv的多媒体文件!");
+		if(pattern.test(filename)){
+			alert("不能上传exe,cmd,ini等可执行文件!");
 			return;
 		}
 	}

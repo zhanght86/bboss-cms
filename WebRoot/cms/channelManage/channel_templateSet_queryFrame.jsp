@@ -1,3 +1,4 @@
+<%@page import="java.net.URLDecoder"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.frameworkset.platform.cms.templatemanager.*" %>
@@ -16,10 +17,10 @@
  	String siteId = request.getParameter("siteId");
  	String channelId = request.getParameter("channelId");
  	String type = request.getParameter("type");
- 	String typeName = request.getParameter("typeName");
+ 	String typeName = URLDecoder.decode(request.getParameter("typeName"),"UTF-8");
  	String action = request.getParameter("action");
-	String channelName = request.getParameter("channelName");
-	String tName = request.getParameter("tName");
+	String channelName = URLDecoder.decode(request.getParameter("channelName"),"UTF-8");
+	String tName = URLDecoder.decode(request.getParameter("tName"),"UTF-8");
 	String tId = request.getParameter("tId");
 	if(isSite == null || !isSite.equals("is")){
 		if(channelName == null || channelName.equals("null")){

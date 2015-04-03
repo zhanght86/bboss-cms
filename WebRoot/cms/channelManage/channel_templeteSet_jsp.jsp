@@ -16,13 +16,17 @@
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
 	
-	String siteName = request.getParameter("siteName");
+	 
 	String siteId   = request.getParameter("siteId");
+	Site site = SiteCacheManager.getInstance().getSite(siteId);
+	
+	String siteName = site.getSecondName()+"-" +site.getName();
 	String channelId = request.getParameter("channelId");
-	String channelName = request.getParameter("channelName");
+	
 	
 	ChannelManager cm = new ChannelManagerImpl();
 	Channel chnl = cm.getChannelInfo(channelId);
+	String channelName = chnl.getDisplayName()+"-"+chnl.getName();
 	String outlineTemplateName="当前没有选择模板";
 	String detailTemplateName ="当前没有选择模板";
 	String otId = "";
@@ -30,15 +34,18 @@
 	try
 	{		
 	    TemplateManager tpltMng = new TemplateManagerImpl();
-		otId = String.valueOf(chnl.getOutlineTemplateId());	    
-		outlineTemplateName = tpltMng.getTemplateInfo(otId).getName();
+		otId = String.valueOf(chnl.getOutlineTemplateId());
+		Template t  =tpltMng.getTemplateInfo(otId);
+		outlineTemplateName = t != null?t.getName():outlineTemplateName;
 		dtId = String.valueOf(chnl.getDetailTemplateId());
-		detailTemplateName = tpltMng.getTemplateInfo(dtId).getName();
+		t  =tpltMng.getTemplateInfo(dtId);
+		detailTemplateName = t != null?t.getName():detailTemplateName;
 		
 	}catch(Exception e)
 	{
 		//System.out.println("xx"+siteId);
-		//e.printStackTrace();
+		e.printStackTrace();
+		throw e;
 	}
 	
 %>
@@ -101,13 +108,32 @@ function templatePreview(obj){
 
 function save()
 {
-	siteForm.action="channel_templateSet_do.jsp?type=1&channelId=<%=channelId%>&tId="
-									+siteForm.outlineTemplateId.value+"&tName="+siteForm.divOutlineTemplate.value+"&siteId=<%=siteId%>";
+	siteForm.action="channel_templateSet_do.jsp?type=1&channelId=<%=channelId%>&oId="
+									+siteForm.outlineTemplateId.value+"&dId="
+										+siteForm.detailTemplateId.value+"&tName="+siteForm.divOutlineTemplate.value+"&siteId=<%=siteId%>";
 	siteForm.submit();
 	
-	siteForm.action="channel_templateSet_do.jsp?type=2&channelId=<%=channelId%>&tId="
-									+siteForm.detailTemplateId.value+"&tName="+siteForm.divDetailTemplate.value+"&siteId=<%=siteId%>";
+
+	
+}
+
+function clearDetailTemplate()
+{
+	siteForm.action="channel_templateSet_do.jsp?type=del&channelId=<%=channelId%>"+"&dId="
+										+siteForm.detailTemplateId.value+"&siteId=<%=siteId%>";
 	siteForm.submit();
+	
+
+	
+}
+
+function clearOutlineTemplate()
+{
+	siteForm.action="channel_templateSet_do.jsp?type=del&channelId=<%=channelId%>"+"&oId="
+										+siteForm.outlineTemplateId.value+"&siteId=<%=siteId%>";
+	siteForm.submit();
+	
+
 	
 }
 </script>
@@ -125,10 +151,18 @@ function save()
 				</tr>
 				<tr>
 					<td width="100" height="24" align="right" nowrap bgcolor="#EDEFF6">
-						站点中文名称:
+						站点名称:
 					</td>
 					<td height="24">
-						&nbsp;&nbsp;<%=(channelName == null ? "&nbsp;" : channelName)%>
+						&nbsp;&nbsp;<%=(siteName == null ? "&nbsp;" : siteName)  %>
+					</td>
+				</tr>
+				<tr>
+					<td width="100" height="24" align="right" nowrap bgcolor="#EDEFF6">
+						频道名称:
+					</td>
+					<td height="24">
+						&nbsp;&nbsp;<%=  channelName%>
 					</td>
 				</tr>
 				<tr><td colspan="2"></td></tr>
@@ -142,6 +176,9 @@ function save()
 						<input class="Channel_5wordsBtn" type="button" value="选 择" 
 								id="btSetChannelOutlineTemplateId" name="btSetChannelOutlineTemplateId" 
 								onClick="setChannelOutlineTemplateId()" />
+						<pg:notempty actual="<%=otId%>"><input class="Channel_5wordsBtn" type="button" value="清除" 
+								id="btSetChannelOutlineTemplateId" name="btSetChannelOutlineTemplateId" 
+								onClick="clearOutlineTemplate()" /></pg:notempty>		
 						<input class="Channel_5wordsBtn" type="button" value="预 览" id="outlineTemplatePreview" name="outlineTemplatePreview" onClick="templatePreview(outlineTemplateId)">
 					　</td>
 					</tr>
@@ -153,6 +190,9 @@ function save()
 							<input name="detailTemplateId" id="detailTemplateId" type="hidden" value="<%=dtId%>" />
 							<input name="divDetailTemplate" id="divDetailTemplate" type="text" style="width:110px" value="<%=detailTemplateName%>"  class="cms_text" disabled />
 							<input class="Channel_5wordsBtn" type="button" value="选 择" id="btSetChannelDetailTemplateId" name="btSetChannelDetailTemplateId" onClick="setChannelDetailTemplateId()">
+							<pg:notempty actual="<%=dtId%>"><input class="Channel_5wordsBtn" type="button" value="清除" 
+								id="btSetChannelOutlineTemplateId" name="btSetChannelOutlineTemplateId" 
+								onClick="clearDetailTemplate()" /></pg:notempty>		
 							<input class="Channel_5wordsBtn" type="button" value="预 览" onClick="templatePreview(detailTemplateId)">
 						</td>
 					</tr>

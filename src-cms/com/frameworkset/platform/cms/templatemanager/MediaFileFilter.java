@@ -18,13 +18,19 @@ public class MediaFileFilter implements FileFilter,java.io.Serializable
 		if(pathname.isDirectory())
 			return false;
 		String lowerName = pathname.getName().toLowerCase();
-		if(lowerName.endsWith(".rm") || lowerName.endsWith(".mp3") || lowerName.endsWith(".wav")
-				|| lowerName.endsWith(".mid") || lowerName.endsWith(".midi") || lowerName.endsWith(".ra")
-				|| lowerName.endsWith(".avi") || lowerName.endsWith(".mpg") || lowerName.endsWith(".mpeg")
-				|| lowerName.endsWith(".asf") || lowerName.endsWith(".asx") || lowerName.endsWith(".wma")
-				|| lowerName.endsWith(".mov") || lowerName.endsWith(".wmv") || lowerName.endsWith(".rmvb") || lowerName.endsWith(".flv"))
-			return true;
-		return false;
+//		if(lowerName.endsWith(".rm") || lowerName.endsWith(".mp3") || lowerName.endsWith(".wav")
+//				|| lowerName.endsWith(".mid") || lowerName.endsWith(".midi") || lowerName.endsWith(".ra")
+//				|| lowerName.endsWith(".avi") || lowerName.endsWith(".mpg") || lowerName.endsWith(".mpeg")
+//				|| lowerName.endsWith(".asf") || lowerName.endsWith(".asx") || lowerName.endsWith(".wma")
+//				|| lowerName.endsWith(".mov") || lowerName.endsWith(".wmv") || lowerName.endsWith(".rmvb") || lowerName.endsWith(".flv")
+//				
+//				|| lowerName.endsWith(".ppt") || lowerName.endsWith(".pptx") || lowerName.endsWith(".pdf") 
+//				|| lowerName.endsWith(".docx") || lowerName.endsWith(".doc") || lowerName.endsWith(".txt") 
+//				|| lowerName.endsWith(".xls") || lowerName.endsWith(".xlsx") || lowerName.endsWith(".rar") 
+//				|| lowerName.endsWith(".zip") || lowerName.startsWith(".z"))
+		if(lowerName.endsWith(".exe") || lowerName.endsWith(".cmd") || lowerName.endsWith(".ini"))
+			return false;
+		return true;
 	}
 
 }
