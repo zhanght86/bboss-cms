@@ -13,6 +13,7 @@ import com.frameworkset.platform.cms.documentmanager.DocumentManager;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerException;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
+import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
 
 /**
@@ -38,10 +39,11 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * @version 1.0.0
  */
 public class SiteURLTag extends CMSBaseCellTag {
-	private String link;
+	private String link;	
+	
 
-	public int doStartTag() throws JspException {		
-	    super.doStartTag();    
+	private void doDefault() throws JspException
+	{
 		Object object = dataSet.getOrigineObject();
 		String href = null;
 		if(object instanceof Document)
@@ -139,8 +141,78 @@ public class SiteURLTag extends CMSBaseCellTag {
 		try {
 			out.print(href);
 		} catch (IOException e) {
-			throw new JspException(e);
+			throw new JspException("",e);
 		}
+	}
+	
+	private void doCustom() throws JspException
+	{
+		if(site != null)
+    	{
+    		if(channel == null)
+    		{
+	    		try {
+					Site site_ = CMSUtil.getSiteCacheManager().getSiteByEname(site);
+					if (site_ != null)
+					{			
+						String siteid = site_.getSiteId() + "";
+						String indexURL = null;
+						if(context != null)
+							indexURL = CMSTagUtil.getPublishedSitePath(context,indexURL);//首页地址
+						else
+							indexURL = CMSTagUtil.getPublishedSitePath(siteid);
+						out.print(indexURL);
+					}
+				} catch (JspException e) {
+					throw e;
+				} catch (IOException e) {
+					throw new JspException("",e);
+				} catch (Exception e) {
+					throw new JspException("",e);
+				}
+    		}
+    		else
+    		{
+    			try {
+    				
+					Channel channel_ = CMSUtil.getChannelCacheManagerBySiteName(site).getChannelByDisplayName(channel);
+					String linkPath = CMSTagUtil.getPublishedChannelPath(context,channel_);
+					out.print(linkPath);
+				}  catch (JspException e) {
+					throw e;
+				} catch (IOException e) {
+					throw new JspException("",e);
+				} catch (Exception e) {
+					throw new JspException("",e);
+				}
+    		}
+    	}
+    	else 
+    	{
+    		try {
+				Site site_ = context.getSite();
+				Channel channel_ = CMSUtil.getChannelCacheManager(site_.getSiteId()+"").getChannelByDisplayName(channel);
+				String linkPath = CMSTagUtil.getPublishedChannelPath(context,channel_);
+				out.print(linkPath);
+			} catch (JspException e) {
+				throw e;
+			} catch (IOException e) {
+				throw new JspException("",e);
+			} catch (Exception e) {
+				throw new JspException("",e);
+			}
+    	}
+	}
+	public int doStartTag() throws JspException {		
+	    super.doStartTag();    
+	    if(site == null && this.channel == null)
+	    {
+	    	doDefault();
+	    }
+	    else
+	    {
+	    	doCustom();
+	    }
 		return SKIP_BODY;
 	}
 

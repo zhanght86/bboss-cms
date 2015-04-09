@@ -156,7 +156,7 @@ tabdropdown.init("bluemenu")
 			String linkName = level1channel.getName();
 			String openTarget= level1channel.getOpenTarget();
 			if(! (openTarget==null||"".equals(openTarget))){
-				target_str="target=\"" + openTarget + "\"";;
+				target_str="target=\"" + openTarget + "\"";
 			}
 			else
 			{

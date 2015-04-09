@@ -4168,7 +4168,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					.append(subsql)
 					.append(" and (1=1 )")
 					.append( " and ((PAGEFLAG=0 or PAGEFLAG is null )and OUTLINE_TPL_ID is not null or (PAGEFLAG=1 or PAGEFLAG=2) and INDEXPAGEPATH is not null)")
-					.append(" order by order_no desc,createtime desc ").append((count <= 0 ? "" : (" ) where rownum <=" + String.valueOf(count))));
+					.append(" order by order_no asc,createtime desc ").append((count <= 0 ? "" : (" ) where rownum <=" + String.valueOf(count))));
 			// System.out.println("sql=" + sql);
 			db.executeSelect(sql.toString());
 			List channels = new ArrayList();
@@ -4249,7 +4249,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					+ " and  status=0 "
 					+ subsql
 					+ " and ((PAGEFLAG=0 or PAGEFLAG is null )and OUTLINE_TPL_ID is not null or (PAGEFLAG=1 or PAGEFLAG=2) and INDEXPAGEPATH is not null)"
-					+ " order by order_no,channel_id ";
+					+ " order by order_no  asc,channel_id ";
 			// System.out.println("sql=" + sql);
 			db.executeSelect(sql, offset, maxpageitems);
 			List channels = new ArrayList();
@@ -4334,7 +4334,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					+ " and  status=0 "
 					+ subsql
 					+ " and ((PAGEFLAG=0 or PAGEFLAG is null )and OUTLINE_TPL_ID is not null or (PAGEFLAG=1 or PAGEFLAG=2) and INDEXPAGEPATH is not null)"
-					+ " order by order_no,channel_id desc";
+					+ " order by order_no  asc,channel_id desc";
 			// System.out.println("sql=" + sql);
 			db.executeSelect(sql, offset, pageitems);
 			List channels = new ArrayList();

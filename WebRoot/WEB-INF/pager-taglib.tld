@@ -4084,6 +4084,10 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>channel</name>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>colName</name>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

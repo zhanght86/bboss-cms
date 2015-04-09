@@ -17,7 +17,7 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Company: 三一集团</p>
  * @Date Jun 6, 2005 11:18:58 AM
- * @author ge.tao
+ * @author yinbp
  * @version 1.0
  */
 public class CMSArrangeSpecialDocDataList extends CMSBaseListData implements java.io.Serializable {
@@ -41,7 +41,7 @@ public class CMSArrangeSpecialDocDataList extends CMSBaseListData implements jav
 		try {
 			listInfo =(CMSUtil.getCMSDriverConfiguration()
 					.getCMSService().getDocumentManager()
-					.getArrangeSpecialDocList(channel,offSet,pageItemsize));
+					.getArrangeSpecialDocList(channel,offSet,pageItemsize,this.params));
 		} catch (DocumentManagerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class CMSArrangeSpecialDocDataList extends CMSBaseListData implements jav
 		try {
 			list =(CMSUtil.getCMSDriverConfiguration()
 					.getCMSService().getDocumentManager()
-					.getArrangeSpecialDocList(channel,count)); 
+					.getArrangeSpecialDocList(channel,count,this.params)); 
 			listInfo.setDatas(list);
 		} catch (DocumentManagerException e) {
 			// TODO Auto-generated catch block

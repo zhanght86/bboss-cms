@@ -1140,6 +1140,16 @@ public interface DocumentManager extends java.io.Serializable
 	 * @throws DocumentManagerException 
 	 * @author: 陶格
 	 */
+	public List getArrangeSpecialDocList(String channel,int count,Map params) throws DocumentManagerException;
+	
+	/**
+	 * 获取频道下 文档 引用文档 引用频道 混合列表 不翻页!!!
+	 * @param channel
+	 * @param count
+	 * @return List
+	 * @throws DocumentManagerException 
+	 * @author: 陶格
+	 */
 	public List getArrangeSpecialDocList(String channel,int count) throws DocumentManagerException;
 	/**
 	 * 获取频道下 文档 引用文档 引用频道 混合列表 翻页!!!
@@ -1151,6 +1161,17 @@ public interface DocumentManager extends java.io.Serializable
 	 * @author: 陶格
 	 */
 	public ListInfo getArrangeSpecialDocList(String channel,long offset, int pageitems) throws DocumentManagerException;
+	
+	/**
+	 * 获取频道下 文档 引用文档 引用频道 混合列表 翻页!!!
+	 * @param channel
+	 * @param offset
+	 * @param pageitems
+	 * @return ListInfo
+	 * @throws DocumentManagerException 
+	 * @author: 陶格
+	 */
+	public ListInfo getArrangeSpecialDocList(String channel,long offset, int pageitems,Map params) throws DocumentManagerException;
 	/**
 	 * 恢复发布中的文档,
 	 * 返回1：恢复操作成功；2：文档处于真的发布中，不能恢复；
