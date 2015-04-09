@@ -368,7 +368,17 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 		}
 	}
 	
-	
+	private void setVariable(CMSServletRequestImpl request) throws Exception
+	{
+		request.setAttribute("cur_channel", this.channelContext.getChannel());
+		Channel parent = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannel(
+				this.channelContext.getChannel().getParentChannelId()+"");
+		if(parent != null)
+			request.setAttribute("cur_parentchannel", parent);
+		
+		
+		request.setAttribute("cur_site", context.getSite());
+	}
 	/**
 	 * 运行发布过程当中产生的临时jsp页面
 	 * 并且生成最终发布页面
@@ -378,7 +388,7 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 	protected void runPage()  {
 		
 //		if(!(context instanceof PageContext))
-		{
+		
 //			if(!needAction())
 //				return;
 			JspFile jspFile = script.getJspFile();
@@ -392,12 +402,16 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 			RequestDispatcher dispatcher = requestContext.getRequest()
 					.getRequestDispatcher(uri);
 			CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-			CMSServletRequest request = new CMSServletRequestImpl(requestContext
-					.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
-			CMSServletResponse response = new CMSServletResponseImpl(requestContext
-					.getResponse(),context);
+			CMSServletRequestImpl request = null;
+			CMSServletResponse response = null;
 	
 			try {
+				request = new CMSServletRequestImpl(requestContext
+						.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
+				
+				response = new CMSServletResponseImpl(requestContext
+						.getResponse(),context);
+				setVariable( request);
 				System.err.println("channel 开始:" + uri +":" + this.getId());
 				cmsDispatcher.include(request, response);
 				StringBuffer out = response.getInternalBuffer().getBuffer();
@@ -426,34 +440,32 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 	
 			catch (IOException e) {
 				log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
-				System.out.println(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage());
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
-				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
+				 
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
 						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 			} catch (CMSException e) {
 				
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
-				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
+				log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
 						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
-				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
+				log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
 						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 			}
-		}
+			finally
+			{
+				if(request != null)
+					request.clear();
+			}
+		
 		
 	}
 	

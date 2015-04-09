@@ -13,21 +13,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.url.CMSURL;
 import com.frameworkset.platform.cms.driver.url.CMSURLParameter;
 
 public class CMSServletRequestImpl extends HttpServletRequestWrapper implements java.io.Serializable,CMSServletRequest {
-	private static final Log LOG = LogFactory.getLog(CMSServletRequestImpl.class);
+	private static final Logger LOG = Logger.getLogger(CMSServletRequestImpl.class);
 	/**
 	 * jsp页面标识
 	 */
 	private JspletWindow jspletWindow;
 	private CMSURL cmsUrl;
 	private Map parameters;
+	private Map<String,Object> attributes;
 	private boolean included;
 	private Context context;
 	private PageContext pageContext;
@@ -47,6 +47,32 @@ public class CMSServletRequestImpl extends HttpServletRequestWrapper implements 
 			e.printStackTrace();
 		}
 		this.context = context;
+	}
+	private void initAttributes()
+	{
+		this.attributes = new HashMap<String,Object>();
+		Enumeration<String> names = super.getAttributeNames();
+		while(names.hasMoreElements())
+		{
+			String name = names.nextElement();
+			this.attributes.put(name, super.getAttribute(name));
+		}
+	}
+	public Object getAttribute(String name)
+	{
+		if(attributes == null)
+		{
+			initAttributes();
+		}
+		return attributes.get(name);
+	}
+	public void setAttribute(String name,Object value)
+	{
+		if(attributes == null)
+		{
+			initAttributes();
+		}
+		this.attributes.put(name, value);
 	}
 	
 	public CMSServletRequestImpl(HttpServletRequest request, PageContext pageContext2) {
@@ -241,6 +267,22 @@ public class CMSServletRequestImpl extends HttpServletRequestWrapper implements 
 
 	public PageContext getPageContext() {
 		return pageContext;
+	}
+	
+	public void clear()
+	{
+		if(this.attributes != null)
+		{
+			this.attributes.clear();
+			this.attributes = null;
+		}
+	
+		if(this.parameters != null)
+		{
+			this.parameters.clear();
+			this.parameters = null;
+		}
+		
 	}
 	
 	

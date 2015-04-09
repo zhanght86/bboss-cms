@@ -1591,7 +1591,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		} else {
 			sql = "select 1 " + "from td_cms_document a " + "where a.document_id = " + docid
 					+ " and 5 in (select dest_status from v_doc_flow_trans c "
-					+ "where c.flow_id=a.flow_id and c.SRC_STATUS=a.status)) ";
+					+ "where c.flow_id=a.flow_id and c.SRC_STATUS=a.status) ";
 		}
 
 		DBUtil db = new DBUtil();

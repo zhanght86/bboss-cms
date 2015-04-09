@@ -5796,10 +5796,12 @@ public class DocumentManagerImpl implements DocumentManager {
 	public String createarrangeSQL(String channel,Map params) {
 		StringBuffer partSQL = new StringBuffer()
 		.append(" (select channel_id from td_cms_channel where display_name = '").append(channel).append("') ");
-		Boolean loaddocument_ = (Boolean)params.get("loaddocument") ;
-		Boolean loadsubchannel_ = (Boolean)params.get("loadsubchannel") ;
-		boolean loaddocument = loaddocument_ == null?true:loaddocument_.booleanValue();
+		Boolean loaddocument_ = (Boolean)params.get("loaddocument") ;//true：装载频道所有的文档，频道引用的文档，频道引用的频道首页，loadsubchannel为TRUE时频道下级频道的首页
+		Boolean loadrefdocument_ = (Boolean)params.get("loadrefdocument") ;//true：装载频道引用的文档，频道引用的频道首页，loadsubchannel为TRUE时频道下级频道的首页
+		Boolean loadsubchannel_ = (Boolean)params.get("loadsubchannel") ;//true,装载子频道的首页，配合loaddocument和loadrefdocument两个属性使用
+		boolean loaddocument = loaddocument_ == null?loadrefdocument_== null?true:false:loaddocument_.booleanValue();
 		boolean loadsubchannel=loadsubchannel_ == null?false:loadsubchannel_.booleanValue();
+		boolean loadrefdocument = loadrefdocument_ == null?false:loadrefdocument_.booleanValue();
 		if(loaddocument)
 		{
 			// DBUtil db = new DBUtil();
@@ -5894,6 +5896,73 @@ public class DocumentManagerImpl implements DocumentManager {
 			}
 					
 			arrangeSpecialDocSQL.append(") ) abc  ");
+			// System.out.println("==========================="+arrangeSpecialDocSQL.toString());
+			// order by abc.publishtime desc,order_no desc
+			return arrangeSpecialDocSQL.toString();
+		}
+		else if(loadrefdocument)
+		{
+			StringBuffer arrangeSpecialDocSQL = new StringBuffer()
+			.append("select * from ( ")
+			
+			 .append("select c.DOCUMENT_ID as document_id,  DOCTYPE, ")
+			// add
+			.append("title,SUBTITLE,status,AUTHOR, ")
+			.append("CREATETIME,  case when DOCTYPE=1 then to_char(c.content) else null end linkfile,")
+			.append("channel_id,LINKTARGET,DOCSOURCE_ID, ")
+			.append("DOCWTIME,CREATEUSER,DETAILTEMPLATE_ID,DOCABSTRACT,TITLECOLOR,")
+			.append("KEYWORDS,doc_level,PARENT_DETAIL_TPL,PIC_PATH,mediapath,publishfilename,secondtitle, ")
+			// --end add
+			.append("nvl(e.order_no,-1) as order_no,2 as ordersq ,publishtime ")
+			.append("from td_cms_document c, td_cms_chnl_ref_doc d ")
+			.append("left outer join ( ")
+			.append("select * from td_cms_doc_arrange a ")
+			.append("where to_date(a.start_time,'yyyy-mm-dd hh24:mi:ss')< ")
+			.append(DBUtil.getDBAdapter().to_date(new Date()) + " ")
+			.append("and to_date(a.end_time,'yyyy-mm-dd hh24:mi:ss')> ")
+			.append(DBUtil.getDBAdapter().to_date(new Date()) + " ")
+			.append(") e on d.doc_id = e.document_id ")
+			.append("where c.document_id=d.doc_id and STATUS in ( " + DocumentStatus.PUBLISHED.getStatus() + ","
+					+ DocumentStatus.PUBLISHING.getStatus() + ") and ISDELETED = 0 ")
+			.append("and d.doc_id not in( ")
+			.append("select c.id_by_aggr from td_cms_doc_aggregation c ")
+			.append("inner join td_cms_document z1 on c.id_by_aggr = z1.document_id ")
+			.append("inner join td_cms_channel z2 on z1.channel_id = z2.channel_id ")
+			.append("where z1.channel_id = ")
+			.append(partSQL.toString())
+			.append(") and d.chnl_id = ")
+			.append(partSQL.toString())
+			
+			.append(" union ")
+			.append("select doc.doc_id as document_id,4 as DOCTYPE, ")
+			// add
+			.append("'' as title,'' as SUBTITLE,1 as status,'' as AUTHOR, ")
+			.append("sysdate as CREATETIME,   ")
+			.append("''  as  linkfile,1 as channel_id,'' as LINKTARGET,1 as DOCSOURCE_ID, ")
+			.append("channel.createtime as DOCWTIME,1 as CREATEUSER,1 as DETAILTEMPLATE_ID,'' as DOCABSTRACT,'' as TITLECOLOR,")
+			.append("'' as KEYWORDS,1 as doc_level,'1' as PARENT_DETAIL_TPL,'' as PIC_PATH,'' as mediapath,'' as publishfilename,'' as secondtitle ,")
+			.append(" -1 as order_no, -1 as ordersq, sysdate as publishtime ")
+			// --end add
+			.append("from td_cms_chnl_ref_doc doc , ")
+			.append("td_cms_channel channel where doc.citetype=1  ")
+			.append("and doc.doc_id = channel.channel_id and doc.CHNL_ID= ( ")
+			.append(partSQL)
+			.append(") ");
+			if(loadsubchannel)
+			{
+				arrangeSpecialDocSQL.append( "union ")
+					.append("select pd.channel_id as document_id, 4 as doctype,")
+					// add
+					.append("'' as title,'' as SUBTITLE,1 as status,'' as AUTHOR, ")
+					.append("sysdate as CREATETIME,   ")
+					.append("''  as  linkfile,1 as channel_id,'' as LINKTARGET,1 as DOCSOURCE_ID, ")
+					.append("pd.createtime as DOCWTIME,1 as CREATEUSER,1 as DETAILTEMPLATE_ID,'' as DOCABSTRACT,'' as TITLECOLOR,")
+					.append("'' as KEYWORDS,1 as doc_level,'1' as PARENT_DETAIL_TPL,'' as PIC_PATH,'' as mediapath,'' as publishfilename,'' as secondtitle ,")
+					.append(" -1 as order_no, -1 as ordersq, sysdate as publishtime ")
+					// --end add
+					.append(" from td_cms_channel pd where pd.parent_id= (").append(partSQL.toString()).append(") ");
+			}	
+			arrangeSpecialDocSQL.append( ") abc ");
 			// System.out.println("==========================="+arrangeSpecialDocSQL.toString());
 			// order by abc.publishtime desc,order_no desc
 			return arrangeSpecialDocSQL.toString();

@@ -24,6 +24,7 @@ import bboss.org.apache.velocity.exception.ParseErrorException;
 import bboss.org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
 import com.frameworkset.platform.cms.driver.context.Context;
@@ -410,6 +411,11 @@ public abstract class PublishObject implements java.io.Serializable
 //		
 //		return true;
 //	}
+	private void setVariable(CMSServletRequestImpl request) throws Exception
+	{
+		
+		request.setAttribute("cur_site", context.getSite());
+	}
 	/**
 	 * 运行发布过程当中产生的临时jsp页面
 	 * 并且生成最终发布页面
@@ -420,7 +426,7 @@ public abstract class PublishObject implements java.io.Serializable
 		
 		
 //		if(!(context instanceof PageContext))
-		{
+		 
 //			if(!needAction())
 //				return;
 			JspFile jspFile = script.getJspFile();
@@ -435,13 +441,16 @@ public abstract class PublishObject implements java.io.Serializable
 			RequestDispatcher dispatcher = requestContext.getRequest()
 					.getRequestDispatcher(uri);
 			CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-			CMSServletRequest request = new CMSServletRequestImpl(requestContext
-					.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
-			CMSServletResponse response = new CMSServletResponseImpl(requestContext
-					.getResponse(),context);
+			CMSServletRequestImpl request = null;
+			CMSServletResponse response = null;
 			
 			
 			try {
+				request = new CMSServletRequestImpl(requestContext
+						.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
+				response = new CMSServletResponseImpl(requestContext
+						.getResponse(),context);
+				setVariable(request);
 				log.debug("common publishobject 开始:" + uri + ":" + this.getId());
 				cmsDispatcher.include(request, response);
 				StringBuffer out = response.getInternalBuffer().getBuffer();
@@ -479,27 +488,21 @@ public abstract class PublishObject implements java.io.Serializable
 			}
 	
 			catch (IOException e) {
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
 				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
 						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 				
 			} catch (CMSException e) {
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
 				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
 //				e.printStackTrace();
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
 						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 			} catch (Exception e) {
-				System.err.println("common publishobject 结束0:" + uri + ":" + this.getId());
 				e.printStackTrace();
-				System.err.println("common publishobject 结束1:" + uri + ":" + this.getId());
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
@@ -508,9 +511,10 @@ public abstract class PublishObject implements java.io.Serializable
 			}
 			finally
 			{
-				
+				if(request != null)
+					request.clear();
 			}
-		}
+		 
 		
 	}
 	

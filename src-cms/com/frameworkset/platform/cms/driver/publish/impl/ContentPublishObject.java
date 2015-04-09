@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
@@ -296,7 +297,18 @@ public class ContentPublishObject extends PublishObject {
 		this.context.getPublishMonitor().setPublishStatus(PublishMonitor.PAGE_GENERATED);
 	}
 	
-	
+	private void setVariable(CMSServletRequestImpl request) throws Exception
+	{
+		request.setAttribute("cur_channel", this.contentContext.getChannel());
+		Channel parent = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannel(
+				this.contentContext.getChannel().getParentChannelId()+"");
+		if(parent != null)
+			request.setAttribute("cur_parentchannel", parent);
+		
+		
+		request.setAttribute("cur_site", context.getSite());
+		request.setAttribute("cur_document", this.contentContext.getDocument());
+	}
 	protected void runPage()  {
 		JspFile jspFile = script.getJspFile();
 		if(!this.context.getPublishMonitor().isScriptInited())
@@ -306,12 +318,15 @@ public class ContentPublishObject extends PublishObject {
 		RequestDispatcher dispatcher = requestContext.getRequest()
 				.getRequestDispatcher(uri);
 		CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
-		CMSServletRequest request = new CMSServletRequestImpl(requestContext
-				.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
-		CMSServletResponse response = new CMSServletResponseImpl(requestContext
-				.getResponse(),context);
+		CMSServletRequestImpl request = null;
+		CMSServletResponse response = null;
 
 		try {
+			request = new CMSServletRequestImpl(requestContext
+					.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
+			response = new CMSServletResponseImpl(requestContext
+					.getResponse(),context);
+			setVariable(request);
 			cmsDispatcher.include(request, response);
 			StringBuffer out = response.getInternalBuffer().getBuffer();
 			out = new StringBuffer(this.parser(out));
@@ -345,26 +360,30 @@ public class ContentPublishObject extends PublishObject {
 
 		catch (IOException e) {
 			log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
-			System.out.println(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage());
-			e.printStackTrace();
+			 
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(context.getRendURI())
 					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 		} catch (CMSException e) {
 			
-			e.printStackTrace();
+			log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(jspFile.getUri())
 					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
 		} catch (Exception e) {
 			
-			e.printStackTrace();
+			log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(context.getRendURI())
 					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+		}
+		finally
+		{
+			if(request != null)
+				request.clear();
 		}
 	}
 	
