@@ -141,7 +141,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-1.8.6.jar" sourcepath="F:/开源项目/quartz/quartz-1.8.6/quartz-1.8.6/quartz"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-hessian.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jodconverter-core.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcl-over-slf4j-1.7.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.7.2.jar"/>
@@ -197,5 +196,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar" sourcepath="/bboss-core"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rpc.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgroups-3.6.1.Final.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.37-src.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.37.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
