@@ -411,7 +411,7 @@ public abstract class PublishObject implements java.io.Serializable
 //		
 //		return true;
 //	}
-	private void setVariable(CMSServletRequestImpl request) throws Exception
+	protected void setVariable(CMSServletRequestImpl request) throws Exception
 	{
 		
 		request.setAttribute("cur_site", context.getSite());
@@ -438,9 +438,8 @@ public abstract class PublishObject implements java.io.Serializable
 			String uri = jspFile.getUri();
 //			System.out.println(this.getClass().getName() +":" + uri);
 			JspletWindow jspWindow = new JspletWindowImpl(context, jspFile);
-			RequestDispatcher dispatcher = requestContext.getRequest()
-					.getRequestDispatcher(uri);
-			CMSRequestDispatcher cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
+			RequestDispatcher dispatcher = null;
+			CMSRequestDispatcher cmsDispatcher = null;
 			CMSServletRequestImpl request = null;
 			CMSServletResponse response = null;
 			
@@ -450,6 +449,8 @@ public abstract class PublishObject implements java.io.Serializable
 						.getRequest(), requestContext.getPageContext(),jspWindow,this.context);
 				response = new CMSServletResponseImpl(requestContext
 						.getResponse(),context);
+				dispatcher = request.getRequestDispatcher(uri);
+				cmsDispatcher = new CMSRequestDispatcherImpl(dispatcher);
 				setVariable(request);
 				log.debug("common publishobject 开始:" + uri + ":" + this.getId());
 				cmsDispatcher.include(request, response);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.jsp.PageContext;
 
+import org.apache.batik.dom.util.HashTable;
 import org.apache.log4j.Logger;
 
 import com.frameworkset.platform.cms.driver.context.Context;
@@ -26,8 +28,8 @@ public class CMSServletRequestImpl extends HttpServletRequestWrapper implements 
 	 */
 	private JspletWindow jspletWindow;
 	private CMSURL cmsUrl;
-	private Map parameters;
-	private Map<String,Object> attributes;
+	private HashMap parameters;
+	private Hashtable<String, Object>  attributes;
 	private boolean included;
 	private Context context;
 	private PageContext pageContext;
@@ -50,12 +52,22 @@ public class CMSServletRequestImpl extends HttpServletRequestWrapper implements 
 	}
 	private void initAttributes()
 	{
-		this.attributes = new HashMap<String,Object>();
+		this.attributes = new Hashtable<String,Object>();
 		Enumeration<String> names = super.getAttributeNames();
 		while(names.hasMoreElements())
 		{
 			String name = names.nextElement();
 			this.attributes.put(name, super.getAttribute(name));
+		}
+	}
+	
+	public Enumeration<String> getAttributeNames()
+	{
+		if(this.attributes == null)
+			return super.getAttributeNames();
+		else
+		{
+			return attributes.keys();
 		}
 	}
 	public Object getAttribute(String name)
@@ -64,7 +76,11 @@ public class CMSServletRequestImpl extends HttpServletRequestWrapper implements 
 		{
 			initAttributes();
 		}
-		return attributes.get(name);
+		
+		Object value = attributes.get(name);
+		if(value == null)//fixed tomcat global attribute null bug. 20150410 by biaoping.yin
+			value = super.getAttribute(name);
+		return value;
 	}
 	public void setAttribute(String name,Object value)
 	{

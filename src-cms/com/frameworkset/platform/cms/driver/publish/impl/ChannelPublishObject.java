@@ -368,7 +368,7 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 		}
 	}
 	
-	private void setVariable(CMSServletRequestImpl request) throws Exception
+	protected void setVariable(CMSServletRequestImpl request) throws Exception
 	{
 		request.setAttribute("cur_channel", this.channelContext.getChannel());
 		Channel parent = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannel(

@@ -297,7 +297,7 @@ public class ContentPublishObject extends PublishObject {
 		this.context.getPublishMonitor().setPublishStatus(PublishMonitor.PAGE_GENERATED);
 	}
 	
-	private void setVariable(CMSServletRequestImpl request) throws Exception
+	protected void setVariable(CMSServletRequestImpl request) throws Exception
 	{
 		request.setAttribute("cur_channel", this.contentContext.getChannel());
 		Channel parent = CMSUtil.getChannelCacheManager(context.getSiteID()).getChannel(
