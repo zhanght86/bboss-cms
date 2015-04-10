@@ -34,6 +34,7 @@
 		cmsM.init(request,session,response,accessControl);
 		int siteID = Integer.parseInt(cmsM.getSiteID());
     	VoteManager voteMgr  = new VoteManagerImpl();
+    	
     	if ("delete".equals((String)request.getParameter("actionType"))){
     		if(voteMgr.deleteSurveyBy((String)request.getParameter("titleID"),accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
     			%>alert("删除成功！");
@@ -90,6 +91,7 @@
     			oneTitle.setUserRepeat(0);
     			oneTitle.setUserTimeGap(Integer.parseInt((String)request.getParameter("selectUserGap")));
     		}
+    		
     		if ("".equals((String)request.getParameter("titleID"))){
     			oneTitle.setFounderID(Integer.parseInt(accessControl.getUserID()));
     			if(voteMgr.insertSurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
@@ -99,8 +101,11 @@
     				%>alert("增添问卷失败！");<%
     			}
     		}else{
+    		    
+    		    boolean isResetData = "true".equals((String)request.getParameter("isResetData")) ? true :false;
+    		    
     			oneTitle.setId(Integer.parseInt((String)request.getParameter("titleID")));
-    			if(voteMgr.modifySurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request))==1){
+    			if(voteMgr.modifySurvey(oneTitle,accessControl.getUserAccount(),accessControl.getUserName(),com.frameworkset.util.StringUtil.getClientIP(request),isResetData)==1){
     				%>alert("问卷更改成功！");
     				returnValue="ok";<%
     			}else{

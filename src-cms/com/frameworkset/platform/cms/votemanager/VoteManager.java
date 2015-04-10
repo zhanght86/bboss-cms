@@ -75,6 +75,14 @@ public interface VoteManager {
 	 * @return
 	 */
 	public int modifySurvey(Title title,String account,String userName,String ipAddress) throws SPIException, ManagerException, VoteManagerException;
+	
+	/** gw_tanx 20150410
+	 * 修改问卷 (是否重置数据 true 清空重置) 
+	 * @param titleID
+	 * @return
+	 */
+	public int modifySurvey(Title title,String account,String userName,String ipAddress,boolean isResetData) throws SPIException, ManagerException, VoteManagerException;
+
 
 	/**
 	 * 删除问卷

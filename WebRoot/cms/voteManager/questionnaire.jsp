@@ -193,6 +193,7 @@
 	}
 	
 	function save(){
+		
 		if(document.all("titleName").value.replace(/ /gi,'')==""){
 			alert("问卷名称不能为空！");
 		//	document.all("titleName").focus();
@@ -356,6 +357,10 @@
 			qstion = qstion.replace(/\>/gi,'》').replace(/\</gi,'《');
 			questionString += "<"+qstion+"'"+qstion_id+"'"+voteCount+"'"+styleChckbx+"'"+optionString+"'"+option_id+"'"+countString+">";
 		}
+		
+		var isResetData = window.confirm("重置原有数据吗？");
+		document.all("isResetData").value= isResetData;
+			
 		document.all("questionString").value= questionString;
 		document.all("actionType").value= "save";
 		document.form1.target = "biaoge";
@@ -471,6 +476,8 @@
 			<input name="actionType" type="hidden" value="">
 			<input name="origQidString" type="hidden" value="">
 			<input name="channelid" type="hidden" value="<%=channel_id_hidden%>">
+			<input name="isResetData" type="hidden" value=""><!-- 判断是否充值的标志 gw_tanx20150410-->
+			
 			<table width="100%">
 				<tr>
 					<td>

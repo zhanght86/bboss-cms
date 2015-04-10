@@ -548,6 +548,169 @@ public class VoteManagerImpl implements VoteManager {
 		}
 
 	}
+	
+	public int modifySurvey(Title title,String account,String userName,String ipAddress,boolean isResetData) throws SPIException, ManagerException, VoteManagerException {
+		try {
+            PreparedDBUtil conn = new PreparedDBUtil();
+			String sqlDelete = "";
+			String sqlInsert = "";
+			int titleID = title.getId();
+			
+			String sql = "";
+			sql = "update td_cms_vote_title set name='"+title.getName()+"',siteid="+title.getSiteid()+","
+				      +"ip_repeat="+title.getIpRepeat()+",time_gap="+title.getTimeGap()+",picpath='"+title.getPicpath()+"',"
+				      +"content=?,depart_id=?,ctime=to_date('"+title.getFoundDate()+"','yyyy-mm-dd hh24:mi:ss'),"
+				      + "USER_REPEAT = "+ title.getUserRepeat()+","
+				      + "USER_TIME_GAP = "+ title.getUserTimeGap()
+				      + " where id =?";
+			conn.preparedUpdate(sql);
+			conn.setClob(1,title.getContent(),"content");
+			conn.setString(2,title.getDepart_id());
+			conn.setPrimaryKey(3,title.getId(),"id");
+			conn.executePrepared();
+			
+			// 判断是否重置数据
+			if (!isResetData) {
+				return 1;
+			}
+			
+			DBUtil db = new DBUtil();
+			sqlDelete = "delete from TD_CMS_CHANNEL_VOTE where VOTE_TITLE_ID=" + title.getId();
+			db.executeDelete(sqlDelete);
+			if (title.getChannelID()!=null&&!"".equals(title.getChannelID())){
+				sqlInsert = "insert into TD_CMS_CHANNEL_VOTE(CHANNEL_ID,VOTE_TITLE_ID)values("+title.getChannelID()+","+title.getId()+")";
+				db.executeInsert(sqlInsert);
+			}
+			//判断题目是否被修改
+			String sqlSelect = "select QUESIONT_ID from TD_CMS_VOTE_TQ where TITLE_ID="	+ title.getId();
+			db.executeSelect(sqlSelect);
+			String deleteQIDs = "-1";
+			List list = title.getQuestions();
+			for(int i=0;i<db.size();i++){
+				deleteQIDs += ","+String.valueOf(db.getInt(i,"QUESIONT_ID"));
+			}
+			sqlDelete = "delete from td_cms_vote_answer where QID in ("+deleteQIDs+")";
+			db.executeDelete(sqlDelete);
+			sqlDelete = "delete from TD_CMS_VOTE_ITEMS where QID in ("+deleteQIDs+")";
+			db.executeDelete(sqlDelete);
+			sqlDelete = "delete from TD_CMS_VOTE_TQ where QUESIONT_ID in ("+deleteQIDs+")";
+			db.executeDelete(sqlDelete);
+			sqlDelete = "delete from TD_CMS_VOTE_QUESTIONS where id in ("+deleteQIDs+")";
+			db.executeDelete(sqlDelete);
+			
+			List qids = new ArrayList();
+			
+			for (int i = 0; i < list.size(); i++) {
+				Question question = (Question) list.get(i);
+				
+				long questionId = db.getNextPrimaryKey("TD_CMS_VOTE_QUESTIONS") ;
+				
+				sqlInsert = "insert into TD_CMS_VOTE_QUESTIONS(TITLE,STYLE,VOTECOUNT,ID) values('"
+					+ question.getTitle()
+					+ "',"
+					+ question.getStyle()
+					+ ","
+					+ question.getVotecount() 
+					+ "," 
+					+ questionId +") ";
+				
+				db.addBatch(sqlInsert);
+				
+				qids.add(questionId+"") ;
+			}
+			
+			if (list.size() > 0)
+				db.executeBatch();
+				
+			for (int i = 0; i < list.size(); i++) {
+				Question question = (Question) list.get(i);
+				List itemlist = question.getItems();
+				for (int j = 0; itemlist != null && j < itemlist.size(); j++) {
+					Item item = (Item) itemlist.get(j);
+					
+					long itemID = db.getNextPrimaryKey("TD_CMS_VOTE_ITEMS") ;
+					
+					sqlInsert = "insert into TD_CMS_VOTE_ITEMS(QID,OPTIONS,count,ID) values("
+							+ qids.get(i).toString()
+							+ ",'"
+							+ item.getOptions()
+//							+ "',"+item.getCount()+"," gw_tanx 20150207 统计清零
+							+ "',0,"
+							+ itemID +") ";
+					db.addBatch(sqlInsert);
+				}
+				if (itemlist != null && itemlist.size() > 0)
+					db.executeBatch();
+			}
+
+			for (int i = 0; i < list.size(); i++) {
+				Question question = (Question) list.get(i);
+				sqlInsert = "insert into TD_CMS_VOTE_TQ(TITLE_ID,QUESIONT_ID)values("
+						+ titleID + "," + qids.get(i).toString() + ") ";
+				db.addBatch(sqlInsert);
+			}
+			if (list.size()>0)
+				db.executeBatch();
+
+			sqlDelete = "delete from TD_CMS_VOTE_IPCTRL where TITLE_ID="
+					+ title.getId();
+			db.executeDelete(sqlDelete);
+
+			list = title.getIpCtrls();
+			for (int i = 0; i < list.size(); i++) {
+				IpCtrl ipctrl = (IpCtrl) list.get(i);
+				
+				long ipCtrlID = db.getNextPrimaryKey("TD_CMS_VOTE_IPCTRL") ;
+				
+				sqlInsert = "insert into TD_CMS_VOTE_IPCTRL(TITLE_ID,IP_START,IP_end,ID) values("
+						+ titleID
+						+ ",'"
+						+ ipctrl.getIpStart()
+						+ "','"
+						+ ipctrl.getIpEnd() + "',"+ ipCtrlID +") ";
+				db.addBatch(sqlInsert);
+			}
+			if (list.size()>0)
+				db.executeBatch();
+
+			sqlDelete = "delete from TD_CMS_VOTE_TIMECTRL where TITLE_ID="
+					+ title.getId();
+			db.executeDelete(sqlDelete);
+
+			list = title.getTimeCtrls();
+			for (int i = 0; i < list.size(); i++) {
+				TimeCtrl timectrl = (TimeCtrl) list.get(i);
+				
+				long timeCtrlID = db.getNextPrimaryKey("TD_CMS_VOTE_TIMECTRL") ;
+				
+				sqlInsert = "insert into TD_CMS_VOTE_TIMECTRL(TITLE_ID,TIME_START,TIME_END,ID) values("
+						+ titleID
+						+ ","
+						+"to_date('"+timectrl.getTimeStart()+"','YYYY-MM-DD')"
+						+ ","
+						+ "to_date('"+timectrl.getTimeEnd()+"','YYYY-MM-DD')" 
+						+ ","
+						+ timeCtrlID +") ";
+				db.addBatch(sqlInsert);
+			}
+			if (list.size()>0)
+				db.executeBatch();
+
+            //---------------START--网上调查修改操作日志
+			String operContent="";       
+		    String openModle="网上调查";
+		    String description="";
+		    LogManager logManager = SecurityDatabase.getLogManager(); 		
+			operContent="修改调查信息："+"调查信息主题为 "+ title.getName();
+			logManager.log(account+":"+userName,operContent,openModle,ipAddress,description);  
+		    //---------------END
+			return 1;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new VoteManagerException(e.getMessage());
+
+		}
+	}
 
 	/**
 	 * 修改问卷
