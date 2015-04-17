@@ -121,9 +121,9 @@
 							</tr>
 						</pg:list>
 					</pg:notequal>
+				<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div>
 					</pg:pager>
 				</table>
-				<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div>
 			</form>
 		</div>
 	</body>
