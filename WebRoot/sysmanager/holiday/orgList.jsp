@@ -16,7 +16,7 @@
    		<tr>     
    		        <td ><pg:cell colName="orgId"/></td>
                 <td><pg:cell colName="orgName"/></td>
-                <td><a href="javascript:void" onclick="deleteOrg('<pg:cell colName="areaId"/>','<pg:cell colName="orgId"/>')"><span>删除</span></a></td>
+                <td><a href="javascript:void(0)" onclick="deleteOrg('<pg:cell colName="areaId"/>','<pg:cell colName="orgId"/>')"><span>删除</span></a></td>
                 
         </tr>
 	 </pg:list>

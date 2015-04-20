@@ -133,10 +133,10 @@ function showAddressBook(){
             <td width="22"><img src="images/Main_B_left.gif" width="22" height="79"></td>
             <td background="images/main_B_bg.gif"><table width="auto" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton2.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton3.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
-                  <td width="65"><!--<a href="javascript:void"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void(0)"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void(0)"><img src="images/Main_B_botton2.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void(0)"><img src="images/Main_B_botton3.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
+                  <td width="65"><!--<a href="javascript:void(0)"><img src="images/Main_B_botton1.gif" width="65" height="79" hspace="5" border="0"></a>--></td>
                   <td width="65"><!--&nbsp; --></td>
                 </tr> 
             </table></td>

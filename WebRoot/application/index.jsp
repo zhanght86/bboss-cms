@@ -264,12 +264,12 @@
 		
 		<div class="title_box">
 			<div class="rightbtn">
-			<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:saveAppInfo();"><span>新增</span></a>
-			<a href="javascript:void" class="bt_small" id="viewButton" onclick="javascript:viewAppInfo();"><span>查看</span></a>
-			<a href="javascript:void" class="bt_small" id="updateButton" onclick="javascript:updateAppInfo();"><span>修改</span></a>
-			<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="javascript:deleteAppInfo()"><span>删除</span></a>
-			<a href="javascript:void" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>应用图片选择</span></a>
-			<a href="javascript:void" class="bt_small" id="uploadPicButton" onclick="javascript:uploadAppPic()"><span>应用图片上传</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:saveAppInfo();"><span>新增</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="viewButton" onclick="javascript:viewAppInfo();"><span>查看</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="updateButton" onclick="javascript:updateAppInfo();"><span>修改</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="delBatchButton" onclick="javascript:deleteAppInfo()"><span>删除</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>应用图片选择</span></a>
+			<a href="javascript:void(0)" class="bt_small" id="uploadPicButton" onclick="javascript:uploadAppPic()"><span>应用图片上传</span></a>
 			</div>
 			<strong>应用列表</strong>
 		</div>

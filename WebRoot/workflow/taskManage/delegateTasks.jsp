@@ -12,7 +12,7 @@
 <body>
 <div class="form">
 	<form id="delegateFrom" name="delegateFrom" method="post" >
-		
+	
 		<table border="0" cellpadding="0" cellspacing="0" class="table2" width="100%" >
 			<tr >
 				<td width="250px;" align="center" >
@@ -30,7 +30,14 @@
 					<a href="javascript:openChooseUsers('delegate_to')">选择</a>
 				</td>
 			</tr>
-		</table>			
+			<tr>
+				<td width="250px;" align="center" >
+					转派流程
+					<input type="radio" name="truntoFlow" value="所有" checked/>
+					<input type="radio" name="truntoFlow" value="部分" />
+				</td>
+			</tr>
+		</table>	
 		
 		<div class="btnarea" >
 			<a href="javascript:void(0)" class="bt_1" id="addButton" onclick="delegateTasks()"><span><pg:message code="sany.pdp.common.ok"/></span></a>

@@ -155,7 +155,7 @@ function queryUser()
     								</td>
     								<th>&nbsp;</th>
     								<td>
-    									<a href="javascript:void" class="bt_1"  name="search"  onclick="queryUser()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+    									<a href="javascript:void(0)" class="bt_1"  name="search"  onclick="queryUser()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
     								</td>
     							</tr>
     						</table>
@@ -219,7 +219,7 @@ function queryUser()
 				<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,20,50,100"/></div>
 				
 				<div class="btnarea" >
-	 				<a href="javascript:void" class="bt_1"  name="but"  onclick="returnUserName()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
+	 				<a href="javascript:void(0)" class="bt_1"  name="but"  onclick="returnUserName()"><span><pg:message code="sany.pdp.common.operation.ok"/></span></a> 
 				 <div>
 			</pg:notequal>
 		</pg:pager>

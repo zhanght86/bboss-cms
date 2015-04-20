@@ -214,7 +214,7 @@
   <tr>
     <td align="center"><table cellspacing="0" cellpadding="0">
       <tr align="middle">
-        <td colspan="2" align="center"> <a onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://www.yxx.gov.cn/');" href="javascript:void">设为首页</a> | <a href="javascript:window.external.addFavorite('http://www.yxx.gov.cn/','中国银都-永兴县政府门户网站');">加入收藏 </a>| <cms:outline channel="关于我们" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">关于我们</cms:link></cms:outline> | <cms:outline channel="联系我们" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">联系我们</cms:link></cms:outline> | <cms:outline channel="网站声明" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">版权申明</cms:link></cms:outline> | <a href="/login.jsp" target="_blank">管理员登录</a>  </td>
+        <td colspan="2" align="center"> <a onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://www.yxx.gov.cn/');" href="javascript:void(0)">设为首页</a> | <a href="javascript:window.external.addFavorite('http://www.yxx.gov.cn/','中国银都-永兴县政府门户网站');">加入收藏 </a>| <cms:outline channel="关于我们" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">关于我们</cms:link></cms:outline> | <cms:outline channel="联系我们" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">联系我们</cms:link></cms:outline> | <cms:outline channel="网站声明" count="1" site="yongxinggov"><cms:link target="_blank" colName="title">版权申明</cms:link></cms:outline> | <a href="/login.jsp" target="_blank">管理员登录</a>  </td>
       </tr>
       <tr>
         <td><div align="center">

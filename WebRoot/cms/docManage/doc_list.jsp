@@ -1032,13 +1032,13 @@
 								if(accesscontroler.checkPermission(channelId,AccessControl.CHANNEL_VIEWDOC_PERMISSION,AccessControl.CHANNELDOC_RESOURCE)|| accesscontroler.checkPermission(siteid,AccessControl.CHANNEL_VIEWDOC_PERMISSION,AccessControl.SITEDOC_RESOURCE))
 								{
 								%>
-								<a href="javascript:void" onclick="viewDocInfo(<%=docId%>,<pg:cell colName="doctype" defaultValue=""/>);" ><u>查看</u></a>
+								<a href="javascript:void(0)" onclick="viewDocInfo(<%=docId%>,<pg:cell colName="doctype" defaultValue=""/>);" ><u>查看</u></a>
 								<%
 								}
 								else
 								{
 								%>
-								<a href="javascript:void" onclick="alert('对不起，您没有权限查看文档！');" ><u>查看</u></a>
+								<a href="javascript:void(0)" onclick="alert('对不起，您没有权限查看文档！');" ><u>查看</u></a>
 								<%
 								}
 								%>

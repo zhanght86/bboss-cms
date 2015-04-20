@@ -191,7 +191,7 @@
 						<pg:equal colName="active" value="1">是</pg:equal>
 					</td>
 					<TD class="tablecells" nowrap="nowrap" >
-					<a style="cursor:hand;color:#0000cc" href="javascript:void" onClick="seeIP('<pg:cell colName="id" defaultValue=""/>')">IP记录</a>
+					<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onClick="seeIP('<pg:cell colName="id" defaultValue=""/>')">IP记录</a>
 					</TD>
 				</tr>
 				</pg:list>

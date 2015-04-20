@@ -150,7 +150,7 @@ function accredit(dealType) {
 	                       		"resadd", AccessControl.RES_RESOURCE))
 				            	{
 				            	%>
-								<a href="javascript:void" onclick="newRes()"><u>新增</u></a> |
+								<a href="javascript:void(0)" onclick="newRes()"><u>新增</u></a> |
 								<%
 								}
 								%>
@@ -159,7 +159,7 @@ function accredit(dealType) {
 	                       		"resdelete", AccessControl.RES_RESOURCE))
 				            	{
 				            	%>
-								<a href="javascript:void" onclick="javascript:dealRecord(1); return false;"><u>删除</u></a></div>
+								<a href="javascript:void(0)" onclick="javascript:dealRecord(1); return false;"><u>删除</u></a></div>
 								<%
 								}
 								%>

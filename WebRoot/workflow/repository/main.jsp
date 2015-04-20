@@ -279,9 +279,9 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.add"/></span></a>
-				<a href="javascript:void" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
-				<a href="javascript:void" class="bt_small" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.add"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
 				<!--  <a href="javascript:void" class="bt_small" id="exportButton"><span>导出</span></a>
 				<!--<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>-->

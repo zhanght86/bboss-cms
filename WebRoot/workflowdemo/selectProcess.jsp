@@ -33,8 +33,8 @@ function toStartProc() {
 <div id="bussinesstree" title="业务类型流程树" style="padding: 10px; overflow: auto; height: 300px;"></div>
 
 <div align="center">
-	<a href="javascript:void" class="bt_sany" onclick="toStartProc();">确定</a>
-	<a href="javascript:void" class="bt_sany" onclick="closeDlg();"><pg:message code="sany.pdp.common.operation.close"/></a>
+	<a href="javascript:void(0)" class="bt_sany" onclick="toStartProc();">确定</a>
+	<a href="javascript:void(0)" class="bt_sany" onclick="closeDlg();"><pg:message code="sany.pdp.common.operation.close"/></a>
 </div>	
 </body>
 </html>

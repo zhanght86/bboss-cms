@@ -1034,7 +1034,7 @@ else
 										<table>
 											<tr>
 												<td>
-												<a href="javascript:void" onClick="preview()" ><u>预览</u></a>
+												<a href="javascript:void(0)" onClick="preview()" ><u>预览</u></a>
 												</td>
 											</tr>
 										</table>

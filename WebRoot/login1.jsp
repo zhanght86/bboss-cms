@@ -521,7 +521,7 @@ DD_belatedPNG.fix('div');
 					
 				</select>
 				</li>
-				<li class="log_bts" ><a href="javascript:void" class="log_bt c_20"  onclick="saveName()"><span>登 录</span></a><a href="javascript:void" class="log_bt log_cancel" onclick="reset()" ><span>重 置</span></a></li>
+				<li class="log_bts" ><a href="javascript:void(0)" class="log_bt c_20"  onclick="saveName()"><span>登 录</span></a><a href="javascript:void(0)" class="log_bt log_cancel" onclick="reset()" ><span>重 置</span></a></li>
 			</ul>
 			</form>			
 			<div class="Zclear"></div> 			

@@ -208,7 +208,7 @@
 		
 		<div class="title_box">
 			<div class="rightbtn">
-				双击任意一行可选择&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:selectedSel();"><span>选择</span></a>
+				双击任意一行可选择&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:selectedSel();"><span>选择</span></a>
 			</div>
 			<strong><pg:message code="sany.pdp.workflow.user.list"/></strong>
 		</div>

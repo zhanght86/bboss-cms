@@ -190,7 +190,7 @@ function wrapDatas(datas){
 <div class="contain_system">
   <!-- <div class="top"><img src="images/top_sys.gif" width="1000" height="65" alt="顶部" /></div>    <pg:cell colName="pendingNum"/>-->
   <div class="main_contain">
-    <div class="sys_dot"><a href="javascript:void" onclick="subscribePending()"><img src="images/dot_sys.gif" width="13" height="11" />&nbsp;&nbsp;待办订阅</a></div> 
+    <div class="sys_dot"><a href="javascript:void(0)" onclick="subscribePending()"><img src="images/dot_sys.gif" width="13" height="11" />&nbsp;&nbsp;待办订阅</a></div> 
       <pg:list  autosort="false" requestKey="datas">
       <div class="system_msg"  id="<pg:cell colName="id"/>" onclick="getPendingDetail('<pg:cell colName="id"/>')">
       <div class="system_img"><img src="${pageContext.request.contextPath}/application/app_images/<pg:cell colName="picName"/>" width="82" height="82"  onerror="findPic('<pg:cell colName="picName"/>')"/></div>

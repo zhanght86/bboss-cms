@@ -27,7 +27,7 @@ $(document).ready(function() {
 //转派任务
 function delegateTasks () {
 	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.jsp?processKey=${processKey}";
-	$.dialog({ title:'转派任务',width:300,height:200, content:'url:'+url});
+	$.dialog({ title:'转派任务',width:400,height:400, content:'url:'+url});
 }
 
 //加载实时任务列表数据  
@@ -109,7 +109,7 @@ function doreset(){
 		
 		<div class="title_box">
 			<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" onclick="delegateTasks();"><span>转派</span></a>
+				<a href="javascript:void(0)" class="bt_small" onclick="delegateTasks();"><span>转派</span></a>
 			</div>
 				
 			<strong>转派日志列表</strong>

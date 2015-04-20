@@ -40,8 +40,8 @@ body {
 </map>
 <map name="Map2">
 <area shape="rect" coords="231,57,312,111" href="../testcontentpublish.jsp?actionType=view">
-<area shape="rect" coords="349,9,440,66" href="docManage/site_document.jsp"><area shape="rect" coords="500,54,579,113" href="javascript:void">
-<area shape="rect" coords="537,140,606,191" href="javascript:void"><area shape="rect" coords="204,154,269,209" href="../testcontentpublish.jsp"><area shape="rect" coords="24,324,97,402" href="../testsitepublish.jsp">
+<area shape="rect" coords="349,9,440,66" href="docManage/site_document.jsp"><area shape="rect" coords="500,54,579,113" href="javascript:void(0)">
+<area shape="rect" coords="537,140,606,191" href="javascript:void(0)"><area shape="rect" coords="204,154,269,209" href="../testcontentpublish.jsp"><area shape="rect" coords="24,324,97,402" href="../testsitepublish.jsp">
 <area shape="rect" coords="100,323,175,404" href="../testchannelpublish.jsp">
 <area shape="rect" coords="179,324,249,406" href="../testchannelpublish.jsp">
 </map></body>

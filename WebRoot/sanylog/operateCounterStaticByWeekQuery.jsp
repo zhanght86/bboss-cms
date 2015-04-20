@@ -122,7 +122,7 @@
 											id="queryButton" onclick="queryList()"><span>查询</span> </a> <a
 											href="javascript:void(0)" class="bt_2" id="resetButton"
 											onclick="doreset()"><span>重置</span> </a> <input type="reset"
-											id="reset" style="display: none" /><a href="javascript:void" class="bt_1"
+											id="reset" style="display: none" /><a href="javascript:void(0)" class="bt_1"
 											id="outputExcel" onclick="outputExcel()"><span>导出周统计报表</span> </a></td>
 											
 											

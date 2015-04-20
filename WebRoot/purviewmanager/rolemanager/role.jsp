@@ -408,8 +408,8 @@
 										</td>
 										<td >
 											<div align="center">
-												<a href="javascript:void" class="bt_1"  name="sub"  onClick="querySubmit()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-												<a href="javascript:void" class="bt_2"  name="clear"  onClick="clearInfo()"><span><pg:message code="sany.pdp.common.operation.clear"/></span></a>
+												<a href="javascript:void(0)" class="bt_1"  name="sub"  onClick="querySubmit()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
+												<a href="javascript:void(0)" class="bt_2"  name="clear"  onClick="clearInfo()"><span><pg:message code="sany.pdp.common.operation.clear"/></span></a>
 											</div>
 										</td>
 									</tr>
@@ -432,16 +432,16 @@
 			if (control.checkPermission("globalrole",
                           "rolemanager", AccessControl.ROLE_RESOURCE)){
 			%>
-					<a href="javascript:void" onclick="addRole()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.add"/></span></a> 
-					<a href="javascript:void" onclick="deleteRole()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.remove"/></span></a> 
-					<a href="javascript:void" onclick="roleTypeManage()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.type.manage"/></span></a>
-					<a href="javascript:void" onclick="reclaimRolesRes()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.purview.recycle.batch"/></span></a>
-					<a href="javascript:void" onclick="roleBatchPurview()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.purview.authorize.batch"/></span></a>
+					<a href="javascript:void(0)" onclick="addRole()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.add"/></span></a> 
+					<a href="javascript:void(0)" onclick="deleteRole()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.remove"/></span></a> 
+					<a href="javascript:void(0)" onclick="roleTypeManage()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.type.manage"/></span></a>
+					<a href="javascript:void(0)" onclick="reclaimRolesRes()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.purview.recycle.batch"/></span></a>
+					<a href="javascript:void(0)" onclick="roleBatchPurview()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.purview.authorize.batch"/></span></a>
 			<%
 			}
 			if(control.isAdmin()){
 			%>
-				<a href="javascript:void" onclick="refreshrolecache()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.cache.ref"/></span></a>
+				<a href="javascript:void(0)" onclick="refreshrolecache()" class="bt_small" ><span><pg:message code="sany.pdp.purviewmanager.rolemanager.role.cache.ref"/></span></a>
 			<%} %>
 		</div>
 		<strong><pg:message code="sany.pdp.common.data.list"/></strong>

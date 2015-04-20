@@ -162,7 +162,7 @@
 				 <a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="modifyOrIncrementRecord('0','increment')"><span>新增</span></a> 
 				<a href="javascript:void(0)" class="bt_1" id="staticSpentTime" onclick="staticSpentTime()"><span>工时统计</span> </a>
 				<a href="getTemplate.page?fileName=functionlist.xlsx" class="bt_small" id="templateButton"><span>模板下载</span></a>
-				<a href="javascript:void" class="bt_small" id="SubjectInputButton" onclick="batchInput()"><span>功能清单导入</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="SubjectInputButton" onclick="batchInput()"><span>功能清单导入</span></a>
 				</div>
 			</div>
 		</div>

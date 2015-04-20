@@ -32,7 +32,7 @@
     <dl id="x-shortcuts">
         <pg:list requestKey="menulist">
 	        <dt id="<pg:cell colName="id"/>-shortcut">
-	            <a href="javascript:void" onclick="ShortCut('<pg:cell colName="id"/>','<pg:cell colName="name"/>','<pg:cell colName="pathU"/>');"><img src="${pageContext.request.contextPath}/desktop/images/s.gif"/>
+	            <a href="javascript:void(0)" onclick="ShortCut('<pg:cell colName="id"/>','<pg:cell colName="name"/>','<pg:cell colName="pathU"/>');"><img src="${pageContext.request.contextPath}/desktop/images/s.gif"/>
 	            <div><pg:cell colName="name"/></div></a>
 	        </dt>
 	        

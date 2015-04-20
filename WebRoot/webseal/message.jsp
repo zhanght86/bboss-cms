@@ -27,7 +27,7 @@ function logout()
 		<div class="mcontent">
 			
 			<div id="custombackContainer" >
-				用户[<%=userName %>]登录失败-IP[<%=ip %>]  <a href="javascript:void" class="zhuxiao" onclick="logout()">注销</a>
+				用户[<%=userName %>]登录失败-IP[<%=ip %>]  <a href="javascript:void(0)" class="zhuxiao" onclick="logout()">注销</a>
 			</div>
 		</div>
 	</body>

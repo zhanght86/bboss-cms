@@ -95,8 +95,8 @@ $(document).ready(function() {
 		<div class="mcontent">
 			<div class="title_box">
 				<div class="rightbtn">
-				<!-- <a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:addWorkTime();"><span>新增工作时间</span></a> -->
-				<!-- <a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a> -->
+				<!-- <a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:addWorkTime();"><span>新增工作时间</span></a> -->
+				<!-- <a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a> -->
 				</div>
 				
 				<strong></strong>				

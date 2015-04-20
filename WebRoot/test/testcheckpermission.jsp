@@ -68,7 +68,7 @@
 						
 						<td colspan="7">
 						<pg:true actual="<%=hasdeletepermission %>">
-							<a href="javascript:void"  onclick="delteUse();">删除用户</a>
+							<a href="javascript:void(0)"  onclick="delteUse();">删除用户</a>
 						</pg:true>
 						<pg:false actual="<%=hasdeletepermission %>">
 							没有删除用户的权限
@@ -97,7 +97,7 @@
 						
 						<td colspan="7">
 							选择用户：<input type="text" value="yinbp" name="userName" id="userName"> 
-							<a href="javascript:void"  onclick="selectUser();">选择</a>
+							<a href="javascript:void(0)"  onclick="selectUser();">选择</a>
 						</td>
 					</tr>
 					

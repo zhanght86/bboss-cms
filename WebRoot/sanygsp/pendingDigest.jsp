@@ -31,7 +31,7 @@ function() {
 	<div data-role="page">
 
 		<div data-role="header" data-position="fixed">
-			<a href="javascript:void" data-rel="back" id="backlink" data-icon="back"> 
+			<a href="javascript:void(0)" data-rel="back" id="backlink" data-icon="back"> 
 				<pg:message code="sany.gsp.common.backlink" />
 			</a>
 			<h1><pg:message code="sany.gsp.tpp.digest" /></h1>

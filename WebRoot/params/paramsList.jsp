@@ -56,9 +56,9 @@
 		<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="right">
-					<a href="javascript:void" onclick="addRow()" class="bt_2" ><span>+</span></a> 
-					<a href="javascript:void" onclick="deleteRow()" class="bt_2" ><span>-</span></a>
-					<a href="javascript:void" onclick="doSubmit()" class="bt_1" ><span>保存</span></a>
+					<a href="javascript:void(0)" onclick="addRow()" class="bt_2" ><span>+</span></a> 
+					<a href="javascript:void(0)" onclick="deleteRow()" class="bt_2" ><span>-</span></a>
+					<a href="javascript:void(0)" onclick="doSubmit()" class="bt_1" ><span>保存</span></a>
 				</td>
 			</tr>
 		</table>

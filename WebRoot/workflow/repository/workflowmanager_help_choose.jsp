@@ -492,7 +492,7 @@
 			<div id="searchblock">
 				<div class="title_box">
 					<div class="rightbtn">
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="subSelectedData();"><span>确认选择</span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="subSelectedData();"><span>确认选择</span></a>
 					<!--<a href="javascript:void" class="bt_small" id="exportButton" onclick="delAllProcRow();"><span>全部删除</span></a>
 					<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 					<input  type="radio" name="excelType"  >2007</input>-->

@@ -37,9 +37,9 @@ function logout()
  <div id="wrapper" style="border:0;">
   <div class="top_contain">
     <div class="logo"><img src="${logoimage}" width="219" height="33" /></div>
-    <br /><pg:message code="sany.pdp.module.welcome"/>　，<a class="name" href="javascript:void"><%=accesscontroler.getUserName()%></a><span class="cart"><a href="../html2/cart.html">Cart (1)</a></span> <span class="logout">
+    <br /><pg:message code="sany.pdp.module.welcome"/>　，<a class="name" href="javascript:void(0)"><%=accesscontroler.getUserName()%></a><span class="cart"><a href="../html2/cart.html">Cart (1)</a></span> <span class="logout">
          <pg:false actual="${fromwebseal}">
-			<a href="javascript:void" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
+			<a href="javascript:void(0)" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
 		</pg:false></span></div>
   <sany:webmenus level="2"/>
  </div></DIV>

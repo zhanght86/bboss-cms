@@ -44,7 +44,7 @@ String path = request.getContextPath();
          <td><input type="text" class="cn_name" name="cn_name" id='<pg:rowid/>' value='<pg:cell colName="cn_name"/>'/></td>
          <td><pg:cell colName="filename"/></td>
          <td><pg:cell colName="creatdate" dateformat="yyyy-MM-dd hh:mm:ss"/></td>
-         <td><a  href="javascript:void" onclick="deleteCustom('<pg:cell colName="filename"/>')">删除</a>&nbsp;&nbsp;<a  href="javascript:void" onclick="saveCustom('<pg:cell colName="filename"/>','<pg:rowid/>')">保存</a></td>
+         <td><a  href="javascript:void(0)" onclick="deleteCustom('<pg:cell colName="filename"/>')">删除</a>&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="saveCustom('<pg:cell colName="filename"/>','<pg:rowid/>')">保存</a></td>
        </tr>
     </pg:list>
        <tr>

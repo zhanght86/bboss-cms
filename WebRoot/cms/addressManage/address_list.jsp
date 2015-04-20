@@ -202,7 +202,7 @@ function userdelete(){
 				<tr id="<pg:cell colName="addressBookId" defaultValue="" />">
 					<td class="tablecells" nowrap="nowrap" width="3%">
 						<div onclick="showUpdate(this)" align="left" id="<pg:cell colName="addressBookId" defaultValue="" />">
-							<a href="javascript:void"><img src="../images/note.gif" width="16" height="15"></a>
+							<a href="javascript:void(0)"><img src="../images/note.gif" width="16" height="15"></a>
 						</div>
 					</td>
 					<td class="tablecells" nowrap="true">

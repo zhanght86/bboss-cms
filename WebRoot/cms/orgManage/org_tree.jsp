@@ -42,7 +42,7 @@ function neworg()
 		//baowen.liu 2008-4-23
 		//if("1".equals(accessControl.getUserID())) {
 	  	%>
-	    <td align="center"><a href="javascript:void" onclick="neworg()">新增机构</a></td>
+	    <td align="center"><a href="javascript:void(0)" onclick="neworg()">新增机构</a></td>
 	   	<%
 	   	//}
    	}

@@ -8,7 +8,7 @@
 <%@ page import="com.frameworkset.platform.cms.searchmanager.handler.ContentHandler"%>
 
 <div id="customContent">
-<div class="comment_title"><div class="comment_num"><a href="javascript:void"><font color="blue" ><b>${queryString}</b></font>的搜索结果，检索耗时：<span class="red_num" >${searchTime }</span>秒，共检索出<span class="red_num" >
+<div class="comment_title"><div class="comment_num"><a href="javascript:void(0)"><font color="blue" ><b>${queryString}</b></font>的搜索结果，检索耗时：<span class="red_num" >${searchTime }</span>秒，共检索出<span class="red_num" >
             ${rowcount }</span>条记录</a></div>
           </div>
 	<pg:empty actual="${searchhitList}"  >

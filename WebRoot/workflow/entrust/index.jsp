@@ -252,10 +252,10 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:addEntrustInfo();"><span>新增</span></a>
-				<a href="javascript:void" class="bt_small" id="viewButton" onclick="javascript:viewEntrustInfo('');"><span>查看</span></a>
-				<a href="javascript:void" class="bt_small" id="updateButton" onclick="javascript:updateEntrustInfo();"><span>修改</span></a>
-				<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="javascript:deleteEntrustInfo()"><span>删除</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:addEntrustInfo();"><span>新增</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="viewButton" onclick="javascript:viewEntrustInfo('');"><span>查看</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="updateButton" onclick="javascript:updateEntrustInfo();"><span>修改</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="delBatchButton" onclick="javascript:deleteEntrustInfo()"><span>删除</span></a>
 				</div>
 				
 				<strong>流程授权列表</strong>				

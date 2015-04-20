@@ -125,8 +125,8 @@ var api = frameElement.api, W = api.opener;
 
 			</div>
 			<tr><td>
-					<a href="javascript:void" class="bt_2"  onclick="confirm()"><span>保存</span>
-					<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
+					<a href="javascript:void(0)" class="bt_2"  onclick="confirm()"><span>保存</span>
+					<a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
 					</td></tr>
 		</form>
 		

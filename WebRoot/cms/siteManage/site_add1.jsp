@@ -182,7 +182,7 @@ function check_form(){
 </form>
 
 <map name="Map"><area shape="rect" coords="1,4,80,25" href="site_add.jsp" >
-<area shape="rect" coords="80,-2,81,3" href="javascript:void"><area shape="rect" coords="87,3,153,23" href="site_add1.jsp">
+<area shape="rect" coords="80,-2,81,3" href="javascript:void(0)"><area shape="rect" coords="87,3,153,23" href="site_add1.jsp">
 <area shape="rect" coords="160,3,224,32" href="site_add2.jsp" >
 </map></body>
 </html>

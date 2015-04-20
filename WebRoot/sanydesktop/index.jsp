@@ -79,7 +79,7 @@ height:44px;
 	<span class="blue1"><sany:accesscontrol userattribute="userName"/><sany:accesscontrol userattribute="userAccount"/>[<sany:accesscontrol userattribute="orgjob"/>]</span>，<pg:message code="sany.pdp.module.welcome"/>　
 		<pg:false actual="${fromwebseal}">
 			<pg:empty actual="<%=specialuser %>">
-				<a href="javascript:void" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
+				<a href="javascript:void(0)" class="zhuxiao" onclick="logout()"><pg:message code="sany.pdp.module.logout"/></a>
 			</pg:empty>
 		</pg:false>
 		</div>
@@ -103,7 +103,7 @@ height:44px;
 
 <!--<div class="l_bottom">-->
     <div class="footer">
-      <div class="left_footer"><a href="http://www.sany.com.cn" target="ablank"><pg:message code="sany.pdp.common.sanygroup"/></a> | <a href="javascript:void"><pg:message code="sany.pdp.common.contact"/></a> | <br />
+      <div class="left_footer"><a href="http://www.sany.com.cn" target="ablank"><pg:message code="sany.pdp.common.sanygroup"/></a> | <a href="javascript:void(0)"><pg:message code="sany.pdp.common.contact"/></a> | <br />
         <script type="text/javascript"> 
     copyright=new Date();
     update=copyright.getFullYear();

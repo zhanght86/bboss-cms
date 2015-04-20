@@ -18,7 +18,7 @@ DD_belatedPNG.fix('div');
 		   <div class="c_prompt">
 上次登录的IP地址：10.8.135.177<br/>
 本次登录的IP地址：10.8.135.133
-<div class="verification"><strong>验证码：</strong><input name="" type="text" class="input1" />&nbsp;&nbsp;<img src="html/images/number.png" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:void">看不清，刷新一下</a></div>
+<div class="verification"><strong>验证码：</strong><input name="" type="text" class="input1" />&nbsp;&nbsp;<img src="html/images/number.png" align="absmiddle" />&nbsp;&nbsp;<a href="javascript:void(0)">看不清，刷新一下</a></div>
 <div class="button"><a href="" class="log_bt c_20"><span>确 定</span></a><a href="" class="log_bt log_cancel"><span>取 消</span></a></div>
 			<div class="Zclear"></div> 
 			

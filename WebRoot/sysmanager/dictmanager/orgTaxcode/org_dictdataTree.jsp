@@ -53,7 +53,7 @@ href="org_dictdataTree.jsp"
     	           imageFolder="../../images/tree_images/" 
     	           collapse="true"
     			   includeRootNode="true"    	
-    			   href="javascript:void"   			   
+    			   href="javascript:void(0)"   			   
     			   target=""
     			   mode="static-dynamic"
     			   >         

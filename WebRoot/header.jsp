@@ -128,10 +128,10 @@ function addTab(name, dataLink){
         <td width="315"><img src="common/images/header_03.gif" width="315" height="34"></td>
         <td class="text_right"><table width="20%" border="0" align="right" cellpadding="0" cellspacing="0">
           <tr>
-            <!--<td align="center"><a href="javascript:void">&nbsp;</a></td>
-            <td align="center"><a href="javascript:void">&nbsp;</a></td>
-            <td align="center"><a href="javascript:void">&nbsp;</a></td>
-            <td align="center"><a href="javascript:void">&nbsp;</a></td>
+            <!--<td align="center"><a href="javascript:void(0)">&nbsp;</a></td>
+            <td align="center"><a href="javascript:void(0)">&nbsp;</a></td>
+            <td align="center"><a href="javascript:void(0)">&nbsp;</a></td>
+            <td align="center"><a href="javascript:void(0)">&nbsp;</a></td>
             --><td align="center"><jsp:include page="accountbox.jsp" flush="true"></jsp:include></td>
             <td  align="center">&nbsp;</td>
           </tr>

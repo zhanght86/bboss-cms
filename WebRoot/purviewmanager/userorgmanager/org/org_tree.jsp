@@ -226,7 +226,7 @@ function refreshcache(){
   <tr height=30>
 
   <td align="center">
-  	<a href="javascript:void" onclick="searchorg()"><pg:message code="sany.pdp.role.organization.query"/></a>
+  	<a href="javascript:void(0)" onclick="searchorg()"><pg:message code="sany.pdp.role.organization.query"/></a>
   </td>
   
   	<%
@@ -235,7 +235,7 @@ function refreshcache(){
 	if("1".equals(accessControl.getUserID()))
 	{
   	%>
-    <td align="center"><a href="javascript:void" onclick="neworg()"><pg:message code="sany.pdp.role.organization.new"/></a></td>
+    <td align="center"><a href="javascript:void(0)" onclick="neworg()"><pg:message code="sany.pdp.role.organization.new"/></a></td>
    	<%
    	}
    	%>  

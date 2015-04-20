@@ -114,7 +114,7 @@ function picRefApp(){
 						<th>应用图片：</th>
 						<td><input type="text" id="pic_name" name="pic_name" style="width: 240px;"
 						value="<pg:cell colName="pic_name" />"/>
-						<a href="javascript:void" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>选择</span></a>
+						<a href="javascript:void(0)" class="bt_small" id="refButton" onclick="javascript:picRefApp()"><span>选择</span></a>
 						</td>
 					</tr>
 					<tr>

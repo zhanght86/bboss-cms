@@ -13,7 +13,7 @@
 		<div class="title_box">
 				<div class="rightbtn">
 				
-				<a href="javascript:void" class="bt_1" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
+				<a href="javascript:void(0)" class="bt_1" id="loadButton"><span><pg:message code="sany.pdp.common.load"/></span></a>
 				
 				</div>
 				

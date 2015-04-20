@@ -10,7 +10,7 @@
 </head>
 <body>
   <div class="mcontent">
-	<div class="titlebox"> <span class="location">您的当前位置： <a href="javascript:void">费用申请</a> &gt; 申请单草稿箱</span></div>
+	<div class="titlebox"> <span class="location">您的当前位置： <a href="javascript:void(0)">费用申请</a> &gt; 申请单草稿箱</span></div>
 	<div id="searchblock">
 	  <div  class="search_top">
 	    <div class="right_top"></div>
@@ -46,7 +46,7 @@
 	            <td><input name="textfield" type="text" value="" class="w90"  />
 -
   <input name="textfield5" type="text" value="" class="input3 w90"  /></td>
-	            <td><a href="javascript:void" class="bt_1"><span>预定</span></a><a href="javascript:void" class="bt_2"><span>重置</span></a></td>
+	            <td><a href="javascript:void(0)" class="bt_1"><span>预定</span></a><a href="javascript:void(0)" class="bt_2"><span>重置</span></a></td>
               </tr>
 	          </table></td>
 	        <td class="right_box"></td>
@@ -83,7 +83,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">45.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>2</td>
@@ -95,7 +95,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">5.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>3</td>
@@ -107,7 +107,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">475.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>4</td>
@@ -119,7 +119,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">475.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>5</td>
@@ -131,7 +131,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">5.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>6</td>
@@ -143,7 +143,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">45.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>7</td>
@@ -155,7 +155,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">45.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>8</td>
@@ -167,7 +167,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">47.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>9</td>
@@ -179,7 +179,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">45.00</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>10</td>
@@ -191,7 +191,7 @@
 	    <td>2011-09-07</td>
 	    <td class="td_right">475.61</td>
 	    <td>单据草稿</td>
-	    <td><a href="javascript:void">删除</a></td>
+	    <td><a href="javascript:void(0)">删除</a></td>
       </tr>
 	  <tr>
 	    <td>&nbsp;</td>
@@ -251,7 +251,7 @@
 	    <option>100</option>
 	    <option>全部</option>
       </select>
-	  条</span> 总计<span class="Total">35</span>条 <span class="current">1</span>/4 页 <span class="next "><a href="javascript:void">上一页</a></span> <span class="current_page"><a href="javascript:void">1</a></span> <a href="javascript:void">2</a> <a href="javascript:void">3</a> <span class="next "><a href="javascript:void">下一页</a></span> 跳转至
+	  条</span> 总计<span class="Total">35</span>条 <span class="current">1</span>/4 页 <span class="next "><a href="javascript:void(0)">上一页</a></span> <span class="current_page"><a href="javascript:void(0)">1</a></span> <a href="javascript:void(0)">2</a> <a href="javascript:void(0)">3</a> <span class="next "><a href="javascript:void(0)">下一页</a></span> 跳转至
   <input type="text" name="textfield3"  class="page_input"/>
     页 <img src="images/go.jpg" width="18" height="16" align="absmiddle" /></div>
 </div>

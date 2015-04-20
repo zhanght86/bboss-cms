@@ -38,10 +38,10 @@
     		<td><pg:cell colName="creator"  /></td>
     		
        		<td>
-       			<a href="javascript:void" onclick="editArea('<pg:cell colName="areaId"/>','<pg:cell colName="areaDefault"/>');">区域信息</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-       			<a href="javascript:void" onclick="editOrgList('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">所辖部门</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-       			<a href="javascript:void" onclick="editHoliday('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">假日安排</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-       			<a href="javascript:void" onclick="queryWorkDate('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">工作时间设置</a>
+       			<a href="javascript:void(0)" onclick="editArea('<pg:cell colName="areaId"/>','<pg:cell colName="areaDefault"/>');">区域信息</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+       			<a href="javascript:void(0)" onclick="editOrgList('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">所辖部门</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+       			<a href="javascript:void(0)" onclick="editHoliday('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">假日安排</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+       			<a href="javascript:void(0)" onclick="queryWorkDate('<pg:cell colName="areaId"/>','<pg:cell colName="areaName" />');">工作时间设置</a>
        		</td>
         </tr>
 	 </pg:list>

@@ -259,7 +259,7 @@
 				<input type="hidden" name="checks" value="">
 			    <input type="hidden" name="un_checks" value="">
 			    <input type="hidden" name="resName2" value="<%=resName2 %>">
-				<pg:listdata dataInfo="RoleList" keyName="RoleList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.RoleList" keyName="RoleList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="15" scope="request" data="RoleList" isList="false">
 				<pg:equal actual="${ResSearchList.itemCount}" value="0" >

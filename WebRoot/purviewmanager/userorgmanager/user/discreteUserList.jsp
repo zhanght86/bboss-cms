@@ -234,8 +234,8 @@ function reloadusers()
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:dealRecord(1); return false;"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
-				<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="javascript:addorg(1); return false;"><span><pg:message code="sany.pdp.move.in.user"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:dealRecord(1); return false;"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="delBatchButton" onclick="javascript:addorg(1); return false;"><span><pg:message code="sany.pdp.move.in.user"/></span></a>
 				</div>
 				<strong><pg:message code="sany.pdp.workflow.user.list"/></strong>
 			</div>

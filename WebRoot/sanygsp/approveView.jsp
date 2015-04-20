@@ -95,7 +95,7 @@ $(document).delegate('#reject', 'click', function() {
 	<div data-role="page">
 
 		<div data-role="header">
-			<a href="javascript:void" data-rel="back" id="backlink" data-icon="back">
+			<a href="javascript:void(0)" data-rel="back" id="backlink" data-icon="back">
 				<pg:message code="sany.gsp.common.backlink" />
 			</a>
 			<h1><pg:message code="sany.gsp.tpp.approve.process" /></h1>
@@ -135,8 +135,8 @@ $(document).delegate('#reject', 'click', function() {
 
 			<div data-role="navbar">
 				<ul>
-					<li><a href="javascript:void" data-icon="check" id="approve" data-role="button" data-iconpos="right"><pg:message code="sany.gsp.pending.approve.pass" /></a></li>
-					<li><a href="javascript:void" data-icon="delete" id="reject" data-role="button" data-iconpos="right"><pg:message code="sany.gsp.pending.approve.reject" /></a></li>
+					<li><a href="javascript:void(0)" data-icon="check" id="approve" data-role="button" data-iconpos="right"><pg:message code="sany.gsp.pending.approve.pass" /></a></li>
+					<li><a href="javascript:void(0)" data-icon="delete" id="reject" data-role="button" data-iconpos="right"><pg:message code="sany.gsp.pending.approve.reject" /></a></li>
 				</ul>
 			</div>
 			<!-- /navbar -->

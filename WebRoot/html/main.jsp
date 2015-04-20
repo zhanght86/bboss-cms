@@ -36,7 +36,7 @@
       <div  class="content_top">
         <div class="right_top"></div>
         <div class="left_top"></div>
-        <div class="more_info"><a target="_news" href="javascript:void" id="more"><img src="images/more.gif" border="0" /></a></div>
+        <div class="more_info"><a target="_news" href="javascript:void(0)" id="more"><img src="images/more.gif" border="0" /></a></div>
         新闻公告</div>
       <div class="box_content">
         <div class="right_content"></div>
@@ -49,25 +49,25 @@
             <ul id="news">
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">5月27号新增岗位 58 个，包括物流管理等</a></li>
+                <a href="javascript:void(0)">5月27号新增岗位 58 个，包括物流管理等</a></li>
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">关于绩效自评提交后汇报关系发生变化</a></li>
+                <a href="javascript:void(0)">关于绩效自评提交后汇报关系发生变化</a></li>
               <li>
                 <div class="date">2010-12-12</div>
                 <a href="vote.html">3月21日HRM系统beta1.2.2版更新公告</a></li>
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">5月18日HRM系统beta2.1.0版更新公告</a></li>
+                <a href="javascript:void(0)">5月18日HRM系统beta2.1.0版更新公告</a></li>
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">关于绩效自评提交后汇报关系发生变化</a></li>
+                <a href="javascript:void(0)">关于绩效自评提交后汇报关系发生变化</a></li>
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">3月21日HRM系统beta1.2.2版更新公告</a></li>
+                <a href="javascript:void(0)">3月21日HRM系统beta1.2.2版更新公告</a></li>
               <li>
                 <div class="date">2010-12-12</div>
-                <a href="javascript:void">3月21日HRM系统beta1.2.2版更新公告</a></li>
+                <a href="javascript:void(0)">3月21日HRM系统beta1.2.2版更新公告</a></li>
             </ul>
           </div>
         </div>

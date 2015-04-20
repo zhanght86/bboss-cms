@@ -19,7 +19,7 @@
    		        <td><input type="text"  value = '<pg:cell colName="name"/>'/></td>
                 <td><input type="text"  value = '<pg:cell colName="startTime"/>' onclick="WdatePicker({dateFmt:'HH:mm'})"/></td>
                 <td><input type="text"  value = '<pg:cell colName="endTime"/>' onclick="WdatePicker({dateFmt:'HH:mm'})"/></td>
-                <td><a href="javascript:void" onclick="confirm(this)"><span>保存</span></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void" onclick="deleteTime(this)"><span>删除</span></a></td>
+                <td><a href="javascript:void(0)" onclick="confirm(this)"><span>保存</span></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:void(0)" onclick="deleteTime(this)"><span>删除</span></a></td>
                 <td></td>
         </tr>
 	 </pg:list>

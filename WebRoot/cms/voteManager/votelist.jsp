@@ -450,10 +450,10 @@
 		                       %>
 								<%-- 
 									gw_tanx 20150204
-								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onclick="modifynew('<pg:cell colName='id' defaultValue=''/>')"/>
 								修改问卷</a>
 								 --%>
-								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onclick="modify('<pg:cell colName='id' defaultValue=''/>')"/>
 								修改问卷</a>
 								
 								<%
@@ -464,7 +464,7 @@
 					               ff = true;
 		                       %>
 		                       |
-								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="havealook('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onclick="havealook('<pg:cell colName='id' defaultValue=''/>')"/>
 								预览</a>
 								
 								<%
@@ -474,7 +474,7 @@
 					               {
 					                ff = true;
 		                       %>|
-								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="getResult('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onclick="getResult('<pg:cell colName='id' defaultValue=''/>')"/>
 								统计</a>
 								<%}
 								if(!ff)
@@ -482,7 +482,7 @@
 								 %>无权限<%
 								}
 								%>|
-								<a style="cursor:hand;color:#0000cc" href="javascript:void" onclick="exportExcel('<pg:cell colName='id' defaultValue=''/>')"/>
+								<a style="cursor:hand;color:#0000cc" href="javascript:void(0)" onclick="exportExcel('<pg:cell colName='id' defaultValue=''/>')"/>
 								导出提交答案</a>
 								</td>
 																

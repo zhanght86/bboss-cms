@@ -263,15 +263,15 @@ function opernDlg(title,url){
 				            	%>
 				<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="newRes();"><span><pg:message code="sany.pdp.common.add"/></span></a>
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:dealRecord(1); return false;"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="resBatchUser();"><span><pg:message code="sany.pdp.resourcemanage.confer.user"/></span></a>
-				<a href="javascript:void" class="bt_small" id="delBatchButton" onclick="resBatchRole();"><span><pg:message code="sany.pdp.resourcemanage.confer.role"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="newRes();"><span><pg:message code="sany.pdp.common.add"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:dealRecord(1); return false;"><span><pg:message code="sany.pdp.common.batch.delete"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="resBatchUser();"><span><pg:message code="sany.pdp.resourcemanage.confer.user"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="delBatchButton" onclick="resBatchRole();"><span><pg:message code="sany.pdp.resourcemanage.confer.role"/></span></a>
 				<%
 								if(isOrg){
 								
 				            	%>
-				 <a href="javascript:void" class="bt_small" id="delBatchButton" onclick="resBatchOrg();"><span><pg:message code="sany.pdp.resourcemanage.confer.organization"/></span></a>
+				 <a href="javascript:void(0)" class="bt_small" id="delBatchButton" onclick="resBatchOrg();"><span><pg:message code="sany.pdp.resourcemanage.confer.organization"/></span></a>
 				 <%
 								}
 								%>
@@ -381,12 +381,12 @@ function opernDlg(title,url){
 					 %>
 						  <div class="title_box">
 						  	<div class="rightbtn">		
-						  		<a href="javascript:void" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.user"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/user_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.user"/></span></a>
-				<a href="javascript:void" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.role"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/role_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.role"/></span></a>
+						  		<a href="javascript:void(0)" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.user"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/user_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.user"/></span></a>
+				<a href="javascript:void(0)" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.role"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/role_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.role"/></span></a>
 				<%
 									if(isOrg){
 				 					
-				            		%><a href="javascript:void" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.organization"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/org_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.organization"/></span></a>
+				            		%><a href="javascript:void(0)" class="bt_1 sp" id="addButton" onclick="opernDlg('<pg:message code="sany.pdp.resourcemanage.confer.organization"/>','${pageContext.request.contextPath}/purviewmanager/resmanager/org_iframe.jsp?isGlobal=true&resId2=<%=resourceInfo.getGlobalresourceid() %>&resTypeId2=<%=restype%>&title=<%=resourceInfo.getGlobalresourceid() %>&resName2=<%=resourceInfo.getGlobalresourceid() %>&isBatch=false',screen.availWidth-100,screen.availHeight-50);"><span><pg:message code="sany.pdp.resourcemanage.confer.organization"/></span></a>
 				            		<%
 									}
 									%>		

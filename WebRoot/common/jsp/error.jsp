@@ -47,7 +47,7 @@ function showT(){
 
 	%>	
 	<%=message %>
-	<a onClick="javascript:showT();" href="javascript:void">查看详细异常</a>
+	<a onClick="javascript:showT();" href="javascript:void(0)">查看详细异常</a>
 	<div id='exceptions'
 		style="display: none; OVERFLOW: auto; width: 100%; height: 460">
 		

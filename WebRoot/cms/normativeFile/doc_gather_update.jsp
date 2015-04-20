@@ -1172,7 +1172,7 @@ else
 											<table>
 												<tr>
 													<td>
-													<a href="javascript:void" onClick="preview()" ><u>预览</u></a>
+													<a href="javascript:void(0)" onClick="preview()" ><u>预览</u></a>
 													</td>
 												</tr>
 											</table>
@@ -1269,17 +1269,17 @@ else
 		                	<td height="26">&nbsp;</td>
 		                  	<td height="23" colspan="2">
 								<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-edit.gif" width=14 >
-								<a id=tab1 href="javascript:void" onclick=tabClick(1) ><u>[内容编辑]</u></a>&nbsp;&nbsp; 
+								<a id=tab1 href="javascript:void(0)" onclick=tabClick(1) ><u>[内容编辑]</u></a>&nbsp;&nbsp; 
 								<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-correlated.gif" width=14 >
-								<a id=tab2 href="javascript:void" onclick=tabClick(2) ><u>[相关文档]</u></a>&nbsp;&nbsp;
+								<a id=tab2 href="javascript:void(0)" onclick=tabClick(2) ><u>[相关文档]</u></a>&nbsp;&nbsp;
 								<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-addons.gif" width=14 >
-								<a id=tab3 href="javascript:void" onclick=tabClick(3) ><u>[文档附件]</u></a>&nbsp;&nbsp;
+								<a id=tab3 href="javascript:void(0)" onclick=tabClick(3) ><u>[文档附件]</u></a>&nbsp;&nbsp;
 								<img align=absMiddle border=0 height=12 src="<%=request.getContextPath()%>/cms/images/text-img.gif" width=14 >
-								<a id=tab4 href="javascript:void" onclick=tabClick(4) ><u>[文档图片]</u></a>&nbsp;&nbsp;
+								<a id=tab4 href="javascript:void(0)" onclick=tabClick(4) ><u>[文档图片]</u></a>&nbsp;&nbsp;
 								<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
-								<a id=tab5 href="javascript:void" onclick=tabClick(5) ><u>[扩展字段]</u></a>
+								<a id=tab5 href="javascript:void(0)" onclick=tabClick(5) ><u>[扩展字段]</u></a>
 								<img align=absMiddle border=0 height=15 src="<%=request.getContextPath()%>/cms/images/text-text.gif" width=15 >
-								<a id=tab5 href="javascript:void" onclick=tabClick(6) ><u>[专题报道]</u></a>
+								<a id=tab5 href="javascript:void(0)" onclick=tabClick(6) ><u>[专题报道]</u></a>
 		                  	</td>
 		                    <td width="30%" height="23">
 				<div align="center">

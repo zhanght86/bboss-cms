@@ -179,7 +179,7 @@ scrollbar-track-color: #E9EDF3;
 	<pg:list>
 	<tr>
 		<td >
-			<a href="javascript:void"  onclick="openWin('doc_view.jsp?docid=<pg:cell colName="documentId" defaultValue=""/>&channelName=<pg:cell colName="channelName" defaultValue=""/>&channelId=<pg:cell colName="channelId" defaultValue=""/>',screen.availWidth-100,screen.availHeight-100)" title="浏览"  target="_self"><pg:cell colName="title" defaultValue=""/></a>
+			<a href="javascript:void(0)"  onclick="openWin('doc_view.jsp?docid=<pg:cell colName="documentId" defaultValue=""/>&channelName=<pg:cell colName="channelName" defaultValue=""/>&channelId=<pg:cell colName="channelId" defaultValue=""/>',screen.availWidth-100,screen.availHeight-100)" title="浏览"  target="_self"><pg:cell colName="title" defaultValue=""/></a>
 			</td>
 		<td  >
 			<pg:cell colName="sourceName" defaultValue=""/>	</td>		

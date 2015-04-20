@@ -69,8 +69,8 @@ var areaId = '${param.areaId}';
 		<div class="mcontent">
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:addWorkDate('${param.areaId}');"><span>新增工作日期</span></a>
-				<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:addWorkDate('${param.areaId}');"><span>新增工作日期</span></a>
+				<a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
 				</div>
 				
 				<strong></strong>				

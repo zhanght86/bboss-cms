@@ -625,7 +625,7 @@
 						</tr>
 					</table>
 					<br/>
-				<tab:iframe  id="sqlList" name="sqlList"  src="javascript:void" frameborder="0" width="99%" height="350px"/>	
+				<tab:iframe  id="sqlList" name="sqlList"  src="javascript:void(0)" frameborder="0" width="99%" height="350px"/>	
 				 
 			</tab:tabPane>
 			

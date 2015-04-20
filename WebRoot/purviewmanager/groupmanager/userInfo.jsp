@@ -315,17 +315,17 @@
 					<%if(accesscontroler.isAdmin() || 
 								(curUserId.equals(groupowner_id) && accesscontroler.checkPermission("globalgroup",
 		                           "groupmanager", AccessControl.GROUP_RESOURCE))){%>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="addRole();"><span><pg:message code="sany.pdp.groupmanage.add.role"/></span></a>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="changeRole();"><span><pg:message code="sany.pdp.groupmanage.correlation.role"/></span></a>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="editGroup();"><span><pg:message code="sany.pdp.groupmanage.modify.group"/></span></a>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="delGroup();"><span><pg:message code="sany.pdp.groupmanage.delte.group"/></span></a>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="lookInfo();"><span><pg:message code="sany.pdp.groupmanage.group.information"/></span></a>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="addsonGroup();"><span><pg:message code="sany.pdp.groupmanage.new.child.group"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="addRole();"><span><pg:message code="sany.pdp.groupmanage.add.role"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="changeRole();"><span><pg:message code="sany.pdp.groupmanage.correlation.role"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="editGroup();"><span><pg:message code="sany.pdp.groupmanage.modify.group"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="delGroup();"><span><pg:message code="sany.pdp.groupmanage.delte.group"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="lookInfo();"><span><pg:message code="sany.pdp.groupmanage.group.information"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="addsonGroup();"><span><pg:message code="sany.pdp.groupmanage.new.child.group"/></span></a>
 					<%
 							}else if(accesscontroler.checkPermission("globalgroup",
 		                           "groupmanager", AccessControl.GROUP_RESOURCE)){//查看时候授权用户组全局操作的权限
 					%>
-					<a href="javascript:void" class="bt_small" id="addButton" onclick="addsonGroup();"><span><pg:message code="sany.pdp.groupmanage.new.child.group"/></span></a>
+					<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="addsonGroup();"><span><pg:message code="sany.pdp.groupmanage.new.child.group"/></span></a>
 					<% 
 								}
 					%>

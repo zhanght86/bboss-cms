@@ -104,7 +104,7 @@ var api = frameElement.api, W = api.opener;
 					</tr>
 					<tr>
 						<td>
-						<a href="javascript:void" class="bt_2"  onclick="Import()"><span>上传</span></a>
+						<a href="javascript:void(0)" class="bt_2"  onclick="Import()"><span>上传</span></a>
 						<a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>关闭</span></a>
 						</td>
 					</tr>

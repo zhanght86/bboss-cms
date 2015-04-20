@@ -46,8 +46,8 @@
 					%>
 					<div align="left">&nbsp;<b>
 					<%=restypeName%></b>&nbsp;>>&nbsp;
-					<a href="javascript:void" onclick="newRes()"><u>新增</u></a> |
-					<a href="javascript:void" onclick="javascript:dealRecord(1); return false;"><u>删除</u></a></div>
+					<a href="javascript:void(0)" onclick="newRes()"><u>新增</u></a> |
+					<a href="javascript:void(0)" onclick="javascript:dealRecord(1); return false;"><u>删除</u></a></div>
 					<%}%>
 					<hr size="1">
 					<div align="left">&nbsp;</div>

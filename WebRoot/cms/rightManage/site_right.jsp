@@ -350,7 +350,7 @@ function selectNo(form)
 </form>
 
 <map name="Map">
-<area shape="rect" coords="80,-2,81,3" href="javascript:void"><area shape="rect" coords="87,3,153,23" href="template_right.jsp">
+<area shape="rect" coords="80,-2,81,3" href="javascript:void(0)"><area shape="rect" coords="87,3,153,23" href="template_right.jsp">
 <area shape="rect" coords="160,3,224,32" href="workflow_right.jsp" >
 <area shape="rect" coords="160,3,224,32" href="channel_right.jsp" >
 <area shape="rect" coords="160,3,224,32" href="doc_right.jsp" >

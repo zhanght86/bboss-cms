@@ -122,7 +122,7 @@
 			<hr size="1">
 			<div align="left">&nbsp;
 			 <!--| 
-			<a href="javascript:void" onclick="createorg()"><u>添加用户</u></a>--></div>
+			<a href="javascript:void(0)" onclick="createorg()"><u>添加用户</u></a>--></div>
 			</td>
 		</tr>
 		<pg:listdata dataInfo="OrgSubUserList" keyName="OrgSubUserList"/>

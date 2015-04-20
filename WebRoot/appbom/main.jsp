@@ -147,7 +147,7 @@
 												&nbsp;
 											</th>
 											<td>
-												<a href="javascript:void" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span>
+												<a href="javascript:void(0)" class="bt_1" id="queryButton"><span><pg:message code="sany.pdp.common.operation.search"/></span>
 												</a>
 												<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span>
 												</a>
@@ -168,9 +168,9 @@
 			</div>
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.operation.new"/></span></a>
-				<a href="javascript:void" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.operation.batch"/> <pg:message code="sany.pdp.common.operation.delete"/></span></a>
-				<a href="javascript:void" class="bt_small" id="exportButton"><span><pg:message code="sany.pdp.common.operation.export"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton"><span><pg:message code="sany.pdp.common.operation.new"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="delBatchButton"><span><pg:message code="sany.pdp.common.operation.batch"/> <pg:message code="sany.pdp.common.operation.delete"/></span></a>
+				<a href="javascript:void(0)" class="bt_small" id="exportButton"><span><pg:message code="sany.pdp.common.operation.export"/></span></a>
 				<input id="excelType" type="radio" name="excelType"   checked  >2003</input>
 				<input  type="radio" name="excelType"  >2007</input>
 				</div>

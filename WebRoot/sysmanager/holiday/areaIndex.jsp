@@ -79,7 +79,7 @@
 			
 			<div class="title_box">
 				<div class="rightbtn">
-				<a href="javascript:void" class="bt_small" id="addButton" onclick="javascript:addArea();"><span>新增区域</span></a>
+				<a href="javascript:void(0)" class="bt_small" id="addButton" onclick="javascript:addArea();"><span>新增区域</span></a>
 				</div>
 				
 				<strong>区域列表</strong>				

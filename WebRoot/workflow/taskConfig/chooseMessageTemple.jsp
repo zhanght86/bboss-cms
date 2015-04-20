@@ -144,7 +144,7 @@ function submitData(){
 		<div class="left_menu" style="width:200px; height: 340px;">
 		    <ul>
 		    	<li class="select_links">
-		    		<a href="javascript:void">模板查询：</a><input type="input" style="width:100px;" name="temple_query" id="temple_query" onKeyUp="sortTempleTree()" />
+		    		<a href="javascript:void(0)">模板查询：</a><input type="input" style="width:100px;" name="temple_query" id="temple_query" onKeyUp="sortTempleTree()" />
 		    		<ul style="display: block;" id="temple_module">
 		    			
 		    		</ul>

@@ -85,6 +85,6 @@ function list()
 //window.setInterval("send_request_account('sysmanager/count.jsp')",300000);
 </script>
 <form name="myform" action="" method="post">		
-	<span class="blue1"> <%=accesscontroler.getUserName()%>(<%=accesscontroler.getUserAccount()%>)</span>，欢迎您　<a href="javascript:void" class="zhuxiao" onclick="logout()" >注销</a>　 <a class="blue">帮助</a>
+	<span class="blue1"> <%=accesscontroler.getUserName()%>(<%=accesscontroler.getUserAccount()%>)</span>，欢迎您　<a href="javascript:void(0)" class="zhuxiao" onclick="logout()" >注销</a>　 <a class="blue">帮助</a>
 </form>
 

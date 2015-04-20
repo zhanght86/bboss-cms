@@ -45,7 +45,7 @@ body{ padding:75px 0 44px 0; _padding:0; height:100%; overflow: hidden;}
 	<div  class="top">
     <div class="logo_top"><img src="${logoimage}" width="300" height="31" /></div>
     <div class="log_message">
-	<span class="blue1"> <%=accesscontroler.getUserName()%></span>，欢迎您　<a href="javascript:void" class="zhuxiao" onclick="logout()">注销</a></div>
+	<span class="blue1"> <%=accesscontroler.getUserName()%></span>，欢迎您　<a href="javascript:void(0)" class="zhuxiao" onclick="logout()">注销</a></div>
 	</div>
 	<sany:menus/>
 </div>

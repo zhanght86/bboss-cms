@@ -133,7 +133,7 @@
 	        </td>
 		
 	        <td>
-	        	&nbsp;<a href="javascript:void 0;" onclick="document.applets.report.printReport();return false;"><img src="reportImages/newprint.gif" border="0" title="打印"></a>
+	        	&nbsp;<a href="javascript:void(0);" onclick="document.applets.report.printReport();return false;"><img src="reportImages/newprint.gif" border="0" title="打印"></a>
 	        </td>
 	        <td>&nbsp;&nbsp;&nbsp;</td>
 			 

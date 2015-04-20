@@ -135,8 +135,8 @@ var id = '${param.id}';
 		   		   <td><input type="text" id="endDate" onclick="WdatePicker()" value='<pg:cell colName="endDate"/>'/></td>
 	   		   </tr>
 		</table>
-			        <a href="javascript:void" class="bt_2"  onclick="confirm()"><span>保存</span></a>
-					<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
+			        <a href="javascript:void(0)" class="bt_2"  onclick="confirm()"><span>保存</span></a>
+					<a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
 					<div   style="display:block;">
         <iframe id="frame1" height="680" width="900" scrolling="no" frameborder="0" vspace="0" hspace="0"  ></iframe> 
     </div>

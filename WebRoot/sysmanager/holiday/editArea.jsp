@@ -110,7 +110,7 @@ var areaId = '${param.areaId}';
 	           
 			   
 		</table>
-			        <a href="javascript:void" class="bt_2"  onclick="confirm()"><span>保存</span></a>
-					<a href="javascript:void" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
+			        <a href="javascript:void(0)" class="bt_2"  onclick="confirm()"><span>保存</span></a>
+					<a href="javascript:void(0)" class="bt_2"  onclick="CloseDlg()"><span>取消</span></a>
 	</body>
 </html>

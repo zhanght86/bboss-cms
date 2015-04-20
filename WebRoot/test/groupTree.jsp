@@ -57,7 +57,7 @@
 						<tr class="tr" height=30>
 							<td class="td" >
 							<td align="center">
-									<a href="javascript:void" onclick="findUserGroup()">用户组查询</a>
+									<a href="javascript:void(0)" onclick="findUserGroup()">用户组查询</a>
 							</td>
 							<% 
 								if (accesscontroler.checkPermission("globalgroup",
@@ -66,7 +66,7 @@
 								
 								
 								<td align="center">
-									<a href="javascript:void" onclick="newFirstGroup()">新增一级组</a>
+									<a href="javascript:void(0)" onclick="newFirstGroup()">新增一级组</a>
 								</td>
 							<% 
 								}

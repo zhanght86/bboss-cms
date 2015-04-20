@@ -152,7 +152,7 @@
 		
 <body class="contentbodymargin" onunload="window.returnValue = 'ok'">
 	<div class="titlebox">
-					<SPAN class=location><A href="javascript:void"><%=orgpath %></A></SPAN>
+					<SPAN class=location><A href="javascript:void(0)"><%=orgpath %></A></SPAN>
 	</div>
 	<div id="" align="center">
 		<center>
