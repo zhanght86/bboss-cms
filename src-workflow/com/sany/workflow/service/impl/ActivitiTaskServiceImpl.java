@@ -1170,8 +1170,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	}
 
 	@Override
-	public void delegateTasks(String processKey, String fromuser, String touser)
-			throws Exception {
+	public void delegateTasks(String processKey, String fromuser,
+			String touser, String startUser) throws Exception {
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -1179,10 +1179,15 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			String currentUser = AccessControl.getAccessControl()
 					.getUserAccount();
 
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("processKeys",
+					processKey.equals("") ? null : processKey.split(","));
+			params.put("fromuser", fromuser);
+			params.put("startUser", startUser);
+
 			// 获取用户未处理的任务
-			List<TaskManager> userTaskList = executor.queryList(
-					TaskManager.class, "selectUserNoDealTasks_wf", fromuser,
-					fromuser);
+			List<TaskManager> userTaskList = executor.queryListBean(
+					TaskManager.class, "getDelegateTaskBycondion_wf", params);
 
 			if (null != userTaskList && userTaskList.size() > 0) {
 
@@ -1204,28 +1209,28 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					if ("1".equals(task.getState())) {
 						// 未签收(直接修改未签收的任务的处理人为touser)
 						executor.update("updateNoSignUserId_wf", touser,
-								fromuser);
+								fromuser, task.getID_());
 
 						// 在扩展表中添加转派记录
 						updateNodeChangeInfo(task.getID_(),
 								task.getPROC_INST_ID_(), task.getKEY_(),
-								currentUser, touser, reamrk, "", 1);
+								fromuser, touser, reamrk, "", 1);
 
 					} else if ("2".equals(task.getState())) {
 
 						// 已签收
 						// activitiService.delegateTask(task.getID_(), touser);
 						executor.update("updateActHiTaskinstSignUserId_wf",
-								touser, fromuser);
+								touser, fromuser, task.getID_());
 						executor.update("updateActHiActinstSignUserId_wf",
-								touser, fromuser);
+								touser, fromuser, task.getID_());
 						executor.update("updateActRuTaskSignUserId_wf", touser,
-								fromuser);
+								fromuser, task.getID_());
 
 						// 在扩展表中添加转派记录
 						updateNodeChangeInfo(task.getID_(),
 								task.getPROC_INST_ID_(), task.getKEY_(),
-								currentUser, touser, reamrk, "", 2);
+								fromuser, touser, reamrk, "", 2);
 					}
 
 				}
@@ -1424,7 +1429,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" , e);
+			throw new Exception("根据key获取当前任务节点信息出错:", e);
 		} finally {
 			tm.release();
 		}
@@ -1468,7 +1473,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:",e);
+			throw new Exception("根据key获取当前任务节点信息出错:", e);
 		}
 	}
 
@@ -1491,7 +1496,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			return taskInfo;
 
 		} catch (Exception e) {
-			throw new Exception("根据key获取当前任务节点信息出错:" , e);
+			throw new Exception("根据key获取当前任务节点信息出错:", e);
 		} finally {
 			tm.release();
 		}
@@ -1688,7 +1693,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			}
 
 		} catch (Exception e) {
-			throw new Exception("根据业务key获取当前任务节点信息出错:" , e);
+			throw new Exception("根据业务key获取当前任务节点信息出错:", e);
 		} finally {
 			tm.release();
 		}

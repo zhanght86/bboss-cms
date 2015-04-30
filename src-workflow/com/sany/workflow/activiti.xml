@@ -3167,7 +3167,7 @@
 			       CHANGETIME     AS DELEGATETIME,
 			       DELEGATEREMARK AS DELEGATEREMARK
 			  FROM TD_WF_NODE_CHANGEINFO
-			 WHERE DELEGATETYPE = 1
+			 WHERE DELEGATETYPE <> 0
 			 
 			  #if($processKey && !$processKey.equals(""))
 				AND PROCESS_KEY like #[processKey]
@@ -3196,28 +3196,143 @@
 	<!-- 转派功能，修改未签收人  gw_tanx-->
 	<property name="updateNoSignUserId_wf">
 		<![CDATA[
-			UPDATE ACT_RU_IDENTITYLINK SET USER_ID_ = ? WHERE TYPE_ = 'candidate' AND USER_ID_ = ?
+			UPDATE ACT_RU_IDENTITYLINK SET USER_ID_ = ? WHERE TYPE_ = 'candidate' AND USER_ID_ = ? AND TASK_ID_ = ?
 		]]>
 	</property>
 	
 	<!-- 转派功能，修改已签收人  gw_tanx-->
 	<property name="updateActHiTaskinstSignUserId_wf">
 		<![CDATA[
-			UPDATE ACT_HI_TASKINST SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ?
+			UPDATE ACT_HI_TASKINST SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ? AND ID_ = ?
 		]]>
 	</property>
 	
 	<!-- 转派功能，修改已签收人  gw_tanx-->
 	<property name="updateActHiActinstSignUserId_wf">
 		<![CDATA[
-			UPDATE ACT_HI_ACTINST SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ?
+			UPDATE ACT_HI_ACTINST SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ? AND ID_ = ?
 		]]>
 	</property>
 	
 	<!-- 转派功能，修改已签收人  gw_tanx-->
 	<property name="updateActRuTaskSignUserId_wf">
 		<![CDATA[
-			UPDATE ACT_RU_TASK SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ?
+			UPDATE ACT_RU_TASK SET ASSIGNEE_ = ? WHERE ASSIGNEE_ = ? AND ID_ = ?
+		]]>
+	</property>
+	
+	<!-- 查询用户未处理的任务  gw_tanx-->
+	<property name="getDelegateTaskBycondion_wf">
+		<![CDATA[
+		
+				-- 未签收任务
+			select distinct 1 as state,
+							B.KEY_,
+			                RES.DURATION_NODE,
+			                RES.IS_CONTAIN_HOLIDAY,
+			                RES.ALERTTIME,
+			                RES.OVERTIME,
+			                RES.ADVANCESEND,
+			                RES.OVERTIMESEND,
+			                RES.ID_,
+			                RES.REV_,
+			                RES.EXECUTION_ID_,
+			                RES.PROC_INST_ID_,
+			                RES.PROC_DEF_ID_,
+			                RES.NAME_,
+			                RES.PARENT_TASK_ID_,
+			                RES.DESCRIPTION_,
+			                RES.TASK_DEF_KEY_,
+			                RES.OWNER_,
+			                RES.ASSIGNEE_,
+			                RES.DELEGATION_,
+			                RES.PRIORITY_,
+			                RES.CREATE_TIME_ AS START_TIME_,
+			                RES.DUE_DATE_,
+			                RES.SUSPENSION_STATE_
+			  from ACT_RU_TASK RES
+			
+			 inner join ACT_RU_IDENTITYLINK I on I.TASK_ID_ = RES.ID_
+			 LEFT JOIN ACT_RE_PROCDEF B ON RES.PROC_DEF_ID_ = B.ID_
+			 JOIN ACT_HI_PROCINST C ON C.PROC_INST_ID_ = RES.PROC_INST_ID_
+			
+			 WHERE RES.ASSIGNEE_ is null
+			   and I.TYPE_ = 'candidate'
+			   
+			   #if($fromuser && !$fromuser.equals(""))
+				   	and I.USER_ID_ = #[fromuser]
+			   #end
+			   
+			   #if($startUser && !$startUser.equals(""))
+				   	and c.start_user_id_ = #[startUser]
+			   #end
+			   
+			   #if($processKeys)
+      			AND b.key_ IN ( 
+      				#foreach($processKey in $processKeys)
+						#if($velocityCount == 0)
+							#[processKeys[$velocityCount]]
+						#else
+							,#[processKeys[$velocityCount]]
+						#end
+					#end
+      			)
+      			#end
+			
+			union
+			
+			-- 已签收任务
+			select 2 as state,
+			 	   C.KEY_,
+			       A.DURATION_NODE,
+			       A.IS_CONTAIN_HOLIDAY,
+			       A.ALERTTIME,
+			       A.OVERTIME,
+			       A.ADVANCESEND,
+			       A.OVERTIMESEND,
+			       A.ID_,
+			       A.REV_,
+			       A.EXECUTION_ID_,
+			       A.PROC_INST_ID_,
+			       A.PROC_DEF_ID_,
+			       A.NAME_,
+			       A.PARENT_TASK_ID_,
+			       A.DESCRIPTION_,
+			       A.TASK_DEF_KEY_,
+			       A.OWNER_,
+			       A.ASSIGNEE_,
+			       A.DELEGATION_,
+			       A.PRIORITY_,
+			       A.CREATE_TIME_ AS START_TIME_,
+			       A.DUE_DATE_,
+			       A.SUSPENSION_STATE_
+			  from ACT_RU_TASK a
+			  LEFT JOIN ACT_RE_PROCDEF C ON C.ID_ = a.PROC_DEF_ID_
+			   JOIN ACT_HI_PROCINST D ON D.PROC_INST_ID_ = A.PROC_INST_ID_
+			
+			 WHERE 1 = 1
+			 
+			   #if($fromuser && !$fromuser.equals(""))
+				   	and a.ASSIGNEE_ = #[fromuser]
+			   #end
+			   
+			   #if($startUser && !$startUser.equals(""))
+				   	and d.start_user_id_ = #[startUser]
+			   #end
+			   
+			   #if($processKeys)
+      			AND c.key_ IN ( 
+      				#foreach($processKey in $processKeys)
+						#if($velocityCount == 0)
+							#[processKeys[$velocityCount]]
+						#else
+							,#[processKeys[$velocityCount]]
+						#end
+					#end
+      			)
+      			#end
+			      
+			 ORDER BY START_TIME_ DESC
 		]]>
 	</property>
 	

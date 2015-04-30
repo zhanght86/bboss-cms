@@ -15,27 +15,62 @@
 	
 		<table border="0" cellpadding="0" cellspacing="0" class="table2" width="100%" >
 			<tr >
-				<td width="250px;" align="center" >
-					转派人
+				<th>转派人：</th>
+				<td >
 					<input type="hidden" class="input1 w120" id="delegate_from_users_id" />
-					<input type="text" class="input1 w120" id="delegate_from_users_name" />
+					<input type="text" class="input1 w120" id="delegate_from_users_name" readonly/>
 					<a href="javascript:openChooseUsers('delegate_from')">选择</a>
 				</td>
+				<td >&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="250px;" align="center" >
-					转派给
+				<th>转派给：</th>
+				<td >
 					<input type="hidden" class="input1 w120" id="delegate_to_users_id" />
-					<input type="text" class="input1 w120" id="delegate_to_users_name" />
+					<input type="text" class="input1 w120" id="delegate_to_users_name" readonly/>
 					<a href="javascript:openChooseUsers('delegate_to')">选择</a>
 				</td>
+				<td >&nbsp;</td>
 			</tr>
 			<tr>
-				<td width="250px;" align="center" >
-					转派流程
-					<input type="radio" name="truntoFlow" value="所有" checked/>
-					<input type="radio" name="truntoFlow" value="部分" />
+				<th>流程提交人：</th>
+				<td >
+					<input type="hidden" class="input1 w120" id="submitUser_users_id" />
+					<input type="text" class="input1 w120" id="submitUser_users_name" readonly/>
+					<a href="javascript:openChooseUsers('submitUser')">选择</a>
 				</td>
+				<td >&nbsp;</td>
+			</tr>
+			<tr>
+				<th vAlign="top">流程key：<input type="hidden" id="processKey" class="input1 w120" value="${param.processKey}" readonly /></th>
+				<pg:notempty actual="${param.processKey}" evalbody="true">
+					<pg:yes>
+						<td>
+							<table id="selectProcdefTable" border="0" cellpadding="0" width="80%" cellspacing="0" class="stable">
+								<tr>
+									<th>流程</th>
+									<th>操作</th>
+								</tr>
+								<tr>
+									<td>${param.processKey}</td>
+									<td>删除</td>
+								</tr>
+							</table>
+						</td>
+						<td>&nbsp;</td>
+					</pg:yes>
+					<pg:no>
+						<td>
+							<table id="selectProcdefTable" border="0" cellpadding="0" width="80%" cellspacing="0" class="stable">
+								<tr>
+									<th>流程</th>
+									<th>操作</th>
+								</tr>
+							</table>
+						</td>
+						<td ><a href="javascript:void(0)" onclick="javascript:toSelectProc()"><span>流程选择</span></a></td>
+					</pg:no>
+				</pg:notempty>
 			</tr>
 		</table>	
 		
@@ -50,10 +85,26 @@
 <script language="javascript">
 var api = frameElement.api, W = api.opener;
 
+function delProcRow(delDoc){
+	$(delDoc).parent().parent().remove();
+	var removeProc = $(delDoc).parent().parent().find("input[name=pkey]").val()+",";
+	var processKeys = $("#processKey").val();
+	$("#processKey").val(processKeys.replace(removeProc,""));
+} 
+
 //选择用户
 function openChooseUsers(node_key){
 	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?&node_key="+node_key;
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
+}
+
+//选择流程
+function toSelectProc() {
+	
+	var url="<%=request.getContextPath()%>/workflow/taskManage/selectProcess.jsp";
+	
+	$.dialog({ id:'iframeNewId1', title:'选择流程',width:300,height:400, content:'url:'+url});  
+	
 }
 
 //转办
@@ -75,7 +126,7 @@ function delegateTasks(){
 		$.ajax({
 	 	 	type: "POST",
 			url : "<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.page",
-			data: {"processKey":"${param.processKey}","fromuser":fromuser,"touser":touser},
+			data: {"processKeys":$("#processKey").val(),"fromuser":fromuser,"touser":touser,"startUser":$("#submitUser_users_id").val()},
 			dataType : 'json',
 			async:false,
 			beforeSend: function(XMLHttpRequest){

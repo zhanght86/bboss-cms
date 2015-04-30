@@ -218,11 +218,13 @@ public interface ActivitiTaskService {
 	 *            转派人
 	 * @param touser
 	 *            被转派人
+	 * @param startUser
+	 *            流程发起人
 	 * @throws Exception
 	 *             2014年10月24日
 	 */
-	public void delegateTasks(String processKey, String fromuser, String touser)
-			throws Exception;
+	public void delegateTasks(String processKey, String fromuser,
+			String touser, String startUser) throws Exception;
 
 	/**
 	 * 根据条件获取转派日志列表数据,分页展示

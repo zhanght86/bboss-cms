@@ -26,8 +26,8 @@ $(document).ready(function() {
 
 //转派任务
 function delegateTasks () {
-	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.jsp?processKey=${processKey}";
-	$.dialog({ title:'转派任务',width:400,height:400, content:'url:'+url});
+	var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasks.jsp?processKey=${param.processKey}";
+	$.dialog({ title:'转派任务',width:500,height:400, content:'url:'+url});
 }
 
 //加载实时任务列表数据  

@@ -38,6 +38,11 @@ $(document).ready(function() {
 		upBatchButton();	 		  
     });
 	
+	$('#turntoButton').click(function() {  
+ 	   var url="<%=request.getContextPath()%>/workflow/taskManage/delegateTasksLog.jsp?processKey=${processKey}";
+ 		$.dialog({ title:'转派任务',width:1100,height:600, content:'url:'+url,maxState:true});  			 		  
+    }); 
+	
 	$("#businessType").combotree({
 	   url:"<%=request.getContextPath()%>/workflow/businesstype/showComboxBusinessTree.page"
 	});
@@ -401,12 +406,16 @@ function doreset(){
 			
 			<div class="title_box">
 				<div class="rightbtn">
+					<pg:true actual="${isAdmin}">
+						<a href="javascript:void(0)" class="bt_small" id="turntoButton"><span>转派</span></a>
+					</pg:true>
+					
 					<pg:notempty actual="${processKey}" >
-						<a href="javascript:void" class="bt_small" id="stBatchButton"><span>开启</span></a>
-						<a href="javascript:void" class="bt_small" id="upBatchButton"><span>升级</span></a>
+						<a href="javascript:void(0)" class="bt_small" id="stBatchButton"><span>开启</span></a>
+						<a href="javascript:void(0)" class="bt_small" id="upBatchButton"><span>升级</span></a>
 					</pg:notempty>
-					<a href="javascript:void" class="bt_small" id="logicDelBatchButton"><span>废弃流程</span></a>
-					<a href="javascript:void" class="bt_small" id="physicalDelBatchButton"><span>物理删除流程</span></a>
+					<a href="javascript:void(0)" class="bt_small" id="logicDelBatchButton"><span>废弃流程</span></a>
+					<a href="javascript:void(0)" class="bt_small" id="physicalDelBatchButton"><span>物理删除流程</span></a>
 				</div>
 					
 				<strong>实例列表</strong>

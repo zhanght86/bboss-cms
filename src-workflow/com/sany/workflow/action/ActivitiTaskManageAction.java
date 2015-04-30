@@ -869,22 +869,25 @@ public class ActivitiTaskManageAction {
 	/**
 	 * 转派任务(管理员权限，将A的任务转办给B)
 	 * 
-	 * @param processKey
+	 * @param processKeys
 	 *            流程key
 	 * @param fromuser
 	 *            转派人
 	 * @param touser
 	 *            被转派人
+	 * @param startUser
+	 *            流程发起人
 	 * @param model
 	 * @return 2014年10月22日
 	 */
 	public @ResponseBody
-	String delegateTasks(String processKey, String fromuser, String touser,
-			ModelMap model) {
+	String delegateTasks(String processKeys, String fromuser, String touser,
+			String startUser, ModelMap model) {
 
 		try {
 
-			activitiTaskService.delegateTasks(processKey, fromuser, touser);
+			activitiTaskService.delegateTasks(processKeys, fromuser, touser,
+					startUser);
 
 			return "success";
 

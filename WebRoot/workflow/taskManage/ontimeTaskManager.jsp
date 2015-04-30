@@ -385,9 +385,9 @@ function viewCopyTask(processInstId,id){
 				
 				<div class="title_box">
 					<div class="rightbtn">
-						<pg:true actual="${isAdmin}">
+						<%-- <pg:true actual="${isAdmin}">
 							<a href="javascript:void(0)" class="bt_small" onclick="delegateTasks();"><span>转派任务</span></a>
-						</pg:true>
+						</pg:true> --%>
 						<a href="javascript:void(0)" class="bt_small" onclick="getEntrustInfo();"><span>流程授权查看</span></a>
 					</div>
 						
