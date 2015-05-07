@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -91,7 +92,6 @@ import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.util.WorkFlowConstant;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ActivitiServiceImpl implements ActivitiService,
 		org.frameworkset.spi.DisposableBean {
