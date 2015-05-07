@@ -14,6 +14,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.impl.persistence.StrongUuidGenerator;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
@@ -59,6 +60,7 @@ public class WorkflowController implements WorkflowService {
 	private ActivitiTaskService activitiTaskService;
 	private ActivitiConfigService activitiConfigService;
 	private ActivitiRelationService activitiRelationService;
+	private StrongUuidGenerator strongUuidGenerator = new StrongUuidGenerator();
 
 	/**
 	 * 部署流程定义
@@ -1512,7 +1514,8 @@ public class WorkflowController implements WorkflowService {
 	@Override
 	public @ResponseBody ResultResponse startSimpleInstanceWithBussinessKey(String processKey,
 			String currentUser) {
-		String businessKey = System.currentTimeMillis() + "_processKey";
+		
+		String businessKey =  strongUuidGenerator.getNextId();
 		return startInstanceWithBussinessKey(processKey, businessKey,
 				currentUser);
 	}
