@@ -716,21 +716,23 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	@Override
 	public List<ActivitiNodeCandidate> queryActivitiNodeCandidate(
 			String process_key) {
-		return queryActivitiNodeCandidate(process_key,null,null);
+		return queryActivitiNodeInfo(  process_key);
 	}
 	
 	@Override
 	public List<ActivitiNodeCandidate> queryActivitiNodeInfo(String process_key){
-		try{
-			Map<String,String> params = new HashMap<String,String>();
-			params.put("process_key", process_key);
-			params.put("business_type", "0");
-			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryActivitiNodeCandidate", params);
-			return list;
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return null;
+		return queryActivitiNodeCandidate(
+				process_key, null, "0") ;
+//		try{
+//			Map<String,String> params = new HashMap<String,String>();
+//			params.put("process_key", process_key);
+//			params.put("business_type", "0");
+//			List<ActivitiNodeCandidate> list = executor.queryListBean(ActivitiNodeCandidate.class, "queryActivitiNodeCandidate", params);
+//			return list;
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+		
 	}
 	
 	@Override
@@ -1031,7 +1033,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 			throw new ActivitiConfigException(e);
 		}
 	}
-
+	@Override
+	public List<Nodevariable> queryNodeVariable(String processKey) 
+			{
+		return queryNodeVariable("0",
+				null, processKey);
+			}
 	@Override
 	public List<Nodevariable> queryNodeVariable(String business_type,
 			String business_id, String processKey) {
@@ -1143,6 +1150,12 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		}
 
 		return list;
+	}
+	
+	@Override
+	public List<NodeControlParam> getNodeContralParamList(String processKey ) throws Exception {
+		return getNodeContralParamList(processKey,
+				null, "0");
 	}
 
 	@Override

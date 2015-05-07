@@ -1535,6 +1535,17 @@ public interface ActivitiService {
 	public void addNodeWorktime(String processKey, String processIntsId,
 			List<NodeControlParam> worktimeList) throws Exception;
 	
+	/** 增加节点的处理工时和提醒次数 gw_tanx
+	 * @param processKey
+	 * @param processIntsId
+	 * @param nodeWorktimeList
+	 * @param insert true 开启 insert false 执行任务 update
+	 * @throws Exception
+	 * 2014年6月27日
+	 */
+	public void addNodeWorktime(String processKey, String processIntsId,
+			List<NodeControlParam> worktimeList,boolean insert) throws Exception;
+	
 	/**根据条件获取节点工时 gw_tanx
 	 * @param processKey
 	 * @param processIntsId
@@ -1607,6 +1618,15 @@ public interface ActivitiService {
 			List<ActivitiNodeCandidate> activitiNodeCandidateList,
 			List<Nodevariable> nodevariableList,
 			List<NodeControlParam> nodeControlParamList);
+	
+	
+	/** 代办任务处理 gw_tanx 
+	 * @param taskList
+	 * @throws Exception
+	 * 2014年7月15日
+	 */
+	public String startPorcessInstance(String processKey, String businessKey,
+			String currentUser);
 	
 	/**
 	 * 日志记录任务操作
@@ -1696,4 +1716,14 @@ public interface ActivitiService {
 	 */
 	public Map<String, Object> queryCopynodeByProcessKey(String processKey)
 			throws Exception;
+	
+	/**
+	 * 获取人工任务节点
+	 * 
+	 * @param processKey
+	 * @return
+	 * @throws Exception
+	 *             2015年2月13日
+	 */
+	public List<String> getUserTasksByKey(String processKey) throws Exception;
 }

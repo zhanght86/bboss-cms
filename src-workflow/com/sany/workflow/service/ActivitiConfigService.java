@@ -344,6 +344,14 @@ public interface ActivitiConfigService {
 	 */
 	public List<Nodevariable> queryNodeVariable (String business_type,
 			String business_id, String processKey);
+	/** 获取流程节点参数 gw_tanx
+	 * @param business_type
+	 * @param business_id
+	 * @param processKey
+	 * @return
+	 * 2014年6月19日
+	 */
+	public List<Nodevariable> queryNodeVariable ( String processKey);
 	
 	/** 获取流程消息模板信息  gw_tanx
 	 * @param processKey
@@ -364,5 +372,7 @@ public interface ActivitiConfigService {
 	 * 2014年9月10日
 	 */
 	public void saveNodeOrderNum(List<NodeControlParam> controlParamList) throws Exception;
+	
+	public List<NodeControlParam> getNodeContralParamList(String processKey ) throws Exception;
 	
 }

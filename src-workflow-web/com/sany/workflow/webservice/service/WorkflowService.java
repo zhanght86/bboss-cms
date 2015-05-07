@@ -95,6 +95,8 @@ public interface WorkflowService {
 			@WebParam(name = "nodeInfoMap", partName = "partNodeInfoMap") List<HashMap<String, Object>> nodeInfoList,
 			@WebParam(name = "variableMap", partName = "partVariableMap") List<HashMap<String, Object>> variableList);
 
+	
+
 	/**
 	 * 升级流程
 	 * 
@@ -327,5 +329,27 @@ public interface WorkflowService {
 	NoHandTaskResponse getNoHandleTask(
 			@WebParam(name = "pernr", partName = "partPernr") String pernr,
 			@WebParam(name = "sysId", partName = "partSysId") String sysId);
-
+ 
+	
+	/**
+	 * 开启流程实例
+	 * 
+	 * @param processKey
+	 *            流程key
+	 * @param businessKey
+	 *            业务主题
+	 * @param nodeInfoList
+	 *            节点配置信息
+	 * @param variableList
+	 *            参数变量信息
+	 * @return 2014年8月1日
+	 */
+	public @WebResult(name = "startInstance", partName = "partStartInstance")
+	ResultResponse startInstanceWithBussinessKey(
+			@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
+			@WebParam(name = "businessKey", partName = "partBusinessKey") String businessKey,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser
+			);
+	public @WebResult(name = "startInstance", partName = "partStartInstance") ResultResponse startSimpleInstanceWithBussinessKey(@WebParam(name = "processKey", partName = "partProcessKey") String processKey,
+			@WebParam(name = "currentUser", partName = "partCurrentUser") String currentUser) ;
 }

@@ -69,8 +69,8 @@ public class WorkflowController implements WorkflowService {
 	 * @return 2014年8月6日
 	 */
 	@WebMethod(exclude = true)
-	public @ResponseBody(datatype = "json")
-	ResultResponse deployZipProcess(DeploymentZipFile deployInfo) {
+	public @ResponseBody(datatype = "json") ResultResponse deployZipProcess(
+			DeploymentZipFile deployInfo) {
 		return null;
 	}
 
@@ -81,8 +81,8 @@ public class WorkflowController implements WorkflowService {
 	 *            部署信息
 	 * @return 2014年8月6日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse deployProcess(DeploymentInfo deployInfo) {
+	public @ResponseBody(datatype = "json") ResultResponse deployProcess(
+			DeploymentInfo deployInfo) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(deployInfo)) {
@@ -191,8 +191,8 @@ public class WorkflowController implements WorkflowService {
 	 *            流程定义id
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse suspendProcessDef(String processDefId) {
+	public @ResponseBody(datatype = "json") ResultResponse suspendProcessDef(
+			String processDefId) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(processDefId)) {
@@ -225,8 +225,8 @@ public class WorkflowController implements WorkflowService {
 	 *            流程定义id
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse activateProcessDef(String processDefId) {
+	public @ResponseBody(datatype = "json") ResultResponse activateProcessDef(
+			String processDefId) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(processDefId)) {
@@ -260,8 +260,8 @@ public class WorkflowController implements WorkflowService {
 	 *            流程发布id
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse delDeployment(String processKeys) {
+	public @ResponseBody(datatype = "json") ResultResponse delDeployment(
+			String processKeys) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(processKeys)) {
@@ -297,8 +297,8 @@ public class WorkflowController implements WorkflowService {
 	 *            流程定义版本
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	DataResponse getProccessXML(String processKey, String version) {
+	public @ResponseBody(datatype = "json") DataResponse getProccessXML(
+			String processKey, String version) {
 		DataResponse rr = new DataResponse();
 
 		if (StringUtil.isEmpty(processKey)) {
@@ -339,8 +339,8 @@ public class WorkflowController implements WorkflowService {
 	 *            流程定义ID
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	void getProccessPic(String processDefId, HttpServletResponse response) {
+	public @ResponseBody(datatype = "json") void getProccessPic(
+			String processDefId, HttpServletResponse response) {
 
 		try {
 			if (StringUtil.isNotEmpty(processDefId)) {
@@ -366,9 +366,9 @@ public class WorkflowController implements WorkflowService {
 	 *            参数变量信息
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse startInstance(String processKey, String businessKey,
-			String currentUser, List<HashMap<String, Object>> nodeInfoList,
+	public @ResponseBody(datatype = "json") ResultResponse startInstance(
+			String processKey, String businessKey, String currentUser,
+			List<HashMap<String, Object>> nodeInfoList,
 			List<HashMap<String, Object>> variableList) {
 		ResultResponse rr = new ResultResponse();
 
@@ -478,8 +478,8 @@ public class WorkflowController implements WorkflowService {
 	 * @throws Exception
 	 *             2014年7月29日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse upgradeInstancesByProcessKey(String processKey) {
+	public @ResponseBody(datatype = "json") ResultResponse upgradeInstancesByProcessKey(
+			String processKey) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(processKey)) {
@@ -514,9 +514,9 @@ public class WorkflowController implements WorkflowService {
 	 *            删除原因
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse delInstancesForLogic(String instancesIds,
-			String deleteReason, String processKey, String currentUser) {
+	public @ResponseBody(datatype = "json") ResultResponse delInstancesForLogic(
+			String instancesIds, String deleteReason, String processKey,
+			String currentUser) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(currentUser)) {
@@ -569,8 +569,8 @@ public class WorkflowController implements WorkflowService {
 	 *            实例ids
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse delInstancesForPhysics(String instancesIds) {
+	public @ResponseBody(datatype = "json") ResultResponse delInstancesForPhysics(
+			String instancesIds) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(instancesIds)) {
@@ -601,8 +601,8 @@ public class WorkflowController implements WorkflowService {
 	 * @param instancesId
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse suspendInstance(String instancesId) {
+	public @ResponseBody(datatype = "json") ResultResponse suspendInstance(
+			String instancesId) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(instancesId)) {
@@ -634,8 +634,8 @@ public class WorkflowController implements WorkflowService {
 	 *            实例id
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse activateInstance(String instancesId) {
+	public @ResponseBody(datatype = "json") ResultResponse activateInstance(
+			String instancesId) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(instancesId)) {
@@ -667,8 +667,8 @@ public class WorkflowController implements WorkflowService {
 	 *            实例id
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	DealInfoResponse getInstanceDealInfo(String instancesId) {
+	public @ResponseBody(datatype = "json") DealInfoResponse getInstanceDealInfo(
+			String instancesId) {
 
 		DealInfoResponse wr = new DealInfoResponse();
 
@@ -771,8 +771,8 @@ public class WorkflowController implements WorkflowService {
 	 *            签收人id
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse signTask(String taskId, String userId) {
+	public @ResponseBody(datatype = "json") ResultResponse signTask(
+			String taskId, String userId) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(taskId)) {
@@ -812,9 +812,9 @@ public class WorkflowController implements WorkflowService {
 	 *            废弃原因
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse discardTask(String instancesId, String deleteReason,
-			String taskId, String processKey, String currentUser) {
+	public @ResponseBody(datatype = "json") ResultResponse discardTask(
+			String instancesId, String deleteReason, String taskId,
+			String processKey, String currentUser) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(currentUser)) {
@@ -875,9 +875,9 @@ public class WorkflowController implements WorkflowService {
 	 *            撤销原因
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse cancelTask(String instancesId, String processKey,
-			String cancelReason, String taskId, String currentUser) {
+	public @ResponseBody(datatype = "json") ResultResponse cancelTask(
+			String instancesId, String processKey, String cancelReason,
+			String taskId, String currentUser) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(currentUser)) {
@@ -960,9 +960,9 @@ public class WorkflowController implements WorkflowService {
 	 *            流程key
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse delegateTask(String taskId, String fromUserId,
-			String toUserId, String instancesId, String processKey) {
+	public @ResponseBody(datatype = "json") ResultResponse delegateTask(
+			String taskId, String fromUserId, String toUserId,
+			String instancesId, String processKey) {
 		ResultResponse rr = new ResultResponse();
 
 		if (StringUtil.isEmpty(taskId)) {
@@ -1047,9 +1047,9 @@ public class WorkflowController implements WorkflowService {
 	 *            参数变量信息
 	 * @return 2014年7月30日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse rejectToPreTask(String taskId, String rejectedReason,
-			int rejectedType, String processKey, String currentUser,
+	public @ResponseBody(datatype = "json") ResultResponse rejectToPreTask(
+			String taskId, String rejectedReason, int rejectedType,
+			String processKey, String currentUser,
 			List<HashMap<String, Object>> nodeInfoList,
 			List<HashMap<String, Object>> variableList) {
 		ResultResponse rr = new ResultResponse();
@@ -1163,8 +1163,8 @@ public class WorkflowController implements WorkflowService {
 	 *            参数变量信息
 	 * @return 2014年7月31日
 	 */
-	public @ResponseBody(datatype = "json")
-	ResultResponse completeTask(HashMap<String, Object> taskMap,
+	public @ResponseBody(datatype = "json") ResultResponse completeTask(
+			HashMap<String, Object> taskMap,
 			List<HashMap<String, Object>> nodeInfoList,
 			List<HashMap<String, Object>> variableList) {
 
@@ -1364,8 +1364,8 @@ public class WorkflowController implements WorkflowService {
 	 *            系统编号
 	 * @return 2014年7月31日
 	 */
-	public @ResponseBody(datatype = "json")
-	DataResponse countTaskNum(String pernr, String sysId) {
+	public @ResponseBody(datatype = "json") DataResponse countTaskNum(
+			String pernr, String sysId) {
 		DataResponse rr = new DataResponse();
 
 		if (StringUtil.isEmpty(pernr)) {
@@ -1401,8 +1401,8 @@ public class WorkflowController implements WorkflowService {
 	 *            系统编号
 	 * @return 2014年8月1日
 	 */
-	public @ResponseBody(datatype = "json")
-	NoHandTaskResponse getNoHandleTask(String pernr, String sysId) {
+	public @ResponseBody(datatype = "json") NoHandTaskResponse getNoHandleTask(
+			String pernr, String sysId) {
 
 		NoHandTaskResponse nhtr = new NoHandTaskResponse();
 
@@ -1471,8 +1471,8 @@ public class WorkflowController implements WorkflowService {
 	 * @param response
 	 *            2014年8月6日
 	 */
-	public @ResponseBody
-	void getProccessActivePic(String instancesId, HttpServletResponse response) {
+	public  void getProccessActivePic(String instancesId,
+			HttpServletResponse response) {
 
 		try {
 			if (StringUtil.isNotEmpty(instancesId)) {
@@ -1483,6 +1483,38 @@ public class WorkflowController implements WorkflowService {
 			logger.error(
 					"获取流程实例" + instancesId + ",任务追踪图片失败：" + e.getMessage(), e);
 		}
+	}
+
+	@Override
+	public @ResponseBody ResultResponse startInstanceWithBussinessKey(String processKey, String businessKey,
+			String currentUser) {
+
+		
+		ResultResponse response = new ResultResponse();
+		try {
+			String pid = activitiService.startPorcessInstance(processKey, businessKey,
+					currentUser);
+			
+
+			response.setResultCode("success pid:"+pid);
+			response.setResultMess("启动流程成功：processKey="+processKey+",businessKey="+businessKey+",currentUser="+currentUser);
+
+		} catch (Exception e) {
+			logger.error("启动流程失败processKey="+processKey+",businessKey="+businessKey+",currentUser="+currentUser, e);
+
+			response.setResultCode("error");
+			response.setResultMess("启动流程成功：processKey="+processKey+",businessKey="+businessKey+",currentUser="+currentUser);
+		}
+		return response;
+	}
+	
+	
+	@Override
+	public @ResponseBody ResultResponse startSimpleInstanceWithBussinessKey(String processKey,
+			String currentUser) {
+		String businessKey = System.currentTimeMillis() + "_processKey";
+		return startInstanceWithBussinessKey(processKey, businessKey,
+				currentUser);
 	}
 
 }

@@ -4435,6 +4435,42 @@ public class ActivitiServiceImpl implements ActivitiService,
 	@Override
 	public void addNodeWorktime(String processKey, String processIntsId,
 			List<NodeControlParam> worktimeList) throws Exception {
+//		TransactionManager tm = new TransactionManager();
+//
+//		try {
+//			tm.begin();
+//
+//			if (worktimeList != null && worktimeList.size() > 0) {
+//				for (int i = 0; i < worktimeList.size(); i++) {
+//					NodeControlParam nodeControlParam = worktimeList.get(i);
+//					nodeControlParam.setPROCESS_KEY(processKey);
+//					nodeControlParam.setPROCESS_ID(processIntsId);
+//
+//					if (StringUtil.isNotEmpty(nodeControlParam
+//							.getDURATION_NODE())) {
+//						nodeControlParam.setDURATION_NODE(nodeControlParam
+//								.getDURATION_NODE() * 60 * 60 * 1000);
+//					} else {
+//						nodeControlParam.setDURATION_NODE(0);
+//					}
+//				}
+//
+//				executor.deleteBeans("deleteNodeWorktime_wf", worktimeList);
+//
+//				executor.insertBeans("insertNodeWorktime_wf", worktimeList);
+//			}
+//
+//			tm.commit();
+//
+//		} finally {
+//			tm.release();
+//		}
+		addNodeWorktime(processKey, processIntsId, worktimeList, false);
+	}
+	
+	@Override
+	public void addNodeWorktime(String processKey, String processIntsId,
+			List<NodeControlParam> worktimeList, boolean insert ) throws Exception {
 		TransactionManager tm = new TransactionManager();
 
 		try {
@@ -4454,10 +4490,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 						nodeControlParam.setDURATION_NODE(0);
 					}
 				}
-
-				executor.deleteBeans("deleteNodeWorktime_wf", worktimeList);
-
-				executor.insertBeans("insertNodeWorktime_wf", worktimeList);
+				
+				if (insert ){
+					executor.insertBeans("insertNodeWorktime_wf", worktimeList);
+				}else {
+					executor.updateBeans("updateNodeWorktime_wf", worktimeList);
+				}
+				
 			}
 
 			tm.commit();
@@ -4682,10 +4721,131 @@ public class ActivitiServiceImpl implements ActivitiService,
 					processKey, map, currentUser);
 
 			addNodeWorktime(processKey, processInstance.getId(),
-					nodeControlParamList);
+					nodeControlParamList,true);
 
 			tm.commit();
 
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			PlatformKPIServiceImpl.setWorktimelist(null);
+			tm.release();
+		}
+
+	}
+	
+	public String startPorcessInstance(String processKey, String businessKey,
+			String currentUser
+		) {
+
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+
+			// 节点代办配置信息
+			List<ActivitiNodeCandidate> activitiNodeCandidateList = activitiConfigService.queryActivitiNodeCandidate(processKey);
+			// 节点参数配置信息
+			List<Nodevariable> nodevariableList = activitiConfigService.queryNodeVariable(processKey);
+			// 节点控制参数配置信息
+			List<NodeControlParam> nodeControlParamList = activitiConfigService.getNodeContralParamList(processKey);
+			
+//			// 节点代办配置信息
+//						List<ActivitiNodeCandidate> nodeConfigList = activitiConfigService
+//								.queryActivitiNodesCandidates(business_type, business_id,
+//										processKey);
+//
+//						// 节点参数配置信息
+//						List<Nodevariable> nodeVariableList = activitiConfigService
+//								.queryNodeVariable(business_type, business_id, processKey);
+//
+//						// 节点控制参数配置信息
+//						List<NodeControlParam> nodeControlParamList = activitiConfigService
+//								.getNodeContralParamList(processKey, business_id,
+//										business_type);
+			// 流程引擎的变量参数集合
+			Map<String, Object> map = new HashMap<String, Object>();
+
+			if (activitiNodeCandidateList != null
+					&& activitiNodeCandidateList.size() > 0) {
+				for (int i = 0; i < activitiNodeCandidateList.size(); i++) {
+					ActivitiNodeCandidate nodeCandidate = activitiNodeCandidateList
+							.get(i);
+					// 普通节点，处理人存变量表
+					if (nodeCandidate.getIs_copy() == 0) {
+
+						// 用户
+						if (!StringUtil.isEmpty(nodeCandidate
+								.getCandidate_users_id())) {
+							map.put(nodeCandidate.getNode_key() + "_users",
+									nodeCandidate.getCandidate_users_id());
+						}
+
+						// 组
+						if (!StringUtil.isEmpty(nodeCandidate
+								.getCandidate_groups_id())) {
+							map.put(nodeCandidate.getNode_key() + "_groups",
+									nodeCandidate.getCandidate_groups_id());
+						}
+					} else {
+						// 不是普通节点，存worktime表
+						NodeControlParam controlParam = nodeControlParamList
+								.get(i);
+						controlParam.setIS_COPY(nodeCandidate.getIs_copy());
+						controlParam.setCOPYUSERS(nodeCandidate
+								.getCandidate_users_id());
+						controlParam.setCOPYORGS(nodeCandidate
+								.getCandidate_orgs_id());
+
+						if (StringUtil.isNotEmpty(nodeCandidate
+								.getCandidate_users_id())
+								&& StringUtil.isNotEmpty(nodeCandidate
+										.getCandidate_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getCandidate_users_name()
+									+ ","
+									+ nodeCandidate.getCandidate_orgs_name());
+
+						} else if (StringUtil.isEmpty(nodeCandidate
+								.getCandidate_users_id())
+								&& StringUtil.isNotEmpty(nodeCandidate
+										.getCandidate_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getCandidate_orgs_name());
+
+						} else if (StringUtil.isNotEmpty(nodeCandidate
+								.getCandidate_users_id())
+								&& StringUtil.isEmpty(nodeCandidate
+										.getCandidate_orgs_id())) {
+							controlParam.setCOPYERSCNNAME(nodeCandidate
+									.getCandidate_users_name());
+						} else {
+							controlParam.setCOPYERSCNNAME("");
+						}
+					}
+
+				}
+			}
+
+			if (nodevariableList != null & nodevariableList.size() > 0) {
+				for (int i = 0; i < nodevariableList.size(); i++) {
+					// 变量
+					if (!StringUtil.isEmpty(nodevariableList.get(i)
+							.getParam_name())) {
+						map.put(nodevariableList.get(i).getParam_name(),
+								nodevariableList.get(i).getParam_value());
+					}
+				}
+			}
+
+			PlatformKPIServiceImpl.setWorktimelist(nodeControlParamList);
+			ProcessInstance processInstance = startProcDef(businessKey,
+					processKey, map, currentUser);
+
+			addNodeWorktime(processKey, processInstance.getId(),
+					nodeControlParamList,true);
+			
+			tm.commit();
+			return processInstance.getId();
 		} catch (Exception e) {
 			throw new ProcessException(e);
 		} finally {
@@ -4869,4 +5029,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	}
 
+	@Override
+	public List<String> getUserTasksByKey(String processKey) throws Exception {
+		return executor.queryList(String.class, "getUserTasksByKey", processKey);
+	}
+	
 }

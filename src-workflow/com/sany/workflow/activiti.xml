@@ -2565,6 +2565,36 @@
 		]]>
 	</property>
 	
+	<!-- 删除节点控制信息  gw_tanx -->
+	<property name="updateNodeWorktime_wf">
+		<![CDATA[
+			update td_wf_node_worktime
+			   set duration_node         = #[DURATION_NODE],
+			       is_valid              = #[IS_VALID],
+			       is_edit               = #[IS_EDIT],
+			       is_auto               = #[IS_AUTO],
+			       is_recall             = #[IS_RECALL],
+			       is_editafter          = #[IS_EDITAFTER],
+			       is_discard            = #[IS_DISCARD],
+			       is_copy               = #[IS_COPY],
+			       is_cancel             = #[IS_CANCEL],
+			       is_autoafter          = #[IS_AUTOAFTER],
+			       bussinesscontrolclass = #[BUSSINESSCONTROLCLASS],
+			       task_url              = #[TASK_URL],
+			       node_describe         = #[NODE_DESCRIBE],
+			       node_name             = #[NODE_NAME],
+			       is_multi              = #[IS_MULTI],
+			       is_sequential         = #[IS_SEQUENTIAL],
+			       is_discarded          = #[IS_DISCARDED],
+			       copyusers             = #[COPYUSERS],
+			       copyorgs              = #[COPYORGS],
+			       copyerscnname         = #[COPYERSCNNAME]
+			 where PROCESS_KEY = #[PROCESS_KEY]
+				   AND PROCESS_ID = #[PROCESS_ID]
+				   AND NODE_KEY = #[NODE_KEY]
+		]]>
+	</property>
+	
 	<!-- 添加节点处理工时与提醒次数  gw_tanx -->
 	<property name="insertNodeWorktime_wf">
 		<![CDATA[
@@ -3547,6 +3577,17 @@
 			       COPYERSCNNAME = #[copyersCnname]
 			 WHERE PROCESS_ID = #[processId]
 			   AND NODE_KEY = #[nodeKey]
+		]]>
+	</property>
+	
+	<!-- 获取人工任务数-->
+	<property name="getUserTasksByKey">
+		<![CDATA[
+			SELECT node_key
+			  FROM TD_WF_ACTIVITI_NODE_INFO A
+			 WHERE A.NODE_TYPE = 'userTask'
+			   AND A.PROCESS_KEY = ?
+			   ORDER BY ORDER_NUM
 		]]>
 	</property>
 	

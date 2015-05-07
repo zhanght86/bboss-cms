@@ -583,6 +583,15 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
+			
+			// 比较节点数是否一致
+			List<ActNode> nodeList =  proIns.getActs();
+			List<String> nodekeyList =  activitiService.getUserTasksByKey(processKey);
+			
+			if (nodeList.size()!=nodekeyList.size()){
+				throw new ProcessException("开启流程出错:丢失节点，请联系管理员,businessKey="+businessKey);
+			}
+			
 
 			// 当前流程发起人，转域账号
 			String currentUser = changeToDomainAccount(proIns.getUserAccount());
@@ -608,7 +617,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 记录节点控制变量与流程实例关联
 			activitiService.addNodeWorktime(processKey,
-					processInstance.getId(), controlParamList);
+					processInstance.getId(), controlParamList,true);
 
 			// 创建统一业务订单
 			proIns.setProInsId(processInstance.getId());
@@ -629,7 +638,11 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			tm.commit();
 
-		} catch (Exception e) {
+		} 
+		catch (ProcessException e) {
+				throw e;
+		} 
+		catch (Exception e) {
 			throw new Exception("开启流程出错:" + e);
 		} finally {
 			PlatformKPIServiceImpl.setWorktimelist(null);
