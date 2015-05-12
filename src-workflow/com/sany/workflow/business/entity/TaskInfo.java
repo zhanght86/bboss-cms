@@ -1,6 +1,7 @@
 package com.sany.workflow.business.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.frameworkset.util.annotations.RequestParam;
@@ -26,7 +27,7 @@ public class TaskInfo implements Serializable {
 	private String senderName;// 流程发起人姓名
 
 	@RequestParam(dateformat = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;// 创建时间
+	private Timestamp createTime;// 创建时间
 
 	private String taskId;// 任务id
 
@@ -156,11 +157,11 @@ public class TaskInfo implements Serializable {
 		this.sender = sender;
 	}
 
-	public Date getCreateTime() {
+	public Timestamp getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
 

@@ -61,9 +61,9 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 				businessBean.setProcessKey(processKey);
 				businessBean.setOrderId(businessKey);
 				executor.insertBean("insertCommonBusinessInfo", businessBean);
-				if (completeFirstTask) {
-					this.modifyCommonOrder(proIns, processKey, paramMap);
-				}
+//				if (completeFirstTask) {
+//					this.modifyCommonOrder(proIns, processKey, paramMap);
+//				}
 			}
 		}
 
@@ -121,7 +121,7 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 			tm.commit();
 
 		} catch (Exception e) {
-			throw new Exception("删除统一业务订单：" + e);
+			throw new Exception("删除统一业务订单：", e);
 		} finally {
 			tm.release();
 		}
@@ -196,7 +196,7 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 			tm.commit();
 
 		} catch (Exception e) {
-			throw new Exception("统一待办任务维护出错：" + e);
+			throw new Exception("统一待办任务维护出错：",e);
 		} finally {
 			tm.release();
 		}

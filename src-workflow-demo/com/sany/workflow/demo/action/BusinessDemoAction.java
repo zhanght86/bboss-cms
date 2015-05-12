@@ -145,7 +145,7 @@ public class BusinessDemoAction {
 					.startProc(proIns, businessKey, processKey, paramMap);
 			return "success";
 		} catch (Exception e) {
-			return "fail:" + e.getMessage();
+			return "fail:" + StringUtil.formatBRException(e);
 		}
 	}
 

@@ -643,7 +643,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				throw e;
 		} 
 		catch (Exception e) {
-			throw new Exception("开启流程出错:" + e);
+			throw new Exception("开启流程出错:", e);
 		} finally {
 			PlatformKPIServiceImpl.setWorktimelist(null);
 			tm.release();

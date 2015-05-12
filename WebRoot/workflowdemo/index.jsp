@@ -35,8 +35,13 @@ function submitForm0(){
 		 			W.modifyQueryData();
 				});
 			}
+			else
+			{
+				$.dialog.alert(result);
+			}
 			
 		 }
+		 
 	});	
 }
 
