@@ -587,8 +587,7 @@ public class SingleSiteTree extends COMTree implements java.io.Serializable {
 						String channelId = String.valueOf(channel
 								.getChannelId());
 						Map map = new HashMap();
-						map.put("channelId", String.valueOf(channel
-								.getChannelId()));
+						map.put("channelId", channelId);
 						map.put("channelName", channel.getDisplayName());
 						map.put("siteid", siteId);
 						map.put("sitename", siteName);

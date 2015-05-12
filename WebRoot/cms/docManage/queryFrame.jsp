@@ -17,12 +17,14 @@
 
 	AccessControl accesscontroler = AccessControl.getInstance();
 	accesscontroler.checkAccess(request, response);
-	String channelname = request.getParameter("channelName");
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
+	
 	SiteManager siteManager = new SiteManagerImpl();
 	String sitename = siteManager.getSiteInfo(siteid).getName();
 	ChannelCacheManager cm = (ChannelCacheManager)SiteCacheManager.getInstance().getChannelCacheManager(siteid);
+	Channel channel = cm.getChannel(channelId);
+	String channelname = channel.getDisplayName();
 %>
 <html>
 	<head>

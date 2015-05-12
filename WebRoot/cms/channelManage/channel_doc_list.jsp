@@ -16,11 +16,13 @@
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
 
-	String channelName = request.getParameter("channelName");
+	
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
 	ChannelManager channelManager = new ChannelManagerImpl();
+	
 	Channel channel = channelManager.getChannelInfo(channelId);
+	String channelName = channel.getDisplayName();
 	//String listdocumenttemplate =channel.getListdocumenttemplate_id();
 	//if(listdocumenttemplate == null || listdocumenttemplate.equals(""))
 	//	listdocumenttemplate = "cms/docManage/doc_list.jsp";

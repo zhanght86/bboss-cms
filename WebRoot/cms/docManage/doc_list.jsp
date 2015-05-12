@@ -18,9 +18,11 @@
 
 <%
 	AccessControl accesscontroler = AccessControl.getAccessControl();
-	String channelName = request.getParameter("channelName");
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
+	ChannelCacheManager cachem = (ChannelCacheManager)SiteCacheManager.getInstance().getChannelCacheManager(siteid);
+	Channel channel = cachem.getChannel(channelId);
+	String channelName = channel.getDisplayName();
 	String flag = request.getParameter("flag");
 	SiteManager siteManager = new SiteManagerImpl();
 	String sitename = siteManager.getSiteInfo(siteid).getName();
