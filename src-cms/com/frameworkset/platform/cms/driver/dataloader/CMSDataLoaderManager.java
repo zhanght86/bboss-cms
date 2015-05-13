@@ -9,7 +9,6 @@ import javax.xml.parsers.SAXParserFactory;
 import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
 
 import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.common.tag.pager.DataInfo;
 import com.frameworkset.util.DaemonThread;
 import com.frameworkset.util.ResourceInitial;
 
@@ -29,7 +28,7 @@ import com.frameworkset.util.ResourceInitial;
 public class CMSDataLoaderManager implements ResourceInitial,java.io.Serializable{
 	public static CMSDataLoaderManager instance;
 	private static final String configFile = "CMSDataloader.xml";
-	static final CMSBaseListData default_ = new com.frameworkset.platform.cms.driver.dataloader.CMSDefaultListData();
+//	static final CMSBaseListData default_ = new com.frameworkset.platform.cms.driver.dataloader.CMSDefaultListData();
 	
 	
 	public Map loaders = new  ConcurrentHashMap();
@@ -65,7 +64,7 @@ public class CMSDataLoaderManager implements ResourceInitial,java.io.Serializabl
 	}
 	public CMSBaseListData getDefaultDataLoader()
 	{
-		return default_;
+		return new com.frameworkset.platform.cms.driver.dataloader.CMSDefaultListData();
 	}
 	
 	/**

@@ -4141,15 +4141,17 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	public List getDirectSubChannels(String siteid, String displayName, int count) throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
-			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName)) {
+			Channel channel = getChannelInfoByDisplayName(siteid, displayName);
+			
+			channelId = String.valueOf(channel.getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
 			} else {
 				subsql = " and PARENT_ID=" + channelId;
 			}
 		} else {
-			subsql = " and (PARENT_ID='' or PARENT_ID is null ) ";
+			subsql = " and (PARENT_ID=0 or PARENT_ID is null ) ";
 		}
 		try {
 			DBUtil db = new DBUtil();

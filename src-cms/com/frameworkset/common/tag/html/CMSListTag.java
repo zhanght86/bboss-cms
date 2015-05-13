@@ -124,7 +124,7 @@ public class CMSListTag extends PagerDataSet {
 		return channel;
 	}
 
-	public void setChannel(String channel) {
+	public void setChannel(String channel) {		
 		this.channel = channel;
 	}
 
