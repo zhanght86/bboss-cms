@@ -58,7 +58,7 @@ function setAsTemplate(){
 	Template t = new TemplateManagerImpl().getTemplateInfo(templateId);
 	
 %>
-<form name="form1" id="form1" action="editTemplate_Info_do.jsp" target="hidFrm">
+<form name="form1" id="form1" action="editTemplate_Info_do.jsp" target="hidFrm" method="post">
 <input name="templateId" type="hidden" id="templateId" value="<%=templateId%>">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>

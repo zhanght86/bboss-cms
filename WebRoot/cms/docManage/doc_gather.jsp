@@ -34,11 +34,13 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 	java.util.Date currentTime = new java.util.Date(); 
 	String riqi = formatter.format(currentTime); 
 	
-	String channelname = request.getParameter("channelName");
+	
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
 	
 	ChannelManager cm = new ChannelManagerImpl();
+	Channel channel = cm.getChannelInfo(channelId);
+	String channelname = channel.getName();
 	//获取所选频道的细缆模板ID
 	String selecttemplateid="-1";
 	
@@ -49,13 +51,15 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 	}
 	
 	SiteManager siteManager = new SiteManagerImpl();
-	String sitename = siteManager.getSiteInfo(siteid).getName();//站点名称
+	Site site = siteManager.getSiteInfo(siteid);
+	String sitename = site.getName();//站点名称
 	//老方法
 	//String docpath = cm.getFilePath(channelId);
 	////根据频道id，站点id获取文档保存路径(新方法) 保存路径=站点路径+频道路径
-	String sitedir = siteManager.getSiteInfo(siteid).getSiteDir();//频道相对路径
-	String relativePath = cm.getChannelInfo(channelId).getChannelPath();//站点相对路径
-	String docpath = siteManager.getSiteInfo(siteid).getSiteDir() + "/_webprj/" + cm.getChannelInfo(channelId).getChannelPath() + "/content_files";
+	
+	String sitedir = site.getSiteDir();//频道相对路径
+	String relativePath = channel.getChannelPath();//站点相对路径
+	String docpath = site.getSiteDir() + "/_webprj/" + channel.getChannelPath() + "/content_files";
 	//System.out.println("jxw==="+docpath);
 	//文档来源的加载js数组
    String idstr="";
@@ -1118,7 +1122,7 @@ else
 	                        	<tr>
 	                            	<td width="7%"><strong>关 键 词:</strong></td>
 	                            	<td>
-	                            	<textarea name="keywords" cols="70" rows="5" class="cms_textarea"><%=request.getParameter("channelName")%></textarea>
+	                            	<textarea name="keywords" cols="70" rows="5" class="cms_textarea"><%=channelname%></textarea>
 	                            	<span class="red_star">*<span>(<span class="red_star">多个关键词之间用逗号“,”分隔</span>)
 	                            	</td>
 	                        	</tr>

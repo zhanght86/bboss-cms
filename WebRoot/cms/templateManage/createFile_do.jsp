@@ -13,7 +13,7 @@
 try{
 	AccessControl control = AccessControl.getInstance();
 	control.checkAccess(request, response);	
-	String pathContext = (String)session.getAttribute("pathContext");
+	String pathContext = request.getParameter("pathContext");
 	String uri = request.getParameter("uri");	
 	String name = request.getParameter("fileName");
 	String type = request.getParameter("type");

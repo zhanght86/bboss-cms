@@ -5,8 +5,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.frameworkset.platform.cms.templatemanager.TemplateStyleInfo" %>
 <%
-	AccessControl control = AccessControl.getInstance();
-	control.checkAccess(request, response);
+	AccessControl control = AccessControl.getAccessControl();
 %>
 <html>
 <head>
@@ -60,7 +59,7 @@ function setAsTemplate(){
 		uri = "";
 	}
 %>
-<form name="form1" id="form1" action="setAsTemplate_do.jsp" target="hidFrm">
+<form name="form1" id="form1" action="setAsTemplate_do.jsp" target="hidFrm" method="post">
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 	<tr>
 		<td width="80" align="right" valign="middle">

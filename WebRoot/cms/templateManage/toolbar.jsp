@@ -6,8 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title></title>
 <% 
-	AccessControl accesscontrol = AccessControl.getInstance();
-	accesscontrol.checkAccess(request, response);
+	AccessControl accesscontrol = AccessControl.getAccessControl();
 	CMSManager cmsmanager = new CMSManager();
 	cmsmanager.init(request,session,response,accesscontrol);
 	String siteId =  cmsmanager.getSiteID();	
@@ -58,6 +57,7 @@ var uri = "<%=(uri==null?"":uri)%>";
 function createFile(type){
 	var url = "createFile.jsp?uri="+uri+"&type="+type;
 	myOpen(url);
+	//window.open(url);
 }
 
 

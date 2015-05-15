@@ -45,6 +45,7 @@ function uploadZipFile(){
 			return;		
 		}
 	}
+	document.form1.pathContext.value=win.parent.fileList.document.form1.pathContext.value;
 	document.form1.action = "uploadZipFile_do.jsp?uri="+uri;			
 	document.form1.submit();
 }
@@ -59,6 +60,8 @@ function uploadZipFile(){
 		<form action="uploadZipFile_do.jsp" method="post" enctype="multipart/form-data" name="form1" target="hidFrm">
 			请选择文件:
 				<input name="newFile" type="file" id="newFile" size="15">
+				<input name="pathContext" type="hidden" id="pathContext" >
+				<input name="uri" type="hidden" id="uri" value="<%=(uri==null?"":uri)%>">
 				<input type="button" class="cms_button" name="Submit" value="确定" onClick="uploadZipFile()">
 				<input type="button" class="cms_button" name="quxiao" value="取消" onClick="window.close()">
 

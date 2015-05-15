@@ -1411,7 +1411,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 						+ "a.DETAIL_TPL_ID, CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, "
 						+ "a.DOC_DYNAMIC, a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
-						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,openTarget " +
+						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,openTarget,CHANNEL_DESC " +
 								"from TD_CMS_CHANNEL a "
 						+ "where (a.PARENT_ID=0 or a.PARENT_ID is null) and a.status=0 "
 						+ "and a.site_id=? order by order_no,channel_id";
@@ -1422,7 +1422,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 						+ "CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC,"
 						+ "a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
-						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH,openTarget " +
+						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH,openTarget,CHANNEL_DESC " +
 								"from TD_CMS_CHANNEL a where a.status=0 "
 						+ "and a.site_id=? order by order_no,channel_id";
 			} else {
@@ -1468,6 +1468,8 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				channel.setCommentTemplateId(db.getInt(i,"COMMENT_TEMPLATE_ID"));
 				channel.setCommentPagePath(db.getString(i,"COMMENTPAGEPATH"));
 				channel.setOpenTarget(db.getString(i,"openTarget"));
+				channel.setChannel_desc(db.getString(i,"CHANNEL_DESC"));
+				
 				channels.add(channel);
 			}
 			return channels;

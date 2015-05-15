@@ -76,7 +76,7 @@
 		        	
 		     </tr>
 		  </table>
-		   <form id="paramForm" name="paramForm">
+		   <form id="paramForm" name="paramForm" method="post">
 	
 			
 			<div id="changeColor">

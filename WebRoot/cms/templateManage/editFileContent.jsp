@@ -40,7 +40,7 @@
 			relatePath = relatePath.substring(0,relatePath.length() - 1);
 		}
 	}
-	System.out.println("--/---"+ relatePath);
+	
 
 %>
 <html>
@@ -69,7 +69,7 @@
 <%		
 		return;
 	}
-	String pathContext = (String)session.getAttribute("pathContext");
+	String pathContext = request.getParameter("pathContext");
 	if(pathContext==null || pathContext.trim().length()==0){
 %>
 		<script type="text/javascript">
@@ -83,6 +83,7 @@
 <form method="post" name="TemplateForm" target="hidFrm" id="TemplateFrm" action="editFileContent_do.jsp">
 	<div align="center">
 	<input name="uri" type="hidden" id="uri" value="<%=uri%>">
+	<input name="pathContext" type="hidden" id="pathContext" value="<%=pathContext%>">
 	<input name="fileName" type="hidden" id="fileName" value="<%=fileName%>">
 	<textarea name="fileContent" rows="45" class="fileContent" id="fileContent" type="_moz"><%
 File tpltFolder = new File(pathContext,uri);

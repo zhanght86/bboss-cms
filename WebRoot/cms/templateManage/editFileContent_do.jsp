@@ -62,7 +62,7 @@
 <%		
 		return;
 	}
-	String pathContext = (String)session.getAttribute("pathContext");
+	String pathContext = request.getParameter("pathContext");
 	if(pathContext==null || pathContext.trim().length()==0){
 %>
 		<script type="text/javascript">

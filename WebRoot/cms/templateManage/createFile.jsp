@@ -54,6 +54,7 @@ function createFile(){
 		}
 		return;
 	}
+	document.form1.pathContext.value=win.parent.fileList.document.form1.pathContext.value;
     if(checkForms(document.form1.fileName)){
 	    document.form1.submit();
     }
@@ -84,6 +85,7 @@ function initialForm()
 				%>
 				<input name="fileName" type="text" id="fileName" size="20">
 				<input name="uri" type="hidden" id="uri" value="<%=(uri==null?"":uri)%>">
+				<input name="pathContext" type="hidden" id="pathContext" >
 				<input name="type" type="hidden" id="type" value="<%=(type==null?"":type)%>">
 				<input type="checkbox" id="coverFlag" name="coverFlag">&nbsp;<label id="lab">覆盖重名文件</label>
 	  </td>

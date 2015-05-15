@@ -156,7 +156,7 @@ public class SiteURLTag extends CMSBaseCellTag {
 					if (site_ != null)
 					{			
 						String siteid = site_.getSiteId() + "";
-						String indexURL = null;
+						String indexURL = site_.getIndexFileName();
 						if(context != null)
 							indexURL = CMSTagUtil.getPublishedSitePath(context,indexURL);//首页地址
 						else

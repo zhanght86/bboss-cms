@@ -5,8 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 <% 
-	AccessControl control = AccessControl.getInstance();
-	control.checkAccess(request, response);
+	AccessControl control = AccessControl.getAccessControl();
 	String uri = request.getParameter("uri");
 %>
 <style type="text/css">
@@ -32,6 +31,8 @@ function uploadFile(){
 		alert("请选择一个要上传的文件!");
 		return;
 	}
+	document.form1.pathContext.value=win.parent.fileList.document.form1.pathContext.value;
+	
 	document.form1.submit();
 }
 </script>
@@ -46,6 +47,7 @@ function uploadFile(){
 请选择文件:
 				<input type="file" name="newFile" id="newFile">
 				<input name="uri" type="hidden" id="uri" value="<%=(uri==null?"":uri)%>">
+				<input name="pathContext" type="hidden" id="pathContext" >
 				<input type="checkbox" id="coverFlag" name="coverFlag">&nbsp;覆盖重名文件
 	  </td>
 	</tr>

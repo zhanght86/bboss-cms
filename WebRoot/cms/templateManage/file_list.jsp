@@ -24,8 +24,7 @@
 <title></title>
 <% 
 
-	AccessControl control = AccessControl.getInstance();
-	control.checkAccess(request, response);
+	AccessControl control = AccessControl.getAccessControl();
     
     ImageManagerImpl impl = new ImageManagerImpl();
     
@@ -48,7 +47,7 @@
 		}
 	}
 	if(pathContext==null || pathContext.trim().length()==0){
-		session.setAttribute("pathContext",null);
+		//session.setAttribute("pathContext",null);
 %>
 		<script language="javascript">
 			alert("没有找到上下文路径,无法对资源进行管理.");
@@ -60,7 +59,7 @@
     }	
 	//设置这个属性供上传文件,新建文件等
 	//如果不设置这个属性,要传递参数;难得统一管理
-	session.setAttribute("pathContext",pathContext);	
+	//session.setAttribute("pathContext",pathContext);	
 	
 %>
 <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
@@ -117,7 +116,7 @@ if(parent.toolFrm.uri!=null){
 }
 
 function setAsTemplate(name){
-	myOpen("setAsTemplate.jsp?name="+name+"&uri="+theURI);
+	myOpen("setAsTemplate.jsp?name="+name+"&uri="+theURI+"&pathContext=<%=pathContext%>");
 }
 function cancelATemplate(templateId){
 	if(window.confirm("你确实要取消这个模板?")){
@@ -130,7 +129,7 @@ function editTemplate(templateId){
 }
 
 function editFileContent(fileName){
-	var url = "editFileContent.jsp?fileName="+fileName+"&uri="+theURI;
+	var url = "editFileContent.jsp?fileName="+fileName+"&uri="+theURI+"&pathContext=<%=pathContext%>";
 	var width = screen.availWidth;
 	var height = screen.availHeight;
 	var f = "dialogWidth:"+width+"px;dialogHeight:"+height+"px;center:yes;resizable:no;scroll:auto";
@@ -313,6 +312,7 @@ function editByDreamweaver(url,siteId,uri,fileName)
 <body>
 <form id="form1" name="form1">
 <table width="100%" border="0" cellspacing="0" cellpadding="3" class="Datalisttable">
+<input type="hidden" name="pathContext" id="pathContext" value="<%=pathContext %>">
 	<tr class="cms_report_tr">
 		<td height="30" width="20px" class="list">
 <!-- 		<object id="dwEditObject" classid="clsid:E7566055-CDA0-4a52-B649-20B42C45677A" codebase="../../InstallFile/DWActiveX.CAB#Version=1,0,0,0"></object> -->
