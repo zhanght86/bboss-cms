@@ -805,8 +805,10 @@ public class CMSSearchManager {
 			CMSSearchIndex index = this.getIndex(indexIds[i]);
 			if(index!= null){
 				String indexFilePath = this.getAbsoluteIndexFilePath(index);
-				//if(!this.isIndexLocked(index)){
+				this.releaseIndexLocked(index);
+				
 					this.deleteFilesAndDirector(new File(indexFilePath));
+				
 				//}else{
 				//	throw new Exception("索引文件已经上锁，暂时无法删除：" + indexFilePath);
 				//}
@@ -1706,18 +1708,68 @@ public class CMSSearchManager {
 	 * 判断指定索引的索引文件库是否已经上锁（即正在建立索引）
 	 * @param cmsIndex
 	 */
+	public static void releaseIndexLocked(CMSSearchIndex Index){
+		try {
+			String indexDirectory = getAbsoluteIndexFilePath(Index);
+			releaseIndexLocked(indexDirectory);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 判断指定索引的索引文件库是否已经上锁（即正在建立索引）
+	 * @param cmsIndex
+	 */
 	public static boolean isIndexLocked(String indexDirectory){
 		try {
 //			String indexDirectory = getAbsoluteIndexFilePath(Index);
 			File f = new File(indexDirectory);
 			if(f.exists()){
-				Directory dir = FSDirectory.open(f);
-				return IndexWriter.isLocked(dir);
+				Directory dir = null;
+				try
+				{
+					dir = FSDirectory.open(f);
+					return IndexWriter.isLocked(dir);
+				}
+				finally
+				{
+					if(dir != null)
+						dir.close();
+				}
 			}
 			else return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return true;
+		}
+	}
+	
+	/**
+	 * 判断指定索引的索引文件库是否已经上锁（即正在建立索引）
+	 * @param cmsIndex
+	 */
+	public static void releaseIndexLocked(String indexDirectory){
+		try {
+//			String indexDirectory = getAbsoluteIndexFilePath(Index);
+			File f = new File(indexDirectory);
+			if(f.exists()){
+				Directory dir = null;
+				try
+				{
+					dir = FSDirectory.open(f);
+					
+					IndexWriter.unlock(dir);
+				}
+				finally
+				{
+					if(dir != null)
+						dir.close();
+				}
+			}
+			 
+		} catch (Exception e) {
+			 e.printStackTrace();
 		}
 	}
 	
@@ -1958,120 +2010,130 @@ public class CMSSearchManager {
 				//若索引库不存在无需追加索引记录
 				if(f.exists()){
 					
-					if(!this.isIndexLocked(index)){
-						//往现有的索引文件中追加记录
-						IndexWriter writer = null;
-						try
-						{
+					releaseIndexLocked(index);
+					
+					//往现有的索引文件中追加记录
+					IndexWriter writer = null;
+					Directory dir = null;
+					try
+					{
 //							writer = new IndexWriter(absoluteIndexFilePath,						
 //																		new StandardAnalyzer(), false); 
-							Directory dir = FSDirectory.open(f);
-						      // :Post-Release-Update-Version.LUCENE_XY:
-						      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
-						      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+						 dir = FSDirectory.open(f);
+					      // :Post-Release-Update-Version.LUCENE_XY:
+					      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
+					      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 
-						     
-						        // Add new documents to an existing index:
-						        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-						      
-						      
+					     
+					        // Add new documents to an existing index:
+					        iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
+					      
+					      
 
-						      // Optional: for better indexing performance, if you
-						      // are indexing many documents, increase the RAM
-						      // buffer.  But if you do this, increase the max heap
-						      // size to the JVM (eg add -Xmx512m or -Xmx1g):
-						      //
-						      // iwc.setRAMBufferSizeMB(256.0);
-						      
-						      writer = new IndexWriter(dir, iwc);
-							//对文档追加索引记录
-							crawler.indexLucene(writer,docHandler,docUrl,docContentType,lastModified);
+					      // Optional: for better indexing performance, if you
+					      // are indexing many documents, increase the RAM
+					      // buffer.  But if you do this, increase the max heap
+					      // size to the JVM (eg add -Xmx512m or -Xmx1g):
+					      //
+					      // iwc.setRAMBufferSizeMB(256.0);
+					      
+					      writer = new IndexWriter(dir, iwc);
+						//对文档追加索引记录
+						crawler.indexLucene(writer,docHandler,docUrl,docContentType,lastModified);
+						
+						//对每一个文档附件追加索引记录
+						for(int j=0;j<attachmentList.size();j++){
+							//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
+							String relativePath = (String)attachmentList.get(j);
+							//获取站点的发布路径
+							String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
+							//获取附件发布后的绝对路径
+							String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
+							//获取附件访问地址
+							String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);
 							
-							//对每一个文档附件追加索引记录
-							for(int j=0;j<attachmentList.size();j++){
-								//获取附件相对于站点发布路径的相对路径，如：zjcz/content_files/20070709024320984.doc
-								String relativePath = (String)attachmentList.get(j);
-								//获取站点的发布路径
-								String sitePubDir = CMSUtil.getSitePubDestinction(siteId);
-								//获取附件发布后的绝对路径
-								String attachmentPubDir = CMSUtil.getPath(sitePubDir,relativePath);
-								//获取附件访问地址
-								String attachmentUrl = this.getPublishedFileUrl(attachmentPubDir,siteId);
+							//判断附件类型，选择文件解析器ContentHandle
+							if(attachmentUrl.endsWith(".doc") || attachmentUrl.endsWith(".docx")){
 								
-								//判断附件类型，选择文件解析器ContentHandle
-								if(attachmentUrl.endsWith(".doc") || attachmentUrl.endsWith(".docx")){
-									
-									String attachmentContentType = ContentHandler.WORD_FILEFOMAT;
-									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".doc") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
-									
-									//追加附件索引记录
-									crawler.indexLucene(writer,
-											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-									
-								}
-								else if(attachmentUrl.endsWith(".xls") || attachmentUrl.endsWith(".xlsx")){
-									
-									String attachmentContentType = ContentHandler.EXCEL_FILEFOMAT;
-									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
-									
-									//追加附件索引记录
-									crawler.indexLucene(writer,
-											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-									
-								}
-								else if(attachmentUrl.endsWith(".ppt") || attachmentUrl.endsWith(".pptx")){
-									
-									String attachmentContentType = ContentHandler.PPT_FILEFOMAT;
-									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".ppt") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
-									
-									//追加附件索引记录
-									crawler.indexLucene(writer,
-											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-									
-								}
-								else if(attachmentUrl.endsWith(".pdf")){
-									
-									String attachmentContentType = ContentHandler.PDF_FILEFOMAT;
-									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
-																			
-									//追加附件索引记录
-									crawler.indexLucene(writer,
-											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-								}else if(attachmentUrl.endsWith(".html") ||
-										attachmentUrl.endsWith(".htm") ||
-										attachmentUrl.endsWith(".txt") ){
-									
-									String attachmentContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
-									ContentHandler attachmentHandler = crawler.
-																			handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
-																			
-									//追加附件索引记录
-									crawler.indexLucene(writer,
-											attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
-								}
+								String attachmentContentType = ContentHandler.WORD_FILEFOMAT;
+								ContentHandler attachmentHandler = crawler.
+																		handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".doc") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+								
+								//追加附件索引记录
+								crawler.indexLucene(writer,
+										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								
 							}
-							
-							
-						}
-						finally
-						{
-							try {
-								if(writer != null)
-									writer.close();
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+							else if(attachmentUrl.endsWith(".xls") || attachmentUrl.endsWith(".xlsx")){
+								
+								String attachmentContentType = ContentHandler.EXCEL_FILEFOMAT;
+								ContentHandler attachmentHandler = crawler.
+																		handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".xls") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+								
+								//追加附件索引记录
+								crawler.indexLucene(writer,
+										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								
+							}
+							else if(attachmentUrl.endsWith(".ppt") || attachmentUrl.endsWith(".pptx")){
+								
+								String attachmentContentType = ContentHandler.PPT_FILEFOMAT;
+								ContentHandler attachmentHandler = crawler.
+																		handleLocalFile(new File(attachmentPubDir),attachmentContentType,attachmentUrl.endsWith(".ppt") ?ContentHandler.VERSION_2003:ContentHandler.VERSION_2007);
+								
+								//追加附件索引记录
+								crawler.indexLucene(writer,
+										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+								
+							}
+							else if(attachmentUrl.endsWith(".pdf")){
+								
+								String attachmentContentType = ContentHandler.PDF_FILEFOMAT;
+								ContentHandler attachmentHandler = crawler.
+																		handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
+																		
+								//追加附件索引记录
+								crawler.indexLucene(writer,
+										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
+							}else if(attachmentUrl.endsWith(".html") ||
+									attachmentUrl.endsWith(".htm") ||
+									attachmentUrl.endsWith(".txt") ){
+								
+								String attachmentContentType = ContentHandler.TEXT_HTML_FILEFOMAT;
+								ContentHandler attachmentHandler = crawler.
+																		handleLocalFile(new File(attachmentPubDir),attachmentContentType,null);
+																		
+								//追加附件索引记录
+								crawler.indexLucene(writer,
+										attachmentHandler,attachmentUrl,attachmentContentType,lastModified);
 							}
 						}
-					}else{
-						log.debug(absoluteIndexFilePath + "已被锁，无法追加索引记录！");
-						throw new Exception(absoluteIndexFilePath + "已被锁，无法追加索引记录！"); 
+						
+						
 					}
+					finally
+					{
+						try {
+							if(writer != null)
+								writer.close();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						try {
+							if(dir != null)
+								dir.close();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}else{
+					log.debug(absoluteIndexFilePath + "已被锁，无法追加索引记录！");
+					throw new Exception(absoluteIndexFilePath + "已被锁，无法追加索引记录！"); 
 				}
+				
 			}
 		}catch(Exception e){}
 		

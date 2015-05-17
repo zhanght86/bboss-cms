@@ -144,15 +144,17 @@ public class CMSCrawler  {
 				rootURL = seeds[0].substring(0, seeds[0].indexOf("/", 9));
 		}else if(searchType == 4){}//库表索引
 	}
-	public void crawl(){		
+	public void crawl(){	
+		IndexWriterConfig iwc=null;
+		Directory dir =  null;
 			try{
 				File f = new File(indexDirectory);
 				if(!f.exists())
 					f.mkdirs();
-				Directory dir = FSDirectory.open(f);
+				 dir = FSDirectory.open(f);
 			      // :Post-Release-Update-Version.LUCENE_XY:
 			      Analyzer analyzer = new SmartChineseAnalyzer(Version.LUCENE_47);
-			      IndexWriterConfig iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
+			      iwc = new IndexWriterConfig(Version.LUCENE_47, analyzer);
 
 			      if (create) {
 			        // Create a new index in the directory, removing any
@@ -224,6 +226,7 @@ public class CMSCrawler  {
 		    }	    
 		    finally
 		    {
+		    	
 		    	if(writer != null)
 		    	try {
 					writer.close();
@@ -231,6 +234,13 @@ public class CMSCrawler  {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
+		    	try {
+					dir.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	
 //				if(reader != null)
 //			    	try {
 //			    		reader.close();
@@ -1208,6 +1218,17 @@ public class CMSCrawler  {
 	public void addIndex(String indexbaseName, Object indexobject)
 	{
 		
+	}
+	
+	public void close()
+	{
+		try {
+			if(writer != null)
+				this.writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

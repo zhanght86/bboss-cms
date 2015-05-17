@@ -39,10 +39,11 @@
 	</head>
 
 <body class=""  scroll="auto">
-<pg:dtoken cache="false"/>
+
 <table width="182" border="0"  background="../images/left_bg.jpg"  cellpadding="0" cellspacing="0" class="table" >
 	<tr>
-		<td height="115" style="padding-top:80px;" align="left">
+	
+		<td height="115"  align="left">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<img src="../images/refresh.gif" onClick="refresh()" width="16" height="15" border="0" title="刷新频道树" style="cursor:hand">
 			&nbsp;&nbsp;

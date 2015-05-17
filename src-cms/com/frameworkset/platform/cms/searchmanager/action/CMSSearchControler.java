@@ -68,13 +68,14 @@ public class CMSSearchControler {
 			searchType = "0";
 
 		CMSSearchManager cmsSm = new CMSSearchManager();
-
+		 CMSMultiSearcher cmsSearcher = null;
 		try{
 			if(queryString == null || queryString.length() <= 0){
 				model.addAttribute("result", "没有指定查询条件");
 //				response.sendRedirect("search_results_empty.jsp");
 				
 			}else{
+				cmsSearcher = new CMSMultiSearcher();
 			    String flag = request.getParameter("flag");
 			    String indexId = "all";		
 //			    String hitsPerSet = "" +pagesize;
@@ -180,7 +181,7 @@ public class CMSSearchControler {
 			   		if(new File(cmsSm.getAbsoluteIndexFilePath(tempIndex)).exists())
 			   			indexList.add(tempIndex);
 			   	}
-			    CMSMultiSearcher cmsSearcher = new CMSMultiSearcher();
+			   
 			    cmsSearcher.setIndexes(indexList);			
 			    cmsSearcher.setFileFormat(realFileFormat);
 				//每页显示条数
@@ -322,6 +323,11 @@ public class CMSSearchControler {
 		}catch(Exception e){
 //			out.println(e.toString());
 			model.addAttribute("result", StringUtil.formatBRException(e));
+		}
+		finally
+		{
+			if(cmsSearcher != null)
+				cmsSearcher.close();
 		}
 		return "path:searchresult";
 	}

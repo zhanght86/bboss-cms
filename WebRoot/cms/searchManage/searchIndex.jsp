@@ -8,9 +8,7 @@
 <script type='text/javascript' src='<pg:sitedomain/>/js/jquery-1.4.2.min.js' language='JavaScript'></script>
 <script type='text/javascript' src='<pg:sitedomain/>/js/pager.js' language='JavaScript'></script>
 <link href="<pg:sitedomain/>/css/main.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="<pg:sitedomain/>/js/nav.js"></script>
 
-<script type="text/javascript" src="<pg:sitedomain/>/js/comment.js"></script>
 <script type="text/javascript">
        $(document).ready(function() {
       	
@@ -60,7 +58,7 @@
 	            <tr>
 	              <td width="12%"><div align="right">搜索条件：</div></td>
 	              <td width="30%"><input id="condition" class="input1" type="text" name="condition" /><input type="hidden" name="siteId" id="siteId" value="<common:request parameter="siteId"/>"/></td>
-	               <td align="left"><a class="bt_1" id="sb" href="javascript:void(0)"><span>搜索</span></a></td>
+	               <td align="left"><a class="bt_0" id="sb" href="javascript:void(0)"><span>搜索</span></a></td>
 	            </tr>
 	            
 	           

@@ -57,6 +57,7 @@ public class CMSMultiSearcher implements java.io.Serializable {
 			
 	        try {
 //	              multiSearcher.;
+	        	multiSearcher.getIndexReader().close();
 	          } catch (Exception e) {
 	              e.printStackTrace();
 	          }
