@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.frameworkset.util.annotations.RequestParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
@@ -178,8 +179,8 @@ public class ChooseUserAction {
 	 * @return 2014年11月18日
 	 */
 	public String toChooseUserPage(String processKey, String candidateName,
-			String candidateCNName, String candidateOrgId,
-			String candidateOrgName, String realName, String nodekey,
+			@RequestParam(decodeCharset="UTF-8") String candidateCNName, String candidateOrgId,
+			@RequestParam(decodeCharset="UTF-8")  String candidateOrgName, @RequestParam(decodeCharset="UTF-8")  String realName, String nodekey,
 			String index, ModelMap model) {
 		TransactionManager tm = new TransactionManager();
 

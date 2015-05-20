@@ -144,14 +144,14 @@ function setCandidate(node_key){
 	//处理部门名称
 	var candidateOrgName = $("#candidateOrgName"+node_key).val();
 	
-	var url = encodeURI(ctx+"/workflowBusiness/choose/toChooseUserPage.page?processKey="+$('#processKey').val()
+	var url = ctx+"/workflowBusiness/choose/toChooseUserPage.page?processKey="+$('#processKey').val()
 			+"&candidateName="+candidateName
-			+"&candidateCNName="+candidateCNName
+			+"&candidateCNName="+encodeURI(encodeURI(candidateCNName))
 			+"&candidateOrgId="+candidateOrgId
-			+"&candidateOrgName="+candidateOrgName
-			+"&realName="+realName
+			+"&candidateOrgName="+encodeURI(encodeURI(candidateOrgName))
+			+"&realName="+encodeURI(encodeURI(realName))
 			+"&nodekey="+node_key
-			+"&callBackFunc=updateAfterChoose");
+			+"&callBackFunc=updateAfterChoose";
 	$.dialog({ id:'nodeInfoIframe', title:'选择处理人',width:1000,height:650, content:'url:'+url}); 
 	
 }

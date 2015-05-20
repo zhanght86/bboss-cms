@@ -329,13 +329,13 @@ function emptyChoose(id,type){
 //选择用户
 function openChooseUsers(node_key){
 	//alert(node_key);
-	var url = encodeURI("<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
+	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?"
 			+"process_key=${processKey}&users="+$('#'+node_key+'_users_id').val()
-			+"&user_realnames="+$('#'+node_key+'_users_name').val()
+			+"&user_realnames="+encodeURI(encodeURI($('#'+node_key+'_users_name').val()))
 			+"&org_id="+$('#'+node_key+'_org_id').val()
-			+"&org_name="+$('#'+node_key+'_org_name').val()
-			+"&all_names="+$('#'+node_key+'_all_names').val()
-			+"&node_key="+node_key);
+			+"&org_name="+encodeURI(encodeURI($('#'+node_key+'_org_name').val()))
+			+"&all_names="+encodeURI(encodeURI($('#'+node_key+'_all_names').val()))
+			+"&node_key="+node_key;
 	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
 	
 }

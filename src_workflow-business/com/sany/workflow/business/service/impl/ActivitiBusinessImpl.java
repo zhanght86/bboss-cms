@@ -2479,7 +2479,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 获取流程实例的处理记录
 			List<HisTaskInfo> taskHistorList = getProcHisInfo(
-					inst.getPROC_INST_ID_(), processKey, filterLog);
+					inst.getPROC_INST_ID_(), inst.getKEY_(), filterLog);
 			model.addAttribute("taskHistorList", taskHistorList);
 
 			// 流程未完成
