@@ -2,7 +2,6 @@ package com.sany.workflow.business.entity;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import org.frameworkset.util.annotations.RequestParam;
 
@@ -68,7 +67,11 @@ public class TaskInfo implements Serializable {
 	private String lastOperName;// 前一次处理人
 
 	private String dealerWorkNo;// 处理人工号
-
+	private String dealer;
+	private String dealerName;
+	private String senderWorkno;
+	private String dealers;
+	private String dealerNames;
 	public int getIsDiscarded() {
 		return isDiscarded;
 	}
@@ -291,6 +294,46 @@ public class TaskInfo implements Serializable {
 
 	public void setDealerWorkNo(String dealerWorkNo) {
 		this.dealerWorkNo = dealerWorkNo;
+	}
+
+	public String getDealer() {
+		return dealer;
+	}
+
+	public void setDealer(String dealer) {
+		this.dealer = dealer;
+	}
+
+	public String getDealerName() {
+		return dealerName;
+	}
+
+	public void setDealerName(String dealerName) {
+		this.dealerName = dealerName;
+	}
+
+	public String getSenderWorkno() {
+		return senderWorkno;
+	}
+
+	public void setSenderWorkno(String senderWorkno) {
+		this.senderWorkno = senderWorkno;
+	}
+
+	public String getDealers() {
+		return dealers;
+	}
+
+	public void setDealers(String dealers) {
+		this.dealers = dealers;
+	}
+
+	public String getDealerNames() {
+		return dealerNames;
+	}
+
+	public void setDealerNames(String dealerNames) {
+		this.dealerNames = dealerNames;
 	}
 
 }

@@ -337,6 +337,63 @@
 			 	 AND A.Id_ = ?
 		]]>
 	</property>
+	
+	
+	<property name="getAssignees">
+		<![CDATA[
+			SELECT av.TEXT_			
+			  FROM ACT_RU_VARIABLE  av
+			 WHERE av.PROC_INST_ID_ = ?
+			   and av.NAME_=? 
+			 
+		]]>
+	</property>
+	
+	<property name="getRunTaskInfoByPINSTID">
+		<![CDATA[
+			SELECT A.ID_           AS taskId,
+			       B.BUSINESS_KEY_ AS businessKey,
+			       C.PROCESS_KEY   AS processKey,
+			       A.PROC_INST_ID_ AS processId,
+			       A.PROC_DEF_ID_  AS DEFID,
+			       A.ASSIGNEE_     AS dealer,
+			       A.TASK_DEF_KEY_ AS taskKey,
+			       A.NAME_         AS taskName,
+			       A.CREATE_TIME_  AS createDatetime,
+			       C.IS_RECALL     AS ISRECALL,
+			       C.IS_DISCARD    AS ISDISCARD,
+			       C.IS_DISCARDED  AS ISDISCARDED,
+			       C.IS_CANCEL     AS ISCANCEL,
+			       C.IS_COPY       AS ISCOPY,
+			       C.IS_AUTOAFTER  AS ISAUTOAFTER,
+			       C.TASK_URL      AS taskUrl
+			
+			  FROM ACT_RU_TASK A
+			  LEFT JOIN ACT_RU_EXECUTION B ON A.PROC_INST_ID_ = B.PROC_INST_ID_
+			  left join TD_WF_NODE_WORKTIME c on a.proc_inst_id_ = c.process_id
+			                                 and a.task_def_key_ = c.node_key
+			 WHERE B.BUSINESS_KEY_ IS NOT NULL
+			 	 AND  A.PROC_INST_ID_ = ?
+		]]>
+	</property>
+	<property name="getTaskInfosByTaskId">
+		<![CDATA[
+			SELECT A.ID_           AS taskId,
+			       A.PROC_INST_ID_ AS processId,
+			       A.PROC_DEF_ID_  AS DEFID,
+			      
+			       A.TASK_DEF_KEY_ AS taskKey,
+			       A.NAME_         AS taskName,
+			       A.CREATE_TIME_  AS createDatetime,
+			       I.USER_ID_ AS dealer
+			
+			  FROM ACT_RU_TASK A,ACT_RU_IDENTITYLINK I 
+			 WHERE A.ID_ = I.TASK_ID_
+			   and I.TYPE_ = 'candidate'
+			   and I.TASK_ID_=?			  
+			 
+		]]>
+	</property>
 	<!-- 根据流程实例id获取当前任务信息  gw_tanx-->
 	<property name="getTaskInfoByTaskId_wf">
 		<![CDATA[
@@ -3590,6 +3647,25 @@
 			   ORDER BY ORDER_NUM
 		]]>
 	</property>
+	<property name="addWfRunTask">
+		<![CDATA[
+			insert into td_wf_run_task (TASK_ID,DEALER,BUSINESS_KEY,CREATE_DATETIME,DEALERNAME,DEALERNAMES,DEALERS,DEALERWORKNO,LAST_OP,LAST_OPER,PROCESS_ID,PROCESS_KEY,SENDER,SENDERNAME,SENDERWORKNO,TASK_KEY,TASK_NAME,TASK_TYPE,TASK_URL) values(#[taskId],#[dealer],#[businessKey],#[createDatetime],#[dealerName],#[dealerNames],#[dealers],#[dealerWorkno],#[lastOp],#[lastOper],#[processId],#[processKey],#[sender],#[senderName],#[senderWorkno],#[taskKey],#[taskName],#[taskType],#[taskUrl])
+		]]>
+	</property>
+		<property name="deleteWfRunTaskByKey">
+		<![CDATA[
+			delete from td_wf_run_task where PROCESS_ID=?
+		]]>
+	</property>
 	
+	<property name="getProcessStarter">
+		<![CDATA[
+			SELECT  
+			       A.START_USER_ID_
+			       
+			  FROM ACT_HI_PROCINST A 
+			 WHERE A.PROC_INST_ID_ = ?
+		]]>
+	</property>
 	
 </properties>

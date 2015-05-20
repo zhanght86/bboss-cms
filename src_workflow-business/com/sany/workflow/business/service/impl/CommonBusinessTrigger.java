@@ -67,9 +67,19 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 			}
 		}
 
+		if(!completeFirstTask)
+		{
+			
+		
 		// 维护统一待办任务
-		this.addTodoTask(proIns.getProInsId(), "发起流程", activitiService
-				.getUserInfoMap().getUserName(proIns.getUserAccount()));
+			this.addTodoTask(proIns.getProInsId(), "发起流程", activitiService
+					.getUserInfoMap().getUserName(proIns.getUserAccount()));
+		}
+		else
+		{
+			this.addTodoTask(proIns.getProInsId(), "提交任务", activitiService
+					.getUserInfoMap().getUserName(proIns.getUserAccount()));
+		}
 	}
 
 	/**
@@ -127,78 +137,85 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 		}
 	}
 
+//	@Override
+//	public void addTodoTask(String processId, String lastOp, String lastOper)
+//			throws Exception {
+//
+//		TransactionManager tm = new TransactionManager();
+//
+//		try {
+//
+//			tm.begin();
+//
+//			executor.delete("deleteTaskInfoByProcessId", processId);
+//
+//			// 根据流程实例ID获取运行任务
+//			List<TaskInfo> taskInfoList = new ArrayList<TaskInfo>();
+//			List<Task> taskList = activitiService
+//					.listTaskByProcessInstanceId(processId);
+//
+//			for (int i = 0; i < taskList.size(); i++) {
+//				Task task = taskList.get(i);
+//				TaskInfo taskInfo = activitiTaskService.getCurrentNodeInfo(task
+//						.getId());
+//				if (null != taskInfo) {
+//					taskInfoList.add(taskInfo);
+//				}
+//			}
+//			// 查询流程实例，获取流程发起人
+//			ProcessInst inst = executor.queryObject(ProcessInst.class,
+//					"getProcessByProcessId_wf", processId);
+//			// 流程未结束
+//			if (taskInfoList != null && taskInfoList.size() > 0) {
+//
+//				// 增加参数
+//				for (TaskInfo task : taskInfoList) {
+//
+//					// 域账号转工号
+//					StringBuffer worknos = new StringBuffer();
+//					String[] arrayAssignee = task.getAssignee().split(",");
+//
+//					for (int i = 0; i < arrayAssignee.length; i++) {
+//						if (i == 0) {
+//							worknos.append(activitiService.getUserInfoMap()
+//									.getUserAttribute(arrayAssignee[i],
+//											"userWorknumber"));
+//						} else {
+//							worknos.append(",").append(
+//									activitiService.getUserInfoMap()
+//											.getUserAttribute(arrayAssignee[i],
+//													"userWorknumber"));
+//						}
+//					}
+//					task.setDealerWorkNo(worknos.toString());
+//					task.setLastOp(lastOp);
+//					task.setLastOperName(lastOper);
+//
+//					
+//
+//					task.setSender(inst.getSTART_USER_ID_());
+//					task.setSenderName(activitiService.getUserInfoMap()
+//							.getUserName(inst.getSTART_USER_ID_()));
+//
+//				}
+//
+//				executor.insertBeans("addTodoTask_wf", taskInfoList);
+//
+//			}
+//
+//			tm.commit();
+//
+//		} catch (Exception e) {
+//			throw new Exception("统一待办任务维护出错：",e);
+//		} finally {
+//			tm.release();
+//		}
+//	}
+	
 	@Override
 	public void addTodoTask(String processId, String lastOp, String lastOper)
 			throws Exception {
 
-		TransactionManager tm = new TransactionManager();
-
-		try {
-
-			tm.begin();
-
-			executor.delete("deleteTaskInfoByProcessId", processId);
-
-			// 根据流程实例ID获取运行任务
-			List<TaskInfo> taskInfoList = new ArrayList<TaskInfo>();
-			List<Task> taskList = activitiService
-					.listTaskByProcessInstanceId(processId);
-
-			for (int i = 0; i < taskList.size(); i++) {
-				Task task = taskList.get(i);
-				TaskInfo taskInfo = activitiTaskService.getCurrentNodeInfo(task
-						.getId());
-				if (null != taskInfo) {
-					taskInfoList.add(taskInfo);
-				}
-			}
-
-			// 流程未结束
-			if (taskInfoList != null && taskInfoList.size() > 0) {
-
-				// 增加参数
-				for (TaskInfo task : taskInfoList) {
-
-					// 域账号转工号
-					StringBuffer worknos = new StringBuffer();
-					String[] arrayAssignee = task.getAssignee().split(",");
-
-					for (int i = 0; i < arrayAssignee.length; i++) {
-						if (i == 0) {
-							worknos.append(activitiService.getUserInfoMap()
-									.getUserAttribute(arrayAssignee[i],
-											"userWorknumber"));
-						} else {
-							worknos.append(",").append(
-									activitiService.getUserInfoMap()
-											.getUserAttribute(arrayAssignee[i],
-													"userWorknumber"));
-						}
-					}
-					task.setDealerWorkNo(worknos.toString());
-					task.setLastOp(lastOp);
-					task.setLastOperName(lastOper);
-
-					// 查询流程实例，获取流程发起人
-					ProcessInst inst = executor.queryObject(ProcessInst.class,
-							"getProcessByProcessId_wf", processId);
-
-					task.setSender(inst.getSTART_USER_ID_());
-					task.setSenderName(activitiService.getUserInfoMap()
-							.getUserName(inst.getSTART_USER_ID_()));
-
-				}
-
-				executor.insertBeans("addTodoTask_wf", taskInfoList);
-
-			}
-
-			tm.commit();
-
-		} catch (Exception e) {
-			throw new Exception("统一待办任务维护出错：",e);
-		} finally {
-			tm.release();
-		}
+		activitiTaskService.refreshTodoList(processId,  lastOp, lastOper);
 	}
 }

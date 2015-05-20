@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.apache.log4j.Logger;
 import org.frameworkset.soa.ObjectSerializable;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
@@ -54,8 +56,6 @@ import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
 import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
 
-import java.util.Collections;
-
 /**
  * @todo 工作流业务实现类
  * @author tanx
@@ -66,6 +66,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 		org.frameworkset.spi.DisposableBean,
 		org.frameworkset.spi.InitializingBean {
 
+	private static Logger log = Logger.getLogger(ActivitiBusinessImpl.class);
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
 	private ActivitiService activitiService;
@@ -621,9 +622,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 创建统一业务订单
 			proIns.setProInsId(processInstance.getId());
-			commonTrigger.createCommonOrder(proIns, businessKey, processKey,
-					paramMap, completeFirstTask);
-
+			
+			
 			if (completeFirstTask) {
 
 				String remark = "["
@@ -635,14 +635,17 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				// 自动完成任务
 				autoCompleteTask(proIns, processKey);
 			}
-
+			commonTrigger.createCommonOrder(proIns, businessKey, processKey,
+					paramMap, completeFirstTask);
 			tm.commit();
 
 		} 
 		catch (ProcessException e) {
+			log.error(e.getMessage(),e);
 				throw e;
 		} 
 		catch (Exception e) {
+			log.error(e.getMessage(),e);
 			throw new Exception("开启流程出错:", e);
 		} finally {
 			PlatformKPIServiceImpl.setWorktimelist(null);
@@ -700,8 +703,8 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.getDealRemak(), proIns.getDealOption(),
 					proIns.getDealReason(), true);
 
-			// 维护统一待办任务
-			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), "");
+//			// 维护统一待办任务
+//			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), "");
 
 			// 后续节点自动审批
 			if (task.getIsAutoafter() == 1
@@ -1503,9 +1506,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 			activitiService.addNodeWorktime(processKey, proIns.getProInsId(),
 					controlParamList);
 
-			completeTask(proIns, paramMap);
-
+			
+			completeTask(proIns, paramMap );
 			if (currentTask.getIsAutoafter() == 1) {
+				
 				// 获取当前任务信息
 				TaskInfo nextTask = getCurrentNodeInfoByKey(
 						proIns.getBusinessKey(), processKey,
@@ -1521,7 +1525,17 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 					autoCompleteTask(nextTask, proIns, processKey);
 				}
+				
 			}
+			String lastOp = proIns.getDealOption();
+			if (StringUtil.isEmpty(lastOp)) {
+				lastOp = "提交任务";
+			}
+			this.addTodoTask(
+					proIns.getProInsId(),
+					lastOp,
+					activitiService.getUserInfoMap().getUserName(
+							proIns.getUserAccount()));
 
 			tm.commit();
 
@@ -1600,12 +1614,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 		}
 
-		// 维护统一待办任务
-		this.addTodoTask(
-				proIns.getProInsId(),
-				proIns.getDealOption(),
-				activitiService.getUserInfoMap().getUserName(
-						proIns.getUserAccount()));
+		
 	}
 
 	@Override

@@ -3,8 +3,8 @@
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 
@@ -29,7 +29,6 @@ import com.frameworkset.platform.cms.driver.jsp.CMSException;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcher;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcherImpl;
-import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequestImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponse;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponseImpl;
@@ -43,6 +42,7 @@ import com.frameworkset.platform.cms.driver.publish.RecursivePublishException;
 import com.frameworkset.platform.cms.driver.publish.RecursivePublishManager;
 import com.frameworkset.platform.cms.util.AttributeKeys;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 
 /**
@@ -364,21 +364,21 @@ public class ContentPublishObject extends PublishObject {
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(context.getRendURI())
-					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+					.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 		} catch (CMSException e) {
 			
 			log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(jspFile.getUri())
-					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+					.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 		} catch (Exception e) {
 			
 			log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 			context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 			this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 					.append(context.getRendURI())
-					.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+					.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 		}
 		finally
 		{

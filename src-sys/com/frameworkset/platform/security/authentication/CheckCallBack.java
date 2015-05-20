@@ -26,6 +26,41 @@ public class CheckCallBack implements Serializable{
 	private String loginModule;
     private Map<String,Object> callBacks = new HashMap<String,Object>();
 //    private AttributeQueue  list = new AttributeQueue();
+    /**
+     * userName
+userID
+password
+orgId
+logincount
+userAccount
+remark1
+remark2
+remark3
+remark4
+remark5
+userAddress
+userEmail
+userFax
+userHometel
+userIdcard
+userMobiletel1
+userMobiletel2
+userOicq
+userPinyin
+userPostalcode
+userSex
+userType
+userWorknumber
+userWorktel
+userBirthday
+userRegdate
+userSn
+userIsvalid
+passwordExpiredTime
+passwordUpdateTime
+     * @param userAttribute
+     * @return
+     */
     public Object getUserAttribute(String userAttribute)
     {
     	Object attr = (Object)callBacks.get(userAttribute);

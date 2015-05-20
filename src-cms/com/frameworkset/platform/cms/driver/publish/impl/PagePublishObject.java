@@ -24,6 +24,7 @@ import com.frameworkset.platform.cms.driver.publish.RecursivePublishManager;
 import com.frameworkset.platform.cms.util.AttributeKeys;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
+import com.frameworkset.util.SimpleStringUtil;
 
 /**
  * 页面的发布需要判断不同类型页面的发布
@@ -256,7 +257,7 @@ public class PagePublishObject extends PublishObject implements java.io.Serializ
 					context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 					this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 							.append(this.pagecontext.getPagePath())
-							.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+							.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 					e.printStackTrace();
 				}
 			}

@@ -38,6 +38,7 @@ import com.frameworkset.platform.cms.driver.publish.RecursivePublishManager;
 import com.frameworkset.platform.cms.util.AttributeKeys;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.util.SimpleStringUtil;
 
 /**
  * 
@@ -444,21 +445,21 @@ public class ChannelPublishObject extends PublishObject implements java.io.Seria
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 			} catch (CMSException e) {
 				
 				log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				log.debug(this.getClass().getName() + "发布报错：[" + uri +"]" + e.getMessage(),e);
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 			}
 			finally
 			{

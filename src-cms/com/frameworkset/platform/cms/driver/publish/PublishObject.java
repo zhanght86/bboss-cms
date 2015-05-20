@@ -56,6 +56,7 @@ import com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor;
 import com.frameworkset.platform.cms.driver.publish.impl.SitePublishObject;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
+import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.VelocityUtil;
 
 /**
@@ -493,7 +494,7 @@ public abstract class PublishObject implements java.io.Serializable
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 				
 			} catch (CMSException e) {
 				e.printStackTrace();
@@ -501,13 +502,13 @@ public abstract class PublishObject implements java.io.Serializable
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 			} catch (Exception e) {
 				e.printStackTrace();
 				context.getPublishMonitor().setPublishStatus(PublishMonitor.PUBLISH_FAILED);
 				this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
 						.append(context.getRendURI())
-						.append("]失败:").append(e.getMessage()).toString(),context.getPublisher());
+						.append("]失败:").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
 //				e.printStackTrace();
 			}
 			finally

@@ -1,0 +1,28 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	margin:0px auto;
+	font-family:"microsoft yahei",Arial, Helvetica, sans-serif;
+	font-size:14px;
+}
+ul,li{padding:0px;margin:0px; list-style:none}
+.main_content{margin:0px 40px;margin-top:-50px;padding-bottom:50px;}
+span.blue{color:#0033cc}
+.title_h1{font-size:26px;line-height:48px;border-bottom:1px solid #ccc;margin-top:70px;color:#313131}
+.title_h2{font-size:16px;line-height:30px;margin-top:25px;color:#444}
+.mt_30{margin-top:30px;}
+.mt_40{margin-top:40px;}
+.mt_10{margin-top:10px;}
+
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}

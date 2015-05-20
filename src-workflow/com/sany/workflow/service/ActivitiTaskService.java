@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
+import com.sany.workflow.business.entity.WfRunTask;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -26,7 +27,14 @@ import com.sany.workflow.entrust.entity.WfEntrust;
  * 
  */
 public interface ActivitiTaskService {
-
+	/**
+	 * 查询统一待办单实例都处理人待办列表信息
+	 * added by yinbp on 20150518,17.02
+	 * @param taskId
+	 * @return
+	 */
+	public List<WfRunTask>  getTodoList(String taskId,String startUser,String lastOp, String lastOper)  throws ProcessException;
+	public void refreshTodoList(String processID, String lastOp, String lastOper) throws ProcessException;
 	/**
 	 * 根据条件获取历史任务列表,分页展示
 	 * 

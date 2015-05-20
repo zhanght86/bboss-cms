@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
+import org.apache.log4j.Logger;
+
 import com.frameworkset.common.tag.CMSBaseCellTag;
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
@@ -15,6 +17,7 @@ import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.util.SimpleStringUtil;
 
 /**
  * 
@@ -39,6 +42,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * @version 1.0.0
  */
 public class SiteURLTag extends CMSBaseCellTag {
+	private static Logger log = Logger.getLogger(SiteURLTag.class);
 	private String link;	
 	
 
@@ -164,10 +168,14 @@ public class SiteURLTag extends CMSBaseCellTag {
 						out.print(indexURL);
 					}
 				} catch (JspException e) {
+					 
 					throw e;
+					
 				} catch (IOException e) {
+					 
 					throw new JspException("",e);
 				} catch (Exception e) {
+					 
 					throw new JspException("",e);
 				}
     		}
@@ -179,10 +187,13 @@ public class SiteURLTag extends CMSBaseCellTag {
 					String linkPath = CMSTagUtil.getPublishedChannelPath(context,channel_);
 					out.print(linkPath);
 				}  catch (JspException e) {
+					 
 					throw e;
 				} catch (IOException e) {
+					 
 					throw new JspException("",e);
 				} catch (Exception e) {
+					 
 					throw new JspException("",e);
 				}
     		}
@@ -195,24 +206,57 @@ public class SiteURLTag extends CMSBaseCellTag {
 				String linkPath = CMSTagUtil.getPublishedChannelPath(context,channel_);
 				out.print(linkPath);
 			} catch (JspException e) {
+				
+				 
 				throw e;
 			} catch (IOException e) {
-				throw new JspException("",e);
+				 
+				throw new JspException("生成频道channel="+channel+"访问地址出错",e);
 			} catch (Exception e) {
-				throw new JspException("",e);
+				 
+				throw new JspException("生成频道channel="+channel+"访问地址出错",e);
 			}
     	}
 	}
-	public int doStartTag() throws JspException {		
-	    super.doStartTag();    
-	    if(site == null && this.channel == null)
-	    {
-	    	doDefault();
-	    }
-	    else
-	    {
-	    	doCustom();
-	    }
+	public int doStartTag() throws JspException {
+		
+		    super.doStartTag();    
+		    if(site == null && this.channel == null)
+		    {
+		    	try
+		    	{
+		    		doDefault();
+		    	}
+		    	catch(Exception e)
+		    	{
+		    		log.error(e.getMessage(),e);
+		    		if(context != null && context.getPublishMonitor() != null)
+					{
+						this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
+								.append(context.getRendURI())
+								.append("]出错,请检查站点或者站点频道或者文档是否存在!:<br>").append(SimpleStringUtil.formatBRException(e)).toString()+",请检查站点或者站点频道或者文档是否存在!",context.getPublisher());
+					}
+		    	}
+		    }
+		    else
+		    {
+		    	try
+				{
+			    	doCustom();
+			    }
+				catch(Exception e)
+				{
+					
+					log.error(e.getMessage(),e);
+		    		if(context != null && context.getPublishMonitor() != null)
+					{
+						this.context.getPublishMonitor().addFailedMessage(new StringBuffer(context.toString()).append("生成页面[")
+								.append(context.getRendURI())
+								.append("]出错,请检查站点或者站点频道或者文档是否存在!:<br>").append(SimpleStringUtil.formatBRException(e)).toString(),context.getPublisher());
+					}
+				}
+		    }
+		
 		return SKIP_BODY;
 	}
 

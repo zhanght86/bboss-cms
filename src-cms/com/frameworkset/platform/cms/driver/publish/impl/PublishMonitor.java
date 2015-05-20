@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.Context;
 
@@ -44,6 +46,8 @@ public class PublishMonitor implements java.io.Serializable {
 	private String pageUrl;
 	private String multidocspub;
 	
+	private static Logger log = Logger.getLogger(PublishMonitor.class);
+	
 
 	/**
 	 * 子监控器列表，封装派生的子发布任务的监控器
@@ -56,9 +60,9 @@ public class PublishMonitor implements java.io.Serializable {
 
 	private PublishMonitor() {
 //		this.tempMonitor = Collections.synchronizedList(new ArrayList());
-		this.totalFailedMessage = Collections.synchronizedList(new ArrayList());
-		this.totalSuccessMessage = Collections
-				.synchronizedList(new ArrayList());
+//		this.totalFailedMessage = Collections.synchronizedList(new ArrayList());
+//		this.totalSuccessMessage = Collections
+//				.synchronizedList(new ArrayList());
 		this.totalMessages = Collections.synchronizedList(new ArrayList());
 		this.distributeTemplateIndexs = Collections
 				.synchronizedMap(new HashMap());
@@ -68,13 +72,12 @@ public class PublishMonitor implements java.io.Serializable {
 				.synchronizedMap(new HashMap());
 	}
 
-	private PublishMonitor(List tempMonitor, List totalFailedMessage,
-			List totalSuccessMessage, List totalMessages,
+	private PublishMonitor(List tempMonitor , List totalMessages,
 			Map distributeTemplateIndexs, Map distributePageIndexs,
 			Map sitePageTemplate, Map tempFileOfPublishObject) {
 //		this.tempMonitor = tempMonitor;
-		this.totalFailedMessage = totalFailedMessage;
-		this.totalSuccessMessage = totalSuccessMessage;
+//		this.totalFailedMessage = totalFailedMessage;
+//		this.totalSuccessMessage = totalSuccessMessage;
 		this.totalMessages = totalMessages;
 		this.distributeTemplateIndexs = distributeTemplateIndexs;
 		this.distributePageIndexs = distributePageIndexs;
@@ -168,15 +171,15 @@ public class PublishMonitor implements java.io.Serializable {
 
 	public int status = -1;
 
-	/**
-	 * 存储发布成功的监控信息
-	 */
-	private List totalSuccessMessage = null;
-
-	/**
-	 * 存储失败监控信息
-	 */
-	private List totalFailedMessage = null;
+//	/**
+//	 * 存储发布成功的监控信息
+//	 */
+//	private List totalSuccessMessage = null;
+//
+//	/**
+//	 * 存储失败监控信息
+//	 */
+//	private List totalFailedMessage = null;
 
 	/**
 	 * 存储全部发布监控信息
@@ -215,13 +218,13 @@ public class PublishMonitor implements java.io.Serializable {
 	 * @param time
 	 */
 	public void addSuccessMessage(String msg, Date time, String[] publisher) {
-		System.out.println("Success msg=" + msg );
+		log.info("Success msg=" + msg );
 		if (this.notRecordMsg) {
 			// System.out.println("drop success Msg1");
 		} else {
 			//System.out.println("Success msg=" + msg );
 			PublishMessage message = new PublishMessage(msg, time, publisher);
-			this.totalSuccessMessage.add(message);
+//			this.totalSuccessMessage.add(message);
 			this.totalMessages.add(message);
 //			tempMonitor.add(message);
 		}
@@ -234,7 +237,7 @@ public class PublishMonitor implements java.io.Serializable {
 	 * @param time
 	 */
 	public void addSuccessMessage(String msg, String[] publisher) {
-		System.out.println("Success msg=" + msg );
+		log.info("Success msg=" + msg );
 		if (this.notRecordMsg) {
 //			System.out.println("drop success Msg2");
 		} else {
@@ -242,7 +245,7 @@ public class PublishMonitor implements java.io.Serializable {
 //					 publisher[0]);
 			PublishMessage message = new PublishMessage(msg, new Date(),
 					publisher);
-			this.totalSuccessMessage.add(message);
+//			this.totalSuccessMessage.add(message);
 			this.totalMessages.add(message);
 //			tempMonitor.add(message);
 		}
@@ -252,18 +255,20 @@ public class PublishMonitor implements java.io.Serializable {
 	 * 获取发布过程中所有失败的消息
 	 * 
 	 * @return List<PublishMessage>
+	 * @deprecated use getAllMessages 
 	 */
 	public List getAllFailedMessages() {
-		return this.totalFailedMessage;
+		return this.totalMessages;
 	}
 
 	/**
 	 * 获取发布过程中所有发布成功的信息
 	 * 
 	 * @return List<PublishMessage>
+	 * @deprecated use getAllMessages 
 	 */
 	public List getAllSuccessMessages() {
-		return this.totalSuccessMessage;
+		return this.totalMessages;
 	}
 
 	/**
@@ -282,14 +287,14 @@ public class PublishMonitor implements java.io.Serializable {
 	 * @param time
 	 */
 	public void addFailedMessage(String msg, Date time, String[] publisher) {
-		System.out.println("Failed msg=" + msg );
+		log.info("Failed msg=" + msg );
 		if (this.notRecordMsg) {
 //			System.out.println("drop faild Msg1");
 		} else {
 //			 System.out.println("Failed msg=" + msg + ",publisher=" +
 //			 publisher[0]);
 			PublishMessage message = new PublishMessage(msg, time, publisher);
-			this.totalFailedMessage.add(message);
+			 
 			this.totalMessages.add(message);
 //			tempMonitor.add(message);
 		}
@@ -302,7 +307,7 @@ public class PublishMonitor implements java.io.Serializable {
 	 * @param time
 	 */
 	public void addFailedMessage(String msg, String[] publisher) {
-		System.out.println("Failed msg=" + msg );
+		log.info("Failed msg=" + msg );
 		if (this.notRecordMsg) {
 //			System.out.println("drop faild Msg2");
 		} else {
@@ -310,7 +315,7 @@ public class PublishMonitor implements java.io.Serializable {
 //			 publisher[0]);
 			PublishMessage message = new PublishMessage(msg, new Date(),
 					publisher);
-			this.totalFailedMessage.add(message);
+			 
 			this.totalMessages.add(message);
 //			tempMonitor.add(message);
 		}
@@ -433,7 +438,6 @@ public class PublishMonitor implements java.io.Serializable {
 
 	public PublishMonitor createSubPublishMonitor() {
 		PublishMonitor monitor = new PublishMonitor(null,
-				this.totalFailedMessage, this.totalSuccessMessage,
 				this.totalMessages, this.distributeTemplateIndexs,
 				this.distributePageIndexs, sitePageTemplate,
 				this.tempFileOfPublishObject);
@@ -676,16 +680,16 @@ public class PublishMonitor implements java.io.Serializable {
 	}
 	public void clearMSGS()
 	{
-		if(totalFailedMessage != null)
-		{
-			this.totalFailedMessage.clear();
-			totalFailedMessage = null;
-		}
-		if(totalSuccessMessage != null)
-		{
-			this.totalSuccessMessage.clear();
-			totalSuccessMessage = null;
-		}
+//		if(totalFailedMessage != null)
+//		{
+//			this.totalFailedMessage.clear();
+//			totalFailedMessage = null;
+//		}
+//		if(totalSuccessMessage != null)
+//		{
+//			this.totalSuccessMessage.clear();
+//			totalSuccessMessage = null;
+//		}
 		if(totalMessages != null)
 		{
 			this.totalMessages.clear();

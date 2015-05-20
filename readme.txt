@@ -1,6 +1,84 @@
--Xms256m -Xmx1024m -XX:PermSize=256M -XX:MaxPermSize=512M -Dfile.encoding=UTF-8  -Dsun.jnu.encoding=UTF-8
+sap驱动在linux下的存放地址：
+/lib/libsapjco3.so
+ 
+
+jgroup linux下部署修改os参数（5M）：
+sysctl -w net.core.rmem_max=5000000
+sysctl -w net.core.wmem_max=5000000
+
+
+
+alter table TD_WF_HI_COPYTASK add TASKTYPE NUMBER(1) default 1;
+alter table TD_WF_COPYTASK add TASKTYPE NUMBER(1) default 1;
+
+alter table TD_WF_HI_COPYTASK add TASKTYPE DECIMAL(1) default 1;
+alter table TD_WF_COPYTASK add TASKTYPE DECIMAL(1) default 1;
+ALTER TABLE td_wf_app
+	MODIFY COLUMN TICKETTIME DECIMAL DEFAULT'-2'
+	
+ALTER TABLE TD_WF_APP MODIFY (TICKETTIME DEFAULT -2)
+	
+ALTER TABLE td_wf_app ADD (TICKETTIME DECIMAL(19) DEFAULT '-2')	
+
+mysql:
+# -----------------------------------------------------------------------
+# TD_WF_COPYTASK
+# -----------------------------------------------------------------------
+drop table if exists TD_WF_COPYTASK;
+
+CREATE TABLE TD_WF_COPYTASK
+(
+    ID VARCHAR(100) NOT NULL,
+    COPERTYPE DECIMAL(1) default 0,
+    COPER VARCHAR(255),
+    PROCESS_ID VARCHAR(100),
+    PROCESS_KEY VARCHAR(200),
+    BUSINESSKEY VARCHAR(255),
+    COPYTIME TIMESTAMP NULL DEFAULT NULL,
+    TASKTYPE DECIMAL(1) default 1,
+    PRIMARY KEY(ID)) ENGINE=InnoDB;
+
+
+# -----------------------------------------------------------------------
+# TD_WF_HI_COPYTASK
+# -----------------------------------------------------------------------
+drop table if exists TD_WF_HI_COPYTASK;
+
+CREATE TABLE TD_WF_HI_COPYTASK
+(
+    ID VARCHAR(100) NOT NULL,
+    COPORG VARCHAR(255),
+    COPER VARCHAR(255),
+    PROCESS_ID VARCHAR(100),
+    PROCESS_KEY VARCHAR(200),
+    BUSINESSKEY VARCHAR(255),
+    COPYTIME TIMESTAMP NULL DEFAULT NULL,
+    READTIME TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY(ID)) ENGINE=InnoDB;
+ALTER TABLE td_wf_node_worktime ADD (COPYUSERS VARCHAR(4000));
+ALTER TABLE td_wf_node_worktime ADD (COPYORGS VARCHAR(4000));
+ALTER TABLE td_wf_node_worktime ADD (COPYERSCNNAME VARCHAR(4000));
+
+  <Host name="test.sany.com.cn"  appBase="sany"
+            unpackWARs="true" autoDeploy="true">
+
+        <!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html -->
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
+
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log." suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
+/SanyPDP/params/showParams.page?paramId=323a023a-8516-47c3-9dbd-afea40c23144&paramType=app&handler=cms.siteparamshandler
 ip访问控制思路：
-CREATE TABLE TD_SM_IPCONTROL
+CREATE TABLE PDPV108.TD_SM_IPCONTROL
 (
   ID           VARCHAR2(100),
   IP           VARCHAR2(1000),

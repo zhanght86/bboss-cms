@@ -77,7 +77,10 @@
 		}
 	}
 	if(pageflag == 3 && indexpagepath!=null){
-		chnlName = CMSUtil.getChannelCacheManager(indexpagepath.split(":")[0]).getChannel(indexpagepath.split(":")[1]).getDisplayName();
+		
+		Channel idxchannel = CMSUtil.getChannelCacheManager(indexpagepath.split(":")[0]).getChannel(indexpagepath.split(":")[1]);
+		if(idxchannel != null)
+			chnlName = idxchannel.getDisplayName();
 	}
 	
 	String parentChannelId = "";//父频道id

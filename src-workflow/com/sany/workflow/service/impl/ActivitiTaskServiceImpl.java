@@ -1,5 +1,6 @@
 package com.sany.workflow.service.impl;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,12 +16,14 @@ import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.TaskInfo;
+import com.sany.workflow.business.entity.WfRunTask;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
 import com.sany.workflow.entity.DelegateTaskLog;
@@ -1501,7 +1504,154 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.release();
 		}
 	}
+	public String getAssignees(String PROC_INST_ID_,String task_id,String task_key) throws SQLException
+	{
+		String v = task_key+"_users";
+		return executor.queryObject(String.class,"getAssignees", PROC_INST_ID_,v);
+		
+		
+	}
+	
+	private String convertNamestoworknos(String names)
+	{
+		String[] _names = names.split(",");
+		StringBuilder b = new StringBuilder();
+		for(String name:_names)
+		{
+			CheckCallBack user = UserCacheManager.getInstance().getUser(name);
+			if(b.length() > 0)
+				b.append(",");
+			b.append(user.getUserAttribute("userName")+ "("+user.getUserAttribute("userWorknumber")+")");
+			
+		}
+		return b.toString();
+	}
+	public void refreshTodoList(String processID,String lastOp, String lastOper) throws ProcessException
+	{
+		TransactionManager tm = new TransactionManager();
+		String startUser = "";
+		try
+		{
+			tm.begin();
+			 startUser = executor.queryObject(String.class,
+					"getProcessStarter", processID);
+			List<WfRunTask> tasks = getTodoList(processID,startUser,lastOp, lastOper);
+			executor.delete("deleteWfRunTaskByKey", processID);
+			if(tasks != null && tasks.size() > 0)
+			{
+				executor.insertBeans("addWfRunTask", tasks);
+			}
+			tm.commit();
+		}
+		catch(ProcessException e)
+		{
+			throw e;
+		}
+		catch(Exception e)
+		{
+			throw new ProcessException("processID:"+processID+"startUser:"+startUser,e);
+		}
+		finally
+		{
+			tm.release();
+		}
+		
+	}
+	public List<WfRunTask> getTodoList(String processID,String startUser,String lastOp, String lastOper) throws ProcessException
+	{
+		if (StringUtil.isEmpty(processID)) {
+			return null;
+		}
+		List<WfRunTask> taskInfos = null;
+		List<WfRunTask> rettaskInfos = new ArrayList<WfRunTask>();
+		
+		Map<String,String> taskassigens = new HashMap<String,String>();
+		try {
+			taskInfos = executor.queryList(WfRunTask.class,
+					"getRunTaskInfoByPINSTID", processID);//查询工作流runtask表中的数据
 
+			// 处理人行转列
+			if (null != taskInfos && taskInfos.size() > 0) {
+				for(WfRunTask taskInfo:taskInfos)
+				{
+					String assigne = taskassigens.get(taskInfo.getTaskKey());
+					if(assigne == null)
+					{
+						assigne = this.getAssignees(processID, taskInfo.getTaskId(), taskInfo.getTaskKey());
+						taskassigens.put(taskInfo.getTaskKey(), assigne);
+					}
+					if (StringUtil.isNotEmpty(taskInfo.getDealer())) {
+	//				taskInfo.setAssigneeName(activitiService.getUserInfoMap()
+	//						.getUserName(taskInfo.getAssignee()));
+						
+						CheckCallBack user = UserCacheManager.getInstance().getUser(taskInfo.getDealer());
+						taskInfo.setDealerName((String)user.getUserAttribute("userName"));
+						taskInfo.setDealerWorkno((String)user.getUserAttribute("userWorknumber"));
+						user = UserCacheManager.getInstance().getUser(startUser);
+						taskInfo.setSender(startUser);
+						taskInfo.setSenderName((String)user.getUserAttribute("userName"));
+						taskInfo.setSenderWorkno((String)user.getUserAttribute("userWorknumber"));
+						taskInfo.setDealers(assigne);
+						taskInfo.setDealerNames(convertNamestoworknos(assigne));	
+						taskInfo.setLastOp(lastOp);
+						taskInfo.setLastOper(lastOper);
+						rettaskInfos.add(taskInfo);
+					} else {
+						// 任务未签收，根据任务id查询任务可处理人
+	//				List<HashMap> candidatorList = executor.queryList(
+	//						HashMap.class, "getCandidatorOftask_wf",
+	//						taskInfo.getTaskId());
+	
+						/**
+						 * B.BUSINESS_KEY_ AS BUSINESSKEY,
+					       C.PROCESS_KEY   AS PROCESSKEY,
+					         C.IS_RECALL     AS ISRECALL,
+					       C.IS_DISCARD    AS ISDISCARD,
+					       C.IS_DISCARDED  AS ISDISCARDED,
+					       C.IS_CANCEL     AS ISCANCEL,
+					       C.IS_COPY       AS ISCOPY,
+					       C.IS_AUTOAFTER  AS ISAUTOAFTER,
+					       C.TASK_URL      AS TASKURL
+						 */
+	//				StringBuilder users = new StringBuilder();
+	//				StringBuilder userNames = new StringBuilder();
+						List<WfRunTask> tasks = executor.queryList(WfRunTask.class, "getTaskInfosByTaskId", taskInfo.getTaskId());
+						if(tasks == null || tasks.size() == 0)
+						{
+							return null;
+						}
+						for(WfRunTask task:tasks)
+						{
+							CheckCallBack user = UserCacheManager.getInstance().getUser(task.getDealer());
+//							task.setDealer(task.getAssignee());
+							task.setDealerName((String)user.getUserAttribute("userName"));
+							task.setDealerWorkno((String)user.getUserAttribute("userWorknumber"));
+							user = UserCacheManager.getInstance().getUser(startUser);
+							task.setSender(startUser);
+							task.setSenderName((String)user.getUserAttribute("userName"));
+							task.setSenderWorkno((String)user.getUserAttribute("userWorknumber"));
+							task.setTaskUrl(taskInfo.getTaskUrl());
+							task.setBusinessKey(taskInfo.getBusinessKey());
+							task.setProcessKey(taskInfo.getProcessKey());
+							
+							task.setDealers(assigne);
+							task.setDealerNames(convertNamestoworknos(assigne));	
+							task.setLastOp(lastOp);
+							task.setLastOper(lastOper);
+							rettaskInfos.add(task);
+						}
+	
+	
+						
+					}
+				}
+			}
+		} catch (SQLException e) {
+			throw new ProcessException("processID:"+processID+"startUser:"+startUser,e);
+		}
+
+		return rettaskInfos;
+	}
 	@Override
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
 
