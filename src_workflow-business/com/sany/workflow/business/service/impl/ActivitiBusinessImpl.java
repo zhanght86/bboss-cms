@@ -26,8 +26,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.log4j.Logger;
 import org.frameworkset.soa.ObjectSerializable;
-import org.frameworkset.spi.BaseApplicationContext;
-import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -43,7 +41,6 @@ import com.sany.workflow.business.entity.HisTaskInfo;
 import com.sany.workflow.business.entity.ProIns;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.service.ActivitiBusinessService;
-import com.sany.workflow.business.service.CommonBusinessTriggerService;
 import com.sany.workflow.business.util.WorkflowConstants;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;
@@ -54,6 +51,7 @@ import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.service.TaskTrigger;
 import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
 
 /**
@@ -63,8 +61,7 @@ import com.sany.workflow.service.impl.PlatformKPIServiceImpl;
  * 
  */
 public class ActivitiBusinessImpl implements ActivitiBusinessService,
-		org.frameworkset.spi.DisposableBean,
-		org.frameworkset.spi.InitializingBean {
+		org.frameworkset.spi.DisposableBean {
 
 	private static Logger log = Logger.getLogger(ActivitiBusinessImpl.class);
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
@@ -73,7 +70,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	private ActivitiTaskService activitiTaskService;
 
-	private CommonBusinessTriggerService commonTrigger;
+//	private TaskTrigger commonTrigger;
 
 	@Override
 	public void destroy() throws Exception {
@@ -635,8 +632,10 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 				// 自动完成任务
 				autoCompleteTask(proIns, processKey);
 			}
-			commonTrigger.createCommonOrder(proIns, businessKey, processKey,
-					paramMap, completeFirstTask);
+//			commonTrigger.createCommonOrder(proIns, businessKey, processKey,
+//					paramMap, completeFirstTask);
+			
+			activitiService.createCommonOrder(proIns.getProInsId(), proIns.getUserAccount(), businessKey, processKey, paramMap, completeFirstTask);
 			tm.commit();
 
 		} 
@@ -1565,7 +1564,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					"getProcessByBusinesskey_wf", businessKey);
 
 			// 维护统一待办任务
-			this.addTodoTask(inst.getPROC_INST_ID_(), businessop, "");
+			this.addTodoTask(inst.getPROC_INST_ID_(), businessop, AccessControl.getAccessControl().getUserAccount());
 
 			tm.commit();
 
@@ -1659,7 +1658,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					proIns.getDealOption(), proIns.getDealReason());
 
 			// 维护统一待办任务
-			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), "");
+			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(), userAccount);
 
 			tm.commit();
 
@@ -1687,7 +1686,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 							processKey, userAccount, businessop, businessReason);
 
 			// 维护统一待办任务
-			this.addTodoTask(processId, businessop, "");
+			this.addTodoTask(processId, businessop, userAccount);
 
 			tm.commit();
 
@@ -1820,7 +1819,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 维护统一待办任务
 			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
-					activitiService.getUserInfoMap().getUserName(userAccount));
+					userAccount);
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1850,8 +1849,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					businessReason, 0);
 
 			// 维护统一待办任务
-			this.addTodoTask(processId, businessop, activitiService
-					.getUserInfoMap().getUserName(delegateUser));
+			this.addTodoTask(processId, businessop, delegateUser);
 
 			tm.commit();
 		} catch (ProcessException e) {
@@ -1913,7 +1911,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 维护统一待办任务
 			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
-					currentUser);
+					userAccount);
 
 			tm.commit();
 
@@ -1955,7 +1953,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 					businessop, businessReason);
 
 			// 维护统一待办任务
-			this.addTodoTask(processId, businessop, currentUser);
+			this.addTodoTask(processId, businessop, userAccount);
 
 			tm.commit();
 
@@ -2027,7 +2025,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 维护统一待办任务
 			this.addTodoTask(proIns.getProInsId(), proIns.getDealOption(),
-					activitiService.getUserInfoMap().getUserName(userAccount));
+					userAccount);
 
 			tm.commit();
 
@@ -2273,7 +2271,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 	public void addTodoTask(String processId, String lastOp, String lastOper)
 			throws Exception {
 
-		commonTrigger.addTodoTask(processId, lastOp, lastOper);
+		this.activitiService.refreshTodoList(processId, lastOp, lastOper);
 
 		// TransactionManager tm = new TransactionManager();
 		//
@@ -2729,7 +2727,7 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 			// 维护统一待办任务
 			this.addTodoTask(taskInfo.getInstanceId(), bussinessop,
-					activitiService.getUserInfoMap().getUserName(currentUser));
+					currentUser);
 
 			tm.commit();
 		} catch (Exception e) {
@@ -3215,19 +3213,5 @@ public class ActivitiBusinessImpl implements ActivitiBusinessService,
 
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		BaseApplicationContext context = DefaultApplicationContext
-				.getApplicationContext("activiti.cfg.xml");
-		boolean enablebussinesstrigger = context.getBooleanProperty(
-				"enablebussinesstrigger", false);
-		if (this.commonTrigger != null) {
-			commonTrigger = new CommonBusinessTriggerServiceWraper(
-					commonTrigger, enablebussinesstrigger);
-		} else {
-			commonTrigger = new CommonBusinessTriggerServiceWraper(null,
-					enablebussinesstrigger);
-		}
-
-	}
+	
 }

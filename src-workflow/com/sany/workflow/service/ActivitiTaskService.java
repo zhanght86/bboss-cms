@@ -6,7 +6,6 @@ import java.util.Map;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.business.entity.WfRunTask;
-import com.sany.workflow.entity.ActivitiNodeCandidate;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.DelegateTaskLog;
 import com.sany.workflow.entity.NoHandleTask;
@@ -34,7 +33,7 @@ public interface ActivitiTaskService {
 	 * @return
 	 */
 	public List<WfRunTask>  getTodoList(String taskId,String startUser,String lastOp, String lastOper)  throws ProcessException;
-	public void refreshTodoList(String processID, String lastOp, String lastOper) throws ProcessException;
+	public int refreshTodoList(String processID, String lastOp, String lastOper) throws ProcessException;
 	/**
 	 * 根据条件获取历史任务列表,分页展示
 	 * 

@@ -293,7 +293,7 @@ public interface ActivitiService {
 	public Deployment deployProcDefByPath(String deploymentName, String xmlPath);
 
 	/**
-	 * 启动流程
+	 * 启动流程，没有刷新统一待办列表，需要调用程序执行
 	 * 
 	 * @param businessKey
 	 * @param variableMap
@@ -304,7 +304,7 @@ public interface ActivitiService {
 			Map<String, Object> map);
 	
 	/**
-	 * 启动流程
+	 * 启动流程，没有刷新统一待办列表，需要调用程序执行
 	 * 
 	 * @param businessKey
 	 * @param variableMap
@@ -1433,11 +1433,27 @@ public interface ActivitiService {
 	 * @param taskId
 	 * @param processKey
 	 * 2014年8月15日
+	 * @deprecated use cancleProcessInstances(String processInstanceIds,
+			String deleteReason, String processKey,
+			String currentUser, String bussinessop, String bussinessRemark)
 	 */
 	public void cancleProcessInstances(String processInstanceIds,
 			String deleteReason, String taskId, String processKey,
 			String currentUser, String bussinessop, String bussinessRemark);
 	
+	/** 逻辑删除流程实例 gw_tanx
+	 * @param processInstanceIds
+	 * @param deleteReason	 
+	 * @param processKey
+	 * 2014年8月15日
+	 */
+	public void cancleProcessInstances(
+			String deleteReason, String processKey,
+			String currentUser, String bussinessop, String bussinessRemark,String... processInstanceIds);
+	public void addDealTask(String dealUser,
+			String dealUserName, String dealType, String processId,
+			String processKey, String dealReason, String bussinessop,
+			String bussinessRemark) throws Exception;
 	/**
 	 * 物理删除流程实例 gw_tanx
 	 * 
@@ -1628,6 +1644,11 @@ public interface ActivitiService {
 	public String startPorcessInstance(String processKey, String businessKey,
 			String currentUser);
 	
+	public void deleteBussinessOrderFromTrigger(
+			 String processKey,
+			String userAccount,String lastOp,
+			String opReason,String... processId) throws Exception;
+	
 	/**
 	 * 日志记录任务操作
 	 * 
@@ -1639,6 +1660,10 @@ public interface ActivitiService {
 	 * @param processId
 	 * @param processKey
 	 * @param remark
+	 * @deprecated use addDealTask(String dealUser,
+			String dealUserName, String dealType, String processId,
+			String processKey, String dealReason, String bussinessop,
+			String bussinessRemark)  
 	 *            2014年8月15日
 	 */
 	public void addDealTask(String taskId, String dealUser,
@@ -1726,4 +1751,54 @@ public interface ActivitiService {
 	 *             2015年2月13日
 	 */
 	public List<String> getUserTasksByKey(String processKey) throws Exception;
+	/**刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	TaskTrigger.refresh_task_success = 1;
+	刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	TaskTrigger.refresh_task_notask = 2;
+	刷新流程待办任务失败
+	TaskTrigger.refresh_task_fail = 0;
+	
+	 * 统一待办机制未启用
+	 */
+	public int createCommonOrder(String proInsId, String userAccount,
+			String businessKey, String processKey,
+			Map<String, Object> paramMap, boolean completeFirstTask)  throws Exception;
+	/**刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	TaskTrigger.refresh_task_success = 1;
+	刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	TaskTrigger.refresh_task_notask = 2;
+	刷新流程待办任务失败
+	TaskTrigger.refresh_task_fail = 0;
+	
+	 * 统一待办机制未启用
+	 */
+	public int refreshTodoList(String processId, String lastOp, String lastOper)  throws Exception;
+	
+	/**
+	 * 根据流程key，删除统一待办任务
+	 * @param processKey
+	 * @throws Exception 
+	 */
+	public void deleteTodoListByKeys(String... processKeys) throws Exception;
+	
+	public void deleteTodoListByKeyWithTrigger(String... processKeys) throws Exception;
+	/**
+	 * 根据流程实例id，删除统一待办任务
+	 * @param processKey
+	 * @throws Exception 
+	 */
+	public void deleteTodoListByProinstids(String... processInstIDs) throws Exception;
+	public void deleteTodoListByProinstidsWithTrigger(String... processInstIDs) throws Exception;
+	
+	/**
+	 *  转派任务，后台执行
+	 * @param fromuser 任务原来拥有人
+	 * @param touser 任务转派给用户
+	 * @param startUser 只转派发起人的任务，可以不指定，就是所有发起人的任务
+	 * @param processKeys 只转派指定流程的任务，可以不指定，就是所有流程的任务都转派
+	 * @throws Exception
+	 */
+	public void changeTasksTo(String fromuser,String touser,String startUser,String... processKeys) throws Exception;
+	public void changeTasksToWithTrigger(String fromuser, String touser,
+			String startUser, String... processKeys) throws Exception;
 }

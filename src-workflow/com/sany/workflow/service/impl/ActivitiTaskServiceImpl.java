@@ -40,6 +40,7 @@ import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ActivitiTaskService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.service.TaskTrigger;
 import com.sany.workflow.service.TempleService;
 
 /**
@@ -1183,8 +1184,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 					.getUserAccount();
 
 			Map<String, Object> params = new HashMap<String, Object>();
+			String[] pkeys = processKey.equals("") ? null : processKey.split(",");
 			params.put("processKeys",
-					processKey.equals("") ? null : processKey.split(","));
+					pkeys);
 			params.put("fromuser", fromuser);
 			params.put("startUser", startUser);
 
@@ -1239,6 +1241,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 				}
 			}
 
+			this.activitiService.changeTasksToWithTrigger(fromuser, touser, startUser, pkeys);
 			tm.commit();
 		} catch (Exception e) {
 			throw new ProcessException(e);
@@ -1526,7 +1529,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 		return b.toString();
 	}
-	public void refreshTodoList(String processID,String lastOp, String lastOper) throws ProcessException
+	public int refreshTodoList(String processID,String lastOp, String lastOper) throws ProcessException
 	{
 		TransactionManager tm = new TransactionManager();
 		String startUser = "";
@@ -1535,13 +1538,18 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.begin();
 			 startUser = executor.queryObject(String.class,
 					"getProcessStarter", processID);
-			List<WfRunTask> tasks = getTodoList(processID,startUser,lastOp, lastOper);
+			List<WfRunTask> tasks = getTodoList(processID,startUser,lastOp, this.activitiService.getUserInfoMap().getUserName(lastOper));
 			executor.delete("deleteWfRunTaskByKey", processID);
+			 
 			if(tasks != null && tasks.size() > 0)
 			{
 				executor.insertBeans("addWfRunTask", tasks);
 			}
 			tm.commit();
+			if(tasks != null && tasks.size() > 0)
+				return TaskTrigger.refresh_task_success;
+			else
+				return TaskTrigger.refresh_task_notask;
 		}
 		catch(ProcessException e)
 		{

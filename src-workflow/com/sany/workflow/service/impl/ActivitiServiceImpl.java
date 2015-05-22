@@ -58,6 +58,8 @@ import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.apache.commons.lang.StringUtils;
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.util.CollectionUtils;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -65,9 +67,11 @@ import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
+import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.sysmgrcore.entity.Log;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.ActivitiNodeCandidate;
@@ -90,11 +94,13 @@ import com.sany.workflow.service.ActivitiConfigService;
 import com.sany.workflow.service.ActivitiRelationService;
 import com.sany.workflow.service.ActivitiService;
 import com.sany.workflow.service.ProcessException;
+import com.sany.workflow.service.TaskTrigger;
 import com.sany.workflow.util.WorkFlowConstant;
 
 
 public class ActivitiServiceImpl implements ActivitiService,
-		org.frameworkset.spi.DisposableBean {
+		org.frameworkset.spi.DisposableBean,
+        org.frameworkset.spi.InitializingBean {
 
 	private com.frameworkset.common.poolman.ConfigSQLExecutor executor;
 
@@ -113,6 +119,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 	private ManagementService managementService;// 用于管理定时任务
 	private IdentityService identityService;// 用于管理组织结构
 	private ActivitiRelationService activitiRelationService;// 应用管理
+	
+	private TaskTrigger commonTrigger;
 
 	public UserInfoMap getUserInfoMap() {
 		return userInfoMap;
@@ -1761,12 +1769,13 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	/**
-	 * 启动流程
+	 * 启动流程，没有刷新统一待办列表，需要调用程序执行
 	 * 
 	 * @param businessKey
 	 * @param variableMap
 	 * @param process_key
 	 *            identityService.setAuthenticatedUserId(initor);
+	 *            
 	 * @return
 	 */
 	public ProcessInstance startProcDef(String businessKey, String process_key,
@@ -2042,6 +2051,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 				// relation.setProcdef_id(pd.getId());
 				relation.setProcdef_id(key);
 				activitiRelationService.deleteAppProcRelation(relation);
+				this.deleteTodoListByKeyWithTrigger(key);
 			}
 
 			tm.commit();
@@ -3525,19 +3535,61 @@ public class ActivitiServiceImpl implements ActivitiService,
 		return StringUtil.formatTimeToString(mss);
 	}
 
+	
+	public void deleteBussinessOrderFromTrigger(
+			 String processKey,
+			String userAccount,String lastOp,
+			String opReason,String... processInstIDs) throws Exception
+	{
+		TransactionManager tm = new TransactionManager();
+
+		try {
+
+			tm.begin();
+
+			String dealRemak = "["
+					+ getUserInfoMap().getUserName(
+							userAccount) + "]将任务废弃";
+
+			cancleProcessInstances(
+					dealRemak,processKey,
+					userAccount, lastOp,
+					opReason,processInstIDs);
+
+//			executor.deleteByKeys("deleteTaskInfoByProcessId", processId);
+			this.deleteTodoListByProinstids(processInstIDs);
+
+			tm.commit();
+
+		} catch (Exception e) {
+			throw new Exception("删除统一业务订单：", e);
+		} finally {
+			tm.release();
+		}
+	}
 	@Override
 	public void cancleProcessInstances(String processInstids,
 			String deleteReason, String taskId, String processKey,
 			String currentUser, String bussinessop, String bussinessRemark) {
-
 		String[] ids = processInstids.split(",");
+		cancleProcessInstances(  
+				  deleteReason,   processKey,
+				  currentUser,   bussinessop,   bussinessRemark,ids) ;
+	}
+	
+	@Override
+	public void cancleProcessInstances(
+			String deleteReason, String processKey,
+			String currentUser, String bussinessop, String bussinessRemark,String... processInstids) {
+
+		
 
 		TransactionManager tm = new TransactionManager();
 
 		try {
 			tm.begin();
 
-			for (String processInstid : ids) {
+			for (String processInstid : processInstids) {
 
 				if (StringUtil.isNotEmpty(processInstid)) {
 
@@ -3551,7 +3603,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 					}
 
 					// 日志记录废弃操作
-					addDealTask(taskId, currentUser, getUserInfoMap()
+					addDealTask(currentUser, getUserInfoMap()
 							.getUserName(currentUser), "3", processInstid,
 							processKey, deleteReason, bussinessop,
 							bussinessRemark);
@@ -3706,8 +3758,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.preparedDelete(" delete from TD_WF_HI_COPYTASK where PROCESS_ID=?");
 		dbUtil.setString(1, processInstid);
 		dbUtil.addPreparedBatch();
-
+        
 		dbUtil.executePreparedBatch();
+		this.commonTrigger.deleteTodoListByProinstids(processInstid);
 
 	}
 
@@ -4843,6 +4896,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			addNodeWorktime(processKey, processInstance.getId(),
 					nodeControlParamList,true);
+			this.createCommonOrder( processInstance.getId(), currentUser, businessKey, processKey, null, false);
 			
 			tm.commit();
 			return processInstance.getId();
@@ -4857,6 +4911,18 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 	@Override
 	public void addDealTask(String taskId, String dealUser,
+			String dealUserName, String dealType, String processId,
+			String processKey, String dealReason, String bussinessop,
+			String bussinessRemark) throws Exception {
+
+		addDealTask(  dealUser,
+				dealUserName, dealType, processId,
+				processKey, dealReason, bussinessop,
+				bussinessRemark);
+	}
+	
+	@Override
+	public void addDealTask(  String dealUser,
 			String dealUserName, String dealType, String processId,
 			String processKey, String dealReason, String bussinessop,
 			String bussinessRemark) throws Exception {
@@ -5034,4 +5100,118 @@ public class ActivitiServiceImpl implements ActivitiService,
 		return executor.queryList(String.class, "getUserTasksByKey", processKey);
 	}
 	
+	@Override
+    public void afterPropertiesSet() throws Exception {
+        BaseApplicationContext context = DefaultApplicationContext
+                .getApplicationContext("activiti.cfg.xml");
+        boolean enablebussinesstrigger = context.getBooleanProperty(
+                "enablebussinesstrigger", false);
+        if (this.commonTrigger != null) {
+            commonTrigger = new CommonBusinessTriggerServiceWraper(
+                    commonTrigger, enablebussinesstrigger);
+        } else {
+            commonTrigger = new CommonBusinessTriggerServiceWraper(null,
+                    enablebussinesstrigger);
+        }
+
+    }
+	/**刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	TaskTrigger.refresh_task_success = 1;
+	刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	TaskTrigger.refresh_task_notask = 2;
+	刷新流程待办任务失败
+	TaskTrigger.refresh_task_fail = 0;
+	
+	 * 统一待办机制未启用
+	 */
+	public final int refresh_task_noenable = 3;
+	/**
+     * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用 
+	 */
+	public int createCommonOrder(String proInsId, String userAccount,
+			String businessKey, String processKey,
+			Map<String, Object> paramMap, boolean completeFirstTask) throws Exception
+	{
+		return commonTrigger.createCommonOrder(proInsId, userAccount, businessKey, processKey, paramMap, completeFirstTask);
+	}
+	/**
+	 *  * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用
+	 */
+	public int refreshTodoList(String processId, String lastOp, String lastOper) throws Exception
+	{
+		return commonTrigger.refreshTodoList(processId, lastOp, lastOper);
+	}
+//	/**
+//	 * 根据流程key，删除统一待办任务
+//	 * @param processKey
+//	 */
+//	public void deleteTodoList(String processKey)
+//	{
+//		this.executor.deleteByKeys("deleteTodoListByKey", fields);
+//	}
+	
+	/**
+	 * 根据流程key，删除统一待办任务
+	 * @param processKey
+	 * @throws Exception 
+	 */
+	public void deleteTodoListByKeys(String... processKeys) throws Exception
+	{
+		this.executor.deleteByKeys("deleteTodoListByKey", processKeys);
+	}
+	
+	public void deleteTodoListByKeyWithTrigger(String... processKeys) throws Exception
+	{
+		this.commonTrigger.deleteTodoListByKeys(processKeys);
+	}
+	/**
+	 * 根据流程key，删除统一待办任务
+	 * @param processKey
+	 * @throws Exception 
+	 */
+	public void deleteTodoListByProinstids(String... processInstIDs) throws Exception
+	{
+		executor.deleteByKeys("deleteTaskInfoByProcessId", processInstIDs);
+	}
+	
+	public void deleteTodoListByProinstidsWithTrigger(String... processInstIDs) throws Exception
+	{
+		this.commonTrigger.deleteTodoListByProinstids(processInstIDs);
+	}
+	
+	/**
+	 *  转派任务，后台执行
+	 * @param fromuser 任务原来拥有人
+	 * @param touser 任务转派给用户
+	 * @param startUser 只转派发起人的任务，可以不指定，就是所有发起人的任务
+	 * @param processKeys 只转派指定流程的任务，可以不指定，就是所有流程的任务都转派
+	 * @throws Exception
+	 */
+	public void changeTasksTo(String fromuser,String touser,String startUser,String... processKeys) throws Exception
+	{
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("processKeys",
+				processKeys == null || processKeys.length == 0 ? null : processKeys);
+		params.put("fromuser", fromuser);
+		params.put("startUser", startUser);
+		params.put("touser", touser);
+		CheckCallBack  user = UserCacheManager.getInstance().getUser(touser);
+		params.put("touserName", user.getUserAttribute("userName"));
+		params.put("touserWorkno", user.getUserAttribute("userWorknumber"));
+		executor.updateBean("changeTasksTo", params);
+	}
+	
+	public void changeTasksToWithTrigger(String fromuser, String touser,
+			String startUser, String[] processKeys) throws Exception
+			{
+		this.commonTrigger.changeTasksTo(fromuser, touser, startUser, processKeys);
+			}
 }

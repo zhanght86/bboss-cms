@@ -3423,6 +3423,26 @@
 		]]>
 	</property>
 	
+	<property name="changeTasksTo">
+		<![CDATA[
+		update TD_WF_RUN_TASK  set DEALER=#[touser],DEALERNAME=#[touserName],DEALERWORKNO=#[touserWorkno] where DEALER=#[fromuser] 
+			#if($startUser && !$startUser.equals(""))
+				and SENDER = #[startUser]
+			#end
+			#if($processKeys)
+      			AND PROCESS_KEY IN ( 
+      				#foreach($processKey in $processKeys)
+						#if($velocityCount == 0)
+							#[processKeys[$velocityCount]]
+						#else
+							,#[processKeys[$velocityCount]]
+						#end
+					#end
+      			)
+      		#end
+		]]>
+	</property>
+	
 	<!-- 查询用户未处理的任务  gw_tanx-->
 	<property name="selectUserNoDealTasks_wf">
 		<![CDATA[
@@ -3667,5 +3687,17 @@
 			 WHERE A.PROC_INST_ID_ = ?
 		]]>
 	</property>
+	<!-- 删除统一待办任务信息 -->
+	<property name="deleteTaskInfoByProcessId">
+		<![CDATA[
+			delete from td_wf_run_task where  PROCESS_ID =?
+		]]>
+	</property>
 	
+	<!-- 删除统一待办任务信息 -->
+	<property name="deleteTodoListByKey">
+		<![CDATA[
+			delete from td_wf_run_task where  PROCESS_KEY =?
+		]]>
+	</property>
 </properties>

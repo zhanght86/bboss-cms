@@ -44,10 +44,10 @@ $(document).ready(function() {
  	     });
 
 	
-	 var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyList.page";
-        $.post(url,{},function(data){
-            initAutoComplete(data);
-        },"json");
+	// var url="<%=request.getContextPath()%>/workflow/businessDemo/getBusinessKeyList.page";
+    //    $.post(url,{},function(data){
+    //        initAutoComplete(data);
+     //   },"json");
 	
 
 });
@@ -155,7 +155,7 @@ function doreset(){
 			<tr><td>
 			    <div class="sany_li2">
 			      	业务单号<input id="businessKey" name="businessKey" type="text" class="input1" style="width: 165px;" value="" />
-			      	业务单号<input id="businessKey1" name="businessKey1" type="text" class="input1" style="width: 165px;" value="" />
+			      	<!--数据量小时可以使用全量搜索  业务单号<input id="businessKey1" name="businessKey1" type="text" class="input1" style="width: 165px;" value="" /> -->
 			    </div> 
 			    <a href="javascript:void(0)" class="bt_search" onclick="queryList();"><span>查询</span></a>
 	    	</td></tr>

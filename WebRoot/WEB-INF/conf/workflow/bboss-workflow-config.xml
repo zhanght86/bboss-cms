@@ -58,11 +58,23 @@
 		f:executor="attr:activiti.configsqlexecutor"
 		f:activitiConfigService="attr:activitiConfigService"
 		f:activitiRelationService="attr:activitiRelationService"
+		f:commonTrigger = "attr:workflow.business.commonTrigger"
 		class="com.sany.workflow.service.impl.ActivitiServiceImpl">
 		<construction>
 			<property value="activiti.cfg.xml"/>
 		</construction>
 	</property>
+	<!-- 统一工作流待办 -->
+	<property name="workflow.business.commonTrigger" 
+		f:executor="attr:workflow.business.triggerSqlexecutor"
+		f:activitiService="attr:activitiService" 
+		f:activitiTaskService="attr:workflow.task.activitiTaskService" 
+		class="com.sany.workflow.business.service.impl.CommonBusinessTrigger" />
 	
-	
+	<property name="workflow.business.triggerSqlexecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="com/sany/workflow/business/commonBusiness.xml" />
+		</construction>
+	</property>
 </properties>

@@ -747,7 +747,8 @@ public class ActivitiTaskManageAction {
 				activitiService.cancleProcessInstances(processInstIds,
 						dealRemak, taskId, processKey, userAccount, "废弃任务",
 						deleteReason);
-
+				// 维护统一待办任务
+				activitiService.refreshTodoList(processInstIds, "废弃任务", userAccount);
 				return "success";
 
 			} else {

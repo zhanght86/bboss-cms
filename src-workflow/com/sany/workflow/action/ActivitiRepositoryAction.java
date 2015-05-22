@@ -29,6 +29,7 @@ import javax.transaction.RollbackException;
 
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.DeploymentBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.frameworkset.util.CollectionUtils;
@@ -114,6 +115,10 @@ public class ActivitiRepositoryAction {
 					
 					// 部署流程定义，默认不考虑节假日/作息时间（状态是0）
 					activitiService.addIsContainHoliday(pd.getKEY_(),0);
+				}
+				if(processDeployment.getUpgradepolicy() == DeploymentBuilder.Deploy_policy_delete)//删除统一待办
+				{
+					activitiService.deleteTodoListByKeyWithTrigger(pd.getKEY_());
 				}
 			}
 			tm.commit();
@@ -214,6 +219,7 @@ public class ActivitiRepositoryAction {
 		// processDef.getProcessDef();
 		String[] ids = processDeploymentids.split(",");
 		try {
+			
 			activitiService.deleteDeploymentAllVersions(ids);
 
 			return "success";
@@ -614,11 +620,11 @@ public class ActivitiRepositoryAction {
 			String dealRemak = "["
 					+ activitiService.getUserInfoMap().getUserName(userAccount)
 					+ "]将流程废弃";
-
-			activitiService.cancleProcessInstances(processInstIds, dealRemak,
-					"", processKey, AccessControl.getAccessControl()
-							.getUserAccount(), "废弃流程", deleteReason);
-
+			String ids[] = processInstIds.split(",");
+			activitiService.cancleProcessInstances( dealRemak,
+					 processKey, AccessControl.getAccessControl()
+							.getUserAccount(), "废弃流程", deleteReason,ids);
+			activitiService.deleteTodoListByProinstidsWithTrigger(ids);
 			return "success";
 		} catch (Exception e) {
 			return "fail" + e.getMessage();

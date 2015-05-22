@@ -14,22 +14,12 @@
  */
 package com.sany.workflow.business.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.task.Task;
-
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.sany.workflow.business.entity.CommonBusinessBean;
-import com.sany.workflow.business.entity.ProIns;
-import com.sany.workflow.business.entity.TaskInfo;
-import com.sany.workflow.business.service.CommonBusinessTriggerService;
 import com.sany.workflow.business.util.WorkflowConstants;
-import com.sany.workflow.entity.ProcessInst;
-import com.sany.workflow.service.ActivitiService;
-import com.sany.workflow.service.ActivitiTaskService;
+import com.sany.workflow.service.impl.CommonTaskTrigger;
 
 /**
  * 
@@ -37,19 +27,22 @@ import com.sany.workflow.service.ActivitiTaskService;
  * @author luoh19
  * @version 2015年2月9日,v1.0
  */
-public class CommonBusinessTrigger implements CommonBusinessTriggerService {
+public class CommonBusinessTrigger extends CommonTaskTrigger {
 
 	private ConfigSQLExecutor executor;
 
-	private ActivitiService activitiService;
-
-	private ActivitiTaskService activitiTaskService;
+	 
 
 	/**
-	 * 创建统一业务订单
+	 * 创建统一业务订单 
+	 * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用
 	 */
 	@Override
-	public void createCommonOrder(ProIns proIns, String businessKey,
+	public int createCommonOrder(String processId, String createUserAccount,String businessKey,
 			String processKey, Map<String, Object> paramMap,
 			boolean completeFirstTask) throws Exception {
 
@@ -67,26 +60,22 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 			}
 		}
 
-		if(!completeFirstTask)
-		{
-			
-		
-		// 维护统一待办任务
-			this.addTodoTask(proIns.getProInsId(), "发起流程", activitiService
-					.getUserInfoMap().getUserName(proIns.getUserAccount()));
-		}
-		else
-		{
-			this.addTodoTask(proIns.getProInsId(), "提交任务", activitiService
-					.getUserInfoMap().getUserName(proIns.getUserAccount()));
-		}
+		int result = super.createCommonOrder(processId, createUserAccount, businessKey, processKey, paramMap, completeFirstTask);
+		return result;
 	}
 
 	/**
-	 * 修改统一业务订单
+	 * 修改统一业务订单 
+	 * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用
 	 */
 	@Override
-	public void modifyCommonOrder(ProIns proIns, String processKey,
+	public int modifyCommonOrder(String processId,
+			String lastOp,
+			String userAccount, String processKey,
 			Map<String, Object> paramMap) throws Exception {
 		// // 获取当前流程所有任务
 		// List<TaskInfo> taskInfoList = executor.queryList(TaskInfo.class,
@@ -96,45 +85,27 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 		// executor.delete("deleteTaskInfoByProcessId", proIns.getProInsId());
 		// // 插入最新的待办
 		// executor.insertBeans("insertRunTaskInfo", taskInfoList);
-
-		this.addTodoTask(
-				proIns.getProInsId(),
-				proIns.getDealOption(),
-				activitiService.getUserInfoMap().getUserName(
-						proIns.getUserAccount()));
+		int result = super.modifyCommonOrder(processId, lastOp, userAccount, processKey, paramMap);
+		return result;
 	}
 
 	/**
-	 * 删除统一业务订单
+	 * 删除统一业务订单 
+	 * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用
 	 */
 	@Override
-	public void deleteCommonOrder(ProIns proIns, String processKey)
+	public int deleteCommonOrder(String processId,
+			 String processKey,
+			String userAccount,String lastOp,
+			String opReason,Map<String, Object> paramMap)
 			throws Exception {
 
-		TransactionManager tm = new TransactionManager();
-
-		try {
-
-			tm.begin();
-
-			String dealRemak = "["
-					+ activitiService.getUserInfoMap().getUserName(
-							proIns.getUserAccount()) + "]将任务废弃";
-
-			activitiService.cancleProcessInstances(proIns.getProInsId(),
-					dealRemak, proIns.getNowtaskId(), processKey,
-					proIns.getUserAccount(), proIns.getDealOption(),
-					proIns.getDealReason());
-
-			executor.delete("deleteTaskInfoByProcessId", proIns.getProInsId());
-
-			tm.commit();
-
-		} catch (Exception e) {
-			throw new Exception("删除统一业务订单：", e);
-		} finally {
-			tm.release();
-		}
+		int result = super.deleteCommonOrder(processId, processKey, userAccount, lastOp, opReason, paramMap);
+		return result;
 	}
 
 //	@Override
@@ -213,9 +184,36 @@ public class CommonBusinessTrigger implements CommonBusinessTriggerService {
 //	}
 	
 	@Override
-	public void addTodoTask(String processId, String lastOp, String lastOper)
+	/**
+	 *  
+	 * 返回值说明：
+	 * TaskTrigger.refresh_task_success 刷新流程待办任务成功，并且流程实例还有有任务（没有结束）
+	 * TaskTrigger.refresh_task_notask 刷新流程待办任务成功，并且流程实例没有任务（已经结束）
+	 * TaskTrigger.refresh_task_fail 刷新流程待办任务失败
+	 * TaskTrigger.refresh_task_noenable 统一待办机制未启用
+	 */
+	public int refreshTodoList(String processId, String lastOp, String lastOper)
 			throws Exception {
 
-		activitiTaskService.refreshTodoList(processId,  lastOp, lastOper);
+		int result = super.refreshTodoList(processId, lastOp, lastOper);
+		return result;
+	}
+
+	@Override
+	public void deleteTodoListByKeys(String... processKeys) throws Exception {
+		// TODO Auto-generated method stub
+		super.deleteTodoListByKeys(processKeys);
+	}
+
+	@Override
+	public void deleteTodoListByProinstids(String... processInstIDs)
+			throws Exception {
+		// TODO Auto-generated method stub
+		super.deleteTodoListByProinstids(processInstIDs);
+	}
+	
+	public void changeTasksTo(String fromuser,String touser,String startUser,String... processKeys) throws Exception
+	{
+		super.changeTasksTo( fromuser, touser, startUser,processKeys) ;
 	}
 }
