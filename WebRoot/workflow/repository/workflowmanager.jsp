@@ -450,7 +450,7 @@ function setHoliday(processKey,value) {
 				</div>
 				
 				<strong><pg:message code="sany.pdp.workflow.manage"/></strong>
-				<img id="wait" src="../common/images/wait.gif" />				
+				<img id="wait" src="<%=request.getContextPath() %>/common/images/wait.gif" />				
 			</div>
 			<div id="custombackContainer"  style="overflow:auto">
 			

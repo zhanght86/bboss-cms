@@ -1801,4 +1801,6 @@ public interface ActivitiService {
 	public void changeTasksTo(String fromuser,String touser,String startUser,String... processKeys) throws Exception;
 	public void changeTasksToWithTrigger(String fromuser, String touser,
 			String startUser, String... processKeys) throws Exception;
+	
+	public void delProcessInstancesByProcessKey(String processKey)  throws Exception;
 }

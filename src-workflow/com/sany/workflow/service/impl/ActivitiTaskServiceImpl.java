@@ -165,6 +165,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		return variableMap;
 	}
 
+	/**
+	 * 没有执行统一待办任务刷新机制，外部方法调用时，需要自行执行统一待办刷新操作
+	 */
 	@Override
 	public void completeTask(TaskCondition task, Map<String, Object> variableMap) {
 
@@ -216,6 +219,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	}
 
+	/**
+	 * 没有执行统一待办刷新操作，如果需要刷新请外部程序自行处理
+	 */
 	@Override
 	public void rejectToPreTask(TaskCondition task,
 			Map<String, Object> variableMap, int rejectedtype) {
@@ -261,6 +267,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 	@Override
 	public void signTaskByUser(String taskId, String username) {
 		activitiService.getTaskService().claim(taskId, username);
+	}
+	
+	public String getProcessInstanceidOfTask(String taskid) throws Exception
+	{
+		return this.executor.queryObject(String.class, "getProcessInstanceidOfTask", taskid);
 	}
 
 	@Override

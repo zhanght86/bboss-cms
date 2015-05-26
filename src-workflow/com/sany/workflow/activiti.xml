@@ -3700,4 +3700,11 @@
 			delete from td_wf_run_task where  PROCESS_KEY =?
 		]]>
 	</property>
+	<!-- 删除统一待办任务信息 -->
+	<property name="getProcessInstanceidOfTask">
+		<![CDATA[
+			select PROC_INST_ID_  from ACT_RU_TASK where  ID_   =?
+		]]>
+	</property>
+	
 </properties>

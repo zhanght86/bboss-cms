@@ -26,6 +26,7 @@ import com.sany.workflow.entrust.entity.WfEntrust;
  * 
  */
 public interface ActivitiTaskService {
+	public String getProcessInstanceidOfTask(String taskid) throws Exception;
 	/**
 	 * 查询统一待办单实例都处理人待办列表信息
 	 * added by yinbp on 20150518,17.02

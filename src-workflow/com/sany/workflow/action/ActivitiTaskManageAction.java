@@ -439,6 +439,9 @@ public class ActivitiTaskManageAction {
 
 				activitiTaskService.signTaskByUser(taskId, AccessControl
 						.getAccessControl().getUserAccount());
+				String processId = activitiTaskService.getProcessInstanceidOfTask(taskId); 
+				this.activitiService.refreshTodoList(processId, "签收任务", AccessControl
+						.getAccessControl().getUserAccount());
 				tm.commit();
 				return "success";
 			} else {
@@ -552,6 +555,7 @@ public class ActivitiTaskManageAction {
 				}
 
 				result = "success";
+				this.activitiService.refreshTodoList(task.getProcessIntsId(), "通过", currentUser);
 
 			} else {
 
@@ -704,6 +708,7 @@ public class ActivitiTaskManageAction {
 				activitiTaskService.rejectToPreTask(task, variableMap,
 						rejectedtype);
 
+				this.activitiService.refreshTodoList(task.getProcessIntsId(),"驳回任务", currentUser);
 				return "success";
 			} else {
 				return "fail: 您没有权限驳回当前任务";
@@ -822,6 +827,8 @@ public class ActivitiTaskManageAction {
 						task.getProcessIntsId(), task.getProcessKey(),
 						currentUser, task.getChangeUserId(), reamrk,
 						task.getCompleteReason(), 0);
+				
+				this.activitiService.refreshTodoList(task.getProcessIntsId(), "任务转办", currentUser);
 
 				tm.commit();
 
@@ -958,7 +965,7 @@ public class ActivitiTaskManageAction {
 			// 撤销任务
 			activitiService.cancelTask(taskId, nodeInfo.getNode_key(), remark,
 					"撤销任务", cancelTaskReason);
-
+			this.activitiService.refreshTodoList(processId, "撤销任务", currentUser);
 			tm.commit();
 
 			return "success";

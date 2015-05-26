@@ -1456,7 +1456,7 @@ public class ActivitiServiceImpl implements ActivitiService,
 	}
 
 	/**
-	 * 为任务指定代理处理用户
+	 * 为任务指定代理处理用户，没有进行统一待办任务刷新处理，如果需要做，请在外部程序执行
 	 * 
 	 * @param taskId
 	 * @param userId
@@ -3576,7 +3576,9 @@ public class ActivitiServiceImpl implements ActivitiService,
 				  deleteReason,   processKey,
 				  currentUser,   bussinessop,   bussinessRemark,ids) ;
 	}
-	
+	/**
+	 * 不需要执行业务触发器
+	 */
 	@Override
 	public void cancleProcessInstances(
 			String deleteReason, String processKey,
@@ -3762,6 +3764,139 @@ public class ActivitiServiceImpl implements ActivitiService,
 		dbUtil.executePreparedBatch();
 		this.commonTrigger.deleteTodoListByProinstids(processInstid);
 
+	}
+	
+	public void delProcessInstancesByProcessKey(String processKey)  throws Exception{
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
+
+//		// 判断是否存在子流程
+//		dbUtil.preparedSelect("SELECT A.PROC_INST_ID_ FROM ACT_RU_EXECUTION A WHERE A.SUPER_EXEC_= ?");
+//		dbUtil.setString(1, processInstid);
+//		dbUtil.executePrepared();
+//
+//		if (dbUtil.size() > 0) {
+//
+//			for (int i = 0; i < dbUtil.size(); i++) {
+//
+//				// 递归删除子流程
+//				delProcessInstance(dbUtil.getString(i, "PROC_INST_ID_"));
+//
+//			}
+//
+//		}
+
+		TransactionManager tm = new TransactionManager();
+
+		try {
+			tm.begin();
+			String temp = processKey;
+			processKey = processKey + ":%";
+			dbUtil.preparedDelete("delete From act_ru_event_subscr where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_ru_variable where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_ru_job where process_instance_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_ru_identitylink where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_ru_task where  PROC_DEF_ID_ like ?");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_ru_execution where   PROC_DEF_ID_ like ?");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_varinst where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_taskinst where  PROC_DEF_ID_ like ?");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_procinst where PROC_DEF_ID_ like ?");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_detail where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_comment where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_attachment where proc_inst_id_ in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			dbUtil.preparedDelete("delete From act_hi_actinst where PROC_DEF_ID_ like ?");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			// 流程实例的控制参数扩展表
+			dbUtil.preparedDelete("delete From TD_WF_NODE_WORKTIME where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 流程实例的控制参数备份扩展表
+			dbUtil.preparedDelete("delete From TD_WF_NODE_HI_WORKTIME where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 转办关系记录表
+			dbUtil.preparedDelete("delete From TD_WF_NODE_CHANGEINFO where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 委托任务处理记录表
+			dbUtil.preparedDelete("delete From TD_WF_ENTRUST_TASK where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 处理任务记录表
+			dbUtil.preparedDelete(" delete from TD_WF_DEAL_TASK where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 任意跳转记录表
+			dbUtil.preparedDelete(" delete from TD_WF_REJECTLOG where PROCESS_ID in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			// 任意跳转归档表
+			dbUtil.preparedDelete(" delete from TD_WF_HI_REJECTLOG where PROCESS_ID in (select PROC_INST_ID_ from ACT_HI_PROCINST where PROC_DEF_ID_ like ?)");
+			dbUtil.setString(1, processKey);
+			dbUtil.addPreparedBatch();
+	
+			// 抄送任务表
+			dbUtil.preparedDelete(" delete from TD_WF_COPYTASK where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	
+			// 已阅抄送任务表
+			dbUtil.preparedDelete(" delete from TD_WF_HI_COPYTASK where PROCESS_KEY =?");
+			dbUtil.setString(1, temp);
+			dbUtil.addPreparedBatch();
+	        
+			dbUtil.executePreparedBatch();
+			this.commonTrigger.deleteTodoListByKeys(processKey);
+			tm.commit();
+		} catch (Exception e) {
+			throw new ProcessException(e);
+		} finally {
+			tm.release();
+		}
+		
 	}
 
 	@Override
@@ -4775,6 +4910,8 @@ public class ActivitiServiceImpl implements ActivitiService,
 
 			addNodeWorktime(processKey, processInstance.getId(),
 					nodeControlParamList,true);
+			
+			this.commonTrigger.createCommonOrder(processInstance.getId(), currentUser, businessKey, processKey, map, false);
 
 			tm.commit();
 

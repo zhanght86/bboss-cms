@@ -29,6 +29,12 @@ $(document).ready(function() {
 	$('#physicalDelBatchButton').click(function() {
 		physicalDelInst();
     });
+	<pg:notempty actual="${processKey}" >
+	$('#physicalDelAllButton').click(function() {
+		physicalDelAllInst();
+    });
+	
+	</pg:notempty>
 	
 	$('#stBatchButton').click(function() {  
 		startInst();	 		  
@@ -111,7 +117,34 @@ function logicDelInst(){
     		+"&processKey=${processKey}";
     $.dialog({ id:'iframeNewId', title:'填写删除原因',width:400,height:200, content:'url:'+url});  
 }
-
+<pg:notempty actual="${processKey}" >
+//物理删除实例
+function physicalDelAllInst(){
+	
+    
+	$.dialog.confirm('确定要删除${processKey}的流程实例吗？删除后将不可恢复', function(){
+		
+		$.ajax({
+	 	 	type: "POST",
+			url : "<%=request.getContextPath()%>/workflow/repository/delInstancesForPhysicsByProcessKey.page",
+			data :{"processKey":"${processKey}"},
+			dataType : 'json',
+			async:false,
+			beforeSend: function(XMLHttpRequest){
+				XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+			},
+			success : function(data){
+				if(data=="success"){
+					$.dialog.alert("物理删除${processKey}所有流程实例完毕");
+		 			modifyQueryData();
+				}else{
+					$.dialog.alert("${processKey}流程实例物理删除出错："+data,function(){});
+				}
+			}	
+		 });
+	},function(){});    
+}
+</pg:notempty>
 //物理删除实例
 function physicalDelInst(){
 	var ids="";
@@ -413,9 +446,12 @@ function doreset(){
 					<pg:notempty actual="${processKey}" >
 						<a href="javascript:void(0)" class="bt_small" id="stBatchButton"><span>开启</span></a>
 						<a href="javascript:void(0)" class="bt_small" id="upBatchButton"><span>升级</span></a>
+						<a href="javascript:void(0)" class="bt_small" id="physicalDelAllButton"><span>物理删除所有实例</span></a>
 					</pg:notempty>
 					<a href="javascript:void(0)" class="bt_small" id="logicDelBatchButton"><span>废弃流程</span></a>
-					<a href="javascript:void(0)" class="bt_small" id="physicalDelBatchButton"><span>物理删除流程</span></a>
+					<a href="javascript:void(0)" class="bt_small" id="physicalDelBatchButton"><span>物理删除选择流程</span></a>
+					
+					
 				</div>
 					
 				<strong>实例列表</strong>

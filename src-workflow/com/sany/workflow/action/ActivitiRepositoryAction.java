@@ -651,6 +651,26 @@ public class ActivitiRepositoryAction {
 		}
 	}
 	
+	
+	/**
+	 * 物理删除流程实例 gw_tanx
+	 * 
+	 * @param processInstIds
+	 * @return 2014年9月28日
+	 */
+	public @ResponseBody
+	String delInstancesForPhysicsByProcessKey(String processKey) {
+
+		try {
+
+			activitiService.delProcessInstancesByProcessKey(processKey);
+
+			return "success";
+		} catch (Exception e) {
+			return "fail" + e.getMessage();
+		}
+	}
+	
 	/**
 	 * 升级流程 gw_tanx
 	 * 
