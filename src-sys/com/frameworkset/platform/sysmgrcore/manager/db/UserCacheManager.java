@@ -57,6 +57,7 @@ userIsvalid
 public class UserCacheManager {
 	private Map<String,CheckCallBack> users = new HashMap<String,CheckCallBack>();
 	private Map<String,CheckCallBack> usersByID = new HashMap<String,CheckCallBack>();
+	private Map<String,CheckCallBack> usersByWorkNo = new HashMap<String,CheckCallBack>();
 	private static UserCacheManager instance;
 	private static final Logger log = Logger.getLogger(UserCacheManager.class);
 	private static boolean hasloadUsers =false;
@@ -88,6 +89,7 @@ public class UserCacheManager {
 	{
 		users.clear();
 		usersByID.clear();
+		this.usersByWorkNo.clear();
 		
 	}
 	
@@ -232,6 +234,44 @@ public class UserCacheManager {
 
 	}
 	
+	private User _loadUserByWorkNo(String userWorkNo) throws ManagerException
+	{
+		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.USER_WORKNUMBER=?";
+		final User user = new User();
+		try {
+			
+			SQLExecutor.queryByNullRowHandler(new NullRowHandler<User>(){
+
+				
+
+				@Override
+				public void handleRow(Record record) throws Exception {
+					int userid = record.getInt("user_id");
+//					User user = new User();
+                    getUser( user,record) ;
+
+					String orgjob = FunctionDB.getUserorgjobinfos(userid);
+					if(orgjob.endsWith(","))
+					{
+						orgjob = orgjob.substring(0, orgjob.length() - 1);
+					}
+					user.setOrgName(orgjob);
+					
+					//System.out.println("orgId = " + dbUtil.getString(i, "org_id"));
+					user.setMainOrg(record.getString( "org_id"));
+					
+				}
+				
+			}, sql,userWorkNo);
+			if(user.getUserName() == null || user.getUserName().equals(""))
+				return null;
+			return user;
+		} catch (Exception e) {
+			throw new ManagerException(e);
+		}
+
+	}
+	
 	private User _loadUserByID(int userID) throws ManagerException
 	{
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.user_id=?";
@@ -281,6 +321,7 @@ public class UserCacheManager {
 		CheckCallBack user_ = buildCallback(  user ) ;
 		users.put(user.getUserName(), user_);
 		usersByID.put(String.valueOf(user.getUserId()), user_);
+		this.usersByWorkNo.put(user.getUserWorknumber(), user_);
 	}
 	
 	protected CheckCallBack buildCallback( User user ) 
@@ -384,7 +425,38 @@ public class UserCacheManager {
 			log.error("刷新用户缓存信息失败.",e);
 		}
 	}
-	
+	 
+	public CheckCallBack getUserByWorkNo(String worknumber)
+	{
+		CheckCallBack user = this.usersByWorkNo.get(worknumber);
+		if(user !=null )
+			return user;
+		else
+		{
+			synchronized(UserCacheManager.class)
+			{
+				user = this.usersByWorkNo.get(worknumber);
+				if(user !=null )
+					return user;
+				User user_ = null;
+				try {
+					user_ = this._loadUserByWorkNo(worknumber);
+					if(user_!= null)
+					{
+						user = buildCallback(  user_ ) ;
+						users.put(user_.getUserName(), user);
+						usersByID.put(String.valueOf(user_.getUserId()), user);
+						usersByWorkNo.put(user_.getUserWorknumber(), user);
+					}
+				} catch (ManagerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			return user;
+		}
+	}
 	public CheckCallBack getUser(String userAccount)
 	{
 		CheckCallBack user = users.get(userAccount);
@@ -405,6 +477,7 @@ public class UserCacheManager {
 						user = buildCallback(  user_ ) ;
 						users.put(user_.getUserName(), user);
 						usersByID.put(String.valueOf(user_.getUserId()), user);
+						usersByWorkNo.put(user_.getUserWorknumber(), user);
 					}
 				} catch (ManagerException e) {
 					// TODO Auto-generated catch block
@@ -437,6 +510,7 @@ public class UserCacheManager {
 						user = buildCallback(  user_ ) ;
 						users.put(user_.getUserName(), user);
 						usersByID.put(String.valueOf(user_.getUserId()), user);
+						usersByWorkNo.put(user_.getUserWorknumber(), user);
 					}
 				} catch (ManagerException e) {
 					// TODO Auto-generated catch block

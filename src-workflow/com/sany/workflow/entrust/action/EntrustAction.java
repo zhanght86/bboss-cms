@@ -14,16 +14,20 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
 import com.sany.workflow.entrust.entity.WfEntrust;
 import com.sany.workflow.entrust.entity.WfEntrustProcRelation;
 import com.sany.workflow.entrust.service.EntrustService;
+import com.sany.workflow.service.ActivitiTaskService;
 
 public class EntrustAction {
 	
 	private static Logger logger = Logger.getLogger(EntrustAction.class);
 	
 	private EntrustService entrustService;
+	
+	private ActivitiTaskService activitiTaskService;
 	
 	/**
 	 * 首页
@@ -108,11 +112,11 @@ public class EntrustAction {
 				wfEntrust = entrustService.saveWfEntrust(wfEntrust);
 				
 				entrustService.saveWfEntrustProcRelation(wfEntrust, entrust_type, entrust_desc, procdef_id);
-				
+				activitiTaskService.refreshEntrustTodoList(wfEntrust.getId(), "委托授权", AccessControl.getAccessControl().getUserAccount());
 				tm.commit();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				logger.error(e);
+				logger.error("",e);
 				
 				return e.getMessage();
 				
@@ -199,9 +203,22 @@ public class EntrustAction {
 		String actionResult = "fail";
 		
 		if(StringUtils.isNotEmpty(entrustInfoId)){
-			
-			entrustService.deleteWfEntrustById(entrustInfoId);
-			
+			TransactionManager tm = new TransactionManager();
+			try
+			{
+				tm.begin();
+				entrustService.deleteWfEntrustById(entrustInfoId);
+				activitiTaskService.refreshEntrustTodoList(entrustInfoId, "委托授权", AccessControl.getAccessControl().getUserAccount());
+				tm.commit();
+			}
+			catch(Exception e)
+			{
+				throw e;
+			}
+			finally
+			{
+				tm.release();
+			}
 			actionResult = "success";
 		}
 		
@@ -220,8 +237,23 @@ public class EntrustAction {
 		
 		if(StringUtils.isNotEmpty(entrustInfoId)){
 			
-			entrustService.unUseEntrustInfo(entrustInfoId,sts);
 			
+			TransactionManager tm = new TransactionManager();
+			try
+			{
+				tm.begin();
+				entrustService.unUseEntrustInfo(entrustInfoId,sts);
+				activitiTaskService.refreshEntrustTodoList(entrustInfoId, "委托授权", AccessControl.getAccessControl().getUserAccount());
+				tm.commit();
+			}
+			catch(Exception e)
+			{
+				throw e;
+			}
+			finally
+			{
+				tm.release();
+			}
 			actionResult = "success";
 		}
 		

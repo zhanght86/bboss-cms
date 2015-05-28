@@ -3051,14 +3051,22 @@
 	<!-- 获取用户的委托关系，权限判断  gw_tanx -->
 	<property name="getEntrustRelation_wf">
 		<![CDATA[
-			SELECT A.ENTRUST_USER, A.START_DATE, A.END_DATE, B.PROCDEF_ID, A.CREATE_USER
-			  FROM TD_WF_ENTRUST A
-			  LEFT JOIN TD_WF_ENTRUST_PROC_RELATION B ON A.ID = B.ENTRUST_ID
-			 WHERE A.STS = '有效'
-			   AND A.ENTRUST_USER = ?
-			   AND (B.PROCDEF_ID = ? OR B.PROCDEF_ID IS NULL)
-			   AND A.START_DATE <= ?
-			   AND A.END_DATE >= ?
+			select d.entrust_user, d.entrust_user_name, d.create_user, d.create_user_name,d.start_date, 
+        		d.sts,d.end_date, d.create_date,c.PROCDEF_ID as procdefId,c.ENTRUST_TYPE  as wf_entrust_type
+			   From TD_WF_ENTRUST_PROC_RELATION c
+			   ,td_wf_entrust d where  c.entrust_id = d.id and
+			  d.entrust_user = ? and d.sts='有效'
+		]]>
+	</property>
+	
+	<!-- 获取用户的委托关系，刷新流程授权任务 -->
+	<property name="getDelegateRelation_wf">
+		<![CDATA[
+			select d.entrust_user, d.entrust_user_name, d.create_user, d.create_user_name,d.start_date, 
+        		d.sts,d.end_date, d.create_date,c.PROCDEF_ID as procdefId,c.ENTRUST_TYPE  as wf_entrust_type
+			   From TD_WF_ENTRUST_PROC_RELATION c
+			   ,td_wf_entrust d where  c.entrust_id = d.id and
+			  d.create_user = ? and d.sts='有效'
 		]]>
 	</property>
 	
@@ -3605,12 +3613,12 @@
 		<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
 	<property name="getNodeCandidates_wf">
 		<![CDATA[
-			SELECT *
+			SELECT USER_ID_ 
 			  FROM ACT_RU_IDENTITYLINK I 
 			 WHERE 1=1
 			   and I.TYPE_ = 'candidate'
 			   and I.TASK_ID_=?
-			   and I.USER_ID_=?
+			   and I.USER_ID_ is not null
 		]]>
 	</property>
 	
@@ -3669,7 +3677,14 @@
 	</property>
 	<property name="addWfRunTask">
 		<![CDATA[
-			insert into td_wf_run_task (TASK_ID,DEALER,BUSINESS_KEY,CREATE_DATETIME,DEALERNAME,DEALERNAMES,DEALERS,DEALERWORKNO,LAST_OP,LAST_OPER,PROCESS_ID,PROCESS_KEY,SENDER,SENDERNAME,SENDERWORKNO,TASK_KEY,TASK_NAME,TASK_TYPE,TASK_URL) values(#[taskId],#[dealer],#[businessKey],#[createDatetime],#[dealerName],#[dealerNames],#[dealers],#[dealerWorkno],#[lastOp],#[lastOper],#[processId],#[processKey],#[sender],#[senderName],#[senderWorkno],#[taskKey],#[taskName],#[taskType],#[taskUrl])
+			insert into td_wf_run_task (TASK_ID,DEALER,BUSINESS_KEY,CREATE_DATETIME,DEALERNAME,DEALERNAMES,DEALERS,DEALERWORKNO,LAST_OP,LAST_OPER,PROCESS_ID,PROCESS_KEY,SENDER,SENDERNAME,SENDERWORKNO,TASK_KEY,TASK_NAME,TASK_TYPE,TASK_URL,ENTRUST_ID,
+  FROMUSER,
+  AUTH_STARTTIME,
+  AUTH_ENDTIME,
+  FROMUSERNAME) values(#[taskId],#[dealer],#[businessKey],#[createDatetime],#[dealerName],#[dealerNames],#[dealers],#[dealerWorkno],#[lastOp],#[lastOper],#[processId],#[processKey],#[sender],#[senderName],#[senderWorkno],#[taskKey],#[taskName],#[taskType],#[taskUrl],#[ENTRUST_ID],#[FROMUSER],
+  #[AUTH_STARTTIME],
+  #[AUTH_ENDTIME],
+  #[FROMUSERNAME])
 		]]>
 	</property>
 		<property name="deleteWfRunTaskByKey">
@@ -3706,5 +3721,41 @@
 			select PROC_INST_ID_  from ACT_RU_TASK where  ID_   =?
 		]]>
 	</property>
+	
+	
+	<property name="getentrusttasksWithProcessKeys">
+		<![CDATA[
+			select * from TD_WF_RUN_TASK t1 where t1.task_type=0 and t1.DEALER=#[fromUser] and PROCESS_KEY in
+			(#foreach($pk in $processKeys)
+				#if($velocityCount > 0),#end
+				#[processKeys[$velocityCount]]
+			#end	
+			)
+			  
+			and  not exists (select 1 from TD_WF_RUN_TASK t2 where t2.DEALER=#[toUser] and  t1.TASK_ID=t2.TASK_ID)
+		]]>
+	</property>
+	<property name="getentrusttasks">
+		<![CDATA[select * from TD_WF_RUN_TASK t1 where t1.task_type=0 and t1.DEALER=? and not exists 
+		(select 1 from TD_WF_RUN_TASK t2 where t2.DEALER=? and  t1.TASK_ID=t2.TASK_ID)]]>
+	</property>
+	
+	
+	
+	<property name="validateentrust">
+		<![CDATA[select ID,ENTRUST_USER,CREATE_USER ,START_DATE,END_DATE from TD_WF_ENTRUST where id=? and sts='有效']]>
+	</property>
+	
+	<property name="deleteentrusttasks">
+		<![CDATA[delete from TD_WF_RUN_TASK where ENTRUST_ID=?]]>
+	</property>
+	
+	
+	<property name="selectentrustprocesskeys">
+		<![CDATA[select PROCDEF_ID from TD_WF_ENTRUST_PROC_RELATION where ENTRUST_ID=? and ENTRUST_TYPE='选择流程委托']]>
+	</property>
+	
+	
+	
 	
 </properties>

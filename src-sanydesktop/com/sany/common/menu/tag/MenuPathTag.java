@@ -71,7 +71,7 @@ public class MenuPathTag extends BaseTag {
 			
 		}
 		MenuItem menu = framework.getMenuByID(menuid);
-		datas.append("<a href=\"#\">")
+		datas.append("<a href=\"javascript:void(0)\">")
 			.append(framework.getPublicItem().getName(request))
 			.append("</a>&gt;");
 		if(menu == null )
@@ -96,7 +96,7 @@ public class MenuPathTag extends BaseTag {
 					}
 					else
 					{
-						path.insert(0, "<a href=\"#\">"+menu.getName(request) + "</a>");
+						path.insert(0, "<a href=\"javascript:void(0)\">"+menu.getName(request) + "</a>");
 					}
 					
 				}
@@ -108,7 +108,7 @@ public class MenuPathTag extends BaseTag {
 					}
 					else
 					{
-						path.insert(0, "&gt;<a href=\"#\">"+menu.getName(request) + "</a>");
+						path.insert(0, "&gt;<a href=\"javascript:void(0)\">"+menu.getName(request) + "</a>");
 					}
 				}
 				menu = menu.getParent();

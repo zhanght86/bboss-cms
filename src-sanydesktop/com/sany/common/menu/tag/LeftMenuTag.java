@@ -115,7 +115,7 @@ public class LeftMenuTag extends BaseTag{
 					ItemQueue iq = menuHelper.getItems();
 					if(iq.size() > 0)
 					{	
-						datas.append("<li class=\"select_links\"><a href=\"#\">").append(personcenter).append("</a>");
+						datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(personcenter).append("</a>");
 						appendItems(datas,iq,null,contextpath,control,true,tokenurl);
 						datas.append("</li>");		
 					}
@@ -182,13 +182,13 @@ public class LeftMenuTag extends BaseTag{
 					Module submodule = mq.getModule(i);
 					if(selectModule != null && selectModule.equals(submodule.getPath()))
 					{
-						datas.append("<li class=\"select_links\"><a href=\"#\">");
+						datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">");
 						datas.append(submodule.getName(request)).append("</a>");
 						appendItems(datas,submodule.getItems(),selectItem,contextpath,control,true,tokenurl);
 					}
 					else
 					{
-						datas.append("<li><a href=\"#\">");
+						datas.append("<li><a href=\"javascript:void(0)\">");
 						datas.append(submodule.getName(request)).append("</a>");
 						appendItems(datas,submodule.getItems(),selectItem,contextpath,control,false,tokenurl);
 					}
@@ -200,12 +200,12 @@ public class LeftMenuTag extends BaseTag{
 					if(selectModule != null 
 							&& selectModule.equals(module.getPath()))
 					{
-						datas.append("<li class=\"select_links\"><a href=\"#\">").append(module.getName(request)).append("</a>");
+						datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 						appendItems(datas,iq,selectItem,contextpath,control,true,tokenurl);
 					}
 					else
 					{
-						datas.append("<li ><a href=\"#\">")
+						datas.append("<li ><a href=\"javascript:void(0)\">")
 						.append(module.getName(request)).append("</a>");
 						appendItems(datas,iq,selectItem,contextpath,control,false,tokenurl);
 					}
@@ -262,7 +262,7 @@ public class LeftMenuTag extends BaseTag{
 			ItemQueue iq = menuHelper.getItems();
 			if(iq.size() > 0)
 			{	
-				datas.append("<li class=\"select_links\"><a href=\"#\">").append(personcenter).append("</a>");
+				datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(personcenter).append("</a>");
 				appendItems(datas,iq,selectItem,contextpath,control,true,tokenurl);
 				datas.append("</li>");		
 			}
@@ -282,12 +282,12 @@ public class LeftMenuTag extends BaseTag{
 				if(selectModule != null 
 						&& selectModule.equals(module.getPath()))
 				{
-					datas.append("<li class=\"select_links\"><a href=\"#\">").append(module.getName(request)).append("</a>");
+					datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 					appendItems(datas,iq,selectItem,contextpath,control,true,tokenurl);
 				}
 				else
 				{
-					datas.append("<li ><a href=\"#\">")
+					datas.append("<li ><a href=\"javascript:void(0)\">")
 					.append(module.getName(request)).append("</a>");
 					appendItems(datas,iq,selectItem,contextpath,control,false,tokenurl);
 				}
@@ -300,13 +300,13 @@ public class LeftMenuTag extends BaseTag{
 				Module submodule = mq.getModule(i);
 				if(selectModule != null && selectModule.equals(submodule.getPath()))
 				{
-					datas.append("<li class=\"select_links\"><a href=\"#\">");
+					datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">");
 					datas.append(submodule.getName(request)).append("</a>");
 					appendItems(datas,submodule.getItems(),selectItem,contextpath,control,true,tokenurl);
 				}
 				else
 				{
-					datas.append("<li><a href=\"#\">");
+					datas.append("<li><a href=\"javascript:void(0)\">");
 					datas.append(submodule.getName(request)).append("</a>");
 					appendItems(datas,submodule.getItems(),selectItem,contextpath,control,false, tokenurl);
 				}
@@ -351,12 +351,12 @@ public class LeftMenuTag extends BaseTag{
 			 if(selectItem != null && subitem.getPath().equals(selectItem))
 			 {
 				
-				 datas.append("<li  class=\"select_links\"><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
+				 datas.append("<li  class=\"select_links\"><a href=\"javascript:void(0)\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
 				.append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">").append(mname).append("</a></li>");
 			 }
 			 else
 			 {
-				 datas.append("<li><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
+				 datas.append("<li><a href=\"javascript:void(0)\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
 				.append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">").append(mname).append("</a></li>");
 			 }
 		 }  

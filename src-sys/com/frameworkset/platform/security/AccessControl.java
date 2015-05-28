@@ -77,6 +77,7 @@ import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.SubSystem;
 import com.frameworkset.platform.resource.ResourceManager;
+import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.security.authentication.Credential;
 import com.frameworkset.platform.security.authentication.LoginContext;
 import com.frameworkset.platform.security.authentication.LoginException;
@@ -92,7 +93,6 @@ import com.frameworkset.platform.security.authorization.impl.AppSecurityCollabor
 import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
 import com.frameworkset.platform.security.authorization.impl.P;
 import com.frameworkset.platform.security.authorization.impl.PermissionToken;
-import com.frameworkset.platform.security.authorization.impl.PermissionTokenRegion;
 import com.frameworkset.platform.security.context.AppAccessContext;
 import com.frameworkset.platform.security.util.CookieUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Group;
@@ -110,6 +110,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.JobManagerImpl;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdminCache;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.RoleCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.StringUtil;
 
 /**
@@ -2575,18 +2576,18 @@ public class AccessControl implements AccessControlInf{
 	
 	public static String getUserAccounByWorknumberOrUsername(String worknumberOrUsername) {
 		try {
-			UserManager um = SecurityDatabase.getUserManager();
-			User user = um.getUserByWorknumberOrUsername(worknumberOrUsername);
+//			UserManager um = SecurityDatabase.getUserManager();
+//			User user = um.getUserByWorknumberOrUsername(worknumberOrUsername);
+			CheckCallBack  user = UserCacheManager.getInstance().getUser(worknumberOrUsername);
+			if(user == null)
+				user = UserCacheManager.getInstance().getUserByWorkNo(worknumberOrUsername);
 			if (user == null)
 				return "";
-			return user.getUserName() + "";
-		} catch (SPIException e) {
+			return (String)user.getUserAttribute("userAccount");
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ManagerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		return "";
 
 	}

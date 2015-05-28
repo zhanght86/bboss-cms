@@ -225,7 +225,7 @@ public class MenuTag extends BaseTag {
 				if(target.equals("mainFrame"))
 				{
 					//tokenurl
-					datas.append("<li><a href=\"#\" id=\"anchor_").append("publicitem").append("\"  ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+					datas.append("<li><a href=\"javascript:void(0)\" id=\"anchor_").append("publicitem").append("\"  ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 					.append("','").append("publicitem")
 					.append("','").append(url).append("','")
 					.append(target).append("',").append(publicitem.getOption()).append(",'").append(mname).append("')\">")
@@ -235,7 +235,7 @@ public class MenuTag extends BaseTag {
 				else
 				{
 					
-					datas.append("<li><a href=\"#\" id=\"anchor_").append("publicitem").append("\"  ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
+					datas.append("<li><a href=\"javascript:void(0)\" id=\"anchor_").append("publicitem").append("\"  ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
 					.append("','").append(publicitem.getName(request))
 					.append("','").append("publicitem")
 					.append("','','").append(contextpath)
@@ -262,7 +262,7 @@ public class MenuTag extends BaseTag {
 				{
 					if(module.getUrl() == null)
 					{
-						datas.append("<li><a id=\"anchor_").append(module.getId()).append("\"  ").append(selectedclass).append(" href=\"#\">").append(module.getName(request)).append("</a>");
+						datas.append("<li><a id=\"anchor_").append(module.getId()).append("\"  ").append(selectedclass).append(" href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 					}
 					else
 					{
@@ -270,7 +270,7 @@ public class MenuTag extends BaseTag {
 						String url = MenuHelper.getModuleUrl(module, contextpath,  control);
 						{
 							String mname = module.getName(request);
-							datas.append("<li><a href=\"#\"  ").append(selectedclass).append("  id=\"anchor_")
+							datas.append("<li><a href=\"javascript:void(0)\"  ").append(selectedclass).append("  id=\"anchor_")
 								 .append(module.getId())
 								 .append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 								 .append("','")
@@ -295,7 +295,7 @@ public class MenuTag extends BaseTag {
 						if(hasson)
 						{
 							
-							datas.append("<li><a href=\"#\"  ").append(selectedclass).append("  id=\"anchor_")
+							datas.append("<li><a href=\"javascript:void(0)\"  ").append(selectedclass).append("  id=\"anchor_")
 								 .append(module.getId())
 								 .append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 								 .append("','")
@@ -315,13 +315,13 @@ public class MenuTag extends BaseTag {
 						{
 							if(module.getUrl() == null)
 							{
-								datas.append("<li><a id=\"anchor_").append(module.getId()).append("\"  ").append(selectedclass).append(" href=\"#\">").append(module.getName(request)).append("</a>");
+								datas.append("<li><a id=\"anchor_").append(module.getId()).append("\"  ").append(selectedclass).append(" href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 							}
 							else
 							{
 								String url = MenuHelper.getModuleUrl(module, contextpath,  control);
 								{
-									datas.append("<li><a href=\"#\"  ").append(selectedclass).append("  id=\"anchor_")
+									datas.append("<li><a href=\"javascript:void(0)\"  ").append(selectedclass).append("  id=\"anchor_")
 										 .append(module.getId())
 										 .append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 										 .append("','")
@@ -339,7 +339,7 @@ public class MenuTag extends BaseTag {
 					}
 					else
 					{
-						datas.append("<li><a href=\"#\"  ").append(selectedclass).append(" id=\"anchor_")
+						datas.append("<li><a href=\"javascript:void(0)\"  ").append(selectedclass).append(" id=\"anchor_")
 						 .append(module.getId())
 						 .append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
 					.append("','")
@@ -384,7 +384,7 @@ public class MenuTag extends BaseTag {
 		
 							String mname = subitem.getName(request);
 							String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
-							datas.append("<li><a id=\"anchor_").append(subitem.getId()).append("\" href=\"#\" onclick=\"navto_sany_MenuItem('").append(tokenurl)
+							datas.append("<li><a id=\"anchor_").append(subitem.getId()).append("\" href=\"javascript:void(0)\" onclick=\"navto_sany_MenuItem('").append(tokenurl)
 						.append("','").append(module.getId()).append("','").append(url).append("','").append(target).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\"><span></span>")
 								.append("<div>").append(mname).append("</div>")
 								.append("</a></li>");
@@ -392,7 +392,7 @@ public class MenuTag extends BaseTag {
 						else
 						{
 							datas.append("<li><a id=\"anchor_").append(subitem.getId())
-							.append("\" href=\"#\" onclick=\"navto_sany_MenuItem_window('").append(tokenurl)
+							.append("\" href=\"javascript:void(0)\" onclick=\"navto_sany_MenuItem_window('").append(tokenurl)
 							.append("','")
 							.append(subitem.getName(request)).append("','")
 							.append(module.getId()).append("','")
@@ -434,12 +434,12 @@ public class MenuTag extends BaseTag {
 				}
 				if(!menuHelper.isShowrootmenuleft())
 				{
-					datas.append("<li><a id=\"anchor_").append("isany_personcenter").append("\" ").append(selectedclass).append(" href=\"#\">").append(personcenter).append("</a>");
+					datas.append("<li><a id=\"anchor_").append("isany_personcenter").append("\" ").append(selectedclass).append(" href=\"javascript:void(0)\">").append(personcenter).append("</a>");
 				}
 				else
 				{
 					String target = "mainFrame";	
-					datas.append("<li><a href=\"#\" id=\"anchor_")
+					datas.append("<li><a href=\"javascript:void(0)\" id=\"anchor_")
 					 .append("isany_personcenter")
 					 .append("\" ").append(selectedclass).append(" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 					.append("','")
@@ -466,14 +466,14 @@ public class MenuTag extends BaseTag {
 					{
 						String mname = item.getName(request);
 						String url = MenuHelper.getItemUrl(item, contextpath, framepath, control);
-						datas.append("<li><a href=\"#\" id=\"anchor_").append(item.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+						datas.append("<li><a href=\"javascript:void(0)\" id=\"anchor_").append(item.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 					.append("','").append("isany_personcenter").append("','").append(url).append("','").append(target).append("',").append(item.getOption()).append(",'").append(mname).append("')\"><span></span>")
 						.append("<div>").append(mname).append("</div>")
 						.append("</a></li>");
 					}
 					else
 					{
-						datas.append("<li><a href=\"#\" id=\"anchor_").append(item.getId()).append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
+						datas.append("<li><a href=\"javascript:void(0)\" id=\"anchor_").append(item.getId()).append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
 					.append("','")
 						.append("isany_personcenter").append("','")
 						.append(item.getPath())
@@ -533,13 +533,13 @@ public class MenuTag extends BaseTag {
 			
 			if(module.getUrl() == null)
 			{
-				datas.append("<li><a  href=\"#\"><span></span><div>").append(module.getName(request)).append("</div></a>");
+				datas.append("<li><a  href=\"javascript:void(0)\"><span></span><div>").append(module.getName(request)).append("</div></a>");
 			}
 			else//如果配置了链接，就必须要能够将链接显示出来
 			{
 				String mname = module.getName(request);
 				String url = MenuHelper.getModuleUrl(module, contextpath,  control);
-				datas.append("<li><a  href=\"#\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+				datas.append("<li><a  href=\"javascript:void(0)\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 				.append("','")
 				 .append(selectedID)
 				 .append("','")
@@ -557,7 +557,7 @@ public class MenuTag extends BaseTag {
 				String mname = module.getName(request);
 				if(hasson)
 				{
-					datas.append("<li><a  href=\"#\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+					datas.append("<li><a  href=\"javascript:void(0)\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 					.append("','")
 					 .append(selectedID)
 					 .append("','")
@@ -573,12 +573,12 @@ public class MenuTag extends BaseTag {
 				{
 					if(module.getUrl() == null)
 					{
-						datas.append("<li><a  href=\"#\"><span></span><div>").append(mname).append("</div></a>");
+						datas.append("<li><a  href=\"javascript:void(0)\"><span></span><div>").append(mname).append("</div></a>");
 					}
 					else//如果配置了链接，就必须要能够将链接显示出来
 					{
 						String url = MenuHelper.getModuleUrl(module, contextpath,  control);
-						datas.append("<li><a  href=\"#\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+						datas.append("<li><a  href=\"javascript:void(0)\" ").append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 						.append("','")
 						 .append(selectedID)
 						 .append("','")
@@ -591,7 +591,7 @@ public class MenuTag extends BaseTag {
 			}
 			else
 			{
-				datas.append("<li><a  href=\"#\" ").append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
+				datas.append("<li><a  href=\"javascript:void(0)\" ").append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
 				.append("','")
 				 .append(module.getName(request))
 				 .append("','")
@@ -637,14 +637,14 @@ public class MenuTag extends BaseTag {
 					{
 						String mname = subitem.getName(request);
 						String url = MenuHelper.getItemUrl(subitem, contextpath, framepath, control);
-						datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
+						datas.append("<li><a  href=\"javascript:void(0)\" id=\"anchor_").append(subitem.getId()).append("\" onClick=\"navto_sany_MenuItem('").append(tokenurl)
 					.append("','").append(selectedID).append("','").append(url).append("','").append(target_).append("',").append(subitem.getOption()).append(",'").append(mname).append("')\">")
 							.append(mname)
 							.append("</a></li>");
 					}
 					else
 					{
-						datas.append("<li><a  href=\"#\" id=\"anchor_").append(subitem.getId())
+						datas.append("<li><a  href=\"javascript:void(0)\" id=\"anchor_").append(subitem.getId())
 						.append("\" onClick=\"navto_sany_MenuItem_window('").append(tokenurl)
 					.append("','")
 						.append(subitem.getName(request)).append("','")

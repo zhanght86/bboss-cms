@@ -210,7 +210,7 @@
 								<td>
 									<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table2">
 										<tr>
-											<th>被授权人：</th>
+											<th>授权给：</th>
 											<td><input id="entrust_user" name="entrust_user" type="text" class="w120" style="width:175px;" /></td>
 											<th>
 												授权人：

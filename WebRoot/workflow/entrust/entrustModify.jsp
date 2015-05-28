@@ -34,7 +34,7 @@ function selectEntrustUser(selectUser){
 	
 	$.dialog({
 		  id : 'selectEntrustUser',
-		  title : '被授权人选择',
+		  title : '选择授权人',
 		  width : 800,
 		  height : 420,
 		  content : 'url:' + "<%=request.getContextPath()%>/sysmanager/user/userquery_help_choose.jsp"
@@ -81,7 +81,7 @@ function selectEntrustProcdef(){
 	
 	$.dialog({
 		  id : 'selectEntrustProcdef',
-		  title : '授权流程选择',
+		  title : '选择授权流程',
 		  width : 950,
 		  height : 620,
 		  content : 'url:' + "<%=request.getContextPath()%>/workflow/repository/workflowmanager_help_choose.jsp"
@@ -168,7 +168,7 @@ function selectProcdef(){
 				<table border="0" cellpadding="0" cellspacing="0" class="table4" width="100%">
 				<pg:beaninfo requestKey="wfEntrust" >
 					<tr>
-						<th>被授权人：</th>
+						<th>授权给：</th>
 						<td width="70%"><input id="entrust_user_name" name="entrust_user_name"
 							type="text" value="<pg:cell colName="entrust_user_name" defaultValue="" />" style="width:175px;"
 							class="w120 input_default easyui-validatebox" required="true"

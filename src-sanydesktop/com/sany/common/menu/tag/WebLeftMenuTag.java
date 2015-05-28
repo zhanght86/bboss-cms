@@ -189,13 +189,13 @@ public class WebLeftMenuTag extends BaseTag{
 						
 						datas.append(module.getName(request)).append("</H4>");
 						datas.append("<UL class=\"expand\">");
-//						datas.append("<li class=\"select_links\"><a href=\"#\">").append(module.getName(request)).append("</a>");
+//						datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 						appendItems(datas,iq,selectItem,contextpath,control,true, tokenurl);
 						datas.append("</UL>");
 					}
 					else
 					{
-//						datas.append("<li ><a href=\"#\">")
+//						datas.append("<li ><a href=\"javascript:void(0)\">")
 //						.append(module.getName(request)).append("</a>");
 						datas.append("<H4>");	
 						
@@ -258,7 +258,7 @@ public class WebLeftMenuTag extends BaseTag{
 			ItemQueue iq = menuHelper.getItems();
 			if(iq.size() > 0)
 			{	
-//				datas.append("<li class=\"select_links\"><a href=\"#\">").append(personcenter).append("</a>");
+//				datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(personcenter).append("</a>");
 				datas.append("<UL class=\"expand\">");
 				appendItems(datas,iq,selectItem,contextpath,control,true, tokenurl);
 				datas.append("</ul>");		
@@ -279,7 +279,7 @@ public class WebLeftMenuTag extends BaseTag{
 				if(selectModule != null 
 						&& selectModule.equals(module.getPath()))
 				{
-//					datas.append("<li class=\"select_links\"><a href=\"#\">").append(module.getName(request)).append("</a>");
+//					datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">").append(module.getName(request)).append("</a>");
 					datas.append("<H4>");			
 					datas.append(module.getName(request)).append("</H4>");
 					datas.append("<UL class=\"expand\">");
@@ -289,7 +289,7 @@ public class WebLeftMenuTag extends BaseTag{
 				else
 				{
 					
-//					datas.append("<li ><a href=\"#\">")
+//					datas.append("<li ><a href=\"javascript:void(0)\">")
 //					.append(module.getName(request)).append("</a>");
 					datas.append("<H4>");			
 					datas.append(module.getName(request)).append("</H4>");
@@ -306,7 +306,7 @@ public class WebLeftMenuTag extends BaseTag{
 				Module submodule = mq.getModule(i);
 				if(selectModule != null && selectModule.equals(submodule.getPath()))
 				{
-//					datas.append("<li class=\"select_links\"><a href=\"#\">");
+//					datas.append("<li class=\"select_links\"><a href=\"javascript:void(0)\">");
 //					datas.append(submodule.getName(request)).append("</a>");
 					datas.append("<H4>");			
 					datas.append(submodule.getName(request)).append("</H4>");
@@ -316,7 +316,7 @@ public class WebLeftMenuTag extends BaseTag{
 				}
 				else
 				{
-//					datas.append("<li><a href=\"#\">");
+//					datas.append("<li><a href=\"javascript:void(0)\">");
 //					datas.append(submodule.getName(request)).append("</a>");
 					datas.append("<H4>");			
 					datas.append(submodule.getName(request)).append("</H4>");
@@ -364,13 +364,13 @@ public class WebLeftMenuTag extends BaseTag{
 				  */
 //				 datas.append("<li  class=\"select_links\"><a href=\"").append(url).append("\" target=\"").append(target).append("\">").append(subitem.getName(request)).append("</a></li>");
 //				 datas.append("<li  ><a href=\"").append(url).append("\" target=\"").append(target).append("\" class=\"current\">").append(subitem.getName(request)).append("</a></li>");
-				 datas.append("<li  ><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
+				 datas.append("<li  ><a href=\"javascript:void(0)\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
 				.append("','").append(url).append("','").append(target).append("')\" class=\"current\">").append(subitem.getName(request)).append("</a></li>");
 			 }
 			 else
 			 {
 //				 datas.append("<li><a href=\"").append(url).append("\" target=\"").append(target).append("\">").append(subitem.getName(request)).append("</a></li>");
-				 datas.append("<li  ><a href=\"#\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
+				 datas.append("<li  ><a href=\"javascript:void(0)\" onclick=\"leftnavto_sany_MenuItem('").append(tokenurl)
 				.append("','").append(url).append("','").append(target).append("')\">").append(subitem.getName(request)).append("</a></li>");
 			 }
 		 }  

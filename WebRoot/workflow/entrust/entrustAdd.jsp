@@ -34,7 +34,7 @@ function selectEntrustUser(selectUser){
 	
 	$.dialog({
 		  id : 'selectEntrustUser',
-		  title : '被授权人选择',
+		  title : '授权人选择',
 		  width : 800,
 		  height : 420,
 		  content : 'url:' + "<%=request.getContextPath()%>/sysmanager/user/userquery_help_choose.jsp"
@@ -159,13 +159,13 @@ function delProcRow(delDoc){
 				<legend>流程授权信息</legend>
 				<table border="0" cellpadding="0" cellspacing="0" class="table4" width="100%">
 					<tr>
-						<th>被授权人：</th>
+						<th>授权给：</th>
 						<td width="70%"><input id="entrust_user_name" name="entrust_user_name"
 							type="text" value="" style="width:175px;"
 							class="w120 input_default easyui-validatebox" required="true"
 							maxlength="100" readonly /><input type="hidden" name="entrust_user" id="entrust_user" />
 							<font color="red">*</font><a href="javascript:void(0)" class="bt_1" id="changeButton"
-							onclick="selectEntrustUser('entrustUser')"><span>被授权人选择</span></a></td>
+							onclick="selectEntrustUser('entrustUser')"><span>选择</span></a></td>
 					</tr>
 					<tr>
 						<th>授权人：</th>
@@ -173,7 +173,7 @@ function delProcRow(delDoc){
 							value="<%=AccessControl.getAccessControl().getUserName() %>" class="w120 input_default easyui-validatebox"
 							required="true" maxlength="100" readonly /><font color="red">*</font>
 							<%if(AccessControl.getAccessControl().isAdmin()){ %><a href="javascript:void(0)" class="bt_1" id="changeButton"
-							onclick="selectEntrustUser('createUser')"><span>授权人选择</span></a><%} %>
+							onclick="selectEntrustUser('createUser')"><span>选择</span></a><%} %>
 							<input type="hidden" name="create_user" id="create_user" value="<%=AccessControl.getAccessControl().getUserAccount() %>" /></td>
 					</tr>
 					<tr id="secret_tr">

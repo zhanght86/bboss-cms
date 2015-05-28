@@ -106,12 +106,21 @@
 					</workspace>
 				
 				</item> 
+				 <item name="行政区划"
+					i18n:en_US="area demo" id="areaManage"  showleftmenu="true" menuType="type1">
+					<top>header.page</top>
+					<workspace>
+						<content>/lcjf/area/index.page</content>
+					</workspace>
+				 </item> 
 		</module>
 		
-		<module name="web前端展示" 
+		<module name="前端组件" 
 		             i18n:en_US="WEB UI Show" 
-		            id="WEB_UI_Show" used="true" showleftmenu="false"
-		             url="appbom/index.page">	
+		            id="WEB_UI_Show" used="true"  showleftmenu="false"
+		             url="appbom/index.page">
+			
+			  
 		   
 			<module name="接待系统" 
 		             i18n:en_US="RMS UI Show" 
@@ -273,16 +282,53 @@
 				</item> 
 			</module>
 			
-			 <item name="固定表头和固定列"
-			i18n:en_US="web list" id="web_list"  menuType="type1">
-				<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
-				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<workspace>
-					<content>/demo/fixedtable.page</content>
-				</workspace>
+			<module name="前端框架" 
+		             i18n:en_US="TAS UI Show" 
+		            id="WEB_tas" used="true" showleftmenu="true">	
+				 <item name="基本元素"
+				i18n:en_US="web list" id="normal_elements" showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/component/component.jsp</content>
+					</workspace>
+				
+				</item> 
+				
+				<item name="基础表格"
+				i18n:en_US="web list" id="normal_table" showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/component/table_normal.jsp</content>
+					</workspace>
+				
+				</item> 
+				
+				<item name="表格滚动"
+				i18n:en_US="web list" id="scro_table" showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/component/tableScroll.jsp</content>
+					</workspace>
+				</item> 
+				
+					<item name="高级搜索"
+				i18n:en_US="web list" id="search_senior" showleftmenu="false"  menuType="type1">
+					<mouseclickimg>html3/hrm/images/app2.png</mouseclickimg>
+					<top>header.page</top>
+					<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
+					<workspace>
+						<content>/html3/component/searchSenior.jsp</content>
+					</workspace>
+				</item>
+			</module>
 			
-			</item>  
+			
 			 	
 		</module>	
 		<!-- name 模块名称 id 模块标识 used 标识模块是否使用，true为使用，false不使用，缺省为true -->
@@ -617,18 +663,7 @@
 				</workspace>
 			</item>
 			
-			<item name="流程授权管理" id="entrustmanager">
-				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
-				
-				<top>header.page</top>
-				
-				<workspace>
-					<content>workflow/entrust/index.page</content>
-				</workspace>
-				<authoration>				 
-				 	<url>sysmanager/user/userquery_help_choose.jsp</url>
-				</authoration>
-			</item>
+			
 			
 		</module>
 		<module name="工作流" id="workflow" used="true" showleftmenu="false" i18n:en_US="Workflow Manage">
@@ -645,6 +680,7 @@
 				<workspace>
 					<content>workflow/repository/menuList.jsp</content>
 				</workspace>
+				workflow/repository/index.page-旧入口地址
 				-->
 				<workspace>
 					<content>workflow/repository/workflowmanager.page</content>
@@ -653,25 +689,7 @@
 				 	<url>workflow/repository/*.page</url>
 				</authoration>
 			</item>
-			<item name="工作流管理"  id="workflowmanager" i18n:en_US="Workflow Manage">
-					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
-				<top>header.page</top>
-				<!-- <top>perspective_toolbar.jsp</top> <left>perspective_outlookbar.jsp</left> -->
-				<!--
-				<navigator>
-					<content>workflow/repository/resColumnCmsTree.jsp</content>
-				</navigator>
-				<workspace>
-					<content>workflow/repository/menuList.jsp</content>
-				</workspace>
-				-->
-				<workspace>
-					<content>workflow/repository/index.page</content>
-				</workspace>
-				<authoration>				 
-				 	<url>workflow/repository/*.page</url>
-				</authoration>
-			</item>
+			 
 			<item name="业务类别管理" id="businesstype" i18n:en_US="Business Type Manage">
 					<mouseclickimg>html/images/jixiao.jpg</mouseclickimg>
 				<top>header.page</top>
@@ -797,6 +815,19 @@
 					
 				</item>
 			</module>
+			
+			<item name="流程授权管理" id="entrustmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content>workflow/entrust/index.page</content>
+				</workspace>
+				<authoration>				 
+				 	<url>sysmanager/user/userquery_help_choose.jsp</url>
+				</authoration>
+			</item>
 		</module>
 
 		<module name="统计报表" id="counter" used="true" showleftmenu="false" i18n:en_US="Counter">

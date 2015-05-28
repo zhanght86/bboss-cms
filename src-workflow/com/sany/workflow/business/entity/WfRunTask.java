@@ -36,7 +36,7 @@ import java.sql.Timestamp;
  * @author yinbp
  * @version v1.0
  */
-public class WfRunTask implements java.io.Serializable {
+public class WfRunTask implements java.io.Serializable,Cloneable {
 
 	private String taskId;
 	private String dealer;
@@ -57,6 +57,14 @@ public class WfRunTask implements java.io.Serializable {
 	private String taskName;
 	private long taskType;
 	private String taskUrl;
+	/**
+	 * 委托任务相关属性
+	 */
+	private String ENTRUST_ID;
+	private String  FROMUSER         ;
+	private Timestamp  AUTH_STARTTIME   ;
+	private Timestamp    AUTH_ENDTIME  ;
+	private String    FROMUSERNAME     ;
 
 	public WfRunTask() {
 	}
@@ -217,5 +225,51 @@ public class WfRunTask implements java.io.Serializable {
 
 	public void setSenderWorkno(String senderWorkno) {
 		this.senderWorkno = senderWorkno;
+	}
+
+	public String getENTRUST_ID() {
+		return ENTRUST_ID;
+	}
+
+	public void setENTRUST_ID(String eNTRUST_ID) {
+		ENTRUST_ID = eNTRUST_ID;
+	}
+
+	public String getFROMUSER() {
+		return FROMUSER;
+	}
+
+	public void setFROMUSER(String fROMUSER) {
+		FROMUSER = fROMUSER;
+	}
+
+	public Timestamp getAUTH_STARTTIME() {
+		return AUTH_STARTTIME;
+	}
+
+	public void setAUTH_STARTTIME(Timestamp aUTH_STARTTIME) {
+		AUTH_STARTTIME = aUTH_STARTTIME;
+	}
+
+	public Timestamp getAUTH_ENDTIME() {
+		return AUTH_ENDTIME;
+	}
+
+	public void setAUTH_ENDTIME(Timestamp aUTH_ENDTIME) {
+		AUTH_ENDTIME = aUTH_ENDTIME;
+	}
+
+	public String getFROMUSERNAME() {
+		return FROMUSERNAME;
+	}
+
+	public void setFROMUSERNAME(String fROMUSERNAME) {
+		FROMUSERNAME = fROMUSERNAME;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

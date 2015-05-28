@@ -832,68 +832,69 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 	@Override
 	public boolean judgeAuthority(String taskId, String processKey) {
-
-		boolean isAdmin = AccessControl.getAccessControl().isAdmin();
-		if (isAdmin) {
-			return true;
-		}
-
-		if (StringUtil.isEmpty(taskId)) {
-			return false;
-		}
-
-		TransactionManager tm = new TransactionManager();
-
-		try {
-			tm.begin();
-
-			boolean haspermission = false;
-
-			String currentAccount = AccessControl.getAccessControl()
-					.getUserAccount();
-
-			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
-			TaskManager task = executor.queryObject(TaskManager.class,
-					"getHiTaskIdByTaskId", taskId);
-
-			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
-
-				if (currentAccount.equals(task.getASSIGNEE_())) {
-					haspermission = true;
-				}
-
-			} else {
-				// 任务未签收，根据任务id查询任务可处理人
-				List<HashMap> candidatorList = executor.queryList(
-						HashMap.class, "getNodeCandidates_wf", taskId,
-						currentAccount);
-
-				if (candidatorList != null && candidatorList.size() > 0) {
-					haspermission = true;
-				}
-			}
-
-			if (!haspermission) {
-				// 最后查看当前用户的委托关系
-				List<WfEntrust> entrustList = executor.queryList(
-						WfEntrust.class, "getEntrustRelation_wf",
-						currentAccount, processKey, new Timestamp(task
-								.getSTART_TIME_().getTime()), new Timestamp(
-								task.getSTART_TIME_().getTime()));
-
-				if (entrustList != null && entrustList.size() > 0) {
-
-					haspermission = true;
-				}
-			}
-			tm.commit();
-			return haspermission;
-
-		} catch (Exception e) {
-			throw new ProcessException(e);
-		} finally {
-			tm.release();
-		}
+		return judgeAuthority(taskId, processKey,AccessControl.getAccessControl()
+				.getUserAccount());
+//		boolean isAdmin = AccessControl.getAccessControl().isAdmin();
+//		if (isAdmin) {
+//			return true;
+//		}
+//
+//		if (StringUtil.isEmpty(taskId)) {
+//			return false;
+//		}
+//
+//		TransactionManager tm = new TransactionManager();
+//
+//		try {
+//			tm.begin();
+//
+//			boolean haspermission = false;
+//
+//			String currentAccount = AccessControl.getAccessControl()
+//					.getUserAccount();
+//
+//			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
+//			TaskManager task = executor.queryObject(TaskManager.class,
+//					"getHiTaskIdByTaskId", taskId);
+//
+//			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
+//
+//				if (currentAccount.equals(task.getASSIGNEE_())) {
+//					haspermission = true;
+//				}
+//
+//			} else {
+//				// 任务未签收，根据任务id查询任务可处理人
+//				List<HashMap> candidatorList = executor.queryList(
+//						HashMap.class, "getNodeCandidates_wf", taskId,
+//						currentAccount);
+//
+//				if (candidatorList != null && candidatorList.size() > 0) {
+//					haspermission = true;
+//				}
+//			}
+//
+//			if (!haspermission) {
+//				// 最后查看当前用户的委托关系
+//				List<WfEntrust> entrustList = executor.queryList(
+//						WfEntrust.class, "getEntrustRelation_wf",
+//						currentAccount, processKey, new Timestamp(task
+//								.getSTART_TIME_().getTime()), new Timestamp(
+//								task.getSTART_TIME_().getTime()));
+//
+//				if (entrustList != null && entrustList.size() > 0) {
+//
+//					haspermission = true;
+//				}
+//			}
+//			tm.commit();
+//			return haspermission;
+//
+//		} catch (Exception e) {
+//			throw new ProcessException(e);
+//		} finally {
+//			tm.release();
+//		}
 	}
 
 	@Override
@@ -1576,6 +1577,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		}
 		
 	}
+	
+	
+	
 	public List<WfRunTask> getTodoList(String processID,String startUser,String lastOp, String lastOper) throws ProcessException
 	{
 		if (StringUtil.isEmpty(processID)) {
@@ -1588,9 +1592,10 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 		try {
 			taskInfos = executor.queryList(WfRunTask.class,
 					"getRunTaskInfoByPINSTID", processID);//查询工作流runtask表中的数据
-
+			 
 			// 处理人行转列
-			if (null != taskInfos && taskInfos.size() > 0) {
+			if (null != taskInfos && taskInfos.size() > 0) {	
+				List<WfRunTask> etaskInfos = new ArrayList<WfRunTask>();
 				for(WfRunTask taskInfo:taskInfos)
 				{
 					String assigne = taskassigens.get(taskInfo.getTaskKey());
@@ -1615,6 +1620,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 						taskInfo.setLastOp(lastOp);
 						taskInfo.setLastOper(lastOper);
 						rettaskInfos.add(taskInfo);
+						handDelegateTasks(  rettaskInfos, etaskInfos, taskInfo);
 					} else {
 						// 任务未签收，根据任务id查询任务可处理人
 	//				List<HashMap> candidatorList = executor.queryList(
@@ -1658,19 +1664,196 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 							task.setLastOp(lastOp);
 							task.setLastOper(lastOper);
 							rettaskInfos.add(task);
+							handDelegateTasks(  rettaskInfos, etaskInfos, task);
 						}
 	
 	
 						
 					}
 				}
+				rettaskInfos.addAll(etaskInfos);
 			}
 		} catch (SQLException e) {
+			throw new ProcessException("processID:"+processID+"startUser:"+startUser,e);
+		}
+		catch (Exception e) {
 			throw new ProcessException("processID:"+processID+"startUser:"+startUser,e);
 		}
 
 		return rettaskInfos;
 	}
+	
+	private boolean hasTask(List<WfRunTask> taskInfos,String user,String taskid)
+	{
+		if(taskInfos == null || taskInfos.size() == 0)
+			return false;
+		for(WfRunTask task:taskInfos)
+		{
+			if(task.getDealer().equals(user) && task.getTaskId().equals(taskid))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param rettaskInfos
+	 * @param taskInfo
+	 */
+	private void handDelegateTasks(List<WfRunTask> taskInfos,List<WfRunTask> rettaskInfos ,WfRunTask taskInfo) throws Exception
+	{
+//		String validateentrust = "select ENTRUST_USER,CREATE_USER ,START_DATE,END_DATE from TD_WF_ENTRUST where CREATE_USER=? and sts='有效'";
+		List<WfEntrust> WfEntrusts = executor.queryList(WfEntrust.class, "getDelegateRelation_wf", taskInfo.getDealer());
+		if(WfEntrusts != null && WfEntrusts.size() > 0)
+		{
+			Date now = new Date();
+			for(WfEntrust WfEntrust:WfEntrusts)
+			{
+				if(WfEntrust.getWf_entrust_type().equals("全部委托") || 
+						(WfEntrust.getWf_entrust_type().equals("选择流程委托") && taskInfo.getProcessKey().equals(WfEntrust.getProcdefId())))
+				{
+					boolean need = false;
+					if(WfEntrust.getStart_date() != null && WfEntrust.getEnd_date() != null)
+					{
+						if(now.before(WfEntrust.getEnd_date()) && now.after(WfEntrust.getStart_date()))
+						{
+							need = true;
+						}
+						
+					}
+					else if(WfEntrust.getStart_date() == null && WfEntrust.getEnd_date() == null)
+					{						
+						need = true;
+					}
+					else if(WfEntrust.getStart_date() == null )
+					{
+						if(now.before(WfEntrust.getEnd_date()) )
+						{							 
+							need = true;
+						}
+					}
+					else if(WfEntrust.getEnd_date() == null )
+					{
+						if(now.after(WfEntrust.getStart_date()) )
+						{
+							need = true;							 
+						}
+					}
+					if(need && !hasTask(taskInfos,WfEntrust.getEntrust_user(),taskInfo.getTaskId()))
+					{
+						WfRunTask etaskInfo =  (WfRunTask)taskInfo.clone();
+						etaskInfo.setDealer(WfEntrust.getEntrust_user());
+						CheckCallBack user = UserCacheManager.getInstance().getUser(WfEntrust.getEntrust_user());
+						etaskInfo.setDealerName((String)user.getUserAttribute("userName"));
+						etaskInfo.setDealerWorkno((String)user.getUserAttribute("userWorknumber"));
+						etaskInfo.setAUTH_ENDTIME(WfEntrust.getEnd_date());
+						etaskInfo.setAUTH_STARTTIME(WfEntrust.getStart_date());
+						user = UserCacheManager.getInstance().getUser(WfEntrust.getCreate_user());
+						etaskInfo.setFROMUSER(WfEntrust.getCreate_user());
+						etaskInfo.setFROMUSERNAME((String)user.getUserAttribute("userName"));
+						etaskInfo.setENTRUST_ID(WfEntrust.getId());	
+						etaskInfo.setLastOp("委托授权");
+						etaskInfo.setTaskType(2);//将任务设置为委托授权任务							
+						rettaskInfos.add(etaskInfo);
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 刷新委托授权时影响的用户的委托授权信息
+	 * @param entrustid 委托授权id
+	 * @param lastOp
+	 * @param userAccount
+	 * @throws Exception
+	 */
+	public void refreshEntrustTodoList(String entrustid, String lastOp,
+			String userAccount) throws Exception
+	{
+//		String validateentrust = "select ENTRUST_USER,CREATE_USER ,START_DATE,END_DATE from TD_WF_ENTRUST where id=? and sts='有效'";
+		WfEntrust WfEntrust = executor.queryObject(WfEntrust.class, "validateentrust", entrustid);
+		boolean validate = false;
+		if(WfEntrust != null )
+		{
+			Date now = new Date();
+			
+			
+			if(WfEntrust.getStart_date() != null)
+			{
+				if(WfEntrust.getEnd_date() != null)
+				{
+					if(now.before(WfEntrust.getEnd_date()))//有效
+					{
+						validate = true;
+					}
+					else//无效
+					{
+						validate = false;
+					}
+					
+				}
+				else//有效
+				{
+					validate = true;
+				}
+			}
+			else//有效
+			{
+				validate = true;
+			}
+			
+		}
+		else//无效
+		{
+			validate = false;
+		}
+		executor.delete("deleteentrusttasks", entrustid);
+		if(validate)
+		{
+			List<String> processKey = executor.queryList(String.class, "selectentrustprocesskeys", entrustid);
+			List<WfRunTask> tasks = null;
+			if(processKey == null || processKey.size() == 0)//所有流程都委托
+			{
+				tasks = executor.queryList(WfRunTask.class, "getentrusttasks",WfEntrust.getCreate_user(), WfEntrust.getEntrust_user());//排除被委托人已经存在的任务
+				
+			}
+			else //选择流程委托
+			{
+//				tasks = SQLExecutor.queryList(WfRunTask.class, "select * from TD_WF_RUN_TASK t1 where t1.task_type=0 and t1.DEALER=? and PROCESS_KEY in  tasks --补充处理"
+//						+ "not exist select 1 from TD_WF_RUN_TASK t2 where t2.task_type=0 and t2.DEALER=? and  t1.TASK_ID=t2.TASK_ID", WfEntrust.getCreate_user(),WfEntrust.getEntrust_user());//排除被委托人已经存在的任务
+				Map params = new HashMap();
+				params.put("fromUser", WfEntrust.getCreate_user());
+				params.put("toUser", WfEntrust.getEntrust_user());
+				params.put("processKeys", processKey);
+				tasks = this.executor.queryListBean(WfRunTask.class, "getentrusttasksWithProcessKeys", params);
+						
+				
+			}
+			if(tasks != null && tasks.size() > 0)
+			{
+				for(WfRunTask task: tasks)
+				{
+					CheckCallBack user = UserCacheManager.getInstance().getUser(WfEntrust.getEntrust_user());
+					task.setDealer(WfEntrust.getEntrust_user());
+					task.setDealerName((String)user.getUserAttribute("userName"));
+					task.setDealerWorkno((String)user.getUserAttribute("userWorknumber"));
+					task.setAUTH_ENDTIME(WfEntrust.getEnd_date());
+					task.setAUTH_STARTTIME(WfEntrust.getStart_date());
+					user = UserCacheManager.getInstance().getUser(WfEntrust.getCreate_user());
+					task.setFROMUSER(WfEntrust.getCreate_user());
+					task.setFROMUSERNAME((String)user.getUserAttribute("userName"));
+					task.setENTRUST_ID(WfEntrust.getId());
+					task.setLastOper((String)UserCacheManager.getInstance().getUserAttribute(userAccount, "userName"));
+					task.setLastOp("委托授权");
+					task.setTaskType(2);//将任务设置为委托授权任务
+				}
+				executor.insertBeans("addWfRunTask", tasks);
+			}
+		}
+
+	}
+	
 	@Override
 	public TaskInfo getCurrentNodeInfo(String taskId) throws Exception {
 
@@ -1738,25 +1921,25 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			tm.begin();
 			boolean haspermission = false;
 			userAccount = this.changeToDomainAccount(userAccount);
-
+			List<String> candidatorList = null;
 			// 首先判断任务是否有没签收，如果签收，以签收人为准，如果没签收，则以该节点配置的人为准
 			TaskManager task = executor.queryObject(TaskManager.class,
 					"getHiTaskIdByTaskId", taskId);
+			String assigner = task.getASSIGNEE_();
+			String processkey = task.getPROC_DEF_ID_().substring(0,task.getPROC_DEF_ID_().indexOf(':'));
+			if (StringUtil.isNotEmpty(assigner)) {
 
-			if (StringUtil.isNotEmpty(task.getASSIGNEE_())) {
-
-				if (userAccount.equals(task.getASSIGNEE_())) {
+				if (userAccount.equals(assigner)) {
 
 					haspermission = true;
 				}
 
 			} else {
 				// 任务未签收，根据任务id查询任务可处理人
-				List<HashMap> candidatorList = executor.queryList(
-						HashMap.class, "getNodeCandidates_wf", taskId,
-						userAccount);
+				candidatorList = executor.queryList(
+						String.class, "getNodeCandidates_wf", taskId);
 
-				if (candidatorList != null && candidatorList.size() > 0) {
+				if (candidatorList != null && candidatorList.size() > 0 && candidatorList.contains(userAccount)) {
 
 					haspermission = true;
 				}
@@ -1765,14 +1948,54 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 			if (!haspermission) {
 				// 最后查看当前用户的委托关系
 				List<WfEntrust> entrustList = executor.queryList(
-						WfEntrust.class, "getEntrustRelation_wf", userAccount,
-						processKey, new Timestamp(task.getSTART_TIME_()
-								.getTime()), new Timestamp(task
-								.getSTART_TIME_().getTime()));
-
+						WfEntrust.class, "getEntrustRelation_wf", userAccount);
+				Date now = new Date();
 				if (entrustList != null && entrustList.size() > 0) {
-
-					haspermission = true;
+					for(WfEntrust WfEntrust:entrustList)
+					{
+						if((StringUtil.isNotEmpty(assigner) && WfEntrust.getCreate_user().equals(assigner)) 
+								|| (candidatorList != null && candidatorList.size() > 0 && candidatorList.contains(WfEntrust.getCreate_user()))
+								)
+						{
+							
+							if(WfEntrust.getWf_entrust_type().equals("全部委托") || 
+									(WfEntrust.getWf_entrust_type().equals("选择流程委托") && processkey.equals(WfEntrust.getProcdefId())))
+							{
+								if(WfEntrust.getStart_date() != null && WfEntrust.getEnd_date() != null)
+								{
+									if(now.before(WfEntrust.getEnd_date()) && now.after(WfEntrust.getStart_date()))
+									{
+										haspermission = true;
+										break;
+									}
+									
+								}
+								else if(WfEntrust.getStart_date() == null && WfEntrust.getEnd_date() == null)
+								{
+									haspermission = true;
+									break;
+								}
+								else if(WfEntrust.getStart_date() == null )
+								{
+									if(now.before(WfEntrust.getEnd_date()) )
+									{
+										haspermission = true;
+										break;
+									}
+								}
+								else if(WfEntrust.getEnd_date() == null )
+								{
+									if(now.after(WfEntrust.getStart_date()) )
+									{
+										haspermission = true;
+										break;
+									}
+								}
+							}
+							
+						}
+					}
+					
 				}
 			}
 			tm.commit();
@@ -1807,7 +2030,11 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService,
 
 			return flag;
 
-		} catch (Exception e) {
+		}
+		 catch (ProcessException e) {
+				throw e;
+			} 
+		catch (Exception e) {
 			throw new ProcessException(e);
 		} finally {
 			tm.release();

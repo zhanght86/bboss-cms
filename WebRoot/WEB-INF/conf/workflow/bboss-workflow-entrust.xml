@@ -14,6 +14,7 @@
 		path:viewEntrustInfo="/workflow/entrust/entrustInfo.jsp"
 		path:modifyEntrustInfo="/workflow/entrust/entrustModify.jsp"
 		f:entrustService="attr:workflow.entrust.entrustService"
+		f:activitiTaskService="attr:workflow.task.activitiTaskService"
 		class="com.sany.workflow.entrust.action.EntrustAction" >
 	</property>
 	

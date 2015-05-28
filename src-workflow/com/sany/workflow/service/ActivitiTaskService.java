@@ -36,6 +36,15 @@ public interface ActivitiTaskService {
 	public List<WfRunTask>  getTodoList(String taskId,String startUser,String lastOp, String lastOper)  throws ProcessException;
 	public int refreshTodoList(String processID, String lastOp, String lastOper) throws ProcessException;
 	/**
+	 * 刷新委托授权时影响的用户的委托授权信息
+	 * @param entrustid 委托授权id
+	 * @param lastOp
+	 * @param userAccount
+	 * @throws Exception
+	 */
+	public void refreshEntrustTodoList(String entrustid, String lastOp,
+			String userAccount) throws Exception;
+	/**
 	 * 根据条件获取历史任务列表,分页展示
 	 * 
 	 * @param task

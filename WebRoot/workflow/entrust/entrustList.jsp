@@ -23,7 +23,7 @@
 	 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
         <pg:header>
             <th align="center">&nbsp;&nbsp;</th>
-       		<th>被授权人</th>
+       		<th>授权给</th>
        		<th>授权人</th>
        		<th>生效时间</th>
        		<th>失效时间</th>

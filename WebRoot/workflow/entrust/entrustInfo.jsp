@@ -34,7 +34,7 @@
 				<table border="0" cellpadding="0" cellspacing="0" class="table4" width="100%">
 				   <pg:beaninfo requestKey="wfEntrust" >
 					<tr>
-						<th>被授权人：</th>
+						<th>授权给：</th>
 						<td width="70%"><pg:cell colName="entrust_user_name" defaultValue="" /></td>
 					</tr>
 					<tr>
