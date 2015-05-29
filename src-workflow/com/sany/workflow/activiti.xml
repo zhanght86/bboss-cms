@@ -3070,17 +3070,7 @@
 		]]>
 	</property>
 	
-	<!-- 获取节点任务配置关系，权限判断  gw_tanx-->
-	<property name="getNodeCandidates_wf">
-		<![CDATA[
-			SELECT *
-			  FROM ACT_RU_IDENTITYLINK I 
-			 WHERE 1=1
-			   and I.TYPE_ = 'candidate'
-			   and I.TASK_ID_=?
-			   and I.USER_ID_=?
-		]]>
-	</property>
+	
 	
 	<!-- 处理日志记录  gw_tanx-->
 	<property name="addDealTaskInfo_wf">
