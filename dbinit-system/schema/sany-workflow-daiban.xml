@@ -33,7 +33,7 @@
         <column name="END_DATETIME" type="TIMESTAMP"/>
         <column name="ORDER_PARAM" type="NVARCHAR"/>
     </table>
-    <table name="TD_WF_RUN_TASK">
+  <table name="TD_WF_RUN_TASK">
         <column name="BUSINESS_KEY" type="NVARCHAR"/>
         <column name="PROCESS_KEY" type="NVARCHAR"/>
         <column name="PROCESS_ID" required="true" type="NVARCHAR"/>
@@ -53,5 +53,10 @@
         <column default="0" name="TASK_TYPE" size="1" type="DECIMAL"/>
         <column name="SENDERWORKNO" size="50" type="VARCHAR"/>
         <column name="DEALERNAME" type="NVARCHAR"/>
+        <column name="ENTRUST_ID" size="64" type="VARCHAR"/>
+        <column name="FROMUSER" size="255" type="VARCHAR"/>
+        <column name="AUTH_STARTTIME" type="NVARCHAR"/>
+        <column name="AUTH_ENDTIME" type="NVARCHAR"/>
+        <column name="FROMUSERNAME" size="255" type="VARCHAR"/>
     </table>
 </database>
