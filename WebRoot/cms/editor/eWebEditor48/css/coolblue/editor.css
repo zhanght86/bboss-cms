@@ -1,4 +1,4 @@
-ï»¿body,a,table,div,span,td,th,input,select,p,li,textarea{font-size:9pt;font-family:å®‹ä½“, Verdana, Arial, Helvetica, sans-serif}
+body,a,table,div,span,td,th,input,select,p,li,textarea{font-size:9pt;font-family:ËÎÌå, Verdana, Arial, Helvetica, sans-serif}
 .yToolbar
 {
 }
@@ -35,6 +35,7 @@ TABLE.Toolbar TR
 	POSITION: absolute;
 	TOP: 2px;
 	WIDTH: 20px;
+	cursor:pointer;
 }
 .TBSep
 {
@@ -44,14 +45,16 @@ TABLE.Toolbar TR
 	HEIGHT: 15px;
 	POSITION: absolute;
 	TOP: 4px;
-	WIDTH:1px
+	WIDTH:1px;
 }
 .TBGen
 {
 	FONT: 8pt arial,sans-serif;
 	HEIGHT: 20px;
 	POSITION: absolute;
-	TOP: 2px
+	TOP: 2px;
+	cursor:pointer;
+	font-family:"Microsoft yahei";
 }
 .TBHandle
 {
@@ -61,7 +64,7 @@ TABLE.Toolbar TR
 	POSITION: absolute;
 	TOP: 4px;
 	left:0px;
-	WIDTH: 3px
+	WIDTH: 3px;
 }
 .Ico
 {
@@ -69,7 +72,7 @@ TABLE.Toolbar TR
 	LEFT: -1px;
 	POSITION: absolute;
 	TOP: -1px;
-	WIDTH: 20px
+	WIDTH: 20px;
 }
 .BtnMouseOverUp
 {

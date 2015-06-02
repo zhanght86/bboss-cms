@@ -7,15 +7,36 @@
 * This copyright notice MUST stay intact for use.
 *######################################
 */
-
+var cms_util = {
+	findById: function(id) {
+		return document.getElementById(id)
+	},
+	findByClass: function(sClass, oParent) {
+		if(!oParent)
+			oParent = document;
+		if(oParent.getElementsByClass){
+			return (oParent || document).getElementsByClass(sClass)
+		}else{
+			var aClass = [];
+	  		var reClass = new RegExp("(^| )" + sClass + "( |$)");
+	  		var aElem = this.findByTagName("*", oParent);
+	  		for (var i = 0; i < aElem.length; i++) reClass.test(aElem[i].className) && aClass.push(aElem[i]);
+	  		return aClass
+		}
+	},
+	findByTagName: function(elem, obj) {
+		return (obj || document).getElementsByTagName(elem)
+	}
+};
 var sCurrMode = null;
 var bEditMode = null;
 var oLinkField = null;
 
 var BrowserInfo = new Object() ;
-BrowserInfo.MajorVer = navigator.appVersion.match(/MSIE (.)/)[1] ;
-BrowserInfo.MinorVer = navigator.appVersion.match(/MSIE .\.(.)/)[1] ;
-BrowserInfo.IsIE55OrMore = BrowserInfo.MajorVer >= 6 || ( BrowserInfo.MajorVer >= 5 && BrowserInfo.MinorVer >= 5 ) ;
+//BrowserInfo.MajorVer = navigator.appVersion.match(/MSIE (.)/)[1] ;
+//BrowserInfo.MinorVer = navigator.appVersion.match(/MSIE .\.(.)/)[1] ;
+//BrowserInfo.IsIE55OrMore = BrowserInfo.MajorVer >= 6 || ( BrowserInfo.MajorVer >= 5 && BrowserInfo.MinorVer >= 5 ) ;
+BrowserInfo.IsIE55OrMore = true;
 config.IsSP2 = (navigator.userAgent.indexOf("SV1") != -1);
 
 window.onresize = initWidths;
@@ -23,7 +44,9 @@ window.onresize = initWidths;
 var yToolbars = new Array();
 
 var bInitialized = false;
-function document.onreadystatechange(){
+$(document).ready(function(){ 
+
+//document.onload = function(){
 	if (document.readyState!="complete") {return;}
 	if (bInitialized) {return;}
 	bInitialized = true;
@@ -52,7 +75,7 @@ function document.onreadystatechange(){
 
 	setMode(ModeEdit.value);
 	setLinkedField() ;
-}
+});
 
 function getSpecialLinkFieldAspx(s_Tag){
 	var els = parent.document.getElementsByTagName(s_Tag);
@@ -75,8 +98,9 @@ function getSpecialLinkFieldAspx(s_Tag){
 
 function initWidths(){
 	var i, curr;
-	for (i=0; i<document.body.all.length;i++){
-		curr=document.body.all[i];
+	var elements = cms_util.findByClass("yToolbar");
+	for (i=0; i<elements.length;i++){
+		curr=elements[i];
 		if (curr.className == "yToolbar"){
 			InitTB(curr);
 			yToolbars[yToolbars.length] = curr;
@@ -588,59 +612,61 @@ function insertHTML(html) {
 
 function setHTML(html, b_NotSaveHistory) {
 	ContentEdit.value = html;
+	
+	var edocument = eWebEditor.document ?eWebEditor.document:eWebEditor.contentWindow.document;
 	switch (sCurrMode){
 	case "CODE":
-		eWebEditor.document.designMode="On";
-		eWebEditor.document.open();
-		eWebEditor.document.write(getStyleEditorHeader());
-		eWebEditor.document.body.innerText=html;
-		eWebEditor.document.body.contentEditable="true";
-		eWebEditor.document.close();
+		edocument.designMode="On";
+		edocument.open();
+		edocument.write(getStyleEditorHeader());
+		edocument.body.innerText=html;
+		edocument.body.contentEditable="true";
+		edocument.close();
 		bEditMode=false;
 		break;
 	case "EDIT":
-		eWebEditor.document.designMode="On";
-		eWebEditor.document.open();
-		eWebEditor.document.write(getStyleEditorHeader() + setPageTagDisplay(html));
+		edocument.designMode="On";
+		edocument.open();
+		edocument.write(getStyleEditorHeader() + setPageTagDisplay(html));
 		//modify by xinwang.jiao 2007-9-14
 		//????innerHTML????????????
 		//eWebEditor.document.write(getStyleEditorHeader());
 		//eWebEditor.document.body.innerHTML = setPageTagDisplay(html);
 
-		eWebEditor.document.body.contentEditable="true";
-		eWebEditor.document.execCommand("2D-Position",true,true);
-		eWebEditor.document.execCommand("MultipleSelection", true, true);
-		eWebEditor.document.execCommand("LiveResize", true, true);
-		eWebEditor.document.close();
+		edocument.body.contentEditable="true";
+		edocument.execCommand("2D-Position",true,true);
+		edocument.execCommand("MultipleSelection", true, true);
+		edocument.execCommand("LiveResize", true, true);
+		edocument.close();
 		doZoom(nCurrZoomSize);
 		bEditMode=true;
 		break;
 	case "TEXT":
-		eWebEditor.document.designMode="On";
-		eWebEditor.document.open();
-		eWebEditor.document.write(getStyleEditorHeader());
-		eWebEditor.document.body.innerText=html;
-		eWebEditor.document.body.contentEditable="true";
-		eWebEditor.document.close();
+		edocument.designMode="On";
+		edocument.open();
+		edocument.write(getStyleEditorHeader());
+		edocument.body.innerText=html;
+		edocument.body.contentEditable="true";
+		edocument.close();		
 		bEditMode=false;
 		break;
 	case "VIEW":
-		eWebEditor.document.designMode="off";
-		eWebEditor.document.open();
-		eWebEditor.document.write(getStyleEditorHeader()+html);
-		eWebEditor.document.body.contentEditable="false";
-		eWebEditor.document.close();
+		edocument.designMode="off";
+		edocument.open();
+		edocument.write(getStyleEditorHeader()+html);
+		edocument.body.contentEditable="false";
+		edocument.close();
 		bEditMode=false;
 		break;
 	}
 
-	eWebEditor.document.body.onpaste = onPaste ;
-	eWebEditor.document.body.onhelp = onHelp ;
-	eWebEditor.document.body.ondragend = new Function("return doDragEnd();");
-	eWebEditor.document.onkeydown = new Function("return onKeyDown(eWebEditor.event);");
-	eWebEditor.document.oncontextmenu=new Function("return showContextMenu(eWebEditor.event);");
-	eWebEditor.document.onmousedown = new Function("return onMouseDown();");
-	eWebEditor.document.onmouseup = new Function("return onMouseUp();");
+	edocument.body.onpaste = onPaste ;
+	edocument.body.onhelp = onHelp ;
+	edocument.body.ondragend = new Function("return doDragEnd();");
+	edocument.onkeydown = new Function("return onKeyDown(eWebEditor.event);");
+	edocument.oncontextmenu=new Function("return showContextMenu(eWebEditor.event);");
+	edocument.onmousedown = new Function("return onMouseDown();");
+	edocument.onmouseup = new Function("return onMouseUp();");
 
 	if ((borderShown != "0")&&bEditMode) {
 		borderShown = "0";
