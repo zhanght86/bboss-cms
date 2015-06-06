@@ -31,7 +31,7 @@ try{
 		Site site = sm.getSiteInfo(siteId) ;
 	 ChannelManager cm = new ChannelManagerImpl();
 	 RecursivePublishManagerImpl imp =new RecursivePublishManagerImpl();
-	if(type == null)//为模板修改和设置操作
+	if(type.equals("1"))//为模板修改和设置操作
 	{
 		if (oId != null && !oId.equals("")) {
 		    Channel channel=cm.getChannelInfo(channelId);

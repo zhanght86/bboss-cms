@@ -78,7 +78,7 @@ function checkForm(){
 }
 function save()
 {
-	siteForm.action="../channelManage/channel_templateSet_do.jsp?tId="
+	siteForm.action="../channelManage/channel_templateSet_do.jsp?type=1&tId="
 						+siteForm.siteTemplateId.value+"&tName="
 						+siteForm.siteTemplateName.value
 						+"&siteId=<%=siteId%>";
