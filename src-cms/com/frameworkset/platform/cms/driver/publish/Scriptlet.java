@@ -7,7 +7,9 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.htmlparser.util.ParserException;
 
@@ -291,7 +293,135 @@ public class Scriptlet {
 //		}
 		
 	}
-	
+	static class ScriptToken
+	{
+		int position;
+		String value;		
+		/**
+		 * 0:普通字符串
+		 * 1:include 宏
+		 */
+		int tokentype;
+		
+	}
+	/**
+	 * 计算模板中引用的include模板文件，并将引用文件的内容合并到当前模板中
+	 * include中对应的文件内容引用的地址都需要用<cms:uri link="path"/>来指定，这样才不会有发布相对路径问题
+	 * @param content
+	 * @return
+	 */
+	private String evalMacro(String content)
+	{
+		StringBuilder builder = new StringBuilder();
+		StringBuilder tplbuilder = new StringBuilder();
+		List<ScriptToken> tokens = new ArrayList<ScriptToken>();
+		int size = content.length();
+		boolean tplstart = false;
+		for(int i = 0; i < size; i ++)
+		{
+			char c = content.charAt(i);
+			if(c == '#')
+			{
+				if(content.charAt(i+1) == 'i' 
+						&& content.charAt(i+2) == 'n' 
+						&& content.charAt(i+3) == 'c' 
+						&& content.charAt(i+4) == 'l'
+					&& content.charAt(i+5) == 'u'
+					&& content.charAt(i+6) == 'd'
+					&& content.charAt(i+7) == 'e'
+					&& content.charAt(i+8) == '(')
+				{
+					if(tplstart = true)	//如果之前已经开始模板前导
+					{
+						builder.append("#include(").append(tplbuilder.toString());
+						tplbuilder.setLength(0);
+					}
+					else
+					{
+						tplstart = true;
+					}
+					i = i+8;					
+				}
+				else
+				{
+					if(tplstart)
+					{
+						tplbuilder.append(c);
+					}
+					else
+					{
+						builder.append(c);
+					}
+				}
+			}
+			else if(c == ')')
+			{
+				if(tplstart)
+				{
+//					tplbuilder.append(c);
+					if(tplbuilder.length() > 0)
+					{
+						if(builder.length() > 0)
+						{
+							ScriptToken stringtoken = new ScriptToken();
+							stringtoken.position = tokens.size() ;
+							stringtoken.value = builder.toString();
+							stringtoken.tokentype = 0;//宏文件路径
+							builder.setLength(0);
+							tokens.add(stringtoken);
+						}
+						ScriptToken stringtoken = new ScriptToken();
+						stringtoken.position = tokens.size() ;
+						stringtoken.value = tplbuilder.toString();
+						stringtoken.tokentype = 1;//宏文件路径
+						tplbuilder.setLength(0);
+					}
+					else
+					{
+						builder.append("#include()");
+						
+					}
+					tplstart = false;
+					
+				}
+				else
+				{					
+					builder.append(c);
+				}
+				
+			}
+			else
+			{
+				if(tplstart)
+				{
+					tplbuilder.append(c);
+				}
+				else
+				{
+					builder.append(c);
+				}
+			}			
+		}
+		if(tplbuilder.length() > 0)
+		{
+			builder.append("#include(").append(tplbuilder.toString());
+			
+		}
+		tplbuilder = null;
+		if(builder.length() > 0)
+		{
+			ScriptToken stringtoken = new ScriptToken();
+			stringtoken.position = tokens.size() ;
+			stringtoken.value = builder.toString();
+			stringtoken.tokentype = 0;//宏文件路径
+			builder.setLength(0);
+			tokens.add(stringtoken);
+		}
+		builder = null;
+		return content;
+			
+		
+	}
 	public void addJspBody(Writer fileWriter,String header,
 												 String pre,
 												 String content,
