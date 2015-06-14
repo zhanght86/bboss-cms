@@ -1,6 +1,7 @@
 package com.frameworkset.platform.cms.driver.jsp;
 
 import java.io.File;
+import java.util.List;
 
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.driver.htmlconverter.CMSTemplateLinkTable;
@@ -59,6 +60,7 @@ public class JspFile extends File {
 	private String templateAttachementPath;
 	
 	private String pageType = CMSLink.TYPE_TEMPLATE + "";
+	private List<File> includeFiles;
 	
 	
 	/**
