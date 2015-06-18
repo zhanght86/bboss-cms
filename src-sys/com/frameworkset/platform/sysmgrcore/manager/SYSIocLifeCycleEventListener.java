@@ -1,5 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.manager;
 
+import java.util.Map;
+
 import org.frameworkset.remote.EventUtils;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.event.IocLifeCycleEventListener;
@@ -28,6 +30,12 @@ public class SYSIocLifeCycleEventListener implements IocLifeCycleEventListener {
 	public void beforestart() {
 		
 
+	}
+
+	@Override
+	public void init(Map<String, String> params) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
