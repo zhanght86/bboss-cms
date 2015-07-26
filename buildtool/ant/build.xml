@@ -61,7 +61,7 @@
 	
 	<target name="jar-sany-fd" depends="compile-all" description="generate the sany-fd-lib library sany-fd.jar">
 			<echo>Generate the jar-sany-fd library sany-fd.jar ...</echo>
-			<jar jarfile="${distrib}/sany-fd.jar" basedir="classes-all" includes="**/*">
+			<jar jarfile="${distrib}/${project}.jar" basedir="classes-all" includes="**/*">
 				<manifest>
 					<attribute name="Implementation-Version" value="${impl.version}" />
 					<attribute name="Specification-Version" value="${revision}" />
@@ -108,14 +108,9 @@
 	
 	<target name="war" depends="distrib" description="copy depends liberarys">
 		
-		<!--<war destfile="${distrib}/test/SanyFD.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
-		  <fileset dir="${distrib}/WebRoot/"/>	  
-		</war>-->
-		<copy todir="${distrib}/WebRoot/WEB-INF/classes" overwrite="true">
-			<fileset dir="${source}/product" includes="**/*" 
-				 />
-		</copy>
-		<war destfile="${distrib}/product/SanyFD.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
+	
+	
+		<war destfile="${distrib}/${project}.war" webxml="${distrib}/WebRoot/WEB-INF/web.xml">
 		  <fileset dir="${distrib}/WebRoot/"/>	  
 		</war>
 		<delete dir="${distrib}/WebRoot"/>

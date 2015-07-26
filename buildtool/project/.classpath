@@ -1,29 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src-workflow-web"/>
-	<classpathentry kind="src" path="src-workflow-demo"/>
-	<classpathentry kind="src" path="src-common"/>
-	<classpathentry kind="src" path="src-application"/>
-	<classpathentry kind="src" path="src-sanymbp"/>
-	<classpathentry kind="src" path="src-datasource"/>
-	<classpathentry kind="src" path="src-sms"/>
-	<classpathentry kind="src" path="src-appmonitor"/>
-	<classpathentry kind="src" path="src-demo"/>
-	<classpathentry kind="src" path="src-sanylog"/>
-	<classpathentry kind="src" path="src-parameters-handler"/>
-	<classpathentry kind="src" path="src-masterdata"/>
-	<classpathentry kind="src" path="src-workflow"/>
-	<classpathentry kind="src" path="src-mail"/>
-	<classpathentry kind="src" path="src-sanydesktop"/>
-	<classpathentry kind="src" path="resources"/>
-	<classpathentry kind="src" path="src-cms"/>
-	<classpathentry kind="src" path="src-dictionary"/>
-	<classpathentry kind="src" path="src-sys"/>
-	<classpathentry kind="src" path="src-appbom"/>
-	<classpathentry kind="src" path="src-ldap"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="src-sap"/>
-	<classpathentry kind="src" path="src_workflow-business"/>
+	<classpathentry kind="src" path="src"/>	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activation-1.1.jar"/>
@@ -46,6 +23,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-digester-1.8.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-httpclient-3.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-io-2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-management-1.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-modeler.jar"/>
@@ -116,6 +94,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/uim_user_validate.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ldap.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-email-1.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/livetribe-jsr223-2.0.6.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mail-1.4.1.jar"/>
@@ -154,7 +133,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wsdl4j-1.6.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar" sourcepath="/bboss-tablib"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="F:/开源项目/报表/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" />
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-applet-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-fonts-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-javaflow-5.5.1.jar"/>
@@ -162,8 +141,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jfreechart-1.0.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/iText-2.1.7.js2.jar"/>
 	<classpathentry kind="lib" path="lib-compile/javaee.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-analyzers-common-4.7.0.jar" sourcepath="D:/d/opensource/lucene/lucene-4.7.0-src"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-4.7.0.jar" sourcepath="D:/d/opensource/lucene/lucene-4.7.0-src"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-analyzers-common-4.7.0.jar" />
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-4.7.0.jar" />
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-demo-4.7.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-facet-4.7.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-queries-4.7.0.jar"/>
@@ -175,13 +154,13 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security.jar" sourcepath="/bboss-security"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sany-message.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3.jar" sourcepath="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar" sourcepath="/bboss-core"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rpc.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgroups-3.6.1.Final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.37-src.jar"/>
@@ -201,7 +180,5 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaxb-impl-2.2.11.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jaxb-xjc-2.2.11.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/neethi-3.0.3.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
