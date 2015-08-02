@@ -303,9 +303,22 @@ public class Scriptlet {
 		
 	}
 	
-	private String replaceTPLMacro(String content,String templatePath)
+	private String replaceTPLMacro(String content,String templatePath,JspFile jspFile)
 	{
 		 List<GrammarToken> tokens = TextGrammarParser.parser(content, SCRIPT_TPL_DEFINE_PRE, SCRIPT_TPL_DEFINE_END);
+		 if(tokens == null || tokens.size() == 0)
+			 return content;
+		 StringBuilder builder = new StringBuilder();
+		 for(GrammarToken token:tokens)
+		 {
+			 if(token.varibletoken())
+			 {
+				;
+			 }
+			 else
+				 builder.append(token.getText());
+		 }
+		 
 		 return content;
 		 
 	}
