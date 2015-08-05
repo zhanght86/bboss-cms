@@ -7,10 +7,10 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.util.tokenizer.TextGrammarParser;
 import org.frameworkset.util.tokenizer.TextGrammarParser.GrammarToken;
 import org.htmlparser.util.ParserException;
@@ -31,9 +31,9 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CMSTemplateLinkTable;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.CMSLink;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkTable;
+import com.frameworkset.platform.cms.driver.jsp.Cache;
+import com.frameworkset.platform.cms.driver.jsp.FileTimestamp;
 import com.frameworkset.platform.cms.driver.jsp.JspFile;
-import com.frameworkset.platform.cms.driver.jsp.JspFile.Cache;
-import com.frameworkset.platform.cms.driver.jsp.JspFile.FileTimestamp;
 import com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor;
 import com.frameworkset.platform.cms.driver.publish.impl.ScriptletUtil;
 import com.frameworkset.platform.cms.util.CMSUtil;
@@ -58,6 +58,7 @@ import com.frameworkset.util.VelocityUtil;
  * @version 1.0
  */
 public class Scriptlet {
+	private static Logger log = Logger.getLogger(Scriptlet.class);
 	/**
 	 * jsp定义头部
 	 */
@@ -303,7 +304,7 @@ public class Scriptlet {
 		
 	}
 	
-	private String replaceTPLMacro(String content,String templatePath,JspFile jspFile)
+	private String replaceTPLMacro(String content,JspFile jspFile)
 	{
 		 List<GrammarToken> tokens = TextGrammarParser.parser(content, SCRIPT_TPL_DEFINE_PRE, SCRIPT_TPL_DEFINE_END);
 		 if(tokens == null || tokens.size() == 0)
@@ -313,13 +314,29 @@ public class Scriptlet {
 		 {
 			 if(token.varibletoken())
 			 {
-				;
+				 File temp = new File(jspFile.getTemplateRootPath(),token.getText());
+				 if(temp.exists())
+				 {
+					 long m = temp.lastModified();
+					String tplcontent = FileUtil.getFileContent(temp, context.getCharset());
+					jspFile.getCache().addTPL(token.getText(),temp,m);
+					builder.append(tplcontent);
+				 }
+				 else
+				 {
+					 try {
+						log.error("子模板不存在:"+temp.getCanonicalPath(),new Exception());
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				 }
 			 }
 			 else
 				 builder.append(token.getText());
 		 }
 		 
-		 return content;
+		 return builder.toString();
 		 
 	}
 	public void addJspBody(Writer fileWriter,String header,
@@ -499,6 +516,7 @@ public class Scriptlet {
 			
 
 			Writer fileWriter = null;
+			FileOutputStream out = null;
 //			Reader reader = null;
 //			StringWriter swriter = null;
 			long lastModified = -2l;
@@ -531,8 +549,9 @@ public class Scriptlet {
 							
 						}
 //						fileWriter =  new FileWriter(this.jspFile);
+						out = new FileOutputStream(jspFile);
 						fileWriter = new OutputStreamWriter( 
-									new FileOutputStream(jspFile),context.getCharset());
+								out,context.getCharset());
 						this.addJspHeader(fileWriter);
 						if(context.getPublishMode() == PublishMode.MODE_DYNAMIC_PROTECTED)
 						{
@@ -580,9 +599,9 @@ public class Scriptlet {
 						
 //							String templateFile = CMSUtil.getPath(this.jspFile.getTemplateAttachementPath() ,this.template.getTemplateFileName());
 //							File template = new File(templateFile);
-						
+						out = new FileOutputStream(jspFile);
 						fileWriter =  fileWriter = new OutputStreamWriter( 
-								new FileOutputStream(jspFile),context.getCharset());
+								out,context.getCharset());
 						addJspHeader(fileWriter);
 						if(context.getPublishMode() == PublishMode.MODE_DYNAMIC_PROTECTED)
 						{
@@ -598,10 +617,12 @@ public class Scriptlet {
 //							this.template.setText(templatecontent);
 ////							this.template.setTextReader(reader);
 //							this.template.setHeader("");
+						this.jspFile.setCache(new Cache());
+						templatecontent = replaceTPLMacro(templatecontent ,jspFile);
 						this.addJspBody(fileWriter,"","",templatecontent,"");
 						fileWriter.flush();
 						this.context.getPublishMonitor().setPublishStatus(PublishMonitor.SCRIPT_INITED);
-						this.jspFile.setCache(new Cache());
+						
 						this.jspFile.setOrigineTemplateLinkTable(this.origineTemplateLinkTable);
 						this.jspFile.setOrigineDynamicPageLinkTable(this.origineDynamicPageLinkTable);
 						this.jspFile.setOrigineStaticPageLinkTable(this.origineStaticPageLinkTable);
@@ -657,13 +678,22 @@ lable1:			if(contentctx != null)
 			
 			} catch (IOException e) {
 				this.context.getPublishMonitor().setPublishStatus(PublishMonitor.SCRIPT_INITFAILED);
-				e.printStackTrace();
+				log.error("",e);
 			} catch (Exception e) {
 				this.context.getPublishMonitor().setPublishStatus(PublishMonitor.SCRIPT_INITFAILED);
-				e.printStackTrace();
+				log.error("",e);
 			}
 			finally
 			{
+				
+				try {
+					if(out!= null)
+						out.close();
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				try {
 					if(fileWriter != null)
 						fileWriter.close();

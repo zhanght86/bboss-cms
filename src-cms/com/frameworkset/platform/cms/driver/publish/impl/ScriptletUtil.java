@@ -9,9 +9,9 @@ import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.context.PageContext;
+import com.frameworkset.platform.cms.driver.jsp.Cache;
+import com.frameworkset.platform.cms.driver.jsp.FileTimestamp;
 import com.frameworkset.platform.cms.driver.jsp.JspFile;
-import com.frameworkset.platform.cms.driver.jsp.JspFile.Cache;
-import com.frameworkset.platform.cms.driver.jsp.JspFile.FileTimestamp;
 import com.frameworkset.platform.cms.driver.publish.Scriptlet;
 import com.frameworkset.util.StringUtil;
 

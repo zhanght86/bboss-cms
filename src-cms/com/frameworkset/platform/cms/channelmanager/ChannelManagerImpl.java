@@ -20,7 +20,6 @@ import org.frameworkset.event.EventImpl;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.poolman.SQLParams.clobfile;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.bean.ChannelCondition;
 import com.frameworkset.platform.cms.container.Template;
@@ -4141,7 +4140,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	public List getDirectSubChannels(String siteid, String displayName, int count) throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			Channel channel = getChannelInfoByDisplayName(siteid, displayName);
 			
 			channelId = String.valueOf(channel.getChannelId());
@@ -4227,7 +4226,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)&& !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
@@ -4311,7 +4310,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
@@ -4399,7 +4398,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	public List getDirectSubNaviChannels(String siteid, String displayName, int count) throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
@@ -4496,7 +4495,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		} catch (NumberFormatException e) {
 		}
 
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
@@ -4596,7 +4595,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throws ChannelManagerException {
 		String channelId = "";
 		String subsql = "";
-		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName)) {
+		if (displayName != null && displayName.trim().length() > 0 && !"root".equalsIgnoreCase(displayName) && !"0".equalsIgnoreCase(displayName) && !"-1".equalsIgnoreCase(displayName)) {
 			channelId = String.valueOf(getChannelInfoByDisplayName(siteid, displayName).getChannelId());
 			if (channelId == null || channelId.trim().length() == 0) {
 				throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");

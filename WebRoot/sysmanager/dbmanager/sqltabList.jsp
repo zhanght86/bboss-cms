@@ -1,4 +1,5 @@
 
+<%@page import="com.frameworkset.util.SimpleStringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
@@ -49,11 +50,11 @@
 	
 	//存取列名
 	List columnList = null ;
-	
+	DBUtil db = new DBUtil();
 	try
 	{
 		//执行sql语句
-		DBUtil db = new DBUtil();
+		
 		db.executeSelect(dsource,sql,0,1);
 		ResultSetMetaData resultMeta = db.getMeta();
 		
@@ -70,9 +71,21 @@
 		flag = true;
 	} catch(Exception e)
 	{
-		flag = false;
-		errorMessage = e.getMessage();
-		e.printStackTrace();
+		try
+		{
+			db.executeUpdate(dsource,sql);
+			flag = true;
+		}
+		catch(Exception ex)
+		{
+			flag = false;
+			errorMessage = e.getMessage();
+			errorMessage = SimpleStringUtil.exceptionToString(e) +"<br>"+SimpleStringUtil.exceptionToString(ex);
+			e.printStackTrace();
+			ex.printStackTrace();
+		}
+		
+		
 		
 	}
 	

@@ -2,6 +2,7 @@ package com.frameworkset.platform.cms.driver.jsp;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.driver.htmlconverter.CMSTemplateLinkTable;
@@ -23,6 +24,8 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * @version 1.0
  */
 public class JspFile extends File {
+	
+	private String templateRootPath;
 	
 	/**
 	 * jsp的uri路径
@@ -211,6 +214,7 @@ public class JspFile extends File {
 	 */
 	public void setTemplateAttachementPath(String templateAttachementPath,Template template)
 	{
+		this.templateRootPath = templateAttachementPath;
 		if(template != null)
 		{
 			if(template.getPersistType() == Template.PERSISTINDB)
@@ -331,31 +335,7 @@ public class JspFile extends File {
 	
 	
 	/**
-	 * 记录文件对应的模板文件时间戳，系统进行发布操作时，
-	 * 检查是否需要重新生成临时发布文件的依据就是看模板文件的时间戳和临时文件的时间戳是否相同，
-	 * 如果不同则需要重新生成临时发布文件
-	 * @author Administrator
-	 *
-	 */
-	public static class FileTimestamp implements java.io.Serializable
-	{
-		private long modifytime = -1l;
-
-		public FileTimestamp(long lastModified) {
-			this.modifytime = lastModified;
-			
-		}
-
-		public long getModifytime() {
-			return modifytime;
-		}
-
-		public void setModifytime(long modifytime) {
-			this.modifytime = modifytime;
-		}
-		
-		
-	}
+	 
 
 	/**
 	 * 判断模板文件是否被修改过，检查上次发布是模板文件的时间戳和最新的模板文件时间戳是否一致
@@ -363,9 +343,10 @@ public class JspFile extends File {
 	 * @return
 	 */
 	public boolean beenModified(FileTimestamp templateFileTimestamp) {
-		if(this.cache.oldTemplateFileTimestamp == null || templateFileTimestamp == null)
-			return false;
-		return (this.cache.oldTemplateFileTimestamp.getModifytime() != templateFileTimestamp.getModifytime()); 
+//		if(this.cache.getOldTemplateFileTimestamp() == null || templateFileTimestamp == null)
+//			return false;
+//		return (this.cache.getOldTemplateFileTimestamp().getModifytime() != templateFileTimestamp.getModifytime());
+		 return beenModified(templateFileTimestamp.getModifytime());
 	}
 	
 	/**
@@ -374,9 +355,10 @@ public class JspFile extends File {
 	 * @return
 	 */
 	public boolean beenModified(long dbtemplateTimestamp) {
-		if(this.cache.oldTemplateFileTimestamp == null )
-			return true;
-		return  (this.cache.oldTemplateFileTimestamp.getModifytime() != dbtemplateTimestamp); 
+//		if(this.cache.getOldTemplateFileTimestamp() == null )
+//			return true;
+//		return  (this.cache.getOldTemplateFileTimestamp().getModifytime() != dbtemplateTimestamp); 
+		return cache.beenModified(dbtemplateTimestamp);
 	}
 //	private  boolean modified = false;
 //	public void setModified(boolean modified) {
@@ -390,99 +372,7 @@ public class JspFile extends File {
 //	}
 	
 	
-	public static class Cache
-	{
-		/**
-		 * 模板文件时间戳，用来记录临时文件对应的模板文件上次发布时的时间戳，系统通过该时间戳来对比系统中模板文件的最新
-		 * 时间戳，根据对比的结果，如果两个时间戳相同就不重新生成临时文件，否则重新生成。 
-		 */
-		private FileTimestamp oldTemplateFileTimestamp;
-		private CMSTemplateLinkTable origineTemplateLinkTable;
-		/**
-		 * 存放待发布的静态页面地址，已经处理过的静态页面无需再次处理
-		 */
-		private CmsLinkTable origineStaticPageLinkTable;
-		
-		/**
-		 * 存放待发布的动态页面地址，已经处理过的动态页面无需再次处理
-		 */
-		
-		private CmsLinkTable origineDynamicPageLinkTable;
-		
-		private boolean isPagintion;
-		
-		/**
-		 * 普通页面内数据
-		 */
-		private StringBuffer pageContent;
-
-		public CMSTemplateLinkTable getOrigineTemplateLinkTable() {
-			return origineTemplateLinkTable;
-		}
-
-		public void setOrigineTemplateLinkTable(CMSTemplateLinkTable origineTemplateLinkTable) {
-			this.origineTemplateLinkTable = origineTemplateLinkTable;
-		}
-
-		public CmsLinkTable getOrigineStaticPageLinkTable() {
-			return origineStaticPageLinkTable;
-		}
-
-		public void setOrigineStaticPageLinkTable(
-				CmsLinkTable origineStaticPageLinkTable) {
-			this.origineStaticPageLinkTable = origineStaticPageLinkTable;
-		}
-
-		public CmsLinkTable getOrigineDynamicPageLinkTable() {
-			return origineDynamicPageLinkTable;
-		}
-
-		public void setOrigineDynamicPageLinkTable(
-				CmsLinkTable origineDynamicPageLinkTable) {
-			this.origineDynamicPageLinkTable = origineDynamicPageLinkTable;
-		}
-		private boolean containJspTag = false;
-		/**
-		 * 判断文件中是否包含jsp标签
-		 * @return
-		 */
-		public boolean containJspTag() {
-			return containJspTag;
-		}
-
-		/**
-		 * 设置文件中是否包含jsp标签
-		 * @param containJspTag
-		 */
-		public void setContainJspTag(boolean containJspTag) {
-			this.containJspTag = containJspTag;
-		}
-
-		public StringBuffer getPageContent() {
-			return pageContent;
-		}
-
-		public void setPageContent(StringBuffer pageContent) {
-			this.pageContent = pageContent;
-		}
-
-		public FileTimestamp getOldTemplateFileTimestamp() {
-			return oldTemplateFileTimestamp;
-		}
-
-		public void setOldTemplateFileTimestamp(FileTimestamp oldTemplateFileTimestamp) {
-			this.oldTemplateFileTimestamp = oldTemplateFileTimestamp;
-		}
-		public boolean isPagintion()
-	    {
-	        return isPagintion;
-	    }
-
-	    public void setPagintion(boolean isPagintion)
-	    {
-	        this.isPagintion = isPagintion;
-	    }
-	}
+	 
 
     public boolean isPagintion()
     {
@@ -503,6 +393,14 @@ public class JspFile extends File {
     {
     	return this._pagintion;
     }
+
+	public String getTemplateRootPath() {
+		return templateRootPath;
+	}
+
+	public void setTemplateRootPath(String templateRootPath) {
+		this.templateRootPath = templateRootPath;
+	}
     
 	
 	
