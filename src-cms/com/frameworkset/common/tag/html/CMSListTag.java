@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
+import com.frameworkset.common.tag.pager.tags.PagerContext;
 import com.frameworkset.common.tag.pager.tags.PagerDataSet;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
@@ -333,6 +334,17 @@ public class CMSListTag extends PagerDataSet {
 		/**
 		 * 文档相关文档
 		 */
+		if(this.colName != null)
+		{
+			if(this.channel == null )
+			{
+				Object temp = PagerContext.getCOLUMNValue(this, colName, this.getProperty());
+				if(temp != null)
+					this.channel = String.valueOf(temp);
+			}
+			colName = null;
+			this.property = null;
+		}
 		if(this.channel == null ) 
 		{
 			if(this.context != null) 
