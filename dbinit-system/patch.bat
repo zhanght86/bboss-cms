@@ -1,1 +1,1 @@
-java -jar launcher.jar true > startup.log
+java -jar bboss-rt.jar true > startup.log
