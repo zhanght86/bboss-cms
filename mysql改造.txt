@@ -1,0 +1,374 @@
+cms mysql改造需要处理数据库问题
+
+2015-08-06 17:44:58,149 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace function site_flow_id(a_site_id int) return int
+								is
+								  l_parent_workflow char(1);
+								  l_parent_id number(10);
+								  l_workflow int;
+								begin
+								  select PARENT_WORKFLOW,mainsite_id,flow_id
+									into l_parent_workflow,l_parent_id,l_workflow 
+								  from td_cms_site where site_id = a_site_id;
+
+								  if l_parent_workflow = '0' then 
+									return l_workflow;
+								  end if;
+
+								  if l_parent_workflow = '1' then 
+									return site_flow_id(l_parent_id);
+								  end if;
+
+								  return -1;
+								end;
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'function site_flow_id(a_site_id int) return int
+								is
+								  l_parent_wo' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,151 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace function channel_flow_id(ch_id int) return int
+								is
+								  l_parent_workflow char(1);
+								  l_parent_id number(10);
+								  l_site_id number(10);
+								  l_workflow int;
+								begin
+								  select PARENT_WORKFLOW,parent_id,site_id,workflow 
+									into l_parent_workflow,l_parent_id,l_site_id,l_workflow 
+								  from td_cms_channel where channel_id = ch_id;
+
+								  if l_parent_workflow = '0' then 
+									return l_workflow;
+								  end if;
+
+								  if l_parent_workflow = '1' then 
+									if l_parent_id is null then
+									   --select flow_id into l_workflow from td_cms_site where site_id = l_site_id;
+									   --return l_workflow;
+									   return site_flow_id(l_site_id);
+									end if;
+
+									return channel_flow_id(l_parent_id);
+								  end if;
+
+								  return -1;
+								end;
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'function channel_flow_id(ch_id int) return int
+								is
+								  l_parent_wor' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,152 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace function f_site_flow(a_site_id int) return typ_id_name_list
+								is
+								  l_parent_workflow char(1);
+								  l_parent_id number(10);
+								  l_workflow int;
+								  l_workflow_name varchar(100);
+								  ret_list typ_id_name_list := typ_id_name_list(); --返回结果集变量
+								begin
+								  select PARENT_WORKFLOW,mainsite_id,flow_id,b.name
+									into l_parent_workflow,l_parent_id,l_workflow,l_workflow_name 
+								  from td_cms_site a left join tb_cms_flow b on a.flow_id=b.id
+								  where site_id = a_site_id;
+
+								  if l_parent_workflow = '0' then 
+									ret_list.extend;
+									ret_list(1) := new TYP_ID_NAME(l_workflow,l_workflow_name);
+									return ret_list;
+								  end if;
+
+								  if l_parent_workflow = '1' then 
+									return f_site_flow(l_parent_id);
+								  end if;
+
+								  return null;
+								end;
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'function f_site_flow(a_site_id int) return typ_id_name_list
+								is
+								 ' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,154 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace function f_channel_flow(ch_id int) return typ_id_name_list
+								is
+								  l_parent_workflow char(1);
+								  l_parent_id number(10);
+								  l_site_id number(10);
+								  l_workflow int;
+								  l_workflow_name varchar(100);
+								  ret_list typ_id_name_list := typ_id_name_list(); --返回结果集变量
+								begin
+								  select PARENT_WORKFLOW,parent_id,site_id,workflow,b.name 
+									into l_parent_workflow,l_parent_id,l_site_id,l_workflow,l_workflow_name 
+								  from td_cms_channel a left join tb_cms_flow b on a.workflow = b.id
+								  where channel_id = ch_id;
+
+								  if l_parent_workflow = '0' then 
+									ret_list.extend;
+									ret_list(1) := new TYP_ID_NAME(l_workflow,l_workflow_name);
+
+									return ret_list;
+								  end if;
+
+								  if l_parent_workflow = '1' then 
+									if l_parent_id is null then
+									  return f_site_flow(l_site_id);
+									end if;
+
+									return f_channel_flow(l_parent_id);
+								  end if;
+
+								  return null;
+								end;
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'function f_channel_flow(ch_id int) return typ_id_name_list
+								is
+								  ' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,156 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace procedure recordpubrelation_proc (pubobject in varchar2,
+												  refobject in varchar2, 
+												  pubtype in  number,
+												  pubsite in varchar2,
+												  reftype in number,
+												  refsite in varchar2) AS num NUMBER;
+								 BEGIN
+									select count(PUBLISHOBJECT) into num from td_cms_pubobject_relation where 
+								  PUBLISHOBJECT=pubobject and REFERENCEOBJECT=refobject and PUBLISHTYPE=pubtype 
+								  and PUBLISH_SITE=pubsite and REFERENCETYPE=reftype and REFERENCE_SITE=refsite;
+								  DBMS_OUTPUT.PUT_LINE('Value is not exact because pi is 
+								irrational.');
+
+								  if(num = 0) then 
+								   insert into td_cms_pubobject_relation
+								   (PUBLISHOBJECT,REFERENCEOBJECT,PUBLISHTYPE,PUBLISH_SITE,REFERENCETYPE,REFERENCE_SITE)
+								   values( pubobject,refobject,pubtype,pubsite,reftype,refsite );
+								   commit;
+								  end if;
+
+
+								 END;
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'procedure recordpubrelation_proc (pubobject in varchar2,
+												  refobject' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,157 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace  type TYP_ID_NAME as OBJECT
+									(
+										ID NUMBER,
+										NAME VARCHAR(100)
+									)
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'type TYP_ID_NAME as OBJECT
+									(
+										ID NUMBER,
+										NAME VARCHA' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,159 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - create or replace  type TYP_ID_NAME_LIST as TABLE of TYP_ID_NAME
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'type TYP_ID_NAME_LIST as TABLE of TYP_ID_NAME' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,263 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS, "DESC" ) VALUES ( 
+5, 20, 1, '起始路径')
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '"DESC" ) VALUES ( 
+5, 20, 1, '璧峰璺緞')' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
+2015-08-06 17:44:58,325 [main] ERROR com.frameworkset.common.poolman.util.SQLUtil - CREATE  INDEX doc_content_idx ON TD_CMS_DOCUMENT(content) INDEXTYPE IS ctxsys.CONTEXT
+java.sql.SQLException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INDEXTYPE IS ctxsys.CONTEXT' at line 1
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:2975)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:1600)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:1695)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:3020)
+	at com.mysql.jdbc.Connection.execSQL(Connection.java:2949)
+	at com.mysql.jdbc.Statement.execute(Statement.java:538)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.commons.dbcp2.DelegatingStatement.execute(DelegatingStatement.java:291)
+	at com.frameworkset.common.poolman.util.SQLUtil.innerExecuteJDBC(SQLUtil.java:573)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:713)
+	at com.frameworkset.common.poolman.util.SQLUtil.doJDBC(SQLUtil.java:525)
+	at com.frameworkset.common.poolman.util.SQLUtil.executeSql(SQLUtil.java:480)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2128)
+	at com.frameworkset.common.poolman.DBUtil.executeUpdate(DBUtil.java:2113)
+	at org.frameworkset.persistent.db.DBInit.insertData(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.insertDataToDB(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.execute(Unknown Source)
+	at org.frameworkset.persistent.db.DBInit.main(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.frameworkset.runtime.CommonLauncher.run(CommonLauncher.java:168)
+	at org.frameworkset.runtime.CommonLauncher.main(CommonLauncher.java:266)
