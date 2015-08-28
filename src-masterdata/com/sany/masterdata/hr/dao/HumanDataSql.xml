@@ -221,13 +221,13 @@
 	
 	<property name="selectTdSmUserKey">
 		<![CDATA[
-			select user_id from td_sm_user
+			select user_id,USER_WORKNUMBER from td_sm_user
 		]]>
 	</property>
 	
 	<property name="selectTdSmOrgKey">
 		<![CDATA[
-			select org_id from td_sm_organization
+			select org_id,org_tree_level from td_sm_organization order by org_tree_level 
 		]]>
 	</property>
 	

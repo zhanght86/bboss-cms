@@ -21,23 +21,34 @@
 	<property name="mdmService" factory-class="com.caucho.hessian.client.HessianProxyFactory" factory-method="create">
 		<construction>
 			<property value="com.sany.greatwall.MdmService"/>		
-			<property><![CDATA[http://xxx.xxx.com.cn/xx-greatwall-web/mdmservice]]></property>	
+			<property><![CDATA[http://gwall.sany.com.cn/sany-greatwall-web/mdmservice]]></property>	
 		</construction>
 	</property>			
-	
+	<!-- 
+      	 是否启用用户调整和组织机构调整功能，启用后一旦管理员手动调整用户和机构关系、组织之间的关系后
+     	 将不会自动同步这些关系，以手工调整后的关系为准，默认为开启true，false不开启
+      -->
 	<property name="masterdata.hr.syncOrganizationInfo"
 		f:executor="attr:masterdata.hr.configSqlExecutor"	
 		f:mdmService="attr:mdmService"
+		f:enablecustom="true"
+		f:deleteremovedorg="true"
 		class="com.sany.masterdata.hr.sync.SyncOrganizationInfo"/>
 	
 	<property name="masterdata.hr.syncJobInfo"
 		f:executor="attr:masterdata.hr.configSqlExecutor"	
 		f:mdmService="attr:mdmService"
 		class="com.sany.masterdata.hr.sync.SyncJobInfo"/>
-	
+	<!-- 
+      	 是否启用用户调整和组织机构调整功能，启用后一旦管理员手动调整用户和机构关系、组织之间的关系后
+     	 将不会自动同步这些关系，以手工调整后的关系为准，默认为开启true，false不开启
+      -->
 	<property name="masterdata.hr.syncUserInfo"
 		f:executor="attr:masterdata.hr.configSqlExecutor"	
 		f:mdmService="attr:mdmService"
+		f:enablecustom="true"
+		
+		f:deleteremoveduser="true"
 		class="com.sany.masterdata.hr.sync.SyncUserInfo"/>
 	
 	<property name="masterdata.hrSyncTask"

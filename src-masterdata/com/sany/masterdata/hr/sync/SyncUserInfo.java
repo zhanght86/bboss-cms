@@ -14,8 +14,7 @@
  */
 package com.sany.masterdata.hr.sync;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,24 +23,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.transaction.RollbackException;
+
 import org.apache.log4j.Logger;
-import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.sysmgrcore.entity.Log;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
-import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
 import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
+import com.sany.greatwall.domain.MdmOrgLeader;
 import com.sany.greatwall.domain.MdmUser;
 import com.sany.masterdata.utils.MDPropertiesUtil;
 
@@ -72,6 +73,7 @@ public class SyncUserInfo {
     private static Logger logger = Logger.getLogger(SyncUserInfo.class);
     private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
     private MdmService mdmService;
+    private boolean deleteremoveduser = false;
     /**
      * 是否启用用户调整和组织机构调整功能，启用后一旦管理员手动调整用户和机构关系、组织之间的关系后
      * 将不会自动同步这些关系，以手工调整后的关系为准，默认为开启true，false不开启
@@ -84,14 +86,52 @@ public class SyncUserInfo {
 	public void setEnablecustom(boolean enablecustom) {
 		this.enablecustom = enablecustom;
 	}
+	
+	private boolean needremove(String userID, List<MdmUser> newuserKeySet)
+	{
+		for(int i = 0; newuserKeySet != null && i < newuserKeySet.size(); i ++)
+		{
+			MdmUser user = newuserKeySet.get(i);
+			if(exchange(user.getUserNo()).equals(userID))
+				return false;
+		}
+		return true;
+	}
+	
+	private List<RemovedUser> evalremoves(List<RemovedUser> userKeySet, List<MdmUser> newuserKeySet)
+	{
+		List<RemovedUser> removes = new ArrayList<RemovedUser>();
+		for(int i = 0; userKeySet != null && i < userKeySet.size(); i ++)
+		{
+			RemovedUser user = userKeySet.get(i);
+			if(needremove(user.getUser_id(), newuserKeySet))
+			{
+				removes.add(user);
+			}
+		}
+		return removes;
+	}
 	private ConfigSQLExecutor executor;
+	
+	private boolean contain(String userNo,List<RemovedUser> userKeySet)
+	{
+		if(userKeySet != null)
+		{
+			for(RemovedUser user:userKeySet)
+			{
+				if(user.getUser_id().equals(userNo))
+					return true;
+			}
+		}
+		return false;
+	}
     
     /**
      * 同步所有机构数据
      */
     public void syncAllData() {
         logger.info("Sync user info started...");
-        
+        List<RemovedUser> removes = null;
     	try {
     		
 			LogManager logMgr = SecurityDatabase.getLogManager();
@@ -149,7 +189,8 @@ public class SyncUserInfo {
                 if(fixeduserorginfos == null)
                 	fixeduserorginfos = new HashMap<String,String>();
                 //用户主键索引
-                Set<String> userKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmUserKey"));
+                List<RemovedUser> userKeySet = executor.queryList(RemovedUser.class, "selectTdSmUserKey");
+                removes = this.evalremoves(userKeySet, userList);
 //                //用户机构关系索引
 //                Set<String> userOrgKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmOrgUserKey"));
 //              //用户岗位机构关系索引
@@ -189,7 +230,7 @@ public class SyncUserInfo {
             	  Map.Entry<String, List<MdmUser>> entry = ss.next();
             	  List<MdmUser> users = entry.getValue();
             	  MdmUser temp = getUser(users);
-                    if (userKeySet.contains(exchange(temp.getUserNo()))) {
+                    if (contain(exchange(temp.getUserNo()),userKeySet)) {
                         updateSize ++;
                         addPreBatch(userUpdatePre, userOrgUpdatePre, userJobOrgUpdatePre,temp,newUsers,fixeduserorginfos,true);
                         if (updateSize > BATCH_LIMIT) {
@@ -259,7 +300,7 @@ public class SyncUserInfo {
 //                                userJobOrgSavePre.preparedUpdate(USERORGJOB_SAVE_SQL);
 //                            }
 //                        }
-                    	if(newUsers.containsKey(temp.getUserNo()))
+                    	if(newUsers.containsKey(temp.getUserNo()))//已经添加过的用户不处理
             			{
                     		continue;
             			}
@@ -314,7 +355,30 @@ public class SyncUserInfo {
         	error = error + "<br>"+StringUtil.formatBRException(e);
             logger.error("", e);
         }
-        
+        if(removes != null)
+        {
+        	TransactionManager tm = new TransactionManager();
+        	try {
+				tm.begin(TransactionManager.RW_TRANSACTION);
+				for(RemovedUser user :removes)
+				{
+					try {
+						deleteUser(user.getUser_id());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+				}
+				tm.commit();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	finally
+        	{
+        		tm.release();
+        	}
+        }
         try {
 			LogManager logMgr = SecurityDatabase.getLogManager();
 			
@@ -362,6 +426,16 @@ public class SyncUserInfo {
 			//e.printStackTrace();
 		}
         logger.info("Sync user info finished...");
+    }
+    
+    private void deleteUser(String userid) throws Exception
+    {
+    	StringBuilder sql = new StringBuilder()
+		.append(" update TD_SM_USER set USER_ISVALID=0 where user_id =?");
+    	PreparedDBUtil db = new PreparedDBUtil();
+    	db.preparedUpdate(sql.toString());
+    	db.setInt(1, Integer.parseInt(userid));
+    	db.executePrepared();
     }
     private MdmUser getUser(List<MdmUser> users) {
 		if(users.size() == 1)
@@ -533,4 +607,10 @@ public class SyncUserInfo {
         SyncUserInfo test = (SyncUserInfo) MDPropertiesUtil.getBeanObject("masterdata.hr.syncUserInfo");
         test.syncAllData();
     }
+	public boolean isDeleteremoveduser() {
+		return deleteremoveduser;
+	}
+	public void setDeleteremoveduser(boolean deleteremoveduser) {
+		this.deleteremoveduser = deleteremoveduser;
+	}
 }

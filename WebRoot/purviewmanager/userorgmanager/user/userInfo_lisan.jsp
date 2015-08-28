@@ -122,9 +122,15 @@
 	}
 	String qqstring = java.net.URLEncoder.encode(qstring);
 
-
-	String pwd = EncrpyPwd.decodePassword(user.getUserPassword());
-	user.setUserPassword(pwd);
+	try
+	{
+		String pwd = EncrpyPwd.decodePassword(user.getUserPassword());
+		user.setUserPassword(pwd);
+	}
+	catch(Exception e)
+	{
+		
+	}
 	request.setAttribute("currUser",user);
 %>
 
@@ -155,12 +161,12 @@ function trim(string){
 //离散用户保存成功提示
 var isSave = "<%=request.getParameter("isSave")%>";
 if(isSave == "true"){
-	$.dialog.alert("<pg:message code='sany.pdp.common.operation.success'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+	alert("<pg:message code='sany.pdp.common.operation.success'/>");
 }
 //离散用户密码恢复提示
 var dispersePwd = "<%=request.getParameter("dispersePwd")%>";
 if(dispersePwd == "2"){
-	$.dialog.alert("<pg:message code='sany.pdp.common.operation.success'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
+	alert("<pg:message code='sany.pdp.common.operation.success'/>");
 }
 
 function storeUser1()
@@ -256,7 +262,7 @@ function winclose()
 							 <pg:message code="sany.pdp.identity.card"/>：
 						</th>
 						<td height="25">
-							<input type="password" name="userIdcard" value="<pg:cell colName="userIdcard"  defaultValue=""/>" validator="intNull" cnname="身份证号码" maxlength="18">
+							<input type="text" name="userIdcard" value="<pg:cell colName="userIdcard"  defaultValue=""/>" validator="intNull" cnname="身份证号码" maxlength="18">
 						</td>
 					</tr>
 					<tr>

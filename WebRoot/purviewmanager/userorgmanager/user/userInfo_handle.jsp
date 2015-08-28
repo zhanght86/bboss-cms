@@ -25,7 +25,7 @@
 				com.frameworkset.platform.sysmgrcore.entity.*,
 				java.util.*" %>
 
-
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%	
 String msg= null;
