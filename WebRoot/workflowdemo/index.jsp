@@ -12,7 +12,7 @@
 <script type="text/javascript">
 var api = frameElement.api, W = api.opener;
 $(document).ready(function() {
-	initliteRequiredStar('1,4');
+	//initliteRequiredStar('1,4');
 	showLogStyle('1');
 });
 

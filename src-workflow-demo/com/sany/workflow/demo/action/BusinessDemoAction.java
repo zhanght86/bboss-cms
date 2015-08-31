@@ -107,7 +107,7 @@ public class BusinessDemoAction {
 	 *             2014年8月20日
 	 */
 	public @ResponseBody
-	String tempSaveFormDatas(ProIns proIns, String businessKey, ModelMap model)
+	String tempSaveFormDatas(ProIns proIns, String processKey, String businessKey, ModelMap model)
 			throws Exception {
 		try {
 
@@ -115,7 +115,7 @@ public class BusinessDemoAction {
 				businessKey = UUID.randomUUID().toString();
 			}
 			workflowService
-					.tempSaveFormDatas(proIns, businessKey, "Mms.return");
+					.tempSaveFormDatas(proIns, businessKey, processKey);
 			return "success";
 		} catch (Exception e) {
 			return "fail:" + e.getMessage();

@@ -89,9 +89,12 @@ public class SyncUserInfo {
 	
 	private boolean needremove(String userID, List<MdmUser> newuserKeySet)
 	{
+		if(userID != null && userID.equals("1"))
+			return false;
 		for(int i = 0; newuserKeySet != null && i < newuserKeySet.size(); i ++)
 		{
 			MdmUser user = newuserKeySet.get(i);
+			
 			if(exchange(user.getUserNo()).equals(userID))
 				return false;
 		}
