@@ -225,7 +225,7 @@ public class SyncUserInfo {
                 userJobOrgSavePre.preparedInsert(USERORGJOB_SAVE_SQL);
                 userJobOrgSavePre.setBatchOptimize(false);
 //                if(!this.updateusertype)
-                	userUpdatePre.preparedUpdate(USER_UPDATE_SQL);
+                	userUpdatePre.preparedUpdate(USER_UPDATE_USER_TYPE_SQL);
 //                else
 //                	userUpdatePre.preparedUpdate(USER_UPDATE_USER_TYPE_SQL);
                 	
@@ -256,7 +256,7 @@ public class SyncUserInfo {
                             userUpdatePre.executePreparedBatch();
                             userUpdatePre = new PreparedDBUtil();
                             userUpdatePre.setBatchOptimize(false);
-                            userUpdatePre.preparedUpdate(USER_UPDATE_SQL);
+                            userUpdatePre.preparedUpdate(USER_UPDATE_USER_TYPE_SQL);
                             userOrgUpdatePre.executePreparedBatch();
                             userOrgUpdatePre = new PreparedDBUtil();
                             userOrgUpdatePre.setBatchOptimize(false);
@@ -526,12 +526,12 @@ public class SyncUserInfo {
 //	        if(!this.updateusertype)
 //	        {
 		        //userPre.setString(11, userType);
-		        userPre.setString(10, temp.getUserNo());
+//		        userPre.setString(10, temp.getUserNo());
 //	        }
 //	        else
 //	        {
-//	        	userPre.setString(10, userType);
-//		        userPre.setString(11, temp.getUserNo());
+	        	userPre.setString(10, userType);
+		        userPre.setString(11, temp.getUserNo());
 //	        }
         }
         
