@@ -14,23 +14,17 @@
  */
 package com.sany.masterdata.hr.sync;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.SQLExecutor;
-import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
@@ -42,7 +36,6 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManage
 import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.MdmService;
-import com.sany.greatwall.domain.MdmOrgLeader;
 import com.sany.greatwall.domain.MdmUser;
 import com.sany.masterdata.utils.MDPropertiesUtil;
 
@@ -89,8 +82,7 @@ public class SyncUserInfo {
 	
 	private boolean needremove(String userID, List<MdmUser> newuserKeySet)
 	{
-		if(userID != null && userID.equals("1"))
-			return false;
+		
 		for(int i = 0; newuserKeySet != null && i < newuserKeySet.size(); i ++)
 		{
 			MdmUser user = newuserKeySet.get(i);
@@ -107,6 +99,8 @@ public class SyncUserInfo {
 		for(int i = 0; userKeySet != null && i < userKeySet.size(); i ++)
 		{
 			RemovedUser user = userKeySet.get(i);
+			if(user.getUser_type() != null && user.getUser_type().equals("0"))
+				continue;
 			if(needremove(user.getUser_id(), newuserKeySet))
 			{
 				removes.add(user);

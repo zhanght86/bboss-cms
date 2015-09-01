@@ -90,6 +90,10 @@ public class SyncOrganizationInfo {
 	
 	private boolean needremove(String orgid, List<MdmOrgLeader> neworgKeySet)
 	{
+		if(orgid.equals("50126153") || orgid.equals("50126154")|| orgid.equals("50508061"))
+		{
+			return true;
+		}
 		for(int i = 0; neworgKeySet != null && i < neworgKeySet.size(); i ++)
 		{
 			MdmOrgLeader org = neworgKeySet.get(i);

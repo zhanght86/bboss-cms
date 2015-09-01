@@ -221,7 +221,7 @@
 	
 	<property name="selectTdSmUserKey">
 		<![CDATA[
-			select user_id,USER_WORKNUMBER from td_sm_user
+			select user_id,USER_WORKNUMBER,user_type from td_sm_user 
 		]]>
 	</property>
 	

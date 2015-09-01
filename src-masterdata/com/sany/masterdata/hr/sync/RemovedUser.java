@@ -3,6 +3,7 @@ package com.sany.masterdata.hr.sync;
 public class RemovedUser {
 	private String user_id;
 	private String user_worknumber;
+	private String user_type;
 	
 
 	public RemovedUser() {
@@ -27,6 +28,16 @@ public class RemovedUser {
 
 	public void setUser_worknumber(String user_worknumber) {
 		this.user_worknumber = user_worknumber;
+	}
+
+
+	public String getUser_type() {
+		return user_type;
+	}
+
+
+	public void setUser_type(String user_type) {
+		this.user_type = user_type;
 	}
 
 }

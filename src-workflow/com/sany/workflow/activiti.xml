@@ -1831,8 +1831,7 @@
 			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
 			inner join td_sm_organization org on oj.org_id=org.org_id
 			inner join td_sm_job j on oj.job_id = j.job_id
-			where 1=1 
-			
+			where 1=1 and u.user_isvalid='2'
 			#if($org_id && !$org_id.equals(""))
 				and oj.org_id = #[org_id]
 			#end
@@ -1864,7 +1863,7 @@
 			from td_sm_userjoborg oj inner join  td_sm_user u on u.user_id=oj.user_id 
 			inner join td_sm_organization org on oj.org_id=org.org_id
 			inner join td_sm_job j on oj.job_id = j.job_id
-			where 1=1 
+			where 1=1  and u.user_isvalid='2'
 				and u.user_name = ?
 		]]>
 	</property>
