@@ -47,7 +47,7 @@
 		f:executor="attr:masterdata.hr.configSqlExecutor"	
 		f:mdmService="attr:mdmService"
 		f:enablecustom="true"
-		
+		f:updateusertype="true"
 		f:deleteremoveduser="true"
 		class="com.sany.masterdata.hr.sync.SyncUserInfo"/>
 	

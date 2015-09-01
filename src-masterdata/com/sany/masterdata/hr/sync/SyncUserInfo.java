@@ -52,6 +52,7 @@ public class SyncUserInfo {
     private static final String USER_UPDATE_SQL_old_old = "update td_sm_user set user_sn=?, user_name=?, user_password=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
     private static final String USER_UPDATE_SQL_old = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_isvalid=?, user_type=? where user_id=?";
     private static final String USER_UPDATE_SQL = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=? where user_id=?";
+    private static final String USER_UPDATE_USER_TYPE_SQL = "update td_sm_user set user_sn=?, user_name=?, user_realname=?, user_sex=?, user_worktel=?, user_worknumber=?, user_mobiletel1=?, user_birthday=?, user_idcard=?, user_type=? where user_id=?";
     private static final String USERORG_UPDATE_SQL = "update td_sm_orguser set org_id=? where user_id=?";
     private static final String USERORGJOB_UPDATE_SQL = "update td_sm_userjoborg set org_id=?, job_id=?  where user_id=?";
     private static final String exist_org_user = "delete from td_sm_orguser where user_id=?";
@@ -67,6 +68,7 @@ public class SyncUserInfo {
     private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
     private MdmService mdmService;
     private boolean deleteremoveduser = false;
+    private boolean updateusertype = true;
     /**
      * 是否启用用户调整和组织机构调整功能，启用后一旦管理员手动调整用户和机构关系、组织之间的关系后
      * 将不会自动同步这些关系，以手工调整后的关系为准，默认为开启true，false不开启
@@ -110,15 +112,17 @@ public class SyncUserInfo {
 	}
 	private ConfigSQLExecutor executor;
 	
-	private boolean contain(String userNo,List<RemovedUser> userKeySet)
+	private boolean contain(String userNo,Map<String,RemovedUser> userKeySet)
 	{
 		if(userKeySet != null)
 		{
-			for(RemovedUser user:userKeySet)
-			{
-				if(user.getUser_id().equals(userNo))
-					return true;
-			}
+//			for(RemovedUser user:userKeySet)
+//			{
+//				if(user.getUser_id().equals(userNo))
+//					return true;
+//			}
+			if(userKeySet.containsKey(userNo))
+				return true;
 		}
 		return false;
 	}
@@ -187,6 +191,14 @@ public class SyncUserInfo {
                 	fixeduserorginfos = new HashMap<String,String>();
                 //用户主键索引
                 List<RemovedUser> userKeySet = executor.queryList(RemovedUser.class, "selectTdSmUserKey");
+                Map<String,RemovedUser> userMap = new HashMap<String,RemovedUser>();
+                if(userKeySet != null)
+                {
+                	for(RemovedUser user:userKeySet)
+                	{
+                		userMap.put(user.getUser_id(), user);
+                	}
+                }
                 removes = this.evalremoves(userKeySet, userList);
 //                //用户机构关系索引
 //                Set<String> userOrgKeySet = new HashSet<String>(executor.queryList(String.class, "selectTdSmOrgUserKey"));
@@ -212,7 +224,11 @@ public class SyncUserInfo {
                 userOrgSavePre.setBatchOptimize(false);
                 userJobOrgSavePre.preparedInsert(USERORGJOB_SAVE_SQL);
                 userJobOrgSavePre.setBatchOptimize(false);
-                userUpdatePre.preparedUpdate(USER_UPDATE_SQL);
+//                if(!this.updateusertype)
+                	userUpdatePre.preparedUpdate(USER_UPDATE_SQL);
+//                else
+//                	userUpdatePre.preparedUpdate(USER_UPDATE_USER_TYPE_SQL);
+                	
                 userUpdatePre.setBatchOptimize(false);
                 userOrgUpdatePre.preparedUpdate(USERORG_SAVE_SQL);
                 userOrgUpdatePre.setBatchOptimize(false);
@@ -227,7 +243,12 @@ public class SyncUserInfo {
             	  Map.Entry<String, List<MdmUser>> entry = ss.next();
             	  List<MdmUser> users = entry.getValue();
             	  MdmUser temp = getUser(users);
-                    if (contain(exchange(temp.getUserNo()),userKeySet)) {
+            	  String userid = exchange(temp.getUserNo());
+                    if (contain(userid,userMap)) {
+                    	
+                    	RemovedUser removedUser = userMap.get(userid);
+                    	if(removedUser.getUser_type() != null && removedUser.getUser_type().equals("0"))//系统用户忽略更新
+                    		continue;
                         updateSize ++;
                         addPreBatch(userUpdatePre, userOrgUpdatePre, userJobOrgUpdatePre,temp,newUsers,fixeduserorginfos,true);
                         if (updateSize > BATCH_LIMIT) {
@@ -502,8 +523,16 @@ public class SyncUserInfo {
 	        }
 	        userPre.setString(9, temp.getIdCard());
 	        //userPre.setInt(10, 2);
-	        //userPre.setString(11, userType);
-	        userPre.setString(10, temp.getUserNo());
+//	        if(!this.updateusertype)
+//	        {
+		        //userPre.setString(11, userType);
+		        userPre.setString(10, temp.getUserNo());
+//	        }
+//	        else
+//	        {
+//	        	userPre.setString(10, userType);
+//		        userPre.setString(11, temp.getUserNo());
+//	        }
         }
         
         userPre.addPreparedBatch();
