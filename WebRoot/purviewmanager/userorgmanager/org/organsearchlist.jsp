@@ -28,12 +28,12 @@
 			if (orgcreator == null)
 			    orgcreator = "";
 			if (isEffective == null)
-			    isEffective = "2";
+			    isEffective = "";
 %>
 <html>
 	<head>
 		<title>属性容器</title>
-		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	</head>
 	<body>
 		<div>
@@ -41,12 +41,13 @@
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 					<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.purviewmanager.tag.OrgSearchList" keyName="OrgList" />
 					<pg:pager maxPageItems="15" scope="request" data="OrgList" isList="false">
-					<pg:equal actual="${OrgList.itemCount}" value="0" >
+					<pg:empty actual="${OrgList}" evalbody="true">
+					<pg:yes>
 						<div class="nodata">
 						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:equal> 
-					<pg:notequal actual="${OrgList.itemCount}"  value="0">
-						<tr>
+					</pg:yes>
+					<pg:no>
+					<tr>
 							<!--设置分页表头-->
 							<th>
 								<pg:message code="sany.pdp.role.organization.name"></pg:message>
@@ -120,8 +121,11 @@
 								</td>
 							</tr>
 						</pg:list>
-					</pg:notequal>
-				<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div>
+					</pg:no>	
+					</pg:empty> 
+					 
+						
+				<tr><td colspan="10"><div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div></td></tr>
 					</pg:pager>
 				</table>
 			</form>

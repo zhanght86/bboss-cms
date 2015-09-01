@@ -248,18 +248,19 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 				sql = "select * from (" + sql_ .toString() + ") o where 1=1 ${where_condition} order by o.org_tree_level ";
 			}
 			
-			// System.out.println(sql);
-			if (remark5.equals("") && orgnumber.equals("") && orgcreator.equals("") && isEffective.equals("2")) {
-				Map<String, String> variablevalues = new HashMap<String, String>();
-				variablevalues.put("where_condition", "and o.remark3='2'");
-				System.out.println(sql);
-				sql = sqlUtilInsert.evaluateSQL("test", sql, variablevalues);
-				System.out.println(sql);
-//				sql = com.frameworkset.util.VariableHandler.substitution(sql,"");				
-				listInfo = this.getQueryResult(sql, offset, maxPagesize);
-				
-
-			} else {
+//			// System.out.println(sql);
+//			if (remark5.equals("") && orgnumber.equals("") && orgcreator.equals("") && isEffective.equals("2")) {
+//				Map<String, String> variablevalues = new HashMap<String, String>();
+//				variablevalues.put("where_condition", "and o.remark3='2'");
+//				System.out.println(sql);
+//				sql = sqlUtilInsert.evaluateSQL("test", sql, variablevalues);
+//				System.out.println(sql);
+////				sql = com.frameworkset.util.VariableHandler.substitution(sql,"");				
+//				listInfo = this.getQueryResult(sql, offset, maxPagesize);
+//				
+//
+//			} else 
+			{
 				
 				if (!remark5.equals("")) {
 					condition.append(" and o.remark5 like '%").append(remark5).append(
@@ -273,8 +274,11 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 					condition.append(" and o.creator in(select user_id from td_sm_user where user_name like '%").append(orgcreator)
 							.append("%')");
 				}
-				if (!isEffective.equals("2") && !isEffective.equals("")) {
-				    condition.append("and o.remark3='").append(isEffective).append("'");
+//				if (!isEffective.equals("2") && !isEffective.equals("")) {
+//				    condition.append("and o.remark3='").append(isEffective).append("'");
+//                }
+				if (!isEffective.equals("")) {
+				    condition.append("and o.remark3='").append(isEffective.equals("2")?"0":isEffective).append("'");
                 }
 				Map<String, String> variablevalues1 = new HashMap<String, String>();
 				variablevalues1.put("where_condition", condition.toString());

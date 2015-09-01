@@ -34,7 +34,7 @@
 	if (orgcreator == null)
 		orgcreator = "";
 	if (isEffective == null)
-	    isEffective = "2";
+	    isEffective = "";
 %>
 <html>
 	<head>
@@ -120,9 +120,11 @@
 													<th>
 														<pg:message code="sany.pdp.role.organization.check"></pg:message>：
 														<select name="isEffective" class="w120">
-															<option value="2" <pg:equal colName="isEffective" value="2">selected </pg:equal>><pg:message code="sany.pdp.invalid"/></option>
-															<option value="1" <pg:equal colName="isEffective" value="1">selected </pg:equal>><pg:message code="sany.pdp.valid"/></option>
 															<option value="" selected <pg:equal colName="isEffective" value="0">selected </pg:equal>><pg:message code="sany.pdp.all"/></option>
+															<option value="1" <pg:equal colName="isEffective" value="1">selected </pg:equal>><pg:message code="sany.pdp.valid"/></option>
+															<option value="0" <pg:equal colName="isEffective" value="0">selected </pg:equal>><pg:message code="sany.pdp.invalid"/></option>
+															
+															
 														</select>
 													</th>
 													<td>
