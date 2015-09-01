@@ -15,6 +15,7 @@ public class User {
 	private String org_name;
 	
 	private String job_name;
+	private boolean alluser;
 
 	public String getUser_id() {
 		return user_id;
@@ -70,5 +71,13 @@ public class User {
 
 	public void setJob_name(String job_name) {
 		this.job_name = job_name;
+	}
+
+	public boolean isAlluser() {
+		return alluser;
+	}
+
+	public void setAlluser(boolean alluser) {
+		this.alluser = alluser;
 	}
 }

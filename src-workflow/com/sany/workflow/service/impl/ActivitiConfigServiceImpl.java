@@ -146,6 +146,7 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 	
 	/**
 	 * 根据查询条件查询用户列表
+	 * @param alluser 是否显示所有用户，true 所有，false只显示有效用户，删除用户、无效用户都不显示
 	 * @param offset
 	 * @param pagesize
 	 * @return
@@ -160,6 +161,8 @@ public class ActivitiConfigServiceImpl implements ActivitiConfigService {
 		}
 		return null;
 	}
+	
+	
 	
 	/**
 	 * 根据查询条件查询用户列表和下级部门列表

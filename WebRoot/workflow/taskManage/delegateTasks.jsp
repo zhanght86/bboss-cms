@@ -19,7 +19,7 @@
 				<td >
 					<input type="hidden" class="input1 w120" id="delegate_from_users_id" />
 					<input type="text" class="input1 w120" id="delegate_from_users_name" readonly/>
-					<a href="javascript:openChooseUsers('delegate_from')">选择</a>
+					<a href="javascript:openChooseUsers('delegate_from','all')">选择</a>
 				</td>
 				<td >&nbsp;</td>
 			</tr>
@@ -28,7 +28,7 @@
 				<td >
 					<input type="hidden" class="input1 w120" id="delegate_to_users_id" />
 					<input type="text" class="input1 w120" id="delegate_to_users_name" readonly/>
-					<a href="javascript:openChooseUsers('delegate_to')">选择</a>
+					<a href="javascript:openChooseUsers('delegate_to','1')">选择</a>
 				</td>
 				<td >&nbsp;</td>
 			</tr>
@@ -37,7 +37,7 @@
 				<td >
 					<input type="hidden" class="input1 w120" id="submitUser_users_id" />
 					<input type="text" class="input1 w120" id="submitUser_users_name" readonly/>
-					<a href="javascript:openChooseUsers('submitUser')">选择</a>
+					<a href="javascript:openChooseUsers('submitUser','all')">选择</a>
 				</td>
 				<td >&nbsp;</td>
 			</tr>
@@ -93,9 +93,17 @@ function delProcRow(delDoc){
 } 
 
 //选择用户
-function openChooseUsers(node_key){
-	var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?&node_key="+node_key;
-	$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url}); 
+function openChooseUsers(node_key,alluser){
+	if(alluser == 'all')
+	{
+		var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?alluser=true&node_key="+node_key ;
+		$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url});
+	}
+	else
+	{
+		var url = "<%=request.getContextPath()%>/workflow/config/toChooseUserPage.page?alluser=false&node_key="+node_key ;
+		$.dialog({ id:'nodeInfoIframe', title:'选择用户',width:1000,height:650, content:'url:'+url});
+	}
 }
 
 //选择流程

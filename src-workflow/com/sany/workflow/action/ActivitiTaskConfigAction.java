@@ -656,7 +656,7 @@ public class ActivitiTaskConfigAction {
     public String toChooseUserPage(String users, String node_key,
             @RequestParam(decodeCharset = "UTF-8") String user_realnames, String process_key, String org_id,
             @RequestParam(decodeCharset = "UTF-8") String org_name,
-            @RequestParam(decodeCharset = "UTF-8") String all_names, ModelMap model) {
+            @RequestParam(decodeCharset = "UTF-8") String all_names,boolean alluser, ModelMap model) {
         TransactionManager tm = new TransactionManager();
 
         try {
@@ -708,7 +708,7 @@ public class ActivitiTaskConfigAction {
             model.addAttribute("org_id", org_id);
             model.addAttribute("org_name", org_name);
             model.addAttribute("all_names", all_names);
-
+            model.addAttribute("alluser", alluser);
             tm.commit();
             return "path:chooseusers";
 

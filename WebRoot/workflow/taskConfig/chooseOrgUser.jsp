@@ -119,8 +119,14 @@ function queryUserAndOrgList (orgId,user_name) {
 // 查询用户列表
 function queryUserList (orgId,user_name) {
 	$.ajax({
-		
-		url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page",
+		<pg:true actual="${alluser}" evalbody="true">
+		<pg:yes>
+			url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page?alluser=true",
+		</pg:yes>
+		<pg:no>
+			url: "<%=request.getContextPath()%>/workflow/config/queryUsersToJson.page?alluser=false",
+		</pg:no>
+		</pg:true>
 		type: "post",
 		data :{"org_id":orgId,"user_name":user_name,"pagesize":$("#rownums").val()},
 		dataType:"json",			

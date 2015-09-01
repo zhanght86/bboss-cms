@@ -48,7 +48,7 @@ public interface ActivitiConfigService {
 	 */
 	public List<User> queryUsersForPage(User user, long offset,
 			int pagesize);
-	
+	 
 	/**
 	 * 根据查询条件查询用户分页列表
 	 * @param offset
