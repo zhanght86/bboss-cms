@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+
+	
+	<!-- 
+		微信开发套件
+	    author: yinbp
+		CopyRight: SANY Group Co, Ltd
+		version: v1.0
+	    Date: 2012-03-21
+	-->
+	
+	<!-- Relational database template -->
+	<property name="wx.enterprise.securityService"
+		class="org.frameworkset.wx.enterprise.WXSecurityServiceImp"/>
+		
+	<property name="wx.enterprise.APIService"
+		class="org.frameworkset.wx.enterprise.WXAPIServiceImp"/>	
+		
+	<property name="wx.enterprise.request.checkcode"
+		value="everytime"/>	
+		
+	<property name="wx.enterprise.getUserInfo"
+		value="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo"/>	
+		
+	<property name="wx.enterprise.accessToken"
+		value="https://qyapi.weixin.qq.com/cgi-bin/gettoken"/>	
+</properties>
+	

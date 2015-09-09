@@ -3638,6 +3638,20 @@ public class AccessControl implements AccessControlInf{
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 重置指定的用户属性值
+	 * @param userAttribute
+	 */
+	public void setUserAttribute(String userAttribute,Object value) {
+		try {
+			
+			
+			session.setAttribute(userAttribute, value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 重置用户属性值
 	 */

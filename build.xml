@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-wx,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -88,7 +88,7 @@
 						
 					</jar>
 				</target>
-	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-sany-wx,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -207,6 +207,46 @@
 			 
 			
 		</target>
+	
+	
+	<target name="compile-sany-wx" description="compile-sany-wx source ">
+					<echo>compile the compile-sany-wx source ...</echo>
+			<delete dir="classes-ds"/>
+			<mkdir dir="classes-ds"/>	
+			<javac encoding="UTF-8" destdir="classes-ds" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-wx" />				
+				<classpath id="cp-cms_baseline">
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					<fileset dir="${source}/lib" includes="*.jar *.zip" />
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+					
+				</classpath>
+			</javac>
+		<copy todir="classes-ds">
+			<fileset dir="${source}/src-wx" includes="**/*.xml"/>
+		</copy>
+		<copy todir="classes-sonar">
+			<fileset dir="classes-ds" includes="**/*.*"/>
+		</copy>
+	</target>
+	
+	<target name="jar-sany-wx" depends="compile-sany-wx" description="generate the sany-wx.jar">
+			<echo>Generate the sany-wx.jar ...</echo>
+			<jar jarfile="${distrib}/sany-wx.jar" basedir="classes-ds" includes="**/*">
+				<manifest>
+					<attribute name="Implementation-Version" value="${impl.version}" />
+					<attribute name="Specification-Version" value="${revision}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-ProductID" value="${impl.productID}" />
+					<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
+					<attribute name="Compile-User" value="${username}" />
+				</manifest>
+			</jar>
+		 <delete dir="classes-ds"/>
+		 
+		
+	</target>
 	
 	
 	<target name="compile-sany-mbp" depends="jar-system" description="compile the sany source ">

@@ -13,6 +13,9 @@ import org.frameworkset.util.FileCopyUtils;
 import org.frameworkset.util.annotations.AssertDToken;
 import org.frameworkset.util.annotations.AssertTicket;
 import org.frameworkset.web.token.TokenStore;
+import org.frameworkset.wx.common.entity.WxAccessToken;
+import org.frameworkset.wx.common.entity.WxUserToken;
+import org.frameworkset.wx.common.util.WXHelper;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
@@ -28,303 +31,427 @@ import com.sany.webseal.LoginValidate.CommonInfo;
 import com.sany.webseal.LoginValidate.UimUserInfo;
 
 public class SSOControler {
-	private static Logger log = Logger.getLogger(SSOControler.class);
 
-	public String sso() {
-		return "path:sso";
-	}
+    private static Logger log = Logger.getLogger(SSOControler.class);
 
-	@AssertTicket
-	public void ssowithticket(HttpServletRequest request,
-			HttpServletResponse response)
-	{
-		_ssowithtoken(request,
-				response);
-	}
-	
-	@AssertDToken
-	public void ssowithtoken(HttpServletRequest request,
-			HttpServletResponse response)
-	{
-		_ssowithtoken(request,
-				response);
-	}
-	/**
-	 * 强制要求系统必须携带令牌
-	 * 
-	 * @return
-	 */
-	
-	public void _ssowithtoken(HttpServletRequest request,
-			HttpServletResponse response) {
-		// return "path:sso";
-		
-		String u = "", p = "", ck = "";
+    public String sso() {
+        return "path:sso";
+    }
 
-		String successRedirect = request.getParameter("successRedirect");
-		//System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+successRedirect);
-		if (!StringUtil.isEmpty(successRedirect)) {
-			successRedirect = StringUtil.getRealPath(request, successRedirect,
-					true);
-		}
-		String userName = (String)request.getAttribute(TokenStore.token_request_account_key);		
-		String worknumber = (String)request.getAttribute(TokenStore.token_request_worknumber_key);
-		String loginType = "1";
-		if(StringUtil.isEmpty(userName ))
-		{
-			userName = worknumber;
-			loginType = "2";
-		}
-		
-		String loginMenu = request.getParameter("loginMenu");
-		String contextpath = request.getContextPath();
-		String menuid = "newGetDoc";
-		if (loginMenu != null) {
+    @AssertTicket
+    public void ssowithticket(HttpServletRequest request, HttpServletResponse response) {
+        _ssowithtoken(request, response);
+    }
 
-			menuid = loginMenu;
+    @AssertDToken
+    public void ssowithtoken(HttpServletRequest request, HttpServletResponse response) {
+        _ssowithtoken(request, response);
+    }
 
-		}
-		HttpSession session = request.getSession();
+    /**
+     * 配置微信菜单 //redirect_uri=http://domain/contextpath/sso/wxsso.page?loginMenu=
+     * appbommanager
+     * 
+     * redirect_uri=http://domain/contextpath/sso/wxsso.page?successRedirect=<%=
+     * URLEncoder.encode("/appbom/aaa.page")
+     * 
+     * 微信跳转过来的地址
+     * redirect_uri=http://domain/contextpath/sso/wxsso.page?loginMenu=
+     * appbommanager&code=CODE&state=STATE
+     * 
+     * redirect_uri=http://domain/contextpath/sso/wxsso.page?successRedirect=/
+     * appbom/aaa.page&code=CODE&state=STATE
+     * 
+     * @param request
+     * @param response
+     */
+    public void wxsso(HttpServletRequest request, HttpServletResponse response) {
 
-		boolean isWebSealServer = ConfigManager.getInstance()
-				.getConfigBooleanValue("isWebSealServer", false);
+        String code = request.getParameter("CODE");
+        String state = request.getParameter("state");
 
-		if (isWebSealServer && userName == null) {
+        String agentid = request.getParameter("agentid");
 
-			String subsystem = "sany-mms";
+        String successRedirect = request.getParameter("successRedirect");
+        String corpid = null, corpsecret = null;
+        String userName = null;
+        String loginMenu = request.getParameter("loginMenu");
+        String contextpath = request.getContextPath();
+        String menuid = null;
+        if (loginMenu != null) {
 
-			try// uim检测
-			{
-				CommonInfo info = new CommonInfo();
-				UimUserInfo userinfo = null;
-				String ip = "";
-				userinfo = info.validateUIM(request);
-				ip = userinfo.getUser_ip();
-				userName = userinfo.getUser_name();
-				AccessControl control = AccessControl.getInstance();
-				control.checkAccess(request, response, false);
-				String user = control.getUserAccount();
-				request.setAttribute("fromsso", "true");
+            menuid = loginMenu;
 
-				if (user == null || "".equals(user) || !userName.equals(user)) {
+        }
+        HttpSession session = request.getSession();
 
-					try {
-						if (!userName.equals(user))
-							control.resetSession(session);
-						String password = SSOUserMapping
-								.getUserPassword(userName);
-						if(password == null)
-							throw new AccessException("用户"+userName+"不存在。");
-						control = AccessControl.getInstance();
-						control.login(request, response, userName, password);
+        try {
+            AccessControl control = AccessControl.getInstance();
+            control.checkAccess(request, response, false);
+            String user = control.getUserAccount();
+            if (!control.isGuest()) {
+                if (WXHelper.requestCheckcode().equals("everytime")) {
+                    WxAccessToken accesstoken = WXHelper.getEnterpriseWXSecurityService().getWxAccessToken(agentid,
+                            corpid, corpsecret);
+                    WxUserToken userToken = WXHelper.getEnterpriseWXSecurityService().getWxUserToken(
+                            accesstoken.getAccessToken(), code, agentid, state);
 
-						if (StringUtil.isEmpty(successRedirect)) {
-							Framework framework = Framework.getInstance(control
-									.getCurrentSystemID());
-							MenuItem menuitem = framework.getMenuByID(menuid);
-							if (menuitem instanceof Item) {
+                    userName = userToken.getUserAccount();
+                } else {
+                    userName = user;
+                }
+            } else {
+                user = null;
+                WxAccessToken accesstoken = WXHelper.getEnterpriseWXSecurityService().getWxAccessToken(agentid, corpid,
+                        corpsecret);
+                WxUserToken userToken = WXHelper.getEnterpriseWXSecurityService().getWxUserToken(
+                        accesstoken.getAccessToken(), code, agentid, state);
 
-								Item menu = (Item) menuitem;
-								successRedirect = MenuHelper.getRealUrl(
-										contextpath, Framework
-												.getWorkspaceContent(menu,
-														control),
-										MenuHelper.sanymenupath_menuid, menu
-												.getId());
-							} else {
+                userName = userToken.getUserAccount();
+            }
 
-								Module menu = (Module) menuitem;
-								String framepath = contextpath
-										+ "/sanydesktop/singleframe.page?"
-										+ MenuHelper.sanymenupath + "="
-										+ menu.getPath();
-								successRedirect = framepath;
-							}
-							AccessControl.recordIndexPage(request,
-									successRedirect);
-						} else {
-							successRedirect = URLDecoder
-									.decode(successRedirect);
-						}
-						response.sendRedirect(successRedirect);
-						return;
-					} catch (Exception e) {
-						log.info("", e);
-						String msg = e.getMessage();
-						if(msg == null) msg = "";
-						response.sendRedirect(contextpath
-								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName + "&ip=" + ip+ "&errormsg=" + java.net.URLEncoder.encode(msg,"UTF-8"));
-						return;
-					}
+            boolean issameuser = false;
 
-				} else {
-					control.resetUserAttributes();
-					if (StringUtil.isEmpty(successRedirect)) {
-						Framework framework = Framework.getInstance(control
-								.getCurrentSystemID());
-						MenuItem menuitem = framework.getMenuByID(menuid);
-						if (menuitem instanceof Item) {
+            if (user != null && !user.equals(""))
+                issameuser = userName.equals(user);
 
-							Item menu = (Item) menuitem;
-							successRedirect = MenuHelper.getRealUrl(
-									contextpath, Framework.getWorkspaceContent(
-											menu, control),
-									MenuHelper.sanymenupath_menuid, menu
-											.getId());
-						} else {
+            if (user == null || "".equals(user) || !issameuser) {
 
-							Module menu = (Module) menuitem;
-							String framepath = contextpath
-									+ "/sanydesktop/singleframe.page?"
-									+ MenuHelper.sanymenupath + "="
-									+ menu.getPath();
-							successRedirect = framepath;
-						}
-						AccessControl.recordIndexPage(request, successRedirect);
-					} else {
-						successRedirect = URLDecoder.decode(successRedirect);
-					}
-					response.sendRedirect(successRedirect);
-					return;
-				}
+                if (!issameuser) {
+                    control.resetSession(session);
+                }
 
-			} catch (Exception e)// 检测失败,继续平台登录
-			{
-				log.info("", e);
-			}
+                try {
+                    // 1-域账号登录 2-工号登录
+                    String password = null;
 
-		}
+                    password = SSOUserMapping.getUserPassword(userName);
+                    if (password == null)
+                        throw new AccessException("用户" + userName + "不存在。");
 
-		else {
-			try {
-				AccessControl control = AccessControl.getInstance();
-				control.checkAccess(request, response, false);
-				String user = control.getUserAccount();
-				
-				worknumber = control.getUserAttribute("userWorknumber");
-				boolean issameuser = false;
-				if (loginType.equals("2")) {
-					if (worknumber != null && !worknumber.equals(""))
-						issameuser = userName.equals(worknumber);
-				} else {
-					if (user != null && !user.equals(""))
-						issameuser = userName.equals(user);
-				}
+                    control = AccessControl.getInstance();
+                    request.setAttribute("fromsso", "true");
+                    // System.out.println("-----------userName="+userName+",password="+password);
+                    control.login(request, response, userName, password);
+                    if (StringUtil.isEmpty(successRedirect)) {
+                        Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                        MenuItem menuitem = framework.getMenuByID(menuid);
+                        if (menuitem instanceof Item) {
 
-				if (user == null || "".equals(user) || !issameuser) {
+                            Item menu = (Item) menuitem;
+                            successRedirect = MenuHelper.getRealUrl(contextpath,
+                                    Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                    menu.getId());
+                        } else {
 
-					if (!issameuser) {
-						control.resetSession(session);
-					}
+                            Module menu = (Module) menuitem;
+                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
+                                    + "=" + menu.getPath();
+                            successRedirect = framepath;
+                        }
+                        AccessControl.recordIndexPage(request, successRedirect);
+                    } else {
+                        successRedirect = URLDecoder.decode(successRedirect);
+                    }
+                    response.sendRedirect(successRedirect);
+                    return;
+                } catch (Exception e) {
+                    log.info("", e);
+                    String msg = e.getMessage();
+                    if (msg == null)
+                        msg = "";
+                    response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
+                            + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                    return;
+                }
 
-					try {
-						// 1-域账号登录 2-工号登录
-						String password = null;
-						if (loginType.equals("1")) {
+            } else {
+                control.resetUserAttributes();
+                if (StringUtil.isEmpty(successRedirect)) {
+                    Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                    MenuItem menuitem = framework.getMenuByID(menuid);
+                    if (menuitem instanceof Item) {
 
-							password = SSOUserMapping.getUserPassword(userName);
-							if(password == null)
-								throw new AccessException("用户"+userName+"不存在。");
-						} else {
-							java.util.Map data = SSOUserMapping
-									.getUserNameAndPasswordByWorknumber(userName);
-							if(data == null)
-								throw new AccessException("工号为"+userName+"的用户不存在。");
-							userName = (String) data.get("USER_NAME");
-							password = (String) data.get("USER_PASSWORD");
-						}
-						control = AccessControl.getInstance();
-						request.setAttribute("fromsso", "true");
-						//System.out.println("-----------userName="+userName+",password="+password);
-						control.login(request, response, userName, password);
-						if (StringUtil.isEmpty(successRedirect)) {
-							Framework framework = Framework.getInstance(control
-									.getCurrentSystemID());
-							MenuItem menuitem = framework.getMenuByID(menuid);
-							if (menuitem instanceof Item) {
+                        Item menu = (Item) menuitem;
+                        successRedirect = MenuHelper.getRealUrl(contextpath,
+                                Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                menu.getId());
+                    } else {
 
-								Item menu = (Item) menuitem;
-								successRedirect = MenuHelper.getRealUrl(
-										contextpath, Framework
-												.getWorkspaceContent(menu,
-														control),
-										MenuHelper.sanymenupath_menuid, menu
-												.getId());
-							} else {
+                        Module menu = (Module) menuitem;
+                        String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
+                                + "=" + menu.getPath();
+                        successRedirect = framepath;
+                    }
+                    AccessControl.recordIndexPage(request, successRedirect);
+                } else {
+                    successRedirect = URLDecoder.decode(successRedirect);
+                }
+                response.sendRedirect(successRedirect);
+                return;
+            }
 
-								Module menu = (Module) menuitem;
-								String framepath = contextpath
-										+ "/sanydesktop/singleframe.page?"
-										+ MenuHelper.sanymenupath + "="
-										+ menu.getPath();
-								successRedirect = framepath;
-							}
-							AccessControl.recordIndexPage(request,
-									successRedirect);
-						} else {
-							successRedirect = URLDecoder
-									.decode(successRedirect);
-						}
-						response.sendRedirect(successRedirect);
-						return;
-					} catch (Exception e) {
-						log.info("", e);
-						String msg = e.getMessage();
-						if(msg == null) msg = "";
-						response.sendRedirect(contextpath
-								+ "/webseal/websealloginfail.jsp?userName="
-								+ userName + "&errormsg=" +java.net.URLEncoder.encode(msg,"UTF-8"));
-						return;
-					}
+        } catch (Throwable ex) {
+            log.info("", ex);
+            String errorMessage = ex.getMessage();
+            if (errorMessage == null)
+                errorMessage = "";
 
-				} else {
-					control.resetUserAttributes();
-					if (StringUtil.isEmpty(successRedirect)) {
-						Framework framework = Framework.getInstance(control
-								.getCurrentSystemID());
-						MenuItem menuitem = framework.getMenuByID(menuid);
-						if (menuitem instanceof Item) {
+            try {
+                FileCopyUtils.copy(errorMessage + "," + userName + "登陆失败，请确保输入的用户名和口令是否正确！", new OutputStreamWriter(
+                        response.getOutputStream(), "UTF-8"));
+            } catch (IOException e) {
+                log.info("", e);
+            }
 
-							Item menu = (Item) menuitem;
-							successRedirect = MenuHelper.getRealUrl(
-									contextpath, Framework.getWorkspaceContent(
-											menu, control),
-									MenuHelper.sanymenupath_menuid, menu
-											.getId());
-						} else {
+        }
 
-							Module menu = (Module) menuitem;
-							String framepath = contextpath
-									+ "/sanydesktop/singleframe.page?"
-									+ MenuHelper.sanymenupath + "="
-									+ menu.getPath();
-							successRedirect = framepath;
-						}
-						AccessControl.recordIndexPage(request, successRedirect);
-					} else {
-						successRedirect = URLDecoder.decode(successRedirect);
-					}
-					response.sendRedirect(successRedirect);
-					return;
-				}
+    }
 
-			} catch (Throwable ex) {
-				log.info("", ex);
-				String errorMessage = ex.getMessage();
-				if (errorMessage == null)
-					errorMessage = "";
-				
-				
-				try {
-					FileCopyUtils.copy(errorMessage + ","+userName+"登陆失败，请确保输入的用户名和口令是否正确！", new OutputStreamWriter(response.getOutputStream(), "UTF-8"));
-				} catch (IOException e) {
-					log.info("", e);
-				}
-				
-			}
-		}
+    /**
+     * 强制要求系统必须携带令牌
+     * 
+     * @return
+     */
 
-	}
+    public void _ssowithtoken(HttpServletRequest request, HttpServletResponse response) {
+        // return "path:sso";
+
+        String u = "", p = "", ck = "";
+
+        String successRedirect = request.getParameter("successRedirect");
+        // System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+successRedirect);
+        if (!StringUtil.isEmpty(successRedirect)) {
+            successRedirect = StringUtil.getRealPath(request, successRedirect, true);
+        }
+        String userName = (String) request.getAttribute(TokenStore.token_request_account_key);
+        String worknumber = (String) request.getAttribute(TokenStore.token_request_worknumber_key);
+        String loginType = "1";
+        if (StringUtil.isEmpty(userName)) {
+            userName = worknumber;
+            loginType = "2";
+        }
+
+        String loginMenu = request.getParameter("loginMenu");
+        String contextpath = request.getContextPath();
+        String menuid = "newGetDoc";
+        if (loginMenu != null) {
+
+            menuid = loginMenu;
+
+        }
+        HttpSession session = request.getSession();
+
+        boolean isWebSealServer = ConfigManager.getInstance().getConfigBooleanValue("isWebSealServer", false);
+
+        if (isWebSealServer && userName == null) {
+
+            String subsystem = "sany-mms";
+
+            try// uim检测
+            {
+                CommonInfo info = new CommonInfo();
+                UimUserInfo userinfo = null;
+                String ip = "";
+                userinfo = info.validateUIM(request);
+                ip = userinfo.getUser_ip();
+                userName = userinfo.getUser_name();
+                AccessControl control = AccessControl.getInstance();
+                control.checkAccess(request, response, false);
+                String user = control.getUserAccount();
+                request.setAttribute("fromsso", "true");
+
+                if (user == null || "".equals(user) || !userName.equals(user)) {
+
+                    try {
+                        if (!userName.equals(user))
+                            control.resetSession(session);
+                        String password = SSOUserMapping.getUserPassword(userName);
+                        if (password == null)
+                            throw new AccessException("用户" + userName + "不存在。");
+                        control = AccessControl.getInstance();
+                        control.login(request, response, userName, password);
+
+                        if (StringUtil.isEmpty(successRedirect)) {
+                            Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                            MenuItem menuitem = framework.getMenuByID(menuid);
+                            if (menuitem instanceof Item) {
+
+                                Item menu = (Item) menuitem;
+                                successRedirect = MenuHelper.getRealUrl(contextpath,
+                                        Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                        menu.getId());
+                            } else {
+
+                                Module menu = (Module) menuitem;
+                                String framepath = contextpath + "/sanydesktop/singleframe.page?"
+                                        + MenuHelper.sanymenupath + "=" + menu.getPath();
+                                successRedirect = framepath;
+                            }
+                            AccessControl.recordIndexPage(request, successRedirect);
+                        } else {
+                            successRedirect = URLDecoder.decode(successRedirect);
+                        }
+                        response.sendRedirect(successRedirect);
+                        return;
+                    } catch (Exception e) {
+                        log.info("", e);
+                        String msg = e.getMessage();
+                        if (msg == null)
+                            msg = "";
+                        response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
+                                + "&ip=" + ip + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                        return;
+                    }
+
+                } else {
+                    control.resetUserAttributes();
+                    if (StringUtil.isEmpty(successRedirect)) {
+                        Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                        MenuItem menuitem = framework.getMenuByID(menuid);
+                        if (menuitem instanceof Item) {
+
+                            Item menu = (Item) menuitem;
+                            successRedirect = MenuHelper.getRealUrl(contextpath,
+                                    Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                    menu.getId());
+                        } else {
+
+                            Module menu = (Module) menuitem;
+                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
+                                    + "=" + menu.getPath();
+                            successRedirect = framepath;
+                        }
+                        AccessControl.recordIndexPage(request, successRedirect);
+                    } else {
+                        successRedirect = URLDecoder.decode(successRedirect);
+                    }
+                    response.sendRedirect(successRedirect);
+                    return;
+                }
+
+            } catch (Exception e)// 检测失败,继续平台登录
+            {
+                log.info("", e);
+            }
+
+        }
+
+        else {
+            try {
+                AccessControl control = AccessControl.getInstance();
+                control.checkAccess(request, response, false);
+                String user = control.getUserAccount();
+
+                worknumber = control.getUserAttribute("userWorknumber");
+                boolean issameuser = false;
+                if (loginType.equals("2")) {
+                    if (worknumber != null && !worknumber.equals(""))
+                        issameuser = userName.equals(worknumber);
+                } else {
+                    if (user != null && !user.equals(""))
+                        issameuser = userName.equals(user);
+                }
+
+                if (user == null || "".equals(user) || !issameuser) {
+
+                    if (!issameuser) {
+                        control.resetSession(session);
+                    }
+
+                    try {
+                        // 1-域账号登录 2-工号登录
+                        String password = null;
+                        if (loginType.equals("1")) {
+
+                            password = SSOUserMapping.getUserPassword(userName);
+                            if (password == null)
+                                throw new AccessException("用户" + userName + "不存在。");
+                        } else {
+                            java.util.Map data = SSOUserMapping.getUserNameAndPasswordByWorknumber(userName);
+                            if (data == null)
+                                throw new AccessException("工号为" + userName + "的用户不存在。");
+                            userName = (String) data.get("USER_NAME");
+                            password = (String) data.get("USER_PASSWORD");
+                        }
+                        control = AccessControl.getInstance();
+                        request.setAttribute("fromsso", "true");
+                        // System.out.println("-----------userName="+userName+",password="+password);
+                        control.login(request, response, userName, password);
+                        if (StringUtil.isEmpty(successRedirect)) {
+                            Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                            MenuItem menuitem = framework.getMenuByID(menuid);
+                            if (menuitem instanceof Item) {
+
+                                Item menu = (Item) menuitem;
+                                successRedirect = MenuHelper.getRealUrl(contextpath,
+                                        Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                        menu.getId());
+                            } else {
+
+                                Module menu = (Module) menuitem;
+                                String framepath = contextpath + "/sanydesktop/singleframe.page?"
+                                        + MenuHelper.sanymenupath + "=" + menu.getPath();
+                                successRedirect = framepath;
+                            }
+                            AccessControl.recordIndexPage(request, successRedirect);
+                        } else {
+                            successRedirect = URLDecoder.decode(successRedirect);
+                        }
+                        response.sendRedirect(successRedirect);
+                        return;
+                    } catch (Exception e) {
+                        log.info("", e);
+                        String msg = e.getMessage();
+                        if (msg == null)
+                            msg = "";
+                        response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
+                                + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                        return;
+                    }
+
+                } else {
+                    control.resetUserAttributes();
+                    if (StringUtil.isEmpty(successRedirect)) {
+                        Framework framework = Framework.getInstance(control.getCurrentSystemID());
+                        MenuItem menuitem = framework.getMenuByID(menuid);
+                        if (menuitem instanceof Item) {
+
+                            Item menu = (Item) menuitem;
+                            successRedirect = MenuHelper.getRealUrl(contextpath,
+                                    Framework.getWorkspaceContent(menu, control), MenuHelper.sanymenupath_menuid,
+                                    menu.getId());
+                        } else {
+
+                            Module menu = (Module) menuitem;
+                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
+                                    + "=" + menu.getPath();
+                            successRedirect = framepath;
+                        }
+                        AccessControl.recordIndexPage(request, successRedirect);
+                    } else {
+                        successRedirect = URLDecoder.decode(successRedirect);
+                    }
+                    response.sendRedirect(successRedirect);
+                    return;
+                }
+
+            } catch (Throwable ex) {
+                log.info("", ex);
+                String errorMessage = ex.getMessage();
+                if (errorMessage == null)
+                    errorMessage = "";
+
+                try {
+                    FileCopyUtils.copy(errorMessage + "," + userName + "登陆失败，请确保输入的用户名和口令是否正确！",
+                            new OutputStreamWriter(response.getOutputStream(), "UTF-8"));
+                } catch (IOException e) {
+                    log.info("", e);
+                }
+
+            }
+        }
+
+    }
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-workflow-web"/>
+	<classpathentry kind="src" path="src-wx"/>
 	<classpathentry kind="src" path="src-workflow-demo"/>
 	<classpathentry kind="src" path="src-common"/>
 	<classpathentry kind="src" path="src-application"/>
