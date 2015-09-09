@@ -42,10 +42,10 @@ public class SapConnTest {
 //		kstar.add(map1);
 //		kstar.add(map2);
 //		kstar.add(map3);
-		SapResult r = util.test();
+//		SapResult r = util.createUser();
+//		System.out.println();
+		SapResult r = util.createUserUnTX("yinbp2","10006675");
 		System.out.println();
-		
-		
 //		List sapres = util.getSapFytj(ksh,kstar,"2010-01-01","2012-08-07");
 //		util.getSapOracleDateTime();
 		

@@ -49,7 +49,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			,String[] inParamsTableNames,List<Map<String, Object>>[] inParamsTableValues,String[] returnParamsStructureNames,List<String>[] returnParamsStructureColumns) throws SapException
 		{
 			return callFunctionForParameterInTableAndStructure(
-					this.getABAP_AS_POOLED(), rfcName, inParams, null,
+					null, rfcName, inParams, null,
 					null, inParamsTableNames, inParamsTableValues, null, returnParamsStructureNames, returnParamsStructureColumns, null, null);
 
 		}
@@ -246,9 +246,19 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 
 		List<Map<String, Object>>[] retRecords = null;
 
+		JCoDestination destination = null;
+		boolean needend = false;
 		try {
-			JCoDestination destination = JCoDestinationManager
-					.getDestination(ABAP_AS_POOLED);
+			if(this.destination_ != null)
+			{
+				destination = destination_;
+			}
+			else
+			{
+				destination = JCoDestinationManager
+						.getDestination(ABAP_AS_POOLED);
+				needend = true;
+			}
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
 			if (function == null)
@@ -301,6 +311,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
+		finally
+		{
+			if(needend)
+			{
+				this.end(destination);
+			}
+		}
 
 		return retRecords;
 	}
@@ -342,9 +359,19 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 
 		List<Map<String, Object>>[] retRecords = null;
 
+		JCoDestination destination = null;
+		boolean needend = false;
 		try {
-			JCoDestination destination = JCoDestinationManager
-					.getDestination(ABAP_AS_POOLED);
+			if(this.destination_ != null)
+			{
+				destination = destination_;
+			}
+			else
+			{
+				destination = JCoDestinationManager
+						.getDestination(ABAP_AS_POOLED);
+				needend = true;
+			}
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
 			if (function == null)
@@ -410,7 +437,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
-
+		finally
+		{
+			if(needend)
+			{
+				this.end(destination);
+			}
+		}
 		return retRecords;
 	}
 
@@ -443,9 +476,19 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 
 		Map<String, Object> retRecords = null;
 
+		JCoDestination destination = null;
+		boolean needend = false;
 		try {
-			JCoDestination destination = JCoDestinationManager
-					.getDestination(ABAP_AS_POOLED);
+			if(this.destination_ != null)
+			{
+				destination = destination_;
+			}
+			else
+			{
+				destination = JCoDestinationManager
+						.getDestination(ABAP_AS_POOLED);
+				needend = true;
+			}
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
 			if (function == null)
@@ -480,7 +523,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
-
+		finally
+		{
+			if(needend)
+			{
+				this.end(destination);
+			}
+		}
 		return retRecords;
 	}
 
@@ -518,9 +567,19 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 
 		Map<String, Object> retRecords = null;
 
+		JCoDestination destination = null;
+		boolean needend = false;
 		try {
-			JCoDestination destination = JCoDestinationManager
-					.getDestination(ABAP_AS_POOLED);
+			if(this.destination_ != null)
+			{
+				destination = destination_;
+			}
+			else
+			{
+				destination = JCoDestinationManager
+						.getDestination(ABAP_AS_POOLED);
+				needend = true;
+			}
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
 			if (function == null)
@@ -576,7 +635,13 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
-
+		finally
+		{
+			if(needend)
+			{
+				this.end(destination);
+			}
+		}
 		return retRecords;
 	}
 
@@ -607,7 +672,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			List<String>[] returnTableColumns) throws SapException {
 
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName, inParams, (String[]) null,
+				null, rfcName, inParams, (String[]) null,
 				(Map<String, Object>[]) null, (String[]) inParamsTableNames,
 				(List<Map<String, Object>>[]) inParamsTableValues,
 				(String[]) returnParameterColumns, (String[]) null,
@@ -637,7 +702,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			throws SapException {
 
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName, inParams, (String[]) null,
+				null, rfcName, inParams, (String[]) null,
 				(Map<String, Object>[]) null, (String[]) null,
 				(List<Map<String, Object>>[]) null,
 				(String[]) returnParameterColumns, (String[]) null,
@@ -655,7 +720,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 	public final SapResult callFunctionForParameterInTableAndStructure(
 			String rfcName) throws SapException {
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName);
+				null, rfcName);
 	}
 
 	public final SapResult callFunctionForParameterInTableAndStructure(
@@ -670,7 +735,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 
 	String rfcName, Map<String, Object> inParams) throws SapException {
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName, inParams, null, null, null,
+				null, rfcName, inParams, null, null, null,
 				null, null, null, null, null, null);
 	}
 
@@ -718,7 +783,7 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			String[] returnTableNames, List<String>[] returnTableColumns)
 			throws SapException {
 		return callFunctionForParameterInTableAndStructure(
-				this.getABAP_AS_POOLED(), rfcName, inParams,
+				null, rfcName, inParams,
 				inParamsStructureNames, inParamsStructureValues,
 				inParamsTableNames, inParamsTableValues,
 				returnParameterColumns, returnParamsStructureNames,
@@ -740,10 +805,27 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			throws SapException {
 
 		SapResult sapResult = null;
+		JCoDestination destination = null;
+		boolean needend = false;
 		try {
-
-			JCoDestination destination = JCoDestinationManager
-					.getDestination(destinationName);
+			
+			if(destinationName == null)
+			{
+				if(this.destination_ != null)
+					destination= destination_;
+				else
+				{
+					destination = JCoDestinationManager
+							.getDestination(this.getABAP_AS_POOLED());
+					needend = true;
+				}
+			}
+			else
+			{
+				destination = JCoDestinationManager
+						.getDestination(destinationName);
+				needend = true;
+			}
 			JCoFunction function = destination.getRepository().getFunction(
 					rfcName);
 			if (function == null)
@@ -864,6 +946,11 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 			// logger.error(e.getMessage(), e);
 			throw new SapException(e);
 		}
+		finally
+		{
+			if(needend)
+				this.end(destination);
+		}
 
 		return sapResult;
 	}
@@ -871,9 +958,9 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 	public String getABAP_AS_POOLED() {
 		return ABAP_AS_POOLED;
 	}
-
+	private JCoDestination destination_;
 	public JCoDestination begin(String destination) throws SapException {
-		JCoDestination destination_ = getJcoDestination(destination);
+		destination_ = getJcoDestination(destination);
 		com.sap.conn.jco.JCoContext.begin(destination_);
 		return destination_;
 	}
@@ -886,6 +973,17 @@ public class SapConnectFactory implements org.frameworkset.spi.InitializingBean,
 		if (destination != null) {
 			try {
 				com.sap.conn.jco.JCoContext.end(destination);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void end() {
+		if (destination_ != null) {
+			try {
+				com.sap.conn.jco.JCoContext.end(destination_);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

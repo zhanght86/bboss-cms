@@ -4,25 +4,25 @@
 
   <property name="sapconf" class="com.sany.sap.connection.SAPConf"
 			  	f:client="150"
-			  	f:user="33"
-			  	f:passward="333"
-			  	f:host="130.0.313.11"
+			  	f:user="esb_rfc"
+			  	f:passward="ESB@1qaz"
+			  	f:host="10.0.13.11"
 			  	f:sysnr="01"
 			  	f:lang="ZH"
 			  	f:jco_pool_capacity="5"
 			  	f:jco_peak_limit="15"
   />  
   
+ 
+  
   <property name="sapconffactory" class="com.sany.sap.connection.SapConnectFactory"
 			  	f:sapconf="attr:sapconf"
-			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED"/>
-			  	
-			  	
+			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED"/>		  	
   <!--<property name="sapconf1" class="com.sany.sap.connection.SAPConf"
 			  	f:client="150"
-			  	f:user="33"
-			  	f:passward="33@3"
-			  	f:host="103.30.13.312"
+			  	f:user="esb_rfc"
+			  	f:passward="ESB@1qaz"
+			  	f:host="10.0.13.12"
 			  	f:sysnr="01"
 			  	f:lang="ZH"
 			  	f:jco_pool_capacity="5"

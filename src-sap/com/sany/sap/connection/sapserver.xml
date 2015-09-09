@@ -28,7 +28,20 @@
 			  	f:domainSAPConf="attr:sapconf"
 			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED"/>
 			  	
+	  <property name="sapconffactorydev" class="com.sany.sap.connection.SapConnectFactory"
+			  	f:sapconf="attr:sapconfdev"
+			  	f:ABAP_AS_POOLED="ABAP_AS_POOLED"/>
 			  	
+	  <property name="sapconfdev" class="com.sany.sap.connection.SAPConf"
+			  	f:client="200"
+			  	f:user="wangfx2"
+			  	f:passward="0.123456"
+			  	f:host="10.0.13.51"
+			  	f:sysnr="00"
+			  	f:lang="ZH"
+			  	f:jco_pool_capacity="5"
+			  	f:jco_peak_limit="15"
+  /> 		  	
   <!--  <property name="sapconf1" class="com.sany.sap.connection.DomainSAPConf"
 			  	f:client="150"
 			  	f:user="esb_rfc"

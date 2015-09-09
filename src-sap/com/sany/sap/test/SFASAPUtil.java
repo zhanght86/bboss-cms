@@ -510,6 +510,195 @@ public class SFASAPUtil {
 
      */
 
+    public SapResult createUser()
+    {
+    	SapResult sapResult = null;
+        JCoDestination destination = null;
+        try {
+            destination = sapConnectFactory.begin();
+        
+          String rfcName = "BAPI_USER_CREATE1";
+ 
+            Map<String, Object> inParams = new HashMap<String,Object>();
+            inParams.put("USERNAME", "yinbp");
+            
+            
+            Map<String, Object>[] inParamsStructureValues = new Map[4];
+            String[] inParamsStructureNames = new String[4];
+    		inParamsStructureNames[0] = "LOGONDATA";
+    		inParamsStructureValues[0] = new HashMap<String, Object>();
+    		inParamsStructureValues[0].put("GLTGV", "20150827");// 凭证日期
+
+    		inParamsStructureValues[0].put("GLTGB","20150927");// 记账日期
+
+    		inParamsStructureValues[0].put("USTYP", "A");
+    		
+    		inParamsStructureNames[1] = "PASSWORD";
+    		inParamsStructureValues[1] = new HashMap<String, Object>();
+    		inParamsStructureValues[1].put("BAPIPWD", "Sany_002");// 凭证日期
+
+    		inParamsStructureNames[2] = "ADDRESS";
+    		inParamsStructureValues[2] = new HashMap<String, Object>();
+    		inParamsStructureValues[2].put("TITLE_P", "先生");// 凭证日期
+    		inParamsStructureValues[2].put("FIRSTNAME", "尹");// 凭证日期
+    		inParamsStructureValues[2].put("LASTNAME", "标平");// 凭证日期
+    		inParamsStructureValues[2].put("DEPARTMENT", "架构科");// 凭证日期
+    		inParamsStructureValues[2].put("FUNCTION", "架构工程师");// 凭证日期
+    		inParamsStructureValues[2].put("ROOM_NO_P", "10006673");// 凭证日期
+    		
+    		inParamsStructureNames[3] = "UCLASS";
+    		inParamsStructureValues[3] = new HashMap<String, Object>();
+    		inParamsStructureValues[3].put("LIC_TYPE", "06");// 凭证日期
+    		inParamsStructureValues[3].put("SPEC_VERS", "00");// 凭证日期
+    		
+    		
+    		String[] inParamsTableNames = {"ADDTEL"};
+            List<Map<String, Object>> inTableValue = new ArrayList<Map<String, Object>>();
+	         
+	        Map<String, Object> row = new HashMap<String, Object>();
+	        row.put("STD_NO", "X");
+	        row.put("TELEPHONE", "18807409059");	
+	        row.put("R_3_USER", "3");
+	        row.put("CONSNUMBER", "001");	              
+	        inTableValue.add(row);	        
+			List<Map<String, Object>>[] inParamsTableValues = new List[]{inTableValue};
+    		
+			String[] returnTableNames = {"RETURN"};
+			
+			List<String>[] returnTableColumns = new List[1];
+			returnTableColumns[0] = new ArrayList<String>();
+	          returnTableColumns[0].add("TYPE");
+	          returnTableColumns[0].add("ID");
+	          returnTableColumns[0].add("NUMBER");
+	          returnTableColumns[0].add("MESSAGE");
+	          returnTableColumns[0].add("LOG_NO");
+	          returnTableColumns[0].add("LOG_MSG_NO");
+	          returnTableColumns[0].add("MESSAGE_V1");
+	          returnTableColumns[0].add("MESSAGE_V2");
+	          returnTableColumns[0].add("MESSAGE_V3");
+	          returnTableColumns[0].add("MESSAGE_V4");
+	          returnTableColumns[0].add("PARAMETER");
+	          returnTableColumns[0].add("ROW");
+	          
+	  
+	          returnTableColumns[0].add("FIELD");
+	        returnTableColumns[0].add("SYSTEM");
+	         
+	        String[] returnParamsStructureNames = null;
+			List<String>[] returnParamsStructureColumns = null;
+			
+			String[] returnParameterColumns = null;
+			
+			
+            sapResult = sapConnectFactory.callFunctionForParameterInTableAndStructure(rfcName, inParams, inParamsStructureNames, inParamsStructureValues, 
+            		inParamsTableNames, inParamsTableValues, returnParameterColumns, 
+            		returnParamsStructureNames, returnParamsStructureColumns,
+            		returnTableNames, returnTableColumns);
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sapConnectFactory.end(destination);
+        }
+
+        return sapResult;
+    }
+    
+    public SapResult createUserUnTX(String userAccount,String worknumber)
+    {
+    	SapResult sapResult = null;
+        
+        try {
+           
+        
+          String rfcName = "BAPI_USER_CREATE1";
+ 
+            Map<String, Object> inParams = new HashMap<String,Object>();
+            inParams.put("USERNAME", userAccount);
+            
+            
+            Map<String, Object>[] inParamsStructureValues = new Map[4];
+            String[] inParamsStructureNames = new String[4];
+    		inParamsStructureNames[0] = "LOGONDATA";
+    		inParamsStructureValues[0] = new HashMap<String, Object>();
+    		inParamsStructureValues[0].put("GLTGV", "20150827");// 凭证日期
+
+    		inParamsStructureValues[0].put("GLTGB","20150927");// 记账日期
+
+    		inParamsStructureValues[0].put("USTYP", "A");
+    		
+    		inParamsStructureNames[1] = "PASSWORD";
+    		inParamsStructureValues[1] = new HashMap<String, Object>();
+    		inParamsStructureValues[1].put("BAPIPWD", "Sany_002");// 凭证日期
+
+    		inParamsStructureNames[2] = "ADDRESS";
+    		inParamsStructureValues[2] = new HashMap<String, Object>();
+    		inParamsStructureValues[2].put("TITLE_P", "先生");// 凭证日期
+    		inParamsStructureValues[2].put("FIRSTNAME", "尹");// 凭证日期
+    		inParamsStructureValues[2].put("LASTNAME", "标平");// 凭证日期
+    		inParamsStructureValues[2].put("DEPARTMENT", "架构科");// 凭证日期
+    		inParamsStructureValues[2].put("FUNCTION", "架构工程师");// 凭证日期
+    		inParamsStructureValues[2].put("ROOM_NO_P", worknumber);// 凭证日期
+    		
+    		inParamsStructureNames[3] = "UCLASS";
+    		inParamsStructureValues[3] = new HashMap<String, Object>();
+    		inParamsStructureValues[3].put("LIC_TYPE", "06");// 凭证日期
+    		inParamsStructureValues[3].put("SPEC_VERS", "00");// 凭证日期
+    		
+    		
+    		String[] inParamsTableNames = {"ADDTEL"};
+            List<Map<String, Object>> inTableValue = new ArrayList<Map<String, Object>>();
+	         
+	        Map<String, Object> row = new HashMap<String, Object>();
+	        row.put("STD_NO", "X");
+	        row.put("TELEPHONE", "18807409059");	
+	        row.put("R_3_USER", "3");
+	        row.put("CONSNUMBER", "001");	              
+	        inTableValue.add(row);	        
+			List<Map<String, Object>>[] inParamsTableValues = new List[]{inTableValue};
+    		
+			String[] returnTableNames = {"RETURN"};
+			
+			List<String>[] returnTableColumns = new List[1];
+			returnTableColumns[0] = new ArrayList<String>();
+	          returnTableColumns[0].add("TYPE");
+	          returnTableColumns[0].add("ID");
+	          returnTableColumns[0].add("NUMBER");
+	          returnTableColumns[0].add("MESSAGE");
+	          returnTableColumns[0].add("LOG_NO");
+	          returnTableColumns[0].add("LOG_MSG_NO");
+	          returnTableColumns[0].add("MESSAGE_V1");
+	          returnTableColumns[0].add("MESSAGE_V2");
+	          returnTableColumns[0].add("MESSAGE_V3");
+	          returnTableColumns[0].add("MESSAGE_V4");
+	          returnTableColumns[0].add("PARAMETER");
+	          returnTableColumns[0].add("ROW");
+	          
+	  
+	          returnTableColumns[0].add("FIELD");
+	        returnTableColumns[0].add("SYSTEM");
+	         
+	        String[] returnParamsStructureNames = null;
+			List<String>[] returnParamsStructureColumns = null;
+			
+			String[] returnParameterColumns = null;
+			
+			
+            sapResult = sapConnectFactory.callFunctionForParameterInTableAndStructure(rfcName, inParams, inParamsStructureNames, inParamsStructureValues, 
+            		inParamsTableNames, inParamsTableValues, returnParameterColumns, 
+            		returnParamsStructureNames, returnParamsStructureColumns,
+            		returnTableNames, returnTableColumns);
+
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+             
+        }
+
+        return sapResult;
+    }
     public SapResult test() {
 
         SapResult sapResult = null;
