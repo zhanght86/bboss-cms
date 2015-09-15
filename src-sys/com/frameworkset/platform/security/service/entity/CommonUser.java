@@ -3,6 +3,8 @@ package com.frameworkset.platform.security.service.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.frameworkset.orm.annotation.PrimaryKey;
+
 public class CommonUser implements Serializable {
 	/**
 	 * USER_ID              NUMBER(22)               NOT NULL,
@@ -44,6 +46,7 @@ public class CommonUser implements Serializable {
   PASSWORD_UPDATETIME  TIMESTAMP(6),
   PASSWORD_DUALTIME    NUMBER(10)
 	 */	
+	@PrimaryKey(pkname="td_sm_user")
 	private Integer user_id;
 	private Integer user_sn;
 	private String user_name;
@@ -85,6 +88,7 @@ public class CommonUser implements Serializable {
 	private String worklength;
 	private String cert_sn;
 	private String org_id;
+	private Date update_time;
 	public CommonUser() {
 		// TODO Auto-generated constructor stub
 	}
@@ -267,6 +271,12 @@ public class CommonUser implements Serializable {
 	}
 	public void setOrg_id(String org_id) {
 		this.org_id = org_id;
+	}
+	public Date getUpdate_time() {
+		return update_time;
+	}
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
 	}
 
 }

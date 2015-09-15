@@ -2,7 +2,7 @@ package com.frameworkset.platform.security.service.entity;
 
 import java.io.Serializable;
 
-public class Result implements Serializable{
+public class Result<T> implements Serializable{
 	public static final String ok = "success";
 	public static final String fail = "failed";
 	/**
@@ -35,8 +35,8 @@ public class Result implements Serializable{
 
 	 
 
-	public Serializable getData() {
-		return data;
+	public T getData() {
+		return (T)data;
 	}
 
 	public void setData(Serializable data) {
