@@ -17,5 +17,5 @@ public interface CommonUserManagerInf {
 	public Result getUser(String useraccount);
 	public Result getUserByID(String userid);
 	public Result getUserByWorknumber(String worknumber);
-	
+	public boolean exist(String useraccount) throws Exception;
 }

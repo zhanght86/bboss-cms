@@ -3,9 +3,15 @@ package com.frameworkset.platform.security.service.entity;
 import java.io.Serializable;
 
 public class Result implements Serializable{
+	public static final String ok = "success";
+	public static final String fail = "failed";
+	/**
+	 * success
+	 * fail
+	 */
 	private String code;
 	private String errormessage;
-	private CommonUser user; 
+	private Serializable data; 
 
 	public Result() {
 		// TODO Auto-generated constructor stub
@@ -27,12 +33,14 @@ public class Result implements Serializable{
 		this.errormessage = errormessage;
 	}
 
-	public CommonUser getUser() {
-		return user;
+	 
+
+	public Serializable getData() {
+		return data;
 	}
 
-	public void setUser(CommonUser user) {
-		this.user = user;
+	public void setData(Serializable data) {
+		this.data = data;
 	}
 
 }

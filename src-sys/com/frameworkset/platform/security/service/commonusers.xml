@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	
+	
+	<property name="createcommonorg">
+		<![CDATA[
+			insert into td_sm_organization 
+(ORG_ID,org_sn,org_name,parent_id,path,layer,children,code,jp,qp,creatingtime,creator,orgnumber,orgdesc,remark1,remark2,remark3,remark4,remark5,chargeorgid,ispartybussiness,satrapjobid,org_level,
+  org_xzqm,org_tree_level,isdirectlyparty,isforeignparty,isjichaparty,isdirectguanhu) values('99999999',99999999,'普通用户','0','',1,'','','qthy','qiantaihuiyuan',?,1,'99999999','存储会员用户','','','1','','普通用户',1,0,'',3,31,'0|99999999','1','1','1','1')
+
+		]]>
+	</property>
+	<property name="initcommonorgjob">
+		<![CDATA[
+		insert into td_sm_orgjob(org_id,job_id,job_sn) values('99999999','1',999)
+
+		]]>
+	</property>
+	
+	
+	<property name="existuser">
+		<![CDATA[
+		select count(1) from td_sm_user where user_name=?
+
+		]]>
+	</property>
+	
+	<property name="createcommonuser">
+		<![CDATA[
+		insert into td_sm_user
+(user_id,user_sn,user_name,user_password,PASSWORD_TEXT,user_realname,user_sex,user_hometel,user_worktel,user_worknumber,user_mobiletel1,user_mobiletel2,user_fax,user_oicq,user_birthday,
+user_email,user_address,user_postalcode,user_idcard,user_isvalid,user_regdate,user_type,remark1,remark2,remark3,remark4,remark5,worklength,cert_sn,org_id)
+values(#[user_id],#[user_sn],#[user_name],#[user_password],#[password_text],#[user_realname],#[user_sex],#[user_hometel],#[user_worktel],#[user_worknumber],#[user_mobiletel1],#[user_mobiletel2],#[user_fax],#[user_oicq],#[user_birthday],#[user_email],#[user_address],#[user_postalcode],#[user_idcard],#[user_isvalid],#[user_regdate],#[user_type],#[remark1],#[remark2],#[remark3],#[remark4],#[remark5],#[worklength],#[cert_sn],#[org_id])]]>
+	</property>
+	
+		<property name="inituserjoborg">
+		<![CDATA[
+		insert into td_sm_userjoborg
+(user_id,job_id,org_id,same_job_user_sn,job_sn,job_starttime,JOB_FETTLE)
+values(?,'1',?,3,999,?,1)
+]]>
+	</property>
+	<property name="inituserorg">
+		<![CDATA[
+		insert into td_sm_orguser(org_id,user_id) values(?,?)
+]]>
+	</property>
+</properties>
