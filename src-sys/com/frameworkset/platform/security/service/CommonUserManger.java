@@ -141,7 +141,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		Result<?> result = new Result();
 		try {
 
-			executor.update("updateuserpassword", password,user_id);
+			executor.update("updateuserpassword", EncrpyPwd.encodePassword(password),user_id);
 			result.setCode(Result.ok);
 			result.setData(user_id);
 		} catch (Exception e) {

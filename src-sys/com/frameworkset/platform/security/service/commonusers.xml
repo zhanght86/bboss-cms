@@ -14,7 +14,7 @@
 	
 	<property name="existcommonorg">
 		<![CDATA[
-			select count(1) td_sm_organization where ORG_ID='99999999'
+			select count(1) from td_sm_organization where ORG_ID='99999999'
 
 		]]>
 	</property>
