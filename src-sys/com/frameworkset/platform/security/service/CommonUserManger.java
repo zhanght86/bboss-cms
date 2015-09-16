@@ -12,7 +12,7 @@ import com.frameworkset.platform.security.service.entity.Result;
 
 public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.spi.InitializingBean{
 	private static Logger log = Logger.getLogger(CommonUserManger.class);
-	private ConfigSQLExecutor exector ;
+	private ConfigSQLExecutor executor ;
 	public CommonUserManger() {
 		// TODO Auto-generated constructor stub
 	}
@@ -21,7 +21,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 	{
 		Result<CommonUser> result = new Result<CommonUser>();
 		try {			
-			CommonUser user = exector.queryObject(CommonUser.class,"getuserbyuserid", user_id);
+			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyuserid", user_id);
 			result.setCode(Result.ok);
 			result.setData(user);
 		} catch (Exception e) {
@@ -40,7 +40,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			
 	
 			
-			CommonUser user = exector.queryObject(CommonUser.class,"getuserbyworknumber", user_worknumber);
+			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyworknumber", user_worknumber);
 			result.setCode(Result.ok);
 			result.setData(user);
 		} catch (Exception e) {
@@ -59,7 +59,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			
 	
 			
-			CommonUser user = exector.queryObject(CommonUser.class,"getuserbyusername", user_account);
+			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyusername", user_account);
 			result.setCode(Result.ok);
 			result.setData(user);
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 	
 	public boolean exist(String useraccount) throws Exception
 	{
-		int result = this.exector.queryObject(int.class, "existuser", useraccount) ;
+		int result = this.executor.queryObject(int.class, "existuser", useraccount) ;
 		return result > 0;
 	}
 	@Override
@@ -94,8 +94,8 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			String p = user.getUser_password();
 			user.setUser_password(EncrpyPwd.encodePassword(user.getUser_password()));
 			user.setUser_regdate(new Date());
-			exector.insertBean("createcommonuser", user);
-			exector.insert("inituserjoborg", user.getUser_id(),"99999999",new Date());
+			executor.insertBean("createcommonuser", user);
+			executor.insert("inituserjoborg", user.getUser_id(),"99999999",new Date());
 			user.setUser_password(p);
 			result.setCode(Result.ok);
 			result.setData(user);
@@ -124,7 +124,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 //				result.setErrormessage(new StringBuilder().append("用户").append(user.getUser_name()).append("已经存在.").toString());
 //			}
 			user.setUpdate_time(new Date());	
-			exector.updateBean("updatecommonuser", user);
+			executor.updateBean("updatecommonuser", user);
 			result.setCode(Result.ok);
 			result.setData(user);
 		} catch (Exception e) {
@@ -141,7 +141,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		Result<?> result = new Result();
 		try {
 
-			exector.update("updateuserpassword", password,user_id);
+			executor.update("updateuserpassword", password,user_id);
 			result.setCode(Result.ok);
 			result.setData(user_id);
 		} catch (Exception e) {
@@ -165,7 +165,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 	
 	private void _upatestatus(int user_id,int status) throws Exception
 	{
-		this.exector.update("updateuserstatus", status,user_id);
+		this.executor.update("updateuserstatus", status,user_id);
 	}
 
 	@Override
@@ -251,12 +251,12 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		try
 		{
 			tm.begin();
-			int exist = this.exector.queryObject(int.class, "existcommonorg");
+			int exist = this.executor.queryObject(int.class, "existcommonorg");
 			if(exist <= 0)
 			{
 		
-				exector.insert("createcommonorg", new Date());
-				exector.insert("initcommonorgjob");
+				executor.insert("createcommonorg", new Date());
+				executor.insert("initcommonorgjob");
 			}
 			tm.commit();
 		}

@@ -43,5 +43,21 @@
 			<property value="com/frameworkset/platform/sysmgrcore/purviewmanager/ipcontrol.xml"/>
 		</construction>
 	</property>
+	<property name="/commonuser/*.page"
+		 ws:servicePort="commonuserService"   
+    	hessian:servicePort="commonuserService"  
+		f:commonUserManager="attr:commonuser.service"
+		class="com.frameworkset.platform.security.service.action.CommonUserControl" >
+	</property>
+	<property name="commonuser.service"
+		f:executor="attr:commonuser.configsqlexecutor"
+		class="com.frameworkset.platform.security.service.CommonUserManger"
+		/>
+	<property name="commonuser.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="com/frameworkset/platform/security/service/commonusers.xml"/>
+		</construction>
+	</property>
 	
 </properties>
