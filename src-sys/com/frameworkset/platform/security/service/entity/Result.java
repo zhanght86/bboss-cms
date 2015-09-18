@@ -2,7 +2,7 @@ package com.frameworkset.platform.security.service.entity;
 
 import java.io.Serializable;
 
-public class Result<T> implements Serializable{
+public class Result implements Serializable{
 	public static final String ok = "success";
 	public static final String fail = "failed";
 	/**
@@ -11,7 +11,8 @@ public class Result<T> implements Serializable{
 	 */
 	private String code;
 	private String errormessage;
-	private Serializable data; 
+	private CommonUser user; 
+	private String otherdata;
 
 	public Result() {
 		// TODO Auto-generated constructor stub
@@ -33,14 +34,24 @@ public class Result<T> implements Serializable{
 		this.errormessage = errormessage;
 	}
 
+	public CommonUser getUser() {
+		return user;
+	}
+
+	public void setUser(CommonUser user) {
+		this.user = user;
+	}
+
+	public String getOtherdata() {
+		return otherdata;
+	}
+
+	public void setOtherdata(String otherdata) {
+		this.otherdata = otherdata;
+	}
+
 	 
 
-	public T getData() {
-		return (T)data;
-	}
-
-	public void setData(Serializable data) {
-		this.data = data;
-	}
+	 
 
 }

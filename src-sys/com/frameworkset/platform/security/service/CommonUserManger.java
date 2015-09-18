@@ -17,13 +17,13 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		// TODO Auto-generated constructor stub
 	}
 	@Override
-	public Result<CommonUser> getUserById(int user_id)
+	public Result getUserById(int user_id)
 	{
-		Result<CommonUser> result = new Result<CommonUser>();
+		Result result = new Result();
 		try {			
 			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyuserid", user_id);
 			result.setCode(Result.ok);
-			result.setData(user);
+			result.setUser(user);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("通过用户id获取用户").append(user_id).append("失败:").append(e.getMessage()).toString();
@@ -33,16 +33,16 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		return result;
 	}
 	@Override
-	public Result<CommonUser> getUserByWorknumber(String user_worknumber)
+	public Result getUserByWorknumber(String user_worknumber)
 	{
-		Result<CommonUser> result = new Result<CommonUser>();
+		Result result = new Result();
 		try {
 			
 	
 			
 			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyworknumber", user_worknumber);
 			result.setCode(Result.ok);
-			result.setData(user);
+			result.setUser(user);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("通过工号获取用户").append(user_worknumber).append("失败:").append(e.getMessage()).toString();
@@ -52,16 +52,16 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		return result;
 	}
 	@Override
-	public Result<CommonUser> getUserByUserAccount(String user_account)
+	public Result getUserByUserAccount(String user_account)
 	{
-		Result<CommonUser> result = new Result<CommonUser>();
+		Result result = new Result();
 		try {
 			
 	
 			
 			CommonUser user = executor.queryObject(CommonUser.class,"getuserbyusername", user_account);
 			result.setCode(Result.ok);
-			result.setData(user);
+			result.setUser(user);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("通过账号获取用户").append(user_account).append("失败:").append(e.getMessage()).toString();
@@ -77,8 +77,8 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		return result > 0;
 	}
 	@Override
-	public Result<CommonUser> createUser(CommonUser user) {
-		Result<CommonUser> result = new Result<CommonUser>();
+	public Result createUser(CommonUser user) {
+		Result result = new Result();
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
@@ -98,7 +98,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			executor.insert("inituserjoborg", user.getUser_id(),"99999999",new Date());
 			user.setUser_password(p);
 			result.setCode(Result.ok);
-			result.setData(user);
+			result.setUser(user);
 			tm.commit();
 		} catch (Exception e) {
 			result.setCode(Result.fail);
@@ -114,8 +114,8 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 	}
 
 	@Override
-	public Result<CommonUser> updateUser(CommonUser user) {
-		Result<CommonUser> result = new Result<CommonUser>();
+	public Result updateUser(CommonUser user) {
+		Result result = new Result();
 		try {
 			
 //			if(exist(user.getUser_name()))
@@ -126,7 +126,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			user.setUpdate_time(new Date());	
 			executor.updateBean("updatecommonuser", user);
 			result.setCode(Result.ok);
-			result.setData(user);
+			result.setUser(user);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("更新用户").append(user.getUser_name()).append("失败:").append(e.getMessage()).toString();
@@ -136,14 +136,14 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		return result;
 	}
 	@Override
-	public Result<?> updatePassword(int user_id,String password)
+	public Result  updatePassword(int user_id,String password)
 	{
-		Result<?> result = new Result();
+		Result result = new Result();
 		try {
 
 			executor.update("updateuserpassword", EncrpyPwd.encodePassword(password),user_id);
 			result.setCode(Result.ok);
-			result.setData(user_id);
+			result.setOtherdata(""+user_id);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("更新用户").append(user_id).append("口令失败:").append(e.getMessage()).toString();
@@ -154,12 +154,12 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 	}
 
 	@Override
-	public Result<?> deleteUser(String useraccount) {
+	public Result  deleteUser(String useraccount) {
 		return _changeUserStatus(useraccount,0,0,"删除");
 	}
 
 	@Override
-	public Result<?> deleteUserByID(int userid) {
+	public Result  deleteUserByID(int userid) {
 		return _changeUserStatus(userid,2,0,"删除");
 	}
 	
@@ -177,7 +177,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 
 	private Result _changeUserStatus(Object user_id,int type,int status,String message)
 	{
-		Result<?> user = null;
+		Result  user = null;
 		TransactionManager tm = new TransactionManager();
 		try
 		{
@@ -190,7 +190,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 				user = this.getUserById((Integer)user_id);
 			if(user.getCode().equals(user.ok))
 			{
-				_upatestatus(((CommonUser)user.getData()).getUser_id(),3);
+				_upatestatus(((CommonUser)user.getUser()).getUser_id(),3);
 				user = new Result();
 				user.setCode(user.ok);
 				
