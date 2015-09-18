@@ -93,7 +93,7 @@ values(?,'1',?,3,999,?,1)
 	
 	<property name="updateuserpassword">
 		<![CDATA[
-		 update td_sm_user set user_password=? where user_id=?
+		 update td_sm_user set user_password=?,PASSWORD_UPDATETIME=? where user_id=?
 	]]>
 	</property>
 	

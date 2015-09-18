@@ -141,9 +141,9 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		Result result = new Result();
 		try {
 
-			executor.update("updateuserpassword", EncrpyPwd.encodePassword(password),user_id);
+			executor.update("updateuserpassword", EncrpyPwd.encodePassword(password),new Date(),user_id);
 			result.setCode(Result.ok);
-			result.setOtherdata(""+user_id);
+			result.setOperationData(""+user_id);
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("更新用户").append(user_id).append("口令失败:").append(e.getMessage()).toString();
@@ -190,10 +190,10 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 				user = this.getUserById((Integer)user_id);
 			if(user.getCode().equals(user.ok))
 			{
-				_upatestatus(((CommonUser)user.getUser()).getUser_id(),3);
+				_upatestatus(((CommonUser)user.getUser()).getUser_id(),status);
 				user = new Result();
 				user.setCode(user.ok);
-				
+				user.setOperationData(new StringBuilder().append(message).append("用户").append(user_id).append("成功.").toString());				
 			}
 			tm.commit();
 		}

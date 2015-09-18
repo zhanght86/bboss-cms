@@ -12,7 +12,7 @@ public class Result implements Serializable{
 	private String code;
 	private String errormessage;
 	private CommonUser user; 
-	private String otherdata;
+	private String operationData;
 
 	public Result() {
 		// TODO Auto-generated constructor stub
@@ -42,12 +42,14 @@ public class Result implements Serializable{
 		this.user = user;
 	}
 
-	public String getOtherdata() {
-		return otherdata;
+	 
+
+	public String getOperationData() {
+		return operationData;
 	}
 
-	public void setOtherdata(String otherdata) {
-		this.otherdata = otherdata;
+	public void setOperationData(String operationData) {
+		this.operationData = operationData;
 	}
 
 	 
