@@ -10,9 +10,7 @@
         <column name="MHOLIDAY" primaryKey="true" required="true"
             size="2" type="VARCHAR"/>
         <column name="ORG_ID" size="50" type="VARCHAR"/>
-        <foreign-key foreignTable="TD_SM_ORGANIZATION">
-            <reference foreign="ORG_ID" local="ORG_ID"/>
-        </foreign-key>
+       
     </table>
     <table name="TD_SP_HOLIDAY_AREA">
         <column name="AREA_ID" primaryKey="true" required="true"
