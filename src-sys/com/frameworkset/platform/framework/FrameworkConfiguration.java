@@ -23,12 +23,13 @@ import org.apache.log4j.Logger;
  * @author biaoping.yin
  * @version 1.0
  */
-public class FrameworkConfiguration implements java.io.Serializable {
+public class FrameworkConfiguration  {
     private static Logger log = Logger.getLogger(FrameworkConfiguration.class);
 
     private String configFile = "module.xml" ;
     private ConfigParser handler;
     private ModuleQueue modules;
+    private MenuQueue menus; 
     /**
      * 一级items是否显示左侧菜单，true显示，false不显示
      */
@@ -172,6 +173,7 @@ public class FrameworkConfiguration implements java.io.Serializable {
             this.workspace_height = handler.getWorkspace_height();
             this.publicItem = handler.getPublicItem();
             this.items = handler.getItems();
+            menus = handler.getMenus(); 
             this.showhidden = handler.getShowhidden();
             showhidden_width = handler.getShowhidden_width();
             this.subsystems = handler.getSubsystems();
@@ -284,5 +286,9 @@ public class FrameworkConfiguration implements java.io.Serializable {
 	}
 	public boolean isShowrootleftmenu() {
 		return showrootleftmenu;
+	}
+
+	public MenuQueue getMenus() {
+		return menus;
 	}
 }

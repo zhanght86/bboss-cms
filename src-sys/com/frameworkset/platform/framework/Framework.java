@@ -174,7 +174,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	 * 菜单id索引表
 	 */
 	private Map indexByIds;
-	
+	 private MenuQueue menus; 
 
 	private Root root = null;
 
@@ -581,6 +581,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			initMessageSource();
 			modules = config.getModules();
 			indexs = config.getIndexs();
+			this.menus = config.getMenus();
 			this.indexByIds = config.getIndexByIds();
 //			framesetAttributeOfItem = Collections
 //					.synchronizedMap(new HashMap());
@@ -2212,6 +2213,10 @@ public class Framework implements ResourceInitial,MessageSource {
 
 	public String getShowhidden_width() {
 		return showhidden_width;
+	}
+
+	public MenuQueue getMenus() {
+		return menus;
 	}
 
 	

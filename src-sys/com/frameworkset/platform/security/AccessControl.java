@@ -73,6 +73,8 @@ import com.frameworkset.platform.framework.FrameworkServlet;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
 import com.frameworkset.platform.framework.MenuHelper;
+import com.frameworkset.platform.framework.MenuItem;
+import com.frameworkset.platform.framework.MenuQueue;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.SubSystem;
@@ -4967,49 +4969,51 @@ public class AccessControl implements AccessControlInf{
 	public static void geSubMenus(Map<String,MenuItemU> permissionMenus,Module module,HttpServletRequest request,AccessControl accesscontroler)
 	{
 		
-		ModuleQueue moduleQueue = module.getSubModules();
-		for (int i = 0; moduleQueue != null && i < moduleQueue.size(); i++) {
-			Module submodule = moduleQueue.getModule(i);
-			if (!submodule.isUsed()) {
-				continue;
-			}
-			MenuItemU menuItemU = new MenuItemU();
-			menuItemU.setId(submodule.getId());
-			menuItemU.setName(submodule.getName(request));
-			menuItemU.setImageUrl(submodule.getMouseclickimg(request));
-			menuItemU.setType("module");
-			permissionMenus.put(submodule.getId(), menuItemU);
-		}
-		ItemQueue itemQueue = module.getItems();
+		MenuQueue menus = module.getMenus();
 		String contextpath = request.getContextPath();
-		for (int i = 0; itemQueue != null && i < itemQueue.size(); i++) {
-			Item item = itemQueue.getItem(i);
-			if (!item.isUsed()) {
+		for(int i = 0 ; menus != null && i < menus.size() ; i ++)
+		{
+			MenuItem menu = menus.getMenuItem(i);
+			if (!menu.isUsed()) {
 				continue;
 			}
-			String contextPath = request.getContextPath();
-			String url = null;
-			String area = item.getArea();
-			if(area != null && area.equals("main"))
+			if(menu instanceof Module)
 			{
-				url = MenuHelper.getMainUrl(contextpath, item,
-						(java.util.Map) null);
+				MenuItemU menuItemU = new MenuItemU();
+				menuItemU.setId(menu.getId());
+				menuItemU.setName(menu.getName(request));
+				menuItemU.setImageUrl(menu.getMouseclickimg(request));
+				menuItemU.setType("module");
+				permissionMenus.put(menu.getId(), menuItemU);
 			}
 			else
 			{
-				url = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(item,accesscontroler),MenuHelper.sanymenupath_menuid,item.getId());
+				Item item = (Item)menu;
+				
+				String url = null;
+				String area = item.getArea();
+				if(area != null && area.equals("main"))
+				{
+					url = MenuHelper.getMainUrl(contextpath, item,
+							(java.util.Map) null);
+				}
+				else
+				{
+					url = MenuHelper.getRealUrl(contextpath, Framework.getWorkspaceContent(item,accesscontroler),MenuHelper.sanymenupath_menuid,item.getId());
+				}
+				MenuItemU menuItemU = new MenuItemU();
+				menuItemU.setId(item.getId());
+				menuItemU.setName(item.getName(request));
+				menuItemU.setImageUrl(item.getMouseclickimg(request));
+				menuItemU.setPathU(url);
+				menuItemU.setType("item");
+				menuItemU.setDesktop_height(item.getDesktop_height());
+				menuItemU.setDesktop_width(item.getDesktop_width());
+				permissionMenus.put(item.getId(), menuItemU);
 			}
-			MenuItemU menuItemU = new MenuItemU();
-			menuItemU.setId(item.getId());
-			menuItemU.setName(item.getName(request));
-			menuItemU.setImageUrl(item.getMouseclickimg(request));
-			menuItemU.setPathU(url);
-			menuItemU.setType("item");
-			menuItemU.setDesktop_height(item.getDesktop_height());
-			menuItemU.setDesktop_width(item.getDesktop_width());
-			permissionMenus.put(item.getId(), menuItemU);
-			// System.out.println("=========="+url+"===="+item.getName());
 		}
+	 
+		 
 	}
 	
 	public static Map<String,List<String>> getResourcePermissions(AccessControl accesscontroler,String resourceType) throws Exception

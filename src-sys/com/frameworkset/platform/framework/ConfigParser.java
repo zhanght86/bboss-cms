@@ -41,6 +41,7 @@ import com.frameworkset.util.StringUtil;
 public class ConfigParser extends I18nXMLParser  {
     private static Logger log = Logger.getLogger(ConfigParser.class) ;
     private ModuleQueue modules;
+    private MenuQueue menus; 
     private ItemQueue items;
     private SubSystem ownersubsystem;
     private String file;
@@ -98,6 +99,7 @@ public class ConfigParser extends I18nXMLParser  {
 
         this.modules = new ModuleQueue();
         this.items = new ItemQueue();
+        this.menus = new MenuQueue();
         this.traceStack = new Stack();
         this.file = file;
         this.systemid = systemid;
@@ -275,6 +277,7 @@ public class ConfigParser extends I18nXMLParser  {
                 this.indexs.put(module.getPath(),module);
                 this.indexByIds.put(module.getId(), module);
                 this.modules.addModule(module);
+                this.menus.addMenuItem(module);
             }
             else if(obuj instanceof Module)
             {
@@ -947,6 +950,14 @@ public class ConfigParser extends I18nXMLParser  {
 
 	public Map<Locale, String> getLocaleDescriptions() {
 		return localeDescriptions;
+	}
+
+	public MenuQueue getMenus() {
+		return menus;
+	}
+
+	public void setMenus(MenuQueue menus) {
+		this.menus = menus;
 	}
 
 }

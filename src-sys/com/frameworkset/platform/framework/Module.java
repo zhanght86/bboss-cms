@@ -4,7 +4,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.PageContext;
 
 import org.frameworkset.web.servlet.support.RequestContextUtils;
 
@@ -26,11 +25,14 @@ import org.frameworkset.web.servlet.support.RequestContextUtils;
 public class Module extends BaseMenuItem{
     private String description;
     private Map<Locale,String> localeDescriptions;
-   
+    private MenuQueue menus; 
     private ItemQueue items;
     private ModuleQueue subModules;
     private String url;
-  
+    /**
+     * 标识模块对应的module的权限状态：如果true标识module本身没有权限，但是下级菜单有权限，主要用于判别是否显示module的url地址，true不应该显示，因为没有module的直接权限，false时根据是否有module权限来显示url
+     */
+    private boolean usesubpermission = false;
 
 
    
@@ -42,17 +44,20 @@ public class Module extends BaseMenuItem{
     {
         this.items = new ItemQueue();
         this.subModules = new ModuleQueue();
+        this.menus = new MenuQueue();
       
     }
 
     public void addSubModule(Module subModule)
     {
         this.subModules.addModule(subModule);
+        this.menus.addMenuItem(subModule);
     }
 
     public void addItem(Item item)
     {
         this.items.addItem(item);
+        this.menus.addMenuItem(item);
     }
     public String getDescription() {
         return description;
@@ -69,7 +74,12 @@ public class Module extends BaseMenuItem{
     	return temp;
     }
 
-  
+    public boolean isUsesubpermission() {
+		return usesubpermission;
+	}
+	public void setUsesubpermission(boolean usesubpermission) {
+		this.usesubpermission = usesubpermission;
+	}
 
     public ItemQueue getItems() {
         return items;
@@ -158,6 +168,10 @@ public class Module extends BaseMenuItem{
 		return (getSubModules() != null && getSubModules().size() > 0) ||
 				(getItems() != null && getItems().size() > 0);
 				
+	}
+
+	public MenuQueue getMenus() {
+		return menus;
 	}
 
 }

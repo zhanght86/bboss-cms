@@ -9,10 +9,8 @@ import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.frameworkset.platform.framework.ConfigParser;
-
 public abstract class I18nXMLParser extends DefaultHandler {
-	private static Logger log = Logger.getLogger(ConfigParser.class);
+	private static Logger log = Logger.getLogger(I18nXMLParser.class);
 	protected Map<String, Locale> languages;
 
 	public void setLanguages(Map<String, Locale> languages) {

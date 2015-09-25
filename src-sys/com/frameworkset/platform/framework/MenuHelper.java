@@ -40,16 +40,20 @@ import com.frameworkset.util.StringUtil;
 
 public class MenuHelper  {
     private Item firstItem;
-    private Map permissionIndexs;
+    private Map<String,Integer> permissionIndexs;
     private Principal principal;
 
     private Map permissionMenuIndex;
     private AccessControlInf control;
     private ModuleQueue modules;
+    private MenuQueue menus;
     private ItemQueue items;
     private List menuQueue;
     private String subsystem;
     private AuthMenuItemQueue menuitemQueue;
+    public static final int VISIBLE_PERMISSION = 1;
+    public static final int SUB_VISIBLE_PERMISSION = 1;
+    public static final int UNVISIBLE_PERMISSION = 0;
 
     Framework framework;
 
@@ -1382,12 +1386,34 @@ public class MenuHelper  {
             if (framework.getModules() == null || framework.getModules().size() == 0)
                 return modules;
             Iterator m = new MenuItemIterator(framework.getModules().getList().iterator());
+            Module temp = null;
             while (m.hasNext()) {
-                Module temp = (Module)m.next();
+                temp = (Module)m.next();
                 // permissionMenuIndex.put(temp.getPath(),temp);
                 modules.addModule(temp);
             }
             return modules;
+        }
+        
+        
+        /**
+         * 获取权限信息的模块队列
+         * 
+         * @return
+         */
+        public MenuQueue getMenuItems() {
+
+            menus = new MenuQueue();
+            if (framework.getMenus() == null || framework.getMenus().size() == 0)
+                return menus;
+            Iterator m = new MenuItemIterator(framework.getMenus().getList().iterator());
+            MenuItem temp = null;
+            while (m.hasNext()) {
+                 temp = (MenuItem)m.next();
+                // permissionMenuIndex.put(temp.getPath(),temp);
+                menus.addMenuItem(temp);
+            }
+            return menus;
         }
 
         public Iterator iterator() {
@@ -1405,8 +1431,9 @@ public class MenuHelper  {
             if (framework.getItems() == null || framework.getItems().size() == 0)
                 return items;
             Iterator i = new MenuItemIterator(framework.getItems().getList().iterator());
+            Item temp = null;
             while (i.hasNext()) {
-                Item temp = (Item)i.next();
+                temp = (Item)i.next();
                 // permissionMenuIndex.put(temp.getPath(),temp);
                 items.addItem(temp);
             }
@@ -1519,11 +1546,11 @@ public class MenuHelper  {
          */
         private boolean found() {
             if (decorator instanceof Module) {
-                String permission = getModulePermission((Module)decorator);
-                return permission.equals(AccessControl.VISIBLE_PERMISSION);
+                int  permission = getModulePermission((Module)decorator);
+                return permission == VISIBLE_PERMISSION || permission == SUB_VISIBLE_PERMISSION;
             } else if (decorator instanceof Item) {
-                String permission = this.getItemPermission((Item)decorator);
-                boolean ret = permission.equals(AccessControl.VISIBLE_PERMISSION);
+            	int permission = this.getItemPermission((Item)decorator);
+                boolean ret = permission == VISIBLE_PERMISSION;
                 if (ret && firstItem == null && decorator instanceof Item && decorator.isUsed()) {
                     firstItem = (Item)decorator;
                 }
@@ -1548,16 +1575,31 @@ public class MenuHelper  {
             }
         }
 
-        private String getModulePermission(Module module) {
-            if (permissionIndexs.containsKey(module.getId()))
-                return (String)permissionIndexs.get(module.getId());
+        private int getModulePermission(Module module) {
+        	Integer permission = permissionIndexs.get(module.getId());
+            if (permission != null)
+            {
+            	if(permission ==  VISIBLE_PERMISSION || permission ==  SUB_VISIBLE_PERMISSION)
+            	{
+            		this.decorator = (MenuItem) permissionMenuIndex.get(module.getPath());
+            	}
+                return permission;
+            }
             AuthorModule amodule = new AuthorModule(module);
+            if (checkPermission(module.getId(), AccessControl.VISIBLE_PERMISSION,
+                    AccessControl.COLUMN_RESOURCE)) {
+				permissionIndexs.put(module.getId(), VISIBLE_PERMISSION);
+				permissionMenuIndex.put(module.getPath(), amodule);
+				this.decorator = amodule;
+				return VISIBLE_PERMISSION;
+			}
             ModuleQueue submoduleQueue = amodule.getSubModules();
             if (submoduleQueue != null && submoduleQueue.size() > 0) {
-                permissionIndexs.put(module.getId(), AccessControl.VISIBLE_PERMISSION);
+                permissionIndexs.put(module.getId(), SUB_VISIBLE_PERMISSION);
                 this.decorator = amodule;
                 permissionMenuIndex.put(module.getPath(), amodule);
-                return AccessControl.VISIBLE_PERMISSION;
+                amodule.setUsesubpermission(true);
+                return SUB_VISIBLE_PERMISSION;
                 // MenuItemIterator moduleIterator = new
                 // MenuItemIterator(submoduleQueue.iterator());
                 // while(moduleIterator.hasNext())
@@ -1569,10 +1611,11 @@ public class MenuHelper  {
             }
             ItemQueue items = amodule.getItems();
             if (items != null && items.size() > 0) {
-                permissionIndexs.put(module.getId(), AccessControl.VISIBLE_PERMISSION);
+                permissionIndexs.put(module.getId(), SUB_VISIBLE_PERMISSION);
                 permissionMenuIndex.put(module.getPath(), amodule);
                 this.decorator = amodule;
-                return AccessControl.VISIBLE_PERMISSION;
+                amodule.setUsesubpermission(true);
+                return SUB_VISIBLE_PERMISSION;
                 // MenuItemIterator moduleIterator = new
                 // MenuItemIterator(items.iterator());
                 // while(moduleIterator.hasNext())
@@ -1582,37 +1625,35 @@ public class MenuHelper  {
                 // return AccessControl.VISIBLE_PERMISSION;
                 // }
             }
-            if (checkPermission(module.getId(), AccessControl.VISIBLE_PERMISSION,
-                                        AccessControl.COLUMN_RESOURCE)) {
-                permissionIndexs.put(module.getId(), AccessControl.VISIBLE_PERMISSION);
-                permissionMenuIndex.put(module.getPath(), amodule);
-                this.decorator = amodule;
-                return AccessControl.VISIBLE_PERMISSION;
-            } else {
-                permissionIndexs.put(module.getId(), AccessControl.UNVISIBLE_PERMISSION);
-                permissionMenuIndex.put(module.getPath(), amodule);
-                this.decorator = amodule;
-                return AccessControl.UNVISIBLE_PERMISSION;
-            }
+            
+            permissionIndexs.put(module.getId(), UNVISIBLE_PERMISSION);
+            
+            return UNVISIBLE_PERMISSION;
+            
 
         }
 
-        private String getItemPermission(Item item) {
-            if (permissionIndexs.containsKey(item.getId()))
-                return (String)permissionIndexs.get(item.getId());
+        private int getItemPermission(Item item) {
+            
+            Integer permission = permissionIndexs.get(item.getId());
+            if (permission != null)
+            {
+            	if(permission ==  VISIBLE_PERMISSION )
+            		this.decorator = (MenuItem) permissionMenuIndex.get(item.getPath());
+                return permission;
+            }
             if (checkPermission(item.getId(), AccessControl.VISIBLE_PERMISSION,
                                         AccessControl.COLUMN_RESOURCE)) {
-                permissionIndexs.put(item.getId(), AccessControl.VISIBLE_PERMISSION);
+                permissionIndexs.put(item.getId(), VISIBLE_PERMISSION);
                 AuthorItem aitem = new AuthorItem(item);
                 permissionMenuIndex.put(item.getPath(), aitem);
                 this.decorator = aitem;
-                return AccessControl.VISIBLE_PERMISSION;
+                return VISIBLE_PERMISSION;
             } else {
-                permissionIndexs.put(item.getId(), AccessControl.UNVISIBLE_PERMISSION);
-                AuthorItem aitem = new AuthorItem(item);
-                permissionMenuIndex.put(item.getPath(), aitem);
-                this.decorator = aitem;
-                return AccessControl.UNVISIBLE_PERMISSION;
+                permissionIndexs.put(item.getId(), UNVISIBLE_PERMISSION);
+              
+               
+                return UNVISIBLE_PERMISSION;
             }
         }
 
@@ -1641,6 +1682,7 @@ public class MenuHelper  {
         private Module module;
         private ModuleQueue submodules;
         private ItemQueue items;
+        private MenuQueue menus;
 
         public AuthorModule(Module module) {
             this.module = module;
@@ -1746,8 +1788,8 @@ public class MenuHelper  {
                 Iterator t = new AuthMenuItemQueue(this.module.getSubModules().getList()).iterator();
 
                 while (t.hasNext()) {
-                    Module temp = new AuthorModule((Module)t.next());
-                    permissionMenuIndex.put(temp.getPath(), temp);
+                    Module temp = (Module)t.next();
+                   
                     submodules.addModule(temp);
                 }
                 return submodules;
@@ -1818,6 +1860,28 @@ public class MenuHelper  {
 			return hasSon;
 					
 		}
+		@Override
+		public boolean isUsesubpermission() {
+			// TODO Auto-generated method stub
+			return super.isUsesubpermission();
+		}
+		@Override
+		public MenuQueue getMenus() {
+			 if (menus != null)
+	                return menus;
+	            else {
+	            	menus = new MenuQueue();
+	                Iterator t = new AuthMenuItemQueue(this.module.getMenus().getList()).iterator();
+
+	                while (t.hasNext()) {
+	                	MenuItem temp = (MenuItem)t.next();
+	                  
+	                    menus.addMenuItem(temp);
+	                }
+	                return menus;
+	            }
+		}
+		
 
     }
     
@@ -2260,6 +2324,10 @@ public class MenuHelper  {
 		url = MenuHelper.getRealUrl(contextpath, 
 							url,sanymenupath_menuid,subitem.getId());
 		return url;
+	}
+
+	public MenuQueue getMenus() {
+		return menus;
 	}
 	
 }

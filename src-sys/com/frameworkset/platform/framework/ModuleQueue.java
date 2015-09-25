@@ -16,8 +16,8 @@ import java.util.List;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ModuleQueue implements java.io.Serializable {
-    private List modules = java.util.Collections.synchronizedList( new ArrayList());
+public class ModuleQueue  {
+    private List modules =   new ArrayList();
 
 
     public void addModule(Module module)

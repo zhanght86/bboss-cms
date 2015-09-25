@@ -16,9 +16,9 @@ import java.util.List;
  * @author biaoping.yin
  * @version 1.0
  */
-public class ItemQueue implements java.io.Serializable {
+public class ItemQueue  {
 
-    private List items = java.util.Collections.synchronizedList( new ArrayList());
+    private List items =   new ArrayList();
 
 
     public void addItem(Item item)
