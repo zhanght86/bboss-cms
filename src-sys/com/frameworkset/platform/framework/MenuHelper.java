@@ -1303,42 +1303,55 @@ public class MenuHelper  {
     }
 
     public Module getModule(String path) {
-        Module m = (Module)this.permissionMenuIndex.get(path);
-        if (m != null)
-            return m;
-        else {
-            Module m1 = framework.getModule(path);
-            if(m1 == null)
-            	return null;
-            m = new AuthorModule(m1);
-            this.permissionMenuIndex.put(path, m);
-            return m;
-        }
-
+//        Module m = (Module)this.permissionMenuIndex.get(path);
+//        if (m != null)
+//            return m;
+//        else {
+//            Module m1 = framework.getModule(path);
+//            if(m1 == null)
+//            	return null;
+//            m = new AuthorModule(m1);
+//            this.permissionMenuIndex.put(path, m);
+//            return m;
+//        }
+    	return (Module)getMenuItem(path);
     }
     
     public MenuItem getMenuItem(String path) {
+    	
     	MenuItem m = (MenuItem)this.permissionMenuIndex.get(path);
         if (m != null)
             return m;
-        else {
-            m = framework.getModule(path);
-            if(m == null)
-            	return null;
-            else if(control.checkPermission(m.getId(), AccessControl.VISIBLE_PERMISSION,
+        else 
+        {
+        	m = framework.getMenuByPath(path);
+        	 if(m == null)
+             	return null;
+        	Integer permission = this.permissionIndexs.get(m.getId());
+            if(permission != null)
+            {
+            	if(permission == UNVISIBLE_PERMISSION )
+            	{
+            		return null;
+            	}
+            }
+           
+            if(control.checkPermission(m.getId(), AccessControl.VISIBLE_PERMISSION,
                     AccessControl.COLUMN_RESOURCE))
             {
             	
             	if(m instanceof Module)
             	{
 		            m = new AuthorModule((Module)m);
-		            this.permissionMenuIndex.put(path, m);
+		            permissionMenuIndex.put(path, m);
+		            permissionIndexs.put(m.getId(), VISIBLE_PERMISSION);
 		            return m;
             	}
             	else if(m instanceof Item)
             	{
 		            m = new AuthorItem((Item)m);
 		            this.permissionMenuIndex.put(path, m);
+		            permissionIndexs.put(m.getId(), VISIBLE_PERMISSION);
 		            return m;
             	}
             	else
@@ -1346,6 +1359,27 @@ public class MenuHelper  {
             }
             else
             {
+            	if(m instanceof Module)
+            	{
+            		AuthorModule amodule = new AuthorModule((Module)m);
+		            ModuleQueue submoduleQueue = amodule.getSubModules();
+		            if (submoduleQueue != null && submoduleQueue.size() > 0) {
+		                permissionIndexs.put(amodule.getId(), SUB_VISIBLE_PERMISSION);
+		                permissionMenuIndex.put(amodule.getPath(), amodule);
+		                amodule.setUsesubpermission(true);
+		                return amodule;
+		                
+		            }
+		            ItemQueue items = amodule.getItems();
+		            if (items != null && items.size() > 0) {
+		                permissionIndexs.put(amodule.getId(), SUB_VISIBLE_PERMISSION);
+		                permissionMenuIndex.put(amodule.getPath(), amodule);
+		                amodule.setUsesubpermission(true);
+		                return amodule;
+		                 
+		            }
+            	}
+            	 permissionIndexs.put(m.getId(), UNVISIBLE_PERMISSION);
             	return null;
             }
         }
@@ -1354,17 +1388,17 @@ public class MenuHelper  {
     }
 
     public Item getItem(String path) {
-        Item item = (Item)this.permissionMenuIndex.get(path);
-        if (item == null) {
-        	Item temp = framework.getItem(path);
-        	if(temp != null)
-        	{
-	            item = new AuthorItem(temp);
-	            this.permissionMenuIndex.put(path, item);
-        	}
-        }
-        return item;
-
+//        Item item = (Item)this.permissionMenuIndex.get(path);
+//        if (item == null) {
+//        	Item temp = framework.getItem(path);
+//        	if(temp != null)
+//        	{
+//	            item = new AuthorItem(temp);
+//	            this.permissionMenuIndex.put(path, item);
+//        	}
+//        }
+//        return item;
+    	return (Item)getMenuItem(path);
     }
 
     class AuthMenuItemQueue {
@@ -1381,7 +1415,10 @@ public class MenuHelper  {
          * @return
          */
         public ModuleQueue getModules() {
-
+        	if(modules != null)
+        	{
+        		return modules;
+        	}
             modules = new ModuleQueue();
             if (framework.getModules() == null || framework.getModules().size() == 0)
                 return modules;
@@ -1402,7 +1439,8 @@ public class MenuHelper  {
          * @return
          */
         public MenuQueue getMenuItems() {
-
+        	if(menus != null)
+        		return menus;
             menus = new MenuQueue();
             if (framework.getMenus() == null || framework.getMenus().size() == 0)
                 return menus;
@@ -1426,7 +1464,8 @@ public class MenuHelper  {
          * @return
          */
         public ItemQueue getItems() {
-
+        	if(items != null)
+        		return items;
             items = new ItemQueue();
             if (framework.getItems() == null || framework.getItems().size() == 0)
                 return items;
@@ -2327,7 +2366,9 @@ public class MenuHelper  {
 	}
 
 	public MenuQueue getMenus() {
-		return menus;
+		if (menus != null)
+            return menus;
+        return menus = menuitemQueue.getMenuItems();
 	}
 	
 }
