@@ -10,8 +10,7 @@
 <%@ page import="com.frameworkset.platform.config.ConfigManager" %>
 
 <%
- 			AccessControl accesscontroler = AccessControl.getInstance();
-	        accesscontroler.checkAccess(request, response);
+ 			AccessControl accesscontroler = AccessControl.getAccessControl();
 	        String userId = accesscontroler.getUserID();
 	        PreparedDBUtil db = new PreparedDBUtil();
 		    db.preparedSelect("select count(1) from td_sm_user");
@@ -34,6 +33,9 @@
 		    	userRealname = "";
 		    }
 		    
+		    boolean showidcard = ConfigManager.getInstance().getConfigBooleanValue("user.showidcard", true);
+		    request.setAttribute("showidcard", showidcard);
+		    
 			//当前用户是否拥有超级管理员权限与部门管理员权限
 			boolean isAdminOrOrgManager = false;
 			//是否是管理员
@@ -42,13 +44,14 @@
 			if(isAdmin || isOrgManager){
 				isAdminOrOrgManager = true;
 			}	
+			
 %>
 
 <html >
 <head>				
-	<tab:tabConfig/>
+	
 		<title>属性容器</title>
-		<script src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
+ 
 		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	<script language="JavaScript" src="common.js" type="text/javascript"></script>
 	
@@ -247,17 +250,17 @@
 						<pg:header>
 							<th><pg:message code="sany.pdp.sysmanager.user.loginname"/></td>
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.realname"/></td>	
-							<th onclick="sortBy('userName')">工号</th>
-							<th onclick="sortBy('userName')">身份证</th>
-							<th onclick="sortBy('userName')">电话</th>							
+							<th >工号</th>
+							<pg:true actual="${showidcard }"><th >身份证</th></pg:true>
+							<th >电话</th>							
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.belongorg"/></td>
 							<th><pg:message code="sany.pdp.purviewmanager.rolemanager.role.authorize.to.user.mobile"/></td>
 							<th>密码过期时间</th>	
 							<th >密码有效期</th>		
 						</pg:header>
 						<pg:notify>
-							<div class="nodata">
-							<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
+							<tr><td><div class="nodata">
+							<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td></tr>
 						</pg:notify>
 						<pg:list>
 							<tr onDBLclick=getUserInfo2(this,'<pg:cell colName="userId" defaultValue=""/>','<pg:querystring encode="true"/>') >
@@ -269,8 +272,8 @@
 								</td>
 								<td><pg:cell colName="workNumber"
 										defaultValue="" /></td>
-								<td><pg:cell colName="USER_IDCARD"
-										defaultValue="" /></td>
+								<pg:true actual="${showidcard }"><td><pg:cell colName="USER_IDCARD"
+										defaultValue="" /></td></pg:true>
 								<td><pg:cell colName="userMobiletel1"
 										defaultValue="" /></td>											
 								<td>

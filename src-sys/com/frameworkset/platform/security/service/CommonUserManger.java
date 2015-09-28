@@ -88,7 +88,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 				result.setErrormessage(new StringBuilder().append("用户").append(user.getUser_name()).append("已经存在.").toString());
 			}
 			
-			user.setOrg_id("99999999");	
+			user.setDepart_id("99999999");	
 			user.setUser_isvalid(1);
 			user.setUser_type(2);
 			String p = user.getUser_password();

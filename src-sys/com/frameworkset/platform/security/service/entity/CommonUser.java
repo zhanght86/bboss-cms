@@ -87,7 +87,7 @@ public class CommonUser implements Serializable {
 	private String remark5;
 	private String worklength;
 	private String cert_sn;
-	private String org_id;
+	private String depart_id;
 	private Date update_time;
 	public CommonUser() {
 		// TODO Auto-generated constructor stub
@@ -266,17 +266,18 @@ public class CommonUser implements Serializable {
 	public void setCert_sn(String cert_sn) {
 		this.cert_sn = cert_sn;
 	}
-	public String getOrg_id() {
-		return org_id;
-	}
-	public void setOrg_id(String org_id) {
-		this.org_id = org_id;
-	}
+	
 	public Date getUpdate_time() {
 		return update_time;
 	}
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
+	}
+	public String getDepart_id() {
+		return depart_id;
+	}
+	public void setDepart_id(String depart_id) {
+		this.depart_id = depart_id;
 	}
 
 }

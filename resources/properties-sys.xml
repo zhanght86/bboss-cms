@@ -333,6 +333,6 @@
 	
 	<property name="destop.defaultstyle" value="5"/>
 	 
-		
+	<property name="user.showidcard" value="true"/>		
 
 </properties>

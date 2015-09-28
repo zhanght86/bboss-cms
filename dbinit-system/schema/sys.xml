@@ -550,7 +550,7 @@
         <column name="PASSWORD_UPDATETIME" type="TIMESTAMP"/>
         <column name="Password_DualTime" size="10" type="DECIMAL"/>
         <column name="PASSWORD_TEXT" size="50" type="VARCHAR"/>
-        <column name="ORG_ID" size="50" type="VARCHAR"/>
+        <column name="DEPART_ID" size="50" type="VARCHAR"/>
         <column name="update_time"  type="TIMESTAMP"/>
         
     </table>

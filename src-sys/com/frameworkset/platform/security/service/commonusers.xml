@@ -55,8 +55,8 @@
 		<![CDATA[
 		insert into td_sm_user
 (user_id,user_sn,user_name,user_password,PASSWORD_TEXT,user_realname,user_sex,user_hometel,user_worktel,user_worknumber,user_mobiletel1,user_mobiletel2,user_fax,user_oicq,user_birthday,
-user_email,user_address,user_postalcode,user_idcard,user_isvalid,user_regdate,user_type,remark1,remark2,remark3,remark4,remark5,worklength,cert_sn,org_id)
-values(#[user_id],#[user_sn],#[user_name],#[user_password],#[password_text],#[user_realname],#[user_sex],#[user_hometel],#[user_worktel],#[user_worknumber],#[user_mobiletel1],#[user_mobiletel2],#[user_fax],#[user_oicq],#[user_birthday],#[user_email],#[user_address],#[user_postalcode],#[user_idcard],#[user_isvalid],#[user_regdate],#[user_type],#[remark1],#[remark2],#[remark3],#[remark4],#[remark5],#[worklength],#[cert_sn],#[org_id])]]>
+user_email,user_address,user_postalcode,user_idcard,user_isvalid,user_regdate,user_type,remark1,remark2,remark3,remark4,remark5,worklength,cert_sn,depart_id)
+values(#[user_id],#[user_sn],#[user_name],#[user_password],#[password_text],#[user_realname],#[user_sex],#[user_hometel],#[user_worktel],#[user_worknumber],#[user_mobiletel1],#[user_mobiletel2],#[user_fax],#[user_oicq],#[user_birthday],#[user_email],#[user_address],#[user_postalcode],#[user_idcard],#[user_isvalid],#[user_regdate],#[user_type],#[remark1],#[remark2],#[remark3],#[remark4],#[remark5],#[worklength],#[cert_sn],#[depart_id])]]>
 	</property>
 	
 	<property name="updatecommonuser">

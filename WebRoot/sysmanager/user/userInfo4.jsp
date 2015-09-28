@@ -1,6 +1,4 @@
-
-<%@ include file="../include/global1.jsp"%>
-<%@ include file="../base/scripts/panes.jsp"%>
+ 
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@page import="java.util.*,com.frameworkset.platform.sysmgrcore.entity.*,com.frameworkset.platform.sysmgrcore.web.struts.form.*"%>
@@ -11,13 +9,14 @@
 <%@ page import="com.frameworkset.util.StringUtil"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
-
+<%@ page import="com.frameworkset.platform.config.ConfigManager" %>
 <%	
 	UserInfoForm user = (UserInfoForm)request.getAttribute("currUser");
 	if(user == null)
 		user = new UserInfoForm();
 		
-		
+	 boolean showidcard = ConfigManager.getInstance().getConfigBooleanValue("user.showidcard", true);
+	    request.setAttribute("showidcard", showidcard);	
 	String qstring = request.getParameter("qstring");
 	String userId = request.getParameter("userId");
 	if(qstring != null){
@@ -128,6 +127,8 @@ function trim(string){
 				<td width="140px"><input type="text" name="userRealname" value="<pg:cell colName="userRealname"  defaultValue=""/>" validator="string" cnname="<pg:message code='sany.pdp.personcenter.person.realname'/>" maxlength="100" readonly="true" class="w120" /></td>
 			</tr>
 			<tr>
+			<pg:true actual="${showidcard }" evalbody="true">
+				<pg:yes>
 				<th width=110px><pg:message code="sany.pdp.personcenter.person.view.password"/>：</th>
 				<td width="140px">
 					<pg:equal colName="remark3" value="否"><input type="password" name="userPassword" value="<pg:cell colName="userPassword"  defaultValue=""/>" readonly="true" class="w120" /></pg:equal>
@@ -138,6 +139,16 @@ function trim(string){
 					<pg:equal colName="remark3" value="否"><input type="text" name="userIdcard" value="<pg:cell colName="userIdcard"  defaultValue=""/>" readonly="true" class="w120" /></pg:equal>
 					<pg:equal colName="remark3" value="是"><input type="text" name="userIdcard" value="******" readonly="true" class="w120"></pg:equal>
 				</td>
+				</pg:yes>
+				<pg:no>
+				<th width=110px><pg:message code="sany.pdp.personcenter.person.view.password"/>：</th>
+				<td width="140px" colspan="3">
+					<pg:equal colName="remark3" value="否"><input type="password" name="userPassword" value="<pg:cell colName="userPassword"  defaultValue=""/>" readonly="true" class="w120" /></pg:equal>
+					<pg:equal colName="remark3" value="是"><input type="password" name="userIdcard" value="******" readonly="true" class="w120" /></pg:equal>
+				</td>
+				
+				</pg:no>
+			</pg:true>	
 			</tr>
 			<tr>
 				<th width=110px><pg:message code="sany.pdp.personcenter.person.worktel"/>：</th>

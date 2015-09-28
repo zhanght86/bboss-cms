@@ -14,7 +14,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
-
+<%@ page import="com.frameworkset.platform.config.ConfigManager" %>
 
 <%@ page
 	import="
@@ -49,7 +49,8 @@
 	}
 	
 	String userNamesNo =null;
-	
+	 boolean showidcard = ConfigManager.getInstance().getConfigBooleanValue("user.showidcard", true);
+	    request.setAttribute("showidcard", showidcard);	
 
 	//String curOrgId = (String)session.getAttribute("orgId");
 	String desc = (String)request.getParameter("pager.desc");	
@@ -251,11 +252,12 @@
 					<pg:param name="userSex" />
 					<pg:param name="userType" />
 					<pg:param name="isOrgManager" />
-					<pg:equal actual="${UserListSn.itemCount}" value="0" >
-						<div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:equal> 
-					<pg:notequal actual="${UserListSn.itemCount}"  value="0">
+					<pg:empty actual="${UserListSn}" evalbody="true" >
+					<pg:yes>
+						<tr><td><div class="nodata">
+						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td></tr>
+					</pg:yes>					 
+					<pg:no>
 						<tr>
 							<!--设置分页表头-->
 							<th width="30">
@@ -263,17 +265,17 @@
 								onclick="checkAll('checkBoxAll','checkBoxOne')" value="on" />
 							</th>								
 							</th>
-							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.login.name"/></th>
+							<th ><pg:message code="sany.pdp.user.login.name"/></th>
 							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.real.name"/></th>
-							<th onclick="sortBy('userName')">工号</th>
-							<th onclick="sortBy('userName')">身份证</th>
-							<th onclick="sortBy('userName')">电话</th>
-							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.sex"/></th>
-							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.user.category"/></th>
-							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.common.status"/></th>
-							<th onclick="sortBy('userName')"><pg:message code="sany.pdp.workflow.organization"/></th>
-							<th onclick="sortBy('userName')">密码过期时间</th>
-							<th onclick="sortBy('userName')">密码有效期</th>
+							<th >工号</th>
+							<pg:true actual="${showidcard }"><th >身份证</th></pg:true>
+							<th  >电话</th>
+							<th  ><pg:message code="sany.pdp.sex"/></th>
+							<th  ><pg:message code="sany.pdp.user.category"/></th>
+							<th  ><pg:message code="sany.pdp.common.status"/></th>
+							<th  ><pg:message code="sany.pdp.workflow.organization"/></th>
+							<th  >密码过期时间</th>
+							<th  >密码有效期</th>
 						</tr>
 					
 						
@@ -680,8 +682,8 @@
 								</td>
 								<td><pg:cell colName="workNumber"
 										defaultValue="" /></td>
-								<td><pg:cell colName="USER_IDCARD"
-										defaultValue="" /></td>
+								<pg:true actual="${showidcard }"><td><pg:cell colName="USER_IDCARD"
+										defaultValue="" /></td></pg:true>
 								<td><pg:cell colName="userMobiletel1"
 										defaultValue="" /></td>										
 										
@@ -739,7 +741,8 @@
 						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5"/></div>
 						
 						
-					</pg:notequal>	
+					</pg:no>
+					</pg:empty> 
 				</pg:pager>
 			
 	</form>
