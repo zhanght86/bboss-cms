@@ -126,12 +126,12 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 
 	public AuthRole[] getAllRoleOfPrincipal(String userName)
 			throws SecurityException {
-		TransactionManager tm = new TransactionManager (); 
+//		TransactionManager tm = new TransactionManager (); 
 		try {
 			
 			UserManager userMgr = SecurityDatabase.getUserManager(super
 					.getProviderType());
-			tm.begin();
+//			tm.begin();
 			User user = userMgr.getUserByName(userName);
 			if (user == null) {
 				log.debug(userName + " not exist");
@@ -191,7 +191,7 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 					authrole.setRoleType(AuthRole.TYPE_USER);
 					roles[0] = authrole;	
 				}
-				tm.commit();
+//				tm.commit();
 				return roles;
 
 				// throw new SecurityException("No role assign to user["
@@ -284,7 +284,7 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 					}
 				}
 			}
-			tm.commit();
+//			tm.commit();
 			return roles;
 
 		} catch (SecurityException e) {
@@ -307,7 +307,7 @@ public class AppAuthorizationTable extends BaseAuthorizationTable implements Ser
 		}
 		finally
 		{
-			tm.releasenolog();
+//			tm.releasenolog();
 		}
 	}
 

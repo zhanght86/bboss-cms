@@ -64,9 +64,9 @@ public class UserPasswordLoginModule extends ACLLoginModule
     		
     	String password_i = password;
     	
-    	TransactionManager tm = new TransactionManager();
+//    	TransactionManager tm = new TransactionManager();
         try {
-        	tm.begin(TransactionType.RW_TRANSACTION);
+//        	tm.begin();
             User user = SecurityDatabase.getUserManager(registTable).getUserByName(userName);
             MessageSource messageSource = WebApplicationContextUtils.getWebApplicationContext();
             if(user == null)
@@ -155,7 +155,7 @@ public class UserPasswordLoginModule extends ACLLoginModule
         }
         finally
         {
-        	tm.releasenolog();
+//        	tm.releasenolog();
         }
     }
 //    protected boolean check(HttpServletRequest request,String userName, String password,CheckCallBackWrapper checkCallBack) throws
