@@ -57,11 +57,11 @@ public class SSOControler {
 		StringBuilder ret = new StringBuilder();
 		if(StringUtil.isEmpty(subsystem ))
 		{
-		
+			
 			if (loginStyle == null || loginStyle.equals("5") || loginStyle.equals("6")) {
 				ret.append("sanydesktop/indexcommon.page");
 			} 
-			else if ((loginStyle != null && loginStyle.equals("1")) || loginStyle.equals("cms")) {
+			else if (loginStyle.equals("1") ) {
 				ret.append("index.jsp?subsystem_id=").append(subsystem);
 			} else if (loginStyle.equals("3")) {
 				ret.append("sanydesktop/index.page");
@@ -77,6 +77,11 @@ public class SSOControler {
 		}
 		else
 		{
+			if(subsystem.equals("cms"))
+			{
+				ret.append("index.jsp?subsystem_id=").append(subsystem);
+				return ret.toString();
+			}
 			SubSystem sys = Framework.getSubSystem(subsystem);
 			if(sys != null && !StringUtil.isEmpty(sys.getSuccessRedirect()))
 				ret.append(sys.getSuccessRedirect());
@@ -85,7 +90,7 @@ public class SSOControler {
 				if (loginStyle == null || loginStyle.equals("5") || loginStyle.equals("6")) {
 					ret.append("sanydesktop/indexcommon.page");
 				} 
-				else if ((loginStyle != null && loginStyle.equals("1")) || loginStyle.equals("cms")) {
+				else if ( loginStyle.equals("1")  ) {
 					ret.append("index.jsp?subsystem_id=").append(subsystem);
 				} else if (loginStyle.equals("3")) {
 					ret.append("sanydesktop/index.page");
