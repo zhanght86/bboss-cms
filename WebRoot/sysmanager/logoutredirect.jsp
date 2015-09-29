@@ -17,7 +17,7 @@
 	{
 		redirect = AccessControl.getSubSystemLogoutRedirect(request);
 		if(redirect == null || redirect.trim().equals(""))
-			redirect = request.getContextPath() + "/login.jsp";
+			redirect = request.getContextPath() + AccessControl.pathloginPage;
 	}
 	/**
 	MemTokenManager memTokenManager = MemTokenManagerFactory.getMemTokenManagerNoexception();

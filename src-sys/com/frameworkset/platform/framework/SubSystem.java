@@ -26,6 +26,7 @@ public class SubSystem implements java.io.Serializable {
 	private String id;
 	private Framework framework;
 	private String logoutredirect = null;
+	private String successRedirect = null;
 	
 	/**
 	 * 子系统对应的框架模板路经
@@ -155,5 +156,11 @@ public class SubSystem implements java.io.Serializable {
 	}
 	public void setLogoutredirect(String logoutredirect) {
 		this.logoutredirect = logoutredirect;
+	}
+	public String getSuccessRedirect() {
+		return successRedirect;
+	}
+	public void setSuccessRedirect(String successRedirect) {
+		this.successRedirect = successRedirect;
 	}
 }

@@ -3,21 +3,20 @@
 <system languages="zh_CN,en_US">
 	<!-- 定义系统中的子系统功能模块 属性：name－子系统中文名称 id－子系统标识 module－模块文件名称 baseuri－如果子系统部署在其他的应用 -->
 	<subsystem name="内容管理" i18n:en_US="Content Manager" id="cms" template="cms" module="module-content.xml"
-	 	logoutredirect="/login.jsp"
+	 	
 		baseuri="http://localhost:7000/creatorcms" />
 	<subsystem name="请求服务管理" i18n:en_US="ESB Manager" id="esb" module="module-esb.xml"
-	 	logoutredirect="/login.jsp"
+	 	
 		baseuri="http://localhost:7000/creatorcms" />
 		
-	<subsystem name="代理商门户" i18n:en_US="代理商门户" id="dp" module="module-dp.xml"
-	 	
+	<subsystem name="代理商门户" i18n:en_US="代理商门户" id="dp" module="module-dp.xml"	 	
 		baseuri="http://localhost:7000/creatorcms" />
-		<subsystem name="WEB应用统计平台" i18n:en_US="WEB应用统计平台" id="sanylog" module="module-sanylog.xml"
-	 	
+	<subsystem name="WEB应用统计平台" i18n:en_US="WEB应用统计平台" id="sanylog" module="module-sanylog.xml"	 	
 		baseuri="http://localhost:7000/creatorcms" />		
 		
 	<subsystem name="移动门户" i18n:en_US="移动门户" id="mbp" module="module-mbp.xml"
 		baseuri="http://localhost:7000/creatorcms" 
+		successRedirect="sanydesktop/index.page"
 		logoutredirect="/sanymbp/login.page"/>
 	
 	<!-- 可以配置一些菜单变量,

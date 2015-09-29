@@ -492,6 +492,11 @@ public class ConfigManager implements ResourceInitial {
     public ApplicationInfo getDefaultApplicationInfo() {
         return defaultApplicationInfo;
     }
+    
+    public String getDefaultLoginpage()
+    {
+    	return this.getDefaultApplicationInfo().getLoginpage();
+    }
 
     public DataSourceConfig getDataSourceConfig() {
         return dataSourceConfig;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sysmenu name="spplatform" left_width="200" top_height="48" showhidden="true" showhidden_width="10" 
 	 messagesource="messages_module">
-	<description>内容管理系统平台</description>
+	<description i18n:en_US="CMS Platform">内容管理系统平台</description>
 	<!--
 		公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目
 	-->

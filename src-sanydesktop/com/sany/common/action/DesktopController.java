@@ -55,7 +55,7 @@ public class DesktopController {
 		}
 //			loginPathCookie.setPath(request.getContextPath());
 		
-		return "path:login";
+		return AccessControl.redirectpathloginPage;
 	}
 	
 	public String index(String sany_menupath,String sany_selecturl,HttpServletRequest request,ModelMap model)

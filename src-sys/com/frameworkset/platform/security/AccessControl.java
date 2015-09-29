@@ -71,7 +71,6 @@ import com.frameworkset.platform.esb.datareuse.common.entity.MenuItemU;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
 import com.frameworkset.platform.framework.Item;
-import com.frameworkset.platform.framework.ItemQueue;
 import com.frameworkset.platform.framework.MenuHelper;
 import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.MenuQueue;
@@ -566,9 +565,12 @@ public class AccessControl implements AccessControlInf{
 
 	private static final ThreadLocal current = new ThreadLocal();
 
-	public String loginPage = "login.jsp";
-
-	public String authorfailedPage = "login.jsp";
+	public static String loginPage = "login.page";
+	public static String pathloginPage = "login.page";
+	public static String redirectpathloginPage = "redirect:/login.page";
+	public static String authorfailedPage = "login.page";
+	
+	
 
 	HttpServletRequest request;
 
@@ -583,6 +585,19 @@ public class AccessControl implements AccessControlInf{
 	private static  AccessControl guest ;
 	static
 	{
+		try {
+			loginPage = ConfigManager.getInstance().getDefaultLoginpage();
+			
+			if (loginPage == null || loginPage.trim().equals("")) {
+				loginPage = "login.jsp";
+			}
+			pathloginPage = loginPage.startsWith("/") ?loginPage:"/"+loginPage;
+			redirectpathloginPage = "redirect:"+pathloginPage;
+			authorfailedPage = ConfigManager.getInstance().getAuthorfailedDirect();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try
 		{
 			guest = new AccessControl();
@@ -593,6 +608,8 @@ public class AccessControl implements AccessControlInf{
 			
 			e.printStackTrace();
 		}
+		
+		
 		
 	}
 	
@@ -621,12 +638,7 @@ public class AccessControl implements AccessControlInf{
 
 		try
 		{
-			loginPage = ConfigManager.getInstance().getLoginPage();
-	
-			if (loginPage == null || loginPage.trim().equals("")) {
-				loginPage = "hnu_main.jsp";
-			}
-			authorfailedPage = ConfigManager.getInstance().getAuthorfailedDirect();
+			
 			moduleName = ConfigManager.getInstance().getModuleName();
 		}
 		catch(Exception e)
@@ -659,7 +671,7 @@ public class AccessControl implements AccessControlInf{
 			return ;
 		String logoutredirect = AccessControl.getSubSystemLogoutRedirect(request, subsystem_id,false);
 		if(logoutredirect == null )
-			logoutredirect = StringUtil.getRealPath(request.getContextPath(),"login.jsp",true);
+			logoutredirect = StringUtil.getRealPath(request.getContextPath(),loginPage,true);
 		
 		AccessControl.addCookieValue(request, response, current_logoutredirect_cookie, logoutredirect);
 	}
@@ -784,7 +796,7 @@ public class AccessControl implements AccessControlInf{
 		String ret = null;
 		if(systemid == null)
 		{
-			String defaultvalue = StringUtil.getRealPath(request.getContextPath(),"/login.jsp",true);
+			String defaultvalue = StringUtil.getRealPath(request.getContextPath(),pathloginPage,true);
 			ret = AccessControl.getCookieValue(request, current_logoutredirect_cookie);
 			if(!StringUtil.isEmpty(ret))
 			{
@@ -2098,7 +2110,7 @@ public class AccessControl implements AccessControlInf{
 			
 			if(protect)
 			{
-				log("Session is null, Check page["+ request.getRequestURI() + this.getParameters(request) +"] will go to login.jsp." ,request);
+				log("Session is null, Check page["+ request.getRequestURI() + this.getParameters(request) +"] will go to "+pathloginPage+"." ,request);
 				return innerRedirect(redirectPath);
 			}
 			else
@@ -2130,19 +2142,19 @@ public class AccessControl implements AccessControlInf{
 				try
 				{
 					isNew = session.isNew();
-					log(" Check page["+ request.getRequestURI() + this.getParameters(request) + "]:  No user logon  will go to login.jsp.session id is " + sessionid + " and new is " + isNew,request);
+					log(" Check page["+ request.getRequestURI() + this.getParameters(request) + "]:  No user logon  will go to "+pathloginPage+".session id is " + sessionid + " and new is " + isNew,request);
 				}
 				catch(Exception e)
 				{
 					//e.printStackTrace();
-					log(" Check page["+ request.getRequestURI() + this.getParameters(request) +"]:  No user logon  will go to login.jsp.session id is " + sessionid + " and get session status failed: " + e.getMessage(),request);
+					log(" Check page["+ request.getRequestURI() + this.getParameters(request) +"]:  No user logon  will go to "+pathloginPage+".session id is " + sessionid + " and get session status failed: " + e.getMessage(),request);
 				}
 				
 				return innerRedirect(redirectPath);
 			}
 			else if(ret == 4)
 			{
-				log("Check page["+ request.getRequestURI() + this.getParameters(request) +"]: CS client user logon failed, will go to login.jsp.session id is " + sessionid,request);
+				log("Check page["+ request.getRequestURI() + this.getParameters(request) +"]: CS client user logon failed, will go to "+pathloginPage+".session id is " + sessionid,request);
 				
 				String redirecttarget = "_self";
 				redirect(request,
@@ -2162,7 +2174,7 @@ public class AccessControl implements AccessControlInf{
 			}
 			else
 			{
-				log(" Check page["+ request.getRequestURI() + this.getParameters(request) +"]: \r\n\tUser not logon ,Will go to login.jsp.session id is " + session.getId()+ " and new is " + session.isNew(),request);
+				log(" Check page["+ request.getRequestURI() + this.getParameters(request) +"]: \r\n\tUser not logon ,Will go to "+pathloginPage+".session id is " + session.getId()+ " and new is " + session.isNew(),request);
 				return innerRedirect(redirectPath);
 			}
 		}
@@ -2187,7 +2199,7 @@ public class AccessControl implements AccessControlInf{
 			} 
 			else 
 			{
-				log("Check page["+ request.getRequestURI() +"]: \r\n\tUser[" + principal + "]'s credentialIndexs not exist,Will go to login.jsp.session id is " + sessionid,request);
+				log("Check page["+ request.getRequestURI() +"]: \r\n\tUser[" + principal + "]'s credentialIndexs not exist,Will go to login.page.session id is " + sessionid,request);
 				return this.innerRedirect(redirectPath);
 			}
 //			if (principal != null
@@ -2274,7 +2286,7 @@ public class AccessControl implements AccessControlInf{
 			redirectPath = ConfigManager.getInstance().getLoginPage();
 		}
 		if (redirectPath == null || redirectPath.trim().equals(""))
-			redirectPath = "/login.jsp";
+			redirectPath = "/login.page";
 		try {
 
 			// 如果response已经提交过，则不执行重定向操作，否则执行
@@ -2318,7 +2330,7 @@ public class AccessControl implements AccessControlInf{
 			redirectPath = ConfigManager.getInstance().getLoginPage();
 		}
 		if (redirectPath == null || redirectPath.trim().equals(""))
-			redirectPath = "/login.jsp";
+			redirectPath = "/login.page";
 
 		if (redirecttarget == null || redirecttarget.trim().equals(""))
 			redirecttarget = "top";

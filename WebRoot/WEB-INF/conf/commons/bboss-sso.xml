@@ -4,7 +4,7 @@
     CopyRight：sany
     Date:2011.4.13
 	-->
-	<property name="/sso/*.page"	
+	<property name="/sso/*.page,/login.page"	
 	path:sso="/sso/login.jsp"
 	class="com.sany.common.action.SSOControler" />
 	

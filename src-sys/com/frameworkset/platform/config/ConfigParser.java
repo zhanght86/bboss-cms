@@ -906,7 +906,7 @@ public class ConfigParser extends I18nXMLParser  {
             ApplicationInfo applicationInfo = (ApplicationInfo)traceStack.peek();
 
             applicationInfo.setLoginpage(StringUtil.replaceNull(attributes.
-                    getValue("loginpage"), "index.jsp"));
+                    getValue("loginpage"), "index.page"));
             applicationInfo.setSso(StringUtil.getBoolean(attributes.
                                                       getValue("sso"), false));
         }

@@ -33,7 +33,7 @@
 		showhidden="true" showhidden_width="10" showrootleftmenu="true" messagesource="messages_module"
 		
 		>
-		<description i18n:en_US="Public Develop Platform" >WEB应用统计平台</description>
+		<description i18n:en_US="Web Static Platform" >WEB应用统计平台</description>
 		<!-- 公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目 -->
 		<publicitem name="首页" 
 			i18n:en_US="Index" 	

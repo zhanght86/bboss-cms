@@ -6,7 +6,7 @@
 <system>
 	<sysmenu name="sanymbp" left_width="12%" top_height="70"
 		showhidden="true" showhidden_width="10" showrootleftmenu="true" messagesource="messages_module">
-		<description>移动平台</description>
+		<description i18n:en_US="Mobile Platform">移动平台</description>
 		<!--
 			公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目
 		-->

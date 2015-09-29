@@ -3,6 +3,7 @@ package com.frameworkset.platform.framework;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -53,6 +54,7 @@ public class FrameworkConfiguration  {
     private boolean isfile = false;
 
 	private Map subsystems;
+	private List<SubSystem> subsystemList; 
 	private SubSystem ownersubsystem;
 	private String messagesourcefiles;
 
@@ -177,6 +179,7 @@ public class FrameworkConfiguration  {
             this.showhidden = handler.getShowhidden();
             showhidden_width = handler.getShowhidden_width();
             this.subsystems = handler.getSubsystems();
+            this.subsystemList = handler.getSubsystemList();
             this.global_target =handler.getGlobal_target();
             this.messagesourcefiles = handler.getMessagesourcefiles();
             this.languages = handler.getLanguages();
@@ -290,5 +293,9 @@ public class FrameworkConfiguration  {
 
 	public MenuQueue getMenus() {
 		return menus;
+	}
+
+	public List<SubSystem> getSubsystemList() {
+		return subsystemList;
 	}
 }

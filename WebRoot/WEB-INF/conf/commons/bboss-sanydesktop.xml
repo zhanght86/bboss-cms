@@ -10,7 +10,7 @@
 	path:indexcommon="/sanydesktop/index_common.jsp"
 	path:frame="/sanydesktop/frame.jsp"
 	path:webframe="/sanydesktop/webframe.jsp"
-	path:login="redirect:/login.jsp"
+	path:login="redirect:/login.page"
 	path:products="/sanydesktop/Concrete_Pump_Trucks.jsp"
 	
 	class="com.sany.common.action.DesktopController" />

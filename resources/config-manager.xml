@@ -71,7 +71,7 @@
 			loginpage：登陆失败跳转页面,或者登录退出页面
 
 		-->
-		<authenticate loginpage="login.jsp">
+		<authenticate loginpage="login.page">
 			<!--
 				登录验证模块
 				name:登录模块名称
@@ -92,7 +92,7 @@
  		<!-- <loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.application.util.WebSealLDAPLoginModule" />  -->
 <!-- 		<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.application.util.TicketUserPasswordLoginModule" /> -->
 <!-- 		<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.sany.application.util.TicketLDAPLoginModule" /> -->
-		 <loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" /> 
+					<loginModule name="console" controlFlag="required" debug="true" registTable="DB" class="com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule" />
 		</authenticate>
 		<!--
 			事件激发器工厂类

@@ -2,7 +2,7 @@
 
 <sysmenu name="spplatform" left_width="12%" top_height="60"
 	showhidden="true" showhidden_width="10"  messagesource="messages_module">
-	<description>南宁市公安局数据调度平台</description>
+	<description i18n:en_US="ESB Platform">请求服务平台</description>
 	<!--
 			公共缺省的栏目，如果用户登录系统后无访问权限，或者main为true时，将显示该栏目
 		-->

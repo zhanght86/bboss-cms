@@ -58,7 +58,7 @@
 	    </init-param>  
 	    <init-param>
 	      <param-name>checkiemodeldialog</param-name>
-	      <param-value>true</param-value>
+	      <param-value>false</param-value>
 	      
 	    </init-param>
 	    <init-param>
@@ -132,6 +132,7 @@
       <param-value>
     		/sysmanager/logoutredirect.jsp,
     		/login.jsp,
+    		/login.page,
     		/login_en.jsp,
     		/logout.jsp,
     		/webseal/websealloginfail.jsp,

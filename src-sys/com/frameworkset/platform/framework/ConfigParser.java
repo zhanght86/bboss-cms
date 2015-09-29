@@ -19,6 +19,7 @@ package com.frameworkset.platform.framework;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
@@ -157,6 +158,7 @@ public class ConfigParser extends I18nXMLParser  {
         if(name.equals("system"))
         {
         	this.subsystems = new HashMap();
+        	this.subsystemList = new ArrayList<SubSystem>();
         	 String las = attributes.getValue("languages");
              if(las != null && !las.equals(""))
              	this.languages = this.converLocales(las);
@@ -179,8 +181,10 @@ public class ConfigParser extends I18nXMLParser  {
         	subsystem.setModule(attributes.getValue("module"));
          	subsystem.setTemplate(attributes.getValue("template"));
          	subsystem.setLogoutredirect(attributes.getValue("logoutredirect"));
+         	subsystem.setSuccessRedirect(attributes.getValue("successRedirect"));         	
          	subsystem.setLocaleNames(this.convertI18n(attributes, subsystem.getName(), subsystem.getId(), "subsystem.localnames"));
         	subsystems.put(subsystem.getId(),subsystem);
+        	subsystemList.add(subsystem);
         }
         else if(name.toLowerCase().equals("publicitem"))
         {
@@ -920,6 +924,7 @@ public class ConfigParser extends I18nXMLParser  {
 	
 	private String showhidden_width = "12";
 	private Map subsystems;
+	private List<SubSystem> subsystemList; 
 
 
 	public String getShowhidden_width() {
@@ -958,6 +963,10 @@ public class ConfigParser extends I18nXMLParser  {
 
 	public void setMenus(MenuQueue menus) {
 		this.menus = menus;
+	}
+
+	public List<SubSystem> getSubsystemList() {
+		return subsystemList;
 	}
 
 }

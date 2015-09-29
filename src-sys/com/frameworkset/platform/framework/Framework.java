@@ -181,7 +181,8 @@ public class Framework implements ResourceInitial,MessageSource {
 	/**
 	 * 子系统菜单集合 Map<String subsystemid,SubSystem>
 	 */
-	private Map subsystems;
+	private Map<String,SubSystem> subsystems;
+	private List<SubSystem> subsystemList; 
 
 	/**
 	 * 子系统菜单集合 Map<String subsystemid,Framework>
@@ -389,6 +390,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			this.frameworkmeta = subsystem;
 			this.buildFramework(config);
 			this.subsystems = config.getSubsystems();
+			this.subsystemList = config.getSubsystemList(); 
 			subsystem.setFramework(this);
 			initSubSystems();
 //			this.inited = true;
@@ -624,6 +626,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			config.setLanguages(languages);
 			buildFramework( config);
 			Map temp_sys = config.getSubsystems();
+			this.subsystemList = config.getSubsystemList();
 			synSubsystems(temp_sys);
 			this.monitor(this.configFile);
 		} catch (Exception ex) {
@@ -674,6 +677,7 @@ public class Framework implements ResourceInitial,MessageSource {
 //				
 				buildFramework( config);
 				this.subsystems = config.getSubsystems();
+				this.subsystemList = config.getSubsystemList();
 				initSubSystems();
 				this.monitor(configFile);
 			} catch (Exception ex) {
@@ -1729,6 +1733,7 @@ public class Framework implements ResourceInitial,MessageSource {
 				framework.stop();
 			}
 			this.subsystemFrameworks.clear();
+			this.subsystemList.clear();
 		}
 	}
 
@@ -2034,6 +2039,7 @@ public class Framework implements ResourceInitial,MessageSource {
 		this.servletContext = null;
 		this.subsystemFrameworks = null;
 		this.subsystems = null;
+		this.subsystemList = null;
 	}
 
 	public String getConfigFile() {
@@ -2176,6 +2182,26 @@ public class Framework implements ResourceInitial,MessageSource {
 	{
 		return Framework.getSubFramework(systemid).getDescription();
 	}
+	
+	public static String getSystemName(String systemid,HttpServletRequest request)
+	{
+		return Framework.getSubFramework(systemid).getDescription(request);
+	}
+	
+	public static SubSystem getSubSystem(String systemid)
+	{
+		
+		return Framework.getInstance()._getSubSystem( systemid);
+	}
+	private SubSystem _getSubSystem(String systemid) {
+		if(this.subsystems != null)
+		{
+			return subsystems.get(systemid);
+		}
+		return null;
+		
+	}
+
 	public Map<Locale, String> getLocaleDescriptions() {
 		return localeDescriptions;
 	}
@@ -2217,6 +2243,12 @@ public class Framework implements ResourceInitial,MessageSource {
 
 	public MenuQueue getMenus() {
 		return menus;
+	}
+
+	 
+
+	public List<SubSystem> getSubsystemList() {
+		return subsystemList;
 	}
 
 	
