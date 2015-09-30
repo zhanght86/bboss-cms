@@ -12,9 +12,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title><pg:message code="sany.appbom.bomManage"/></title>
-<%@ include file="/common/jsp/css.jsp"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html2/js/common.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
+
 <script language="javascript">
 				function senior()
 				{

@@ -32,9 +32,9 @@ DD_belatedPNG.fix('div');
 <![endif]-->
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/jquery-1.4.2.min.js"></script>
 <link href="${pageContext.request.contextPath}/html/login/stylesheet/login.css"	rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/commontool.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/commontool.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lhgdialog.js?self=false"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/common/scripts/WebDes.js"></script>
 
 <script language="JavaScript">
