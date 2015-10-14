@@ -18,13 +18,5 @@
 	<property name="wx.enterprise.APIService"
 		class="org.frameworkset.wx.enterprise.WXAPIServiceImp"/>	
 		
-	<property name="wx.enterprise.request.checkcode"
-		value="everytime"/>	
-		
-	<property name="wx.enterprise.getUserInfo"
-		value="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo"/>	
-		
-	<property name="wx.enterprise.accessToken"
-		value="https://qyapi.weixin.qq.com/cgi-bin/gettoken"/>	
 </properties>
 	

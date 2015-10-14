@@ -87,15 +87,60 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 				result.setCode(Result.fail);
 				result.setErrormessage(new StringBuilder().append("用户").append(user.getUser_name()).append("已经存在.").toString());
 			}
-			
-			user.setDepart_id("99999999");	
-			user.setUser_isvalid(1);
+			String orgid = user.getDepart_id();
+			if(orgid == null )
+			{
+			    orgid = "99999999";
+			    user.setDepart_id(orgid);
+			}
+			user.setUser_isvalid(2);
 			user.setUser_type(2);
 			String p = user.getUser_password();
 			user.setUser_password(EncrpyPwd.encodePassword(user.getUser_password()));
 			user.setUser_regdate(new Date());
 			executor.insertBean("createcommonuser", user);
-			executor.insert("inituserjoborg", user.getUser_id(),"99999999",new Date());
+			executor.insert("inituserjoborg", user.getUser_id(),orgid,new Date());
+			user.setUser_password(p);
+			result.setCode(Result.ok);
+			result.setUser(user);
+			tm.commit();
+		} catch (Exception e) {
+			result.setCode(Result.fail);
+			String m = new StringBuilder().append("创建用户").append(user.getUser_name()).append("失败:").append(e.getMessage()).toString();
+			result.setErrormessage(m);
+			log.error(m,e);
+		}
+		finally
+		{
+			tm.release();
+		}
+		return result;
+	}
+	
+	@Override
+	public Result createTempUser(CommonUser user) {
+		Result result = new Result();
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			if(exist(user.getUser_name()))
+			{
+				result.setCode(Result.fail);
+				result.setErrormessage(new StringBuilder().append("用户").append(user.getUser_name()).append("已经存在.").toString());
+			}
+			String orgid = user.getDepart_id();
+			if(orgid == null )
+			{
+			    orgid = "99999999";
+			    user.setDepart_id(orgid);
+			}
+//			user.setUser_isvalid(2);
+//			user.setUser_type(2);
+			String p = user.getUser_password();
+			user.setUser_password(EncrpyPwd.encodePassword(user.getUser_password()));
+			user.setUser_regdate(new Date());
+			executor.insertBean("createcommonuser", user);
+			executor.insert("inituserjoborg", user.getUser_id(),orgid,new Date());
 			user.setUser_password(p);
 			result.setCode(Result.ok);
 			result.setUser(user);

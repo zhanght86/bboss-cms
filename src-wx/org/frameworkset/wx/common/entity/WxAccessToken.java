@@ -21,7 +21,7 @@ public class WxAccessToken {
 
     private String corpsecret;
 
-    private String accessToken;
+    private String access_token;
 
     private long expires_in;
 
@@ -40,14 +40,6 @@ public class WxAccessToken {
 
     public void setAccessTokenId(String accessTokenId) {
         this.accessTokenId = accessTokenId;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
     }
 
     public Date getCreateTime() {
@@ -96,6 +88,14 @@ public class WxAccessToken {
 
     public void setErrmsg(String errmsg) {
         this.errmsg = errmsg;
+    }
+
+    public String getAccess_token() {
+        return access_token;
+    }
+
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
     }
 
 }

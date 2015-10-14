@@ -19,6 +19,10 @@ public class CommonUserControl implements CommonUserManagerInf{
 		// TODO Auto-generated method stub
 		return commonUserManager.createUser(user);
 	}
+	
+	public @ResponseBody Result createTempUser(CommonUser user) {
+		return commonUserManager.createTempUser(user);
+	}
 
 	@Override
 	public @ResponseBody Result updateUser(CommonUser user) {

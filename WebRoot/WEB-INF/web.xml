@@ -141,6 +141,8 @@
     		/test/testssowithtoken.jsp,
     		/sso/login.jsp,
     		/sso/sso.page,
+    		/sso/wxsso.page,
+    		/sso/recive.page,
     		/sso/ssowithtoken.page,
     		/sso/ssowithticket.page,
     		/sanydesktop/cookieLocale.page,

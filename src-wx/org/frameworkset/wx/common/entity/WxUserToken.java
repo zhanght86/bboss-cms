@@ -1,29 +1,62 @@
 package org.frameworkset.wx.common.entity;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class WxUserToken {
-	private String userAccount;
-	private String errorcode;
-	private String errormsg;
-	public WxUserToken() {
-		// TODO Auto-generated constructor stub
-	}
-	public String getUserAccount() {
-		return userAccount;
-	}
-	public void setUserAccount(String userAccount) {
-		this.userAccount = userAccount;
-	}
-	public String getErrorcode() {
-		return errorcode;
-	}
-	public void setErrorcode(String errorcode) {
-		this.errorcode = errorcode;
-	}
-	public String getErrormsg() {
-		return errormsg;
-	}
-	public void setErrormsg(String errormsg) {
-		this.errormsg = errormsg;
-	}
+
+	
+    private String UserId;
+
+    private String errcode;
+
+    private String errmsg;
+
+    private String deviceId;
+
+    private String openId;
+
+    public WxUserToken() {
+        // TODO Auto-generated constructor stub
+    }
+
+    public String getErrcode() {
+        return errcode;
+    }
+
+    public void setErrcode(String errcode) {
+        this.errcode = errcode;
+    }
+
+    public String getErrmsg() {
+        return errmsg;
+    }
+
+    public void setErrmsg(String errmsg) {
+        this.errmsg = errmsg;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+    @JsonProperty("UserId")
+    public String getUserId() {
+        return UserId;
+    }
+    @JsonProperty("UserId")
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
 
 }
