@@ -631,6 +631,15 @@
 					<content><![CDATA[/params/showParams.page?paramId=Token&paramType=Token&handler=cms.siteparamshandler]]></content>
 				</workspace>
 			</item>
+			<item name="微信参数管理" id="weixin-argsmanager">
+				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
+				
+				<top>header.page</top>
+				
+				<workspace>
+					<content><![CDATA[/params/showParams.page?paramId=weixin&paramType=weixin&handler=cms.siteparamshandler]]></content>
+				</workspace>
+			</item>
 			<!-- 
 			<item name="邮件消息参数管理" id="mailmsgmanager">
 				<mouseclickimg>common/ico/zjcx_c.gif</mouseclickimg>
