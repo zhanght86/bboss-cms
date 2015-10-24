@@ -374,7 +374,7 @@ DD_belatedPNG.fix('div');
 			<div class="Zclear"></div> 			
 		  </div>
 		   <div class="c_log_bot"></div>
-		   <p class="c_edition"><pg:message code="sany.pdp.login.copyright"/></p>
+		   <p class="c_edition">BBoss V1.0</p>
       </div>
         <div class="c_logHeight"></div>
 	</div>
