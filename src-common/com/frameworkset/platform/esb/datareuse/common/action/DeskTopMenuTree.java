@@ -158,7 +158,7 @@ public class DeskTopMenuTree extends COMTree {
             if(submodule.isUsed())
             {
             	addNode(father, treeid, treeName, moduleType, showHref, curLevel, memo,
-                        radioValue, checkboxValue, path,params);
+            			!submodule.isUsesubpermission()?radioValue:null, !submodule.isUsesubpermission()?checkboxValue:null, path,params);
             }
         }
         for(int i = 0; i < items.size(); i ++)

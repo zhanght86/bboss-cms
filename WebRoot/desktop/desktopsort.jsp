@@ -163,7 +163,7 @@ String path = request.getContextPath();
 	function delItem() {
 		var userid = '';
 		if ('${isdefault}' ==  'false') {
-			userid = '1';
+			userid = '<%=accesscontroler.getUserID()%>';
 		}else {
 			userid = '-1';
 		}
