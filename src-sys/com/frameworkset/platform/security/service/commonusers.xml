@@ -25,6 +25,12 @@
 		]]>
 	</property>
 	
+	<property name="existcommonorgjob">
+		<![CDATA[		
+		select count(1) from td_sm_orgjob where org_id='99999999' and job_id = '1'
+		]]>
+	</property>
+	
 	
 	<property name="existuser">
 		<![CDATA[

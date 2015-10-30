@@ -301,7 +301,10 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			{
 		
 				executor.insert("createcommonorg", new Date());
-				executor.insert("initcommonorgjob");
+				
+				exist = this.executor.queryObject(int.class, "existcommonorgjob");
+				if(exist <= 0)
+					executor.insert("initcommonorgjob");
 			}
 			tm.commit();
 		}
