@@ -1,18 +1,14 @@
 package com.frameworkset.platform.esb.datareuse.common.action;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.frameworkset.util.annotations.RequestParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -32,6 +28,8 @@ import com.frameworkset.platform.framework.MenuHelper;
 import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
+
+
 
 
 public class DeskTopController {
@@ -416,11 +414,11 @@ public class DeskTopController {
 				MenuItem item=frame.getMenuByPath(list.get(i).getMenupath());
 				if(item == null)
 				{
-					System.out.println("list.get(i).getMenupath():>>>>>>>>>>>>>>>>>>>>>>>>"+list.get(i).getMenupath());
+					 
 					continue;
 				}
-				if(!control.checkPermission(item.getId(), "visible", "column"))
-					continue;
+//				if(!control.checkPermission(item.getId(), "visible", "column"))
+//					continue;
 				list.get(i).setMenuname(item.getName(request));
 			}
 		}
@@ -441,67 +439,64 @@ public class DeskTopController {
 		}
 	}
 	
-	public void updatemenusortBymenuName(HttpServletRequest request,HttpServletResponse response){
-		
+	public @ResponseBody String updatemenusortBymenuName(HttpServletRequest request, HttpServletResponse response) {
+
 		AccessControl control = AccessControl.getAccessControl();
-		
-		Framework frame = Framework.getInstance(control.getCurrentSystemID()); 
-		
-		
+
+		Framework frame = Framework.getInstance(control.getCurrentSystemID());
+
 		DeskTopMenuBean bean = new DeskTopMenuBean();
 		bean.setUserid(control.getUserID());
 		bean.setSubsystem(control.getCurrentSystemID());
 		List<DeskTopMenuBean> list = null;
 		try {
 			list = deskTopMenuShorcutManager.getUserDeskMenus(bean);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String[] arr = new String[list.size()];
-		if (list != null && list.size() > 0) {
-			for(int i=0;i<list.size();i++){
-				BaseMenuItem item=(BaseMenuItem)frame.getMenuByPath(list.get(i).getMenupath());
-//				Item item=frame.getItem(list.get(i).getMenupath());
-				if(item == null)
-				{
-					System.out.println("list.get(i).getMenupath():>>>>>>>>>>>>>>>>>>>>>>>>"+list.get(i).getMenupath());
-					continue;
+			if (list != null && list.size() > 0) {
+				for (int i = 0; i < list.size(); i++) {
+					BaseMenuItem item = (BaseMenuItem) frame.getMenuByPath(list.get(i).getMenupath());
+					// Item item=frame.getItem(list.get(i).getMenupath());
+					if (item == null) {
+
+						continue;
+					}
+					// if(!control.checkPermission(item.getId(), "visible",
+					// "column"))
+					// continue;
+					list.get(i).setMenuname(item.getName(request));
+
 				}
-				if(!control.checkPermission(item.getId(), "visible", "column"))
-					continue;
-				list.get(i).setMenuname(item.getName(request));
-				arr[i] = list.get(i).getMenuname();
+				Collections.sort(list, new Comparator<DeskTopMenuBean>() {
+
+					@Override
+					public int compare(DeskTopMenuBean o1, DeskTopMenuBean o2) {
+						// TODO Auto-generated method stub
+						int ret = o1.getMenuname().compareToIgnoreCase(o2.getMenuname());
+						if (ret > 0)
+							return -1;
+						else if (ret == 0)
+							return 0;
+						else
+							return 1;
+					}
+
+				});
+
+				for (int j = 0; j < list.size(); j++) {
+					DeskTopMenuBean dtmb = list.get(j);
+
+					dtmb.setItem_order(j + "");
+
+				}
+
+				deskTopMenuShorcutManager.updateMenuSort(list);
 			}
-		}
-		
-		List<DeskTopMenuBean> listbyName = new ArrayList<DeskTopMenuBean>();
-		Comparator cmp = Collator.getInstance(java.util.Locale.CHINA);
-		Arrays.sort(arr, cmp);  
-		for (int i = 0; i < arr.length; i++){
-			for(int j=0;j<list.size();j++){
-			  DeskTopMenuBean dtmb = list.get(j);
-			  if(arr[i].equals(dtmb.getMenuname())){
-				  dtmb.setItem_order(i+"");
-				  listbyName.add(dtmb);
-			  }
-			}
-		} 
-		
-		PrintWriter pw = null; 
-		try {
-			pw = response.getWriter();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			deskTopMenuShorcutManager.updateMenuSort(listbyName);
-			pw.print("ok");
+
+			return ("ok");
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			pw.print("fail");
+			return ("fail");
 		}
 
 	}

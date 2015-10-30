@@ -1,2 +1,0 @@
-
-ant  buildjar >build.log

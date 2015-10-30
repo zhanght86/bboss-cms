@@ -478,7 +478,7 @@ public class SSOControler {
     public @ResponseBody
     String recive(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("消息接收接口");
-        
+
         String app = request.getParameter("app");
         log.info("微信系统app名称=" + app);
 
@@ -508,9 +508,9 @@ public class SSOControler {
             WXBizMsgCrypt wxcpt;
             try {
                 String weixin_token = WXHelper.getEnterpriseToken(app);
-                String weixin_aeskey = WXHelper.getEnterpriseAeskey(app); 
+                String weixin_aeskey = WXHelper.getEnterpriseAeskey(app);
                 String weixin_corpid = WXHelper.getEnterpriseCorpid(app);
-                
+
                 wxcpt = new WXBizMsgCrypt(weixin_token, weixin_aeskey, weixin_corpid);
                 sEchoStr = wxcpt.VerifyURL(sVerifyMsgSig, sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
                 System.out.println("需要返回的明文sEchoStr=" + sEchoStr);
@@ -551,6 +551,14 @@ public class SSOControler {
         System.out.println("微信state=" + app);
 
         String successRedirect = request.getParameter("successRedirect");
+
+        // 解析successRedirect参数中含有多个参数
+        int num= app.indexOf(";");
+        if (num > -1) {
+            successRedirect = successRedirect + app.substring(num).replace(";", "?").replace(",", "&");
+            app = app.substring(0,num);
+        }
+
         System.out.println("微信successRedirect=" + successRedirect);
 
         String corpid = WXHelper.getEnterpriseCorpid(app), corpsecret = WXHelper.getEnterpriseCorpsecret(app);
