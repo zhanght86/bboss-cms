@@ -43,6 +43,11 @@ public class WXHelper {
         Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.token.url", "weixin");
         return (String) p.getValue();
     }
+    
+    public static String getEnterpriseSendWeChatMsgURL() {
+        Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.sendMsg.url", "weixin");
+        return (String) p.getValue();
+    }
 
     public static String getEnterpriseToken(String app) {
         if (StringUtil.isEmpty(app)) {

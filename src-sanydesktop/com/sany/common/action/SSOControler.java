@@ -553,12 +553,13 @@ public class SSOControler {
         String successRedirect = request.getParameter("successRedirect");
 
         // 解析successRedirect参数中含有多个参数
-        int num= app.indexOf(";");
-        if (num > -1) {
-            successRedirect = successRedirect + app.substring(num).replace(";", "?").replace(",", "&");
-            app = app.substring(0,num);
+        if (StringUtil.isNotEmpty(app)) {
+            int num= app.indexOf(";");
+            if (num > -1) {
+                successRedirect = successRedirect + app.substring(num).replace(";", "?").replace(",", "&");
+                app = app.substring(0,num);
+            }
         }
-
         System.out.println("微信successRedirect=" + successRedirect);
 
         String corpid = WXHelper.getEnterpriseCorpid(app), corpsecret = WXHelper.getEnterpriseCorpsecret(app);
