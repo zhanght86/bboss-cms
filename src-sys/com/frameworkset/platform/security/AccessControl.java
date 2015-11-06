@@ -4867,14 +4867,14 @@ public class AccessControl implements AccessControlInf{
 	/**
 	 * 
 	 * @param token
-	 * @return 0:参数匹配不成功，1:参数匹配成功 2:没有设置相关的参数 ,3:没有参数
+	 * @return 0:参数匹配不成功，1:参数匹配成功 2:request没有设置部分相关的参数 ,3:request完全没有设置对应的参数,4:没有配置参数
 	 */
 	public int compareParams(PermissionToken token)
 	{
 		if(!token.hasParamCondition())//带参数的token排在最前面，都已经比较过了，没有匹配的值，没有参数时，自然返回true
-			return 3;
+			return 4;
 		List<P> params = token.getParamConditions();
-		int nullcount = 0;
+//		int nullcount = 0;
 		
 		
 		boolean success = true;
@@ -4886,21 +4886,28 @@ public class AccessControl implements AccessControlInf{
 			if(value != null)
 			{
 			
+				
 				if(!value.equals(p.getValue()))
 				{
 					
 					success = false;
+					break;
 					
 				}
 			}
 			else
 			{
-				nullcount ++;
+				success = false;
+				break;
 			}
 			
 		}
-		if(nullcount > 0)
-			return 2;	
+//		if(nullcount > 0)
+//			return 2;	
+//		else if(nullcount == params.size() - 1)
+//		{
+//			return 3;
+//		}
 		return success?1:0;
 		
 		

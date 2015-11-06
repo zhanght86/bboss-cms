@@ -18,6 +18,8 @@ package com.frameworkset.platform.security.authorization.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.frameworkset.platform.security.AccessControl;
+
 /**
  * <p>Title: LinkPermissionToken.java</p>
  *
@@ -35,7 +37,7 @@ public class LinkPermissionToken {
 	private boolean unprotected;
 	private List<PermissionToken> permissionTokensWithParams;
 	private List<PermissionToken> permissionTokensWithNoParams;
-	private List<List<P>> paramConditions;
+	
 	public LinkPermissionToken(String url, boolean unprotected,
 			List<PermissionToken> permissionTokens) {
 		super();
@@ -43,6 +45,16 @@ public class LinkPermissionToken {
 		this.unprotected = unprotected;
 //		this.permissionTokens = permissionTokens;
 		splitToken( permissionTokens);
+	}
+	
+	
+	public LinkPermissionToken(String url, boolean unprotected) {
+		super();
+		this.url = url;
+		this.unprotected = unprotected;
+//		this.permissionTokens = permissionTokens;
+		permissionTokensWithParams = new ArrayList<PermissionToken>();
+		permissionTokensWithNoParams = new ArrayList<PermissionToken>();
 	}
 	private void splitToken(List<PermissionToken> permissionTokens)
 	{
@@ -58,6 +70,13 @@ public class LinkPermissionToken {
 					permissionTokensWithNoParams.add(token);
 			}
 		}
+	}
+	public void addPermissionToken(PermissionToken token)
+	{
+		if(token.hasParamCondition())
+			permissionTokensWithParams.add(token);
+		else
+			permissionTokensWithNoParams.add(token);
 	}
 	public LinkPermissionToken() {
 		// TODO Auto-generated constructor stub
@@ -75,22 +94,24 @@ public class LinkPermissionToken {
 	public List<PermissionToken> getPermissionTokensWithNoParams() {
 		return permissionTokensWithNoParams;
 	}
-	public List<List<P>> getParamConditions() {
-		return paramConditions;
-	}
-	public void setParamConditions(List<List<P>> paramConditions) {
-		if(paramConditions == null || paramConditions.size() == 0)
-			return;
-		this.paramConditions = paramConditions;
-		for(List<P> ps :paramConditions)
-		{
-			if(ps == PermissionTokenRegion.dual)
-			{
-				this.paramConditions.clear();
-				break;
-			}
-		}
-		
-	}
+//	public List<List<P>> getParamConditions() {
+//		return paramConditions;
+//	}
+//	public void setParamConditions(List<List<P>> paramConditions) {
+//		if(paramConditions == null || paramConditions.size() == 0)
+//			return;
+//		this.paramConditions = paramConditions;
+//		for(List<P> ps :paramConditions)
+//		{
+//			if(ps == PermissionTokenRegion.dual)
+//			{
+//				this.paramConditions.clear();
+//				break;
+//			}
+//		}
+//		
+//	}
+	
+	
 
 }

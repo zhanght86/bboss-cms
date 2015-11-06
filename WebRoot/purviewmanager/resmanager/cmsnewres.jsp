@@ -16,6 +16,8 @@
  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
+<%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.resource.*"%>
+<%@page import="com.frameworkset.platform.config.ConfigManager,com.frameworkset.platform.config.model.*"%>
 <%
 String isJobExist = "false";
 	if ( request.getAttribute("isJobExist") != null){
@@ -23,7 +25,10 @@ String isJobExist = "false";
 	}
 String restype=request.getParameter("restype");
 String restypeName=request.getParameter("restypeName");
-
+ResourceManager resourceManager = new ResourceManager();
+ResourceInfo resourceInfo =  resourceManager.getResourceInfoByType(restype);
+if(resourceInfo != null)
+	restypeName = resourceInfo.getName();
 %>
 <html>
 <head>     

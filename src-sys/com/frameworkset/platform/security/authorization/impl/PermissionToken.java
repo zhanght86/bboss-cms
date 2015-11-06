@@ -44,6 +44,10 @@ public class PermissionToken {
 	private boolean hasParamCondition;
 	private boolean useResourceAuthCode;
 	private boolean resouceAuthCodeRequired = true;
+	private String region;
+	
+	private boolean validate = true;
+	
 	/**
 	 * 权限码，也就是url后面跟随的参数值，如果资源操作都匹配，但是参数不匹配，同样不允许访问
 	 */
@@ -136,6 +140,18 @@ public class PermissionToken {
 	}
 	public void setParamConditions(List<P> paramConditions) {
 		this.paramConditions = paramConditions;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public boolean isValidate() {
+		return validate;
+	}
+	public void setValidate(boolean validate) {
+		this.validate = validate;
 	}
 
 }

@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.frameworkset.util.AntPathMatcher;
+import org.frameworkset.util.PathMatcher;
+
 /**
  * <p>Title: PermissionTokenRegion.java</p>
  *
@@ -39,7 +42,7 @@ public class PermissionTokenRegion {
 	 * Map<String,        Map<String,         List<PermissionToken>>>
 	 *     region(资源区域划分)       url（或其他）              资源类型/资源标识/资源操作(一个url可能会对应多个资源操作)
 	 */
-	private Map<String,Map<RID,List<PermissionToken>>> regionResourcTokenMap;
+	private Map<String,Map<String,List<PermissionToken>>> regionResourcTokenMap;
 	
 //	private Map<RID,List<PermissionToken>> resourcTokenMap;
 	/**
@@ -53,7 +56,7 @@ public class PermissionTokenRegion {
 	
 	public PermissionTokenRegion (PermissionTokenMap permissionTokenMap)
 	{
-		regionResourcTokenMap = new HashMap<String,Map<RID,List<PermissionToken>>>();
+		regionResourcTokenMap = new HashMap<String,Map<String,List<PermissionToken>>>();
 //		resourcTokenMap = new HashMap<RID,List<PermissionToken>>();
 		
 		regionUnprotectedResourcTokenMap = new HashMap<String,Map<RID,List<P>>>();		
@@ -73,19 +76,19 @@ public class PermissionTokenRegion {
 		
 		token.setHasParamCondition(url.hasParamCondition());
 		token.setParamConditions(url.getParamConditions());
-		Map<RID,List<PermissionToken>> resourceTokens = this.regionResourcTokenMap.get(region);
+		Map<String,List<PermissionToken>> resourceTokens = this.regionResourcTokenMap.get(region);
 		if(resourceTokens == null)
 		{
-			resourceTokens = new HashMap<RID,List<PermissionToken>>();
+			resourceTokens = new HashMap<String,List<PermissionToken>>();
 			this.regionResourcTokenMap.put(region, resourceTokens);
 		}
 		
-		RID rid = new RID(url.getUrl(),true);
-		List<PermissionToken> tokens = resourceTokens.get(rid);
+//		RID rid = new RID(url.getUrl(),true);
+		List<PermissionToken> tokens = resourceTokens.get(url.getUrl());
 		if(tokens == null)
 		{
 			tokens = new ArrayList<PermissionToken>();
-			resourceTokens.put(rid, tokens);
+			resourceTokens.put(url.getUrl(), tokens);
 					
 		}
 		if(!token.hasParamCondition())
@@ -103,11 +106,11 @@ public class PermissionTokenRegion {
 		
 		if(regionResourcTokenMap != null)
 		{
-			Iterator<Entry<String, Map<RID, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();
+			Iterator<Entry<String, Map<String, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();
 			while(entries.hasNext())
 			{
-				Entry<String, Map<RID, List<PermissionToken>>> entry = entries.next();
-				Map<RID, List<PermissionToken>> resourceTokens = entry.getValue();
+				Entry<String, Map<String, List<PermissionToken>>> entry = entries.next();
+				Map<String, List<PermissionToken>> resourceTokens = entry.getValue();
 				resourceTokens.clear();
 			}
 			regionResourcTokenMap.clear();
@@ -126,7 +129,7 @@ public class PermissionTokenRegion {
 	{		
 		if(regionResourcTokenMap != null)
 		{
-			Map<RID,List<PermissionToken>> resourceTokens = regionResourcTokenMap.get(region);
+			Map<String,List<PermissionToken>> resourceTokens = regionResourcTokenMap.get(region);
 			
 			if(resourceTokens != null)
 				resourceTokens.clear();
@@ -205,9 +208,9 @@ public class PermissionTokenRegion {
 		
 	}
 	
+	private static PathMatcher pathMatcher = new AntPathMatcher();
 	
-	
-	public List<PermissionToken> getAllURLToken(RID rid) {
+	public List<PermissionToken> getAllURLToken(String rid) {
 		List<PermissionToken> ptokens = new ArrayList<PermissionToken>();
 //		if(resourcTokenMap.size() > 0)
 //		{
@@ -227,17 +230,17 @@ public class PermissionTokenRegion {
 //		}
 		if((this.regionResourcTokenMap == null || this.regionResourcTokenMap.size() == 0))
 			return ptokens;
-		Iterator<Entry<String, Map<RID, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();		
+		Iterator<Entry<String, Map<String, List<PermissionToken>>>> entries = this.regionResourcTokenMap.entrySet().iterator();		
 		while(entries.hasNext())
 		{
-			Entry<String, Map<RID, List<PermissionToken>>> entry = entries.next();
-			Map<RID, List<PermissionToken>> resourceTokens_ = entry.getValue();
+			Entry<String, Map<String, List<PermissionToken>>> entry = entries.next();
+			Map<String, List<PermissionToken>> resourceTokens_ = entry.getValue();
 			List<PermissionToken> tokens = new ArrayList<PermissionToken>();
-			Iterator<Entry<RID, List<PermissionToken>>> resources = resourceTokens_.entrySet().iterator();
+			Iterator<Entry<String, List<PermissionToken>>> resources = resourceTokens_.entrySet().iterator();
 			while(resources.hasNext())
 			{
-				Entry<RID, List<PermissionToken>> entry_= resources.next();
-				if(entry_.getKey().match(rid))
+				Entry<String, List<PermissionToken>> entry_= resources.next();
+				if(pathMatcher.match(entry_.getKey(),rid))
 					tokens.addAll(entry_.getValue());
 			}
 			if(tokens.size() > 0)

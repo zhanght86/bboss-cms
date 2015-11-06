@@ -30,6 +30,13 @@ package com.frameworkset.platform.security.authorization.impl;
 public class P {
 	private String name;
 	private String value;
+	/**
+	 * a = b
+	 * true:a==b if(haspermission) ok if(!haspermission) no a!=b no
+	 * false:a==b if(haspermission) ok if(!haspermission) no a!=b ok
+	 */
+	private boolean mustmatchvaluetoallow = true;
+	
 	public String getName() {
 		return name;
 	}
@@ -41,6 +48,12 @@ public class P {
 	}
 	public void setValue(String value) {
 		this.value = value;
+	}
+	public boolean isMustmatchvaluetoallow() {
+		return mustmatchvaluetoallow;
+	}
+	public void setMustmatchvaluetoallow(boolean mustmatchvaluetoallow) {
+		this.mustmatchvaluetoallow = mustmatchvaluetoallow;
 	}
 
 }

@@ -34,7 +34,7 @@
 <script language="JavaScript" src="common.js" type="text/javascript"></script>
 <script src="../scripts/func.js"></script>
 <script language="JavaScript" src="<%=rootpath%>/sysmanager/resmanager/common.js" type="text/javascript"></script>
-<script language="JavaScript" src="<%=rootpath%>/sysmanager/include/pager.js" type="text/javascript"></script>
+ 
 <script type="text/javascript" src="<%=rootpath%>/html/js/commontool.js"></script>
 <SCRIPT language="javascript">	
 var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");
@@ -140,8 +140,7 @@ function accredit(dealType) {
     //	return false;
    	//}
 	return false;
-	    			//ResSearchList.action="<%=rootpath%>/resmanager/resource.do?method=getAllResList&restypeName=<%=restypeName%>&restype=<%=restype%>";
-		
+	    			
 }
 
 function resBatchUser(){

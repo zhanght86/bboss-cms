@@ -4,7 +4,7 @@
 
 <%
 	com.frameworkset.platform.security.AccessControl accesscontroler = com.frameworkset.platform.security.AccessControl.getAccessControl();	//获取平台当前用户会话对象
-	boolean hasaddpermission = accesscontroler.checkPermission("globaltest",//资源id
+	boolean hasaddpermission = accesscontroler.checkPermission("testid",//资源id
 																"add",//资源操作
 																"testresource"//资源类型
 																);
@@ -73,10 +73,10 @@
 						<pg:false actual="<%=hasdeletepermission %>">
 							没有删除用户的权限
 						</pg:false>
-						    has read testid permission：<%=hasreadpermission %> error code parameter value:null<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid" target="_blank">测试url控制1</a><br>
-							has read testid permission：<%=hasreadpermission %> correct code parameter value:bbb<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=bbb" target="_blank">测试url控制2</a><br>
-							has read testid permission：<%=hasreadpermission %> error code parameter value:ccc<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=ccc" target="_blank">测试url控制3</a><br>
-							has read testid permission：<%=hasreadpermission %> correct code parameter value:aaa<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=aaa" target="_blank">测试url控制4</a>
+						    has delete testid permission：<%=hasdeletepermission %>   code parameter value:null<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid" target="_blank">测试url控制1</a><br>
+							has write testid permission：<%=hasupdatepermission %>   code parameter value:bbb<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=bbb" target="_blank">测试url控制2</a><br>
+							has add testid permission：<%=hasaddpermission %>   code parameter value:ccc<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=ccc" target="_blank">测试url控制3</a><br>
+							has read testid permission：<%=hasreadpermission %>   code parameter value:aaa<a href="<%=request.getContextPath() %>/test/testresopurlpermissionread.jsp?opCode=testid&code=aaa" target="_blank">测试url控制4</a>
 						</td>
 					</tr>
 					<tr>
@@ -149,7 +149,7 @@
 						</td>
 						
 						<td colspan="7">							
-							<dict:select type="sex" name="userSex" textValueCode="sany.pdp.common.operation.select" textNAN="-1"  extend=" onclick='alert(1) '"/>
+							<dict:select type="sex" name="userSex" textValueCode="sany.pdp.common.operation.select" textNAN="-1"  />
 						</td>
 						
 					</tr>
