@@ -34,7 +34,7 @@ $(document).ready(function(){
 		var noticechannel = '<dict:itemvalue type="newsservice" itemName="noticechannel" defaultItemValue="notice"/>';
 		var noticecount = '<dict:itemvalue type="newsservice" itemName="noticecount" defaultItemValue="100"/>';
 		var getnewsurl =  host + 'document/getNewsList.freepage?jsonp_callback=?';
-	
+	/**
 		$.getJSON(getnewsurl, { site:site,channel:noticechannel,count:noticecount,isArrangeDoc:'true' },
            function(data) {   
 			 if(data != null)
@@ -120,6 +120,7 @@ $(document).ready(function(){
 				}
                
             });
+      **/      
 		loadCustomMenu();
 		
 		

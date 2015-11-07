@@ -59,7 +59,6 @@ String rootpath = request.getContextPath();
 <script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js" type="text/javascript"></script>		
 <script language="javascript" src="../scripts/selectTime.js"></script>
 
-<script src="../inc/js/func.js"></script>
 <script language="JavaScript" src="<%=request.getContextPath()%>/public/datetime/calender_date.js" ></script>
 <script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 <script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>

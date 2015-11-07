@@ -3,6 +3,7 @@ package com.frameworkset.platform.sysmgrcore.manager.db;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1028,7 +1029,6 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 		// }
 		TransactionManager tr = new TransactionManager();
 		PreparedDBUtil pe = new PreparedDBUtil();
-		PreparedDBUtil pe_ = new PreparedDBUtil();
 		try {
 			tr.begin();
 			int day_ = Integer.parseInt(day);
@@ -1036,7 +1036,11 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 
 			String log_opertime = dbAdaptor.to_char("log_opertime",
 					dbAdaptor.getFORMART_YEAR_MM_DD());
-			String start_time = dbAdaptor.to_char(dbAdaptor.to_date(new Date()) + " - ?",
+			
+			Calendar cal1 = Calendar.getInstance();
+			cal1.add(Calendar.DAY_OF_MONTH, 0-day_);
+			Date start = cal1.getTime();
+			String start_time = dbAdaptor.to_char("?",
 					dbAdaptor.getFORMART_YEAR_MM_DD());
 			Map<String, String> variablevalues = new HashMap<String, String>();
 			variablevalues.put("log_opertime", log_opertime);
@@ -1051,7 +1055,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 						variablevalues);
 				idx++;
 				pe.preparedInsert(sql);
-				pe.setInt(1, day_);
+				pe.setDate(1, start);
 				pe.executePrepared();
 			}
 			idx = 0;
@@ -1064,7 +1068,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 						variablevalues);
 				idx++;
 				pe.preparedDelete(sql_);
-				pe.setInt(1, day_);
+				pe.setDate(1, start);
 				pe.executePrepared();
 			}
 
