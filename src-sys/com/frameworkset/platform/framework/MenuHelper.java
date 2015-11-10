@@ -1621,6 +1621,10 @@ public class MenuHelper  {
             	if(permission ==  VISIBLE_PERMISSION || permission ==  SUB_VISIBLE_PERMISSION)
             	{
             		this.decorator = (MenuItem) permissionMenuIndex.get(module.getPath());
+            		if(decorator == null)
+            		{
+            			throw new java.lang.RuntimeException("菜单配置文件["+MenuHelper.this.framework.getConfigFile()+"]中存在多个id为"+module.getId()+"的菜单配置。");
+            		}
             	}
                 return permission;
             }
@@ -1678,7 +1682,13 @@ public class MenuHelper  {
             if (permission != null)
             {
             	if(permission ==  VISIBLE_PERMISSION )
+            	{
             		this.decorator = (MenuItem) permissionMenuIndex.get(item.getPath());
+            		if(decorator == null)
+            		{
+            			throw new java.lang.RuntimeException("菜单配置文件["+MenuHelper.this.framework.getConfigFile()+"]中存在多个id为"+item.getId()+"的菜单配置。");
+            		}
+            	}
                 return permission;
             }
             if (checkPermission(item.getId(), AccessControl.VISIBLE_PERMISSION,
