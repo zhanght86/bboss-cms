@@ -94,7 +94,7 @@
 			      			.append("&isBatch=false");
 		      			//String link = dataSet.getString("resource")+"?roleId="+roleId;
 		      			boolean isCurSystem = resourceInfo.containSystem(curSystem); 
-		      			if(isCurSystem && !(dataSet.getString("id").equals("column") && !accesscontroler.getUserID().equals("1")) && resourceInfo.isAuto())
+		      			if(isCurSystem && !(dataSet.getString("id").equals("column") && !accesscontroler.isAdmin()) && resourceInfo.isAuto())
 		      			{
 	      				%>
 		      			
