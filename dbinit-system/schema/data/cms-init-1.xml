@@ -5,294 +5,290 @@
 	smc mysql初始化语句
  ]]>
 	</description>
-	<!--
-		<properties name="insert"> <property name="insert-mysql">
+	<!-- <properties name="insert"> <property name="insert-mysql"> <![CDATA[insert 
+		into mq_users (broker_id, user_id, user_name, user_password) values (?, ?, 
+		'system', 'manager')]]> </property> <property name="insert-oracle"> <![CDATA[insert 
+		into mq_users (broker_id, user_id, user_name, user_password) values (?, ?, 
+		'system', 'manager')]]> </property> </properties> -->
 
-		<![CDATA[insert into mq_users (broker_id, user_id, user_name,
-		user_password) values (?, ?, 'system', 'manager')]]> </property>
-		<property name="insert-oracle"> <![CDATA[insert into mq_users
-		(broker_id, user_id, user_name, user_password) values (?, ?, 'system',
-		'manager')]]> </property> </properties>
-	-->
-	
-		<property name="all_datas">
-			<list>
-    
-			<property name="type_list" >
-					<map>
-						<property name="default">
-							<list>
-								
-								
+	<property name="all_datas">
+		<list>
 
-							
-<property index="0"><![CDATA[
+			<property name="type_list">
+				<map>
+					<property name="default">
+						<list>
+
+
+
+
+							<property index="0"><![CDATA[
 INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, ORDER_NO ) VALUES ( 
 1, '一级分类1', 1)
 	]]></property>
 
-<property index="1"><![CDATA[
+							<property index="1"><![CDATA[
 INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, ORDER_NO ) VALUES ( 
 100, '一级分类2', 2)
 	]]></property>
 
-<property index="2"><![CDATA[
+							<property index="2"><![CDATA[
 INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
 10, 'x', 1, 1)
 	]]></property>
 
 
-<property index="3"><![CDATA[
+							<property index="3"><![CDATA[
 INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
 101, 'Y1', 100, 1)
 	]]></property>
 
 
-<property index="4"><![CDATA[
+							<property index="4"><![CDATA[
 INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
 102, 'Y2', 100, 2)
 	]]></property>
 
-<property index="5"><![CDATA[
+							<property index="5"><![CDATA[
 INSERT INTO TB_CMS_DOC_LEVEL ( ID, NAME, LEVEL_VALUE ) VALUES ( 
 1, '普通', 1)
 	]]></property>
 
 
 
-<property index="6"><![CDATA[
+							<property index="6"><![CDATA[
 INSERT INTO TB_CMS_DOC_LEVEL ( ID, NAME, LEVEL_VALUE ) VALUES ( 
 5, '内部', 2)
 	]]></property>
 
 
-<property index="7"><![CDATA[
+							<property index="7"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 1, '送审')
 	]]></property>
 
-<property index="8"><![CDATA[
+							<property index="8"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 5, '审核')
 	]]></property>
 
-<property index="9"><![CDATA[
+							<property index="9"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 10, '回收')
 	]]></property>
 
-<property index="10"><![CDATA[
+							<property index="10"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 20, '发布')
 	]]></property>
 
-<property index="11"><![CDATA[
+							<property index="11"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 30, '归档')
 	]]></property>
 
-<property index="12"><![CDATA[
+							<property index="12"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 2, '撤销呈送') 
 	]]></property>
 
-<property index="13"><![CDATA[
+							<property index="13"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 40, '版本恢复')
 	]]></property>
 
-<property index="14"><![CDATA[
+							<property index="14"><![CDATA[
 INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
 3, '回收恢复')
 	]]></property>
 
 
-<property index="15"><![CDATA[
+							<property index="15"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 1, '新稿', 2)
 	]]></property>
 
-<property index="16"><![CDATA[
+							<property index="16"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 2, '待审', 2)
 	]]></property>
 
-<property index="17"><![CDATA[
+							<property index="17"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 3, '已审', 2)
 	]]></property>
 
-<property index="18"><![CDATA[
+							<property index="18"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 4, '返工', 2)
 	]]></property>
 
-<property index="19"><![CDATA[
+							<property index="19"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 5, '已发', 2)
 	]]></property>
 
-<property index="20"><![CDATA[
+							<property index="20"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 6, '已撤发', 2) 
 	]]></property>
 
-<property index="21"><![CDATA[
+							<property index="21"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 7, '已归档', 2)
 	]]></property>
 
-<property index="22"><![CDATA[
+							<property index="22"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 8, '已回收', 2)
 	]]></property>
 
-<property index="23"><![CDATA[
+							<property index="23"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 12, '发布中', 2)
 	]]></property>
 
-<property index="24"><![CDATA[
+							<property index="24"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 10, '正在发布', 2)
 	]]></property>
 
-<property index="25"><![CDATA[
+							<property index="25"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 20, '开始状态', 1)
 	]]></property>
 
-<property index="26"><![CDATA[
+							<property index="26"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 100, '结束状态', 3)
 	]]></property>
 
-<property index="27"><![CDATA[
+							<property index="27"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
 11, '待发布', 2)
 	]]></property>
 
 
-<property index="28"><![CDATA[
+							<property index="28"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 1, 1, 2)
 	]]></property>
 
-<property index="29"><![CDATA[
+							<property index="29"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 2, 1, 8)
 	]]></property>
 
-<property index="30"><![CDATA[
+							<property index="30"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 3, 1, 5)
 	]]></property>
 
-<property index="31"><![CDATA[
+							<property index="31"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 4, 11, 5)
 	]]></property>
 
-<property index="32"><![CDATA[
+							<property index="32"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 13, 3, 11)
 	]]></property>
 
-<property index="33"><![CDATA[
+							<property index="33"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 15, 3, 12)
 	]]></property>
 
-<property index="34"><![CDATA[
+							<property index="34"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 8, 2, 3)
 	]]></property>
 
 
-<property index="35"><![CDATA[
+							<property index="35"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 9, 2, 4)
 	]]></property>
 
-<property index="36"><![CDATA[
+							<property index="36"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 30, 1, 11)
 	]]></property>
 
-<property index="37"><![CDATA[
+							<property index="37"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 20, 5, 5)
 	]]></property>
 
-<property index="38"><![CDATA[
+							<property index="38"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 12, 5, 7)
 	]]></property>
 
-<property index="39"><![CDATA[
+							<property index="39"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 16, 5, 8)
 	]]></property>
 
-<property index="40"><![CDATA[
+							<property index="40"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 17, 7, 8)
 	]]></property>
 
-<property index="41"><![CDATA[
+							<property index="41"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 18, 2, 8)
 	]]></property>
 
-<property index="42"><![CDATA[
+							<property index="42"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 21, 3, 5)
 	]]></property>
 
-<property index="43"><![CDATA[
+							<property index="43"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 10, 4, 2)
 	]]></property>
 
 
-<property index="44"><![CDATA[
+							<property index="44"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 11, 4, 8)
 	]]></property>
 
-<property index="45"><![CDATA[
+							<property index="45"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 31, 3, 2)
 	]]></property>
 
-<property index="46"><![CDATA[
-INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS, "DESC" ) VALUES ( 
+							<property index="46"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS, TRAN_DESC ) VALUES ( 
 5, 20, 1, '起始路径')
 	]]></property>
 
-<property index="47"><![CDATA[
+							<property index="47"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 6, 2, 1)
 	]]></property>
 
-<property index="48"><![CDATA[
+							<property index="48"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 14, 2, 2)
 	]]></property>
 
-<property index="49"><![CDATA[
+							<property index="49"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 19, 11, 8)
 	]]></property>
 
 
-<property index="50"><![CDATA[
+							<property index="50"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 40, 5, 6)
 	]]></property>
 
 
-<property index="51"><![CDATA[
+							<property index="51"><![CDATA[
 INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
 41, 6, 5)
 	]]></property>
@@ -301,203 +297,674 @@ INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES (
 
 
 
-<property index="52"><![CDATA[
+							<property index="52"><![CDATA[
 INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
 0, '引用站点流程')
 	]]></property>
 
-<property index="53"><![CDATA[
+							<property index="53"><![CDATA[
 INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
 1, '采-审-发')
 	]]></property>
 
-<property index="54"><![CDATA[
+							<property index="54"><![CDATA[
 INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
 2, '采-发')
 	]]></property>
 
-<property index="55"><![CDATA[
+							<property index="55"><![CDATA[
 INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
 200, 'X流程')
 	]]></property>
 
-<property index="56"><![CDATA[
+							<property index="56"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 40)
 	]]></property>
 
-<property index="57"><![CDATA[
+							<property index="57"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 41)
 	]]></property>
 
 
-<property index="58"><![CDATA[
+							<property index="58"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 1)
 	]]></property>
 
-<property index="59"><![CDATA[
+							<property index="59"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 2)
 	]]></property>
 
 
-<property index="60"><![CDATA[
+							<property index="60"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 17)
 	]]></property>
 
 
-<property index="61"><![CDATA[
+							<property index="61"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 4)
 	]]></property>
 
-<property index="62"><![CDATA[
+							<property index="62"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 13)
 	]]></property>
 
 
-<property index="63"><![CDATA[
+							<property index="63"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 16)
 	]]></property>
 
 
-<property index="64"><![CDATA[
+							<property index="64"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 31)
 	]]></property>
 
 
-<property index="65"><![CDATA[
+							<property index="65"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 21)
 	]]></property>
 
 
-<property index="66"><![CDATA[
+							<property index="66"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 12)
 	]]></property>
 
 
-<property index="67"><![CDATA[
+							<property index="67"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 30)
 	]]></property>
 
-<property index="68"><![CDATA[
+							<property index="68"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 2)
 	]]></property>
 
 
-<property index="69"><![CDATA[
+							<property index="69"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 20)
 	]]></property>
 
-<property index="70"><![CDATA[
+							<property index="70"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 10)
 	]]></property>
 
 
-<property index="71"><![CDATA[
+							<property index="71"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 11)
 	]]></property>
 
 
-<property index="72"><![CDATA[
+							<property index="72"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 19)
 	]]></property>
 
 
-<property index="73"><![CDATA[
+							<property index="73"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 30)
 	]]></property>
 
 
-<property index="74"><![CDATA[
+							<property index="74"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 4)
 	]]></property>
 
 
-<property index="75"><![CDATA[
+							<property index="75"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 8)
 	]]></property>
 
-<property index="76"><![CDATA[
+							<property index="76"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 9)
 	]]></property>
 
 
-<property index="77"><![CDATA[
+							<property index="77"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 3)
 	]]></property>
 
-<property index="78"><![CDATA[
+							<property index="78"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 16)
 	]]></property>
 
-<property index="79"><![CDATA[
+							<property index="79"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 17)
 	]]></property>
 
-<property index="80"><![CDATA[
+							<property index="80"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 12)
 	]]></property>
 
 
-<property index="81"><![CDATA[
+							<property index="81"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 2, 19)
 	]]></property>
 
 
-<property index="82"><![CDATA[
+							<property index="82"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 6)
 	]]></property>
 
 
-<property index="83"><![CDATA[
+							<property index="83"><![CDATA[
 INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
 1, 18) 
 	]]></property>
 
-<property index="84"><![CDATA[
+							<property index="84"><![CDATA[
 CREATE  INDEX doc_content_idx ON TD_CMS_DOCUMENT(content) INDEXTYPE IS ctxsys.CONTEXT
 	]]></property>
 
 
-<property index="85"><![CDATA[
+							<property index="85"><![CDATA[
 insert into td_cms_template_style(style_id,style_name,style_desc,style_order) values(-1,'通用','被默认的通用风格',0)
 ]]></property>
 
 
-							</list>
-						</property>
-                   </map>
-		</property>
+						</list>
+					</property>
+					
+					
+					<property name="mysql">
+						<list>
 
 
 
 
-			</list>
-		</property>
+							<property index="0"><![CDATA[
+INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, ORDER_NO ) VALUES ( 
+1, '一级分类1', 1)
+	]]></property>
+
+							<property index="1"><![CDATA[
+INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, ORDER_NO ) VALUES ( 
+100, '一级分类2', 2)
+	]]></property>
+
+							<property index="2"><![CDATA[
+INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
+10, 'x', 1, 1)
+	]]></property>
+
+
+							<property index="3"><![CDATA[
+INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
+101, 'Y1', 100, 1)
+	]]></property>
+
+
+							<property index="4"><![CDATA[
+INSERT INTO TB_CMS_DOC_KIND ( ID, NAME, PARENT_ID, ORDER_NO ) VALUES ( 
+102, 'Y2', 100, 2)
+	]]></property>
+
+							<property index="5"><![CDATA[
+INSERT INTO TB_CMS_DOC_LEVEL ( ID, NAME, LEVEL_VALUE ) VALUES ( 
+1, '普通', 1)
+	]]></property>
+
+
+
+							<property index="6"><![CDATA[
+INSERT INTO TB_CMS_DOC_LEVEL ( ID, NAME, LEVEL_VALUE ) VALUES ( 
+5, '内部', 2)
+	]]></property>
+
+
+							<property index="7"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+1, '送审')
+	]]></property>
+
+							<property index="8"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+5, '审核')
+	]]></property>
+
+							<property index="9"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+10, '回收')
+	]]></property>
+
+							<property index="10"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+20, '发布')
+	]]></property>
+
+							<property index="11"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+30, '归档')
+	]]></property>
+
+							<property index="12"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+2, '撤销呈送') 
+	]]></property>
+
+							<property index="13"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+40, '版本恢复')
+	]]></property>
+
+							<property index="14"><![CDATA[
+INSERT INTO TB_CMS_DOC_OPER ( ID, NAME ) VALUES ( 
+3, '回收恢复')
+	]]></property>
+
+
+							<property index="15"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+1, '新稿', 2)
+	]]></property>
+
+							<property index="16"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+2, '待审', 2)
+	]]></property>
+
+							<property index="17"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+3, '已审', 2)
+	]]></property>
+
+							<property index="18"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+4, '返工', 2)
+	]]></property>
+
+							<property index="19"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+5, '已发', 2)
+	]]></property>
+
+							<property index="20"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+6, '已撤发', 2) 
+	]]></property>
+
+							<property index="21"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+7, '已归档', 2)
+	]]></property>
+
+							<property index="22"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+8, '已回收', 2)
+	]]></property>
+
+							<property index="23"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+12, '发布中', 2)
+	]]></property>
+
+							<property index="24"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+10, '正在发布', 2)
+	]]></property>
+
+							<property index="25"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+20, '开始状态', 1)
+	]]></property>
+
+							<property index="26"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+100, '结束状态', 3)
+	]]></property>
+
+							<property index="27"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS ( ID, NAME, TYPE ) VALUES ( 
+11, '待发布', 2)
+	]]></property>
+
+
+							<property index="28"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+1, 1, 2)
+	]]></property>
+
+							<property index="29"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+2, 1, 8)
+	]]></property>
+
+							<property index="30"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+3, 1, 5)
+	]]></property>
+
+							<property index="31"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+4, 11, 5)
+	]]></property>
+
+							<property index="32"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+13, 3, 11)
+	]]></property>
+
+							<property index="33"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+15, 3, 12)
+	]]></property>
+
+							<property index="34"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+8, 2, 3)
+	]]></property>
+
+
+							<property index="35"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+9, 2, 4)
+	]]></property>
+
+							<property index="36"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+30, 1, 11)
+	]]></property>
+
+							<property index="37"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+20, 5, 5)
+	]]></property>
+
+							<property index="38"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+12, 5, 7)
+	]]></property>
+
+							<property index="39"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+16, 5, 8)
+	]]></property>
+
+							<property index="40"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+17, 7, 8)
+	]]></property>
+
+							<property index="41"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+18, 2, 8)
+	]]></property>
+
+							<property index="42"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+21, 3, 5)
+	]]></property>
+
+							<property index="43"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+10, 4, 2)
+	]]></property>
+
+
+							<property index="44"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+11, 4, 8)
+	]]></property>
+
+							<property index="45"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+31, 3, 2)
+	]]></property>
+
+							<property index="46"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS, TRAN_DESC ) VALUES ( 
+5, 20, 1, '起始路径')
+	]]></property>
+
+							<property index="47"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+6, 2, 1)
+	]]></property>
+
+							<property index="48"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+14, 2, 2)
+	]]></property>
+
+							<property index="49"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+19, 11, 8)
+	]]></property>
+
+
+							<property index="50"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+40, 5, 6)
+	]]></property>
+
+
+							<property index="51"><![CDATA[
+INSERT INTO TB_CMS_DOC_STATUS_TRANS ( ID, SRC_STATUS, DEST_STATUS ) VALUES ( 
+41, 6, 5)
+	]]></property>
+
+
+
+
+
+							<property index="52"><![CDATA[
+INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
+0, '引用站点流程')
+	]]></property>
+
+							<property index="53"><![CDATA[
+INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
+1, '采-审-发')
+	]]></property>
+
+							<property index="54"><![CDATA[
+INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
+2, '采-发')
+	]]></property>
+
+							<property index="55"><![CDATA[
+INSERT INTO TB_CMS_FLOW ( ID, NAME ) VALUES ( 
+200, 'X流程')
+	]]></property>
+
+							<property index="56"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 40)
+	]]></property>
+
+							<property index="57"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 41)
+	]]></property>
+
+
+							<property index="58"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 1)
+	]]></property>
+
+							<property index="59"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 2)
+	]]></property>
+
+
+							<property index="60"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 17)
+	]]></property>
+
+
+							<property index="61"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 4)
+	]]></property>
+
+							<property index="62"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 13)
+	]]></property>
+
+
+							<property index="63"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 16)
+	]]></property>
+
+
+							<property index="64"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 31)
+	]]></property>
+
+
+							<property index="65"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 21)
+	]]></property>
+
+
+							<property index="66"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 12)
+	]]></property>
+
+
+							<property index="67"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 30)
+	]]></property>
+
+							<property index="68"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 2)
+	]]></property>
+
+
+							<property index="69"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 20)
+	]]></property>
+
+							<property index="70"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 10)
+	]]></property>
+
+
+							<property index="71"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 11)
+	]]></property>
+
+
+							<property index="72"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 19)
+	]]></property>
+
+
+							<property index="73"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 30)
+	]]></property>
+
+
+							<property index="74"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 4)
+	]]></property>
+
+
+							<property index="75"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 8)
+	]]></property>
+
+							<property index="76"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 9)
+	]]></property>
+
+
+							<property index="77"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 3)
+	]]></property>
+
+							<property index="78"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 16)
+	]]></property>
+
+							<property index="79"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 17)
+	]]></property>
+
+							<property index="80"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 12)
+	]]></property>
+
+
+							<property index="81"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+2, 19)
+	]]></property>
+
+
+							<property index="82"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 6)
+	]]></property>
+
+
+							<property index="83"><![CDATA[
+INSERT INTO TB_CMS_FLOW_DOC_TRANS ( FLOW_ID, TRANSISION_ID ) VALUES ( 
+1, 18) 
+	]]></property>
+
+							 
+
+
+							<property index="84"><![CDATA[
+insert into td_cms_template_style(style_id,style_name,style_desc,style_order) values(-1,'通用','被默认的通用风格',0)
+]]></property>
+
+
+						</list>
+					</property>
+				</map>
+			</property>
+
+
+
+
+		</list>
+	</property>
 
 </manager-config>

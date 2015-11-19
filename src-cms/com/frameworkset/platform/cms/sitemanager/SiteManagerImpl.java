@@ -20,6 +20,7 @@ import org.frameworkset.security.AccessControlInf;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.bean.FlowInfo;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
@@ -30,6 +31,7 @@ import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
 import com.frameworkset.platform.cms.templatemanager.TemplateManager;
 import com.frameworkset.platform.cms.templatemanager.TemplateManagerException;
 import com.frameworkset.platform.cms.templatemanager.TemplateManagerImpl;
+import com.frameworkset.platform.cms.util.CMSDBFunction;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.cms.util.FtpUpfile;
@@ -246,7 +248,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			 */
 			site.setSiteDir(siteDIR);
 			// (5) 插入记录
-			StringBuffer sqlBuffer = new StringBuffer();
+			StringBuilder sqlBuffer = new StringBuilder();
 			sqlBuffer.append("insert into TD_CMS_SITE(");
 			sqlBuffer.append("SITE_ID,NAME,SECOND_NAME,MAINSITE_ID,");
 			sqlBuffer.append("SITEDESC,DBNAME,SITEDIR,STATUS,");
@@ -667,8 +669,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			
 			
 			String selectSubSite = "SELECT a.site_id,nvl(a.mainsite_id,-1) as orderid " +
-					"FROM td_cms_site a START WITH site_id = " + siteId + 
-					"CONNECT BY PRIOR site_id = mainsite_id order by orderid desc,site_id desc";
+					"FROM td_cms_site a where site_id = " + siteId ;
 			dbSelectSite.executeSelect(selectSubSite);//所有子站点
 			
             //删除站点引用的应用记录 TD_CMS_SITEAPPS
@@ -694,11 +695,11 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				//删除该站点下所有频道，文档相关的记录 end
 				
 				//删除具体的子站点
-				String sql = "delete from td_cms_site t where t.site_id = " + siteIds;
-				String sql1 = "delete from td_cms_sitefield t where t.site_id = " + siteIds;
-				String sql2 = "delete from td_cms_site_tpl t where t.site_id = "  + siteIds;
-				String sql3 = "delete from tl_cms_site_flow_his t where t.site_id = "  + siteIds;
-				String sql4 ="delete from td_cms_siteuser t where t.site_id = "  + siteIds;
+				String sql = "delete from td_cms_site   where  site_id = " + siteIds;
+				String sql1 = "delete from td_cms_sitefield   where  site_id = " + siteIds;
+				String sql2 = "delete from td_cms_site_tpl   where  site_id = "  + siteIds;
+				String sql3 = "delete from tl_cms_site_flow_his  where site_id = "  + siteIds;
+				String sql4 ="delete from td_cms_siteuser where  site_id = "  + siteIds;
 				String sql5 = "delete from TD_SM_ROLERESOP  " +
 				  " where res_id ='"+ siteIds +"' and restype_id in('site','site.channel','site.doc','sitetpl','sitefile')";
 				
@@ -715,7 +716,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			
 			
 			//真正删除该站点
-			String delsql = "delete from td_cms_site t where t.site_id = " + siteId;
+			String delsql = "delete from td_cms_site  where site_id = " + siteId;
 			db.addBatch(delsql);
 			
 			db.executeBatch();//批处理操作数据库
@@ -771,7 +772,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		PreparedDBUtil conn = null;
 		try {
 			 conn = new PreparedDBUtil();
-			StringBuffer sqlBuffer = new StringBuffer();
+			StringBuilder sqlBuffer = new StringBuilder();
 			sqlBuffer.append("update td_cms_site set STATUS = ? ");
 			sqlBuffer.append("where site_id = ?");
 			conn.preparedUpdate(sqlBuffer.toString());
@@ -800,7 +801,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		PreparedDBUtil conn = null;
 		try {
 			 conn = new PreparedDBUtil();
-			StringBuffer sqlBuffer = new StringBuffer();
+			StringBuilder sqlBuffer = new StringBuilder();
 			sqlBuffer.append("update td_cms_site set FLOW_ID = ?,PARENT_WORKFLOW = ? ");
 			sqlBuffer.append("where site_id = ?");
 			
@@ -832,7 +833,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		String secondName = site.getSecondName();
 		long parentSiteId = site.getParentSiteId();
 		
-		StringBuffer sql = new StringBuffer("select count(*) as total from TD_CMS_SITE ");
+		StringBuilder sql = new StringBuilder("select count(*) as total from TD_CMS_SITE ");
 		sql.append(" where SITE_ID != '"+siteId+"' ");
 		if(parentSiteId>0){
 			sql.append(" and MAINSITE_ID = '"+parentSiteId+"'");
@@ -905,7 +906,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		}
 		try {
 			PreparedDBUtil conn = new PreparedDBUtil();
-			StringBuffer sqlBuffer = new StringBuffer();
+			StringBuilder sqlBuffer = new StringBuilder();
 			sqlBuffer.append("update td_cms_site set ");
 			sqlBuffer.append("NAME=?,");
 			sqlBuffer.append("SECOND_NAME=?,");
@@ -1019,7 +1020,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					+ "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,"
 					+ "a.SITEORDER, a.CREATETIME, a.CREATEUSER, "
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
-					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS from td_cms_site a "
+					+ "a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS from td_cms_site a "
 //					+ "where (a.status=0 or a.status=1) and a.SITE_ID ='"
 					+ "where a.SITE_ID =?";
 
@@ -1032,7 +1033,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				return site;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取站点信息时发生sql异常,描述为:"
 					+ e.getMessage());
@@ -1049,14 +1050,14 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		}
 		try {
 			DBUtil db = new DBUtil();
-			StringBuffer sql = new StringBuffer();
+			StringBuilder sql = new StringBuilder();
 			sql.append( "select a.SITE_ID, a.NAME, a.SECOND_NAME, " );
 			sql.append( "a.MAINSITE_ID, a.SITEDESC, a.DBNAME, a.SITEDIR,");
 			sql.append( "a.STATUS, a.FTPIP, a.FTPPORT, a.FTPUSER, ");
 			sql.append( "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,");
 			sql.append( "a.SITEORDER, a.CREATETIME, a.CREATEUSER, ");
 			sql.append( "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,");
-			sql.append( "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,");
+			sql.append( "  a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,");
 			sql.append( "a.DISTRIBUTEMANNERS from td_cms_site a ");
 //					+ "where (a.status=0 or a.status=1) and a.SITE_ID ='"
 			sql.append( "where a.SECOND_NAME ='"); 
@@ -1069,7 +1070,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				return site;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取站点信息时发生sql异常,描述为:"+ e.getMessage());
 		}
@@ -1091,7 +1092,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					+ "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,"
 					+ "a.SITEORDER, a.CREATETIME, a.CREATEUSER, "
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
-					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
+					+ "  a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
 					+ "from td_cms_site a inner join td_cms_site b "
 					+ "on a.SITE_ID = b.MAINSITE_ID "
 					+ "where (a.status=0 or a.status=1) and (b.status=0 or b.status=1) and  b.SITE_ID ='"
@@ -1104,7 +1105,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				return site;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("发生sql异常,无法查找站点的父站点信息.描述为:"
 					+ e.getMessage());
@@ -1155,7 +1156,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					+ "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,"
 					+ "a.SITEORDER, a.CREATETIME, a.CREATEUSER, "
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
-					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
+					+ "  a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
 					+ "from td_cms_site a where (a.status=0 or a.status=1) and a.MAINSITE_ID is null "
 					+ "order by a.SITEORDER,a.SITE_ID";
 			//System.out.println("///"+sql);
@@ -1167,7 +1168,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				subsite.add(site);
 			}
 			return subsite;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取直接子站点时发生sql异常,描述为:"
 					+ e.getMessage());
@@ -1190,7 +1191,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				subsite.add(site);
 			}
 			return subsite;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取直接子站点时发生sql异常,描述为:"
 					+ e.getMessage());
@@ -1214,7 +1215,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					+ "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,"
 					+ "a.SITEORDER, a.CREATETIME, a.CREATEUSER, "
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
-					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
+					+ "  a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
 					+ "from td_cms_site a where (a.status=0 or a.status=1) and a.MAINSITE_ID ='"
 					+ siteId + "'order by a.SITEORDER,a.SITE_ID";
 //			System.out.println(sql);
@@ -1226,7 +1227,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				subsite.add(site);
 			}
 			return subsite;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取子站点时发生sql异常,描述为:"
 					+ e.getMessage());
@@ -1254,7 +1255,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				subsite.add(site);
 			}
 			return subsite;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("获取子站点时发生sql异常,描述为:"
 					+ e.getMessage());
@@ -1273,22 +1274,24 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		}
 
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			List sites = new ArrayList();
+			int id = Integer.parseInt(siteId);
 			String sql = "select * from(SELECT  a.SITE_ID, a.NAME, a.SECOND_NAME, "
 					+ "a.MAINSITE_ID, a.SITEDESC, a.DBNAME, a.SITEDIR,"
 					+ "a.STATUS, a.FTPIP, a.FTPPORT, a.FTPUSER, "
 					+ "a.FTPPASSWORD, a.FTPFOLDER, a.WEBHTTP,"
 					+ "a.SITEORDER, a.CREATETIME, a.CREATEUSER, "
 					+ "a.PUBLISHDESTINATION, a.INDEXFILENAME, a.INDEXTEMPLATE_ID,"
-					+ "site_flow_id(a.SITE_ID) as FLOW_ID, a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
+					+ "  a.PARENT_WORKFLOW,a.LOCALPUBLISHPATH,a.DISTRIBUTEMANNERS "
 					+ "FROM td_cms_site a "
-					+ "start with a.site_id= '"
-					+ siteId
-					+ "' and (a.status=0 or a.status=1) "
-					+ "connect by prior a.site_id = a.mainsite_id  and (a.status=0 or a.status=1)"
-					+ " order by a.siteorder,a.SITE_ID) b where b.site_id <> '"+siteId+"'";
-			db.executeSelect(sql);
+					+ "where a.site_id= ? and (a.status=0 or a.status=1) "
+					+ "   and (a.status=0 or a.status=1)"
+					+ " order by a.siteorder,a.SITE_ID) b where b.site_id <> ?";
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.setInt(2, id);
+			db.executePrepared();
 //			System.out.println("获取所有子站点的sql=" + sql);
 			for (int i = 0; i < db.size(); i++) {
 				Site site = new Site();
@@ -1296,7 +1299,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				sites.add(site);
 			}
 			return sites;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new SiteManagerException("发生sql异常,无法获取子节点信息.详细信息为:"
 					+ e.getMessage());
@@ -1408,7 +1411,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, a.ISNAVIGATOR,a.PUB_FILE_NAME, "
 						+ "a.PARENT_ID, a.CHNL_PATH, a.CREATEUSER, a.CREATETIME,"
 						+ "a.ORDER_NO, a.SITE_ID, a.STATUS, a.OUTLINE_TPL_ID, "
-						+ "a.DETAIL_TPL_ID, CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, "
+						+ "a.DETAIL_TPL_ID,  a.CHNL_OUTLINE_DYNAMIC, "
 						+ "a.DOC_DYNAMIC, a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
 						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,openTarget,CHANNEL_DESC " +
@@ -1419,7 +1422,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, a.PARENT_ID,  a.ISNAVIGATOR, a.PUB_FILE_NAME,"
 						+ "a.CHNL_PATH, a.CREATEUSER, a.CREATETIME, a.ORDER_NO,"
 						+ "a.SITE_ID, a.STATUS, a.OUTLINE_TPL_ID, a.DETAIL_TPL_ID,"
-						+ "CHANNEL_FLOW_ID(a.WORKFLOW) as WORKFLOW, a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC,"
+						+ " a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC,"
 						+ "a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT, "
 						+ "a.PARENT_WORKFLOW , OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, " +
 						" COMMENT_TEMPLATE_ID, COMMENTPAGEPATH,openTarget,CHANNEL_DESC " +
@@ -1447,7 +1450,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				channel.setStaus(db.getInt(i, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(i, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(i, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(i, "WORKFLOW"));
+				channel.setWorkflow( CMSDBFunction.getSiteShannelFlowid((int)channel.getChannelId()));
 				channel.setOutlineIsDynamic(db
 						.getInt(i, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(i, "DOC_DYNAMIC"));
@@ -1473,10 +1476,10 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 				channels.add(channel);
 			}
 			return channels;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch ( Exception e) {
+			 
 			throw new SiteManagerException("发生sql异常,无法返回频道信息.异常信息为:"
-					+ e.getMessage());
+					,e);
 		}
 	}
 
@@ -1519,7 +1522,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 	}
 
 	private void fillSiteInfo(Site site, int rowNum, DBUtil db)
-			throws SQLException {
+			throws Exception {
 		site.setSiteId(db.getLong(rowNum, "SITE_ID"));
 		site.setName(db.getString(rowNum, "NAME"));
 		site.setSecondName(db.getString(rowNum, "SECOND_NAME"));
@@ -1540,7 +1543,8 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		site.setPublishDestination(db.getInt(rowNum, "PUBLISHDESTINATION"));
 		site.setIndexFileName(db.getString(rowNum, "INDEXFILENAME"));
 		site.setIndexTemplateId(db.getInt(rowNum, "INDEXTEMPLATE_ID"));
-		site.setWorkflow(db.getInt(rowNum, "FLOW_ID"));
+//		site.setWorkflow(db.getInt(rowNum, "FLOW_ID"));
+		site.setWorkflow(CMSDBFunction.getSiteFlowid((int)site.getSiteId()));
 		site.setWorkflowIsFromParent(db.getInt(rowNum, "PARENT_WORKFLOW"));
 		site.setLocalPublishPath(db.getString(rowNum, "LOCALPUBLISHPATH"));
 		site.setDistributeManners(db.getString(rowNum, "DISTRIBUTEMANNERS"));
@@ -1619,21 +1623,18 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			throw new SiteManagerException("没有站点id,无法站点的流程信息");
 		}
 		try {
-			DBUtil db = new DBUtil();
-			String sql = "select ID,NAME from table(F_SITE_FLOW('" + siteId
-					+ "'))";
-			db.executeSelect(sql);
-			if (db.size() > 0) {
+			FlowInfo f = CMSDBFunction.getSiteFlowInfo(Integer.parseInt(siteId));
+			if (f != null) {
 				List flowInfo = new ArrayList(2);
-				flowInfo.add(db.getString(0, "ID"));
-				flowInfo.add(db.getString(0, "NAME"));
+				flowInfo.add(f.getId()+"");
+				flowInfo.add(f.getName());
 				return flowInfo;
 			}
 			return null;
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			
 			throw new SiteManagerException("发生sql异常,无法返回流程信息.异常信息为:"
-					+ e.getMessage());
+					,e);
 		}
 	}
 	
@@ -2154,15 +2155,19 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		String[] params = request.getParameterValues("appId");
 		long siteId = site.getSiteId();
 		
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		
-			
+		TransactionManager tm = new TransactionManager();	
 		try {
+			tm.begin();
 			//重新设置时,删除站点引用的应用记录 TD_CMS_SITEAPPS			
-			String deleteApp = "delete from TD_CMS_SITEAPPS where site_id=" + siteId;
-			db.addBatch(deleteApp);
+			String deleteApp = "delete from TD_CMS_SITEAPPS where site_id=?";
+			db.preparedDelete(deleteApp);
+			db.setInt(1, (int)siteId);
+			db.addPreparedBatch();
 			
 			if(params != null){
+				boolean pre = false;
 			    for(int i=0;i<params.length;i++){
 			    	String param = params[i];
 			    	String[] p = param.split("\\^");
@@ -2172,22 +2177,39 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			    	if("null".equalsIgnoreCase(p[0]) || "null".equalsIgnoreCase(p[1])){
 			    		continue;
 			    	}
-			    	StringBuffer sql = new StringBuffer();
-					sql.append("insert into TD_CMS_SITEAPPS(SITE_ID,APP_ID,APP_PATH) (")
-					.append("select ").append(siteId).append(" as SITE_ID ")
-					.append(",'").append(p[1]).append("' as APP_ID ")
-					.append(",'").append(p[0]).append("' as APP_PATH ")
-					.append("from dual where not exists")
-					.append("(select 1 from TD_CMS_SITEAPPS where SITE_ID=")
-					.append(siteId)
-					.append("and APP_ID='").append(p[1]).append("' )) ");
+			    	
+//			    	StringBuilder sql = new StringBuilder();
+//					sql.append("insert into TD_CMS_SITEAPPS(SITE_ID,APP_ID,APP_PATH) (")
+//					.append("select ").append(siteId).append(" as SITE_ID ")
+//					.append(",'").append(p[1]).append("' as APP_ID ")
+//					.append(",'").append(p[0]).append("' as APP_PATH ")
+//					.append("from dual where not exists")
+//					.append("(select 1 from TD_CMS_SITEAPPS where SITE_ID=")
+//					.append(siteId)
+//					.append("and APP_ID='").append(p[1]).append("' )) ");
 					//System.out.println("插入站点的应用sql---------------------"+sql.toString());
-					db.addBatch(sql.toString());
+//					db.addBatch(sql.toString());
+			    	String sql = "insert into TD_CMS_SITEAPPS(SITE_ID,APP_ID,APP_PATH) values(?,?,?)";
+			    	
+					if(!pre)
+			    	{
+			    		db.preparedInsert(sql);
+			    		pre = true;
+			    	}
+					db.setInt(1, (int)siteId);
+					db.setString(2, p[1]);
+					db.setString(3, p[0]);
+					db.addPreparedBatch();
 			    }	
 			}
-			db.executeBatch();	
+			db.executePreparedBatch();	
+			tm.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 	
@@ -2200,12 +2222,15 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 	 */
 	public List getSetedAppInSite(String siteId){
 		List list = new ArrayList();
-		StringBuffer sql = new StringBuffer()
-		.append("select APP_PATH || '^' || APP_ID as id from TD_CMS_SITEAPPS where ")
-		.append("SITE_ID=").append(siteId);
-		DBUtil db = new DBUtil();
+		
+		StringBuilder sql = new StringBuilder()
+		.append("select ").append(DBUtil.getDBAdapter().concat("APP_PATH","'^'","APP_ID")).append(" as id from TD_CMS_SITEAPPS where ")
+		.append("SITE_ID=?");
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql.toString());
+			db.preparedSelect(sql.toString());
+			db.setInt(1, Integer.parseInt(siteId));
+			db.executePrepared();
 			for(int i=0;i<db.size();i++){
 				list.add(db.getString(i,"id"));
 			}

@@ -21,6 +21,7 @@ import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.bean.FlowInfo;
 import com.frameworkset.platform.cms.channelmanager.bean.ChannelCondition;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.customform.CustomFormManager;
@@ -41,6 +42,7 @@ import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
 import com.frameworkset.platform.cms.sitemanager.SiteManager;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerException;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
+import com.frameworkset.platform.cms.util.CMSDBFunction;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.cms.util.FtpUpfile;
@@ -766,7 +768,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			DBUtil db = new DBUtil();
 			String sql = "select * from (select CHANNEL_ID, NAME, DISPLAY_NAME, "
 					+ "PARENT_ID, CHNL_PATH, CREATEUSER, CREATETIME, " + "ORDER_NO, SITE_ID, STATUS, OUTLINE_TPL_ID, "
-					+ "DETAIL_TPL_ID,  CHANNEL_FLOW_ID(channel_id) WORKFLOW, "
+					+ "DETAIL_TPL_ID,   "
 					+ "CHNL_OUTLINE_DYNAMIC, DOC_DYNAMIC, CHNL_OUTLINE_PROTECT, "
 					+ "DOC_PROTECT, PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE, "
 					+ "MOUSECLICKIMAGE, MOUSEUPIMAGE, OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, "
@@ -789,7 +791,8 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(i, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(i, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(i, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(i, "WORKFLOW"));
+//				channel.setWorkflow(db.getInt(i, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid(Integer.parseInt(channelId)));
 				channel.setOutlineIsDynamic(db.getInt(i, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(i, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(i, "CHNL_OUTLINE_PROTECT"));
@@ -810,7 +813,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channels.add(channel);
 			}
 			return channels;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:" + e.getMessage());
 		}
@@ -827,14 +830,15 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select CHANNEL_ID,NAME,DISPLAY_NAME,PARENT_ID,"
 					+ "CHNL_PATH,CREATEUSER,CREATETIME,ORDER_NO,SITE_ID,"
-					+ "STATUS,OUTLINE_TPL_ID,DETAIL_TPL_ID, CHANNEL_FLOW_ID(channel_id) WORKFLOW,"
+					+ "STATUS,OUTLINE_TPL_ID,DETAIL_TPL_ID,  "
 					+ "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC,CHNL_OUTLINE_PROTECT,"
 					+ "DOC_PROTECT,PARENT_WORKFLOW,pub_file_name,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, "
 					+ "MOUSEOUTIMAGE, MOUSECLICKIMAGE, MOUSEUPIMAGE,OUTLINEPICTURE,"
 					+ "PAGEFLAG,INDEXPAGEPATH,comment_template_id,commentpagepath ,specialflag,channel_desc,openTarget "
 					+ "from TD_CMS_CHANNEL " + "where status=0 and CHANNEL_ID = ?";
+			int id = Integer.parseInt(channelId);
 			db.preparedSelect(sql);
-			db.setInt(1, Integer.parseInt(channelId));
+			db.setInt(1, id);
 			db.executePrepared();
 			if (db.size() > 0) {
 				Channel channel = new Channel();
@@ -850,7 +854,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(0, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(0, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(0, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(0, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid(id));
 				channel.setOutlineIsDynamic(db.getInt(0, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(0, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(0, "CHNL_OUTLINE_PROTECT"));
@@ -876,7 +880,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				return channel;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:" + e.getMessage());
 		}
@@ -887,18 +891,20 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select CHANNEL_ID, NAME,DISPLAY_NAME, PUB_FILE_NAME, "
 					+ "PARENT_ID,CHNL_PATH,CREATEUSER,CREATETIME, " + "ORDER_NO,SITE_ID,STATUS,OUTLINE_TPL_ID, "
-					+ "DETAIL_TPL_ID, CHANNEL_FLOW_ID(channel_id) WORKFLOW," + "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC, "
+					+ "DETAIL_TPL_ID,  " + "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC, "
 					+ "CHNL_OUTLINE_PROTECT, DOC_PROTECT,"
 					+ "PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE,"
 					+ " MOUSECLICKIMAGE, MOUSEUPIMAGE, OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH, "
 					+ " COMMENT_TEMPLATE_ID, COMMENTPAGEPATH ,channel_desc ,openTarget "
-					+ " from TD_CMS_CHANNEL where PARENT_ID!=0 and PARENT_ID is not null and status=0 and PARENT_ID="
-					+ channelId + " order by order_no,channel_id";
+					+ " from TD_CMS_CHANNEL where PARENT_ID!=0 and PARENT_ID is not null and status=0 and PARENT_ID=? order by order_no,channel_id";
 			// System.out.println("sql=" + sql);
-			db.executeSelect(sql);
+			int id = Integer.parseInt(channelId);
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
 			List channels = new ArrayList();
 			for (int i = 0; i < db.size(); i++) {
 				Channel channel = new Channel();
@@ -914,7 +920,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(i, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(i, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(i, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(i, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid(id));
 				channel.setOutlineIsDynamic(db.getInt(i, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(i, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(i, "CHNL_OUTLINE_PROTECT"));
@@ -939,9 +945,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channels.add(channel);
 			}
 			return channels;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:" + e.getMessage());
+		} catch (Exception e) {
+			
+			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:",e);
 		}
 	}
 
@@ -953,18 +959,21 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有提供频道id,无法返回父频道信息.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, "
 					+ "a.PARENT_ID, a.CHNL_PATH, a.CREATEUSER, a.CREATETIME, "
 					+ "a.ORDER_NO, a.SITE_ID, a.STATUS, a.OUTLINE_TPL_ID, "
-					+ "a.DETAIL_TPL_ID, CHANNEL_FLOW_ID(a.channel_id) WORKFLOW,"
+					+ "a.DETAIL_TPL_ID, "
 					+ "a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC, "
 					+ "a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT,"
 					+ "a.PARENT_WORKFLOW,A.ISNAVIGATOR, A.NAVIGATORLEVEL,A.MOUSEINIMAGE, A.MOUSEOUTIMAGE, "
 					+ "A.MOUSECLICKIMAGE,A.MOUSEUPIMAGE,a.OUTLINEPICTURE, a.PAGEFLAG, a.INDEXPAGEPATH, "
 					+ "a.COMMENTSWITCH,a.COMMENT_TEMPLATE_ID,a.COMMENTPAGEPATH,a.channel_desc from TD_CMS_CHANNEL a inner join TD_CMS_CHANNEL b "
-					+ "on a.CHANNEL_ID = b.PARENT_ID " + "where b.channel_id ='" + channelId + "'";
-			db.executeSelect(sql);
+					+ "on a.CHANNEL_ID = b.PARENT_ID " + "where b.channel_id =?";
+			int id = Integer.parseInt(channelId);
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
 			if (db.size() > 0) {
 				Channel channel = new Channel();
 				channel.setChannelId(db.getLong(0, "CHANNEL_ID"));
@@ -979,7 +988,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(0, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(0, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(0, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(0, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid(id));
 				channel.setOutlineIsDynamic(db.getInt(0, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(0, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(0, "CHNL_OUTLINE_PROTECT"));
@@ -1000,7 +1009,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				return channel;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new ChannelManagerException("发生sql异常,无法返回父频道信息.异常信息为:" + e.getMessage());
 		}
@@ -1015,17 +1024,21 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有提供频道显示名称,无法返回父频道信息.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select a.CHANNEL_ID, a.NAME, a.DISPLAY_NAME, "
 					+ "a.PARENT_ID, a.CHNL_PATH, a.CREATEUSER, a.CREATETIME, "
 					+ "a.ORDER_NO, a.SITE_ID, a.STATUS, a.OUTLINE_TPL_ID, "
-					+ "a.DETAIL_TPL_ID, CHANNEL_FLOW_ID(a.channel_id) WORKFLOW,"
+					+ "a.DETAIL_TPL_ID, "
 					+ "a.CHNL_OUTLINE_DYNAMIC, a.DOC_DYNAMIC, " + "a.CHNL_OUTLINE_PROTECT, a.DOC_PROTECT,"
 					+ "a.PARENT_WORKFLOW,A.ISNAVIGATOR, A.NAVIGATORLEVEL,A.MOUSEINIMAGE, A.MOUSEOUTIMAGE,"
 					+ " A.MOUSECLICKIMAGE,A.MOUSEUPIMAGE,a.OUTLINEPICTURE, a.PAGEFLAG, a.INDEXPAGEPATH,"
 					+ " a.COMMENTSWITCH,a.COMMENT_TEMPLATE_ID,a.COMMENTPAGEPATH ,a.channel_desc"
 					+ " from TD_CMS_CHANNEL a inner join TD_CMS_CHANNEL b " + "on a.CHANNEL_ID = b.PARENT_ID "
 					+ "where b.DISPLAY_NAME ='" + channelDisplayName + "' and b.site_id = " + siteid;
+			int siteid_ = Integer.parseInt(siteid);
+			db.preparedSelect(sql);
+			db.setString(1, channelDisplayName);
+			db.setInt(2, siteid_);
 			db.executeSelect(sql);
 			if (db.size() > 0) {
 				Channel channel = new Channel();
@@ -1041,7 +1054,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(0, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(0, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(0, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(0, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid((int)channel.getChannelId()));
 				channel.setOutlineIsDynamic(db.getInt(0, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(0, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(0, "CHNL_OUTLINE_PROTECT"));
@@ -1063,7 +1076,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				return channel;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			throw new ChannelManagerException("发生sql异常,无法返回父频道信息.异常信息为:" + e.getMessage());
 		}
@@ -1482,19 +1495,20 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有频道id,无法频道的流程信息");
 		}
 		try {
-			DBUtil db = new DBUtil();
-			String sql = "select ID,NAME from table(f_channel_flow('" + channelId + "'))";
-			db.executeSelect(sql);
-			if (db.size() > 0) {
+//			DBUtil db = new DBUtil();
+//			String sql = "select ID,NAME from table(f_channel_flow('" + channelId + "'))";
+//			db.executeSelect(sql);
+			FlowInfo flow = CMSDBFunction.getSiteShannelFlowInfo(Integer.parseInt(channelId));
+			if (flow != null) {
 				List flowInfo = new ArrayList(2);
-				flowInfo.add(db.getString(0, "ID"));
-				flowInfo.add(db.getString(0, "NAME"));
+				flowInfo.add(flow.getId()+"");
+				flowInfo.add(flow.getName());
 				return flowInfo;
 			}
 			return null;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ChannelManagerException("发生sql异常,无法返回流程信息.异常信息为:" + e.getMessage());
+		} catch (Exception e) {
+			 
+			throw new ChannelManagerException("发生sql异常,无法返回流程信息.异常信息为:" ,e);
 		}
 	}
 
@@ -2059,19 +2073,21 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throw new ChannelManagerException("没有提供频道id,无法返回子频道列表.");
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select CHANNEL_ID, NAME,DISPLAY_NAME, "
 					+ "PARENT_ID,CHNL_PATH,CREATEUSER,CREATETIME, "
 					+ "ORDER_NO,SITE_ID,STATUS,OUTLINE_TPL_ID, "
-					+ "DETAIL_TPL_ID, CHANNEL_FLOW_ID(channel_id) WORKFLOW,"
+					+ "DETAIL_TPL_ID,  "
 					+ "CHNL_OUTLINE_DYNAMIC,DOC_DYNAMIC, "
 					+ "CHNL_OUTLINE_PROTECT, DOC_PROTECT,"
 					+ "PARENT_WORKFLOW,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, MOUSEOUTIMAGE, MOUSECLICKIMAGE,"
 					+ " MOUSEUPIMAGE,OUTLINEPICTURE, PAGEFLAG, INDEXPAGEPATH, COMMENTSWITCH,  COMMENT_TEMPLATE_ID,"
-					+ " COMMENTPAGEPATH,channel_desc from TD_CMS_CHANNEL where PARENT_ID!=0 and PARENT_ID is not null and status=0 and PARENT_ID="
-					+ channelId + " and ISNAVIGATOR=1 order by order_no,channel_id";
+					+ " COMMENTPAGEPATH,channel_desc from TD_CMS_CHANNEL where PARENT_ID!=0 and PARENT_ID is not null and status=0 and PARENT_ID=? and ISNAVIGATOR=1 order by order_no,channel_id";
 			// System.out.println("sql=" + sql);
-			db.executeSelect(sql);
+			int id = Integer.parseInt(channelId);
+			db.preparedSelect(sql);
+			db.setInt(1, id);
+			db.executePrepared();
 			List channels = new ArrayList();
 			for (int i = 0; i < db.size(); i++) {
 				Channel channel = new Channel();
@@ -2087,7 +2103,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(i, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(i, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(i, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(i, "WORKFLOW"));
+				channel.setWorkflow(CMSDBFunction.getSiteShannelFlowid(id));
 				channel.setOutlineIsDynamic(db.getInt(i, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(i, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(i, "CHNL_OUTLINE_PROTECT"));
@@ -2108,9 +2124,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channels.add(channel);
 			}
 			return channels;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:" + e.getMessage());
+		} catch ( Exception e) {
+			 
+			throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:" ,e);
 		}
 	}
 
@@ -4683,17 +4699,18 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			return null;
 		}
 		try {
-			DBUtil db = new DBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
 			String sql = "select z1.CHANNEL_ID,z1.NAME,z1.DISPLAY_NAME,z1.PARENT_ID,"
 					+ "z1.CHNL_PATH,z1.CREATEUSER,z1.CREATETIME,z1.ORDER_NO,z1.SITE_ID,"
-					+ "z1.STATUS,z1.OUTLINE_TPL_ID,z1.DETAIL_TPL_ID, CHANNEL_FLOW_ID(z1.channel_id) WORKFLOW,"
+					+ "z1.STATUS,z1.OUTLINE_TPL_ID,z1.DETAIL_TPL_ID,  "
 					+ "z1.CHNL_OUTLINE_DYNAMIC,z1.DOC_DYNAMIC,z1.CHNL_OUTLINE_PROTECT,"
 					+ "z1.DOC_PROTECT,z1.PARENT_WORKFLOW,z1.pub_file_name,z1.ISNAVIGATOR,z1.NAVIGATORLEVEL,z1.MOUSEINIMAGE, "
 					+ "z1.MOUSEOUTIMAGE, z1.MOUSECLICKIMAGE, z1.MOUSEUPIMAGE,z1.OUTLINEPICTURE,z1.PAGEFLAG,z1.INDEXPAGEPATH, "
 					+ "z1.commentpagepath,z1.channel_desc "
-					+ "from TD_CMS_CHANNEL z1 inner join td_cms_document z2 on z1.channel_id = z2.channel_id where z2.document_id = "
-					+ docid + " and z1.status=0";
-			db.executeSelect(sql);
+					+ "from TD_CMS_CHANNEL z1 inner join td_cms_document z2 on z1.channel_id = z2.channel_id where z2.document_id = ? and z1.status=0";
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(docid));
+			db.executePrepared();
 			if (db.size() > 0) {
 				Channel channel = new Channel();
 				channel.setChannelId(db.getLong(0, "CHANNEL_ID"));
@@ -4708,7 +4725,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				channel.setStaus(db.getInt(0, "STATUS"));
 				channel.setOutlineTemplateId(db.getInt(0, "OUTLINE_TPL_ID"));
 				channel.setDetailTemplateId(db.getInt(0, "DETAIL_TPL_ID"));
-				channel.setWorkflow(db.getInt(0, "WORKFLOW"));
+				channel.setWorkflow( CMSDBFunction.getSiteShannelFlowid((int)channel.getChannelId()));
 				channel.setOutlineIsDynamic(db.getInt(0, "CHNL_OUTLINE_DYNAMIC"));
 				channel.setDocIsDynamic(db.getInt(0, "DOC_DYNAMIC"));
 				channel.setOutlineIsProtect(db.getInt(0, "CHNL_OUTLINE_PROTECT"));
@@ -4731,7 +4748,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				return channel;
 			}
 			return null;
-		} catch (SQLException e) {
+		} catch ( Exception e) {
 			e.printStackTrace();
 			return null;
 			// throw new ChannelManagerException("发生sql异常,无法返回频道信息.异常信息为:"

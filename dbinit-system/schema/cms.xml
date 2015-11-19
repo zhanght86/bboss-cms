@@ -26,7 +26,7 @@
         <column name="ID" primaryKey="true" required="true" size="22" type="DECIMAL"/>
         <column name="SRC_STATUS" required="true" size="22" type="DECIMAL"/>
         <column name="DEST_STATUS" required="true" size="22" type="DECIMAL"/>
-        <column name="DESC" size="100" type="VARCHAR"/>
+        <column name="TRAN_DESC" size="100" type="VARCHAR"/>
         <foreign-key foreignTable="TB_CMS_DOC_STATUS">
             <reference foreign="ID" local="SRC_STATUS"/>
         </foreign-key>

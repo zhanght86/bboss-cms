@@ -25,13 +25,13 @@
 		//刷新频道数
 		function refresh()
 		{
-			window.open("navigator_content.jsp?<pg:dtoken element="param"/>","perspective_toolbar");
-			parent.parent.window.open("../top.jsp?<pg:dtoken element="param"/>","perspective_topbar");
+			window.open("navigator_content.jsp","perspective_toolbar");
+			parent.parent.window.open("../top.jsp","perspective_topbar");
 		}
 		//站内文档查询
 		function serchSiteDoc()
 		{
-			var url = "../docManage/siteDoc_frames.jsp?<pg:dtoken element="param"/>";
+			var url = "../docManage/siteDoc_frames.jsp";
 			parent.window.open(url,"base_properties_content");
 		}
 		//-->

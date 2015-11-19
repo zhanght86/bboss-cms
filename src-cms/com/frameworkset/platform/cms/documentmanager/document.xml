@@ -436,5 +436,27 @@
 		group by doc_id	
 		]]>
 	</property>
+	<property name="getDocsourceList">
+		<![CDATA[
+		select t.*,crtime  as crdate,user_name from TD_CMS_DOCSOURCE t left join td_sm_user b on t.cruser = b.user_id  where 1=1 
+		
+		#if($srcName && !$srcName.equals(""))			
+			and SRCNAME like #[srcName]
+		#end
+		
+		#if($provider && !$provider.equals(""))			
+			and user_name like #[provider]
+		#end
+		 #if($fromDate  )			
+			and CRTIME >= #[fromDate]
+		#end
+		 #if($toDate  )			
+			and CRTIME <= #[toDate]
+		#end 
+		 
+		order by DOCSOURCE_ID
+		]]>
+	</property>
+	
 	
 </properties>

@@ -1,14 +1,21 @@
 package com.frameworkset.platform.cms.docsourcemanager.tag;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import com.frameworkset.platform.cms.docsourcemanager.Docsource;
-import com.frameworkset.common.poolman.DBUtil;
+import org.frameworkset.util.DataFormatUtil;
+
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLParams;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.cms.docsourcemanager.Docsource;
 import com.frameworkset.util.ListInfo;
 
-public class DocsourceList extends DataInfoImpl implements java.io.Serializable
+public class DocsourceList extends DataInfoImpl  
 {
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
              int maxPagesize) {
@@ -16,52 +23,63 @@ public class DocsourceList extends DataInfoImpl implements java.io.Serializable
 		String provider = request.getParameter("provider");
 		String fromDate = request.getParameter("fromDate");
 		String toDate = request.getParameter("toDate");
-		String sqlWhere = " where 1=1 ";
-		
-
-		if (null != srcName && !"".equals(srcName))
-			sqlWhere += " and SRCNAME like '%" + srcName + "%' ";
-		if (null != provider && !"".equals(provider))
-			sqlWhere += " and user_name like '%" + provider + "%' ";
-		if (null != fromDate && !"".equals(fromDate))
-			sqlWhere += " and to_char(CRTIME,'YYYY-MM-DD') >= '" + fromDate + "' ";
-		if (null != toDate && !"".equals(toDate))
-			sqlWhere += " and to_char(CRTIME,'YYYY-MM-DD') <= '" + toDate + "' ";
 		
 		ListInfo listInfo = new ListInfo();
-		DBUtil dbUtil = new DBUtil();
-		try {
+		try
+		{
+			ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/cms/documentmanager/document.xml");
+			SQLParams params = new SQLParams();
+			final SimpleDateFormat dateformat = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
+			if (null != srcName && !"".equals(srcName))
+				params.addSQLParam("srcName", "%" + srcName +"%", SQLParams.STRING);
+	//			sqlWhere += " and SRCNAME like '%" + srcName + "%' ";
+			if (null != provider && !"".equals(provider))
+				params.addSQLParam("provider", "%" + provider +"%", SQLParams.STRING);
+	//			sqlWhere += " and user_name like '%" + provider + "%' ";
+			if (null != fromDate && !"".equals(fromDate))
+				params.addSQLParam("fromDate",  dateformat.parse(fromDate), SQLParams.DATE);
+	//			sqlWhere += " and to_char(CRTIME,'YYYY-MM-DD') >= '" + fromDate + "' ";
+			if (null != toDate && !"".equals(toDate))
+				params.addSQLParam("toDate",  dateformat.parse(toDate), SQLParams.DATE);
+	//			sqlWhere += " and to_char(CRTIME,'YYYY-MM-DD') <= '" + toDate + "' ";
+				
+			 
+	
 			
-			String sql ="select t.*,to_char(crtime,'yyyy-mm-dd') as crdate,user_name from TD_CMS_DOCSOURCE t " +
-					"left join td_sm_user b on t.cruser = b.user_id " +
-					sqlWhere + " order by DOCSOURCE_ID";
-
-			dbUtil.executeSelect(sql,(int)offset,maxPagesize);
-			List list = new ArrayList();
-			Docsource docsource;
-			if(dbUtil.size()>0){
-				for (int i = 0; i < dbUtil.size(); i++) {
-					docsource = new Docsource();
-					if (!"null".equals(dbUtil.getString(i,"srcname")))
-						docsource.setSRCNAME(dbUtil.getString(i,"srcname"));
-					if (!"null".equals(dbUtil.getString(i,"srcdesc")))
-						docsource.setSRCDESC(dbUtil.getString(i,"srcdesc"));
-					if (!"null".equals(dbUtil.getString(i,"srclink")))
-						docsource.setSRCLINK(dbUtil.getString(i,"srclink"));
-					docsource.setCRUSER(dbUtil.getInt(i,"CRUSER"));
-					docsource.setUsername(dbUtil.getString(i,"user_name"));
-					if (!"null".equals(dbUtil.getString(i,"crdate")))
-						docsource.setCRTIME(dbUtil.getString(i,"crdate"));
-					docsource.setDOCSOURCE_ID(dbUtil.getInt(i,"docsource_id"));
+			final List<Docsource> list = new ArrayList<Docsource>();
+			listInfo = executor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+	
+				@Override
+				public void handleRow(Record dbUtil)
+						throws Exception {
+					Docsource docsource = new Docsource();
+					if (!"null".equals(dbUtil.getString("srcname")))
+						docsource.setSRCNAME(dbUtil.getString("srcname"));
+					if (!"null".equals(dbUtil.getString("srcdesc")))
+						docsource.setSRCDESC(dbUtil.getString("srcdesc"));
+					if (!"null".equals(dbUtil.getString("srclink")))
+						docsource.setSRCLINK(dbUtil.getString("srclink"));
+					docsource.setCRUSER(dbUtil.getInt("CRUSER"));
+					docsource.setUsername(dbUtil.getString("user_name"));
+					Date crdate = dbUtil.getDate("crdate");
+					if (crdate != null)
+						docsource.setCRTIME(dateformat.format(crdate));
+					docsource.setDOCSOURCE_ID(dbUtil.getInt("docsource_id"));
 					list.add(docsource);
+					
+					
 				}
-				listInfo.setDatas(list);
-				listInfo.setTotalSize(dbUtil.getTotalSize());
-				return listInfo;
-			}
-		}catch(Exception e){
-			e.printStackTrace();
+				
+			}, "getDocsourceList", offset, maxPagesize, params);
+			listInfo.setDatas(list);
 		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			
+		}
+		 
+			 
 		return listInfo;
 	}
 	

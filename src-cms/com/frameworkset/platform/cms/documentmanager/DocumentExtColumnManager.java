@@ -60,22 +60,31 @@ public class DocumentExtColumnManager implements java.io.Serializable {
 	}
 	
 	public static String getColCommandByName(String name){
-		String command = "";
-		StringBuffer sql = new StringBuffer();
-		sql.append("select b.comments  from ");
-		sql.append("USER_TAB_COLUMNS a, USER_COL_COMMENTS b where  a.TABLE_NAME=b.table_name and ");
-		sql.append("a.COLUMN_NAME=b.column_name and ");
-		sql.append("a.column_name='").append(name).append("'");
-		DBUtil db = new DBUtil();
-		try{			
-			db.executeSelect(sql.toString());
-			if(db.size()>0){
-				command = db.getString(0, "comments");
-			}
-		}catch(Exception e){
-			e.printStackTrace();
+		TableMetaData tableMetaData = DBUtil.getTableMetaData("td_cms_document");
+		if(tableMetaData != null)
+		{
+			ColumnMetaData column = tableMetaData.getColumnMetaData(name);
+			if(column != null)
+				return column.getRemarks();
+						
 		}
-		return command;
+		return "";
+//		String command = "";
+//		StringBuffer sql = new StringBuffer();
+//		sql.append("select b.comments  from ");
+//		sql.append("USER_TAB_COLUMNS a, USER_COL_COMMENTS b where  a.TABLE_NAME=b.table_name and ");
+//		sql.append("a.COLUMN_NAME=b.column_name and ");
+//		sql.append("a.column_name='").append(name).append("'");
+//		DBUtil db = new DBUtil();
+//		try{			
+//			db.executeSelect(sql.toString());
+//			if(db.size()>0){
+//				command = db.getString(0, "comments");
+//			}
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//		return command;
 			
 	}
 	

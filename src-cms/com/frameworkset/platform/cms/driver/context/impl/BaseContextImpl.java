@@ -31,6 +31,7 @@ import com.frameworkset.platform.cms.driver.publish.impl.PublishMonitor;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerException;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
+import com.frameworkset.platform.cms.util.CMSDBFunction;
 import com.frameworkset.platform.cms.util.CMSUtil;
 
 /**
@@ -1287,10 +1288,10 @@ public abstract class BaseContextImpl implements Context {
 		set.addAll(set1);
 		System.out.println(set.size());
 		
-		DBUtil dbutil = new DBUtil();
+		 
 		try {
-			dbutil.execute("call recordpubrelation_proc('2', '2', 1,'2',1,'2')");
-		} catch (SQLException e) {
+			CMSDBFunction.recordpubrelation_proc("2", "2", 1,"2",1,"2");
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -751,7 +751,7 @@ from td_cms_document a
 
 			<property name="index_list" >
 				<map>
-					<property name="defult">
+					<property name="default">
 						<list>
 							<property index="0"><![CDATA[
 								create unique index IDX_SRC_DEST on TB_CMS_DOC_STATUS_TRANS (
@@ -873,6 +873,124 @@ from td_cms_document a
 
 						</list>
 					</property>
+					<property name="mysql">
+						<list>
+							<property index="0"><![CDATA[
+								create unique index IDX_SRC_DEST on TB_CMS_DOC_STATUS_TRANS (
+									   DEST_STATUS ASC,
+									   SRC_STATUS ASC
+									)
+							]]></property>
+								
+							<property index="1"><![CDATA[
+								create index TC_TD_CMS_CHANNEL1277 on TD_CMS_CHANNEL (
+									   PARENT_ID ASC
+									)
+							]]></property>
+								
+				
+							<property index="2"><![CDATA[
+								create index TC_TD_CMS_CHANNEL1287 on TD_CMS_CHANNEL (
+									   SITE_ID ASC
+									)
+							]]></property>
+
+
+
+							<property index="3"><![CDATA[
+								create index INDEX_4 on TD_CMS_CHANNELFIELD (
+									   FIELD_ID ASC
+									)
+							]]></property>
+
+
+
+							<property index="4"><![CDATA[
+								create index INDEX_5 on TD_CMS_CHANNELFIELD (
+										   CHANNEL_ID ASC
+										)
+							]]></property>
+
+							 
+
+
+							<property index="6"><![CDATA[
+								create index INDEX_1 on TD_CMS_EXTFIELDVALUE (
+									   DOCUMENT_ID ASC
+									)
+							]]></property>
+
+
+							<property index="7"><![CDATA[
+								create index INDEX_2 on TD_CMS_EXTFIELDVALUE (
+									   FIELD_ID ASC
+									)
+							]]></property>
+
+
+							<property index="8"><![CDATA[
+								create index TC_TD_CMS_SITE1260 on TD_CMS_SITE (
+									   MAINSITE_ID ASC
+									)
+							]]></property>
+				
+
+							<property index="9"><![CDATA[
+								create index TC_TD_CMS_SITE1273 on TD_CMS_SITE (
+									   INDEXTEMPLATE_ID ASC
+									)
+							]]></property>
+
+
+
+							<property index="10"><![CDATA[
+								create index INDEX_6 on TD_CMS_SITEFIELD (
+										   FILE_ID ASC
+										)
+							]]></property>
+
+
+							<property index="11"><![CDATA[
+								create index INDEX_7 on TD_CMS_SITEFIELD (
+										   SITE_ID ASC
+										)
+							]]></property>
+								
+							<property index="12"><![CDATA[
+								create index vhits_docid on TD_CMS_VIDIO_HITS(doc_id)
+							]]></property>
+
+
+
+							<property index="13"><![CDATA[
+								create index vhits_channelid on TD_CMS_VIDIO_HITS(CHANNEL_ID)
+							]]></property>
+
+
+							<property index="14"><![CDATA[
+
+								create index vhits_siteid on TD_CMS_VIDIO_HITS(SITE_ID)
+
+							]]></property>
+								
+							<property index="15"><![CDATA[
+								 create index brwcounts_docid on TD_CMS_BROWSER_COUNTS(doc_id)
+							]]></property>
+
+
+
+							<property index="16"><![CDATA[
+								 create index brwcounts_channelid on TD_CMS_BROWSER_COUNTS(CHANNEL_ID)
+							]]></property>
+
+
+							<property index="17"><![CDATA[					
+								 create index brwcounts_siteid on TD_CMS_BROWSER_COUNTS(SITE_ID)
+							]]></property>
+				
+
+						</list>
+					</property>
 				</map>
 			</property>
 
@@ -881,436 +999,30 @@ from td_cms_document a
 				<map>
 					<property name="mysql">
 						<list>
-							<property index="0"><![CDATA[
-									DROP FUNCTION IF EXISTS site_flow_id;
-									-- 返回格式：id 如：123
-									CREATE FUNCTION site_flow_id(site_id int) RETURNS int(8)
-									BEGIN
-									   DECLARE l_parent_workflow   char(1);
-										   DECLARE l_parent_id         numeric(10);
-										   DECLARE l_workflow          int;
-										   DECLARE l_workflow_name     varchar(100);
-										   DECLARE tmp_site_id         int;
-
-										   SET l_parent_workflow ='3';
-										   SET tmp_site_id =site_id;
-
-									  WHILE l_parent_workflow is not null DO  -- 循环
-											SELECT  parent_workflow,
-													   mainsite_id,
-													   flow_id,
-													   name
-												INTO   l_parent_workflow,
-													   l_parent_id,
-													   l_workflow,
-													   l_workflow_name
-											FROM (
-											  SELECT   a.parent_workflow,
-													   a.mainsite_id,
-													   a.flow_id,
-													   b.name
-												FROM td_cms_site a 
-												LEFT JOIN tb_cms_flow b ON a.flow_id = b.id
-												WHERE a.site_id = tmp_site_id limit 0,1 ) A;                 
-
-												IF l_parent_workflow = '0' THEN
-												  RETURN l_workflow;
-												ELSEIF l_parent_workflow = '1'
-												THEN
-												 SET tmp_site_id=l_parent_id;
-												ELSE                
-												  RETURN -1;
-												END IF;
-
-										   END WHILE;
-
-									  RETURN -1;
-								   END;
-							]]></property>
-								
-							<property index="1"><![CDATA[
-									  DROP FUNCTION IF EXISTS channel_flow_id;
-									  -- 返回格式：id 如：123
-									  CREATE FUNCTION channel_flow_id(ch_id int) RETURNS int(8)
-									  BEGIN
-									  DECLARE l_parent_workflow   char(1);
-									  DECLARE l_parent_id         numeric(10);
-									  DECLARE l_site_id           numeric(10);
-									  DECLARE l_workflow          INT;
-									  DECLARE l_workflow_name     VARCHAR(100);
-
-									  DECLARE tmp_ch_id           int;
-
-
-									  SET l_parent_workflow ='3';
-									  SET tmp_ch_id =ch_id;
-
-									   WHILE l_parent_workflow IS NOT NULL DO  -- 循环
-										  SELECT parent_workflow,
-												 parent_id,
-												 site_id,
-												 workflow,
-												 name
-										  INTO l_parent_workflow,
-											   l_parent_id,
-											   l_site_id,
-											   l_workflow,
-											   l_workflow_name
-										  FROM (SELECT a.parent_workflow,
-												 a.parent_id,
-												 a.site_id,
-												 a.workflow,
-												 b.name
-										  FROM td_cms_channel a LEFT JOIN tb_cms_flow b ON a.workflow = b.id
-										  WHERE a.channel_id = tmp_ch_id LIMIT 0,1) A;
-
-
-										  IF l_parent_workflow = '0' THEN
-											RETURN l_workflow;
-										  ELSEIF l_parent_workflow = '1' THEN
-											  IF l_parent_id IS NULL THEN
-												RETURN site_flow_id(l_site_id);
-											  ELSE
-												SET tmp_ch_id=l_parent_id;
-											  END IF;
-										  ELSE                
-											RETURN -1;
-										  END IF;
-									  END WHILE;
-									  RETURN -1;
-								   END;
-
-							]]></property>
-								
-							<property index="2"><![CDATA[
-								 DROP FUNCTION IF EXISTS f_site_flow;
-								 -- 返回格式：id,name 如： 1,采集流程
-								 CREATE FUNCTION f_site_flow(site_id int) RETURNS varchar(200) CHARSET utf8
-								 BEGIN
-								   DECLARE l_parent_workflow   char(1);
-								   DECLARE l_parent_id         numeric(10);
-								   DECLARE l_workflow          int;
-								   DECLARE l_workflow_name     varchar(100);
-								   DECLARE tmp_site_id         int;
-								   DECLARE ret_list             varchar(200);
-
-								   SET l_parent_workflow ='3';
-								   SET tmp_site_id =site_id;
-
-									WHILE l_parent_workflow is not null DO  -- 循环
-									SELECT  parent_workflow,
-											   mainsite_id,
-											   flow_id,
-											   name
-										INTO   l_parent_workflow,
-											   l_parent_id,
-											   l_workflow,
-											   l_workflow_name
-									FROM (
-									  SELECT   a.parent_workflow,
-											   a.mainsite_id,
-											   a.flow_id,
-											   b.name
-										FROM td_cms_site a 
-										LEFT JOIN tb_cms_flow b ON a.flow_id = b.id
-										WHERE a.site_id = tmp_site_id limit 0,1 ) A;                 
-
-										IF l_parent_workflow = '0' THEN
-										  SET ret_list =concat(l_workflow,',',l_workflow_name);
-										  RETURN ret_list;
-										ELSEIF l_parent_workflow = '1'
-										THEN
-										 SET tmp_site_id=l_parent_id;
-										ELSE                
-										  RETURN NULL;
-										END IF;
-
-								   END WHILE;
-
-								   RETURN NULL;
-								  END;
-							]]></property>
-
-
-							<property index="3"><![CDATA[
-									DROP FUNCTION IF EXISTS f_channel_flow;
-									-- 返回格式：id,name 如： 1,采集流程
-									CREATE FUNCTION f_channel_flow(ch_id int) RETURNS varchar(1000) CHARSET utf8
-									BEGIN
-									  DECLARE l_parent_workflow   char(1);
-									  DECLARE l_parent_id         numeric(10);
-									  DECLARE l_site_id           numeric(10);
-									  DECLARE l_workflow          INT;
-									  DECLARE l_workflow_name     VARCHAR(100);
-
-									  DECLARE tmp_ch_id           int;
-									  DECLARE ret_list            varchar(200);
-
-									  SET l_parent_workflow ='3';
-									  SET tmp_ch_id =ch_id;
-
-									   WHILE l_parent_workflow IS NOT NULL DO  -- 循环
-										  SELECT parent_workflow,
-												 parent_id,
-												 site_id,
-												 workflow,
-												 name
-										  INTO l_parent_workflow,
-											   l_parent_id,
-											   l_site_id,
-											   l_workflow,
-											   l_workflow_name
-										  FROM (SELECT a.parent_workflow,
-												 a.parent_id,
-												 a.site_id,
-												 a.workflow,
-												 b.name
-										  FROM td_cms_channel a LEFT JOIN tb_cms_flow b ON a.workflow = b.id
-										  WHERE a.channel_id = tmp_ch_id LIMIT 0,1) A;
-
-
-										  IF l_parent_workflow = '0' THEN
-											SET ret_list =concat(l_workflow,',',l_workflow_name);
-											RETURN ret_list;
-										  ELSEIF l_parent_workflow = '1' THEN
-											  IF l_parent_id IS NULL THEN
-												RETURN f_site_flow(l_site_id);
-											  ELSE
-												SET tmp_ch_id=l_parent_id;
-											  END IF;
-										  ELSE                
-											RETURN NULL;
-										  END IF;
-									  END WHILE;
-									  RETURN NULL;
-								   END;	
-							]]></property>		
-
-							<property index="4"><![CDATA[
-								DROP PROCEDURE IF EXISTS recordpubrelation_proc;
-								CREATE PROCEDURE recordpubrelation_proc(IN pubobject   varchar(50),
-																		IN refobject   varchar(50),
-																		IN pubtype     numeric(8),
-																		IN pubsite     varchar(50),
-																		IN reftype     numeric(8),
-																		IN refsite     varchar(50))
-								   BEGIN
-									  DECLARE num   numeric(8);
-									  SELECT count(PUBLISHOBJECT)
-										INTO num
-										FROM td_cms_pubobject_relation
-									   WHERE     PUBLISHOBJECT = pubobject
-											 AND REFERENCEOBJECT = refobject
-											 AND PUBLISHTYPE = pubtype
-											 AND PUBLISH_SITE = pubsite
-											 AND REFERENCETYPE = reftype
-											 AND REFERENCE_SITE = refsite;
-
-									  -- DBMS_OUTPUT.PUT_LINE('Value is not exact because pi is  irrational.');
-									  IF num = 0
-									  THEN
-										 INSERT INTO td_cms_pubobject_relation(PUBLISHOBJECT,
-																			   REFERENCEOBJECT,
-																			   PUBLISHTYPE,
-																			   PUBLISH_SITE,
-																			   REFERENCETYPE,
-																			   REFERENCE_SITE)
-										 VALUES (pubobject,
-												 refobject,
-												 pubtype,
-												 pubsite,
-												 reftype,
-												 refsite);
-
-										 COMMIT;
-									  END IF;
-								   END;   
-							]]></property>
+							 
 							
-							<property index="5"><![CDATA[
-								DROP FUNCTION IF EXISTS nvl;
-								-- 无数据输入限制
-								CREATE FUNCTION nvl(condParam  varchar(50),defaultParam  varchar(50)) RETURNS varchar(50)
+							<property index="5"><![CDATA[								
+								CREATE FUNCTION nvl(condParam  varchar(50),defaultParam  varchar(50)) RETURNS varchar(50)  NOT DETERMINISTIC 
 								BEGIN
 								  return IFNULL(condParam,defaultParam);
 								END;
 							]]></property>
 						</list>
 					</property>
+					<property name="default">
+						<list>
+							 
+							
+							 
+						</list>
+					</property>
 				</map>
                    
-				<map>
-					<property name="default">
-						<list>
-							<property index="0"><![CDATA[
-
-								create or replace function site_flow_id(a_site_id int) return int
-								is
-								  l_parent_workflow char(1);
-								  l_parent_id number(10);
-								  l_workflow int;
-								begin
-								  select PARENT_WORKFLOW,mainsite_id,flow_id
-									into l_parent_workflow,l_parent_id,l_workflow 
-								  from td_cms_site where site_id = a_site_id;
-
-								  if l_parent_workflow = '0' then 
-									return l_workflow;
-								  end if;
-
-								  if l_parent_workflow = '1' then 
-									return site_flow_id(l_parent_id);
-								  end if;
-
-								  return -1;
-								end;
-							]]></property>
-								
-							<property index="1"><![CDATA[
-								create or replace function channel_flow_id(ch_id int) return int
-								is
-								  l_parent_workflow char(1);
-								  l_parent_id number(10);
-								  l_site_id number(10);
-								  l_workflow int;
-								begin
-								  select PARENT_WORKFLOW,parent_id,site_id,workflow 
-									into l_parent_workflow,l_parent_id,l_site_id,l_workflow 
-								  from td_cms_channel where channel_id = ch_id;
-
-								  if l_parent_workflow = '0' then 
-									return l_workflow;
-								  end if;
-
-								  if l_parent_workflow = '1' then 
-									if l_parent_id is null then
-									   --select flow_id into l_workflow from td_cms_site where site_id = l_site_id;
-									   --return l_workflow;
-									   return site_flow_id(l_site_id);
-									end if;
-
-									return channel_flow_id(l_parent_id);
-								  end if;
-
-								  return -1;
-								end;
-							]]></property>
-								
-							<property index="2"><![CDATA[
-								create or replace function f_site_flow(a_site_id int) return typ_id_name_list
-								is
-								  l_parent_workflow char(1);
-								  l_parent_id number(10);
-								  l_workflow int;
-								  l_workflow_name varchar(100);
-								  ret_list typ_id_name_list := typ_id_name_list(); --返回结果集变量
-								begin
-								  select PARENT_WORKFLOW,mainsite_id,flow_id,b.name
-									into l_parent_workflow,l_parent_id,l_workflow,l_workflow_name 
-								  from td_cms_site a left join tb_cms_flow b on a.flow_id=b.id
-								  where site_id = a_site_id;
-
-								  if l_parent_workflow = '0' then 
-									ret_list.extend;
-									ret_list(1) := new TYP_ID_NAME(l_workflow,l_workflow_name);
-									return ret_list;
-								  end if;
-
-								  if l_parent_workflow = '1' then 
-									return f_site_flow(l_parent_id);
-								  end if;
-
-								  return null;
-								end;
-							]]></property>
-
-
-							<property index="3"><![CDATA[
-								create or replace function f_channel_flow(ch_id int) return typ_id_name_list
-								is
-								  l_parent_workflow char(1);
-								  l_parent_id number(10);
-								  l_site_id number(10);
-								  l_workflow int;
-								  l_workflow_name varchar(100);
-								  ret_list typ_id_name_list := typ_id_name_list(); --返回结果集变量
-								begin
-								  select PARENT_WORKFLOW,parent_id,site_id,workflow,b.name 
-									into l_parent_workflow,l_parent_id,l_site_id,l_workflow,l_workflow_name 
-								  from td_cms_channel a left join tb_cms_flow b on a.workflow = b.id
-								  where channel_id = ch_id;
-
-								  if l_parent_workflow = '0' then 
-									ret_list.extend;
-									ret_list(1) := new TYP_ID_NAME(l_workflow,l_workflow_name);
-
-									return ret_list;
-								  end if;
-
-								  if l_parent_workflow = '1' then 
-									if l_parent_id is null then
-									  return f_site_flow(l_site_id);
-									end if;
-
-									return f_channel_flow(l_parent_id);
-								  end if;
-
-								  return null;
-								end;	
-							]]></property>
-				
-
-							<property index="4"><![CDATA[
-								create or replace procedure recordpubrelation_proc (pubobject in varchar2,
-												  refobject in varchar2, 
-												  pubtype in  number,
-												  pubsite in varchar2,
-												  reftype in number,
-												  refsite in varchar2) AS num NUMBER;
-								 BEGIN
-									select count(PUBLISHOBJECT) into num from td_cms_pubobject_relation where 
-								  PUBLISHOBJECT=pubobject and REFERENCEOBJECT=refobject and PUBLISHTYPE=pubtype 
-								  and PUBLISH_SITE=pubsite and REFERENCETYPE=reftype and REFERENCE_SITE=refsite;
-								  DBMS_OUTPUT.PUT_LINE('Value is not exact because pi is 
-								irrational.');
-
-								  if(num = 0) then 
-								   insert into td_cms_pubobject_relation
-								   (PUBLISHOBJECT,REFERENCEOBJECT,PUBLISHTYPE,PUBLISH_SITE,REFERENCETYPE,REFERENCE_SITE)
-								   values( pubobject,refobject,pubtype,pubsite,reftype,refsite );
-								   commit;
-								  end if;
-
-
-								 END;   
-							]]></property>
-						</list>
-					</property>
-				</map>
+				 
 			</property>
 
 
-			<property name="type_list" >
-				<map>
-					<property name="default">
-						<list>
-							<property index="0"><![CDATA[
-								create or replace  type TYP_ID_NAME as OBJECT
-									(
-										ID NUMBER,
-										NAME VARCHAR(100)
-									)
-
-							]]></property>
-
-							<property index="1"><![CDATA[
-								create or replace  type TYP_ID_NAME_LIST as TABLE of TYP_ID_NAME
-
-							]]></property>
-						</list>
-					</property>
-				</map>
-			</property>
+			
 
 
 

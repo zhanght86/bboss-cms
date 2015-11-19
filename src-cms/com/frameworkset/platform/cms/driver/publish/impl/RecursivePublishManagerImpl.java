@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.frameworkset.platform.cms.channelmanager.Channel;
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.driver.context.BatchContext;
 import com.frameworkset.platform.cms.driver.context.CMSContext;
@@ -19,9 +21,7 @@ import com.frameworkset.platform.cms.driver.publish.PubObjectReference;
 import com.frameworkset.platform.cms.driver.publish.RecursivePublishException;
 import com.frameworkset.platform.cms.driver.publish.RecursivePublishManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
-import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.platform.cms.util.CMSDBFunction;
 
 /**
  * 递归发布管理类，主要是记录当前的发布元素和发布对象之间的关系， 以便监控到发布元素的内容发生变化时，系统自动发布与该元素相关的发布对象
@@ -62,7 +62,7 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 		try {
 			
 				/* end add */
-				PreparedDBUtil dbUtil = new PreparedDBUtil();
+				 
 				// StringBuffer sql = new StringBuffer().append("insert into
 				// td_cms_pubobject_relation")
 				// .append("(PUBLISHOBJECT,REFERENCEOBJECT,PUBLISHTYPE,PUBLISH_SITE,")
@@ -99,14 +99,8 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 				String pubSite = pubObjectReference.getPubSite();
 				int refobjectType = pubObjectReference.getRefobjectType();
 				String refSite = pubObjectReference.getRefSite();
-				StringBuffer sql = new StringBuffer().append(
-						"call recordpubrelation_proc( ").append("'")
-						.append(pubobject).append("',").append("'").append(
-								referenceObject).append("',").append("")
-						.append(pubobjectType).append(",").append("'")
-						.append(pubSite).append("',").append("").append(
-								refobjectType).append(",").append("'")
-						.append(refSite).append("' ").append(")");
+				CMSDBFunction.recordpubrelation_proc(pubobject,referenceObject,pubobjectType,pubSite,
+						refobjectType,refSite);
 
 //				StringBuffer sql = new StringBuffer()
 //						.append("insert into td_cms_pubobject_relation")
@@ -123,11 +117,10 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 //								",").append("'").append(
 //								pubObjectReference.getRefSite()).append("'")
 //						.append(")");
-				dbUtil.execute(sql.toString());			
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				
+		} catch ( Exception e) {
+			 
+			throw new RecursivePublishException(e);
 		}
 
 	}
@@ -718,9 +711,9 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 
 		if (!pubObjectReferences.isEmpty()) {
 			Iterator it = pubObjectReferences.iterator();
-			DBUtil dbUtil = new DBUtil();
+			TransactionManager tm = new TransactionManager();
 			try {
-
+				tm.begin();
 				while (it.hasNext()) {
 					PubObjectReference pubObjectReference = (PubObjectReference) it
 							.next();
@@ -732,22 +725,18 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 					String pubSite = pubObjectReference.getPubSite();
 					int refobjectType = pubObjectReference.getRefobjectType();
 					String refSite = pubObjectReference.getRefSite();
-					StringBuffer sql = new StringBuffer().append(
-							"call recordpubrelation_proc( ").append("'")
-							.append(pubobject).append("',").append("'").append(
-									referenceObject).append("',").append("")
-							.append(pubobjectType).append(",").append("'")
-							.append(pubSite).append("',").append("").append(
-									refobjectType).append(",").append("'")
-							.append(refSite).append("' ").append(")");
-					//System.out.println(sql.toString());
-					dbUtil.addBatch(sql.toString());
+					CMSDBFunction.recordpubrelation_proc(pubobject,referenceObject,pubobjectType,pubSite,
+							refobjectType,refSite);
+					
 				}
 				// }
-				dbUtil.executeBatch();
+				tm.commit();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new RecursivePublishException(e);
+			}
+			finally
+			{
+				tm.release();
 			}
 		}
 	}

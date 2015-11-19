@@ -2145,39 +2145,94 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		return storeRoleresop(opids, resid, roleid,
 				restypeid, resname, roletype,true);
 	}
+//	public boolean storeRoleresop(String[] opids, String resid, String roleid,
+//			String restypeid, String resname, String roletype,boolean broadevent)
+//			throws ManagerException {
+//		boolean b = false;
+//		PreparedDBUtil db = new PreparedDBUtil();
+//		try {
+//			for (int i = 0; i < opids.length; i++) {
+//				String sql = "insert all when totalsize <= 0 then into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)"
+//						+ " values('"
+//						+ opids[i]
+//						+ "','"
+//						+ resid
+//						+ "','"
+//						+ roleid
+//						+ "','"
+//						+ restypeid
+//						+ "','"
+//						+ resname
+//						+ "','"
+//						+ roletype
+//						+ "') select count(OP_ID) totalsize from td_sm_roleresop where OP_ID='"
+//						+ opids[i]
+//						+ "' and RES_ID='"
+//						+ resid
+//						+ "' and ROLE_ID='"
+//						+ roleid
+//						+ "' and TYPES='"
+//						+ roletype + "' and RESTYPE_ID='" + restypeid + "'";
+//				//System.out.println("=="+sql);
+//				db.addBatch(sql);
+//
+//			}
+//			db.executeBatch();
+//			b = true;
+//			if(broadevent)
+//			{
+//				Event event = new EventImpl("",
+//						ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
+//				super.change(event);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new ManagerException(e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new ManagerException(e.getMessage());
+//		}finally{
+//			db.resetBatch();
+//		}
+//		return b;
+//	}
+	
+	
 	public boolean storeRoleresop(String[] opids, String resid, String roleid,
 			String restypeid, String resname, String roletype,boolean broadevent)
 			throws ManagerException {
 		boolean b = false;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
+		
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+			String sql = "insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)"
+					+ " values(?,?,?,?,?,?) ";
+			db.preparedInsert(sql);
+			int s = -1;
 			for (int i = 0; i < opids.length; i++) {
-				String sql = "insert all when totalsize <= 0 then into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)"
-						+ " values('"
-						+ opids[i]
-						+ "','"
-						+ resid
-						+ "','"
-						+ roleid
-						+ "','"
-						+ restypeid
-						+ "','"
-						+ resname
-						+ "','"
-						+ roletype
-						+ "') select count(OP_ID) totalsize from td_sm_roleresop where OP_ID='"
-						+ opids[i]
-						+ "' and RES_ID='"
-						+ resid
-						+ "' and ROLE_ID='"
-						+ roleid
-						+ "' and TYPES='"
-						+ roletype + "' and RESTYPE_ID='" + restypeid + "'";
-				//System.out.println("=="+sql);
-				db.addBatch(sql);
+				int totalsize = SQLExecutor.queryObject(int.class, "select count(OP_ID) totalsize from td_sm_roleresop where OP_ID=? and RES_ID=? and ROLE_ID=? and TYPES=?"
+						+ " and RESTYPE_ID=?", opids[i],resid,roleid,roletype,restypeid);
+				if(totalsize <=0)
+				{
+					s ++;
+					db.setString(1, opids[i]);
+					db.setString(2, resid);
+					db.setString(3, roleid);
+					db.setString(4, restypeid);
+					db.setString(5, resname);
+					db.setString(6, roletype);
+					 
+						 
+					//System.out.println("=="+sql);
+					db.addPreparedBatch();
+				}
 
 			}
-			db.executeBatch();
+			if(s > 0)
+				db.executePreparedBatch();
+			tm.commit();
 			b = true;
 			if(broadevent)
 			{
@@ -2192,7 +2247,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			e.printStackTrace();
 			throw new ManagerException(e.getMessage());
 		}finally{
-			db.resetBatch();
+			tm.release();
 		}
 		return b;
 	}
