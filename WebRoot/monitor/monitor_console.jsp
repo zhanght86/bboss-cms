@@ -50,6 +50,11 @@
 	</tr>
 	
 	<tr>
+	<td width="20%">集群节点监控</td><td><a href="clustermembers.jsp" target="_blank">集群节点监控页面</a></td>
+	
+	</tr>
+	
+	<tr>
 	<td>SPI监控树</td><td><a href="spiFrame.jsp" target="_blank"  >SPI管理</a></td>
 	</tr>
 	<tr>
