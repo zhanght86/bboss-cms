@@ -28,7 +28,7 @@ public class DictTree extends COMTree implements java.io.Serializable{
 		//OrgAdministrator orgAdministrator = new OrgAdministratorImpl();
 		//String curUserId = super.accessControl.getUserID();
 		//List list = orgAdministrator.getManagerOrgsOfUserByID(curUserId);//list.size()>0时，当前用户拥有部门管理员角色
-		if(super.accessControl.getUserID().equals("1")){//判断是否是部门管理员与拥有超级管理员角色的用户
+		if(super.accessControl.isAdmin()){//判断是否是部门管理员与拥有超级管理员角色的用户
 			try {
 				DictManager dictManager = new DictManagerImpl();
 				

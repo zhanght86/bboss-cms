@@ -42,7 +42,7 @@ public class DictTreeForData extends COMTree implements java.io.Serializable{
 					e.printStackTrace();
 				}
 			}
-		}else if(super.accessControl.getUserID().equals("1")){//判断是否是部门管理员与拥有超级管理员角色的用户
+		}else if(super.accessControl.isAdmin()){//判断是否是部门管理员与拥有超级管理员角色的用户
 			try {
 				DictManager dictManager = new DictManagerImpl();
 				return dictManager.isContainChildDicttype(treeID);
