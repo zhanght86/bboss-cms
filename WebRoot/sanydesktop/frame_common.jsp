@@ -167,7 +167,10 @@ function loadCustomMenu()
 
 					var pathU=d.pathU;
 					//pathU=pathU.replace("sanydesktop/index.page","sanydesktop/indexcommon.page");
-					custommenuobj[menuType]=custommenuobj[menuType] +" <li><a href=\"javascript:void(0)\" onclick=\"opencustom('"+pathU+"','"+d.pathPopu+"',"+d.desktop_width+","+d.desktop_height+",'"+d.name+"','"+urltype+"',"+d.option+")\"><img src=\""+d.imageUrl+"\" width=\"56\" height=\"52\" /><br />"+d.name+"</a></li>";
+					if(d.imageUrl != null && d.imageUrl != '')
+						custommenuobj[menuType]=custommenuobj[menuType] +" <li><a href=\"javascript:void(0)\" onclick=\"opencustom('"+pathU+"','"+d.pathPopu+"',"+d.desktop_width+","+d.desktop_height+",'"+d.name+"','"+urltype+"',"+d.option+")\"><img src=\""+d.imageUrl+"\" width=\"56\" height=\"52\" /><br />"+d.name+"</a></li>";
+					else
+						custommenuobj[menuType]=custommenuobj[menuType] +" <li><a href=\"javascript:void(0)\" onclick=\"opencustom('"+pathU+"','"+d.pathPopu+"',"+d.desktop_width+","+d.desktop_height+",'"+d.name+"','"+urltype+"',"+d.option+")\"><br />"+d.name+"</a></li>";
 					
 				}
 				$("#customMenu").empty();
