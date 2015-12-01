@@ -172,8 +172,11 @@ public class SSOControler {
 
         if (loginPath != null) {
             StringUtil.addCookieValue(request, response, "loginStyle", loginPath);
+            loginStyle = loginPath; 
 
         }
+        if(loginStyle == null)
+        	loginStyle = "5";
         if (subsystem_id != null) {
             StringUtil.addCookieValue(request, response, "subsystem_id", subsystem_id);
 

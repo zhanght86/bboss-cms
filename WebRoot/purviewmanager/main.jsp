@@ -26,7 +26,7 @@
 <HTML>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
+
 	<%@ include file="/common/jsp/css.jsp"%>	
 	<tab:tabConfig/>
 	<title>权限管理</title>
