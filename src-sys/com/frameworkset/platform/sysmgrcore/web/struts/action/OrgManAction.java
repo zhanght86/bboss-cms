@@ -16,6 +16,7 @@ import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.util.EventUtil;
 
 /**
  * <p>
@@ -816,14 +817,17 @@ public class OrgManAction   {
 		String opid = tmp[1];
 		
 		if (tmp != null && tmp.length == 2) {
+			boolean sendevent =false;
 			try {
 				RoleManager roleManager = SecurityDatabase.getRoleManager();
 				OrgManager orgManager = SecurityDatabase.getOrgManager();
 				Organization org = orgManager.getOrgById(resId);
 				if(checked != null && checked.equals("1")){
-					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role");
+					sendevent = true;
+					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role",false);
 				}else if(checked != null && checked.equals("0")){
-					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"role");
+					sendevent = true;
+					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"role",false);
 				}
 				//递归保存子机构
 				if (isRecursion.equals("1")) {
@@ -832,12 +836,16 @@ public class OrgManAction   {
 						Organization organization = (Organization) orglist.get(i);
 					
 						if(checked != null && checked.equals("1")){
-							roleManager.storeRoleresop(opid,organization.getOrgId(),roleid,resTypeId,organization.getOrgName(),"role");
+							sendevent = true;
+							roleManager.storeRoleresop(opid,organization.getOrgId(),roleid,resTypeId,organization.getOrgName(),"role",false);
 						}else if(checked != null && checked.equals("0")){
-							roleManager.deletePermissionOfRole(opid,organization.getOrgId(),resTypeId,roleid,"role");
+							sendevent = true;
+							roleManager.deletePermissionOfRole(opid,organization.getOrgId(),resTypeId,roleid,"role",false);
 						}
 					}
 			 }
+				if(sendevent )
+					EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 				return "success";
 			} catch (Exception e) {
 				e.printStackTrace();

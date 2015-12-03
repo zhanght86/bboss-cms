@@ -73,7 +73,7 @@ public interface RoleManager extends Provider, Serializable {
 	 * @throws ManagerException
 	 */
 	 
-	public boolean deletePermissionOfRole(String resId, String restypeId, String roleid,String type)
+	public boolean deletePermissionOfRole(String resId, String restypeId, String roleid,String type,boolean sendevent)
 			throws ManagerException;
 	
 	/**
@@ -92,7 +92,7 @@ public interface RoleManager extends Provider, Serializable {
 	
 	
 	
-	public boolean deletePermissionOfRole(String opid,String resId, String restypeId, String roleid, String type) 
+	public boolean deletePermissionOfRole(String opid,String resId, String restypeId, String roleid, String type,boolean sendevent) 
 	throws ManagerException; 
 	/**
 	 * 删除某一资源id及资源类型对应的所有角色及操作
@@ -367,7 +367,7 @@ public interface RoleManager extends Provider, Serializable {
 	 * @return
 	 * @throws ManagerException
 	 */
-	public boolean storeRoleresop(String opid,String resid,String roleid,String restypeid,String resname,String role_type) throws ManagerException;
+	public boolean storeRoleresop(String opid,String resid,String roleid,String restypeid,String resname,String role_type,boolean sendevent) throws ManagerException;
 	
 	/**
 	 * 将资源及操作授予对应的角色数组中的角色

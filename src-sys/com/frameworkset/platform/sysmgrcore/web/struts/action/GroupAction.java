@@ -9,6 +9,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 
 public class GroupAction   implements Serializable{
 	private Logger logger = Logger.getLogger(GroupAction.class.getName());
@@ -32,11 +33,13 @@ public class GroupAction   implements Serializable{
 			try {
 				RoleManager roleManager = SecurityDatabase.getRoleManager();
 				GroupManager groupManager = SecurityDatabase.getGroupManager();
-
+				boolean sendevent = false;
 				if(checked != null && checked.equals("1")){
-					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role");
+					sendevent = true;
+					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role",false);
 				}else if(checked != null && checked.equals("0")){
-					roleManager.deletePermissionOfRole(resId,resTypeId,roleid,"role");
+					sendevent = true;
+					roleManager.deletePermissionOfRole(resId,resTypeId,roleid,"role",false);
 				}
 			//	递归保存子组
 				if (isRecursion.equals("1")) {
@@ -45,14 +48,18 @@ public class GroupAction   implements Serializable{
 						Group group = (Group) grouplist.get(i);
 					
 						if(checked != null && checked.equals("1")){
-							roleManager.storeRoleresop(opid,String.valueOf(group.getGroupId()),roleid,resTypeId,group.getGroupName(),"role");
+							sendevent = true;
+							roleManager.storeRoleresop(opid,String.valueOf(group.getGroupId()),roleid,resTypeId,group.getGroupName(),"role",false);
 						}else if(checked != null && checked.equals("0")){
-							roleManager.deletePermissionOfRole(String.valueOf(group.getGroupId()),resTypeId,roleid,"role");
+							sendevent = true;
+							roleManager.deletePermissionOfRole(String.valueOf(group.getGroupId()),resTypeId,roleid,"role",false);
 						}
 					}
 //				
 
 			 }
+			if(sendevent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 
 				return "success";
 			} catch (Exception e) {

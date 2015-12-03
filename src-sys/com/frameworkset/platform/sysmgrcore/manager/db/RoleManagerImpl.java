@@ -44,6 +44,7 @@ import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.ResManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -2042,49 +2043,49 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	}
 
 	public boolean storeRoleresop(String opid, String resid, String roleid,
-			String restypeid, String resname, String types)
+			String restypeid, String resname, String types,boolean sendevent)
 			throws ManagerException {
 		boolean b = false;
-		DBUtil db = new DBUtil();
-		String sql = "insert all when totalsize <= 0 then into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)"
-				+ " values('"
-				+ opid
-				+ "','"
-				+ resid
-				+ "','"
-				+ roleid
-				+ "','"
-				+ restypeid
-				+ "','"
-				+ resname
-				+ "','"
-				+ types
-				+ "') select count(op_id) totalsize from td_sm_roleresop where OP_ID='"
-				+ opid
-				+ "' and RES_ID='"
-				+ resid
-				+ "' and ROLE_ID='"
-				+ roleid
-				+ "' and TYPES='"
-				+ types
-				+ "' and RESTYPE_ID='"
-				+ restypeid
-				+ "'";
+		String sql = "select count(op_id) totalsize from td_sm_roleresop where OP_ID=? and RES_ID=? and ROLE_ID=? and TYPES=? and RESTYPE_ID=?";
+		try {
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setString(1, opid);
+			db.setString(2, resid);
+			db.setString(3, roleid);
+			db.setString(4, types);
+			db.setString(5, restypeid);
+			db.executePrepared();
+			if(db.getInt(0, 0) <= 0)
+			{
+				sql = "insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)"
+						+ " values(?,?,?,?,?,?)";
+				db.preparedInsert(sql);
+				db.setString(1, opid);
+				db.setString(2, resid);
+				db.setString(3, roleid);
+				db.setString(4, restypeid);
+				db.setString(5, resname);
+				db.setString(6, types);
+				db.executePrepared();
+			}
+		
+		
 		// String sqlselect = "select count(*) from td_sm_roleresop where " +
 		// "OP_ID='"+opid+"' and RES_ID='"+resid+"' and ROLE_ID='"+roleid+"'" +
 		// " and RESTYPE_ID='"+restypeid+"' and RES_NAME='"+resname+"' and
 		// TYPES='"+types+"'" ;
 		// System.out.println("=="+sql);
-		try {
+		
 			// db.executeSelect(sqlselect);
 			// if(db.getInt(0,0)==0){
-			db.executeInsert(sql);
+			
 			b = true;
 			// }
-
-			Event event = new EventImpl("",
-					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
-			super.change(event);
+			if(sendevent)
+			{
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
+			}
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
 			// e.printStackTrace();
@@ -2092,9 +2093,10 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		return b;
 
 	}
+	
 
 	public boolean deletePermissionOfRole(String resId, String restypeId,
-			String roleid, String type) throws ManagerException {
+			String roleid, String type,boolean sendevent) throws ManagerException {
 		boolean b = false;
 		DBUtil db = new DBUtil();
 		String sql = "delete from td_sm_roleresop where RES_ID='" + resId
@@ -2105,9 +2107,13 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		try {
 			db.executeDelete(sql);
 			b = true;
-			Event event = new EventImpl("",
-					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
-			super.change(event);
+			if(sendevent)
+			{
+//				Event event = new EventImpl("",
+//						ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
+//				super.change(event);
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
+			}
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -2116,7 +2122,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	}
 
 	public boolean deletePermissionOfRole(String opid, String resId,
-			String restypeId, String roleid, String type)
+			String restypeId, String roleid, String type,boolean sendevent)
 			throws ManagerException {
 		boolean b = false;
 		DBUtil db = new DBUtil();
@@ -2129,9 +2135,8 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		try {
 			db.executeDelete(sql);
 			b = true;
-			Event event = new EventImpl("",
-					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
-			super.change(event);
+			if(sendevent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -2236,9 +2241,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 			b = true;
 			if(broadevent)
 			{
-				Event event = new EventImpl("",
-						ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
-				super.change(event);
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -2603,6 +2606,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 		DBUtil dbutil = new DBUtil();
 		String str;
 		try {
+			boolean sendevent = false;
 
 			for (int i = 0; i < opids.length; i++) {
 				// 是站点资源并且递归的话
@@ -2621,7 +2625,8 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 							String id = dbutil.getInt(k, "site_id") + "";
 							String name = dbutil.getString(k, "name");
 							this.storeRoleresop(opids[i], id, roleid,
-									restypeid, name, roletype);
+									restypeid, name, roletype,false);
+							sendevent = true;
 						}
 					}
 				}
@@ -2640,7 +2645,8 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 							String id = dbutil.getInt(k, "channel_id") + "";
 							String name = dbutil.getString(k, "name");
 							this.storeRoleresop(opids[i], id, roleid,
-									restypeid, name, roletype);
+									restypeid, name, roletype,false);
+							sendevent = true;
 						}
 					}
 				}
@@ -2656,7 +2662,8 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 							String id = dbutil.getString(k, "org_id");
 							String name = dbutil.getString(k, "org_name");
 							this.storeRoleresop(opids[i], id, roleid,
-									restypeid, name, roletype);
+									restypeid, name, roletype,false);
+							sendevent = true;
 						}
 					}
 				}
@@ -2672,20 +2679,24 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 							String id = dbutil.getString(k, "group_id");
 							String name = dbutil.getString(k, "group_name");
 							this.storeRoleresop(opids[i], id, roleid,
-									restypeid, name, roletype);
+									restypeid, name, roletype,false);
+							sendevent = true;
 						}
 					}
 				}
 				if (isRecursive.equals("0")) {
 					this.storeRoleresop(opids[i], resid, roleid, restypeid,
-							resname, roletype);
+							resname, roletype,false);
+					sendevent = true;
 				}
 			}
 
 			b = true;
-			Event event = new EventImpl("",
-					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
-			super.change(event);
+//			Event event = new EventImpl("",
+//					ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
+//			super.change(event);
+			if(sendevent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new ManagerException(e.getMessage());

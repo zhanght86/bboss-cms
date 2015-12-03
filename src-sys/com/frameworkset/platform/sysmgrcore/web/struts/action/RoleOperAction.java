@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 
 /**
  * 资源管理＝＝资源操作授予＝＝角色操作的保存
@@ -34,7 +35,7 @@ public class RoleOperAction   implements Serializable {
 			try {
 				RoleManager roleManager = SecurityDatabase.getRoleManager();
 				if(checked != null && checked.equals("1")){
-					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role");
+					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"role",true);
 					try
 					{
 						Integer.parseInt(resId);
@@ -54,7 +55,7 @@ public class RoleOperAction   implements Serializable {
 							for(int j=0;j<db.size();j++)
 							{
 								String parentid = db.getInt(j,"channel_id")+"";
-								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"role");							
+								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"role",true);							
 							}
 						}
 						//递归给该频道的所属站点及父站点授可见权限
@@ -71,7 +72,7 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"role");							
+								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"role",true);							
 							}
 							
 						}
@@ -87,14 +88,14 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"role");							
+								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"role",true);							
 							}
 						}
 					}
 			
 				}else if(checked != null && checked.equals("0")){
 					//roleManager.deletePermissionOfRole(resId,resTypeId,roleid,"user");
-					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"role");
+					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"role",true);
 				}
 				return "success";
 			} catch (Exception e) {
@@ -119,10 +120,13 @@ public class RoleOperAction   implements Serializable {
 		DBUtil db = new DBUtil();
 		if (tmp != null && tmp.length == 2) {
 			try {
+				boolean sendevent = false;
 				RoleManager roleManager = SecurityDatabase.getRoleManager();
 				if(checked != null && checked.equals("1")){
-					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"user");
+					sendevent = true;
+					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"user",false);
 					if("channel".equals(resTypeId)){
+						
 						//如果是频道，则递归给该频道的上级频道和所属站点及父站点授可见权限
 						//递归给该频道的父频道授只读权限
 						String str="SELECT t.channel_id FROM TD_cms_channel t START WITH "+
@@ -132,7 +136,7 @@ public class RoleOperAction   implements Serializable {
 							for(int j=0;j<db.size();j++)
 							{
 								String parentid = db.getInt(j,"channel_id")+"";
-								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"user");							
+								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"user",false);							
 							}
 						}
 						//递归给该频道的所属站点及父站点授可见权限
@@ -149,7 +153,7 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"user");							
+								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"user",false);							
 							}
 							
 						}
@@ -165,15 +169,18 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"user");							
+								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"user",false);							
 							}
 						}
 					}
 			
 				}else if(checked != null && checked.equals("0")){
+					sendevent = true;
 					//roleManager.deletePermissionOfRole(resId,resTypeId,roleid,"user");
-					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"user");
+					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"user",false);
 				}
+				if(sendevent)
+					EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 				return "success";
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -191,9 +198,11 @@ public class RoleOperAction   implements Serializable {
 		DBUtil db = new DBUtil();
 		if (tmp != null && tmp.length == 2) {
 			try {
+				boolean sendevent = false;
 				RoleManager roleManager = SecurityDatabase.getRoleManager();
 				if(checked != null && checked.equals("1")){
-					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"organization");
+					sendevent = true;
+					roleManager.storeRoleresop(opid,resId,roleid,resTypeId,title,"organization",false);
 					if("channel".equals(resTypeId)){
 						//如果是频道，则递归给该频道的上级频道和所属站点及父站点授可见权限
 						//递归给该频道的父频道授只读权限
@@ -201,10 +210,11 @@ public class RoleOperAction   implements Serializable {
 						" t.channel_id="+ resId +" CONNECT BY PRIOR t.parent_ID=t.channel_id";
 						db.executeSelect(str);
 						if(db.size()>1){
+							
 							for(int j=0;j<db.size();j++)
 							{
 								String parentid = db.getInt(j,"channel_id")+"";
-								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"organization");							
+								roleManager.storeRoleresop("write",parentid,roleid,resTypeId,title,"organization",false);							
 							}
 						}
 						//递归给该频道的所属站点及父站点授可见权限
@@ -221,7 +231,7 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"organization");							
+								roleManager.storeRoleresop("write",siteid,roleid,"site",name,"organization",false);							
 							}
 							
 						}
@@ -237,14 +247,17 @@ public class RoleOperAction   implements Serializable {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"organization");							
+								roleManager.storeRoleresop("write",siteid,roleid,resTypeId,name,"organization",false);							
 							}
 						}
 					}
 			
 				}else if(checked != null && checked.equals("0")){
-					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"organization");
+					sendevent = true;
+					roleManager.deletePermissionOfRole(opid,resId,resTypeId,roleid,"organization",false);
 				}
+				if(sendevent )
+					EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 				return "success";
 			} catch (Exception e) {
 				e.printStackTrace();

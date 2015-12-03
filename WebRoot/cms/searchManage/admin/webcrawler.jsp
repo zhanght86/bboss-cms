@@ -36,7 +36,7 @@
 			}else{
 			
 				//启动线程检索对站点建立索引
-				new CMSCrawlerThread(cmsIndex).start();	
+				new CMSCrawlerThread(cmsIndex,request.getContextPath()).start();	
 			}
 		}
 		
@@ -55,7 +55,7 @@
 			alertStr = "对不起，正在建索引中:" + cmsIndex.getIndexName() + "，请稍后重试！";
 		else
 			//启动线程检索对站点建立索引
-			new CMSCrawlerThread(cmsIndex).start();
+			new CMSCrawlerThread(cmsIndex,request.getContextPath()).start();
 	}
 	
 	out.println("<script language='javascript'>alert('" + alertStr + "');</script>");

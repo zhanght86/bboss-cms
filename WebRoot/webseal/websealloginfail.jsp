@@ -1,8 +1,11 @@
+<%@page import="java.net.URLDecoder"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/common/jsp/importtaglib.jsp"%>
 <%String userName = request.getParameter("userName");
 String errormsg  = request.getParameter("errormsg");
+if(errormsg != null)
+	errormsg = URLDecoder.decode(errormsg , "UTF-8");
  String ip = request.getParameter("ip");
  if(ip == null)
  {

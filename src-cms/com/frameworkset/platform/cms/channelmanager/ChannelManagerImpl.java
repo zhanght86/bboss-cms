@@ -56,6 +56,7 @@ import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 
 public class ChannelManagerImpl extends EventHandle implements ChannelManager {
@@ -215,8 +216,9 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		sqlBuffer.append("?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		PreparedDBUtil conn = new PreparedDBUtil();
+		TransactionManager tm = new TransactionManager();
 		try {
-
+			tm.begin();
 			String channelId = conn.getNextStringPrimaryKey("td_cms_channel");
 
 			conn.preparedInsert(sqlBuffer.toString());
@@ -316,9 +318,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 
 			channel.setChannelId(Integer.parseInt(channelId));// 由于后面要用到该频道对象
 
-			Event event = new EventImpl(channel, CMSEventType.EVENT_CHANNEL_ADD);
-
-			super.change(event, true);
+			
 			// 增加自定义表单
 			try {
 				CustomFormManager cm = new CustomFormManagerImpl();
@@ -328,6 +328,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			}
 			// 新增频道的时候默认将当前用户控制频道权限加上
 			String userId = String.valueOf(channel.getCreateUser());
+			RoleManager roleManager = SecurityDatabase.getRoleManager();
 			if (!userId.equals("1")) {
 				ResourceManager resManager = new ResourceManager();
 				List list = resManager.getOperations("channel");
@@ -335,14 +336,14 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 				Operation op = new Operation();
 				String[] opids1 = new String[list.size()];
 				String[] opids2 = new String[listdoc.size()];
-				RoleManager roleManager;
+				
 				for (int i = 0; i < list.size(); i++) {
 					op = (Operation) list.get(i);
 					opids1[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids1, channelId, userId, "channel", channelName, "user");
+					
+					roleManager.storeRoleresop(opids1, channelId, userId, "channel", channelName, "user",false);
 				} catch (Exception e) {
 
 					e.printStackTrace();
@@ -352,8 +353,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					opids2[k] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids2, channelId, userId, "channeldoc", channelName, "user");
+					roleManager.storeRoleresop(opids2, channelId, userId, "channeldoc", channelName, "user",false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -380,14 +380,13 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					Operation op = new Operation();
 					String[] opids1 = new String[list.size()];
 					String[] opids2 = new String[listdoc.size()];
-					RoleManager roleManager;
+					 
 					for (int i = 0; i < list.size(); i++) {
 						op = (Operation) list.get(i);
 						opids1[i] = op.getId();
 					}
 					try {
-						roleManager = SecurityDatabase.getRoleManager();
-						roleManager.storeRoleresop(opids1, channelId, roleId, "channel", channelName, "role");
+						roleManager.storeRoleresop(opids1, channelId, roleId, "channel", channelName, "role",false);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -396,18 +395,21 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 						opids2[k] = op.getId();
 					}
 					try {
-						roleManager = SecurityDatabase.getRoleManager();
-						roleManager.storeRoleresop(opids2, channelId, roleId, "channeldoc", channelName, "role");
+						roleManager.storeRoleresop(opids2, channelId, roleId, "channeldoc", channelName, "role",false);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ChannelManagerException("SQL异常,无法创建频道.异常信息为:" + e.getMessage());
+			tm.commit();
+			Event event = new EventImpl(channel, CMSEventType.EVENT_CHANNEL_ADD);
+
+			super.change(event, true);
+			EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
+		} catch (Exception e) {
+			throw new ChannelManagerException("SQL异常,无法创建频道.异常信息为:" + e.getMessage(),e);
 		} finally {
-			conn.resetPrepare();
+			tm.release();
 		}
 
 	}

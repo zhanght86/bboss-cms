@@ -48,6 +48,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 
 /**
  * 站点管理
@@ -202,8 +203,10 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			}
 		}
 		PreparedDBUtil conn = null;
+		TransactionManager tm = new TransactionManager(); 
 		try {
 			 conn = new PreparedDBUtil();
+			 tm.begin();
 			long siteId = (long) conn.getNextPrimaryKey("TD_CMS_SITE");
 			site.setSiteId(siteId);
 //			String sitesavepath = "site" + siteId;
@@ -339,14 +342,13 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			conn.setString(24,site.getDistributeManners());
 			conn.executePrepared();
 			
-			Event event = new EventImpl(site,CMSEventType.EVENT_SITE_ADD);
-			super.change(event,true);
+		
 			
 			//新增站点的时候默认将当前用户控制站点权限加上
 			String userId = String.valueOf(site.getCreateUser());
 			String siteid = String.valueOf(siteId);
 			ResourceManager resManager = new ResourceManager();
-			RoleManager roleManager;
+			RoleManager roleManager = SecurityDatabase.getRoleManager();
 			
 			
 			if(!userId.equals("1")){
@@ -369,8 +371,8 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					opids1[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids1,siteid,userId,"site",name,"user");
+					
+					roleManager.storeRoleresop(opids1,siteid,userId,"site",name,"user",false);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -379,8 +381,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					opids2[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids2,siteid,userId,"site.channel",name,"user");
+					roleManager.storeRoleresop(opids2,siteid,userId,"site.channel",name,"user",false);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -389,8 +390,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					opids3[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids3,siteid,userId,"sitetpl",name,"user");
+					roleManager.storeRoleresop(opids3,siteid,userId,"sitetpl",name,"user",false);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -399,8 +399,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					opids4[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids4,siteid,userId,"site.doc",name,"user");
+					roleManager.storeRoleresop(opids4,siteid,userId,"site.doc",name,"user",false);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -409,15 +408,13 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					opids5[i] = op.getId();
 				}
 				try {
-					roleManager = SecurityDatabase.getRoleManager();
-					roleManager.storeRoleresop(opids5,siteid,userId,"sitefile",name,"user");
+					roleManager.storeRoleresop(opids5,siteid,userId,"sitefile",name,"user",false);
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
 	        }
 			//新增站点时默认新增一个该站点管理员角色，并将该站点所有控制权赋给此角色
 	        try {
-	        	roleManager = SecurityDatabase.getRoleManager();
 	        	
 				Role role = new Role();
 				//role.setRoleId(roleId);
@@ -451,47 +448,51 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 					op = (Operation)list1.get(k);
 					opids1[k] = op.getId();
 				}
-				roleManager.storeRoleresop(opids1,siteid,roleId,"site",name,"role");
+				roleManager.storeRoleresop(opids1,siteid,roleId,"site",name,"role",false);
 				for(int k=0;k<list2.size();k++){
 					op = (Operation)list2.get(k);
 					opids2[k] = op.getId();
 				}
-				roleManager.storeRoleresop(opids2,siteid,roleId,"site.channel",name,"role");
+				roleManager.storeRoleresop(opids2,siteid,roleId,"site.channel",name,"role",false);
 				for(int k=0;k<list3.size();k++){
 					op = (Operation)list3.get(k);
 					opids3[k] = op.getId();
 				}
-				roleManager.storeRoleresop(opids3,siteid,roleId,"sitetpl",name,"role");
+				roleManager.storeRoleresop(opids3,siteid,roleId,"sitetpl",name,"role",false);
 				for(int k=0;k<list4.size();k++){
 					op = (Operation)list4.get(k);
 					opids4[k] = op.getId();
 				}
-				roleManager.storeRoleresop(opids4,siteid,roleId,"site.doc",name,"role");
+				roleManager.storeRoleresop(opids4,siteid,roleId,"site.doc",name,"role",false);
 				for(int k=0;k<list5.size();k++){
 					opids5[k] = op.getId();
 					op = (Operation)list5.get(k);
 				}
-				roleManager.storeRoleresop(opids5,siteid,roleId,"sitefile",name,"role");
+				roleManager.storeRoleresop(opids5,siteid,roleId,"sitefile",name,"role",false);
 				//加站点离散资源
 				DBUtil db = new DBUtil();
 				db.executeSelect("select title from td_sm_res where restype_id ='site'");
 				if(db.size()>0){
 					for(int j =0 ;j<db.size();j++)
 					{
-						roleManager.storeRoleresop("write",db.getString(j,"title"),roleId,"site",db.getString(j,"title"),"role");
+						roleManager.storeRoleresop("write",db.getString(j,"title"),roleId,"site",db.getString(j,"title"),"role",false);
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+	        tm.commit();
+	    	Event event = new EventImpl(site,CMSEventType.EVENT_SITE_ADD);
+			super.change(event,true);
+	        EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 			/*拷贝标签附件到tmp目录*/				
 			copyTagAttachment2Tmp(currSitePath.getAbsoluteFile()+"\\_template");
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new SiteManagerException("sql异常.异常描述为:" + e.getMessage());
+			
+		} catch (Exception e) {
+			throw new SiteManagerException("sql异常.异常描述为:" + e.getMessage(),e);
 		}finally{
-			conn.resetPrepare();
+			tm.release();
 		}
 		
 		/**
@@ -1644,9 +1645,11 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		}
 		String sitedir = null;
 		try {
-			DBUtil db = new DBUtil();
-			String sql = "select sitedir from td_cms_site where site_id = '"+siteId+"'";
-			db.executeSelect(sql);
+			PreparedDBUtil db = new PreparedDBUtil();
+			String sql = "select sitedir from td_cms_site where site_id = ?";
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(siteId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				sitedir = db.getString(0,0);
 			}

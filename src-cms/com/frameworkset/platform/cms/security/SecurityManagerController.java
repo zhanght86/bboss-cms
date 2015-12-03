@@ -28,6 +28,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -87,19 +88,21 @@ public class SecurityManagerController {
 			session.removeAttribute("resname");
 			request.setAttribute("resname",resname);
 			
-			
+			boolean sendEvent = false;
 			RoleManager roleManager = SecurityDatabase.getRoleManager();
 			for(int k=0;k<tmp.length;k++){
 				//操作和递归为空的话删除当前站点所有操作
+				sendEvent = true;
 				if(opid==null){
-					roleManager.deletePermissionOfRole(resid,resTypeId,tmp[k],role_type);
+					
+					roleManager.deletePermissionOfRole(resid,resTypeId,tmp[k],role_type,false);
 					
 				}
 				
 				//操作不为空和递归为空的话授权当前站点相关操作（先删后存）
 				if(opid!=null){
-					roleManager.deletePermissionOfRole(resid,resTypeId,tmp[k],role_type);
-					roleManager.storeRoleresop(opid,resid,tmp[k],resTypeId,resname,role_type);
+					roleManager.deletePermissionOfRole(resid,resTypeId,tmp[k],role_type,false);
+					roleManager.storeRoleresop(opid,resid,tmp[k],resTypeId,resname,role_type,false);
 					try
 					{
 						Integer.parseInt(resid);
@@ -112,7 +115,7 @@ public class SecurityManagerController {
 							{
 								String siteid = db.getInt(j,"site_id")+"";
 								String name = db.getString(j,"name");
-								roleManager.storeRoleresop("write",siteid,tmp[k],resTypeId,name,role_type);
+								roleManager.storeRoleresop("write",siteid,tmp[k],resTypeId,name,role_type,false);
 							
 							}
 						}
@@ -123,6 +126,8 @@ public class SecurityManagerController {
 					}
 				}
 			}
+			if(sendEvent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 		
 			return "success";
 	}

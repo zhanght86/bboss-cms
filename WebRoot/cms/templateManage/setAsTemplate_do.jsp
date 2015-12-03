@@ -21,8 +21,10 @@ try{
 	cmsmanager.init(request,session,response,control);
 
 	String siteId =  cmsmanager.getSiteID();
+	int siteId_int = -1;
 	if(siteId != null){
-		tplt.setSiteId(Integer.parseInt(siteId));		
+		siteId_int = Integer.parseInt(siteId);
+		tplt.setSiteId(siteId_int);		
 	}
 
 	String uri = request.getParameter("uri");
@@ -55,7 +57,7 @@ try{
 	int style = Integer.parseInt(request.getParameter("templateStyle"));
 	tplt.setStyle(style);
 	
-	new TemplateManagerImpl().createTemplateofSite(tplt,Integer.parseInt(siteId));
+	new TemplateManagerImpl().createTemplateofSite(tplt,siteId_int);
 	%>
 	<script language="javascript">
 		alert('设置<%=fileName%>为模板成功!');

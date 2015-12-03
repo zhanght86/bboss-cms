@@ -322,8 +322,7 @@ public class SSOControler {
                         return null;
                     } catch (Exception e) {
 
-                        response.sendRedirect(request.getContextPath() + "/webseal/websealloginfail.jsp?userName="
-                                + userName + "&ip=" + ip);
+                        response.sendRedirect(new StringBuilder().append(request.getContextPath() ).append( "/webseal/websealloginfail.jsp?userName=").append(userName ).append( "&ip=" ).append( ip).toString());
                         return null;
                     }
 
@@ -548,10 +547,10 @@ public class SSOControler {
     public void wxsso(HttpServletRequest request, HttpServletResponse response) {
 
         String code = request.getParameter("code");
-        System.out.println("微信code=" + code);
+        log.info("微信code=" + code);
 
         String app = request.getParameter("state");
-        System.out.println("微信state=" + app);
+        log.info("微信state=" + app);
 
         String successRedirect = request.getParameter("successRedirect");
 
@@ -563,11 +562,11 @@ public class SSOControler {
                 app = app.substring(0,num);
             }
         }
-        System.out.println("微信successRedirect=" + successRedirect);
+        log.info("微信successRedirect=" + successRedirect);
 
         String corpid = WXHelper.getEnterpriseCorpid(app), corpsecret = WXHelper.getEnterpriseCorpsecret(app);
-        System.out.println("微信corpid=" + corpid);
-        System.out.println("微信corpsecret=" + corpsecret);
+        log.info("微信corpid=" + corpid);
+        log.info("微信corpsecret=" + corpsecret);
 
         String userName = null;
         String loginMenu = request.getParameter("loginMenu");
@@ -607,7 +606,7 @@ public class SSOControler {
                 userName = userToken.getUserId();
             }
 
-            System.out.println("微信userName=" + userName);
+            log.info("微信userName=" + userName);
 
             boolean issameuser = false;
 
@@ -644,9 +643,10 @@ public class SSOControler {
                         } else {
 
                             Module menu = (Module) menuitem;
-                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
-                                    + "=" + menu.getPath();
-                            successRedirect = framepath;
+                            StringBuilder framepath = new StringBuilder();
+                            framepath .append( contextpath ).append( "/sanydesktop/singleframe.page?" ).append( MenuHelper.sanymenupath
+                            		).append( "=" ).append( menu.getPath());
+                            successRedirect = framepath.toString();
                         }
                         AccessControl.recordIndexPage(request, successRedirect);
                     } else {
@@ -659,8 +659,8 @@ public class SSOControler {
                     String msg = e.getMessage();
                     if (msg == null)
                         msg = "";
-                    response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
-                            + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                    response.sendRedirect( new StringBuilder().append(contextpath ).append( "/webseal/websealloginfail.jsp?userName=" ).append( userName
+                    		).append( "&errormsg=" ).append( java.net.URLEncoder.encode(java.net.URLEncoder.encode(msg, "UTF-8"), "UTF-8")).toString());
                     return;
                 }
 
@@ -678,9 +678,9 @@ public class SSOControler {
                     } else {
 
                         Module menu = (Module) menuitem;
-                        String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
-                                + "=" + menu.getPath();
-                        successRedirect = framepath;
+                        StringBuilder framepath = new StringBuilder();
+                        framepath .append( contextpath ).append( "/sanydesktop/singleframe.page?" ).append( MenuHelper.sanymenupath).append("=" ).append( menu.getPath());
+                        successRedirect = framepath.toString();
                     }
                     AccessControl.recordIndexPage(request, successRedirect);
                 } else {
@@ -697,7 +697,7 @@ public class SSOControler {
                 errorMessage = "";
 
             try {
-                FileCopyUtils.copy(errorMessage + "," + userName + "登陆失败，请确保输入的用户名和口令是否正确！", new OutputStreamWriter(
+                FileCopyUtils.copy( new StringBuilder().append( errorMessage ).append( "," ).append( userName ).append( "登陆失败，请确保输入的用户名和口令是否正确！").toString(), new OutputStreamWriter(
                         response.getOutputStream(), "UTF-8"));
             } catch (IOException e) {
                 log.info("", e);
@@ -783,9 +783,9 @@ public class SSOControler {
                             } else {
 
                                 Module menu = (Module) menuitem;
-                                String framepath = contextpath + "/sanydesktop/singleframe.page?"
-                                        + MenuHelper.sanymenupath + "=" + menu.getPath();
-                                successRedirect = framepath;
+                                StringBuilder framepath = new StringBuilder();
+                                framepath .append(contextpath ).append( "/sanydesktop/singleframe.page?").append( MenuHelper.sanymenupath ).append( "=" ).append( menu.getPath());
+                                successRedirect = framepath.toString();
                             }
                             AccessControl.recordIndexPage(request, successRedirect);
                         } else {
@@ -798,8 +798,10 @@ public class SSOControler {
                         String msg = e.getMessage();
                         if (msg == null)
                             msg = "";
-                        response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
-                                + "&ip=" + ip + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(contextpath).append( "/webseal/websealloginfail.jsp?userName=").append( userName)
+                    	.append( "&ip=").append(StringUtil.getClientIP(request) ).append( "&errormsg=").append( java.net.URLEncoder.encode(java.net.URLEncoder.encode(msg, "UTF-8"), "UTF-8"));
+                        response.sendRedirect(builder.toString());
                         return;
                     }
 
@@ -816,10 +818,11 @@ public class SSOControler {
                                     menu.getId());
                         } else {
 
-                            Module menu = (Module) menuitem;
-                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
-                                    + "=" + menu.getPath();
-                            successRedirect = framepath;
+                            Module menu = (Module) menuitem; 
+                            StringBuilder framepath = new StringBuilder();
+                            framepath .append(contextpath ).append( "/sanydesktop/singleframe.page?" ).append( MenuHelper.sanymenupath
+                            		).append( "=" ).append( menu.getPath());
+                            successRedirect = framepath.toString();
                         }
                         AccessControl.recordIndexPage(request, successRedirect);
                     } else {
@@ -832,6 +835,19 @@ public class SSOControler {
             } catch (Exception e)// 检测失败,继续平台登录
             {
                 log.info("", e);
+                try {
+                	if(!response.isCommitted())
+                	{
+	                	StringBuilder builder = new StringBuilder();
+	                	builder.append(contextpath).append( "/webseal/websealloginfail.jsp?userName=").append( userName)
+	                	.append( "&ip=").append(StringUtil.getClientIP(request) ).append( "&errormsg=validate UIM failed.");
+	                	
+						response.sendRedirect(builder.toString());
+                	}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
 
         }
@@ -889,9 +905,9 @@ public class SSOControler {
                             } else {
 
                                 Module menu = (Module) menuitem;
-                                String framepath = contextpath + "/sanydesktop/singleframe.page?"
-                                        + MenuHelper.sanymenupath + "=" + menu.getPath();
-                                successRedirect = framepath;
+                                StringBuilder framepath = new StringBuilder();
+                                framepath .append(contextpath ).append( "/sanydesktop/singleframe.page?").append(MenuHelper.sanymenupath ).append( "=").append( menu.getPath());
+                                successRedirect = framepath.toString();
                             }
                             AccessControl.recordIndexPage(request, successRedirect);
                         } else {
@@ -904,8 +920,10 @@ public class SSOControler {
                         String msg = e.getMessage();
                         if (msg == null)
                             msg = "";
-                        response.sendRedirect(contextpath + "/webseal/websealloginfail.jsp?userName=" + userName
-                                + "&errormsg=" + java.net.URLEncoder.encode(msg, "UTF-8"));
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(contextpath ).append( "/webseal/websealloginfail.jsp?userName=").append( userName)
+                    	.append( "&ip=").append(StringUtil.getClientIP(request) ).append( "&errormsg=" ).append( java.net.URLEncoder.encode(java.net.URLEncoder.encode(msg, "UTF-8"),"UTF-8"));
+                        response.sendRedirect(builder.toString());
                         return;
                     }
 
@@ -923,9 +941,10 @@ public class SSOControler {
                         } else {
 
                             Module menu = (Module) menuitem;
-                            String framepath = contextpath + "/sanydesktop/singleframe.page?" + MenuHelper.sanymenupath
-                                    + "=" + menu.getPath();
-                            successRedirect = framepath;
+                            StringBuilder framepath = new StringBuilder();
+                            framepath .append(contextpath ).append( "/sanydesktop/singleframe.page?" ).append( MenuHelper.sanymenupath
+                            		).append( "=" ).append( menu.getPath());
+                            successRedirect = framepath.toString();
                         }
                         AccessControl.recordIndexPage(request, successRedirect);
                     } else {

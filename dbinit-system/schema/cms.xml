@@ -58,7 +58,7 @@
     </table>
     <table name="TD_CMS_ADDWATERIMAGE">
         <column name="URL" primaryKey="true" required="true" size="150" type="VARCHAR"/>
-        <column name="CREATETIME" type="DATE"/>
+        <column name="CREATETIME" type="TIMESTAMP"/>
         <column name="ISBACKUP" size="2" type="VARCHAR"/>
     </table>
     <table name="TD_CMS_CHANNEL">
@@ -69,7 +69,7 @@
         <column name="PARENT_ID" size="10" type="DECIMAL"/>
         <column name="CHNL_PATH" required="true" size="150" type="VARCHAR"/>
         <column name="CREATEUSER" required="true" size="22" type="DECIMAL"/>
-        <column name="CREATETIME" required="true" type="DATE"/>
+        <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column default="0" name="ORDER_NO" required="true" size="5" type="DECIMAL"/>
         <column name="SITE_ID" required="true" size="10" type="DECIMAL"/>
         <column default="0" name="STATUS" required="true" size="1" type="DECIMAL"/>
@@ -152,7 +152,7 @@
         <column name="DOC_ID" primaryKey="true" required="true"
             size="22" type="DECIMAL"/>
         <column name="OP_USER_ID" required="true" size="22" type="DECIMAL"/>
-        <column name="OP_TIME" required="true" type="DATE"/>
+        <column name="OP_TIME" required="true" type="TIMESTAMP"/>
         <column name="CITETYPE" size="1" type="DECIMAL"/>
         <column name="SITE_ID" size="22" type="DECIMAL"/>
         <foreign-key foreignTable="TD_CMS_CHANNEL">
@@ -163,12 +163,12 @@
         <column name="ANSWER" type="CLOB"/>
         <column name="CID" size="10" type="DECIMAL"/>
         <column name="WHO_IP" size="100" type="VARCHAR"/>
-        <column name="WHEN" type="DATE"/>
+        <column name="WHEN" type="TIMESTAMP"/>
         <column name="NAME" size="50" type="VARCHAR"/>
         <column name="STATE" size="1" type="DECIMAL"/>
         <column name="OPERATORID" size="50" type="VARCHAR"/>
-        <column name="OTIME" type="DATE"/>
-        <column name="ANSTIME" type="DATE"/>
+        <column name="OTIME" type="TIMESTAMP"/>
+        <column name="ANSTIME" type="TIMESTAMP"/>
         <column name="ANSWER_ID" primaryKey="true" required="true"
             size="10" type="DECIMAL"/>
         <column name="PHONE" size="50" type="VARCHAR"/>
@@ -186,8 +186,8 @@
     <table name="TD_CMS_COLLECT_TIMECTRL2">
         <column name="ID" primaryKey="true" required="true" size="10" type="DECIMAL"/>
         <column name="TITLE_ID" size="10" type="DECIMAL"/>
-        <column name="TIME_START" type="DATE"/>
-        <column name="TIME_END" type="DATE"/>
+        <column name="TIME_START" type="TIMESTAMP"/>
+        <column name="TIME_END" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_COLLECT_TITLE">
             <reference foreign="ID" local="TITLE_ID"/>
         </foreign-key>
@@ -200,11 +200,11 @@
         <column name="IP_REPEAT" size="1" type="DECIMAL"/>
         <column name="TIME_GAP" size="22" type="DECIMAL"/>
         <column name="FOUNDER_ID" size="22" type="DECIMAL"/>
-        <column name="CTIME" type="DATE"/>
+        <column name="CTIME" type="TIMESTAMP"/>
         <column name="ISTOP" size="1" type="DECIMAL"/>
         <column name="DEPART" size="50" type="VARCHAR"/>
-        <column name="STIME" type="DATE"/>
-        <column name="ETIME" type="DATE"/>
+        <column name="STIME" type="TIMESTAMP"/>
+        <column name="ETIME" type="TIMESTAMP"/>
         <column name="STATE" size="1" type="DECIMAL"/>
     </table>
     <table name="TD_CMS_CUSTOM_FORM">
@@ -248,7 +248,7 @@
         <column name="EMAIL" size="30" type="VARCHAR"/>
         <column name="REASON" required="true" size="1" type="DECIMAL"/>
         <column name="DESCRIPTIONINFO" size="200" type="VARCHAR"/>
-        <column name="COMTIME" required="true" type="DATE"/>
+        <column name="COMTIME" required="true" type="TIMESTAMP"/>
         <column name="REPLYED" size="1" type="DECIMAL"/>
         <foreign-key foreignTable="TD_CMS_DOC_COMMENT">
             <reference foreign="COMMENT_ID" local="COMMENT_ID"/>
@@ -259,7 +259,7 @@
         <column name="SRCDESC" size="200" type="VARCHAR"/>
         <column name="SRCLINK" size="200" type="VARCHAR"/>
         <column name="CRUSER" size="5" type="DECIMAL"/>
-        <column name="CRTIME" type="DATE"/>
+        <column name="CRTIME" type="TIMESTAMP"/>
         <column name="DOCSOURCE_ID" primaryKey="true" required="true"
             size="10" type="DECIMAL"/>
     </table>
@@ -276,9 +276,9 @@
         <column name="KEYWORDS" size="500" type="VARCHAR"/>
         <column name="DOCABSTRACT" size="2000" type="VARCHAR"/>
         <column name="DOCTYPE" required="true" size="22" type="DECIMAL"/>
-        <column name="DOCWTIME" required="true" type="DATE"/>
+        <column name="DOCWTIME" required="true" type="TIMESTAMP"/>
         <column name="TITLECOLOR" size="7" type="VARCHAR"/>
-        <column name="CREATETIME" required="true" type="DATE"/>
+        <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column name="CREATEUSER" required="true" size="10" type="DECIMAL"/>
         <column name="DOCSOURCE_ID" required="true" size="10" type="DECIMAL"/>
         <column name="DETAILTEMPLATE_ID" size="10" type="DECIMAL"/>
@@ -290,10 +290,10 @@
         <column default="1" name="PARENT_DETAIL_TPL" required="true"
             size="1" type="CHAR"/>
         <column default="0" name="ISDELETED" size="5" type="DECIMAL"/>
-        <column name="AUDITTIME" type="DATE"/>
-        <column name="PUBLISHTIME" type="DATE"/>
-        <column name="GUIDANGTIME" type="DATE"/>
-        <column name="RECYCLETIME" type="DATE"/>
+        <column name="AUDITTIME" type="TIMESTAMP"/>
+        <column name="PUBLISHTIME" type="TIMESTAMP"/>
+        <column name="GUIDANGTIME" type="TIMESTAMP"/>
+        <column name="RECYCLETIME" type="TIMESTAMP"/>
         <column name="GUIDANGMAN" size="10" type="DECIMAL"/>
         <column name="RECYCLEMAN" size="10" type="DECIMAL"/>
         <column default="1" name="VERSION" size="4" type="DECIMAL"/>
@@ -305,7 +305,7 @@
         <column name="SECONDTITLE" size="300" type="VARCHAR"/>
         <column default="0" name="ISNEW" size="1" type="DECIMAL"/>
         <column name="NEWPIC_PATH" size="200" type="VARCHAR"/>
-        <column name="ORDERTIME" type="DATE"/>
+        <column name="ORDERTIME" type="TIMESTAMP"/>
         <column name="FILECONTENT" type="BLOB"/>
         <column default="9999" name="SEQ" size="22" type="DECIMAL"/>
         <column name="EXT_CLASS" size="300" type="VARCHAR"/>
@@ -351,9 +351,9 @@
         <column name="KEYWORDS" size="500" type="VARCHAR"/>
         <column name="DOCABSTRACT" size="2000" type="VARCHAR"/>
         <column name="DOCTYPE" required="true" size="22" type="DECIMAL"/>
-        <column name="DOCWTIME" required="true" type="DATE"/>
+        <column name="DOCWTIME" required="true" type="TIMESTAMP"/>
         <column name="TITLECOLOR" size="7" type="VARCHAR"/>
-        <column name="CREATETIME" required="true" type="DATE"/>
+        <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column name="CREATEUSER" required="true" size="10" type="DECIMAL"/>
         <column name="DOCSOURCE_ID" required="true" size="10" type="DECIMAL"/>
         <column name="DETAILTEMPLATE_ID" size="10" type="DECIMAL"/>
@@ -363,10 +363,10 @@
         <column name="DOC_KIND" size="22" type="DECIMAL"/>
         <column name="PARENT_DETAIL_TPL" required="true" size="1" type="CHAR"/>
         <column name="ISDELETED" size="5" type="DECIMAL"/>
-        <column name="AUDITTIME" type="DATE"/>
-        <column name="PUBLISHTIME" type="DATE"/>
-        <column name="GUIDANGTIME" type="DATE"/>
-        <column name="RECYCLETIME" type="DATE"/>
+        <column name="AUDITTIME" type="TIMESTAMP"/>
+        <column name="PUBLISHTIME" type="TIMESTAMP"/>
+        <column name="GUIDANGTIME" type="TIMESTAMP"/>
+        <column name="RECYCLETIME" type="TIMESTAMP"/>
         <column name="GUIDANGMAN" size="10" type="DECIMAL"/>
         <column name="RECYCLEMAN" size="10" type="DECIMAL"/>
         <column name="VERSION" size="4" type="DECIMAL"/>
@@ -389,7 +389,7 @@
         <column name="END_TIME" required="true" size="100" type="VARCHAR"/>
         <column name="ORDER_NO" required="true" size="22" type="DECIMAL"/>
         <column name="OP_USER" required="true" size="22" type="DECIMAL"/>
-        <column name="OP_TIME" required="true" type="DATE"/>
+        <column name="OP_TIME" required="true" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_DOCUMENT">
             <reference foreign="DOCUMENT_ID" local="DOCUMENT_ID"/>
         </foreign-key>
@@ -412,7 +412,7 @@
         <column name="DOC_ID" size="10" type="DECIMAL"/>
         <column name="DOC_COMMENT" required="true" type="CLOB"/>
         <column name="USER_NAME" size="100" type="VARCHAR"/>
-        <column name="COMTIME" type="DATE"/>
+        <column name="COMTIME" type="TIMESTAMP"/>
         <column name="USER_IP" size="100" type="VARCHAR"/>
         <column name="SRC_COMMENT_ID" size="10" type="DECIMAL"/>
         <column name="STATUS" size="22" type="DECIMAL"/>
@@ -437,7 +437,7 @@
             size="22" type="DECIMAL"/>
         <column name="OLD_STATUS" required="true" size="10" type="DECIMAL"/>
         <column name="PUBLISHER" size="100" type="VARCHAR"/>
-        <column name="PUB_START_TIME" type="DATE"/>
+        <column name="PUB_START_TIME" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_DOCUMENT">
             <reference foreign="DOCUMENT_ID" local="DOCUMENT_ID"/>
         </foreign-key>
@@ -448,7 +448,7 @@
         <column name="RELATED_DOC_ID" primaryKey="true" required="true"
             size="22" type="DECIMAL"/>
         <column name="OP_USER_ID" required="true" size="22" type="DECIMAL"/>
-        <column name="OP_TIME" required="true" type="DATE"/>
+        <column name="OP_TIME" required="true" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_DOCUMENT">
             <reference foreign="DOCUMENT_ID" local="RELATED_DOC_ID"/>
         </foreign-key>
@@ -463,7 +463,7 @@
         <column name="DOCUMENT_ID" required="true" size="22" type="DECIMAL"/>
         <column name="PRE_STATUS" size="22" type="DECIMAL"/>
         <column name="SUBMIT_ID" required="true" size="22" type="DECIMAL"/>
-        <column name="SUBMIT_TIME" required="true" type="DATE"/>
+        <column name="SUBMIT_TIME" required="true" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_DOCUMENT">
             <reference foreign="DOCUMENT_ID" local="DOCUMENT_ID"/>
         </foreign-key>
@@ -478,7 +478,7 @@
             size="22" type="DECIMAL"/>
         <column name="AFTER_STATUS" size="22" type="DECIMAL"/>
         <column default="1" name="VALID" size="22" type="DECIMAL"/>
-        <column name="COMPLETE_TIME" type="DATE"/>
+        <column name="COMPLETE_TIME" type="TIMESTAMP"/>
         <column name="OPINION" size="500" type="VARCHAR"/>
         <foreign-key foreignTable="TB_CMS_DOC_STATUS">
             <reference foreign="ID" local="AFTER_STATUS"/>
@@ -491,7 +491,7 @@
         <column name="CHANNEL_ID" required="true" size="10" type="DECIMAL"/>
         <column name="CREATOR" required="true" size="10" type="DECIMAL"/>
         <column name="DESCRIPTION" size="200" type="VARCHAR"/>
-        <column name="CREATTIME" required="true" type="DATE"/>
+        <column name="CREATTIME" required="true" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_CHANNEL">
             <reference foreign="CHANNEL_ID" local="CHANNEL_ID"/>
         </foreign-key>
@@ -509,7 +509,7 @@
         <column name="KEYWORDS" size="500" type="VARCHAR"/>
         <column name="DOCABSTRACT" size="2000" type="VARCHAR"/>
         <column name="DOCTYPE" required="true" size="22" type="DECIMAL"/>
-        <column name="DOCWTIME" required="true" type="DATE"/>
+        <column name="DOCWTIME" required="true" type="TIMESTAMP"/>
         <column name="TITLECOLOR" size="7" type="VARCHAR"/>
         <column name="DOCSOURCE_ID" required="true" size="10" type="DECIMAL"/>
         <column name="DETAILTEMPLATE_ID" size="10" type="DECIMAL"/>
@@ -519,7 +519,7 @@
         <column name="DOC_KIND" size="22" type="DECIMAL"/>
         <column name="PARENT_DETAIL_TPL" required="true" size="1" type="CHAR"/>
         <column name="OP_USER" required="true" size="22" type="DECIMAL"/>
-        <column name="OP_TIME" required="true" type="DATE"/>
+        <column name="OP_TIME" required="true" type="TIMESTAMP"/>
         <column name="LABEL" size="100" type="VARCHAR"/>
         <column name="VERSIONDESCRIPTION" size="100" type="VARCHAR"/>
         <column name="PIC_PATH" size="100" type="VARCHAR"/>
@@ -565,7 +565,7 @@
         <column name="FIELDVALUE" size="4000" type="VARCHAR"/>
         <column name="NUMBERVALUE" size="10" type="DECIMAL"/>
         <column name="CLOBVALUE" type="CLOB"/>
-        <column name="DATEVALUE" type="DATE"/>
+        <column name="DATEVALUE" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_EXTFIELD">
             <reference foreign="FIELD_ID" local="FIELD_ID"/>
         </foreign-key>
@@ -589,7 +589,7 @@
         <column name="URI" required="true" size="510" type="VARCHAR"/>
         <column default="1.0" name="VERSION" required="true" size="22" type="DECIMAL"/>
         <column name="USER_ID" required="true" size="40" type="VARCHAR"/>
-        <column name="CHANGE_TIME" required="true" type="DATE"/>
+        <column name="CHANGE_TIME" required="true" type="TIMESTAMP"/>
         <column name="BAK_FILE_NAME" size="510" type="VARCHAR"/>
         <column name="CHANGE_REMARK" size="510" type="VARCHAR"/>
     </table>
@@ -599,7 +599,7 @@
         <column name="URI" primaryKey="true" required="true" size="200" type="VARCHAR"/>
         <column name="VERSION" scale="1" size="6" type="DECIMAL"/>
         <column name="CHECKOUT_USER" size="40" type="VARCHAR"/>
-        <column name="CHECKOUT_TIME" type="DATE"/>
+        <column name="CHECKOUT_TIME" type="TIMESTAMP"/>
     </table>
     <table name="TD_CMS_MAILSERVERINFO">
         <column name="ID" primaryKey="true" required="true" size="22" type="DECIMAL"/>
@@ -645,7 +645,7 @@
         <column name="FTPFOLDER" size="20" type="VARCHAR"/>
         <column name="WEBHTTP" size="100" type="VARCHAR"/>
         <column name="SITEORDER" size="5" type="DECIMAL"/>
-        <column name="CREATETIME" required="true" type="DATE"/>
+        <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column name="CREATEUSER" required="true" size="22" type="DECIMAL"/>
         <column name="PUBLISHDESTINATION" size="1" type="DECIMAL"/>
         <column name="INDEXFILENAME" size="50" type="VARCHAR"/>
@@ -727,7 +727,7 @@
         <column name="TEXT" type="CLOB"/>
         <column name="TYPE" required="true" size="5" type="DECIMAL"/>
         <column name="CREATEUSER" required="true" size="22" type="DECIMAL"/>
-        <column name="CREATETIME" required="true" type="DATE"/>
+        <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column default="0" name="INC_PUB_FLAG" required="true" size="1" type="CHAR"/>
         <column default="0" name="PERSISTTYPE" size="5" type="DECIMAL"/>
         <column name="TEMPLATEFILENAME" size="100" type="VARCHAR"/>
@@ -745,7 +745,7 @@
         <column name="TMPLNAME" primaryKey="true" required="true"
             size="50" type="VARCHAR"/>
         <column name="TMPLDESC" size="400" type="VARCHAR"/>
-        <column name="EXPORTDATE" type="DATE"/>
+        <column name="EXPORTDATE" type="TIMESTAMP"/>
         <column name="EXPORTERID" size="22" type="DECIMAL"/>
         <column name="FLAG" size="2" type="VARCHAR"/>
         <column name="SITEID" size="22" type="DECIMAL"/>
@@ -757,7 +757,7 @@
         <column default="0" name="TYPE" size="1" type="DECIMAL"/>
         <column name="ITEM_ID" size="22" type="DECIMAL"/>
         <column name="WHO_IP" size="100" type="VARCHAR"/>
-        <column name="WHEN" type="DATE"/>
+        <column name="WHEN" type="TIMESTAMP"/>
         <column name="ISBIGTITLE" size="1" type="DECIMAL"/>
         <column default="0" name="STATE" size="1" type="DECIMAL"/>
         <column name="ANSWER" type="CLOB"/>
@@ -796,8 +796,8 @@
     <table name="TD_CMS_VOTE_TIMECTRL">
         <column name="ID" primaryKey="true" required="true" size="10" type="DECIMAL"/>
         <column name="TITLE_ID" size="10" type="DECIMAL"/>
-        <column name="TIME_START" type="DATE"/>
-        <column name="TIME_END" type="DATE"/>
+        <column name="TIME_START" type="TIMESTAMP"/>
+        <column name="TIME_END" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_VOTE_TITLE">
             <reference foreign="ID" local="TITLE_ID"/>
         </foreign-key>
@@ -812,7 +812,7 @@
         <column name="FOUNDER_ID" size="22" type="DECIMAL"/>
         <column default="0" name="ACTIVE" size="1" type="DECIMAL"/>
         <column name="SEETYPE" size="1" type="DECIMAL"/>
-        <column name="CTIME" type="DATE"/>
+        <column name="CTIME" type="TIMESTAMP"/>
         <column default="0" name="ISTOP" size="1" type="DECIMAL"/>
         <column name="PICPATH" size="500" type="VARCHAR"/>
         <column name="DEPART_ID" size="20" type="VARCHAR"/>
@@ -839,7 +839,7 @@
         <column name="DOC_ID" required="true" size="22" type="DECIMAL"/>
         <column name="DOC_OPER_ID" required="true" size="22" type="DECIMAL"/>
         <column name="DOC_TRANS_ID" size="22" type="DECIMAL"/>
-        <column name="OPER_TIME" required="true" type="DATE"/>
+        <column name="OPER_TIME" required="true" type="TIMESTAMP"/>
         <column name="OPER_CONTENT" size="1000" type="VARCHAR"/>
         <foreign-key foreignTable="TB_CMS_DOC_STATUS_TRANS">
             <reference foreign="ID" local="DOC_TRANS_ID"/>
@@ -856,7 +856,7 @@
         <column name="OLD_FLOW_ID" size="22" type="DECIMAL"/>
         <column name="NEW_FLOW_ID" required="true" size="22" type="DECIMAL"/>
         <column name="OP_USER_ID" required="true" size="22" type="DECIMAL"/>
-        <column name="OP_TIME" type="DATE"/>
+        <column name="OP_TIME" type="TIMESTAMP"/>
         <foreign-key foreignTable="TD_CMS_SITE">
             <reference foreign="SITE_ID" local="SITE_ID"/>
         </foreign-key>
@@ -870,10 +870,10 @@
    
     <table name="X_TD_CMS_PUBLISHSCHEDULAR">
         <column name="SCHEDULERTYPE" size="5" type="DECIMAL"/>
-        <column name="STARTTIME" type="DATE"/>
+        <column name="STARTTIME" type="TIMESTAMP"/>
         <column name="PUBLISHTIMES" size="5" type="DECIMAL"/>
         <column name="PUBLISHINTERVAL" size="5" type="DECIMAL"/>
-        <column name="ENDTIME" type="DATE"/>
+        <column name="ENDTIME" type="TIMESTAMP"/>
         <column name="PUBLISHSCHEDULAR_ID" required="true" size="10" type="DECIMAL"/>
         <column name="SITE_ID" size="10" type="DECIMAL"/>
         <column name="DOCUMENT_ID" required="true" size="10" type="DECIMAL"/>

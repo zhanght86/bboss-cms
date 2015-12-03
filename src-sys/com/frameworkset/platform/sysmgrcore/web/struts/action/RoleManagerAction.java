@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
@@ -22,6 +23,7 @@ import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 /**
  * <p>
  * Title:
@@ -247,9 +249,9 @@ public class RoleManagerAction   {
 //			o.setTypes(role_type);
 //			Roleresop s = operManager.getRoleresop(o);
 			if (Flag != null && Flag.equals("1")) {
-				roleManager.storeRoleresop(opId,resId,roleId,resTypeId,resName,role_type);
+				roleManager.storeRoleresop(opId,resId,roleId,resTypeId,resName,role_type,true);
 			} else if (Flag != null && Flag.equals("0")) {
-				roleManager.deletePermissionOfRole(resId,resTypeId,roleId,role_type);
+				roleManager.deletePermissionOfRole(resId,resTypeId,roleId,role_type,true);
 			}
 			return "success";
 
@@ -304,9 +306,9 @@ public class RoleManagerAction   {
 //				o.setTypes(role_type);
 //				Roleresop s = operManager.getRoleresop(o);
 				if (Flag != null && Flag.equals("1") ) {
-					roleManager.storeRoleresop(opid,resId,roleId,"user",resname,role_type);
+					roleManager.storeRoleresop(opid,resId,roleId,"user",resname,role_type,true);
 				} else if (Flag != null && Flag.equals("0")) {
-					roleManager.deletePermissionOfRole(resId,"user",roleId,role_type);
+					roleManager.deletePermissionOfRole(resId,"user",roleId,role_type,true);
 				}
 				return "success";
 
@@ -341,10 +343,12 @@ public class RoleManagerAction   {
 		
 		try {
 			if (roleId != null) {
+				RoleManager roleManager = SecurityDatabase.getRoleManager();
+				
+				OrgManager orgManager = SecurityDatabase.getOrgManager();
+				boolean sendevent = roleId.length > 0;
 				for (int k = 0; k < roleId.length; k++){
-					RoleManager roleManager = SecurityDatabase.getRoleManager();
 					
-					OrgManager orgManager = SecurityDatabase.getOrgManager();
 					Roleresop o = new Roleresop();
 //					o.getId().setRoleId(roleId[k]);
 //					o.getId().setOpId(opId);
@@ -360,9 +364,9 @@ public class RoleManagerAction   {
 					
 					// 授权当前机构
 					if (Flag != null && Flag.equals("1")) {
-						roleManager.storeRoleresop(opId,resId,roleId[k],resTypeId,resName,role_type);
+						roleManager.storeRoleresop(opId,resId,roleId[k],resTypeId,resName,role_type,false);
 					} else if (Flag != null && Flag.equals("0")) {
-						roleManager.deletePermissionOfRole(resId,resTypeId,roleId[k],role_type);
+						roleManager.deletePermissionOfRole(resId,resTypeId,roleId[k],role_type,false);
 					}
 					// 递归授权机构的权限
 					if (isRecursion.equals("1")) {
@@ -381,14 +385,16 @@ public class RoleManagerAction   {
 //								Roleresop rs = operManager.getRoleresop(rro);
 								// 授权当前机构
 								if (Flag != null && Flag.equals("1")) {
-									roleManager.storeRoleresop(opId,so.getOrgId(),roleId[k],resTypeId,so.getOrgName(),role_type);
+									roleManager.storeRoleresop(opId,so.getOrgId(),roleId[k],resTypeId,so.getOrgName(),role_type,false);
 								} else if (Flag != null && Flag.equals("0")) {
-									roleManager.deletePermissionOfRole(so.getOrgId(),resTypeId,roleId[k],role_type);
+									roleManager.deletePermissionOfRole(so.getOrgId(),resTypeId,roleId[k],role_type,false);
 								}
 							}
 						  }
 						}
 					}
+					if(sendevent)
+						EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 				}
 			
 			return "success";
@@ -414,18 +420,30 @@ public class RoleManagerAction   {
 	public static String storeColumnAjax(String resId, String resTypeId,
 			String opId, String[] roleId, String Flag, String isRecursion,
 			String resName, String menuPath, String role_type) {
+		return _storeColumnAjax(resId, resTypeId,
+				  opId,  roleId,   Flag,   isRecursion,
+				  resName,   menuPath,   role_type,  true);
+
+	}
+	
+	private static String _storeColumnAjax(String resId, String resTypeId,
+			String opId, String[] roleId, String Flag, String isRecursion,
+			String resName, String menuPath, String role_type,boolean sendevent) {
 		AccessControl control = AccessControl.getAccessControl(); 
 		HttpServletRequest request = control.getRequest();
+		boolean innerneedsendevent = false;
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
 			if (roleId != null) {
 				for (int k = 0; k < roleId.length; k++){
 					RoleManager roleManager = SecurityDatabase.getRoleManager();
-					
+					innerneedsendevent = true;
 					// 授权当前菜单
 					if (Flag != null && Flag.equals("1")) {
-						roleManager.storeRoleresop(opId,resId,roleId[k],resTypeId,resName,role_type);
+						roleManager.storeRoleresop(opId,resId,roleId[k],resTypeId,resName,role_type,false);
 					} else if (Flag != null && Flag.equals("0")) {
-						roleManager.deletePermissionOfRole(resId,resTypeId,roleId[k],role_type);
+						roleManager.deletePermissionOfRole(resId,resTypeId,roleId[k],role_type,false);
 					}
 
 //					 递归授权菜单的权限
@@ -438,8 +456,8 @@ public class RoleManagerAction   {
 							String resname = item.getName(request);
 						
 							// 子栏目授权
-							storeColumnAjax(item.getId(), resTypeId, opId,roleId, 
-									Flag, isRecursion,resname,item.getPath(),role_type);
+							_storeColumnAjax(item.getId(), resTypeId, opId,roleId, 
+									Flag, isRecursion,resname,item.getPath(),role_type,false);
 						
 							}
 
@@ -449,20 +467,25 @@ public class RoleManagerAction   {
 							String resname = module.getName(request);
 						
 							// 子模块授权
-							storeColumnAjax(module.getId(), resTypeId, opId,roleId, 
-									Flag, isRecursion,resname,module.getPath(),role_type);
+							_storeColumnAjax(module.getId(), resTypeId, opId,roleId, 
+									Flag, isRecursion,resname,module.getPath(),role_type,false);
 							
 						}
 					}
 				}
 			}
-		
-
+			tm.commit();
+			if(sendevent && innerneedsendevent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 			return "success";
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("", e);
 			return "fail";
+		}
+		finally
+		{
+			tm.release();
 		}
 
 	}
@@ -482,22 +505,30 @@ public class RoleManagerAction   {
 	public static void recursionMenu(RoleManager roleManager,Module module,
 			String[] opid,String roleid,String resTypeId,String roleType,boolean isdel) throws Exception
 	{
+		 _recursionMenu(  roleManager,  module,
+					  opid,  roleid,  resTypeId,roleType,isdel,true);
+	}
+	
+	private static void _recursionMenu(RoleManager roleManager,Module module,
+			String[] opid,String roleid,String resTypeId,String roleType,boolean isdel,boolean sendevent) throws Exception
+	{
 		AccessControl control = AccessControl.getAccessControl(); 
 		HttpServletRequest request = control.getRequest();
 		ModuleQueue modules = module.getSubModules();
 		ItemQueue items = module.getItems();
 		Item item = null;
 		Module submodule = null;
+		boolean innersendevent =  items.size() > 0 || modules.size() > 0;
 		for (int i = 0; items != null && i < items.size(); i++) 
 		{
 			item = items.getItem(i);
 			//String resname = item.getName();
 		
 			// 子栏目授权
-			roleManager.deletePermissionOfRole(item.getId(),resTypeId,roleid,roleType);
+			roleManager.deletePermissionOfRole(item.getId(),resTypeId,roleid,roleType,false);
 			if(!isdel)
 			{
-				roleManager.storeRoleresop(opid,item.getId(),roleid,resTypeId,item.getName(request),roleType);
+				roleManager.storeRoleresop(opid,item.getId(),roleid,resTypeId,item.getName(request),roleType,false);
 			}
 		
 		}
@@ -505,13 +536,17 @@ public class RoleManagerAction   {
 		{
 			submodule = modules.getModule(i);
 			
-			roleManager.deletePermissionOfRole(submodule.getId(),resTypeId,roleid,roleType);
+			roleManager.deletePermissionOfRole(submodule.getId(),resTypeId,roleid,roleType,false);
 			if(!isdel)
 			{
-				roleManager.storeRoleresop(opid,submodule.getId(),roleid,resTypeId,submodule.getName(request),roleType);
+				roleManager.storeRoleresop(opid,submodule.getId(),roleid,resTypeId,submodule.getName(request),roleType,false);
 			}
 			
-			recursionMenu(roleManager,submodule,opid,roleid,resTypeId,roleType,isdel);
+			_recursionMenu(roleManager,submodule,opid,roleid,resTypeId,roleType,isdel,false);
+		}
+		if(sendevent && innersendevent)
+		{
+			EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 		}
 	}
 	

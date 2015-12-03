@@ -26,6 +26,7 @@ import org.jdom.input.SAXBuilder;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.container.Template;
 import com.frameworkset.platform.cms.container.TmplateExport;
@@ -45,6 +46,7 @@ import com.frameworkset.platform.config.model.Operation;
 import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.sysmgrcore.manager.RoleManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -64,12 +66,14 @@ public class TemplateManagerImpl implements TemplateManager{
 	 * @param 输入:模板对象template
 	 *  返回值int:成功时为模板id;失败时为:0 功能:将模板基本信息写入数据库表(td_cms_template)中
 	 */
-	public int createTemplate(Template template)throws TemplateManagerException {
+	public int createTemplate(Template template, int siteid)throws TemplateManagerException {
 
 		PreparedDBUtil preDBUtil = new PreparedDBUtil();
 		int ret = 0;
 		String sql = "";
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			sql = "insert into TD_CMS_TEMPLATE("
 					+ "NAME ,DESCRIPTION, HEADER, TEXT ,TYPE,CREATEUSER, CREATETIME, " +
 							"INC_PUB_FLAG,PERSISTTYPE, TEMPLATEFILENAME, TEMPLATEPATH, TEMPLATE_STYLE,TEMPLATE_ID)"
@@ -132,11 +136,13 @@ public class TemplateManagerImpl implements TemplateManager{
 			  RoleManager roleManager = SecurityDatabase.getRoleManager();
 			  Operation op;
 			  List list = resManager.getOperations("template");
+			  boolean sendevent  = false;
 			  if(!userId.equals("1"))
 			  {
 				  for(int k=0;k<list.size();k++){
 						op = (Operation)list.get(k);
-						roleManager.storeRoleresop(op.getId(),ret+"",userId,"template",templateName,"user");
+						roleManager.storeRoleresop(op.getId(),ret+"",userId,"template",templateName,"user",false);
+						sendevent = true;
 				  }
 			  }
 			
@@ -154,17 +160,27 @@ public class TemplateManagerImpl implements TemplateManager{
 						op = (Operation)list.get(i);
 						try {
 							
-							roleManager.storeRoleresop(op.getId(),ret+"",roleId,"template",templateName,"role");
-						
+							roleManager.storeRoleresop(op.getId(),ret+"",roleId,"template",templateName,"role",false);
+							sendevent = true;
 						}catch (Exception e) {
 							e.printStackTrace();
 						}
 						
 					}
+					
 			}
+			SiteTemplateMap sitetemplateM = new SiteTemplateMap();
+			sitetemplateM.createSiteTempateMap(ret, siteid);
+			tm.commit();
+			if(sendevent)
+				EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
 		} catch (Exception e) {
 			ret = 0; // 建模板出现异常
 			throw new TemplateManagerException(e.getMessage());
+		}
+		finally
+		{
+			tm.release();
 		}
 		return ret;
 	}
@@ -177,9 +193,9 @@ public class TemplateManagerImpl implements TemplateManager{
     public int createTemplateofSite(Template template, int siteid)
 			throws TemplateManagerException {
 
-		SiteTemplateMap sitetemplateM = new SiteTemplateMap();
-		int ret = createTemplate(template);
-		sitetemplateM.createSiteTempateMap(ret, siteid);
+		
+		int ret = createTemplate(template,   siteid);
+		
 		return ret;
 	} 
     
@@ -1047,13 +1063,15 @@ public class TemplateManagerImpl implements TemplateManager{
 		if(name==null || name.trim().length()==0){
 			throw new TemplateManagerException("判断是否存在文件名和路径对应的模板,请提供文件名!");
 		}
-		DBUtil conn = new DBUtil();
-		String sql=" select a.*,c.user_name from td_cms_template a inner join TD_CMS_SITE_TPL b on a.TEMPLATE_ID = b.template_id inner join TD_SM_USER c on a.CREATEUSER = c.user_id where a.PERSISTTYPE=1 and a.TEMPLATEFILENAME ='"+name+"' ";	
-		
+		PreparedDBUtil conn = new PreparedDBUtil();
+		StringBuilder sql=new StringBuilder().append(" select a.*,c.user_name from td_cms_template a inner join TD_CMS_SITE_TPL b on a.TEMPLATE_ID = b.template_id inner join TD_SM_USER c on a.CREATEUSER = c.user_id where a.PERSISTTYPE=1 and a.TEMPLATEFILENAME =? ");	
+		sql.append(" and b.site_Id = ?");
 		//文件是否在存放模板的根目录里
 		boolean root = false; 
+		boolean pp = false;
+		String p = null;
 		if(path!=null){
-			String p = path.replace('\\','/');
+			p = path.replace('\\','/');
 			if(p.startsWith("/")){
 				p = p.substring(1);
 			}
@@ -1061,19 +1079,25 @@ public class TemplateManagerImpl implements TemplateManager{
 				p = p.substring(0,p.length()-1);
 			}
 			if(p.trim().length()!=0){
-				sql += " and a.TEMPLATEPATH = '"+p+"'";
+				sql.append(" and a.TEMPLATEPATH = ?");
+				pp = true;
 			}else{
 				root = true;
 			}
 		}
 		if(path == null || root){
-			sql += " and a.TEMPLATEPATH is null";
+			sql.append(" and (a.TEMPLATEPATH is null || a.TEMPLATEPATH='')");
 		}
 		
-		sql += " and b.site_Id = '"+siteId+"'";
+		
 		
 		try {
-			conn.executeSelect(sql);
+			conn.preparedSelect(sql.toString());
+			conn.setString(1, name);
+			conn.setInt(2, Integer.parseInt(siteId));
+			if(pp)
+				conn.setString(3, p);
+			conn.executePrepared();
 			if (conn.size() > 0) {
 				Template templateobj = new Template();
 				templateobj.setName(conn.getString(0, "name"));
@@ -1115,7 +1139,7 @@ public class TemplateManagerImpl implements TemplateManager{
 			throw new TemplateManagerException("根据模板id没有找到模板!");
 		}
 		StringBuffer sb = new StringBuffer();
-		sb.append("<?xml version=\"1.0\" encoding=\"gb2312\"?>\n");
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		sb.append("<template>\n");
 		sb.append("\t<id>" + tplt.getTemplateId() + "</id>\n");
 		sb.append("\t<name>" + tplt.getName() + "</name>\n");

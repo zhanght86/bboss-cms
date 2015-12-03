@@ -34,7 +34,8 @@ String tokenparamname = TokenStore.temptoken_param_name;
 //hessian服务方式申请token
 HessianProxyFactory factory = new HessianProxyFactory();
 //String url = "http://localhost:8080/context/hessian?service=tokenService";
-String url = "http://10.0.15.223/SanyToken/hessian?service=tokenService";
+//String url = "http://10.0.15.223/SanyToken/hessian?service=tokenService";
+String url = "http://localhost:8080/SanyPDP/hessian?service=tokenService";
 TokenService tokenService = (TokenService) factory.create(TokenService.class, url);
 //通过hessian根据账号或者工号获取ticket
 
@@ -42,10 +43,12 @@ String ticket = tokenService.genTicket(account, worknumber, appid, secret);
 
 
 //hessian服务方式申请token
-HessianProxyFactory factory = new HessianProxyFactory();
+factory = new HessianProxyFactory();
 //String url = "http://localhost:8080/context/hessian?service=tokenService";
-String url = "http://10.0.15.223/SanyToken/hessian?service=checktokenService";
-org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
+//url = "http://10.0.15.223/SanyToken/hessian?service=checktokenService";
+url = "http://localhost:8080/SanyPDP/hessian?service=checktokenService";
+
+org.frameworkset.web.token.ws.CheckTokenService  checkTokenService = (org.frameworkset.web.token.ws.CheckTokenService) factory.create(org.frameworkset.web.token.ws.CheckTokenService.class, url);
 org.frameworkset.web.token.ws.TokenCheckResponse tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket);
 System.out.println(tokenCheckResponse.getResultcode());
 System.out.println(tokenCheckResponse.isValidateResult());

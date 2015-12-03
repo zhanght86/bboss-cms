@@ -27,7 +27,7 @@ public interface TemplateManager extends java.io.Serializable
      * 返回值int:成功时为模板id;失败时为:0
      * 功能:将模板基本信息写入数据库表(td_cms_template)中
      */
-    public int createTemplate(Template template) throws TemplateManagerException;
+    public int createTemplate(Template template, int siteid) throws TemplateManagerException;
     /**
      * 创建站点下的模板
      * @since 2006.12
