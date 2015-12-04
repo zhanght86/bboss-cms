@@ -119,13 +119,15 @@ public class CustomFormManagerImpl implements CustomFormManager
 	public String getCustomFormFilename(String targetId,String targetType,String formType) throws CustomFormManagerException
 	{
 		String filename = "";
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try
 		{
-			String sql = "select file_name from TD_CMS_CUSTOM_FORM where " +
-				"TARGET_ID = " + targetId + " and TARGET_TYPE = '" + targetType + "' and " +
-				"FORM_TYPE = '"	+ formType + "'";
-			db.executeSelect(sql);
+			String sql = "select file_name from TD_CMS_CUSTOM_FORM where TARGET_ID = ? and TARGET_TYPE = ? and FORM_TYPE = ?";
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(targetId));
+			db.setString(2, targetType);
+			db.setString(3, formType);
+			db.executePrepared();
 			if(db.size()>0)
 			{
 				filename = db.getString(0,"file_name");
@@ -147,11 +149,13 @@ public class CustomFormManagerImpl implements CustomFormManager
 	public boolean hasSameFieldName(String fieldName) throws CustomFormManagerException
 	{
 		boolean flag = false;
-		DBUtil db = new DBUtil();
-		String sql = "select 1 from TD_CMS_EXTFIELD where FIELDNAME = '" + fieldName + "'";
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select 1 from TD_CMS_EXTFIELD where FIELDNAME = ?";
 		try
 		{
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setString(1, fieldName);
+			db.executePrepared();
 			if(db.size()>0)
 				flag = true;
 		}catch(Exception e)

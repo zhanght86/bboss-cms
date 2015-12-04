@@ -42,6 +42,7 @@ public class ArrangeDoc implements java.io.Serializable {
 	private String username;
 	//附加的（文档标题）
 	private String doctitle;
+	private int channelid;
 	
 	public int getDocumentId() {
 		return documentId;
@@ -113,6 +114,14 @@ public class ArrangeDoc implements java.io.Serializable {
 	public void setOvertime(int overtime)
 	{
 		this.overtime=overtime;
+	}
+
+	public int getChannelid() {
+		return channelid;
+	}
+
+	public void setChannelid(int channelid) {
+		this.channelid = channelid;
 	}
 
 }

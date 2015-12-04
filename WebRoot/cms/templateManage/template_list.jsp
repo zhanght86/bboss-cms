@@ -34,7 +34,7 @@
 <script src="../inc/js/func.js"></script>
 <script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js" type="text/javascript"></script>		
 <script language="javascript" src="../../scripts/selectTime.js"></script>
-<script language="JavaScript" src="../../include/pager.js" type="text/javascript"></script>
+
 <script language="JavaScript">
 	var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");
 	function getLogInfo(e,logId){
@@ -270,7 +270,7 @@
 	<tr>
 		<td align="center">
 			<table width="100%" border="0" cellspacing="0" cellpadding="4">
-				<pg:listdata dataInfo="TemplateofSiteList" keyName="TemplateofSiteList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.templatemanager.tag.TemplateofSiteList" keyName="TemplateofSiteList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="10" scope="request" data="TemplateofSiteList" isList="false">
 				<pg:param name="siteId" />										

@@ -3,9 +3,10 @@ package com.frameworkset.platform.cms.documentmanager.tag;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.frameworkset.platform.cms.documentmanager.Document;
-import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.util.ListInfo;
 
 public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializable
@@ -38,14 +39,17 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 //			System.out.println("flag............"+flag);
 			
 			ListInfo listInfo = new ListInfo();
-			DBUtil dbUtil = new DBUtil();
-			DBUtil db = new DBUtil();
+			PreparedDBUtil dbUtil = new PreparedDBUtil();
+			PreparedDBUtil db = new PreparedDBUtil();
+			TransactionManager tm = new TransactionManager(); 
 			try {
-				
-				String sql="select * from  TD_CMS_DOCUMENT where channel_id ="+ channelid +" and  GARBAGE=1 ";
+				tm.begin();
+				String sql="select * from  TD_CMS_DOCUMENT where channel_id =? and  GARBAGE=1 ";
 				if ((title == null && doclevel == null && status == null && user ==null && doctype == null)||flag.equals("2")){
 				//	System.out.println("............"+sql);
-					dbUtil.executeSelect(sql +"order by CREATETIME desc",(int)offset,maxPagesize);
+					dbUtil.preparedSelect(sql +"order by CREATETIME desc",(int)offset,maxPagesize);
+					dbUtil.setInt(1, Integer.parseInt(channelid));
+					dbUtil.executePrepared();
 					List list = new ArrayList();
 					Document document;
 					
@@ -55,7 +59,9 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 						document.setTitle(dbUtil.getString(i,"title"));
 						document.setSubtitle(dbUtil.getString(i,"SUBTITLE"));
 						document.setStatus(dbUtil.getInt(i,"status"));
-						db.executeSelect("select name from TB_CMS_DOC_STATUS where id="+ dbUtil.getInt(i,"status") +"");
+						db.preparedSelect("select name from TB_CMS_DOC_STATUS where id=?");
+						db.setInt(1, dbUtil.getInt(i,"status"));
+						db.executePrepared();
 						if(db.size()>0){
 							document.setStatusname(db.getString(0,"name"));
 						}else{
@@ -66,8 +72,10 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 						document.setCreateTime(dbUtil.getDate(i,"CREATETIME"));
 						document.setDoctype(dbUtil.getInt(i,"DOCTYPE"));
 						document.setIslock(dbUtil.getInt(i,"ISLOCK"));
-						String str="select USER_REALNAME from td_sm_user where user_id="+ dbUtil.getInt(i,"USER_ID") +"";
-						db.executeSelect(str);
+						String str="select USER_REALNAME from td_sm_user where user_id=?";
+						db.preparedSelect(str);
+						db.setInt(1, dbUtil.getInt(i,"USER_ID"));
+						db.executePrepared();
 						if(db.size()>0){
 							document.setUsername(db.getString(0,"USER_REALNAME"));
 						}
@@ -75,6 +83,7 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 					}
 					listInfo.setDatas(list);
 					listInfo.setTotalSize(dbUtil.getTotalSize());
+					tm.commit();
 					return listInfo;	
 				}
 				
@@ -89,8 +98,10 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 				}
 				if (user != null && user.length() > 0) {
 				
-					String struser ="select user_id from td_sm_user where USER_REALNAME='"+user+"'";
-					db.executeSelect(struser);
+					String struser ="select user_id from td_sm_user where USER_REALNAME=?";
+					db.preparedSelect(struser);
+					db.setString(1, user);
+					db.executePrepared();
 					if(db.size()>0){
 						sql = sql +" and user_id like '%"+ db.getInt(0,"user_id") +"%'";
 					}
@@ -130,10 +141,14 @@ public class Doc_GarbageList extends DataInfoImpl implements java.io.Serializabl
 				}
 				listInfo.setDatas(list);
 				listInfo.setTotalSize(dbUtil.getTotalSize());
-      
+				tm.commit();
        }catch(Exception e){
              e.printStackTrace();
        }
+	   finally
+	   {
+		   tm.release();
+	   }
 		return listInfo;	
  }	
       

@@ -1525,13 +1525,14 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public List getDistributeList(String channelid) throws DocumentManagerException {
 		List distributeList = new ArrayList();
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
-			sql = "select user_id,user_realname from TD_sm_user where user_id "
-					+ " in(select distinct createuser from td_cms_document where channel_id =" + channelid + ") ";
+			sql = "select user_id,user_realname from TD_sm_user where user_id in(select distinct createuser from td_cms_document where channel_id =?) ";
 			// System.out.println(sql);
-			dbUtil.executeSelect(sql);
+			dbUtil.preparedSelect(sql);
+			dbUtil.setInt(1, Integer.parseInt(channelid));
+			dbUtil.executePrepared();
 			if (dbUtil.size() > 0) {
 				for (int i = 0; i < dbUtil.size(); i++) {
 					DistributeUser du = new DistributeUser();
@@ -1553,14 +1554,16 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public List getDistributeListOfSite(String siteid) throws DocumentManagerException {
 		List distributeList = new ArrayList();
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
 			sql = "select user_id,user_realname from TD_sm_user where user_id "
 					+ " in(select distinct a.createuser from td_cms_document a ,td_cms_channel b,td_cms_site c "
-					+ "where a.channel_id = b.channel_id and c.site_id = b.site_id and b.site_id =" + siteid + ") ";
+					+ "where a.channel_id = b.channel_id and c.site_id = b.site_id and b.site_id =?) ";
 			// System.out.println(sql);
-			dbUtil.executeSelect(sql);
+			dbUtil.preparedSelect(sql);
+			dbUtil.setInt(1, Integer.parseInt(siteid));
+			dbUtil.executePrepared();
 			if (dbUtil.size() > 0) {
 				for (int i = 0; i < dbUtil.size(); i++) {
 					DistributeUser du = new DistributeUser();
@@ -1605,12 +1608,14 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public List getDocVerUserList(String docid) throws DocumentManagerException {
 		List distributeList = new ArrayList();
-		DBUtil dbUtil = new DBUtil();
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
 			sql = "select user_id,user_realname from TD_sm_user where user_id "
 					+ " in(select op_user from td_cms_doc_ver where document_id =" + docid + ") ";
-			dbUtil.executeSelect(sql);
+			dbUtil.preparedSelect(sql);
+			dbUtil.setInt(1, Integer.parseInt(docid));
+			dbUtil.executePrepared();
 			if (dbUtil.size() > 0) {
 				for (int i = 0; i < dbUtil.size(); i++) {
 					DistributeUser du = new DistributeUser();
@@ -1632,9 +1637,7 @@ public class DocumentManagerImpl implements DocumentManager {
 		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		String sql = "";
 		try {
-			sql = "select distinct b.channel_id as channelid,b.name as channelName from "
-					+ "td_cms_document a,td_cms_channel b,td_cms_chnl_ref_doc c " + "where c.chnl_id = ?"
-					+ " and " + "c.doc_id = a.document_id and a.channel_id = b.channel_id";
+			sql = "select distinct b.channel_id as channelid,b.name as channelName from td_cms_document a,td_cms_channel b,td_cms_chnl_ref_doc c where c.chnl_id = ? and c.doc_id = a.document_id and a.channel_id = b.channel_id";
 
 			dbUtil.preparedSelect(sql);
 			dbUtil.setInt(1, Integer.parseInt(channelid));
@@ -1720,15 +1723,17 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public int getDocType(int docId) throws DocumentManagerException {
 		int type = 0;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			String sql = "select doctype from td_cms_document " + "where document_id = " + docId;
-			db.executeSelect(sql);
+			String sql = "select doctype from td_cms_document where document_id = ?";
+			db.preparedSelect(sql);
+			db.setInt(1, docId);
+			db.executePrepared();
 			if (db.size() > 0)
 				type = db.getInt(0, "doctype");
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new DocumentManagerException(e.getMessage());
+			
+			throw new DocumentManagerException(e.getMessage(),e);
 		}
 		return type;
 	}
@@ -1737,10 +1742,12 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 获取文档所在频道的id
 	 */
 	public int getDocChnlId(int docId) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			String sql = "select channel_id from td_cms_document " + "where document_id = " + docId;
-			db.executeSelect(sql);
+			String sql = "select channel_id from td_cms_document where document_id = ?" ;
+			db.preparedSelect(sql);
+			db.setInt(1, docId);
+			db.executePrepared();
 			if (db.size() > 0)
 				return (db.getInt(0, "channel_id"));
 		} catch (Exception e) {
@@ -1754,12 +1761,13 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 获取文档所在站点的id
 	 */
 	public int getDocSiteId(int docId) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			String sql = "select b.site_id as site_id from td_cms_document a, td_cms_channel b "
-					+ "where a.channel_id = b.channel_id and a.document_id = " + docId;
-			db.executeSelect(sql);
-			if (db.size() > 0)
+			String sql = "select b.site_id as site_id from td_cms_document a, td_cms_channel b  where a.channel_id = b.channel_id and a.document_id = ?";
+			db.preparedSelect(sql);
+			db.setInt(1, docId);
+			db.executePrepared();
+			if(db.size() > 0)
 				return (db.getInt(0, "site_id"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1999,19 +2007,22 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public int canTransition(int docid, int destStatus) throws DocumentManagerException {
 		int b = -1;
-		DBUtil db = new DBUtil();
-		String sql = "select a.id as tranId from tb_cms_doc_status_trans a, "
-				+ "td_cms_document b, tb_cms_flow_doc_trans c " + "where a.src_status= b.status and a.dest_status= "
-				+ destStatus + " and a.id = c.transision_id and c.flow_id = b.flow_id " + "and b.document_id = "
-				+ docid;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select a.id as tranId from tb_cms_doc_status_trans a, td_cms_document b, tb_cms_flow_doc_trans c  where a.src_status= b.status and a.dest_status= ? and a.id = c.transision_id and c.flow_id = b.flow_id and b.document_id = ?";
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, destStatus);
+			db.setInt(2, docid);
+			db.executePrepared();
 			if (db.size() > 0) {
 				b = db.getInt(0, "tranId");
 				return b;
 			}
-			sql = "select document_id from td_cms_document where flow_id is null and document_id = " + docid;
-			db.executeSelect(sql);
+			sql = "select document_id from td_cms_document where flow_id is null and document_id = ?";
+			db.preparedSelect(sql);
+			
+			db.setInt(1, docid);
+			db.executePrepared();
 			if (db.size() > 0)
 				b = 0;
 		} catch (SQLException e) {
@@ -2042,13 +2053,14 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public int canTransition(int channelId, int srcStatus, int destStatus) throws DocumentManagerException {
 		int b = -1;
-		DBUtil db = new DBUtil();
-		String sql = "select a.id as tranId from tb_cms_doc_status_trans a, "
-				+ "td_cms_channel b, tb_cms_flow_doc_trans c " + "where a.src_status= " + srcStatus
-				+ " and a.dest_status= " + destStatus
-				+ " and a.id = c.transision_id and c.flow_id = b.workflow and b.channel_id=" + channelId;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select a.id as tranId from tb_cms_doc_status_trans a, td_cms_channel b, tb_cms_flow_doc_trans c where a.src_status= ? and a.dest_status= ? and a.id = c.transision_id and c.flow_id = b.workflow and b.channel_id=?";
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, srcStatus);
+			db.setInt(2, destStatus);
+			db.setInt(3, channelId);
+			db.executePrepared();
 			if (db.size() > 0)
 				b = db.getInt(0, "tranId");
 		} catch (SQLException e) {
@@ -3493,15 +3505,13 @@ public class DocumentManagerImpl implements DocumentManager {
 	// 获取当前返工任务的审核意见
 	public TaskDocument getTaskInfo(int taskid) throws DocumentManagerException {
 		TaskDocument task = new TaskDocument();
-		DBUtil db = new DBUtil();
-		String sql = "select a.task_id as task_id, a.submit_id as submit_id, "
-				+ "a.submit_time as submit_time, b.opinion as opinion,c.user_name as user_name "
-				+ "from td_cms_doc_task a,td_cms_doc_task_detail b,td_sm_user c "
-				+ "where b.valid=1 and b.complete_time is not null and " + "b.task_id = a.pre_task_id and a.task_id ="
-				+ taskid + " and c.user_id = a.submit_id";
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select a.task_id as task_id, a.submit_id as submit_id, a.submit_time as submit_time, b.opinion as opinion,c.user_name as user_name from td_cms_doc_task a,td_cms_doc_task_detail b,td_sm_user c where b.valid=1 and b.complete_time is not null and " + "b.task_id = a.pre_task_id and a.task_id =? and c.user_id = a.submit_id";
 		try {
-
-			db.executeSelect(sql);
+			
+			db.preparedSelect(sql);
+			db.setInt(1, taskid);
+			db.executePrepared();
 			if (db.size() > 0) {
 				task.setTaskid(db.getInt(0, "task_id"));
 				task.setSubmitUserid(db.getInt(0, "submit_id"));
@@ -3520,42 +3530,48 @@ public class DocumentManagerImpl implements DocumentManager {
 			String opinion) throws DocumentManagerException {
 		TransactionManager tm = new TransactionManager();
 
-		DBUtil db = new DBUtil();
-		DBUtil db1 = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
+		PreparedDBUtil db1 = new PreparedDBUtil();
 		String docid = context.getContentid();
 		String sStatus = srcStatus.getStatus();
 		if (opinion == null)
 			opinion = "";
-		String sql = "select a.task_id as task_id from td_cms_doc_task a, td_cms_doc_task_detail b "
-				+ "where a.document_id = " + docid + " and a.pre_status = " + sStatus
-				+ " and b.task_id = a.task_id and b.valid = 1 and complete_time is null for update nowait";
+		String sql = "select a.task_id as task_id from td_cms_doc_task a, td_cms_doc_task_detail b where a.document_id = ? and a.pre_status = ? and b.task_id = a.task_id and b.valid = 1 and complete_time is null ";
 		try {
 			tm.begin();
 			int taskid;
-			db.executeSelect(context.getDBName(), sql);
+			
+			db.preparedSelect(context.getDBName(), sql);
+			db.setInt(1, Integer.parseInt(docid));
+			db.setInt(2, Integer.parseInt(sStatus));
+			db.executePrepared();
 			if (db.size() > 0) {
 				taskid = db.getInt(0, "task_id");
 				// 将当前执行人performer的待审任务更新，填写任务完成时间和审核意见等
-				sql = "update td_cms_doc_task_detail set complete_time ="
-						+ DBUtil.getDBDate(new Date(), context.getDBName()) + ",after_status = "
-						+ desStatus.getStatus() + ",opinion='" + opinion + "' where valid = 1 " + "and task_id ="
-						+ taskid + " and performer =" + performer;
-				db1.executeUpdate(context.getDBName(), sql);
+				sql = "update td_cms_doc_task_detail set complete_time =?,after_status = ?,opinion=? where valid = 1 and task_id =? and performer =?";
+				db1.preparedUpdate(context.getDBName(), sql);
+				db1.setTimestamp(1, new Timestamp(new Date().getTime()));
+				db1.setInt(2, Integer.parseInt(desStatus.getStatus()));
+				db1.setString(3, opinion);
+				db1.setInt(4, taskid);
+				db1.setInt(5, performer);
+				db1.addPreparedBatch();
 				// 将非当前执行人performer的待审任务置为无效
-				sql = "update td_cms_doc_task_detail set valid = 0 where valid = 1" + " and task_id =" + taskid
-						+ " and performer !=" + performer;
-				db1.executeUpdate(context.getDBName(), sql);
+				sql = "update td_cms_doc_task_detail set valid = 0 where valid = 1  and task_id =? and performer !=?";
+				db1.preparedUpdate(context.getDBName(), sql);
+				db1.setInt(1, taskid);
+				db1.setInt(2, performer);
+				db1.addPreparedBatch();
+				db1.executePreparedBatch();
 			}
 			tm.commit();
 		} catch (Exception se) {
-			try {
-				tm.rollback();
-			} catch (RollbackException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			se.printStackTrace();
-			throw new DocumentManagerException("完成任务更新失败" + se.getMessage());
+			
+			throw new DocumentManagerException("完成任务更新失败" + se.getMessage(),se);
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 
@@ -5100,16 +5116,24 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public boolean addArrangeDoc(ArrangeDoc arrangeDoc) throws DocumentManagerException {
 		boolean flag = false;
-		String sql = "insert into TD_CMS_DOC_ARRANGE values(" + arrangeDoc.getDocumentId() + ",'"
-				+ arrangeDoc.getStartTime() + "','" + arrangeDoc.getEndTime()
-				+ "',(select nvl(max(order_no),-1)+1 from TD_CMS_DOC_ARRANGE where document_id "
-				+ "in(select b.document_id from td_cms_document b where b.channel_id = "
-				+ "(select c.channel_id from td_cms_document c where c.document_id = " + arrangeDoc.getDocumentId()
-				+ ")))," + arrangeDoc.getOpUser() + ", " + DBUtil.getDBAdapter().to_date(new Date()) + ")";
+		String sql = "insert into TD_CMS_DOC_ARRANGE(DOCUMENT_ID,START_TIME,END_TIME,ORDER_NO,OP_USER,OP_TIME) values(?,?,?,?,?, ?)";
 		// System.out.print(sql);
-		DBUtil db = new DBUtil();
+		
+		String mx = "select nvl(max(order_no),-1)+1 from TD_CMS_DOC_ARRANGE where document_id in (select b.document_id from td_cms_document b where b.channel_id = ?)";
+		
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeInsert(sql);
+			int acid = SQLExecutor.queryObject(int.class, mx, arrangeDoc.getChannelid());
+			db.preparedInsert(sql);
+			db.setInt(1, arrangeDoc.getDocumentId());
+			db.setString(2, arrangeDoc.getStartTime());
+			db.setString(3, arrangeDoc.getEndTime());
+			db.setInt(4, acid);
+			db.setInt(5, arrangeDoc.getOpUser());
+			
+			db.setTimestamp(6, new Timestamp(new Date().getTime()));
+			db.executePrepared();
+			
 			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5326,10 +5350,12 @@ public class DocumentManagerImpl implements DocumentManager {
 		Map<String,DocExtValue> map = new HashMap<String,DocExtValue>();
 		PreparedDBUtil db = new PreparedDBUtil();
 		PreparedDBUtil db2 = new PreparedDBUtil();
-		String sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.fieldvalue as value "
+		String sql = "select a.fieldname as key_,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.fieldvalue as value_ "
 				+ "from td_cms_extfield a inner join td_cms_extfieldvalue b "
 				+ "on a.field_id = b.field_id where b.document_id = ? and a.fieldtype in ('1','4','5','6')";
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			// varchar,file,select,radiobox类型
 			int id = Integer.parseInt(docid);
 			db.preparedSelect(sql);
@@ -5338,15 +5364,15 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocExtValue docvalue = new DocExtValue();
-					docvalue.setField(db.getString(i, "key"));
-					docvalue.setStringvalue(db.getString(i, "value"));
+					docvalue.setField(db.getString(i, "key_"));
+					docvalue.setStringvalue(db.getString(i, "value_"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
 					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 				}
 			}
 			// number类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.numbervalue as value "
+			sql = "select a.fieldname as key_,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.numbervalue as value_ "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=0";
 			db = new PreparedDBUtil();
@@ -5357,8 +5383,8 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocExtValue docvalue = new DocExtValue();
-					docvalue.setField(db.getString(i, "key"));
-					docvalue.setIntvalue(db.getInt(i, "value"));
+					docvalue.setField(db.getString(i, "key_"));
+					docvalue.setIntvalue(db.getInt(i, "value_"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
 					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
@@ -5366,7 +5392,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				}
 			}
 			// clob类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.clobvalue as value "
+			sql = "select a.fieldname as key_,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.clobvalue as value_ "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=3";
 			db = new PreparedDBUtil();
@@ -5377,8 +5403,8 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocExtValue docvalue = new DocExtValue();
-					docvalue.setField(db.getString(i, "key"));
-					docvalue.setStringvalue(db.getString(i, "value"));
+					docvalue.setField(db.getString(i, "key_"));
+					docvalue.setStringvalue(db.getString(i, "value_"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
 					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
@@ -5386,7 +5412,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				}
 			}
 			// date类型
-			sql = "select a.fieldname as key,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.datevalue as value "
+			sql = "select a.fieldname as key_,a.fieldtype as fieldtype,a.FIELDLABEL as fieldlabel,b.datevalue as value_ "
 					+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=2";
 			db = new PreparedDBUtil();
@@ -5396,15 +5422,15 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					DocExtValue docvalue = new DocExtValue();
-					docvalue.setField(db.getString(i, "key"));
-					docvalue.setDatevalue(db.getDate(i, "value"));
+					docvalue.setField(db.getString(i, "key_"));
+					docvalue.setDatevalue(db.getDate(i, "value_"));
 					docvalue.setFieldtype(db.getString(i, "fieldtype"));
 					docvalue.setLabel(db.getString(i, "fieldlabel"));
 					map.put(docvalue.getField(), docvalue);
 				}
 			}
 			// checkbox类型
-			sql = "select distinct a.fieldname as key,a.field_id as id,a.FIELDLABEL as fieldlabel,a.fieldtype as fieldtype from td_cms_extfield a inner join td_cms_extfieldvalue b "
+			sql = "select distinct a.fieldname as key_,a.field_id as id,a.FIELDLABEL as fieldlabel,a.fieldtype as fieldtype from td_cms_extfield a inner join td_cms_extfieldvalue b "
 					+ " on a.field_id = b.field_id where b.document_id = ? and a.fieldtype=7";
 			db = new PreparedDBUtil();
 			db.preparedSelect(sql);
@@ -5413,7 +5439,7 @@ public class DocumentManagerImpl implements DocumentManager {
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					int tempid = db.getInt(i, "id");
-					sql = "select a.fieldname as key,c.value as value "
+					sql = "select a.fieldname as key_,c.value as value_ "
 							+ " from td_cms_extfield a inner join td_cms_extfieldvalue b "
 							+ " on a.field_id = b.field_id ,td_cms_extvaluescope c "
 							+ " where b.fieldvalue = c.id and b.document_id = ? and a.fieldtype=7 and a.field_id = ? order by c.id";
@@ -5421,14 +5447,14 @@ public class DocumentManagerImpl implements DocumentManager {
 					db2.setInt(1, id);
 					db2.setInt(2, tempid);
 					db2.executePrepared();
-					String key = db.getString(i, "key");
+					String key = db.getString(i, "key_");
 					String fieldtype = db.getString(i, "fieldtype");
 					String label  = db.getString(i, "fieldlabel"); 
 					
 					String value = "";
 					if (db2.size() > 0) {
 						for (int j = 0; j < db2.size(); j++) {
-							value += db2.getString(j, "value") + "&nbsp;";
+							value += db2.getString(j, "value_") + "&nbsp;";
 						}
 						DocExtValue docvalue = new DocExtValue();
 						docvalue.setField(key);
@@ -5440,10 +5466,14 @@ public class DocumentManagerImpl implements DocumentManager {
 					}
 				}
 			}
-
+			tm.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new DocumentManagerException(e.getMessage());
+			
+			throw new DocumentManagerException(e.getMessage(),e);
+		}
+		finally
+		{
+			tm.release();
 		}
 		return map;
 	}
@@ -7899,13 +7929,19 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public int getDocCommentByDocId(int docId, Integer status) {
 		int ret = 0;
-		String sql = "select count(COMMENT_ID) from TD_CMS_DOC_COMMENT where doc_id=" + docId;
+		StringBuilder sql = new StringBuilder().append("select count(COMMENT_ID) from TD_CMS_DOC_COMMENT where doc_id=?");
 		if (status != null) {
-			sql += " and STATUS=" + status;
+			sql .append(" and STATUS=?");
 		}
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql.toString());
+			db.setInt(1,docId);
+			if (status != null) 
+			{
+				db.setInt(2, status.intValue());
+			}
+			db.executePrepared();
 			ret = db.getInt(0, 0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -7916,10 +7952,12 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public String ext_orgByDocId(String docId) {
 		String ret = null;
-		String sql = "select ext_org from td_cms_document where DOCUMENT_ID=" + docId;
-		DBUtil db = new DBUtil();
+		String sql = "select ext_org from td_cms_document where DOCUMENT_ID=?";
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1,Integer.parseInt(docId));			 
+			db.executePrepared();
 			if (db.size() > 0) {
 				ret = db.getString(0, 0);
 			}

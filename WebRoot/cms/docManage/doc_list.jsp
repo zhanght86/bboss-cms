@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.*"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.channelmanager.*"%>
@@ -17,9 +18,15 @@
 <%@ page import="com.frameworkset.platform.cms.countermanager.bean.VideoHitsCounter"%>
 
 <%
+TransactionManager tm = new TransactionManager();
+try
+{
+	
+	tm.begin();
 	AccessControl accesscontroler = AccessControl.getAccessControl();
 	String siteid = request.getParameter("siteid");
 	String channelId = request.getParameter("channelId");
+	
 	ChannelCacheManager cachem = (ChannelCacheManager)SiteCacheManager.getInstance().getChannelCacheManager(siteid);
 	Channel channel = cachem.getChannel(channelId);
 	String channelName = channel.getDisplayName();
@@ -693,7 +700,7 @@
 					
 					</td>
 				</tr>
-				<pg:listdata dataInfo="DocumentList" keyName="DocumentList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.DocumentList" keyName="DocumentList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="15" scope="request" data="DocumentList" isList="false">
 					<tr class="cms_report_tr">
@@ -1083,3 +1090,11 @@
         <iframe name="cleanSession" id="cleanSession"  width="0" height="0"  style="display:none" ></iframe>
 	</body>
 </html>
+<%
+	tm.commit();
+}
+finally
+{
+	tm.release();
+}
+%>

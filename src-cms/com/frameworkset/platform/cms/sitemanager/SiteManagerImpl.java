@@ -17,6 +17,7 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.security.AccessControlInf;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.orm.transaction.TransactionManager;
@@ -26,6 +27,7 @@ import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
 import com.frameworkset.platform.cms.container.Template;
+import com.frameworkset.platform.cms.documentmanager.bean.DocClass;
 import com.frameworkset.platform.cms.event.CMSEventType;
 import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
 import com.frameworkset.platform.cms.templatemanager.TemplateManager;
@@ -341,8 +343,12 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			conn.setString(23,site.getLocalPublishPath());
 			conn.setString(24,site.getDistributeManners());
 			conn.executePrepared();
-			
-		
+			ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/cms/documentmanager/docclass.xml");
+			DocClass docClass = new DocClass();
+			docClass.setSite_id((int)siteId);
+			docClass.setClass_desc("普通分类");
+			docClass.setClass_name("普通分类");			
+			executor.insertBean("saveClasses", docClass);
 			
 			//新增站点的时候默认将当前用户控制站点权限加上
 			String userId = String.valueOf(site.getCreateUser());

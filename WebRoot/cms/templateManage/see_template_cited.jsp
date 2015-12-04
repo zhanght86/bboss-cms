@@ -67,7 +67,7 @@
 			<tab:tabContainer id="foo-extfield-add" selectedTabPaneId="foo-extfield">
 				<tab:tabPane id="foo-extfield" tabTitle="引用文档">
 				<table width="100%" border="0" cellspacing="1" cellpadding="4">
-				<pg:listdata dataInfo="DocumentofTlpCitedList" keyName="DocumentofTlpCitedList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.templatemanager.tag.DocumentofTlpCitedList" keyName="DocumentofTlpCitedList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="8" scope="request" data="DocumentofTlpCitedList" isList="false">
 				
@@ -113,7 +113,7 @@
 				</tab:tabPane>
 				<tab:tabPane id="bar-extfield" tabTitle="引用频道">
 				<table width="100%" border="0" cellspacing="1" cellpadding="4">
-				<pg:listdata dataInfo="ChannelofTlpCitedList" keyName="ChannelofTlpCitedList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.templatemanager.tag.ChannelofTlpCitedList" keyName="ChannelofTlpCitedList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="8" scope="request" data="ChannelofTlpCitedList" isList="false">
 				
@@ -160,7 +160,7 @@
 				</tab:tabContainer>
 				<%}else{%>
 				<table width="100%" border="0" cellspacing="1" cellpadding="4">
-				<pg:listdata dataInfo="ChannelofTlpCitedList" keyName="ChannelofTlpCitedList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.templatemanager.tag.ChannelofTlpCitedList" keyName="ChannelofTlpCitedList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="8" scope="request" data="ChannelofTlpCitedList" isList="false">
 				

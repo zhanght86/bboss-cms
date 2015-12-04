@@ -179,7 +179,7 @@ public interface TemplateManager extends java.io.Serializable
      * sql为传入的要执行的sql语言
      * 
      */
-    public ListInfo getTemplateInfoListofSite (String sql,int offset,int maxitem) throws TemplateManagerException;
+    public ListInfo getTemplateInfoListofSite (HttpServletRequest request,int offset,int maxitem) throws TemplateManagerException;
     /**取某一类型的模板列表
      * 输入:type 模板类型
      * 输出:列表对像list
@@ -264,7 +264,7 @@ public interface TemplateManager extends java.io.Serializable
 	 * @return
 	 * @throws TemplateManagerException
 	 */
-	public ListInfo getChannelListofTlpCited (String sql,int offset,int maxitem) throws TemplateManagerException;
+	public ListInfo getChannelListofTlpCited (String indexPagePath,String siteId,String templateId,int offset,int maxitem) throws TemplateManagerException;
 	/**
 	 * 获取模板的文档引用列表。
 	 * @param templateId

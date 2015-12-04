@@ -1253,7 +1253,7 @@ public abstract class PublishObject implements java.io.Serializable
 		{
 			TransactionManager tm = new TransactionManager (); 
 			try {	
-				tm.begin(tm.RW_TRANSACTION);
+				tm.begin();
 				context = this.buildContext();
 				tm.commit();
 			} catch (PublishException e) {

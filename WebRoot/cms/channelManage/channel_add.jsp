@@ -524,6 +524,14 @@ function previewChnl(){
 							</tr>
 							<tr>
 								<td width="130" height="24" align="right" nowrap>
+									频道目录存在允许创建:
+								</td>
+								<td height="24">
+									<input name="cancreate" id="cancreate" type="checkbox" > 频道目录存在允许创建
+								</td>
+							</tr>
+							<tr>
+								<td width="130" height="24" align="right" nowrap>
 									频道排列的顺序:
 								</td>
 								<td height="24">

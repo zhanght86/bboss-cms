@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ page import="java.sql.*,java.util.*"%>
-<%@ page import="com.frameworkset.platform.security.*"%>
+<%@ page import="com.frameworkset.platform.security.*,com.frameworkset.platform.cms.util.*"%>
 <%@ page import="com.frameworkset.platform.cms.templatemanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.container.TmplateExport"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
@@ -14,7 +14,7 @@
 	cmsManager.init(request,session,response,accesscontroler);	
 	String siteId = cmsManager.getSiteID();	
     //模板存放的路径
-    String templatePath = application.getRealPath("cms/siteResource/siteTemplate");
+    String templatePath = CMSUtil.getAppRootPath()+("/cms/siteResource/siteTemplate");
     templatePath = templatePath.replaceAll("\\\\","/");
     TemplateManager tmplUtil = new TemplateManagerImpl();
     //有权限的私有模板包

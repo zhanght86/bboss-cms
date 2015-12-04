@@ -289,16 +289,16 @@ public class FileManagerImpl implements FileManager {
 				}
 			}
 
-			DBUtil db = new DBUtil();
-			String sql = "select version,checkout_user,checkout_time,b.user_name FROM td_cms_file_status a inner join TD_SM_USER b  on a.CHECKOUT_USER = b.user_id where site_id='"
-					+ siteId
-					+ "' and uri='"
-					+ theURI
-					+ subFiles[i].getName()
-					+ "' and checkout_user is not null and checkout_time is not null";
+			PreparedDBUtil db = new PreparedDBUtil();
+			String sql = "select version,checkout_user,checkout_time,b.user_name FROM td_cms_file_status a inner join TD_SM_USER b  on a.CHECKOUT_USER = b.user_id where site_id=?"
+					+ " and uri=? and (checkout_user is not null or checkout_user <>'') and checkout_time is not null";
 
 			try {
-				db.executeSelect(sql);
+				db.preparedSelect(sql);
+				db.setString(1, siteId);
+				db.setString(2, theURI
+						+ subFiles[i].getName());
+				db.executePrepared();
 				if (db.size() > 0) {
 					fr.setCheckoutUser(db.getString(0, "checkout_user"));
 					fr.setCheckoutTime(db.getDate(0, "checkout_time"));
@@ -403,7 +403,7 @@ public class FileManagerImpl implements FileManager {
 				}
 	
 				PreparedDBUtil db = new PreparedDBUtil();
-				String sql =  "select version,checkout_user,checkout_time,b.user_name FROM td_cms_file_status a inner join TD_SM_USER b  on a.CHECKOUT_USER = b.user_id where site_id=? and uri=? and checkout_user is not null and checkout_time is not null";
+				String sql =  "select version,checkout_user,checkout_time,b.user_name FROM td_cms_file_status a inner join TD_SM_USER b  on a.CHECKOUT_USER = b.user_id where site_id=? and uri=? and (checkout_user is not null or checkout_user<>'') and checkout_time is not null";
 				String theuri = null;
 				if ("'".equalsIgnoreCase(theURI + subFiles[i].getName())) {
 					theuri = "";
@@ -470,7 +470,7 @@ public class FileManagerImpl implements FileManager {
 				+ siteId
 				+ "' and uri='"
 				+ theURI
-				+ "' and checkout_user is not null and checkout_time is not null";
+				+ "' and (checkout_user is not null  or checkout_user<>'') and checkout_time is not null";
 
 		try {
 			db.executeSelect(sql);
@@ -811,7 +811,7 @@ public class FileManagerImpl implements FileManager {
 		try {
 			tm.begin();
 			// (1) 检查文件是否是被其他人check out了,如果被别人checkout 无法check in
-			String sql = "select * from TD_CMS_FILE_STATUS where site_id=? and uri=? and checkout_user is not null and checkout_user<>?  and checkout_time is not null";
+			String sql = "select * from TD_CMS_FILE_STATUS where site_id=? and uri=? and (checkout_user is not null  or checkout_user<>'') and checkout_user<>?  and checkout_time is not null";
 			conn.preparedSelect(sql);
 			conn.setString(1, siteId);
 			conn.setString(2, theURI);
@@ -1096,7 +1096,7 @@ public class FileManagerImpl implements FileManager {
 					}
 				}
 				if (path == null || root) {
-					sql += " and a.TEMPLATEPATH is null";
+					sql += " and (a.TEMPLATEPATH is null or   a.TEMPLATEPATH = '')";
 				}
 	
 				sql += " and b.site_Id = '" + siteId + "'";
@@ -1125,7 +1125,7 @@ public class FileManagerImpl implements FileManager {
 							+ siteId
 							+ "' and uri='"
 							+ theURI
-							+ "' and checkout_user is not null and checkout_user='"
+							+ "' and (checkout_user is not null  or checkout_user<>'') and checkout_user='"
 							+ userId + "'";
 	
 					try {
@@ -1189,7 +1189,7 @@ public class FileManagerImpl implements FileManager {
 			// (1) 检查文件是否被该用户check out了,如果没有被他check out 则没有权力删除
 			String sql = "select 1 from TD_CMS_FILE_STATUS where site_id='"
 					+ siteId + "' and uri='" + theURL
-					+ "' and checkout_user is not null and checkout_user='"
+					+ "' and (checkout_user is not null  or checkout_user<>'') and checkout_user='"
 					+ userId + "'  and checkout_time is not null";
 			conn.executeSelect(sql);
 			if (conn.size() > 0) {

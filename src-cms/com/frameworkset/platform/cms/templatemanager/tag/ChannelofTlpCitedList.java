@@ -21,12 +21,8 @@ public class ChannelofTlpCitedList extends DataInfoImpl{
 		String siteId=request.getParameter("siteId");
 		TemplateManager tm = new TemplateManagerImpl();
 		try {
-			String sql = "";
-			if(indexPagePath == null || indexPagePath.length()==0)
-				sql = "select a.*,b.name as siteName from td_cms_channel a,td_cms_site b where a.site_id = b.site_id and (a.outline_tpl_id =" + templateId + " or a.detail_tpl_id =" + templateId + ")";
-			else
-				sql = "select a.*,b.name as siteName from td_cms_channel a,td_cms_site b where a.site_id = b.site_id and a.indexpagepath = '" + indexPagePath + "' and a.site_id = " + siteId; 
-			listInfo = tm.getChannelListofTlpCited(sql,(int)offset,maxPagesize);
+			 
+			listInfo = tm.getChannelListofTlpCited(indexPagePath,siteId,templateId,(int)offset,maxPagesize);
 			
 		} catch (TemplateManagerException e) {
 			e.printStackTrace();

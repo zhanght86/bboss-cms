@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,12 +22,18 @@ import java.util.zip.ZipOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.util.DataFormatUtil;
+import org.frameworkset.util.TimeUtil;
 import org.htmlparser.util.ParserException;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
+import com.frameworkset.orm.adapter.DB;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.container.Template;
@@ -811,35 +819,130 @@ public class TemplateManagerImpl implements TemplateManager{
      * sql为传入的要执行的sql语言
      * 
      */
-    public ListInfo getTemplateInfoListofSite (String sql,int offset,int maxitem) throws TemplateManagerException
+    public ListInfo getTemplateInfoListofSite (HttpServletRequest request,int offset,int maxitem) throws TemplateManagerException
     {
+    	
+		String siteId=request.getParameter("siteId");
+		String action = request.getParameter("action");
+		String name = request.getParameter("name");
+		if(null==name) name = "";
+		String creatorUser = request.getParameter("creatorUser");
+		if(null==creatorUser) creatorUser = "";
+		String type = request.getParameter("type");
+		String templateStyle = request.getParameter("templateStyle");
+		DB db = DBUtil.getDBAdapter();
+		
+		String TimeBgin=request.getParameter("TimeBgin");
+		String TimeEnd=request.getParameter("TimeEnd");
+		//String channelIds=request.getParameter("channelIds");
+		Map params = new HashMap();
+		params.put("siteId", Integer.parseInt(siteId));
+		StringBuilder sqlBuffer = new StringBuilder();
+		sqlBuffer.append(" select t1.*,t3.user_name,nvl(t4.style_name,").append(db.concat("'未知风格(' "," t1.TEMPLATE_STYLE ", "')'")).append(") as style_name from td_cms_template t1 inner join td_cms_site_tpl t2 on ");
+		sqlBuffer.append(" t1.template_id = t2.template_id ");
+		sqlBuffer.append(" and t2.site_id = #[siteId]");
+//		sqlBuffer.append(siteId);
+		DateFormat format = DataFormatUtil.getSimpleDateFormat(request, "yyyy-mm-dd");
+		if(action!=null && action.equals("search"))
+		{
+			params.put("name", "%"+name+"%");
+			sqlBuffer.append(" and t1.name like #[name] ");
+			if(null!=type && !type.equals(""))
+			{
+				params.put("type", Integer.parseInt(type));
+				sqlBuffer.append(" and t1.type = #[type]");
+			}
+			if(null!=TimeBgin && !TimeBgin.equals(""))
+			{
+				try {
+					params.put("TimeBgin", format.parse(TimeBgin));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				sqlBuffer.append(" and t1.createtime>=#[TimeBgin]");
+			}
+			if(null!=TimeEnd && !TimeEnd.equals(""))
+			{
+				try {
+					Date date = format.parse(TimeEnd);
+					date = TimeUtil.addDates(date, 1);
+					params.put("TimeEnd", date);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				sqlBuffer.append(" and t1.createtime<#[TimeEnd]");
+				
+			}
+
+		}
+		sqlBuffer.append(" inner join td_sm_user t3 ");
+		sqlBuffer.append("on t1.createuser = t3.user_id");
+		if(action!=null && action.equals("search"))
+		{
+			params.put("creatorUser", "%"+creatorUser+"%");
+			sqlBuffer.append(" and t3.user_name like #[creatorUser]");
+		}
+		sqlBuffer.append(" left join td_cms_template_style t4 on t1.template_style = t4.style_id ");
+		if(null!=templateStyle && !templateStyle.equals("-2")){
+			int styleId = Integer.parseInt(templateStyle);
+			params.put("styleId", styleId);
+			sqlBuffer.append(" and t4.style_id = #[styleId]");
+		}
+		sqlBuffer.append(" order by t1.type,t1.template_style,t1.PERSISTTYPE,t1.createtime desc");
+    	
+    	
     	ListInfo   templatelist = new ListInfo();
-    	List list = new ArrayList();
-    	DBUtil conn = new DBUtil();     	
-   	    try {   		
-   		 
-   		 conn.executeSelect(sql, offset, maxitem);
-   		 if (conn.size()>0){
-   			for(int i=0;i<conn.size();i++){
-   		     Template templateobj=new Template();
-   		     templateobj.setName     (conn.getString(i,"name"));       //模板名称
-   		     templateobj.setDescription (conn.getString(i,"description"));    //模板描述
-   		     templateobj.setText (conn.getString(i,"text"));     		    
-   		     templateobj.setType     (conn.getInt   (i,"type"));
-   		     templateobj.setStyleName(conn.getString(i,"style_name"));	//模板风格名称
-   		     templateobj.setCreateTime(conn.getDate(i,"createtime"));
-   		     templateobj.setCreateUserId(conn.getLong(i,"createuser"));	
-   		     templateobj.setCreateUserName(conn.getString(i,"user_name"));	 			 
-   		     templateobj.setHeader       (conn.getString(i,"header")); 
-   		     templateobj.setTemplateId  (conn.getInt(i,"template_id"));   
-   		     templateobj.setIncreasePublishFlag(conn.getInt(i,"inc_pub_flag"));
-   		     templateobj.setTemplateFileName(conn.getString(i, "TEMPLATEFILENAME"));
-		     templateobj.setTemplatePath(conn.getString(i,"TEMPLATEPATH")); 
-   		     list.add(i,templateobj);
-   			}
-   		  }
+    	
+    	
+   	    try {   
+   	    	final List<Template> list = new ArrayList<Template>();
+   	    	templatelist = SQLExecutor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+   	    		
+			@Override
+			public void handleRow(Record conn) throws Exception {
+				Template templateobj=new Template();
+	   		     templateobj.setName     (conn.getString("name"));       //模板名称
+	   		     templateobj.setDescription (conn.getString("description"));    //模板描述
+	   		     templateobj.setText (conn.getString("text"));     		    
+	   		     templateobj.setType     (conn.getInt   ("type"));
+	   		     templateobj.setStyleName(conn.getString("style_name"));	//模板风格名称
+	   		     templateobj.setCreateTime(conn.getDate("createtime"));
+	   		     templateobj.setCreateUserId(conn.getLong("createuser"));	
+	   		     templateobj.setCreateUserName(conn.getString("user_name"));	 			 
+	   		     templateobj.setHeader       (conn.getString("header")); 
+	   		     templateobj.setTemplateId  (conn.getInt("template_id"));   
+	   		     templateobj.setIncreasePublishFlag(conn.getInt("inc_pub_flag"));
+	   		     templateobj.setTemplateFileName(conn.getString( "TEMPLATEFILENAME"));
+			     templateobj.setTemplatePath(conn.getString("TEMPLATEPATH")); 
+	   		     list.add(templateobj);
+				
+			}
+   			 
+   		 }, sqlBuffer.toString(), offset, maxitem, params);
+//   		 conn.executeSelect(sqlBuffer.toString(), offset, maxitem);
+//   		 if (conn.size()>0){
+//   			for(int i=0;i<conn.size();i++){
+//   		     Template templateobj=new Template();
+//   		     templateobj.setName     (conn.getString(i,"name"));       //模板名称
+//   		     templateobj.setDescription (conn.getString(i,"description"));    //模板描述
+//   		     templateobj.setText (conn.getString(i,"text"));     		    
+//   		     templateobj.setType     (conn.getInt   (i,"type"));
+//   		     templateobj.setStyleName(conn.getString(i,"style_name"));	//模板风格名称
+//   		     templateobj.setCreateTime(conn.getDate(i,"createtime"));
+//   		     templateobj.setCreateUserId(conn.getLong(i,"createuser"));	
+//   		     templateobj.setCreateUserName(conn.getString(i,"user_name"));	 			 
+//   		     templateobj.setHeader       (conn.getString(i,"header")); 
+//   		     templateobj.setTemplateId  (conn.getInt(i,"template_id"));   
+//   		     templateobj.setIncreasePublishFlag(conn.getInt(i,"inc_pub_flag"));
+//   		     templateobj.setTemplateFileName(conn.getString(i, "TEMPLATEFILENAME"));
+//		     templateobj.setTemplatePath(conn.getString(i,"TEMPLATEPATH")); 
+//   		     list.add(i,templateobj);
+//   			}
+//   		  }
 	   	  templatelist.setDatas(list);
-	   	  templatelist.setTotalSize(conn.getTotalSize());
+//	   	  templatelist.setTotalSize(conn.getTotalSize());
    		  return templatelist;
    		} catch (Exception e) {
    			System.out.print("取站点模板信息出错!"+e);
@@ -1646,12 +1749,29 @@ public class TemplateManagerImpl implements TemplateManager{
 			throw new TemplateManagerException(e.getMessage());
 		}
 	}
-	public ListInfo getChannelListofTlpCited(String sql, int offset, int maxitem) throws TemplateManagerException {
+	public ListInfo getChannelListofTlpCited(String indexPagePath,String siteId,String templateId, int offset, int maxitem) throws TemplateManagerException {
 		ListInfo   templatelist = new ListInfo();
 		List list = new ArrayList();
-    	DBUtil db = new DBUtil();     	
+    	PreparedDBUtil db = new PreparedDBUtil();     	
    	    try { 
-   	    	db.executeSelect(sql,offset, maxitem);
+   	    	String sql = "";
+			if(indexPagePath == null || indexPagePath.length()==0)
+			{
+				sql = "select a.*,b.name as siteName from td_cms_channel a,td_cms_site b where a.site_id = b.site_id and (a.outline_tpl_id =? or a.detail_tpl_id =?)";
+				db.preparedSelect(sql,offset, maxitem);
+				int tpid = Integer.parseInt(templateId) ;
+				db.setInt(1, tpid);
+				db.setInt(2, tpid);
+			}
+			else
+			{
+				sql = "select a.*,b.name as siteName from td_cms_channel a,td_cms_site b where a.site_id = b.site_id and a.indexpagepath = ? and a.site_id =?";
+				db.preparedSelect(sql,offset, maxitem);
+				int siteId_ = Integer.parseInt(siteId) ;
+				db.setString(1, indexPagePath);
+				db.setInt(2, siteId_);
+			}
+   	    	db.executePrepared();
    	    	for(int i=0;i<db.size();i++){
    	    		Channel chnl = new Channel();
    	    		chnl.setDisplayName(db.getString(i,"display_name"));
@@ -1671,10 +1791,13 @@ public class TemplateManagerImpl implements TemplateManager{
 	public ListInfo getDocumentListofTlpCited(String templateId, int offset, int maxitem) throws TemplateManagerException {
 		ListInfo   templatelist = new ListInfo();
 		List list = new ArrayList();
-    	DBUtil db = new DBUtil();     	
+    	PreparedDBUtil db = new PreparedDBUtil();     	
    	    try { 
-   	    	String sql = "select a.*,b.display_name as chnlName from td_cms_document a,td_cms_channel b where a.channel_id = b.channel_id and a.detailtemplate_id =" + templateId ;
-   	    	db.executeSelect(sql,offset, maxitem);
+   	    	String sql = "select a.*,b.display_name as chnlName from td_cms_document a,td_cms_channel b where a.channel_id = b.channel_id and a.detailtemplate_id =?";
+   	    	db.preparedSelect(sql,offset, maxitem);
+   	    	int tpid = Integer.parseInt(templateId) ;
+   	    	db.setInt(1, tpid);
+   	    	db.executePrepared();
    	    	for(int i=0;i<db.size();i++){
    	    		Document doc = new Document();
    	    		doc.setSubtitle(db.getString(i,"subtitle"));
@@ -1889,13 +2012,15 @@ public class TemplateManagerImpl implements TemplateManager{
 	{
 		ListInfo listinfo = new ListInfo();
 		List list = new ArrayList();
-		DBUtil db = new DBUtil();		
+		PreparedDBUtil db = new PreparedDBUtil();		
 		String sql = "select TMPLNAME,TMPLDESC,EXPORTERID,flag,"
             + " site.name as SITENAME from TD_CMS_TMPL_EXPORT tmpl join  td_cms_site site " 
-            + "on  tmpl.siteid=site.site_id and (tmpl.flag=0 or (tmpl.flag=1 and tmpl.siteid="+siteId+"))";
+            + "on  tmpl.siteid=site.site_id and (tmpl.flag=0 or (tmpl.flag=1 and tmpl.siteid=?))";
 		try
 		{
-			db.executeSelect(sql,offset,pageitems);
+			db.preparedSelect(sql,offset,pageitems);
+			db.setInt(1, siteId);
+			db.executePrepared();
 			if(db.size()>0)
 			{
 				for(int i=0;i<db.size();i++){
@@ -1929,15 +2054,18 @@ public class TemplateManagerImpl implements TemplateManager{
 		List list = new ArrayList();
 		//case when DOCTYPE=1 then t.content else null end linkfile
 		String subsql = "";
+		boolean set = false;
 		switch(select){
 		case 0:
 			subsql = " and tmpl.flag=0 ";
 			break;
 		case 1:
-			subsql = " and tmpl.flag=1 and tmpl.siteid="+siteId;
+			subsql = " and tmpl.flag=1 and tmpl.siteid=?";
+			set = true;
 			break;
 		case 2:
-			subsql = " and ( tmpl.flag=0 or (tmpl.flag=1 and tmpl.siteid="+siteId+")) ";
+			subsql = " and ( tmpl.flag=0 or (tmpl.flag=1 and tmpl.siteid=?)) ";
+			set = true;
 			break;
 		default:
 		    break;
@@ -1946,9 +2074,12 @@ public class TemplateManagerImpl implements TemplateManager{
                    + " site.name as SITENAME from TD_CMS_TMPL_EXPORT tmpl join  td_cms_site site " 
                    + "on  tmpl.siteid=site.site_id ";
 		sql += subsql;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			if(set)
+				db.setInt(1, siteId);
+			db.executePrepared();
 			for(int i=0;i<db.size();i++){
 				TmplateExport tmpl = new TmplateExport();
 				tmpl.setTmplname(db.getString(i,"TMPLNAME"));
@@ -1977,12 +2108,13 @@ public class TemplateManagerImpl implements TemplateManager{
 		List tmpStyles = new ArrayList();
 		
 		//去掉每一模板类型中子类的重复记录
-		String strsql = " select * from td_cms_template t where t.TYPE = "+type
-						+" and t.rowid in (select max(rowid) from td_cms_template where template_style <> -1   group by template_style) ";
+		String strsql = " select * from td_cms_template t where t.TYPE = ? and t.rowid in (select max(rowid) from td_cms_template where template_style <> -1   group by template_style) ";
 		
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(strsql);
+			db.preparedSelect(strsql);
+			db.setInt(1, Integer.parseInt(type));
+			db.executePrepared();
 			for(int i=0;i<db.size();i++){
 				Integer styleId = new Integer(db.getInt(i,"TEMPLATE_STYLE"));
 				tmpStyles.add(styleId);

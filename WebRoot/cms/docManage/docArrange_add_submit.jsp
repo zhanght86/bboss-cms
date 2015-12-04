@@ -1,3 +1,4 @@
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%
 /**
   *	Action设置一个文档为置顶文档
@@ -21,38 +22,52 @@
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
 	
-	AccessControl accesscontroler = AccessControl.getInstance();
-    accesscontroler.checkAccess(request, response);
-	
+	AccessControl accesscontroler = AccessControl.getAccessControl();
+	TransactionManager tm = new TransactionManager();
 	DocumentManager dm = new DocumentManagerImpl();
 	ChannelManager cm = new ChannelManagerImpl();
 	SiteManager siteManager = new SiteManagerImpl();
+	int docstatus = -1;
+	String siteid = null;
+	String channelid = null;
+	boolean b = false;
+	try
+	{
 	
-	String channelid = request.getParameter("channelid");
-	String siteid = request.getParameter("siteid");
+		tm.begin();
+		  channelid = request.getParameter("channelid");
+		  siteid = request.getParameter("siteid");
+		
+		String userid = accesscontroler.getUserID();
+		String docid = request.getParameter("documentId");
+		String starttime = request.getParameter("starttime");
+		String endtime = request.getParameter("endtime");
+		
+		Site site = siteManager.getSiteInfo(siteid);
+		Channel channel = cm.getChannelInfo(channelid);
+		Document doc = dm.getPartDocInfoById(docid);
 	
-	String userid = accesscontroler.getUserID();
-	String docid = request.getParameter("documentId");
-	String starttime = request.getParameter("starttime");
-	String endtime = request.getParameter("endtime");
-	
-	Site site = siteManager.getSiteInfo(siteid);
-	Channel channel = cm.getChannelInfo(channelid);
-	Document doc = dm.getPartDocInfoById(docid);
-
-	ArrangeDoc ad = new ArrangeDoc();
-	ad.setStartTime(starttime);
-	ad.setEndTime(endtime);
-	ad.setDocumentId(Integer.parseInt(docid));
-	ad.setOpUser(Integer.parseInt(userid));
-	
-	//新增置顶
-	boolean b = dm.addArrangeDoc(ad);
+		ArrangeDoc ad = new ArrangeDoc();
+		ad.setStartTime(starttime);
+		ad.setEndTime(endtime);
+		ad.setDocumentId(Integer.parseInt(docid));
+		ad.setOpUser(Integer.parseInt(userid));
+		ad.setChannelid(Integer.parseInt(channelid));
+		//新增置顶
+		  b = dm.addArrangeDoc(ad);
+		docstatus = dm.getDocStatus(Integer.parseInt(docid));
+		tm.commit();
+		LogManager logManager = SecurityDatabase.getLogManager();
+		logManager.log(accesscontroler.getUserAccount(),"新增置顶文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
+	}
+	finally
+	{
+		tm.release();
+	}
 	//记录操作日志
-	LogManager logManager = SecurityDatabase.getLogManager();
-	logManager.log(accesscontroler.getUserAccount(),"新增置顶文档.文档标题:【" + site.getName() + " 站点，" + channel.getDisplayName() + " 频道】" + doc.getSubtitle(),"文档管理",com.frameworkset.util.StringUtil.getClientIP(request),"");
 	
-	if(dm.getDocStatus(Integer.parseInt(docid)) == 5)//只有已发的文档才要递归
+	
+	if(docstatus == 5)//只有已发的文档才要递归
 	{
 		/*
 		try

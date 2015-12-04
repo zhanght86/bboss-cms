@@ -6,7 +6,7 @@ import com.frameworkset.platform.cms.templatemanager.TemplateManagerImpl;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
-	public class DocumentofTlpCitedList extends DataInfoImpl implements java.io.Serializable{
+	public class DocumentofTlpCitedList extends DataInfoImpl{
 
 		protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 				int maxPagesize) {

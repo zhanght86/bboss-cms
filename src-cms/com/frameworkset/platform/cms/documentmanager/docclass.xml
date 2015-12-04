@@ -16,7 +16,7 @@
 	
 	<property name="deleteClasses">
 		<![CDATA[
-			delete td_cms_document_class where site_id=?
+			delete from td_cms_document_class where site_id=?
 		]]>
 	</property>
 	

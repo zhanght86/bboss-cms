@@ -99,8 +99,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			throws ChannelManagerException {
 		try {
 			createChannel(channel);
-			AccessControl control = AccessControl.getInstance();
-			control.checkAccess(request, response);
+			AccessControl control = AccessControl.getAccessControl();			
 			String operContent = "";
 			String operSource = com.frameworkset.util.StringUtil.getClientIP(request);
 			String openModle = "频道管理";
@@ -182,15 +181,18 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 		}
 		channelPath += tempPath;
 		channel.setChannelPath(channelPath);
-
+		
 		File currChannelDirectory = new File(channelRootDirectory.getAbsolutePath(), channelPath);
-		if (!currChannelDirectory.exists()) {
+		boolean currChannelDirectoryExist = currChannelDirectory.exists(); 
+		if (!currChannelDirectoryExist) {
 			boolean mkdirs = currChannelDirectory.mkdirs();
 			if (!mkdirs) {
 				throw new ChannelManagerException("新建频道的目录不成功.");
 			}
 		} else {
-			throw new ChannelManagerException("频道的目录已经存在,新建频道的目录不成功.");
+			String cancreate = AccessControl.getAccessControl().getRequest().getParameter("cancreate");
+			if(cancreate == null )
+				throw new ChannelManagerException("频道的目录已经存在,新建频道的目录不成功.");
 		}
 
 		// File theFiles = new File(currChannelDirectory.getAbsolutePath(),
@@ -360,16 +362,20 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 			}
 
 			// 新增频道的时候默认将当前频道权限赋给站点管理员角色
-			DBUtil db1 = new DBUtil();
-			DBUtil db2 = new DBUtil();
-			String selectname = "select name from td_cms_site where site_id =" + siteId;
-
-			db1.executeSelect(selectname);
+			PreparedDBUtil db1 = new PreparedDBUtil();
+			PreparedDBUtil db2 = new PreparedDBUtil();
+			String selectname = "select name from td_cms_site where site_id =?";
+			
+			db1.preparedSelect(selectname);
+			db1.setLong(1, siteId);
+			db1.executePrepared();
 			if (db1.size() > 0) {
 				String rolename = db1.getString(0, "name") + "站点管理员";
-				String selectrole = "select role_id from td_sm_role where role_name='" + rolename + "'";
-
-				db2.executeSelect(selectrole);
+				String selectrole = "select role_id from td_sm_role where role_name=?";
+				db2.preparedSelect(selectrole);
+				db2.setString(1, rolename);
+				db2.executePrepared();
+				
 
 				if (db2.size() > 0) {
 					String roleId = db2.getString(0, "role_id");

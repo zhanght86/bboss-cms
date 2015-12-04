@@ -115,10 +115,10 @@ public class HTMLDistribute extends Distribute  {
 					tm.begin();
 					ContentContext contentctx = (ContentContext) context;
 					
-					PreparedDBUtil db = new PreparedDBUtil();
-					db.preparedSelect(context.getDBName(), "select document_id from td_cms_document where document_id = ? for update nowait");
-					db.setInt(1, contentctx.getDocument().getDocument_id());
-					db.executePrepared();
+//					PreparedDBUtil db = new PreparedDBUtil();
+//					db.preparedSelect(context.getDBName(), "select document_id from td_cms_document where document_id = ? for update nowait");
+//					db.setInt(1, contentctx.getDocument().getDocument_id());
+//					db.executePrepared();
 					// 更新文档发布状态
 					if (context.getPublishMonitor().isPublishCompleted() || context.getPublishMonitor().isDistributeCompleted()) 
 					{

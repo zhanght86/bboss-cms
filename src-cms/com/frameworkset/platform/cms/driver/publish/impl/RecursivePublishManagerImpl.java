@@ -681,12 +681,10 @@ public class RecursivePublishManagerImpl implements RecursivePublishManager {
 	public void deleteRefObjectsOfPubobject(Context context, String pubobject,
 			int pubobjtype) throws RecursivePublishException {
 		String siteEname = context.getSite().getSecondName();
-		StringBuffer sql = new StringBuffer();
-		sql.append("delete td_cms_pubobject_relation t where ").append(
-				"t.PUBLISHOBJECT=? and t.REFERENCE_SITE=? and t.PUBLISHTYPE=?");
+		String sql = "delete from td_cms_pubobject_relation  where PUBLISHOBJECT=? and REFERENCE_SITE=? and PUBLISHTYPE=?";
 		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		try {
-			dbUtil.preparedDelete(context.getDBName(), sql.toString());
+			dbUtil.preparedDelete(context.getDBName(), sql);
 			dbUtil.setString(1, pubobject);
 			dbUtil.setString(2, siteEname);
 			dbUtil.setInt(3, pubobjtype);
