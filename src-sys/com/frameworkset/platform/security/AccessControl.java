@@ -5086,4 +5086,24 @@ public class AccessControl implements AccessControlInf{
 		return cmPermissions;
 	}
 	
+	public static String getRequestParameter(String name)
+	{
+		return AccessControl.getAccessControl()._getRequestParameter(name);
+	}
+	
+	private String _getRequestParameter(String name)
+	{
+		return request !=null?request.getParameter(name):null;
+	}
+	
+	public static String[] getRequestParameters(String name)
+	{
+		return AccessControl.getAccessControl()._getRequestParameters(name);
+	}
+	
+	private String[] _getRequestParameters(String name)
+	{
+		return request !=null?request.getParameterValues(name):null;
+	}
+	
 }

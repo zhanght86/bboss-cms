@@ -26,7 +26,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 	<script src="../inc/js/func.js"></script>	
-	<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 	<tab:tabConfig/>
 	<title>新建站点</title>
 <style type="text/css">
@@ -530,6 +529,12 @@ function changeclass(){
 								<td width="100" height="24" align="right" nowrap bgcolor="#EDEFF6"> 站点的顺序: </td>
 								<td height="24" align="left">
 									<input type="text" name="order" id="order" class="cms_text" style="width:30px" value="0" maxlength="9">
+								</td>
+							</tr>
+							<tr>
+								<td width="100" height="24" align="right" nowrap bgcolor="#EDEFF6"> 允许在存在的目录上建站: </td>
+								<td height="24" align="left">
+									<input type="checkbox" name="allowed" id="allowed"  >
 								</td>
 							</tr>
 							<tr>
