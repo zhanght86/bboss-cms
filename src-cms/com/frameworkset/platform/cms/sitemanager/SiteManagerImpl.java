@@ -132,8 +132,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 		    //2007-08-20
 		    //新建站点设置应用
 		    this.setAppInSite(site,request);
-			AccessControl control = AccessControl.getInstance();
-			control.checkAccess(request,response);
+			AccessControl control = AccessControl.getAccessControl();
 			String operContent="";        
 	        String operSource=com.frameworkset.util.StringUtil.getClientIP(request);
 	        String openModle="站点管理";
@@ -215,37 +214,43 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			String sitesavepath = site.getSecondName();
 			siteDIR += sitesavepath;
 			File currSitePath = new File(parentSitePath, sitesavepath);
-			if (currSitePath.exists()) {
-				throw new SiteManagerException("同样名称的文件或文件夹已经存在.无法创建站点");
+			String allowed = AccessControl.getRequestParameter("allowed");
+			boolean sitepathexist = currSitePath.exists();
+			if (sitepathexist) {
+				if(allowed == null)
+					throw new SiteManagerException("同样名称的文件或文件夹已经存在.无法创建站点");
 			}
-			boolean mkdir = currSitePath.mkdir();
-			if (!mkdir) {
-				throw new SiteManagerException("无法创建站点的文件夹.");
+			else
+			{
+				boolean mkdir = currSitePath.mkdir();
+				if (!mkdir) {
+					throw new SiteManagerException("无法创建站点的文件夹.");
+				}
+	
+	//			// (4) 创建站点内的子文件夹
+	//			mkdir = (new File(currSitePath.getAbsoluteFile(), "_imgLib"))
+	//					.mkdir();
+	//			if (!mkdir) {
+	//				throw new SiteManagerException("无法创建站点内的_imgLib文件夹.");
+	//			}
+				mkdir = (new File(currSitePath.getAbsoluteFile(), "_webprj"))
+						.mkdir();
+				if (!mkdir) {
+					throw new SiteManagerException("无法创建站点内的_webprj文件夹.");
+				}
+	
+				File _template = new File(currSitePath.getAbsoluteFile(),
+						"_template");
+				mkdir = _template.mkdir();
+				if (!mkdir) {
+					throw new SiteManagerException("无法创建站点内的_template文件夹.");
+				}
+	
+	//			new File(_template.getAbsoluteFile(), "files").mkdir();
+	//			if (!mkdir) {
+	//				throw new SiteManagerException("无法创建站点内的_template/files文件夹.");
+	//			}
 			}
-
-//			// (4) 创建站点内的子文件夹
-//			mkdir = (new File(currSitePath.getAbsoluteFile(), "_imgLib"))
-//					.mkdir();
-//			if (!mkdir) {
-//				throw new SiteManagerException("无法创建站点内的_imgLib文件夹.");
-//			}
-			mkdir = (new File(currSitePath.getAbsoluteFile(), "_webprj"))
-					.mkdir();
-			if (!mkdir) {
-				throw new SiteManagerException("无法创建站点内的_webprj文件夹.");
-			}
-
-			File _template = new File(currSitePath.getAbsoluteFile(),
-					"_template");
-			mkdir = _template.mkdir();
-			if (!mkdir) {
-				throw new SiteManagerException("无法创建站点内的_template文件夹.");
-			}
-
-//			new File(_template.getAbsoluteFile(), "files").mkdir();
-//			if (!mkdir) {
-//				throw new SiteManagerException("无法创建站点内的_template/files文件夹.");
-//			}
 			
 			/**
 			 * added by biaoping.yin on 2007.11.12
@@ -491,8 +496,9 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 	    	Event event = new EventImpl(site,CMSEventType.EVENT_SITE_ADD);
 			super.change(event,true);
 	        EventUtil.sendRESOURCE_ROLE_INFO_CHANGEEvent();
-			/*拷贝标签附件到tmp目录*/				
-			copyTagAttachment2Tmp(currSitePath.getAbsoluteFile()+"\\_template");
+			/*拷贝标签附件到tmp目录*/		
+	        if(!sitepathexist)
+	        	copyTagAttachment2Tmp(currSitePath.getAbsoluteFile()+"\\_template");
 			
 			
 		} catch (Exception e) {
@@ -510,7 +516,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			
 			//默认添加新站点的整站索引
 			String index_siteId = String.valueOf(site.getSiteId());
-			String index_searchType = "2";
+			int index_searchType = 2;
 			//String index_name = site.getName();							//索引名字暂用站点名字
 			String index_name = site.getSecondName() ;    //索引名字用站点英文名称
 			String index_lever = site.getIndex_level();
@@ -518,15 +524,21 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
 			String index_time = site.getIndex_time();
 		
 			try{
-				DBUtil index_db = new DBUtil();
+				PreparedDBUtil index_db = new PreparedDBUtil();
 				
 				long searchId = index_db.getNextPrimaryKey("td_cms_site_search") ;
 				
 				String index_sql = 
-						"insert into td_cms_site_search (id,site_id,search_type,name,lever,day,time) values("
-						+searchId +"," 
-						+ index_siteId + "," + index_searchType + ",'" + index_name + "'," + index_lever + "," + index_day + "," + index_time + ")";
-				index_db.executeInsert(index_sql);
+						"insert into td_cms_site_search (id,site_id,search_type,name,lever,day,time) values(?,?,?,?,?,?,?)";
+				index_db.preparedInsert(index_sql);
+				index_db.setLong(1, searchId);
+				index_db.setLong(2, site.getSiteId());
+				index_db.setInt(3, index_searchType);
+				index_db.setString(4, index_name);
+				index_db.setInt(5, Integer.parseInt(index_lever));
+				index_db.setInt(6, Integer.parseInt(index_day));
+				index_db.setInt(7, Integer.parseInt(index_time));
+				index_db.executePrepared();
 			}catch(Exception e){
 				System.out.println("添加新站点时添加整站索引发生错误");
 			}

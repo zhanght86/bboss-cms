@@ -3,8 +3,7 @@
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%
 try {
-	AccessControl control = AccessControl.getInstance();
-	control.checkAccess(request, response);
+	AccessControl control = AccessControl.getAccessControl();
 
 	response.setHeader("Cache-Control", "no-cache"); 
 	response.setHeader("Pragma", "no-cache"); 
