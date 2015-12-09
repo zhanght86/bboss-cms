@@ -1,14 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.frameworkset.platform.cms.documentmanager.*"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.platform.security.*"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	String rootpath = request.getContextPath();
 	String docId = request.getParameter("docId");
 %>
 <html>
@@ -17,7 +15,6 @@
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<title>内容管理主框架</title>
 		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
 		<script language="JavaScript" src="../../sysmanager/scripts/selectTime.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender.js" language="javascript"></script>
 		<script type="text/javascript" src="../../public/datetime/calender_date.js" language="javascript"></script>

@@ -171,7 +171,7 @@ public interface DocumentManager extends java.io.Serializable
 	 * @throws DocumentManagerException
 	 *             在处理当前方法的过程中如果遇到问题将抛出 DocumentManagerException 异常
 	 */
-	public ListInfo getDocList(String sql,int offset,int maxItem) throws DocumentManagerException;
+	public ListInfo getDocList(int offset,int maxItem) throws DocumentManagerException;
 	/**
 	 * 根据SQL语句获取引用文档列表
 	 * @param sql
@@ -1400,4 +1400,6 @@ public interface DocumentManager extends java.io.Serializable
 	public List getAllPublishedAttachmentOfDocument(HttpServletRequest request,
 			Document document, String siteId, List docattachements,
 			CMSTemplateLinkTable contentOrigineTemplateLinkTable) throws DocumentManagerException;
+	public ListInfo getSelectDocList(int offset, int maxPagesize)throws DocumentManagerException ;
+	public ListInfo getSiteDocumentList(int offset, int maxPagesize)throws DocumentManagerException ;
 }

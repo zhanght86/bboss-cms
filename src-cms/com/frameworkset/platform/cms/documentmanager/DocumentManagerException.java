@@ -28,4 +28,8 @@ public class DocumentManagerException extends Exception implements java.io.Seria
 	public DocumentManagerException(String string, Exception e) {
 		super(string,e);
 	}
+
+	public DocumentManagerException(Exception de) {
+		super(de);
+	}
 }

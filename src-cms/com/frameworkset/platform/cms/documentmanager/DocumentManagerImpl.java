@@ -4,8 +4,9 @@ package com.frameworkset.platform.cms.documentmanager;
 import java.io.File;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,9 +16,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
+import org.frameworkset.util.DataFormatUtil;
+import org.frameworkset.util.TimeUtil;
 import org.htmlparser.util.ParserException;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
@@ -30,6 +32,7 @@ import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.common.poolman.sql.ColumnMetaData;
 import com.frameworkset.common.poolman.sql.TableMetaData;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManager;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerException;
@@ -59,13 +62,13 @@ import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 import com.frameworkset.platform.cms.driver.publish.impl.APPPublish;
 import com.frameworkset.platform.cms.searchmanager.CMSSearchManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
-import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
 import com.frameworkset.platform.cms.sitemanager.SiteManager;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerException;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.cms.util.FtpUpfile;
+import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.util.ListInfo;
@@ -81,7 +84,7 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	private ConfigSQLExecutor executor;
 
-	private DBUtil dbUitl = new DBUtil();
+ 
 
 	protected static Logger log = Logger.getLogger(DocumentManagerImpl.class);
 
@@ -271,9 +274,11 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 
 	 */
 	public void deleteDoc(int docid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "delete from td_cms_document where document_id=" + docid;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "delete from td_cms_document where document_id=?";
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
 			// 删除任务
 			clearTask(docid);
 			// 删除文档的历史操作记录
@@ -284,38 +289,86 @@ public class DocumentManagerImpl implements DocumentManager {
 			DocCommentManager dcm = new DocCommentManagerImpl();
 			dcm.delCommentsByDocId(docid);
 
-			String sql0 = "delete from td_cms_chnl_ref_doc where doc_id = " + docid;
-			String sql1 = "delete from td_cms_doc_aggregation a where a.aggr_doc_id =" + docid + " or a.id_by_aggr ="
-					+ docid;
-			String sql2 = "delete from td_cms_doc_arrange b where b.document_id =" + docid;
-			String sql3 = "delete from td_cms_doc_attach c where c.document_id =" + docid;
-			String sql4 = "delete from td_cms_doc_related d where d.doc_id =" + docid + " or d.related_doc_id ="
-					+ docid;
-			String sql5 = "delete from td_cms_doc_ver e where e.document_id =" + docid;
-			String sql6 = "delete from td_cms_doc_ver_attach f where f.document_id =" + docid;
-			String sql7 = "delete from td_cms_doc_dist_manner g where g.document_id =" + docid;
-			String sql8 = "delete from tl_cms_doc_oper_log h where h.doc_id =" + docid;
-			String sql9 = "delete from td_cms_doc_task i where i.document_id =" + docid;
-			String sql10 = "delete from td_cms_extfieldvalue k where k.document_id = " + docid;
-			String sql11 = "delete from td_cms_doc_publishing l where l.document_id = " + docid;
+			String sql0 = "delete from td_cms_chnl_ref_doc where doc_id = ?";
+			db.preparedDelete(sql0);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql1 = "delete from td_cms_doc_aggregation   where  aggr_doc_id =? or id_by_aggr =?";
+			db.preparedDelete(sql1);
+			db.setInt(1, docid);
+			db.setInt(2, docid);
+			db.addPreparedBatch();
+			String sql2 = "delete from td_cms_doc_arrange   where document_id =?";
+			db.preparedDelete(sql2);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql3 = "delete from td_cms_doc_attach  where document_id =?" ;
+			
+			db.preparedDelete(sql3);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql4 = "delete from td_cms_doc_related  where doc_id =? or related_doc_id =?";
+			
+			db.preparedDelete(sql4);
+			db.setInt(1, docid);
+			db.setInt(2, docid);
+			db.addPreparedBatch();
+			String sql5 = "delete from td_cms_doc_ver  where document_id =?" ;
+			
+			db.preparedDelete(sql5);
+			db.setInt(1, docid);
+			
+			db.addPreparedBatch();
+			String sql6 = "delete from td_cms_doc_ver_attach  where document_id =?" ;
+			db.preparedDelete(sql6);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql7 = "delete from td_cms_doc_dist_manner  where document_id =?";
+			db.preparedDelete(sql7);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql8 = "delete from tl_cms_doc_oper_log  where doc_id =?" ;
+			db.preparedDelete(sql8);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql9 = "delete from td_cms_doc_task  where document_id =?" ;
+			db.preparedDelete(sql9);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql10 = "delete from td_cms_extfieldvalue  where document_id = ?";
+			db.preparedDelete(sql10);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			String sql11 = "delete from td_cms_doc_publishing  where document_id = ?";
+			db.preparedDelete(sql11);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
 
-			db.addBatch(sql0);
-			db.addBatch(sql1);
-			db.addBatch(sql2);
-			db.addBatch(sql3);
-			db.addBatch(sql4);
-			db.addBatch(sql5);
-			db.addBatch(sql6);
-			db.addBatch(sql7);
-			db.addBatch(sql8);
-			db.addBatch(sql9);
-			db.addBatch(sql10);
-			db.addBatch(sql11);
-			db.addBatch(sql);
-			db.executeBatch();// 批处理操作数据库
+//			db.addBatch(sql0);
+//			db.addBatch(sql1);
+//			db.addBatch(sql2);
+//			db.addBatch(sql3);
+//			db.addBatch(sql4);
+//			db.addBatch(sql5);
+//			db.addBatch(sql6);
+//			db.addBatch(sql7);
+//			db.addBatch(sql8);
+//			db.addBatch(sql9);
+//			db.addBatch(sql10);
+//			db.addBatch(sql11);
+//			db.addBatch(sql);
+			db.preparedDelete(sql);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			db.executePreparedBatch();// 批处理操作数据库
+			tm.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new DocumentManagerException(e.getMessage());
+			
+			throw new DocumentManagerException(e.getMessage(),e);
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 
@@ -647,93 +700,710 @@ public class DocumentManagerImpl implements DocumentManager {
 	}
 
 	// 根据sql语句获取文档的ListInfo列表
-	public ListInfo getDocList(String sql, int offset, int maxItem) throws DocumentManagerException {
-		DBUtil dbUtil = new DBUtil();
-		// DBUtil db = new DBUtil();
+	public ListInfo getDocList( int offset, int maxItem) throws DocumentManagerException {
+		 
 		try {
-			dbUtil.executeSelect(sql, offset, maxItem);
-			ListInfo listInfo = new ListInfo();
-			List list = new ArrayList();
-			Document document;
-
-			for (int i = 0; i < dbUtil.size(); i++) {
-				document = new Document();
-				document.setDocument_id(dbUtil.getInt(i, "document_id"));
-				document.setTitle(dbUtil.getString(i, "title"));
-				document.setSubtitle(dbUtil.getString(i, "SUBTITLE"));
-				document.setDocabstract(dbUtil.getString(i, "docabstract"));
-				document.setStatus(dbUtil.getInt(i, "status"));
-				// 是否置顶
-				if (dbUtil.getInt(i, "order_no") != -1) {
-					document.setArrangeDoc(true);
-					// 是否过期
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					try {
-						if (format.parse(dbUtil.getString(i, "end_time")).after(new Date())) {
-							document.setArrangeOverTime(false);
-						} else {
-							document.setArrangeOverTime(true);
-						}
-					} catch (ParseException e) {
-						document.setArrangeOverTime(false);
-						e.printStackTrace();
+			
+			
+			AccessControl accessControl = AccessControl.getAccessControl();
+			HttpServletRequest request = accessControl.getRequest();
+			//普通查询字段，针对文档标题状态类型以及发稿人查询
+	  		String title = request.getParameter("title");
+			String status = request.getParameter("status");
+			String user = request.getParameter("userid");
+			String doctype = request.getParameter("doctype");
+			String docLevel = request.getParameter("docLevel");
+			String docClass = request.getParameter("docClass");
+			
+			//查询标志
+			String flag = request.getParameter("flag");
+			
+			String orderByHit = request.getParameter("orderByHit");
+			String orderByDocWtime = request.getParameter("orderByDocWtime");
+			String orderStr  = "";
+			
+		 	String channelid = request.getParameter("channelId");
+			String channelName = request.getParameter("channelName");
+			String siteid = request.getParameter("siteid");
+			request.setAttribute("channelId",channelid);
+			request.setAttribute("channelName",channelName);
+			request.setAttribute("siteid",siteid);
+			
+			//高级查询增加的字段
+			String author = request.getParameter("author");
+			String docAbstract = request.getParameter("docAbstract");
+			String docsorid = request.getParameter("docsorid");
+			String keyword = request.getParameter("keyword");
+			String createTimeBegin = request.getParameter("createTimeBegin");
+			String createTimeEnd = request.getParameter("createTimeEnd");
+			String content = request.getParameter("content");
+			
+			final DateFormat format =  DataFormatUtil.getSimpleDateFormat(request, "yyyy-MM-dd HH:mm:ss");
+		
+				StringBuilder sql = new StringBuilder();
+				Map<String,Object> params = new HashMap<String,Object>();
+				params.put("channelid", Integer.parseInt(channelid));
+				params.put("recycleStatus", DocumentStatus.RECYCLED.getStatus());
+				
+				sql.append("select x.document_id,x.title,x.subtitle,x.author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
+				   .append("x.doctype,nvl(x.doc_class, '未分类') as doc_class,x.docwtime,x.createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,x.docabstract,nvl(y.order_no,-1) as order_no,y.end_time,nvl(x.ordertime,x.docwtime) as ordertime,x.seq,x.count ")
+				   .append("from  TD_CMS_DOCUMENT x left outer join td_cms_doc_arrange y ")
+				   .append("on x.document_id = y.document_id ")
+				   .append(" left outer join tb_cms_flow z on x.flow_id = z.id ")
+				   .append(" left outer join tb_cms_doc_status u on x.status = u.id ")
+				   .append(" left outer join td_sm_user v on x.createuser = v.user_id ")
+				   .append(" left outer join td_cms_channel w on x.channel_id = w.channel_id ")
+				   .append(" where x.channel_id =#[channelid] and ")
+				   .append("x.status not in(#[recycleStatus],20,100) and isdeleted != 1 and ")
+				   .append("(select count(*) from td_cms_site a, td_cms_channel b ")
+				   .append("where b.site_id = a.site_id and (a.status = 0 or a.status = 1) and b.channel_id =#[channelid])>0 ");
+				if(ConfigManager.getInstance().getConfigBooleanValue("cms.channel.doclist.onlycurrentuser",false))
+				{
+					if(accessControl.isGrantedRole("部门管理员"))
+					{
+						/**
+						 * 目前只考虑显示用户自己采集的文档
+						 * 以后还需考虑将用户可以操作的其他文档放进来，如：审核，发布，撤销发布，回收等等
+						 * 还需考虑部门管理员，可以查看其所管理的所有用户采集的文档
+						 */
+						
+						String currentUser = accessControl.getUserID();
+						params.put("currentUser", currentUser);
+						sql.append(" and x.createuser=#[currentUser]");
 					}
-				} else {
-					document.setArrangeDoc(false);
-					document.setArrangeOverTime(true);
 				}
-				// 置顶是否过期
-				// db.executeSelect("select name from TB_CMS_DOC_STATUS where
-				// id="+ dbUtil.getInt(i,"status") +"");
-				// if(db.size()>0){
-				document.setStatusname(dbUtil.getString(i, "statusname"));
-				// }else{
-				// document.setStatusname("状态不明");
-				// }
-				document.setAuthor(dbUtil.getString(i, "AUTHOR"));
-				document.setUser_id(dbUtil.getInt(i, "createuser"));
+				if(flag!=null && flag.equals("query")){        //这个是条件查询
+					if (title != null && title.length() > 0) {
+						params.put("subtitle", "%"+ title +"%");
+					 
+						sql.append(" and x.subtitle like #[subtitle]");
+					}
+					if (status != null && status.length() > 0) {
+						params.put("status", status);
+					
+						sql.append(" and x.status = #[status]");
+					}
+					if (user != null && user.length() > 0) {
+						params.put("createuser", user);
+					
+						sql.append(" and x.createuser = #[createuser] ");
+					}
+					if (doctype != null && doctype.length() > 0) {
+						
+						params.put("doctype", doctype);
+						sql.append(" and x.doctype = #[doctype]");
+					}
+					if(author!=null && author.length()>0){
+						params.put("author", "%"+ author +"%");
+						sql.append(" and x.author like #[author]");
+					}
+					if(docAbstract!=null && docAbstract.length()>0){
+						params.put("docAbstract", "%"+ docAbstract +"%");
+						sql.append(" and x.docabstract like #[docAbstract]");
+					}
+					if(docsorid!=null && docsorid.length()>0){
+						params.put("docsorid", "%"+ docsorid +"%");
+						sql.append(" and x.docsource_id like #[docsorid]");
+					}
+					if(keyword!=null && keyword.length()>0){
+						params.put("keyword", "%"+ keyword +"%");
+						sql.append(" and x.keywords like #[keyword]");
+					}
+					
+					if(createTimeBegin!=null && createTimeBegin.length()>0){
+						params.put("docwtime",format.parseObject(createTimeBegin));
+						sql.append(" and x.docwtime > #[docwtime]");  
+					}
+					if(createTimeEnd!=null && createTimeEnd.length()>0){
+						params.put("docwtimeend",TimeUtil.addDates(format.parse(createTimeEnd),1));
+						sql.append(" and x.docwtime < #[docwtimeend]");  
+					}
+					if(content!=null && content.length()>0){
+						params.put("content", "%"+ content +"%");
+						sql.append(" and x.content like #[content]");
+					}
+					if(docLevel != null && docLevel.length() != 0){
+						params.put("docLevel", Integer.parseInt(docLevel));
+						sql.append(" and x.doc_level = #[docLevel]");
+					} 
+					if(docClass!= null && docClass.length() != 0){
+						params.put("doc_class", docClass);
+						sql.append(" and x.doc_class = #[docClass]");
+					} 
+					if(orderByHit != null && orderByHit.equals("true")){
+						orderStr = "x.count desc,";
+					} 
+					if(orderByHit != null && orderByHit.equals("false")){
+						orderStr = "x.count,";
+					} 
+					if(orderByDocWtime != null && orderByDocWtime.equals("true")){
+						orderStr = "x.docwtime desc,";
+					}
+					if(orderByDocWtime != null && orderByDocWtime.equals("false")){
+						orderStr = "x.docwtime,";
+					}
+					
+				}	
+				 
+					sql.append(" order by "+orderStr+"order_no desc,x.seq,x.ordertime desc,x.document_id desc");
+				 
+				final List list = new ArrayList();
+			ListInfo listInfo = SQLExecutor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+			
+				@Override
+				public void handleRow(Record dbUtil) throws Exception {
+					Document document = new Document();
+					document.setDocument_id(dbUtil.getInt( "document_id"));
+					document.setTitle(dbUtil.getString( "title"));
+					document.setSubtitle(dbUtil.getString( "SUBTITLE"));
+					document.setDocabstract(dbUtil.getString( "docabstract"));
+					document.setStatus(dbUtil.getInt( "status"));
+					// 是否置顶
+					if (dbUtil.getInt( "order_no") != -1) {
+						document.setArrangeDoc(true);
+						// 是否过期
+						try {
+							if (format.parse(dbUtil.getString( "end_time")).after(new Date())) {
+								document.setArrangeOverTime(false);
+							} else {
+								document.setArrangeOverTime(true);
+							}
+						} catch (ParseException e) {
+							document.setArrangeOverTime(false);
+							e.printStackTrace();
+						}
+					} else {
+						document.setArrangeDoc(false);
+						document.setArrangeOverTime(true);
+					}
+					// 置顶是否过期
+					// db.executeSelect("select name from TB_CMS_DOC_STATUS where
+					// id="+ dbUtil.getInt("status") +"");
+					// if(db.size()>0){
+					document.setStatusname(dbUtil.getString( "statusname"));
+					// }else{
+					// document.setStatusname("状态不明");
+					// }
+					document.setAuthor(dbUtil.getString( "AUTHOR"));
+					document.setUser_id(dbUtil.getInt( "createuser"));
 
-				document.setDocwtime(dbUtil.getDate(i, "docwtime"));
-				document.setDoctype(dbUtil.getInt(i, "DOCTYPE"));
-				// String str="select USER_REALNAME from td_sm_user where
-				// user_id="+ dbUtil.getInt(i,"createuser") +"";
-				// db.executeSelect(str);
-				// if(db.size()>0){
+					document.setDocwtime(dbUtil.getDate( "docwtime"));
+					document.setDoctype(dbUtil.getInt( "DOCTYPE"));
+					// String str="select USER_REALNAME from td_sm_user where
+					// user_id="+ dbUtil.getInt("createuser") +"";
+					// db.executeSelect(str);
+					// if(db.size()>0){
 
-				document.setUsername(dbUtil.getString(i, "username"));
-				// }
-				// str = "select name from tb_cms_flow where id =" +
-				// dbUtil.getInt(i,"flow_id");
-				// db.executeSelect(str);
-				// if(db.size()>0)
-				try {
-					document.setFlowName(dbUtil.getString(i, "flowname"));
-				} catch (Exception e) {
+					document.setUsername(dbUtil.getString( "username"));
+					// }
+					// str = "select name from tb_cms_flow where id =" +
+					// dbUtil.getInt("flow_id");
+					// db.executeSelect(str);
+					// if(db.size()>0)
+					try {
+						document.setFlowName(dbUtil.getString( "flowname"));
+					} catch (Exception e) {
 
+					}
+					// else document.setFlowName("无流程");
+
+					document.setChanel_id(dbUtil.getInt( "channel_id"));
+					// str = "select name from td_cms_channel where channel_id =" +
+					// dbUtil.getInt("channel_id");
+					// db.executeSelect(str);
+					// if(db.size()>0)
+					document.setChannelName(dbUtil.getString( "channelName"));
+
+					document.setCount(dbUtil.getInt( "count"));
+
+					document.setDoc_class(dbUtil.getString( "doc_class"));
+
+					list.add(document);
+					
 				}
-				// else document.setFlowName("无流程");
-
-				document.setChanel_id(dbUtil.getInt(i, "channel_id"));
-				// str = "select name from td_cms_channel where channel_id =" +
-				// dbUtil.getInt(i,"channel_id");
-				// db.executeSelect(str);
-				// if(db.size()>0)
-				document.setChannelName(dbUtil.getString(i, "channelName"));
-
-				document.setCount(dbUtil.getInt(i, "count"));
-
-				document.setDoc_class(dbUtil.getString(i, "doc_class"));
-
-				list.add(document);
-			}
+				
+			}, sql.toString(), offset, maxItem,params);
+			
+		
+			 
+		 
 			listInfo.setDatas(list);
-			listInfo.setTotalSize(dbUtil.getTotalSize());
 			return listInfo;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new DocumentManagerException(e.getMessage());
 		}
 	}
+	
+	// 根据sql语句获取文档的ListInfo列表
+		public ListInfo getSelectDocList( int offset, int maxItem) throws DocumentManagerException {
+			 
+			try {
+				
+				
+				AccessControl accessControl = AccessControl.getAccessControl();
+				HttpServletRequest request = accessControl.getRequest();
+				//普通查询字段，针对文档标题状态类型以及发稿人查询
+		  		String title = request.getParameter("title");
+				String status = request.getParameter("status");
+				String user = request.getParameter("userid");
+				String doctype = request.getParameter("doctype");
+				String docLevel = request.getParameter("docLevel");
+				
+				//查询标志
+				String flag = request.getParameter("flag");
+
+			 	String channelid = request.getParameter("channelId");
+				String channelName = request.getParameter("channelName");
+				String siteid = request.getParameter("siteid");
+				request.setAttribute("channelId",channelid);
+				request.setAttribute("channelName",channelName);
+				request.setAttribute("siteid",siteid);
+				
+				//高级查询增加的字段
+				String author = request.getParameter("author");
+				String docAbstract = request.getParameter("docAbstract");
+				String docsorid = request.getParameter("docsorid");
+				String keyword = request.getParameter("keyword");
+				String createTimeBegin = request.getParameter("createTimeBegin");
+				String createTimeEnd = request.getParameter("createTimeEnd");
+				String content = request.getParameter("content");
+				
+			 
+			
+				 
+				final DateFormat format =  DataFormatUtil.getSimpleDateFormat(request, "yyyy-MM-dd HH:mm:ss");
+				
+				StringBuilder sql = new StringBuilder();
+				Map<String,Object> params = new HashMap<String,Object>();
+				params.put("channelid", Integer.parseInt(channelid));
+					sql.append("select x.document_id,title,subtitle,x.author,x.channel_id,nvl(w.name,'未知') as channelName,x.status,nvl(u.name,'未知状态') as statusname,")
+					   .append("x.doctype,x.docwtime,x.createuser,nvl(v.USER_REALNAME,'未知') as username,x.flow_id,nvl(z.name,'未知流程') as flowname,x.docabstract,nvl(y.order_no,-1) as order_no,end_time,x.count ")
+					   .append("from  TD_CMS_DOCUMENT x left outer join td_cms_doc_arrange y ")
+					   .append("on x.document_id = y.document_id ")
+					   .append(" left outer join tb_cms_flow z on x.flow_id = z.id ")
+					   .append(" left outer join tb_cms_doc_status u on x.status = u.id ")
+					    .append(" left outer join td_sm_user v on x.createuser = v.user_id ")
+					    .append(" left outer join td_cms_channel w on x.channel_id = w.channel_id ")
+					   .append(" where x.channel_id =#[channelid] and ")
+					   .append("x.status not in(8,20,100,10,12) and isdeleted != 1 and " )
+					   .append("(select count(*) from td_cms_site a, td_cms_channel b " )
+					   .append("where b.site_id = a.site_id and (a.status = 0 or a.status = 1) " )
+					   .append(" and b.channel_id =#[channelid])>0 " )
+					   .append(" and doctype != 3 ");//过滤聚合文档类型
+					if(flag!=null && flag.equals("query")){        //这个是条件查询
+						 
+						 
+						 
+						 
+						  
+						 
+						 
+						 
+					 
+						 
+						
+						
+						if (title != null && title.length() > 0) {
+							params.put("subtitle", "%"+ title +"%");
+						 
+							sql.append(" and x.subtitle like #[subtitle]");
+						}
+						if (status != null && status.length() > 0) {
+							params.put("status", status);
+						
+							sql.append(" and x.status = #[status]");
+						}
+						if (user != null && user.length() > 0) {
+							params.put("createuser", user);
+						
+							sql.append(" and x.createuser = #[createuser] ");
+						}
+						if (doctype != null && doctype.length() > 0) {
+							
+							params.put("doctype", doctype);
+							sql.append(" and x.doctype = #[doctype]");
+						}
+						if(author!=null && author.length()>0){
+							params.put("author", "%"+ author +"%");
+							sql.append(" and x.author like #[author]");
+						}
+						if(docAbstract!=null && docAbstract.length()>0){
+							params.put("docAbstract", "%"+ docAbstract +"%");
+							sql.append(" and x.docabstract like #[docAbstract]");
+						}
+						if(docsorid!=null && docsorid.length()>0){
+							params.put("docsorid", "%"+ docsorid +"%");
+							sql.append(" and x.docsource_id like #[docsorid]");
+						}
+						if(keyword!=null && keyword.length()>0){
+							params.put("keyword", "%"+ keyword +"%");
+							sql.append(" and x.keywords like #[keyword]");
+						}
+						
+						if(createTimeBegin!=null && createTimeBegin.length()>0){
+							params.put("docwtime",format.parseObject(createTimeBegin));
+							sql.append(" and x.docwtime > #[docwtime]");  
+						}
+						if(createTimeEnd!=null && createTimeEnd.length()>0){
+							params.put("docwtimeend",TimeUtil.addDates(format.parse(createTimeEnd),1));
+							sql.append(" and x.docwtime < #[docwtimeend]");  
+						}
+						if(content!=null && content.length()>0){
+							params.put("content", "%"+ content +"%");
+							sql.append(" and x.content like #[content]");
+						}
+						if(docLevel != null && docLevel.length() != 0){
+							params.put("docLevel", Integer.parseInt(docLevel));
+							sql.append(" and x.doc_level = #[docLevel]");
+						} 
+						 
+					}
+					 
+					 sql.append(" order by docwtime desc,document_id desc");
+					final List list = new ArrayList();
+				ListInfo listInfo = SQLExecutor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+				
+					@Override
+					public void handleRow(Record dbUtil) throws Exception {
+						Document document = new Document();
+						document.setDocument_id(dbUtil.getInt( "document_id"));
+						document.setTitle(dbUtil.getString( "title"));
+						document.setSubtitle(dbUtil.getString( "SUBTITLE"));
+						document.setDocabstract(dbUtil.getString( "docabstract"));
+						document.setStatus(dbUtil.getInt( "status"));
+						// 是否置顶
+						if (dbUtil.getInt( "order_no") != -1) {
+							document.setArrangeDoc(true);
+							// 是否过期
+							try {
+								if (format.parse(dbUtil.getString( "end_time")).after(new Date())) {
+									document.setArrangeOverTime(false);
+								} else {
+									document.setArrangeOverTime(true);
+								}
+							} catch (ParseException e) {
+								document.setArrangeOverTime(false);
+								e.printStackTrace();
+							}
+						} else {
+							document.setArrangeDoc(false);
+							document.setArrangeOverTime(true);
+						}
+						// 置顶是否过期
+						// db.executeSelect("select name from TB_CMS_DOC_STATUS where
+						// id="+ dbUtil.getInt("status") +"");
+						// if(db.size()>0){
+						document.setStatusname(dbUtil.getString( "statusname"));
+						// }else{
+						// document.setStatusname("状态不明");
+						// }
+						document.setAuthor(dbUtil.getString( "AUTHOR"));
+						document.setUser_id(dbUtil.getInt( "createuser"));
+
+						document.setDocwtime(dbUtil.getDate( "docwtime"));
+						document.setDoctype(dbUtil.getInt( "DOCTYPE"));
+						// String str="select USER_REALNAME from td_sm_user where
+						// user_id="+ dbUtil.getInt("createuser") +"";
+						// db.executeSelect(str);
+						// if(db.size()>0){
+
+						document.setUsername(dbUtil.getString( "username"));
+						// }
+						// str = "select name from tb_cms_flow where id =" +
+						// dbUtil.getInt("flow_id");
+						// db.executeSelect(str);
+						// if(db.size()>0)
+						try {
+							document.setFlowName(dbUtil.getString( "flowname"));
+						} catch (Exception e) {
+
+						}
+						// else document.setFlowName("无流程");
+
+						document.setChanel_id(dbUtil.getInt( "channel_id"));
+						// str = "select name from td_cms_channel where channel_id =" +
+						// dbUtil.getInt("channel_id");
+						// db.executeSelect(str);
+						// if(db.size()>0)
+						document.setChannelName(dbUtil.getString( "channelName"));
+
+						document.setCount(dbUtil.getInt( "count"));
+
+						document.setDoc_class(dbUtil.getString( "doc_class"));
+
+						list.add(document);
+						
+					}
+					
+				}, sql.toString(), offset, maxItem,params);
+				
+			
+				 
+			 
+				listInfo.setDatas(list);
+				return listInfo;
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new DocumentManagerException(e.getMessage());
+			}
+		}
+		protected String getChnlIds(String siteid)
+		{
+			String chlIds = "";
+			//取当前用户username
+			//String curUserId = accessControl.getUserID();
+			PreparedDBUtil db = new PreparedDBUtil();
+			AccessControl accessControl = AccessControl.getAccessControl();
+			String sql = "select channel_id from td_cms_channel where site_id = ?";
+			try
+			{
+				db.preparedSelect(sql);
+				db.setInt(1, Integer.parseInt(  siteid));
+				db.executePrepared();
+				if( db.size() > 0)
+				{
+					for( int i=0;i<db.size();i++)
+					{
+						String chlid = db.getInt(i,0) + "";
+						if( accessControl.checkPermission(chlid,AccessControl.WRITE_PERMISSION,AccessControl.CHANNEL_RESOURCE)
+							|| accessControl.checkPermission(siteid,AccessControl.WRITE_PERMISSION,AccessControl.SITECHANNEL_RESOURCE))
+						{
+							if( !chlIds.equals(""))
+								chlIds += "," + db.getInt(i,0);
+							else
+								chlIds += db.getInt(i,0);
+						}
+					}
+					if( chlIds.equals(""))
+						chlIds = "''";
+				}
+				else
+					chlIds = "''";
+			}
+			catch(Exception e)
+			{
+				chlIds = "''";
+				e.printStackTrace();
+			}
+			return chlIds;
+		}
+		public ListInfo getSiteDocumentList( int offset, int maxItem) throws DocumentManagerException {
+			 
+			try {
+				
+				
+				AccessControl accessControl = AccessControl.getAccessControl();
+				HttpServletRequest request = accessControl.getRequest();
+				//取当前用户username
+				String curUser = accessControl.getUserAccount();
+				
+				//普通查询字段，针对文档标题状态类型以及发稿人查询
+				String title = request.getParameter("title");
+				String status = request.getParameter("status");
+				String user = request.getParameter("userid");
+				String doctype = request.getParameter("doctype");
+				String docLevel = request.getParameter("docLevel");
+					
+				//查询标志
+				String flag = request.getParameter("flag");
+
+			 	String channelid = request.getParameter("channelId");
+				String channelName = request.getParameter("channelName");
+				String siteid = request.getParameter("siteid");
+				if(siteid == null || siteid.equals("") || siteid.equals("null"))
+				{
+					CMSManager cms = new CMSManager();
+					cms.init(request,accessControl.getSession(),accessControl);
+					siteid = cms.getSiteID();
+				}
+				request.setAttribute("channelId",channelid);
+				request.setAttribute("channelName",channelName);
+				request.setAttribute("siteid",siteid);
+				
+				String channelIds = request.getParameter("channelIds");
+				if(channelIds!=null && channelIds.endsWith(",")){
+					channelIds = channelIds.substring(0,channelIds.length()-1);
+				}
+					
+				//高级查询增加的字段
+				String author = request.getParameter("author");
+				String docAbstract = request.getParameter("docAbstract");
+				String docsorid = request.getParameter("docsorid");
+				String keyword = request.getParameter("keyword");
+				String createTimeBegin = request.getParameter("createTimeBegin");
+				String createTimeEnd = request.getParameter("createTimeEnd");
+				String content = request.getParameter("content");
+				
+			
+					final DateFormat format =  DataFormatUtil.getSimpleDateFormat(request, "yyyy-MM-dd HH:mm:ss");
+					
+					StringBuilder sql = new StringBuilder();
+					Map<String,Object> params = new HashMap<String,Object>();
+					sql.append("select abc.*,nvl(z.name,'未知流程') as flowname,nvl(u.name,'未知状态') as statusname,nvl(v.USER_REALNAME,'未知') as username ")
+					   .append("from (select x.document_id,x.title,x.subtitle,x.author,")
+					   .append("x.channel_id,x.status,")
+					   .append("x.doctype,x.createtime,")
+					   .append("x.docwtime,")
+					   .append("nvl(w.name,'未知') as channelName,")
+					   .append("x.createuser,x.flow_id, x.docabstract,-1 as order_no,count ")
+					   .append("from TD_CMS_DOCUMENT x ,td_cms_channel w ,td_cms_site c ")
+					   .append("where c.site_id = ")
+					   .append(siteid)
+					   .append(" and x.channel_id = w.channel_id and w.site_id = c.site_id ");
+					if( !AccessControl.isAdmin(curUser) )
+						sql.append(" and x.channel_id in (" + getChnlIds(siteid) + ") ");
+					if(flag!=null && flag.equals("query")){        //这个是条件查询
+						    
+						  
+						
+						if (title != null && title.length() > 0) {
+							params.put("subtitle", "%"+ title +"%");
+						 
+							sql.append(" and x.subtitle like #[subtitle]");
+						}
+						if (status != null && status.length() > 0) {
+							params.put("status", status);
+						
+							sql.append(" and x.status = #[status]");
+						}
+						if (user != null && user.length() > 0) {
+							params.put("createuser", user);
+						
+							sql.append(" and x.createuser = #[createuser] ");
+						}
+						if (doctype != null && doctype.length() > 0) {
+							
+							params.put("doctype", doctype);
+							sql.append(" and x.doctype = #[doctype]");
+						}
+						if(author!=null && author.length()>0){
+							params.put("author", "%"+ author +"%");
+							sql.append(" and x.author like #[author]");
+						}
+						if(docAbstract!=null && docAbstract.length()>0){
+							params.put("docAbstract", "%"+ docAbstract +"%");
+							sql.append(" and x.docabstract like #[docAbstract]");
+						}
+						if(docsorid!=null && docsorid.length()>0){
+							params.put("docsorid", "%"+ docsorid +"%");
+							sql.append(" and x.docsource_id like #[docsorid]");
+						}
+						if(keyword!=null && keyword.length()>0){
+							params.put("keyword", "%"+ keyword +"%");
+							sql.append(" and x.keywords like #[keyword]");
+						}
+						
+						if(createTimeBegin!=null && createTimeBegin.length()>0){
+							params.put("docwtime",format.parseObject(createTimeBegin));
+							sql.append(" and x.docwtime > #[docwtime]");  
+						}
+						if(createTimeEnd!=null && createTimeEnd.length()>0){
+							params.put("docwtimeend",TimeUtil.addDates(format.parse(createTimeEnd),1));
+							sql.append(" and x.docwtime < #[docwtimeend]");  
+						}
+						if(content!=null && content.length()>0){
+							params.put("content", "%"+ content +"%");
+							sql.append(" and x.content like #[content]");
+						}
+						if(docLevel != null && docLevel.length() != 0){
+							params.put("docLevel", Integer.parseInt(docLevel));
+							sql.append(" and x.doc_level = #[docLevel]");
+						} 
+					}	
+					 
+						sql.append(" ) abc ")
+					   .append("left outer join tb_cms_flow z on abc.flow_id = z.id  ")
+					   .append("left outer join tb_cms_doc_status u on abc.status = u.id  ")
+					   .append("left outer join td_sm_user v on abc.createuser = v.user_id  ")
+					   .append("order by abc.channel_id desc,abc.docwtime desc,abc.document_id desc");
+					final List list = new ArrayList();
+				ListInfo listInfo = SQLExecutor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
+				
+					@Override
+					public void handleRow(Record dbUtil) throws Exception {
+						Document document = new Document();
+						document.setDocument_id(dbUtil.getInt( "document_id"));
+						document.setTitle(dbUtil.getString( "title"));
+						document.setSubtitle(dbUtil.getString( "SUBTITLE"));
+						document.setDocabstract(dbUtil.getString( "docabstract"));
+						document.setStatus(dbUtil.getInt( "status"));
+						// 是否置顶
+						if (dbUtil.getInt( "order_no") != -1) {
+							document.setArrangeDoc(true);
+							// 是否过期
+							try {
+								if (format.parse(dbUtil.getString( "end_time")).after(new Date())) {
+									document.setArrangeOverTime(false);
+								} else {
+									document.setArrangeOverTime(true);
+								}
+							} catch (ParseException e) {
+								document.setArrangeOverTime(false);
+								e.printStackTrace();
+							}
+						} else {
+							document.setArrangeDoc(false);
+							document.setArrangeOverTime(true);
+						}
+						// 置顶是否过期
+						// db.executeSelect("select name from TB_CMS_DOC_STATUS where
+						// id="+ dbUtil.getInt("status") +"");
+						// if(db.size()>0){
+						document.setStatusname(dbUtil.getString( "statusname"));
+						// }else{
+						// document.setStatusname("状态不明");
+						// }
+						document.setAuthor(dbUtil.getString( "AUTHOR"));
+						document.setUser_id(dbUtil.getInt( "createuser"));
+
+						document.setDocwtime(dbUtil.getDate( "docwtime"));
+						document.setDoctype(dbUtil.getInt( "DOCTYPE"));
+						// String str="select USER_REALNAME from td_sm_user where
+						// user_id="+ dbUtil.getInt("createuser") +"";
+						// db.executeSelect(str);
+						// if(db.size()>0){
+
+						document.setUsername(dbUtil.getString( "username"));
+						// }
+						// str = "select name from tb_cms_flow where id =" +
+						// dbUtil.getInt("flow_id");
+						// db.executeSelect(str);
+						// if(db.size()>0)
+						try {
+							document.setFlowName(dbUtil.getString( "flowname"));
+						} catch (Exception e) {
+
+						}
+						// else document.setFlowName("无流程");
+
+						document.setChanel_id(dbUtil.getInt( "channel_id"));
+						// str = "select name from td_cms_channel where channel_id =" +
+						// dbUtil.getInt("channel_id");
+						// db.executeSelect(str);
+						// if(db.size()>0)
+						document.setChannelName(dbUtil.getString( "channelName"));
+
+						document.setCount(dbUtil.getInt( "count"));
+
+						document.setDoc_class(dbUtil.getString( "doc_class"));
+
+						list.add(document);
+						
+					}
+					
+				}, sql.toString(), offset, maxItem,params);
+				
+			
+				 
+			 
+				listInfo.setDatas(list);
+				return listInfo;
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new DocumentManagerException(e.getMessage());
+			}
+		}
 
 	// 获取待审文档列表
 	public ListInfo getAuditDocList(String sql, int offset, int maxItem) throws DocumentManagerException {
@@ -1354,69 +2024,90 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * @return
 	 * @throws DocumentManagerException
 	 *             DocumentManager.java
-	 * @author: ge.tao
+	 * @author: yinbp
 	 */
 	public List getDocInfoByIds(String docids) throws DocumentManagerException {
-		List list = new ArrayList();
+		final List list = new ArrayList();
 		DBUtil db = new DBUtil();
-		Document document = null;
 		if (docids.endsWith(";"))
 			docids = docids.substring(0, docids.length() - 1);
-		docids = docids.replace(';', ',');
-		DocumentExtColumnManager extManager = new DocumentExtColumnManager();
+//		docids = docids.replace(';', ',');
+		String ids[] = docids.split(";");
+		List idslist = new ArrayList();
+		for(int i = 0; i < ids.length; i ++)
+		{
+			idslist.add(Integer.parseInt(ids[i]));
+		}
+		Map params = new HashMap();
+		params.put("docids", idslist);
+		final DocumentExtColumnManager extManager = new DocumentExtColumnManager();
 		StringBuffer sql = new StringBuffer();
 		sql.append("select document_id,title,SUBTITLE,t.status as status ,AUTHOR, indexpagepath,")
-				.append("CREATETIME, DOCTYPE, case when DOCTYPE=1 ")
-				.append("then t.content else null end linkfile,channel_id,LINKTARGET,t.DOCSOURCE_ID, ")
-				.append("DOCWTIME,CREATEUSER,t.DETAILTEMPLATE_ID,DOCABSTRACT,TITLECOLOR,")
-				.append("KEYWORDS,doc_level,PARENT_DETAIL_TPL,PIC_PATH,mediapath,publishfilename,secondtitle, ")
-				.append("isnew,newpic_path,ordertime,")
+				.append("t.CREATETIME, DOCTYPE, case when DOCTYPE=1 ")
+				.append("then t.content else null end linkfile,t.channel_id,LINKTARGET,t.DOCSOURCE_ID, ")
+				.append("t.DOCWTIME,t.CREATEUSER,t.DETAILTEMPLATE_ID,DOCABSTRACT,TITLECOLOR,")
+				.append("KEYWORDS,doc_level,t.PARENT_DETAIL_TPL,PIC_PATH,mediapath,publishfilename,secondtitle, ")
+				.append("isnew,newpic_path,t.ordertime,")
 				.append("ds.SRCNAME as SRCNAME, tmpl.NAME as NAME,t_channel.site_id as site_id ")
 				.append("from TD_CMS_DOCUMENT t inner join TD_CMS_DOCSOURCE ds on ds.DOCSOURCE_ID=t.DOCSOURCE_ID ")
 				.append("left join TD_CMS_TEMPLATE tmpl on tmpl.TEMPLATE_ID=t.DETAILTEMPLATE_ID ")
 				.append("left join td_cms_channel t_channel on t.channel_id = t_channel.channel_id ")
-				.append(" where document_id in (").append(docids).append(") ");
-		log.warn(sql.toString());
+				.append(" where document_id in (")
+						.append("#foreach($id in $docids)")
+				.append("#if($velocityCount == 0)")
+				.append("#[docids[$velocityCount]]")
+				.append("#else")
+				.append(",#[docids[$velocityCount]]")
+				.append("#end")
+				.append("#end")
+				.append(") ");
+		
 		try {
-			db.executeSelect(sql.toString());
-			for (int i = 0; i < db.size(); i++) {
-				document = new Document();
-				document.setDocument_id(db.getInt(i, "document_id"));
-				document.setTitle(db.getString(i, "title"));
-				document.setSubtitle(db.getString(i, "SUBTITLE"));
-				document.setStatus(db.getInt(i, "status"));
-				document.setAuthor(db.getString(i, "AUTHOR"));
-				document.setCreateTime(db.getDate(i, "CREATETIME"));
-				document.setDoctype(db.getInt(i, "DOCTYPE"));
-				document.setChanel_id(db.getInt(i, "channel_id"));
-				document.setLinktarget(db.getString(i, "LINKTARGET"));
-				// 出于链接文档的链接地址保存的是在content字段的考虑
-				// if(document.getDoctype() == 1)
-				document.setLinkfile(db.getString(i, "linkfile"));
-				document.setDocsource_id(db.getInt(i, "DOCSOURCE_ID"));
+			SQLExecutor.queryBeanByNullRowHandler(new NullRowHandler(){
 
-				document.setDocwtime(db.getDate(i, "DOCWTIME"));
+				@Override
+				public void handleRow(Record db) throws Exception {
+					Document document = new Document();
+					document.setDocument_id(db.getInt("document_id"));
+					document.setTitle(db.getString("title"));
+					document.setSubtitle(db.getString("SUBTITLE"));
+					document.setStatus(db.getInt("status"));
+					document.setAuthor(db.getString("AUTHOR"));
+					document.setCreateTime(db.getDate("CREATETIME"));
+					document.setDoctype(db.getInt("DOCTYPE"));
+					document.setChanel_id(db.getInt("channel_id"));
+					document.setLinktarget(db.getString("LINKTARGET"));
+					// 出于链接文档的链接地址保存的是在content字段的考虑
+					// if(document.getDoctype() == 1)
+					document.setLinkfile(db.getString("linkfile"));
+					document.setDocsource_id(db.getInt("DOCSOURCE_ID"));
 
-				document.setCreateUser(db.getInt(i, "CREATEUSER"));
-				document.setDetailtemplate_id(db.getInt(i, "DETAILTEMPLATE_ID"));
-				document.setDocabstract(db.getString(i, "DOCABSTRACT"));
+					document.setDocwtime(db.getDate("DOCWTIME"));
 
-				document.setTitlecolor(db.getString(i, "TITLECOLOR"));
-				document.setKeywords(db.getString(i, "KEYWORDS"));
-				document.setDoc_level(db.getInt(i, "doc_level"));
-				document.setParentDetailTpl(db.getString(i, "PARENT_DETAIL_TPL"));
-				document.setPicPath(db.getString(i, "PIC_PATH"));
-				document.setMediapath(db.getString(i, "mediapath"));
-				document.setPublishfilename(db.getString(i, "publishfilename"));
-				document.setSecondtitle(db.getString(i, "secondtitle"));
-				document.setOrdertime(db.getDate(i, "ordertime"));
-				document.setSiteid(db.getInt(i, "site_id"));
-				/* 装载扩展字段数据 */
-				document.setExtColumn(extManager.getExtColumnInfo(i,db));
-				document.setDocsource_name(db.getString(i, "SRCNAME"));
-				document.setDetailtemplate_name(db.getString(i, "NAME"));
-				list.add(document);
-			}
+					document.setCreateUser(db.getInt("CREATEUSER"));
+					document.setDetailtemplate_id(db.getInt("DETAILTEMPLATE_ID"));
+					document.setDocabstract(db.getString("DOCABSTRACT"));
+
+					document.setTitlecolor(db.getString("TITLECOLOR"));
+					document.setKeywords(db.getString("KEYWORDS"));
+					document.setDoc_level(db.getInt("doc_level"));
+					document.setParentDetailTpl(db.getString("PARENT_DETAIL_TPL"));
+					document.setPicPath(db.getString("PIC_PATH"));
+					document.setMediapath(db.getString("mediapath"));
+					document.setPublishfilename(db.getString("publishfilename"));
+					document.setSecondtitle(db.getString("secondtitle"));
+					document.setOrdertime(db.getDate("ordertime"));
+					document.setSiteid(db.getInt("site_id"));
+					/* 装载扩展字段数据 */
+					document.setExtColumn(extManager.getExtColumnInfo(db));
+					document.setDocsource_name(db.getString("SRCNAME"));
+					document.setDetailtemplate_name(db.getString("NAME"));
+					list.add(document);
+					
+				}
+				
+			}, sql.toString(), params);
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1425,37 +2116,57 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	// 回收单个文档
 	public void garbageDoc(int docid, int userid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
-		int status = this.getDocStatus(docid);
+		PreparedDBUtil db = new PreparedDBUtil();
+	 
 		// 将回收标志位置为1
-		String sql = "update td_cms_document set isdeleted=1,recycletime =" + DBUtil.getDBAdapter().to_date(new Date())
-				+ ",recycleman=" + userid + " where document_id=" + docid;
+		String sql = "update td_cms_document set isdeleted=1,recycletime =?,recycleman=? where document_id=?";
+		TransactionManager tm = new TransactionManager(); 
 		try {
-			db.executeUpdate(sql);
+			tm.begin();
+			int status = this.getDocStatus(docid);
+			db.preparedUpdate(sql);
+			db.setTimestamp(1, new Timestamp(new Date().getTime()));
+			db.setInt(2, userid);
+			db.setInt(3,docid);
+			db.executePrepared();
 			// 将文档当前的任务置为无效
-			sql = "update td_cms_doc_task_detail set valid=0 where task_id in"
-					+ "(select a.task_id from td_cms_doc_task a where a.pre_status ="
-					+ status
-					+ " and a.document_id="
-					+ docid
-					+ " and not exists "
-					+ "(select * from td_cms_doc_task_detail b where b.task_id = a.task_id and b.complete_time is not null))";
-			db.executeUpdate(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DocumentManagerException("回收时出现异常：" + e.getMessage());
+			sql = "update td_cms_doc_task_detail set valid=0 where complete_time  is not null and task_id in (select a.task_id from td_cms_doc_task a where a.pre_status =? and a.document_id=?)";
+			db.preparedUpdate(sql);
+			db.setInt(1, status);
+			db.setInt(2,docid);
+			db.executePrepared();
+			tm.commit();
+		}  
+		 catch (Exception de) {
+				
+			 throw new DocumentManagerException("回收时出现异常：" + de.getMessage(),de);
+			}
+		finally
+		{
+			tm.release();
 		}
 	}
 
 	// 批量回收文档
 	public void garbageDoc(int[] docids, int userid) throws DocumentManagerException {
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			for (int i = 0; i < docids.length; i++) {
 				garbageDoc(docids[i], userid);
 			}
+			tm.commit();
 		} catch (DocumentManagerException de) {
-			de.printStackTrace();
+			
 			throw de;
+		}
+		 catch (Exception de) {
+				
+				throw new DocumentManagerException(de);
+			}
+		finally
+		{
+			tm.release();
 		}
 	}
 
@@ -1463,35 +2174,53 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 恢复已回收的文档
 	 */
 	public void recoverDoc(int docid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
-		int status = this.getDocStatus(docid);
-		String sql = "update td_cms_document set isdeleted=0 where document_id=" + docid;
+		PreparedDBUtil db = new PreparedDBUtil();
+		
+		String sql = "update td_cms_document set isdeleted=0 where document_id=?";
+		TransactionManager tm = new TransactionManager(); 
 		try {
-			db.executeUpdate(sql);
+			tm.begin();
+			int status = this.getDocStatus(docid);
+			db.preparedUpdate(sql);
+			db.setInt(1, docid);
+			db.executePrepared();
 			// 恢复任务，即将文档当前的任务置为有效
-			sql = "update td_cms_doc_task_detail set valid=1 where task_id in"
-					+ "(select a.task_id from td_cms_doc_task a where a.pre_status ="
-					+ status
-					+ " and a.document_id="
-					+ docid
-					+ " and not exists "
-					+ "(select * from td_cms_doc_task_detail b where b.task_id = a.task_id and b.complete_time is not null))";
-			db.executeUpdate(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DocumentManagerException("垃圾文档恢复时出现异常" + e.getMessage());
+			sql = "update td_cms_doc_task_detail set valid=1 where  complete_time is not null and task_id in (select a.task_id from td_cms_doc_task a where a.pre_status =? and a.document_id=?)";
+			db.preparedUpdate(sql);
+			db.setInt(1, status);
+			db.setInt(2, docid);
+			db.executePrepared();
+			tm.commit();
+		} catch (Exception e) {
+			
+			throw new DocumentManagerException("垃圾文档恢复时出现异常" + e.getMessage(),e);
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 
 	// 批量恢复文档
 	public void recoverDoc(int[] docids) throws DocumentManagerException {
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			for (int i = 0; i < docids.length; i++) {
 				recoverDoc(docids[i]);
 			}
+			tm.commit();
 		} catch (DocumentManagerException de) {
-			de.printStackTrace();
+			
 			throw de;
+		}
+		 catch (Exception de) {
+				
+				throw new DocumentManagerException(de);
+			}
+		finally
+		{
+			tm.release();
 		}
 	}
 
@@ -1708,10 +2437,12 @@ public class DocumentManagerImpl implements DocumentManager {
 	}
 
 	public int getDocStatus(int docId) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			String sql = "select status from td_cms_document " + "where document_id = " + docId;
-			db.executeSelect(sql);
+			String sql = "select status from td_cms_document where document_id = ?" ;
+			db.preparedSelect(sql);
+			db.setInt(1, docId);
+			db.executePrepared();
 			if (db.size() > 0)
 				return (db.getInt(0, "status"));
 		} catch (Exception e) {
@@ -2354,10 +3085,12 @@ public class DocumentManagerImpl implements DocumentManager {
 
 	public boolean isPigeonholeManager(int userId) {
 		boolean b = false;
-		DBUtil db = new DBUtil();
-		String sql = "select count(*) from td_sm_userrole where role_id = 11 and user_id = " + userId;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select count(*) from td_sm_userrole where role_id = 11 and user_id = ?";
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, userId);
+			db.executePrepared();
 			if (db.size() > 0)
 				b = db.getInt(0, "count(*)") > 0;
 		} catch (SQLException e) {
@@ -2371,49 +3104,35 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public void recordDocOperate(int docid, int userid, String operType, int tranId, String operContent)
 			throws DocumentManagerException {
-		DBUtil db = new DBUtil();
-		String sqlSelOperid = "select id from tb_cms_doc_oper where name = '" + operType + "'";
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sqlSelOperid = "select id from tb_cms_doc_oper where name = ?";
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			db.executeSelect(sqlSelOperid);
+			db.preparedSelect(sqlSelOperid);
+			db.setString(1, operType);
+			db.executePrepared();
 
 			long docOperLogId = db.getNextPrimaryKey("tl_cms_doc_oper_log");
 
 			if (db.size() > 0) {
 				int operId = db.getInt(0, "id");
-				String sqlInsert = "insert into tl_cms_doc_oper_log(ID,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) "
-						+ "values("
-						+ docOperLogId
-						+ ","
-						+ userid
-						+ ","
-						+ docid
-						+ ","
-						+ operId
-						+ ","
-						+ tranId
-						+ ","
-						+ DBUtil.getDBAdapter().to_date(new Date()) + ",'" + operContent + "')";
+				String sqlInsert = "insert into tl_cms_doc_oper_log(ID,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) values(?,?,?,?,?,?,?)";
 				// 考虑其他操作没有对应的tranId（如，删除操作）,回收文档恢复
-				if (tranId == -1 || tranId == 0) {
-					sqlInsert = "insert into tl_cms_doc_oper_log(ID,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) "
-							+ "values("
-							+ docOperLogId
-							+ ","
-							+ userid
-							+ ","
-							+ docid
-							+ ","
-							+ operId
-							+ ","
-							+ null
-							+ ","
-							+ DBUtil.getDBAdapter().to_date(new Date()) + ",'" + operContent + "')";
-				}
-
-				db.executeInsert(sqlInsert);
 				
+
+				db.preparedInsert(sqlInsert);
+				db.setLong(1, docOperLogId);
+				db.setInt(2, userid);
+				db.setInt(3, docid);
+				db.setInt(4, operId);
+				if (tranId == -1 || tranId == 0) 
+					db.setNull(5, Types.DECIMAL);
+				else						
+					db.setInt(5, tranId);
+				db.setTimestamp(6, new Timestamp(new Date().getTime()));
+				db.setString(7, operContent);
+				db.executePrepared();
 			}
 			tm.commit();
 		} catch (Exception sqle) {
@@ -2429,51 +3148,45 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public void recordDocOperate(int[] docids, int userid, String operType, Map tranIdMap, String operContent)
 			throws DocumentManagerException {
-		DBUtil db = new DBUtil();
-		String sqlSelOperid = "select id from tb_cms_doc_oper where name = '" + operType + "'";
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sqlSelOperid = "select id from tb_cms_doc_oper where name = ?";
 		TransactionManager tm = new TransactionManager();
 		try {
 			tm.begin();
-			db.executeSelect(sqlSelOperid);
+			db.preparedSelect(sqlSelOperid);
+			db.setString(1, operType);
+			db.executePrepared();
 			if (db.size() > 0) {
 				int operId = db.getInt(0, "id");
+				String sqlInsert = "insert into tl_cms_doc_oper_log(ID,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) values(?,?,?,?,?,?,?)";
+				// 考虑其他操作没有对应的tranId（如，删除操作）,回收文档恢复
+				
+
+				db.preparedInsert(sqlInsert);
 				for (int i = 0; i < docids.length; i++) {
 					Object temp = tranIdMap.get(new Integer(docids[i]));
 					int tranId = -1;
 					if (temp != null)
 						tranId = ((Integer) temp).intValue();
-					String sqlInsert = "";
+					 
 
 					long operLogId = db.getNextPrimaryKey("tl_cms_doc_oper_log");
 
-					if (tranId > 0)
-						sqlInsert = "insert into tl_cms_doc_oper_log(id,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) "
-								+ "values("
-								+ operLogId
-								+ ","
-								+ userid
-								+ ","
-								+ docids[i]
-								+ ","
-								+ operId
-								+ ","
-								+ tranId
-								+ "," + DBUtil.getDBAdapter().to_date(new Date()) + ",'" + operContent + "')";
-					else
-						sqlInsert = "insert into tl_cms_doc_oper_log(id,user_id,doc_id,doc_oper_id,doc_trans_id,oper_time,oper_content) "
-								+ "values("
-								+ operLogId
-								+ ","
-								+ userid
-								+ ","
-								+ docids[i]
-								+ ","
-								+ operId
-								+ ","
-								+ null
-								+ "," + DBUtil.getDBAdapter().to_date(new Date()) + ",'" + operContent + "')";
-					db.executeInsert(sqlInsert);
+					
+					db.setLong(1, operLogId);
+					db.setInt(2, userid);
+					db.setInt(3, docids[i]);
+					db.setInt(4, operId);
+					if (tranId == -1 || tranId == 0) 
+						db.setNull(5, Types.DECIMAL);
+					else						
+						db.setInt(5, tranId);
+					db.setTimestamp(6, new Timestamp(new Date().getTime()));
+					db.setString(7, operContent);
+					
+					db.addPreparedBatch();
 				}
+				db.executePreparedBatch();
 			}
 			tm.commit();
 		} catch (Exception sqle) {
@@ -2488,10 +3201,12 @@ public class DocumentManagerImpl implements DocumentManager {
 	 * 移动指定文档到指定频道，单个文档移动
 	 */
 	public void moveDoc(HttpServletRequest request, int docid, int channelid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 
 		String sql;
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			tm.begin();
 			// 文档删除前的原频道id以及删除前的附件地址
 			Document document = this.getPartDocInfoById(docid + "");
 			int srcChnlId = document.getChanel_id();
@@ -2509,7 +3224,7 @@ public class DocumentManagerImpl implements DocumentManager {
 			sql = "update td_cms_document set status = 1,channel_id = " + channelid + ", flow_id = "
 					+ channel.getWorkflow() + ", parent_detail_tpl = 1, detailtemplate_id = "
 					+ channel.getDetailTemplateId() + " where document_id = " + docid;
-			System.out.println("sql" + sql);
+			
 			db.executeUpdate(sql);
 			// 删除该文档的所有历史操作记录信息
 			sql = "delete from tl_cms_doc_oper_log where doc_id = " + docid;
@@ -2568,10 +3283,15 @@ public class DocumentManagerImpl implements DocumentManager {
 					}
 				}
 			}
+			tm.commit();
 			// }
 		} catch (Exception sqle) {
 			sqle.printStackTrace();
 			throw new DocumentManagerException("移动文档时数据库错误" + sqle.getMessage());
+		}
+		finally
+		{
+			tm.release();
 		}
 
 	}
@@ -3630,38 +4350,53 @@ public class DocumentManagerImpl implements DocumentManager {
 	}
 
 	public void clearTask(ContentContext context) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+		 
 		String docid = context.getContentid();
-		String sql = "";
-		try {
-			// 删除任务明细表中的数据
-			sql = "delete from td_cms_doc_task_detail where task_id in" + "(select task_id from td_cms_doc_task "
-					+ "where document_id = " + docid + ")";
-			db.executeDelete(sql);
-			// 删除任务表中的数据
-			sql = "delete from td_cms_doc_task where document_id = " + docid;
-			db.executeDelete(sql);
-		} catch (Exception se) {
-			se.printStackTrace();
-			throw new DocumentManagerException("任务删除失败" + se.getMessage());
-		}
+		clearTask(Integer.parseInt(docid));
 	}
 
 	// 删除所有该文档的相关任务
 	public void clearTask(int docid) throws DocumentManagerException {
-		DBUtil db = new DBUtil();
+//		DBUtil db = new DBUtil();
+//		String sql = "";
+//		try {
+//			// 删除任务明细表中的数据
+//			sql = "delete from td_cms_doc_task_detail where task_id in" + "(select task_id from td_cms_doc_task "
+//					+ "where document_id = " + docid + ")";
+//			db.executeDelete(sql);
+//			// 删除任务表中的数据
+//			sql = "delete from td_cms_doc_task where document_id = " + docid;
+//			db.executeDelete(sql);
+//		} catch (Exception se) {
+//			se.printStackTrace();
+//			throw new DocumentManagerException("任务删除失败" + se.getMessage());
+//		}
+		PreparedDBUtil db = new PreparedDBUtil();
+		
 		String sql = "";
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
 			// 删除任务明细表中的数据
-			sql = "delete from td_cms_doc_task_detail where task_id in" + "(select task_id from td_cms_doc_task "
-					+ "where document_id = " + docid + ")";
-			db.executeDelete(sql);
+			sql = "delete from td_cms_doc_task_detail where task_id in (select task_id from td_cms_doc_task  where document_id = ?)";
+			 
+			db.preparedDelete(sql);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
 			// 删除任务表中的数据
-			sql = "delete from td_cms_doc_task where document_id = " + docid;
-			db.executeDelete(sql);
+			sql = "delete from td_cms_doc_task where document_id = ?";
+			db.preparedDelete(sql);
+			db.setInt(1, docid);
+			db.addPreparedBatch();
+			db.executePreparedBatch();
+			tm.commit();
 		} catch (Exception se) {
-			se.printStackTrace();
+			
 			throw new DocumentManagerException("任务删除失败" + se.getMessage());
+		}
+		finally
+		{
+			tm.release();
 		}
 	}
 
@@ -4167,10 +4902,12 @@ public class DocumentManagerImpl implements DocumentManager {
 			e.printStackTrace();
 		}
 		// 第二布，取相关图片，相关附件
-		DBUtil db = new DBUtil();
-		String sql = "select * from TD_CMS_DOC_ATTACH t where t.document_id=" + docid;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select * from TD_CMS_DOC_ATTACH t where t.document_id=?";
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, docid);
+			db.executePrepared();
 			if (db.size() > 0) {
 				for (int i = 0; i < db.size(); i++) {
 					String url = db.getString(i, "url");

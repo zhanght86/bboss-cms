@@ -9,17 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.frameworkset.util.CollectionUtils;
-
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.orm.transaction.TransactionException;
+import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.container.Container;
-import com.frameworkset.platform.cms.container.ContainerImpl;
 import com.frameworkset.platform.cms.docCommentManager.docCommentDictManager.DocCommentDict;
-import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.mailmanager.EMailImpl;
 import com.frameworkset.platform.cms.mailmanager.EMailInterface;
 import com.frameworkset.util.ListInfo;
@@ -31,11 +26,9 @@ public class DocCommentManagerImpl implements DocCommentManager {
 	public void updateCommentStatus(String docCommentId, int newStatus)
 			throws DocCommentManagerException {
 		// TODO Auto-generated method stub
-		DBUtil db = new DBUtil();
-		String sql = "update td_cms_doc_comment set status = " + newStatus
-				+ " where comment_id = " + docCommentId;
+		String sql = "update td_cms_doc_comment set status = ? where comment_id = ?";
 		try {
-			db.executeUpdate(sql);
+			SQLExecutor.update(sql, newStatus,Integer.parseInt(docCommentId));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("更新指定评论的状态失败！"
@@ -89,15 +82,20 @@ public class DocCommentManagerImpl implements DocCommentManager {
 
 	public void delCommentsByDocId(int docId) throws DocCommentManagerException {
 		// TODO Auto-generated method stub
-		DBUtil db = new DBUtil();
-		String sql = "delete from td_cms_doc_comment where doc_id = " + docId;
-		String sql1 = "delete from td_cms_doccom_impeachinfo b "
-				+ "where b.comment_id in "
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "delete from td_cms_doc_comment where doc_id = ?" ;
+		String sql1 = "delete from td_cms_doccom_impeachinfo  "
+				+ "where comment_id in "
 				+ "(select a.comment_id from td_cms_doc_comment a "
-				+ "where a.doc_id = " + docId + ")";
+				+ "where a.doc_id = ?)";
 		try {
-			db.executeDelete(sql1);
-			db.executeDelete(sql);
+			db.preparedDelete(sql1);
+			db.setInt(1, docId);
+			db.addPreparedBatch();
+			db.preparedDelete(sql);
+			db.setInt(1, docId);
+			db.addPreparedBatch();
+			db.executePreparedBatch();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("删除指定文档的评论失败！"
@@ -108,11 +106,12 @@ public class DocCommentManagerImpl implements DocCommentManager {
 	public void delOneCommentByComId(int docCommentId)
 			throws DocCommentManagerException {
 		// TODO Auto-generated method stub
-		DBUtil db = new DBUtil();
-		String sql = "delete from td_cms_doc_comment where comment_id = "
-				+ docCommentId;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "delete from td_cms_doc_comment where comment_id = ?";
 		try {
-			db.executeDelete(sql);
+			db.preparedDelete(sql);
+			db.setInt(1, docCommentId);
+			db.executePrepared();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("删除指定评论失败！" + e.getMessage());
@@ -122,11 +121,12 @@ public class DocCommentManagerImpl implements DocCommentManager {
 	public DocComment getCommentByComId(int docCommentId)
 			throws DocCommentManagerException {
 		// TODO Auto-generated method stub
-		DBUtil db = new DBUtil();
-		String sql = "select * from td_cms_doc_comment where comment_id = "
-				+ docCommentId;
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "select * from td_cms_doc_comment where comment_id = ?";
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, docCommentId);
+			db.executePrepared();
 			if (db.size() > 0) {
 				DocComment docComment = new DocComment();
 				docComment.setCommentId(db.getInt(0, "comment_id"));
@@ -148,24 +148,20 @@ public class DocCommentManagerImpl implements DocCommentManager {
 
 	public int getCommentCount() throws DocCommentManagerException {
 		// TODO Auto-generated method stub
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment";
+		String sql = "select count(1) from td_cms_doc_comment";
 		try {
-			db.executeSelect(sql);
-			return db.size();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DocCommentManagerException("统计评论总数失败!" + e.getMessage());
+			return SQLExecutor.queryObject(int.class, sql );
+		} catch ( Exception e) {
+			 
+			throw new DocCommentManagerException("统计评论总数失败!" + e.getMessage(),e);
 		}
 	}
 
 	public int getCommentCount(int docId) throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment where doc_id = "
-				+ docId;
+		String sql = "select count(1) from td_cms_doc_comment where doc_id = ?"
+				;
 		try {
-			db.executeSelect(sql);
-			return db.size();
+			return SQLExecutor.queryObject(int.class, sql,docId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("统计指定文档的评论总数失败！"
@@ -175,41 +171,35 @@ public class DocCommentManagerImpl implements DocCommentManager {
 
 	public int getCommentPublishedCount(int docId)
 			throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment where status = 1 and doc_id = "
-				+ docId;
+		
+		String sql = "select count(comment_id) from td_cms_doc_comment where status = 1 and doc_id = ?";
 		try {
-			db.executeSelect(sql);
-			return db.size();
+			return SQLExecutor.queryObject(int.class, sql,docId);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 			throw new DocCommentManagerException("统计指定文档的评论总数失败！"
-					+ e.getMessage());
+					+ e.getMessage(),e);
 		}
 	}
 	public int getSiteCommentPublishedCount()
 			throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment where status = 1 ";
+		
+		String sql = "select count(1) from td_cms_doc_comment where status = 1 ";
 		try {
-			db.executeSelect(sql);
-			return db.size();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			return SQLExecutor.queryObject(int.class, sql);
+		} catch (Exception e) {
+			
 			throw new DocCommentManagerException("统计站点的评论总数失败！"
-					+ e.getMessage());
+					+ e.getMessage(),e);
 		}
 	}
 	public int getChannelCommentPublishedCount(String channel) 
 			throws DocCommentManagerException{
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment where status = 1 and doc_id in "
+		String sql = "select count(1) from td_cms_doc_comment where status = 1 and doc_id in "
 				+" ( select  document_id from td_cms_document where channel_id in  "
-				+" ( select  channel_id From td_cms_channel where display_name =' "
-				+ channel+"'))";
+				+" ( select  channel_id From td_cms_channel where display_name =?))";
 		try {
-			db.executeSelect(sql);
-			return db.size();
+			return SQLExecutor.queryObject(int.class, sql,channel);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("统计指定频道的评论总数失败！"
@@ -239,10 +229,11 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin();
 			NComentList nComentList = new NComentList();
 			nComentList.setComments(executor.queryListBean(DocComment.class, "getCommnetNList",paramMap));
 			nComentList.setTotal(getTotalCommnet(docId));
+			tm.commit();
 			return nComentList;
 		} catch (SQLException e) {
 			throw e;
@@ -269,12 +260,13 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin();
 			NComentList nComentList = new NComentList();
 			nComentList.setComments(executor.queryListBean(DocComment.class, "getSiteCommnetNList",paramMap));
 		
 			
 			nComentList.setTotal(getSiteCommentPublishedCount());
+			tm.commit();
 			return nComentList;
 		} catch (SQLException e) {
 			throw e;
@@ -301,7 +293,7 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin( );
 			NComentList nComentList = new NComentList();
 			nComentList.setComments(executor.queryListBean(DocComment.class, "getChannelCommnetNList",paramMap));
 			//Container container = new ContainerImpl();
@@ -313,6 +305,7 @@ public class DocCommentManagerImpl implements DocCommentManager {
 				}
 			}*/
 			nComentList.setTotal(getChannelCommentPublishedCount(channel));
+			tm.commit();
 			return nComentList;
 		} catch (SQLException e) {
 			throw e;
@@ -462,14 +455,13 @@ public class DocCommentManagerImpl implements DocCommentManager {
 	}
 
 	public int getHotCommentCount(int docId) throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "select comment_id from td_cms_doc_comment a "
-				+ "where doc_id = "
-				+ docId
-				+ " and (select count(c.comment_id) from td_cms_doc_comment c where a.comment_id = c.src_comment_id) >= 2"
-				+ " and a.comment_id not in (select d.comment_id from td_cms_doc_comment d where d.doc_comment like '顶' or d.doc_comment like '不好说' or d.doc_comment like'不知所云' or d.doc_comment like '反对')";
+		PreparedDBUtil db = new PreparedDBUtil();
+		StringBuilder sql = new StringBuilder().append("select count(comment_id) from td_cms_doc_comment a ").append("where doc_id = ? and (select count(c.comment_id) from td_cms_doc_comment c where a.comment_id = c.src_comment_id) >= 2")
+				.append(" and a.comment_id not in (select d.comment_id from td_cms_doc_comment d where d.doc_comment like '顶' or d.doc_comment like '不好说' or d.doc_comment like'不知所云' or d.doc_comment like '反对')");
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql.toString());
+			db.setInt(1, docId);
+			db.executePrepared();
 			return db.size();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -480,16 +472,16 @@ public class DocCommentManagerImpl implements DocCommentManager {
 
 	public void switchDocCommentFunction(String id, String commentSwitch,
 			String docorchnl) throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		String sql = "";
 		String sql1 = "";
 		if (docorchnl.equals("doc")) {
 			if (commentSwitch.equals("open")) { // 开通文档评论功能
-				sql = "update td_cms_document set commentswitch = 0 where document_id = "
-						+ id;
+				sql = "update td_cms_document set commentswitch = 0 where document_id = ?"
+						;
 			} else if (commentSwitch.equals("close")) { // 关闭文档评论功能
-				sql = "update td_cms_document set commentswitch = 1 where document_id = "
-						+ id;
+				sql = "update td_cms_document set commentswitch = 1 where document_id = ?"
+						;
 			}
 		} else if (docorchnl.equals("chnl")) {
 			if (commentSwitch.equals("open")) { // 关闭频道评论功能
@@ -505,11 +497,8 @@ public class DocCommentManagerImpl implements DocCommentManager {
 				// +
 				// "(select channel_id from td_cms_channel connect by parent_id = prior channel_id start with channel_id='"
 				// + id + "'))";
-				sql = "update td_cms_channel set commentswitch = 0 where channel_id = '"
-						+ id + "'";
-				sql1 = "update td_cms_document set commentswitch = 0 where document_id in "
-						+ "(select document_id from td_cms_document where channel_id = '"
-						+ id + "')";
+				sql = "update td_cms_channel set commentswitch = 0 where channel_id = ?";
+				sql1 = "update td_cms_document set commentswitch = 0 where   channel_id = ?";
 
 				// System.out.print(sql1);
 			} else if (commentSwitch.equals("close")) { // 关闭频道评论功能
@@ -525,62 +514,61 @@ public class DocCommentManagerImpl implements DocCommentManager {
 			// "(select channel_id from td_cms_channel connect by parent_id = prior channel_id start with channel_id='"
 			// + id + "'))";
 
-				sql = "update td_cms_channel set commentswitch = 1 where channel_id = '"
-						+ id + "'";
-				sql1 = "update td_cms_document set commentswitch = 1 where document_id in "
-						+ "(select document_id from td_cms_document where channel_id = '"
-						+ id + "')";
+				sql = "update td_cms_channel set commentswitch = 1 where channel_id = ?";
+				sql1 = "update td_cms_document set commentswitch = 1 where  channel_id = ?";
 
 				// System.out.print(sql1);
 			}
 			try {
-				db.addBatch(sql);
-			} catch (SQLException e) {
+				if(sql1.length() == 0 && sql.length() == 0)
+					return;
+				int id_ = Integer.parseInt(id);
+				if(sql.length() > 0)
+				{
+					db.preparedUpdate(sql);
+					db.setInt(1, id_);
+					db.addPreparedBatch();
+				}
+				if(sql1.length() > 0)
+				{
+					db.preparedUpdate(sql1);
+					db.setInt(1, id_);
+					db.addPreparedBatch();
+					
+				}
+				db.executePreparedBatch();
+			} catch (Exception e) {
 
-				e.printStackTrace();
+				throw new DocCommentManagerException("开通（关闭）评论功能时，数据库操作失败！"
+						+ e.getMessage(),e);
 			}
-			try {
-				db.addBatch(sql1);
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-			}
-		}
-		try {
-			if (sql.length() > 0) {
-				db.executeUpdate(sql);
-			}
-			if (sql1.length() > 0) {
-				db.executeUpdate(sql1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DocCommentManagerException("开通（关闭）评论功能时，数据库操作失败！"
-					+ e.getMessage());
+		 
+		 
+			
 		}
 	}
 
 	public int getDocCommentSwitch(String id, String docorchnl)
 			throws DocCommentManagerException {
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		String sql = "";
 		int commentSwitch = 0;
 		if (docorchnl.equals("doc")) {
-			sql = "select commentswitch from td_cms_document where document_id = "
-					+ id;
+			sql = "select commentswitch from td_cms_document where document_id = ?";
 		} else if (docorchnl.equals("chnl")) {
-			sql = "select commentswitch from td_cms_channel where channel_id = "
-					+ id;
+			sql = "select commentswitch from td_cms_channel where channel_id = ?";
 		}
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(id));
+			db.executePrepared();
 			if (db.size() > 0)
 				commentSwitch = db.getInt(0, "commentswitch");
 			return commentSwitch;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DocCommentManagerException("获取评论功能信息时，数据库操作失败！"
-					+ e.getMessage());
+					+ e.getMessage(),e);
 		}
 	}
 

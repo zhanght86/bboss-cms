@@ -2,14 +2,12 @@
 <%@ page import="com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.cms.channelmanager.*"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ page import="com.frameworkset.platform.cms.docCommentManager.*"%>
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	 
 	String docId = request.getParameter("docId");
 	
 	String docComment = request.getParameter("docComment");
@@ -31,41 +29,9 @@
 		<title>引用文档列表</title>
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
 		<script src="../inc/js/func.js"></script>
-		<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+		 
 		<script language="javascript">
-			function checkAll(totalCheck,checkName){	//复选框全部选中
-			   var selectAll = document.getElementsByName(totalCheck);
-			   var o = document.getElementsByName(checkName);
-			   if(selectAll[0].checked==true){
-				   for (var i=0; i<o.length; i++){
-			      	  if(!o[i].disabled){
-			      	  	o[i].checked=true;
-			      	  }
-				   }
-			   }else{
-				   for (var i=0; i<o.length; i++){
-			   	  	  o[i].checked=false;
-			   	   }
-			   }
-			}
-			//单个选中复选框
-			function checkOne(totalCheck,checkName){
-			   var selectAll = document.getElementsByName(totalCheck);
-			   var o = document.getElementsByName(checkName);
-				var cbs = true;
-				for (var i=0;i<o.length;i++){
-					if(!o[i].disabled){
-						if (o[i].checked==false){
-							cbs=false;
-						}
-					}
-				}
-				if(cbs){
-					selectAll[0].checked=true;
-				}else{
-					selectAll[0].checked=false;
-				}
-			}
+			 
 			//判断是否有选择
 			function haveSelect(elName){
 				var isSelect = false;
@@ -175,7 +141,7 @@
 										class="operStyle" src="../../sysmanager/images/plan.gif">撤发</div></a>
 					</td>
 				</tr>
-				<pg:listdata dataInfo="DocCommentList" keyName="DocCommentList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.docCommentManager.DocCommentList" keyName="DocCommentList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="12" scope="request" data="DocCommentList" isList="false">
 				<tr class="cms_report_tr">

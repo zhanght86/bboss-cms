@@ -1198,7 +1198,12 @@ public class AccessControl implements AccessControlInf{
 		if(session == null)
 			session = request.getSession();
 		
-		
+		String sessionTimeout = request.getParameter("sessionTimeout");
+		if(sessionTimeout != null && !sessionTimeout.equals(""))
+		{
+			int timeout = Integer.parseInt(sessionTimeout);
+			session.setMaxInactiveInterval(timeout);
+		}
 	
 		StringBuffer ssoCookie = new StringBuffer();
 		StringBuffer credentialCookie = new StringBuffer();

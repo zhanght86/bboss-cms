@@ -12,6 +12,7 @@ import org.frameworkset.spi.BaseApplicationContext;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.common.poolman.handle.NullRowHandler;
+import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.sysmgrcore.entity.User;
@@ -199,15 +200,15 @@ public class UserCacheManager {
 	private User _loadUserByAccount(String userAccount) throws ManagerException
 	{
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.USER_NAME=?";
-		final User user = new User();
+		 
 		try {
 			
-			SQLExecutor.queryByNullRowHandler(new NullRowHandler<User>(){
+			User user = SQLExecutor.queryObjectByRowHandler(new RowHandler<User>(){
 
 				
 
 				@Override
-				public void handleRow(Record record) throws Exception {
+				public void handleRow(User user,Record record) throws Exception {
 					int userid = record.getInt("user_id");
 //					User user = new User();
                     getUser( user,record) ;
@@ -224,7 +225,7 @@ public class UserCacheManager {
 					
 				}
 				
-			}, sql,userAccount);
+			}, User.class,sql,userAccount);
 			if(user.getUserName() == null || user.getUserName().equals(""))
 				return null;
 			return user;
@@ -237,15 +238,15 @@ public class UserCacheManager {
 	private User _loadUserByWorkNo(String userWorkNo) throws ManagerException
 	{
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.USER_WORKNUMBER=?";
-		final User user = new User();
+		 
 		try {
 			
-			SQLExecutor.queryByNullRowHandler(new NullRowHandler<User>(){
+			User user = SQLExecutor.queryObjectByRowHandler(new RowHandler<User>(){
 
 				
 
 				@Override
-				public void handleRow(Record record) throws Exception {
+				public void handleRow(User user,Record record) throws Exception {
 					int userid = record.getInt("user_id");
 //					User user = new User();
                     getUser( user,record) ;
@@ -262,7 +263,7 @@ public class UserCacheManager {
 					
 				}
 				
-			}, sql,userWorkNo);
+			}, User.class,sql,userWorkNo);
 			if(user.getUserName() == null || user.getUserName().equals(""))
 				return null;
 			return user;
@@ -277,13 +278,13 @@ public class UserCacheManager {
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.user_id=?";
 
 		try {
-			final User user = new User();
-			SQLExecutor.queryByNullRowHandler(new NullRowHandler<User>(){
+			
+			User user = SQLExecutor.queryObjectByRowHandler(new RowHandler<User>(){
 
 				
 
 				@Override
-				public void handleRow(Record record) throws Exception {
+				public void handleRow(User user,Record record) throws Exception {
 					int userid = record.getInt("user_id");
 					
                     getUser( user,record) ;
@@ -308,7 +309,7 @@ public class UserCacheManager {
 					
 				}
 				
-			}, sql,userID);
+			}, User.class,sql,userID);
 			return user;
 		} catch (Exception e) {
 			throw new ManagerException(e);

@@ -72,7 +72,7 @@
 			  	session.removeAttribute("docCommentFiltered");
 			  	session.setAttribute("docCommentFiltered","docCommentFiltered");
 			  %>
-			  <pg:listdata dataInfo="DocCommentList" keyName="DocCommentList" />
+			  <pg:listdata dataInfo="com.frameworkset.platform.cms.docCommentManager.DocCommentList" keyName="DocCommentList" />
 			  <!--分页显示开始,分页标签初始化-->
 			  <pg:pager maxPageItems="5" scope="request" data="DocCommentList" isList="false">
 			  <pg:param name="docId" />
@@ -100,7 +100,7 @@
 					String userName = dataSet.getString("userName");
 					String userIP = dataSet.getString("userIP"); 
 					int commentId = dataSet.getInt("commentId"); 
-					String comment = dataSet.getString("comment");
+					String comment = dataSet.getString("docComment");
 					int srcCommentId = dataSet.getInt("srcCommentId");
 					String displayStr = "网友";
 					if(userName.length()>0){
@@ -125,10 +125,12 @@
 					  <tr>
 						<td align="left">&nbsp;&nbsp;&nbsp;&nbsp; <pg:cell colName="comment" defaultValue="" /></td>
 					  </tr>
-					  <%if(srcCommentId != 0){				//获取原贴信息
-					  		String srcComment = dcm.getCommentByComId(srcCommentId).getComment();
-					  		String srcUserName = dcm.getCommentByComId(srcCommentId).getUserName();
-					  		String srcUserIP = dcm.getCommentByComId(srcCommentId).getUserIP();
+					  <%if(srcCommentId != 0){	
+						  //获取原贴信息
+						  DocComment  docComment = dcm.getCommentByComId(srcCommentId);
+					  		String srcComment = docComment.getDocComment();
+					  		String srcUserName = docComment.getUserName();
+					  		String srcUserIP = docComment.getUserIP();
 					  		String srcDisplayStr = "网友";
 							if(srcUserName.length()>0){
 								if(srcUserIP.length()>0)                //系统管理员不记录IP
@@ -198,7 +200,7 @@
 			  	session.removeAttribute("docCommentPublished"); 
 			  	session.setAttribute("docCommentPublished","docCommentPublished");
 			  %>
-			  <pg:listdata dataInfo="DocCommentList" keyName="DocCommentList" />
+			  <pg:listdata dataInfo="com.frameworkset.platform.cms.docCommentManager.DocCommentList" keyName="DocCommentList" />
 			  <!--分页显示开始,分页标签初始化-->
 			  <pg:pager maxPageItems="5" scope="request" data="DocCommentList" isList="false">
 			  <pg:param name="docId" />
@@ -226,7 +228,7 @@
 					String userName1 = dataSet.getString("userName");
 					String userIP1 = dataSet.getString("userIP"); 
 					int commentId1 = dataSet.getInt("commentId"); 
-					String comment1 = dataSet.getString("comment");
+					String comment1 = dataSet.getString("docComment");
 					int srcCommentId1 = dataSet.getInt("srcCommentId");
 					String displayStr1 = "网友";
 					if(userName1.length()>0){
@@ -252,9 +254,10 @@
 						<td align="left">&nbsp;&nbsp;&nbsp;&nbsp; <pg:cell colName="comment" defaultValue="" /></td>
 					  </tr>
 					  <%if(srcCommentId1 != 0){					//获取原贴信息
-					  		String srcComment = dcm.getCommentByComId(srcCommentId1).getComment();
-					  		String srcUserName = dcm.getCommentByComId(srcCommentId1).getUserName();
-					  		String srcUserIP = dcm.getCommentByComId(srcCommentId1).getUserIP();
+						  DocComment  docComment = dcm.getCommentByComId(srcCommentId1);
+					  		String srcComment = docComment.getDocComment();
+					  		String srcUserName = docComment.getUserName();
+					  		String srcUserIP = docComment.getUserIP();
 					  		String srcDisplayStr = "网友";
 							if(srcUserName.length()>0){
 								if(srcUserIP.length()>0)                //系统管理员不记录IP
@@ -324,7 +327,7 @@
 			  	session.removeAttribute("docCommentHot");
 			  	session.setAttribute("docCommentHot","docCommentHot");
 			  %>
-			  <pg:listdata dataInfo="DocCommentList" keyName="DocCommentList" />
+			  <pg:listdata dataInfo="com.frameworkset.platform.cms.docCommentManager.DocCommentList" keyName="DocCommentList" />
 			  <!--分页显示开始,分页标签初始化-->
 			  <pg:pager maxPageItems="5" scope="request" data="DocCommentList" isList="false">
 			  <pg:param name="docId" />

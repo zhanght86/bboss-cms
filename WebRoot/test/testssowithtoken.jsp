@@ -110,6 +110,7 @@ String worknumbertokenrequest =  "_dt_token_=" + token ;
 <table>
 <tr><td>ticket sso</td></tr>
 <tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=accountticketrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单</a></td></tr>
+<tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=accountticketrequest %>&successRedirect=<%=URLEncoder.encode("/appbom/aaa.page?a=b&c=d") %>&sessionTimeout=7200000&subsystem_id=module">创建领料单</a></td></tr>
 <tr><td><a target="_blank" href="<%=request.getContextPath() %>/sso/ssowithticket.page?<%=erroraccountticketrequest %>&loginMenu=appbommanager&subsystem_id=module">创建领料单-错误的ticket</a></td></tr>
 </table>
 <table>

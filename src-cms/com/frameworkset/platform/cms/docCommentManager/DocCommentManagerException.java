@@ -12,4 +12,7 @@ public class DocCommentManagerException extends Exception implements java.io.Ser
 	public DocCommentManagerException(){
 		super();
 	}
+	public DocCommentManagerException(String string, Exception e) {
+		super(string,   e);
+	}
 }

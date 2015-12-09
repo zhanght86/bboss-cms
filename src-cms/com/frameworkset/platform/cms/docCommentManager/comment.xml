@@ -14,7 +14,7 @@
 	<property name="getCommnetNList">
 		<![CDATA[
 			select p.* from (select comment_id commentId, doc_id docId, doc_comment docComment, user_name userName, 
-			comtime subTime,to_char(comtime,'yyyy-mm-dd hh24:mi:ss') str_subTime, user_ip userIP, src_comment_id srcCommentId, status
+			comtime subTime, comtime as str_subTime, user_ip userIP, src_comment_id srcCommentId, status
 			from td_cms_doc_comment t where t.doc_id = #[docId] and status = 1 
 			order by comtime desc) p where rownum < #[n]
 		]]>
@@ -22,7 +22,7 @@
 	<property name="getSiteCommnetNList">
 		<![CDATA[
 			select p.* from (select comment_id commentId, doc_id docId, doc_comment docComment, user_name userName, 
-			comtime subTime,to_char(comtime,'yyyy-mm-dd hh24:mi:ss') str_subTime, user_ip userIP, src_comment_id srcCommentId, status
+			comtime subTime,comtime as str_subTime, user_ip userIP, src_comment_id srcCommentId, status
 			from td_cms_doc_comment t where status = 1 
 			order by comtime desc) p where rownum < #[n]
 		]]>
@@ -30,7 +30,7 @@
 	<property name="getChannelCommnetNList">
 		<![CDATA[
 			select p.* from (select comment_id commentId, doc_id docId, doc_comment docComment, user_name userName, 
-			comtime subTime,to_char(comtime,'yyyy-mm-dd hh24:mi:ss') str_subTime, user_ip userIP, src_comment_id srcCommentId, status
+			comtime subTime,comtime as str_subTime, user_ip userIP, src_comment_id srcCommentId, status
 			from td_cms_doc_comment t where  t.doc_id in (select document_id from td_cms_document where channel_id in(  select channel_id From td_cms_channel where display_name=  #[channel] ) ) and status = 1 
 			order by comtime desc) p where rownum < #[n]
 		]]>

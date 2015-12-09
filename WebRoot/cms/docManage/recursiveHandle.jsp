@@ -13,8 +13,7 @@
 	3必须传参数channelId
 	4必须传参数docInfos，因为docInfos是个二维数组，所以通过session传
 */
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request, response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
 	
 	String siteId = request.getParameter("siteId");
 	String action = request.getParameter("action");

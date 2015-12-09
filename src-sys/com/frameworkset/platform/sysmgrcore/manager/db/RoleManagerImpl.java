@@ -65,8 +65,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	private  SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(RoleManagerImpl.class
-			.getName());
+	private static Logger logger = Logger.getLogger(RoleManagerImpl.class );
 
 
 	/**
@@ -1107,8 +1106,8 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	/**
 	 * 得到用户的自身直接资源，角色的自身直接资源。发生改变
 	 */
-	public AuthRole[] getSecurityrolesInResource(String resId,
-			String operName, String restypeId) throws ManagerException {
+	public AuthRole[] getSecurityrolesInResource(final String resId,
+			final String operName, final String restypeId) throws ManagerException {
 //		if(true){
 //			throw new ManagerException("yichang !!");
 //		}
@@ -1124,39 +1123,60 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 				public void handleRow(Record origine) throws Exception {
 					String types= origine.getString("types");
 					String role_id= origine.getString("role_id");
-					AuthRole role = new AuthRole();
-					role.setRoleId(role_id);
-					role.setRoleType(types);
-					
-					if(types.equals("role"))
+					try
 					{
-						Role r = RoleCacheManager.getInstance().getRoleByID(role_id);
-						if(r != null)
-							role.setRoleName(r.getRoleName());
-						else
-							return;
-					}
-					else if(types.equals("user"))
-					{
-						String userAccount = (String)UserCacheManager.getInstance().getUserAttributeByID(role_id,"userAccount");
-						if(userAccount != null)
-							role.setRoleName(userAccount);
-						else
-							return;
-					}
-					else if(types.equals("organization"))
-					{
-						Organization  org = OrgCacheManager.getInstance().getOrganization(role_id);
-						if(org != null)
+						
+						AuthRole role = new AuthRole();
+						role.setRoleId(role_id);
+						role.setRoleType(types);
+						
+						if(types.equals("role"))
 						{
-							String org_name = org.getOrgName();
-							role.setRoleName(org_name);
+							Role r = RoleCacheManager.getInstance().getRoleByID(role_id);
+							if(r != null)
+								role.setRoleName(r.getRoleName());
+							else
+							{
+								Exception e = new Exception(new StringBuilder().append("build roleinfo for resource[resId=").append(resId).append(",operName=").append(operName).append(",restypeId=").append(restypeId).append("]failed:types[").append(types).append("]").append("roleid[").append(role_id).append("] not exist.").toString());
+								RoleManagerImpl.logger.error("build roleinfo failed:", e);
+								return;
+							}
 						}
-						else
-							return;
+						else if(types.equals("user"))
+						{
+							String userAccount = (String)UserCacheManager.getInstance().getUserAttributeByID(role_id,"userAccount");
+							if(userAccount != null)
+								role.setRoleName(userAccount);
+							else
+							{
+								Exception e = new Exception(new StringBuilder().append("build roleinfo for resource[resId=").append(resId).append(",operName=").append(operName).append(",restypeId=").append(restypeId).append("]failed:types[").append(types).append("]").append("roleid[").append(role_id).append("] not exist.").toString());
+								RoleManagerImpl.logger.error("build roleinfo failed:", e);
+								return;
+							}
+						}
+						else if(types.equals("organization"))
+						{
+							Organization  org = OrgCacheManager.getInstance().getOrganization(role_id);
+							if(org != null)
+							{
+								String org_name = org.getOrgName();
+								role.setRoleName(org_name);
+							}
+							else
+							{
+								Exception e = new Exception(new StringBuilder().append("build roleinfo for resource[resId=").append(resId).append(",operName=").append(operName).append(",restypeId=").append(restypeId).append("]failed:types[").append(types).append("]").append("roleid[").append(role_id).append("] not exist.").toString());
+								RoleManagerImpl.logger.error("build roleinfo failed:", e);
+								return;
+							}
+						}
+						authRoles.add(role);
+					}	
+					catch(Exception e)
+					{
+						RoleManagerImpl.logger.error(new StringBuilder().append("build roleinfo for resource[resId=").append(resId).append(",operName=").append(operName).append(",restypeId=").append(restypeId).append("]failed:types[").append(types).append("]").append("roleid[").append(role_id).append("] failed:").toString(), e);
 					}
-					authRoles.add(role);
-				}			
+				}
+				
 			}, sql, operName,resId,restypeId);
 		} catch (SQLException e) {
 			throw new ManagerException(e.getMessage(),e);

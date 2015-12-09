@@ -843,7 +843,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 					+ "DOC_PROTECT,PARENT_WORKFLOW,pub_file_name,ISNAVIGATOR,NAVIGATORLEVEL,MOUSEINIMAGE, "
 					+ "MOUSEOUTIMAGE, MOUSECLICKIMAGE, MOUSEUPIMAGE,OUTLINEPICTURE,"
 					+ "PAGEFLAG,INDEXPAGEPATH,comment_template_id,commentpagepath ,specialflag,channel_desc,openTarget "
-					+ "from TD_CMS_CHANNEL " + "where status=0 and CHANNEL_ID = ?";
+					+ "from TD_CMS_CHANNEL where status=0 and CHANNEL_ID = ?";
 			int id = Integer.parseInt(channelId);
 			db.preparedSelect(sql);
 			db.setInt(1, id);
