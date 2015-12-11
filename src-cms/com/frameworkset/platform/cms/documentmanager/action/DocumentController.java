@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
 import org.frameworkset.util.CollectionUtils;
+import org.frameworkset.util.DataFormatUtil;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.util.io.Resource;
@@ -469,7 +470,7 @@ public class DocumentController {
 		String[] names = (request.getParameter("extfieldnames")).split("№");
 		String[] types = (request.getParameter("extfieldtypes")).split("№");
 		Map map = new HashMap();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		SimpleDateFormat format = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd"); 
 		Map<String,DocExtField> defs = ci.getDataFieldMap("2", chnlId, docid);
 		for(int i=0;i<names.length;i++)
 		{
@@ -720,7 +721,7 @@ public class DocumentController {
 			    String isnewdocsource=request.getParameter("isnewdocsource");
 			    String docwtime = request.getParameter("docwtime");
 			    String ordertime = request.getParameter("ordertime");
-			    java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			    java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd HH:mm:ss");
 				java.util.Date date = formatter.parse(docwtime);
 				java.util.Date orderDate = formatter.parse(ordertime);
 				doc.setDocwtime(date);
@@ -1272,7 +1273,7 @@ public class DocumentController {
 			//doc.setContent(request.getParameter("content"));
 			doc.setDoctype(Integer.parseInt(request.getParameter("doctype")));
 			doc.setLinktarget(request.getParameter("linktarget"));
-			java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			java.text.SimpleDateFormat sf = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd HH:mm:ss");
 			//doc.setCreateTime(sf.parse(request.getParameter("createtime")));
 			doc.setDocwtime(sf.parse(request.getParameter("docwtime")));
 			doc.setOrdertime(sf.parse(request.getParameter("ordertime")));

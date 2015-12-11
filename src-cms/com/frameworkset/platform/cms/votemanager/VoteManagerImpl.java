@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.transaction.RollbackException;
 
 import org.frameworkset.spi.SPIException;
+import org.frameworkset.util.DataFormatUtil;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -63,7 +64,7 @@ public class VoteManagerImpl implements VoteManager {
 				if(item.getTimeCtrls()!=null&& item.getTimeCtrls().size()>0){
 					try{
 					TimeCtrl timeCtrl=(TimeCtrl)item.getTimeCtrls().get(0);
-					SimpleDateFormat dateformt = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat dateformt = DataFormatUtil.getSimpleDateFormat("yyyy-MM-dd");
 			    	Date expriedtime_ = dateformt.parse(timeCtrl.getTimeEnd());
 			    	String endStr=CommonUtil.getDaysBetween(new Date(),expriedtime_)+"天"
 			    	  + ((expriedtime_.getTime() -new Date().getTime())/1000/60/60%24)+"小时"
@@ -373,8 +374,7 @@ public class VoteManagerImpl implements VoteManager {
 	public List getTimectrlOfServey(int titleID) throws VoteManagerException {
 		try {
 			List res = new ArrayList();
-			SimpleDateFormat sdf = new SimpleDateFormat();
-			sdf.applyPattern("yyyy-MM-dd");
+			SimpleDateFormat sdf = DataFormatUtil.getSimpleDateFormat("yyyy-MM-dd");
 			 
 			DBUtil dbUtil = new DBUtil();
 			String sql = "select * from TD_CMS_VOTE_TIMECTRL  where  TITLE_ID="

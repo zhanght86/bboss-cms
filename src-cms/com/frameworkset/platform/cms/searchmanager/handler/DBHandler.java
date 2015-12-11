@@ -1,34 +1,9 @@
 package com.frameworkset.platform.cms.searchmanager.handler;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.swing.text.html.parser.ParserDelegator;
-import javax.swing.text.html.HTMLEditorKit.ParserCallback;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.html.HTML.Tag;
-
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import javax.swing.text.html.HTML;
-
-import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.sql.ColumnMetaData;
-import com.frameworkset.common.poolman.sql.TableMetaData;
-
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 
 /**
  * <p><code>DBHandler</code>
@@ -39,8 +14,8 @@ import java.net.HttpURLConnection;
  * @version 1.0
  */
 
-public final class DBHandler extends ContentHandlerBase implements java.io.Serializable {
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+public final class DBHandler extends ContentHandlerBase{
+//	private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
 
 	public DBHandler() {
     }

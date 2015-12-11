@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.Document;
@@ -77,7 +79,7 @@ public class ChnlGuideTag extends CMSBaseTag {
 			String docHerf = CMSTagUtil.getPublishedContentPath(context,chnl.getChannelPath(),String.valueOf(((Document)docLst.get(0)).getDocument_id()));
 			String picPath = CMSTagUtil.getPublishedLinkPath(context,chnl.getOutlinepicture());
 			liImgSrc = CMSTagUtil.getPublishedLinkPath(context,liImgSrc);
-			SimpleDateFormat sdf=new SimpleDateFormat("MM月dd日");
+			SimpleDateFormat sdf=DataFormatUtil.getSimpleDateFormat("MM月dd日");
 			Date docDate= ((Document)docLst.get(0)).getPublishTime();
 			
 			outputStrng += "<TR bgcolor=\"#eeeeee\">";

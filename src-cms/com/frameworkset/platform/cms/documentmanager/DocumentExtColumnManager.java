@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
@@ -352,13 +354,14 @@ public class DocumentExtColumnManager implements java.io.Serializable {
 	 */
 	public int appendExtPreparedValue(PreparedDBUtil db ,HashMap map,String tableName,int index)throws Exception{
 //		List list = getTableColumnsInfo_oracle(tableName);
+		SimpleDateFormat df = DataFormatUtil.getSimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		for(int i=0;i<extColumns.size();i++){
 			ColumnMetaData str = (ColumnMetaData)extColumns.get(i);
             String column_name = str.getColumnName();
             column_name = column_name.toLowerCase();
             if(map.containsKey(column_name)){      
             	if(str.getSchemaType() == SchemaType.DATE){
-	            	SimpleDateFormat df = new SimpleDateFormat("yyyy-mm-dd hh24:mi:ss");
+	            	
 	            	Date date = df.parse((String)map.get(column_name));
 	            	db.setTimestamp(index,new Timestamp(date.getTime()));
 	            }else if(str.getSchemaType() == SchemaType.NUMERIC ){

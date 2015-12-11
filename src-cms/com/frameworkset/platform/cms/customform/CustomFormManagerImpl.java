@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.util.StringUtil;
@@ -453,7 +455,7 @@ public class CustomFormManagerImpl implements CustomFormManager
 		try
 		{
 			int did = Integer.parseInt(docid);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = DataFormatUtil.getSimpleDateFormat("yyyy-MM-dd");
 			for(int i=0;i<ids.length;i++)
 			{
 				if("".equals(ids[i])||ids[i]==null)

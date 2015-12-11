@@ -22,6 +22,8 @@ import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLEditorKit.ParserCallback;
 import javax.swing.text.html.parser.ParserDelegator;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
 
 /**
@@ -84,7 +86,7 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
     private static final char STYLE = 4;
 
 
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+//    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
     private ParserDelegator pd = new ParserDelegator();
     
     
@@ -265,6 +267,7 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
         }
         if (name.equals("PUBLISHED")) {
             try {
+            	SimpleDateFormat dateFormatter = DataFormatUtil.getSimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
                 published = dateFormatter.parse(content).getTime();
             } catch(ParseException e) {e.printStackTrace();}
             return;
@@ -322,6 +325,7 @@ public final class HTMLHandler extends ParserCallback implements ContentHandler{
         }
         if (name.equals("DOCWTIME")) {
             try {
+            	SimpleDateFormat dateFormatter = DataFormatUtil.getSimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
                 published = dateFormatter.parse(content).getTime();
             } catch(ParseException e) {}
             return;

@@ -6,7 +6,7 @@ import java.util.List;
 import com.frameworkset.platform.cms.container.Container;
 import com.frameworkset.util.ListInfo;
 
-public interface DocCommentManager extends java.io.Serializable {
+public interface DocCommentManager  {
 	/**
 	 * 增加一条文档评论
 	 * @param docComment

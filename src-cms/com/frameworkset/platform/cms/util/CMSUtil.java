@@ -32,6 +32,7 @@ import javax.swing.ImageIcon;
 import org.apache.log4j.Logger;
 import org.codehaus.swizzle.stream.StringTemplate;
 import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.util.DataFormatUtil;
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
 import org.frameworkset.util.ParamsHandler.Params;
@@ -2742,7 +2743,7 @@ public class CMSUtil{
 	public static String formatDate(Date myDate) 
 	{
 		String strFormat = "yyyy-MM-dd HH:mm:ss";
-		SimpleDateFormat formatter = new SimpleDateFormat(strFormat);
+		SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(strFormat);
 		String strDate = formatter.format(myDate);
 		return strDate;
 	}
@@ -2758,7 +2759,7 @@ public class CMSUtil{
 	public static String formatDate(String strFormat,Date myDate) 
 	{
 		//String strFormat = "yyyy-MM-dd HH:mm:ss";
-		SimpleDateFormat formatter = new SimpleDateFormat(strFormat);
+		SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(strFormat);
 		String strDate = formatter.format(myDate);
 		return strDate;
 	}

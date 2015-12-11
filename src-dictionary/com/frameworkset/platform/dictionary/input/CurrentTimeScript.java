@@ -10,7 +10,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.dictionary.DictAttachField;
 
 /**
@@ -78,7 +80,7 @@ public class CurrentTimeScript  extends BaseInputTypeScript{
 		boolean readonly = this.isReadOnly(keyWords);
 		String defaultValue = "";
 		Date currentDate = new Date();
-		Format format = new SimpleDateFormat(dictatt.getDateFormat());
+		Format format = DataFormatUtil.getSimpleDateFormat(dictatt.getDateFormat());
 		defaultValue = format.format(currentDate);
 		if(dictatt.getFieldValue()!=null && !"".equals(dictatt.getFieldValue())){
 			defaultValue = dictatt.getFieldValue();
@@ -105,7 +107,7 @@ public class CurrentTimeScript  extends BaseInputTypeScript{
 	public String getNewExtendHtmlContent(HttpServletRequest request, HttpServletResponse response) {
 		String defaultValue = "";
 		Date currentDate = new Date();
-		Format format = new SimpleDateFormat(dictatt.getDateFormat());
+		Format format = DataFormatUtil.getSimpleDateFormat(request,dictatt.getDateFormat());
 		defaultValue = format.format(currentDate);
 		if(dictatt.getFieldValue()!=null && !"".equals(dictatt.getFieldValue())){
 			defaultValue = dictatt.getFieldValue();

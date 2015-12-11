@@ -2,9 +2,12 @@ package com.frameworkset.platform.cms.sitemember.tag;
 
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import org.frameworkset.util.DataFormatUtil;
 
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.common.poolman.DBUtil;
@@ -60,9 +63,9 @@ public class ChargeMemberList  extends DataInfoImpl implements java.io.Serializa
     					user.setServiceType(dbUtil.getString(i,"SERVICE_TYPE"));
     				
     					
-    					//判断会员是否已到过期时间
-    				    java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-    					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    					//判断会员是否已到过期时间SimpleDateFormat dateFormatter = DataFormatUtil.getSimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+    				    java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
+    					java.text.SimpleDateFormat sdf = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd HH:mm:ss");
     					//最后登陆时间
     				
     					if(dbUtil.getDate(i,"LASTLOGIN_DATE")!=null)
@@ -181,8 +184,8 @@ public class ChargeMemberList  extends DataInfoImpl implements java.io.Serializa
     					user.setServiceType(dbUtil.getString(i,"SERVICE_TYPE"));
     					
     					//判断会员是否已到过期时间
-    				    java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-    					java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    				    java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
+    					java.text.SimpleDateFormat sdf = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd HH:mm:ss");
     					//最后登陆时间
         				if(dbUtil.getDate(i,"LASTLOGIN_DATE")!=null)
     					{

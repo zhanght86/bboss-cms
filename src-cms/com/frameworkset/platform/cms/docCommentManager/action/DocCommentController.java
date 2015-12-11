@@ -19,6 +19,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
@@ -43,6 +44,7 @@ import com.frameworkset.util.StringUtil;
 public class DocCommentController {
 
 	private DocCommentManager docCommentManager;
+	private static Logger log = Logger.getLogger(DocCommentController.class);
 	
 	public String showAllComments(String siteId,int docId, long channelId, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -53,7 +55,7 @@ public class DocCommentController {
 		try
 		{
 			
-			tm.begin(tm.RW_TRANSACTION);
+			tm.begin( );
 			// 获得该文档所在的频道评论开关
 			int channelCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "chnl");
 			if (channelCommentSwitch != 0) {
@@ -81,7 +83,7 @@ public class DocCommentController {
 			request.setAttribute("docurl", docurl);
 			request.setAttribute("docTitle", doc.getTitle());
 			request.setAttribute("doc", doc);
-
+			tm.commit();
 			return "path:showAllComments";
 		}
 		finally
@@ -105,7 +107,7 @@ public class DocCommentController {
 		try
 		{
 			
-			tm.begin(tm.RW_TRANSACTION);// 获得该文档所在的频道评论开关
+			tm.begin( );// 获得该文档所在的频道评论开关
 			int channelCommentSwitch = docCommentManager.getDocCommentSwitch(String.valueOf(docId), "chnl");
 			if (channelCommentSwitch != 0) {
 				// 首先判断频道的评论开关
@@ -126,7 +128,7 @@ public class DocCommentController {
 			request.setAttribute("docId", docId);
 			request.setAttribute("total", docCommentManager.getTotalCommnet( docId));
 			request.setAttribute("channelId", channelId);
-	
+			tm.commit();
 			return "path:showDocumentCommentList";
 		}
 		finally
@@ -180,6 +182,7 @@ public class DocCommentController {
 			NComentList docCommentList = docCommentManager.getCommnetList(docId, n);
 			return docCommentList;
 		} catch (Exception e) {
+			log.error("",e);
 			return null;
 		}	
 		
@@ -211,6 +214,7 @@ public class DocCommentController {
 			}
 			return docCommentList;
 		} catch (Exception e) {
+			log.error("",e);
 			return null;
 		}	
 		
@@ -241,6 +245,7 @@ public class DocCommentController {
 			}
 			return docCommentList;
 		} catch (Exception e) {
+			log.error("",e);
 			return null;
 		}	
 		
@@ -319,6 +324,7 @@ public class DocCommentController {
 			docCommentManager.addOneComment(docCommentBean);
 			result.setMsg("success");
 		} catch (DocCommentManagerException e) {
+			log.error("",e);
 			result.setMsg("failed");
 			result.setError(StringUtil.exceptionToString(e));
 		}

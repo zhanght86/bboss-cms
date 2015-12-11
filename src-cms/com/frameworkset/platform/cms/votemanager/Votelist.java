@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.common.poolman.DBUtil;
@@ -62,7 +64,7 @@ public class Votelist extends  DataInfoImpl {
 			
 			db.executeSelect(sql,(int)offset,maxPagesize);	
 			
-			SimpleDateFormat bartDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat bartDateFormat = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 			for (int i = 0; i < db.size(); i++) {
 
 				Title  title = new Title();

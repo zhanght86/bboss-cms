@@ -1,27 +1,32 @@
+<%@page import="org.frameworkset.util.DataFormatUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="/sysmanager/base/scripts/panes.jsp"%>
-<%@ include file="/sysmanager/include/global1.jsp"%>
+
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@page import="com.frameworkset.common.poolman.DBUtil"%>
+<%@page import="com.frameworkset.common.poolman.PreparedDBUtil"%>
 <%@page import="com.frameworkset.platform.cms.documentmanager.*,java.util.List"%>
 <jsp:useBean id="date" scope="page" class="net.fiyu.edit.TimeStamp"/>
 <%
 	String docidStr = request.getParameter("docidStr");	
 	String channelname = request.getParameter("channelName");
 	//当前时间
-	java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+	java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request, "yyyy-MM-dd HH:mm:ss");//new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 	java.util.Date currentTime = new java.util.Date(); 
 	String riqi = formatter.format(currentTime); 
 	//文档来源的加载js数组
    String idstr="";
    String srcnamestr="";
-	List dslist=null;
+	List<DocumentSource> dslist=null;
 	DocumentManager dmi=new DocumentManagerImpl();
-	DocumentSource ds=new DocumentSource();
+	DocumentSource ds= null;
 	dslist=dmi.getDocSourceList();
+	 String docSourceName = "";
+	   String docSourceId = "";
    if(dslist.size()>0)
    {
-   
+	   ds = dslist.get(0);
+	   docSourceName = ds.getSrcname();
+	   docSourceId = ds.getDocsource_id()+"";
+	   
     for(int i=0;i<dslist.size();i++)
     {
        ds=(DocumentSource)dslist.get(i);
@@ -38,17 +43,17 @@
     
    }
 	//获取上一次文档的信息如：文档来源 
-   String docSourceName = "";
-   String docSourceId = "";
+  
    
    try{
-	   DBUtil db = new DBUtil();
-	   String sql = "select a.DOCSOURCE_ID,a.SRCNAME from TD_CMS_DOCSOURCE a , TD_CMS_DOCUMENT b where a.DOCSOURCE_ID = b.DOCSOURCE_ID and rownum =1 order by b.Document_Id desc" ;
+	   /**PreparedDBUtil db = new PreparedDBUtil();
+	   String sql = "select a.DOCSOURCE_ID,a.SRCNAME from TD_CMS_DOCSOURCE a , TD_CMS_DOCUMENT b where a.DOCSOURCE_ID = b.DOCSOURCE_ID  order by b.Document_Id desc" ;
 	   db.executeSelect(sql) ;
 	   if(db.size()>0){
 	   		docSourceId = db.getString(0,0);
 	   		docSourceName = db.getString(0,1); 
-	   }
+	   }*/
+	   
 	}catch(Exception e){}
 %>
 <html>
@@ -56,8 +61,8 @@
 <head>    
   <title>文档转发：：</title>
   <script language="JavaScript" src="changeView.js" type="text/javascript"></script>
-  <link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/treeview.css">
-  <link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/windows.css">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/sysmanager/css/treeview.css">
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/sysmanager/css/windows.css">
   <link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
   <script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
   <script type="text/javascript" src="<%=request.getContextPath()%>/public/datetime/calender.js" language="javascript"></script>

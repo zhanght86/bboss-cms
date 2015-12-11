@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
@@ -49,7 +51,7 @@ public class MemberList  extends DataInfoImpl implements java.io.Serializable{
     					user.setUserAddress(dbUtil.getString(i,"user_address"));
     					user.setUserPassword(dbUtil.getString(i,"user_password"));
     					
-    					java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    					java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
     					//最后登陆时间
         				if(dbUtil.getDate(i,"LASTLOGIN_DATE")!=null)
     					{
@@ -114,7 +116,7 @@ public class MemberList  extends DataInfoImpl implements java.io.Serializable{
     					user.setUserAddress(dbUtil.getString(i,"user_address"));
     					user.setUserPassword(dbUtil.getString(i,"user_password"));
     					user.setUser_Regdate(String.valueOf(dbUtil.getDate(i,"user_REGDATE")));
-    					java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    					java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
     					//最后登陆时间
         				if(dbUtil.getDate(i,"LASTLOGIN_DATE")!=null)
     					{

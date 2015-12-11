@@ -16,7 +16,7 @@ public class TemplateManagerException extends Exception
     	super();
     }
 
-	 
+	
 
 	public TemplateManagerException(String message, Throwable cause) {
 		super(message, cause);

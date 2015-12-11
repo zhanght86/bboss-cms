@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
@@ -20,7 +22,7 @@ public class Answerlist extends DataInfoImpl {
 		//System.out.println("========="+id);
 
 		int titleid = Integer.parseInt(id);
-		SimpleDateFormat bartDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat bartDateFormat = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 		try {
 			
 			String sql="select a.*,b.title from td_cms_vote_answer a,td_cms_vote_questions b,td_cms_vote_tq c where a.qid=b.id and b.id=c.quesiont_id and a.type=1 and c.title_id="+titleid +"  order by a.when";

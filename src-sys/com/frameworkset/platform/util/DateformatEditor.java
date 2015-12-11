@@ -1,39 +1,39 @@
 package com.frameworkset.platform.util;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.Date;
 
 import org.frameworkset.util.DataFormatUtil;
+import org.frameworkset.util.annotations.wraper.ColumnWraper;
 
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.util.EditorInf;
-import com.ibm.icu.math.BigDecimal;
+import com.frameworkset.util.ColumnToFieldEditor;
 
-public class DateformatEditor implements EditorInf<String> {
+public class DateformatEditor extends ColumnToFieldEditor {
 
 	public DateformatEditor() {
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public String getValueFromObject(Object fromValue) {
+	public String getValueFromObject(ColumnWraper columnWraper ,Object fromValue) {
 		if(fromValue == null)
 			return null;
 		if(fromValue instanceof Date)
 		{
-			DateFormat format = DataFormatUtil.getSimpleDateFormat(AccessControl.getAccessControl().getRequest(),"yyyy-MM-dd HH:mm:ss");
+			DateFormat format =  DataFormatUtil.getSimpleDateFormat(columnWraper.editorparams());
 			return format.format((Date)fromValue);
 			
 		}
 		else if(fromValue instanceof BigDecimal)
 		{
-			DateFormat format = DataFormatUtil.getSimpleDateFormat(AccessControl.getAccessControl().getRequest(),"yyyy-MM-dd HH:mm:ss");
+			DateFormat format =  DataFormatUtil.getSimpleDateFormat(columnWraper.editorparams());
 			return format.format(new Date(((BigDecimal)fromValue).longValue()));
 			
 		}
 		else if(fromValue instanceof Long)
 		{
-			DateFormat format = DataFormatUtil.getSimpleDateFormat(AccessControl.getAccessControl().getRequest(),"yyyy-MM-dd HH:mm:ss");
+			DateFormat format =  DataFormatUtil.getSimpleDateFormat(columnWraper.editorparams());
 			return format.format(((Long)fromValue).longValue());
 			
 		}
@@ -46,7 +46,7 @@ public class DateformatEditor implements EditorInf<String> {
 	}
 
 	@Override
-	public String getValueFromString(String fromValue) {
+	public String getValueFromString(ColumnWraper columnWraper ,String fromValue) {
 		// TODO Auto-generated method stub
 		return fromValue;
 	}

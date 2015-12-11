@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -45,10 +47,9 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		String sql = "insert into td_cms_doc_comment(comment_id, doc_id,doc_comment,user_name,comtime,user_ip,src_comment_id,status) values(?, ?,?,?,?,?,?,?)";
 		try {
 
-			int id = (Integer) dbUitl.executeSelectForObject(
-					executor.getSql("getCommentNextId"), Integer.class);
+			long id = DBUtil.getNextPrimaryKey("TD_CMS_DOC_COMMENT");
 			preparedDB.preparedInsert(sql);
-			preparedDB.setInt(1, id);
+			preparedDB.setLong(1, id);
 			preparedDB.setInt(2, docComment.getDocId());
 			preparedDB.setClob(3, docComment.getDocComment(), "doc_comment");
 			preparedDB.setString(4, docComment.getUserName());
@@ -213,9 +214,16 @@ public class DocCommentManagerImpl implements DocCommentManager {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("docId", docId);
-
-		return executor.queryListInfoBean(DocComment.class, "getCommnetList",
-				offset, maxItem, paramMap);
+		try
+		{
+			DataFormatUtil.initDateformatThreadLocal();
+			return executor.queryListInfoBean(DocComment.class, "getCommnetList",
+					offset, maxItem, paramMap);
+		}
+		finally
+		{
+			DataFormatUtil.releaseDateformatThreadLocal();
+		}
 	}
 	
 	public NComentList getCommnetList(int docId,int n)
@@ -226,12 +234,21 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("docId", docId);
 		paramMap.put("n", n+1);
+		paramMap.put("nm", n);
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
 			tm.begin();
 			NComentList nComentList = new NComentList();
-			nComentList.setComments(executor.queryListBean(DocComment.class, "getCommnetNList",paramMap));
+			try
+			{
+				DataFormatUtil.initDateformatThreadLocal();
+				nComentList.setComments(executor.queryListBean(DocComment.class, "getCommnetNList",paramMap));
+			}
+			finally
+			{
+				DataFormatUtil.releaseDateformatThreadLocal();
+			}
 			nComentList.setTotal(getTotalCommnet(docId));
 			tm.commit();
 			return nComentList;
@@ -257,12 +274,22 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		//paramMap.put("docId", docId);
 		paramMap.put("n", n+1);
+		paramMap.put("nm", n);
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
 			tm.begin();
 			NComentList nComentList = new NComentList();
-			nComentList.setComments(executor.queryListBean(DocComment.class, "getSiteCommnetNList",paramMap));
+			try
+			{
+				DataFormatUtil.initDateformatThreadLocal();
+				
+				nComentList.setComments(executor.queryListBean(DocComment.class, "getSiteCommnetNList",paramMap));
+			}
+			finally
+			{
+				DataFormatUtil.releaseDateformatThreadLocal();
+			}
 		
 			
 			nComentList.setTotal(getSiteCommentPublishedCount());
@@ -290,12 +317,21 @@ public class DocCommentManagerImpl implements DocCommentManager {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("channel", channel);
 		paramMap.put("n", n+1);
+		paramMap.put("nm", n);
 		TransactionManager tm = new TransactionManager(); 
 		try
 		{
 			tm.begin( );
 			NComentList nComentList = new NComentList();
-			nComentList.setComments(executor.queryListBean(DocComment.class, "getChannelCommnetNList",paramMap));
+			try
+			{
+				DataFormatUtil.initDateformatThreadLocal();
+				nComentList.setComments(executor.queryListBean(DocComment.class, "getChannelCommnetNList",paramMap));
+			}
+			finally
+			{
+				DataFormatUtil.releaseDateformatThreadLocal();
+			}
 			//Container container = new ContainerImpl();
 			//container.in
 /*			if (!CollectionUtils.isEmpty(nComentList.getComments())) {

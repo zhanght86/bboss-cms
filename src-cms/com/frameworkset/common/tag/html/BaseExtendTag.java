@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.platform.cms.documentmanager.bean.DocExtValue;
 import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
@@ -201,7 +203,7 @@ public class BaseExtendTag extends BaseCellTag{
 					return String.valueOf(value.getIntvalue());
 				else if(value.getFieldtype().equals("2"))
 				{
-					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat format = DataFormatUtil.getSimpleDateFormat("yyyy-MM-dd");
 					return format.format(value.getDatevalue());
 				}
 				else

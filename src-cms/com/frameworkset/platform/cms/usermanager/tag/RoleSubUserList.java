@@ -3,6 +3,8 @@ package com.frameworkset.platform.cms.usermanager.tag;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
@@ -42,7 +44,7 @@ public class RoleSubUserList extends DataInfoImpl implements java.io.Serializabl
 					user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 					
 					//注册日期
-					java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+					java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
   					if(dbUtil.getDate(i,"USER_REGDATE")==null){
   						user.setUser_Regdate("不详");
   					}

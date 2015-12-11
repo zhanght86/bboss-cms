@@ -9,9 +9,11 @@ public class DocComment implements java.io.Serializable {
 	private int docId;					//文档ID
 	private String docTitle;			//文档标题，与前面统一，都用文档子标题
 	private String docComment;				//评论内容
-	private String userName;			//评论发表人名
+	private String userName;			//评论发表人名	 
 	private Date subTime;				//评论发表时间
-	@Column(editor="com.frameworkset.platform.util.DateformatEditor")
+	@Column(editorparams="yyyy-MM-dd HH:mm:ss",
+			editor="com.frameworkset.platform.util.DateformatEditor",
+			ignoreCUDbind=true)
 	private String str_subTime;
 	private String userIP;				//评论发表人IP
 	private int srcCommentId;			//源评论ID

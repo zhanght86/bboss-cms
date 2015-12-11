@@ -3,6 +3,8 @@ package com.frameworkset.platform.cms.usermanager.tag;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.frameworkset.util.DataFormatUtil;
+
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.common.poolman.DBUtil;
@@ -58,7 +60,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}
@@ -105,7 +107,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}
@@ -149,7 +151,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter =DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}
@@ -190,7 +192,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}
@@ -240,7 +242,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}
@@ -290,7 +292,7 @@ public class UserList extends DataInfoImpl implements java.io.Serializable{
 						user.setUserIsvalid(new Integer(dbUtil.getInt(i,"USER_ISVALID")));
 						user.setDredgeTime(dbUtil.getString(i,"DREDGE_TIME"));
 						//注册日期
-						java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
+						java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 	  					if(dbUtil.getDate(i,"USER_REGDATE")==null){
 	  						user.setUser_Regdate("不详");
 	  					}

@@ -1708,6 +1708,7 @@ public class DocumentManagerImpl implements DocumentManager {
 			dbUtil.executeSelect(sql, offset, maxItem);
 			List list = new ArrayList();
 			DocHistoryOperate hisOper;
+			java.text.SimpleDateFormat formatter = DataFormatUtil.getSimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			for (int i = 0; i < dbUtil.size(); i++) {
 				hisOper = new DocHistoryOperate();
 				int userid = dbUtil.getInt(i, "user_id");
@@ -1731,7 +1732,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				hisOper.setHisOperid(dbUtil.getInt(i, "id"));
 				hisOper.setHisOperContent(dbUtil.getString(i, "oper_content"));
 				hisOper.setDocStatusTranid(dbUtil.getInt(i, "doc_trans_id"));
-				java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+				
 				String riqi = formatter.format(dbUtil.getDate(i, "oper_time"));
 				hisOper.setHisOperTime(riqi);
 				list.add(hisOper);
@@ -2224,26 +2225,20 @@ public class DocumentManagerImpl implements DocumentManager {
 		}
 	}
 
-	public List getDocSourceList() throws DocumentManagerException {
-		List docSourcelist = new ArrayList();
-		DBUtil conn = new DBUtil();
+	public List<DocumentSource> getDocSourceList() throws DocumentManagerException {
+		List<DocumentSource> docSourcelist = null;
 		String sql = "";
 		try {
 			sql = "select * from TD_CMS_DOCSOURCE order by crtime desc,docsource_id";
-			// System.out.println(sql);
-			conn.executeSelect(sql);
-			if (conn.size() > 0) {
-				for (int i = 0; i < conn.size(); i++) {
-					DocumentSource ds = new DocumentSource();
-					ds.setDocsource_id(conn.getInt(i, "docsource_id"));
-					ds.setSrcname(conn.getString(i, "srcname"));
-					docSourcelist.add(ds);
-				}
+			docSourcelist = SQLExecutor.queryList(DocumentSource.class, sql);
+			if(docSourcelist == null)
+			{
+				docSourcelist = new ArrayList<DocumentSource>();
 			}
 
 		} catch (Exception e) {
-			System.out.print("取文档来源信息出错!" + e);
-			throw new DocumentManagerException(e.getMessage());
+			 
+			throw new DocumentManagerException(e.getMessage(),e);
 		}
 		return docSourcelist;
 
@@ -8530,136 +8525,218 @@ public class DocumentManagerImpl implements DocumentManager {
 		boolean ret = false;
 		int size = map.size();
 		int count = 0;
-		StringBuffer sql = new StringBuffer();
+		StringBuilder sql = new StringBuilder();
 		sql.append("update td_cms_document set ");
 		if (map.containsKey("titlecolor")) {
-			sql.append("titlecolor=?");
+			sql.append("titlecolor=#[titlecolor]");
 			count++;
 		}
 		if (map.containsKey("docsource_id")) {
 			if (count != 0)
-				sql.append(",docsource_id=?");
+				sql.append(",docsource_id=#[docsource_id]");
 			else
-				sql.append("docsource_id=?");
+				sql.append("docsource_id=#[docsource_id]");
 			count++;
 		}
-		if (map.containsKey("docwtime")) {
-			if (count != 0)
-				sql.append(",docwtime=to_date(?,'yyyy-mm-dd hh24:mi:ss')");
-			else
-				sql.append("docwtime=to_date(?,'yyyy-mm-dd hh24:mi:ss')");
-			count++;
+		
+		DateFormat format = DataFormatUtil.getSimpleDateFormat(AccessControl.getAccessControl().getRequest(), "yyyy-MM-dd HH:mm:ss");
+		String dt = (String)map.get("docwtime");
+		if (!StringUtil.isEmpty(dt)) {
+			try {
+				map.put("docwtime", format.parse(dt));
+				if (count != 0)
+					sql.append(",docwtime=#[docwtime]");
+				else
+					sql.append("docwtime=#[docwtime]");
+				count++;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+					
+			
 		}
-		if (map.containsKey("ordertime")) {
-			if (count != 0)
-				sql.append(",ordertime=to_date(?,'yyyy-mm-dd hh24:mi:ss')");
-			else
-				sql.append("ordertime=to_date(?,'yyyy-mm-dd hh24:mi:ss')");
-			count++;
+		
+		  dt = (String)map.get("ordertime");
+		if (!StringUtil.isEmpty(dt)) {
+			try {
+				map.put("ordertime", format.parse(dt));
+				if (count != 0)
+					sql.append(",ordertime=#[ordertime]");
+				else
+					sql.append("ordertime=#[ordertime]");
+				count++;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+					
+			
 		}
+		 
 		if (map.containsKey("author")) {
 			if (count != 0)
-				sql.append(",author=?");
+				sql.append(",author=#[author]");
 			else
-				sql.append("author=?");
+				sql.append("author=#[author]");
 			count++;
 		}
-		if (map.containsKey("seq")) {
+		dt = (String)map.get("seq");
+		if (!StringUtil.isEmpty(dt)) {
+			map.put("seq", Integer.parseInt(dt));
 			if (count != 0)
-				sql.append(",seq=?");
+				sql.append(",seq=#[seq]");
 			else
-				sql.append("seq=?");
+				sql.append("seq=#[seq]");
 			count++;
 		}
-		if (map.containsKey("isnew")) {
+		dt = (String)map.get("isnew");
+		if (!StringUtil.isEmpty(dt)) {
+			map.put("isnew", Integer.parseInt(dt));
 			if (count != 0)
-				sql.append(",isnew=?");
+				sql.append(",isnew=#[isnew]");
 			else
-				sql.append("isnew=?");
+				sql.append("isnew=#[isnew]");
 			count++;
 		}
+		 
 		if (map.containsKey("newpicpath")) {
 			if (count != 0)
-				sql.append(",NEWPIC_PATH=?");
+				sql.append(",NEWPIC_PATH=#[newpicpath]");
 			else
-				sql.append("NEWPIC_PATH=?");
+				sql.append("NEWPIC_PATH=#[newpicpath]");
 			count++;
 		}
 		if (map.containsKey("keywords")) {
 			if (count != 0)
-				sql.append(",keywords=?");
+				sql.append(",keywords=#[keywords]");
 			else
-				sql.append("keywords=?");
+				sql.append("keywords=#[keywords]");
 			count++;
 		}
 
-		sql.append(" where DOCUMENT_ID in(" + docIdStr.replace(';', ',').substring(0, docIdStr.length() - 1) + ")");
-		// String sql = "update td_cms_document set
-		// TITLECOLOR='"+doc.getTitlecolor()+"',DOCSOURCE_ID="+doc.getDocsource_id()+"
-		// where DOCUMENT_ID
-		// in("+docIdStr.replace(';',',').substring(0,docIdStr.length()-1)+")";
-		System.out.println(sql);
-		PreparedDBUtil db = new PreparedDBUtil();
-		try {
-			db.preparedUpdate(sql.toString());
-			int flag = 1;
-			if (map.containsKey("titlecolor")) {
-				db.setString(flag, map.get("titlecolor").toString());
-				flag++;
-
+		docIdStr = docIdStr.substring(0, docIdStr.length() - 1);
+		String[] ids = docIdStr.split(";");
+		List iids = null;
+		if(ids.length >0 )
+		{
+			iids = new ArrayList(ids.length);
+			for(int i = 0 ; i < ids.length; i ++)
+			{
+				iids.add(Integer.parseInt(ids[i]));
 			}
-			if (map.containsKey("docsource_id")) {
-				db.setInt(flag, Integer.parseInt(map.get("docsource_id").toString()));
-				flag++;
+			map.put("docIds", iids);
+			sql.append(" where DOCUMENT_ID in(")
+			.append("#foreach($did in $docIds)")
+			.append(" #if($velocityCount == 0)")
+			.append("#[docIds[0]]")
+			.append("#else ,#[docIds[$velocityCount]]")
+			.append(  "#end")
+			.append(  "#end)");
+			TransactionManager tm =  new TransactionManager(); 
+			try {
+			tm.begin();
+			SQLExecutor.updateBean(sql.toString(), map);
+			// String sql = "update td_cms_document set
+			// TITLECOLOR='"+doc.getTitlecolor()+"',DOCSOURCE_ID="+doc.getDocsource_id()+"
+			// where DOCUMENT_ID
+			// in("+docIdStr.replace(';',',').substring(0,docIdStr.length()-1)+")";
+			//System.out.println(sql);
+//			PreparedDBUtil db = new PreparedDBUtil();
+//			try {
+//				db.preparedUpdate(sql.toString());
+//				int flag = 1;
+//				if (map.containsKey("titlecolor")) {
+//					db.setString(flag, map.get("titlecolor").toString());
+//					flag++;
+	//
+//				}
+//				if (map.containsKey("docsource_id")) {
+//					db.setInt(flag, Integer.parseInt(map.get("docsource_id").toString()));
+//					flag++;
+//				}
+//				if (map.containsKey("docwtime")) {
+//					db.setString(flag, map.get("docwtime").toString());
+//					flag++;
+//				}
+//				if (map.containsKey("ordertime")) {
+//					db.setString(flag, map.get("ordertime").toString());
+//					flag++;
+//				}
+//				if (map.containsKey("author")) {
+//					db.setString(flag, map.get("author").toString());
+//					flag++;
+//				}
+//				if (map.containsKey("seq")) {
+//					db.setInt(flag, Integer.parseInt(map.get("seq").toString()));
+//					flag++;
+//				}
+//				if (map.containsKey("isnew")) {
+//					db.setInt(flag, Integer.parseInt(map.get("isnew").toString()));
+//					flag++;
+//				}
+//				if (map.containsKey("newpicpath")) {
+//					db.setString(flag, map.get("newpicpath").toString());
+//					flag++;
+//				}
+//				if (map.containsKey("keywords")) {
+//					db.setString(flag, map.get("keywords").toString());
+//					flag++;
+//				}
+//				// extManager.appendExtPreparedValue(db,doc.getExtColumn(),"td_cms_document",0);
+//				db.executePrepared();
+				
+				updateStatus(iids);
+				ret = true;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			if (map.containsKey("docwtime")) {
-				db.setString(flag, map.get("docwtime").toString());
-				flag++;
+			finally
+			{
+				tm.release();
 			}
-			if (map.containsKey("ordertime")) {
-				db.setString(flag, map.get("ordertime").toString());
-				flag++;
-			}
-			if (map.containsKey("author")) {
-				db.setString(flag, map.get("author").toString());
-				flag++;
-			}
-			if (map.containsKey("seq")) {
-				db.setInt(flag, Integer.parseInt(map.get("seq").toString()));
-				flag++;
-			}
-			if (map.containsKey("isnew")) {
-				db.setInt(flag, Integer.parseInt(map.get("isnew").toString()));
-				flag++;
-			}
-			if (map.containsKey("newpicpath")) {
-				db.setString(flag, map.get("newpicpath").toString());
-				flag++;
-			}
-			if (map.containsKey("keywords")) {
-				db.setString(flag, map.get("keywords").toString());
-				flag++;
-			}
-			// extManager.appendExtPreparedValue(db,doc.getExtColumn(),"td_cms_document",0);
-			db.executePrepared();
-			ret = true;
-			updateStatus(docIdStr);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		
 		return ret;
 	}
+	public void updateStatus(List iids ) throws  Exception {
+		
+		StringBuilder sql = new StringBuilder().append("update td_cms_document set status=11 where status<>1 ");
+		 
+		Map params = new HashMap();
+		if(iids.size() >0 )
+		{
+			 
+			params.put("docIds", iids);
+			sql.append(" and document_id in (")
+			.append("#foreach($did in $docIds)")
+			.append(" #if($velocityCount == 0)")
+			.append("#[docIds[0]]")
+			.append("#else ,#[docIds[$velocityCount]]")
+			.append(  "#end")
+			.append(  "#end)");
+		}
+		SQLExecutor.updateBean(sql.toString(), params);
 
-	public void updateStatus(String docIdStr) {
-		String sql = "update td_cms_document set status=11 where document_id in ("
-				+ docIdStr.replace(';', ',').substring(0, docIdStr.length() - 1) + ") and status<>1";
-		DBUtil db = new DBUtil();
-		try {
-			db.executeUpdate(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	}
+	public void updateStatus(String docIdStr) throws  Exception {
+		
+		 
+		if(docIdStr.endsWith(";"))
+			docIdStr = docIdStr.substring(0, docIdStr.length() - 1);
+		String[] ids = docIdStr.split(";");
+		Map params = new HashMap();
+		if(ids.length >0 )
+		{
+			List iids = new ArrayList(ids.length);
+			for(int i = 0 ; i < ids.length; i ++)
+			{
+				iids.add(Integer.parseInt(ids[i]));
+			}
+			updateStatus(  iids );
 		}
 
 	}

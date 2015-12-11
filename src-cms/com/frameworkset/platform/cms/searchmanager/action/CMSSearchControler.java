@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.frameworkset.util.DataFormatUtil;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.web.servlet.ModelMap;
 
@@ -199,7 +200,7 @@ public class CMSSearchControler {
 				//}else{
 				//	cmsSearcher.setFrom(Integer.valueOf(fromDays).intValue());
 				//}
-				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat dateFormat = DataFormatUtil.getSimpleDateFormat(request,"yyyy-MM-dd");
 				if(dayBegin != null && !dayBegin.equals(""))
 				{
 					cmsSearcher.setFrom(dateFormat.parse(dayBegin).getTime());

@@ -131,6 +131,7 @@ public class CounterManagerImpl implements CounterManager {
 	 */
 	@Override
 	public void incrementBrowserCounter(BrowserCounter counter) throws SQLException {
+		counter.setBrowserTime(new Timestamp(new java.util.Date().getTime()));
 		executor.insertBean("incrementBrowserCounter", counter);
 	}
 
@@ -254,6 +255,7 @@ public class CounterManagerImpl implements CounterManager {
 	 */
 	@Override
 	public void incrementVideoHitsCounter(VideoHitsCounter counter) throws SQLException {
+		counter.setHitTime(new Timestamp(new java.util.Date().getTime()));
 		executor.insertBean("incrementVideoHitsCounter", counter);
 	}
 

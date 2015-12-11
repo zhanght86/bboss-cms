@@ -15,15 +15,15 @@ public class CheckProcessOvertime {
 	private TempleService templeService;
 	private ActivitiService activitiService;
 	private Calendar instance = null;
-	private SimpleDateFormat sdf = null;
+//	private SimpleDateFormat sdf = null;
 
 	public CheckProcessOvertime() {
 		if (instance == null) {
 			instance = Calendar.getInstance();
 		}
-		if (sdf == null) {
-			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		}
+//		if (sdf == null) {
+//			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		}
 	}
 
 	/**
@@ -36,11 +36,12 @@ public class CheckProcessOvertime {
 				.getProcessNodeUnComplete();
 
 		if (null != list && list.size() > 0) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			for (Map<String, Object> process : list) {
 
 				// 检查数据
 				// checkPara(process);
-
+				
 				Timestamp alertTime = (Timestamp) process.get("alertTime");
 				Timestamp overTime = (Timestamp) process.get("overTime");
 

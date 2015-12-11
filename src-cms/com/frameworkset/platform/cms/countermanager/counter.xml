@@ -5,7 +5,7 @@
 	<property name="incrementBrowserCounter">
 		<![CDATA[
 			insert into td_cms_browser_counts(browser_id, doc_id, docname, site_id, sitename, channel_id, channelname, browsercount, browserip, browser_user, pageurl, browsertype, browsertime, referer) values
-			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], systimestamp, #[referer])
+			(#[browserId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[browserCount], #[browserIp], #[browserUser], #[pageURL], #[browserType], #[browserTime], #[referer])
 		]]>
 	</property>
 	
@@ -84,7 +84,7 @@
 	<property name="incrementVideoHitsCounter">
 		<![CDATA[
 			insert into td_cms_vidio_hits (hit_id, doc_id, docname, site_id, sitename, channel_id, channelname, hitcount, hit_user, vidiopath, hitip, hittime, referer) values
-			(#[hitId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[hitCount], #[hitUser], #[videoPath], #[hitIP], systimestamp, #[referer])
+			(#[hitId], #[docId], #[docName], #[siteId], #[siteName], #[channelId], #[channelName], #[hitCount], #[hitUser], #[videoPath], #[hitIP], #[hitTime], #[referer])
 		]]>
 	</property>
 	
