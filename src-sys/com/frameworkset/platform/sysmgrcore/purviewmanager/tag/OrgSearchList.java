@@ -14,9 +14,12 @@ import java.util.Map;
 
 import org.frameworkset.persitent.util.SQLUtil;
 
-import com.frameworkset.platform.sysmgrcore.entity.Organization;
-import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
@@ -204,6 +207,7 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 			// "select org_id from td_sm_organization where parent_id='0'";
 
 			String sql = null;
+			Map params = new HashMap();
 			StringBuffer condition = new StringBuffer();  
 			if (super.accessControl.isAdmin()) {
 				sql = sqlUtilInsert.getSQL("OrgSearchLish_getDataList");
@@ -224,24 +228,34 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 			// .append( " start with t.parent_id ='0' ")
 			// .append( "connect by prior t.org_id=t.parent_id ) ");
 				String curUserId = super.accessControl.getUserID();
-				String managerorg = "select o.* from td_sm_organization o, td_sm_orgmanager om " +
-						"where o.org_id = om.org_id and om.user_id = " + curUserId;
-				
-				DBUtil db = new DBUtil();
-				db.executeSelect(managerorg);
+				String managerorg = "select o.org_tree_level from td_sm_organization o, td_sm_orgmanager om " +
+						"where o.org_id = om.org_id and om.user_id = ?";
+				int uid = Integer.parseInt(curUserId);
+				PreparedDBUtil db = new PreparedDBUtil();
+				db.preparedSelect(managerorg);
+				db.setInt(1, uid);
+				db.executePrepared();
 				StringBuffer sql_ = new StringBuffer();
+				
 				for(int i = 0; i < db.size(); i ++)
 				{
-					
-					if(sql_ == null)
-						sql_ .append("select * from td_sm_organization where org_tree_level like '" +  db.getString(i, "org_tree_level") + "|%'");
+					String key = "orglevel"+i;
+					params.put(key, db.getString(i, "org_tree_level") + "|%");
+					if(i == 0)
+						sql_ .append("select * from td_sm_organization where org_tree_level like #[").append(key).append("]");
 					else
-						sql_ .append("  select * from td_sm_organization where org_tree_level like '" +  db.getString(i, "org_tree_level") + "|%'");
+						sql_ .append(" union select * from td_sm_organization where org_tree_level like #[").append(key).append("]");
 				}
 				if(sql_ == null)
-					sql_ .append(managerorg);
+				{
+					params.put("user_id", uid);
+					sql_ .append("select o.* from td_sm_organization o, td_sm_orgmanager om where o.org_id = om.org_id and om.user_id = #[user_id]");
+				}
 				else
-					sql_ .append(" union ").append(managerorg);
+				{
+					params.put("user_id", uid);
+					sql_ .append(" union ").append("select o.* from td_sm_organization o, td_sm_orgmanager om where o.org_id = om.org_id and om.user_id = #[user_id]");
+				}
 				
 				
 				
@@ -263,28 +277,29 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 			{
 				
 				if (!remark5.equals("")) {
-					condition.append(" and o.remark5 like '%").append(remark5).append(
-							"%'");
+					params.put("remark5", "%"+remark5+"%");
+					condition.append(" and o.remark5 like #[remark5]");
 				}
 				if (!orgnumber.equals("")) {
-					condition.append(" and o.orgnumber like '%").append(orgnumber)
-							.append("%'");
+					params.put("orgnumber", "%"+orgnumber+"%");
+					condition.append(" and o.orgnumber like #[orgnumber]");
 				}
 				if (!orgcreator.equals("")) {
-					condition.append(" and o.creator in(select user_id from td_sm_user where user_name like '%").append(orgcreator)
-							.append("%')");
+					params.put("orgcreator", "%"+orgcreator+"%");
+					condition.append(" and o.creator in(select user_id from td_sm_user where user_name like #[orgcreator]");
 				}
 //				if (!isEffective.equals("2") && !isEffective.equals("")) {
 //				    condition.append("and o.remark3='").append(isEffective).append("'");
 //                }
 				if (!isEffective.equals("")) {
-				    condition.append("and o.remark3='").append(isEffective.equals("2")?"0":isEffective).append("'");
+					params.put("remark3", isEffective.equals("2")?"0":isEffective);
+				    condition.append("and o.remark3=#[remark3]");
                 }
 				Map<String, String> variablevalues1 = new HashMap<String, String>();
 				variablevalues1.put("where_condition", condition.toString());
 				sql = sqlUtilInsert.evaluateSQL("test", sql, variablevalues1);
 //				sql = com.frameworkset.util.VariableHandler.substitution(sql,condition.toString());
-				listInfo = this.getQueryResult(sql.toString(), offset, maxPagesize);
+				listInfo = this.getQueryResult(sql.toString(), offset, maxPagesize,params);
 				
 
 			}
@@ -312,29 +327,33 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 	 * @return LogSearchList.java
 	 * @author: ge.tao
 	 */
-	protected ListInfo getQueryResult(String sql, long offset, int maxItem) {
-		List datas = new ArrayList();
-		ListInfo listInfo = new ListInfo();
-		DBUtil db = new DBUtil();
+	protected ListInfo getQueryResult(String sql, long offset, int maxItem,Map params) {
+		final List datas = new ArrayList();
+		
+		ListInfo listInfo = null;
 		try {
-			db.executeSelect(sql, offset, maxItem);
+			  listInfo = SQLExecutor.queryListInfoBeanByNullRowHandler(new NullRowHandler(){
 
-			Organization org = null;
-			for (int i = 0; i < db.size(); i++) {
-				org = new Organization();
-				org.setOrgId(db.getString(i, "org_id".toUpperCase()));
-				org.setParentId(db.getString(i, "parent_id".toUpperCase()));
-				org.setOrgName(db.getString(i, "org_name".toUpperCase()));
-				org.setOrgnumber(db.getString(i, "orgnumber".toUpperCase()));
-				org.setOrgSn(db.getString(i, "org_sn".toUpperCase()));
-				org.setOrgdesc(db.getString(i, "orgdesc".toUpperCase()));
-				org.setRemark5(db.getString(i, "remark5".toUpperCase()));
-				org.setCreator(db.getString(i, "creator".toUpperCase()));
+				@Override
+				public void handleRow(Record db) throws Exception {
+					Organization org = new Organization();
+					org.setOrgId(db.getString( "org_id".toUpperCase()));
+					org.setParentId(db.getString( "parent_id".toUpperCase()));
+					org.setOrgName(db.getString( "org_name".toUpperCase()));
+					org.setOrgnumber(db.getString( "orgnumber".toUpperCase()));
+					org.setOrgSn(db.getString( "org_sn".toUpperCase()));
+					org.setOrgdesc(db.getString( "orgdesc".toUpperCase()));
+					org.setRemark5(db.getString( "remark5".toUpperCase()));
+					org.setCreator(db.getString( "creator".toUpperCase()));
 
-				datas.add(org);
-			}
+					datas.add(org);
+					
+				}
+				
+			},sql, offset, maxItem, params);
+
+			 
 			listInfo.setDatas(datas);
-			listInfo.setTotalSize(db.getTotalSize());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
