@@ -24,7 +24,9 @@
 	        <pg:header>
 	            <th align=center><input id="CKA" name="CKA" type="checkbox" 
 								onClick="checkAll('CKA','CK')"></th>
-				<th>SessionID</th>
+				<th>SessionID</th>				
+				<pg:list requestKey="monitorAttributes"><th><pg:cell colName="cname"/></th></pg:list>
+				
 	       		<th>创建时间</th>
 	       		<th>最后访问时间</th>
 	       		<th>失效时间</th>
@@ -60,10 +62,14 @@
 					        <td class="td_center">
 				                <input id="CK" type="checkbox" name="CK" <pg:equal colName="sessionid" value="${currentsessionid}">disabled</pg:equal> onClick="checkOne('CKA','CK')" value="<pg:cell colName="sessionid" />"/>
 				            </td>
+				            
 				    		<td><pg:equal colName="sessionid" value="${currentsessionid}" evalbody="true">
 					    		<pg:yes><span style=" color: blue;"><b><pg:cell colName="sessionid" /></b></span></pg:yes>
 					    		<pg:no><pg:cell colName="sessionid" /></pg:no>
 				    		    </pg:equal></td> 
+				    		<pg:list colName="extendAttributes">
+				            	<td><pg:cell colName="value" /></td>
+				            </pg:list>    
 				    		<td><pg:cell colName="creationTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 				    		<td><pg:cell colName="lastAccessedTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>       
 				       		<td><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>

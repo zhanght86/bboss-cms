@@ -1243,6 +1243,8 @@ public class AccessControl implements AccessControlInf{
 					subsystem_id = getDefaultSUBSystemID();
 				// 将用户登录的子系统模块名称添加到session中
 				session.setAttribute(Framework.SUBSYSTEM, subsystem_id);
+				
+				
 				// 添加用户的所有身份索引到session中
 						session.setAttribute(PRINCIPAL_INDEXS, this.principal);
 						// 添加用户的所有属性到session中
@@ -1355,6 +1357,8 @@ public class AccessControl implements AccessControlInf{
 //	//				request.getRemoteAddr(),
 //					macaddr,machineName,serverIp,serverport);
 //		}
+		session.setAttribute("userAccount", this.getUserAccount());
+		session.setAttribute("worknumber", this.getUserAttribute("userWorknumber"));
 		current.set(this);
 		
 		// ------------登陆时保存用户日志信息
@@ -3633,6 +3637,43 @@ public class AccessControl implements AccessControlInf{
 				.getEveryonegrantedRoleName();
 	}
 
+	/**
+	 *  
+     * userName
+userID
+password
+orgId
+logincount
+userAccount
+remark1
+remark2
+remark3
+remark4
+remark5
+userAddress
+userEmail
+userFax
+userHometel
+userIdcard
+userMobiletel1
+userMobiletel2
+userOicq
+userPinyin
+userPostalcode
+userSex
+userType
+userWorknumber
+userWorktel
+userBirthday
+userRegdate
+userSn
+userIsvalid
+passwordExpiredTime
+passwordUpdateTime
+     * @param userAttribute
+     * @return
+     */
+	 
 	public String getUserAttribute(String userAttribute) {
 		try {
 			Object value = credential.getCheckCallBack().getUserAttribute(
