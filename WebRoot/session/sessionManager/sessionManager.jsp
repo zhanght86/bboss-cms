@@ -208,7 +208,17 @@ function doClickTreeNode(app_id,selectedNode){
    	$("#wf_app_name_td").html("&nbsp;");
 
 	queryList(true,true);
+	getSessionConfig();
 } 
+
+function getSessionConfig()
+{
+	
+	
+	  $("#sessionConfig").load("<%=request.getContextPath()%>/session/sessionManager/viewSessionConfig.page?appkey="+$("#appkey").val(),
+	    	function(){});
+	    
+}
 
 function sessionInfo(sessionid){
 	
@@ -434,6 +444,8 @@ function delAllSessions () {
 		</div>
 			
 		<div id="sessionContainer" style="overflow:auto"></div>
+		
+		<div id="sessionConfig" style="overflow:auto"></div>
 	</div>
 </div>
 </body>

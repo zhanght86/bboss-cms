@@ -6,18 +6,24 @@
 	-->
 	<property name="sessionManager" class="org.frameworkset.security.session.impl.SessionManager"
 		init-method="init" destroy-method="destroy">		
-			<property name="sessionTimeout" value="3600000"/>
+			<property name="sessionTimeout" value="600000"/>
 			<!-- <property name="sessionstore" refid="attr:sessionstore"/> -->
 			<property name="sessionstore" value="session"/>
 			<property name="cookiename" value="b_sessionid"/>			
 			<property name="httpOnly" value="true"/>
 			<property name="secure" value="false"/>
+			<property name="monitorAttributes" ><![CDATA[ 
+			[
+				{"name":"userAccount","cname":"账号","type":"String","like":true,"enableEmptyValue":true},				
+				{"name":"worknumber","cname":"工号","type":"String","like":false,"enableEmptyValue":true,"useIndex":true}
+			]			
+			]]></property>
 	<!--
 	  应用编码，如果没有指定appcode值默认为应用上下文
 	  appcode的作用：当所有的应用上下文为“/”时，用来区分后台统计的会话信息
 	  如果应用上下文为“/”时,appcode为ROOT
 	 
-	 当启用跨域会话共享时，就必须指定appcode
+	 当启用跨域会话共享时，就必须指定appcode 
 	 -->
 		
  	<property name="appcode" value="pdp"/> 
@@ -31,49 +37,12 @@
 			path:共享session的应用上下文名称
 			attributeNamespace:共享session应用私有session属性名称命名空间，用来限定应用私有session数据的存储空间  ，如果指定了shareSessionAttrs则必须指定每个应用的attributeNamespace			
 			-->
-			<property name="crossDomain" class="org.frameworkset.security.session.domain.CrossDomain" 
-			    f:rootDomain="sany.com.cn"  
-			    f:shareSessionAttrs="CREDENTIAL_INDEXS,PRINCIPAL_INDEXS" 
-			    init-method="init">
-			    <property name="domainApps">
-				    <list componentType="bean">
-				        <property class="org.frameworkset.security.session.domain.App"
-				            	f:path="/SanyPDP"
-				            	f:domain="pdp.sany.com.cn" 
-				            	f:attributeNamespace="pdp_sany_com_cn"  
-				            	f:currentApp="true"
-				            	init-method="init"
-				            />				        
-				        <property class="org.frameworkset.security.session.domain.App"				            	
-				            	f:path="/g4studio"	
-				            	f:attributeNamespace="g4_sany_com_cn"
-				            	f:domain="g4.sany.com.cn"
-				            	f:currentApp="false"
-				            	init-method="init"
-				            />
-				        
-				        <property class="org.frameworkset.security.session.domain.App"				            	
-				            	f:path="/"	
-				            	f:attributeNamespace="test_sany_com_cn"
-				            	f:domain="test.sany.com.cn"
-				            	f:currentApp="false"
-				            	init-method="init"
-				            />
-				        <property class="org.frameworkset.security.session.domain.App"				            	
-				            	f:path="/WebRoot"	
-				            	f:attributeNamespace="testpdp_sany_com_cn"
-				            	f:domain="testpdp.sany.com.cn"
-				            	f:currentApp="false"
-				            	init-method="init"
-				            />
-				    </list>
-			    </property>
-			</property>
-<!--             <property name="sessionlisteners" value="org.frameworkset.security.session.impl.NullSessionListener"/> -->
+			
+            <property name="sessionlisteners" value="org.frameworkset.security.session.impl.NullSessionListener"/> 
 			<property name="startLifeScan" value="false"/>
 	</property>
 	
-	<property name="sessionStaticManager" class="org.frameworkset.security.session.statics.MongoSessionStaticManagerImpl"/>	
+	<property name="sessionStaticManager" f:monitorScope="all" class="org.frameworkset.security.session.statics.MongoSessionStaticManagerImpl"/>	
 	
 	<property name="sessionstore" class="org.frameworkset.security.session.impl.MongDBSessionStore"/>
 </properties>

@@ -74,7 +74,7 @@
 				    		<td><pg:cell colName="lastAccessedTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>       
 				       		<td><pg:cell colName="loseTime" dateformat="yyyy-MM-dd HH:mm:ss"/></td>
 				       		<td><pg:cell colName="requesturi"/></td>
-				       		<td ><pg:cell colName="lastAccessedUrl"/></td>
+				       		<td ><pg:cell colName="lastAccessedUrl" htmlEncode="true"/></td>
 				       		<td><pg:cell colName="lastAccessedHostIP"/></td>
 				       		<td><pg:cell colName="referip"/></td>
 				       		<td><pg:cell colName="host" /></td>
