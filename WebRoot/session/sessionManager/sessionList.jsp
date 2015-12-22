@@ -1,5 +1,5 @@
 <%@ page language="java"  pageEncoding="utf-8"%>
-<%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
 <%--
 描述：SessionList
@@ -47,7 +47,7 @@
 					<tr >
 						<td colspan="100" align="center"><pg:empty actual="${message}"  evalbody="true">
 							<pg:yes>
-								<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/>
+								<img src="${pageContext.request.contextPath}/include/images/no_data.jpg"/>
 							</pg:yes>
 							<pg:no>
 								<span style=" color: red;">${message}</span>

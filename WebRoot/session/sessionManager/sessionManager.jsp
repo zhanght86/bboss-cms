@@ -1,6 +1,6 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@page import=" org.frameworkset.security.session.impl.SessionHelper"%>
-<%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%--
 	描述：session管理
 	作者：谭湘
@@ -11,8 +11,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Session管理</title>
-<%@ include file="/common/jsp/css.jsp"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type='text/javascript' src='<%=request.getContextPath() %>/include/jquery-1.4.2.min.js' language='JavaScript'></script>
+<script type='text/javascript' src='<%=request.getContextPath() %>/include/pager.js' language='JavaScript'></script>
+<link href='<%=request.getContextPath() %>/include/pager.css' type='text/css' rel='stylesheet'>
+
+
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/include/css/common.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/include/js/dialog/lhgdialog.js"></script>
+<script language="javascript" type="text/javascript"
+src="${pageContext.request.contextPath}/include/datepicker/My97DatePicker/WdatePicker.js?lang=zh_CN"></script>
 <style type="text/css">
 <!--
   #rightContentDiv{
@@ -43,7 +50,7 @@ $(document).ready(function() {
 
 	$("#wait").hide();
        		
-	queryList(false,false);   
+	queryList(null,false,false);   
 	
 	$('#delBatchButton').click(function() {
 		delSessions();
@@ -61,11 +68,12 @@ $(document).ready(function() {
 });
        
 //加载实时任务列表数据  
-function queryList(reset,loadextendattrs){
+function queryList(appkey ,reset,loadextendattrs){
 	if(reset)
 		doreset();
-	
-	var appkey = $("#appkey").val();
+	if(appkey != null && appkey != '')
+		$("#appkey").val(appkey);
+	 
 	var sessionid = $("#sessionid").val();
 	var createtime_start = $("#createtime_start").val();
 	var createtime_end = $("#createtime_end").val();
@@ -172,13 +180,13 @@ function initTreeModule(app_query){
 			if(app_query!=null && app_query!=""){
 				if(apps[i].appkey.toLowerCase().indexOf(app_query.toLowerCase()) >= 0 ){
 					treeModuleHtml += 
-    					"<li id=\""+apps[i].appkey+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+apps[i].appkey+"',this)\" >"+apps[i].appkey+" ("+apps[i].sessions+")</a></li>";
+    					"<li id=\""+apps[i].appkey+"\"><a href=\"javascript:void(0);\" onclick=\"doClickTreeNode('"+apps[i].appkey+"',this)\" >"+apps[i].appkey+" ("+apps[i].sessions+")</a></li>";
     					seq++;	
 				}
 			}else{
 				
 				treeModuleHtml += 
-					"<li id=\""+apps[i].appkey+"\"><a href=\"#\" onclick=\"doClickTreeNode('"+apps[i].appkey+"',this)\" >"+apps[i].appkey+" ("+apps[i].sessions+")</a></li>";
+					"<li id=\""+apps[i].appkey+"\"><a href=\"javascript:void(0);\" onclick=\"doClickTreeNode('"+apps[i].appkey+"',this)\" >"+apps[i].appkey+" ("+apps[i].sessions+")</a></li>";
 					seq++;	
 			}
 		}
@@ -202,20 +210,20 @@ function doClickTreeNode(app_id,selectedNode){
 	$("#app_tree_module").find("li").removeAttr("class");
 	$("#"+app_id).attr("class","select_links");
 	
-	$("#appkey").val(app_id);
+	
    	
 	$("#app_query_th").html("&nbsp;");
    	$("#wf_app_name_td").html("&nbsp;");
 
-	queryList(true,true);
-	getSessionConfig();
+	queryList(app_id,true,true);
+	getSessionConfig(app_id);
 } 
 
-function getSessionConfig()
+function getSessionConfig(app_id)
 {
 	
 	
-	  $("#sessionConfig").load("<%=request.getContextPath()%>/session/sessionManager/viewSessionConfig.page?appkey="+$("#appkey").val(),
+	  $("#sessionConfig").load("<%=request.getContextPath()%>/session/sessionManager/viewSessionConfig.page?appkey="+app_id,
 	    	function(){});
 	    
 }
@@ -430,8 +438,8 @@ function delAllSessions () {
 		<div class="title_box">
 			<div class="rightbtn">
 				
-											<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span><pg:message code="sany.pdp.common.operation.search"/></span></a>
-											<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span><pg:message code="sany.pdp.common.operation.reset"/></span></a>
+											<a href="javascript:void(0)" class="bt_1" id="queryButton" onclick="queryList()"><span>查询</span></a>
+											<a href="javascript:void(0)" class="bt_2" id="resetButton" onclick="doreset()"><span>重置</span></a>
 											
 										
 				<a href="javascript:void(0)" class="bt_small" id="delAllButton"><span>清空应用下Session</span></a>
@@ -440,7 +448,7 @@ function delAllSessions () {
 			</div>
 					
 			<strong><span id="titileSpan">Session列表</span></strong>
-			<img id="wait" src="<%=request.getContextPath()%>/common/images/wait.gif" />				
+			<img id="wait" src="<%=request.getContextPath()%>/include/images/wait.gif" />				
 		</div>
 			
 		<div id="sessionContainer" style="overflow:auto"></div>

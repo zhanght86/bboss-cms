@@ -1,6 +1,6 @@
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <br>
 <pg:empty actual="${message }" evalbody="true">
 	<pg:yes>
@@ -13,13 +13,13 @@
 
 				<table border="0" cellpadding="0" cellspacing="0" class="table4">
 					<tr>
-						<th width="60"><strong>appcode:</strong></th>
-						<td width="300"><pg:cell colName="appcode" /></td>
+						<th width="150"><strong>appcode:</strong></th>
+						<td width="400"><pg:cell colName="appcode" /></td>
 
 					</tr>
 					<tr>
-						<th width="60"><strong>session失效扫描进程:</strong></th>
-						<td width="300" colspan="2"><pg:true colName="startLifeScan"
+						<th width="150"><strong>失效session销毁进程:</strong></th>
+						<td width="400" colspan="2"><pg:true colName="startLifeScan"
 								evalbody="true">
 								<pg:yes>
 									<strong><font color="green">开启</font></strong>
@@ -34,21 +34,21 @@
 
 					</tr>
 					<tr>
-						<th width="60"><strong>sessionscaninterval(单位 毫秒):</strong></th>
-						<td width="300"><pg:cell colName="sessionscaninterval" /></td>
+						<th width="150"><strong>失效session扫描时间间隔(单位 毫秒):</strong></th>
+						<td width="400"><pg:cell colName="sessionscaninterval" /></td>
 
 					</tr>
 					<tr>
 
 
-						<th width="100"><strong>失效session扫描进程开启时间:</strong></th>
+						<th width="150"><strong>失效session扫描进程开启时间:</strong></th>
 						<td width="150" colspan="2"><pg:cell colName="scanStartTime"
 								dateformat="yyyy-MM-dd HH:mm:ss" /></td>
 
 					</tr>
 					<tr>
-						<th width="60"><strong>sessionTimeout(单位：毫秒):</strong></th>
-						<td width="300"><pg:cell colName="sessionTimeout" /></td>
+						<th width="150"><strong>sessionTimeout(单位：毫秒):</strong></th>
+						<td width="400"><pg:cell colName="sessionTimeout" /></td>
 
 
 
@@ -57,8 +57,8 @@
 
 					<tr>
 
-						<th width="100"><strong>cookiename:</strong></th>
-						<td width="150"><pg:cell colName="cookiename" /></td>
+						<th width="150"><strong>cookiename:</strong></th>
+						<td width="400"><pg:cell colName="cookiename" /></td>
 
 
 
@@ -66,19 +66,19 @@
 
 
 					<tr>
-						<th width="60"><strong>配置保存时间:</strong></th>
-						<td width="300"><pg:cell colName="createTime"
+						<th width="150"><strong>配置保存时间:</strong></th>
+						<td width="400"><pg:cell colName="createTime"
 								dateformat="yyyy-MM-dd HH:mm:ss" /></td>
 
 					</tr>
 					<tr>
-						<th width="60"><strong>配置更新时间:</strong></th>
+						<th width="150"><strong>配置更新时间:</strong></th>
 						<td width="300"><pg:cell colName="updateTime"
 								dateformat="yyyy-MM-dd HH:mm:ss" /></td>
 
 					</tr>
 					<tr>
-						<th width="60"><strong>httpOnly:</strong></th>
+						<th width="150"><strong>httpOnly:</strong></th>
 						<td width="300"><pg:true colName="httpOnly" evalbody="true">
 								<pg:yes>
 									<strong><font color="green">开启</font></strong>
@@ -90,8 +90,8 @@
 
 					</tr>
 					<tr>
-						<th width="60"><strong>secure:</strong></th>
-						<td width="300"><pg:true colName="secure" evalbody="true">
+						<th width="150"><strong>secure:</strong></th>
+						<td width="400"><pg:true colName="secure" evalbody="true">
 								<pg:yes>
 									<strong><font color="green">开启</font></strong>
 								</pg:yes>
@@ -102,24 +102,71 @@
 
 					</tr>
 					<tr>
-						<th width="60"><strong>sessionStore:</strong></th>
-						<td width="300"><pg:cell colName="sessionStore" /></td>
+						<th width="150"><strong>sessionStore:</strong></th>
+						<td width="400"><pg:cell colName="sessionStore" /></td>
 
 					</tr>
 					<tr>
-						<th width="60"><strong>sessionListeners:</strong></th>
-						<td width="300"><pg:cell colName="sessionListeners" /></td>
+						<th width="150"><strong>sessionListeners:</strong></th>
+						<td width="400"><pg:cell colName="sessionListeners" /></td>
 
 					</tr>
-
-					<tr>
-						<th width="60"><strong>监控查询属性:</strong></th>
-						<td width="300"><pg:cell colName="monitorAttributes" /></td>
-
-					</tr>
+					
 
 				</table>
 			</fieldset>
+			<pg:notempty colName="extendAttributeInfos" >
+			 <br>
+					<legend>
+						<strong>Session管理-可查询属性:</strong>
+					</legend>
+					
+					
+					 
+						<table width="100%" border="0" cellpadding="0" cellspacing="0"
+						class="stable" id="tb">
+							<tr>
+
+							<th>属性名称</th>
+
+
+							<th>属性中文名称</th>
+							
+							<th>属性类型</th>
+							
+							<th>like查询</th>
+							
+							<th>启用空值查询</th>
+							
+							<th>启用属性索引</th>
+
+
+						</tr>
+						<pg:list colName="extendAttributeInfos" >
+						<tr>
+
+							<td><pg:cell colName="name" /></td>
+
+
+							<td><pg:cell colName="cname" /></td>
+							
+							<td><pg:cell colName="type" /></td>
+							
+							<td><pg:cell colName="like" /></td>
+							
+							<td><pg:cell colName="enableEmptyValue" /></td>
+							
+							<td><pg:cell colName="useIndex" /></td>
+
+
+						</tr>
+						</pg:list>
+						</table>
+						
+					 
+					
+				  <br>
+				</pg:notempty>
 		</pg:beaninfo>
 		<pg:notempty requestKey="crossDomain">
 			<pg:beaninfo requestKey="crossDomain">
@@ -129,21 +176,21 @@
 					</legend>
 					<table border="0" cellpadding="0" cellspacing="0" class="table4">
 						<tr>
-							<th width="60"><strong>rootDomain:</strong></th>
-							<td width="300"><pg:cell colName="rootDomain" /></td>
+							<th width="150"><strong>rootDomain:</strong></th>
+							<td width="400"><pg:cell colName="rootDomain" /></td>
 
 						</tr>
 						<tr>
-							<th width="60"><strong>path:</strong></th>
-							<td width="300" colspan="2"><pg:cell colName="path" /></td>
+							<th width="150"><strong>path:</strong></th>
+							<td width="400" colspan="2"><pg:cell colName="path" /></td>
 
 
 
 
 						</tr>
 						<tr>
-							<th width="60"><strong>shareSessionAttrs :</strong></th>
-							<td width="300"><pg:cell colName="shareSessionAttrs" /></td>
+							<th width="150"><strong>shareSessionAttrs :</strong></th>
+							<td width="400"><pg:cell colName="shareSessionAttrs" /></td>
 
 						</tr>
 

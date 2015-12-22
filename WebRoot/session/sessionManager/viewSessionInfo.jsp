@@ -1,13 +1,14 @@
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ page language="java" pageEncoding="UTF-8"%>
-<%@ include file="/common/jsp/importtaglib.jsp"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Session详情</title>
-<%@ include file="/common/jsp/css.jsp"%>
-<script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lhgdialog.js?self=false&skin=sany"></script>
+<script type='text/javascript' src='<%=request.getContextPath() %>/include/jquery-1.4.2.min.js' language='JavaScript'></script>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/include/css/common.css">
+ 
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/include/syntaxhighlighter/styles/SyntaxHighlighter.css"></link>
 <script language="javascript" src="${pageContext.request.contextPath}/include/syntaxhighlighter/shCore.js"></script>
 <script language="javascript" src="${pageContext.request.contextPath}/include/syntaxhighlighter/shBrushJava.js"></script>
@@ -101,9 +102,7 @@
 		</div>
   	</div>	
   		
-	<div class="btnarea" >
-		<a href="javascript:void(0)" class="bt_2" id="closeButton" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
-	</div>	
+	
 </div>
 </body>
 <script type="text/javascript">
