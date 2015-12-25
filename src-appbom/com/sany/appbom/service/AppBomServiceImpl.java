@@ -135,7 +135,7 @@ public class AppBomServiceImpl {
 	public ListInfo queryListInfoBean(long offset, int pagesize, AppBomCondition appcondition ) throws AppBomException{
 		ListInfo datas=null;
 		try{
-			datas=executor.moreListInfoBean(AppBom.class,"queryListAppBom", offset, pagesize, appcondition);
+			datas=executor.queryListInfoBean(AppBom.class,"queryListAppBom", offset, pagesize, appcondition);
 		}catch(Exception e){
 			throw new AppBomException("pagine query appbom failed:",e);
 		}

@@ -41,10 +41,10 @@
        		<th><pg:message code="sany.appbom.softTool"/></th>
        		<th><pg:message code="sany.pdp.common.operation"/></th>
        	</pg:header>	
-      <pg:list>
-
+      <pg:list loopvar="i" rowcountvar="total" pagesizevar="pagesize" offsetvar="offset" var="bom">
+		
    		<tr onDblClick="viewBom('<pg:cell colName="id" />')">
-   		        <td class="td_center">
+   		        <td class="td_center"> i:${i } ,total:${total },pagesize:${pagesize },offset:${offset },bom:${bom.bm }
                     <input id="CK" type="checkbox" name="CK" onClick="checkOne('CKA','CK')" value="<pg:cell colName="id" />"/>
                     <input id="id" type="hidden" name="id" value="<pg:cell colName="id" />"/></td>
                 <td><pg:rowid increament="1" offset="false"/><pg:cell colName="bm"/></td>
