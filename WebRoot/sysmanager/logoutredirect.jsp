@@ -11,7 +11,7 @@
 	* 同时用户还可指定退出的目的窗口，如果没有指定就退出到top窗口
 	*/	
 		String referer = request.getParameter(AuthenticateFilter.referpath_parametername); // REFRESH
-	
+		String failedbackpath = request.getParameter(AuthenticateFilter.failedbackpath_parametername); // REFRESH
 	String redirect = request.getParameter("_redirectPath");//"http://172.16.17.26:9080";
 	if(redirect == null || redirect.trim().equals(""))
 	{

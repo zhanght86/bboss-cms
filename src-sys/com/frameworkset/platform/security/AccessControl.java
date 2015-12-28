@@ -828,6 +828,20 @@ public class AccessControl implements AccessControlInf{
 					ret = StringUtil.getRealPath(request.getContextPath(), systemid,true);
 				}
 			}
+			else
+			{
+				String defaultvalue = StringUtil.getRealPath(request.getContextPath(),pathloginPage,true);
+				ret = AccessControl.getCookieValue(request, current_logoutredirect_cookie);
+				if(!StringUtil.isEmpty(ret))
+				{
+					 if(ret.indexOf(TokenStore.temptoken_param_name_word) > 0)
+						 ret = defaultvalue;				 
+				}
+				else
+				{
+					ret = defaultvalue;	
+				}
+			}
 			if(ret != null && appendToken)
 			{
 				
