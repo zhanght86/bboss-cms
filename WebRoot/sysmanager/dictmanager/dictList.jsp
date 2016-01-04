@@ -123,14 +123,14 @@
 	<head>
 		<title>属性容器</title>
 		<script language="javascript" src="../scripts/selectTime.js"></script>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
+		 
 		<script language="JavaScript" src="../user/common.js" type="text/javascript"></script>
-		<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
+	 
 		<script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
 		<script language="javascript" src="js/checkUnique.js"></script>
 		<script language="JavaScript"
 			src="<%=request.getContextPath()%>/public/datetime/calender_date.js"></script>
-		<script language="javascript" src="../scripts/selectTime.js"></script>	
+	 
   
 <SCRIPT language="javascript">
 	var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");
@@ -170,8 +170,8 @@
 	    var outMsg;
 		var selecet_value = "";   
 		//var arr = document.getElementsByName("dictDataId");
-		var arr = document.frames[0].document.getElementsByName("dictDataId");
-		document.all("queryString").value = document.frames[0].document.all("queryString").value;
+		var arr = window.frames[0].document.getElementsByName("dictDataId");
+		document.all("queryString").value = window.frames[0].document.getElementsByName("queryString").value;
 	    for (var i=0;i<arr.length;i++) {
 			if (arr[i].checked){
 		       	isSelect=true;
@@ -443,8 +443,8 @@
 	
 	//修改
 	function advance_EditDict(){
-		var obj=document.frames[0].document.getElementsByName("dictDataId");
-		var queryString = document.frames[0].document.all("queryString").value;
+		var obj=window.frames[0].document.getElementsByName("dictDataId");
+		var queryString = window.frames[0].document.getElementsByName("queryString").value;
 		var checkValue = "";
 		var n = 0;
 		var win = "";

@@ -227,11 +227,8 @@
 						}
 					}
 				
-				var tablesFrame = document.getElementsByName("orgUserList");
-				tablesFrame[0].src = "org_userlistIframe.jsp?orgId=<%=curOrgId%>&intervalType="+intervalType+"&userSex="+userSex
-								+"&userRealname="+encodeURIComponent(userRealname)+"&userName="+userName+"&userIsvalid="+userIsvalid+"&userType="+userType;
-				//userList.action="org_userlist.jsp?orgId=<%=curOrgId%>&intervalType="+intervalType;
-				//userList.submit();	
+				
+				userList.submit();	
 			}
 			function querytype(e){
 			    queryUser();
@@ -529,7 +526,7 @@
 			</div>
 			<div class="mcontent">
 			
-			<form name="userList" method="post" >
+			<form name="userList" id="userList" method="post" action="org_userlistIframe.jsp" target="orgUserList">
 				<input type="hidden" name="orgId" value="<%=curOrgId%>"/>
 			<div id="searchblock">
 	  <div  class="search_top">
