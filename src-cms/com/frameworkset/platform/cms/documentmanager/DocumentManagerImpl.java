@@ -969,7 +969,8 @@ public class DocumentManagerImpl implements DocumentManager {
 				String createTimeEnd = request.getParameter("createTimeEnd");
 				String content = request.getParameter("content");
 				
-			 
+			 if(StringUtil.isEmpty(channelid))
+				 return null;
 			
 				 
 				final DateFormat format =  DataFormatUtil.getSimpleDateFormat(request, "yyyy-MM-dd HH:mm:ss");
@@ -4475,17 +4476,21 @@ public class DocumentManagerImpl implements DocumentManager {
 	 */
 	public boolean creatorDocRelated(DocRelated d) throws DocumentManagerException {
 		boolean flag = false;
-		DBUtil db = new DBUtil();
-		String sql = "insert into TD_CMS_DOC_RELATED(DOC_ID,RELATED_DOC_ID,OP_USER_ID,OP_TIME) " + "values("
-				+ d.getDocId() + "," + d.getRelatedDocId() + "," + d.getOpUserId() + ",sysdate)";
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = "insert into TD_CMS_DOC_RELATED(DOC_ID,RELATED_DOC_ID,OP_USER_ID,OP_TIME) values(?,?,?,?)";
 		try {
 			// System.out.println(sql);
-			db.executeInsert(sql);
+			db.preparedInsert(sql);
+			db.setInt(1, d.getDocId());
+			db.setInt(2, d.getRelatedDocId());
+			db.setInt(3, d.getOpUserId());
+			db.setDate(4, new Date());
+			db.executePrepared();
+			
 			flag = true;
 		} catch (Exception e) {
-			System.out.println("error:新增文档的相关文档时出错！");
-			e.printStackTrace();
-			throw new DocumentManagerException(e.getMessage());
+		
+			throw new DocumentManagerException(e.getMessage(),e);
 		}
 		return flag;
 	}
@@ -4503,10 +4508,12 @@ public class DocumentManagerImpl implements DocumentManager {
 				creatorDocRelated(d);
 			}
 			flag = true;
-		} catch (Exception e) {
-			System.out.println("error:批量新增文档的相关文档时出错！");
-			e.printStackTrace();
-			throw new DocumentManagerException(e.getMessage());
+		} catch (DocumentManagerException e) {
+			
+			throw   e;
+		}catch (Exception e) {
+			
+			throw new DocumentManagerException(e.getMessage(),e);
 		}
 		return flag;
 	}

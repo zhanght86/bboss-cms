@@ -1,8 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" import="java.util.List"%>
 <%@ page import="com.frameworkset.platform.cms.sitemanager.*,com.frameworkset.platform.cms.documentmanager.*"%>
 <%@ page import="com.frameworkset.platform.security.*"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
-<%@ include file="../../sysmanager/base/scripts/panes.jsp"%>
+
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
@@ -15,22 +14,25 @@
 	response.setDateHeader("Expires", -1);  
 	response.setDateHeader("max-age", 0);
 
-	String channelName = request.getParameter("channelName");
+	
 	String siteid = request.getParameter("siteid");
+	
 	String channelId = request.getParameter("channelId");
+	String channelName = channelId != null?SiteCacheManager.getInstance().getChannelCacheManager(siteid).getChannel(channelId).getName():"";
 	String flag = request.getParameter("flag");
 	SiteManager siteManager = new SiteManagerImpl();
-	String sitename = siteManager.getSiteInfo(siteid).getName();
+	String rootpath = request.getContextPath();
+	String sitename = SiteCacheManager.getInstance().getSite(siteid).getName();
 %>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link href="../inc/css/cms.css" rel="stylesheet" type="text/css">
-		<link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/treeview.css">
+
 		<link rel="stylesheet" type="text/css" href="<%=rootpath%>/sysmanager/css/windows.css">
 		<title>内容管理主框架</title>
 <script src="../inc/js/func.js"></script>
-<script language="JavaScript" src="../../sysmanager/include/pager.js" type="text/javascript"></script>
+
 <script language="javascript">
 	var arr = new Array();
 	var channelId = <%=channelId%>;
@@ -113,7 +115,7 @@
 			<input type="hidden" name="chlName" value="<%=channelName%>"/>
 			<table width="100%" border="0" align=center cellpadding="3" cellspacing="0" id="docListTable" class="Datalisttable">
 				
-				<pg:listdata dataInfo="SelectDocList" keyName="SelectDocList" />
+				<pg:listdata dataInfo="com.frameworkset.platform.cms.documentmanager.tag.SelectDocList" keyName="SelectDocList" />
 				<!--分页显示开始,分页标签初始化-->
 				<pg:pager maxPageItems="10" scope="request" data="SelectDocList" isList="false">
 					<tr class="cms_report_tr">
