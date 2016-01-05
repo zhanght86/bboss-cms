@@ -155,6 +155,10 @@ public class SSOControler {
             language = RequestContextUtils.getLocaleResolver(request).resolveLocaleCode(request);
 
         }
+        else
+        {
+        	RequestContextUtils.getLocaleResolver(request).setLocale(request, response, language);
+        }
         model.addAttribute("language", language);
 
         /*
