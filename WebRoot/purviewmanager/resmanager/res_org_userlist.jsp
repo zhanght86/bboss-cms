@@ -15,7 +15,8 @@
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.entity.RoleresopKey"%>
 <%@page import="java.util.Map"%>
-
+<%@page import="com.frameworkset.platform.sysmgrcore.entity.Organization"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager"%>
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
 <%
@@ -24,7 +25,8 @@
 	OrgAdministratorImpl orgAdministratorImpl = new OrgAdministratorImpl();
 	String curOrgId = accessControl.getChargeOrgId(); 
 	String orgId=request.getParameter("orgId");
-	
+	Organization org = orgId != null?OrgCacheManager.getInstance().getOrganization(orgId):null;
+	String orgname = org != null?org.getOrgName():"";
 	//所选机构是否是当前用户所属机构
 	boolean isCurOrg = curOrgId.equals(orgId);
 
@@ -165,7 +167,7 @@
 			%>
 	<div class="title_box">
 	<strong>
-			<%=request.getParameter("resName")==null?"":request.getParameter("resName")%>&nbsp;<pg:message code="sany.pdp.workflow.user.list"/>
+			<%=orgname%>&nbsp;<pg:message code="sany.pdp.workflow.user.list"/>
 	</strong>
 	<%}%>
 	</div>
@@ -175,11 +177,7 @@
 				  scope="request"  
 				  data="OrgSubUserList" 
 				  isList="false">
-				  <pg:equal actual="${OrgSubUserList.itemCount}" value="0" >
-						<div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:equal> 
-					<pg:notequal actual="${OrgSubUserList.itemCount}"  value="0">
+				   
 					<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 			      <pg:header>
 			      <!--设置分页表头-->
@@ -306,7 +304,7 @@
 			     	}
 			     %>
 		</div>	
-	</pg:notequal>
+	 
 		</pg:pager>
 	<iframe name="saveHidden" width="0" height="0"></iframe>
 </form>	

@@ -1,3 +1,5 @@
+<%@page import="com.frameworkset.platform.sysmgrcore.entity.Organization"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
 <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
@@ -28,7 +30,7 @@
 	String roleid = request.getParameter("resId");
 	
 	String role_type = "organization";
-	String orgname = request.getParameter("resName");
+
 
 	String title = request.getParameter("title");
 	
@@ -38,7 +40,8 @@
 	if(resid == null){
 		resid = (String)request.getAttribute("resid");
 	}
-	
+	Organization org = OrgCacheManager.getInstance().getOrganization(roleid);
+	String orgname = org != null?org.getOrgName():"";
 	OperManager operManager = SecurityDatabase.getOperManager();
 	ResourceManager resManager = new ResourceManager();
 	String isGlobal=request.getParameter("isGlobal");

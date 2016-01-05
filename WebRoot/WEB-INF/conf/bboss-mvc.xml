@@ -49,7 +49,7 @@
      />-->
      
     <property name="localeResolver" class="org.frameworkset.web.servlet.i18n.CookieLocaleResolver"
-     f:cookielocalkey="cookie.localkey"   defaultLanguage="zh_CN"
+     f:cookielocalkey="cookie.localkey"   f:defaultLanguage="zh_CN"
      />
      
     
