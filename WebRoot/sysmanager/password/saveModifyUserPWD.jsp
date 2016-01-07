@@ -18,7 +18,6 @@
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
 <%	   
-		System.out.println("hello");
       	String loginName = StringUtil.replaceNull(request.getParameter("loginName"));
       	String passWord    = StringUtil.replaceNull(request.getParameter("passWord"));
       	AccessControl accesscontroler = AccessControl.getInstance();
@@ -41,12 +40,13 @@
 	            <%
 	            return;
             }
-            OrgManager orgManager = SecurityDatabase.getOrgManager();
-	        Organization org = orgManager.getMainOrganizationOfUser(loginName);
-	      	String orgId = org.getOrgId();
-	      	List  secondOrgs = null;
+            
 	      	 if(!accesscontroler.isAdmin())
 	      	 {
+	      		OrgManager orgManager = SecurityDatabase.getOrgManager();
+		        Organization org = orgManager.getMainOrganizationOfUser(loginName);
+		      	
+		      	List  secondOrgs = null;
 		      	if(org == null)
 		      	{
 					secondOrgs = orgManager.getSecondOrganizationsOfUser(loginName);
@@ -76,6 +76,7 @@
 		      	}
 		      	else
 		      	{
+		      		String orgId = org.getOrgId();
 		           
 	            	if(! new OrgAdministratorImpl().userAdminOrg(accesscontroler.getUserID(),orgId)){
 		      			orgAdmin = RequestContextUtils.getI18nMessage("sany.pdp.personcenter.person.password.modfiy.fail.noadmin.begin", request) + loginName + RequestContextUtils.getI18nMessage("sany.pdp.personcenter.person.password.modfiy.fail.noadmin.end", request);

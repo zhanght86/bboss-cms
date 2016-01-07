@@ -7,8 +7,8 @@
 	<property name="sessionManager" class="org.frameworkset.security.session.impl.SessionManager"
 		init-method="init" destroy-method="destroy">		
 			<property name="sessionTimeout" value="600000"/>
-			 <!--<property name="sessionstore" refid="attr:sessionstore"/> -->
-			<property name="sessionstore" value="session"/>-->
+			 <property name="sessionstore" refid="attr:sessionstore"/> 
+			<!--<property name="sessionstore" value="session"/>-->
 			<property name="cookiename" value="b_sessionid"/>			
 			<property name="httpOnly" value="true"/>
 			<property name="secure" value="false"/>
