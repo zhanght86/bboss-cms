@@ -7,8 +7,7 @@
 <%@ page import="com.frameworkset.platform.cms.driver.publish.*"%>
 <%@ page import="com.frameworkset.platform.cms.util.CMSUtil"%>
 <%
-		AccessControl accesscontroler = AccessControl.getInstance();
-		accesscontroler.checkAccess(request, response);
+		AccessControl accesscontroler = AccessControl.getAccessControl();
 		int userId = Integer.parseInt(accesscontroler.getUserID());
 
 		

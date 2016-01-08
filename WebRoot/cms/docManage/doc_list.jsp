@@ -86,7 +86,12 @@ try
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 		<script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
 
-		<script language="javascript"> 	
+		<script language="javascript">
+		var form1;
+		$(document).ready(function(){ 
+			form1 = document.getElementById("form1");
+			
+		});  
 	//新增文档
 	function adddoc(url, channelName,height,width) {
 		
@@ -104,15 +109,18 @@ try
 	}
 	//送审、提交发布、归档、撤销送审操作，传来的参数分别为送审、提交发布、归档、撤销送审(针对单个文档操作)
 	function operateDoc(operType,docId){
-		var tagetJsp = "<%=request.getContextPath()%>/cms/docManage/operate_doc.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&operType="+operType+"&docId="+docId;	    
+		var tagetJsp = "<%=request.getContextPath()%>/cms/docManage/operate_doc.jsp?docId="+docId;
+		$("#operType").val(operType);
 	    form1.action=tagetJsp;
 	    form1.target="operIframe";
 		form1.submit();
 	}
 	//对送审以及提交发布进行批量操作
 	function operateDocs(operType){
+		
 		if(haveSelect('ID')){
-			var tagetJsp = "<%=request.getContextPath()%>/cms/docManage/operate_doc.jsp?siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>&operType="+operType;	    
+			var tagetJsp = "<%=request.getContextPath()%>/cms/docManage/operate_doc.jsp";
+			$("#operType").val(operType);
 		    form1.action=tagetJsp;
 		    form1.target="operIframe";
 			form1.submit();
@@ -592,13 +600,18 @@ try
     	</div--> 
            
          
-		<form name="form1" action="" method="post">
+		<form name="form1" id="form1" action="" method="post">
             <input type="hidden" name="uuid">
             <input type="hidden" name="isRecordValue">
             <input type="hidden" name="recursionPublish">
             <input type="hidden" name="clearCache">
-            <input type="hidden" name="url">
+            <input type="hidden" name="url">            
             <input type="hidden" name="expzipname" value=""><!-- 指定文档导出name-->
+            <input type="hidden" name="siteid" value="<%=siteid%>">
+            <input type="hidden" name="channelName" value="<%=channelName%>">
+            <input type="hidden" name="channelId" value="<%=channelId%>">
+            <input type="hidden" name="operType" id="operType">
+            
 			<table width="100%" border="1" align=center cellpadding="3" cellspacing="0" bordercolor="#B7CBE4"  class="Datalisttable" id="docListTable">
 				<tr>
 					<td height='25' colspan="13" background="<%=request.getContextPath()%>/cms/images/data_list_tHeadbg.jpg" style="text-align:left; background:url(<%=request.getContextPath()%>/cms/images/data_list_tHeadbg.jpg) repeat-y center #B7BDD7">
