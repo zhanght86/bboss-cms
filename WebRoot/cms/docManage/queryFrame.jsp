@@ -59,10 +59,10 @@
 		//form1.reset();
 	}
 	//默认光标停留在文档标题输入框
-	function document.onreadystatechange(){
+	$(document).ready(function(){  
 		if (document.readyState!="complete") return;
 		document.all.form1.title.focus();
-	}
+	  });  
 	function advancedQuery(){
 		$.secutiry.dosubmit("form1",
 				"<%=rootpath%>/cms/docManage/advancedQueryFrame.jsp?siteid=<%=siteid%>&channelName=<%=channelname%>&channelId=<%=channelId%>",

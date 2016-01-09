@@ -293,9 +293,9 @@ try
 		if(haveSelect('ID')){
 			var zipname = window.prompt("请输入指定的导出文件名，不指定将使用系统默认值！","在这输入指定的导出文件名");
 			if(zipname != null && zipname != "")
-				form1.expzipname.value = zipname;
+				$("#expzipname").val(zipname);
 			
-			form1.action="<%=request.getContextPath()%>/cms/docManage/doc_export.jsp?siteid=<%=siteid%>&docids=" + docidStr;
+			form1.action="<%=request.getContextPath()%>/cms/docManage/doc_export.jsp?docids=" + docidStr;
 	        form1.target="operIframe";
 			form1.submit();
 			//打开模态窗口选择目的频道
@@ -547,11 +547,11 @@ try
 		var flag = <%=request.getParameter("orderByHit")%>;
 		if(flag==true)
 		{
-			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByHit=false&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>"
+			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByHit=false"
 		}
 		else
 		{
-			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByHit=true&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>"
+			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByHit=true"
 		}
 		form1.target="forDocList";
 		form1.submit();	
@@ -563,11 +563,11 @@ try
 		var flag = <%=request.getParameter("orderByDocWtime")%>;
 		if(flag==true)
 		{
-			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByDocWtime=false&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>"
+			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByDocWtime=false"
 		}
 		else
 		{
-			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByDocWtime=true&siteid=<%=siteid%>&channelName=<%=channelName%>&channelId=<%=channelId%>"
+			form1.action="<%=rootpath%>/cms/docManage/doc_list.jsp?flag=query&orderByDocWtime=true"
 		}
 		form1.target="forDocList";
 		form1.submit();	
@@ -606,7 +606,7 @@ try
             <input type="hidden" name="recursionPublish">
             <input type="hidden" name="clearCache">
             <input type="hidden" name="url">            
-            <input type="hidden" name="expzipname" value=""><!-- 指定文档导出name-->
+            <input type="hidden" name="expzipname" id="expzipname" value=""><!-- 指定文档导出name-->
             <input type="hidden" name="siteid" value="<%=siteid%>">
             <input type="hidden" name="channelName" value="<%=channelName%>">
             <input type="hidden" name="channelId" value="<%=channelId%>">

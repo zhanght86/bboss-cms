@@ -8,14 +8,26 @@
 *######################################
 */
 
-var sCurrMode = null;
-var bEditMode = null;
-var oLinkField = null;
+var sCurrMode_ ;
+var bEditMode ;
+var oLinkField;
 
-var BrowserInfo = new Object() ;
-BrowserInfo.MajorVer = navigator.appVersion.match(/MSIE (.)/)[1] ;
-BrowserInfo.MinorVer = navigator.appVersion.match(/MSIE .\.(.)/)[1] ;
-BrowserInfo.IsIE55OrMore = BrowserInfo.MajorVer >= 6 || ( BrowserInfo.MajorVer >= 5 && BrowserInfo.MinorVer >= 5 ) ;
+(function($) {
+    function _BrowserInfo() {
+    	
+    	 var MajorVer = navigator.appVersion.match(/MSIE (.)/)[1] ;
+    	var MinorVer = navigator.appVersion.match(/MSIE .\.(.)/)[1] ;
+    	var IsIE55OrMore = MajorVer >= 6 || ( MajorVer >= 5 && MinorVer >= 5 ) ;
+        var BrowserInfo = this;
+        BrowserInfo.MajorVer = MajorVer;
+        BrowserInfo.MinorVer = MinorVer;
+        BrowserInfo.IsIE55OrMore = IsIE55OrMore;
+       
+    }
+    $.BrowserInfo =  new _BrowserInfo();
+    
+})(jQuery);
+BrowserInfo = $.BrowserInfo;
 config.IsSP2 = (navigator.userAgent.indexOf("SV1") != -1);
 
 window.onresize = initWidths;
@@ -23,7 +35,7 @@ window.onresize = initWidths;
 var yToolbars = new Array();
 
 var bInitialized = false;
-function document.onreadystatechange(){
+$(document).ready(function(){ 
 	if (document.readyState!="complete") {return;}
 	if (bInitialized) {return;}
 	bInitialized = true;
@@ -39,7 +51,7 @@ function document.onreadystatechange(){
 		}
 	}
 
-	if (!BrowserInfo.IsIE55OrMore){
+	if (!$.BrowserInfo.IsIE55OrMore){
 		config.InitMode = "TEXT";
 	}
 	
@@ -52,7 +64,7 @@ function document.onreadystatechange(){
 
 	setMode(ModeEdit.value);
 	setLinkedField() ;
-}
+});
 
 function getSpecialLinkFieldAspx(s_Tag){
 	var els = parent.document.getElementsByTagName(s_Tag);
@@ -277,7 +289,7 @@ function AttachSubmit() {
 	
 	var html = getHTML();
 	ContentEdit.value = html;
-	if (sCurrMode=="TEXT"){
+	if (sCurrMode_=="TEXT"){
 		html = HTMLEncode(html);
 	}
 	splitTextField(oLinkField, html);
@@ -303,12 +315,12 @@ function onHelp(){
 }
 
 function onPaste() {
-	if (sCurrMode=="VIEW") {return false;}
+	if (sCurrMode_=="VIEW") {return false;}
 	if (!history.saved){saveHistory();}
 
-	if (sCurrMode=="EDIT"){
+	if (sCurrMode_=="EDIT"){
 		var sHTML = GetClipboardHTML() ;
-		if ((config.AutoDetectPasteFromWord=="1") && BrowserInfo.IsIE55OrMore) {
+		if ((config.AutoDetectPasteFromWord=="1") && $.BrowserInfo.IsIE55OrMore) {
 			var re = /<\w[^>]* class="?MsoNormal"?/gi ;
 			if ( re.test(sHTML)){
 				if ( confirm("你要粘贴的内容好象是从Word中拷出来的，是否要先清除Word格式再粘贴？") ){
@@ -396,7 +408,7 @@ function onKeyDown(event){
 	}
 
 
-	switch(sCurrMode){
+	switch(sCurrMode_){
 	case "VIEW":
 		return true;
 		break;
@@ -579,7 +591,7 @@ function insertHTML(html) {
 	if (eWebEditor.document.selection.type.toLowerCase() != "none"){
 		eWebEditor.document.selection.clear() ;
 	}
-	if (sCurrMode!="EDIT"){
+	if (sCurrMode_!="EDIT"){
 		html=HTMLEncode(html);
 	}
 	eWebEditor.document.selection.createRange().pasteHTML(html) ; 
@@ -588,7 +600,7 @@ function insertHTML(html) {
 
 function setHTML(html, b_NotSaveHistory) {
 	ContentEdit.value = html;
-	switch (sCurrMode){
+	switch (sCurrMode_){
 	case "CODE":
 		eWebEditor.document.designMode="On";
 		eWebEditor.document.open();
@@ -654,12 +666,12 @@ function setHTML(html, b_NotSaveHistory) {
 
 function getHTML() {
 	var html;
-	if((sCurrMode=="EDIT")||(sCurrMode=="VIEW")){
+	if((sCurrMode_=="EDIT")||(sCurrMode_=="VIEW")){
 		html = eWebEditor.document.body.innerHTML;
 	}else{
 		html = eWebEditor.document.body.innerText;
 	}
-	if (sCurrMode!="TEXT"){
+	if (sCurrMode_!="TEXT"){
 		if ((html.toLowerCase()=="<p>&nbsp;</p>")||(html.toLowerCase()=="<p></p>")){
 			html = "";
 		}
@@ -669,7 +681,7 @@ function getHTML() {
 
 function appendHTML(html) {
 	if(isModeView()){return false;}
-	if(sCurrMode=="EDIT"){
+	if(sCurrMode_=="EDIT"){
 		eWebEditor.document.body.innerHTML += html;
 	}else{
 		eWebEditor.document.body.innerText += html;
@@ -680,7 +692,7 @@ function PasteWord(){
 	if(!validateMode()){return;}
 	eWebEditor.focus();
 	if (!history.saved){saveHistory();}
-	if(BrowserInfo.IsIE55OrMore){
+	if($.BrowserInfo.IsIE55OrMore){
 		cleanAndPaste( GetClipboardHTML() ) ;
 		saveHistory();
 	}else if(confirm("此功能要求IE5.5版本以上，你当前的浏览器不支持，是否按常规粘贴进行？")){
@@ -700,14 +712,14 @@ function PasteText(){
 }
 
 function validateMode() {
-	if(sCurrMode=="EDIT"){return true;}
+	if(sCurrMode_=="EDIT"){return true;}
 	alert("需转换为编辑状态后才能使用编辑功能！");
 	eWebEditor.focus();
 	return false;
 }
 
 function isModeView(){
-	if (sCurrMode=="VIEW"){
+	if (sCurrMode_=="VIEW"){
 		alert("预览时不允许设置编辑区内容。");
 		return true;
 	}
@@ -991,9 +1003,9 @@ function VerifyFocus() {
 }
 
 function setMode(NewMode){
-	if (NewMode==sCurrMode){return;}
+	if (NewMode==sCurrMode_){return;}
 
-	if (!BrowserInfo.IsIE55OrMore){
+	if (!$.BrowserInfo.IsIE55OrMore){
 		if ((NewMode=="CODE") || (NewMode=="EDIT") || (NewMode=="VIEW")){
 			alert("HTML编辑模式需要IE5.5版本以上的支持！");
 			return false;
@@ -1001,7 +1013,7 @@ function setMode(NewMode){
 	}
 
 	if (NewMode=="TEXT"){
-		if (sCurrMode==ModeEdit.value){
+		if (sCurrMode_==ModeEdit.value){
 			if (!confirm("警告！切换到纯文本模式会丢失您所有的HTML格式，您确认切换吗？")){
 				return false;
 			}
@@ -1009,7 +1021,7 @@ function setMode(NewMode){
 	}
 
 	var sBody = "";
-	switch(sCurrMode){
+	switch(sCurrMode_){
 	case "CODE":
 		if (NewMode=="TEXT"){
 			eWebEditor_Temp_HTML.innerHTML = eWebEditor.document.body.innerText;
@@ -1047,7 +1059,7 @@ function setMode(NewMode){
 	catch(e){
 		}
 	
-	sCurrMode = NewMode;
+	sCurrMode_ = NewMode;
 	ModeEdit.value = NewMode;
 	setHTML(sBody);
 	disableChildren(eWebEditor_Toolbar);
@@ -1376,7 +1388,7 @@ function findParentElement(tag) {
 }
 
 function sizeChange(size){
-	if (!BrowserInfo.IsIE55OrMore){
+	if (!$.BrowserInfo.IsIE55OrMore){
 		alert("此功能需要IE5.5版本以上的支持！");
 		return false;
 	}
@@ -1505,8 +1517,8 @@ function splitTextField(objField, html) {
 var sEventUploadAfter;
 function remoteUpload(strEventUploadAfter) { 
 	if (config.AutoRemote!="1") {return;}
-	if (sCurrMode=="TEXT") {return;}
-	alert(config.AutoRemote + "|" + sCurrMode + "|" +  sEventUploadAfter);
+	if (sCurrMode_=="TEXT") {return;}
+	alert(config.AutoRemote + "|" + sCurrMode_ + "|" +  sEventUploadAfter);
 	sEventUploadAfter = strEventUploadAfter;
 	var objField = document.getElementsByName("eWebEditor_UploadText")[0];
 	splitTextField(objField, getHTML());
@@ -1616,7 +1628,7 @@ function setHistoryCursor() {
 				r.select();
 			}
 		}else{
-			if (sCurrMode=="EDIT"){
+			if (sCurrMode_=="EDIT"){
 				r = eWebEditor.document.body.createControlRange();
 				var a = s_Bookmark.split("|");
 				var els = eWebEditor.document.body.getElementsByTagName(a[1]);
@@ -1629,7 +1641,7 @@ function setHistoryCursor() {
 }
 
 function getStyleEditorHeader(){
-	if ((sCurrMode=="EDIT") || (sCurrMode=="VIEW")){
+	if ((sCurrMode_=="EDIT") || (sCurrMode_=="VIEW")){
 		return config.StyleEditorHeader1 + sExtCSS + config.StyleEditorHeader2;
 	}else{
 		return config.StyleEditorHeader1 + config.StyleEditorHeader2;

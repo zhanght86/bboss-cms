@@ -34,7 +34,7 @@ if (sExtCSS){
 
 document.write ("<title>eWebEditor</title>");
 document.write ("<link href='css/" + config.CssDir + "/editor.css' type='text/css' rel='stylesheet'>");
-
+document.write ("<script type='text/javascript' src='js/jquery-1.4.2.min.js'><\/script>");
 document.write ("<script type='text/javascript' src='js/editor.js'><\/script>");
 document.write ("<script type='text/javascript' src='js/table.js'><\/script>");
 document.write ("<script type='text/javascript' src='js/menu.js'><\/script>");

@@ -2337,7 +2337,7 @@ public class DocumentManagerImpl implements DocumentManager {
 		String sql = "";
 		try {
 			sql = "select user_id,user_realname from TD_sm_user where user_id "
-					+ " in(select op_user from td_cms_doc_ver where document_id =" + docid + ") ";
+					+ " in(select op_user from td_cms_doc_ver where document_id =?) ";
 			dbUtil.preparedSelect(sql);
 			dbUtil.setInt(1, Integer.parseInt(docid));
 			dbUtil.executePrepared();

@@ -8,7 +8,6 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 <jsp:useBean id="date" scope="page" class="net.fiyu.edit.TimeStamp"/>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
 
 <%
 	response.setHeader("Cache-Control", "no-cache"); 
@@ -118,7 +117,6 @@ import="java.util.*,java.text.SimpleDateFormat,java.util.StringTokenizer"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/html/js/dialog/lan/lhgdialog_<pg:locale/>.js"></script>
 
 
-<script src="<%=request.getContextPath()%>/cms/inc/js/killerror.js"></script>
 
 <script type="text/javascript" src="<%=request.getContextPath()%>/public/datetime/calender.js" language="javascript"></script>
 <style type="text/css">
