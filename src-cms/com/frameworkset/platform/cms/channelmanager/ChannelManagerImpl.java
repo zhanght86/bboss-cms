@@ -1888,17 +1888,13 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	 * @throws ChannelManagerException
 	 */
 	public boolean hasSetDetailTemplate(String channalId) throws ChannelManagerException {
-		String sql = "select a.site_id as site_id, b.templatefilename as templatefilename,b.templatepath as templatepath "
-				+ "from td_cms_channel a "
-				+ "inner join td_cms_template b "
-				+ "on a.DETAIL_TPL_ID = b.template_id and b.type = '2' "
-				+ "where to_char(a.channel_id)='"
-				+ channalId
-				+ "'";
-		DBUtil db = new DBUtil();
+		String sql = "select a.site_id as site_id, b.templatefilename as templatefilename,b.templatepath as templatepath  from td_cms_channel a  inner join td_cms_template b  on a.DETAIL_TPL_ID = b.template_id and b.type = '2'  where a.channel_id=?";
+		PreparedDBUtil db = new PreparedDBUtil();
 		SiteManager sm = new SiteManagerImpl();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(channalId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				String templatefilename = db.getString(0, "templatefilename");
 				String templatepath = db.getString(0, "templatepath");
@@ -1927,12 +1923,12 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 	 * @throws ChannelManagerException
 	 */
 	public boolean hasSetOutlineTemplate(String channalId) throws ChannelManagerException {
-		String sql = "select 1 from td_cms_channel a " + "inner join td_cms_template b "
-				+ "on a.OUTLINE_TPL_ID = b.template_id and b.type = '1' " + "where to_char(a.channel_id)='" + channalId
-				+ "'";
-		DBUtil db = new DBUtil();
+		String sql = "select 1 from td_cms_channel a  inner join td_cms_template b  on a.OUTLINE_TPL_ID = b.template_id and b.type = '1' where a.channel_id=?";
+		PreparedDBUtil db = new PreparedDBUtil();
 		try {
-			db.executeSelect(sql);
+			db.preparedSelect(sql);
+			db.setInt(1, Integer.parseInt(channalId));
+			db.executePrepared();
 			if (db.size() > 0) {
 				return true;
 			}

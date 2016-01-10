@@ -399,7 +399,11 @@ public class DocumentController {
 		String siteId= request.getParameter("siteid");
 		String chnlId = request.getParameter("channelId");
 		CustomFormManagerImpl ci = new CustomFormManagerImpl();
-		doc.setChanel_id(Integer.parseInt(request.getParameter("channelId")));
+		if(docid != null && !docid.equals(""))
+		{
+			doc.setDocument_id(Integer.parseInt(docid));
+		}
+		doc.setChanel_id(Integer.parseInt(chnlId));
 		doc.setUser_id(Integer.parseInt(request.getParameter("userid")));
 		doc.setCreateUser(Integer.parseInt(request.getParameter("userid")));
 		doc.setTitle(request.getParameter("title"));

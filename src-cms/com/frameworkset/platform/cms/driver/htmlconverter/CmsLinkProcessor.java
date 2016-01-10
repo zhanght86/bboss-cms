@@ -1852,7 +1852,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 				/**
 				 * 如果链接已经替换过了，就不需要再替换了
 				 */
-				if(!cmslink.isHanded())
+				if(cmslink != null && !cmslink.isHanded())
 				{
 					styleCode = StringUtil.replaceAll(styleCode,urls[i],cmslink.getHref());
 					cmslink.setHanded(true);					
@@ -3728,7 +3728,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 		/**
 		 * 样式附件提取正则表达式模式
 		 */
-		private static final String URL_PATTERN = "\\s*url\\s*\\(([^\\)]+)\\)";
+		private static final String URL_PATTERN = "\\s*url\\s*\\(\"?([^\\^\")]+)\"?\\)";
 		/**
 		 * 传递需要分析和处理的脚本，只需分析提取其中包含的链接信息，无需更新和修改
 		 * @param code
@@ -5639,6 +5639,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 		String href= "../../hbj/images/help_03.gif";
 		String origin = "images/help_03.gif";
 		String code = "background:url(images/help_03.gif) no-repeat center";
+		String[] urls = RegexUtil.containWithPatternMatcherInput(code,"\\s*url\\s*\\(\"?([^\\^\")]+)\"?\\)");
 		System.out.println(StringUtil.replaceAll(code,origin,href));
 	}
 
