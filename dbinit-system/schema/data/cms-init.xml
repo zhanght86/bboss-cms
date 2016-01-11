@@ -1001,12 +1001,7 @@ from td_cms_document a
 						<list>
 							 
 							
-							<property index="5"><![CDATA[								
-								CREATE FUNCTION nvl(condParam  varchar(50),defaultParam  varchar(50)) RETURNS varchar(50)  NOT DETERMINISTIC 
-								BEGIN
-								  return IFNULL(condParam,defaultParam);
-								END;
-							]]></property>
+							
 						</list>
 					</property>
 					<property name="default">

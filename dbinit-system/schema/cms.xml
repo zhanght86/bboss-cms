@@ -276,7 +276,7 @@
         <column name="KEYWORDS" size="500" type="VARCHAR"/>
         <column name="DOCABSTRACT" size="2000" type="VARCHAR"/>
         <column name="DOCTYPE" required="true" size="22" type="DECIMAL"/>
-        <column name="DOCWTIME" required="true" type="TIMESTAMP"/>
+        <column name="DOCWTIME" required="false" type="TIMESTAMP"/>
         <column name="TITLECOLOR" size="7" type="VARCHAR"/>
         <column name="CREATETIME" required="true" type="TIMESTAMP"/>
         <column name="CREATEUSER" required="true" size="10" type="DECIMAL"/>

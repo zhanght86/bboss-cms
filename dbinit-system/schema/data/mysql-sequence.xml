@@ -75,7 +75,7 @@
 						-->
 						<property index="3" action="create"><![CDATA[
                  CREATE FUNCTION nextval(seq_name varchar(100)) 
-                                RETURNS bigint(20) NOT DETERMINISTIC 
+                                RETURNS bigint(20)NOT DETERMINISTIC 
                            BEGIN
                                 DECLARE cur_val bigint(20);                                
                                 INSERT INTO `sequence_data` (`sequence_name`) VALUES(seq_name) ON DUPLICATE KEY UPDATE `sequence_cur_value` = LAST_INSERT_ID(`sequence_cur_value` + 1);                                
@@ -83,6 +83,12 @@
                                 RETURN cur_val; 
                            END
                                    ]]></property>
+                                   <property index="5"><![CDATA[								
+								CREATE FUNCTION nvl(condParam  varchar(50),defaultParam  varchar(50)) RETURNS varchar(50)  NOT DETERMINISTIC 
+								BEGIN
+								  return IFNULL(condParam,defaultParam);
+								END;
+							]]></property>
 						</list>
 					</property>
 				</map>
