@@ -146,8 +146,7 @@ function sub(){
 }
 
 function reset_(){
-	document.getElementById("getopergroup").location.href = "../user/resChange.jsp?restypeId=";
-
+	$("#operategroup").load( "../user/resChangeAjax.jsp?restypeId=");
 	$("#reset").click();
 }
 
