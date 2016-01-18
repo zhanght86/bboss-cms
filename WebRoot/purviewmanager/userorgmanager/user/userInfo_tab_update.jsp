@@ -100,11 +100,11 @@
 	<head>
 		<title>用户[<%=userRealName%>]基本信息</title>
 	    <tab:tabConfig />
-	    <script language="JavaScript" src="../../scripts/calender_date.js" ></script>
+	
 		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
-		<script language="javascript" src="../../scripts/selectTime.js"></script>
+ 
 		<script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
-		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 
@@ -265,19 +265,19 @@ function queryroleRes(name)
 			<tr>
 				<th><pg:message code="sany.pdp.user.login.name"/>：</th>						
 				<td height="25">
-					<input type="text" name="userName" onchange="checkUser()" value="<pg:cell colName="userName"  defaultValue=""/>"  cnname="登陆名" disabled="true" >
+					<input type="text" id="userName" name="userName" onchange="checkUser()" value="<pg:cell colName="userName"  defaultValue=""/>"  cnname="登陆名" disabled="true" >
 					<span class="STYLE1">*</span>				
 				</td>
 				<th><pg:message code="sany.pdp.user.real.name"/>：</th>					
 				<td height="25">
-					<input type="text" name="userRealname" value="<pg:cell colName="userRealname"  defaultValue=""/>"  cnname="真实名称" maxlength="100"><span class="STYLE1">*</span>
+					<input type="text" id="userRealname" name="userRealname" value="<pg:cell colName="userRealname"  defaultValue=""/>"  cnname="真实名称" maxlength="100"><span class="STYLE1">*</span>
 				</td>											  
 			</tr>
 			
 			<tr>						
 				<th> <pg:message code="sany.pdp.password"/>：</th>
 				<td height="25">
-					<input type="password" name="userPassword" readonly  value="<pg:cell colName="userPassword"  defaultValue="123456"/>"  cnname="口令"  maxlength="40"><span class="STYLE1">*<pg:message code="sany.pdp.default.password"/>&nbsp;123456</span>
+					<input type="password" id="userPassword" name="userPassword" readonly  value="<pg:cell colName="userPassword"  defaultValue="123456"/>"  cnname="口令"  maxlength="40"><span class="STYLE1">*<pg:message code="sany.pdp.default.password"/>&nbsp;123456</span>
 				</td>
 				<th><pg:message code="sany.pdp.identity.card"/>：</th>
 					<td height="25">
@@ -288,7 +288,7 @@ function queryroleRes(name)
 			
 			<tr><th><pg:message code="sany.pdp.company.telephone"/>：</th>					
 				<td height="25">
-					<input type="text" name="userWorktel" value="<pg:cell colName="userWorktel"  defaultValue=""/>"   cnname="单位电话" maxlength="13"></td>
+					<input type="text" id="userWorktel" name="userWorktel" value="<pg:cell colName="userWorktel"  defaultValue=""/>"   cnname="单位电话" maxlength="13"></td>
 				<th> <pg:message code="sany.pdp.sex"/>：</td>
 				<td height="25">					  					    
 				<%if("1".equals(request.getParameter("userId"))){%>
@@ -301,29 +301,29 @@ function queryroleRes(name)
 			
 			<tr><th> <pg:message code="sany.pdp.family.telephone"/>：</th>
 				<td height="25">
-							<input type="text" name="homePhone" value="<pg:cell colName="userHometel"  defaultValue=""/>"  cnname="家庭电话" maxlength="13"></td>				
+							<input type="text" id="homePhone" name="homePhone" value="<pg:cell colName="userHometel"  defaultValue=""/>"  cnname="家庭电话" maxlength="13"></td>				
 				<th> <pg:message code="sany.pdp.email"/>：</th>
 				<td height="25">
-							<input type="text" name="mail" value="<pg:cell colName="userEmail"  defaultValue=""/>"  cnname="电子邮件" maxlength="40"></td>
+							<input type="text" id="mail" name="mail" value="<pg:cell colName="userEmail"  defaultValue=""/>"  cnname="电子邮件" maxlength="40"></td>
 				
 			</tr>
 			
 			<tr>
 				<th> <pg:message code="sany.pdp.moblie.telephone"/>1：</th>
 				<td height="25">
-							<input type="text" name="mobile" value="<pg:cell colName="userMobiletel1"  defaultValue=""/>" cnname="移动电话" maxlength="13"></td>
+							<input type="text" id="mobile" name="mobile" value="<pg:cell colName="userMobiletel1"  defaultValue=""/>" cnname="移动电话" maxlength="13"></td>
 				<th> <pg:message code="sany.pdp.moblie.telephone"/>1<pg:message code="sany.pdp.address"/>：</th>
 				<td height="25">
-							<input type="text" name="remark4" value="<pg:cell colName="remark4"  defaultValue=""/>"  cnname="移动电话1归属地" maxlength="100"></td>
+							<input type="text" id="remark4" name="remark4" value="<pg:cell colName="remark4"  defaultValue=""/>"  cnname="移动电话1归属地" maxlength="100"></td>
 				
 			</tr>
 			
 			<tr><th> <pg:message code="sany.pdp.moblie.telephone"/>2：</th>
 				<td height="25">
-					<input type="text" name="userMobiletel2" value="<pg:cell colName="userMobiletel2"  defaultValue=""/>" validator="phone" cnname="移动电话2" maxlength="13"></td>
+					<input type="text" id="userMobiletel2" name="userMobiletel2" value="<pg:cell colName="userMobiletel2"  defaultValue=""/>" validator="phone" cnname="移动电话2" maxlength="13"></td>
 				<th> <pg:message code="sany.pdp.moblie.telephone"/>2<pg:message code="sany.pdp.address"/>：</th>
 				<td height="25">
-							<input type="text" name="remark5" value="<pg:cell colName="remark5"  defaultValue=""/>" validator="stringNull" cnname="移动电话2归属地" maxlength="100"></td>
+							<input type="text" id="remark5" name="remark5" value="<pg:cell colName="remark5"  defaultValue=""/>" validator="stringNull" cnname="移动电话2归属地" maxlength="100"></td>
 				
 		   </tr>
 		   <tr>
@@ -369,7 +369,7 @@ function queryroleRes(name)
 							 <pg:message code="sany.pdp.birthday"/>：
 						</th>
 						<td height="25">
-							<input type="text" name="userBirthday" onclick="showdate(document.all('userBirthday'))" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />" validator="stringNull" cnname="生日" maxlength="40">
+							<input type="text" name="userBirthday" class="Wdate" onclick="WdatePicker()" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />" validator="stringNull" cnname="生日" maxlength="40">
 						</td>
 						<th>
 							  <pg:message code="sany.pdp.user.address"/>：

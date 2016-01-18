@@ -13,14 +13,12 @@
 
 
 <tab:tabConfig />
-<script language="JavaScript" src="<%=request.getContextPath()%>/public/datetime/calender_date.js" ></script>
-<script language="JavaScript" src="../common.js" type="text/javascript"></script>
-<script language="javascript" src="../../../sysmanager/scripts/selectTime.js"></script>
-<SCRIPT language="JavaScript" SRC="validateForm.js"></SCRIPT>
+
+
 		
 <link rel="stylesheet" type="text/css" href="../../../sysmanager/css/contentpage.css">
 <link rel="stylesheet" type="text/css" href="../../../sysmanager/css/tab.winclassic.css">
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <style type="text/css">
 	.notice_STYLE{color: #FF0000;display : none }
     .STYLE1 {color: #FF0000}

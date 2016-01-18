@@ -26,13 +26,10 @@
 <html>
 <head>
 	<tab:tabConfig />
-		<script language="JavaScript" src="<%=request.getContextPath()%>/public/datetime/calender_date.js" ></script>
-		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
-		<script language="javascript" src="../../scripts/selectTime.js"></script>
-		<SCRIPT language="JavaScript" SRC="../../../include/validateForm.js"></SCRIPT>
+		 
 <%@ include file="/include/css.jsp"%>
-		<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
-		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		 
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<style type="text/css">
 		    .notice_STYLE{color: #FF0000;display : none }
 	        .STYLE1 {color: #FF0000}
