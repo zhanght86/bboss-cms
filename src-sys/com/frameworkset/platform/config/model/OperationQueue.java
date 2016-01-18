@@ -17,7 +17,7 @@ import java.util.List;
  * @version 1.0
  */
 public class OperationQueue implements java.io.Serializable {
-    private List queue = new ArrayList();
+    private List<Operation> queue = new ArrayList<Operation>();
     
   
 
@@ -59,7 +59,7 @@ public class OperationQueue implements java.io.Serializable {
         return queue.size();
     }
 
-    public List<String> getList()
+    public List<Operation> getList()
     {
         return this.queue;
     }

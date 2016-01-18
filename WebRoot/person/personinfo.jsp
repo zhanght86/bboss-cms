@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.entity.*"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl
 				,com.frameworkset.platform.config.ConfigManager"%>
-<%@ include file="/common/jsp/importtaglib.jsp"%>
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
@@ -19,8 +18,7 @@
 %>
 				
 <%
-	AccessControl accesscontroler = AccessControl.getInstance();
-    accesscontroler.checkAccess(request,response);
+	AccessControl accesscontroler = AccessControl.getAccessControl();
     
     String userId = accesscontroler.getUserID();
     
@@ -57,13 +55,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<script language="JavaScript"
-	src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js"
-	type="text/javascript"></script>
-<script language="javascript" src="../scripts/selectTime.js"></script>
-<script language="JavaScript" src="../include/pager.js"
-	type="text/javascript"></script>
-<script src="../inc/js/func.js"></script>
+
+
 <script language="JavaScript">
 function ReSizeiFrame(iframe)
 {
@@ -215,7 +208,7 @@ function storeUser()
 										<th><pg:message code="sany.pdp.personcenter.person.birthday"/></th>
 										<td><input type="text" name="userBirthday"
 											value="<pg:cell colName="userBirthday" defaultValue="" />"
-											onclick="showdate(document.all('userBirthday'))"
+											class="Wdate" onclick="WdatePicker()"
 											readonly="true" labelClass="label" class="w_70">
 										</td>
 										<th><pg:message code="sany.pdp.personcenter.person.address"/></th>

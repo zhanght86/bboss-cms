@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.UserManager" %>
@@ -152,9 +152,7 @@
 	<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="98%" height="98%">
 	    <tr>
 		    <td bgcolor=#3A6EA5>
-			    <marquee align="middle" behavior="alternate" scrollamount="5">
 				    <font color=#FFFFFF>...处理中...请等待...</font>
-				</marquee>
 			</td>
 		</tr>
 	</table>

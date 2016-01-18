@@ -6,7 +6,7 @@
 <%@ page import="java.sql.Date" %>
 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
@@ -71,6 +71,7 @@
 			user.setUserWorktel(request.getParameter("userWorktel"));
 			user.setUserFax(request.getParameter("userFax"));
 			user.setUserOicq(request.getParameter("userOicq"));
+			user.setUserWorknumber(request.getParameter("userWorknumber"));
 			
 			if (request.getParameter("userBirthday") != null && !request.getParameter("userBirthday").equals(""))
 			{

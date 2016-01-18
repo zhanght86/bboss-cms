@@ -2548,7 +2548,7 @@ nocache
   				WORKLENGTH,POLITICS,ISTAXMANAGER,LOGON_IP,CERT_SN)
 				values
   				(1,1,'admin','E10ADC3949BA59ABBE56E057F20F883E','系统管理员',' ','M',' ',
-  				' ','1',' ',' ',' ',' ',null,
+  				' ','0',' ',' ',' ',' ',null,
   				' ',' ',' ',' ',2,null,null,
   				'0',' ',' ',' ',' ',' ',null,' ',null,
   				' ',' ',null,' ',' ')]]></property>

@@ -4,7 +4,7 @@
 <%@ page import="com.frameworkset.platform.security.AccessControl
 				,com.frameworkset.platform.config.ConfigManager"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.resource.ResourceManager"%>
 
 <%
@@ -37,8 +37,6 @@ String typeName = request.getParameter("typeName");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>    
  <title>权限资源查询</title>
-<script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js" type="text/javascript"></script>		
-<script language="JavaScript" src="../include/pager.js" type="text/javascript"></script>
 <SCRIPT language="javascript">
 
 function isUserRes(){
@@ -148,7 +146,7 @@ function sub(){
 }
 
 function reset_(){
-	getopergroup.location.href = "../user/resChange.jsp?restypeId=";
+	document.getElementById("getopergroup").location.href = "../user/resChange.jsp?restypeId=";
 
 	$("#reset").click();
 }
@@ -172,7 +170,7 @@ function del(){
 }
 
 function getOperateType(){
-		getopergroup.location.href = "../user/resChange.jsp?restypeId="+document.all.restypeId.value;
+	$("#operategroup").load( "../user/resChangeAjax.jsp?restypeId="+document.all.restypeId.value);
 }
 
 function change(){
@@ -219,11 +217,8 @@ function chooseorgjob()
 	}
 }
 
-//F1
-	function window.onhelp(){  
-	  chooseorgjob();
-	  return false;
-	}
+
+	
 </SCRIPT>
 <style>
 </style>
@@ -300,7 +295,7 @@ function chooseorgjob()
       							</tr>
       							<tr>
       								<th><pg:message code="sany.pdp.personcenter.person.res.name"/>：</th>
-      								<td><input type="text" name="resName" class="w120"/></td>
+      								<td><input type="text" id="resName" name="resName" class="w120"/></td>
       								<th><pg:message code="sany.pdp.personcenter.person.res.type"/>：</th>
       								<td>
       									<select class="select" id="restypeId" name="restypeId" onChange="getOperateType()" class="w120">
@@ -349,8 +344,8 @@ function chooseorgjob()
 	</div>
 </div>
 
-<iframe id="getopergroup" src="" border="0" height="0" width="0"></iframe>
-<iframe id="delop" src="" border="0" height="0" width="0"></iframe>
+<iframe id="getopergroup" name="getopergroup" border="1" height="100" width="100"></iframe>
+<iframe id="delop" name="delop"  border="0" height="0" width="0"></iframe>
 </body>
 
 </html>
