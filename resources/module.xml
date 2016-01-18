@@ -61,12 +61,8 @@
 		<publicitem name="首页" 
 			i18n:en_US="Index" 	
 			id="indexpage" main="true">
-			<mouseupimg i18n:en_US="sysmanager/itemicon/bbs_enabled.gif" >sysmanager/itemicon/bbs_enabled.gif</mouseupimg>
 			<mouseclickimg>html/images/date_work.jpg</mouseclickimg>
-			<mouseoverimg>sysmanager/itemicon/bbs_highlighted.gif
-			</mouseoverimg>
-			<mouseoutimg>sysmanager/itemicon/bbs_enabled.gif</mouseoutimg>
-			<headimg>sysmanager/itemicon/bbs_enabled.gif</headimg>
+			
 			<top>headersimple.page</top>
 			<!--<left>perspective_outlookbar.jsp</left> -->
 			<workspace>
@@ -77,11 +73,11 @@
 
 			</workspace>
 			<authoration>				 
-				 	<!--<url>/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
-				 		 	
-				 	<url>/sysmanager/resmanager/delRedundance.jsp</url>
+				 	<url>/sysmanager/resmanager/res_query.jsp,/sysmanager/user/userres_querylist.jsp</url>
+				 	<url>/sysmanager/resmanager/delRedundance.jsp,/sysmanager/password/saveModifySelfPWD.jsp,/sysmanager/password/modifySelfPassword.jsp</url>
 				 	<url>/sysmanager/user/userres_querylist.jsp</url>
-				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>-->				 
+				 	<url>/sysmanager/resmanager/res_queryframe.jsp</url>	
+				 	<url>/sysmanager/user/resChangeAjax.jsp</url>					 	
 			</authoration>
 		</publicitem>
 		<module name="统一待办" 
