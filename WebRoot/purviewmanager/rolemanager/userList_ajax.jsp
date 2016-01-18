@@ -116,7 +116,7 @@
 				   		}
 				   		var flag2 = false;
 				   		for(var j = 0; j < existuser.length; j++){
-				   			if(op.text==existuser.options[j].text){
+				   			if(op.text==existuser[j].text){
 				   				flag2 = true;
 				   			}
 				   		}

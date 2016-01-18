@@ -115,15 +115,16 @@
 		    winOpen = window.open("about:blank","win","scrollbars=no,status=no,titlebar=no,toolbar=no,z-lock=yes,width=616,height=500,top=130,left=210");                   
 		    document.all.form2.target = "win";
 		    document.all.form2.action = "user_order_ajax.jsp?orgId=<%=curOrgId%>";
-		    timer = window.setInterval("isClosed()",500);
+		  //  timer = window.setInterval("isClosed()",500);
 		    document.all.form2.submit();
+		    isClosed();
 		}
 		var timer;
 		function isClosed(){
-		    if(winOpen.closed==true){
+		   
 		        window.location.href = window.location;
-		        window.clearInterval(timer);
-		    }
+		       
+		   
 		}
 		
 		<!-- gao.tang 2007.11.05 start 右键菜单跳转路径  -->
@@ -173,7 +174,7 @@
 		function roleGrant(userId){
 			//机构下的用户角色授予
 			var url="${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/changeRole_ajax.jsp?userId="+ userId + "&orgId=<%=curOrgId%>";
-			$.dialog({title:'<pg:message code="sany.pdp.role.setting"/>',width:760,height:560, content:'url:'+url,lock: true});
+			$.dialog({close:isClosed,title:'<pg:message code="sany.pdp.role.setting"/>',width:760,height:560, content:'url:'+url,lock: true});
 		}
 		
 		function resGrant(userId){
@@ -233,7 +234,7 @@
 
 
 
-	<form name="userList" method="post">
+	<form name="userList" id="userList" method="post">
 		<input type="hidden" name="orgId" value="<%=curOrgId%>" />
    		<div id="changeColor">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table3">

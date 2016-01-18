@@ -21,6 +21,7 @@
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.GroupManager"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.entity.Group"%>
+<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%
 	AccessControl control = AccessControl.getInstance();
 	control.checkManagerAccess(request,response);
@@ -36,8 +37,8 @@
 	<head>
 		<title>【<%=groupName%>】用户组添加隶属用户</title>
 	</head> 
-	<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
-	<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>	
+
+	<%@ include file="/common/jsp/css-lhgdialog.jsp"%>	
 	<frameset name="frame1" cols="20%,80%" frameborder="no" border="0" framespacing="0" >
 	  <frame src="orgTree.jsp" name="orgTree" id="orgTree" />
 	  <frame src="userList_ajax.jsp" name="userList" scrolling="No" noresize="noresize" id="orgList" />

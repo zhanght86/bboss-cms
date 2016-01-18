@@ -79,17 +79,18 @@ public class OrgTree extends COMTree implements Serializable {
                 			treeName = sonorg.getRemark5();
                 		}
                     }
-                    
+                	String encodeOrgName = java.net.URLEncoder.encode(treeName,"UTF-8");
                     Map map = new HashMap();
                     map.put("orgId", orgId);
                     map.put("resId", orgId);                    
-                	map.put("resName", treeName);
+                	map.put("resName", encodeOrgName);
                 	map.put("displayNameInput", displayNameInput);
                 	map.put("displayValueInput", displayValueInput);
+                
                 	if (accessControl.isOrganizationManager(orgId) ||
                 			accessControl.isAdmin()) {
                         addNode(father, orgId, treeName.trim(),
-                            "org", true, curLevel, orgId+":"+treeName,
+                            "org", true, curLevel, orgId+":"+encodeOrgName,
                             orgId+":"+treeName, (String) null, map);
                     } else {
                         if (super.accessControl.isSubOrgManager(orgId)) {
