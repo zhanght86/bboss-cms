@@ -101,8 +101,7 @@
 		<title>用户[<%=userRealName%>]基本信息</title>
 	    <tab:tabConfig />
 	
-		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
- 
+		
 		<script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
 		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

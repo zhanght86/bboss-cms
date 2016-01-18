@@ -26,7 +26,7 @@
 <%@page import="com.frameworkset.platform.sysmgrcore.purviewmanager.GenerateServiceFactory,java.util.*"%>
 				 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
@@ -202,8 +202,7 @@
 	<head>
 		<title>新增用户</title>
 		
-		<script type="text/javascript" src="../../../html/js/commontool.js"></script>
-		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
+		
 		<script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
 		
         <script language="JavaScript">
@@ -213,7 +212,7 @@
         	}else{
         		api = parent.frameElement.api,W = api.opener;
         	}
-			var jsAccessControl = new JSAccessControl("#ff0000","#ffffff","#eeeeee");
+			 
 			var reFlush = "<%=reFlush%>";
 			var userErr = 0;
 				
@@ -535,7 +534,7 @@
 					<tr>
 						<th><pg:message code="sany.pdp.birthday"/>：</th>
 						<td height="25">
-							<input type="text" name="userBirthday" onclick="showdate(document.all('userBirthday'))" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />" validator="stringNull" cnname="生日" maxlength="40">
+							<input type="text" name="userBirthday" class="Wdate" onclick="WdatePicker()" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />" validator="stringNull" cnname="生日" maxlength="40">
 						</td>
 						<th><pg:message code="sany.pdp.user.address"/>：</th>
 						<td height="25">
