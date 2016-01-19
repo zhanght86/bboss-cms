@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="../../sysmanager/include/global1.jsp"%>
+
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree" %>
 
 <%
@@ -15,7 +15,7 @@
 	String resName2 = request.getParameter("resName2");
 	String isBatch = request.getParameter("isBatch");
 	String path = "res_org_userlist.jsp?resId2=" + resId2 + "&resTypeId2=" + resTypeId2 + "&resTypeName=" + resTypeName + "&title=" + title+"&resName2="+resName2+"&isBatch="+isBatch;
-	
+	String rootpath = request.getContextPath();
 %>
 <html>
 <head>
@@ -30,7 +30,6 @@ function neworg()
 	openWin("new_org.jsp",520,400);
 }
 </script>
-<script src="../inc/js/func.js"></script>
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/treeview.css">
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/contentpage.css">
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/tab.winclassic.css">

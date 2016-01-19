@@ -334,7 +334,7 @@
 			function operUser(type) 
 			{
 			    var arr = new Array();
-			    arr = document.frames[0].document.getElementsByName("checkBoxOne");
+			    arr = window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
 			    var checks = "";
 			    var count = 0;
 			    for(var i = 0; i < arr.length; i++)

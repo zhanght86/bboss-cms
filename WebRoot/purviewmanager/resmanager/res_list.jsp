@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@page import="com.frameworkset.platform.config.ConfigManager,com.frameworkset.platform.config.model.*"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl,com.frameworkset.platform.resource.*"%>
 <%
 	response.setHeader("Cache-Control", "no-cache"); 
@@ -31,20 +31,17 @@
 <html>
 	<head>
 		<title>资源列表</title>
-<script language="JavaScript" src="common.js" type="text/javascript"></script>
 <script src="../scripts/func.js"></script>
 <script language="JavaScript" src="<%=rootpath%>/sysmanager/resmanager/common.js" type="text/javascript"></script>
  
 <script type="text/javascript" src="<%=rootpath%>/html/js/commontool.js"></script>
 <SCRIPT language="javascript">	
-var jsAccessControl = new JSAccessControl("#DAE0E9","#F6F8FB","#F6F8FB");
+ 
 function getResDetail(e,resId,resTypeId,resTypeName,title)
 {
 	
 	document.all("selectId").value = resId;
-	if (jsAccessControl.setBackColor(e)){
-	//	getPropertiesToolbar().location.href="properties_toolbar.jsp?resId2="+resId+"&resTypeId2="+resTypeId+"&resTypeName="+resTypeName+"&title="+title;
-	}
+	 
 }
 	
 function dealRecord(dealType) {

@@ -17,7 +17,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>监控</title>
 <%@ include file="/include/css.jsp"%>
-		<script src="../inc/js/func.js"></script>
+
 		<script type="text/javascript">
 		function openUrl(url){
 			window.open(url);

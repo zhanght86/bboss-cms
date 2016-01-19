@@ -149,8 +149,7 @@
 			    
 			    parent.alertfun(msg,"<pg:message code='sany.pdp.common.alert'/>");
 				parent.document.all.divProcessing.style.display = "none";
-				parent.document.all.button1.disabled = false;
-				parent.document.all.button2.disabled = false;
+				
 				parent.document.all.exit.disabled = false;
 			</script> 	
 <%	

@@ -11,10 +11,7 @@
 <html>
 <head>
 <title>组织机构树</title>
-<script language="javascript">
-
-</script>
-<script src="../inc/js/func.js"></script>
+ 
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/treeview.css">
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/contentpage.css">
 <link rel="stylesheet" type="text/css" href="../../sysmanager/css/tab.winclassic.css">

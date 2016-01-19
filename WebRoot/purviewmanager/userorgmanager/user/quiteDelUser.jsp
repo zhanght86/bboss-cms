@@ -12,10 +12,7 @@
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
-<%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<script type="text/javascript" src="../../../include/jquery-1.4.2.min.js"></script>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.UserManager,
 				com.frameworkset.platform.sysmgrcore.manager.LogManager,
 				com.frameworkset.platform.sysmgrcore.manager.OrgManager,

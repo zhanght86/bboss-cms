@@ -7,7 +7,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.OperManager,com.frameworkset.platform.resource.ResourceManager"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
@@ -54,12 +54,9 @@
  <title>用户列表</title>
  <script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/jobmanager/common.js" type="text/javascript"></script>		
  <script src="<%=request.getContextPath()%>/cms/inc/js/func.js"></script>
- <script language="JavaScript" src="<%=request.getContextPath()%>/sysmanager/include/pager.js" type="text/javascript"></script>
- <script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../../html/js/commontool.js"></script>
-<script type="text/javascript" src="../../html/js/dialog/lhgdialog.js?self=false"></script>	
+ 
  <SCRIPT language="javascript">
- 	var api = frameElement.api, W = api.opener;
+ 	var api = frameElement.api;
 	
 	var http_request = false;
 	//初始化，指定处理的函数，发送请求的函数
@@ -83,7 +80,7 @@
 			}
 		}
 		if(!http_request){
-			W.$.dialog.alert("<pg:message code='sany.pdp.no.httprequest'/>");
+			alert("<pg:message code='sany.pdp.no.httprequest'/>");
 			return false;
 		}
 		http_request.onreadystatechange = processRequest;
@@ -97,22 +94,22 @@
 				//alert(http_request.responseText);
 			}
 			else{
-				W.$.dialog.alert("<pg:message code='sany.pdp.server.error'/>");
+				alert("<pg:message code='sany.pdp.server.error'/>");
 			}
 		}
 	}
 	
 	function saveRoleresop(obj){
 		var roleIdAndOpId = obj.value;
-		W.$.dialog.alert(roleIdAndOpId);
+		alert(roleIdAndOpId);
 		var arr = roleIdAndOpId.split(":");
 		var roleId = arr[0];
 		var opid = arr[1]; 
 		if(obj.checked){
 			send_request("saveRoleresop.jsp?check=1&types=user&opid="+opid+"&resId=<%=resId2%>&roleId="+roleId+"&restypeId=<%=resTypeId2%>&resName=<%=resName2%>");
-			W.$.dialog.alert('<pg:message code="sany.pdp.common.operation.choose"/>');
+			alert('<pg:message code="sany.pdp.common.operation.choose"/>');
 		}else{
-			W.$.dialog.alert('<pg:message code="sany.pdp.common.operation.cancel"/>');
+			alert('<pg:message code="sany.pdp.common.operation.cancel"/>');
 			send_request("saveRoleresop.jsp?check=0&types=user&opid="+opid+"&resId=<%=resId2%>&roleId="+roleId+"&restypeId=<%=resTypeId2%>&resName=<%=resName2%>");
 		}
 	}
