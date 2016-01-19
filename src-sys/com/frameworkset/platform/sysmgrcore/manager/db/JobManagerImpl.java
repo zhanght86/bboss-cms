@@ -929,7 +929,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			throws ManagerException {
 		boolean state = false;
 
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		if (jobId != null && roleids != null && roleids.length > 0
 				&& !jobId.equals("")) {
 			StringBuffer sql_b = new StringBuffer();

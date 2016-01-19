@@ -12,7 +12,7 @@
  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.security.AccessControl" %>
 <%@ page import="com.frameworkset.util.StringUtil
 				,com.frameworkset.platform.security.AccessControl
@@ -407,8 +407,8 @@
 		</form>
 		<script type="text/javascript" language="JavaScript">
 			function parentFrame(){
-				parent.frames[0].document.all("jobId").disabled = false;
-				parent.frames[0].document.all.divProcessing.style.display="none";
+				//parent.frames[0].document.all("jobId").disabled = false;
+				//parent.frames[0].document.all.divProcessing.style.display="none";
 				//parent.frames[0].document.all("jobId").focus();
 			}
 		</script>

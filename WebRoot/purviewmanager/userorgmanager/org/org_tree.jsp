@@ -167,7 +167,7 @@ function addOrgSon(orgId,orgName)
 function changeOrgJob(orgId,orgName)
 {
 	//openWin("userjoborg.jsp?orgId=" + orgId + "&orgName=" + orgName,1000,600);
-	$.dialog({ close:reloadparenthref,title:'<pg:message code="sany.pdp.role.organization.job.setting"/>',width:740,height:560, content:'url:<%=contextpath%>userjoborg.jsp?orgId=' + orgId + "&orgName=" + orgName,lock: true});
+	$.dialog({ title:'<pg:message code="sany.pdp.role.organization.job.setting"/>',width:740,height:560, content:'url:<%=contextpath%>userjoborg.jsp?orgId=' + orgId + "&orgName=" + orgName,lock: true});
 }
 
 //reclaim user's resource under organization

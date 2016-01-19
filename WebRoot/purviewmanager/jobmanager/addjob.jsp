@@ -27,9 +27,9 @@
 			.style1 {color: #CC0000}
 			-->
 		</style>
-		<SCRIPT language="JavaScript" SRC="../include/validateForm.js"></SCRIPT>
-		<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		<SCRIPT language="JavaScript" SRC="../scripts/validateForm.js"></SCRIPT>
+ 
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<SCRIPT LANGUAGE="JavaScript"> 
 			var api = frameElement.api, W = api.opener;
 			function trim(string)
@@ -228,9 +228,7 @@
 			<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="100%" height="100%">
 				<tr>
 					<td bgcolor=#3A6EA5>
-						<marquee align="middle" behavior="alternate" scrollamount="5">
 							<font color=#FFFFFF>...处理中...请等待...</font>
-						</marquee>
 					</td>
 				</tr>
 			</table>
