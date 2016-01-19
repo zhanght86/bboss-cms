@@ -203,12 +203,7 @@ TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX ) VALUES (
 							]]></property>
 
 
-							<property index="24"><![CDATA[
-					    
-INSERT INTO TABLEINFO ( TABLE_NAME, TABLE_ID_NAME, TABLE_ID_INCREMENT, TABLE_ID_VALUE,
-TABLE_ID_GENERATOR, TABLE_ID_TYPE, TABLE_ID_PREFIX ) VALUES ( 
-'TD_CMS_EXTVALUESCOPE', 'ID', 1, 0, null, 'int', NULL)                     
-							]]></property>
+							
 
 
 							<property index="25"><![CDATA[
