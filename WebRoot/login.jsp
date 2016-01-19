@@ -374,7 +374,18 @@ DD_belatedPNG.fix('div');
 			<div class="Zclear"></div> 			
 		  </div>
 		   <div class="c_log_bot"></div>
-		   <p class="c_edition">BBoss V1.0</p>
+		   <p class="c_edition"><a href="http://www.bbossgroups.com" target="_blank" ><font color="white">BBoss V1.0</font> </a> <a href="http://www.miitbeian.gov.cn" target="_blank" ><font color="white">湘ICP备16000994号</font></a> 				 
+				<script type="text/javascript">
+					var cnzz_protocol = (("https:" == document.location.protocol) ? " https://"
+							: " http://");
+					document
+							.write(unescape("%3Cspan id='cnzz_stat_icon_1254131450'%3E%3C/span%3E%3Cscript src='"
+									+ cnzz_protocol
+									+ "s11.cnzz.com/z_stat.php%3Fid%3D1254131450%26show%3Dpic2' type='text/javascript'%3E%3C/script%3E"));
+				</script>
+				 
+			 
+		   </p>
       </div>
         <div class="c_logHeight"></div>
 	</div>
