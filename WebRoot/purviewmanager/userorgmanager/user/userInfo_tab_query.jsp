@@ -99,10 +99,7 @@
 	<head>
 		<title>用户[<%=userName%>]基本信息</title>
 	    <tab:tabConfig />
-	    <script language="JavaScript" src="../../scripts/calender_date.js" ></script>
-		<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
-		<script language="javascript" src="../../scripts/selectTime.js"></script>
-		<script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
+	  
 		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>

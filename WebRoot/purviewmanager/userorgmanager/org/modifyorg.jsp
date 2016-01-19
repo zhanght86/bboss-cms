@@ -17,7 +17,7 @@
  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
@@ -184,11 +184,7 @@
 			.style1 {color: #CC0000}
 			-->
 		</style>
-<script language="javaScript" src="../../scripts/validateForm.js"></script>
-<script type="text/javascript" src="../../../include/jquery-1.4.2.min.js"></script>
-<link href="../../../html/stylesheet/common.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="../../../html/js/commontool.js"></script>
-<script type="text/javascript" src="../../../html/js/dialog/lhgdialog.js?self=false"></script>
+<script language="javaScript" src="../../scripts/validateForm.js"></script> 
 <script language="JavaScript">
 	
 	var api = frameElement.api, W = api.opener;
@@ -447,9 +443,8 @@
 			<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="100%" height="100%">
 				<tr>
 					<td bgcolor=#3A6EA5>
-						<marquee align="middle" behavior="alternate" scrollamount="5">
-							<font color=#FFFFFF><pg:message code="sany.pdp.common.operation.processing"/></font>
-						</marquee>
+						 	<font color=#FFFFFF><pg:message code="sany.pdp.common.operation.processing"/></font>
+						 
 					</td>
 				</tr>
 			</table>
