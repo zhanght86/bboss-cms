@@ -18,5 +18,12 @@ public class EventUtil {
 				ACLEventType.RESOURCE_ROLE_INFO_CHANGE);
 		EventHandle.sendEvent(event);
 	}
+	
+	public static void sendUSER_ROLE_INFO_CHANGEEvent()
+	{
+		Event event = new EventImpl("",
+				ACLEventType.USER_ROLE_INFO_CHANGE);
+		EventHandle.sendEvent(event);
+	}
 
 }

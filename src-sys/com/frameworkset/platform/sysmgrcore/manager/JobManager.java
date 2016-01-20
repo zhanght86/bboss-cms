@@ -263,7 +263,7 @@ public interface JobManager extends Provider,java.io.Serializable {
 	 */
 	public boolean deleteJobroleByJobId(String jobId, String orgId) throws ManagerException;
 	
-	
+	public boolean deleteJobroleByJobId(String jobId, String orgId,boolean sendevent) throws ManagerException;
 	
 	/**
 	 * 添加角色岗位关系--gao.tang  2007-10-18
@@ -276,6 +276,8 @@ public interface JobManager extends Provider,java.io.Serializable {
 	 * 			在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
 	 */
 	public boolean addJobroleMap(String jobId, String orgId, String roleids[]) throws ManagerException;
+	
+	public boolean addJobroleMap(String jobId, String orgId, String roleids[],boolean sendevent) throws ManagerException;
 	
 	/**
 	 * 返回根据岗位ID查询出的机构记录--gao.tang 2007.10.24

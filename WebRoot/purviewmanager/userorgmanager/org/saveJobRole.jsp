@@ -1,3 +1,5 @@
+<%@page import="com.frameworkset.platform.util.EventUtil"%>
+<%@page import="com.frameworkset.orm.transaction.TransactionManager"%>
 <%
 /**
  * <p>Title: 机构岗位下的角色设置处理页面</p>
@@ -44,25 +46,32 @@
 			description="";
 			logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);       
 			//--	end	 --
-			
+			 
 			
 			JobManager jobManager = SecurityDatabase.getJobManager();
 			if(jobId != null && !jobId.equals("")){
 				//jobManager.deleteJobroleByJobId(jobId, orgId);
 				//递归回收
+				TransactionManager tm = new TransactionManager();
 			  try{
-				jobManager.deleteJobroleByJobId(jobId, orgId);
+				  tm.begin();
+				jobManager.deleteJobroleByJobId(jobId, orgId,false);
 				if(roleIds[0] != null && !roleIds[0].equals("")){
 					//jobManager.addJobroleMap(jobId, orgId, roleIds);
 					//记录递归授予关系
-					jobManager.addJobroleMap(jobId, orgId, roleIds);	                
+					jobManager.addJobroleMap(jobId, orgId, roleIds,false);	                
 				}
+				tm.commit();
 				flag=true;
-				
+				EventUtil.sendUSER_ROLE_INFO_CHANGEEvent();
 				}catch(Exception e){
-				e.printStackTrace();
+					
 				flag=false;
 				}
+			    finally
+			    {
+			    	tm.release();
+			    }
 			}
 			//System.out.println(JobManagerAction.storeAndDeleteJobRoleAjax(jobId,roleIds));	
 		 }

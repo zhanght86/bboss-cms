@@ -35,6 +35,7 @@ import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.entity.Userjoborg;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.JobManager;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -904,58 +905,96 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 	}
 
 	public boolean deleteJobroleByJobId(String jobId, String orgId)
+			throws ManagerException
+			{
+		return deleteJobroleByJobId(jobId, orgId,true);
+			}
+	public boolean deleteJobroleByJobId(String jobId, String orgId,boolean sendevent)
 			throws ManagerException {
 		boolean r = false;
 		DBUtil db = new DBUtil();
 
 		if (jobId != null && !jobId.equals("")) {
-			String sql = "delete td_sm_orgjobrole jr where jr.job_id='" + jobId
-					+ "' and jr.org_id = '" + orgId + "'";
+			String sql = "delete from td_sm_orgjobrole where job_id='" + jobId
+					+ "' and org_id = '" + orgId + "'";
 			try {
 				db.executeDelete(sql);
 				r = true;
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new ManagerException(e);
 			}
 		}
-		Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
-		super.change(event,true);
+		if(sendevent)
+		{
+			if(sendevent)
+			{
+				EventUtil.sendUSER_ROLE_INFO_CHANGEEvent();
+				 
+			}
+		}
 		return r;
 	}
 	
 	
-
 	public boolean addJobroleMap(String jobId, String orgId, String roleids[])
+			throws ManagerException
+			{
+			return addJobroleMap(  jobId,   orgId,   roleids ,true);
+			}
+	public boolean addJobroleMap(String jobId, String orgId, String roleids[],boolean sendevent)
 			throws ManagerException {
 		boolean state = false;
 
-		PreparedDBUtil db = new PreparedDBUtil();
+		
 		if (jobId != null && roleids != null && roleids.length > 0
 				&& !jobId.equals("")) {
-			StringBuffer sql_b = new StringBuffer();
-			sql_b.append("insert all when totalsize <= 0 then into td_sm_orgjobrole(job_id, org_id, role_id) values ('")
-				.append(jobId).append("','").append(orgId).append("','");
-			int length = sql_b.length();
+			
+//			sql_b.append("insert all when totalsize <= 0 then into td_sm_orgjobrole(job_id, org_id, role_id) values ('")
+//				.append(jobId).append("','").append(orgId).append("','");
+//			int length = sql_b.length();
 			try {
 				if(roleids.length > 0){
+					PreparedDBUtil db = new PreparedDBUtil();
+					String sql_b = null;
+					String sql_exist = null;
+					sql_b = "insert into td_sm_orgjobrole(job_id, org_id, role_id) values (?,?,?)";
+					sql_exist = "select count(1) as totalsize from td_sm_orgjobrole where job_id=? and org_id=? and role_id=?";		
+					db.preparedInsert(sql_b.toString());
+					boolean e = false;
 					for (int i = 0; i < roleids.length; i++) {
-						sql_b.append(roleids[i]).append("') select count(1) as totalsize from td_sm_orgjobrole ")
-							.append("where job_id='").append(jobId).append("' and org_id='").append(orgId).append("' ")
-							.append(" and role_id='").append(roleids[i]).append("'");
-						db.addBatch(sql_b.toString());
-						sql_b.setLength(length);
+						
+						
+						int count = SQLExecutor.queryObject(int.class, sql_exist, jobId,orgId,roleids[i]);
+						if(count <= 0)
+						{
+							e = true;
+							db.setString(1, jobId);
+							db.setString(2, orgId);
+							db.setString(3, roleids[i]);
+							db.addPreparedBatch();
+							
+						}
+						
 					}
-					db.executeBatch();
+					if(e)
+					{
+						
+						db.executePreparedBatch();
+						if(sendevent)
+						{
+							EventUtil.sendUSER_ROLE_INFO_CHANGEEvent();
+							 
+						}
+					}
 					state = true;
-					Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
-					super.change(event,true);
+					
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new ManagerException(e);
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new ManagerException(e);
 			} finally {
-				db.resetBatch();
+				
 			}
 		}
 		return state;
