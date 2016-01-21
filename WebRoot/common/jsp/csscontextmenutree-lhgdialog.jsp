@@ -1,4 +1,4 @@
-<pg:config enablecontextmenu="true" enabletree="false"/>
+<pg:config enablecontextmenu="true" enabletree="true"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/include/js/disablebaskspace.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/include/locale/easyui-lang-zh_CN.js"></script>

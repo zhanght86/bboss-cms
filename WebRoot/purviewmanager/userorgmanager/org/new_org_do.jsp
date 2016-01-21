@@ -26,7 +26,7 @@
 				,com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase
 				,com.frameworkset.util.StringUtil"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 
 <%@ page import="org.frameworkset.web.servlet.support.RequestContextUtils"%>
 
@@ -159,7 +159,7 @@
 				%>
 				<script>
 				W.$.dialog.alert('<pg:message code="sany.pdp.userorgmanager.org.add.success"/>', function(){
-					W.location.reload();
+					W.loadorgtree();
 					api.close();
 				}, api);
 				</script>
@@ -170,14 +170,11 @@
 			%>
 				<script>
 				W.$.dialog.alert("<%=notice%>", function() {
-					W.location.reload();
+					W.loadorgtree();
 					api.close();
 				}, api);
 				</script>
 			<%
 			}
 		%>
-<script>
-    window.onload = function prompt(){
-    }
-</script>
+

@@ -28,7 +28,7 @@
 <head>
   <title>新增机构</title>
 </head>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <script src="<%=request.getContextPath()%>/include/validateForm_<pg:locale/>.js"></script>
 <script language="JavaScript">
 	var api = frameElement.api, W = api.opener;

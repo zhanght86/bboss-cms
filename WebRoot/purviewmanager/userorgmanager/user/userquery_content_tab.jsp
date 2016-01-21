@@ -26,9 +26,9 @@
 	        String userId = accesscontroler.getUserID();
 	        DBUtil db = new DBUtil();
 	        
-		    db.executeSelect("select 1 from td_sm_user");
+		    db.executeSelect("select count(1) from td_sm_user");
 		    
-		    String usercount = String.valueOf(db.size());
+		    String usercount = String.valueOf(db.getInt(0, 0));
 		    
 		    String userOrgType = (String)request.getParameter("userOrgType");
 		    String userName = (String)request.getParameter("userName");
@@ -53,9 +53,7 @@
 		<tab:tabConfig/>
 			<title>属性容器</title>
 <%@ include file="/include/css.jsp"%>
-			<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
-			<script language="JavaScript" src="../../scripts/common.js" type="text/javascript"></script>
-			<script language="JavaScript" src="../../scripts/pager.js" type="text/javascript"></script>
+		 
 			<SCRIPT language="javascript">	
 				function actionOnmouseover(e)
 				{	

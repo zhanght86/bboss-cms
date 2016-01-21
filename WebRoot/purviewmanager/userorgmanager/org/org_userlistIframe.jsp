@@ -1,4 +1,4 @@
-<%@page import="com.frameworkset.platform.ca.CaProperties"%>
+<%@page import="com.frameworkset.platform.ca.CaProperties"%><%@page import="com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB"%>
 <%
 /*
  * <p>Title:机构下用户列表显示页面</p>
@@ -85,9 +85,8 @@
 <%--
 		<script language="JavaScript" src="../../scripts/pager.js" type="text/javascript"></script>
 		--%>
-<script language="JavaScript" src="../../scripts/common.js"
-	type="text/javascript"></script>
-	<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+
+	
 <script language="javascript">	
 		function sortBy(byName){
 			var desc = "false";
@@ -753,6 +752,11 @@
 	<script language="JavaScript">	
 
 	var intervalType = "<%=intervalType%>";
+	<%
+	String orgpath =  FunctionDB.buildOrgPath(curOrgId);
+	
+	%>
+	$("#orgpath").html('<%=orgpath%>');
     
 </script>
 	<iframe name="deluser" height="0" width="0"></iframe>

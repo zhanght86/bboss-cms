@@ -39,7 +39,7 @@
 			
 				<tab:tabContainer id="user-manage-update" selectedTabPaneId="org-manage" skin="sany">
 					<tab:tabPane id="org-manage"  tabTitleCode="sany.pdp.user.organization.manage" tabTitle="用户和机构管理"  lazeload="true">
-						<tab:iframe id="orgmanage" src="userorgmanager/org/org_main.jsp" frameborder="0" scrolling="no" width="100%" height="95%">
+						<tab:iframe id="orgmanage" src="userorgmanager/org/neworg_main.jsp" frameborder="0" scrolling="no" width="100%" height="95%">
 						</tab:iframe>
 					</tab:tabPane>
 					<tab:tabPane id="role-manage" tabTitleCode="sany.pdp.role.manage" tabTitle="角色管理" lazeload="true">

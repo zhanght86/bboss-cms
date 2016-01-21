@@ -85,7 +85,8 @@ public class PurviewManagerOrgTree extends COMTree implements Serializable{
 	                	map.put("resName", treeName);
 	                	map.put("displayNameInput", displayNameInput);
 	                	map.put("displayValueInput", displayValueInput);
-	                	map.put("nodeLink", request.getContextPath() + "/purviewmanager/userorgmanager/org/org_userlist.jsp");
+//	                	map.put("nodeLink", request.getContextPath() + "/purviewmanager/userorgmanager/org/org_userlist.jsp");
+	                	map.put("nodeLink", "javascript:loaduserlist('" + orgId + "');");
 	                	if (super.accessControl.isOrganizationManager(orgId) ||
 	                			super.accessControl.isAdmin()) {//部门管理员登陆过滤机构
 	                		ITreeNode node = addNode(father, orgId, treeName,
