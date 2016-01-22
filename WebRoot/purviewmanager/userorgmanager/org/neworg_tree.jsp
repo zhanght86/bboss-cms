@@ -26,7 +26,7 @@ accessControl.checkManagerAccess(request,response);
 
 
 
-<form name="orgtreeform" action="" method="post" style="height:550px;overflow:auto;" >
+<form name="orgtreeform" id="orgtreeform" method="post"  >
 
     <table >
         <tr><td align="left">
@@ -54,6 +54,13 @@ accessControl.checkManagerAccess(request,response);
     </table>
 </form>
 <iframe name="hiddenFrame" width=0 height=0 frameborder="0"></iframe>
- 
- 
+ <script type="text/javascript">
+ $(document).ready(function() {
+	 
+	 resizetree();
+	//queryList(null,false,false);   
+	
+	
+});
+ </script>
 

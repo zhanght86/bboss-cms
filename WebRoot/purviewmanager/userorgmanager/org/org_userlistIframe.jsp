@@ -77,10 +77,7 @@
 	boolean userupdate = accesscontroler.checkPermission("orgunit","userupdate",AccessControl.ORGUNIT_RESOURCE);
 	boolean isPurset = accesscontroler.checkPermission("orgunit","purset",AccessControl.ORGUNIT_RESOURCE);        
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>属性容器</title>
+ 
 
 <%--
 		<script language="JavaScript" src="../../scripts/pager.js" type="text/javascript"></script>
@@ -228,7 +225,7 @@
 		
 		
 		</SCRIPT>
-<body>
+ 
 
 
 
@@ -241,7 +238,7 @@
 					dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.Org_UserListSn"
 					keyName="UserListSn" />
 				<!--分页显示开始,分页标签初始化-->
-				<pg:pager maxPageItems="5" scope="request" data="UserListSn"
+				<pg:pager maxPageItems="5" scope="request" data="UserListSn" containerid="userContainer" 
 					isList="false">
 						<pg:param name="orgId" />
 					<pg:param name="userName" />
@@ -252,12 +249,9 @@
 					<pg:param name="userSex" />
 					<pg:param name="userType" />
 					<pg:param name="isOrgManager" />
-					<pg:empty actual="${UserListSn}" evalbody="true" >
-					<pg:yes>
-						<tr><td><div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td></tr>
-					</pg:yes>					 
-					<pg:no>
+					
+										 
+					
 						<tr>
 							<!--设置分页表头-->
 							<th width="30">
@@ -278,7 +272,10 @@
 							<th  >密码有效期</th>
 						</tr>
 					
-						
+						<pg:notify>
+							<tr><td colspan="20"><div class="nodata">
+							<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td></tr>
+						</pg:notify>
 						
 						
 						<%
@@ -738,11 +735,10 @@
 							scope="request" />
 	</table>
 		</div>
-						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5"/></div>
+						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10"/></div>
 						
 						
-					</pg:no>
-					</pg:empty> 
+					 
 				</pg:pager>
 			
 	</form>
@@ -760,6 +756,4 @@
     
 </script>
 	<iframe name="deluser" height="0" width="0"></iframe>
-</body>
-<center>
-</html>
+ 

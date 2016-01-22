@@ -80,8 +80,16 @@ function queryList(appkey ,reset,loadextendattrs){
 function loadorgtree()
 {
 	$("#app_tree_module").load("neworg_tree.jsp");
+ 
 	
 	
+	
+}
+
+function resizetree()
+{
+	
+	$("#orgtreeform").css({'height':($(window).height()-60)+'px','overflow':'auto'});
 }
 function doreset(){
 	$("#reset").click();
@@ -89,7 +97,7 @@ function doreset(){
 
 
 //机构查询
-//2008-4-2 baowen.liu
+
 var featrue = "dialogWidth=600px;dialogHeight=500px;scroll=yes;status=no;titlebar=no;toolbar=no;maximize=yes;minimize=0;help=0;dialogLeft="+(screen.availWidth-600)/2+";dialogTop="+(screen.availHeight-500)/2;
 var win;
 
@@ -299,7 +307,7 @@ function loaduserlist(orgId )
 
 	<div id="leftContentDiv">
 			    
-		<div class="left_menu" style="width:193px;">
+		<div class="left_menu" style="width:200px;">
 		    <ul>
 		    	<li >
 		    		<a href="javascript:void(0)" onclick="searchorg()"><pg:message code="sany.pdp.role.organization.query"/></a> <%
