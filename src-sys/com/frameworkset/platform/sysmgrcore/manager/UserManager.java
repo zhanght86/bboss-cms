@@ -317,6 +317,8 @@ public interface UserManager extends Provider, Serializable {
 	 */
 	public boolean deleteBatchUser(String userIds[]) throws ManagerException;
 	
+	public boolean deleteBatchUser(String userIds[],boolean sendevent) throws ManagerException;
+	
 	public boolean deleteBatchUser(User[] users) throws ManagerException;
 	
 	/**

@@ -61,6 +61,7 @@ import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.PurviewManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
@@ -708,43 +709,20 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		}
 		return r;
 	}
+	public boolean deleteBatchUser(String users[]) throws ManagerException {
+		return deleteBatchUser(  users,  true);
+	}
 	/**
 	 * 批量删除用户时改为批出理，gao.tang 修改
 	 */
-	public boolean deleteBatchUser(String userIds[]) throws ManagerException {
-		User[] users = new User[userIds.length];
-		User user = null;
-		DBUtil db = new DBUtil();
-		for(int i = 0; i < userIds.length; i++){
-			try {
-				db.executeSelect("select user_name,user_realname from td_sm_user where user_id='"+userIds[i]+"'");
-				user = new User();
-				user.setUserName(db.getString(0, "user_name"));
-				user.setUserRealname(db.getString(0, "user_realname"));
-				user.setUserId(Integer.valueOf(userIds[i]));
-				users[i] = user;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			return SecurityDatabase.getUserManager().deleteBatchUser(users);
-		} catch (SPIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new ManagerException(e);
-		}
-	}
-	
-	public boolean deleteBatchUser(User[] users) throws ManagerException {
+	public boolean deleteBatchUser(String users[],boolean sendevent) throws ManagerException {
 		boolean r = false;
-		DBUtil dbUtil = null;
 		TransactionManager tm = new TransactionManager();
 		if (users != null) {
 			try {
 				tm.begin();
 //				cb.setAutoCommit(false);
-				dbUtil = new DBUtil();
+				PreparedDBUtil dbUtil = new PreparedDBUtil();
 				for (int i = 0; i < users.length; i++) {
 //					User user = getUser("userId", userIds[i]);
 
@@ -754,59 +732,187 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //					p.setObject("from Userjoborg ujo where ujo.id.userId = '"
 //							+ userIds[i] + "'");
 //					cb.execute(p);
-					String userId = String.valueOf(users[i].getUserId());
-					String sql7 = "delete from TD_SM_ORGUSER where user_id ='"
-						+ userId + "'";
-					dbUtil.addBatch(sql7);
+					String userId = (users[i]);
+					int iuid = Integer.parseInt(userId);
+					String sql7 = "delete from TD_SM_ORGUSER where user_id =?";
+					dbUtil.preparedDelete(sql7);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
 					
-					String sql1 = "delete from TD_SM_USERJOBORG where USER_ID = '" + userId +"' ";
-					dbUtil.addBatch(sql1);
+					String sql1 = "delete from TD_SM_USERJOBORG where USER_ID = ?";
+					dbUtil.preparedDelete(sql1);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
 					// 删除当前用户的所关联的 Userrole 对象
 //					p.setObject("from Userrole ur where ur.id.userId = '"
 //							+ userIds[i] + "'");
 //					cb.execute(p);
 					
-					String sql2 = "delete from TD_SM_USERROLE where USER_ID = '" + userId + "' ";
+					String sql2 = "delete from TD_SM_USERROLE where USER_ID = ? ";
 					if(!"1".equals(userId)){
-						dbUtil.addBatch(sql2);	
+						dbUtil.preparedDelete(sql2);
+						dbUtil.setInt(1, iuid);
+						dbUtil.addPreparedBatch();
 					}
 					// 删除当前用户的所关联的 Userresop 对象
 //					p.setObject("from Userresop uro where uro.id.userId = '"
 //							+ userIds[i] + "'");
 //					cb.execute(p);
-					String sql3 = "delete from TD_SM_ROLERESOP where ROLE_ID = '" + userId + "' and types='user' ";
-					dbUtil.addBatch(sql3);
+					String sql3 = "delete from TD_SM_ROLERESOP where ROLE_ID = ? and types='user' ";
+					dbUtil.preparedDelete(sql3);
+					dbUtil.setString(1, userId);
+					dbUtil.addPreparedBatch();
 
 					// 删除当前用户的所关联的 Usergroup 对象
 //					p.setObject("from Usergroup ug where ug.id.userId = '"
 //							+ userIds[i] + "'");
 //					cb.execute(p);
-					String sql4 = "delete from TD_SM_USERGROUP where USER_ID = '" + userId + "' ";
-					dbUtil.addBatch(sql4);
+					String sql4 = "delete from TD_SM_USERGROUP where USER_ID = ? ";
+					dbUtil.preparedDelete(sql4);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
 
 					// 删除当前用户的所关联的 Tempaccredit 对象
 //					p.setObject("from Tempaccredit ta where ta.id.userId = '"
 //							+ userIds[i] + "'");
 //					cb.execute(p);
 					//删除用户对应的机构管理员td_sm_orgmanager关系表
-					String sql5 = "delete from TD_SM_ORGMANAGER where USER_ID = '" + userId + "' ";
-					dbUtil.addBatch(sql5);
+					String sql5 = "delete from TD_SM_ORGMANAGER where USER_ID = ? ";
+					dbUtil.preparedDelete(sql5);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
 					// 删除指定的用户实例
 //					p.setObject("from User u where u.userId = '" + userIds[i]
 //							+ "'");
 //					cb.execute(p);
-					String sql6 = "delete from TD_SM_USER where USER_ID = '" + userId + "' ";
-					dbUtil.addBatch(sql6);
+					String sql6 = "delete from TD_SM_USER where USER_ID = ? ";
+					dbUtil.preparedDelete(sql6);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
 					
 					
 
 				}
-				dbUtil.executeBatch();
+				dbUtil.executePreparedBatch();
 				tm.commit();
 //				 触发删除缓冲中用户的事件
-				Event event = new EventImpl("",
-						ACLEventType.USER_INFO_DELETE);
-				super.change(event);
+				if(sendevent)
+				{
+					EventUtil.sendUSER_INFO_DELETEEvent(users);
+				}
+//				Event event = new EventImpl("",
+//						ACLEventType.USER_INFO_DELETE);
+//				super.change(event);
+				r = true;
+				
+			} catch (SQLException e) {
+				throw new ManagerException(e);
+			} catch (Exception e) {
+				throw new ManagerException(e);
+			}
+			finally
+			{
+				tm.release();
+			}
+		}
+		return r;
+	}
+	public boolean deleteBatchUser(User[] users) throws ManagerException 
+	{
+		return deleteBatchUser(users,true);
+	}
+	public boolean deleteBatchUser(User[] users,boolean sendevent) throws ManagerException {
+		boolean r = false;
+		 
+		TransactionManager tm = new TransactionManager();
+		if (users != null) {
+			try {
+				tm.begin();
+				String[] ids = new String[users.length];
+				PreparedDBUtil dbUtil = new PreparedDBUtil();
+				for (int i = 0; i < users.length; i++) {
+//					User user = getUser("userId", userIds[i]);
+
+					// 删除当前用户的所关联的 Userjoborg 对象
+//					Parameter p = new Parameter();
+//					p.setCommand(Parameter.COMMAND_DELETE);
+//					p.setObject("from Userjoborg ujo where ujo.id.userId = '"
+//							+ userIds[i] + "'");
+//					cb.execute(p);
+					
+					int iuid = users[i].getUserId();
+					
+					String userId = iuid+"";
+					ids[i] = userId;
+					String sql7 = "delete from TD_SM_ORGUSER where user_id =?";
+					dbUtil.preparedDelete(sql7);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
+					
+					String sql1 = "delete from TD_SM_USERJOBORG where USER_ID = ?";
+					dbUtil.preparedDelete(sql1);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
+					// 删除当前用户的所关联的 Userrole 对象
+//					p.setObject("from Userrole ur where ur.id.userId = '"
+//							+ userIds[i] + "'");
+//					cb.execute(p);
+					
+					String sql2 = "delete from TD_SM_USERROLE where USER_ID = ? ";
+					if(!"1".equals(userId)){
+						dbUtil.preparedDelete(sql2);
+						dbUtil.setInt(1, iuid);
+						dbUtil.addPreparedBatch();
+					}
+					// 删除当前用户的所关联的 Userresop 对象
+//					p.setObject("from Userresop uro where uro.id.userId = '"
+//							+ userIds[i] + "'");
+//					cb.execute(p);
+					String sql3 = "delete from TD_SM_ROLERESOP where ROLE_ID = ? and types='user' ";
+					dbUtil.preparedDelete(sql3);
+					dbUtil.setString(1, userId);
+					dbUtil.addPreparedBatch();
+
+					// 删除当前用户的所关联的 Usergroup 对象
+//					p.setObject("from Usergroup ug where ug.id.userId = '"
+//							+ userIds[i] + "'");
+//					cb.execute(p);
+					String sql4 = "delete from TD_SM_USERGROUP where USER_ID = ? ";
+					dbUtil.preparedDelete(sql4);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
+
+					// 删除当前用户的所关联的 Tempaccredit 对象
+//					p.setObject("from Tempaccredit ta where ta.id.userId = '"
+//							+ userIds[i] + "'");
+//					cb.execute(p);
+					//删除用户对应的机构管理员td_sm_orgmanager关系表
+					String sql5 = "delete from TD_SM_ORGMANAGER where USER_ID = ? ";
+					dbUtil.preparedDelete(sql5);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
+					// 删除指定的用户实例
+//					p.setObject("from User u where u.userId = '" + userIds[i]
+//							+ "'");
+//					cb.execute(p);
+					String sql6 = "delete from TD_SM_USER where USER_ID = ? ";
+					dbUtil.preparedDelete(sql6);
+					dbUtil.setInt(1, iuid);
+					dbUtil.addPreparedBatch();
+					
+					
+
+				}
+				dbUtil.executePreparedBatch();
+				tm.commit();
+//				 触发删除缓冲中用户的事件
+				if(sendevent)
+				{
+					EventUtil.sendUSER_INFO_DELETEEvent(ids);
+				}
+//				Event event = new EventImpl("",
+//						ACLEventType.USER_INFO_DELETE);
+//				super.change(event);
 				r = true;
 				
 			} catch (SQLException e) {
@@ -840,73 +946,78 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 	 */
 	public boolean deleteBatchUserRes(String userIds[],boolean broadcastevent) throws ManagerException {
 		boolean r = false;
-		DBUtil dbUtil = null;
 		TransactionManager tm = new TransactionManager();
 		if (userIds != null) {
 			try {
 				tm.begin();
 				int count = 0;
-				dbUtil = new DBUtil();
+				PreparedDBUtil dbUtil = new PreparedDBUtil();
 				for (int i = 0; i < userIds.length; i++) {
 
 					// 删除当前用户的所关联的 Userjoborg 对象
-					String sql7 = "delete from TD_SM_ORGUSER where user_id ='"
-						+ userIds[i] + "'";
-					dbUtil.addBatch(sql7);
+					String userid = userIds[i];
+					int uid = Integer.parseInt(userid);
+					String sql7 = "delete from TD_SM_ORGUSER where user_id =?";
+					dbUtil.preparedDelete(sql7);
+					dbUtil.setInt(1, uid);
+					dbUtil.addPreparedBatch();
 					
-					String sql1 = "delete from TD_SM_USERJOBORG where USER_ID = '" + userIds[i] +"' ";
-					dbUtil.addBatch(sql1);
+					String sql1 = "delete from TD_SM_USERJOBORG where USER_ID = ?";
+					dbUtil.preparedDelete(sql1);
+					dbUtil.setInt(1, uid);
+					dbUtil.addPreparedBatch();
 					
 					// 删除当前用户的所关联的 Userrole 对象
-					String sql2 = "delete from TD_SM_USERROLE where USER_ID = '" + userIds[i] + "' ";
+					String sql2 = "delete from TD_SM_USERROLE where USER_ID = ?";
 					//如果删除的用户是admin不删除admin与角色的关系。删除机构时会出现下面现象
 					if(!userIds[i].equals("1")){
-						dbUtil.addBatch(sql2);	
+						
+								dbUtil.preparedDelete(sql2);
+								dbUtil.setInt(1, uid);
+								dbUtil.addPreparedBatch();
 					}
 					// 删除当前用户的所关联的 Userresop 对象
-					String sql3 = "delete from TD_SM_ROLERESOP  where ROLE_ID = '" + userIds[i] + "' and types='user' ";
-					dbUtil.addBatch(sql3);
+					String sql3 = "delete from TD_SM_ROLERESOP  where ROLE_ID = ? and types='user' ";
+					dbUtil.preparedDelete(sql3);
+					dbUtil.setString(1, userid);
+					dbUtil.addPreparedBatch();
 
-					String sql4 = "delete from TD_SM_USERGROUP where USER_ID = '" + userIds[i] + "' ";
-					dbUtil.addBatch(sql4);
-
+					String sql4 = "delete from TD_SM_USERGROUP where USER_ID = ? ";
+					dbUtil.preparedDelete(sql4);
+					dbUtil.setInt(1, uid);
+					dbUtil.addPreparedBatch();
 					//删除用户对应的机构管理员td_sm_orgmanager关系表
-					String sql5 = "delete from TD_SM_ORGMANAGER where USER_ID = '" + userIds[i] + "' ";
-					dbUtil.addBatch(sql5);
+					String sql5 = "delete from TD_SM_ORGMANAGER where USER_ID = ?";
+					dbUtil.preparedDelete(sql5);
+					dbUtil.setInt(1, uid);
+					dbUtil.addPreparedBatch();
 					count ++;
 					if(count > 900){
-						dbUtil.executeBatch();
+						dbUtil.executePreparedBatch();
 						count = 0;
 					}
 
 				}
-				dbUtil.executeBatch();
+				if(count > 0)
+					dbUtil.executePreparedBatch();
 				tm.commit();
 //				 触发删除缓冲中用户的事件
 				if(broadcastevent)
 				{
-					Event event = new EventImpl(userIds,
-							ACLEventType.USER_INFO_DELETE);
-					super.change(event);
+					EventUtil.sendUSER_INFO_DELETEEvent(userIds);
 				}
 				r = true;
 				
 			} catch (SQLException e) {
-				e.printStackTrace();
-				try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					e1.printStackTrace();
-				}
-				throw new ManagerException(e.getMessage());
+				
+				throw new ManagerException(e);
 			} catch (Exception e) {
-				e.printStackTrace();
-				try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					e1.printStackTrace();
-				}
-				throw new ManagerException(e.getMessage());
+				
+				throw new ManagerException(e);
+			}
+			finally
+			{
+				tm.release();
 			}
 		}
 

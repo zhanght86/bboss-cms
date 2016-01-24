@@ -244,7 +244,9 @@ public interface OrgManager extends Provider {
 	 *             在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
 	 */
 	public boolean deleteOrg(Organization org) throws ManagerException;
-
+	
+	public boolean deleteOrg(Organization org,boolean sendEvent) throws ManagerException;
+	public boolean deleteOrg(String orgId,boolean sendEvent) throws ManagerException ;
 	/**
 	 * 根据机构id删除指定机构及其子机构
 	 * 

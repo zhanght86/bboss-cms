@@ -44,6 +44,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.OrgQuery;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
+import com.frameworkset.platform.util.EventUtil;
 
 
 /**
@@ -64,44 +65,259 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	
 
 	public boolean deleteOrg(Organization org) throws ManagerException {
-		return deleteOrg(org.getOrgId());
+		return deleteOrg(org.getOrgId(),true);
 	}
 
-	
-	public boolean deleteOrg(String orgId) throws ManagerException {
+	public boolean deleteOrg(String orgId) throws ManagerException 
+	{
+		return deleteOrg(orgId,true);
+	}
+	public boolean deleteOrg(String orgId,boolean sendEvent) throws ManagerException {
 		boolean r = false;
-		DBUtil db = new DBUtil();
+		PreparedDBUtil db = new PreparedDBUtil();
 		String concat_ = DBUtil.getDBAdapter().concat(" org_tree_level","'|%' ");
 		String orgs = "(SELECT t.org_id FROM TD_SM_ORGANIZATION t where t.org_tree_level like (select "
 			+ concat_ + " from TD_SM_ORGANIZATION c " +
-					"where c.ORG_ID = '" + orgId + "') or t.org_id = "+ orgId+ ")";
+					"where c.ORG_ID = ?) or t.org_id = ?)";
 		
 		PreparedDBUtil dbutil = new PreparedDBUtil();
 		try {
 			dbutil.preparedSelect(orgs);
+			dbutil.setString(1, orgId);
+			dbutil.setString(2, orgId);
 			dbutil.executePrepared();
 		} catch (SQLException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		StringBuffer str = new StringBuffer();
+		 
 		if(dbutil.size() == 0)
-			str.append("( 'unkown'");
+			throw new ManagerException("删除部门失败：机构"+orgId+"不存在!");
 		else
 		{
-			str.append("(");
+//			str.append("(");
+			String[] orgids = new String[dbutil.size()];
 			for(int i=0;i<dbutil.size();i++){
 				try {
-					str.append("'").append(dbutil.getString(i, "org_id")).append("',");
-					
+					orgids[i] = dbutil.getString(i, "org_id");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
-			str.deleteCharAt(str.length()-1);
-			str.append(" )");
+			Map params = new HashMap();
+			params.put("orgs", orgids);
+			StringBuilder sql = new StringBuilder()
+					.append(" delete from TD_SM_ORGANIZATION where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+//						.append("delete from TD_SM_ORGANIZATION a where a.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH ")
+//						.append("t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					    
+
+//					删除机构岗位用户表的基本数据
+//					StringBuffer sql1 = new StringBuffer()
+					
+//						.append("delete from TD_SM_USERJOBORG a where a.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
+//						.append(" t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					
+					StringBuffer sql1 = new StringBuffer()
+					
+					.append("delete from TD_SM_USERJOBORG  where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+					
+////					删除机构岗位表的基本数据
+//					StringBuffer sql2 = new StringBuffer()
+//						.append("delete from TD_SM_ORGJOB a where a.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
+//						.append(" t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+//					删除机构岗位表的基本数据
+					StringBuffer sql2 = new StringBuffer()
+						.append("delete from TD_SM_ORGJOB where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+
+////					删除机构用户表的基本数据
+//					StringBuffer sql3 = new StringBuffer()
+//						.append("delete from TD_SM_ORGUSER a where a.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
+//						.append(" t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					
+////				删除机构用户表的基本数据
+					StringBuilder sql3 = new StringBuilder()
+						.append("delete from TD_SM_ORGUSER where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+
+////					删除机构角色表的基本数据
+//					StringBuffer sql4 = new StringBuffer()
+//						.append("delete from TD_SM_ORGROLE a where a.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
+//						.append(" t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					
+////				删除机构角色表的基本数据
+					StringBuilder sql4 = new StringBuilder()
+						.append("delete from TD_SM_ORGROLE  where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+					
+////					递归删除机构自身资源操作的基本数据
+//					String sql5 = "delete from TD_SM_ROLERESOP  where res_id in "
+//						+"(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH t.org_id='"+ orgId +"' "
+//						+" CONNECT BY PRIOR t.org_id=t.PARENT_ID) and restype_id='orgunit'";
+					
+////				递归删除机构自身资源操作的基本数据
+					StringBuilder sql5 = new StringBuilder().append("delete from TD_SM_ROLERESOP  where res_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+					
+////					删除机构岗位角色表中的外键 gao.tang 2007.10.26
+////					删除了机构岗位角色表数据
+//					StringBuffer sql6 = new StringBuffer()
+//						.append("delete from TD_SM_ORGJOBROLE where org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
+//						.append(" t.org_id='").append(orgId)
+//						.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					
+////				删除机构岗位角色表中的外键 gao.tang 2007.10.26
+////				删除了机构岗位角色表数据
+					StringBuilder sql6 = new StringBuilder()
+					.append("delete from TD_SM_ORGJOBROLE where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+//					
+////					删除机构与用户的部门管理员对应关系
+//					StringBuffer sql7 = new StringBuffer()
+//						.append("delete from td_sm_orgmanager d ")
+//						.append("where d.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t ")
+//						.append("START WITH t.org_id='").append(orgId).append("' ")
+//						.append("CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
+					
+//					删除机构与用户的部门管理员对应关系
+					StringBuilder sql7 = new StringBuilder()
+						.append("delete from td_sm_orgmanager ")
+						.append("where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+					
+//					//地税特有表TD_SM_TAXCODE_ORGANIZATION
+//					StringBuffer sql8 = new StringBuffer()
+//						.append("delete from TD_SM_TAXCODE_ORGANIZATION d ")
+//						.append("where d.org_id in ")
+//						.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t ")
+//						.append("START WITH t.org_id='").append(orgId).append("' ")
+//						.append("CONNECT BY PRIOR t.org_id=t.PARENT_ID)") ;
+					
+					//地税特有表TD_SM_TAXCODE_ORGANIZATION
+					StringBuilder sql8 = new StringBuilder()
+						.append("delete from TD_SM_TAXCODE_ORGANIZATION  ")
+						.append("where org_id in (#foreach($org in $orgs)")
+					.append("    #if($velocityCount == 0) ")
+					.append("     #[orgs[$velocityCount]]")
+					.append("        #else ")
+					.append("            ,#[orgs[$velocityCount]]")
+					.append("    #end")
+					.append("    #end)");
+					
+//					//递归获取当前机构下的所有用户的ID
+//					StringBuffer  sql_user = new StringBuffer()
+//						.append(" select distinct b.USER_ID from TD_SM_USERJOBORG b where b.ORG_ID in ( ")
+//						.append("select distinct a.ORG_ID from TD_SM_ORGANIZATION a start with a.ORG_ID = '")
+//						.append(orgId) 
+//						.append("' connect by prior a.ORG_ID = a.PARENT_ID)");
+					
+					//递归获取当前机构下的所有用户的ID
+//					StringBuilder  sql_user = new StringBuilder()
+//						.append(" select distinct USER_ID from TD_SM_USERJOBORG where ORG_ID in  (#foreach($org in $orgs)")
+//					.append("    #if($velocityCount == 0) ")
+//					.append("     #[orgs[$velocityCount]]")
+//					.append("        #else ")
+//					.append("            ,#[orgs[$velocityCount]]")
+//					.append("    #end")
+//					.append("    #end)");
+				   TransactionManager tm = new TransactionManager();
+					try {
+						tm.begin();
+						SQLExecutor.deleteBean(sql1.toString(), params);//addBatch(sql1.toString());
+						SQLExecutor.deleteBean(sql2.toString(), params);
+						SQLExecutor.deleteBean(sql3.toString(), params);
+						SQLExecutor.deleteBean(sql4.toString(), params);
+						SQLExecutor.deleteBean(sql5.toString(), params);
+						SQLExecutor.deleteBean(sql6.toString(), params);
+						SQLExecutor.deleteBean(sql8.toString(), params);
+						SQLExecutor.deleteBean(sql7.toString(), params);
+						SQLExecutor.deleteBean(sql.toString(), params);
+						db.executeBatch();
+
+						tm.commit();
+						
+						r = true;
+						if(sendEvent)
+						{
+							EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(orgId);
+				//			触发用户角色变化事件
+//							Event event = new EventImpl(orgId, ACLEventType.USER_ROLE_INFO_CHANGE);
+//							super.change(event,true);
+				//			触发用户角色变化事件
+//							Event event1 = new EventImpl(orgId, ACLEventType.ORGUNIT_INFO_DELETE);
+//							super.change(event1,true);
+							
+							EventUtil.sendORGUNIT_INFO_DELETEEvent(orgId);
+						}
+						
+					} catch (SQLException e) {
+						throw new  ManagerException(e);
+					} catch (Exception e) {
+						throw new  ManagerException(e);
+					}
+					finally
+					{
+						tm.release();
+					}
+//			
+//			str.deleteCharAt(str.length()-1);
+//			str.append(" )");
 		}
 		
 		
@@ -110,163 +326,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 		
 //	   System.out.println(str.toString());
 //		删除机构表的基本数据
-		StringBuffer sql = new StringBuffer()
-		.append(" delete from TD_SM_ORGANIZATION where org_id in ")
-		.append(str.toString());
-//			.append("delete from TD_SM_ORGANIZATION a where a.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH ")
-//			.append("t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		    
-
-//		删除机构岗位用户表的基本数据
-//		StringBuffer sql1 = new StringBuffer()
 		
-//			.append("delete from TD_SM_USERJOBORG a where a.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
-//			.append(" t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		
-		StringBuffer sql1 = new StringBuffer()
-		
-		.append("delete from TD_SM_USERJOBORG  where org_id in ").append(str.toString());
-		
-////		删除机构岗位表的基本数据
-//		StringBuffer sql2 = new StringBuffer()
-//			.append("delete from TD_SM_ORGJOB a where a.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
-//			.append(" t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-//		删除机构岗位表的基本数据
-		StringBuffer sql2 = new StringBuffer()
-			.append("delete from TD_SM_ORGJOB where org_id in ").append(str.toString());
-
-////		删除机构用户表的基本数据
-//		StringBuffer sql3 = new StringBuffer()
-//			.append("delete from TD_SM_ORGUSER a where a.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
-//			.append(" t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		
-////	删除机构用户表的基本数据
-		StringBuffer sql3 = new StringBuffer()
-			.append("delete from TD_SM_ORGUSER where org_id in ")
-			.append(str.toString());
-
-////		删除机构角色表的基本数据
-//		StringBuffer sql4 = new StringBuffer()
-//			.append("delete from TD_SM_ORGROLE a where a.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
-//			.append(" t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		
-////	删除机构角色表的基本数据
-		StringBuffer sql4 = new StringBuffer()
-			.append("delete from TD_SM_ORGROLE  where org_id in ")
-			.append(str.toString());
-		
-////		递归删除机构自身资源操作的基本数据
-//		String sql5 = "delete from TD_SM_ROLERESOP  where res_id in "
-//			+"(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH t.org_id='"+ orgId +"' "
-//			+" CONNECT BY PRIOR t.org_id=t.PARENT_ID) and restype_id='orgunit'";
-		
-////	递归删除机构自身资源操作的基本数据
-		String sql5 = "delete from TD_SM_ROLERESOP  where res_id in "
-			+ str.toString();
-		
-////		删除机构岗位角色表中的外键 gao.tang 2007.10.26
-////		删除了机构岗位角色表数据
-//		StringBuffer sql6 = new StringBuffer()
-//			.append("delete from TD_SM_ORGJOBROLE where org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t START WITH")
-//			.append(" t.org_id='").append(orgId)
-//			.append("' CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		
-////	删除机构岗位角色表中的外键 gao.tang 2007.10.26
-////	删除了机构岗位角色表数据
-	StringBuffer sql6 = new StringBuffer()
-		.append("delete from TD_SM_ORGJOBROLE where org_id in ")
-		.append(str.toString());
-//		
-////		删除机构与用户的部门管理员对应关系
-//		StringBuffer sql7 = new StringBuffer()
-//			.append("delete from td_sm_orgmanager d ")
-//			.append("where d.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t ")
-//			.append("START WITH t.org_id='").append(orgId).append("' ")
-//			.append("CONNECT BY PRIOR t.org_id=t.PARENT_ID)");
-		
-//		删除机构与用户的部门管理员对应关系
-		StringBuffer sql7 = new StringBuffer()
-			.append("delete from td_sm_orgmanager ")
-			.append("where org_id in ")
-			.append(str.toString());
-		
-//		//地税特有表TD_SM_TAXCODE_ORGANIZATION
-//		StringBuffer sql8 = new StringBuffer()
-//			.append("delete from TD_SM_TAXCODE_ORGANIZATION d ")
-//			.append("where d.org_id in ")
-//			.append("(SELECT t.org_id FROM TD_SM_ORGANIZATION t ")
-//			.append("START WITH t.org_id='").append(orgId).append("' ")
-//			.append("CONNECT BY PRIOR t.org_id=t.PARENT_ID)") ;
-		
-		//地税特有表TD_SM_TAXCODE_ORGANIZATION
-		StringBuffer sql8 = new StringBuffer()
-			.append("delete from TD_SM_TAXCODE_ORGANIZATION  ")
-			.append("where org_id in ")
-			.append(str.toString());
-		
-//		//递归获取当前机构下的所有用户的ID
-//		StringBuffer  sql_user = new StringBuffer()
-//			.append(" select distinct b.USER_ID from TD_SM_USERJOBORG b where b.ORG_ID in ( ")
-//			.append("select distinct a.ORG_ID from TD_SM_ORGANIZATION a start with a.ORG_ID = '")
-//			.append(orgId) 
-//			.append("' connect by prior a.ORG_ID = a.PARENT_ID)");
-		
-		//递归获取当前机构下的所有用户的ID
-		StringBuffer  sql_user = new StringBuffer()
-			.append(" select distinct USER_ID from TD_SM_USERJOBORG where ORG_ID in  ")
-			.append(str.toString());
-	   TransactionManager tm = new TransactionManager();
-		try {
-			tm.begin();
-			db.addBatch(sql1.toString());
-			db.addBatch(sql2.toString());
-			db.addBatch(sql3.toString());
-			db.addBatch(sql4.toString());
-			db.addBatch(sql5.toString());
-			db.addBatch(sql6.toString());
-			db.addBatch(sql8.toString());
-			db.addBatch(sql7.toString());
-			db.addBatch(sql.toString());
-			db.executeBatch();
-
-			tm.commit();
-			
-			r = true;
-			
-//			触发用户角色变化事件
-			Event event = new EventImpl(orgId, ACLEventType.USER_ROLE_INFO_CHANGE);
-			super.change(event,true);
-//			触发用户角色变化事件
-			Event event1 = new EventImpl(orgId, ACLEventType.ORGUNIT_INFO_DELETE);
-			super.change(event1,true);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				e1.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				e1.printStackTrace();
-			}
-		}
 		return r;
 	}
 

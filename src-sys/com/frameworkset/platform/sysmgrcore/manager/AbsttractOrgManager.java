@@ -510,4 +510,16 @@ public class AbsttractOrgManager extends EventHandle implements OrgManager {
 		return false;
 	}
 
+	@Override
+	public boolean deleteOrg(Organization org, boolean sendEvent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteOrg(String orgId, boolean sendEvent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

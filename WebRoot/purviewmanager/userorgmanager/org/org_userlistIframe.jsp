@@ -79,9 +79,6 @@
 %>
  
 
-<%--
-		<script language="JavaScript" src="../../scripts/pager.js" type="text/javascript"></script>
-		--%>
 
 	
 <script language="javascript">	
@@ -231,7 +228,7 @@
 
 
 	<form name="userList" id="userList" method="post">
-		<input type="hidden" name="orgId" value="<%=curOrgId%>" />
+		<input type="hidden" name="orgId"  value="<%=curOrgId%>" />
    		<div id="changeColor">
 		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table3">
 				<pg:listdata
@@ -732,7 +729,7 @@
 								request.setAttribute("opuser",contextmenu);  
 								%>
 						<pg:contextmenu enablecontextmenu="true" context="opuser"
-							scope="request" />
+							scope="request" jquery="true"/>
 	</table>
 		</div>
 						<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10"/></div>

@@ -197,9 +197,28 @@ function modifyOrgInfo(orgId,parentId)
 function deleteOrg(orgId,orgName)
 {
 	$.dialog.confirm("<pg:message code='sany.pdp.common.operation.remove.confirm'/>", function() {
-		document.forms["orgtreeform"].action = "deleteorg_do.jsp?orgId=" + orgId;
-		document.forms["orgtreeform"].target = "hiddenFrame";
-		document.forms["orgtreeform"].submit();
+		$.ajax({
+			   type: "POST",
+				url : "deleteorg_do.jsp",
+				data :{"orgId":orgId},
+				dataType : 'html',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+						 
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      	 
+					 	
+					},
+				success : function(responseText){
+					//去掉遮罩	
+					unblockUI();
+					 $.dialog.alert('<pg:message code="sany.pdp.purviewmanager.rolemanager.role.type.remove.success"/>', function() {
+						 reloadhref();
+					    });
+				}
+			  });
+		 
 	});
 }
 //机构属性管理
@@ -294,6 +313,7 @@ function loaduserlist(orgId )
 	$("#app_tree_module a").removeClass("a_bg_color");
 	$("a[name='"+orgId+"']").addClass("a_bg_color"); 
 	$("#userContainer").load("org_userlistIframe.jsp?orgId="+orgId);
+	$("#orgarea").css("display","block");
 }
 
 </script>
@@ -310,17 +330,18 @@ function loaduserlist(orgId )
 		<div class="left_menu" style="width:200px;">
 		    <ul>
 		    	<li >
-		    		<a href="javascript:void(0)" onclick="searchorg()"><pg:message code="sany.pdp.role.organization.query"/></a> <%
+		    	<a href="javascript:void(0)" class="bt_small" onclick="searchorg()"><span><pg:message code="sany.pdp.role.organization.query"/></span></a>
+		    		<%
 	//判断是否是系统管理员(即是否是admin)
-	//2008-4-7 baowen.liu
+	//2008-4-7
 	if(accesscontroler.isAdmin())
 	{
   	%>
-     &nbsp;&nbsp;<a href="javascript:void(0)" onclick="neworg()"><pg:message code="sany.pdp.role.organization.new"/></a> 
+     <a href="javascript:void(0)" class="bt_small" onclick="neworg()"><span><pg:message code="sany.pdp.role.organization.new"/></span></a> 
    	<%
    	}
    	%>  
-   	&nbsp;&nbsp;<a href="javascript:void(0)" id="_type_1">右键操作</a>
+   	&nbsp;&nbsp;<a href="javascript:void(0)"  class="bt_small" ><span id="_type_1">右键操作</span></a> 
    	
 		    		<ul style="display: block;" >
 		    			<div id="app_tree_module" style="background-color: white;margin:0 auto;overflow:auto;" align="left"></div>
@@ -334,7 +355,7 @@ function loaduserlist(orgId )
 	<div id="rightContentDiv">
 			
 		 <script language="javascript">
-		    
+		//用户操作js函数
 			var isSucceed = '<%=request.getParameter("isSucceed")%>';
 			var delSucceed = '<%=request.getParameter("delSucceed")%>';
 			var isMain = '<%=request.getParameter("isMain")%>';
@@ -413,7 +434,7 @@ function loaduserlist(orgId )
 			    {
 			    	if (type==1)
 			    	{
-			    		userList.target = "deluser";
+			    		searchuserList.target = "deluser";
 			    		var curOrgId = $("#orgId").val();
 			    		var url = "${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/alotUserRole.jsp?orgId="+curOrgId+"&checks="+checks;
 			    		$.dialog({ close:queryUser,title:'<pg:message code="sany.pdp.sys.role.authorize"/>',width:740,height:560, content:'url:'+url,lock: true});
@@ -433,8 +454,8 @@ function loaduserlist(orgId )
 			
 				if ( "<%=desc%>"  == desc ) desc = "true";
 				var curOrgId = $("#orgId").val();
-				userList.action="${pageContext.request.contextPath}/user/userList.jsp?orgId="+curOrgId+"&pager.offset=0&pager.sortKey="+byName+"&pager.desc="+desc;
-				userList.submit();
+				searchuserList.action="${pageContext.request.contextPath}/user/userList.jsp?orgId="+curOrgId+"&pager.offset=0&pager.sortKey="+byName+"&pager.desc="+desc;
+				searchuserList.submit();
 			}
 				
 			function actionOnmouseover(e)
@@ -461,9 +482,8 @@ function loaduserlist(orgId )
 				var userIsvalid = document.all("userIsvalid").value;
 				var userSex = document.all("userSex").value;
 				var userType = document.all("userType").value;
+				var orgId = $("#orgId").val();
 				
-				var userName = userList.userName.value;
-				var userRealname = userList.userRealname.value;
 				
 				
 				
@@ -495,8 +515,9 @@ function loaduserlist(orgId )
 						}
 					}
 				
+				$("#userContainer").load("org_userlistIframe.jsp",
+						{"orgId":orgId,"intervalType":intervalType,"userName":userName,"userRealname":userRealname,"userIsvalid":userIsvalid,"userSex":userSex,"userType":userType});
 				
-				userList.submit();	
 			}
 			function querytype(e){
 			    queryUser();
@@ -553,7 +574,7 @@ function loaduserlist(orgId )
 			{
 			        var isSelect = false;
 				    var outMsg;
-					var userList = document.userList; 
+					var userList = document.searchuserList; 
 					
 					//选择两个或更多的用户进行批量处理,da.wei
 					var count = 0;
@@ -781,11 +802,11 @@ function loaduserlist(orgId )
 				{
 					outMsg = "<pg:message code='sany.pdp.delete.comfirm'/>?";
 					$.dialog.confirm(outMsg,function(){
-						document.userList.target = "deluser";
+						document.searchuserList.target = "deluser";
 						var curOrgId = $("#orgId").val();
-						document.userList.action = "../../userorgmanager/user/quiteDelUser.jsp?checks="+checks+"&orgId="+curOrgId;
+						document.searchuserList.action = "../../userorgmanager/user/quiteDelUser.jsp?checks="+checks+"&orgId="+curOrgId;
 						//win = window.showModelessDialog("<%=path%>/purviewmanager/common/doing.jsp","",featrue);
-						document.userList.submit();
+						document.searchuserList.submit();
 						},function(){},null,"<pg:message code='sany.pdp.common.alert'/>"
 					)
 				}
@@ -804,9 +825,10 @@ function loaduserlist(orgId )
 </div>
 <div class="mcontent">
 
-	<form name="userList" id="userList" method="post"
+<span id="orgarea" style="display: <pg:empty actual="${orgId }">none</pg:empty>;">
+	<form name="searchuserList" id="searchuserList" method="post"
 		action="org_userlistIframe.jsp" target="orgUserList">
-		<input type="hidden" name="orgId"  />
+		<input type="hidden" name="orgId"  id="orgId" />
 		<div id="searchblock">
 			<div class="search_top">
 				<div class="right_top"></div>
@@ -868,7 +890,7 @@ function loaduserlist(orgId )
 		<div class="rightbtn">
 			<a href="javascript:void(0)" class="bt_1" onClick="queryUser()"><span><pg:message
 						code="sany.pdp.common.operation.search" /></span></a> <a
-				href="javascript:void(0)" class="bt_2" onClick="userList.reset()"><span><pg:message
+				href="javascript:void(0)" class="bt_2" onClick="searchuserList.reset()"><span><pg:message
 						code="sany.pdp.common.operation.reset" /></span></a>
 			<%
 				if (accesscontroler.checkPermission("orgunit", "newdeluser", AccessControl.ORGUNIT_RESOURCE)) {
@@ -915,6 +937,9 @@ function loaduserlist(orgId )
 			%>
 		</div>
 	</div>
+	</span>
+
+	
 	
 	<div id="userContainer" style="overflow:auto">请选择一个部门</div>
 	 

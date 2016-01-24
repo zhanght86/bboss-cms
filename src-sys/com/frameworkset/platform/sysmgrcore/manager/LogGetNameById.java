@@ -1,14 +1,26 @@
 package com.frameworkset.platform.sysmgrcore.manager;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.frameworkset.common.poolman.DBUtil;
+import org.apache.log4j.Logger;
+
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.SQLExecutor;
+import com.frameworkset.common.poolman.handle.NullRowHandler;
+import com.frameworkset.platform.sysmgrcore.manager.db.GroupCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.RoleCacheManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 /**
  * 方便记录日志的时候，从ID到NAME的转换。
  * 
  * @author hongguang.zhao 
  *
  */
-public class LogGetNameById implements Serializable {
+public class LogGetNameById{
+	private static Logger log = Logger.getLogger(LogGetNameById.class);
 	/**
 	 * 通过用户ID返回用户名称
 	 * @param userId
@@ -19,7 +31,8 @@ public class LogGetNameById implements Serializable {
 		String  returnValue="";	
 		try
 		{
-		returnValue = SecurityDatabase.getUserManager().getUserByName(userId).getUserRealname();
+			
+		returnValue = (String)UserCacheManager.getInstance().getUserByID(userId).getUserAttribute("userName");
 		}catch(Exception e)
 		{			
 		}
@@ -32,15 +45,15 @@ public class LogGetNameById implements Serializable {
 	 */
 	public static String getUserNamesByUserIds(String userIds[])
 	{
-		String  returnValue="";	
+		StringBuilder  returnValue=new StringBuilder();	
 		try
 		{
 			for(int i=0;i<userIds.length;i++)
 			{
-				returnValue += SecurityDatabase.getUserManager().getUserById(userIds[i]).getUserRealname()+" ";
+				returnValue.append((String)UserCacheManager.getInstance().getUserByID(userIds[i]).getUserAttribute("userName")).append(" ");//SecurityDatabase.getUserManager().getUserById(userIds[i]).getUserRealname()+" ";
 			}		
 		}catch(Exception e){ }
-		return returnValue;
+		return returnValue.toString();
 	}
 	public static String getGroupNameByGroupId(String groupId)
 	{
@@ -48,7 +61,7 @@ public class LogGetNameById implements Serializable {
 	
 		try
 		{
-		returnValue = SecurityDatabase.getGroupManager().getGroupByID(groupId).getGroupName();
+		returnValue = GroupCacheManager.getInstance().getGroupByID(groupId).getGroupName();
 		}catch(Exception e)
 		{			
 		}
@@ -56,16 +69,17 @@ public class LogGetNameById implements Serializable {
 	}
 	public static String getGroupNamesByGroupIds(String groupIds[])
 	{
-		String  returnValue="";
+		StringBuilder  returnValue=new StringBuilder();	
 		
 		try
 		{
 			for(int i=0;i<groupIds.length;i++)
 			{
-				returnValue += SecurityDatabase.getGroupManager().getGroupByID(groupIds[i]).getGroupName()+" ";
+				
+				returnValue.append(GroupCacheManager.getInstance().getGroupByID(groupIds[i]).getGroupName()).append(" ");
 			}					
 		}catch(Exception e){ }		
-		return returnValue;
+		return returnValue.toString();
 	}
 	public static String getJobNameByJobId(String jobId)
 	{
@@ -73,8 +87,10 @@ public class LogGetNameById implements Serializable {
 	
 		try
 		{
-			DBUtil db = new DBUtil();
-			db.executeSelect("select JOB_NAME from TD_SM_JOB where JOB_ID ='"+jobId+"'");
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect("select JOB_NAME from TD_SM_JOB where JOB_ID =?");
+			db.setString(1, jobId);
+			db.executePrepared();
 			returnValue = db.getString(0,"JOB_NAME");		
 		}catch(Exception e)
 		{			
@@ -83,39 +99,44 @@ public class LogGetNameById implements Serializable {
 	}
 	public static String getJobNamesByJobIds(String jobIds[])
 	{
-		String  returnValue="";
-		String jobidsIn="";
-		for(int i=0;i<jobIds.length;i++)
-		{
-			if(jobIds[i]!=null || jobIds[i]!="")
-			{	
-				jobidsIn+="'"+jobIds[i]+"',";			
-			}
-		}
-		jobidsIn=jobidsIn.substring(0,jobidsIn.length()-1);	
+		if(jobIds == null || jobIds.length == 0)
+			return "";
+		final StringBuilder returnValue = new StringBuilder();
+		 
 		//System.out.println(jobidsIn);
 		try
 		{	
-			DBUtil db = new DBUtil();
-			db.executeSelect("select JOB_NAME from TD_SM_JOB where JOB_ID in ("+jobidsIn+")");
-			
-			for(int i=0;i<db.size();i++)
-			{
-				returnValue+=db.getString(i,"JOB_NAME")+" ";
-			}
+			StringBuilder sb = new StringBuilder();
+			sb.append("select JOB_NAME from TD_SM_JOB where JOB_ID in (#foreach($jid in $jobIds)  #if($velocityCount == 0) ")
+			.append(" #[jobIds[$velocityCount]] ")
+			.append("    #else ")
+			.append(" ,#[jobIds[$velocityCount]] ")
+			.append(" #end  #end)");
+			Map params = new HashMap();
+			params.put("jobIds", jobIds);
+			SQLExecutor.queryBeanByNullRowHandler(new NullRowHandler(){
+
+				@Override
+				public void handleRow(Record origine) throws Exception {
+					returnValue.append(origine.getString("JOB_NAME")).append(" ");
+					
+				}
+				
+			}, sb.toString(), params);
+		 
 			
 		}catch(Exception e)
 		{
-			System.out.println(e.getMessage());
+			log.error("getJobNamesByJobIds:"+jobIds, e);
 		}
-		return returnValue;
+		return returnValue.toString();
 	}
 	public static String getOrgNameByOrgId(String orgId)
 	{
 		String  returnValue="";	
 		try
 		{
-		returnValue = SecurityDatabase.getOrgManager().getOrgById(orgId).getRemark5();
+		returnValue = OrgCacheManager.getInstance().getOrganization(orgId).getRemark5();
 		}catch(Exception e)
 		{			
 		}
@@ -123,17 +144,17 @@ public class LogGetNameById implements Serializable {
 	}
 	public static String getOrgNamesByOrgIds(String orgIds[])
 	{
-		String  returnValue="";	
+		StringBuilder  returnValue=new StringBuilder();	
 		try
 		{
 			for(int i=0;i<orgIds.length;i++)
 			{
-				returnValue += SecurityDatabase.getOrgManager().getOrgById(orgIds[i]).getRemark5()+" ";
+				returnValue.append(OrgCacheManager.getInstance().getOrganization(orgIds[i]).getRemark5()).append(" ");
 			}
 		}catch(Exception e)
 		{			
 		}
-		return returnValue;
+		return returnValue.toString();
 	}
 	public static String getRoleNameByRoleId(String roleId)
 	{
@@ -141,7 +162,7 @@ public class LogGetNameById implements Serializable {
 	
 		try
 		{
-		returnValue = SecurityDatabase.getRoleManager().getRoleById(roleId).getRoleName();
+		returnValue = RoleCacheManager.getInstance().getRoleByID(roleId).getRoleName();
 		}catch(Exception e)
 		{			
 		}
@@ -149,18 +170,18 @@ public class LogGetNameById implements Serializable {
 	}
 	public static String getRoleNamesByRoleIds(String roleIds[])
 	{
-		String  returnValue="";
+		StringBuilder  returnValue=new StringBuilder();	
 	
 		try
 		{
 			for(int i=0;i<roleIds.length;i++)
 			{
-				returnValue += SecurityDatabase.getRoleManager().getRoleById(roleIds[i]).getRoleName()+" ";
+				returnValue .append(RoleCacheManager.getInstance().getRoleByID(roleIds[i]).getRoleName()).append(" ");
 			}
 		}catch(Exception e)
 		{			
 		}
-		return returnValue;
+		return returnValue.toString();
 	}
 	public static String getResNameByResId(String resId)
 	{

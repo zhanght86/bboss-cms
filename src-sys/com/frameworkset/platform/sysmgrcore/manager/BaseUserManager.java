@@ -843,4 +843,10 @@ public class BaseUserManager extends EventHandle implements UserManager {
 		return null;
 	}
 
+	@Override
+	public boolean deleteBatchUser(String[] userIds, boolean sendevent) throws ManagerException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
