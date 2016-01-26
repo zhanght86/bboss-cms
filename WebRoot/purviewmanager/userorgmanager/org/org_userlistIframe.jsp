@@ -741,7 +741,7 @@
 	</form>
 
 	
-	<form name="form2" method="POST"></form>
+	 
 	<script language="JavaScript">	
 
 	var intervalType = "<%=intervalType%>";
@@ -752,5 +752,5 @@
 	$("#orgpath").html('<%=orgpath%>');
     
 </script>
-	<iframe name="deluser" height="0" width="0"></iframe>
+	 
  

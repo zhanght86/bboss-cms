@@ -60,4 +60,9 @@
 		</construction>
 	</property>
 	
+	<property name="/usermanager/*.page"	
+		 
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.UserAction" >
+	</property>
+	
 </properties>

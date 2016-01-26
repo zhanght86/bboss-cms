@@ -54,7 +54,7 @@ boolean isJobOpen = ConfigManager.getInstance().getConfigBooleanValue("enablejob
 </style>
 
 <script type="text/javascript">
-
+var api = frameElement.api;
 $(document).ready(function() {
 	bboss.pager.pagerevent = {   
 			                            beforeload:null,   
@@ -778,7 +778,7 @@ function loaduserlist(orgId )
 			{
 				var arr = new Array();
 				//var arr = $(this).contents().find(".checkBoxOne");
-				var arr=window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+				var arr=document.getElementsByName("checkBoxOne");
 				var checks = "";
 				for(var i = 0; i < arr.length; i++)
 				{
@@ -802,13 +802,44 @@ function loaduserlist(orgId )
 				{
 					outMsg = "<pg:message code='sany.pdp.delete.comfirm'/>?";
 					$.dialog.confirm(outMsg,function(){
-						document.searchuserList.target = "deluser";
+						//document.searchuserList.target = "deluser";
 						var curOrgId = $("#orgId").val();
-						document.searchuserList.action = "../../userorgmanager/user/quiteDelUser.jsp?checks="+checks+"&orgId="+curOrgId;
-						//win = window.showModelessDialog("<%=path%>/purviewmanager/common/doing.jsp","",featrue);
-						document.searchuserList.submit();
-						},function(){},null,"<pg:message code='sany.pdp.common.alert'/>"
-					)
+					
+						$.ajax({
+							   type: "POST",
+								url : "<%=request.getContextPath()%>/usermanager/quiteDelUser.page?checks="+checks+"&orgId="+curOrgId,
+								data :{},
+								dataType : 'json',
+								async:false,
+								beforeSend: function(XMLHttpRequest){
+										 
+								      		blockUI();	
+								      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+								       			 	
+									},
+								success : function(response){
+									//去掉遮罩
+									unblockUI();
+									if(response.code=="success"){
+										var msg = response.errormessage;
+										 
+										$.dialog.alert(msg,function(){	
+												loaduserlist($("#orgId").val());
+												
+										},api);													
+									}else{
+										$.dialog.alert("操作结果："+response.errormessage,function(){	
+											 
+											},api);	
+										 
+									}
+								}
+							  });
+						
+						},function(){
+							
+							
+						},null,"<pg:message code='sany.pdp.common.alert'/>");
 				}
 			}
 			

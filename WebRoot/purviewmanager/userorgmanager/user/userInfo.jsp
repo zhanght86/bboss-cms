@@ -316,7 +316,7 @@
 				}
 				
 				
-				if (validateForm(UserInfoForm) )
+				 
 				{
 					//var userName= document.forms[0].userName.value;
 					//if (trim(userName).length == 0 ){
@@ -330,15 +330,50 @@
 			    	    
 			    	//}
 			    	
-			    	if(document.UserInfoForm.remark3.checked)
-			    		document.UserInfoForm.remark3.value="<pg:message code='sany.pdp.common.yes'/>";
-					else 
-						document.UserInfoForm.remark3.value="<pg:message code='sany.pdp.common.no'/>";
+			    	
 					
-			   		
-			   		document.UserInfoForm.target = "saveuser";
-					document.UserInfoForm.action="../user/userInfo.jsp?storeUser=true&flag=2";
-					document.UserInfoForm.submit();
+						$.ajax({
+							   type: "POST",
+								url : "<%=request.getContextPath()%>/usermanager/addUser.page?storeUser=true&flag=2",
+								data :formToJson("#UserInfoForm"),
+								dataType : 'json',
+								async:false,
+								beforeSend: function(XMLHttpRequest){
+										var validated =validateForm(UserInfoForm);
+								      	if (validated){
+								      		if(document.UserInfoForm.remark3.checked)
+									    		document.UserInfoForm.remark3.value="<pg:message code='sany.pdp.common.yes'/>";
+											else 
+												document.UserInfoForm.remark3.value="<pg:message code='sany.pdp.common.no'/>";
+								      		blockUI();	
+								      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+								      	}
+								      	else
+								      	{			      		
+								      		return false;
+								      	}				 	
+									},
+								success : function(response){
+									//去掉遮罩
+									unblockUI();
+									if(response.code=="success"){
+										var msg = response.errormessage;
+										 
+										W.$.dialog.alert(msg,function(){	
+												W.loaduserlist('<%=currOrgId%>');
+												api.close();
+										},api);													
+									}else{
+										W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+											 
+											},api);	
+										 
+									}
+								}
+							  });
+			   		//document.UserInfoForm.target = "saveuser";
+					//document.UserInfoForm.action="../user/userInfo.jsp?storeUser=true&flag=2";
+					//document.UserInfoForm.submit();
 					
 				}
 			}
@@ -427,7 +462,7 @@
 	<body>
 		<div style="height: 10px">&nbsp;</div>
 		<div align="center">
-		<form name="UserInfoForm" method="post">
+		<form name="UserInfoForm" id="UserInfoForm" method="post">
 			<pg:beaninfo requestKey="currUser">
 			
 				<input type="hidden" name="remark1" value="<pg:cell colName="remark1"  defaultValue=""/>" />
