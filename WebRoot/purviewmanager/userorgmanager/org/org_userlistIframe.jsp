@@ -104,14 +104,7 @@
 		}
 		
 		var winOpen
-		function orderUser(){
-		    winOpen = window.open("about:blank","win","scrollbars=no,status=no,titlebar=no,toolbar=no,z-lock=yes,width=616,height=500,top=130,left=210");                   
-		    document.all.form2.target = "win";
-		    document.all.form2.action = "user_order_ajax.jsp?orgId=<%=curOrgId%>";
-		  //  timer = window.setInterval("isClosed()",500);
-		    document.all.form2.submit();
-		    isClosed();
-		}
+		
 		var timer;
 		function isClosed(){
 		   

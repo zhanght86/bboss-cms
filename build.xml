@@ -64,6 +64,7 @@
 					<fileset dir="src-sanylog" includes="**/*.java"/>
 					<fileset dir="src-sms" includes="**/*.java"/>
 						<fileset dir="src-application" includes="**/*.java"/>
+					<fileset dir="src-appbom" includes="**/*.java"/>
 					<fileset dir="src-datasource" includes="**/*.java"/>
 					
 				</jar>
