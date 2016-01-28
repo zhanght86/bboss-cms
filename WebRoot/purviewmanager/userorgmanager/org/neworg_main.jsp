@@ -409,7 +409,7 @@ function loaduserlist(orgId )
 			{
 				var checks = "";
 			    var arr = new Array();
-			    arr = window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+			    arr = document.getElementsByName("checkBoxOne");
 			    var count = 0;
 			    for(var i = 0; i < arr.length; i++)
 			    {
@@ -532,7 +532,7 @@ function loaduserlist(orgId )
 			function jobUser(type) 
 			{
 			    var arr = new Array();
-			    arr = window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+			    arr =  document.getElementsByName("checkBoxOne");
 			    var checks = "";
 				var count = 0;
 				
@@ -625,7 +625,7 @@ function loaduserlist(orgId )
 			function operUser(type) 
 			{
 			    var arr = new Array();
-			    arr = window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+			    arr = document.getElementsByName("checkBoxOne");
 			    var checks = "";
 			    var count = 0;
 			    for(var i = 0; i < arr.length; i++)
@@ -665,7 +665,7 @@ function loaduserlist(orgId )
 			function purviewReclaimUsers()
 			{
 			    var arr = new Array();
-			    arr = window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+			    arr = document.getElementsByName("checkBoxOne");
 			    var checks = "";
 			    var count = 0;
 			    for(var i = 0; i < arr.length; i++)
@@ -733,7 +733,7 @@ function loaduserlist(orgId )
 			    var outMsg;
 			    var checks = "";
 			    var state = false;
-			   var obj=window.frames["orgUserList"].document.getElementsByName("checkBoxOne");
+			   var obj=document.getElementsByName("checkBoxOne");
 			    if(obj.length==0)
 			    {
 			    	$.dialog.alert("<pg:message code='sany.pdp.no.user.to.move.out' />");

@@ -4627,25 +4627,26 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			throws Exception {
 		if (userId == null || userId.length <= 0)
 			return;
-		DBUtil db = new DBUtil();
-		StringBuffer sql = new StringBuffer();
+		PreparedDBUtil db = new PreparedDBUtil();
+		String sql = ("update td_sm_userjoborg t set t.same_job_user_sn=? where t.user_id=? and org_id=?");
+		TransactionManager tm = new TransactionManager();
 		try {
+			tm.begin();
+			db.preparedUpdate(sql.toString());
 			for (int i = 0; i < userId.length; i++) {
-				sql.append("update td_sm_userjoborg t set t.same_job_user_sn=");
-				sql.append(i + "");
-				sql.append(" where t.user_id=");
-				sql.append(userId[i]);
-				sql.append(" and org_id='").append(orgId).append("'");
-				db.addBatch(sql.toString());
-				sql.setLength(0);
+				db.setInt(1, i);
+				db.setInt(2, Integer.parseInt(userId[i]));
+				db.setString(3, orgId);
+				db.addPreparedBatch();
 			}
-			db.executeBatch();
+			db.executePreparedBatch();
+			tm.commit();
 			//Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
 			//super.change(event);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw e;
 		}finally{
-			db.resetBatch();
+			tm.release();
 		}
 
 	}

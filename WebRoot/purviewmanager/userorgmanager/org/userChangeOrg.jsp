@@ -104,9 +104,41 @@ function addorg(){
   	}
   	<%if(!ConfigManager.getInstance().getConfigBooleanValue("sys.user.enablemutiorg", true)){%>
 	  	if(orgValues!=""){
-	  		document.OrgJobForm.target="getOrg";
-		  	document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0";
-		  	document.OrgJobForm.submit();
+	  		//document.OrgJobForm.target="getOrg";
+		  	//document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0";
+		  	//document.OrgJobForm.submit();
+		  	
+		  	
+		  	$.ajax({
+				   type: "POST",
+					url : "<%=request.getContextPath()%>/usermanager/foldDisperse.page?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0",
+					data :formToJson("#OrgJobForm"),
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							 
+					      		blockUI();	
+					      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+					      	 		 	
+						},
+					success : function(response){
+						//去掉遮罩
+						unblockUI();
+						if(response.code=="success"){
+							var msg = response.errormessage;
+							 
+							W.$.dialog.alert(msg,function(){	
+									W.loaduserlist('<%=orgId%>');
+									api.close();
+							},api);													
+						}else{
+							W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+								 
+								},api);	
+							 
+						}
+					}
+				  });
 	  	}else{
 	  		$.dialog.alert("<pg:message code='sany.pdp.choose.move.in.organization'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 			return;
@@ -114,13 +146,75 @@ function addorg(){
   	<%}else{%>
 	  	if(orgValues!=""){
 	  		if(confirm("<pg:message code='sany.pdp.is.reserve.user'/>")){
-		  		document.OrgJobForm.target="getOrg";
-			  	document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=1";
-			  	document.OrgJobForm.submit();
+		  		//document.OrgJobForm.target="getOrg";
+			  	//document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=1";
+			  	//document.OrgJobForm.submit();
+			  	
+			  	$.ajax({
+					   type: "POST",
+						url : "<%=request.getContextPath()%>/usermanager/foldDisperse.page?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=1",
+						data :formToJson("#OrgJobForm"),
+						dataType : 'json',
+						async:false,
+						beforeSend: function(XMLHttpRequest){
+								 
+						      		blockUI();	
+						      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+						      	 		 	
+							},
+						success : function(response){
+							//去掉遮罩
+							unblockUI();
+							if(response.code=="success"){
+								var msg = response.errormessage;
+								 
+								W.$.dialog.alert(msg,function(){	
+										W.loaduserlist('<%=orgId%>');
+										api.close();
+								},api);													
+							}else{
+								W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+									 
+									},api);	
+								 
+							}
+						}
+					  });
 		  	}else{
-		  		document.OrgJobForm.target="getOrg";
-			  	document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0";
-			  	document.OrgJobForm.submit();		  	
+		  		//document.OrgJobForm.target="getOrg";
+			  	//document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0";
+			  	//document.OrgJobForm.submit();	
+			  	
+			  	$.ajax({
+					   type: "POST",
+						url : "<%=request.getContextPath()%>/usermanager/foldDisperse.page?userIds=<%=ids%>&orgIds="+orgValues+"&orgId=<%=orgId%>&flag=0",
+						data :formToJson("#OrgJobForm"),
+						dataType : 'json',
+						async:false,
+						beforeSend: function(XMLHttpRequest){
+								 
+						      		blockUI();	
+						      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+						      	 		 	
+							},
+						success : function(response){
+							//去掉遮罩
+							unblockUI();
+							if(response.code=="success"){
+								var msg = response.errormessage;
+								 
+								W.$.dialog.alert(msg,function(){	
+										W.loaduserlist('<%=orgId%>');
+										api.close();
+								},api);													
+							}else{
+								W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+									 
+									},api);	
+								 
+							}
+						}
+					  });
 		  	}
 	  	}else{
 	  		$.dialog.alert("<pg:message code='sany.pdp.choose.move.in.organization'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
@@ -185,14 +279,12 @@ function alertfun(msg1,msg2)
   <a class="bt_2" onclick="closeDlg()"><span><pg:message code="sany.pdp.common.operation.exit"/></span></a>
   </td>
   </tr>
-<iframe name="getOrg" width="0" height="0" ></iframe>  
+ 
 </table>
 </form>
 </center>
 </div>
-<div style="display:none">
-<IFRAME name="delDisperse" height="0" width="0"></IFRAME>
-</div>
+ 
 </body>
 <script>
 function checkFold()

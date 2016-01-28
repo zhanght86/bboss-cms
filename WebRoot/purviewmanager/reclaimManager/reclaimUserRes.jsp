@@ -23,13 +23,12 @@
 %>
 <html>
 	<head>
-		<title><pg:message code="sany.pdp.sys.purview.recycle"/></title>
-		<script type="text/javascript" src="../../include/jquery-1.4.2.min.js"></script>
-		<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+		<title><pg:message code="sany.pdp.sys.purview.recycle"/></title> 
+		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	</head>
 	<body class="contentbodymargin" >
 		<br>
-		<form name="form1" method="post" target="hiddenFrame" >
+		<form name="form1" id="form1" method="post" target="hiddenFrame" >
 		<input type="hidden" name="userIds" value="<%=userIds%>">
 				<br>
 				<table cellspacing="1" cellpadding="0" border="0" bordercolor="#EEEEEE" width=100% >
@@ -83,6 +82,7 @@
 		</form>
 	</body>
 	<script language="javascript">
+	var api = frameElement.api, W = api.opener;
 	    function reclaim(){
 	        var directRes = "";
 	        var userRoleRes = "";
@@ -104,12 +104,42 @@
 	            parent.$.dialog.alert("<pg:message code='sany.pdp.common.operation.select'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 	            return false;
 	        }else{	   
-		        document.form1.target = "hiddenFrame";
-		        document.form1.action = "reclaimUserRes_do.jsp";
-		        document.form1.submit();
+		       // document.form1.target = "hiddenFrame";
+		        //document.form1.action = "reclaimUserRes_do.jsp";
+		        //document.form1.submit();
+		        
+		        $.ajax({
+					   type: "POST",
+						url : "<%=request.getContextPath()%>/usermanager/reclaimUserRes_do.page",
+						data :formToJson("#form1"),
+						dataType : 'json',
+						async:false,
+						beforeSend: function(XMLHttpRequest){
+								 
+						      		blockUI();	
+						      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+						      	 		 	
+							},
+						success : function(response){
+							//去掉遮罩
+							unblockUI();
+							if(response.code=="success"){
+								var msg = response.errormessage;
+								 
+								W.$.dialog.alert(msg,function(){	
+										
+										api.close();
+								},api);													
+							}else{
+								W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+									 
+									},api);	
+								 
+							}
+						}
+					  });
 	        }
 	    }
 	</script>
-	<iframe id="hiddenFrame" name="hiddenFrame" src="" width=0 height=0></iframe>
 </html>
 

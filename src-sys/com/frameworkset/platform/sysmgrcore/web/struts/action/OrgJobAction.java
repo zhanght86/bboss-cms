@@ -399,7 +399,8 @@ public class OrgJobAction   {
 			UserManager userManager = SecurityDatabase.getUserManager();
 			userManager.storeOrgUserOrder( orgId, userId);
 		} catch (Exception e) {
-			return "fail";
+			throw e;
+//			return "fail";
 		}
 		return "success";
 

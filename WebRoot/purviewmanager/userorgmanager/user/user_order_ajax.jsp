@@ -32,6 +32,12 @@
         <title>机构下用户排序</title>
         <SCRIPT LANGUAGE="JavaScript">
         var http_request = false;
+        var api = frameElement.api;
+        if(api){
+    		W = api.opener;
+    	}else{
+    		api = parent.frameElement.api,W = api.opener;
+    	}
         //初始化，指定处理的函数，发送请求的函数
         function send_request(url){
             //http_request = false;
@@ -62,6 +68,8 @@
 			document.form1.action = url;
 			document.form1.target = "hiddenFrame";
 			document.form1.submit();
+			
+			
         }
         
         var dflag = false;
@@ -83,7 +91,38 @@
            for (var i=0;i<len;i++){       
              userId[i]=document.all("userList").options[i].value;
            }
-           send_request('userorderchange.jsp?orgId='+orgId+'&userId='+userId);
+           //send_request('userorderchange.jsp?orgId='+orgId+'&userId='+userId);
+           $.ajax({
+			   type: "POST",
+				url : '<%=request.getContextPath()%>/usermanager/userorderchange.page?userId='+userId,
+				data :formToJson("#form1"),
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+						 
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				       			 	
+					},
+				success : function(response){
+					//去掉遮罩
+					unblockUI();
+					if(response.code=="success"){
+						var msg = response.errormessage;
+						 
+						$.dialog.alert(msg,function(){	
+								W.loaduserlist($("#orgId").val());
+								
+						},api);													
+					}else{
+						$.dialog.alert("操作结果："+response.errormessage,function(){	
+							 
+							},api);	
+						 
+					}
+				}
+			  });
+		
         }
    
         function up1() {
@@ -224,10 +263,10 @@
     </SCRIPT>
     </head>
     
-    <body onload=init() onunload="window.returnValue = 'ok'">
-        <form name="form1" method="post">
+    <body >
+        <form name="form1" id="form1" method="post">
         <div align="center">
-            <input type="hidden" name="orgId" value="<%=orgId%>">
+            <input type="hidden" name="orgId" id="orgId" value="<%=orgId%>">
             <table width="450" height="20" border="0" align="center">
                 <tr>
                     <td height="16" colspan="15" valign="top" width="60%">
@@ -321,9 +360,7 @@
 				</tr>
 			</table>
 		</div>
-		<div style="display:none">	
-		<iframe name="hiddenFrame" width=0 height=0 border=0></iframe>
-		</div>
+		
     </body>
 </html>
 

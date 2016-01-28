@@ -8,7 +8,7 @@
 
 <%@ taglib prefix="tab" uri="/WEB-INF/tabpane-taglib.tld" %>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.UserManager" %>
 <%@ page import="com.frameworkset.platform.sysmgrcore.entity.*"%>
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
@@ -181,8 +181,7 @@
 				</tab:tabContainer>			
 			</td>
 		</tr>
-	</table>	
-  <iframe name="exeman" width="0" height="0" style="display:none"></iframe>
+	</table>	 
 </body>
 </html>
 

@@ -62,7 +62,7 @@
 	
 	<property name="/usermanager/*.page"	
 		 
-		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.UserAction" >
+		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.UserOrgAction" >
 	</property>
 	
 </properties>
