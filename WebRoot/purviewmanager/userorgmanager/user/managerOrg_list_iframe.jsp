@@ -57,7 +57,8 @@
 				      <pg:param name="userId"/>
 				      <pg:param name="orgName"/>
 				      <pg:param name="remark5"/>
-				      <pg:param name="orgnumber"/>		      
+				      <pg:param name="orgnumber"/>		  
+				       
 				      <!--list标签循环输出每条记录-->			      
 				      <pg:list>	
 				      		<tr onmouseover="this.className='mouseover'" onmouseout="this.className= 'mouseout'" onDBLclick="" >	      				
@@ -80,10 +81,10 @@
 				      </pg:list>
 				     
 	
-	<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,15"/></div>
+	
 						</table>   
 	        		
-			       
+			       <div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="10,15"/></div>
 		</pg:pager>
 </div>
 </body>

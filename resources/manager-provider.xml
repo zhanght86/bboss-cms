@@ -118,7 +118,6 @@
 	<managerimport file="properties-content.xml" />
 	
  
-	<managerimport file="event-service-assemble.xml" />
 	<!--
 		监控服务
 		 

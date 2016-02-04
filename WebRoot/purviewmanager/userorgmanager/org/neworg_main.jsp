@@ -708,16 +708,7 @@ function loaduserlist(orgId )
 				$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.sort.user"/>',width:760,height:560, content:'url:'+url,lock: true});
 			}
 			
-			var timer;
-			function isClosed()
-			{
-			    if(winOpen.closed==true)
-			    {
-			        window.location.href = window.location;
-			        window.clearInterval(timer);
-			    }
-			}
-			
+			 
 			function foldUser()
 			{
 				var win;

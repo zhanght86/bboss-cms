@@ -1,6 +1,5 @@
-<%@ include file="../../../sysmanager/include/global1.jsp"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="../../../sysmanager/base/scripts/panes.jsp"%>
+ 
+<%@ page language="java" contentType="text/html; charset=UTF-8"%> 
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree" %>
 <%@ page import="com.frameworkset.platform.security.AccessControl" %>
@@ -31,7 +30,7 @@
     	           collapse="true"
     			   includeRootNode="true"
     			   href="<%=href%>"
-    			   target="userList"
+    			   target="otheruserList"
     			   mode="static-dynamic"  
     			   >                         
                    <tree:param name="userId"/>

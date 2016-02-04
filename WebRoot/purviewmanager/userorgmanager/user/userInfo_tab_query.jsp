@@ -618,7 +618,6 @@ function queryroleRes(name)
       </div>
 
 </div>
-<iframe name="userInfo" width="0" height="0"></iframe>
 <script>
 //恢复密码
 function renewPassword(){

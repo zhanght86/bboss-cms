@@ -37,8 +37,7 @@
 
 <html>
 <head>
-<title>用户【<%=userName%>】隶属组设置</title>
-<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
+<title>用户【<%=userName%>】隶属组设置</title> 
 <%@ include file="/include/css.jsp"%>
 
 </head> 

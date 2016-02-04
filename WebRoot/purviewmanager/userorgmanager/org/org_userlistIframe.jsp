@@ -104,14 +104,7 @@
 		}
 		
 		var winOpen
-		
-		var timer;
-		function isClosed(){
-		   
-		        window.location.href = window.location;
-		       
-		   
-		}
+	 
 		
 		<!-- gao.tang 2007.11.05 start 右键菜单跳转路径  -->
 		function userInfoquery(userId){ 
@@ -160,7 +153,7 @@
 		function roleGrant(userId){
 			//机构下的用户角色授予
 			var url="${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/changeRole_ajax.jsp?userId="+ userId + "&orgId=<%=curOrgId%>";
-			$.dialog({close:isClosed,title:'<pg:message code="sany.pdp.role.setting"/>',width:760,height:560, content:'url:'+url,lock: true});
+			$.dialog({close:queryUser,title:'<pg:message code="sany.pdp.role.setting"/>',width:760,height:560, content:'url:'+url,lock: true});
 		}
 		
 		function resGrant(userId){
@@ -203,7 +196,7 @@
 		}
 		
 		function usersx(){
-			document.location = document.location;
+			queryUser();
 		}
 		
 		function userResetCa(userName){

@@ -91,7 +91,8 @@
 		}
 		
 		function getOperateType(id){
-				getopergroup.location.href = "resChange.jsp?restypeId="+id;
+			$("#operategroup").load( "resChangeAjax.jsp?restypeId="+id);
+				//getopergroup.location.href = "resChange.jsp?restypeId="+id;
 		}
 		function doreset() {
 			document.getElementById("reset").click();

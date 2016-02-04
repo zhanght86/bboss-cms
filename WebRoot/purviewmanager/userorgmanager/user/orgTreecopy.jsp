@@ -1,6 +1,4 @@
-<%@ include file="../../../sysmanager/include/global1.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
-<%@ include file="../../../sysmanager/base/scripts/panes.jsp"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree" %>
 <%@ page import="com.frameworkset.platform.security.AccessControl" %>

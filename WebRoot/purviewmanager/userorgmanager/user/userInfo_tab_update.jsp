@@ -368,7 +368,7 @@ function queryroleRes(name)
 							 <pg:message code="sany.pdp.birthday"/>：
 						</th>
 						<td height="25">
-							<input type="text" name="userBirthday" class="Wdate" onclick="WdatePicker()" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />" validator="stringNull" cnname="生日" maxlength="40">
+							<input type="text" name="userBirthday" class="Wdate" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="true" value="<pg:cell colName="userBirthday"  defaultValue=""  />"  cnname="生日" maxlength="40">
 						</td>
 						<th>
 							  <pg:message code="sany.pdp.user.address"/>：

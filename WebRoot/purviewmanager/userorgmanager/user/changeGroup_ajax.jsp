@@ -314,7 +314,7 @@
 		parent.window.returnValue = "ok";
 	}
 </SCRIPT>
- 	<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+ 	<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 	<body class="contentbodymargin" scroll="no">
 		<div id="">
 			<center>
@@ -401,9 +401,7 @@
 		<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="100%" height="100%">
 		    <tr>
 			    <td bgcolor=#3A6EA5>
-				    <marquee align="middle" behavior="alternate" scrollamount="5">
 					    <font color=#FFFFFF>...处理中...请等待...</font>
-					</marquee>
 				</td>
 			</tr>
 		</table>
