@@ -80,8 +80,7 @@
  
 
 
-	
-<script language="javascript">	
+<script language="JavaScript">	
 		function sortBy(byName){
 			var desc = "false";
 		
@@ -103,10 +102,10 @@
 			history.back();	
 		}
 		
-		var winOpen
+	 
 	 
 		
-		<!-- gao.tang 2007.11.05 start 右键菜单跳转路径  -->
+		 
 		function userInfoquery(userId){ 
 			//用户基本信息查看 userInfo_tab.jsp
 			var url="${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/userInfo_tab_query.jsp?orgId=<%=curOrgId%>&userId="+userId;
@@ -204,10 +203,11 @@
 			document.userList.target="deluser";
 			document.userList.submit();
 		}
-		<!-- gao.tang 2007.11.05 end    -->
+		 
 		
 		
-		</SCRIPT>
+	    
+		</script>
  
 
 
