@@ -2,14 +2,14 @@
  * My97 DatePicker 4.8 Beta4
  */
 var $dp,WdatePicker;(function(){var $={
-$langList:[
- {name:"en",charset:"UTF-8"},
- {name:"zh-cn",charset:"gb2312"},
- {name:"zh-tw",charset:"GBK"}],
-$skinList:[
- {name:"default",charset:"gb2312"},
- {name:"blue",charset:"gb2312"},
- {name:"red",charset:"gb2312"}],
+		$langList:[
+		           {name:"en",charset:"UTF-8"},
+		           {name:"zh-cn",charset:"UTF-8"},
+		           {name:"zh-tw",charset:"UTF-8"}],
+		          $skinList:[
+		           {name:"default",charset:"UTF-8"},
+		           {name:"blue",charset:"UTF-8"},
+		           {name:"red",charset:"UTF-8"}],
 $wdate:true,
 $crossFrame:true,
 $preLoad:false,
@@ -26,8 +26,8 @@ dateFmt:"yyyy-MM-dd",
 realDateFmt:"yyyy-MM-dd",
 realTimeFmt:"HH:mm:ss",
 realFullFmt:"%Date %Time",
-minDate:"2004-01-01 00:00:00",
-maxDate:"2099-12-31 23:59:59",
+minDate:"0001-00-00 00:00:00",
+maxDate:"9999-12-31 23:59:59",
 startDate:"",
 alwaysUseStartDate:false,
 yearOffset:2004,
