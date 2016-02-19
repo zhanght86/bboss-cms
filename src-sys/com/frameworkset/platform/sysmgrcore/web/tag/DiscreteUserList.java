@@ -2,14 +2,17 @@ package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.Record;
+import com.frameworkset.common.poolman.handle.RowHandler;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -21,56 +24,54 @@ where user0_.user_id in ( select user1_.USER_ID from td_sm_user user1_
  * @file DiscreteUserList.java Created on: Apr 26, 2006
  */
 public class DiscreteUserList extends DataInfoImpl implements Serializable {
-
+	ConfigSQLExecutor executor_ = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/web/tag/userListSn.xml");
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {
-		ListInfo listInfo = new ListInfo();
-		DBUtil dbUtil = new DBUtil();
+		
+		ListInfo listInfo = null;
+		TransactionManager tm = new TransactionManager(); 
 		try {
+			
+			Map params = new HashMap();
 			String userName = request.getParameter("userName");
 			String userRealname = request.getParameter("userRealname");
-			StringBuffer hsql = new StringBuffer("select user0_.* from td_sm_user  user0_ where 1=1 ");
+			 
 			if (userName != null && userName.length() > 0) {
-				hsql.append(" and user_name like '%" + userName + "%' ");
+				params.put("userName", "%" + userName + "%");
 			}
 			if (userRealname != null && userRealname.length() > 0) {
-				hsql
-						.append(" and user_realname like '%" + userRealname
-								+ "%'");
+				params.put("userRealname", "%" + userRealname + "%");
 			}
-//			hsql
-//					.append(" and u.userId not in (select distinct ujo.id.userId from Userjoborg ujo"
-//							+ ")");
-			hsql
-			.append(" and user0_.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( select user_id from td_sm_userjoborg where user_id =user1_.USER_ID)"
-					+ ")");
+		 
+			final UserManager userManager = SecurityDatabase.getUserManager();
 //			System.out.println(hsql.toString());
-			dbUtil.executeSelect(hsql.toString(),offset,maxPagesize);
-			User user = null;
-			List users = new ArrayList();
-			 UserManager userManager = SecurityDatabase.getUserManager();
-			for(int i = 0; i < dbUtil.size(); i ++)
-			{
-				user = new User();
-				user.setUserId(new Integer(dbUtil.getInt(i, "user_id")));
-				user.setUserName(dbUtil.getString(i, "user_name"));
-				user.setUserRealname(dbUtil.getString(i, "user_realname"));
-				user.setUserType(dbUtil.getString(i, "user_type"));
-				user.setUserEmail(dbUtil.getString(i, "user_email"));
-				user.setUserIdcard(dbUtil.getString(i,"USER_IDCARD"));
-				user.setUserWorknumber(dbUtil.getString(i,"USER_WORKNUMBER"));
-				user.setUserMobiletel1(dbUtil.getString(i,"USER_MOBILETEL1"));
-				user.setPasswordUpdatetime(dbUtil.getTimestamp(i,"password_updatetime"));
-				user.setPasswordDualedTime(dbUtil.getInt(i, "Password_DualTime"));
-				user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+			tm.begin();
+			listInfo = executor_.queryListInfoBeanByRowHandler(new RowHandler<User>(){
+
+				@Override
+				public void handleRow(User user, Record dbUtil) throws Exception {
+					user.setUserId(new Integer(dbUtil.getInt(  "user_id")));
+					user.setUserName(dbUtil.getString( "user_name"));
+					user.setUserRealname(dbUtil.getString( "user_realname"));
+					user.setUserType(dbUtil.getString( "user_type"));
+					user.setUserEmail(dbUtil.getString( "user_email"));
+					user.setUserIdcard(dbUtil.getString("USER_IDCARD"));
+					user.setUserWorknumber(dbUtil.getString("USER_WORKNUMBER"));
+					user.setUserMobiletel1(dbUtil.getString("USER_MOBILETEL1"));
+					user.setPasswordUpdatetime(dbUtil.getTimestamp("password_updatetime"));
+					user.setPasswordDualedTime(dbUtil.getInt( "Password_DualTime"));
+					user.setPasswordExpiredTime((Timestamp)userManager.getPasswordExpiredTime(user.getPasswordUpdatetime(),user.getPasswordDualedTime()));
+					
+				}
 				
-				users.add(user);
-				
-			}
-			listInfo.setDatas(users);
-			listInfo.setTotalSize(dbUtil.getTotalSize());
+			}, User.class, "DiscreteUserList", offset, maxPagesize, params);
+			tm.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		finally
+		{
+			tm.release();
 		}
 		
 //		String userName = request.getParameter("userName");

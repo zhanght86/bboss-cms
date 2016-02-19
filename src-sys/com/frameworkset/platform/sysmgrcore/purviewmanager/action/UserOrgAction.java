@@ -1,6 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager.action;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.frameworkset.event.Event;
-import org.frameworkset.event.EventHandle;
-import org.frameworkset.event.EventImpl;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
@@ -47,6 +45,7 @@ public class UserOrgAction {
 		{
 			result.setErrormessage("没有新增用户权限!");
 			result.setCode(result.fail);
+			return result;
 		}
 		
 		String newUserName = "";String errorMessage = "";
@@ -197,6 +196,7 @@ public class UserOrgAction {
 			{
 				result.setErrormessage("没有删除用户权限!");
 				result.setCode(result.fail);
+				return result;
 			}
 			UserManager userManager = SecurityDatabase.getUserManager();
 			
@@ -287,6 +287,7 @@ public class UserOrgAction {
 			{
 				result.setErrormessage("没有用户排序权限!");
 				result.setCode(result.fail);
+				return result;
 			}
 			
 			 //记录日志
@@ -336,6 +337,7 @@ public class UserOrgAction {
 			{
 				result.setErrormessage("没有用户调动权限!");
 				result.setCode(result.fail);
+				return result;
 			}
 			
 			UserManager userManager = SecurityDatabase.getUserManager();
@@ -471,6 +473,7 @@ public class UserOrgAction {
 			{
 				result.setErrormessage("没有回收操作权限!");
 				result.setCode(result.fail);
+				return result;
 			}
 			
 			 String userIds = request.getParameter("userIds") == null ? "":request.getParameter("userIds");
@@ -519,5 +522,130 @@ public class UserOrgAction {
 		}
 		return result;
 	}
+	public @ResponseBody Result lisanuserInfo_deletehandle(HttpServletRequest request,HttpServletResponse response)  
+	{
+		Result result = new Result();String errorMessage = "";
+		AccessControl control = AccessControl.getInstance();
+		if(!control.checkManagerAccess(request,response))
+		{
+			result.setErrormessage("没有删除离散用户权限!");
+			result.setCode(result.fail);
+			return result;
+		}
+		String msg= null;
+		List allMessage = new ArrayList();
+		
+		String[] ids = null;
+		TransactionManager tm = new TransactionManager();
+		try
+		{
+			//action start
+					
+					
+					//获取要删除的用户
+					  ids = request.getParameterValues("checkBoxOne");
+					//System.out.println(ids);
+					//System.out.println(ids.length);
+					UserManager userManager = SecurityDatabase.getUserManager();
+					
+					
+					User user = null;
+					
+					
+					tm.begin();
+					List<User> uids = new ArrayList<User>();
+					for(int i = 0;  ids != null&&i < ids.length; i ++)
+					{
+						
+						user = userManager.getUserById(ids[i]);
+						if(user == null)
+						{
+							allMessage.add("用户【" + ids[i] + "】不存在,无需删除！");
+							continue;
+						}
+						//获取用户是否可以被删除,调用系统校验接口，验证用户是否可以被删除
+						List message = PurviewManagerImpl.getBussinessCheck().userDeleteCheck(control,ids[i]);
+						if(message != null && message.size()> 0)
+						{
+							allMessage.addAll(message);
+							continue;
+						}
+						
+						uids.add(user);
+//						userManager.deleteUser(user);
+					 
+						//--从机构中删除用户记录日志
+						   
+				        //-------------
+				        //删除该机构下的用户，该用户在其他机构下存在---关联表关系（td_sm_userjoborg,td_sm_orgmanager）
+					}
+					ids = null;
+					ids = new String[uids.size()];
+					int i = 0; 
+					StringBuilder b = new StringBuilder();
+					
+					for(User id:uids)
+					{
+						ids[i] = id.getUserId()+"";
+						if (i == 0)
+							b.append(id.getUserName());
+						else
+							b.append(",").append(id.getUserName());
+						i ++;
+					}
+					userManager.deleteBatchUser(ids,false);
+					String operContent="";        
+			        String operSource=control.getMachinedID();
+			        String openModle="用户管理";
+			        LogManager logManager = SecurityDatabase.getLogManager(); 
+					operContent=control.getUserAccount() +" 删除了离散用户: "+b.toString(); 
+			        logManager.log(control.getUserAccount(),operContent,openModle,operSource);    
+					tm.commit();
+					if(i > 0) //发出离散用户删除事件
+					{
+						ConfigManager.getEventHandle().change("删除离散用户",ACLEventType.USER_INFO_DELETE);
+					}
+					
+					
+					
+			//action end
+			}
+			catch(Exception e)
+			{
+					e.printStackTrace();
+					allMessage.add(e.getMessage());
+			}
+		finally
+		{
+			tm.release();
+		}
+			result.setCode(result.ok);
+	    
+			if(allMessage != null)
+			{
+				if(ids != null)
+				{		
+					allMessage.add("实际删除用户[" + ids.length + "]个。");
+				}
+				if(allMessage.size() > 0)
+				{
+					//System.out.println("allMessage.size():" + allMessage.size());
+					
+					StringBuffer str = new StringBuffer();
+					
+					msg =  StringUtil.buildStringMessage(allMessage);
+					result.setErrormessage(msg);
+				 
+				}
+				else
+				{
+					result.setErrormessage("删除离散用户完毕");
+				}	
+				
+			
+			}
+			return result;
+	}
+	 
 	
 }

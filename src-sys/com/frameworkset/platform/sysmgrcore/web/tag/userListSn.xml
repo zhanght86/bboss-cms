@@ -71,4 +71,17 @@
          order by a.num,bb.same_job_user_sn,t.user_id 
 		]]>
 </property>
+<property name="DiscreteUserList">
+		<![CDATA[
+		select user0_.* from td_sm_user  user0_ where 1=1  
+			 #if($userName && !$userName.equals("")) 
+				  and user_name like #[userName] 
+			 #end
+			 #if($userRealname && !$userRealname.equals(""))  
+				  and user_realname like #[userRealname] 
+			 #end			 
+			 and user0_.user_id in (select user1_.USER_ID from td_sm_user user1_ where not exists( select user_id from td_sm_userjoborg where user_id =user1_.USER_ID))
+		]]>
+</property>
+		 
 </properties>	   

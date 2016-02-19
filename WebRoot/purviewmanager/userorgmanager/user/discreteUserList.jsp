@@ -33,6 +33,7 @@
 	}else{
 		QueryuserRealname = request.getParameter("userRealname");
 	}
+	
 
     ResourceManager resManager = new ResourceManager();
     String resId = resManager.getGlobalResourceid(AccessControl.ORGUNIT_RESOURCE);
@@ -45,6 +46,8 @@
 <%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
 
 <SCRIPT language="Javascript">
+var api = frameElement.api,W = api.opener;
+
 var isSucceed = <%=request.getParameter("delSucceed")%>;
 if(isSucceed=="3"){
 	$.dialog.alert("<pg:message code='sany.pdp.userorgmanager.user.delete.success'/>",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
@@ -83,10 +86,38 @@ function dealRecord(dealType) {
     if (isSelect){
     	if (dealType==1){
     		parent.$.dialog.confirm("<pg:message code='sany.pdp.dictmanager.dict.delete.confirm'/>",function(){
-				userList.action="lisanuserInfo_deletehandle.jsp";
-				userList.target="delDisperse";
-				userList.submit();
-				
+				 
+				$.ajax({
+					   type: "POST",
+						url : "<%=request.getContextPath()%>/usermanager/lisanuserInfo_deletehandle.page",
+						data :formToJson("#userList"),
+						dataType : 'json',
+						async:false,
+						beforeSend: function(XMLHttpRequest){
+								 
+						      		blockUI();	
+						      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+						      	 		 	
+							},
+						success : function(response){
+							//去掉遮罩
+							unblockUI();
+							if(response.code=="success"){
+								var msg = response.errormessage;
+								 
+								 $.dialog.alert(msg,function(){	
+										 reloadusers();
+										api.close();
+								},api);													
+							}else{
+								 $.dialog.alert("操作结果："+response.errormessage,function(){	
+									 
+									},api);	
+								 
+							}
+						}
+					  });
+
 	 			return true;
     		});
 		} 
@@ -197,7 +228,7 @@ function reloadusers()
 </SCRIPT>		
 			<body>
 			<div style="height: 10px">&nbsp;</div>
-			<form name="userList" method="post" >
+			<form id="userList" name="userList" method="post" >
 			<div id="searchblock">
 				<div class="search_top">
 					<div class="right_top"></div>
@@ -241,11 +272,8 @@ function reloadusers()
 						<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.web.tag.DiscreteUserList" keyName="DiscreteUserList" />
 						<!--分页显示开始,分页标签初始化-->
 						<pg:pager maxPageItems="10" scope="request" data="DiscreteUserList" isList="false">
-						<pg:equal actual="${DiscreteUserList.itemCount}" value="0" >
-						<div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:equal> 
-					<pg:notequal actual="${DiscreteUserList.itemCount}"  value="0">
+						
+					
 						<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 							<pg:header>
 								<!--设置分页表头-->
@@ -262,10 +290,14 @@ function reloadusers()
 								<th>密码过期时间</th>						
 								
 							</pg:header>
-							<pg:param name="orgId" />
+							
 							<pg:param name="userName" />
 							<pg:param name="userRealname" />
-
+						<pg:notify >
+							<tr>
+									<td class="td_center" colspan="100"><div class="nodata">
+							<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td>
+						</pg:notify>
 							<%
 								ContextMenu contextmenu = new ContextMenuImpl();
 					 		%>
@@ -355,7 +387,7 @@ function reloadusers()
 							<pg:contextmenu enablecontextmenu="true" context="opuser" scope="request"/> 
 							</table>
 							<div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div>
-							</pg:notequal>
+						
 						</pg:pager>
 						<tr><td colspan="6" align='center'><div id=divProcessing style="width:200px;height:30px;position:absolute;left:200px;top:330px;display:none">
 					<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="100%" height="100%">
@@ -370,9 +402,7 @@ function reloadusers()
 				  </table>
 				</form>
 				
-
-
-<IFRAME name="delDisperse" height="0" width="0" frameborder="0"></IFRAME>
+ 
 			</body>
 			<center>
 </html>
