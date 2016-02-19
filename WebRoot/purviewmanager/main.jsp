@@ -39,11 +39,11 @@
 			
 				<tab:tabContainer id="user-manage-update" selectedTabPaneId="org-manage" skin="sany">
 					<tab:tabPane id="org-manage"  tabTitleCode="sany.pdp.user.organization.manage" tabTitle="用户和机构管理"  lazeload="true">
-						<tab:iframe id="orgmanage" src="userorgmanager/org/neworg_main.jsp" frameborder="0" scrolling="no" width="100%" height="95%">
+						<tab:iframe id="orgmanage" src="userorgmanager/org/neworg_main.jsp" frameborder="0" scrolling="auto" width="100%" height="95%">
 						</tab:iframe>
 					</tab:tabPane>
 					<tab:tabPane id="role-manage" tabTitleCode="sany.pdp.role.manage" tabTitle="角色管理" lazeload="true">
-						<tab:iframe id="rolemanage" src="rolemanager/role.jsp" frameborder="0" scrolling="no" width="99%" height="95%">
+						<tab:iframe id="rolemanage" src="rolemanager/role.jsp" frameborder="0" scrolling="auto" width="99%" height="95%">
 						</tab:iframe>
 					</tab:tabPane>
 					
@@ -53,7 +53,7 @@
 						{
 					%>
 					<tab:tabPane id="job-manage" tabTitleCode="sany.pdp.job.manage" tabTitle="岗位管理" lazeload="true">
-						<tab:iframe id="jobmanage" src="jobmanager/jobinfo.jsp" frameborder="0" scrolling="no" width="99%" height="95%">
+						<tab:iframe id="jobmanage" src="jobmanager/jobinfo.jsp" frameborder="0" scrolling="auto" width="99%" height="95%">
 						</tab:iframe>
 					</tab:tabPane>
 					<%
@@ -66,7 +66,7 @@
 						{   
 					%>
 					<tab:tabPane id="group-manage" tabTitleCode="sany.pdp.user.group.manage" tabTitle="用户组管理" lazeload="true">
-						<tab:iframe id="groupmanager" src="groupmanager/group_main.jsp" frameborder="0" scrolling="no" width="99%" height="95%">
+						<tab:iframe id="groupmanager" src="groupmanager/group_main.jsp" frameborder="0" scrolling="auto" width="99%" height="95%">
 						</tab:iframe>
 					</tab:tabPane>
 					<%
@@ -79,7 +79,7 @@
 						{
 					%>
 					<tab:tabPane id="res-manage" tabTitleCode="sany.pdp.resource.manage" tabTitle="资源管理" lazeload="true">
-						<tab:iframe id="resmanage" src="resmanager/res_main.jsp" frameborder="0" scrolling="no" width="99%" height="95%" >
+						<tab:iframe id="resmanage" src="resmanager/res_main.jsp" frameborder="0" scrolling="auto" width="99%" height="95%" >
 						</tab:iframe>
 					</tab:tabPane>
 					<% 
