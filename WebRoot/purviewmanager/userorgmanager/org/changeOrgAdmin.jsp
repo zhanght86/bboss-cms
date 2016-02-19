@@ -93,7 +93,7 @@
    			
 		}
 		function deleteall(){
-			if(<%=orgId1%> == null){
+			if(!'<%=orgId1%>'){
 				W.$.dialog.alert("<pg:message code='sany.pdp.afterchooseoption'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				return;
 			}
@@ -132,7 +132,7 @@
 		}
 		
 		function deleterole(){
-			if(<%=orgId1%> == null){
+			if(!'<%=orgId1%>'){
 				W.$.dialog.alert("<pg:message code='sany.pdp.afterchooseoption'/>!",function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 				return;
 			}
@@ -162,7 +162,7 @@
 		function changebox(){				 
 			var len=document.all("userIds").options.length;			  	 	
 		    var userId=new Array(len);
-		    var orgId = <%=orgId1%>;
+		    var orgId = '<%=orgId1%>';
 		    for (var i=0;i<len;i++){	      
 		    	userId[i]=document.all("userIds").options[i].value;
 		    }  
