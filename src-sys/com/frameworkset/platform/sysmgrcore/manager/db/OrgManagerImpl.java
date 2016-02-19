@@ -1082,7 +1082,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	}
 	
 
-	private static String getKeyPrimary(String ss){
+	public static String getKeyPrimary(String ss){
 		DBUtil sdbutil = new DBUtil();
 		String primaryKey = null;
 		try {
@@ -2392,24 +2392,19 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	public void addMainOrgnazitionOfUser(String userID, String orgID,boolean broadcastevent)
 			throws ManagerException {
 				if(orgID==null || orgID.equals("null")) return; 
-				DBUtil db = new DBUtil();
-				DBUtil exe = new DBUtil();
-				StringBuffer isexist = new StringBuffer();
+				
 				StringBuffer executesql = new StringBuffer();
-				isexist.append("SELECT count(*) counts FROM td_sm_orguser ");
-				isexist.append("WHERE user_id = ").append(userID);
+				int userID_  = Integer.parseInt(userID); 
+				
 				try {
-					 db.executeSelect(isexist.toString());
-					 if(db.size()>0){
-						 if(db.getInt(0, "counts")>0){//update
-							 executesql.append("update td_sm_orguser set org_id='").append(orgID).append("' ")
-							 .append(" where user_id=").append(userID);
-							 exe.execute(executesql.toString());
-						 }else{//insert
-							 executesql.append("INSERT into td_sm_orguser (org_id, user_id)")
-							 .append("VALUES ('").append(orgID).append("', ").append(userID).append(") ");
-							 exe.execute(executesql.toString());
-						 }
+					boolean isexist = SQLExecutor.queryObject(int.class,"SELECT count(*) counts FROM td_sm_orguser WHERE user_id = ?",userID_) > 0;	 
+					 if(isexist){
+						 SQLExecutor.update("update td_sm_orguser set org_id=? where user_id=?" ,orgID,userID_);
+							 
+						
+					 }else{//insert
+						
+						 SQLExecutor.insert("INSERT into td_sm_orguser (org_id, user_id) VALUES (?, ?) " ,orgID,userID_);
 					 }				 
 					 
 				} catch (SQLException e) {
@@ -2418,8 +2413,9 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 				}
 				if(broadcastevent)
 				{
-					Event event = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
-					super.change(event,true);
+					EventUtil.sendORGUNIT_INFO_CHANGE(orgID);
+//					Event event = new EventImpl("",	ACLEventType.ORGUNIT_INFO_CHANGE);
+//					super.change(event,true);
 				}
 				
 			}
@@ -2429,10 +2425,11 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	 */
 	public void deleteMainOrgnazitionOfUser(String userID)
 			throws ManagerException {
-		DBUtil db = new DBUtil();
-		String sql = "delete from  TD_SM_ORGUSER where USER_ID=" + userID + "";
+	 
+		String sql = "delete from  TD_SM_ORGUSER where USER_ID=?";
 		try {
-			db.executeDelete(sql);
+			SQLExecutor.delete(sql, Integer.parseInt(userID));
+			 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

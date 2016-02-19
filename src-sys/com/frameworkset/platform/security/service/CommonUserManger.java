@@ -1,18 +1,32 @@
 package com.frameworkset.platform.security.service;
 
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.orm.transaction.TransactionManager;
+import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
+import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.CommonUser;
 import com.frameworkset.platform.security.service.entity.Result;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.LogManager;
+import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
+import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.GenerateServiceFactory;
+import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
+import com.frameworkset.platform.util.EventUtil;
 
 public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.spi.InitializingBean{
 	private static Logger log = Logger.getLogger(CommonUserManger.class);
 	private ConfigSQLExecutor executor ;
+	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 	public CommonUserManger() {
 		// TODO Auto-generated constructor stub
 	}
@@ -100,10 +114,23 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			user.setUser_regdate(new Date());
 			executor.insertBean("createcommonuser", user);
 			executor.insert("inituserjoborg", user.getUser_id(),orgid,new Date());
+			
+			executor.insert("inituserorg", orgid,user.getUser_id());
+			this.userOrgParamManager.fixuserorg(user.getUser_id()+"", orgid);
 			user.setUser_password(p);
 			result.setCode(Result.ok);
 			result.setUser(user);
 			tm.commit();
+			 AccessControl control = AccessControl.getAccessControl();
+				String operContent="";        
+		        String operSource=control.getMachinedID();
+		        String openModle="用户管理";
+		        String userName = control.isGuest()?"通用用户部门管理服务":control.getUserName();
+		        String description="";
+		        LogManager logManager = SecurityDatabase.getLogManager(); 		
+				operContent=new StringBuilder().append(userName).append("创建用户：").append(user.getUser_name()).append("(").append(user.getUser_realname()).append(")").toString(); 
+				 description="";
+		        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);       
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("创建用户").append(user.getUser_name()).append("失败:").append(e.getMessage()).toString();
@@ -116,7 +143,115 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		}
 		return result;
 	}
+	public Result addOrganization(CommonOrganization org)
+	{
+		return addOrganizationWithEventTrigger(org,true);
+	}
 	
+	/**
+	 *  常用字段：
+ * 
+ * orgId,
+ * orgName,
+ * parentId,
+ * code,
+ * creatingtime,
+ * orgnumber,
+ * orgdesc,
+ * remark5, 显示名称
+ * orgTreeLevel,部门层级，自动运算
+ * orgleader 部门主管
+ * 如果triggerEvent为false，需要调用程序自己触发以下事件
+ * if(triggerEvent)
+			{
+				EventUtil.sendORGUNIT_INFO_ADD(org.getOrgId());				
+			}
+	 * @param org
+	 * @return
+	 */
+	public Result addOrganizationWithEventTrigger(CommonOrganization org,boolean triggerEvent) {
+		Result result = new Result();
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			if(existOrg(org.getOrgId()))
+			{
+				result.setCode(Result.fail);
+				result.setErrormessage(new StringBuilder().append("机构").append(org.getOrgId()).append("已经存在.").toString());
+			}
+			String orgid =org.getOrgId();
+			if(orgid == null )
+			{
+			    orgid =  OrgManagerImpl.getKeyPrimary("td_sm_organization");
+			    org.setOrgId(orgid);
+			    
+			}
+			if(org.getParentId() != null && !org.getParentId().equals("") && !org.getParentId().equals("0"))
+			{
+				OrgManager orgManager = SecurityDatabase.getOrgManager();
+				Organization parentOrg = orgManager.getOrgById(org.getParentId());
+				String orgnumber = "";
+				String parentOrgNumber = parentOrg.getOrgnumber();
+				 
+				if(StringUtil.isEmpty(org.getOrgnumber()))
+				{
+					int len = GenerateServiceFactory.getOrgNumberGenerateService().getOrgNumberLen();
+					boolean orgNumberHiberarchy = GenerateServiceFactory.getOrgNumberGenerateService().enableOrgNumberGenerate(); 
+					if(orgNumberHiberarchy){
+						orgnumber = GenerateServiceFactory.getOrgNumberGenerateService().generateOrgNumber(parentOrg);
+					}else{
+						orgnumber = parentOrgNumber;
+					}
+					org.setOrgnumber(orgnumber);
+				}
+				
+				
+			}
+			else
+			{
+				org.setParentId("0");
+			}
+			
+			org.setOrgTreeLevel(OrgManagerImpl.getOrgTreeLevel(org.getParentId(), org.getOrgId()));
+			org.setOrgSn(executor.queryObject(int.class, "maxorgsn", org.getParentId()));
+			org.setCreatingtime(new Timestamp(System.currentTimeMillis()));			 
+			executor.insertBean("addOrganization", org);			 
+			result.setCode(Result.ok);
+			result.setOrg(org);
+			tm.commit();
+			if(triggerEvent)
+			{
+				EventUtil.sendORGUNIT_INFO_ADD(org.getOrgId());				
+			}
+			 AccessControl control = AccessControl.getAccessControl();
+			String operContent="";        
+	        String operSource=control.getMachinedID();
+	        String openModle="部门管理";
+	        String userName = control.isGuest()?"通用用户部门管理服务":control.getUserName();
+	        String description="";
+	        LogManager logManager = SecurityDatabase.getLogManager(); 		
+			operContent=new StringBuilder().append(userName).append("创建部门：").append(org.getOrgName()).append("(").append(org.getOrgId()).append(")").toString(); 
+			 description="";
+	        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description);       
+	       
+			
+		} catch (Exception e) {
+			result.setCode(Result.fail);
+			String m = new StringBuilder().append("创建机构").append(org.getOrgName()).append("失败:").append(e.getMessage()).toString();
+			result.setErrormessage(m);
+			log.error(m,e);
+		}
+		finally
+		{
+			tm.release();
+		}
+		return result;
+	}
+	
+	private boolean existOrg(String orgId) throws SQLException {
+		
+		return executor.queryObject(int.class, "existOrg", orgId) > 0;
+	}
 	@Override
 	public Result createTempUser(CommonUser user) {
 		Result result = new Result();
@@ -141,10 +276,22 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			user.setUser_regdate(new Date());
 			executor.insertBean("createcommonuser", user);
 			executor.insert("inituserjoborg", user.getUser_id(),orgid,new Date());
+			executor.insert("inituserorg", orgid,user.getUser_id());
 			user.setUser_password(p);
+			this.userOrgParamManager.fixuserorg(user.getUser_id()+"", orgid);
 			result.setCode(Result.ok);
 			result.setUser(user);
 			tm.commit();
+			AccessControl control = AccessControl.getAccessControl();
+			String operContent="";        
+	        String operSource=control.getMachinedID();
+	        String openModle="用户管理";
+	        String userName = control.isGuest()?"通用用户部门管理服务":control.getUserName();
+	        String description="";
+	        LogManager logManager = SecurityDatabase.getLogManager(); 		
+			operContent=new StringBuilder().append(userName).append("创建用户：").append(user.getUser_name()).append("(").append(user.getUser_realname()).append(")").toString(); 
+			 description="";
+	        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description); 
 		} catch (Exception e) {
 			result.setCode(Result.fail);
 			String m = new StringBuilder().append("创建用户").append(user.getUser_name()).append("失败:").append(e.getMessage()).toString();
@@ -157,7 +304,72 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		}
 		return result;
 	}
+	@Override
+	public Result buildUserOrgRelation(int userid,String orgid)
+	{
+		return buildUserOrgRelationWithEventTrigger(userid,orgid,true);
+	}
+	@Override
+	public Result buildUserOrgRelationWithEventTrigger(int userid,String orgid,boolean broadcastevent) {
+		Result result = new Result();
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			if(existJobReleation(userid,  orgid))
+			{
+				 
+				result.setErrormessage(new StringBuilder().append("用户机构岗位关系[user=").append(userid).append(",org=").append(orgid).append("]已经存在.").toString());
+			}
+			else
+			 
+//			user.setUser_isvalid(2);
+//			user.setUser_type(2);
+			{
+		 
+				executor.insert("inituserjoborg", userid,orgid,new Date());
+			}
+			
+			if(existOrgReleation(userid))
+			{
+				executor.update("updateuserorg", orgid,userid);
+				executor.update("updateuserdepart", orgid,userid);
+//				result.appendErrormessage(new StringBuilder().append("用户机构关系[user=").append(userid).append(",org=").append(orgid).append("]已经存在.").toString());
+			}
+			else
+			{
+			 
+				executor.insert("inituserorg", orgid,userid);
+				
+			}
+			
+			this.userOrgParamManager.fixuserorg(userid+"", orgid);
+			 
+			result.setCode(Result.ok);
+			 
+			tm.commit();
+			if(broadcastevent)
+				EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(userid+"");
+		} catch (Exception e) {
+			result.setCode(Result.fail);
+			String m = new StringBuilder().append("构建用户机构关系[user=").append(userid).append(",org=").append(orgid).append("]失败.").toString();
+			result.setErrormessage(m);
+			log.error(m,e);
+		}
+		finally
+		{
+			tm.release();
+		}
+		return result;
+	}
 
+	private boolean existJobReleation(int userid, String orgid) throws SQLException {
+		
+		return executor.queryObject(int.class, "existJobReleation", orgid,userid) > 0;
+	}
+	private boolean existOrgReleation(int userid) throws SQLException {
+		
+		return executor.queryObject(int.class, "existOrgReleation",  userid) > 0;
+	}
 	@Override
 	public Result updateUser(CommonUser user) {
 		Result result = new Result();
@@ -317,5 +529,7 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 			tm.release();
 		}
 	}
+ 
+	
 
 }

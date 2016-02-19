@@ -5,6 +5,7 @@ import javax.jws.WebService;
 import org.frameworkset.util.annotations.ResponseBody;
 
 import com.frameworkset.platform.security.service.CommonUserManagerInf;
+import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.CommonUser;
 import com.frameworkset.platform.security.service.entity.Result;
 @WebService(name = "commonuserService", targetNamespace = "com.frameworkset.platform.security.service.CommonuserService") 
@@ -97,6 +98,30 @@ public class CommonUserControl implements CommonUserManagerInf{
 	@Override
 	public @ResponseBody Result openUserByWorknumber(String worknumber) {
 		return commonUserManager.openUserByWorknumber(worknumber);
+	}
+
+	@Override
+	public Result buildUserOrgRelation(int userid, String orgid) {
+		 
+		return commonUserManager.buildUserOrgRelation(  userid,   orgid);
+	}
+
+	@Override
+	public Result addOrganization(CommonOrganization org) {
+		// TODO Auto-generated method stub
+		return commonUserManager.addOrganization(  org);
+	}
+
+	@Override
+	public Result addOrganizationWithEventTrigger(CommonOrganization org, boolean triggerEvent) {
+		// TODO Auto-generated method stub
+		return commonUserManager.addOrganizationWithEventTrigger(  org,triggerEvent);
+	}
+
+	@Override
+	public Result buildUserOrgRelationWithEventTrigger(int userid, String orgid, boolean broadcastevent) {
+		// TODO Auto-generated method stub
+		return commonUserManager.buildUserOrgRelationWithEventTrigger(  userid,   orgid,   broadcastevent) ;
 	}
 
 }

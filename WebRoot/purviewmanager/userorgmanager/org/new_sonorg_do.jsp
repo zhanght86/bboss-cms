@@ -62,7 +62,7 @@
 			String orgname=org.getOrgName();
 			
 			boolean tag = true;
-			String notice = "<pg:message code='sany.pdp.add.failed'/>";
+			String notice = RequestContextUtils.getI18nMessage("sany.pdp.add.failed", request);//"<pg:message code='sany.pdp.add.failed'/>";
 			
 			DBUtil db = new DBUtil();
 			//查看机构编号是否存在,全局唯一

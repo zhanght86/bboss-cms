@@ -31,6 +31,7 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.GenerateServiceFactor
 import com.frameworkset.platform.sysmgrcore.purviewmanager.PurviewManager;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.PurviewManagerImpl;
 import com.frameworkset.platform.sysmgrcore.web.struts.action.OrgJobAction;
+import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.StringUtil;
 
 public class UserOrgAction {
@@ -438,12 +439,11 @@ public class UserOrgAction {
 					}
 				}
 				tm.commit();
-				Event eventUSER_INFO_DELETE = new EventImpl(userIds,
-						ACLEventType.USER_INFO_DELETE);
-				EventHandle.getInstance().change(eventUSER_INFO_DELETE);
 				
-				Event eventUSER_ROLE_INFO_CHANGE = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
-				EventHandle.getInstance().change(eventUSER_ROLE_INFO_CHANGE);
+				EventUtil.sendUSER_INFO_DELETEEvent(userIds);
+				
+				
+				EventUtil.sendUSER_ROLE_INFO_CHANGEEvent();
 			}
 			finally
 			{

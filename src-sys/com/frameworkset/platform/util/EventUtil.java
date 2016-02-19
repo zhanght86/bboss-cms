@@ -43,6 +43,26 @@ public class EventUtil {
 		Event event1 = new EventImpl(orgId, ACLEventType.ORGUNIT_INFO_DELETE);
 		EventHandle.sendEvent(event1);
 	}
+
+	public static void sendORGUNIT_INFO_ADD(String orgId) {
+		Event event = new EventImpl(orgId,
+				ACLEventType.ORGUNIT_INFO_ADD);
+		EventHandle.sendEvent(event,false);
+		
+	}
+
+	public static void sendORGUNIT_INFO_CHANGE(String orgID) {
+		Event event = new EventImpl(orgID,
+				ACLEventType.ORGUNIT_INFO_CHANGE);
+		EventHandle.sendEvent(event,true);
+	}
+
+	public static void sendUSER_INFO_DELETEEvent(String userIds) {
+		Event eventUSER_INFO_DELETE = new EventImpl(userIds,
+				ACLEventType.USER_INFO_DELETE);
+		EventHandle.getInstance().change(eventUSER_INFO_DELETE);
+		
+	}
 	
 
 }

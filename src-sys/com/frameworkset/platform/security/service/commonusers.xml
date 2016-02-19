@@ -91,6 +91,28 @@ values(?,'1',?,3,999,?,1)
 		insert into td_sm_orguser(org_id,user_id) values(?,?)
 ]]>
 	</property>
+	<property name="existJobReleation">
+		<![CDATA[
+		select count(*) from td_sm_userjoborg where org_id=? and user_id=?
+]]>
+	</property>
+	<property name="updateuserorg">
+		<![CDATA[
+		update td_sm_orguser set org_id=? where user_id = ?
+]]>
+	</property>
+	
+	<property name="existOrgReleation">
+		<![CDATA[
+		select count(*) from td_sm_orguser where user_id=?
+]]>
+	</property>
+	<property name="updateuserdepart">
+		<![CDATA[
+		 update td_sm_user set depart_id=? where user_id=?
+]]>
+	</property>
+	
 	<property name="updateuserstatus">
 		<![CDATA[
 		 update td_sm_user set user_isvalid=? where user_id=?
@@ -102,5 +124,29 @@ values(?,'1',?,3,999,?,1)
 		 update td_sm_user set user_password=?,PASSWORD_UPDATETIME=? where user_id=?
 	]]>
 	</property>
+	
+	<property name="addOrganization">
+		<![CDATA[		
+		insert into td_sm_organization (ORG_ID,org_sn,org_name,parent_id,path,layer,children,code,jp,qp,creatingtime,creator,orgnumber,orgdesc,remark1,remark2,remark3,remark4,remark5,chargeorgid,ispartybussiness,satrapjobid,org_level,
+  org_xzqm,org_tree_level,isdirectlyparty,isforeignparty,isjichaparty,isdirectguanhu,ORGLEADER)
+   values(#[orgId],#[orgSn],#[orgName],#[parentId],'','1','',#[code],'jianpin','quanpin',#[creatingtime],'1',#[orgnumber],#[orgdesc],'','','1','',#[remark5],'1',0,'','3','31',#[orgTreeLevel],1,1,1,1,#[orgleader])
+	]]>
+	</property>
+	
+	
+	<property name="existOrg">
+		<![CDATA[		
+		select count(ORG_ID) from td_sm_organization where ORG_ID=?
+	]]>
+	</property>
+	<property name="maxorgsn">
+		<![CDATA[		
+		select max(org_sn)+1 from td_sm_organization where parent_id=?
+	]]>
+	</property>
+	
+	
+	
+	
 	
 </properties>

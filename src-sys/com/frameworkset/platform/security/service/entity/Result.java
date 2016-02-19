@@ -12,6 +12,15 @@ public class Result implements Serializable{
 	private String code;
 	private String errormessage;
 	private CommonUser user; 
+	private CommonOrganization org; 
+	public CommonOrganization getOrg() {
+		return org;
+	}
+
+	public void setOrg(CommonOrganization org) {
+		this.org = org;
+	}
+
 	private String operationData;
 
 	public Result() {
@@ -50,6 +59,13 @@ public class Result implements Serializable{
 
 	public void setOperationData(String operationData) {
 		this.operationData = operationData;
+	}
+
+	public void appendErrormessage(String errormessage) {
+		if(this.errormessage == null)
+			this.errormessage = errormessage;
+		else
+			this.errormessage = this.errormessage +"\n"+ errormessage;
 	}
 
 	 

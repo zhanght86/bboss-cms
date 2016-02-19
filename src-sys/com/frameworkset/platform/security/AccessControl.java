@@ -1449,6 +1449,8 @@ public class AccessControl implements AccessControlInf{
 	
 	public String getMachinedID()
 	{
+		if(this.isGuest())
+			return "";
 		String machineID = this.getRemoteAddr() + "||" + this.getMacAddr() + "||" + this.getMachineName()
 		;
 		return machineID;

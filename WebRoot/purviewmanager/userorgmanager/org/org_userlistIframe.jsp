@@ -127,7 +127,7 @@
 		
 		function subJob(userId,orgId){
 			//用户隶属岗位  userjoborg.jsp
-			var url = "${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/userjoborg.jsp?userId="+userId+"&orgId="+<%=curOrgId%>;
+			var url = "${pageContext.request.contextPath}/purviewmanager/userorgmanager/user/userjoborg.jsp?userId="+userId+"&orgId=<%=curOrgId%>";
 			$.dialog({title:'<pg:message code="sany.pdp.role.organization.job.setting"/>',width:760,height:560, content:'url:'+url,lock: true});
 		}
 		

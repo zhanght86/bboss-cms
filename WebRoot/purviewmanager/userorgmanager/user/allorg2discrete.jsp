@@ -26,7 +26,7 @@
 <%@ page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase" %>
 <%@ taglib uri="/WEB-INF/treetag.tld" prefix="tree" %>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@page import="com.frameworkset.platform.security.AccessControl,
 				com.frameworkset.platform.config.ConfigManager,
 				com.frameworkset.platform.sysmgrcore.manager.OrgAdministrator,
@@ -52,7 +52,7 @@
 %>
 
 <script language="javascript">
-var api = frameElement.api;
+var api = frameElement.api,W = api.opener;
 function addorg(){
    var orgValues="";
    var state = false;
@@ -81,9 +81,40 @@ function addorg(){
 	  
 	  	
   	if(orgValues!=""){
-  		document.OrgJobForm.target="getOrg";
-	  	document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues;
-	  	document.OrgJobForm.submit();
+  		//document.OrgJobForm.target="getOrg";
+	  	//document.OrgJobForm.action="../user/foldDisperse.jsp?userIds=<%=ids%>&orgIds="+orgValues;
+	  	//document.OrgJobForm.submit();
+	  	
+	  	$.ajax({
+			   type: "POST",
+				url : "<%=request.getContextPath()%>/usermanager/foldDisperse.page?userIds=<%=ids%>&orgIds="+orgValues,
+				data :formToJson("#OrgJobForm"),
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+						 
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      	 		 	
+					},
+				success : function(response){
+					//去掉遮罩
+					unblockUI();
+					if(response.code=="success"){
+						var msg = response.errormessage;
+						 
+						W.$.dialog.alert(msg,function(){	
+								W.reloadusers();
+								api.close();
+						},api);													
+					}else{
+						W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+							 
+							},api);	
+						 
+					}
+				}
+			  });
   	}else{
   		$.dialog.alert('<pg:message code="sany.pdp.choose.move.in.organization"/>',function(){},null,"<pg:message code='sany.pdp.common.alert'/>");
 		return;

@@ -4492,28 +4492,21 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 				OrgManager orgmanager = SecurityDatabase.getOrgManager();
 				// String userId = user.getUserId().toString();
 
-				orgmanager.addMainOrgnazitionOfUser(userId, orgId);
+				orgmanager.addMainOrgnazitionOfUser(userId, orgId,false);
 				// （3）往td_sm_userjoborg表中插入记录
-				String sqlsn = "select max(same_job_user_sn) as sn from  td_sm_userjoborg"
-						+ " where  org_id ='" + orgId + "'";
-				DBUtil dbutil = new DBUtil();
-				dbutil.executeSelect(sqlsn);
-				DBUtil db = new DBUtil();
-				if (dbutil != null && dbutil.getInt(0, 0) > 0) {
-					samesn = dbutil.getInt(0, "sn") + 1;
-					String sql = "insert into td_sm_userjoborg"
-							+ " (user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)"
-							+ " values(" + userId + ",'" + jobId + "','"
-							+ orgId + "'," + 999 + "," + samesn + ","+DBUtil.getDBAdapter().to_date(new Date())+",1)";
-					db.executeInsert(sql);
-				} else {
-					samesn = 1;
-					String sql = "insert into td_sm_userjoborg"
-							+ "(user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)"
-							+ " values(" + userId + ",'" + jobId + "','"
-							+ orgId + "'," + 999 + "," + samesn + ","+DBUtil.getDBAdapter().to_date(new Date())+",1)";
-					db.executeInsert(sql);
-				}
+				String sqlsn = "select max(same_job_user_sn)+1 from  td_sm_userjoborg  where  org_id =?";
+				  samesn = SQLExecutor.queryObject(int.class, sqlsn, orgId);
+				 
+					String sql = "insert into td_sm_userjoborg (user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE) values(?,?,?,999 ,?,?,1)";
+					SQLExecutor.insert(sql, Integer.parseInt(userId),jobId,orgId,samesn,new Date());
+//				} else {
+//					samesn = 1;
+//					String sql = "insert into td_sm_userjoborg"
+//							+ "(user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)"
+//							+ " values(" + userId + ",'" + jobId + "','"
+//							+ orgId + "'," + 999 + "," + samesn + ","+DBUtil.getDBAdapter().to_date(new Date())+",1)";
+//					db.executeInsert(sql);
+//				}
 				/**
 				 * 把排序号set到user对象里面 ge.tao 2007-09-10
 				 */
@@ -5934,8 +5927,8 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 		boolean state = false;
 //		StringBuffer sql;
 		String sql;
-		StringBuffer sql2;
-		DBUtil dbUtil = new DBUtil();
+		 
+		PreparedDBUtil dbUtil = new PreparedDBUtil();
 		DBUtil db = new DBUtil();
 		PreparedDBUtil preparedbutil = new PreparedDBUtil();
 		PreparedDBUtil preparedbutil_ = new PreparedDBUtil();
@@ -5952,7 +5945,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 					if(preparedbutil.getInt(0, 0)<=0)
 					{
 						preparedbutil_.preparedInsert(sqlUtil.getSQL("userManagerImpl_storeBatchUserOrg_insert"));
-						preparedbutil_.setString(1, userIds[j]);
+						preparedbutil_.setInt(1, Integer.parseInt(userIds[j]));
 						preparedbutil_.setString(2, orgIds[0]);
 						preparedbutil_.executePrepared();
 					}
@@ -5965,31 +5958,40 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 //					dbUtil.addBatch(sql.toString());
 				}
 			}
-			
+			String sql2 = "insert into td_sm_userjoborg (user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE) values(?,'1',?,999,1,?,1)";
+			Date d = new Date();
+			dbUtil.preparedInsert(sql2);
+			boolean ne = false;
 			for(int i = 0; i < orgIds.length; i++){
 				for(int j = 0; j < userIds.length; j++){
-					sql2 = new StringBuffer();
-					String sql3 = "select * from td_sm_userjoborg where user_id='"+userIds[j]+"' and org_id='"+orgIds[i]+"'";
-					db.executeSelect(sql3);
-					if(db.size() > 0){
+					 
+					 
+					int e = SQLExecutor.queryObject(int.class,"select count(*) from td_sm_userjoborg where user_id=? and org_id=?",Integer.parseInt(userIds[j]),orgIds[i]);
+					if(e > 0){
 						continue;
 					}
-					sql2.append("insert into td_sm_userjoborg")
-						.append("(user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)")
-						.append(" values(")
-						.append(userIds[j]).append(",'")
-						.append(1).append("','")
-						.append(orgIds[i]).append("',")
-						.append(999).append(",").append(1).append(",")
-						.append(DBUtil.getDBAdapter().to_date(new Date())).append(",1)");
+//					sql2.append("insert into td_sm_userjoborg")
+//						.append("(user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)")
+//						.append(" values(")
+//						.append(userIds[j]).append(",'")
+//						.append(1).append("','")
+//						.append(orgIds[i]).append("',")
+//						.append(999).append(",").append(1).append(",")
+//						.append(DBUtil.getDBAdapter().to_date(new Date())).append(",1)");
 					if(i == 0)
 					{
+						ne = true;
 						this.userOrgParamManager.fixuserorg(userIds[j], orgIds[i]);
 					}
-					dbUtil.addBatch(sql2.toString());
+					dbUtil.setInt(1,Integer.parseInt(userIds[j]));
+					dbUtil.setString(2, orgIds[i]);
+					dbUtil.setDate(3, d);
+					dbUtil.addPreparedBatch();
+					
 				}
 			}
-			dbUtil.executeBatch();
+			if(ne)
+				dbUtil.executePreparedBatch();
 			
 			tm.commit();
 			if(broadcastevent)
@@ -5999,23 +6001,12 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 			}
 			state = true;
 		} catch (SQLException e) {
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
+			 e.printStackTrace();
 		} catch (Exception e) {
-			try {
-				tm.rollback();
-			} catch (RollbackException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			 
 			e.printStackTrace();
 		}finally{
-			dbUtil.resetBatch();
+			tm.release();
 		}
 		return state;
 	}
