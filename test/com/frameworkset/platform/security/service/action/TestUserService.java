@@ -71,7 +71,7 @@ public class TestUserService {
 		CommonUserManagerInf tokenService = (CommonUserManagerInf) factory.create(CommonUserManagerInf.class, url);
 	 
 		 
-		Result result = tokenService.buildUserOrgRelationWithEventTrigger(userId, org, true);
+		Result result = tokenService.buildUserOrgRelationWithEventTrigger(userId, org, true,true);
 		System.out.println();
 	}
 	

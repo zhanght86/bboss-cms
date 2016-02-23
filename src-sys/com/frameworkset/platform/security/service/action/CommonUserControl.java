@@ -101,9 +101,9 @@ public class CommonUserControl implements CommonUserManagerInf{
 	}
 
 	@Override
-	public Result buildUserOrgRelation(int userid, String orgid) {
+	public Result buildUserOrgRelation(int userid, String orgid,boolean deleteotherorgjobrelation) {
 		 
-		return commonUserManager.buildUserOrgRelation(  userid,   orgid);
+		return commonUserManager.buildUserOrgRelation(  userid,   orgid,deleteotherorgjobrelation);
 	}
 
 	@Override
@@ -119,9 +119,26 @@ public class CommonUserControl implements CommonUserManagerInf{
 	}
 
 	@Override
-	public Result buildUserOrgRelationWithEventTrigger(int userid, String orgid, boolean broadcastevent) {
+	public Result buildUserOrgRelationWithEventTrigger(int userid, String orgid, boolean broadcastevent,boolean deleteotherorgjobrelation) {
 		// TODO Auto-generated method stub
-		return commonUserManager.buildUserOrgRelationWithEventTrigger(  userid,   orgid,   broadcastevent) ;
+		return commonUserManager.buildUserOrgRelationWithEventTrigger(  userid,   orgid,   broadcastevent, deleteotherorgjobrelation) ;
+	}
+
+	@Override
+	public Result createOnlyUser(CommonUser user) {
+		return commonUserManager.createOnlyUser(  user) ;
+	}
+
+	@Override
+	public Result updateOrganization(CommonOrganization org, boolean broadcastevent) {
+		// TODO Auto-generated method stub
+		return commonUserManager.updateOrganization(  org,   broadcastevent);
+	}
+
+	@Override
+	public Result invalidateOrganization(String orgid, boolean broadcastevent) {
+		// TODO Auto-generated method stub
+		return commonUserManager.invalidateOrganization(  orgid,   broadcastevent);
 	}
 
 }

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import javax.jws.WebParam;
+
 import org.apache.log4j.Logger;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
@@ -305,12 +307,12 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		return result;
 	}
 	@Override
-	public Result buildUserOrgRelation(int userid,String orgid)
+	public Result buildUserOrgRelation(int userid,String orgid,boolean deleteotherorgjobrelation)
 	{
-		return buildUserOrgRelationWithEventTrigger(userid,orgid,true);
+		return buildUserOrgRelationWithEventTrigger(userid,orgid,true,true);
 	}
 	@Override
-	public Result buildUserOrgRelationWithEventTrigger(int userid,String orgid,boolean broadcastevent) {
+	public Result buildUserOrgRelationWithEventTrigger(int userid,String orgid,boolean broadcastevent,boolean deleteotherorgjobrelation) {
 		Result result = new Result();
 		TransactionManager tm = new TransactionManager();
 		try {
@@ -326,6 +328,10 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 //			user.setUser_type(2);
 			{
 		 
+				if(deleteotherorgjobrelation)
+				{
+					executor.delete("deleteotherorgjobrelation", userid);
+				}
 				executor.insert("inituserjoborg", userid,orgid,new Date());
 			}
 			
@@ -361,6 +367,8 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		}
 		return result;
 	}
+	
+	
 
 	private boolean existJobReleation(int userid, String orgid) throws SQLException {
 		
@@ -528,6 +536,64 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		{
 			tm.release();
 		}
+	}
+	@Override
+	public Result createOnlyUser(CommonUser user) {
+		Result result = new Result();
+		TransactionManager tm = new TransactionManager();
+		try {
+			tm.begin();
+			if(exist(user.getUser_name()))
+			{
+				result.setCode(Result.fail);
+				result.setErrormessage(new StringBuilder().append("用户").append(user.getUser_name()).append("已经存在.").toString());
+			}
+			String orgid = user.getDepart_id();
+			
+//			user.setUser_isvalid(2);
+//			user.setUser_type(2);
+			String p = user.getUser_password();
+			user.setUser_password(EncrpyPwd.encodePassword(user.getUser_password()));
+			user.setUser_regdate(new Date());
+			executor.insertBean("createcommonuser", user);
+			
+			user.setUser_password(p);
+//			if(orgid != null && !orgid.equals(""))
+//				this.userOrgParamManager.fixuserorg(user.getUser_id()+"", orgid);
+			result.setCode(Result.ok);
+			result.setUser(user);
+			tm.commit();
+			AccessControl control = AccessControl.getAccessControl();
+			String operContent="";        
+	        String operSource=control.getMachinedID();
+	        String openModle="用户管理";
+	        String userName = control.isGuest()?"通用用户部门管理服务":control.getUserName();
+	        String description="";
+	        LogManager logManager = SecurityDatabase.getLogManager(); 		
+			operContent=new StringBuilder().append(userName).append("创建用户：").append(user.getUser_name()).append("(").append(user.getUser_realname()).append(")").toString(); 
+			 description="";
+	        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,description); 
+		} catch (Exception e) {
+			result.setCode(Result.fail);
+			String m = new StringBuilder().append("创建用户").append(user.getUser_name()).append("失败:").append(e.getMessage()).toString();
+			result.setErrormessage(m);
+			log.error(m,e);
+		}
+		finally
+		{
+			tm.release();
+		}
+		return result;
+	}
+	@Override
+	public Result updateOrganization(CommonOrganization org,  boolean broadcastevent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Result invalidateOrganization(String orgid,  boolean broadcastevent) {
+		// TODO Auto-generated method stub
+		return null;
 	}
  
 	

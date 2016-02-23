@@ -11,7 +11,6 @@ import org.frameworkset.spi.BaseApplicationContext;
 
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
-import com.frameworkset.common.poolman.handle.NullRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.CheckCallBack;
@@ -199,6 +198,8 @@ public class UserCacheManager {
 	}
 	private User _loadUserByAccount(String userAccount) throws ManagerException
 	{
+		if(StringUtil.isEmpty(userAccount))
+			return null;
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.USER_NAME=?";
 		 
 		try {
@@ -226,7 +227,7 @@ public class UserCacheManager {
 				}
 				
 			}, User.class,sql,userAccount);
-			if(user.getUserName() == null || user.getUserName().equals(""))
+			if(user == null || user.getUserName() == null || user.getUserName().equals(""))
 				return null;
 			return user;
 		} catch (Exception e) {
@@ -237,6 +238,8 @@ public class UserCacheManager {
 	
 	private User _loadUserByWorkNo(String userWorkNo) throws ManagerException
 	{
+		if(StringUtil.isEmpty(userWorkNo))
+			return null;
 		String sql = "select u.*,ou.org_id from td_sm_user u left join td_sm_orguser ou on u.user_id = ou.user_id where u.USER_WORKNUMBER=?";
 		 
 		try {
@@ -264,7 +267,7 @@ public class UserCacheManager {
 				}
 				
 			}, User.class,sql,userWorkNo);
-			if(user.getUserName() == null || user.getUserName().equals(""))
+			if(user == null || user.getUserName() == null || user.getUserName().equals(""))
 				return null;
 			return user;
 		} catch (Exception e) {

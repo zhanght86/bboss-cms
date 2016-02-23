@@ -12,6 +12,7 @@ import com.frameworkset.platform.util.EventUtil;
 public interface CommonUserManagerInf {
 	public @WebResult(name = "result", partName = "partResult") Result createTempUser(@WebParam(name = "user", partName = "partUser") CommonUser user);
 	public @WebResult(name = "result", partName = "partResult") Result createUser(@WebParam(name = "user", partName = "partUser") CommonUser user); 
+	public @WebResult(name = "result", partName = "partResult") Result createOnlyUser(@WebParam(name = "user", partName = "partUser") CommonUser user);
 	public @WebResult(name = "result", partName = "partResult") Result updateUser(@WebParam(name = "user", partName = "partUser") CommonUser user);
 	public @WebResult(name = "result", partName = "partResult") Result deleteUser(@WebParam(name = "useraccount", partName = "partUseraccount") String useraccount);
 	public @WebResult(name = "result", partName = "partResult") Result deleteUserByID(@WebParam(name = "userid", partName = "partUserid") int userid);
@@ -38,8 +39,12 @@ public interface CommonUserManagerInf {
 	 * @param broadcastevent if false then call EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(userid) in your programe
 	 * @return
 	 */
-	public @WebResult(name = "result", partName = "partResult") Result buildUserOrgRelationWithEventTrigger(@WebParam(name = "userid", partName = "partUserid")  int userid,@WebParam(name = "orgid", partName = "partOrgid") String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
-	public @WebResult(name = "result", partName = "partResult") Result buildUserOrgRelation(@WebParam(name = "userid", partName = "partUserid")  int userid,@WebParam(name = "orgid", partName = "partOrgid") String orgid);
+	public @WebResult(name = "result", partName = "partResult") Result buildUserOrgRelationWithEventTrigger(@WebParam(name = "userid", partName = "partUserid")  int userid,@WebParam(name = "orgid", partName = "partOrgid") String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent,
+			@WebParam(name = "deleteotherorgjobrelation", partName = "partDeleteotherorgjobrelation")  boolean deleteotherorgjobrelation);
+	public @WebResult(name = "result", partName = "partResult") Result buildUserOrgRelation(@WebParam(name = "userid", partName = "partUserid")  int userid,@WebParam(name = "orgid", partName = "partOrgid") String orgid,
+			@WebParam(name = "deleteotherorgjobrelation", partName = "partDeleteotherorgjobrelation") boolean deleteotherorgjobrelation);
+	
+	
 	/**
 	 *  常用字段：
  * 
@@ -58,6 +63,44 @@ public interface CommonUserManagerInf {
 	 */
 	public @WebResult(name = "result", partName = "partResult") Result addOrganization(@WebParam(name = "org", partName = "partOrg")  CommonOrganization org);
 	
+	
+
+	/**
+	 *  常用字段：
+ * 
+ * orgId,
+ * orgName,
+ * parentId,
+ * code,
+ * creatingtime,
+ * orgnumber,
+ * orgdesc,
+ * remark5, 显示名称
+ * orgTreeLevel,部门层级，自动运算
+ * orgleader 部门主管
+	 * @param org
+	 * @return
+	 */
+	public @WebResult(name = "result", partName = "partResult") Result updateOrganization(@WebParam(name = "org", partName = "partOrg")  CommonOrganization org,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
+	
+
+	/**
+	 *  常用字段：
+ * 
+ * orgId,
+ * orgName,
+ * parentId,
+ * code,
+ * creatingtime,
+ * orgnumber,
+ * orgdesc,
+ * remark5, 显示名称
+ * orgTreeLevel,部门层级，自动运算
+ * orgleader 部门主管
+	 * @param org
+	 * @return
+	 */
+	public @WebResult(name = "result", partName = "partResult") Result invalidateOrganization(@WebParam(name = "org", partName = "partOrg")  String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
 	/**
 	 *  常用字段：
  * 
