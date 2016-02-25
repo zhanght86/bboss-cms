@@ -344,6 +344,7 @@ public class OrgSearchList extends DataInfoImpl implements Serializable {
 					org.setOrgSn(db.getString( "org_sn".toUpperCase()));
 					org.setOrgdesc(db.getString( "orgdesc".toUpperCase()));
 					org.setRemark5(db.getString( "remark5".toUpperCase()));
+					org.setRemark3(db.getString( "remark3".toUpperCase()));
 					org.setCreator(db.getString( "creator".toUpperCase()));
 
 					datas.add(org);

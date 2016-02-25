@@ -4,26 +4,32 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.jws.WebParam;
-
 import org.apache.log4j.Logger;
+import org.frameworkset.spi.support.MessageSource;
+import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
+import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.CommonUser;
 import com.frameworkset.platform.security.service.entity.Result;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.LogGetNameById;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
+import com.frameworkset.platform.sysmgrcore.manager.UserManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.GenerateServiceFactory;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.UserOrgParamManager;
 import com.frameworkset.platform.util.EventUtil;
+import com.frameworkset.util.StringUtil;
 
 public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.spi.InitializingBean{
 	private static Logger log = Logger.getLogger(CommonUserManger.class);
@@ -585,16 +591,270 @@ public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.s
 		}
 		return result;
 	}
+	
+	
 	@Override
 	public Result updateOrganization(CommonOrganization org,  boolean broadcastevent) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result = new Result();
+		if(StringUtil.isEmpty(org.getOrgId()))
+		{
+			
+
+			result.setCode(result.fail);
+			result.setErrormessage("部门ID为空");
+			return result;
+		}
+
+
+		boolean tag = true;
+		MessageSource messageSource = WebApplicationContextUtils.getWebApplicationContext();
+		String notice = messageSource.getMessage("sany.pdp.modify.failed");
+		 
+		TransactionManager tm = new TransactionManager(); 
+		
+		try {
+			tm.begin();
+			// 得到原来机构的编号.显示名称,名称
+			String orgnumber = org.getOrgnumber();
+			 
+
+		 
+			// 吴卫雄结束
+			
+			String sql = "select count(orgnumber) from TD_SM_ORGANIZATION where orgnumber=? and orgnumber<>?";
+			int exist = SQLExecutor.queryObject(int.class, sql,  org.getOrgnumber(),orgnumber);
+			
+			if (exist > 0) {
+				tag = false;
+				notice = messageSource.getMessage("sany.pdp.orgno.exist");
+			}
+ 
+			
+ 
+		 
+			if (tag) {
+				executor.updateBean("updateOrganization", org);
+				// 修改机构重新加载缓冲
+				// --记日志--------------------------------
+				AccessControl control = AccessControl.getAccessControl();
+				String operContent = "";
+				String operSource = control.getMachinedID();
+				String openModle ="部门管理";
+				String userName = control.getUserName();
+				String description = "";
+				LogManager logManager = SecurityDatabase.getLogManager();
+				operContent = userName + "修改"+ org.getOrgName();
+				description = "";
+				logManager.log(control.getUserAccount(), operContent, openModle, operSource, description);
+			}
+			if (tag) {
+				result.setErrormessage("部门修改成功!");
+
+			 
+
+			} else {
+				result.setErrormessage("部门修改失败：" + notice);
+
+			}
+			tm.commit();
+			result.setCode(result.ok);
+			if(tag)
+			{
+				EventUtil.sendORGUNIT_INFO_UPDATE(org.getOrgId());
+			}
+		} catch (Exception e) {
+			result.setCode(result.fail);
+			result.setErrormessage(StringUtil.exceptionToString(e));
+		}
+		finally
+		{
+			tm.release();
+		}
+		return result;
 	}
 	@Override
-	public Result invalidateOrganization(String orgid,  boolean broadcastevent) {
-		// TODO Auto-generated method stub
-		return null;
+	public Result disableOrganization(String orgid,  boolean broadcastevent) {
+		Result result = new Result();
+		if(StringUtil.isEmpty(orgid))
+		{
+			
+
+			result.setCode(result.fail);
+			result.setErrormessage("部门ID为空");
+			return result;
+		}
+
+		try {
+			_updateOrganizationStatus(orgid, "0");
+			result.setCode(result.ok);
+			result.setErrormessage("禁用部门成功！");
+			if(broadcastevent)
+			{
+				EventUtil.sendORGUNIT_INFO_UPDATE(orgid);
+			}
+		} catch (Exception e) {
+			result.setCode(result.fail);
+			result.setErrormessage(StringUtil.exceptionToString(e));
+		} 
+		return result;
 	}
+	
+	@Override
+	public Result enableOrganization(String orgid,  boolean broadcastevent) {
+		Result result = new Result();
+		if(StringUtil.isEmpty(orgid))
+		{
+			
+
+			result.setCode(result.fail);
+			result.setErrormessage("部门ID为空");
+			return result;
+		}
+
+		try {
+			_updateOrganizationStatus(orgid, "1");
+			result.setCode(result.ok);
+			result.setErrormessage("启用部门成功！");
+			if(broadcastevent)
+			{
+				EventUtil.sendORGUNIT_INFO_UPDATE(orgid);
+			}
+		} catch (Exception e) {
+			result.setCode(result.fail);
+			result.setErrormessage(StringUtil.exceptionToString(e));
+		} 
+		return result;
+	}
+	
+	private void _updateOrganizationStatus(String orgid, String status ) throws Exception
+	{
+		
+		executor.update("updateOrganizationStatus", status,orgid);
+		
+	}
+	@Override
+	public Result deleteOrganization(String orgid, boolean triggerEvent) {
+		 
+		Result result = new Result();
+		if(StringUtil.isEmpty(orgid))
+		{
+			
+
+			result.setCode(result.fail);
+			result.setErrormessage("部门ID为空");
+			return result;
+		}
+
+		OrgManager orgManager = SecurityDatabase.getOrgManager();
+		
+		 
+		//Organization org = orgManager.getOrgById(orgId);
+
+		//String orgId = org.getOrgId();
+		//String parentId = org.getParentId();
+		//request.setAttribute("orgId", orgId);
+		//request.setAttribute("parentId", parentId);
+		AccessControl control = AccessControl.getAccessControl(); 
+		//--记日志-----
+		String operContent = "";
+		String operSource = control.getMachinedID();
+		String openModle = "部门管理";
+		String userName = control.getUserName();
+		String description = "";
+		LogManager logManager = SecurityDatabase.getLogManager();
+		operContent = userName + "删除"
+				+ LogGetNameById.getOrgNameByOrgId(orgid);
+		description = "";
+		//--------
+
+		
+		
+		//获取当前机构下的所有用户的ID
+		//String  sql = " select distinct b.USER_ID from TD_SM_USERJOBORG b where b.ORG_ID in ( "
+	//	+ "select distinct a.ORG_ID from TD_SM_ORGANIZATION a start with a.ORG_ID = '" + orgId 
+		//+ "' connect by prior a.ORG_ID = a.PARENT_ID)";
+		String sql = "select distinct b.USER_ID from TD_SM_USERJOBORG b where b.ORG_ID in ("
+
+  +"select a.ORG_ID from TD_SM_ORGANIZATION a where a.org_tree_level like  "
++"	(select concat(org_tree_level, '%') from TD_SM_ORGANIZATION c where c.ORG_ID = ?))" ;
+
+
+
+		//根据用户ID删除用户所拥有的一切资源(除超级管理员外)
+		UserManager userManager = SecurityDatabase.getUserManager() ;
+		TransactionManager tm = new TransactionManager();
+		String[] userIds = null;
+		boolean tag = true;
+		
+		try
+		{
+			tm.begin();
+			PreparedDBUtil db = new PreparedDBUtil();
+			db.preparedSelect(sql);
+			db.setString(1, orgid);
+			db.executePrepared();
+			//如果使用了离散用户，删除机构只将机构下的用户的资源和关系删掉，变为离散用户。如果没有离散用户将机构下的用户彻底删除
+			boolean islisan = ConfigManager.getInstance().getConfigBooleanValue("enableorgusermove",true);
+			if(db.size()>0)
+			{
+				 userIds = new String[db.size()];
+				for(int i= 0; i<db.size(); i++)
+				{
+					userIds[i] = String.valueOf(db.getInt(i,"USER_ID"));
+				}
+				if(userIds.length > 0){
+					if(islisan){
+						userManager.deleteBatchUserRes(userIds,false);
+					}else{
+						userManager.deleteBatchUser(userIds,false);
+					}
+				}
+			}
+			//递归删除机构
+			tag = orgManager.deleteOrg(orgid,false);
+			tm.commit();
+			if(userIds != null)
+			{
+				result.setOperationData("remove users");
+			}
+			if(triggerEvent)
+			{
+				EventUtil.sendORGUNIT_DELETEEVENT(result.getOperationData(), orgid);
+//				if(userIds != null)
+//					EventUtil.sendUSER_INFO_DELETEEvent(userIds);
+//				EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(orgid);
+//				EventUtil.sendORGUNIT_INFO_DELETEEvent(orgid);
+			}
+		}
+		catch(Exception e)
+		{
+			tag = false ;
+			result.setCode(result.fail);
+			result.setErrormessage(StringUtil.exceptionToString(e));
+		}
+		finally
+		{
+			tm.release();
+		}
+		if (tag) 
+		{
+			try {
+				logManager.log(control.getUserAccount() ,
+					operContent, openModle, operSource, description);
+			} catch (ManagerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			result.setCode(result.ok);
+			result.setErrormessage("删除部门成功");
+		}
+		else
+	    {
+			
+		}
+		return result;
+	}
+	 
  
 	
 

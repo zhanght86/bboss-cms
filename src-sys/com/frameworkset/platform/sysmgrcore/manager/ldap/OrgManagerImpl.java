@@ -233,7 +233,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
 		return false;
 	}
 
-	public boolean storeOrg(Organization org) throws ManagerException {
+	public boolean storeOrg(Organization org,boolean triggerevent) throws ManagerException {
 		boolean r = false;
 
 		try {

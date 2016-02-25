@@ -333,9 +333,47 @@
 		//document.all.saveButton.disabled = true;
 		//document.all.resetButton.disabled = true;
 		//document.all.backButton.disabled = true;
-	  	document.forms[0].action = "modifyorg_do.jsp";
-		document.forms[0].target = "hiddenFrame";
-		document.forms[0].submit();
+	  	//document.forms[0].action = "modifyorg_do.jsp";
+		//document.forms[0].target = "hiddenFrame";
+		//document.forms[0].submit();
+		
+		$.ajax({
+			   type: "POST",
+				url : "<%=request.getContextPath()%>/usermanager/modifyorg_do.page",
+				data :formToJson("#form2"),
+				dataType : 'json',
+				async:false,
+				beforeSend: function(XMLHttpRequest){
+						 
+				      		blockUI();	
+				      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+				      	 		 	
+					},
+				success : function(response){
+					//去掉遮罩
+					unblockUI();
+					if(response.code=="success"){
+						var msg = response.errormessage;
+						 if(msg == 'enable')
+							 {
+							 	enable();
+							 }
+						 else
+							 {
+							 W.$.dialog.alert(msg,function(){	
+									
+								},api);	 
+							 }
+																			
+					}else{
+						W.$.dialog.alert("操作结果："+response.errormessage,function(){	
+							 
+							},api);	
+						 
+					}
+				}
+			  });
+
 		
 	}
 	
@@ -369,7 +407,7 @@
 <div style="height: 10px">&nbsp;</div>
 <div id="" >
 <center>
-<form name="form2" action="" method="post"  >	
+<form name="form2" id="form2" action="" method="post"  >	
 <pg:beaninfo requestKey="updateOrgInfo">
 	      
 		 <input type="hidden"  name="orgId" value="<pg:cell colName="orgId"  defaultValue=""/>"/> 
@@ -449,6 +487,5 @@
 				</tr>
 			</table>
 		</div>
-</body>
-<iframe name="hiddenFrame" width=0 height=0 frameborder=0></iframe>
+</body> 
 </html>

@@ -1242,7 +1242,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	 * 此函数用来处理更新机构的情况
 	 * 
 	 * */
-	public boolean storeOrg(Organization org) throws ManagerException {
+	public boolean storeOrg(Organization org,boolean triggerevent) throws ManagerException {
 		boolean r = false;
 		if (org != null) {
 			try {
@@ -1255,7 +1255,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 //					else
 //						org.setOrgId(oldOrg.getOrgId());
 //				}				
-				PreparedDBUtil conn = new PreparedDBUtil();
+				 
 				//有四个字段没有更新(暂时不需要)：ORG_ID CREATINGTIME CREATOR REMARK2 REMARK4，危达200711151437
 				String parentId = org.getParentId();
 				if( (parentId == null) || (parentId == "") || ("".equals(parentId)) )//机构的根结点id必须保证是0
@@ -1289,35 +1289,40 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 					isdirectguanhu = Integer.parseInt(org.getIsdirectguanhu());
 				
 				
-				String sql = "update td_sm_organization " + 
-				"set " +
-				"ORG_SN='" + org.getOrgSn() + "',ORG_NAME='" + org.getOrgName() + "'," +
-				"JP='" + org.getJp() + "'," +
-				"QP='" + org.getQp() + "'," + 
-				"ORGNUMBER='" + org.getOrgnumber() + "',ORGDESC='" + org.getOrgdesc() + "',REMARK1='" + org.getRemark1() + "'," +
-				"REMARK3='" + org.getRemark3()+ "'," + 
-				"REMARK5='" + org.getRemark5() + "',CHARGEORGID='" + org.getChargeOrgId() + "',SATRAPJOBID='" + org.getSatrapJobId() + "'," +
-				"ISPARTYBUSSINESS='" + org.getIspartybussiness() + "'," + 
-				"PATH='" + org.getPath() + "'," +
-				"LAYER='" + org.getLayer() + "'," +
-				"CHILDREN='" + org.getChildren() + "'," +
-				"CODE='" + org.getCode() + "'," +
-				"org_level='" + org_level + "'," +
-				"org_xzqm='" + org_xzqm + "'," +
-				"PARENT_ID='" + parentId + "'," + 
-				"isdirectlyparty='" + isdirectlyparty + "'," + 
-				"isforeignparty='" + isforeignparty + "'," + 
-				"isjichaparty='" + isjichaparty + "'," + 
-				"isdirectguanhu='" + isdirectguanhu + "'" + 
-				" where ORG_ID='" + org.getOrgId() + "'";
-				conn.preparedUpdate(sql);
-				conn.executePrepared();
-				r = true;				
-				Event event = new EventImpl(org.getOrgId(),
-						ACLEventType.ORGUNIT_INFO_UPDATE);
-				super.change(event,true);
+				String sql = "update td_sm_organization  set ORG_SN=?,ORG_NAME=?,JP=?,QP=?,ORGNUMBER=?,ORGDESC=?,REMARK1=?,REMARK3=?,REMARK5=?,CHARGEORGID=?,SATRAPJOBID=?,ISPARTYBUSSINESS=?,PATH=?,LAYER=?,CHILDREN=?,CODE=?,org_level=?,"
+				+ "org_xzqm=?,PARENT_ID=?,isdirectlyparty=?,isforeignparty=?,isjichaparty=?,isdirectguanhu=? where ORG_ID=?";
+//				conn.preparedUpdate(sql);
+//				conn.executePrepared();
+				SQLExecutor.update(sql,  org.getOrgSn() ,org.getOrgName() ,org.getJp(),org.getQp() ,org.getOrgnumber() 
+						,org.getOrgdesc()
+						,org.getRemark1() 
+						,  org.getRemark3()
+						, org.getRemark5()
+						, org.getChargeOrgId()
+						, org.getSatrapJobId()
+						,org.getIspartybussiness() 
+						,org.getPath() 
+						, org.getLayer()
+						,org.getChildren() 
+						, org.getCode() 
+						,org_level 
+						, org_xzqm 
+						, parentId 
+						, isdirectlyparty 
+						, isforeignparty 
+						, isjichaparty 
+						, isdirectguanhu
+						, org.getOrgId());
+				r = true;	
+				if(triggerevent)
+				{
+					EventUtil.sendORGUNIT_INFO_UPDATE(org.getOrgId());
+//					Event event = new EventImpl(org.getOrgId(),
+//							ACLEventType.ORGUNIT_INFO_UPDATE);
+//					super.change(event,true);
+				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				throw new ManagerException(e);
 			}
 		}
 		return r;

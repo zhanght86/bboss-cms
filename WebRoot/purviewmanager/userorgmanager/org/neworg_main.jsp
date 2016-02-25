@@ -106,7 +106,7 @@ function searchorg()
 	//winuser = window.showModalDialog("organsearch.jsp?jobId=2",
 		//								 window,"dialogWidth:"+(850)+"px;dialogHeight:"+(520)+"px;help:no;scroll:auto;status:no");
 	
-	$.dialog({ title:'<pg:message code="sany.pdp.role.organization.query"/>',width:740,height:560, content:'url:<%=contextpath%>organsearch.jsp?jobId=2',lock: true});
+	$.dialog({ close:reloadparenthref,title:'<pg:message code="sany.pdp.role.organization.query"/>',width:740,height:560, content:'url:<%=contextpath%>organsearch.jsp?jobId=2',lock: true});
 }
 
 //新增一级机构

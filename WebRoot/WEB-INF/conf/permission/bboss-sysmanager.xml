@@ -61,7 +61,7 @@
 	</property>
 	
 	<property name="/usermanager/*.page"	
-		 
+		 f:commonUserManager="attr:commonuser.service"
 		class="com.frameworkset.platform.sysmgrcore.purviewmanager.action.UserOrgAction" >
 	</property>
 	

@@ -136,9 +136,23 @@ public class CommonUserControl implements CommonUserManagerInf{
 	}
 
 	@Override
-	public Result invalidateOrganization(String orgid, boolean broadcastevent) {
-		// TODO Auto-generated method stub
-		return commonUserManager.invalidateOrganization(  orgid,   broadcastevent);
+	public Result disableOrganization(String orgid, boolean broadcastevent) {
+		return commonUserManager.disableOrganization(  orgid,   broadcastevent);
 	}
+
+	@Override
+	public Result enableOrganization(String orgid, boolean broadcastevent) {
+		return commonUserManager.enableOrganization(  orgid,   broadcastevent);
+	}
+
+	@Override
+	public Result deleteOrganization(String orgid, boolean triggerEvent) {
+		// TODO Auto-generated method stub
+		return commonUserManager.deleteOrganization(  orgid,   triggerEvent);
+	}
+
+	 
+
+ 
 
 }

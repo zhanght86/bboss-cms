@@ -86,7 +86,7 @@ public interface OrgManager extends Provider {
 	 *             在处理当前方法的过程中如果遇到问题将抛出 ManagerException 异常
 	 * 此函数用来更新机构基本信息
 	 */
-	public boolean storeOrg(Organization org) throws ManagerException;
+	public boolean storeOrg(Organization org,boolean triggerevent) throws ManagerException;
 	
 	/**
 	 * 与storeOrg对应，用来处理新增的情况

@@ -20,7 +20,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 public class AbsttractOrgManager extends EventHandle implements OrgManager {
 
 	@Override
-	public boolean storeOrg(Organization org) throws ManagerException {
+	public boolean storeOrg(Organization org,boolean triggerevent) throws ManagerException {
 		// TODO Auto-generated method stub
 		return false;
 	}

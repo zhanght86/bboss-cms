@@ -1,3 +1,5 @@
+<%@page import="com.frameworkset.platform.security.authentication.CheckCallBack"%>
+<%@page import="com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager"%>
 <%
 /**
  * <p>Title: 机构查询</p>
@@ -30,23 +32,18 @@
 			if (isEffective == null)
 			    isEffective = "";
 %>
-<html>
-	<head>
-		<title>属性容器</title>
-		<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
-	</head>
-	<body>
-		<div>
-			<form name="Org" action="" method="post">
+ 
+			
 				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="stable" id="tb">
 					<pg:listdata dataInfo="com.frameworkset.platform.sysmgrcore.purviewmanager.tag.OrgSearchList" keyName="OrgList" />
-					<pg:pager maxPageItems="15" scope="request" data="OrgList" isList="false">
-					<pg:empty actual="${OrgList}" evalbody="true">
-					<pg:yes>
-						<div class="nodata">
-						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div>
-					</pg:yes>
-					<pg:no>
+					<pg:pager maxPageItems="15" scope="request" data="OrgList" isList="false" containerid="custombackContainer">
+					 
+						 
+						<pg:param name="remark5" />
+						<pg:param name="orgnumber" />
+						 
+						<pg:param name="isEffective"  />
+					<tr><td colspan="10"><div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div></td></tr>
 					<tr>
 							<!--设置分页表头-->
 							<th>
@@ -65,27 +62,27 @@
                          <th>
 								<pg:message code="sany.pdp.role.organization.creater"></pg:message>
 							</th>
-
+ 						<th>
+								有效性
+							</th>
 						</tr>
-						<pg:param name="orgName" />
-						<pg:param name="code" />
-						<pg:param name="remark5" />
-						<pg:param name="orgnumber" />
-						<pg:param name="orgcreator"  />
-						<pg:param name="isEffective"  />
-
+					
+<pg:notify >
+						<tr><td colspan="10"><div class="nodata">
+						<img src="${pageContext.request.contextPath}<pg:message code='sany.pdp.common.list.nodata.path'/>"/></div></td></tr>
+					</pg:notify>
 						<!--list标签循环输出每条记录-->
 						<pg:list>
 						<%
 						   String owner_Id=(String)dataSet.getString("creator");
 						   
-						   UserManager usermanager=SecurityDatabase.getUserManager();
-					        User user=usermanager.getUserById(owner_Id);
+						CheckCallBack user = UserCacheManager.getInstance().getUserByID(owner_Id);
+					        //User user=usermanager.getUserById(owner_Id);
 					       String username="";
 					       String userrealname="";
 					       if(user != null){
-					       		username=user.getUserName();
-					       		userrealname=user.getUserRealname();	
+					       		username=(String)user.getUserAttribute("userAccount");
+					       		userrealname=(String)user.getUserAttribute("userName");	
 					       }
 					      
 						%>
@@ -119,18 +116,28 @@
                                     <td height="20px" align=left class="tablecells">
 									<%=username%>【<%=userrealname%>】
 								</td>
+								<td height="20px" align=left class="tablecells">
+										<pg:equal colName="remark3" value="0" evalbody="true">
+											<pg:yes>
+												无效 &nbsp;&nbsp;<a href="javascript:void(0)" class="bt_1" onclick="changeStatus('<pg:cell colName="orgId"/>','1')"><span>启用</span>
+														</a>
+											</pg:yes>
+											<pg:no>
+											有效 &nbsp;&nbsp;<a href="javascript:void(0)" class="bt_1" onclick="changeStatus('<pg:cell colName="orgId"/>','0')"><span>禁用</span>
+														</a>
+												
+											</pg:no>
+										</pg:equal>
+								</td>
 							</tr>
 						</pg:list>
-					</pg:no>	
-					</pg:empty> 
+					
 					 
 						
-				<tr><td colspan="10"><div class="pages"><input type="hidden" value="<pg:querystring/>" id="querystring"/><pg:index tagnumber="5" sizescope="5,10,20,50,100"/></div></td></tr>
+				
 					</pg:pager>
 				</table>
-			</form>
-		</div>
-	</body>
-
-</html>
+			
+		
+ 
 

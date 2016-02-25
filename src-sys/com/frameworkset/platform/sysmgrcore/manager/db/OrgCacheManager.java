@@ -3,6 +3,7 @@ package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class OrgCacheManager implements Listener, Serializable{
 	private static Logger log = Logger.getLogger(OrgCacheManager.class);
 	OrgManager orgManager = SecurityDatabase.getOrgManager();
 	/** 机构的缓冲器 */
-	Map orgMap;
+	Map<String,Organization> orgMap;
 	
 	/**
 	 * 缓冲系统中所有的用户列表
@@ -126,7 +127,7 @@ public class OrgCacheManager implements Listener, Serializable{
 	
 		if(orgMap == null)
 		{
-			orgMap = new EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap();
+			orgMap = new HashMap();
 			this.orgMap.put(root.getOrgId(),root);
 		}
 //		else if(this.orgMap.containsKey(root.getOrgId()))
@@ -134,6 +135,31 @@ public class OrgCacheManager implements Listener, Serializable{
 //			log.debug("机构ID[" + root.getOrgId() + "]已经被加载，忽略重复加载!");
 //			return;
 //		}
+//		try {
+//			
+//			List subOrgList = orgManager.getChildOrgList(root);
+//			for(int i=0;subOrgList != null && i<subOrgList.size();i++){
+//				Organization org = (Organization)subOrgList.get(i);
+//				
+//				if(this.orgMap.containsKey(org.getOrgId()))
+//				{
+//					log.debug("机构ID[" + org.getOrgId() + "]已经被加载，忽略重复加载!");
+//					return;
+//				}
+//				root.addSubOrg(org);
+//				org.setParentOrg(root);
+//				this.orgMap.put(org.getOrgId(),org);
+//				loadOrganization(org);
+//			}
+//			
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}		
+		cacheSubOrgs(root);
+	}
+	
+	private void cacheSubOrgs(Organization root)
+	{
 		try {
 			
 			List subOrgList = orgManager.getChildOrgList(root);
@@ -178,7 +204,7 @@ public class OrgCacheManager implements Listener, Serializable{
 		 else
 		 {
 			 Organization org = getOrganization(orgid);
-	         return org.getSuborgs() != null && org.getSuborgs().size() > 0;
+	         return org != null && org.getSuborgs() != null && org.getSuborgs().size() > 0;
 		 }
 	}
 
@@ -353,7 +379,51 @@ public class OrgCacheManager implements Listener, Serializable{
 //					OrgManager orgManager = SecurityDatabase.getOrgManager();
 					Organization from = orgManager.getOrgById(orgid);
 					if(from != null)
-						OrgManagerImpl.orgcopy(from, to);
+					{
+						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+						{
+							String parentid = from.getParentId();
+							Organization parent = this.getOrganization(parentid);
+							if(parent != null)
+								parent.deleteSubOrg(to);
+							this.deleteOrg(to,false);
+						}
+						else
+							OrgManagerImpl.orgcopy(from, to);
+					}
+					
+				}
+				else
+				{
+					Organization from = orgManager.getOrgById(orgid);
+					
+					if(from != null)
+					{
+						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+						{
+							String parentid = from.getParentId();
+							Organization parent = this.getOrganization(parentid);
+							if(parent != null)
+								parent.deleteSubOrg(from);
+							this.deleteOrg(from,false);
+						}
+						else
+						{
+							String parentid = from.getParentId();
+							 
+							synchronized(this.orgMap)
+							{					
+								Organization parent = this.getOrganization(parentid);
+								if(parent != null)
+								{
+									parent.addSubOrg(from);	
+									from.setParentOrg(parent);
+								}
+								this.cacheSubOrgs(from);
+								this.orgMap.put(from.getOrgId(), from);
+							}
+						}
+					}
 				}
 			} catch (ManagerException e1) {
 				// TODO Auto-generated catch block
@@ -441,10 +511,22 @@ public class OrgCacheManager implements Listener, Serializable{
 	 */
 	private void deleteOrg(Organization org)
 	{
+		deleteOrg(org,true);
+			
+	}
+	
+
+	/**
+	 * 删除机构及子机构的索引
+	 * @param org
+	 */
+	private void deleteOrg(Organization org,boolean clearsub)
+	{
 		synchronized(this.orgMap)
 		{
-			this.orgMap.remove(org.getOrgId());			
-			deleteSubOrgs(org);
+			Organization cached = this.orgMap.remove(org.getOrgId());		
+			if(clearsub && cached != null)
+				deleteSubOrgs(cached);
 		}
 			
 	}
@@ -462,8 +544,9 @@ public class OrgCacheManager implements Listener, Serializable{
 				for(int i = 0; i < orgs.size();i ++)
 				{
 					Organization org_ = (Organization)orgs.get(i);
-					orgMap.remove(org_.getOrgId());
-					deleteSubOrgs(org_);
+					Organization cached =  orgMap.remove(org_.getOrgId());
+					if(cached != null)
+						deleteSubOrgs(cached);
 				}
 			}
 		}

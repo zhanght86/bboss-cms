@@ -7,7 +7,6 @@ import javax.jws.WebService;
 import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.CommonUser;
 import com.frameworkset.platform.security.service.entity.Result;
-import com.frameworkset.platform.util.EventUtil;
 @WebService(name = "commonuserService", targetNamespace = "com.frameworkset.platform.security.service.CommonuserService") 
 public interface CommonUserManagerInf {
 	public @WebResult(name = "result", partName = "partResult") Result createTempUser(@WebParam(name = "user", partName = "partUser") CommonUser user);
@@ -36,7 +35,7 @@ public interface CommonUserManagerInf {
 	 * 
 	 * @param userid
 	 * @param orgid
-	 * @param broadcastevent if false then call EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(userid) in your programe
+	 * @param broadcastevent 如果broadcastevent 为false则需要检查result.code == success,然后 EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(userid) in your programe
 	 * @return
 	 */
 	public @WebResult(name = "result", partName = "partResult") Result buildUserOrgRelationWithEventTrigger(@WebParam(name = "userid", partName = "partUserid")  int userid,@WebParam(name = "orgid", partName = "partOrgid") String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent,
@@ -66,7 +65,8 @@ public interface CommonUserManagerInf {
 	
 
 	/**
-	 *  常用字段：
+	 *  更新字段：update td_sm_organization set org_name=#[orgName], code=#[code],  orgnumber=#[orgnumber],orgdesc=#[orgdesc] ,remark3=#[remark3], remark5=#[remark5] 
+  ORGLEADER=#[orgleader] where org_id=#[orgId]
  * 
  * orgId,
  * orgName,
@@ -85,22 +85,27 @@ public interface CommonUserManagerInf {
 	
 
 	/**
-	 *  常用字段：
- * 
- * orgId,
- * orgName,
- * parentId,
- * code,
- * creatingtime,
- * orgnumber,
- * orgdesc,
- * remark5, 显示名称
- * orgTreeLevel,部门层级，自动运算
- * orgleader 部门主管
+
+ * 如果broadcastevent 为false则需要检查result.code == success,然后
+			please execute send event yourself:
+				EventUtil.sendORGUNIT_INFO_UPDATE(orgid);
+			
 	 * @param org
 	 * @return
 	 */
-	public @WebResult(name = "result", partName = "partResult") Result invalidateOrganization(@WebParam(name = "org", partName = "partOrg")  String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
+	public @WebResult(name = "result", partName = "partResult") Result disableOrganization(@WebParam(name = "org", partName = "partOrg")  String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
+	
+	/**
+
+
+ * 如果broadcastevent 为false则需要检查result.code == success,然后
+			please execute send event yourself:
+				EventUtil.sendORGUNIT_INFO_UPDATE(orgid);
+
+	 * @param org
+	 * @return
+	 */
+	public @WebResult(name = "result", partName = "partResult") Result enableOrganization(@WebParam(name = "org", partName = "partOrg")  String orgid,@WebParam(name = "broadcastevent", partName = "partBroadcastevent") boolean broadcastevent);
 	/**
 	 *  常用字段：
  * 
@@ -114,8 +119,8 @@ public interface CommonUserManagerInf {
  * remark5, 显示名称
  * orgTreeLevel,部门层级，自动运算
  * orgleader 部门主管
- * 如果triggerEvent为false，需要调用程序自己触发以下事件
- * if(triggerEvent)
+ * 如果broadcastevent 为false则需要检查result.code == success,然后
+ * 
 			{
 				EventUtil.sendORGUNIT_INFO_ADD(org.getOrgId());				
 			}
@@ -123,5 +128,18 @@ public interface CommonUserManagerInf {
 	 * @return
 	 */
 	public @WebResult(name = "result", partName = "partResult") Result addOrganizationWithEventTrigger(@WebParam(name = "org", partName = "partOrg")  CommonOrganization org,@WebParam(name = "triggerEvent", partName = "partTriggerEvent")   boolean triggerEvent);
+	
+	/**
+	 * 物理删除机构
+	 * @param orgid
+	 * @param triggerEvent
+	 *如果broadcastevent 为false则需要检查result.code == success,然后
+ * 
+			{
+				EventUtil.sendORGUNIT_DELETEEVENT(result.getOperationData(), orgid);			
+			}
+	 * @return
+	 */
+	public @WebResult(name = "result", partName = "partResult") Result deleteOrganization(@WebParam(name = "org", partName = "partOrg")  String orgid,@WebParam(name = "triggerEvent", partName = "partTriggerEvent")   boolean triggerEvent);
 	 
 }

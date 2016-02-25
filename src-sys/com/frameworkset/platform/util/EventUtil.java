@@ -63,6 +63,21 @@ public class EventUtil {
 		EventHandle.getInstance().change(eventUSER_INFO_DELETE);
 		
 	}
+
+	public static void sendORGUNIT_INFO_UPDATE(String orgId) {
+		Event event = new EventImpl(orgId,
+				ACLEventType.ORGUNIT_INFO_UPDATE);
+		EventHandle.sendEvent(event,true);
+		
+	}
+	
+	public static void sendORGUNIT_DELETEEVENT(String operdata,String orgid)
+	{
+		if(operdata != null)
+			EventUtil.sendUSER_INFO_DELETEEvent("");
+		EventUtil.sendUSER_ROLE_INFO_CHANGEEvent(orgid);
+		EventUtil.sendORGUNIT_INFO_DELETEEvent(orgid);
+	}
 	
 
 }

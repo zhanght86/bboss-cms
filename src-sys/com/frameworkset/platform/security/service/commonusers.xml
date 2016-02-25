@@ -139,7 +139,20 @@ values(?,'1',?,3,999,?,1)
 	]]>
 	</property>
 	
+		<property name="updateOrganization">
+		<![CDATA[		
+		update td_sm_organization set org_name=#[orgName], code=#[code],  orgnumber=#[orgnumber],orgdesc=#[orgdesc] ,remark3=#[remark3], remark5=#[remark5] 
+  ORGLEADER=#[orgleader] where org_id=#[orgId]
+   
+	]]>
+	</property>
 	
+		<property name="updateOrganizationStatus">
+		<![CDATA[		
+		update td_sm_organization set remark3=? where org_id=?
+   
+	]]>
+	</property>
 	<property name="existOrg">
 		<![CDATA[		
 		select count(ORG_ID) from td_sm_organization where ORG_ID=?

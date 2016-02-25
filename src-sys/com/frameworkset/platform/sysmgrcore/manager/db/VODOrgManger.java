@@ -25,7 +25,7 @@ import com.frameworkset.common.tag.pager.ListInfo;
   
 public class VODOrgManger extends AbsttractOrgManager implements OrgManager { 
   	    
-	public boolean storeOrg(Organization org) throws ManagerException {
+	public boolean storeOrg(Organization org,boolean triggerevent) throws ManagerException {
 		boolean r = false;
 		PreparedDBUtil preDBUtil = new PreparedDBUtil();
 		String sqlstr = "INSERT INTO TB_Branch (FD_Branch_ID,FD_Branch_ParentID,FD_Branch_Name,FD_Branch_ShowName,FD_BRANCH_ISDELETED,FD_BRANCH_POSITION) " +
