@@ -117,6 +117,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 		root.setOrgId("0");
 		root.orgCacheCallback(this);
 		root.putloadfather(true);
+		this.orgMap.put("0", root);
 //		root.putloadfathers(true);
 	}
 	/**
@@ -127,9 +128,10 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 		
 		synchronized(lock)
 		{
+			orgMap = new HashMap();
 			root = null;
 			initroot();
-			orgMap = null;
+			
 			
 //			loadOrganization(root);
 		}
@@ -743,6 +745,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 							{
 								return;
 							}
+							org.orgCacheCallback(this);
 							Organization parent = this.orgMap.get(org.getParentId());
 							if(parent != null)
 							{
