@@ -25,10 +25,12 @@ import com.frameworkset.platform.security.service.entity.Result;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
+import com.frameworkset.platform.sysmgrcore.manager.LogGetNameById;
 import com.frameworkset.platform.sysmgrcore.manager.LogManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.sysmgrcore.manager.UserManager;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.GenerateServiceFactory;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.PurviewManager;
@@ -827,5 +829,93 @@ public class UserOrgAction {
 		return result;
 
 	}
+	
+	
+	public @ResponseBody Result orgtran_do(HttpServletRequest request, HttpServletResponse response) {
+		Result result = new Result();
+		 
+		AccessControl control = AccessControl.getInstance();
+		if (!control.checkManagerAccess(request, response)) {
+			result.setErrormessage("没有修改机构状态权限!");
+			result.setCode(result.fail);
+			return result;
+		}
+		if (!control.checkPermission("orgunit",
+                "orgupdate", AccessControl.ORGUNIT_RESOURCE))
+		{
+			result.setErrormessage("没有修改机构状态权限!");
+			result.setCode(result.fail);
+			return result;
+		}
+		String tag = "0";
+		boolean flag=true;
+		String notice = RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.fail.admin", request);
+		
+		String parentId = request.getParameter("parentId");
+		String orgId = request.getParameter("orgId");
+		try
+			{
+			Organization org = OrgCacheManager.getInstance().getOrganization(orgId);
+			
+			String remark5 = org==null?"":org.getRemark5();
+			OrgManager orgManger = SecurityDatabase.getOrgManager();
+			//机构转移时判断是否有显示名称同名的机构
+			//baowen.liu
+			
+			int size = SQLExecutor.queryObject(int.class,"select count(remark5) from TD_SM_ORGANIZATION org where PARENT_ID=? and remark5=?",parentId,remark5);
+			if( size> 0 ){
+			  notice = RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.name.exist", request);
+			  flag=false;
+			}
+			
+			if(flag){
+				
+				
+				flag = orgManger.tranOrg(orgId,parentId);
+				
+				if(flag){
+					tag = "2";
+					//记录日志
+					//---------------START--
+					
+					String operContent="";        
+			        String operSource=control.getMachinedID();
+			        String openModle=RequestContextUtils.getI18nMessage("sany.pdp.organization.manage", request);
+			        String userName = control.getUserName();
+			        LogManager logManager = SecurityDatabase.getLogManager(); 
+			        operContent = RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.to.otherorg", new Object[] {userName, LogGetNameById.getOrgNameByOrgId(orgId), LogGetNameById.getOrgNameByOrgId(parentId)}, request);
+			        logManager.log(control.getUserAccount() ,operContent,openModle,operSource,""); 
+					//---------------END
+				}
+	        
+			}	
+			if(tag.equals("1"))
+			{
+				result.setCode(result.fail);
+				result.setErrormessage(RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.to.self.no", request));
+				 
+			}
+			else if(tag.equals("2"))
+			{
+				result.setCode(result.ok);
+				result.setErrormessage(RequestContextUtils.getI18nMessage("sany.pdp.userorgmanager.org.transfer.success", request));
+			 
+			}
+			else
+			{
+				result.setCode(result.fail);
+				result.setErrormessage(notice);
+			}
+		}
+		catch(Exception e)
+		{
+			result.setCode(result.fail);
+			result.setErrormessage(StringUtil.exceptionToString(e));
+		}
+		
+		return result;
+
+	}
+	
 
 }

@@ -1,11 +1,15 @@
 package com.frameworkset.platform.security.service.action;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 import com.frameworkset.platform.security.service.CommonUserManagerInf;
 import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.Result;
+import com.frameworkset.platform.sysmgrcore.entity.Organization;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 
 public class TestUserService {
 
@@ -91,5 +95,18 @@ public class TestUserService {
 		Result result = tokenService.deleteOrganization(org, true);
 		System.out.println();
 	}
+	
+	@Test
+	public void testgetFathers() throws Exception
+	{
+	 
+		String orgid = "50459816";
+		Organization org = OrgCacheManager.getInstance().getFatherOrganization(orgid);
+		List<Organization> orgs = OrgCacheManager.getInstance().getFatherOrganizations(orgid);
+		orgs = OrgCacheManager.getInstance().getFatherOrganizations(orgid);
+		System.out.println();
+	}
+	
+	
 	
 }

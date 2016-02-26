@@ -6,7 +6,6 @@
  */
 package com.frameworkset.platform.menu;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,11 +13,11 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * @author ok
@@ -26,7 +25,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class CurrentorgAndLisanTree extends COMTree implements Serializable {
+public class CurrentorgAndLisanTree extends COMTree  {
 	String parentPath = "";
 	String orgId = "";
 	String curOrgId = "";
@@ -115,13 +114,13 @@ public class CurrentorgAndLisanTree extends COMTree implements Serializable {
 							} else {
 								addNode(father, sonorg.getOrgId(), treeName,
 										"org", true, curLevel, (String) null,
-										(String) null, (String) null, map);
+										sonorg.getOrgId(),   sonorg.getOrgId(), map);
 							}
 						} else {
 							if (super.accessControl.isSubOrgManager(sonorg.getOrgId())) {
 								addNode(father, sonorg.getOrgId(), treeName,
 										"org", false, curLevel, (String) null,
-										(String) null, (String) null, map);
+										(String) sonorg.getOrgId(),   sonorg.getOrgId(), map);
 							}
 						}
 					}

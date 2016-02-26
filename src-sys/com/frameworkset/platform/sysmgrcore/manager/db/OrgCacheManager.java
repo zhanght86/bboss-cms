@@ -1,13 +1,11 @@
 package com.frameworkset.platform.sysmgrcore.manager.db;
 
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.transaction.RollbackException;
 
 import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
@@ -16,8 +14,6 @@ import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.SPIException;
 
-import com.frameworkset.orm.annotation.TransactionType;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
@@ -30,11 +26,12 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  * @author zhuo.wang
  * 
  */
-public class OrgCacheManager implements Listener, Serializable{
+public class OrgCacheManager implements Listener,OrgCacheCallback{
 	private static Logger log = Logger.getLogger(OrgCacheManager.class);
 	OrgManager orgManager = SecurityDatabase.getOrgManager();
 	/** 机构的缓冲器 */
 	Map<String,Organization> orgMap;
+	private static Object lock = new Object();
 	
 	/**
 	 * 缓冲系统中所有的用户列表
@@ -67,42 +64,60 @@ public class OrgCacheManager implements Listener, Serializable{
 		init();
 		return this.userList;
 	}
-	static boolean initing = false; 
+	 
 	public static void init()
 	{
-		if(!inited && !initing)
+		
+		if(!inited )
 		{
-			initing = true;
-			instance = new OrgCacheManager();
-			instance.root = new Organization();
-			instance.root.setOrgId("0");
-			TransactionManager tm = new TransactionManager();
-			try
+			synchronized(lock)
 			{
-				tm.begin(TransactionType.RW_TRANSACTION);
-				instance.loadOrganization(instance.root);
-				tm.commit();
-			}
-			catch(Throwable e)
-			{
-				try {
-					tm.rollback();
-				} catch (RollbackException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				if(!inited )
+				{
+					OrgCacheManager _instance = new OrgCacheManager();
+					_instance.root = new Organization();
+					_instance.root.setOrgId("0");
+					_instance.root.orgCacheCallback(_instance);
+					_instance.cacheorg(_instance.root);
+//					TransactionManager tm = new TransactionManager();
+//					try
+//					{
+//						tm.begin(TransactionType.RW_TRANSACTION);
+//						_instance.loadOrganization(_instance.root);
+//						tm.commit();
+//					}
+//					catch(Throwable e)
+//					{
+//						try {
+//							tm.rollback();
+//						} catch (RollbackException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//					}
+					//注册感兴趣饿的事件类型
+					List eventTypes = new ArrayList();
+					eventTypes.add(ACLEventType.ORGUNIT_INFO_ADD);
+					eventTypes.add(ACLEventType.ORGUNIT_INFO_DELETE);
+					eventTypes.add(ACLEventType.ORGUNIT_INFO_UPDATE);
+					eventTypes.add(ACLEventType.ORGUNIT_INFO_SORT);
+					eventTypes.add(ACLEventType.ORGUNIT_INFO_TRAN);
+					NotifiableFactory.getNotifiable()
+			                .addListener(_instance,eventTypes);
+					instance = _instance;
+					inited = true;
 				}
 			}
-			//注册感兴趣饿的事件类型
-			List eventTypes = new ArrayList();
-			eventTypes.add(ACLEventType.ORGUNIT_INFO_ADD);
-			eventTypes.add(ACLEventType.ORGUNIT_INFO_DELETE);
-			eventTypes.add(ACLEventType.ORGUNIT_INFO_UPDATE);
-			eventTypes.add(ACLEventType.ORGUNIT_INFO_SORT);
-			eventTypes.add(ACLEventType.ORGUNIT_INFO_TRAN);
-			NotifiableFactory.getNotifiable()
-	                .addListener(instance,eventTypes);
-			inited = true;
 		}
+	}
+	private void initroot()
+	{
+		root = new Organization();
+		
+		root.setOrgId("0");
+		root.orgCacheCallback(this);
+		root.putloadfather(true);
+//		root.putloadfathers(true);
 	}
 	/**
 	 *重新加载
@@ -110,31 +125,63 @@ public class OrgCacheManager implements Listener, Serializable{
 	public void reset()
 	{
 		
-		synchronized(this)
+		synchronized(lock)
 		{
 			root = null;
-			root = new Organization();
-			
-			root.setOrgId("0");
+			initroot();
 			orgMap = null;
 			
-			loadOrganization(root);
+//			loadOrganization(root);
 		}
 	}
 	
-	private void loadOrganization(Organization root)
+	private void cacheorg(Organization root)
 	{
-	
 		if(orgMap == null)
 		{
 			orgMap = new HashMap();
 			this.orgMap.put(root.getOrgId(),root);
 		}
-//		else if(this.orgMap.containsKey(root.getOrgId()))
+	}
+	
+//	private void loadOrganization(Organization root)
+//	{
+//	
+//		if(orgMap == null)
 //		{
-//			log.debug("机构ID[" + root.getOrgId() + "]已经被加载，忽略重复加载!");
-//			return;
+//			orgMap = new HashMap();
+//			this.orgMap.put(root.getOrgId(),root);
 //		}
+////		else if(this.orgMap.containsKey(root.getOrgId()))
+////		{
+////			log.debug("机构ID[" + root.getOrgId() + "]已经被加载，忽略重复加载!");
+////			return;
+////		}
+////		try {
+////			
+////			List subOrgList = orgManager.getChildOrgList(root);
+////			for(int i=0;subOrgList != null && i<subOrgList.size();i++){
+////				Organization org = (Organization)subOrgList.get(i);
+////				
+////				if(this.orgMap.containsKey(org.getOrgId()))
+////				{
+////					log.debug("机构ID[" + org.getOrgId() + "]已经被加载，忽略重复加载!");
+////					return;
+////				}
+////				root.addSubOrg(org);
+////				org.setParentOrg(root);
+////				this.orgMap.put(org.getOrgId(),org);
+////				loadOrganization(org);
+////			}
+////			
+////		} catch (Exception e) {
+////			e.printStackTrace();
+////		}		
+//		cacheSubOrgs(root);
+//	}
+	
+//	private void cacheSubOrgs(Organization root)
+//	{
 //		try {
 //			
 //			List subOrgList = orgManager.getChildOrgList(root);
@@ -155,8 +202,7 @@ public class OrgCacheManager implements Listener, Serializable{
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}		
-		cacheSubOrgs(root);
-	}
+//	}
 	
 	private void cacheSubOrgs(Organization root)
 	{
@@ -165,22 +211,90 @@ public class OrgCacheManager implements Listener, Serializable{
 			List subOrgList = orgManager.getChildOrgList(root);
 			for(int i=0;subOrgList != null && i<subOrgList.size();i++){
 				Organization org = (Organization)subOrgList.get(i);
-				
-				if(this.orgMap.containsKey(org.getOrgId()))
+				Organization cacheorg = this.orgMap.get(org.getOrgId())  ;
+				if(cacheorg != null)
 				{
-					log.debug("机构ID[" + org.getOrgId() + "]已经被加载，忽略重复加载!");
-					return;
+					
+					root.addSubOrg(cacheorg);
+					if(!cacheorg.loadfather())
+					{
+						cacheorg.setParentOrg(root);
+						cacheorg.putloadfather(true);
+					}
 				}
-				root.addSubOrg(org);
-				org.setParentOrg(root);
-				this.orgMap.put(org.getOrgId(),org);
-				loadOrganization(org);
+				else
+				{
+					root.addSubOrg(org);
+					org.setParentOrg(root);
+					org.putloadfather(true);
+					org.orgCacheCallback(this);
+					this.orgMap.put(org.getOrgId(),org);
+				}
+	
+				
+//				loadOrganization(org);
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 	}
+	
+	private void cachefather(Organization node)
+	{
+		try {
+			if(node.getParentId() != null )
+			{
+				if(node.getOrgId() != null && node.getOrgId().equals("0"))
+					return;
+				if(node.getParentId().equals("0"))
+				{
+					if(root != null)
+					{
+						node.setParentOrg(root);
+					}
+					else
+					{
+						initroot();
+						node.setParentOrg(root);
+					}
+				}
+				else
+				{
+//					Organization father = orgManager.getOrgById(node.getParentId());
+					Organization father = this.getOrganization(node.getParentId());
+					if(father != null)
+					{
+						 
+						node.setParentOrg(father);
+					}
+				}
+					
+			}
+			 
+			
+//			for(int i=0;subOrgList != null && i<subOrgList.size();i++){
+//				Organization org = (Organization)subOrgList.get(i);
+//				
+//				if(this.orgMap.containsKey(org.getOrgId()))
+//				{
+//					log.debug("机构ID[" + org.getOrgId() + "]已经被加载，忽略重复加载!");
+//					return;
+//				}
+//				root.addSubOrg(org);
+//				org.setParentOrg(root);
+//				org.putloadfather(true);
+//				org.orgCacheCallback(this);
+//				this.orgMap.put(org.getOrgId(),org);
+////				loadOrganization(org);
+//			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+ 
 	
 	
 	
@@ -214,49 +328,146 @@ public class OrgCacheManager implements Listener, Serializable{
 
 	public Organization getOrganization(String orgid) throws ManagerException {
 		Organization org = (Organization)this.orgMap.get(orgid);
+		if(org == null)
+		{
+			synchronized(lock)
+			{
+				org = (Organization)this.orgMap.get(orgid);
+				if(org == null)
+				{
+					org = _getOrganization( orgid);
+				}
+				
+			}
+		}
 		
         return org;
 		
+	}
+	
+	private Organization _getOrganization(String orgid)
+	{
+		try {
+			if(orgid != null )
+			{
+				
+				if(orgid.equals("0"))
+				{
+					if(root != null)
+					{
+						return (root);
+					}
+					else
+					{
+						initroot();
+						return (root);
+					}
+				}
+				else
+				{
+					Organization node = orgManager.getOrgById(orgid);
+					if(node != null)
+					{
+						node.orgCacheCallback(this);
+						this.orgMap.put(orgid,node);
+						
+					}
+					return node;
+				}
+					
+			}
+			return null;
+			 
+			
+//			for(int i=0;subOrgList != null && i<subOrgList.size();i++){
+//				Organization org = (Organization)subOrgList.get(i);
+//				
+//				if(this.orgMap.containsKey(org.getOrgId()))
+//				{
+//					log.debug("机构ID[" + org.getOrgId() + "]已经被加载，忽略重复加载!");
+//					return;
+//				}
+//				root.addSubOrg(org);
+//				org.setParentOrg(root);
+//				org.putloadfather(true);
+//				org.orgCacheCallback(this);
+//				this.orgMap.put(org.getOrgId(),org);
+////				loadOrganization(org);
+//			}
+			
+		} catch (Exception e) {
+			log.error("orgid:"+orgid,e);
+		}		
+		return null;
 	}
 	
 	/**
 	 *	取子机构列表 
 	*/
 	public List getSubOrganizations(String orgid) throws ManagerException {
-		Organization org = (Organization)this.orgMap.get(orgid);
+		Organization org = getOrganization(orgid);
         return org.getSuborgs();
 	}
 	
+//	/**
+//	 *	取父机构列表,包括当前机构
+//	*/
+//	public List getFatherOrganizations(String orgid) throws ManagerException {
+//		ArrayList list = new ArrayList();
+//		if(orgid != null)
+//		{
+//			Organization org = getOrganization(orgid);
+//			if(org != null)
+//			{
+//				list.add(org);
+//				String parentOrgid = org.getParentId();
+//				while(parentOrgid != null)
+//				{
+//					Organization parentOrg = getOrganization(parentOrgid);
+//					if(parentOrg != null)
+//					{
+//						list.add(parentOrg);
+//						parentOrgid = parentOrg.getParentId();
+//					}
+//					else
+//					{
+//						parentOrgid = null;
+//					}
+//				}				
+//			}			
+//		}
+//		return list;
+//	}
 	/**
 	 *	取父机构列表,包括当前机构
 	*/
-	public List getFatherOrganizations(String orgid) throws ManagerException {
+	public List<Organization> getFatherOrganizations(String orgid) throws ManagerException {
 		ArrayList list = new ArrayList();
 		if(orgid != null)
 		{
-			Organization org = (Organization)this.orgMap.get(orgid);
+			Organization org = getOrganization(orgid);
 			if(org != null)
 			{
 				list.add(org);
-				String parentOrgid = org.getParentId();
-				while(parentOrgid != null)
+				Organization parentOrg = org.getParentOrg();
+				
+				while(parentOrg != null)
 				{
-					Organization parentOrg = (Organization)this.orgMap.get(parentOrgid);
-					if(parentOrg != null)
+					if(parentOrg.getOrgId() != null && !parentOrg.getOrgId().equals("0"))
 					{
 						list.add(parentOrg);
-						parentOrgid = parentOrg.getParentId();
+						parentOrg = parentOrg.getParentOrg();
 					}
 					else
 					{
-						parentOrgid = null;
+						parentOrg = null;
 					}
-				}				
+				}	
+				
 			}			
 		}
 		return list;
 	}
-	
 	/**
      *  取父机构列表,包括当前机构
     */
@@ -264,8 +475,13 @@ public class OrgCacheManager implements Listener, Serializable{
         
         if(orgid != null)
         {
-            Organization org = (Organization)this.orgMap.get(orgid);
-            return org.getParentOrg();
+            try {
+				Organization org =  getOrganization(orgid);
+				return org.getParentOrg();
+			} catch (ManagerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             
         }
         return null;
@@ -287,7 +503,6 @@ public class OrgCacheManager implements Listener, Serializable{
 		
 		root = null;
 		orgManager = null;
-		initing = false; 
 		inited = false;
 //		this.inited = false;
 //		this.initing = false;
@@ -302,6 +517,207 @@ public class OrgCacheManager implements Listener, Serializable{
 		}
 	}
 	
+//	public void handle(Event e) {
+//		/**
+//		 * 机构添加时，直接将添加的机构
+//		 */
+//		if(e.getType() .equals( ACLEventType.ORGUNIT_INFO_ADD ))	//机构添加
+//		{
+//			Object source = e.getSource();
+//			if(source == null || !(source instanceof String))
+//				return ;
+//			String orgid = source.toString();
+//			try {
+////				OrgManager orgManager = SecurityDatabase.getOrgManager();
+//				Organization org = orgManager.getOrgById(orgid);
+//				if(org == null)
+//				{
+//					return;
+//				}
+//				String parentid = org.getParentId();
+//				 
+//				synchronized(lock)
+//				{					
+//					Organization parent = this.getOrganization(parentid);
+//					parent.addSubOrg(org);	
+//					org.setParentOrg(parent);
+//					this.orgMap.put(org.getOrgId(), org);
+//				}
+//			} catch (SPIException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (ManagerException e2) {
+//				// TODO Auto-generated catch block
+//				e2.printStackTrace();
+//			}
+//			
+//		}
+//		
+//		if( e.getType() .equals( ACLEventType.ORGUNIT_INFO_DELETE))	//机构删除
+//		{
+//			Object source = e.getSource();
+//			if(source == null || !(source instanceof String))
+//				return ;
+//			String orgid = source.toString();
+//			try {
+//				Organization org = getOrganization(orgid);
+//				if(org != null)
+//				{
+//					String parentid = org.getParentId();
+//					Organization parent = this.getOrganization(parentid);
+//					parent.deleteSubOrg(org);
+//					deleteOrg(org);
+//					
+//				}
+//				
+//					
+//			} catch (ManagerException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//			
+//			
+//			
+//		}
+//		
+//		if(e.getType() .equals( ACLEventType.ORGUNIT_INFO_UPDATE))	//机构更新
+//		{
+//			Object source = e.getSource();
+//			if(source == null || !(source instanceof String))
+//				return ;
+//			String orgid = source.toString();		
+//			try {
+//				Organization to = getOrganization(orgid);
+//				if(to != null)
+//				{
+////					OrgManager orgManager = SecurityDatabase.getOrgManager();
+//					Organization from = orgManager.getOrgById(orgid);
+//					if(from != null)
+//					{
+//						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+//						{
+//							String parentid = from.getParentId();
+//							Organization parent = this.getOrganization(parentid);
+//							if(parent != null)
+//								parent.deleteSubOrg(to);
+//							this.deleteOrg(to,false);
+//						}
+//						else
+//							OrgManagerImpl.orgcopy(from, to);
+//					}
+//					
+//				}
+//				else
+//				{
+//					Organization from = orgManager.getOrgById(orgid);
+//					
+//					if(from != null)
+//					{
+//						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+//						{
+//							String parentid = from.getParentId();
+//							Organization parent = this.getOrganization(parentid);
+//							if(parent != null)
+//								parent.deleteSubOrg(from);
+//							this.deleteOrg(from,false);
+//						}
+//						else
+//						{
+//							String parentid = from.getParentId();
+//							 
+//							synchronized(lock)
+//							{					
+//								Organization parent = this.getOrganization(parentid);
+//								if(parent != null)
+//								{
+//									parent.addSubOrg(from);	
+//									from.setParentOrg(parent);
+//								}
+//								this.cacheSubOrgs(from);
+//								this.orgMap.put(from.getOrgId(), from);
+//							}
+//						}
+//					}
+//				}
+//			} catch (ManagerException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (SPIException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//		}
+//		
+//		if(e.getType() .equals( ACLEventType.ORGUNIT_INFO_SORT))	//机构排序
+//		{
+//			Object source = e.getSource();
+//			if(source == null || !(source instanceof Object[]))
+//				return ;
+//			Object[] infos = (Object[]) source;
+//			String orgid = infos[0].toString();			
+//			String[] suborgids = (String[])infos[1];
+//			if(orgid == null || orgid.length() == 0 || suborgids == null || suborgids.length == 0)
+//				return;
+//			try {
+//				
+//				
+//				synchronized(lock)
+//				{
+//					Organization parent = getOrganization(orgid);
+//					if(parent != null)
+//			        {
+//						List subs = new ArrayList();
+//						for(int i = 0; i < suborgids.length;i ++)
+//						{
+//							Organization to = getOrganization(suborgids[i]);
+//							if(to != null)
+//								subs.add(to);
+//						}
+//						parent.setSuborgs(subs);
+//			        }
+//				}
+//				
+//				
+//			} catch (ManagerException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//		}
+//		
+//		if(e.getType() .equals( ACLEventType.ORGUNIT_INFO_TRAN))	//机构转移
+//		{
+//			Object source = e.getSource();
+//			if(source == null || !(source instanceof String[]))
+//				return ;
+//			String[] infos = (String[]) source;
+//			String orgid = infos[0].toString();		
+//			String tanstoOrgId = infos[1];
+//			try {
+//				
+//				
+//				synchronized(lock)
+//				{
+//					Organization org = getOrganization(orgid);
+//					org.getParentOrg().deleteSubOrg(org);
+//					Organization tanstoOrg = getOrganization(tanstoOrgId);
+//					tanstoOrg.addSubOrg(org);
+//					org.setParentOrg(tanstoOrg);
+//					org.setParentId(tanstoOrg.getOrgId());
+//					
+//				}
+//				
+//				
+//			} catch (ManagerException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+//		}
+//		
+//	}
+	
 	public void handle(Event e) {
 		/**
 		 * 机构添加时，直接将添加的机构
@@ -314,20 +730,87 @@ public class OrgCacheManager implements Listener, Serializable{
 			String orgid = source.toString();
 			try {
 //				OrgManager orgManager = SecurityDatabase.getOrgManager();
-				Organization org = orgManager.getOrgById(orgid);
+				Organization org = this.orgMap.get(orgid);
 				if(org == null)
 				{
-					return;
+					synchronized(lock)
+					{
+						org = this.orgMap.get(orgid);
+						if(org == null)
+						{
+							org = orgManager.getOrgById(orgid);
+							if(org == null)
+							{
+								return;
+							}
+							Organization parent = this.orgMap.get(org.getParentId());
+							if(parent != null)
+							{
+								if(parent.loadsubs())
+								{
+									if(!parent.containSubOrg(org.getOrgId()))
+										parent.addSubOrg(org);
+								}
+								org.setParentOrg(parent);
+								org.putloadfather(true);
+							}
+							this.orgMap.put(org.getOrgId(), org);
+						}
+						else
+						{
+							Organization parent = this.orgMap.get(org.getParentId());
+							if(parent != null)
+							{
+								if(parent.loadsubs())
+								{
+									if(!parent.containSubOrg(org.getOrgId()))
+										parent.addSubOrg(org);
+								}
+								org.setParentOrg(parent);
+								org.putloadfather(true);
+							}
+						}
+					}
 				}
-				String parentid = org.getParentId();
+				else
+				{
+					
+					
+						synchronized(lock)
+						{
+							Organization parent = this.orgMap.get(org.getParentId());
+							if(parent != null)
+							{
+							
+								if(parent.loadsubs())
+								{
+									
+									if(!parent.containSubOrg(org.getOrgId()))
+										parent.addSubOrg(org);
+								}
+								if(!org.loadfather())
+								{
+									org.setParentOrg(parent);
+									org.putloadfather(true);
+								}
+							}
+						}
+					}
 				 
-				synchronized(this.orgMap)
-				{					
-					Organization parent = this.getOrganization(parentid);
-					parent.addSubOrg(org);	
-					org.setParentOrg(parent);
-					this.orgMap.put(org.getOrgId(), org);
-				}
+//				Organization org = orgManager.getOrgById(orgid);
+//				if(org == null)
+//				{
+//					return;
+//				}
+//				
+//				 
+//				synchronized(lock)
+//				{					
+//					Organization parent = this.orgMap.get(orgid);
+//					parent.addSubOrg(org);	
+//					org.setParentOrg(parent);
+//					this.orgMap.put(org.getOrgId(), org);
+//				}
 			} catch (SPIException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -344,22 +827,26 @@ public class OrgCacheManager implements Listener, Serializable{
 			if(source == null || !(source instanceof String))
 				return ;
 			String orgid = source.toString();
-			try {
-				Organization org = getOrganization(orgid);
-				if(org != null)
+			
+				synchronized(lock)
 				{
-					String parentid = org.getParentId();
-					Organization parent = this.getOrganization(parentid);
-					parent.deleteSubOrg(org);
-					deleteOrg(org);
+					Organization org = this.orgMap.get(orgid);
+					if(org != null)
+					{
+						String parentid = org.getParentId();
+						Organization parent = this.orgMap.get(parentid);
+						if(parent != null && 
+								parent.loadsubs())
+							parent.deleteSubOrg(org);
+						deleteOrg(org);
+						
+					}
 					
 				}
 				
 					
-			} catch (ManagerException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+				
+			
 			
 			
 			
@@ -373,57 +860,33 @@ public class OrgCacheManager implements Listener, Serializable{
 				return ;
 			String orgid = source.toString();		
 			try {
-				Organization to = getOrganization(orgid);
-				if(to != null)
+				synchronized(lock)
 				{
-//					OrgManager orgManager = SecurityDatabase.getOrgManager();
-					Organization from = orgManager.getOrgById(orgid);
-					if(from != null)
+					Organization to = this.orgMap.get(orgid);
+					if(to != null)
 					{
-						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+	//					OrgManager orgManager = SecurityDatabase.getOrgManager();
+						
+						
+						Organization from = orgManager.getOrgById(orgid);
+						if(from != null)
 						{
-							String parentid = from.getParentId();
-							Organization parent = this.getOrganization(parentid);
-							if(parent != null)
-								parent.deleteSubOrg(to);
-							this.deleteOrg(to,false);
-						}
-						else
-							OrgManagerImpl.orgcopy(from, to);
-					}
-					
-				}
-				else
-				{
-					Organization from = orgManager.getOrgById(orgid);
-					
-					if(from != null)
-					{
-						if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
-						{
-							String parentid = from.getParentId();
-							Organization parent = this.getOrganization(parentid);
-							if(parent != null)
-								parent.deleteSubOrg(from);
-							this.deleteOrg(from,false);
-						}
-						else
-						{
-							String parentid = from.getParentId();
-							 
-							synchronized(this.orgMap)
-							{					
-								Organization parent = this.getOrganization(parentid);
-								if(parent != null)
-								{
-									parent.addSubOrg(from);	
-									from.setParentOrg(parent);
-								}
-								this.cacheSubOrgs(from);
-								this.orgMap.put(from.getOrgId(), from);
+							if(from.getRemark3() != null && from.getRemark3().equals("0"))//冻结部门信息清理
+							{
+								
+								String parentid = from.getParentId();
+								Organization parent = this.orgMap.get(parentid);
+								if(parent != null && 
+										parent.loadsubs())
+									parent.deleteSubOrg(to);
+								this.deleteOrg(to,false);
 							}
+							else
+								OrgManagerImpl.orgcopy(from, to);
 						}
+						
 					}
+					 
 				}
 			} catch (ManagerException e1) {
 				// TODO Auto-generated catch block
@@ -445,30 +908,27 @@ public class OrgCacheManager implements Listener, Serializable{
 			String[] suborgids = (String[])infos[1];
 			if(orgid == null || orgid.length() == 0 || suborgids == null || suborgids.length == 0)
 				return;
-			try {
+			 
 				
 				
-				synchronized(this.orgMap)
-				{
-					Organization parent = getOrganization(orgid);
-					if(parent != null)
-			        {
-						List subs = new ArrayList();
-						for(int i = 0; i < suborgids.length;i ++)
-						{
-							Organization to = getOrganization(suborgids[i]);
-							if(to != null)
-								subs.add(to);
-						}
-						parent.setSuborgs(subs);
-			        }
-				}
-				
-				
-			} catch (ManagerException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			synchronized(lock)
+			{
+				Organization parent = this.orgMap.get(orgid);
+				if(parent != null && parent.loadsubs())
+		        {
+					List subs = new ArrayList();
+					for(int i = 0; i < suborgids.length;i ++)
+					{
+						Organization to = orgMap.get(suborgids[i]);
+						if(to != null)
+							subs.add(to);
+					}
+					parent.setSuborgs(subs);
+		        }
 			}
+				
+				
+			 
 		}
 		
 		if(e.getType() .equals( ACLEventType.ORGUNIT_INFO_TRAN))	//机构转移
@@ -478,26 +938,37 @@ public class OrgCacheManager implements Listener, Serializable{
 				return ;
 			String[] infos = (String[]) source;
 			String orgid = infos[0].toString();		
-			String tanstoOrgId = infos[1];
-			try {
-				
-				
-				synchronized(this.orgMap)
+			String tanstoOrgId = infos[1];	
+			synchronized(lock)
+			{
+				Organization org = orgMap.get(orgid);
+				if(org != null)
 				{
-					Organization org = getOrganization(orgid);
-					org.getParentOrg().deleteSubOrg(org);
-					Organization tanstoOrg = getOrganization(tanstoOrgId);
-					tanstoOrg.addSubOrg(org);
-					org.setParentOrg(tanstoOrg);
-					org.setParentId(tanstoOrg.getOrgId());
-					
+					Organization parent = this.orgMap.get(org.getParentId());
+					if(parent != null && 
+							parent.loadsubs())
+						org.getParentOrg().deleteSubOrg(org);
+					if(org.loadfather())
+					{
+						org.setParentOrg(null);
+						org.putloadfather(false);
+					}
+					Organization tanstoOrg = orgMap.get(tanstoOrgId);
+					if(tanstoOrg != null )
+					{
+						if(tanstoOrg.loadsubs())
+							tanstoOrg.addSubOrg(org);
+						org.setParentOrg(tanstoOrg);
+						org.putloadfather(true); 
+					}
+					org.setParentId(tanstoOrgId);
 				}
 				
 				
-			} catch (ManagerException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
+				
+				
+			 
 			
 		}
 		
@@ -522,13 +993,36 @@ public class OrgCacheManager implements Listener, Serializable{
 	 */
 	private void deleteOrg(Organization org,boolean clearsub)
 	{
-		synchronized(this.orgMap)
+		synchronized(lock)
 		{
 			Organization cached = this.orgMap.remove(org.getOrgId());		
-			if(clearsub && cached != null)
+			if(clearsub)
+			{
 				deleteSubOrgs(cached);
+			}
 		}
 			
+	}
+	/**
+	 * 查找要删除的机构id
+	 * @param org
+	 * @return
+	 */
+	private List<String> findSubs(  Organization org)
+	{
+		List<String> ids = new ArrayList<String>();
+		Iterator<Map.Entry<String, Organization>> entries = this.orgMap.entrySet().iterator();
+		String treelevel = org.getOrgtreelevel() + "|";
+		while(entries.hasNext())
+		{
+			Map.Entry<String, Organization> entry = entries.next();
+			if(entry.getValue().getOrgtreelevel().startsWith(treelevel))
+			{
+				ids.add(entry.getValue().getOrgId());
+			}
+		}
+		return ids;
+		
 	}
 	/**
 	 * 删除机构的子机构索引
@@ -536,20 +1030,68 @@ public class OrgCacheManager implements Listener, Serializable{
 	 */
 	private void deleteSubOrgs(Organization org)
 	{
-		List orgs = org.getSuborgs();
-		if(orgs != null && orgs.size() > 0)
-		{
-			synchronized(this.orgMap)
+		synchronized(lock){
+			List<String> subids = findSubs(  org);
+			
+			if(subids != null && subids.size() > 0)
 			{
-				for(int i = 0; i < orgs.size();i ++)
+				for(int i = 0; i < subids.size();i ++)
 				{
-					Organization org_ = (Organization)orgs.get(i);
-					Organization cached =  orgMap.remove(org_.getOrgId());
-					if(cached != null)
-						deleteSubOrgs(cached);
+				
+					orgMap.remove(subids.get(i));				
+				}
+			
+			}
+		}
+		
+			
+	}
+
+	@Override
+	public void loadsubs(Organization root) {
+		if(!root.loadsubs())
+		{
+			synchronized(lock)
+			{
+				if(!root.loadsubs())
+				{
+					this.cacheSubOrgs(root);
+					root.putloadsubs(true);
 				}
 			}
 		}
-			
+		
 	}
+
+	@Override
+	public void loadfather(Organization node) {
+		if(!node.loadfather())
+		{
+			synchronized(lock)
+			{
+				if(!node.loadfather())
+				{
+					this.cachefather(node);
+					node.putloadfather(true);
+				}
+			}
+		}
+	}
+
+
+//	@Override
+//	public void loadfathers(Organization node) {
+//		if(!node.loadfathers())
+//		{
+//			synchronized(lock)
+//			{
+//				if(!node.loadfathers())
+//				{
+//					this.cachefathers(node);
+//					node.putloadfathers(true);
+//				}
+//			}
+//		}
+//		
+//	}
 }

@@ -1,6 +1,5 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +21,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.db.FunctionDB;
 
-public class PurviewManagerOrgTree extends COMTree implements Serializable{
+public class PurviewManagerOrgTree extends COMTree {
 	
 //	  private Map subOrgIdMap = null;//子机构
 //	  private Map parentOrgIdMap = null;//父机构

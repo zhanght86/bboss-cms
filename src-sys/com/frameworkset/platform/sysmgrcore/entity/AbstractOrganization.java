@@ -103,7 +103,7 @@ public abstract class AbstractOrganization  implements
 	/**
 	 * 子机构列表
 	 */
-	private List suborgs;
+	protected List<Organization> suborgs;
 
 	/**
 	 * 机构实体所关联的岗位
@@ -128,7 +128,7 @@ public abstract class AbstractOrganization  implements
 	/**
 	 * 当前机构的父机构
 	 */
-	private Organization parentOrg = null;
+	protected Organization parentOrg = null;
 	
 	/**
 	 * 当前机构的父机构
@@ -606,18 +606,18 @@ public abstract class AbstractOrganization  implements
 		this.satrapJobId = satrapJobId;
 	}
 
-	public List getSuborgs() {
+	public List<Organization> getSuborgs() {
 		return suborgs;
 	}
 
-	public void setSuborgs(List suborgs) {
+	public void setSuborgs(List<Organization> suborgs) {
 		this.suborgs = suborgs;
 	}
 	
 	public void addSubOrg(Organization org) {
 		if(this.suborgs == null)
 		{
-			suborgs = new ArrayList();			
+			suborgs = new ArrayList<Organization>();			
 		}
 		suborgs.add(org);
 		//org.setParentOrg((Organization)this);

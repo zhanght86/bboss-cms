@@ -41,7 +41,8 @@
 
 var api = frameElement.api, W = api.opener;
 
-function okadd(){	
+function okadd(){
+	var selectNode = $("input[name='selectedOrg']:checked").val();	
  if(selectNode==null)
  {
  	$.dialog.alert('<pg:message code="sany.pdp.to.choose.organization"/>'); return;
@@ -50,16 +51,44 @@ function okadd(){
  //document.getElementById("tranSaveButton").disabled = true;
  //document.getElementById("tranBackButton").disabled = true;
 
- document.Form1.action = "orgtran_do.jsp?orgId=<%=orgId%>&remark5=<%=remark5%>&parentId="+selectNode;
- document.Form1.target = "hiddenFrame";
- document.Form1.submit();          
+ //document.Form1.action = "orgtran_do.jsp?orgId=<%=orgId%>&remark5=<%=remark5%>&parentId="+selectNode;
+ //document.Form1.target = "hiddenFrame";
+ //document.Form1.submit();   
+ 
+ $.ajax({
+	   type: "POST",
+		url : "<%=request.getContextPath()%>/usermanager/orgtran_do.page",
+		data :{"orgId":"<%=orgId%>","parentId":selectNode},
+		dataType : 'json',
+		async:false,
+		beforeSend: function(XMLHttpRequest){
+				 
+		      		blockUI();	
+		      		XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+		      	 		 	
+			},
+		success : function(response){
+			//去掉遮罩
+			unblockUI();
+			if(response.code=="success"){
+				var msg = response.errormessage;
+				
+					 $.dialog.alert(msg,function(){	
+							
+						},api);	 
+					 
+																	
+			}else{
+				$.dialog.alert("操作结果："+response.errormessage,function(){	
+					 
+					},api);	
+				 
+			}
+		}
+	  });
 }
 
-function alertfun(msg)
-{
-	
-	$.dialog.alert(msg);
-}
+
 </SCRIPT>
 <html>
 	<head>
@@ -67,7 +96,7 @@ function alertfun(msg)
 		<link rel="stylesheet" type="text/css" href="../../css/treeview.css">
 	</head>
 	<body class="contentbodymargin" scroll="auto">
-		<div id="" align="center">
+		
 			<form name="Form1" action="" method="post">			
 				<table>
 					<tr>
@@ -82,11 +111,11 @@ function alertfun(msg)
 							imageFolder="/sysmanager/images/tree_images/" 
 							collapse="true" 
 							includeRootNode="true" 
-							href="aa.jsp" 
-							target="abc"
+							
+							
 							mode="static-dynamic"
 							>
-										
+								<tree:radio name="selectedOrg" />
 								<tree:param name="parentId" />
 								<tree:param name="orgId" />
 								<tree:treedata 
@@ -109,11 +138,11 @@ function alertfun(msg)
 							imageFolder="/sysmanager/images/tree_images/" 
 							collapse="true" 
 							includeRootNode="true" 
-							href="aa.jsp" 
-							target="abc"
+							
+						
 							mode="static-dynamic"
 							>
-										
+									<tree:radio name="selectedOrg" />	
 								<tree:param name="parentId" />
 								<tree:param name="orgId" />
 								<tree:treedata 
@@ -143,24 +172,22 @@ function alertfun(msg)
 					</tr>
 				</table>
 		
-		<div style="display:none">
-			<iframe src="" id="abc" name="abc" style="width:0;height:0">
-		</div>
+		 
 		</form>
-		</div>
+		 
 		<div id=divProcessing style="width:200px;height:30px;position:absolute;left:200px;top:300px;display:none">
 			<table border=0 cellpadding=0 cellspacing=1 bgcolor="#000000" width="100%" height="100%">
 				<tr>
 					<td bgcolor=#3A6EA5>
-						<marquee align="middle" behavior="alternate" scrollamount="5">
+						 
 							<font color=#FFFFFF>...处理中...请等待...</font>
-						</marquee>
+						 
 					</td>
 				</tr>
 			</table>
 		</div>
 	</body>
-	<iframe name="hiddenFrame" width=0 height=0></iframe>
+	 
 </html>
 
 
