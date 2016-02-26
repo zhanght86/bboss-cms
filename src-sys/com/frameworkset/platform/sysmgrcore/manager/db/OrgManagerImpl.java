@@ -3832,12 +3832,12 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	 static class org
 	    {
 	    	String org_id;
-	    	String org_sn;
+	    
 	    	String orgtreelevel;
 	    }
     private static void _run(String parentID,String parentOrgtreelevel) throws Exception
     {
-    	String sql =  "select org_id,org_sn from td_sm_organization where parent_id=?";
+    	String sql =  "select org_id from td_sm_organization where parent_id=?";
     	try {
     		final List<org> orgs = new ArrayList<org> ();
 			SQLExecutor.queryByNullRowHandler(new NullRowHandler(){
@@ -3847,7 +3847,6 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 					// TODO Auto-generated method stub
 					org orgtree = new org();
 					orgtree.org_id = origine.getString("org_id");
-					orgtree.org_sn = origine.getString("org_sn"); 
 					orgs.add(orgtree);
 				}
 				
@@ -3860,7 +3859,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
             for(int i = 0; i < orgs.size(); i ++)
             {
             	org orgtree = orgs.get(i);
-            	String orgtreelevel = parentOrgtreelevel + "|" + orgtree.org_sn;
+            	String orgtreelevel = parentOrgtreelevel + "|" + orgtree.org_id ;
             	orgtree.orgtreelevel = orgtreelevel;
                 pre.setString(1, orgtreelevel);
                 pre.setString(2, orgtree.org_id);
@@ -3892,8 +3891,8 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 		try {
 			tm.begin();
 //			String levelSn = this.getMaxSN(tranToOrgId);
-			String org_sn = OrgCacheManager.getInstance().getOrganization(orgId).getOrgSn();
-			String org_level = OrgManagerImpl.getOrgTreeLevel(tranToOrgId, org_sn);
+//			String org_sn = OrgCacheManager.getInstance().getOrganization(orgId).get;
+			String org_level = OrgManagerImpl.getOrgTreeLevel(tranToOrgId, orgId);
 			
 			String sql = "update td_sm_organization set parent_id=?,org_tree_level=? where org_id=?";
 			

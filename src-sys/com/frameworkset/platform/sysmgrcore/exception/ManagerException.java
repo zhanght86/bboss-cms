@@ -9,8 +9,8 @@ import java.io.Serializable;
  *
  * @author 
  */
-public class ManagerException extends Exception 
-							implements Serializable {
+public class ManagerException extends RuntimeException 
+							 {
 
     public ManagerException(String msg) {
         super(msg);

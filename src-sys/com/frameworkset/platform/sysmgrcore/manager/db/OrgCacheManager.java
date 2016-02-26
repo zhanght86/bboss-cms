@@ -117,6 +117,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 		root.setOrgId("0");
 		root.orgCacheCallback(this);
 		root.putloadfather(true);
+		root.setOrgtreelevel("0");
 		this.orgMap.put("0", root);
 //		root.putloadfathers(true);
 	}
@@ -956,17 +957,35 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 						org.setParentOrg(null);
 						org.putloadfather(false);
 					}
-					Organization tanstoOrg = orgMap.get(tanstoOrgId);
+					org.setSuborgs(null);
+					org.putloadsubs(false);
+					Organization tanstoOrg = this.getOrganization(tanstoOrgId);
 					if(tanstoOrg != null )
 					{
-						if(tanstoOrg.loadsubs())
+						org.setOrgtreelevel(tanstoOrg.getOrgtreelevel() + "|"+org.getOrgId());
+						if(tanstoOrg.loadsubs() && !tanstoOrg.containSubOrg(orgid))
 							tanstoOrg.addSubOrg(org);
 						org.setParentOrg(tanstoOrg);
 						org.putloadfather(true); 
+						
 					}
 					org.setParentId(tanstoOrgId);
+					
 				}
-				
+				else
+				{
+					org = this.getOrganization(orgid);
+					Organization tanstoOrg = this.getOrganization(tanstoOrgId);
+					if(tanstoOrg != null )
+					{
+						if(tanstoOrg.loadsubs() && !tanstoOrg.containSubOrg(orgid))
+							tanstoOrg.addSubOrg(org);
+						org.setParentOrg(tanstoOrg);
+						org.putloadfather(true); 
+						
+					}
+				}
+				this.deleteSubOrgs(org);
 				
 			}
 				
