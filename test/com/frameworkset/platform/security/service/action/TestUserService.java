@@ -10,11 +10,17 @@ import com.frameworkset.platform.security.service.entity.CommonOrganization;
 import com.frameworkset.platform.security.service.entity.Result;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgCacheManager;
+import com.sany.masterdata.hr.sync.OrgTreeLevel;
 
 public class TestUserService {
 
 	public TestUserService() {
 		// TODO Auto-generated constructor stub
+	}
+	@Test
+	public void buildOrgTreeLevel()
+	{
+		 OrgTreeLevel.run();
 	}
 	@Test
 	public void testGetUser() throws Exception

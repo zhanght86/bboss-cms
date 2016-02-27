@@ -75,10 +75,13 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 				if(!inited )
 				{
 					OrgCacheManager _instance = new OrgCacheManager();
-					_instance.root = new Organization();
-					_instance.root.setOrgId("0");
-					_instance.root.orgCacheCallback(_instance);
-					_instance.cacheorg(_instance.root);
+//					_instance.root = new Organization();
+//					_instance.root.setOrgId("0");
+//					_instance.root.orgCacheCallback(_instance);
+//					_instance.root.
+					
+					_instance.initroot();
+//					_instance.cacheorg(_instance.root);
 //					TransactionManager tm = new TransactionManager();
 //					try
 //					{
@@ -110,14 +113,20 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 			}
 		}
 	}
+	
 	private void initroot()
 	{
+		if(orgMap == null)
+		{
+			orgMap = new HashMap<String,Organization>();
+		}
 		root = new Organization();
 		
 		root.setOrgId("0");
 		root.orgCacheCallback(this);
 		root.putloadfather(true);
 		root.setOrgtreelevel("0");
+		
 		this.orgMap.put("0", root);
 //		root.putloadfathers(true);
 	}
@@ -129,7 +138,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 		
 		synchronized(lock)
 		{
-			orgMap = new HashMap();
+			orgMap =  new HashMap<String,Organization>();
 			root = null;
 			initroot();
 			
@@ -138,14 +147,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 		}
 	}
 	
-	private void cacheorg(Organization root)
-	{
-		if(orgMap == null)
-		{
-			orgMap = new HashMap();
-			this.orgMap.put(root.getOrgId(),root);
-		}
-	}
+	 
 	
 //	private void loadOrganization(Organization root)
 //	{
@@ -943,6 +945,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 			String[] infos = (String[]) source;
 			String orgid = infos[0].toString();		
 			String tanstoOrgId = infos[1];	
+			String oldorgtreelevel = infos[2];
 			synchronized(lock)
 			{
 				Organization org = orgMap.get(orgid);
@@ -985,7 +988,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 						
 					}
 				}
-				this.deleteSubOrgs(org);
+				this.deleteSubOrgs(org, oldorgtreelevel);
 				
 			}
 				
@@ -1020,7 +1023,7 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 			Organization cached = this.orgMap.remove(org.getOrgId());		
 			if(clearsub)
 			{
-				deleteSubOrgs(cached);
+				deleteSubOrgs(cached,org.getOrgtreelevel());
 			}
 		}
 			
@@ -1030,17 +1033,17 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 	 * @param org
 	 * @return
 	 */
-	private List<String> findSubs(  Organization org)
+	private List<String> findSubs(  Organization org,String oldorgtreelevel)
 	{
 		List<String> ids = new ArrayList<String>();
 		Iterator<Map.Entry<String, Organization>> entries = this.orgMap.entrySet().iterator();
-		String treelevel = org.getOrgtreelevel() + "|";
+		String treelevel =oldorgtreelevel+"|";
 		while(entries.hasNext())
 		{
-			Map.Entry<String, Organization> entry = entries.next();
-			if(entry.getValue().getOrgtreelevel().startsWith(treelevel))
+			Organization entry = entries.next().getValue();
+			if(entry.getOrgtreelevel().startsWith(treelevel))
 			{
-				ids.add(entry.getValue().getOrgId());
+				ids.add(entry.getOrgId());
 			}
 		}
 		return ids;
@@ -1050,10 +1053,10 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 	 * 删除机构的子机构索引
 	 * @param org
 	 */
-	private void deleteSubOrgs(Organization org)
+	private void deleteSubOrgs(Organization org,String oldorgtreelevel)
 	{
 		synchronized(lock){
-			List<String> subids = findSubs(  org);
+			List<String> subids = findSubs(  org, oldorgtreelevel);
 			
 			if(subids != null && subids.size() > 0)
 			{

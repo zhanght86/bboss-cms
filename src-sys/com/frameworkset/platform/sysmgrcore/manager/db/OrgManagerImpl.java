@@ -913,7 +913,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			org.setIsforeignparty(dBUtil.getString(0, "isforeignparty"));
 			org.setIsjichaparty(dBUtil.getString(0, "isjichaparty"));
 			org.setIsdirectguanhu(dBUtil.getString(0, "isdirectguanhu"));
-			
+			org.setOrgtreelevel(dBUtil.getString(0, "ORG_TREE_LEVEL"));
 			return org;
 		
 		}
@@ -966,7 +966,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			org.setIsforeignparty(dBUtil.getString( "isforeignparty"));
 			org.setIsjichaparty(dBUtil.getString( "isjichaparty"));
 			org.setIsdirectguanhu(dBUtil.getString( "isdirectguanhu"));
-			
+			org.setOrgtreelevel(dBUtil.getString( "ORG_TREE_LEVEL"));
 			return org;
 		
 	
@@ -1020,7 +1020,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			org.setIsforeignparty(dBUtil.getString(k, "isforeignparty"));
 			org.setIsjichaparty(dBUtil.getString(k, "isjichaparty"));
 			org.setIsdirectguanhu(dBUtil.getString(k, "isdirectguanhu"));
-			
+			org.setOrgtreelevel(dBUtil.getString( k, "ORG_TREE_LEVEL"));
 			list.add(org);
 		}
 		return list;
@@ -1075,6 +1075,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			org.setIsforeignparty(origine.getString( "isforeignparty"));
 			org.setIsjichaparty(origine.getString( "isjichaparty"));
 			org.setIsdirectguanhu(origine.getString( "isdirectguanhu"));
+			org.setOrgtreelevel(origine.getString( "ORG_TREE_LEVEL"));
 //			System.out.println(org.getOrgName());
 //			list.add(org);
 //		}
@@ -3892,6 +3893,8 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			tm.begin();
 //			String levelSn = this.getMaxSN(tranToOrgId);
 //			String org_sn = OrgCacheManager.getInstance().getOrganization(orgId).get;
+			Organization org = OrgCacheManager.getInstance().getOrganization(orgId);
+			
 			String org_level = OrgManagerImpl.getOrgTreeLevel(tranToOrgId, orgId);
 			
 			String sql = "update td_sm_organization set parent_id=?,org_tree_level=? where org_id=?";
@@ -3903,7 +3906,12 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			userOrgParamManager.fixorg(orgId, tranToOrgId);//人工维护关系固化，以免被自动同步程序重置
 			tm.commit();
 			state = true;
-			
+			 
+			 
+			Event event = new EventImpl(new String[]{orgId,tranToOrgId,org.getOrgtreelevel()},
+					ACLEventType.ORGUNIT_INFO_TRAN);
+			super.change(event,true);
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3911,12 +3919,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 		{
 			tm.release();
 		}
-		if(state)
-		{
-			Event event = new EventImpl(new String[]{orgId,tranToOrgId},
-					ACLEventType.ORGUNIT_INFO_TRAN);
-			super.change(event,true);
-		}
+		
 		return state;
 	}
 	
