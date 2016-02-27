@@ -99,6 +99,15 @@
 											id="queryButton" onclick="clearDBCache()"><span>清除</span> </a> 
 				</td>
 				</tr>
+				
+					<tr>
+				<td>数据库主键元数据缓存</td>
+				<td >
+				<a  href="javascript:void(0)" class="bt_1 sp"
+											id="queryButton" onclick="clearDBPrimaryKeyCache()"><span>清除</span> </a> 
+				</td>
+				</tr>
+				
 				<tr>
 				<td>ParamsHandler数据缓存</td>
 				<td >
@@ -515,6 +524,40 @@ function clearCMSSite2ndChannelCache()
 	
 		
 		
+}
+
+function clearDBPrimaryKeyCache()
+{
+	$.dialog.confirm("是否清除数据库主键元数据缓存",function()//确定按钮回调函数
+			{
+				$.ajax({
+					type: "POST",
+					url : "resetPrimaryKeyCache.page",
+					data :{},
+					dataType : 'json',
+					async:false,
+					beforeSend: function(XMLHttpRequest){
+							blockUI();	
+					      	XMLHttpRequest.setRequestHeader("RequestType", "ajax");
+						},
+					success : function(responseText){
+						//去掉遮罩	
+						unblockUI();
+						if(responseText=="success"){
+							$.dialog.alert("清除数据库表主键元数据缓存完成.",function(){},api);
+							
+						}else{
+							$.dialog.alert(responseText,function(){},api);
+						}
+					}
+				  });
+				
+			},
+			function()//取消按钮回调函数
+			{
+					
+			} ,
+			api);
 }
 function clearDBCache()
 {

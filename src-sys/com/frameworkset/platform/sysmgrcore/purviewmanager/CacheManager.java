@@ -36,6 +36,8 @@ public class CacheManager  implements Listener<String>{
 	public static final String clearCMSPublishCache = "clearCMSPublishCache";
 	public static final String clearUserCache = "clearUserCache";
 	public static final String clearDBMetaCache = "clearDBMetaCache";
+	public static final String resetPrimaryKeyCache = "resetPrimaryKeyCache";
+	
 	public static final String clearParamsHandlerCache = "clearParamsHandlerCache";
 	public static final SimpleEventType cacheRefreshEvent = new SimpleEventType("cacheRefreshEvent");
 	
@@ -95,6 +97,11 @@ public class CacheManager  implements Listener<String>{
 		{
 			result = this.clearDBMetaCache();
 		}
+		else if(event.equals(resetPrimaryKeyCache))
+		{
+			result = this.resetPrimaryKeyCache();
+		}
+		
 		else if(event.equals(clearParamsHandlerCache))
 		{
 			result = this.clearParamsHandlerCache();
@@ -107,9 +114,23 @@ public class CacheManager  implements Listener<String>{
 		
 	}
 	
+	public String resetPrimaryKeyCache() {
+		StringBuilder errorMessage = new StringBuilder();
+		try {
+			DBUtil.resetPrimaryKeyCache();;
+			
+		} catch (Exception e) {
+			errorMessage .append(StringUtil.formatBRException(e));
+		}
+		
+		if(errorMessage.length() == 0)
+			errorMessage.append("清除数据库表主键元数据缓存成功");
+		return errorMessage.toString();		
+	}
+
 	public  String clearAll()
 	{
-		StringBuffer ret = new StringBuffer();
+		StringBuilder ret = new StringBuilder();
 		ret.append(clearOrg());
 		ret.append("<br/>").append(clearOrgAdminCache());
 		ret.append("<br/>").append(clearDict());
@@ -129,7 +150,7 @@ public class CacheManager  implements Listener<String>{
 	}
 	public  String clearParamsHandlerCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			ParamsHandler.cleanAllCache();
 		}catch(Exception e){
@@ -142,7 +163,7 @@ public class CacheManager  implements Listener<String>{
 	public  String clearOrg()
 	{
 		
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			OrgCacheManager.getInstance().reset();
 		}catch(Exception e){
@@ -157,7 +178,7 @@ public class CacheManager  implements Listener<String>{
 	public  String clearOrgAdminCache()
 	{
 		
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			OrgAdminCache.getOrgAdminCache().reset();
 		}catch(Exception e){
@@ -172,7 +193,7 @@ public class CacheManager  implements Listener<String>{
 	public  String clearDict()
 	{
 		
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			DataManagerFactory.getDataManager().reinit();
 		}catch(Exception e){
@@ -185,7 +206,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearPermission()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			AccessControl.resetAuthCache();
 		}catch(Exception e){
@@ -205,7 +226,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearRoleCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		RoleCacheManager.getInstance().reset();
 		if(errorMessage.length() == 0)
 			errorMessage.append("清除角色缓存成功");
@@ -217,7 +238,7 @@ public class CacheManager  implements Listener<String>{
 	{
 		
 		
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			GroupCacheManager.getInstance().reset();
 		}catch(Exception e){
@@ -232,7 +253,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearCMSSite2ndChannelCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try{
 			try {
 				SQLExecutor.queryObject(int.class,"select 1 from td_cms_site where 1=0");
@@ -258,7 +279,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearCMSPublishCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try {
 			SQLExecutor.queryObject(int.class,"select 1 from td_cms_site where 1=0");
 			
@@ -288,7 +309,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearUserCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try {
 			UserCacheManager.getInstance().refresh();
 			
@@ -309,7 +330,7 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearDBMetaCache()
 	{
-		StringBuffer errorMessage = new StringBuffer();
+		StringBuilder errorMessage = new StringBuilder();
 		try {
 			DBUtil.refreshDatabaseMetaData();
 			

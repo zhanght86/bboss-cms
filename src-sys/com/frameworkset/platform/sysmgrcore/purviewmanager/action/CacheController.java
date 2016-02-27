@@ -352,6 +352,35 @@ public  class CacheController {
 		
 		
 	}
+	public @ResponseBody String resetPrimaryKeyCache()
+	{
+//		StringBuffer errorMessage = new StringBuffer();
+//		try {
+//			DBUtil.refreshDatabaseMetaData();
+//			
+//		} catch (Exception e) {
+//			errorMessage .append(StringUtil.formatBRException(e));
+//		}
+//		
+//		if(errorMessage.length() == 0)
+//			errorMessage.append("清除数据库元数据缓存成功");
+//		return errorMessage.toString();					
+		Event<String> event = new EventImpl<String>(CacheManager.resetPrimaryKeyCache,CacheManager.cacheRefreshEvent);
+		
+		/**
+		 * 事件以同步方式传播
+		 */
+		
+		EventHandle.sendEvent(event);
+		return "请求提交成功.";		
+		
+		
+		
+		
+		
+		
+	}
+	
 	
 	public @ResponseBody String synAll()
 	{
