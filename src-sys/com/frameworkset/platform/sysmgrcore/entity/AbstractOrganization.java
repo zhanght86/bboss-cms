@@ -103,32 +103,32 @@ public abstract class AbstractOrganization  implements
 	/**
 	 * 子机构列表
 	 */
-	protected List<Organization> suborgs;
+	protected transient List<Organization> suborgs;
 
 	/**
 	 * 机构实体所关联的岗位
 	 */
-	private Set jobs = null;
+	private transient Set jobs = null;
 
 	/**
 	 * 用户、岗位、机构实体集合
 	 */
-	private Set userjoborgSet = null;
+	private transient Set userjoborgSet = null;
 
 	/**
 	 * 机构和岗位实体集合
 	 */
-	private Set orgjobSet = null;
+	private transient Set orgjobSet = null;
 
 	/**
 	 * 机构和组实体集合
 	 */
-	private Set orggroupSet = null;
+	private transient Set orggroupSet = null;
 
 	/**
 	 * 当前机构的父机构
 	 */
-	protected Organization parentOrg = null;
+	protected transient Organization parentOrg = null;
 	
 	/**
 	 * 当前机构的父机构

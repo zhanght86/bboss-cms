@@ -20,7 +20,7 @@ public class Organization
 	/**
 	 * 机构管理人员列表，系统管理扩展
 	 */
-	private List orgAdmins;
+	private transient List orgAdmins;
 	private transient OrgCacheCallback orgCacheCallback;
 	
 	
