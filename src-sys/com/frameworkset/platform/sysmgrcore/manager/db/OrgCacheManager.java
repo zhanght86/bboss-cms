@@ -374,6 +374,17 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 					if(node != null)
 					{
 						node.orgCacheCallback(this);
+						Organization parent = this.orgMap.get(node.getParentId());
+						if(parent != null)
+						{
+							if(parent.loadsubs())
+							{
+								if(!parent.containSubOrg(node.getOrgId()))
+									parent.addSubOrg(node);
+							}
+							node.setParentOrg(parent);
+							node.putloadfather(true);
+						}
 						this.orgMap.put(orgid,node);
 						
 					}
@@ -891,6 +902,10 @@ public class OrgCacheManager implements Listener,OrgCacheCallback{
 								OrgManagerImpl.orgcopy(from, to);
 						}
 						
+					}
+					else
+					{
+						to = this.getOrganization(orgid);
 					}
 					 
 				}

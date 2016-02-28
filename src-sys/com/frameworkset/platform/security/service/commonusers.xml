@@ -141,7 +141,7 @@ values(?,'1',?,3,999,?,1)
 	
 		<property name="updateOrganization">
 		<![CDATA[		
-		update td_sm_organization set org_name=#[orgName], code=#[code],  orgnumber=#[orgnumber],orgdesc=#[orgdesc] ,remark3=#[remark3], remark5=#[remark5] 
+		update td_sm_organization set org_name=#[orgName], code=#[code],  orgnumber=#[orgnumber],orgdesc=#[orgdesc] ,remark3=#[remark3], remark5=#[remark5], 
   ORGLEADER=#[orgleader] where org_id=#[orgId]
    
 	]]>

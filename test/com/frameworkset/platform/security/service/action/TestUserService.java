@@ -113,6 +113,46 @@ public class TestUserService {
 		System.out.println();
 	}
 	
+	@Test
+	public void testupdateOrg() throws Exception
+	{
+	 
+		CommonOrganization org = new CommonOrganization();
+		/**
+		 * 常用字段：
+		 * 
+		 * orgId,
+		 * orgName,
+		 * parentId,
+		 * code,
+		 
+		 * orgnumber,
+		 * orgdesc,
+		 * remark5, 显示名称
+		 * orgTreeLevel,部门层级，自动运算
+		 * orgleader 部门主管
+		 * @author yinbp
+		 *
+		 */
+		org.setOrgName("测试机构");
+		org.setCode("code");
+		org.setOrgnumber("orgnumber");
+		
+		org.setOrgdesc("测试机构");
+		org.setRemark5("测试机构");
+		org.setOrgleader("10006673");
+		org.setOrgId("10");
+		HessianProxyFactory factory = new HessianProxyFactory();
+		//String url = "http://10.25.192.142:8081/context/hessian?service=tokenService";
+//		String url = "http://localhost/hessian/commonuserService";
+		String url = "http://pdp.bbossgroups.com/hessian?service=commonuserService";
+		CommonUserManagerInf tokenService = (CommonUserManagerInf) factory.create(CommonUserManagerInf.class, url);
+	 
+		 
+		Result result = tokenService.updateOrganization(org,true);
+		System.out.println();
+	}
+	
 	
 	
 }

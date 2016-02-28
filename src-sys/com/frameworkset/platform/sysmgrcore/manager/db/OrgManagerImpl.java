@@ -1203,7 +1203,13 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 				conn.setString(19,org.getChargeOrgId());
 				conn.setString(20,org.getSatrapJobId());
 				conn.setString(21,org.getIspartybussiness());
-				conn.setString(22,org.getOrg_level());
+				String org_level = org.getOrg_level();
+				if(org_level == null || org_level.equals(""))
+				{
+					org_level = "1";
+					org.setOrg_level(org_level);
+				}
+				conn.setString(22,org_level);
 				conn.setString(23,org.getOrg_xzqm());
 				conn.setInt(24,(org.getIsdirectlyparty()).equals("")?1:0);
 				conn.setInt(25,org.getIsforeignparty().equals("")?1:0);

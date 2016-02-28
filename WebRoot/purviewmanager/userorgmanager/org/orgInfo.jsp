@@ -17,7 +17,7 @@
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg" %>
-<%@ include file="/common/jsp/csscontextmenu-lhgdialog.jsp"%>
+<%@ include file="/common/jsp/css-lhgdialog.jsp"%>
 <%@page import="com.frameworkset.util.StringUtil"%>
 <%@ taglib uri="/WEB-INF/dictionary.tld" prefix="dict"%>
 <%@page import="com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase"%>
@@ -49,7 +49,7 @@
 		String subSystemId = accesscontroler.getCurrentSystemID();
 		
 		OrgManager orgManager = SecurityDatabase.getOrgManager();
-		session.setAttribute("Organization", orgManager.getOrgById(orgId));
+		request.setAttribute("Organization", orgManager.getOrgById(orgId));
 		
 		//判断当前登陆用户能否管理当前机构
 		OrgAdministrator orgAdministrator = new OrgAdministratorImpl();
@@ -158,7 +158,7 @@
 			isProvinceAdminTag = true;
 		}	
  
-		if(org_level.equals("J")){org_level="集团";}
+		if(org_level == null || org_level.equals("")||org_level.equals("J")){org_level="集团";}
 		else if(org_level.equals("G")){org_level="子公司";}
 		else if(org_level.equals("1")){org_level="一级部门";}
 		else if(org_level.equals("2")){org_level="二级部门";}
@@ -191,7 +191,7 @@
 <div style="height: 10px">&nbsp;</div>
 <div id="">
 <form name="form2" action="" method="post"  >	
-<pg:beaninfo sessionKey="Organization">
+<pg:beaninfo requestKey="Organization">
 	      
 		 <input type="hidden"  name="orgId" value="<pg:cell colName="orgId"  defaultValue=""/>"/>
 		 <input type="hidden"  name="parentId" value="<pg:cell colName="parentId"  defaultValue=""/>" />		
