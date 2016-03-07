@@ -3,6 +3,7 @@ package org.frameworkset.token;
 import org.frameworkset.security.ecc.ECCHelper;
 import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
+import org.frameworkset.web.token.Ticket;
 import org.frameworkset.web.token.TokenStore;
 import org.frameworkset.web.token.ws.CheckTokenService;
 import org.frameworkset.web.token.ws.TicketGetResponse;
@@ -19,11 +20,12 @@ public class DBTokenTest {
 	private static DBTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
-	private String appid = "hrm";
-	private String secret = "0b61dde1-d9bc-4108-a2c5-c32d09d8adb9";
-	 String server = "http://token.sany.com.cn:85/SanyToken";
+	private String appid = "tas";
+	private String secret = "2d66d96f-ada4-4e12-a4e4-f4541c0b4bea";
+//	 String server = "http://10.0.15.223/SanyToken";
+	String server = "http://pdp.bbossgroups.com";
 	
-	
+	@Before
 	public void init() throws Exception
 	{
 		mongodbTokenStore = new DBTokenStore();
@@ -32,12 +34,12 @@ public class DBTokenTest {
 		mongodbTokenStore.setTempTokendualtime(TokenStore.DEFAULT_TEMPTOKENLIVETIME);
 		mongodbTokenStore.setTicketdualtime(TokenStore.DEFAULT_TICKETTOKENLIVETIME);
 		mongodbTokenStore.setDualtokenlivetime(TokenStore.DEFAULT_DUALTOKENLIVETIME);
-		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
-		MemToken token = mongodbTokenStore.genDualToken(appid,ticket,secret,TokenStore.DEFAULT_DUALTOKENLIVETIME);
+		Ticket ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
+		MemToken token = mongodbTokenStore.genDualToken(appid,ticket.getToken(),secret,TokenStore.DEFAULT_DUALTOKENLIVETIME);
 		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 		token = mongodbTokenStore.genTempToken();
 		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(null,null,token.getToken()).getResult());
-		token = mongodbTokenStore.genAuthTempToken(appid,ticket,secret);
+		token = mongodbTokenStore.genAuthTempToken(appid,ticket.getToken(),secret);
 		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 	}
 	@Test
@@ -51,9 +53,9 @@ public class DBTokenTest {
 	@Test
 	public void gendualtokenAndValidate() throws Exception
 	{
-		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
+		Ticket ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
 		//long start = System.currentTimeMillis();
-		MemToken token = mongodbTokenStore.genDualToken(appid,ticket,secret,TokenStore.DEFAULT_DUALTOKENLIVETIME);
+		MemToken token = mongodbTokenStore.genDualToken(appid,ticket.getToken(),secret,TokenStore.DEFAULT_DUALTOKENLIVETIME);
 		//long end = System.currentTimeMillis();
 		//System.out.println(end - start);
 		//start = System.currentTimeMillis();
@@ -66,8 +68,8 @@ public class DBTokenTest {
 	@Test
 	public void gentempauthortokenAndValidate() throws Exception
 	{
-		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
-		MemToken token = mongodbTokenStore.genAuthTempToken(appid,ticket,secret);
+		Ticket ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
+		MemToken token = mongodbTokenStore.genAuthTempToken(appid,ticket.getToken(),secret);
 		Assert.assertTrue(TokenStore.token_request_validateresult_ok == mongodbTokenStore.checkToken(appid,secret,token.getToken()).getResult());
 	}
 	@Test
@@ -78,8 +80,8 @@ public class DBTokenTest {
 	@Test
 	public void testticket() throws Exception
 	{
-		String ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
-		System.out.println(":\n"+ticket);
+		Ticket ticket = mongodbTokenStore.genTicket(account, worknumber, appid, secret);
+		System.out.println(":\n"+ticket.getToken());
 	}
 	
 	public static void main(String[] args) throws Exception
@@ -125,11 +127,13 @@ public class DBTokenTest {
 	    public void testServiceticket() throws Exception
 	    {
 		    String ticket = genTicket();
+		    System.out.println(ticket);
 	    	TokenCheckResponse response = checkTicket(ticket);
-	    	refreshTicket(ticket) ;
-	    	destroyTicket(ticket);
+	    	
+//	    	refreshTicket(ticket) ;
+//	    	destroyTicket(ticket);
 	    	checkTicket(ticket);
-	    	refreshTicket(ticket) ;
+//	    	refreshTicket(ticket) ;
 	    }
 	 
 	 @org.junit.Test
