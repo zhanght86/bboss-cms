@@ -63,6 +63,14 @@
 						<th>票据时间：</th>
 						<td><pg:cell colName="tickettime"  />毫秒</td>
 					</tr>
+					<tr>
+						<th>票据签名：</th>
+						<td><pg:case colName="needsign">
+							 <pg:equal value="1">签名</pg:equal>
+							<pg:equal value="0">不签名</pg:equal>
+							 </pg:case></td>
+					</tr>
+					
 					</pg:beaninfo>
 				</table>
 			</fieldset>

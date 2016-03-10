@@ -169,6 +169,9 @@ public class AppcreateServiceImpl implements AppcreateService {
 				app.setAppid(record.getString("SYSTEM_ID"));
 				app.setSecret(record.getString("SYSTEM_SECRET"));
 				app.setTicketlivetime(record.getLong("TICKETTIME"));
+				
+				int needsign = record.getInt("needsign");
+				app.setSign(needsign == 1);
 				rowValue.setApplication(app);
 			}
 			

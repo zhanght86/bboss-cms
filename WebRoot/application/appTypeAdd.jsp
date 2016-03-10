@@ -77,6 +77,7 @@ function picRefApp(){
 							
 							<font color="red">*</font></td>
 					</tr>
+					
 					<tr>
 						<th>启用待办：</th>
 						<td><!-- <input id="used" name="used" type="text"
@@ -123,6 +124,20 @@ function picRefApp(){
 						<input type="text" name="tickettime" value="-2" style="width: 240px;"
 						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>毫秒(-2为默认值，表示读取系统全局配置的时间，一般默认为2天) 
 						</td>
+					</tr>
+					<tr>
+						<th>票据签名：</th>
+						<td><!-- <input id="pending_type" name="pending_type" type="text"
+							value="" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> -->
+							
+							<select id="needsign" name="needsign"   >
+							<option value="1">签名</option>
+							<option value="0">不签名</option>
+							 
+							</select>
+							
+							<font color="red">*</font></td>
 					</tr>
 				</table>
 			</fieldset>

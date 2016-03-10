@@ -126,6 +126,21 @@ function getSystemSecret(){
 						onkeyup="chkPrice(this);" onblur="chkLast(this)" onpaste="javascript: return false;"/>毫秒
 						</td>
 					</tr>
+					<tr>
+						<th>票据签名：</th>
+						<td><!-- <input id="pending_type" name="pending_type" type="text"
+							value="" class="w120 input_default easyui-validatebox"
+							required="true" maxlength="100" /> -->
+							
+							<select id="needsign" name="needsign"   >
+							<pg:case colName="needsign">
+							<option value="1" <pg:equal value="1">selected</pg:equal>>签名</option>
+							<option value="0" <pg:equal value="0">selected</pg:equal>>不签名</option>
+							 </pg:case>
+							</select>
+							
+							<font color="red">*</font></td>
+					</tr>
 					</pg:beaninfo>
 				</table>
 			</fieldset>

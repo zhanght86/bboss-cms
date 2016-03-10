@@ -3,6 +3,7 @@ package org.frameworkset.token;
 import org.frameworkset.security.ecc.ECCHelper;
 import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
+import org.frameworkset.web.token.NullValidateApplication;
 import org.frameworkset.web.token.Ticket;
 import org.frameworkset.web.token.TokenStore;
 import org.frameworkset.web.token.ws.CheckTokenService;
@@ -14,23 +15,22 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.caucho.hessian.client.HessianProxyFactory;
-import com.sany.application.service.impl.SYSValidationApplication;
 
 public class DBTokenTest {
 	private static DBTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
-	private String appid = "tas";
-	private String secret = "2d66d96f-ada4-4e12-a4e4-f4541c0b4bea";
+	private String appid = "test";
+	private String secret = "c96a4686-c5dc-4556-9554-eb61846b5180";
 //	 String server = "http://10.0.15.223/SanyToken";
 	String server = "http://pdp.bbossgroups.com";
 	
-	@Before
+	
 	public void init() throws Exception
 	{
 		mongodbTokenStore = new DBTokenStore();
 		mongodbTokenStore.setECCCoder(ECCHelper.getECCCoder());
-		mongodbTokenStore.setValidateApplication(new SYSValidationApplication());
+		mongodbTokenStore.setValidateApplication(new NullValidateApplication());
 		mongodbTokenStore.setTempTokendualtime(TokenStore.DEFAULT_TEMPTOKENLIVETIME);
 		mongodbTokenStore.setTicketdualtime(TokenStore.DEFAULT_TICKETTOKENLIVETIME);
 		mongodbTokenStore.setDualtokenlivetime(TokenStore.DEFAULT_DUALTOKENLIVETIME);
@@ -178,6 +178,58 @@ public class DBTokenTest {
 	         return ticket;
 
 	    }
+	    
+	    @Test
+	    public void gentmpandchecktmpTicket() throws Exception
+
+	    {
+
+//	         String appid = "pdp";
+//
+//	         String secret = "ED6F601E3ABC7BA35836C56141AF8351";
+//
+//	         String account = "marc";//如果使用工号则loginType为2，否则为1
+//
+//	         String worknumber = "10006857";
+
+	         //hessian服务方式申请token
+
+	         HessianProxyFactory factory = new HessianProxyFactory();
+
+	         //String url = "http://localhost:8080/context/hessian?service=tokenService";
+
+	         String url = server + "/hessian?service=v2tokenService";
+
+	         org.frameworkset.web.token.ws.v2.TokenService tokenService = (org.frameworkset.web.token.ws.v2.TokenService) factory.create(org.frameworkset.web.token.ws.v2.TokenService.class, url);
+
+	         //通过hessian根据账号或者工号获取ticket
+
+
+
+	         org.frameworkset.web.token.ws.v2.TicketGetResponse ticket = tokenService.getTempTicket(account, worknumber, appid, secret);
+
+	         url = server + "/hessian?service=v2checktokenService";
+
+	         org.frameworkset.web.token.ws.v2.CheckTokenService checkTokenService = (org.frameworkset.web.token.ws.v2.CheckTokenService) factory.create(org.frameworkset.web.token.ws.v2.CheckTokenService.class, url);
+
+	         org.frameworkset.web.token.ws.v2.TokenCheckResponse tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket.getTicket());
+
+	         System.out.println(tokenCheckResponse.getResultcode());
+
+	         System.out.println(tokenCheckResponse.getUserAccount());
+
+	         System.out.println(tokenCheckResponse.getWorknumber());
+	         
+	         tokenCheckResponse = checkTokenService.checkTicket(appid, secret, ticket.getTicket());
+
+	         System.out.println(tokenCheckResponse.getResultcode());
+
+	         System.out.println(tokenCheckResponse.getUserAccount());
+
+	         System.out.println(tokenCheckResponse.getWorknumber());
+
+	    }
+
 
 	    
 

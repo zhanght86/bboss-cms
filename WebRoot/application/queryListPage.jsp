@@ -27,8 +27,10 @@
 			<th>创建人</th>
 			<th>创建时间</th>
 			<th>票据时间</br>(毫秒)</th>
+			<th>票据签名</th>
 			<th>修改人</th>	
 			<th>修改时间</th>
+			
        	</pg:header>
   
       	<pg:list autosort="false" >
@@ -57,8 +59,13 @@
 				<td align="center"><pg:cell colName="creator" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="create_date" dateformat="yyyy-MM-dd HH:mm:ss" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="tickettime" defaultValue="" /></td>
+				<td><pg:case colName="needsign">
+							 <pg:equal value="1">签名</pg:equal>
+							<pg:equal value="0">不签名</pg:equal>
+							 </pg:case></td>
 				<td align="center"><pg:cell colName="update_person" defaultValue="" /></td>
 				<td align="center"><pg:cell colName="update_date" dateformat="yyyy-MM-dd HH:mm:ss" defaultValue="" /></td>
+				
         	</tr>
 	 	</pg:list>
     </table>

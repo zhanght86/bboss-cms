@@ -43,6 +43,7 @@ public class WfApp {
 	private String pending_type;
 	
 	private String pending_used;
+	private int needsign;
 	
 	private long tickettime;// 票据失效时间
 
@@ -214,6 +215,14 @@ public class WfApp {
 
 	public void setTickettime(long tickettime) {
 		this.tickettime = tickettime;
+	}
+
+	public int getNeedsign() {
+		return needsign;
+	}
+
+	public void setNeedsign(int needsign) {
+		this.needsign = needsign;
 	}
 
 
