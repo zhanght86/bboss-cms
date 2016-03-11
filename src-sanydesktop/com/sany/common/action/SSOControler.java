@@ -52,9 +52,13 @@ import com.sany.webseal.LoginValidate.UimUserInfo;
 public class SSOControler {
 
     private static Logger log = Logger.getLogger(SSOControler.class);
-
-    public String sso() {
-        return "path:sso";
+    private boolean enableuseraccountsso = false;
+    public String sso(ModelMap model) {
+    	model.addAttribute("enableuseraccountsso", new Boolean(enableuseraccountsso));
+    	if(enableuseraccountsso)
+    		return "path:sso";
+    	else
+    		return "path:ssofailed";
     }
 
     private String getSuccessRedirect(String loginStyle, String subsystem) {

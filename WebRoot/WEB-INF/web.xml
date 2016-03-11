@@ -139,7 +139,7 @@
     		/webseal/message.jsp,
     		/test/testmmssso.jsp,
     		/test/testssowithtoken.jsp,
-    		/sso/login.jsp,
+    		
     		/sso/sso.page,
     		/sso/wxsso.page,
     		/sso/recive.page,

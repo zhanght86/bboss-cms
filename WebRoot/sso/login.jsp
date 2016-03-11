@@ -14,6 +14,9 @@
 <%@page import="java.net.URLDecoder"%>
 <%
 
+    Boolean enableuseraccountsso = (Boolean)request.getAttribute("enableuseraccountsso");
+if(enableuseraccountsso != null || enableuseraccountsso.booleanValue() )
+{
 	String u = "", p = "", ck = "";
 
 	String successRedirect = request.getParameter("successRedirect");
@@ -274,7 +277,11 @@
 				out.print(errorMessage+"登陆失败，请确保输入的用户名和口令是否正确！");
      }
 	}
-
+}
+else
+{
+	out.print("<div>对不起，你没有登录系统的权限</div>");
+}
 %>
 
 
