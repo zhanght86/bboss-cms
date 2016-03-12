@@ -1129,7 +1129,7 @@ public class FileManagerImpl implements FileManager {
 							+ userId + "'";
 	
 					try {
-						conn.execute(sql);
+						conn.executeSql(sql);
 					} catch (SQLException e) {
 						e.printStackTrace();
 						throw new TemplateManagerException(
@@ -1283,7 +1283,7 @@ public class FileManagerImpl implements FileManager {
 					+ "' or uri like '" + theURI + oldName + "/%')";
 			DBUtil conn = new DBUtil();
 			try {
-				conn.execute(sql);
+				conn.executeSql(sql);
 			} catch (SQLException e) {
 				System.out.println("删除文件(夹)后,更新文件(夹)在数据库中相关信息失败!");
 				e.printStackTrace();

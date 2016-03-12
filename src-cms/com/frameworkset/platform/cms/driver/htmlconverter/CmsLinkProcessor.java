@@ -4,7 +4,6 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -1287,7 +1286,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 		if(StringUtil.isEmpty(scriptsrc))
 			return;
 //		tag.removeAttribute("movie");
-		Hashtable parameters = tag.getObjectParams();
+		HashMap parameters = tag.getObjectParams();
 //		tag.setObjectParams(parameters);
 		int linkhandletype = needProcess(scriptsrc,false);
 		if (linkhandletype != LINK_NO_PARSER_NO_DISTRIBUTE) {
@@ -2688,7 +2687,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 		if(ff != null)
 			tag.setAttribute("src", ff);
 		this.m_result.append("<img ");
-		Hashtable attrs = tag.getAttributes();
+		HashMap attrs = tag.getAttributes();
 		Set set = attrs.entrySet();
 		Iterator itr = set.iterator();
 		
@@ -2725,7 +2724,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 			tag.setAttribute("src", ff);
 		//'<EMBED src="' + sFromUrl + '" width="' + sWidth + '" height="' + sHeight + '" type="audio/x-pn-realaudio-plugin" autostart="true" controls="IMAGEWINDOW,ControlPanel,StatusBar" console="Clip1"></EMBED>';
 		this.m_result.append("<EMBED  ");
-		Hashtable attrs = tag.getAttributes();
+		HashMap attrs = tag.getAttributes();
 		Set set = attrs.entrySet();
 		Iterator itr = set.iterator();
 		
@@ -2755,7 +2754,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 		if(ff != null)
 			tag.setResourceText(ff);
 		this.m_result.append("<a  ");
-		Hashtable attrs = tag.getAttributes();
+		HashMap attrs = tag.getAttributes();
 		Set set = attrs.entrySet();
 		Iterator itr = set.iterator();
 		String filename = tag.getAttribute("filename");

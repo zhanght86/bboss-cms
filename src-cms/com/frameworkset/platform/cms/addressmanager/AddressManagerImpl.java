@@ -2,10 +2,9 @@
 package com.frameworkset.platform.cms.addressmanager;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
-import com.frameworkset.platform.cms.templatemanager.TemplateStyleInfo;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.util.ListInfo;
 
@@ -124,7 +123,7 @@ public class AddressManagerImpl implements AddressManager {
 		DBUtil db = new DBUtil();
 		
 		try{
-			Hashtable[] ht = db.executeUpdate(sql);
+			HashMap[] ht = db.executeUpdate(sql);
 			int l = ht.length;
 			return true;
 		} catch (Exception e){

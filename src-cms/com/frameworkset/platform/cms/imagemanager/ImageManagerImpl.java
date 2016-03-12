@@ -216,7 +216,7 @@ public class ImageManagerImpl implements ImageManager{
 		DBUtil db = new DBUtil();
 		try {
 			//System.out.println("sql in imageManagerImpl.java-------------------"+sqlstr);
-			db.execute(sqlstr);			
+			db.executeSql(sqlstr);			
 		} catch (Exception e) {
 			e.printStackTrace();			
 		}

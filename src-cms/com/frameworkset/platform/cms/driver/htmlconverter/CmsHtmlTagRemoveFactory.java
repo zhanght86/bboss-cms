@@ -33,7 +33,9 @@ package com.frameworkset.platform.cms.driver.htmlconverter;
 
 
 
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -189,7 +191,7 @@ public final class CmsHtmlTagRemoveFactory extends PrototypicalNodeFactory imple
          * @deprecated
          * @see org.htmlparser.Tag#getAttributes()
          */
-        public Hashtable getAttributes() {
+        public HashMap getAttributes() {
 
             return m_decorated.getAttributes();
         }
@@ -197,7 +199,7 @@ public final class CmsHtmlTagRemoveFactory extends PrototypicalNodeFactory imple
         /**
          * @see org.htmlparser.Tag#getAttributesEx()
          */
-        public Vector getAttributesEx() {
+        public List getAttributesEx() {
 
             return m_decorated.getAttributesEx();
         }
@@ -376,7 +378,7 @@ public final class CmsHtmlTagRemoveFactory extends PrototypicalNodeFactory imple
          * 
          * @see org.htmlparser.Tag#setAttributes(java.util.Hashtable)
          */
-        public void setAttributes(Hashtable arg0) {
+        public void setAttributes(HashMap arg0) {
 
             m_decorated.setAttributes(arg0);
         }
@@ -384,7 +386,7 @@ public final class CmsHtmlTagRemoveFactory extends PrototypicalNodeFactory imple
         /**
          * @see org.htmlparser.Tag#setAttributesEx(java.util.Vector)
          */
-        public void setAttributesEx(Vector arg0) {
+        public void setAttributesEx(List arg0) {
 
             m_decorated.setAttributesEx(arg0);
         }

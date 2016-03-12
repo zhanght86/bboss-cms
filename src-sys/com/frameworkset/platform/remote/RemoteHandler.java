@@ -2,11 +2,12 @@ package com.frameworkset.platform.remote;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.util.JDBCPoolMetaData;
+import com.frameworkset.platform.security.AccessControl;
 
 /**
  * <p>Title: RemoteHandler.java</p>
@@ -33,10 +34,10 @@ public class RemoteHandler implements RemoteHandlerInf{
 	{
 		Map map = new HashMap();
 		DBUtil dbUtil = new DBUtil();
-		Enumeration enum_ = dbUtil.getAllPoolnames();
-		while(enum_.hasMoreElements()){
+		Iterator<String> enum_ = dbUtil.getAllPoolNames().iterator();
+		while(enum_.hasNext()){
 			Object infos[] = new Object[4];
-			String poolname = (String)enum_.nextElement();
+			String poolname = enum_.next();
 			infos[0] = String.valueOf(DBUtil.getNumIdle(poolname));
 			infos[1] = String.valueOf(DBUtil.getNumActive(poolname));
 			infos[2] = String.valueOf(DBUtil.getMaxNumActive(poolname));
@@ -54,10 +55,10 @@ public class RemoteHandler implements RemoteHandlerInf{
 	{
 		Map map = new HashMap();
 		DBUtil dbUtil = new DBUtil();
-		Enumeration enum_ = dbUtil.getAllPoolnames();
-		while(enum_.hasMoreElements()){
+		Iterator<String> enum_ = dbUtil.getAllPoolNames().iterator();
+		while(enum_.hasNext()){
 			Object infos[] = new Object[5];
-			String poolname = (String)enum_.nextElement();
+			String poolname =  enum_.next();
 			JDBCPoolMetaData metadata = DBUtil.getPool(poolname).getJDBCPoolMetadata();
 			infos[0] = String.valueOf(DBUtil.getNumIdle(poolname));
 			infos[1] = String.valueOf(DBUtil.getNumActive(poolname));

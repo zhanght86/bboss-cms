@@ -6,8 +6,7 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager.db;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +17,12 @@ import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 
+import com.frameworkset.common.poolman.ConfigSQLExecutor;
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.poolman.PreparedDBUtil;
+import com.frameworkset.common.poolman.SQLParams;
+import com.frameworkset.orm.transaction.TransactionException;
+import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.resource.ResourceManager;
@@ -35,15 +40,6 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserManagerImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.BussinessCheck;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.DefaultBussinessCheckImpl;
 import com.frameworkset.platform.sysmgrcore.purviewmanager.PurviewManager;
-import com.frameworkset.common.poolman.ConfigSQLExecutor;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.common.poolman.Record;
-import com.frameworkset.common.poolman.SQLParams;
-import com.frameworkset.common.poolman.handle.NullRowHandler;
-import com.frameworkset.common.poolman.util.SQLResult;
-import com.frameworkset.orm.transaction.TransactionException;
-import com.frameworkset.orm.transaction.TransactionManager;
 
 /**
  * <p>
@@ -1702,8 +1698,8 @@ public class PurviewManagerImpl extends EventHandle implements PurviewManager {
 
 							System.out.println(add_sql_1.toString());
 
-							Hashtable[] s = db.executeSql(add_sql_1.toString());
-							Hashtable s1 = s[0];
+							HashMap[] s = db.executeSql(add_sql_1.toString());
+							HashMap s1 = s[0];
 							Collection keys = s1.values();
 							Iterator it = keys.iterator();
 							Object totalsize = it.next();
