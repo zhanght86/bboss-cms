@@ -4,16 +4,15 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
+import com.frameworkset.common.tag.CMSSupportTag;
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelCacheManager;
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.CMSSupportTag;
-import com.frameworkset.common.tag.CMSTagUtil;
 
 /**
  * 更多文本标签

@@ -56,7 +56,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/crypt.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ditchnet-tabs-taglib.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dom4j.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ecs-1.4.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ehcache-0.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ewebedit.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/EXML.jar"/>

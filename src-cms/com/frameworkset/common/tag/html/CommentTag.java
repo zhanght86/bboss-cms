@@ -2,13 +2,12 @@ package com.frameworkset.common.tag.html;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManager;
 import com.frameworkset.platform.cms.docCommentManager.DocCommentManagerImpl;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
-import com.frameworkset.common.tag.CMSBaseTag;
 /**
  * 评论查看标签
  * @author Administrator

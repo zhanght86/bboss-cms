@@ -7,10 +7,11 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.Font;
-import org.apache.ecs.html.IMG;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.Font;
+import com.frameworkset.common.ecs.IMG;
+import com.frameworkset.common.tag.BaseCellTag;
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.documentmanager.DocumentManager;
@@ -18,8 +19,6 @@ import com.frameworkset.platform.cms.documentmanager.DocumentManagerException;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.platform.cms.documentmanager.bean.DocAggregation;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.BaseCellTag;
-import com.frameworkset.common.tag.CMSTagUtil;
 ;
 
 /**
@@ -115,7 +114,7 @@ public class CMSLinkTag extends BaseCellTag {
 						linkA.setTagText(outStr);
 						/*增加title属性*/
 						if(this.useTitle){
-							linkA.addElement(addTitleContent(altStr));
+							linkA.setTitle(addTitleContent(altStr));
 						}else{
 							linkA.setTitle(altStr);
 						}
@@ -227,7 +226,7 @@ public class CMSLinkTag extends BaseCellTag {
 				try {
 					/*增加title属性*/
 					if(this.useTitle){
-						linkA.addElement(addTitleContent(tagText));
+						linkA.setTitle(addTitleContent(tagText));
 					}else{
 						linkA.setTitle(tagText);
 					}
@@ -255,7 +254,7 @@ public class CMSLinkTag extends BaseCellTag {
 			try {
 				/*增加title属性*/
 				if(this.useTitle){
-					linkA.addElement(addTitleContent(tagText));
+					linkA.setTitle(addTitleContent(tagText));
 				}else{
 					linkA.setTitle(tagText);
 				}
@@ -307,7 +306,7 @@ public class CMSLinkTag extends BaseCellTag {
 				alink.setTagText(title);
 				/*增加title属性*/
 				if(this.useTitle){
-					alink.addElement(addTitleContent(docAggregation.getTitle()));
+					alink.setTitle(addTitleContent(docAggregation.getTitle()));
 				}else{
 					alink.setTitle(docAggregation.getTitle());
 				}				

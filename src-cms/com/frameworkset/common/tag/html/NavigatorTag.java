@@ -4,12 +4,8 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.context.Context;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
 import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
@@ -18,6 +14,9 @@ import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
 import com.frameworkset.platform.cms.util.CMSUtil;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
 public class NavigatorTag extends CMSBaseTag{
 	private ChannelManagerImpl impl = new ChannelManagerImpl();
@@ -409,7 +408,7 @@ public class NavigatorTag extends CMSBaseTag{
 			output.append(img.toString());				
 		} else{	
 			a.setHref(CMSTagUtil.getPublishedChannelPath(context,channel ));
-			a.addElement(channel.getName());	
+			a.setTagText(channel.getName());	
 			a.setStyle("display:none");
 			output.append(a.toString());
 			output.append("<!--[if lte IE 6]>");

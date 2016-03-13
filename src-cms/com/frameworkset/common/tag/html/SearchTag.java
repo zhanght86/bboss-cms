@@ -2,23 +2,22 @@ package com.frameworkset.common.tag.html;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.Form;
-import org.apache.ecs.html.IMG;
-import org.apache.ecs.html.Input;
-import org.apache.ecs.html.Option;
-import org.apache.ecs.html.Select;
-import org.apache.ecs.html.TD;
-import org.apache.ecs.html.TR;
-import org.apache.ecs.html.Table;
-
+import com.frameworkset.common.ecs.Form;
+import com.frameworkset.common.ecs.IMG;
+import com.frameworkset.common.ecs.Input;
+import com.frameworkset.common.ecs.Option;
+import com.frameworkset.common.ecs.Select;
+import com.frameworkset.common.ecs.TD;
+import com.frameworkset.common.ecs.TR;
+import com.frameworkset.common.ecs.Table;
+import com.frameworkset.common.tag.CMSBaseTag;
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
 import com.frameworkset.platform.cms.driver.context.PageContext;
 import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.CMSBaseTag;
-import com.frameworkset.common.tag.CMSTagUtil;
 
 /**
  * 
@@ -258,7 +257,7 @@ public class SearchTag extends CMSBaseTag {
 			{
 				Input searchButton = new Input();
 				searchButton.setType("button");
-				searchButton.setStyle(buttonStyle);
+				
 				
 				if(buttonValue == null || buttonValue.equals(""))
 				{
@@ -273,7 +272,12 @@ public class SearchTag extends CMSBaseTag {
 					else if("4".equals(searchType))
 						buttonValue = "库表搜索";
 				}
-				searchButton.setStyle("cursor:hand")	;
+//				searchButton.setStyle(buttonStyle);
+//				searchButton.setStyle("cursor:hand")	;
+				if(buttonStyle != null )
+					searchButton.setStyle(buttonStyle);
+				else
+					searchButton.setStyle("cursor:hand");
 				searchButton.setValue(buttonValue);
 				searchButton.setName("searchButton");
 				searchButton.setOnClick("searchForm.submit();");
@@ -317,8 +321,10 @@ public class SearchTag extends CMSBaseTag {
 				{
 					Input advancedSearchButton = new Input();
 					advancedSearchButton.setType("button");
-					advancedSearchButton.setStyle(buttonStyle);
-					advancedSearchButton.setStyle("cursor:hand");
+					if(buttonStyle != null )
+						advancedSearchButton.setStyle(buttonStyle);
+					else
+						advancedSearchButton.setStyle("cursor:hand");
 					advancedSearchButton.setValue(advancedButtonValue);
 					advancedSearchButton.setName("advancedSearchButton");
 					advancedSearchButton.setOnClick("var trueAction=searchForm.action;searchForm.action='" + path + "/cms/searchManage/advanced_search.jsp?siteId=" + siteId + "';searchForm.submit();searchForm.action=trueAction;");
@@ -345,8 +351,12 @@ public class SearchTag extends CMSBaseTag {
 					{
 						advancedImage.setWidth(imgWidth);
 					}
-					advancedImage.setStyle(imgStyle);
-					advancedImage.setStyle("cursor:hand");
+//					advancedImage.setStyle(imgStyle);
+//					advancedImage.setStyle("cursor:hand");
+					if(buttonStyle != null )
+						advancedImage.setStyle(buttonStyle);
+					else
+						advancedImage.setStyle("cursor:hand");
 					TD tdAdvancedImage = new TD();
 					tdAdvancedImage.setAlign("center");
 					tdAdvancedImage.addElement(advancedImage); 

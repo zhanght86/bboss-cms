@@ -4,12 +4,8 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.context.Context;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
 import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
@@ -18,6 +14,9 @@ import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
 import com.frameworkset.platform.cms.util.CMSUtil;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
 public class CZNavigatorTag extends CMSBaseTag{
 	private ChannelManagerImpl impl = new ChannelManagerImpl();
@@ -80,14 +79,14 @@ public class CZNavigatorTag extends CMSBaseTag{
      * 其中一级导航栏目是单独生成,其他层级的子导航栏目采用递归的方式生成
      * 导航频道数据从缓存里面获取
      * 根据layout的不同取值,输出不同的导航布局
-     * @return StringBuffer
+     * @return StringBuilder
      * @throws Exception
      */
-	public StringBuffer navigatorTagShow() throws Exception{
+	public StringBuilder navigatorTagShow() throws Exception{
 		String site_id = "";  
 		String channelName = "";
 		/* 加载外部模板 */
-		StringBuffer sb = new StringBuffer();		 
+		StringBuilder sb = new StringBuilder();		 
 		Context top = new VelocityContext();
 		top.put("colWidth",this.colWidth+"");
 		top.put("totalWidth",this.totalWidth+"");
@@ -196,7 +195,7 @@ public class CZNavigatorTag extends CMSBaseTag{
 	public String createHTMlByStyle(String style,Channel channel,int count,int size)throws Exception{
 		IMG img = new IMG();
 		A a = new A();		
-		StringBuffer sb = new StringBuffer();		 
+		StringBuilder sb = new StringBuilder();		 
 		Context menu = new VelocityContext();		
 		/*加分隔图片 第一层*/
 		if((this.menuBorderImg.length()>0)){
@@ -234,7 +233,7 @@ public class CZNavigatorTag extends CMSBaseTag{
 	 * @author: ge.tao
 	 */
 	public String createSubHTML(List sublist,int position)throws Exception{
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Channel subchannel = null;
 		Context top = new VelocityContext();
 		Context loop = new VelocityContext();

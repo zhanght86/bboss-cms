@@ -1,6 +1,6 @@
 package com.frameworkset.common.tag.html;
 
-import org.apache.ecs.html.TD;
+import com.frameworkset.common.ecs.TD;
 
 /**
  * 生成td的more脚本标签

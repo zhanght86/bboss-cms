@@ -4,14 +4,13 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
+import com.frameworkset.common.tag.CMSSupportTag;
+import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.CMSSupportTag;
-import com.frameworkset.common.tag.CMSTagUtil;
 
 /**
  * RSS 链接标签
@@ -74,24 +73,24 @@ public class RssTag extends CMSSupportTag {
 				if (getTarget() != null)
 					rssA.setTarget(getTarget());
 				if (getRssimage() == null) {
-					rssA.setTagText("RSS" + "  " +rssA.getAttribute("href"));
+					rssA.setTagText("RSS" + "  " +rssA.getHref());
 				} else {
 					IMG image = new IMG();
 					String imgSrc = CMSTagUtil.getPublishedLinkPath(context,templatePath, getRssimage());
 					image.setSrc(imgSrc);
 					image.setBorder(0);
-					rssA.setTagText(image.toString() + "  " + rssA.getAttribute("href"));
+					rssA.setTagText(image.toString() + "  " + rssA.getHref());
 				}
 			} else {
 				rssA.setHref(getRsslink());
 				if (getRssimage() == null) {
-					rssA.setTagText("RSS" + "  " + rssA.getAttribute("href"));
+					rssA.setTagText("RSS" + "  " + rssA.getHref());
 				} else {
 					IMG image = new IMG();
 					String imgSrc = CMSTagUtil.getPublishedLinkPath(context,"", getRssimage());
 					image.setSrc(imgSrc);
 					image.setBorder(0);
-					rssA.setTagText(image.toString() + "  " + rssA.getAttribute("href"));
+					rssA.setTagText(image.toString() + "  " + rssA.getHref());
 				}
 			}
 			if (style != null && !"".equals(style))
@@ -125,14 +124,14 @@ public class RssTag extends CMSSupportTag {
 
 				rssA.setHref(rssLink);
 				if (getRssimage() == null) {
-					rssA.setTagText("RSS" + "  " + rssA.getAttribute("href"));
+					rssA.setTagText("RSS" + "  " + rssA.getHref());
 				} else {
 					String templatePath = CMSTagUtil.getTemplatePath(context);
 					IMG image = new IMG();
 					String imgSrc = CMSTagUtil.getPublishedLinkPath(context,templatePath, getRssimage());
 					image.setSrc(imgSrc);
 					image.setBorder(0);
-					rssA.setTagText(image.toString() + "  " + rssA.getAttribute("href"));
+					rssA.setTagText(image.toString() + "  " + rssA.getHref());
 				}
 				if (getTarget() != null)
 					rssA.setTarget(getTarget());
@@ -165,14 +164,14 @@ public class RssTag extends CMSSupportTag {
 				rssA.setHref(rssLink);
 
 				if (getRssimage() == null) {
-					rssA.setTagText("RSS" + "  " + rssA.getAttribute("href"));
+					rssA.setTagText("RSS" + "  " + rssA.getHref());
 				} else {
 					String templatePath = CMSTagUtil.getTemplatePath(context);
 					IMG image = new IMG();
 					String imgSrc = CMSTagUtil.getPublishedLinkPath(context,templatePath, getRssimage());
 					image.setSrc(imgSrc);
 					image.setBorder(0);
-					rssA.setTagText(image.toString() + "  " + rssA.getAttribute("href"));
+					rssA.setTagText(image.toString() + "  " + rssA.getHref());
 				}
 				if (getTarget() != null)
 					rssA.setTarget(getTarget());

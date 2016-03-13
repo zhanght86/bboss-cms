@@ -4,17 +4,16 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.context.Context;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.documentmanager.Document;
 import com.frameworkset.platform.cms.util.CMSUtil;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 
 /**
  * 图片新闻链接标签，针对主题图片的链接标签,如果是外部链接，直接输出外部链接和主题图片，如果是普通
@@ -70,7 +69,7 @@ public class CMSImageLinkTag extends BaseCellTag {
 				if("true".equals(this.isZoom)){
 					Context content = new VelocityContext();
 					extHTML = CMSTagUtil.loadTemplate("publish/imageZoom.vm",	content);
-					image.addAttribute("onmousewheel","return zoomimg(this)");				
+					image.setOnmousewheel("return zoomimg(this)");				
 				}
 				imageurl  = CMSUtil.getPublishedLinkPath(this.context,"",imageurl);
 				
@@ -158,7 +157,7 @@ public class CMSImageLinkTag extends BaseCellTag {
 				if("true".equals(this.isZoom)) {
 					Context content = new VelocityContext();
 					extHTML = CMSTagUtil.loadTemplate("publish/imageZoom.vm",	content);
-					image.addAttribute("onmousewheel","return zoomimg(this)");
+					image.setOnmousewheel("return zoomimg(this)");
 				}
 				A a = new A();
 				String url = CMSUtil.getPublishedChannelPath(context,channel);
@@ -228,7 +227,7 @@ public class CMSImageLinkTag extends BaseCellTag {
 			if("true".equals(this.isZoom)) {
 				Context content = new VelocityContext();
 				extHTML = CMSTagUtil.loadTemplate("publish/imageZoom.vm",	content);
-				image.addAttribute("onmousewheel","return zoomimg(this)");
+				image.setOnmousewheel("return zoomimg(this)");
 			}
 			A a = new A();
 			String url = CMSUtil.getPublishedChannelPath(context,channel);

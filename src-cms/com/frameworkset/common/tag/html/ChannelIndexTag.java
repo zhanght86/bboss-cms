@@ -2,14 +2,11 @@ package com.frameworkset.common.tag.html;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.driver.context.Context;
-import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
-import com.frameworkset.common.tag.BaseCellTag;
-import com.frameworkset.common.tag.CMSTagUtil;
 /**
  * 在概览标签中使用,可以获取文档和频道混合列表
  * <p>Title: ChannelIndexTag.java</p>
@@ -45,6 +42,13 @@ public class ChannelIndexTag extends BaseCellTag {
 			
 				if ("channelindex".equals(type)) {
 					A a = new A();
+//					StringBuilder a = new StringBuilder();
+//					a.append("<a");
+//					a.append(" href=\"").append(getPublishedChannelPath(context)).append("\"");
+//					a.append(" style=\"").append(style).append("\"");
+//					a.append(" onMouseOver=\"").append(mouseOverEvent).append("\">");
+//					a.append(getSimpleText(super.dataSet
+//							.getString(property))).append("</a>");
 					a.setHref(getPublishedChannelPath(context));
 					a.setTagText(getSimpleText(super.dataSet
 									.getString(property)));
@@ -69,6 +73,13 @@ public class ChannelIndexTag extends BaseCellTag {
 					a.setTagText(getSimpleText(_channel.getName()));
 					a.setStyle(style);
 					a.setOnMouseOver(mouseOverEvent);
+					
+//					StringBuilder a = new StringBuilder();
+//					a.append("<a");
+//					a.append(" href=\"").append(CMSUtil.getPublishedChannelPath(context,_channel)).append("\"");
+//					a.append(" style=\"").append(style).append("\"");
+//					a.append(" onMouseOver=\"").append(mouseOverEvent).append("\">");
+//					a.append(getSimpleText(_channel.getName())).append("</a>");
 					out.print(a.toString());
 				}
 			

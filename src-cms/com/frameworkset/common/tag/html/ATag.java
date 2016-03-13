@@ -4,11 +4,10 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-
-import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
+import com.frameworkset.common.ecs.A;
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
 
 /**
  * 外部链接标签，可以用于概览标签的内容标签，也可以单独使用来生成一个可用的链接
@@ -138,25 +137,41 @@ public class ATag extends BaseCellTag {
 		 */
 		text = getSimpleText(text);
 		A a = new A();
+//		StringBuilder a = new StringBuilder();
+//		a.append("<a");
+//		a.setTagText(text);
 		a.setTagText(text);
 
 		if (outStr != null && !outStr.equals("")) {
 			a.setHref(outStr);
+//			a.append(" href=\"").append(outStr).append("\"");
 
 			if (null != target && !"".equals(target))
+			{
+//				a.append(" target=\"").append(target).append("\"");
 				a.setTarget(target);
+			}
 			else
 			{
 				String temp = this.dataSet.getString("linktarget");
 				if (null != temp && !"".equals(temp))
+				{
 					a.setTarget(temp);
+//					a.append(" target=\"").append(target).append("\"");
+				}
 			}
 
 			if (style!=null && !"".equals(style))
+			{
 				a.setStyle(style);
+//				a.append(" style=\"").append(style).append("\"");
+			}
 			if (classname!=null && !"".equals(classname))
+			{
 				a.setClass(classname);
-			
+//				a.append(" class=\"").append(classname).append("\"");
+			}
+//			a.append(">").append(text).append("</a>");
 
 			try {
 				out.print(a.toString());

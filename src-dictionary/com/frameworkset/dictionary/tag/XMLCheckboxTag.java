@@ -5,8 +5,7 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.Input;
-
+import com.frameworkset.common.ecs.Input;
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.DataManagerFactory;
 import com.frameworkset.dictionary.Item;

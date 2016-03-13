@@ -2,8 +2,7 @@ package com.frameworkset.common.tag.html;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.IFrame;
-
+import com.frameworkset.common.ecs.IFrame;
 import com.frameworkset.common.tag.CMSBaseTag;
 
 /**

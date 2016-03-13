@@ -1,6 +1,6 @@
 package com.frameworkset.common.tag.html;
 
-import org.apache.ecs.html.TR;
+import com.frameworkset.common.ecs.TR;
 
 /**
  * 通过直接生成tr的more脚本行

@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.A;
-import org.apache.ecs.html.IMG;
-
-import com.frameworkset.platform.cms.channelmanager.Channel;
-import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.common.ecs.A;
+import com.frameworkset.common.ecs.IMG;
 import com.frameworkset.common.tag.CMSBaseTag;
 import com.frameworkset.common.tag.CMSTagUtil;
+import com.frameworkset.platform.cms.channelmanager.Channel;
+import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.util.ValueObjectUtil;
 
 public class ChannelInfoTag extends CMSBaseTag {
@@ -66,7 +65,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 			if (chnl == null)
 				return SKIP_BODY;
 
-			StringBuffer outputStrng = new StringBuffer();
+			StringBuilder outputStrng = new StringBuilder();
 
 			if ("image".equals(linktype)) {
 				if (property == null)
@@ -76,7 +75,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 				String value =  v == null?null:String.valueOf(v);
 				if (value == null)
 					value = "频道的属性[" + property + "]未指定";
-				outputStrng = new StringBuffer(value);
+				outputStrng = new StringBuilder(value);
 				if (CMSTagUtil.getPublishedLinkPath(context,
 						outputStrng.toString()).endsWith(".swf")
 						|| CMSTagUtil.getPublishedLinkPath(context,
@@ -103,7 +102,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 						img.setExtend(imageextend);
 					if (imagestyle != null)
 						img.setStyle(imagestyle);
-					outputStrng = new StringBuffer(img.toString());
+					outputStrng = new StringBuilder(img.toString());
 				}
 			} else if ("homepage".equals(linktype)) {
 				if (property == null)
@@ -113,14 +112,14 @@ public class ChannelInfoTag extends CMSBaseTag {
 				String value =  v == null?null:String.valueOf(v);
 				if (value == null)
 					value = "频道的属性[" + property + "]未指定";
-				outputStrng = new StringBuffer(value);
+				outputStrng = new StringBuilder(value);
 				A a = new A();
 				/* set target */
 				if (target != null)
 					a.setTarget(this.target);
 				a.setHref(CMSTagUtil.getPublishedChannelPath(context, chnl));
 				a.setTagText(outputStrng.toString());
-				outputStrng = new StringBuffer(a.toString());
+				outputStrng = new StringBuilder(a.toString());
 			} else if ("imagehomepage".equals(linktype)) {
 				if (property == null)
 					property = "outlinepicture";
@@ -129,7 +128,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 				String value =  v == null?null:String.valueOf(v);
 				if (value == null)
 					value = "频道的属性[" + property + "]未指定";
-				outputStrng = new StringBuffer(value);
+				outputStrng = new StringBuilder(value);
 				String swfLink = CMSUtil.getPublishedLinkPath(context,outputStrng.toString());
 				if (swfLink.endsWith(".swf")
 						|| swfLink.endsWith(".SWF")) {/*
@@ -160,7 +159,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 					if (imagestyle != null)
 						img.setStyle(imagestyle);
 					a.setTagText(img.toString());
-					outputStrng = new StringBuffer(a.toString());
+					outputStrng = new StringBuilder(a.toString());
 				}
 			} else {
 				Object v = ValueObjectUtil
@@ -169,7 +168,7 @@ public class ChannelInfoTag extends CMSBaseTag {
 				if (value == null)
 					value = "频道的属性[" + property + "]未指定";
 
-				outputStrng = new StringBuffer(value);
+				outputStrng = new StringBuilder(value);
 			}
 
 			out.print(outputStrng);
@@ -240,8 +239,8 @@ public class ChannelInfoTag extends CMSBaseTag {
 	 * @return
 	 * @throws Exception
 	 */
-	public StringBuffer flashTagShow(String src) throws Exception {
-		StringBuffer sb = new StringBuffer();
+	public StringBuilder flashTagShow(String src) throws Exception {
+		StringBuilder sb = new StringBuilder();
 		sb
 				.append("<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" \n");
 		sb

@@ -6,10 +6,10 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.Option;
-import org.apache.ecs.html.Select;
 import org.frameworkset.util.I18NUtil;
 
+import com.frameworkset.common.ecs.Option;
+import com.frameworkset.common.ecs.Select;
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.DataManagerFactory;
 import com.frameworkset.dictionary.Item;
@@ -51,24 +51,24 @@ public class XMLSelectTag extends XMLBaseTag
 			{
 				selected = selected();
 			}
-			Option[] options = null;
-			int temp = 0;
+//			Option[] options = null;
+//			int temp = 0;
 			if(this.getTextValue() != null)
 			{
-				options = new Option[data.size() + 1];
-				options[0] = new Option().setValue(textNAN);
-				options[0].setTagText(getTextValue());
-				temp ++;
+				Option o = new Option();
+				o = new Option().setValue(textNAN);
+				o.setTagText(getTextValue());
+				select.addElement(o);
 			}
 			else
 			{
-				options = new Option[data.size()];
+//				options = new Option[data.size()];
 			}
 			
 			DataManager  dataManager = DataManagerFactory.getDataManager();
-			for(int i = temp ; i < data.size() + temp; i ++)
+			for(int i = 0 ; i < data.size() ; i ++)
 			{				
-				Item item = data.getItem(i - temp);
+				Item item = data.getItem(i );
 				if(item.getDataValidate() == 0) continue;
 				//设置了权限过滤
 //				if(this.isCheckPermission() && !super.accesscontroler.checkPermission(ids,this.getOpcode(),"orgTaxcode")){
@@ -101,12 +101,12 @@ public class XMLSelectTag extends XMLBaseTag
 					}
 				}
 				option.setTagText(item.getName());
-				options[i] = option;
-				
+//				options[i] = option;
+				select.addElement(option);
 				
 			}
 			
-			select.addElement(options);
+//			select.addElement(options);
 			if(getStyle() != null)
 				select.setStyle(getStyle());
 			//buffer.append(data.getName());
@@ -114,10 +114,10 @@ public class XMLSelectTag extends XMLBaseTag
 		}
 		else
 		{
-			Option[] options = new Option[1];
-			options[0] = new Option().setValue("NaN");
-			options[0].setTagText("字典[" + this.type + "]不存在");
-			select.addElement(options);
+			Option option = new com.frameworkset.common.ecs.Option();
+			option  = new Option().setValue("NaN");
+			option.setTagText("字典[" + this.type + "]不存在");
+			select.addElement(option);
 			return select.toString();
 		}
 	}

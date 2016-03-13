@@ -4,9 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.ecs.html.IMG;
-
-import com.frameworkset.platform.cms.driver.context.impl.DefaultContextImpl;
+import com.frameworkset.common.ecs.IMG;
 import com.frameworkset.common.tag.BaseCellTag;
 import com.frameworkset.common.tag.CMSTagUtil;
 
