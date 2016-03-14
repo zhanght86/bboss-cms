@@ -5,7 +5,7 @@
 <head>
 <title>选择用户</title>
 <%@ include file="/common/jsp/css.jsp"%>
-<link href="stylesheet/common.css" rel="stylesheet" type="text/css" />
+
 </head>
 <style type="text/css">
 .a_bg_color{
@@ -106,6 +106,10 @@ function queryUserAndOrgList (orgId,user_name) {
 					move($('#select1'),$('#select2'));
 				}
 			}
+			else
+				{
+					$("#select1").find('option').remove();
+				}
 			/* else {
 				W.$.dialog.alert("无查询结果",function(){});
 			} */
@@ -150,6 +154,10 @@ function queryUserList (orgId,user_name) {
 					$("#select1").find('option').attr('selected','selected');
 					move($('#select1'),$('#select2'));
 				}
+			}
+			else
+			{
+				$("#select1").find('option').remove();
 			}
 			/* else {
 				W.$.dialog.alert("无查询结果",function(){});
