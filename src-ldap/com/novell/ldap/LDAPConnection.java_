@@ -1,0 +1,1485 @@
+package com.novell.ldap;
+
+import com.novell.ldap.asn1.ASN1OctetString;
+import com.novell.ldap.client.BindProperties;
+import com.novell.ldap.client.Debug;
+import com.novell.ldap.client.ReferralInfo;
+import com.novell.ldap.rfc2251.RfcBindRequest;
+import com.novell.ldap.rfc2251.RfcBindResponse;
+import com.novell.ldap.rfc2251.RfcLDAPMessage;
+import com.novell.security.sasl.Sasl;
+import com.novell.security.sasl.SaslClient;
+import com.novell.security.sasl.SaslException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.StringTokenizer;
+import javax.security.auth.callback.CallbackHandler;
+
+public class LDAPConnection implements Cloneable {
+	private LDAPSearchConstraints defSearchCons = new LDAPSearchConstraints();
+	private LDAPControl[] responseCtls = null;
+	private Object responseCtlSemaphore = new Object();
+	private Connection conn = null;
+	private static Object nameLock = new Object();
+	private static int lConnNum = 0;
+	private String name;
+	public static final int SCOPE_BASE = 0;
+	public static final int SCOPE_ONE = 1;
+	public static final int SCOPE_SUB = 2;
+	public static final int SCOPE_SUBORDINATESUBTREE = 4;
+	public static final String NO_ATTRS = "1.1";
+	public static final String ALL_USER_ATTRS = "*";
+	public static final int LDAP_V3 = 3;
+	public static final int DEFAULT_PORT = 389;
+	public static final int DEFAULT_SSL_PORT = 636;
+	public static final String LDAP_PROPERTY_SDK = "version.sdk";
+	public static final String LDAP_PROPERTY_PROTOCOL = "version.protocol";
+	public static final String LDAP_PROPERTY_SECURITY = "version.security";
+	public static final String SERVER_SHUTDOWN_OID = "1.3.6.1.4.1.1466.20036";
+	private static final String START_TLS_OID = "1.3.6.1.4.1.1466.20037";
+
+	public LDAPConnection() {
+		this(null);
+	}
+
+	public LDAPConnection(LDAPSocketFactory factory) {
+		synchronized (nameLock) {
+			this.name = ("LDAPConnection(" + ++lConnNum + "): ");
+		}
+		Debug.trace("APIRequests", this.name + "Created");
+
+		this.conn = new Connection(factory);
+	}
+
+	public LDAPConnection(int timeout) {
+		synchronized (nameLock) {
+			this.name = ("LDAPConnection(" + ++lConnNum + "): ");
+		}
+		Debug.trace("APIRequests", this.name + "Created");
+
+		this.conn = new Connection(timeout);
+	}
+
+	public Object clone() {
+		Object newObj = null;
+		LDAPConnection newClone = null;
+		try {
+			newObj = super.clone();
+			newClone = (LDAPConnection) newObj;
+		} catch (CloneNotSupportedException ce) {
+
+			throw new RuntimeException("Internal error, cannot create clone");
+		}
+
+		newClone.conn = this.conn;
+
+		Debug.trace("APIRequests", this.name + "clone()");
+		if (this.defSearchCons != null) {
+			newClone.defSearchCons = ((LDAPSearchConstraints) this.defSearchCons.clone());
+		} else {
+			newClone.defSearchCons = null;
+		}
+		if (this.responseCtls != null) {
+			newClone.responseCtls = new LDAPControl[this.responseCtls.length];
+			for (int i = 0; i < this.responseCtls.length; i++) {
+				newClone.responseCtls[i] = ((LDAPControl) this.responseCtls[i].clone());
+			}
+		} else {
+			newClone.responseCtls = null;
+		}
+		this.conn.incrCloneCount();
+		return newObj;
+	}
+
+	protected void finalize() throws LDAPException {
+		disconnect(this.defSearchCons, false);
+	}
+
+	public int getProtocolVersion() {
+		BindProperties prop = this.conn.getBindProperties();
+		if (prop == null) {
+			return 3;
+		}
+		return prop.getProtocolVersion();
+	}
+
+	public String getAuthenticationDN() {
+		BindProperties prop = this.conn.getBindProperties();
+		if (prop == null) {
+			return null;
+		}
+		if (prop.isAnonymous()) {
+			return null;
+		}
+		return prop.getAuthenticationDN();
+	}
+
+	public String getAuthenticationMethod() {
+		BindProperties prop = this.conn.getBindProperties();
+		if (prop == null) {
+			return "simple";
+		}
+		return this.conn.getBindProperties().getAuthenticationMethod();
+	}
+
+	public Map getSaslBindProperties() {
+		BindProperties prop = this.conn.getBindProperties();
+		if (prop == null) {
+			return null;
+		}
+		return this.conn.getBindProperties().getSaslBindProperties();
+	}
+
+	public Object getSaslBindCallbackHandler() {
+		BindProperties prop = this.conn.getBindProperties();
+		if (prop == null) {
+			return null;
+		}
+		return this.conn.getBindProperties().getSaslCallbackHandler();
+	}
+
+	public LDAPConstraints getConstraints() {
+		return (LDAPConstraints) this.defSearchCons.clone();
+	}
+
+	public String getHost() {
+		return this.conn.getHost();
+	}
+
+	public int getPort() {
+		return this.conn.getPort();
+	}
+
+	public Object getProperty(String name) {
+		if (name.equalsIgnoreCase("version.sdk")) {
+			return Connection.sdk;
+		}
+		if (name.equalsIgnoreCase("version.protocol")) {
+			return Connection.protocol;
+		}
+		if (name.equalsIgnoreCase("version.security")) {
+			return Connection.security;
+		}
+		return null;
+	}
+
+	public LDAPSearchConstraints getSearchConstraints() {
+		return (LDAPSearchConstraints) this.defSearchCons.clone();
+	}
+
+	public LDAPSocketFactory getSocketFactory() {
+		return this.conn.getSocketFactory();
+	}
+
+	public boolean isBound() {
+		return this.conn.isBound();
+	}
+
+	public boolean isConnected() {
+		return this.conn.isConnected();
+	}
+
+	public boolean isConnectionAlive() {
+		return this.conn.isConnectionAlive();
+	}
+
+	public boolean isTLS() {
+		return this.conn.isTLS();
+	}
+
+	public int getSocketTimeOut() {
+		return this.conn.getSocketTimeOut();
+	}
+
+	public void setSocketTimeOut(int timeout) {
+		this.conn.setSocketTimeOut(timeout);
+	}
+
+	public void setConstraints(LDAPConstraints cons) {
+		if ((cons instanceof LDAPSearchConstraints)) {
+			this.defSearchCons = ((LDAPSearchConstraints) cons.clone());
+			return;
+		}
+		LDAPSearchConstraints newCons = (LDAPSearchConstraints) this.defSearchCons.clone();
+		newCons.setHopLimit(cons.getHopLimit());
+		newCons.setTimeLimit(cons.getTimeLimit());
+		newCons.setReferralHandler(cons.getReferralHandler());
+		newCons.setReferralFollowing(cons.getReferralFollowing());
+		LDAPControl[] lsc = cons.getControls();
+		if (lsc != null) {
+			newCons.setControls(lsc);
+		}
+		Hashtable lp = newCons.getProperties();
+		if (lp != null) {
+			newCons.setProperties(lp);
+		}
+		this.defSearchCons = newCons;
+	}
+
+	public static void setSocketFactory(LDAPSocketFactory factory) {
+		Connection.setSocketFactory(factory);
+	}
+
+	public void addUnsolicitedNotificationListener(LDAPUnsolicitedNotificationListener listener) {
+		Debug.trace("APIRequests", this.name + "addUnsolicitedNOtificationListener()");
+		if (listener != null) {
+			this.conn.addUnsolicitedNotificationListener(listener);
+		}
+	}
+
+	public void removeUnsolicitedNotificationListener(LDAPUnsolicitedNotificationListener listener) {
+		Debug.trace("APIRequests", this.name + "removeUnsolicitedNOtificationListener()");
+		if (listener != null) {
+			this.conn.removeUnsolicitedNotificationListener(listener);
+		}
+	}
+
+	/* Error */
+	public void startTLS() throws LDAPException {
+		// Byte code:
+		// 0: ldc 106
+		// 2: new 84 java/lang/StringBuffer
+		// 5: dup
+		// 6: aload_0
+		// 7: getfield 104 com/novell/ldap/LDAPConnection:name
+		// Ljava/lang/String;
+		// 10: invokestatic 108 java/lang/String:valueOf
+		// (Ljava/lang/Object;)Ljava/lang/String;
+		// 13: invokespecial 88 java/lang/StringBuffer:<init>
+		// (Ljava/lang/String;)V
+		// 16: ldc_w 315
+		// 19: invokevirtual 97 java/lang/StringBuffer:append
+		// (Ljava/lang/String;)Ljava/lang/StringBuffer;
+		// 22: invokevirtual 100 java/lang/StringBuffer:toString
+		// ()Ljava/lang/String;
+		// 25: invokestatic 116 com/novell/ldap/client/Debug:trace
+		// (Ljava/lang/String;Ljava/lang/String;)V
+		// 28: aload_0
+		// 29: new 317 com/novell/ldap/LDAPExtendedOperation
+		// 32: dup
+		// 33: ldc 54
+		// 35: aconst_null
+		// 36: invokespecial 319 com/novell/ldap/LDAPExtendedOperation:<init>
+		// (Ljava/lang/String;[B)V
+		// 39: aconst_null
+		// 40: invokevirtual 322
+		// com/novell/ldap/LDAPConnection:makeExtendedOperation
+		// (Lcom/novell/ldap/LDAPExtendedOperation;Lcom/novell/ldap/LDAPConstraints;)Lcom/novell/ldap/LDAPMessage;
+		// 43: astore_1
+		// 44: aload_1
+		// 45: invokevirtual 326 com/novell/ldap/LDAPMessage:getMessageID ()I
+		// 48: istore_2
+		// 49: aload_0
+		// 50: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 53: iload_2
+		// 54: invokevirtual 331
+		// com/novell/ldap/Connection:acquireWriteSemaphore (I)I
+		// 57: pop
+		// 58: aload_0
+		// 59: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 62: invokevirtual 335 com/novell/ldap/Connection:areMessagesComplete
+		// ()Z
+		// 65: ifne +15 -> 80
+		// 68: new 338 com/novell/ldap/LDAPLocalException
+		// 71: dup
+		// 72: ldc_w 340
+		// 75: iconst_1
+		// 76: invokespecial 342 com/novell/ldap/LDAPLocalException:<init>
+		// (Ljava/lang/String;I)V
+		// 79: athrow
+		// 80: aload_0
+		// 81: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 84: iload_2
+		// 85: invokevirtual 345 com/novell/ldap/Connection:stopReaderOnReply
+		// (I)V
+		// 88: aload_0
+		// 89: aload_1
+		// 90: aload_0
+		// 91: getfield 76 com/novell/ldap/LDAPConnection:defSearchCons
+		// Lcom/novell/ldap/LDAPSearchConstraints;
+		// 94: invokevirtual 348
+		// com/novell/ldap/LDAPSearchConstraints:getTimeLimit ()I
+		// 97: aconst_null
+		// 98: aconst_null
+		// 99: invokespecial 349
+		// com/novell/ldap/LDAPConnection:sendRequestToServer
+		// (Lcom/novell/ldap/LDAPMessage;ILcom/novell/ldap/LDAPResponseQueue;Lcom/novell/ldap/client/BindProperties;)Lcom/novell/ldap/LDAPResponseQueue;
+		// 102: astore_3
+		// 103: aload_3
+		// 104: invokevirtual 353 com/novell/ldap/LDAPResponseQueue:getResponse
+		// ()Lcom/novell/ldap/LDAPMessage;
+		// 107: checkcast 359 com/novell/ldap/LDAPExtendedResponse
+		// 110: astore 4
+		// 112: aload 4
+		// 114: invokevirtual 361
+		// com/novell/ldap/LDAPExtendedResponse:chkResultCode ()V
+		// 117: aload_0
+		// 118: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 121: invokevirtual 364 com/novell/ldap/Connection:startTLS ()V
+		// 124: goto +23 -> 147
+		// 127: astore 5
+		// 129: aload_0
+		// 130: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 133: invokevirtual 366 com/novell/ldap/Connection:startReader ()V
+		// 136: aload_0
+		// 137: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 140: iload_2
+		// 141: invokevirtual 369 com/novell/ldap/Connection:freeWriteSemaphore
+		// (I)V
+		// 144: aload 5
+		// 146: athrow
+		// 147: aload_0
+		// 148: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 151: invokevirtual 366 com/novell/ldap/Connection:startReader ()V
+		// 154: aload_0
+		// 155: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 158: iload_2
+		// 159: invokevirtual 369 com/novell/ldap/Connection:freeWriteSemaphore
+		// (I)V
+		// 162: return
+		// Line number table:
+		// Java source line #799 -> byte code offset #0
+		// Java source line #803 -> byte code offset #28
+		// Java source line #804 -> byte code offset #29
+		// Java source line #803 -> byte code offset #40
+		// Java source line #806 -> byte code offset #44
+		// Java source line #808 -> byte code offset #49
+		// Java source line #810 -> byte code offset #58
+		// Java source line #811 -> byte code offset #68
+		// Java source line #812 -> byte code offset #72
+		// Java source line #813 -> byte code offset #75
+		// Java source line #811 -> byte code offset #76
+		// Java source line #817 -> byte code offset #80
+		// Java source line #821 -> byte code offset #88
+		// Java source line #822 -> byte code offset #89
+		// Java source line #823 -> byte code offset #90
+		// Java source line #821 -> byte code offset #99
+		// Java source line #820 -> byte code offset #102
+		// Java source line #826 -> byte code offset #103
+		// Java source line #825 -> byte code offset #110
+		// Java source line #827 -> byte code offset #112
+		// Java source line #829 -> byte code offset #117
+		// Java source line #831 -> byte code offset #127
+		// Java source line #833 -> byte code offset #129
+		// Java source line #834 -> byte code offset #136
+		// Java source line #835 -> byte code offset #144
+		// Java source line #833 -> byte code offset #147
+		// Java source line #834 -> byte code offset #154
+		// Java source line #836 -> byte code offset #162
+		// Local variable table:
+		// start length slot name signature
+		// 0 163 0 this LDAPConnection
+		// 43 47 1 startTLS LDAPMessage
+		// 48 111 2 tlsID int
+		// 102 2 3 queue LDAPResponseQueue
+		// 110 3 4 response LDAPExtendedResponse
+		// 127 18 5 localObject Object
+		// Exception table:
+		// from to target type
+		// 58 127 127 finally
+	}
+
+	/* Error */
+	public void stopTLS() throws LDAPException {
+		// Byte code:
+		// 0: aload_0
+		// 1: invokevirtual 379 com/novell/ldap/LDAPConnection:isTLS ()Z
+		// 4: ifne +15 -> 19
+		// 7: new 338 com/novell/ldap/LDAPLocalException
+		// 10: dup
+		// 11: ldc_w 380
+		// 14: iconst_1
+		// 15: invokespecial 342 com/novell/ldap/LDAPLocalException:<init>
+		// (Ljava/lang/String;I)V
+		// 18: athrow
+		// 19: aload_0
+		// 20: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 23: invokevirtual 382
+		// com/novell/ldap/Connection:acquireWriteSemaphore ()I
+		// 26: istore_1
+		// 27: aload_0
+		// 28: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 31: invokevirtual 335 com/novell/ldap/Connection:areMessagesComplete
+		// ()Z
+		// 34: ifne +15 -> 49
+		// 37: new 338 com/novell/ldap/LDAPLocalException
+		// 40: dup
+		// 41: ldc_w 340
+		// 44: iconst_1
+		// 45: invokespecial 342 com/novell/ldap/LDAPLocalException:<init>
+		// (Ljava/lang/String;I)V
+		// 48: athrow
+		// 49: aload_0
+		// 50: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 53: invokevirtual 384 com/novell/ldap/Connection:stopTLS ()V
+		// 56: goto +14 -> 70
+		// 59: astore_2
+		// 60: aload_0
+		// 61: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 64: iload_1
+		// 65: invokevirtual 369 com/novell/ldap/Connection:freeWriteSemaphore
+		// (I)V
+		// 68: aload_2
+		// 69: athrow
+		// 70: aload_0
+		// 71: getfield 82 com/novell/ldap/LDAPConnection:conn
+		// Lcom/novell/ldap/Connection;
+		// 74: iload_1
+		// 75: invokevirtual 369 com/novell/ldap/Connection:freeWriteSemaphore
+		// (I)V
+		// 78: return
+		// Line number table:
+		// Java source line #860 -> byte code offset #0
+		// Java source line #861 -> byte code offset #7
+		// Java source line #862 -> byte code offset #14
+		// Java source line #861 -> byte code offset #15
+		// Java source line #865 -> byte code offset #19
+		// Java source line #867 -> byte code offset #27
+		// Java source line #868 -> byte code offset #37
+		// Java source line #869 -> byte code offset #41
+		// Java source line #870 -> byte code offset #44
+		// Java source line #868 -> byte code offset #45
+		// Java source line #873 -> byte code offset #49
+		// Java source line #875 -> byte code offset #59
+		// Java source line #876 -> byte code offset #60
+		// Java source line #877 -> byte code offset #68
+		// Java source line #876 -> byte code offset #70
+		// Java source line #878 -> byte code offset #78
+		// Local variable table:
+		// start length slot name signature
+		// 0 79 0 this LDAPConnection
+		// 26 49 1 semaphoreID int
+		// 59 10 2 localObject Object
+		// Exception table:
+		// from to target type
+		// 27 59 59 finally
+	}
+
+	public void abandon(LDAPSearchResults results) throws LDAPException {
+		abandon(results, this.defSearchCons);
+	}
+
+	public void abandon(LDAPSearchResults results, LDAPConstraints cons) throws LDAPException {
+		results.abandon();
+	}
+
+	public void abandon(int id) throws LDAPException {
+		abandon(id, this.defSearchCons);
+	}
+
+	public void abandon(int id, LDAPConstraints cons) throws LDAPException {
+		try {
+			MessageAgent agent = this.conn.getMessageAgent(id);
+
+			Debug.trace("APIRequests", this.name + "abandon(" + id + ")");
+
+			agent.abandon(id, cons);
+			return;
+		} catch (NoSuchFieldException ex) {
+			Debug.trace("APIRequests", this.name + "abandon(" + id + "), agent not found");
+		}
+	}
+
+	public void abandon(LDAPMessageQueue queue) throws LDAPException {
+		abandon(queue, this.defSearchCons);
+	}
+
+	public void abandon(LDAPMessageQueue queue, LDAPConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "abandon(queue)");
+		if (queue != null) {
+			MessageAgent agent;
+
+			if ((queue instanceof LDAPSearchQueue)) {
+				agent = queue.getMessageAgent();
+			} else {
+				agent = queue.getMessageAgent();
+			}
+			int[] msgIds = agent.getMessageIDs();
+			for (int i = 0; i < msgIds.length; i++) {
+				agent.abandon(msgIds[i], cons);
+			}
+		}
+	}
+
+	public void add(LDAPEntry entry) throws LDAPException {
+		add(entry, this.defSearchCons);
+	}
+
+	public void add(LDAPEntry entry, LDAPConstraints cons) throws LDAPException {
+		LDAPResponseQueue queue = add(entry, null, cons);
+
+		LDAPResponse addResponse = (LDAPResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = addResponse.getControls();
+		}
+		chkResultCode(queue, cons, addResponse);
+	}
+
+	public LDAPResponseQueue add(LDAPEntry entry, LDAPResponseQueue queue) throws LDAPException {
+		return add(entry, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue add(LDAPEntry entry, LDAPResponseQueue queue, LDAPConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "add()");
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		if (entry == null) {
+			throw new IllegalArgumentException("The LDAPEntry parameter cannot be null");
+		}
+		if (entry.getDN() == null) {
+			throw new IllegalArgumentException("The DN value must be present in the LDAPEntry object");
+		}
+		LDAPMessage msg = new LDAPAddRequest(entry, cons.getControls());
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public void bind(String dn, String passwd) throws LDAPException {
+		bind(3, dn, passwd, this.defSearchCons);
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public void bind(int version, String dn, String passwd) throws LDAPException {
+		bind(version, dn, passwd, this.defSearchCons);
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public void bind(String dn, String passwd, LDAPConstraints cons) throws LDAPException {
+		bind(3, dn, passwd, cons);
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public void bind(int version, String dn, String passwd, LDAPConstraints cons) throws LDAPException {
+		byte[] pw = (byte[]) null;
+		if (passwd != null) {
+			try {
+				pw = passwd.getBytes("UTF8");
+				passwd = null;
+			} catch (UnsupportedEncodingException ex) {
+				passwd = null;
+				throw new RuntimeException(ex.toString());
+			}
+		}
+		bind(version, dn, pw, cons);
+	}
+
+	public void bind(int version, String dn, byte[] passwd) throws LDAPException {
+		bind(version, dn, passwd, this.defSearchCons);
+	}
+
+	public void bind(int version, String dn, byte[] passwd, LDAPConstraints cons) throws LDAPException {
+		LDAPResponseQueue queue = bind(version, dn, passwd, null, cons);
+		LDAPResponse res = (LDAPResponse) queue.getResponse();
+		if (res != null) {
+			synchronized (this.responseCtlSemaphore) {
+				this.responseCtls = res.getControls();
+			}
+			chkResultCode(queue, cons, res);
+		}
+	}
+
+	public LDAPResponseQueue bind(int version, String dn, byte[] passwd, LDAPResponseQueue queue) throws LDAPException {
+		return bind(version, dn, passwd, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue bind(int version, String dn, byte[] passwd, LDAPResponseQueue queue, LDAPConstraints cons)
+			throws LDAPException { 
+		Debug.trace("APIRequests", this.name + "bind(\"" + dn + "\")");
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		if (dn == null) {
+			dn = "";
+		} else {
+			dn = dn.trim();
+		}
+//		if (passwd == null) {
+//			passwd = new byte[0];
+//		}
+		boolean anonymous = false;
+		if (passwd == null || passwd.length == 0) {
+//			anonymous = true;
+//			dn = "";
+			throw new LDAPException("EMPTY_PASSWORD", LDAPException.INVALID_CREDENTIALS, "dn="+dn+";password is empty.");
+//			passwd = null;
+		}
+		LDAPMessage msg = new LDAPBindRequest(version, dn, passwd, cons.getControls());
+
+		int msgId = msg.getMessageID();
+		BindProperties bindProps = new BindProperties(version, dn, "simple", anonymous, null, null);
+		if (!this.conn.isConnected()) {
+			if (this.conn.getHost() != null) {
+				this.conn.connect(this.conn.getHost(), this.conn.getPort());
+			} else {
+				throw new LDAPException("CONNECTION_IMPOSSIBLE", 91, null);
+			}
+		}
+		this.conn.acquireWriteSemaphore(msgId);
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, bindProps);
+	}
+
+	public void bind(String dn, String authzId, Map props, Object cbh) throws LDAPException {
+		bind(dn, authzId, props, cbh, this.defSearchCons);
+	}
+
+	public void bind(String dn, String authzId, Map props, Object cbh, LDAPConstraints cons) throws LDAPException {
+		throw new LDAPLocalException("NOT_IMPLEMENTED", new Object[] { "LDAPConnection.bind(with mechanisms)" }, 92);
+	}
+
+	public void bind(String dn, String authzId, String[] mechanisms, Map props, Object cbh) throws LDAPException {
+		bind(dn, authzId, mechanisms, props, cbh, this.defSearchCons);
+	}
+
+	public void bind(String dn, String authzId, String[] mechanisms, Map props, Object cbh, LDAPConstraints cons)
+			throws LDAPException {
+		Debug.trace("APIRequests", this.name + "saslBind(" + dn + ")");
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		if (dn == null) {
+			dn = "";
+		}
+		if (authzId == null) {
+			authzId = "";
+		}
+		try {
+			SaslClient saslClient = Sasl.createSaslClient(mechanisms, authzId, "ldap", getHost(), props,
+					(CallbackHandler) cbh);
+			if (saslClient == null) {
+				throw new LDAPException("Unsupported SASL mechanism(s) and/or properties", 7, null);
+			}
+			Debug.trace("SaslBind", this.name + "saslClient created, mechanism " + saslClient.getMechanismName());
+
+			byte[] clientResponse = (byte[]) null;
+			boolean anonymous = false;
+			BindProperties bindProps = new BindProperties(3, null, "sasl", anonymous, null, null);
+
+			int id = this.conn.acquireWriteSemaphore();
+			this.conn.setBindSemId(id);
+			if (saslClient.hasInitialResponse()) {
+				clientResponse = saslClient.evaluateChallenge(new byte[0]);
+			}
+			while (!saslClient.isComplete()) {
+				try {
+					byte[] replyBuf = LDAPTransport(clientResponse, saslClient.getMechanismName(), bindProps);
+					if (replyBuf != null) {
+						Debug.trace("SaslBind", this.name + "saslClient response " + replyBuf.length + " bytes");
+
+						clientResponse = saslClient.evaluateChallenge(replyBuf);
+					} else {
+						Debug.trace("SaslBind", this.name + "saslClient response empty");
+
+						clientResponse = saslClient.evaluateChallenge(new byte[0]);
+					}
+				} catch (SaslException e) {
+					saslClient.dispose();
+					throw new LDAPException("Unexpected SASL error.", 80, null, e);
+				} catch (LDAPException lde) {
+					saslClient.dispose();
+					throw lde;
+				}
+			}
+			Debug.trace("SaslBind", this.name + "saslBind Complete");
+		} catch (SaslException eSasl) {
+			throw new LDAPException("SASL Bind Error.", 80, null, eSasl.getCause());
+		}
+	}
+
+	private byte[] LDAPTransport(byte[] toWrite, String mechanism, BindProperties bindProps) throws LDAPException {
+		LDAPConstraints cons = this.defSearchCons;
+		LDAPMessage msg = new LDAPMessage(0, new RfcBindRequest(3, "", mechanism, toWrite), cons.getControls());
+
+		LDAPResponseQueue queue = sendRequestToServer(msg, cons.getTimeLimit(), null, bindProps);
+		LDAPResponse ldapResponse = (LDAPResponse) queue.getResponse();
+		RfcBindResponse bindResponse = (RfcBindResponse) ldapResponse.getASN1Object().get(1);
+		ASN1OctetString serverCreds = bindResponse.getServerSaslCreds();
+		int resultCode = ldapResponse.getResultCode();
+
+		byte[] replyBuf = (byte[]) null;
+		if ((resultCode == 14) || (resultCode == 0)) {
+			if (serverCreds != null) {
+				replyBuf = serverCreds.byteValue();
+			}
+		} else {
+			ldapResponse.chkResultCode();
+			throw new LDAPException("SASL Bind Error.", resultCode, null);
+		}
+		return replyBuf;
+	}
+
+	public boolean compare(String dn, LDAPAttribute attr) throws LDAPException {
+		return compare(dn, attr, this.defSearchCons);
+	}
+
+	public boolean compare(String dn, LDAPAttribute attr, LDAPConstraints cons) throws LDAPException {
+		boolean ret = false;
+
+		Debug.trace("APIRequests", this.name + "compare(" + dn + ") if value");
+
+		LDAPResponseQueue queue = compare(dn, attr, null, cons);
+
+		LDAPResponse res = (LDAPResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = res.getControls();
+		}
+		if (res.getResultCode() == 6) {
+			ret = true;
+		} else if (res.getResultCode() == 5) {
+			ret = false;
+		} else {
+			chkResultCode(queue, cons, res);
+		}
+		return ret;
+	}
+
+	public LDAPResponseQueue compare(String dn, LDAPAttribute attr, LDAPResponseQueue queue) throws LDAPException {
+		return compare(dn, attr, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue compare(String dn, LDAPAttribute attr, LDAPResponseQueue queue, LDAPConstraints cons)
+			throws LDAPException {
+		Debug.trace("APIRequests", this.name + "compare(" + dn + ") compare value");
+		if (attr.size() != 1) {
+			throw new IllegalArgumentException("compare: Exactly one value must be present in the LDAPAttribute");
+		}
+		if (dn == null) {
+			throw new IllegalArgumentException("compare: DN cannot be null");
+		}
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = new LDAPCompareRequest(dn, attr.getName(), attr.getByteValue(), cons.getControls());
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	public void connect(String host, int port) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "connect(" + host + ", " + port + ")");
+
+		StringTokenizer hostList = new StringTokenizer(host, " ");
+		String address = null;
+		while (hostList.hasMoreTokens()) {
+			try {
+				int specifiedPort = port;
+				address = hostList.nextToken();
+				int colonIndex = address.indexOf(':');
+				if ((colonIndex != -1) && (colonIndex + 1 != address.length())) {
+					try {
+						specifiedPort = Integer.parseInt(address.substring(colonIndex + 1));
+						address = address.substring(0, colonIndex);
+					} catch (Exception e) {
+						throw new IllegalArgumentException("INVALID_ADDRESS");
+					}
+				}
+				this.conn = this.conn.destroyClone(true);
+				this.conn.connect(address, specifiedPort);
+			} catch (LDAPException LE) {
+				if (!hostList.hasMoreTokens()) {
+					throw LE;
+				}
+			}
+		}
+	}
+
+	public void delete(String dn) throws LDAPException {
+		delete(dn, this.defSearchCons);
+	}
+
+	public void delete(String dn, LDAPConstraints cons) throws LDAPException {
+		LDAPResponseQueue queue = delete(dn, null, cons);
+
+		LDAPResponse deleteResponse = (LDAPResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = deleteResponse.getControls();
+		}
+		chkResultCode(queue, cons, deleteResponse);
+	}
+
+	public LDAPResponseQueue delete(String dn, LDAPResponseQueue queue) throws LDAPException {
+		return delete(dn, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue delete(String dn, LDAPResponseQueue queue, LDAPConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "delete(" + dn + ")");
+		if (dn == null) {
+			throw new IllegalArgumentException("DN_PARAM_ERROR");
+		}
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = new LDAPDeleteRequest(dn, cons.getControls());
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	public void disconnect() throws LDAPException {
+		disconnect(this.defSearchCons, true);
+	}
+
+	public void disconnect(LDAPConstraints cons) throws LDAPException {
+		disconnect(cons, true);
+	}
+
+	private void disconnect(LDAPConstraints cons, boolean how) throws LDAPException {
+		Debug.trace("APIRequests", this.name + (how ? "disconnect()" : "finalize()"));
+
+		this.conn = this.conn.destroyClone(how);
+	}
+
+	public LDAPExtendedResponse extendedOperation(LDAPExtendedOperation op) throws LDAPException {
+		return extendedOperation(op, this.defSearchCons);
+	}
+
+	public LDAPExtendedResponse extendedOperation(LDAPExtendedOperation op, LDAPConstraints cons) throws LDAPException {
+		LDAPResponseQueue queue = extendedOperation(op, cons, null);
+		LDAPExtendedResponse response = (LDAPExtendedResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = response.getControls();
+		}
+		chkResultCode(queue, cons, response);
+		return response;
+	}
+
+	public LDAPResponseQueue extendedOperation(LDAPExtendedOperation op, LDAPResponseQueue queue) throws LDAPException {
+		return extendedOperation(op, this.defSearchCons, queue);
+	}
+
+	public LDAPResponseQueue extendedOperation(LDAPExtendedOperation op, LDAPConstraints cons, LDAPResponseQueue queue)
+			throws LDAPException {
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = makeExtendedOperation(op, cons);
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	protected LDAPMessage makeExtendedOperation(LDAPExtendedOperation op, LDAPConstraints cons) throws LDAPException {
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		if (op.getID() == null) {
+			throw new IllegalArgumentException("OP_PARAM_ERROR");
+		}
+		return new LDAPExtendedRequest(op, cons.getControls());
+	}
+
+	public LDAPControl[] getResponseControls() {
+		if (this.responseCtls == null) {
+			Debug.trace("APIRequests", this.name + "getResponseControls() returns null");
+
+			return null;
+		}
+		Debug.trace("APIRequests", this.name + "getResponseControls()");
+
+		LDAPControl[] clonedControl = new LDAPControl[this.responseCtls.length];
+		synchronized (this.responseCtlSemaphore) {
+			for (int i = 0; i < this.responseCtls.length; i++) {
+				clonedControl[i] = ((LDAPControl) this.responseCtls[i].clone());
+			}
+		}
+		return clonedControl;
+	}
+
+	public void modify(String dn, LDAPModification mod) throws LDAPException {
+		modify(dn, mod, this.defSearchCons);
+	}
+
+	public void modify(String dn, LDAPModification mod, LDAPConstraints cons) throws LDAPException {
+		LDAPModification[] mods = new LDAPModification[1];
+		mods[0] = mod;
+		modify(dn, mods, cons);
+	}
+
+	public void modify(String dn, LDAPModification[] mods) throws LDAPException {
+		modify(dn, mods, this.defSearchCons);
+	}
+
+	public void modify(String dn, LDAPModification[] mods, LDAPConstraints cons) throws LDAPException {
+		LDAPResponseQueue queue = modify(dn, mods, null, cons);
+
+		LDAPResponse modifyResponse = (LDAPResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = modifyResponse.getControls();
+		}
+		chkResultCode(queue, cons, modifyResponse);
+	}
+
+	public LDAPResponseQueue modify(String dn, LDAPModification mod, LDAPResponseQueue queue) throws LDAPException {
+		return modify(dn, mod, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue modify(String dn, LDAPModification mod, LDAPResponseQueue queue, LDAPConstraints cons)
+			throws LDAPException {
+		LDAPModification[] mods = new LDAPModification[1];
+		mods[0] = mod;
+		return modify(dn, mods, queue, cons);
+	}
+
+	public LDAPResponseQueue modify(String dn, LDAPModification[] mods, LDAPResponseQueue queue) throws LDAPException {
+		return modify(dn, mods, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue modify(String dn, LDAPModification[] mods, LDAPResponseQueue queue, LDAPConstraints cons)
+			throws LDAPException {
+		Debug.trace("APIRequests", this.name + "modify(" + dn + "), " + mods.length + " modifications");
+		if (dn == null) {
+			throw new IllegalArgumentException("DN_PARAM_ERROR");
+		}
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = new LDAPModifyRequest(dn, mods, cons.getControls());
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	public LDAPEntry read(String dn) throws LDAPException {
+		return read(dn, this.defSearchCons);
+	}
+
+	public LDAPEntry read(String dn, LDAPSearchConstraints cons) throws LDAPException {
+		return read(dn, null, cons);
+	}
+
+	public LDAPEntry read(String dn, String[] attrs) throws LDAPException {
+		return read(dn, attrs, this.defSearchCons);
+	}
+
+	public LDAPEntry read(String dn, String[] attrs, LDAPSearchConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "read(" + dn + ")");
+
+		LDAPSearchResults sr = search(dn, 0, null, attrs, false, cons);
+
+		LDAPEntry ret = null;
+		if (sr.hasMore()) {
+			ret = sr.next();
+			if (sr.hasMore()) {
+				throw new LDAPLocalException("READ_MULTIPLE", 101);
+			}
+		}
+		return ret;
+	}
+
+	public static LDAPEntry read(LDAPUrl toGet) throws LDAPException {
+		Debug.trace("APIRequests", "read(" + toGet.toString() + ")");
+
+		LDAPConnection lconn = new LDAPConnection();
+		lconn.connect(toGet.getHost(), toGet.getPort());
+		LDAPEntry toReturn = lconn.read(toGet.getDN(), toGet.getAttributeArray());
+
+		Debug.trace("APIRequests", "read: disconnect()");
+
+		lconn.disconnect();
+		return toReturn;
+	}
+
+	public static LDAPEntry read(LDAPUrl toGet, LDAPSearchConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", "read(" + toGet.toString() + ")");
+
+		LDAPConnection lconn = new LDAPConnection();
+		lconn.connect(toGet.getHost(), toGet.getPort());
+		LDAPEntry toReturn = lconn.read(toGet.getDN(), toGet.getAttributeArray(), cons);
+
+		Debug.trace("APIRequests", "read: disconnect()");
+
+		lconn.disconnect();
+		return toReturn;
+	}
+
+	public void rename(String dn, String newRdn, boolean deleteOldRdn) throws LDAPException {
+		rename(dn, newRdn, deleteOldRdn, this.defSearchCons);
+	}
+
+	public void rename(String dn, String newRdn, boolean deleteOldRdn, LDAPConstraints cons) throws LDAPException {
+		rename(dn, newRdn, null, deleteOldRdn, cons);
+	}
+
+	public void rename(String dn, String newRdn, String newParentdn, boolean deleteOldRdn) throws LDAPException {
+		rename(dn, newRdn, newParentdn, deleteOldRdn, this.defSearchCons);
+	}
+
+	public void rename(String dn, String newRdn, String newParentdn, boolean deleteOldRdn, LDAPConstraints cons)
+			throws LDAPException {
+		LDAPResponseQueue queue = rename(dn, newRdn, newParentdn, deleteOldRdn, null, cons);
+
+		LDAPResponse renameResponse = (LDAPResponse) queue.getResponse();
+		synchronized (this.responseCtlSemaphore) {
+			this.responseCtls = renameResponse.getControls();
+		}
+		chkResultCode(queue, cons, renameResponse);
+	}
+
+	public LDAPResponseQueue rename(String dn, String newRdn, boolean deleteOldRdn, LDAPResponseQueue queue)
+			throws LDAPException {
+		return rename(dn, newRdn, deleteOldRdn, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue rename(String dn, String newRdn, boolean deleteOldRdn, LDAPResponseQueue queue,
+			LDAPConstraints cons) throws LDAPException {
+		return rename(dn, newRdn, null, deleteOldRdn, queue, cons);
+	}
+
+	public LDAPResponseQueue rename(String dn, String newRdn, String newParentdn, boolean deleteOldRdn,
+			LDAPResponseQueue queue) throws LDAPException {
+		Debug.trace("APIRequests", this.name + "rename(" + dn + "," + newRdn + "," + newParentdn + ")");
+
+		return rename(dn, newRdn, newParentdn, deleteOldRdn, queue, this.defSearchCons);
+	}
+
+	public LDAPResponseQueue rename(String dn, String newRdn, String newParentdn, boolean deleteOldRdn,
+			LDAPResponseQueue queue, LDAPConstraints cons) throws LDAPException {
+		if ((dn == null) || (newRdn == null)) {
+			throw new IllegalArgumentException("RDN_PARAM_ERROR");
+		}
+		Debug.trace("APIRequests", this.name + "rename(" + dn + "," + newRdn + "," + newParentdn + ")");
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = new LDAPModifyDNRequest(dn, newRdn, newParentdn, deleteOldRdn, cons.getControls());
+
+		return sendRequestToServer(msg, cons.getTimeLimit(), queue, null);
+	}
+
+	public LDAPSearchResults search(String base, int scope, String filter, String[] attrs, boolean typesOnly)
+			throws LDAPException {
+		return search(base, scope, filter, attrs, typesOnly, this.defSearchCons);
+	}
+
+	public LDAPSearchResults search(String base, int scope, String filter, String[] attrs, boolean typesOnly,
+			LDAPSearchConstraints cons) throws LDAPException {
+		LDAPSearchQueue queue = search(base, scope, filter, attrs, typesOnly, null, cons);
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		return new LDAPSearchResults(this, queue, cons);
+	}
+
+	public LDAPSearchQueue search(String base, int scope, String filter, String[] attrs, boolean typesOnly,
+			LDAPSearchQueue queue) throws LDAPException {
+		return search(base, scope, filter, attrs, typesOnly, queue, this.defSearchCons);
+	}
+
+	public LDAPSearchQueue search(String base, int scope, String filter, String[] attrs, boolean typesOnly,
+			LDAPSearchQueue queue, LDAPSearchConstraints cons) throws LDAPException {
+		if (filter == null) {
+			filter = "objectclass=*";
+		}
+		Debug.trace("APIRequests", this.name + "search(\"" + base + "\"," + scope + ",\"" + filter + "\")");
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessage msg = new LDAPSearchRequest(base, scope, filter, attrs, cons.getDereference(), cons.getMaxResults(),
+				cons.getServerTimeLimit(), typesOnly, cons.getControls());
+
+		LDAPSearchQueue myqueue = queue;
+		MessageAgent agent;
+		if (myqueue == null) {
+			agent = new MessageAgent();
+			myqueue = new LDAPSearchQueue(agent);
+		} else {
+			agent = queue.getMessageAgent();
+		}
+		try {
+			agent.sendMessage(this.conn, msg, cons.getTimeLimit(), myqueue, null);
+		} catch (LDAPException lex) {
+			throw lex;
+		}
+		return myqueue;
+	}
+
+	public static LDAPSearchResults search(LDAPUrl toGet) throws LDAPException {
+		return search(toGet, null);
+	}
+
+	public static LDAPSearchResults search(LDAPUrl toGet, LDAPSearchConstraints cons) throws LDAPException {
+		Debug.trace("APIRequests", "LDAPConnection.search(" + toGet.toString() + ")");
+
+		LDAPConnection lconn = new LDAPConnection();
+		lconn.connect(toGet.getHost(), toGet.getPort());
+		if (cons == null) {
+			cons = lconn.getSearchConstraints();
+		} else {
+			cons = (LDAPSearchConstraints) cons.clone();
+		}
+		cons.setBatchSize(0);
+		LDAPSearchResults toReturn = lconn.search(toGet.getDN(), toGet.getScope(), toGet.getFilter(),
+				toGet.getAttributeArray(), false, cons);
+		lconn.disconnect();
+		return toReturn;
+	}
+
+	public LDAPMessageQueue sendRequest(LDAPMessage request, LDAPMessageQueue queue) throws LDAPException {
+		return sendRequest(request, queue, null);
+	}
+
+	public LDAPMessageQueue sendRequest(LDAPMessage request, LDAPMessageQueue queue, LDAPConstraints cons)
+			throws LDAPException {
+		Debug.trace("APIRequests", this.name + "sendRequest(" + request.toString() + ")");
+		if (!request.isRequest()) {
+			throw new RuntimeException("Object is not a request message");
+		}
+		if (cons == null) {
+			cons = this.defSearchCons;
+		}
+		LDAPMessageQueue myqueue = queue;
+		MessageAgent agent;
+		if (myqueue == null) {
+			agent = new MessageAgent();
+			if (request.getType() == 3) {
+				myqueue = new LDAPSearchQueue(agent);
+			} else {
+				myqueue = new LDAPResponseQueue(agent);
+			}
+		} else {
+
+			if (request.getType() == 3) {
+				agent = queue.getMessageAgent();
+			} else {
+				agent = queue.getMessageAgent();
+			}
+		}
+		try {
+			agent.sendMessage(this.conn, request, cons.getTimeLimit(), myqueue, null);
+		} catch (LDAPException lex) {
+			throw lex;
+		}
+		return myqueue;
+	}
+
+	private LDAPResponseQueue sendRequestToServer(LDAPMessage msg, int timeout, LDAPResponseQueue queue,
+			BindProperties bindProps) throws LDAPException {
+		MessageAgent agent;
+		if (queue == null) {
+			agent = new MessageAgent();
+			queue = new LDAPResponseQueue(agent);
+		} else {
+			agent = queue.getMessageAgent();
+		}
+		agent.sendMessage(this.conn, msg, timeout, queue, bindProps);
+		return queue;
+	}
+
+	Connection getConnection() {
+		return this.conn;
+	}
+
+	String getConnectionName() {
+		return this.name;
+	}
+
+	private ReferralInfo getReferralConnection(String[] referrals) throws LDAPReferralException {
+		ReferralInfo refInfo = null;
+		Throwable ex = null;
+		LDAPConnection rconn = null;
+		LDAPReferralHandler rh = this.defSearchCons.getReferralHandler();
+		int i = 0;
+		if ((rh == null) || ((rh instanceof LDAPAuthHandler))) {
+			for (i = 0; i < referrals.length; i++) {
+				String dn = null;
+				byte[] pw = (byte[]) null;
+				try {
+					Debug.trace("Referrals", this.name + "getReferralConnection: " + "url=" + referrals[i]);
+
+					rconn = new LDAPConnection(this.conn.getSocketFactory());
+					rconn.setConstraints(this.defSearchCons);
+					LDAPUrl url = new LDAPUrl(referrals[i]);
+					rconn.connect(url.getHost(), url.getPort());
+					if ((rh != null) && ((rh instanceof LDAPAuthHandler))) {
+						LDAPAuthProvider ap = ((LDAPAuthHandler) rh).getAuthProvider(url.getHost(), url.getPort());
+						dn = ap.getDN();
+						pw = ap.getPassword();
+					}
+					rconn.bind(3, dn, pw);
+					ex = null;
+					refInfo = new ReferralInfo(rconn, referrals, url);
+
+					rconn.getConnection().setActiveReferral(refInfo);
+				} catch (Throwable lex) {
+					if (rconn != null) {
+						try {
+							Debug.trace("Referrals", this.name + "getReferralConnection, exception "
+									+ "binding for referral" + lex.toString());
+
+							rconn.disconnect();
+							rconn = null;
+							ex = lex;
+						} catch (LDAPException localLDAPException1) {
+						}
+					}
+				}
+			}
+		} else {
+			try {
+				Debug.trace("Referrals", this.name + "getReferralConnection: " + "Call LDAPBind.bind()");
+
+				rconn = ((LDAPBindHandler) rh).bind(referrals, this);
+				if (rconn == null) {
+					LDAPReferralException rex = new LDAPReferralException("REFERRAL_ERROR");
+					rex.setReferrals(referrals);
+					throw rex;
+				}
+				for (int idx = 0; idx < referrals.length; idx++) {
+					try {
+						LDAPUrl url = new LDAPUrl(referrals[idx]);
+
+						Debug.trace("Referrals",
+								this.name + "getReferralConnection: " + "Compare host port " + url.getHost() + "-"
+										+ rconn.getHost() + " & " + url.getPort() + "-" + rconn.getPort());
+						if ((!url.getHost().equalsIgnoreCase(rconn.getHost())) || (url.getPort() != rconn.getPort())) {
+							continue;
+						}
+						refInfo = new ReferralInfo(rconn, referrals, url);
+					} catch (Exception localException) {
+					}
+				}
+				if (refInfo == null) {
+					Debug.trace("Referrals", this.name + "getReferralConnection: " + "LDAPBind.bind(): "
+							+ " could not match connection with URL" + referrals.toString());
+
+					ex = new LDAPLocalException("REFERRAL_BIND_MATCH", 91);
+				}
+			} catch (Throwable lex) {
+				Debug.trace("Referrals",
+						this.name + "getReferralConnection: " + "Exception from LDAPBind.bind(): " + lex.toString());
+
+				rconn = null;
+				ex = lex;
+			}
+		}
+		if (ex != null) {
+			if ((ex instanceof LDAPReferralException)) {
+				throw ((LDAPReferralException) ex);
+			}
+			LDAPException ldapex;
+
+			if ((ex instanceof LDAPException)) {
+				ldapex = (LDAPException) ex;
+			} else {
+				ldapex = new LDAPLocalException("SERVER_CONNECT_ERROR", new Object[] { this.conn.getHost() }, 91, ex);
+			}
+			LDAPReferralException rex = new LDAPReferralException("REFERRAL_ERROR", ldapex);
+			rex.setReferrals(referrals);
+
+			rex.setFailedReferral(referrals[(referrals.length - 1)]);
+			throw rex;
+		}
+		return refInfo;
+	}
+
+	private void chkResultCode(LDAPMessageQueue queue, LDAPConstraints cons, LDAPResponse response)
+			throws LDAPException {
+		if ((response.getResultCode() == 10) && (cons.getReferralFollowing())) {
+			ArrayList refConn = null;
+			try {
+				chaseReferral(queue, cons, response, response.getReferrals(), 0, false, null);
+			} finally {
+				releaseReferralConnections(refConn);
+			}
+		} else {
+			response.chkResultCode();
+		}
+	}
+
+	ArrayList chaseReferral(LDAPMessageQueue queue, LDAPConstraints cons, LDAPMessage msg, String[] initialReferrals,
+			int hopCount, boolean searchReference, ArrayList connectionList) throws LDAPException {
+		ArrayList connList = connectionList;
+		LDAPConnection rconn = null;
+		ReferralInfo rinfo = null;
+
+		Debug.trace("Referrals", this.name + "Check for referrals, reference = " + searchReference);
+
+		if (connList == null)
+			connList = new ArrayList(cons.getHopLimit());
+		LDAPMessage origMsg;
+		String[] refs = null;
+		 
+		if (initialReferrals != null) {
+			  refs = initialReferrals;
+			origMsg = msg.getRequestingMessage();
+		} else {
+			LDAPResponse resp = (LDAPResponse) queue.getResponse();
+			if (resp.getResultCode() != 10) {
+				resp.chkResultCode();
+				return connList;
+			}
+
+			refs = resp.getReferrals();
+			origMsg = resp.getRequestingMessage();
+		}
+
+		try {
+			if (hopCount++ > cons.getHopLimit()) {
+				throw new LDAPLocalException("Max hops exceeded", 97);
+			}
+
+			rinfo = getReferralConnection(refs);
+			rconn = rinfo.getReferralConnection();
+			LDAPUrl refUrl = rinfo.getReferralUrl();
+			connList.add(rconn);
+
+			Debug.trace("Referrals",
+					this.name + (searchReference ? "Following search reference URL " : "Following referral URL ")
+							+ refUrl.toString());
+
+			LDAPMessage newMsg = rebuildRequest(origMsg, refUrl, searchReference);
+
+			Debug.trace("Referrals", this.name + "following referral for " + refUrl.toString());
+			Debug.trace("Referrals", this.name + "request " + newMsg.toString());
+			try {
+				MessageAgent agent;
+				 
+				if ((queue instanceof LDAPResponseQueue))
+					agent = queue.getMessageAgent();
+				else {
+					agent = queue.getMessageAgent();
+				}
+				agent.sendMessage(rconn.getConnection(), newMsg, this.defSearchCons.getTimeLimit(), queue, null);
+			} catch (InterThreadException ex) {
+				LDAPReferralException rex = new LDAPReferralException("REFERRAL_SEND", 91, null, ex);
+				rex.setReferrals(initialReferrals);
+				ReferralInfo ref = rconn.getConnection().getActiveReferral();
+				rex.setFailedReferral(ref.getReferralUrl().toString());
+				throw rex;
+			}
+
+			if (initialReferrals == null) {
+				connList = chaseReferral(queue, cons, null, null, hopCount, false, connList);
+			} else
+				return connList;
+		} catch (Exception ex) {
+			Debug.trace("Referrals", this.name + "Throw exception " + ex.toString());
+
+			if ((ex instanceof LDAPReferralException)) {
+				throw ((LDAPReferralException) ex);
+			}
+
+			LDAPReferralException rex = new LDAPReferralException("REFERRAL_ERROR", ex);
+			rex.setReferrals(refs);
+			if (rinfo != null)
+				rex.setFailedReferral(rinfo.getReferralUrl().toString());
+			else {
+				rex.setFailedReferral(refs[(refs.length - 1)]);
+			}
+			throw rex;
+		}
+		LDAPUrl refUrl;
+		return connList;
+	}
+
+	private LDAPMessage rebuildRequest(LDAPMessage msg, LDAPUrl url, boolean reference) throws LDAPException {
+		Debug.trace("Referrals", this.name + "rebuildRequest: original request = " + "message(" + msg.getMessageID()
+				+ "), request type " + msg.getType());
+
+		String dn = url.getDN();
+		String filter = null;
+		switch (msg.getType()) {
+		case 3:
+			if (reference) {
+				filter = url.getFilter();
+			}
+			break;
+		case 0:
+		case 6:
+		case 8:
+		case 10:
+		case 12:
+		case 14:
+		case 23:
+			break;
+		case 1:
+		case 2:
+		case 4:
+		case 5:
+		case 7:
+		case 9:
+		case 11:
+		case 13:
+		case 15:
+		case 16:
+		case 17:
+		case 18:
+		case 19:
+		case 20:
+		case 21:
+		case 22:
+		default:
+			throw new LDAPLocalException(
+
+					"IMPROPER_REFERRAL", new Object[] { new Integer(msg.getType()) },
+
+					82);
+		}
+		return msg.clone(dn, filter, reference);
+	}
+
+	void releaseReferralConnections(ArrayList list) {
+		if (list == null) {
+			return;
+		}
+		Debug.trace("Referrals", this.name + "Release referal connections");
+		for (int i = list.size() - 1; i >= 0; i--) {
+			LDAPConnection rconn = null;
+			try {
+				rconn = (LDAPConnection) list.remove(i);
+
+				Debug.trace("Referrals", "\t" + this.name + "Disconnecting " + rconn.getConnectionName());
+
+				rconn.disconnect();
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				Debug.trace("Referrals", "\t" + this.name + "Failed to get conn at index " + i);
+			} catch (LDAPException lex) {
+				Debug.trace("Referrals", "\t" + this.name + "Disconnect failed for " + rconn.getConnectionName());
+			}
+		}
+	}
+
+	public LDAPSchema fetchSchema(String schemaDN) throws LDAPException {
+		LDAPEntry ent = read(schemaDN, LDAPSchema.schemaTypeNames);
+		return new LDAPSchema(ent);
+	}
+
+	public String getSchemaDN() throws LDAPException {
+		return getSchemaDN("");
+	}
+
+	public String getSchemaDN(String dn) throws LDAPException {
+		String[] attrSubSchema = { "subschemaSubentry" };
+
+		LDAPEntry ent = read(dn, attrSubSchema);
+
+		LDAPAttribute attr = ent.getAttribute(attrSubSchema[0]);
+		String[] values = attr.getStringValueArray();
+		if ((values == null) || (values.length < 1)) {
+			throw new LDAPLocalException("NO_SCHEMA", new Object[] { dn }, 94);
+		}
+		if (values.length > 1) {
+			throw new LDAPLocalException("MULTIPLE_SCHEMA", new Object[] { dn }, 19);
+		}
+		return values[0];
+	}
+}
