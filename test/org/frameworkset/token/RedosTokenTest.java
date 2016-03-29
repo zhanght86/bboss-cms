@@ -4,6 +4,7 @@ import org.frameworkset.security.ecc.ECCHelper;
 import org.frameworkset.web.token.DBTokenStore;
 import org.frameworkset.web.token.MemToken;
 import org.frameworkset.web.token.NullValidateApplication;
+import org.frameworkset.web.token.RedisTokenStore;
 import org.frameworkset.web.token.Ticket;
 import org.frameworkset.web.token.TokenStore;
 import org.frameworkset.web.token.ws.CheckTokenService;
@@ -11,13 +12,12 @@ import org.frameworkset.web.token.ws.TicketGetResponse;
 import org.frameworkset.web.token.ws.TokenCheckResponse;
 import org.frameworkset.web.token.ws.TokenService;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 
-public class DBTokenTest {
-	private static DBTokenStore mongodbTokenStore;
+public class RedosTokenTest {
+	private static RedisTokenStore mongodbTokenStore;
 	private String account = "yinbp";
 	private String worknumber = "10006673";
 	private String appid = "test";
@@ -25,10 +25,10 @@ public class DBTokenTest {
 //	 String server = "http://10.0.15.223/SanyToken";
 	String server = "http://pdp.bbossgroups.com";
 	
-	
+	@Test
 	public void init() throws Exception
 	{
-		mongodbTokenStore = new DBTokenStore();
+		mongodbTokenStore = new RedisTokenStore();
 		mongodbTokenStore.setECCCoder(ECCHelper.getECCCoder());
 		mongodbTokenStore.setValidateApplication(new NullValidateApplication());
 		mongodbTokenStore.setTempTokendualtime(TokenStore.DEFAULT_TEMPTOKENLIVETIME);
@@ -86,7 +86,7 @@ public class DBTokenTest {
 	
 	public static void main(String[] args) throws Exception
 	{
-		final DBTokenTest s = new DBTokenTest();
+		final RedosTokenTest s = new RedosTokenTest();
 		s.init();
 		for(int i = 0; i < 10; i ++)
 		{
