@@ -53,7 +53,7 @@
 			String org_level = request.getParameter("org_level");
 			if(org_level == null || org_level.equals(""))
 			{
-				org_level = "1"
+				org_level = "1";
 			}
 			org.setOrg_level(org_level);
 			org.setOrg_xzqm(StringUtil.replaceNull(request.getParameter("org_xzqm")));			
