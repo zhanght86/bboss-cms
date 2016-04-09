@@ -524,18 +524,21 @@ public class OrgAdministratorImpl extends EventHandle implements
 		if (userId == null || userId.trim().length() == 0) {
 			return false;
 		}
-		String sql = "select * from td_sm_orgmanager t " + "where t.user_id='"
-				+ userId + "' ";
-		if (!"".equalsIgnoreCase(orgId.trim())) {
-			sql += " and t.org_id='" + orgId + "'";
-		}
-
-		DBUtil dBUtil = new DBUtil();
+		userId = userId.trim();
+		orgId = orgId.trim();
+		String sql = "select count(*) from td_sm_orgmanager t where t.user_id=?";
+		int size = 0;
 		try {
-			dBUtil.executeSelect(sql);
-			if (dBUtil.size() > 0) {
-				return true;
+			if (!"".equalsIgnoreCase(orgId)) {
+				sql += " and t.org_id=?";
+				size = SQLExecutor.queryObject(int.class, sql, Integer.parseInt(userId),orgId);
 			}
+			else
+			{
+				size = SQLExecutor.queryObject(int.class, sql, Integer.parseInt(userId));
+			}
+
+			return size > 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -545,13 +548,18 @@ public class OrgAdministratorImpl extends EventHandle implements
 
 	public static String getParentOrgLevels(String orgId) throws SQLException
 	{
-		String sql_ = "select org_tree_level from td_sm_organization where org_id = ?";
-		PreparedDBUtil prepareddbutil_ = new PreparedDBUtil();
-		prepareddbutil_.preparedSelect(sql_);
-		prepareddbutil_.setString(1, orgId);
-		prepareddbutil_.executePrepared();
-		String org_tree_level = prepareddbutil_.getString(0,
-				"org_tree_level");
+//		String sql_ = "select org_tree_level from td_sm_organization where org_id = ?";
+//		PreparedDBUtil prepareddbutil_ = new PreparedDBUtil();
+//		prepareddbutil_.preparedSelect(sql_);
+//		prepareddbutil_.setString(1, orgId);
+//		prepareddbutil_.executePrepared();
+		Organization org = OrgCacheManager.getInstance().getOrganization(orgId);
+		if(org == null)
+		{
+			return "";
+		}
+		
+		String org_tree_level = org.getOrgtreelevel();
 		StringBuffer reals = new StringBuffer();
 		String[] levels = org_tree_level.split("\\|");
 		if (levels.length == 2) {
@@ -601,8 +609,8 @@ public class OrgAdministratorImpl extends EventHandle implements
 		// SQLUtil.getInstance("org/frameworkset/insert.xml").getSQL("orgAdministratorImpl_userAdminOrg");
 		try {
 			
-			String sql = " select * from td_sm_orgmanager t "
-					+ " where t.user_id = '" + userId + "' " + " and "
+			String sql = " select count(*) from td_sm_orgmanager t "
+					+ " where t.user_id = ? and "
 					+ "t.org_id in "
 					+ "( select o.org_id from td_sm_organization o "
 					+ " where o.org_tree_level in (" + getParentOrgLevels(orgId) + "))";
@@ -629,7 +637,7 @@ public class OrgAdministratorImpl extends EventHandle implements
 		
 		
 		try {
-			List<String> orgids = SQLExecutor.queryList(String.class, sql, userId);
+			List<String> orgids = SQLExecutor.queryList(String.class, sql, Integer.parseInt(userId));
 			if (orgids.size() > 0) {
 				for (int i = 0; i < orgids.size(); i++) {
 
@@ -734,16 +742,17 @@ public class OrgAdministratorImpl extends EventHandle implements
 	public List getManagerOrgsOfUserByAccount(String userAccount) {
 		List list = new ArrayList();
 		String sql = "select * from td_sm_orgmanager t where t.user_id in"
-				+ "(select o.user_id from td_sm_user o where o.user_name='"
-				+ userAccount + "')";
-		DBUtil dBUtil = new DBUtil();
+				+ "(select o.user_id from td_sm_user o where o.user_name=?)";
 		try {
-			dBUtil.executeSelect(sql);
-			if (dBUtil.size() > 0) {
-				Organization organization = OrgCacheManager.getInstance()
-						.getOrganization(dBUtil.getString(0, "org_id"));
-				if (organization != null) {
-					list.add(organization);
+			List<String> orgids = SQLExecutor.queryList(String.class, sql, userAccount);
+			if (orgids != null && orgids.size() > 0) {
+				for(String orgid:orgids)
+				{
+					Organization organization = OrgCacheManager.getInstance()
+							.getOrganization(orgid);
+					if (organization != null) {
+						list.add(organization);
+					}
 				}
 			}
 		} catch (Exception e) {

@@ -167,7 +167,7 @@ public class RoleSearchList extends DataInfoImpl
             int maxPagesize) 
  {
     	
-        ListInfo listInfo = new ListInfo();
+        ListInfo listInfo = null;
         String roleName = request.getParameter("roleName");
         
         String roleTypeName = request.getParameter("roleTypeName");
@@ -181,7 +181,7 @@ public class RoleSearchList extends DataInfoImpl
 		try
 		{			
 			Map allrolesparams = new HashMap();			
-			StringBuffer hsql = new StringBuffer("select role_id,owner_id from TD_SM_ROLE");
+			StringBuilder hsql = new StringBuilder("select role_id,owner_id from TD_SM_ROLE");
 			
 			if (roleName != null && roleName.length() > 0) 
 			{
@@ -191,7 +191,7 @@ public class RoleSearchList extends DataInfoImpl
 				allrolesparams.put("roleName",roleName);
 			List<HashMap> aroles = executor.queryListBean(HashMap.class, "queryAllRoles", allrolesparams);
 			
-			if(aroles.size() > 0)
+			if(aroles != null && aroles.size() > 0)
 			{
 				Role role = null;
 				List roles = new ArrayList();
@@ -213,39 +213,42 @@ public class RoleSearchList extends DataInfoImpl
 						
 				
 				}
-				allrolesparams.put("roles", roles);
-				if(roleTypeName != null && roleTypeName.length() > 0)
+				if(roles.size() > 0)
 				{
-					allrolesparams.put("roleTypeName",Integer.parseInt(roleTypeName));
-	//				realhsql.append(" and rt.type_id = '" + roleTypeName + "' ");
-				}
-				else
-					allrolesparams.put("roleTypeName",-1);
-				
-				if(roleDesc != null && roleDesc.length() > 0)
-				{
-					allrolesparams.put("roleDesc","%" + roleDesc + "%");
-				}
-				else
-					allrolesparams.put("roleDesc",roleDesc);
-				if(createrName != null && createrName.length() > 0){
+					allrolesparams.put("roles", roles);
+					if(roleTypeName != null && roleTypeName.length() > 0)
+					{
+						allrolesparams.put("roleTypeName",Integer.parseInt(roleTypeName));
+		//				realhsql.append(" and rt.type_id = '" + roleTypeName + "' ");
+					}
+					else
+						allrolesparams.put("roleTypeName",-1);
 					
-					allrolesparams.put("createrName","%" + createrName + "%");
-				}
-				else
-					allrolesparams.put("createrName",createrName);
-				listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<Role>(){
-
-					@Override
-					public void handleRow(Role realrole, Record record)
-							throws Exception {
-						realrole.setRoleId(record.getString("ROLE_ID"));
-						realrole.setRoleName(record.getString("ROLE_NAME"));
-						realrole.setRoleDesc(record.getString("ROLE_DESC"));	
-						realrole.setRoleType(record.getString("type_name"));	
-						realrole.setOwner_id(record.getInt("OWNER_ID"));
+					if(roleDesc != null && roleDesc.length() > 0)
+					{
+						allrolesparams.put("roleDesc","%" + roleDesc + "%");
+					}
+					else
+						allrolesparams.put("roleDesc",roleDesc);
+					if(createrName != null && createrName.length() > 0){
 						
-					}},Role.class, "queryAllPermissionRoles", offset, maxPagesize, allrolesparams);
+						allrolesparams.put("createrName","%" + createrName + "%");
+					}
+					else
+						allrolesparams.put("createrName",createrName);
+					listInfo = executor.queryListInfoBeanByRowHandler(new RowHandler<Role>(){
+	
+						@Override
+						public void handleRow(Role realrole, Record record)
+								throws Exception {
+							realrole.setRoleId(record.getString("ROLE_ID"));
+							realrole.setRoleName(record.getString("ROLE_NAME"));
+							realrole.setRoleDesc(record.getString("ROLE_DESC"));	
+							realrole.setRoleType(record.getString("type_name"));	
+							realrole.setOwner_id(record.getInt("OWNER_ID"));
+							
+						}},Role.class, "queryAllPermissionRoles", offset, maxPagesize, allrolesparams);
+				}
 			}
 			
 			

@@ -3633,6 +3633,10 @@ public class AccessControl implements AccessControlInf{
 		arole.setRoleName(role);
 		return isGrantedRole(arole);
 	}
+	public boolean isOrgmanager()
+	{
+		return this.isGrantedRole(AuthRole.ORGMANAGER);
+	}
 
 	/**
 	 * 获取超级管理员角色名称
@@ -4732,13 +4736,10 @@ passwordUpdateTime
 	public static boolean isOrgManager(String userName) {
 		boolean state = false;
 		DBUtil db = new DBUtil();
-		String sql = "select count(b.org_id) from td_sm_user a,td_sm_orgmanager b "
-				+ "where a.user_id = b.user_id and a.user_name='"
-				+ userName
-				+ "'";
+		String sql = "select count(b.org_id) from td_sm_user a,td_sm_orgmanager b  where a.user_id = b.user_id and a.user_name=?";
 		try {
-			db.executeSelect(sql);
-			if (db.getInt(0, 0) > 0) {
+			int size = SQLExecutor.queryObject(int.class, sql, userName);
+			if (size > 0) {
 				state = true;
 			}
 		} catch (SQLException e) {

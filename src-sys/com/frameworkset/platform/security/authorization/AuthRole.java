@@ -12,6 +12,17 @@ import java.io.Serializable;
  * @author biaoping.yin
  */
 public class AuthRole implements Serializable{
+	public static final String ADMINISTRATOR="administrator";
+	public static final String ORGMANAGER="orgmanager";
+	public static final String ORGMANAGERROLETEMPLATE="orgmanagerroletemplate";
+	public static final String ROLEOFEVERYONE="roleofeveryone";
+	public static final String GUEST="guest";
+	
+	public static final AuthRole ROLE_ADMINISTRATOR=new AuthRole(ADMINISTRATOR);
+	public static final AuthRole ROLE_ORGMANAGER=new AuthRole(ORGMANAGER);
+	public static final AuthRole ROLE_ORGMANAGERROLETEMPLATE=new AuthRole(ORGMANAGERROLETEMPLATE);
+	public static final AuthRole ROLE_ROLEOFEVERYONE=new AuthRole(ROLEOFEVERYONE);
+	public static final AuthRole ROLE_GUEST=new AuthRole(GUEST);
 	/**
 	 * 角色帐号
 	 */
@@ -38,6 +49,15 @@ public class AuthRole implements Serializable{
 	 * 角色类型
 	 */
 	private String roleType = TYPE_ROLE;
+	
+	public AuthRole()
+	{
+		
+	}
+	public AuthRole(String role)
+	{
+		this.roleName = role;
+	}
 	
 	public String toString()
 	{

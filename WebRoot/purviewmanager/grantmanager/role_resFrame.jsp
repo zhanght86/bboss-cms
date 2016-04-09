@@ -78,7 +78,7 @@
 	
 			<tr>
 				<td colspan="2">
-					<tab:tabContainer id="role_resFrame" selectedTabPaneId="role-manage"  skin="sany">
+					<tab:tabContainer id="role_resFrame" selectedTabPaneId="purview-column"  skin="sany">
 					<pg:list requestKey="resTypeList" needClear="false">
 					
 		      			<pg:equal colName="auto" value="true">
@@ -94,18 +94,34 @@
 			      			.append("&isBatch=false");
 		      			//String link = dataSet.getString("resource")+"?roleId="+roleId;
 		      			boolean isCurSystem = resourceInfo.containSystem(curSystem); 
-		      			if(isCurSystem && !(dataSet.getString("id").equals("column") && !accesscontroler.isAdmin()) && resourceInfo.isAuto())
+		      			if(isCurSystem  && resourceInfo.isAuto())
 		      			{
+		      				if(dataSet.getString("id").equals("column") )
+		      				{
+		      					if(accesscontroler.isAdmin() || accesscontroler.isOrgmanager())
+		      					{
 	      				%>
 		      			
 	<!-- ------------------------------------------------------------------------------------------------------------------------------------------>
-						<tab:tabPane id="<%=id%>" tabTitle="<%=name%>" lazeload="true">
-							<tab:iframe id="<%=iframeid%>" src="<%=link.toString()%>" frameborder="0" scrolling="no" width="98%" height="600">
-							</tab:iframe>
-						</tab:tabPane>
+									<tab:tabPane id="<%=id%>" tabTitle="<%=name%>" lazeload="true">
+										<tab:iframe id="<%=iframeid%>" src="<%=link.toString()%>" frameborder="0" scrolling="no" width="98%" height="600">
+										</tab:iframe>
+									</tab:tabPane>
 						<%
-
-							}
+		      					}
+		      				}
+		      				else
+		      				{
+		      					%>
+				      			
+		      					<!-- ------------------------------------------------------------------------------------------------------------------------------------------>
+								<tab:tabPane id="<%=id%>" tabTitle="<%=name%>" lazeload="true">
+									<tab:iframe id="<%=iframeid%>" src="<%=link.toString()%>" frameborder="0" scrolling="no" width="98%" height="600">
+									</tab:iframe>
+								</tab:tabPane>
+								<%
+		      				}
+						}
 						%>
 	<!-------------------------------------------------------------------------------------------------------------------------------->
 					  </pg:equal>					
