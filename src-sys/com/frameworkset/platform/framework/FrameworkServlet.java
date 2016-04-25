@@ -263,7 +263,7 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 		Cookie cookie = null;
 		if (subsystem == null)
 			subsystem = getSubSystem(req, resp,userAccount);
-		String cookiekey = userAccount + "@" + Framework.COOKIE_NAME + "_"
+		String cookiekey = userAccount + "_" + Framework.COOKIE_NAME + "_"
 				+ subsystem;
 		try
 		{
@@ -650,7 +650,7 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 
 		if (setcookie)
 		{
-			Cookie newCookie = new Cookie(control.getUserAccount() + "@"
+			Cookie newCookie = new Cookie(control.getUserAccount() + "_"
 					+ Framework.COOKIE_NAME + "_" + subsystem, temp_path);
 			newCookie.setMaxAge(86400);
 			resp.addCookie(newCookie);
@@ -666,7 +666,7 @@ public class FrameworkServlet extends HttpServlet implements java.io.Serializabl
 			{
 				session.removeAttribute(CURRENTPATH_KEY + "_" + subsystem);
 			}
-			Cookie newCookie = new Cookie(control.getUserAccount() + "@"
+			Cookie newCookie = new Cookie(control.getUserAccount() + "_"
 					+ Framework.COOKIE_NAME + "_" + subsystem, null);
 			newCookie.setMaxAge(1);
 			
