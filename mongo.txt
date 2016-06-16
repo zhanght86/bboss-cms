@@ -44,6 +44,7 @@ logpath = /data/logs/db1.log
 开通防火墙端口：
 -A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27017 -j ACCEPT
 -A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 27018 -j ACCEPT
+
 在主节点将134添加到复制set
 rs.add("10.0.15.134:27017")
 rs.add("10.0.15.134:27018")

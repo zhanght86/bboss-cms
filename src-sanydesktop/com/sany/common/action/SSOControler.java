@@ -472,7 +472,8 @@ public class SSOControler {
 
         }
         model.addAttribute("systemList", syses);
-        return "/login.jsp";
+//        return "/login.jsp";
+        return "path:login";
     }
 
     @AssertTicket

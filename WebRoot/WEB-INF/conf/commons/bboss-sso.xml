@@ -7,6 +7,7 @@
 	<property name="/sso/*.page,/login.page"	
 	path:sso="/sso/login.jsp"
 	path:ssofailed="/sso/ssofailed.jsp"
+	path:login="/login.jsp"
 	f:enableuseraccountsso="false"
 	class="com.sany.common.action.SSOControler" />
 	
