@@ -9,9 +9,8 @@ import java.io.UnsupportedEncodingException;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 
-import com.frameworkset.platform.cms.util.FileUtil;
-import com.frameworkset.platform.cms.util.GetFileNamesException;
 import com.frameworkset.platform.framework.MenuHelper;
+import com.frameworkset.util.FileUtil;
 
 /**
  * <p>
@@ -144,7 +143,7 @@ public class PortalUtil {
 	 * @throws GetFileNamesException
 	 */
 	public static File[] getFileNames(String pathName, final String suffix)
-			throws GetFileNamesException {
+			{
 
 		File file = new File(pathName);
 		File[] files = file.listFiles(new FilenameFilter() {

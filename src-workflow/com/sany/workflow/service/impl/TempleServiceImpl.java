@@ -11,9 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.greatwall.domain.AccessToken;
 import com.sany.mail.util.MailHelper;
 import com.sany.sim.message.MessageService;

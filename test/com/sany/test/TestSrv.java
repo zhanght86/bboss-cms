@@ -26,8 +26,6 @@ import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.frameworkset.util.ClassUtil;
 import org.frameworkset.web.token.TokenStore;
-import org.frameworkset.web.token.ws.CheckTokenService;
-import org.frameworkset.web.token.ws.TokenCheckResponse;
 import org.frameworkset.web.token.ws.TokenService;
 
 import com.caucho.hessian.client.HessianProxyFactory;
@@ -44,6 +42,16 @@ import com.sany.workflow.service.impl.ActivitiServiceImpl;
  * @author gw_yuel
  */
 public class TestSrv {
+	@org.junit.Test
+	public void testff()
+	{
+//		def gcd //predefine closure name
+//		gcd={ m,n-> m%n==0? n: gcd(n,m%n) }
+//		assert gcd( 28, 35 ) == 7
+		
+		System.out.println(28%35);
+		System.out.println(35%28);
+	}
 	@org.junit.Test
 	public void testHttp() throws Exception
 	{

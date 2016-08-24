@@ -1,5 +1,8 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
@@ -8,11 +11,7 @@ import org.frameworkset.event.SimpleEventType;
 import org.frameworkset.util.ParamsHandler;
 
 import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.poolman.SQLExecutor;
 import com.frameworkset.dictionary.DataManagerFactory;
-import com.frameworkset.platform.cms.driver.publish.impl.ScriptletUtil;
-import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
-import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.sysmgrcore.manager.db.GroupCacheManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdminCache;
@@ -250,27 +249,42 @@ public class CacheManager  implements Listener<String>{
 		
 		
 	}
+	private static Method clearCMSSite2ndChannelCache_M;
+	private static Method clearCMSPublishCache_M;
+	static 
+	{
+		try {
+			Class CMSCacheUtil = Class.forName("com.frameworkset.platform.cms.cache.CMSCacheUtil");
+			clearCMSPublishCache_M = CMSCacheUtil.getMethod("clearCMSPublishCache");
+			clearCMSSite2ndChannelCache_M = CMSCacheUtil.getMethod("clearCMSSite2ndChannelCache");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public String clearCMSSite2ndChannelCache()
 	{
-		StringBuilder errorMessage = new StringBuilder();
-		try{
+		 
 			try {
-				SQLExecutor.queryObject(int.class,"select 1 from td_cms_site where 1=0");
-				
-			} catch (Exception e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-				return "清除站点和频道缓存，未安装cms系统";
+				return (String)clearCMSSite2ndChannelCache_M.invoke(null);
+			} catch (IllegalAccessException e) {
+				throw new java.lang.RuntimeException(e);
+			} catch (IllegalArgumentException e) {
+				throw new java.lang.RuntimeException(e);
+			} catch (InvocationTargetException e) {
+				throw new java.lang.RuntimeException(e);
 			}
-			SiteCacheManager.getInstance().reset();
+			 
 			
-		}catch(Exception e){
-			errorMessage .append(StringUtil.formatBRException(e));
-		}
-		if(errorMessage.length() == 0)
-			errorMessage.append("清除站点和频道缓存成功");
-		return errorMessage.toString();		
+		 
+		 
 		
 		
 		
@@ -279,26 +293,15 @@ public class CacheManager  implements Listener<String>{
 	
 	public String clearCMSPublishCache()
 	{
-		StringBuilder errorMessage = new StringBuilder();
 		try {
-			SQLExecutor.queryObject(int.class,"select 1 from td_cms_site where 1=0");
-			
-		} catch (Exception e) {
-			return "清除站点发布缓存，未安装cms系统";
-		}
-		try{
-			CMSUtil.getCMSDriverConfiguration().getPublishEngine().clearTasks();
-		}catch(Exception e){
-			errorMessage .append(StringUtil.formatBRException(e));
-		}
-		try{
-			ScriptletUtil.resetCache();
-		}catch(Exception e){
-			errorMessage .append(StringUtil.formatBRException(e));
-		}
-		if(errorMessage.length() == 0)
-			errorMessage.append("清除站点发布缓存成功");
-		return errorMessage.toString();		
+			return (String)clearCMSPublishCache_M.invoke(null);
+		} catch (IllegalAccessException e) {
+			throw new java.lang.RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new java.lang.RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new java.lang.RuntimeException(e);
+		}	
 		
 		
 		

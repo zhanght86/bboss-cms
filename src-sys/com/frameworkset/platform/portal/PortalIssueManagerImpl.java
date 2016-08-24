@@ -4,7 +4,8 @@ import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.frameworkset.platform.cms.util.FileUtil;
+import com.frameworkset.util.FileUtil;
+ 
 
 /** 
  * <p>类说明:</p>

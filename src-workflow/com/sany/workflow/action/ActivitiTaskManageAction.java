@@ -10,9 +10,9 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.business.entity.TaskInfo;
 import com.sany.workflow.entity.ActivitiNodeInfo;
 import com.sany.workflow.entity.ActivitiVariable;

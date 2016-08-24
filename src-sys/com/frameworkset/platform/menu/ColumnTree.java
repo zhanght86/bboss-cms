@@ -12,7 +12,6 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 
-import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
@@ -28,6 +27,7 @@ import com.frameworkset.platform.sysmgrcore.manager.CSMenuManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenu;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenus;
+import com.frameworkset.util.StringUtil;
 import com.frameworkset.common.tag.contextmenu.Menu;
 import com.frameworkset.common.tag.tree.COMTree;
 import com.frameworkset.common.tag.tree.itf.ITreeNode;
@@ -220,7 +220,7 @@ public class ColumnTree extends COMTree implements Serializable{
         if(father.isRoot())
         {
         	 Map params = new HashMap();
-             params.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/viewMenuInfo.page?resId=module"));
+             params.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/viewMenuInfo.page?resId=module"));
              
         	addNode(father, "module", Framework.getInstance().getDescription(request), "subsystem", true, curLevel, "",
                     (String)null, (String)null, (String)null, params);
@@ -234,7 +234,7 @@ public class ColumnTree extends COMTree implements Serializable{
 	        		SubSystem sys = (SubSystem)subsystems.get(subsystem);
 	        		
 	        		Map paramsSub = new HashMap();
-	        		paramsSub.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/viewMenuInfo.page?resId=" + subsystem));
+	        		paramsSub.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/viewMenuInfo.page?resId=" + subsystem));
 	        		
 	        		addNode(father, subsystem, sys.getName(request), "subsystem", true, curLevel, "",
 	        				(String)null, (String)null, (String)null, paramsSub);
@@ -278,7 +278,7 @@ public class ColumnTree extends COMTree implements Serializable{
                      params.put("columnID",treeid);
                      params.put("resId",rpt.getId());
                      params.put("resName",rpt.getName());
-                     params.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/resReportMenu_tab.jsp"));
+                     params.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/resReportMenu_tab.jsp"));
          		
             		if(super.accessControl.checkPermission(rpt.getId(), "visible", "report_column"))
     				{
@@ -322,7 +322,7 @@ public class ColumnTree extends COMTree implements Serializable{
         				params.put("columnID","cs_column");
         				params.put("menuPath","");
         				
-        				params.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/resCSMenu_tab.jsp"));
+        				params.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/resCSMenu_tab.jsp"));
         				
         				
         				if(super.accessControl.checkPermission(menu.getId(), "visible", "cs_column"))
@@ -352,7 +352,7 @@ public class ColumnTree extends COMTree implements Serializable{
                  params.put("columnID",treeid);
                  params.put("resId",rpt.getId());
                  params.put("resName",rpt.getName());
-                 params.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/resReportMenu_tab.jsp"));
+                 params.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/resReportMenu_tab.jsp"));
      		
         		if(super.accessControl.checkPermission(rpt.getId(), "visible", "report_column"))
 				{
@@ -408,7 +408,7 @@ public class ColumnTree extends COMTree implements Serializable{
         				params.put("columnID","cs_column");
         				params.put("menuPath","");
         				
-        				params.put("nodeLink",CMSUtil.getPath(request.getContextPath() , "/sysmanager/menumanager/resCSMenu_tab.jsp"));
+        				params.put("nodeLink",StringUtil.getRealPath(request.getContextPath() , "/sysmanager/menumanager/resCSMenu_tab.jsp"));
         				if(super.accessControl.checkPermission(menu.getId(), "visible", "cs_column"))
         				{
 	        				addNode(father, menu.getId(), menu.getTitle().trim(), type, true, curLevel, "",

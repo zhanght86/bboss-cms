@@ -8,8 +8,8 @@ import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
 
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 import com.sany.workflow.entity.Template;
 import com.sany.workflow.entity.TempleCondition;
 import com.sany.workflow.service.TempleService;

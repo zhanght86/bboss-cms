@@ -31,7 +31,6 @@ import com.frameworkset.dictionary.Data;
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.Item;
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.util.StringUtil;
 import com.frameworkset.platform.dictionary.input.BaseInputTypeScript;
 import com.frameworkset.platform.dictionary.input.CurrentOrgScript;
 import com.frameworkset.platform.dictionary.input.CurrentTimeScript;
@@ -48,6 +47,7 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.StringUtil;
 
 public class DictManagerImpl extends EventHandle implements DictManager  {
      

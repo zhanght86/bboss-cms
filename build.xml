@@ -35,7 +35,7 @@
 		        Distribution jar package
 		       ==========================
 	-->
-	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-wx,jar-sany-mail,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
+	<target name="distrib" depends="init,jar-parameters-handler,jar-sany-wx,jar-sany-mail,jar-cms,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms,copy-resource,copy-depends-liberary" description="copy jar file to distribution directory">
 		<echo>Construct the distribution package...</echo>
 		
 	</target>
@@ -89,7 +89,7 @@
 						
 					</jar>
 				</target>
-	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-sany-wx,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
+	<target name="distrib-jars" depends="init,jar-parameters-handler,jar-sany-wx,jar-cms,jar-system,jar-sany-datasource,jar-sany-mbp,jar-sources,jar-sany-masterdata,jar-sany-workflow,jar-sany-workflow-bussiness,jar-sany-workflow-demo,jar-sany-ldap,jar-sany-demo,jar-sany-appbom,jar-sany-log,jar-sany-sap,jar-sany-sms" description="copy jar file to distribution directory">
 			<echo>Construct the distribution package...</echo>
 		<antcall target="cleartempfiles"></antcall>
 	</target>
@@ -102,7 +102,7 @@
 	<target name="compile-all" description="compile the compile-all source ">
 		<echo>compile the compile-all source ...</echo>
 		<javac encoding="UTF-8" destdir="classes-all" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
-			<src path="${source}/src-cms" />
+			 
 			<src path="${source}/src-dictionary" />
 			<src path="${source}/src-sys" />
 			<!--<src path="${source}/src-communication" />-->
@@ -120,8 +120,7 @@
 		</javac>
 		<copy todir="classes-all">
 			<fileset dir="${source}/src-common" includes="**/*.xml"/>
-			<fileset dir="${source}/src-cms" includes="**/*.xml"/>
-			<fileset dir="${source}/src-cms" includes="**/*.xlsx"/>
+		 
 			<!--<fileset dir="${source}/src-sys" includes="com/frameworkset/platform/sysmgrcore/manager/db/job.xml"/>-->
 			<fileset dir="${source}/src-sys" includes="**/*.xml"/>
 			<fileset dir="${source}/src-dictionary" includes="**/*.xml"/>
@@ -132,6 +131,32 @@
 		
 		
 	</target>
+	
+	<target name="compile-cms" depends="jar-system" description="compile the compile-cms source ">
+			<echo>compile the compile-cms source ...</echo>
+		<mkdir dir="classes-all"/>	
+		<javac encoding="UTF-8" destdir="classes-all" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
+				<src path="${source}/src-cms" />
+				
+				<!--
+				<src path="${source}/test" />
+				-->
+				<classpath id="cp-cms_baseline">
+
+					<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
+					
+					<fileset dir="${source}/lib-compile" includes="*.jar *.zip" />
+					<fileset dir="${distrib}" includes="*.jar *.zip" />
+				</classpath>
+			</javac>
+			<copy todir="classes-all">
+				 <fileset dir="${source}/src-cms" includes="**/*.xml"/>
+				<fileset dir="${source}/src-cms" includes="**/*.xlsx"/>
+				 
+			</copy>
+			 
+			
+		</target>
 	
 	<target name="compile-sany-desktop" depends="jar-sany-application,jar-system" description="compile the sany source ">
 			<echo>compile the compile-all source ...</echo>
@@ -535,38 +560,7 @@
 	
 	
 	
-	<!--<target name="compile-sany-appmonitor" depends="jar-sany-mail,jar-system" description="compile the sany source ">
-				<echo>compile the compile-all source ...</echo>
-				<javac encoding="UTF-8" destdir="classes-sany" target="1.5" source="1.5" deprecation="true" debug="${debug}" optimize="${optimize}" memorymaximumsize="256M" fork="true" verbose="yes">
-					<src path="${source}/src-appmonitor" />				
-					<classpath id="cp-cms_baseline">
-						<fileset dir="${webroot}/WEB-INF/lib" includes="**/*.jar *.zip" />
-						 
-						<fileset dir="${distrib}" includes="*.jar *.zip" />
-						
-					</classpath>
-				</javac>
-			<copy todir="classes-sany">
-				<fileset dir="${source}/src-appmonitor" includes="**/*.xml"/>
-			</copy>
-		</target>
-		
-		<target name="jar-sany-appmonitor" depends="compile-sany-appmonitor" description="generate the sany-appmonitor-lib library sany-appmonitor.jar">
-				<echo>Generate the jar-sany-appmonitor library sany-appmonitor.jar ...</echo>
-				<jar jarfile="${distrib}/sany-appmonitor.jar" basedir="classes-sany" includes="**/*">
-					<manifest>
-						<attribute name="Implementation-Version" value="${impl.version}" />
-						<attribute name="Specification-Version" value="${revision}" />
-						<attribute name="Implementation-Vendor" value="${impl.vendor}" />
-						<attribute name="Implementation-ProductID" value="${impl.productID}" />
-						<attribute name="Compile-Timestamp" value="${compile.timestamp}" />
-						<attribute name="Compile-User" value="${username}" />
-					</manifest>
-				</jar>
-			 <delete dir="classes-sany"/>
-			 <mkdir dir="classes-sany"/>	
-			
-		</target>-->
+
 		
 		
 		<target name="compile-sany-mail" depends="jar-system" description="compile the sany source ">
@@ -849,7 +843,7 @@
 		 
 		
 	</target>
-	<target name="jar-system" depends="jar-cms" description="generate the system-lib library system.jar">
+	<target name="jar-system" depends="compile-all" description="generate the system-lib library system.jar">
 		<echo>Generate the jar-system library system.jar ...</echo>
 		<jar jarfile="${distrib}/system.jar" basedir="classes-all" includes="**/*">
 			<manifest>
@@ -861,9 +855,11 @@
 				<attribute name="Compile-User" value="${username}" />
 			</manifest>
 		</jar>
+		<delete dir="classes-all"/>
+			
 	</target>
 	
-	<target name="jar-cms" depends="compile-all" description="generate the cms library cms.jar">
+	<target name="jar-cms" depends="compile-cms" description="generate the cms library cms.jar">
 		<echo>Generate the cms library cms.jar ...</echo>
 		<jar jarfile="${distrib}/cms.jar" basedir="classes-all" 
 			includes="org/**/* com/frameworkset/platform/cms/**/* com/frameworkset/common/tag/**/*"
@@ -892,9 +888,8 @@
 			</manifest>
 		</jar>
 		
-		<delete dir="classes-all/com/frameworkset/platform/cms/"/>
-		<delete dir="classes-all/com/frameworkset/common/tag/"/>		
-		<delete dir="classes-all/org/"/>
+			
+		<delete dir="classes-all"/>
 	</target>
 	<target name="compile-mq" depends="jar-cms" description="compile the compile-all source ">
 			<echo>compile the compile-all source ...</echo>

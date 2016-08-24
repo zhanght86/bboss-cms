@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +11,8 @@ import javax.servlet.jsp.PageContext;
 
 import org.apache.log4j.Logger;
 
-import com.frameworkset.platform.cms.util.CMSUtil;
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
@@ -22,15 +22,6 @@ import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.framework.SubSystem;
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.entity.CSMenuModel;
-import com.frameworkset.platform.sysmgrcore.manager.CSMenuManager;
-import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl;
-import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenu;
-import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenus;
-import com.frameworkset.common.tag.contextmenu.Menu;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * <p>
