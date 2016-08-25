@@ -34,10 +34,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/batik-dom.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/batik-svggen.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/batik-util.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-event.jar" sourcepath="/bbossevent"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mvc.jar" sourcepath="/bboss-mvc"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-schedule.jar" sourcepath="/bboss-schedule"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-soa.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/casclient.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cas-client-core-3.1.3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/cfgatewayadapter.jar"/>
@@ -52,14 +48,11 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/concurrent-1.3.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/connector.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/crypt.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ditchnet-tabs-taglib.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/dom4j.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ehcache-0.7.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ewebedit.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/EXML.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/FontBox-0.1.0-dev.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset-pool.jar" sourcepath="/bboss-persistent"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset-util.jar" sourcepath="/bboss-util"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-activation_1.1_spec-1.0.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-annotation_1.0_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar"/>
@@ -124,12 +117,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/proxool-cglib.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sapjco3.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-velocity.jar" sourcepath="/bboss-velocity"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-wordpdf.jar" sourcepath="/bboss-plugin-wordpdf"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bsh-2.0b4.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-1.8.6.jar" sourcepath="F:/开源项目/quartz/quartz-1.8.6/quartz-1.8.6/quartz"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-hessian.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jodconverter-core.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jcl-over-slf4j-1.7.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/slf4j-api-1.7.2.jar"/>
@@ -139,7 +128,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-converter-5.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-layout-5.12.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-bpmn-model-5.12.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/activiti-engine-5.12.jar" sourcepath="WebRoot/WEB-INF/lib/activiti-engine-5.12-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/geronimo-jaxws_2.2_spec-1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.ws.rs-api-2.0-m10.jar"/>
@@ -147,8 +135,6 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/stax2-api-3.1.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/woodstox-core-asl-4.2.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/wsdl4j-1.6.3.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/frameworkset.jar" sourcepath="/bboss-tablib"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/htmlparser-1.5-20050925.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-5.5.1.jar" sourcepath="F:/开源项目/报表/jasperreports-5.5.1-project/jasperreports-5.5.1"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-applet-5.5.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jasperreports-fonts-5.5.1.jar"/>
@@ -170,14 +156,9 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-ooxml-schemas-3.10-FINAL-20140208.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/poi-scratchpad-3.10-FINAL-20140208.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security.jar" sourcepath="/bboss-security"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/sany-message.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-net-3.3.jar" sourcepath="WebRoot/WEB-INF/lib/commons-net-3.3-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf.jar" sourcepath="WebRoot/WEB-INF/lib/bboss-security-web-sources.jar"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core.jar" sourcepath="/bboss-core"/>
-	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rpc.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jgroups-3.6.1.Final.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.37-src.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/hessian-4.0.37.jar"/>
@@ -202,13 +183,27 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/pinyin4j-2.5.0.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/kaptcha-2.3.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jackson-all-1.9.10.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jasper.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/el-api.jar"/>
-	<classpathentry kind="var" path="TOMCAT_HOME/lib/annotations-api.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-pool2-2.4.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jedis-3.0.0-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jedis-3.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-core-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-data-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-event-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-hession-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-htmlparser-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-jodconverter-core-4.10.9.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-mvc-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-persistent-5.0.1.jar" sourcepath="/bboss-persistent"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-plugin-wordpdf-4.10.9.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-rpc-4.10.9.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-schedule-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-security-web-inf-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-soa-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-tabpane-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-taglib-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-util-5.0.1.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/bboss-velocity-5.0.1.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

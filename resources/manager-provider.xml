@@ -100,7 +100,7 @@
 	<managerimport file="com/frameworkset/platform/spi/txsyn/manager-txsynchronize.xml" />	
 	<managerimport file="com/frameworkset/platform/spi/interceptor/manager-interceptor.xml" />
 	 -->	
-	<managerimport file="manager-sys.xml" />
+	
 	
 	
 	<!-- 导入其他模块的的业务组件配置 -->

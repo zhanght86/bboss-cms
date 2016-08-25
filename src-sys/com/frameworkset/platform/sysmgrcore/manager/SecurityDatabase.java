@@ -17,10 +17,8 @@
  */
 package com.frameworkset.platform.sysmgrcore.manager;
 
-//import weblogic.jndi.Environment;
-//import com.ibm.websphere.naming.JndiHelper;
-//import com.frameworkset.platform.sysmgrcore.manager.PermissionManagement;
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseApplicationContext;
+import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.spi.SPIException;
 
 
@@ -31,7 +29,12 @@ import org.frameworkset.spi.SPIException;
  * @version 1.0
  * @modelguid {20A4C33F-4AB6-4B13-8540-9B2D8AE3C554}
  */
-public class SecurityDatabase extends BaseSPIManager {
+public class SecurityDatabase  {
+	private static BaseApplicationContext ioc = null;
+	static 
+	{
+		ioc = DefaultApplicationContext.getApplicationContext("manager-sys.xml");
+	}
 
     /** @modelguid {18CAAF39-FDE0-416C-93CA-3CF6CB5008A3} */
 
@@ -123,7 +126,7 @@ public class SecurityDatabase extends BaseSPIManager {
      */
     public static UserManager getUserManager() throws SPIException {
 //        UserManager userManager = (UserManager) getProvider(userManagers,SecurityConstants.USER_MANAGEMENT_TYPE);
-        UserManager userManager = (UserManager) getProvider(SecurityConstants.USER_MANAGEMENT_TYPE);
+        UserManager userManager = (UserManager) ioc.getBeanObject(SecurityConstants.USER_MANAGEMENT_TYPE);
         return userManager;
     }
 
@@ -136,7 +139,7 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {CEA3B71E-4A0A-49E0-80FE-7E1F015816A8}
      */
     public static GroupManager getGroupManager() throws SPIException {
-        GroupManager userGroupManager = (GroupManager) getProvider(SecurityConstants.GROUP_MANAGEMENT_TYPE);
+        GroupManager userGroupManager = (GroupManager) ioc.getBeanObject(SecurityConstants.GROUP_MANAGEMENT_TYPE);
         return userGroupManager;
     }
 
@@ -149,7 +152,7 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {2BE258C4-920B-422C-B676-2E83A50E1102}
      */
     public static RoleManager getRoleManager() throws SPIException {
-        RoleManager roleManager = (RoleManager) getProvider(SecurityConstants.ROLE_MANAGEMENT_TYPE);
+        RoleManager roleManager = (RoleManager) ioc.getBeanObject(SecurityConstants.ROLE_MANAGEMENT_TYPE);
         return roleManager;
     }
 
@@ -160,27 +163,27 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {F02D2A0D-B09C-41E0-B3E7-BB304CA14BCE}
      */
     public static ResManager getResourceManager() throws SPIException {
-        ResManager resManager = (ResManager) getProvider(SecurityConstants.ENTRY_MANAGEMENT_TYPE);
+        ResManager resManager = (ResManager) ioc.getBeanObject(SecurityConstants.ENTRY_MANAGEMENT_TYPE);
         return resManager;
     }
 
     public static JobManager getJobManager() throws SPIException {
-        JobManager jobManager = (JobManager) getProvider(SecurityConstants.JOB_MANAGEMENT_TYPE);
+        JobManager jobManager = (JobManager) ioc.getBeanObject(SecurityConstants.JOB_MANAGEMENT_TYPE);
         return jobManager;
     }
     
     public static LogManager getLogManager() throws SPIException {
-        LogManager logManager = (LogManager) getProvider(SecurityConstants.LOG_MANAGEMENT_TYPE);
+        LogManager logManager = (LogManager) ioc.getBeanObject(SecurityConstants.LOG_MANAGEMENT_TYPE);
         return logManager;
     }
     public static OperManager getOperManager() throws SPIException {
-        OperManager operManager = (OperManager) getProvider(SecurityConstants.OPER_MANAGEMENT_TYPE);
+        OperManager operManager = (OperManager) ioc.getBeanObject(SecurityConstants.OPER_MANAGEMENT_TYPE);
         return operManager;
     }
 
     public static OrgManager getOrgManager(String type) throws SPIException {
-        OrgManager orgManager = (OrgManager) getProvider(SecurityConstants.
-                                            ORG_MANAGEMENT_TYPE,type);
+        OrgManager orgManager = (OrgManager) ioc.getBeanObject(SecurityConstants.
+                                            ORG_MANAGEMENT_TYPE);
         return orgManager;
     }
 
@@ -193,8 +196,8 @@ public class SecurityDatabase extends BaseSPIManager {
      */
     public static UserManager getUserManager(String type) throws SPIException {
         //UserManagement um = null;
-        UserManager userManager = (UserManager) getProvider(SecurityConstants.
-                                            USER_MANAGEMENT_TYPE,type);
+        UserManager userManager = (UserManager) ioc.getBeanObject(SecurityConstants.
+                                            USER_MANAGEMENT_TYPE);
         return userManager;
 
     }
@@ -206,8 +209,8 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {CEA3B71E-4A0A-49E0-80FE-7E1F015816A8}
      */
     public static GroupManager getGroupManager(String type) throws SPIException {
-        GroupManager userGroupManager = (GroupManager) getProvider(SecurityConstants.
-                                            GROUP_MANAGEMENT_TYPE,type);
+        GroupManager userGroupManager = (GroupManager)ioc.getBeanObject(SecurityConstants.
+                                            GROUP_MANAGEMENT_TYPE);
 
 
         return userGroupManager;
@@ -220,8 +223,8 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {2BE258C4-920B-422C-B676-2E83A50E1102}
      */
     public static RoleManager getRoleManager(String type) throws SPIException {
-        RoleManager roleManager = (RoleManager) getProvider(SecurityConstants.
-                                            ROLE_MANAGEMENT_TYPE,type);
+        RoleManager roleManager = (RoleManager) ioc.getBeanObject(SecurityConstants.
+                                            ROLE_MANAGEMENT_TYPE);
 
         return roleManager;
     }
@@ -233,36 +236,36 @@ public class SecurityDatabase extends BaseSPIManager {
      * @modelguid {F02D2A0D-B09C-41E0-B3E7-BB304CA14BCE}
      */
     public static ResManager getResourceManager(String type) throws SPIException {
-        ResManager resourceManager = (ResManager) getProvider(SecurityConstants.
-                                            ENTRY_MANAGEMENT_TYPE,type);
+        ResManager resourceManager = (ResManager) ioc.getBeanObject(SecurityConstants.
+                                            ENTRY_MANAGEMENT_TYPE);
 
         return resourceManager;
     }
 
     public static JobManager getJobManager(String type) throws SPIException {
 
-        JobManager jobManager = (JobManager) getProvider(SecurityConstants.
-                                            JOB_MANAGEMENT_TYPE,type);
+        JobManager jobManager = (JobManager) ioc.getBeanObject(SecurityConstants.
+                                            JOB_MANAGEMENT_TYPE);
         return jobManager;
 
     }
     
     public static LogManager getLogManager(String type) throws SPIException {
 
-        LogManager logManager = (LogManager) getProvider(SecurityConstants.
-                                            LOG_MANAGEMENT_TYPE,type);
+        LogManager logManager = (LogManager)ioc.getBeanObject(SecurityConstants.
+                                            LOG_MANAGEMENT_TYPE);
         return logManager;
 
     }
 
     public static OperManager getOperManager(String type) throws SPIException {
-        OperManager operManager = (OperManager) getProvider(SecurityConstants.
-                                            OPER_MANAGEMENT_TYPE,type);
+        OperManager operManager = (OperManager) ioc.getBeanObject(SecurityConstants.
+                                            OPER_MANAGEMENT_TYPE);
         return operManager;
     }
 
     public static OrgManager getOrgManager() throws SPIException {
-        OrgManager orgManager = (OrgManager) getProvider(SecurityConstants.ORG_MANAGEMENT_TYPE);
+        OrgManager orgManager = (OrgManager) ioc.getBeanObject(SecurityConstants.ORG_MANAGEMENT_TYPE);
         return orgManager;
     }
     

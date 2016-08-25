@@ -5,6 +5,7 @@ import org.apache.axis.client.Service;
 import org.apache.axis.handlers.soap.SOAPService;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.type.TypeReference;
+import org.frameworkset.json.JsonTypeReference;
 
 import com.frameworkset.util.StringUtil;
 import com.sany.hrm.modules.webService.dto.MessageDto;
@@ -144,8 +145,8 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = StringUtil.json2Object(returnJson, new TypeReference<MessageDto<T1>>() {
-				});
+		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2Object(returnJson, new JsonTypeReference( new TypeReference<MessageDto<T1>>() {
+				}));
 
 		return returnMessageDto;
 	}
@@ -182,8 +183,8 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = StringUtil.json2Object(returnJson, new TypeReference<MessageDto<T1>>() {
-				});
+		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2Object(returnJson, new JsonTypeReference( new TypeReference<MessageDto<T1>>() {
+				}));
 
 		return returnMessageDto;
 	}
