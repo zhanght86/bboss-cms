@@ -9,3 +9,6 @@
 /readme.txt.bak
 /velocity.log
 /src/
+/.gradle/
+/.settings/
+/.classpath2

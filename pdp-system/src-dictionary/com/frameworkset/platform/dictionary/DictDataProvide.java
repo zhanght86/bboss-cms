@@ -11,7 +11,7 @@ import org.frameworkset.event.EventType;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 
-import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.common.poolman.DBUtil;
