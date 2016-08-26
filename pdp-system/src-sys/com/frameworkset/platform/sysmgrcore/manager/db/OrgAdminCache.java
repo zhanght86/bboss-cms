@@ -10,7 +10,7 @@ import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.spi.BaseApplicationContext;
 
-import EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.manager.OrgAdministrator;

@@ -63,7 +63,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 	 */
 
 	/* 保存模块信息的全局变量 */
-	static Map map = new EDU.oswego.cs.dl.util.concurrent.ConcurrentHashMap();
+	static Map map = new java.util.concurrent.ConcurrentHashMap();
 
 	private static Logger logger = Logger.getLogger(LogManagerImpl.class);
 

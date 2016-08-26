@@ -1,0 +1,57 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    test {
+        java {
+            srcDir 'test'
+           
+        }
+        resources {
+           //srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
+dependencies {
+	
+   compile (
+    		// [group: 'log4j', name: 'log4j', version: '1.2.17', transitive: false],          
+      fileTree(dir: '../lib', include: '**/*.jar'),        
+     [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
+     [group: 'dom4j', name: 'dom4j', version: "1.6.1", transitive: false],
+     [group: 'com.bbossgroups', name: 'bboss-htmlparser', version: "${bboss_version}", transitive: false],
+      [group: 'org.apache.xmlbeans', name: 'xmlbeans', version: "2.6.0", transitive: false],
+      [group: 'org.apache.commons', name: 'commons-email', version: "1.4", transitive: false],
+      [group: 'rsslibj', name: 'rsslibj', version: "1.0RC2", transitive: false],
+       [group: 'pdfbox', name: 'pdfbox', version: "0.7.3", transitive: false],
+      [group: 'org.apache.pdfbox', name: 'pdfbox-app', version: "2.0.2", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-core', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-facet', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-demo', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-queries', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-queryparser', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-sandbox', version: "4.7.0", transitive: false],
+ 	[group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: "4.7.0", transitive: false],
+      [group: 'org.apache.lucene', name: 'lucene-analyzers-smartcn', version: "4.7.0", transitive: false],
+      [group: 'axis', name: 'axis', version: "1.4", transitive: false],
+     [group: 'jdom', name: 'jdom', version: '1.0', transitive: false],
+      [group: 'org.codehaus.swizzle', name: 'swizzle-stream', version: '1.6.2', transitive: false],
+      [group: 'commons-net', name: 'commons-net', version: '3.5', transitive: false],
+                 
+    )
+    compileOnly(
+    		 fileTree(dir: '../lib-compile', include: '**/*.jar'),    
+    )
+}

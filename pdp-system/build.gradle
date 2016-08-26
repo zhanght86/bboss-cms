@@ -14,25 +14,33 @@ sourceSets {
     
     
 }
-//project.tasks.compileJava.dependsOn(project(':activiti-bpmn-model').tasks.install)
+project.tasks.compileJava.dependsOn(project(':pdp-parameters-handler').tasks.install)
 dependencies {
 	
    compile (
+   			fileTree(dir: '../lib', include: '**/*.jar'),
+             
+   			[group: 'com.bbossgroups.pdp', name: 'pdp-parameters-handler', version: "${PROJ_VERSION}", transitive: false],
+            
     		[group: 'log4j', name: 'log4j', version: '1.2.17', transitive: false],   
-     		[group: 'javax.servlet', name: 'javax.servlet-api', version: "3.0.1", transitive: false],
+    		      [group: 'com.bbossgroups', name: 'bboss-core', version: "${bboss_version}", transitive: false],
+        [group: 'com.bbossgroups', name: 'bboss-persistent', version: "${bboss_version}", transitive: false],
+             [group: 'com.bbossgroups', name: 'bboss-event', version: "${bboss_version}", transitive: false],
+          [group: 'com.bbossgroups', name: 'bboss-util', version: "${bboss_version}", transitive: false],
+              
+			[group: 'javax.servlet', name: 'javax.servlet-api', version: "3.0.1", transitive: false],
             [group: 'javax.servlet', name: 'jsp-api', version: '2.0', transitive: false],
-			[group: 'com.bbossgroups', name: 'bboss-util', version: "${bboss_version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-data', version: "${bboss_version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-core', version: "${bboss_version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-persistent', version: "${bboss_version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-event', version: "${bboss_version}", transitive: false],
-              [group: 'com.bbossgroups', name: 'bboss-mvc', version: "${bboss_version}", transitive: false],
+			   [group: 'com.bbossgroups', name: 'bboss-mvc', version: "${bboss_version}", transitive: false],
+     		 [group: 'com.bbossgroups', name: 'bboss-data', version: "${bboss_version}", transitive: false],
+             [group: 'com.bbossgroups', name: 'bboss-schedule', version: "${bboss_version}", transitive: false],
            [group: 'com.bbossgroups', name: 'bboss-velocity', version: "${bboss_version}", transitive: false],
                 [group: 'com.bbossgroups.security', name: 'bboss-security', version: "${bboss_version}", transitive: false],
                 [group: 'com.bbossgroups.security', name: 'bboss-security-web', version: "${bboss_version}", transitive: false],
                 [group: 'com.bbossgroups.security', name: 'bboss-security-web-inf', version: "${bboss_version}", transitive: false],
+                
           [group: 'com.bbossgroups', name: 'bboss-soa', version: "${bboss_version}", transitive: false],
               [group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
+             [group: 'com.bbossgroups.rpc', name: 'bboss-rpc', version: "4.10.9", transitive: false],
              
               [group: 'oro', name: 'oro', version: '2.0.8', transitive: false],
               [group: 'commons-lang', name: 'commons-lang', version: '2.6', transitive: false],
@@ -48,8 +56,35 @@ dependencies {
              [group: 'net.sourceforge.jtds', name: 'jtds', version: '1.3.1', transitive: false],
              [group: 'mysql', name: 'mysql-connector-java', version: '3.1.14', transitive: false],
               [group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.1', transitive: false],
-            [group: 'commons-io', name: 'commons-io', version: '1.3.2', transitive: false],
+            [group: 'commons-io', name: 'commons-io', version: '2.0', transitive: false],
                [group: 'jstl', name: 'jstl', version: '1.2', transitive: false],
+            [group: 'org.apache.poi', name: 'poi', version: '3.10-FINAL', transitive: false],
+            [group: 'org.apache.poi', name: 'poi-excelant', version: '3.10-FINAL', transitive: false],
+            [group: 'org.apache.poi', name: 'poi-ooxml', version: '3.10-FINAL', transitive: false],
+            [group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.10-FINAL', transitive: false],
+             [group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.10-FINAL', transitive: false],
+            [group: 'org.jasig.cas.client', name: 'cas-client-core', version: '3.4.1', transitive: false],
+              [group: 'cas', name: 'casclient', version: '2.1.1', transitive: false],
+           [group: 'org.quartz-scheduler', name: 'quartz', version: '1.8.6', transitive: false],
+           [group: 'bsh', name: 'bsh', version: '2.0b1', transitive: false],
+            [group: 'net.sf.jasperreports', name: 'jasperreports', version: '5.5.1', transitive: false],
+            //[group: 'net.sf.jasperreports', name: 'jasperreports-applet', version: '5.5.1', transitive: false],
+           // [group: 'net.sf.jasperreports', name: 'jasperreports-fonts', version: '5.5.1', transitive: false],
+           //[group: 'net.sf.jasperreports', name: 'jasperreports-javaflow', version: '5.5.1', transitive: false],
+           [group: 'jfree', name: 'jfreechart', version: '1.0.12', transitive: false],
+             [group: 'javax.mail', name: 'mail', version: '1.4', transitive: false],
+            [group: 'org.apache.ant', name: 'ant', version: '1.9.7', transitive: false],
+            [group: 'javax.transaction', name: 'jta', version: '1.1', transitive: false],
+            [group: 'commons-codec', name: 'commons-codec', version: '1.10', transitive: false],
+            [group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1', transitive: false],
+            
+             [group: 'com.bbossgroups.activiti', name: 'activiti-bpmn-converter', version: "${WF_VERSION}", transitive: false],
+            [group: 'com.bbossgroups.activiti', name: 'activiti-bpmn-layout', version: "${WF_VERSION}", transitive: false],
+            [group: 'com.bbossgroups.activiti', name: 'activiti-bpmn-model', version: "${WF_VERSION}", transitive: false],
+            [group: 'com.bbossgroups.activiti', name: 'activiti-engine', version: "${WF_VERSION}", transitive: false],
+              [group: 'com.belerweb', name: 'pinyin4j', version: "2.5.1", transitive: false],
+            [group: 'javax.activation', name: 'activation', version: "1.1", transitive: false],
+     
             
     )
     testCompile(

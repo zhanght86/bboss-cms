@@ -1,3 +1,5 @@
 rootProject.name = 'bboss-cms'
 include 'pdp-wx'
 include 'pdp-system'
+include 'pdp-parameters-handler'
+include 'pdp-cms'

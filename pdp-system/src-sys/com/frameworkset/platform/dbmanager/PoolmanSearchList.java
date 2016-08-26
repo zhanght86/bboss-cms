@@ -13,16 +13,16 @@ public class PoolmanSearchList extends DataInfoImpl {
 		ListInfo listInfo = new ListInfo();
 	
 		
-		ParsedPoolman poolman = PoolmanHelper.getParsedPoolman();
+//		ParsedPoolman poolman = PoolmanHelper.getParsedPoolman();
+//		
+//		//每页只显示一条poolman连接池对象
+//		ParsedDataSource  dataSource = (ParsedDataSource)poolman.getDataSourceList().get((int)offset);
 		
-		//每页只显示一条poolman连接池对象
-		ParsedDataSource  dataSource = (ParsedDataSource)poolman.getDataSourceList().get((int)offset);
-		
-		List list = new ArrayList();
-		list.add(dataSource);
-		
-		listInfo.setDatas(list);
-		listInfo.setTotalSize(poolman.getDataSourceList().size());
+//		List list = new ArrayList();
+//		list.add(dataSource);
+//		
+//		listInfo.setDatas(list);
+//		listInfo.setTotalSize(poolman.getDataSourceList().size());
 		
 		return listInfo;
 	}

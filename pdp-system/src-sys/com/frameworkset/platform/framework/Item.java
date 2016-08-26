@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
-import org.jfree.util.Log;
 
-import com.frameworkset.util.StringUtil;
+ 
 
 /**
  * <p>

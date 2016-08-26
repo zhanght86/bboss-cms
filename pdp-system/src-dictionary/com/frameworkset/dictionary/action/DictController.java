@@ -5,13 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.frameworkset.dictionary.bean.Item;
 import com.frameworkset.dictionary.service.DictManager;
 import com.frameworkset.platform.util.POIExcelUtil2007;
+import com.frameworkset.util.StringUtil;
 /**
  * Description:字典管理控制器
  * @author qingl2
@@ -46,7 +46,7 @@ public class DictController {
 				XSSFWorkbook wb = POIExcelUtil2007.createHSSFWorkbook(colDesc, itemList);//生成Excel
 
 				response.setContentType("application/vnd.ms-excel");
-				response.setHeader("Content-Disposition", "attachment;filename=" + new URLCodec().encode(dictType+"字典清单.xlsx"));
+				response.setHeader("Content-Disposition", "attachment;filename=" + StringUtil.urlencode(dictType+"字典清单.xlsx","UTF-8"));
 				wb.write(response.getOutputStream());
 			}catch(Exception e){
 				e.printStackTrace();

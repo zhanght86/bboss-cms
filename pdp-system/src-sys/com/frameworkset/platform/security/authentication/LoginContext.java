@@ -792,8 +792,7 @@ public class LoginContext implements Serializable{
          * @return a String representation of this controlFlag.
          */
         public String toString() {
-            return (sun.security.util.ResourcesMgr.getString
-                ("LoginModuleControlFlag: ") + controlFlag);
+            return "LoginModuleControlFlag: " + controlFlag;
         }
     }
     
