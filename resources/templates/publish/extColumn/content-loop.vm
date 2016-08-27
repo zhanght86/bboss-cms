@@ -1,3 +1,0 @@
-<td>
-${comments}<input type="text" name="${name}" value="${value}">
-</td>

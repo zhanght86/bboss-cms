@@ -1,9 +1,0 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<HTML xmlns="http://www.w3.org/1999/xhtml"><HEAD><TITLE></TITLE>
-<META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<META content="MSHTML 6.00.2800.1522" name=GENERATOR></HEAD>
-<FRAMESET rows="${actioner_container_rows}" border="0" name="actions_container">
-    <FRAME name=base_properties_container marginWidth=0 marginHeight=0 src="${base_properties_container_url}" frameBorder=0 scrolling=no>
-    <FRAME name=base_status_container marginWidth=0 marginHeight=0 src="${base_status_container_url}" frameBorder=0 scrolling=no ${noresize}>
-</FRAMESET>
-</HTML>

@@ -1,3 +1,0 @@
-  
-    
-outlookbar.addNavigator('<img src=${head_img} border=0>${title_dec}','${navigator_link}','${target}');

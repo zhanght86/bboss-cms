@@ -1,4 +1,0 @@
-<%@page import="com.frameworkset.platform.security.AccessControl"%><%
-	AccessControl accesscontroler = AccessControl.getInstance();
-	accesscontroler.checkAccess(request,response);
-%>
