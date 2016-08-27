@@ -1,0 +1,28 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
+ 
+dependencies {
+	
+   compile (
+       [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
+        [group: 'com.bbossgroups.plugins', name: 'bboss-plugin-wordpdf', version: "${bboss_wordpdf_version}", transitive: false],         
+        [group: 'com.bbossgroups.plugins', name: 'bboss-jodconverter-core', version: "${bboss_wordpdf_version}", transitive: false],         
+       
+
+    )
+   
+}

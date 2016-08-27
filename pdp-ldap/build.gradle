@@ -1,0 +1,36 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    test {
+        java {
+            srcDir 'test'
+           
+        }
+         
+        
+    }
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
+dependencies {
+	
+   compile (
+               
+     [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
+     [group: 'com.novell.ldap', name: 'jldap', version: "2009-10-07", transitive: false],
+      
+
+    )
+    testCompile(
+    		 
+    )
+}
