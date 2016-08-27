@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<property name="smsconf" class="com.sany.sms.Config"
+		f:user="itsm_sms"
+		f:password="itsm_sms831"
+		f:firstDeptId="50020097"
+		f:secondDeptId=""
+		f:thirdDeptId=""
+	    f:SMS_SUBCODE="18"
+		f:smsurl="http://sms.xxx.com.cn/sms/services/SmsNewOperatoraddsubCode"/>
+
+</properties>

@@ -1,0 +1,24 @@
+<!--
+	Description:页面模版
+	Author:biaoping.yin
+	Date:2007-01-11
+	Company:Creator
+-->
+
+<html>
+	<body>
+		<table>
+		<tr>
+			<cms:template refid="1" />
+		</tr>
+		</table>
+		<cms:list viewid="1" channel="3"><!--通过置标追加-->
+			<cms:cell title="${title}" field="${field}"/><!--通过置标追加-->
+		</cms:list><!--通过置标追加-->
+		<table>
+		<tr>
+			<cms:template refid="2" />
+		</tr>
+		</table>
+	</body>
+</html>

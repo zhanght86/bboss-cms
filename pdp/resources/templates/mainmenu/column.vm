@@ -1,0 +1,13 @@
+  <TR>
+    <TD class=text vAlign=center noWrap align=left height=25>
+    <A href="${link_url}"
+      target="${target}"><IMG 
+      onmouseup="src='${onmouseup_img}';mouseup(this)"
+      class="${class}"
+      onmousedown="src='${onmousedown_img}';mousedown(this)"
+      id=img_${id}
+      onmouseover="src='${onmouseover_img}';mouseover(this);"
+      title=${title_dec}
+      onmouseout="src='${onmouseout_img}';mouseout(this)"
+      alt=${title_dec}
+    src="${default_img}"></A></TD></TR>

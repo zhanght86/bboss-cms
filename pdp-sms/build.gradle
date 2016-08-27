@@ -1,0 +1,29 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
+ 
+dependencies {
+	
+   compile (
+  	    
+      	  [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
+         
+
+    )
+    compileOnly group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
+   
+   
+}

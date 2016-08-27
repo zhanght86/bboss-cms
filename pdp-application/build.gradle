@@ -20,8 +20,7 @@ dependencies {
    compile (
       [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
      [group: 'com.bbossgroups.pdp', name: 'pdp-ldap', version: "${PROJ_VERSION}", transitive: false],
-      [group: 'com.bbossgroups', name: 'bboss-hession', version: "${bboss_version}", transitive: true],
-             
+            
 
     )
     testCompile(

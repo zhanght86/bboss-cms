@@ -1,0 +1,9 @@
+<script language="javascript">
+if("${br}"=="true") document.write("<TR onMouseOver=\"this.bgColor='#DCDCDC'\"  onmouseout=\"this.bgColor='#EEEEEE'\">");
+</script>
+        <TD height=25 class="${className}" hspace=${hspace} style="padding:3,0,0,5 "  onclick="${function}; return true"  >
+        <img src="../images/leftNavigator_dot_red.gif" width="3" height="7" hspace="10">
+        <A href="${linkPath}">${displayName}</A> </TD>
+<script language="javascript">
+if("${br}"=="false") document.write("</TR>");
+</script>

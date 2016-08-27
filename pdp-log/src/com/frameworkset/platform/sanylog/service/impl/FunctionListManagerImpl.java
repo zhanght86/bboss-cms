@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.junit.Test;
+ 
 
 import com.frameworkset.common.poolman.CallableDBUtil;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
@@ -93,7 +93,7 @@ public class FunctionListManagerImpl implements FunctionListManager{
 		
 	}
 
-	@Test
+	 
 	public void testJira()throws SQLException {
 		//List<String> datas = executor.queryListWithDBName(String.class, "jira", "jiratest");
 		   

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<description>
+<![CDATA[
+	新增broker时，添加默认的用户，用户组，用户和用户组关系，用户组权限数据库脚本
+ ]]>
+	</description>
+	<!--
+		<properties name="insert"> <property name="insert-mysql">
+
+		<![CDATA[insert into mq_users (broker_id, user_id, user_name,
+		user_password) values (?, ?, 'system', 'manager')]]> </property>
+		<property name="insert-oracle"> <![CDATA[insert into mq_users
+		(broker_id, user_id, user_name, user_password) values (?, ?, 'system',
+		'manager')]]> </property> </properties>
+	-->
+
+
+	
+	
+		<property name="LogManagerImpl_log">
+		
+		<![CDATA[INSERT INTO TD_SM_LOG(
+		        LOG_ID,LOG_OPERUSER,OP_ORGID,OPER_MODULE,LOG_VISITORIAL,LOG_OPERTIME,LOG_CONTENT,REMARK1,OPER_TYPE)
+		
+		        values(?,?,?,?,?,?,?,?,?)]]>
+		</property>
+		
+		
+	
+
+	<properties name="roleManagerImpl_copyResOfRole">
+
+		<property name="roleManagerImpl_copyResOfRole-oracle">
+			<!--
+				insert into
+				td_sm_roleresop(op_id,res_id,res_name,restype_id,types,role_id)
+				select b.op_id,b.res_id,b.res_name,b.restype_id,b.types,? from
+				td_sm_roleresop b where b.role_id = ? minus select
+				c.op_id,c.res_id,c.res_name,c.restype_id,c.types,c.role_id from
+				td_sm_roleresop c where c.role_id= ?
+			-->
+		<![CDATA[insert into td_sm_roleresop(op_id,res_id,res_name,restype_id,types,role_id)
+	                   	select b.op_id,b.res_id,b.res_name,b.restype_id,b.types,? from  
+	                   	td_sm_roleresop b  where b.role_id =? and (b.op_id,b.res_id,b.res_name,b.restype_id,b.types,?) 
+	                   	not in( select  c.op_id,c.res_id,c.res_name,c.restype_id,c.types,c.role_id from 
+	                   	td_sm_roleresop c  where c.role_id=?)]]>
+		</property>
+		<property name="roleManagerImpl_copyResOfRole-mysql">
+		<![CDATA[insert into td_sm_roleresop(op_id,res_id,res_name,restype_id,types,role_id)
+	                   	select b.op_id,b.res_id,b.res_name,b.restype_id,b.types,? from  
+	                   	td_sm_roleresop b  where b.role_id =? and (b.op_id,b.res_id,b.res_name,b.restype_id,b.types,?) 
+	                   	not in( select  c.op_id,c.res_id,c.res_name,c.restype_id,c.types,c.role_id from 
+	                   	td_sm_roleresop c  where c.role_id=?)]]>
+
+		</property>
+	</properties>
+
+	<properties name="roleManagerImpl_grantRoleresop">
+
+		<property name="roleManagerImpl_grantRoleresop-oracle">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where OP_ID=?  and RES_ID=?  and ROLE_ID=?
+		         and TYPES=? and RESTYPE_ID=?]]>
+		</property>
+		<property name="roleManagerImpl_grantRoleresop-mysql">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where OP_ID=?  and RES_ID=?  and ROLE_ID=?
+		         and TYPES=? and RESTYPE_ID=?]]>
+
+		</property>
+	</properties>
+
+	<properties name="roleManagerImpl_grantRoleresop2">
+
+		<property name="roleManagerImpl_grantRoleresop2-oracle">
+		<![CDATA[insert  into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		         values(?,?,?,?,?,?)]]>
+		</property>
+		<property name="roleManagerImpl_grantRoleresop2-mysql">
+		<![CDATA[insert  into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		         values(?,?,?,?,?,?)]]>
+
+		</property>
+	</properties>
+
+	
+
+		<property name="purviewmanagerimpl_batchSaveTreeRoleresop">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where OP_ID=?  and RES_ID=?  and ROLE_ID=?
+		         and TYPES=? and RESTYPE_ID=?]]>
+		</property>
+	
+
+
+		<property name="purviewmanagerimpl_batchSaveTreeRoleresop2">
+		<![CDATA[insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		values(?,?,?,?,?,?)]]>
+		</property>
+
+
+	<properties name="purviewmanagerimpl_batchSaveRoleListRoleresop">
+
+		<property name="purviewmanagerimpl_batchSaveRoleListRoleresop-oracle">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where op_id=?  and res_id=?  and role_id=?
+		         and restype_id=? and types=?]]>
+		</property>
+		<property name="purviewmanagerimpl_batchSaveRoleListRoleresop-mysql">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where op_id=?  and res_id=?  and role_id=?
+		         and restype_id=? and types=?
+		]]>
+
+		</property>
+	</properties>
+
+	<properties name="purviewmanagerimpl_batchSaveRoleListRoleresop2">
+
+		<property name="purviewmanagerimpl_batchSaveRoleListRoleresop2-oracle">
+		<![CDATA[insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		values(?,?,?,?,?,?)]]>
+		</property>
+		<property name="purviewmanagerimpl_batchSaveRoleListRoleresop2-mysql">
+		<![CDATA[insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		values(?,?,?,?,?,?)
+		]]>
+
+		</property>
+	</properties>
+
+	<properties name="FunctionDB_getUserorgjobinfos">
+
+		<property name="FunctionDB_getUserorgjobinfos-oracle">
+		<![CDATA[
+				 select distinct * from (
+				 select t.org_id,t.remark5,t.org_sn from td_sm_organization t inner join
+                 td_sm_userjoborg c on t.org_id= c.org_id inner join td_sm_user b on b.user_id =
+                 c.user_id where b.user_id =? 
+              	order by t.org_tree_level) a
+		]]>
+		</property>
+		<property name="FunctionDB_getUserorgjobinfos-mysql">
+		<![CDATA[
+				select distinct * from (
+                 select t.org_id,t.remark5,t.org_sn from td_sm_organization t inner join
+                 td_sm_userjoborg c on t.org_id= c.org_id inner join td_sm_user b on b.user_id =
+                 c.user_id where b.user_id =? 
+              	order by t.org_tree_level) a
+    
+		]]>
+		</property>
+		
+		</properties>
+
+		<properties name="FunctionDB_getUserjobinfos">
+
+			<property name="FunctionDB_getUserjobinfos-oracle">
+		<![CDATA[select t.job_name from td_sm_job t inner join td_sm_userjoborg c on t.job_id = c.job_id 
+           where c.user_id = ? and c.org_id = ? group by t.job_name]]>
+			</property>
+			<property name="FunctionDB_getUserjobinfos-mysql">
+		<![CDATA[select t.job_name from td_sm_job t inner join td_sm_userjoborg c on t.job_id = c.job_id 
+           where c.user_id = ? and c.org_id = ? group by t.job_name
+		]]>
+
+			</property>
+		</properties>
+
+
+		
+		<property name="OrgSearchLish_getDataList">
+		<![CDATA[
+		select * from (select o.org_tree_level,
+       o.org_id,
+       o.parent_id,
+       o.org_name,
+       o.orgnumber,
+       o.creator,
+       o.org_sn,
+       o.orgdesc,
+       o.remark5,       
+	   o.remark3,
+       u.user_name,
+       u.user_realname
+  from TD_SM_ORGANIZATION o
+  left join td_sm_user u on u.user_id = o.creator) o
+                        where 1=1 ${where_condition} order by o.org_tree_level
+		
+		]]>
+
+			</property>
+			
+			
+		<property name="userManagerImpl_storeBatchUserOrg">
+	
+		<![CDATA[select count(ORG_ID) from TD_SM_ORGUSER where USER_ID =?
+		]]>
+	
+	   </property>
+			
+			
+		<property name="userManagerImpl_storeBatchUserOrg_insert">
+	
+		<![CDATA[insert into TD_SM_ORGUSER(USER_ID, ORG_ID) 
+		values(?,?)
+		]]>
+	
+	   </property>
+	   
+	   <property name="orgAdministratorImpl_userAdminOrg">
+	
+		<![CDATA[select * from td_sm_orgmanager t where t.user_id = ? and t.org_id in 
+		( select o.org_id from td_sm_organization o where o.org_id=? ) 
+		]]>
+	
+	   </property >
+	   
+	    <property name="OrgManagerImpl_addOrgjob">
+	
+		<![CDATA[select count(1)  from td_sm_orgjob where org_id=? and job_id=?
+		]]>
+	
+	   </property>
+	
+	      
+	    <property name="OrgManagerImpl_addOrgjob_">
+	
+		<![CDATA[insert  into td_sm_orgjob (org_id, job_id, job_sn)
+		 values (?,?,?)
+		]]>
+	
+	   </property>
+	   
+	   <property name="orgadministratorimpl_addOrgAdmin">
+	
+		<![CDATA[select count(user_id) from td_sm_orgmanager e where e.user_id=? and e.org_id=?
+		]]>
+	
+	   </property>
+	   
+	   <property name="orgadministratorimpl_addOrgAdmin2">
+	
+		<![CDATA[insert into td_sm_orgmanager
+		values(?,?)
+		]]>
+	
+	   </property>
+	   
+	    <property name="orgadministratorimpl_addOrgAdmin3">
+	
+		<![CDATA[select count(user_id) from td_sm_userrole e where e.user_id=? and e.role_id='3'
+		]]>
+	
+	   </property>
+	   
+	    <property name="orgadministratorimpl_addOrgAdmin4">
+	
+		<![CDATA[insert into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,'3',?)
+		]]>
+	
+	   </property>
+	   
+	   <property name="orgadministratorimpl_addOrgAdmin5">
+	
+		<![CDATA[select count(user_id)  from td_sm_userrole e where e.user_id=? and e.role_id='4'
+		]]>
+	
+	   </property>
+	   
+	   <property name="orgadministratorimpl_addOrgAdmin6">
+	
+		<![CDATA[insert  into td_sm_userrole(user_id,role_id,RESOP_ORIGIN_USERID) values(?,'4',?)
+		]]>
+	
+	   </property>
+	   
+	    <property name="purviewmanagerimpl_saveRoleListRoleresop">
+	
+		<![CDATA[select count(op_id) totalsize from td_sm_roleresop where
+		op_id=? and res_id=? and role_id=? and restype_id=? and types=?
+		]]>
+	
+	   </property>
+			
+	    <property name="purviewmanagerimpl_saveRoleListRoleresop_">
+	
+		<![CDATA[insert  into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		values(?,?,?,?,?,?)
+		]]>
+	
+	   </property>
+			
+			
+	  
+	
+		<property name="usermanagerimpl_addUserOrg">
+		
+		<![CDATA[insert into td_sm_userjoborg (user_id,job_id,org_id,JOB_SN,SAME_JOB_USER_SN,JOB_STARTTIME,JOB_FETTLE)
+		values(?,1,?,999,?,${date},1)]]>
+		</property>
+		
+		
+	
+	 <property name="userManagerImpl_storeAlotUserRole">
+	
+		<![CDATA[select count(role_id )  from td_sm_userrole where user_id =? and role_id =?
+		]]>
+	
+	   </property>
+	   
+	    <property name="userManagerImpl_storeAlotUserRole_">
+	
+		<![CDATA[insert  into td_sm_userrole(user_id,role_id) values(?,?)
+		]]>
+	
+	   </property>
+	   
+	   <property name="usersearchlist_sortUser_simple">
+	
+		<![CDATA[
+			select 
+				t.*, us.org_id, org.org_sn 
+			from 
+				td_sm_user t, td_sm_userjoborg us, td_sm_organization org 
+			where 
+				us.user_id=t.user_id and org.org_id=us.org_id 
+    
+		]]>
+		</property>
+	    <property name="usersearchlist_sortUser1">
+	
+		<![CDATA[select bb.same_job_user_sn,
+       t.*,
+       a.org_id,
+       a.org_sn
+  from (select org_sn, a.org_id
+          from td_sm_organization a where a.org_id in          
+             (select t.org_id from td_sm_organization t where t.org_tree_level like concat('0', '%'))             
+              order by a.org_sn asc) a,              
+
+       (select min(tmp.same_job_user_sn) as same_job_user_sn,
+               tmp.org_id,
+               tmp.user_id
+          from ((select ujo.*
+                   from td_sm_userjoborg ujo, TD_SM_ORGUSER ou
+                  where ou.org_id = ujo.org_id
+                    and ou.user_id = ujo.user_id)) tmp
+         group by tmp.user_id, tmp.org_id) bb,
+       td_sm_user t
+ where a.org_id = bb.org_id
+    
+		]]>
+	
+	   </property>
+	   
+	    <property name="userManagerImpl_storeUserjoborg">
+	
+		<![CDATA[select count(1)  from TD_SM_USERJOBORG where USER_ID=? and JOB_ID=? and ORG_ID=?
+		]]>
+	
+	   </property>
+	   
+	     <property name="userManagerImpl_storeUserjoborg_">
+	
+		<![CDATA[insert  into TD_SM_USERJOBORG(USER_ID,JOB_ID,ORG_ID,SAME_JOB_USER_SN,JOB_SN,JOB_STARTTIME,JOB_FETTLE)
+		values(?,?,?,?,?,?,1)
+		]]>
+	
+	   </property>
+	   
+	     <property name="userManagerImpl_addUserrole">
+	
+		<![CDATA[select count(1)  from td_sm_userrole where user_id=? and role_id=?
+		]]>
+	
+	   </property>
+			
+	   
+	    <property name="userManagerImpl_addUserrole_">
+	
+		<![CDATA[insert into td_sm_userrole(user_id,role_id,resop_origin_userid)
+		values(?,?,?)
+		]]>
+	
+	   </property>
+	   
+	   	<property name="logManagerImpl_backupLog_insert">
+	   	
+	      	
+	   	<description><![CDATA[INSERT INTO TD_SM_LOG_HIS
+             SELECT * FROM TD_SM_LOG t where 
+             to_char(t.log_opertime,'yyyy-mm-dd') <= to_char(sysdate() - ?,'yyyy-mm-dd')
+             
+             INSERT INTO TD_SM_LOGDETAIL_HIS
+              SELECT * FROM TD_SM_LOGDETAIL
+             where log_id in 
+             ( select log_id from TD_SM_LOG t where to_char(t.log_opertime,'yyyy-mm-dd') <= to_char(sysdate() - ?,'yyyy-mm-dd'))
+             ]]></description>
+	   	<list>
+	   	
+			<property index="0">
+			
+			<![CDATA[INSERT INTO TD_SM_LOG_HIS
+             SELECT * FROM TD_SM_LOG where 
+             ${log_opertime} <= ${starttime}]]>
+             
+             </property>
+             <property index="1"><![CDATA[INSERT INTO TD_SM_LOGDETAIL_HIS
+              SELECT * FROM TD_SM_LOGDETAIL
+             where log_id in 
+             ( select log_id from TD_SM_LOG where ${log_opertime} <= ${starttime})]]></property>
+             
+				
+				
+		</list>
+	   
+	</property>
+	
+	
+	
+	   	
+	   <property  name="logManagerImpl_backupLog_delete">   	
+	   		<description><![CDATA[DELETE FROM TD_SM_LOGDETAIL where log_id in
+            (select log_id from TD_SM_LOG t where to_char(t.log_opertime,'yyyy-mm-dd') <= to_char(sysdate() - ?,'yyyy-mm-dd'))
+             
+             DELETE FROM TD_SM_LOG t where 
+            to_char(t.log_opertime,'yyyy-mm-dd') <= to_char(sysdate() - ?,'yyyy-mm-dd');
+             ]]></description>
+	   	<list>
+			<property index="0"><![CDATA[DELETE FROM TD_SM_LOGDETAIL where log_id in
+            (select log_id from TD_SM_LOG where  ${log_opertime} <= ${starttime})]]></property>
+            <property index="1"><![CDATA[DELETE FROM TD_SM_LOG where 
+             ${log_opertime} <= ${starttime}]]></property>			
+		</list>
+	    </property>
+	
+		 
+	   
+	
+	
+			
+		<property name="resmanagerimpl_delRedundance_3">
+	
+		<![CDATA[ select role_id from td_sm_roleresop c where types='user' and not exists (select user_id from td_sm_user where user_id = c.role_id)
+		]]>
+	
+	   </property>
+	   
+	     <property name="resmanagerimpl_delRedundance_4">
+	
+		<![CDATA[select a.role_id from td_sm_roleresop  a  where types='role' and not exists 
+		(select b.role_id from td_sm_role b where a.role_id=b.role_id )
+		]]>
+	
+	   </property>
+	   
+	     <property name="resmanagerimpl_delRedundance_7">
+	
+		<![CDATA[select a.role_id from td_sm_roleresop a where types='organization' and not exists 
+		(select b.org_id from td_sm_organization b where a.role_id=b.org_id )
+		]]>
+	
+	   </property>
+	   
+	   
+	   
+		
+		<property name="mqgroupservice_addMQ_PERMISSIONS">
+		
+		<![CDATA[insert into mq_permissions(RES_NAME,RESOURCE_TYPE,RES_OP,GROUP_TYPE,GROUP_NAME,AUTHOR,AUTH_DATE,BROKER_ID) 
+		values(?,?,?,?,?,?,${date},?)]]>
+		</property>
+		
+
+	
+	
+
+		<property name="purviewmanagerimpl_saveTreeRoleresop">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where op_id=?  and res_id=?  and role_id=?
+		         and restype_id=? and types=?]]>
+		</property>
+		
+	
+
+	
+
+		<property name="purviewmanagerimpl_saveTreeRoleresop_">
+		<![CDATA[insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES)
+		values(?,?,?,?,?,?)]]>
+		</property>
+		
+		<property name="purviewmanagerimpl_saveSelfDefineOrgRoleresop">
+		<![CDATA[select count(OP_ID)  from td_sm_roleresop where OP_ID=?  and RES_ID=? and ROLE_ID=?
+		and TYPES=? and RESTYPE_ID=? and auto='1']]>
+		</property>
+		
+		<property name="purviewmanagerimpl_saveSelfDefineOrgRoleresop_">
+		<![CDATA[insert into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES,AUTO)
+		values(?,?,?,?,?,?,'1')]]>
+		</property>
+		
+			<property name="purviewmanagerimpl_saveSelfDefineOrgRoleresop_del">
+		<![CDATA[delete from td_sm_roleresop where OP_ID=? and RES_ID=? and ROLE_ID=? and TYPES=? and RESTYPE_ID=? and AUTO='1']]>
+		</property>
+		
+			<property name="purviewmanagerimpl_saveSelfDefineRoleresop_1">
+		<![CDATA[select count(OP_ID) from td_sm_roleresop 
+		where OP_ID=? and RES_ID=? and ROLE_ID=? and TYPES=? and RESTYPE_ID=? and auto='1'
+		]]>
+		</property>
+		
+		
+			<property name="purviewmanagerimpl_saveSelfDefineRoleresop_2">
+		<![CDATA[insert  into td_sm_roleresop(OP_ID,RES_ID,ROLE_ID,RESTYPE_ID,RES_NAME,TYPES,auto)
+		values(?,?,?,?,?,?,'1')
+		]]>
+		</property>
+		
+		
+	
+
+
+
+
+	
+</manager-config>

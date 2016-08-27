@@ -1,0 +1,5 @@
+
+<properties>
+		<property name="isWebSealServer" value="true"/>	
+		<property name="webseallogouturl" value="http://10.0.6.191/pkmslogout"/>
+</properties>

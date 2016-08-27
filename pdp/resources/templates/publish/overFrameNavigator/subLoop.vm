@@ -1,0 +1,15 @@
+<DIV STYLE="position:relative;  background:${subBgColor};  height:${height}px; color:black; font-family:verdana; cursor:default" 
+onmouseover="this.style.background='${onMouseOverColor}';${subHTML};" 
+onmouseout="this.style.background='${subBgColor}';" 
+onclick="javascript:${parentFix}parent.location.href='${channelPath}'" onContextMenu="return false" style="border-bottom:1 solid #E3E3E3;">
+<table width="100%" border="0" padding="0" margin="0" height=${height}px; align=center >
+<tr><td style="font-size:${fontsize};background-image:url(${subOverImg});background-repeat: no-repeat;background-position: 2px; " align=center 
+onmouseover="this.style.backgroundImage='url(${subOutImg})';this.style.backgroundPosition='2px';"
+onmouseout="this.style.backgroundImage='url(${subOverImg})';this.style.backgroundPosition='2px';"
+>
+<a href="#" onclick="javascript:${parentFix}parent.location.href='${channelPath}'" style="text-decoration: none;color:#000000;" 
+onmouseover="this.style.color='red';${parentFix}clearTimer();"
+onmouseout="this.style.color='black';${parentFix}setTimer();" 
+>${displayName}</a></td>
+</tr></table>
+</DIV>

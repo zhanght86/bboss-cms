@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+面向方面服务管理主文件，可以配置业务组件，导入其他业务组件配置文件
+ -->
+<!-- 
+	manager-config(manager+,managerimport*)
+	manager(provider+,synchronize?,transactions?,reference*,interceptor*)
+	manager-attributelist{
+		id-管理服务者id
+		jndiname-管理服务者jndi属性，目前未使用
+		singlable-是否是单实例模式
+		default-是否是缺省管理服务
+		interceptor-管理服务器的拦截器
+	}
+	##
+	# 如果在系统中配置了多个拦截器，整个框架能够确保每个拦截器都被调用
+	# 调用的顺序为 拦截器配置的顺序,如果同时通过manager节点的属性interceptor定义了一个拦截器，
+	# 则会首先调用这个属性对应的拦截器，然后再调用其他拦截器
+	##
+	interceptor(pcdata)
+	
+	interceptor-attributelist{
+		class-拦截器的实现类，所有的拦截器都必须实现
+		      com.frameworkset.proxy.Interceptor接口
+		      目前系统中提供了以下缺省拦截器：
+		      	数据库事务管理拦截器（com.frameworkset.platform.spi.
+		      	interceptor.TransactionInterceptor）,支持对声明式事务的管理
+	}
+	reference(pcdata)
+	reference-attributelist{
+		fieldname-对应的管理服务提供者中的字段名称，必选属性
+		refid-引用的管理服务的id，对应manager节点的id属性，必选属性
+		reftype-对应的管理服务提供者类型，可选属性
+	}
+	provider(pcdata)   
+	provider-attributelist{
+		type-服务提供者标识id
+		used-服务提供者是否被启用,缺省值为false
+		class-服务提供者对应的class类
+		prior-provider调用的优先级
+	}
+	synchronize(method+)
+	synchronize-attributelist{
+		enabled-是否启用同步功能，如果没有启用同步功能
+		        即使配置了多个服务提供者的同步方法，所有的同步功能将不起作用
+	}
+	transactions(method+)
+	
+	method(param*,rollbackexceptions?)
+	method-attributelist{
+		name-方法名称，name和pattern不能同时出现
+		pattern-匹配方法名称的正则表达式
+		txtype-需要控制的事务类型，取值范围：
+					NEW_TRANSACTION，
+					REQUIRED_TRANSACTION，
+					MAYBE_TRANSACTION，
+					NO_TRANSACTION
+	}
+	param(pcdata)
+	param-attributelist{
+		type-
+	}
+	rollbackexceptions(exception+)
+	
+	exception(pcdata)
+	exception-attributelist{
+		class-
+		type-IMPLEMENTS,INSTANCEOF
+	}
+	
+	mangerimport(pcdata)
+	mangerimport-attributelist{
+		file-
+	}
+	
+	
+-->
+<manager-config>
+	<!--
+		User Management Implement Class and JNDI Name
+		获取方法：
+		获取缺省的用户管理接口
+		com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase.getUserManager();
+		获取不同数据源的用户管理接口
+		com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase.getUserManager(String type);
+		
+		interceptor:拦截器，执行同步方法时提供事务处理机制,必须实现接口com.frameworkset.proxy.Interceptor
+		
+		UserManagement userMgr = (UserManagement)
+						com.frameworkset.platform.spi.BaseSPIManager.getProvider("UserManagement");
+		
+	-->
+	
+	
+	<!-- 导入其他模块的的业务组件配置 -->
+	<!-- 
+	<managerimport file="com/frameworkset/platform/spi/reference/manager-provider-reference.xml" />
+	<managerimport file="com/frameworkset/platform/spi/transaction/manager-transaction.xml" />
+	<managerimport file="com/frameworkset/platform/spi/syn/manager-synchronize.xml" />
+	<managerimport file="com/frameworkset/platform/spi/txsyn/manager-txsynchronize.xml" />	
+	<managerimport file="com/frameworkset/platform/spi/interceptor/manager-interceptor.xml" />
+	 -->	
+	
+	
+	
+	<!-- 导入其他模块的的业务组件配置 -->
+	
+	<managerimport file="trans_conf.xml" />
+	
+		<!--  
+				系统管理全局属性开关配置文件
+	-->
+	
+	<managerimport file="properties-sys.xml" />
+	<!--  
+				内容管理属性开关配置文件
+	-->	
+	<managerimport file="properties-content.xml" />
+	
+ 
+	<!--
+		监控服务
+		 
+	 -->
+	<managerimport file="base-service-assemble.xml" />
+	<!-- 
+		mq监控服务
+	 -->
+	<managerimport file="org/frameworkset/mq/mq-service.xml" />
+	<managerimport file="org/frameworkset/util/paramhandlers.xml" />
+	
+	
+	<!-- MQ服务数据库初始化脚本 -->
+	<!--<managerimport file="org/frameworkset/mq/mq-init.xml" />	-->
+	
+	<!-- CA认证中心属性配置文件 -->
+	<managerimport file="properties-ca.xml" />	
+	
+	<!-- portal相关配置文件 -->
+	<managerimport file="properties-portal.xml" />	
+	
+	
+	
+	<!-- 监控中心相关配置文件 -->
+	<!-- 
+	<managerimport file="com/frameworkset/platform/monitorcenter/monitorcenter-manager.xml" />	
+	 -->
+	<property name="ENABLE_TAG_SECURITY" value="true"/> 
+			
+			<!--
+			指定应用的根目录
+			    获取方法：
+			    String approot = ConfigManager.getInstance().getConfigValue("approot");
+			    velocity模板目录要求必须制定本属性变量
+			-->
+		<!-- <property name="approot" value="D:/workspace/creatorcim/cimconsole/" /> -->
+	
+	<!-- 
+		远程服务（RPC）组件框架配置
+	 -->
+	<managerimport file="org/frameworkset/spi/manager-rpc-service.xml" />
+	<managerimport file="org/frameworkset/util/paramhandlers.xml" />
+	<managerimport file="properties-webseal.xml" />
+
+	
+	
+
+</manager-config>

@@ -25,7 +25,6 @@ dependencies {
             
 
     )
-    compile group: 'com.github.penggle', name: 'kaptcha', version: '2.3.2',transitive: true
     
     testCompile(
     		 

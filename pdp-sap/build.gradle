@@ -1,0 +1,37 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+     test {
+        java {
+            srcDir 'test'
+           
+        }
+        resources {
+           srcDir 'test'  exclude '**/*.java'
+            
+        }
+        
+    }
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
+ 
+dependencies {
+	
+   compile (
+       [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
+         fileTree(dir: '../lib', include: '**/*.jar'),
+            
+
+    )
+   
+}

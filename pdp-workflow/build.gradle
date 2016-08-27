@@ -1,0 +1,31 @@
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+           
+        }
+        resources {
+           srcDir 'src'  exclude '**/*.java'
+            
+        }
+        
+    }
+    
+    
+}
+project.tasks.compileJava.dependsOn(project(':pdp-workflow-web').tasks.install)
+project.tasks.compileJava.dependsOn(project(':pdp-mail').tasks.install)
+
+dependencies {
+	
+   compile (
+      [group: 'com.bbossgroups.pdp', name: 'pdp-workflow-web', version: "${PROJ_VERSION}", transitive: true],         
+       [group: 'com.bbossgroups.pdp', name: 'pdp-mail', version: "${PROJ_VERSION}", transitive: true],         
+           
+	fileTree(dir: '../lib', include: '**/*.jar'),
+      
+    )
+    testCompile(
+    		 
+    )
+}

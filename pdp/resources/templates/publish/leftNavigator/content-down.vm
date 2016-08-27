@@ -1,0 +1,15 @@
+<SCRIPT>
+		  numTotal=${count};
+            for(var i= 1; i <= numTotal; i++){
+			
+            scores[i]='KB'+i;
+            }
+            initIt();
+            var nodeName = getCookie("nodeName");
+            if(nodeName!=undefined) modikebyTG(nodeName);
+            
+            </SCRIPT> 
+    </TD></TR></TABLE>   
+</TR></TABLE>
+
+  </div>

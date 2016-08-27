@@ -1,0 +1,7 @@
+<script language="javascript">
+    if("${br}"=="true") document.write("<tr bgcolor='#FAFAFA'>");
+</script>
+  <td><a href="${linkPath}" target="${target}">${displayName}</a></td>
+<script language="javascript">
+    if("${br}"=="false") document.write("</tr>");
+</script>

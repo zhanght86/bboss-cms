@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manager-config>
+	<!-- 
+		客服端节点参数配置处理类
+	 -->
+<!-- 	<property name="cmc.paramshandler" singlable="true" class="org.frameworkset.util.ParamsHandler" > -->
+<!-- 		<property name="dbname" value="kettle" /> -->
+<!-- 	</property> -->
+	<!-- 
+		客服端节点参数配置处理类
+	 -->
+<!-- 	<property name="smc.paramshandler" singlable="true" class="org.frameworkset.util.ParamsHandler" > -->
+<!-- 		<property name="dbname" value="mq" /> -->
+<!-- 	</property> -->
+	
+<!-- 	<property name="cim.collect.policy.paramshandler" singlable="true" class="org.frameworkset.util.ParamsHandler" > -->
+<!-- 		<property name="dbname" value="mq" /> -->
+<!-- 		<property name="tableName" value="BUSINESS_PARAMS" /> -->
+<!-- 	</property> -->
+   <property name="cms.siteparamshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_CMS_SITEPARAMETERS" />
+	</property>
+	
+   <property name="sys.org.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_ORGPARAMETERS" />
+	</property>
+	<property name="sys.user.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_USERPARAMETERS" />
+	</property>
+	<property name="sys.msg.paramshandler" class="org.frameworkset.util.ParamsHandler" >
+		<property name="tableName" value="TD_SM_MSGPARAMETERS" />
+	</property>
+</manager-config>

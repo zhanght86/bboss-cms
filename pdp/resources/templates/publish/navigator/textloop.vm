@@ -1,0 +1,8 @@
+<td nowrap><a href="${channelPath}">${displayName}</a></td>
+<script language="javascript">
+    if("${flag}".valueOf()==""){
+        document.write("<td>|</td>");
+    }else{
+        document.write("</tr><tr>");
+    }
+</script> 

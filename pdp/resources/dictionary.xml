@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dictionary>
+	<version>1.0</version>
+	<description><![CDATA[才鸟]]></description>
+	
+	<!--==========================基础数据维护===================================-->	
+	
+
+	<data id="Gender" name="性别">						
+		<item>
+			<name>男</name>
+			<value>1</value>  ddd dd
+		</item>
+		<item>
+			<name>女</name>    
+			<value>2</value>
+		</item>
+		<item>
+			<name>未定义</name>
+			<value>3</value>
+		</item>
+	</data>
+
+	<data id="actionResult" name="审核结果">						
+		<item>
+			<name>通过</name>
+			<value>1</value>
+		</item>
+		<item>
+			<name>不通过</name>
+			<value>3</value>
+		</item>
+	</data>		
+</dictionary>

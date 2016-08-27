@@ -21,7 +21,7 @@ package com.sany.demo.entity;
  * <p> bboss workgroup </p>
  * <p> Copyright (c) 2009 </p>
  * 
- * @Date 2012-11-1 обнГ4:32:18
+ * @Date 2012-11-1 4:32:18
  * @author biaoping.yin
  * @version 1.0
  */

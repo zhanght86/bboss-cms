@@ -1,0 +1,1 @@
+<a href="${linkpath}" target="${target}"><img border=none src="${imagepath}" onmouseover="imageRollClear()" onmouseout="reRoll()" width="${imgWidth}" height="${imgHeight}" alt="${altstr}"/></a><img src="${rollcenter}"/>

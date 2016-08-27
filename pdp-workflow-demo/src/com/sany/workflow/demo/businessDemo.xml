@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<properties>
+	<!-- 获取业务单数据 平台演示用的  gw_tanx-->
+	<property name="getDemoList_wf">
+		<![CDATA[
+			SELECT F.BUSINESSKEY AS BUSINESSKEY,
+			 	   F.PROCESSKEY AS PROCESSKEY,
+			       NULL          AS CREATETIME,
+			       NULL          AS ENDTIME,
+			       NULL          AS SENDER,
+			       NULL          AS REASON,
+			       NULL          AS INSTANCEID,
+			       NULL          AS NODENAME
+			  FROM TD_WF_FORMCACHE F
+			 WHERE 1=1
+			 #if($processKey && !$processKey.equals(""))
+			 	AND F.PROCESSKEY = #[processKey]
+			 #end
+			 
+			 #if($businessKey && !$businessKey.equals(""))
+			 	AND F.BUSINESSKEY = #[businessKey]
+			 #end
+			
+			union all
+			
+			SELECT distinct A.BUSINESS_KEY_  AS BUSINESSKEY,
+							B.KEY_ 			 AS PROCESSKEY,
+			       			A.START_TIME_    AS CREATETIME,
+			      			A.END_TIME_      AS ENDTIME,
+			       			A.START_USER_ID_ AS SENDER,
+			       			A.DELETE_REASON_ AS REASON,
+			       			A.PROC_INST_ID_  AS INSTANCEID,
+			      			C.NAME_          AS NODENAME
+			
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			  LEFT JOIN ACT_RU_TASK C ON A.PROC_INST_ID_ = C.PROC_INST_ID_
+			
+			 WHERE 1 = 1
+			 #if($processKey && !$processKey.equals(""))
+			 	AND B.KEY_ = #[processKey]
+			 #end
+       			 
+       		 #if($businessKey && !$businessKey.equals(""))
+			 	AND A.BUSINESS_KEY_ = #[businessKey]
+			 #end
+       			 
+       		 ORDER BY CREATETIME DESC
+		]]>
+	</property>
+	
+	<property name="hasSonNodes">
+		<![CDATA[
+			select count(1)
+			  from (select t.business_id
+			          from td_wf_businesstype t
+			         where use_flag = '1'
+			              
+			           and parent_id = ?
+			           and parent_id != business_id
+			        
+			        union
+			        
+			        select a.businesstype_id
+			          From td_wf_pro_businesstype a
+			          left join act_re_procdef b on a.process_key = b.key_
+			         where a.businesstype_id = ?
+			           and b.version_ = (select max(VERSION_)
+			                               from ACT_RE_PROCDEF
+			                              where KEY_ = a.process_key)) c
+				
+		]]>
+	</property>	
+	
+	<property name="selectSonBusinessList">
+		<![CDATA[
+		-- 业务类型
+			select t.business_id as nodeId,
+			       t.business_name as nodeName,
+			       t.parent_id as parentId,
+			       t.use_flag as useFlag,
+			       t.remark as remark,
+			       null as processname,
+			       null as processkey
+			  from td_wf_businesstype t
+			 where use_flag = '1'
+			      
+			   and parent_id = ?
+			   and parent_id != business_id
+			
+			union
+		
+		-- 流程定义
+			select a.businesstype_id  as nodeId,
+			       null as nodeName,
+			       null as parentId,
+			       null as useFlag,
+			       null as remark,
+			       b.name_ as processname,
+			       b.key_ as processkey
+			  From td_wf_pro_businesstype a
+			  left join act_re_procdef b on a.process_key = b.key_
+			 where a.businesstype_id =?
+			   and b.version_ =
+			       (select max(VERSION_) from ACT_RE_PROCDEF where KEY_ = a.process_key)
+		]]>
+	</property>
+	
+	<property name="getBusinessKeyList">
+		<![CDATA[
+			select t.business_key_ ,t.proc_inst_id_ from act_hi_procinst t
+			
+			 #if($businessKey && !$businessKey.equals(""))
+			 	where t.business_key_ like #[businessKey]
+			 #end
+		]]>
+	</property>
+	
+	<!-- 根据业务主键获取流程实例  gw_tanx -->
+	<property name="getProcessByBusinesskey_wf">
+		<![CDATA[
+			SELECT A.ID_,
+			       A.PROC_INST_ID_,
+			       A.BUSINESS_KEY_,
+			       A.PROC_DEF_ID_,
+			       A.START_TIME_,
+			       A.END_TIME_,
+			       A.DURATION_,
+			       A.START_USER_ID_,
+			       A.DELETE_REASON_,
+			       B.KEY_
+			  FROM ACT_HI_PROCINST A
+			  LEFT JOIN ACT_RE_PROCDEF B ON A.PROC_DEF_ID_ = B.ID_
+			 WHERE A.BUSINESS_KEY_ = ?
+		]]>
+	</property>
+	
+</properties>

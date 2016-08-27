@@ -1,0 +1,13 @@
+<style>
+	/*url(../images/her_32.gif)*/
+	.publicServerCSS a:link,
+	.publicServerCSS a:visited{color:#333333;text-decoration: none;text-align:center;height:23;width:69; padding:3,0,0,0}
+    .publicServerCSS a:hover {color:white;text-decoration: none;text-align:center;background:#E71008;}
+	.publicServerCSS{font:12px Tahoma; color:#2E2E2E; }
+</style>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="90"><img src="${imagePath}" width="87" height="69"></td>
+    <td valign="top">
+    <table width="100%"  border="0" align="center" cellpadding="0" cellspacing="4" class="publicServerCSS">

@@ -26,7 +26,6 @@ dependencies {
    compile (
                
      [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
-     [group: 'com.novell.ldap', name: 'jldap', version: "2009-10-07", transitive: false],
       
 
     )

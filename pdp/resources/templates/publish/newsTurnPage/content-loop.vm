@@ -1,0 +1,1 @@
+<a href="${currentpath}" style="${style}" class="${classname}" target="_self">[${count}] </a>

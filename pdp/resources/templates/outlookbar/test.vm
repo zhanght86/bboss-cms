@@ -1,0 +1,113 @@
+<!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+<LINK REL=stylesheet HREF="sysmanager/style/blue/blue.css" TYPE="text/css">
+<style>
+.normal {
+	border-color:
+	border-bottom-color:;
+	border-right-color:;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+
+.hover {
+	border-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border-left-width: 1px;
+	border-bottom-color: #8C8E8C;
+	border-right-color: #8C8E8C;
+	cursor: hand;
+}
+
+.down {
+	border-color: #8C8E8C;
+	border-style: solid;
+	border-width: 1px;
+	border-left-width: 1px;
+	border-bottom-color: white;
+	border-right-color: white;
+	cursor: hand;
+}
+
+.select {
+	border-color: #8C8E8C;
+	border-style: solid;
+	border-width: 1px;
+	border-left-width: 1px;
+	border-bottom-color: white;
+	border-right-color: white;
+	cursor: hand;
+}
+.contentdiv1
+{
+	
+	top:0;
+	left:0;
+	width:100%;	
+	height:100%;
+	z-index:1
+}
+</style>
+<BODY scroll="no">
+<SCRIPT language="JavaScript" src="sysmanager/style/blue/js/common/admin.js"></SCRIPT>
+<SCRIPT language="JavaScript" src="sysmanager/style/blue/js/common/menu.js"></SCRIPT>
+<SCRIPT language=javascript>
+var selectImg ;
+
+/**
+* չʾģʽ
+*/
+
+function showDiv(div,imgsrc,evename){
+	alert(div.childNodes[0].outerHTML)
+	if(evename != null && evename == "mouseover"){		
+	}
+}
+
+var showMode = "${showMode}";
+function mouseover(img,imgsrc){
+
+  img.src=imgsrc;
+  if(selectImg!=img){
+      img.className = "hover";
+  }
+}
+
+function mouseout(img,imgsrc){
+  img.src=imgsrc;
+  if(selectImg!=img){
+      img.className = "normal";
+  }
+}
+
+function mousedown(img,imgsrc){
+  img.src=imgsrc;
+  if(selectImg!=img){
+      img.className = "down";
+  }
+}
+function mouseup(img,imgsrc){
+  img.src=imgsrc;
+  if(selectImg!=null){
+      selectImg.className = "normal";
+  }
+  selectImg=img;
+  img.className="select";
+}
+
+</SCRIPT>
+
+<SCRIPT language="javascript">
+    function showsubmenu(sid) {
+        whichEl = eval("submenu" + sid);
+        if (whichEl.style.display == "none") {
+            eval("submenu" + sid + ".style.display=\"\";");
+        }
+        else {
+            eval("submenu" + sid + ".style.display=\"none\";");
+        }
+    }
+var t;
+outlookbar.additem('${menu_title}',t,'');

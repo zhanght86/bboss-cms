@@ -3,14 +3,12 @@ package com.frameworkset.platform.sanylog.service.impl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.frameworkset.util.ClassWrapper;
-import org.junit.Test;
+ 
 
 import com.frameworkset.common.poolman.CallableDBUtil;
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
@@ -19,8 +17,6 @@ import com.frameworkset.platform.sanylog.bean.App;
 import com.frameworkset.platform.sanylog.bean.FunctionList;
 import com.frameworkset.platform.sanylog.bean.PageCounter;
 import com.frameworkset.platform.sanylog.bean.PageList;
-import com.frameworkset.platform.sanylog.bean.SpentTime;
-import com.frameworkset.platform.sanylog.service.FunctionListManager;
 import com.frameworkset.platform.sanylog.service.PageListManager;
 import com.frameworkset.util.ListInfo;
 
@@ -46,7 +42,7 @@ public class PageListManagerImpl implements PageListManager{
 		return datas;
 	}
 
-	@Test
+	 
 	public void testJira()throws SQLException {
 		//List<String> datas = executor.queryListWithDBName(String.class, "jira", "jiratest");
 		   

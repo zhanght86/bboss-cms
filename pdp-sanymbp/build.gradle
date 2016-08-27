@@ -19,13 +19,12 @@ dependencies {
 	
    compile (
   	 	//fileTree(dir: '../lib', include: '**/*.jar'),
-         [group: 'axis', name: 'axis', version: "1.4", transitive: false],   
-         
+          
        [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
          
 
     )
-    compile group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
-    
+   compileOnly group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
+      
    
 }

@@ -1,0 +1,6 @@
+<TD width=6>
+    <IMG height=7 hspace=2 src="${imageUrl}" width=4>
+</TD>
+<TD class=wen2 width=${subColWidth}>
+    <A  href="${linkPath}" target="${target}"> ${linkName}</A>
+</TD>
