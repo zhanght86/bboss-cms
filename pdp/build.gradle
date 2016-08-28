@@ -19,7 +19,7 @@ sourceSets {
 
  
 
-
+/**
 project.tasks.compileJava.dependsOn(project(':pdp-ldap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-desktop').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-datasource').tasks.install)
@@ -33,7 +33,7 @@ project.tasks.compileJava.dependsOn(project(':pdp-sanymbp').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sms').tasks.install)
  
-project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)
+project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)*/
 dependencies {
    
 
@@ -58,6 +58,7 @@ dependencies {
 			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow', version: "${PROJ_VERSION}", transitive: true],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-bussiness', version: "${PROJ_VERSION}", transitive: true],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-demo', version: "${PROJ_VERSION}", transitive: true],
+			[group: 'commons-digester', name: 'commons-digester', version: "2.1", transitive: false],
 			 
          fileTree(dir: '../lib', include: '**/*.jar'),        
      

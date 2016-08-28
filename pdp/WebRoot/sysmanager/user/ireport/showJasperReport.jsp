@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"%>
-<%@ page errorPage="error.jsp" %>
+
 <%@ page import="net.sf.jasperreports.engine.*" %>
 <%@ page import="net.sf.jasperreports.engine.util.*" %>
 <%@ page import="net.sf.jasperreports.engine.export.*" %>
