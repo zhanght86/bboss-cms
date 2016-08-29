@@ -93,7 +93,6 @@ dependencies {
          
         //----------------cms begin---------------// 
          
-      [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
      [group: 'dom4j', name: 'dom4j', version: "1.6.1", transitive: false],
      [group: 'com.bbossgroups', name: 'bboss-htmlparser', version: "${bboss_version}", transitive: false],
       [group: 'org.apache.xmlbeans', name: 'xmlbeans', version: "2.6.0", transitive: false],

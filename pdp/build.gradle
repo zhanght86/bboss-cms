@@ -19,7 +19,7 @@ sourceSets {
 
  
 
-/**
+
 project.tasks.compileJava.dependsOn(project(':pdp-ldap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-desktop').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-datasource').tasks.install)
@@ -33,31 +33,32 @@ project.tasks.compileJava.dependsOn(project(':pdp-sanymbp').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sms').tasks.install)
  
-project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)*/
+project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)
 dependencies {
    
 
    
     compile  (
-			[group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-cms', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-application', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-ldap', version: "${PROJ_VERSION}", transitive: true],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-cms', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-application', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-ldap', version: "${PROJ_VERSION}", transitive: false],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-desktop', version: "${PROJ_VERSION}", transitive: false],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-datasource', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-appbom', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-appmonitor', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-mail', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-wordpdfdemo', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-masterdata', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-log', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-sanymbp', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-sap', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-sms', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-web', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-bussiness', version: "${PROJ_VERSION}", transitive: true],
-			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-demo', version: "${PROJ_VERSION}", transitive: true],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-datasource', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-appbom', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-appmonitor', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-mail', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-wordpdfdemo', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-masterdata', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-log', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-sanymbp', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-sap', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-sms', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-web', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-bussiness', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-workflow-demo', version: "${PROJ_VERSION}", transitive: false],
+			[group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
 			[group: 'commons-digester', name: 'commons-digester', version: "2.1", transitive: false],
 			 
          fileTree(dir: '../lib', include: '**/*.jar'),        
