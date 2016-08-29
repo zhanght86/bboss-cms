@@ -25,8 +25,8 @@ dependencies {
           [group: 'com.bbossgroups', name: 'bboss-util', version: "${bboss_version}", transitive: false],           
 			
 			   [group: 'com.bbossgroups', name: 'bboss-mvc', version: "${bboss_version}", transitive: false],
-            [group: 'javax.servlet', name: 'javax.servlet-api', version: "3.0.1", transitive: false],
-            [group: 'javax.servlet', name: 'jsp-api', version: '2.0', transitive: false],
+            
     )
+    
     
 }
