@@ -35,4 +35,5 @@ dependencies {
     compileOnly(
     		 fileTree(dir: '../lib-compile', include: '**/*.jar'),    
     )
+    compileOnly group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
 }
