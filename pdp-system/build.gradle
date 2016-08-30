@@ -6,7 +6,9 @@ sourceSets {
               srcDir 'src-sys'
         }
         resources {
-           srcDir 'src'  exclude '**/*.java'
+        	 srcDir 'src-common'
+             srcDir 'src-dictionary'
+           	srcDir 'src'  exclude '**/*.java'
             
         }
         
