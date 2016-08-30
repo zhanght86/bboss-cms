@@ -223,7 +223,7 @@ dependencies {
     
     //----------------sms begin---------------//
     
-    compileOnly group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
+    compile group: 'axis', name: 'axis-jaxrpc', version: '1.4', transitive: false
     //---------------sms end------------------//
      
     
