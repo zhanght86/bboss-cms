@@ -145,8 +145,7 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2Object(returnJson, new JsonTypeReference( new TypeReference<MessageDto<T1>>() {
-				}));
+		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2ObjectWithType(returnJson, new JsonTypeReference<MessageDto<T1>>());
 
 		return returnMessageDto;
 	}
@@ -183,8 +182,7 @@ public class WebServiceUtils {
 			return new MessageDto<T1>();
 		}
 
-		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2Object(returnJson, new JsonTypeReference( new TypeReference<MessageDto<T1>>() {
-				}));
+		MessageDto<T1> returnMessageDto = (MessageDto<T1>) StringUtil.json2ObjectWithType(returnJson, new JsonTypeReference<MessageDto<T1>>());
 
 		return returnMessageDto;
 	}
