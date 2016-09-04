@@ -34,7 +34,7 @@
 		}
 	%>
 	window.location.href = '<%=rpage%>';
-	//window.open('login.jsp', '南宁市公安局数据复用平台' + milliseconds.getTime(), param);
+	
 </script>
 </body>
 </html>
