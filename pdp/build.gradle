@@ -11,8 +11,12 @@ sourceSets {
     
      test {
         java {
-            srcDirs 'test'
+            srcDir 'test'
         }
+        resources {
+					srcDir 'test'  exclude '**/*.java'
+        }
+         
     }
    
 }
@@ -64,6 +68,21 @@ dependencies {
          fileTree(dir: '../lib', include: '**/*.jar'),        
      
     )
+    
+    compileOnly (            
+             
+           [group: 'javax.el', name: 'javax.el-api', version: '2.2.1', transitive: false],
+           [group: 'org.eclipse.jetty.aggregate', name: 'jetty-all-server', version: '8.1.19.v20160209', transitive: false],
+           [group: 'org.eclipse.jetty.orbit', name: 'org.apache.jasper.glassfish', version: '2.2.2.v201112011158', transitive: false],
+           [group: 'org.eclipse.jetty.orbit', name: 'javax.servlet.jsp', version: '2.2.0.v201112011158', transitive: false],
+        
+          [group: 'org.eclipse.jetty.orbit', name: 'org.apache.taglibs.standard.glassfish', version: '1.2.0.v201112081803', transitive: false],
+           [group: 'org.eclipse.jetty.orbit', name: 'com.sun.el', version: '2.2.0.v201108011116', transitive: false],
+           
+          
+    )    
+    
+    
    
 }
 if(enable_gretty.equals("true"))
