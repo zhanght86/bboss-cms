@@ -91,8 +91,8 @@ if(enable_gretty.equals("true"))
     
      gretty {
 	    httpPort = 80
-	   inplaceMode="hard"	  
-	   scanInterval=0
+	   //inplaceMode="hard"	  
+	   //scanInterval=0
 	    contextPath = project.name
 	    jvmArgs = ['-Xmx1024M', '-XX:PermSize=128M', '-XX:MaxPermSize=256M']
 	  //  servletContainer = 'jetty7'

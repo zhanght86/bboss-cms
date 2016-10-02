@@ -73,7 +73,7 @@
 											<td >
 												<select id="soft_level_query" name="soft_level"
 													class="select1" style="width:125px;">
-													<option value=""></option>
+													<option value="0"></option>
 													<option value="1">
 														一级
 													</option>
@@ -94,7 +94,7 @@
 											</th>
 											<td>
 												<select id="state_query" name="state" class="select1" style="width:125px;">
-													<option value=""></option>
+													<option value="0"></option>
 													<option value="1">
 														在用
 													</option>
@@ -124,7 +124,7 @@
 											<td>
 												<select id="rd_type_query" name="rd_type"
 													style="width: 125px;">
-													<option value=""></option>
+													<option value="0"></option>
 													<option value="1">
 														自研
 													</option>

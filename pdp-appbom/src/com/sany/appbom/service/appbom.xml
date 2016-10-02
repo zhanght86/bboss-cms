@@ -93,13 +93,13 @@ values
 			#if($app_name && !$app_name.equals(""))
 				and app_name like #[app_name]
 			#end
-			#if($soft_level && !$soft_level.equals(""))
+			#if($soft_level && $soft_level != 0)
 				and soft_level=#[soft_level]
 			#end
-			#if($state && !$state.equals(""))
+			#if($state && $state != 0)
 				and state=#[state]
 			#end
-			#if($rd_type && !$rd_type.equals(""))
+			#if($rd_type && $rd_type != 0)
 				and rd_type=#[rd_type]
 			#end
 		]]>
@@ -117,13 +117,13 @@ values
 			#if($app_name && !$app_name.equals(""))
 				and app_name like #[app_name]
 			#end
-			#if($soft_level && !$soft_level.equals(""))
+			#if($soft_level && $soft_level != 0)
 				and soft_level=#[soft_level]
 			#end
-			#if($state && !$state.equals(""))
+			#if($state && $state != 0)
 				and state=#[state]
 			#end
-			#if($rd_type && !$rd_type.equals(""))
+			#if($rd_type && $rd_type != 0)
 				and rd_type=#[rd_type]
 			#end
 			#if($sortKey && !$sortKey.equals(""))
