@@ -6277,7 +6277,7 @@ public class DocumentManagerImpl implements DocumentManager {
 				+ " select field_id from td_cms_channelfield where channel_id =" + channelId + ") "
 				+ " and a.field_id =" + fieldId;
 
-		String sql1 = "select b.minvalue,b.maxvalue from TD_CMS_EXTFIELD a,TD_CMS_EXTVALUESCOPE b  "
+		String sql1 = "select b.minvalue,b.maxvalue_ from TD_CMS_EXTFIELD a,TD_CMS_EXTVALUESCOPE b  "
 				+ " where a.field_id = b.field_id and  a.field_id =" + fieldId;
 
 		try {
@@ -6299,7 +6299,7 @@ public class DocumentManagerImpl implements DocumentManager {
 					db.executeSelect(sql1);
 					if (db.size() > 0) {
 						int min = db.getInt(0, "minvalue");
-						int max = db.getInt(0, "maxvalue");
+						int max = db.getInt(0, "maxvalue_");
 						for (int i = min; i <= max; i++) {
 							Extvaluescope evs = new Extvaluescope();
 							evs.setId(i + "");

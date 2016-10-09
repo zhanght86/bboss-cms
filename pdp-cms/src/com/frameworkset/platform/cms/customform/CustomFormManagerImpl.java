@@ -241,7 +241,7 @@ public class CustomFormManagerImpl implements CustomFormManager
 			{
 //				sql = "insert into td_cms_extvaluescope(field_id,minvalue,maxvalue) values " +
 //						"(" + id + "," + docExtField.getMinvalue() + "," + docExtField.getMaxvalue() +")";
-				sql = "insert into td_cms_extvaluescope(field_id,minvalue,maxvalue,ID) values (?,?,?,?)";
+				sql = "insert into td_cms_extvaluescope(field_id,minvalue,maxvalue_,ID) values (?,?,?,?)";
 				
 				long Id = pd.getNextPrimaryKey("td_cms_extvaluescope") ;
 				
@@ -631,7 +631,7 @@ public class CustomFormManagerImpl implements CustomFormManager
 			db.executeSelect(sql);
 			if(db.size()>0){
 				field.setMinvalue(db.getInt(0,"MINVALUE"));
-				field.setMaxvalue(db.getInt(0,"MAXVALUE"));
+				field.setMaxvalue(db.getInt(0,"maxvalue_"));
 				ArrayList list = new ArrayList();
 				for (int i=0;i<db.size();i++){
 					String s = db.getString(i,"VALUE")+";"+db.getString(i,"DESCRIPTION");
@@ -683,7 +683,7 @@ public class CustomFormManagerImpl implements CustomFormManager
 			{
 				long autoId = dbutil.getNextPrimaryKey("td_cms_extvaluescope") ;
 				
-				sql = "insert into td_cms_extvaluescope(id,field_id,minvalue,maxvalue) values " +
+				sql = "insert into td_cms_extvaluescope(id,field_id,minvalue,maxvalue_) values " +
 						"("+ autoId +"," + id + "," + docExtField.getMinvalue() + "," + docExtField.getMaxvalue() +")";
 				dbutil.executeInsert(sql);
 			}

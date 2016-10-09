@@ -579,7 +579,7 @@
         <column name="ID" primaryKey="true" required="true" size="10" type="DECIMAL"/>
         <column name="DESCRIPTION" size="100" type="VARCHAR"/>
         <column name="MINVALUE" size="10" type="DECIMAL"/>
-        <column name="MAXVALUE" size="10" type="DECIMAL"/>
+        <column name="MAXVALUE_" size="10" type="DECIMAL"/>
         <foreign-key foreignTable="TD_CMS_EXTFIELD">
             <reference foreign="FIELD_ID" local="FIELD_ID"/>
         </foreign-key>

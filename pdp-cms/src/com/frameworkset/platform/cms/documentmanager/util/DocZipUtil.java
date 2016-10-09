@@ -506,7 +506,7 @@ public class DocZipUtil implements java.io.Serializable {
 								sb.append("</MINVALUE>");
 								
 								sb.append("\n\t\t\t\t\t<MAXVALUE>");
-								sb.append(String.valueOf(db2.getInt(b,"MAXVALUE")));
+								sb.append(String.valueOf(db2.getInt(b,"maxvalue_")));
 								sb.append("</MAXVALUE>");
 								  
 								sb.append("\n\t\t\t\t</EXTVALUESCOPE>");

@@ -1,22 +1,17 @@
 package org.eclipse.jetty.webapp;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.xml.sax.SAXException;
 
-public class JettyStart {
-	private static Logger log = Logger.getLogger(JettyStart.class);
-	private static File appdir ;
-	public JettyStart() {
+public class PDPJettyStart {
+	 public PDPJettyStart() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -25,10 +20,10 @@ public class JettyStart {
 			try {
 				BaseApplicationContext jettyconfig = DefaultApplicationContext.getApplicationContext("org/eclipse/jetty/webapp/jetty.xml");
 				// 服务器的监听端口
-				String port = jettyconfig.getProperty("port", "8088");
+				String port = jettyconfig.getProperty("port", "8080");
 				
 				String contextPath = jettyconfig.getProperty("context",
-						"wowo-backend");
+						"/");
 				
 				int p = Integer.parseInt(port);
 				Server server = new Server(p);
@@ -70,8 +65,5 @@ public class JettyStart {
 
 	}
 	
-	public static void setAppdir(File appdir) {
-		JettyStart.appdir = appdir;
-	}
-
+	 
 }
