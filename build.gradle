@@ -1,10 +1,11 @@
 buildscript {
 	    repositories {	
-	    	maven {
+	    	mavenLocal() 
+	    	/**maven {
 		        url "http://139.224.19.207:8081/repository/maven-public/"
-		    }      
+		    }      */
 	        mavenCentral()	
-	        //mavenLocal()        
+	        //       
 	    }
 	
 	    dependencies {
@@ -78,10 +79,10 @@ configure(allprojects) { project ->
 
 	repositories {
 		mavenLocal()
-		
+		/**
 		maven {
 	        url "http://139.224.19.207:8081/repository/maven-public/"
-	    }
+	    }*/
 		mavenCentral()
 		
 		
