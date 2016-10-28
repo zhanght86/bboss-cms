@@ -62,6 +62,10 @@ public class SSOControler {
     }
 
     private String getSuccessRedirect(String loginStyle, String subsystem) {
+    	 if (StringUtil.isEmpty(subsystem))
+         {
+         	subsystem = AccessControl.getDefaultSUBSystemID();
+         }
         StringBuilder ret = new StringBuilder();
         if (StringUtil.isEmpty(subsystem)) {
 
