@@ -426,11 +426,10 @@ function opernDlg(title,url){
 									
 									<!-- 资源修改，只能是拥有超级管理员角色的用户能进行此项操作 --> 
 									<td class="tablecells" nowrap="nowrap" height='30'  bgcolor="#F6FFEF">
-										<ul>
-										<pg:list colName="authoresouresList">
-											<li><pg:cell/></li>
-										</pg:list>
-										</ul>
+										 
+										<pg:cell colName="authoresouresList"/>
+											
+										 
 									</td>
 									
 									
@@ -481,9 +480,8 @@ function opernDlg(title,url){
 									<!-- 资源修改，只能是拥有超级管理员角色的用户能进行此项操作 --> 
 									<td class="tablecells" nowrap="nowrap" height='30'  bgcolor="#F6FFEF">
 										<ul>
-										<pg:list colName="authoresouresList">
-											<li><pg:cell/></li>
-										</pg:list>
+										<pg:cell colName="authoresouresList"/>
+										 
 										</ul>
 									</td>
 									
