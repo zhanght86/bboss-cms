@@ -40,6 +40,7 @@
 		
 		<property name="LogManagement" class="com.frameworkset.platform.sysmgrcore.manager.db.LogManagerImpl"/>
 		<property name="SchedularManagement" class="com.frameworkset.platform.sysmgrcore.manager.db.SchedularManagerImpl"/>
+		<property name="GroupManagement" class="com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl"/>
 		
 		 
 		 
