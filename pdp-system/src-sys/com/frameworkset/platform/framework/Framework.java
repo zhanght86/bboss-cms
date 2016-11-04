@@ -558,7 +558,7 @@ public class Framework implements ResourceInitial,MessageSource {
 	private void buildFramework(FrameworkConfiguration config) throws Exception
 	{	
 			
-			config.loadConfiguration();
+//			config.loadConfiguration();
 //			modules = config.getModules();
 //			indexs = config.getIndexs();
 //			this.indexByIds = config.getIndexByIds();

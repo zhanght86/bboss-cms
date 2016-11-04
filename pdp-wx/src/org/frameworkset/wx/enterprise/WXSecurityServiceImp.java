@@ -17,151 +17,150 @@ import com.frameworkset.util.StringUtil;
 
 public class WXSecurityServiceImp implements WXSecurityService {
 
-    private static Logger log = Logger.getLogger(WXSecurityServiceImp.class);
+	private static Logger log = Logger.getLogger(WXSecurityServiceImp.class);
 
-    public WXSecurityServiceImp() {
-        // TODO Auto-generated constructor stub
-    }
+	public WXSecurityServiceImp() {
+		// TODO Auto-generated constructor stub
+	}
 
-    @Override
-    public WxAccessToken getWxAccessToken(String corpid, String corpsecret) throws Exception {
-        String url = WXHelper.getEnterpriseAccessTokenURL() + "?corpid=" + corpid + "&corpsecret=" + corpsecret;
+	@Override
+	public WxAccessToken getWxAccessToken(String corpid, String corpsecret) throws Exception {
+		String url = WXHelper.getEnterpriseAccessTokenURL() + "?corpid=" + corpid + "&corpsecret=" + corpsecret;
+		// System.out.println("微信getWxAccessToken=" + url);
+		log.debug("微信getWxAccessToken=" + url);
+		String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
+		WxAccessToken token = StringUtil.json2Object(response, WxAccessToken.class);
+		return token;
+	}
 
-        // System.out.println("微信getWxAccessToken=" + url);
-        log.debug("微信getWxAccessToken=" + url);
+	@Override
+	public WxUserToken getWxUserToken(String accesstoken, String code) throws Exception {
+		String url = WXHelper.getEnterpriseUserInfoURL() + "?access_token=" + accesstoken + "&code=" + code;
 
-        String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
-        WxAccessToken token = StringUtil.json2Object(response, WxAccessToken.class);
-        return token;
-    }
+		// System.out.println("微信getWxUserToken=" + url);
+		log.debug("微信getWxUserToken=" + url);
 
-    @Override
-    public WxUserToken getWxUserToken(String accesstoken, String code) throws Exception {
-        String url = WXHelper.getEnterpriseUserInfoURL() + "?access_token=" + accesstoken + "&code=" + code;
+		String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
+		WxUserToken user = StringUtil.json2Object(response, WxUserToken.class);
+		return user;
+	}
 
-        // System.out.println("微信getWxUserToken=" + url);
-        log.debug("微信getWxUserToken=" + url);
+	// public static void main(String args[]) {
+	// String response =
+	// "{\"UserId\":\"gw_tanx\",\"deviceId\":\"94ab58a699a41828b7da1a6fc9535be2\"}";
+	// WxUserToken user = StringUtil.json2Object(response, WxUserToken.class);
+	// System.out.println(user.getUserId());
+	// }
 
-        String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
-        WxUserToken user = StringUtil.json2Object(response, WxUserToken.class);
-        return user;
-    }
+	@Override
+	public String sendWeChatMsg(WxSendMessage sendMes, String accessToken) throws Exception {
+		String sendUrl = WXHelper.getEnterpriseSendWeChatMsgURL() + "=" + accessToken;
 
-    // public static void main(String args[]) {
-    // String response = "{\"UserId\":\"gw_tanx\",\"deviceId\":\"94ab58a699a41828b7da1a6fc9535be2\"}";
-    // WxUserToken user = StringUtil.json2Object(response, WxUserToken.class);
-    // System.out.println(user.getUserId());
-    // }
+		// System.out.println("微信发送消息URL=" + sendUrl);
+		log.debug("微信发送消息URL=" + sendUrl);
 
-    @Override
-    public String sendWeChatMsg(WxSendMessage sendMes, String accessToken) throws Exception {
-        String sendUrl = WXHelper.getEnterpriseSendWeChatMsgURL() + "=" + accessToken;
+		// 封装发送消息请求json
+		StringBuffer sb = new StringBuffer();
+		sb.append("{");
+		sb.append("\"touser\":" + "\"" + sendMes.getToUser() + "\",");
+		sb.append("\"toparty\":" + "\"" + sendMes.getToparty() + "\",");
+		sb.append("\"totag\":" + "\"" + sendMes.getTotag() + "\",");
+		if (sendMes.getMsgType().equals("text")) {
+			sb.append("\"msgtype\":" + "\"text\",");
+			sb.append("\"text\":" + "{");
+			sb.append("\"content\":" + "\"" + sendMes.getContent() + "\"");
+			sb.append("}");
+		} else if (sendMes.getMsgType().equals("image")) {
+			sb.append("\"msgtype\":" + "\"image\",");
+			sb.append("\"image\":" + "{");
+			sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
+			sb.append("}");
+		} else if (sendMes.getMsgType().equals("voice")) {
+			sb.append("\"msgtype\":" + "\"voice\",");
+			sb.append("\"voice\":" + "{");
+			sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
+			sb.append("}");
+		} else if (sendMes.getMsgType().equals("video")) {
+			sb.append("\"msgtype\":" + "\"video\",");
+			sb.append("\"video\":" + "{");
+			sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\",");
+			sb.append("\"title\":" + "\"" + sendMes.getTitle() + "\",");
+			sb.append("\"description\":" + "\"" + sendMes.getDescription() + "\"");
+			sb.append("}");
+		} else if (sendMes.getMsgType().equals("file")) {
+			sb.append("\"msgtype\":" + "\"file\",");
+			sb.append("\"file\":" + "{");
+			sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
+			sb.append("}");
+		} else if (sendMes.getMsgType().equals("news")) {
+			sb.append("\"msgtype\":" + "\"news\",");
+			sb.append("\"news\":" + "{");
+			sb.append("\"articles\":" + "[");
+			sb.append("{");
+			sb.append("\"title\":" + "\"" + sendMes.getTitle() + "\",");
+			sb.append("\"description\":" + "\"" + sendMes.getDescription() + "\",");
+			sb.append("\"url\":" + "\"" + sendMes.getUrl() + "\",");
+			sb.append("\"picurl\":" + "\"" + sendMes.getPicurl() + "\"");
+			sb.append("}");
+			sb.append("]");
+			sb.append("}");
+		}
+		sb.append(",\"safe\":" + "\"" + sendMes.getSafe() + "\",");
+		sb.append("\"agentid\":" + "\"" + sendMes.getAgentid() + "\"");
+		sb.append("}");
+		String json = sb.toString();
 
-        // System.out.println("微信发送消息URL=" + sendUrl);
-        log.debug("微信发送消息URL=" + sendUrl);
+		// System.out.println("微信发送消息json=" + json);
+		log.debug("微信发送消息json=" + json);
 
-        // 封装发送消息请求json
-        StringBuffer sb = new StringBuffer();
-        sb.append("{");
-        sb.append("\"touser\":" + "\"" + sendMes.getToUser() + "\",");
-        sb.append("\"toparty\":" + "\"" + sendMes.getToparty() + "\",");
-        sb.append("\"totag\":" + "\"" + sendMes.getTotag() + "\",");
-        if (sendMes.getMsgType().equals("text")) {
-            sb.append("\"msgtype\":" + "\"text\",");
-            sb.append("\"text\":" + "{");
-            sb.append("\"content\":" + "\"" + sendMes.getContent() + "\"");
-            sb.append("}");
-        } else if (sendMes.getMsgType().equals("image")) {
-            sb.append("\"msgtype\":" + "\"image\",");
-            sb.append("\"image\":" + "{");
-            sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
-            sb.append("}");
-        } else if (sendMes.getMsgType().equals("voice")) {
-            sb.append("\"msgtype\":" + "\"voice\",");
-            sb.append("\"voice\":" + "{");
-            sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
-            sb.append("}");
-        } else if (sendMes.getMsgType().equals("video")) {
-            sb.append("\"msgtype\":" + "\"video\",");
-            sb.append("\"video\":" + "{");
-            sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\",");
-            sb.append("\"title\":" + "\"" + sendMes.getTitle() + "\",");
-            sb.append("\"description\":" + "\"" + sendMes.getDescription() + "\"");
-            sb.append("}");
-        } else if (sendMes.getMsgType().equals("file")) {
-            sb.append("\"msgtype\":" + "\"file\",");
-            sb.append("\"file\":" + "{");
-            sb.append("\"media_id\":" + "\"" + sendMes.getMediaId() + "\"");
-            sb.append("}");
-        } else if (sendMes.getMsgType().equals("news")) {
-            sb.append("\"msgtype\":" + "\"news\",");
-            sb.append("\"news\":" + "{");
-            sb.append("\"articles\":" + "[");
-            sb.append("{");
-            sb.append("\"title\":" + "\"" + sendMes.getTitle() + "\",");
-            sb.append("\"description\":" + "\"" + sendMes.getDescription() + "\",");
-            sb.append("\"url\":" + "\"" + sendMes.getUrl() + "\",");
-            sb.append("\"picurl\":" + "\"" + sendMes.getPicurl() + "\"");
-            sb.append("}");
-            sb.append("]");
-            sb.append("}");
-        }
-        sb.append(",\"safe\":" + "\"" + sendMes.getSafe() + "\",");
-        sb.append("\"agentid\":" + "\"" + sendMes.getAgentid() + "\"");
-        sb.append("}");
-        String json = sb.toString();
+		try {
 
-        // System.out.println("微信发送消息json=" + json);
-        log.debug("微信发送消息json=" + json);
+			URL url = new URL(sendUrl);
 
-        try {
+			HttpsURLConnection http = (HttpsURLConnection) url.openConnection();
 
-            URL url = new URL(sendUrl);
+			http.setRequestMethod("POST");
 
-            HttpsURLConnection http = (HttpsURLConnection) url.openConnection();
+			http.setRequestProperty("Content-Type",
 
-            http.setRequestMethod("POST");
+					"application/json;charset=UTF-8");
 
-            http.setRequestProperty("Content-Type",
+			http.setDoOutput(true);
 
-            "application/json;charset=UTF-8");
+			http.setDoInput(true);
 
-            http.setDoOutput(true);
+			System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
+			// 连接超时30秒
 
-            http.setDoInput(true);
+			System.setProperty("sun.net.client.defaultReadTimeout", "30000");
+			// 读取超时30秒
 
-            System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
-            // 连接超时30秒
+			http.connect();
 
-            System.setProperty("sun.net.client.defaultReadTimeout", "30000");
-            // 读取超时30秒
+			OutputStream os = http.getOutputStream();
 
-            http.connect();
+			os.write(json.getBytes("UTF-8"));// 传入参数
 
-            OutputStream os = http.getOutputStream();
+			InputStream is = http.getInputStream();
 
-            os.write(json.getBytes("UTF-8"));// 传入参数
+			int size = is.available();
 
-            InputStream is = http.getInputStream();
+			byte[] jsonBytes = new byte[size];
 
-            int size = is.available();
+			is.read(jsonBytes);
 
-            byte[] jsonBytes = new byte[size];
+			os.flush();
 
-            is.read(jsonBytes);
+			os.close();
 
-            os.flush();
+			return new String(jsonBytes, "UTF-8");
 
-            os.close();
+		} catch (Exception e) {
 
-            return new String(jsonBytes, "UTF-8");
+			log.debug("推送消息给微信端出错：" + e.getMessage(), e);
 
-        } catch (Exception e) {
+			return "";
+		}
 
-            log.debug("推送消息给微信端出错：" + e.getMessage(), e);
-
-            return "";
-        }
-
-    }
+	}
 }
