@@ -36,13 +36,14 @@ project.tasks.compileJava.dependsOn(project(':pdp-log').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sanymbp').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-sms').tasks.install)
- 
+project.tasks.compileJava.dependsOn(project(':pdp-wx').tasks.install) 
 project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)
 dependencies {
    
 
    
     compile  (
+			[group: 'com.bbossgroups.pdp', name: 'pdp-trans', version: "${PROJ_VERSION}", transitive: false],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: false],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-cms', version: "${PROJ_VERSION}", transitive: false],
 			[group: 'com.bbossgroups.pdp', name: 'pdp-application', version: "${PROJ_VERSION}", transitive: false],
