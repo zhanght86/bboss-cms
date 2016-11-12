@@ -316,7 +316,7 @@ function openCustomMenu(){
               <td width="80">请假申请</td>
               <td width="300">5月27日的事假申请</td>
               <td width="100">部门领导审批</td>
-              <td width="100">邱华 龙兵</td>
+              <td width="100">张三 李四</td>
               <td width="150"><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
             <tr>
@@ -324,7 +324,7 @@ function openCustomMenu(){
               <td>调休申请</td>
               <td>5月26日的调休申请</td>
               <td>部门领导审批</td>
-              <td>邱华 龙兵</td>
+              <td>张三 李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
             <tr>
@@ -332,7 +332,7 @@ function openCustomMenu(){
               <td>调休申请</td>
               <td>5月20日-5月25日的年假申请</td>
               <td>部门领导审批</td>
-              <td>邱华 龙兵</td>
+              <td>张三 李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
             <tr>
@@ -340,7 +340,7 @@ function openCustomMenu(){
               <td>调休申请</td>
               <td>5月18日的加班申请</td>
               <td>部门领导审批</td>
-              <td>邱华 龙兵</td>
+              <td>张三 李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
             <tr>
@@ -348,7 +348,7 @@ function openCustomMenu(){
               <td>请假申请</td>
               <td>第二季度绩效合约提交申请</td>
               <td>部门领导审批</td>
-              <td>邱华 龙兵</td>
+              <td>张三 李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a></td>
             </tr>
             <tr>
@@ -356,7 +356,7 @@ function openCustomMenu(){
               <td>绩效合约</td>
               <td>第一季度绩效合约总结</td>
               <td>部门领导审批</td>
-              <td>邱华 龙兵</td>
+              <td>张三 李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
             <tr>
@@ -364,7 +364,7 @@ function openCustomMenu(){
               <td>加班申请</td>
               <td>5月16日的加班申请</td>
               <td>部门领导审批</td>
-              <td>龙兵</td>
+              <td>李四</td>
               <td><a href="javascript:void(0)">催办</a> <a href="javascript:void(0)">撤回</a> <a href="javascript:void(0)">废弃</a></td>
             </tr>
           </table>
