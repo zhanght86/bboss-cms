@@ -46,6 +46,8 @@ public class WfApp {
 	private int needsign;
 	
 	private long tickettime;// 票据失效时间
+	private String publicKey;
+	private String privateKey;
 
 	public String getPending_type() {
 		return pending_type;
@@ -223,6 +225,22 @@ public class WfApp {
 
 	public void setNeedsign(int needsign) {
 		this.needsign = needsign;
+	}
+
+	public String getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
+	}
+
+	public String getPrivateKey() {
+		return privateKey;
+	}
+
+	public void setPrivateKey(String privateKey) {
+		this.privateKey = privateKey;
 	}
 
 

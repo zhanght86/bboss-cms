@@ -70,7 +70,23 @@
 							<pg:equal value="0">不签名</pg:equal>
 							 </pg:case></td>
 					</tr>
+					<pg:equal colName="needsign" value="1">
+					<tr>
+						<th>签名私钥：</th>
+						<td> 
+							<textarea rows="2" cols="5"><pg:cell colName="privateKey"/></textarea>
+							 </td>
+							
+							
+					</tr>
 					
+					<tr>
+						<th>签名公钥：</th>
+						<td> 
+							<textarea rows="2" cols="5"><pg:cell colName="publicKey"/></textarea>
+							 </td>
+					</tr>
+					</pg:equal>
 					</pg:beaninfo>
 				</table>
 			</fieldset>

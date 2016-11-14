@@ -21,9 +21,9 @@ public class DBTokenTest {
 	private String account = "yinbp";
 	private String worknumber = "10006673";
 	private String appid = "test";
-	private String secret = "c96a4686-c5dc-4556-9554-eb61846b5180";
+	private String secret = "76252a20-b171-4796-a4a4-c89149b725a2";
 //	 String server = "http://10.0.15.223/SanyToken";
-	String server = "http://pdp.bbossgroups.com";
+	String server = "http://localhost:8082/ecsystem";
 	
 	
 	public void init() throws Exception

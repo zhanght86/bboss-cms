@@ -539,6 +539,23 @@ public class SSOControler {
         return sEchoStr;
 
     }
+    
+    public static void main(String[] args) throws AesException
+    {
+    	 WXBizMsgCrypt wxcpt;
+        
+             String weixin_token = "yinbp|10000";
+             String weixin_aeskey = "aaasderaaweaaaaaaasderaaweaaaaaaasderaaweaa";
+             String weixin_corpid = "dd";
+
+             wxcpt = new WXBizMsgCrypt(weixin_token, weixin_aeskey, weixin_corpid);
+             String sVerifyMsgSig = "fcafc2db725a8ebcc97f97796da66ebf954483bb";
+             String sVerifyTimeStamp = "fffdasdf";
+             String sVerifyNonce = "sVerifyNonce";
+             String sVerifyEchoStr = "sVerifyEchoStr";
+             String sEchoStr = wxcpt.VerifyURL(sVerifyMsgSig, sVerifyTimeStamp, sVerifyNonce, sVerifyEchoStr);
+             System.out.println("需要返回的明文sEchoStr=" + sEchoStr);
+    }
 
     /**
      * 配置微信菜单 //redirect_uri=http://domain/contextpath/sso/wxsso.page?loginMenu=

@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.frameworkset.security.ecc.SimpleKeyPair;
 import org.frameworkset.web.token.AppValidateResult;
 import org.frameworkset.web.token.Application;
+import org.frameworkset.web.token.TokenHelper;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.handle.FieldRowHandler;
 import com.frameworkset.common.poolman.handle.RowHandler;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
 import com.sany.application.entity.WfApp;
@@ -58,7 +59,14 @@ public class AppcreateServiceImpl implements AppcreateService {
     	
     	
     	try {
-    		return executor.queryObject(WfApp.class, "selectWfApp", wfAppId);
+    		WfApp wfApp = executor.queryObject(WfApp.class, "selectWfApp", wfAppId);
+    		SimpleKeyPair keypair = TokenHelper.getTokenService().getSimpleKeyPair(wfAppId);
+    		if(keypair != null)
+    		{
+    			wfApp.setPrivateKey(keypair.getPrivateKey());
+    			wfApp.setPublicKey(keypair.getPublicKey());
+    		}
+    		return wfApp;
     	} catch (Exception e) {
             throw e;
             
