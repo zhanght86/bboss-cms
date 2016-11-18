@@ -91,6 +91,11 @@
 				</table>
 			</fieldset>
 			<div class="btnarea">
+			<pg:equal actual="${wfApp.needsign}" value="1">
+				<a
+					href="downcafile.page?appcode=${wfApp.system_id}" class="bt_1" id="downfile"
+					><span>下载证书</span></a> 
+			</pg:equal>		
 				<a
 					href="javascript:void(0)" class="bt_2" id="resetButton"
 					onclick="closeDlg()"><span>退出</span></a> <input type="reset"

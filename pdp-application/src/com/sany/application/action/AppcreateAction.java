@@ -15,6 +15,7 @@
 package com.sany.application.action;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.frameworkset.http.FileBlob;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
+import org.frameworkset.web.auth.AuthorHelper;
 import org.frameworkset.web.multipart.MultipartFile;
 import org.frameworkset.web.servlet.ModelMap;
 
@@ -99,6 +102,22 @@ public class AppcreateAction {
     	}
     	
     	return "path:viewAppInfo";
+    }
+    
+    public @ResponseBody FileBlob downcafile(String appcode)
+    {
+    	if(appcode == null || appcode.equals(""))
+    		throw new java.lang.NullPointerException("下载证书出错:必须指定应用编码");
+    	
+		try {
+			
+			InputStream input =  AuthorHelper.generateCAStream(appcode);
+	        FileBlob fb = new FileBlob ("token.certificate",input);//下载文件流
+	        return fb;
+		} catch (Exception e) {
+			throw new java.lang.RuntimeException(e);
+		}
+    	
     }
 	
     /**

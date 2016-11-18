@@ -60,7 +60,7 @@ public class AppcreateServiceImpl implements AppcreateService {
     	
     	try {
     		WfApp wfApp = executor.queryObject(WfApp.class, "selectWfApp", wfAppId);
-    		SimpleKeyPair keypair = TokenHelper.getTokenService().getSimpleKeyPair(wfAppId);
+    		SimpleKeyPair keypair = TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
     		if(keypair != null)
     		{
     			wfApp.setPrivateKey(keypair.getPrivateKey());
@@ -153,6 +153,10 @@ public class AppcreateServiceImpl implements AppcreateService {
     			wfApp.setUpdate_date(new Timestamp(new Date().getTime()));
     			
     			executor.updateBean("updateWfApp", wfApp);
+    			if(wfApp.getNeedsign() == 1)
+    			{
+    				TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
+    			}
     		}else{
     			
     			wfApp.setCreate_date(new Timestamp(new Date().getTime()));
@@ -160,6 +164,10 @@ public class AppcreateServiceImpl implements AppcreateService {
     			wfApp.setId(UUID.randomUUID().toString());
     			
     			executor.insertBean("insertWfApp", wfApp);
+    			if(wfApp.getNeedsign() == 1)
+    			{
+    				TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
+    			}
     		}
     	}
     }

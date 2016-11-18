@@ -70,7 +70,7 @@
 			id : 'add',
 			title : '新增应用',
 			width : 500,
-			height : 380,
+			height : 500,
 			content : 'url:' + "<%=request.getContextPath()%>/application/appTypeAdd.jsp"
 		});
 	}
@@ -90,7 +90,7 @@
 			id : 'update',
 			title : '修改应用',
 			width : 500,
-			height : 350,
+			height : 500,
 			content : 'url:' + "<%=request.getContextPath()%>/application/updateAppInfo.page?appInfoId="+appInfoId
 		});
 	}
@@ -110,7 +110,7 @@
 			id : 'update',
 			title : '查看应用',
 			width : 500,
-			height : 320,
+			height : 500,
 			content : 'url:' + "<%=request.getContextPath()%>/application/viewAppInfo.page?appInfoId="+appInfoId
 		});
 	}
