@@ -8,7 +8,7 @@ include 'pdp-ldap'
 include 'pdp-desktop'
 include 'pdp-datasource'
 include 'pdp-appbom'
-include 'pdp-appmonitor'
+
 include 'pdp-mail'
 include 'pdp-wordpdfdemo'
 include 'pdp-masterdata'

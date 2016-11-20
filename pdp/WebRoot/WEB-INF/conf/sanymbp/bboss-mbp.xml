@@ -18,7 +18,7 @@
 	<property name="/sanymbp/ssoLogin.page"
 		path:login="/sanymbp/login.jsp"
 		path:index="redirect:/sanymbp/index.page"
-		f:clientLoginService="attr:sanymbp.clientLoginService"
+		 
 		class="com.sany.mbp.login.action.SsoController" >
 	</property>
 	
@@ -28,7 +28,6 @@
 	</property>
 	
 	
-	<property name="sanymbp.clientLoginService"
-		class="com.sany.mbp.login.service.ClientLoginService"/>
+	 
 		
 </properties>

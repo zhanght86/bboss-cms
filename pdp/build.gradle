@@ -28,7 +28,6 @@ project.tasks.compileJava.dependsOn(project(':pdp-ldap').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-desktop').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-datasource').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-appbom').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-appmonitor').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-mail').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-wordpdfdemo').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-masterdata').tasks.install)
@@ -51,7 +50,6 @@ dependencies {
    compile project(':pdp-desktop')
    compile project(':pdp-appbom')
    compile project(':pdp-datasource')
-   compile project(':pdp-appmonitor')
    compile project(':pdp-mail')
    compile project(':pdp-wordpdfdemo')
    compile project(':pdp-masterdata')
@@ -63,6 +61,7 @@ dependencies {
    compile project(':pdp-workflow-bussiness')
    compile project(':pdp-workflow-demo')
      compile project(':pdp-parameters-handler')
+     compile 'io.jsonwebtoken:jjwt:0.7.0'
    
     compile  (
 			 

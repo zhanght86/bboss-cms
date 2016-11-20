@@ -1565,7 +1565,7 @@ public class AccessControl implements AccessControlInf{
 	 *            String 新密码
 	 */
 	public static void updateMailPassword(String userEmail, String newPassword) {
-		String mailValidata = ConfigManager.getInstance().getConfigValue(
+		/**String mailValidata = ConfigManager.getInstance().getConfigValue(
 				"mailValidata");
 		if (mailValidata != null && mailValidata.equals("1")) {
 			String url = "http://"
@@ -1582,7 +1582,7 @@ public class AccessControl implements AccessControlInf{
 			} finally {
 				client = null;
 			}
-		}
+		}*/
 	}
 
 	/**

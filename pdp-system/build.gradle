@@ -27,7 +27,7 @@ dependencies {
             
     	      [group: 'com.bbossgroups', name: 'bboss-event', version: "${bboss_version}", transitive: false],
            [group: 'com.bbossgroups', name: 'bboss-tabpane', version: "${bboss_version}", transitive: false],
-          
+           [group: 'com.bbossgroups', name: 'bboss-http', version: "${bboss_version}", transitive: true],
               
 		 	 [group: 'com.bbossgroups', name: 'bboss-data', version: "${bboss_version}", transitive: false],
              [group: 'com.bbossgroups', name: 'bboss-schedule', version: "${bboss_version}", transitive: false],
@@ -39,7 +39,7 @@ dependencies {
                 
           [group: 'com.bbossgroups', name: 'bboss-soa', version: "${bboss_version}", transitive: false],
               [group: 'com.bbossgroups', name: 'bboss-taglib', version: "${bboss_version}", transitive: false],
-             [group: 'com.bbossgroups.rpc', name: 'bboss-rpc', version: "4.10.9", transitive: false],
+             [group: 'com.bbossgroups.rpc', name: 'bboss-rpc', version: "5.0.0", transitive: false],
              
               [group: 'oro', name: 'oro', version: '2.0.8', transitive: false],
               [group: 'commons-lang', name: 'commons-lang', version: '2.6', transitive: false],
@@ -79,8 +79,7 @@ dependencies {
              [group: 'javax.mail', name: 'mail', version: '1.4', transitive: false],
             [group: 'org.apache.ant', name: 'ant', version: '1.9.7', transitive: false],
             [group: 'javax.transaction', name: 'jta', version: '1.1', transitive: false],
-            [group: 'commons-codec', name: 'commons-codec', version: '1.10', transitive: false],
-            [group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1', transitive: false],
+          
             
              [group: 'com.bbossgroups.activiti', name: 'activiti-bpmn-converter', version: "${WF_VERSION}", transitive: false],
             [group: 'com.bbossgroups.activiti', name: 'activiti-bpmn-layout', version: "${WF_VERSION}", transitive: false],
@@ -158,8 +157,7 @@ dependencies {
     		[group: 'antlr', name: 'antlr', version: '2.7.7', transitive: false],
      [group: 'org.apache.geronimo.specs', name: 'geronimo-activation_1.1_spec', version: '1.1', transitive: false],
             [group: 'org.apache.geronimo.specs', name: 'geronimo-annotation_1.0_spec', version: '1.1.1', transitive: false],
-              [group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.1.3', transitive: false],
-              
+                
            [group: 'com.ibm.icu', name: 'icu4j', version: '4.6', transitive: false],
              [group: 'org.jboss.netty', name: 'netty', version: '3.2.10.Final', transitive: false],
           [group: 'org.jasypt', name: 'jasypt', version: '1.9.2', transitive: false],
