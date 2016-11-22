@@ -34,6 +34,7 @@ import org.frameworkset.web.servlet.ModelMap;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
 import com.frameworkset.util.ListInfo;
+import com.frameworkset.util.SimpleStringUtil;
 import com.sany.application.entity.WfApp;
 import com.sany.application.entity.WfPic;
 import com.sany.application.service.AppcreateService;
@@ -288,7 +289,7 @@ public class AppcreateAction {
 	 */
 	public @ResponseBody String getSystemSecret(ModelMap model) throws Exception{
 
-		return java.util.UUID.randomUUID().toString();
+		return SimpleStringUtil.getUUID();
 
 	}
 	
