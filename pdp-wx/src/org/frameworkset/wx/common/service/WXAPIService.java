@@ -1,16 +1,15 @@
 package org.frameworkset.wx.common.service;
 
 import org.frameworkset.wx.common.entity.OAuthSnsAPIBase;
+import org.frameworkset.wx.common.entity.WxAccessToken;
+import org.frameworkset.wx.common.entity.WxJsapiTicket;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
+import org.frameworkset.wx.common.enums.EnumWeiXinAccountFlag;
 import org.frameworkset.wx.common.enums.EnumWeiXinOAuthScope;
 
 public interface WXAPIService {
 	/**
-	 * Appid（数据库设置好）、
-	 * MchId（数据库设置好）、
-	 * sign（自动计算）、
-	 * NonceStr（自动计算） 
-	 * 以上四个参数自动赋值，不需要传。
+	 * Appid（数据库设置好）、 MchId（数据库设置好）、 sign（自动计算）、 NonceStr（自动计算） 以上四个参数自动赋值，不需要传。
 	 * 
 	 * @param orderMsg
 	 *            统一下单的对象
@@ -52,4 +51,27 @@ public interface WXAPIService {
 	 * @throws Exception
 	 */
 	public OAuthSnsAPIBase getWeiXinSnsAPIBase(String code) throws Exception;
+
+	/**
+	 * 获取企业号和公众号的accsesstoken不一样。
+	 * 
+	 * @param appid
+	 * @param appsecret
+	 * @param enumWeiXinAccountFlag
+	 * @return
+	 * @throws Exception
+	 */
+	public WxAccessToken getWxAccessToken(String appid, String appsecret, EnumWeiXinAccountFlag enumWeiXinAccountFlag)
+			throws Exception;
+
+	/**
+	 * 根据access token 获取ticket
+	 * 
+	 * @param accessToken
+	 * @return
+	 * @throws Exception
+	 */
+	public WxJsapiTicket getJsapiTicket(String accessToken) throws Exception;
+
+	public String getPaySign(long timestamp, String nodeStr) throws Exception;
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.frameworkset.wx.common.entity.WxJSAPISign;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
 
 /**
@@ -72,6 +73,29 @@ public class XMLParse {
 		return String.format(format, encrypt, signature, timestamp, nonce);
 	}
 
+	public static String generateJsAPIXML(WxJSAPISign wxJSAPISign) throws UnsupportedEncodingException {
+		List<String> xmllist = new ArrayList<String>();
+		StringBuffer sb = new StringBuffer();
+		sb.append("<xml>\n");
+		if (wxJSAPISign.getAppId() != null)
+			xmllist.add("<appId>" + wxJSAPISign.getAppId() + "</appId>\n");
+		if (wxJSAPISign.getTimeStamp() != null)
+			xmllist.add("<timeStamp>" + wxJSAPISign.getTimeStamp() + "</timeStamp>\n");
+		if (wxJSAPISign.getNonceStr() != null)
+			xmllist.add("<nonceStr>" + wxJSAPISign.getNonceStr() + "</nonceStr>\n");
+		if (wxJSAPISign.getPrepayId() != null)
+			xmllist.add("<package>prepay_id=" + wxJSAPISign.getPrepayId() + "</package>\n");
+		if (wxJSAPISign.getSignType() != null)
+			xmllist.add("<signType>" + wxJSAPISign.getSignType() + "</signType>\n");
+		Collections.sort(xmllist);
+		for (String str : xmllist) {
+			sb.append(str);
+		}
+		sb.append("</xml>");
+
+		return new String(sb.toString().getBytes(), "ISO8859-1");
+	}
+
 	/**
 	 * 
 	 * @param encrypt
@@ -79,10 +103,10 @@ public class XMLParse {
 	 * @param timestamp
 	 * @param nonce
 	 * @return
-	 * @throws UnsupportedEncodingException 
+	 * @throws UnsupportedEncodingException
 	 */
 	public static String generateUnifiedOrderXML(WxOrderMessage orderMsg) throws UnsupportedEncodingException {
-		List<String> xmllist=new ArrayList<String>();
+		List<String> xmllist = new ArrayList<String>();
 		StringBuffer sb = new StringBuffer();
 		sb.append("<xml>\n");
 		if (orderMsg.getAppid() != null)
@@ -125,12 +149,12 @@ public class XMLParse {
 			xmllist.add("<product_id>" + orderMsg.getProductId() + "</product_id>\n");
 		if (orderMsg.getLimitPay() != null)
 			xmllist.add("<limit_pay>" + orderMsg.getLimitPay() + "</limit_pay>\n");
-		Collections.sort(xmllist);  
-		for(String str:xmllist){
+		Collections.sort(xmllist);
+		for (String str : xmllist) {
 			sb.append(str);
 		}
 		sb.append("</xml>");
-		
+
 		return new String(sb.toString().getBytes(), "ISO8859-1");
 	}
 }

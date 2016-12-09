@@ -23,13 +23,15 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.Md5Crypt;
 import org.apache.http.message.BasicNameValuePair;
+import org.frameworkset.wx.common.entity.WxJSAPISign;
+import org.frameworkset.wx.common.entity.WxJsapiTicket;
+import org.frameworkset.wx.common.entity.WxNotify;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
-import org.frameworkset.wx.common.util.MD5Util;
 import org.frameworkset.wx.common.util.Md5;
 import org.frameworkset.wx.common.util.RandomUtil;
 import org.frameworkset.wx.common.util.WXHelper;
+import org.jfree.util.Log;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -315,8 +317,10 @@ public class WXBizMsgCrypt {
 		String result = decrypt(echoStr);
 		return result;
 	}
+
 	/**
-	 *  验证微信公众号token
+	 * 验证微信公众号token
+	 * 
 	 * @param msgSignature
 	 * @param timeStamp
 	 * @param nonce
@@ -324,7 +328,8 @@ public class WXBizMsgCrypt {
 	 * @return
 	 * @throws AesException
 	 */
-	public String VerifyServiceURL(String msgSignature, String timeStamp, String nonce, String echoStr) throws AesException {
+	public String VerifyServiceURL(String msgSignature, String timeStamp, String nonce, String echoStr)
+			throws AesException {
 		String signature = SHA1.getSHA1(token, timeStamp, nonce);
 		System.out.println(signature);
 		if (!signature.equals(msgSignature)) {
@@ -332,7 +337,6 @@ public class WXBizMsgCrypt {
 		}
 		return echoStr;
 	}
-
 
 	/**
 	 * 获得微信统一下单的签名
@@ -346,7 +350,7 @@ public class WXBizMsgCrypt {
 	 * @return
 	 */
 	public static String getWXSign(WxOrderMessage orderMessage, String apiKey) throws AesException {
-//		verifyUnifiedOrderParam(orderMessage);
+		verifyUnifiedOrderParam(orderMessage);
 		String sign = null;
 		try {
 			Class t = Class.forName("org.frameworkset.wx.common.entity.WxOrderMessage");
@@ -369,6 +373,85 @@ public class WXBizMsgCrypt {
 			}
 			System.out.println(pingStr);
 			String stringA = pingStr.toString() + "key=" + apiKey;
+			System.out.println(stringA);
+			sign = new Md5().getMD5ofStr(stringA).toUpperCase();
+			System.out.println(sign);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sign;
+	}
+
+	public static String getWXPaySign(String className, WxJSAPISign wxJSAPISign, String apiKey) throws AesException {
+		// verifyUnifiedOrderParam(orderMessage);
+		String sign = null;
+		try {
+			Class t = Class.forName(className);
+			Arrays.sort(WXHelper.PAYSIGN_COLUMN);
+			int i = 0;
+			StringBuffer pingStr = new StringBuffer();
+			for (String column : WXHelper.getMethodByASCIIsort("jsapi")) {
+				Method m = t.getMethod(column);
+				String value = (String) m.invoke(wxJSAPISign, null);
+				if (value == null || "".equals(value)) {
+					i++;
+					continue;
+				}
+				if (WXHelper.PAYSIGN_COLUMN[i].equals("package"))
+					pingStr.append(new BasicNameValuePair(WXHelper.PAYSIGN_COLUMN[i], "prepay_id=" + value));
+				else
+					pingStr.append(new BasicNameValuePair(WXHelper.PAYSIGN_COLUMN[i], value));
+				System.out.println(pingStr.toString());
+				if (i < WXHelper.PAYSIGN_COLUMN.length) {
+					pingStr.append("&");
+				}
+				i++;
+			}
+			System.out.println(pingStr);
+			String stringA = pingStr.toString() + "key=" + apiKey;
+			System.out.println(stringA);
+			sign = new Md5().getMD5ofStr(stringA).toUpperCase();
+			System.out.println(sign);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sign;
+	}
+
+	public static String getWXSign(Class t, Object obj, String apiKey, String[] COLUMN_NAME)
+			throws AesException {
+		String sign = null;
+		try {
+			Arrays.sort(COLUMN_NAME);
+			int i = 0;
+			StringBuffer pingStr = new StringBuffer();
+			for (String column : WXHelper.getMethodByASCIIsort(COLUMN_NAME)) {
+				Method m = null;
+				try {
+					m = t.getMethod(column);
+				} catch (NoSuchMethodException e) {
+					Log.debug("the method:  " + column + " not found in class:" + t.getName());
+					i++;
+					continue;
+				}
+				String value = (String) m.invoke(obj, null);
+				if (value == null || "".equals(value) || "sign".equals(column)) {
+					i++;
+					continue;
+				}
+				if (COLUMN_NAME[i].equals("package"))
+					pingStr.append(new BasicNameValuePair(COLUMN_NAME[i], "prepay_id=" + value));
+				else
+					pingStr.append(new BasicNameValuePair(COLUMN_NAME[i], value));
+				System.out.println(pingStr.toString());
+				if (i < COLUMN_NAME.length - 1) {
+					pingStr.append("&");
+				}
+				i++;
+			}
+			System.out.println(pingStr);
+			String stringA = "";
+			stringA = pingStr.toString() + "&key=" + apiKey;
 			System.out.println(stringA);
 			sign = new Md5().getMD5ofStr(stringA).toUpperCase();
 			System.out.println(sign);
@@ -417,8 +500,9 @@ public class WXBizMsgCrypt {
 		// throw new AesException(AesException.ValidateUnifiedOrderParamError);
 		if (orderMessage.getBody() == null || "".equals(orderMessage.getBody()))
 			throw new AesException(AesException.ValidateUnifiedOrderParamError);
-//		if (orderMessage.getOutTradeNo() == null || "".equals(orderMessage.getOutTradeNo()))
-//			throw new AesException(AesException.ValidateUnifiedOrderParamError);
+		// if (orderMessage.getOutTradeNo() == null ||
+		// "".equals(orderMessage.getOutTradeNo()))
+		// throw new AesException(AesException.ValidateUnifiedOrderParamError);
 		if (orderMessage.getTotalFee() == null || "".equals(orderMessage.getTotalFee()))
 			throw new AesException(AesException.ValidateUnifiedOrderParamError);
 		if (orderMessage.getSpbillCreateIp() == null || "".equals(orderMessage.getSpbillCreateIp()))
@@ -430,21 +514,74 @@ public class WXBizMsgCrypt {
 		return true;
 	}
 
+	/**
+	 * 验证支付成功后的回调通知签名
+	 * 
+	 * @param orderMessage
+	 * @return
+	 * @throws AesException
+	 */
+	public static boolean verifyNotifySign(WxNotify wxNotify) throws AesException {
+		String COLUMN_NAME[] = {
+				"appid", "mch_id", "device_info", "nonce_str",
+				"sign", "sign_type", "result_code", "err_code",
+				"err_code_des", "openid", "is_subscribe", "trade_type",
+				"bank_type", "total_fee", "settlement_total_fee",
+				"fee_type", "cash_fee", "cash_fee_type", "coupon_fee",
+				"coupon_count", "transaction_id", "out_trade_no", "attach", "time_end"
+		};
+		// String paySign = getWXSign(wxNotify.getClass(), wxNotify,
+		// WXHelper.getServiceMchKey(), COLUMN_NAME);
+		String paySign = getWXSign(wxNotify.getClass(), wxNotify,
+				"administratorwowo201612345678901", COLUMN_NAME);
+		System.out.println(paySign);
+		return true;
+	}
+
 	public static void main(String args[]) throws Exception {
-//	WXBizMsgCrypt b=new WXBizMsgCrypt("wowo4l6zkjs1zimtdzswylhn", "AxBhanBqb1hinGg3IwnOBbykN2q421m3mTCWbIiQuSq", "wxe88cfaa46b73c192");
-//	b.VerifyURL("fc536012323ebd4d74947ec1da3d790064b53e86", "1477853717", "1683104923", "701889282266065751");
+
+		WxNotify wxNotify = new WxNotify();
+		wxNotify.setAppid("222");
+		wxNotify.setMchId("12331231232");
+		wxNotify.setDeviceInfo("fasfsad");
+		wxNotify.setNonceStr("ddddd");
+		wxNotify.setTotalFee("1");
+//		verifyNotifySign(wxNotify);
+
+		String COLUMN_NAME[] = { "noncestr", "jsapi_ticket", "timestamp", "url" };
+		WxJsapiTicket wxJsapiTicket = new WxJsapiTicket();
+		// getWXPaySign(WxJsapiTicket.class, wxJsapiTicket, null, COLUMN_NAME)
+		// WXBizMsgCrypt b=new WXBizMsgCrypt("wowo4l6zkjs1zimtdzswylhn",
+		// "AxBhanBqb1hinGg3IwnOBbykN2q421m3mTCWbIiQuSq", "wxe88cfaa46b73c192");
+		// b.VerifyURL("fc536012323ebd4d74947ec1da3d790064b53e86", "1477853717",
+		// "1683104923", "701889282266065751");
+		WxJSAPISign wxJSAPISign = new WxJSAPISign();
+		wxJSAPISign.setAppId("wxe88cfaa46b73c192");
+		wxJSAPISign.setNonceStr("5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
+		wxJSAPISign.setPrepayId("123456789");
+		wxJSAPISign.setSignType("MD5");
+		wxJSAPISign.setTimeStamp("1414561699");
+		String payxml = XMLParse.generateJsAPIXML(wxJSAPISign);
+		String paySign1 = getWXSign(wxJSAPISign.getClass(), wxJSAPISign,
+				"administratorwowo201612345678901", COLUMN_NAME);
+		System.out.println("---" + paySign1);
+
+		String paySign = getWXPaySign("org.frameworkset.wx.common.entity.WxJSAPISign", wxJSAPISign,
+				"administratorwowo201612345678901");
+		System.out.println(payxml + "---" + paySign);
+
 		WxOrderMessage orderMsg = new WxOrderMessage();
 		orderMsg.setAppid("wxe88cfaa46b73c192");
 		orderMsg.setMchId("1379567102");
-		 orderMsg.setBody("wowo-charge");
-//		orderMsg.setBody("test");
+		orderMsg.setBody("wowo-charge");
+		// orderMsg.setBody("test");
 		orderMsg.setNotifyUrl("https://www.becst.com.cn/wowo-service-server-1.0.0/hessian/payNotify");
 		orderMsg.setOutTradeNo("w1000001");
 		orderMsg.setSpbillCreateIp("139.224.19.207");
 		orderMsg.setTotalFee("0.01");
 		orderMsg.setTradeType("JSAPI");
 		orderMsg.setDeviceInfo("1000");
-//		orderMsg.setNonceStr("ibuaiVcKdpRxkhJA");
+		// orderMsg.setNonceStr("ibuaiVcKdpRxkhJA");
 		// orderMsg.setOutTradeNo("w1000001" );
 		// orderMsg.setSpbillCreateIp("139");
 		// orderMsg.setTotalFee("001");

@@ -1,0 +1,32 @@
+<properties>
+
+	<!-- 
+		描述:初始化token管理控制器CmsWxtokenController，并将所有关联的token管理service注入到此控制器中。并以别名的形式定义好跳转页面。
+	    author:suwei
+		CopyRight:wowo
+		版本:v1.0 
+	    Date: 2016-11-12 15:44:26
+	-->
+
+	<property name="/*.page"
+		path:index="/main.jsp"
+		path:queryListInfoCmsWxtokens="/cmsWxtokenListInfo.jsp"
+		path:queryListCmsWxtokens="/cmsWxtokenList.jsp"
+		path:updateCmsWxtoken="/cmsWxtokenEdit.jsp"
+		path:addCmsWxtoken="/cmsWxtokenAdd.jsp"
+		path:getCmsWxtoken="/cmsWxtokenView.jsp"
+		f:cmsWxtokenService="attr:token.cmsWxtokenService"
+		class="org.frameworkset.trans.action.CmsWxtokenController" >
+	</property>
+		<property name="token.cmsWxtokenService"
+		f:executor="attr:token.configsqlexecutor"
+		class="org.frameworkset.trans.service.CmsWxtokenServiceImpl"
+		/>
+	<property name="token.configsqlexecutor"		
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor" >
+		<construction>
+			<property value="org/frameworkset/trans/service/cmsWxtoken.xml"/>
+		</construction>
+	</property>
+	
+</properties>

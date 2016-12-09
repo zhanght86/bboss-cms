@@ -46,7 +46,7 @@ public class ReceiveXmlUtil {
 			while (iter.hasNext()) {
 				Element ele = (Element) iter.next();
 				// 获取set方法中的参数字段（实体类的属性）
-				String fieldName=WXHelper.getBeanName(ele.getName());
+				String fieldName = WXHelper.getBeanName(ele.getName());
 				Field field = c.getDeclaredField(fieldName);
 				// 获取set方法，field.getType())获取它的参数数据类型
 				Method method = c.getDeclaredMethod("set" + WXHelper.captureName(fieldName), field.getType());
@@ -61,8 +61,47 @@ public class ReceiveXmlUtil {
 		return msg;
 	}
 
+	public static Object getObjectEntity(Class z, Object obj, String strXml) {
+		// WxOrderResult msg = null;
+		try {
+			if (strXml.length() <= 0 || strXml == null)
+				return null;
+
+			// 将字符串转化为XML文档对象
+			Document document = DocumentHelper.parseText(strXml);
+			// 获得文档的根节点
+			Element root = document.getRootElement();
+			// 遍历根节点下所有子节点
+			Iterator<?> iter = root.elementIterator();
+
+			// 遍历所有结点
+			// msg = new WxOrderResult();
+			// 利用反射机制，调用set方法
+			// 获取该实体的元类型
+			// Class<?> c =
+			// Class.forName("org.frameworkset.wx.common.entity.WxOrderResult");
+			obj = z.newInstance();// 创建这个实体的对象
+
+			while (iter.hasNext()) {
+				Element ele = (Element) iter.next();
+				// 获取set方法中的参数字段（实体类的属性）
+				String fieldName = WXHelper.getBeanName(ele.getName());
+				Field field = z.getDeclaredField(fieldName);
+				// 获取set方法，field.getType())获取它的参数数据类型
+				Method method = z.getDeclaredMethod("set" + WXHelper.captureName(fieldName), field.getType());
+				// 调用set方法
+				method.invoke(obj, ele.getText());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("xml 格式异常: " + strXml);
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
 	public static void main(String args[]) {
-		StringBuffer xml=new StringBuffer();
+		StringBuffer xml = new StringBuffer();
 		xml.append("<xml>\n");
 		xml.append("<return_code><![CDATA[SUCCESS]]></return_code>\n");
 		xml.append("<return_msg><![CDATA[OK]]></return_msg>\n");

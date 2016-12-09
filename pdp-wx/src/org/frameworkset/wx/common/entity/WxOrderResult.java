@@ -43,6 +43,15 @@ public class WxOrderResult implements Serializable {
 	private String returnCode;
 	@JsonProperty("return_msg")
 	private String returnMsg;
+	private String timeStamp;
+	
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
+	}
 
 	public boolean isSuccess() {
 		if (this.returnCode == null || "".equals(returnCode))

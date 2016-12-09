@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.frameworkset.wx.common.entity.WxAccessToken;
 import org.frameworkset.wx.common.entity.WxSendMessage;
 import org.frameworkset.wx.common.entity.WxUserToken;
+import org.frameworkset.wx.common.enums.EnumWeiXinAccountFlag;
 import org.frameworkset.wx.common.service.WXSecurityService;
 import org.frameworkset.wx.common.util.WXHelper;
 
@@ -30,8 +31,10 @@ public class WXSecurityServiceImp implements WXSecurityService {
 		log.debug("微信getWxAccessToken=" + url);
 		String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 		WxAccessToken token = StringUtil.json2Object(response, WxAccessToken.class);
+//		return getWxAccessToken(corpid, corpsecret,EnumWeiXinAccountFlag.ENTERPRISE);
 		return token;
 	}
+	
 
 	@Override
 	public WxUserToken getWxUserToken(String accesstoken, String code) throws Exception {

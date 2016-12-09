@@ -16,7 +16,7 @@
 		class="org.frameworkset.wx.enterprise.WXSecurityServiceImp"/>
 		
 	<property name="wx.enterprise.APIService"
-		class="org.frameworkset.wx.enterprise.WXAPIServiceImp"/>	
+		class="org.frameworkset.wx.publics.WXAPIServiceImpl"/>	
 		
 </properties>
 	

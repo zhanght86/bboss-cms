@@ -18,6 +18,7 @@ public class WXHelper {
 	public static String[] UNIFIED_ORDER_COLUMN = { "appid", "mch_id", "device_info", "nonce_str", "sign", "body",
 			"detail", "attach", "out_trade_no", "fee_type", "total_fee", "spbill_create_ip", "time_start",
 			"time_expire", "goods_tag", "notify_url", "trade_type", "product_id", "limit_pay", "openid" };
+	public static String[] PAYSIGN_COLUMN = { "appId", "timeStamp", "nonceStr", "package", "signType" };
 
 	public WXHelper() {
 		// TODO Auto-generated constructor stub
@@ -29,7 +30,7 @@ public class WXHelper {
 		return context.getTBeanObject("wx.enterprise.securityService", WXSecurityService.class);
 	}
 
-	public static WXAPIService getEnterpriseWXAPIService() {
+	public static WXAPIService getServiceWXAPIService() {
 		BaseApplicationContext context = DefaultApplicationContext
 				.getApplicationContext("org/frameworkset/wx/common/util/bboss-wx.xml");
 		return context.getTBeanObject("wx.enterprise.APIService", WXAPIService.class);
@@ -52,7 +53,14 @@ public class WXHelper {
 	}
 
 	public static String getServiceAccessTokenURL() {
-		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.service.token.url", "weixin");
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.service.token.url",
+				"weixin");
+		return (String) p.getValue();
+	}
+
+	public static String getServiceOauthURL() {
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.service.oauth.url",
+				"weixin");
 		return (String) p.getValue();
 	}
 
@@ -94,6 +102,12 @@ public class WXHelper {
 		return (String) p.getValue();
 	}
 
+	public static String getServiceTicketURL() {
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.service.ticket.url",
+				"weixin");
+		return (String) p.getValue();
+	}
+
 	/**
 	 * 获取微信公众的AppId
 	 * 
@@ -113,15 +127,18 @@ public class WXHelper {
 		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.key.mchId", "weixin");
 		return (String) p.getValue();
 	}
+
 	/**
 	 * 获取微信公众号的商户名称
+	 * 
 	 * @return
 	 */
 	public static String getServiceMchName() {
-		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.key.mchName", "weixin");
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.key.mchName",
+				"weixin");
 		return (String) p.getValue();
 	}
-	
+
 	/**
 	 * 获取微信的商户key
 	 * 
@@ -180,21 +197,53 @@ public class WXHelper {
 			return (String) p.getValue();
 		}
 	}
+
 	/**
 	 * 获得微信统一下单回调url
+	 * 
 	 * @return
 	 */
 	public static String getServiceUnifiederOrderNotifyURL() {
-		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.unifiederOrderNotify.url", "weixin");
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin",
+				"wx.unifiederOrderNotify.url", "weixin");
 		return (String) p.getValue();
 	}
 
 	public static String[] getMethodByASCIIsort() {
-		String[] rs = new String[UNIFIED_ORDER_COLUMN.length];
-		Arrays.sort(UNIFIED_ORDER_COLUMN);
-		for (int i = 0; i < UNIFIED_ORDER_COLUMN.length; i++) {
-			rs[i] = "get" +captureName( getBeanName(UNIFIED_ORDER_COLUMN[i]));
-//			 System.out.println(rs[i]);
+		return getMethodByASCIIsort("unified_order");
+	}
+
+	public static String[] getMethodByASCIIsort(String flag) {
+		String[] rs = null;
+		if ("unified_order".equals(flag)) {
+			Arrays.sort(UNIFIED_ORDER_COLUMN);
+			rs = new String[UNIFIED_ORDER_COLUMN.length];
+			for (int i = 0; i < UNIFIED_ORDER_COLUMN.length; i++) {
+				rs[i] = "get" + captureName(getBeanName(UNIFIED_ORDER_COLUMN[i]));
+			}
+		} else if ("jsapi".equals(flag)) {
+			Arrays.sort(PAYSIGN_COLUMN);
+			rs = new String[PAYSIGN_COLUMN.length];
+			for (int i = 0; i < PAYSIGN_COLUMN.length; i++) {
+				if (PAYSIGN_COLUMN[i].equals("package"))
+					rs[i] = "getPrepayId";
+				else
+					rs[i] = "get" + captureName(getBeanName(PAYSIGN_COLUMN[i]));
+			}
+		}
+		return rs;
+
+	}
+
+	public static String[] getMethodByASCIIsort(String[] columns) {
+		String[] rs = null;
+		Arrays.sort(columns);
+		rs = new String[columns.length];
+		for (int i = 0; i < columns.length; i++) {
+			if (columns[i].equals("package"))
+				rs[i] = "getPrepayId";
+			else
+				rs[i] = "get" + captureName(getBeanName(columns[i]));
 		}
 		return rs;
 
