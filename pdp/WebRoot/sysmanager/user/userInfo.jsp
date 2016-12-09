@@ -9,7 +9,7 @@
 				 com.frameworkset.platform.sysmgrcore.manager.UserManager,
 				 com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase,
 				 com.frameworkset.platform.config.ConfigManager,
-				 com.frameworkset.platform.synchronize.httpclient.ApachePostMethodClient,
+				
 				 java.sql.Date"%>
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 
@@ -109,22 +109,7 @@
 							.getUserId().toString());
 					if (!oldUser.getUserPassword().equals(
 							user.getUserPassword())) {
-						String url = "http://"
-								+ ConfigManager.getInstance().getConfigValue(
-										"mailServer")
-								+ "/creator_changepw.asp?username="
-								+ user.getUserEmail() + "&pw1="
-								+ user.getUserPassword();
-						ApachePostMethodClient client = new ApachePostMethodClient(
-								url);
-						try {
-							String clientResponse = client.sendRequest();
-							//System.out.println("response=" + clientResponse);
-						} catch (Exception ex) {
-							System.out.println(ex.toString());
-						} finally {
-							client = null;
-						}
+						
 					}
 				}
 			}

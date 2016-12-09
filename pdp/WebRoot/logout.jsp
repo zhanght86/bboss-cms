@@ -1,6 +1,6 @@
 <%@page session="false" contentType="text/html;charset=UTF-8"%>
 <%@page import="com.frameworkset.platform.security.AccessControl
-                ,com.frameworkset.platform.security.authorization.AccessException,com.frameworkset.platform.synchronize.httpclient.*"%>
+                ,com.frameworkset.platform.security.authorization.AccessException"%>
 <%@page import="com.frameworkset.platform.config.ConfigManager"%>
 <%
   HttpSession session = request.getSession(false);
