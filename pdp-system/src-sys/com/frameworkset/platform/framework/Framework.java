@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.frameworkset.security.AccessControlInf;
 import org.frameworkset.spi.BaseApplicationContext;
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 import org.frameworkset.spi.support.MessageSource;
 import org.frameworkset.spi.support.MessageSourceResolvable;
 import org.frameworkset.spi.support.NoSuchMessageException;
@@ -118,8 +118,8 @@ public class Framework implements ResourceInitial,MessageSource {
 	public static final int PROPERTIES_TOOLBAR = 11;
 	public static final int STATUS_CONTENT = 12;
 	public static final int STATUS_TOOLBAR = 13;
-	public static  String menu_folder = BaseSPIManager.getProperty("menu.folder","");
-	public static boolean menu_monitor = BaseSPIManager.getBooleanProperty("menu_monitor",true);
+	public static  String menu_folder = BaseSPIManager2.getProperty("menu.folder","");
+	public static boolean menu_monitor = BaseSPIManager2.getBooleanProperty("menu_monitor",true);
 
 	/**
 	 * 存储每个贞属性

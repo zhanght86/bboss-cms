@@ -2,7 +2,7 @@ package com.frameworkset.platform.portal;
 
 import java.io.File;
 
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 
 /** 
  * <p>类说明:portal相关的配置属性</p>
@@ -16,12 +16,12 @@ public class PortalProperties {
 	/**
 	 * 应用部署的目录
 	 */
-	public static final String APPROOT = BaseSPIManager.getProperty("approot"); 
+	public static final String APPROOT = BaseSPIManager2.getProperty("approot"); 
 	
 	/**
 	 * portal iframe模板文件发布目录路径
 	 */
-	public static final String PORTAL_ISSUEPATH_WAR = BaseSPIManager.getProperty("portal.issuepath.war", 
+	public static final String PORTAL_ISSUEPATH_WAR = BaseSPIManager2.getProperty("portal.issuepath.war", 
 			APPROOT+"/portal/issue_war");
 	
 	static{

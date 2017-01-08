@@ -13,6 +13,7 @@
 	boolean hasreadpermission = accesscontroler.checkPermission("testid","read","testresource");
 	boolean hasglobaltestreadpermission = accesscontroler.checkPermission("globaltest","read","testresource");
 	boolean hasglobaltestdeletepermission = accesscontroler.checkPermission("globaltest","delete","testresource");
+	boolean isadmin = accesscontroler.isAdmin();//判断用户是否是超级管理员
 	java.util.Map<String,java.util.List<String>> permissions = accesscontroler.getResourcePermissions(accesscontroler, "testresource");
 	out.println(permissions);
 %>

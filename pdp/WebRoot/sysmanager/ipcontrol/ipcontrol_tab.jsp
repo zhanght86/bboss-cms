@@ -21,7 +21,7 @@
 			queryData();
 		});
 		$('#addButton').click(function() {
-		ipcontrol_new（）；
+		ipcontrol_new();
     });            
 });
 

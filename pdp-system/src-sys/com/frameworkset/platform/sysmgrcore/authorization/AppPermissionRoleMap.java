@@ -3,14 +3,12 @@
 package com.frameworkset.platform.sysmgrcore.authorization;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.frameworkset.spi.SPIException;
 
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.impl.PermissionRoleMap;
 import com.frameworkset.platform.security.authorization.impl.SecurityException;
-import com.frameworkset.platform.sysmgrcore.entity.Role;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 

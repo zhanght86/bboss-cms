@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 import org.frameworkset.spi.assemble.ManagerImport;
 import org.frameworkset.spi.assemble.ProviderManagerInfo;
 import org.frameworkset.spi.assemble.ServiceProviderManager;
@@ -151,7 +151,7 @@ public class ApplicationInfo implements java.io.Serializable {
 
     public Map getManagerInfos() {
 //        return ServiceProviderManager.getInstance().getManagers();
-        return BaseSPIManager.getDefaultApplicationContext().getManagers();
+        return BaseSPIManager2.getDefaultApplicationContext().getManagers();
     }
 
     public ProviderManagerInfo getProviderManagerInfo(String id)
@@ -228,7 +228,7 @@ public class ApplicationInfo implements java.io.Serializable {
 
     public ProviderManagerInfo getDefaultProviderManagerInfo() {
 //        return ServiceProviderManager.getInstance().getDefaultProviderManagerInfo();
-        return BaseSPIManager.getDefaultApplicationContext().getServiceProviderManager().getDefaultProviderManagerInfo();
+        return BaseSPIManager2.getDefaultApplicationContext().getServiceProviderManager().getDefaultProviderManagerInfo();
     }
 
     public void setApplication(String application) {
@@ -314,7 +314,7 @@ public class ApplicationInfo implements java.io.Serializable {
 
     public void setDefaultProviderManagerInfo(ProviderManagerInfo
                                               defaultProviderManagerInfo) {
-        BaseSPIManager.getDefaultApplicationContext().getServiceProviderManager().setDefaultProviderManagerInfo(defaultProviderManagerInfo);
+        BaseSPIManager2.getDefaultApplicationContext().getServiceProviderManager().setDefaultProviderManagerInfo(defaultProviderManagerInfo);
 //        this.defaultProviderManagerInfo = defaultProviderManagerInfo;
     }
 

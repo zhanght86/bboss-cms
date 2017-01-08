@@ -14,7 +14,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
-import org.frameworkset.spi.ApplicationContext;
+import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.assemble.InterceptorInfo;
 import org.frameworkset.spi.assemble.ManagerImport;
 import org.frameworkset.spi.assemble.Param;
@@ -571,8 +571,8 @@ public class ConfigParser extends I18nXMLParser  {
      */
     private List systemInits;
     private String dictionary = "com.frameworkset.dictionary.ProfessionDataManager";
-    ApplicationContext applicationContext;
-    public ConfigParser(String file,ApplicationContext applicationContext) {
+    BaseApplicationContext applicationContext;
+    public ConfigParser(String file,BaseApplicationContext applicationContext) {
         traceStack = new Stack();
         applicationInfos = Collections.synchronizedMap(new HashMap());
         systemInits = new ArrayList();

@@ -1,6 +1,6 @@
 package com.frameworkset.platform.ca;
 
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 
 /** 
  * <p>类说明:
@@ -17,7 +17,7 @@ public class CaProperties {
 	 * 是否使用数字认证中心服务
 	 * 默认为false不使用
 	 */
-	public static final boolean CA_LOGIN_SERVER = BaseSPIManager.getBooleanProperty("ca.login.server",false);
+	public static final boolean CA_LOGIN_SERVER = BaseSPIManager2.getBooleanProperty("ca.login.server",false);
 	
 	public static final String RETURN_SPLIT = "^@^";
 	public static final String RETURN_SPLIT_ = "\\^@\\^";

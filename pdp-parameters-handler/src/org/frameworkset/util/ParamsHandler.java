@@ -43,7 +43,7 @@ import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.event.SimpleEventType;
 import org.frameworkset.spi.ApplicationContext;
 import org.frameworkset.spi.BaseApplicationContext;
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 import org.frameworkset.spi.BeanNameAware;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.spi.assemble.Pro;
@@ -1457,7 +1457,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		String[] properMapnames = properMapname.split(",");
 
 		for (String mapName : properMapnames) {
-			Pro t_ = BaseSPIManager.getProBean(mapName);
+			Pro t_ = BaseSPIManager2.getProBean(mapName);
 			String paramsType = (String) t_.getExtendAttribute("paramstype");
 			try {
 				handle.delNodeParams(businessIds, paramsType);
@@ -1572,7 +1572,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		String[] properMapnames = properMapname.split(",");
 		if (rpcbrokeraddr == null || "".equals(rpcbrokeraddr))
 			rpcbrokeraddr = ParamProperties.PARAM_HANDLER_PRO;
-		RpcParamsHandlerInf brokerMan = (RpcParamsHandlerInf) BaseSPIManager
+		RpcParamsHandlerInf brokerMan = (RpcParamsHandlerInf) BaseSPIManager2
 				.getBeanObject(rpcbrokeraddr);
 
 		String key = null;
@@ -1581,8 +1581,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		String msg = null;
 		for (String mapName : properMapnames) {
 			// 获取配置文件中的配置参数默认值
-			ProMap confMap = (ProMap) BaseSPIManager.getMapProperty(mapName);
-			Pro t_ = BaseSPIManager.getProBean(mapName);
+			ProMap confMap = (ProMap) BaseSPIManager2.getMapProperty(mapName);
+			Pro t_ = BaseSPIManager2.getProBean(mapName);
 			String paramsType = (String) t_.getExtendAttribute("paramstype");
 			Iterator itParams = confMap.keySet().iterator();
 			while (itParams.hasNext()) {
@@ -1637,7 +1637,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		String[] properMapnames = properMapname.split(",");
 		if (rpcbrokeraddr == null || "".equals(rpcbrokeraddr))
 			rpcbrokeraddr = ParamProperties.PARAM_HANDLER_PRO;
-		RpcParamsHandlerInf brokerMan = (RpcParamsHandlerInf) BaseSPIManager
+		RpcParamsHandlerInf brokerMan = (RpcParamsHandlerInf) BaseSPIManager2
 				.getBeanObject(rpcbrokeraddr);
 
 		String key = null;
@@ -1646,8 +1646,8 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		String msg = null;
 		for (String mapName : properMapnames) {
 			// 获取配置文件中的配置参数默认值
-			ProMap confMap = (ProMap) BaseSPIManager.getMapProperty(mapName);
-			Pro t_ = BaseSPIManager.getProBean(mapName);
+			ProMap confMap = (ProMap) BaseSPIManager2.getMapProperty(mapName);
+			Pro t_ = BaseSPIManager2.getProBean(mapName);
 			String paramsType = (String) t_.getExtendAttribute("paramstype");
 			Iterator itParams = confMap.keySet().iterator();
 			while (itParams.hasNext()) {

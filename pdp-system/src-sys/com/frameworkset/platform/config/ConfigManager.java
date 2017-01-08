@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Notifiable;
 import org.frameworkset.event.NotifiableFactory;
-import org.frameworkset.spi.BaseSPIManager;
+import org.frameworkset.spi.BaseSPIManager2;
 import org.frameworkset.spi.assemble.LinkConfigFile;
 import org.frameworkset.spi.assemble.ProviderInfoQueue;
 import org.frameworkset.spi.assemble.ProviderManagerInfo;
@@ -248,7 +248,7 @@ public class ConfigManager implements ResourceInitial {
             url = confURL.toString();
         }
 //        String configRealpath = confURL.getPath();
-        ConfigParser handler = new ConfigParser(url,BaseSPIManager.getDefaultApplicationContext());
+        ConfigParser handler = new ConfigParser(url,BaseSPIManager2.getDefaultApplicationContext());
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(false);
         factory.setValidating(false);
@@ -430,15 +430,15 @@ public class ConfigManager implements ResourceInitial {
     		while(it.hasNext())
     		{
     			ApplicationInfo app = (ApplicationInfo)it.next();
-    			BaseSPIManager.getDefaultApplicationContext().getServiceProviderManager().addMangers(app.getProviderManagerTypes());
+    			BaseSPIManager2.getDefaultApplicationContext().getServiceProviderManager().addMangers(app.getProviderManagerTypes());
     			linkconfigFile.setMgrServices(app.getProviderManagerTypes());
     			
-    			BaseSPIManager.getDefaultApplicationContext().getServiceProviderManager().batchLoad(app.getManagerimports(),linkconfigFile);
+    			BaseSPIManager2.getDefaultApplicationContext().getServiceProviderManager().batchLoad(app.getManagerimports(),linkconfigFile);
     		}
     		
     	}
     	
-    	BaseSPIManager.getDefaultApplicationContext().getServiceProviderManager().addTopLevel(linkconfigFile);
+    	BaseSPIManager2.getDefaultApplicationContext().getServiceProviderManager().addTopLevel(linkconfigFile);
     	
     	
 		
@@ -849,7 +849,7 @@ public class ConfigManager implements ResourceInitial {
 //            return this.getApplicationInfo(this.getAppName()).getProperty(name);
 //        }
         
-        return BaseSPIManager.getProperty(name);
+        return BaseSPIManager2.getProperty(name);
 
     }
 
@@ -865,7 +865,7 @@ public class ConfigManager implements ResourceInitial {
 //        } catch (Exception e) {
 //            throw new ConfigException("属性[" + name + "]不是整型数据！");
 //        }
-        return BaseSPIManager.getIntProperty(name);
+        return BaseSPIManager2.getIntProperty(name);
     }
 
     public boolean getConfigBooleanValue(String name) throws ConfigException {
@@ -884,7 +884,7 @@ public class ConfigManager implements ResourceInitial {
 //            throw new ConfigException("配置文件config-manager.xml没有指定属性[" + name +
 //                                      "]或者属性[" + name + "]不是布尔型数据！");
 //        }
-        return BaseSPIManager.getBooleanProperty(name);
+        return BaseSPIManager2.getBooleanProperty(name);
     }
 
     public String getConfigValue(String name, String defaultValue) {
@@ -895,7 +895,7 @@ public class ConfigManager implements ResourceInitial {
 //            return defaultValue;
 //        }
 //        return value;
-        return BaseSPIManager.getProperty(name, defaultValue);
+        return BaseSPIManager2.getProperty(name, defaultValue);
     }
 
     public int getConfigIntValue(String name, int defaultValue) {
@@ -912,7 +912,7 @@ public class ConfigManager implements ResourceInitial {
 //            log.debug("属性[" + name + "]不是整型数据！返回缺省值" + defaultValue);
 //            return defaultValue; //throw new ConfigException("属性[" + name + "]不是整型数据！");
 //        }
-        return BaseSPIManager.getIntProperty(name, defaultValue);
+        return BaseSPIManager2.getIntProperty(name, defaultValue);
     }
 
     public boolean getConfigBooleanValue(String name, boolean defaultValue) {
@@ -934,7 +934,7 @@ public class ConfigManager implements ResourceInitial {
 //            return defaultValue;
 //            //throw new ConfigException("配置文件config-manager.xml没有指定属性[" + name + "]或者属性[" + name + "]不是布尔型数据！" );
 //        }
-        return BaseSPIManager.getBooleanProperty(name, defaultValue);
+        return BaseSPIManager2.getBooleanProperty(name, defaultValue);
     }
 
     public ProviderManagerInfo getDefaultProviderManagerInfo() {
