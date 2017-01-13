@@ -9,15 +9,21 @@
 package org.frameworkset.wx.common.mp.aes;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.frameworkset.wx.common.entity.WxJSAPISign;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
+import org.frameworkset.wx.common.entity.WxServiceCompany;
+import org.frameworkset.wx.common.util.WXHelper;
+ 
 
 /**
  * XMLParse class
@@ -25,7 +31,7 @@ import org.frameworkset.wx.common.entity.WxOrderMessage;
  * 提供提取消息格式中的密文及生成回复消息格式的接口.
  */
 public class XMLParse {
-
+	private static Logger log = Logger.getLogger(XMLParse.class);
 	/**
 	 * 提取出xml数据包中的加密消息
 	 * 
@@ -97,7 +103,6 @@ public class XMLParse {
 	}
 
 	/**
-	 * 
 	 * @param encrypt
 	 * @param signature
 	 * @param timestamp
@@ -154,7 +159,45 @@ public class XMLParse {
 			sb.append(str);
 		}
 		sb.append("</xml>");
-
 		return new String(sb.toString().getBytes(), "ISO8859-1");
 	}
+
+	public static String generateServiceCompanyPayXML(WxServiceCompany wxServiceCompany, String[] columnNames) {
+		String xml = null;
+		try {
+			Arrays.sort(columnNames);
+			Class t=WxServiceCompany.class;
+			int i = 0;
+			StringBuffer sb = new StringBuffer();
+			sb.append("<xml>\n");
+			int j=0;
+			for (String column : WXHelper.getMethodByASCIIsort(columnNames)) {
+				Method m = null;
+				try {
+					m =t.getMethod(column);
+				} catch (NoSuchMethodException e) {
+					log.debug("the method:  " + column + " not found in class:" +t.getName());
+					i++;
+					continue;
+				}
+				Object value = m.invoke(wxServiceCompany, null);
+				sb.append("<");
+				sb.append(columnNames[j]);
+				sb.append(">");
+				sb.append(value);
+				sb.append("</");
+				sb.append(columnNames[j]);
+				sb.append(">\n");
+				j++;
+			}
+			sb.append("</xml>");
+			xml=sb.toString();
+			System.out.println(xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return xml;
+	}
+
 }

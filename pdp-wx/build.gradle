@@ -18,10 +18,14 @@ project.tasks.compileJava.dependsOn(project(':pdp-trans').tasks.install)
 dependencies {
 	
    compile (
-    		// [group: 'log4j', name: 'log4j', version: '1.2.17', transitive: false],                   
+    	//[group: 'it.sauronsoftware.jave', name: 'jave', version: '1.0.2', transitive: true],                   
      	[group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
      	[group: 'com.bbossgroups.pdp', name: 'pdp-trans', version: "${PROJ_VERSION}", transitive: true],
     )
+    compile ( 
+	    fileTree(dir: '../lib', include: '**/*.jar'), 
+	)
+	    
      compileOnly (  
      	[group: 'org.apache.httpcomponents', name: 'httpcore', version: "4.4.1", transitive: false],     
 		[group: 'commons-logging', name: 'commons-logging', version: '1.1', transitive: false],

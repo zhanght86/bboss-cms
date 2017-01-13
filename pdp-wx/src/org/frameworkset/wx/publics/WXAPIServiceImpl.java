@@ -22,7 +22,7 @@ import org.frameworkset.wx.common.entity.OAuthSnsAPIBase;
 import org.frameworkset.wx.common.entity.WxAccessToken;
 import org.frameworkset.wx.common.entity.WxJsapiTicket;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
-import org.frameworkset.wx.common.enums.EnumWeiXinAccountFlag;
+import org.frameworkset.wx.common.entity.WxServiceCompany;
 import org.frameworkset.wx.common.enums.EnumWeiXinOAuthScope;
 import org.frameworkset.wx.common.mp.aes.WXBizMsgCrypt;
 import org.frameworkset.wx.common.mp.aes.XMLParse;
@@ -47,10 +47,11 @@ public class WXAPIServiceImpl implements WXAPIService {
 	private CmsWxtokenService cmsWxtokenService;
 
 	@Override
-	public WxAccessToken getWxAccessToken(String corpid, String corpsecret, EnumWeiXinAccountFlag enumWeiXinAccountFlag)
+	public WxAccessToken getWxAccessToken(String appid, String appsecret)
 			throws Exception {
 		TransactionManager tm = new TransactionManager();
-		String url = "";
+		String url = WXHelper.getServiceAccessTokenURL() + "?grant_type=client_credential" + "&appid=" + appid
+				+ "&secret=" + appsecret;
 		WxAccessToken token = new WxAccessToken();
 		if (cmsWxtokenService == null) {
 			BaseApplicationContext context = DefaultApplicationContext
@@ -67,18 +68,26 @@ public class WXAPIServiceImpl implements WXAPIService {
 				String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 				token = StringUtil.json2Object(response, WxAccessToken.class);
 				token.setCreateTime(new Date());
+				cmsWxToken = new CmsWxtoken();
 				cmsWxToken.setAccessToken(token.getAccess_token());
 				cmsWxToken.setExpiresIn(token.getExpires_in());
 				Timestamp ts = new Timestamp(System.currentTimeMillis());
 				cmsWxToken.setCreateTime(ts);
 				cmsWxToken.setState(0);
+				Timestamp endts = new Timestamp(System.currentTimeMillis() + cmsWxToken.getExpiresIn() * 1000);
+				cmsWxToken.setEndTime(endts);
 				cmsWxtokenService.addCmsWxtoken(cmsWxToken);
 				tm.commit();
 			} catch (Exception e) {
+				e.printStackTrace();
 				// TODO: handle exception
 			} finally {
 				tm.release(); // 释放
 			}
+		} else {
+			token.setAccess_token(cmsWxToken.getAccessToken());
+			token.setExpires_in(cmsWxToken.getExpiresIn());
+			token.setCreateTime(cmsWxToken.getCreateTime());
 		}
 		log.debug("当前系统的access token ：" + cmsWxToken.getAccessToken());
 		log.debug("微信getWxAccessToken=" + url);
@@ -101,11 +110,6 @@ public class WXAPIServiceImpl implements WXAPIService {
 
 		// String sendUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 		log.debug("微信发送消息URL=" + sendUrl);
-		// orderMsg.setAppid("wxe88cfaa46b73c192");
-		// orderMsg.setMchId("1379567102");
-		// String sign = WXBizMsgCrypt.getWXSign(orderMsg,
-		// "ec81fb87c5436d44c5faf1edf47bc5a9"); // 获得随机数
-		// System.out.println(sign);
 		orderMsg.setSign(sign);
 		// 记录对微信的发送数据包
 		String xml = XMLParse.generateUnifiedOrderXML(orderMsg);
@@ -173,7 +177,6 @@ public class WXAPIServiceImpl implements WXAPIService {
 		String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
 		System.out.println("微信getWxAccessToken back json :" + response);
 		OAuthSnsAPIBase token = StringUtil.json2Object(response, OAuthSnsAPIBase.class);
-		// System.out.println(token.getErrmsg());
 		log.debug(token.getErrmsg());
 		return token;
 	}
@@ -187,6 +190,13 @@ public class WXAPIServiceImpl implements WXAPIService {
 
 	@Override
 	public WxJsapiTicket getJsapiTicket(String accessToken) throws Exception {
+		if (accessToken == null || StringUtil.isEmpty(accessToken)) {
+			String appid = WXHelper.getServiceAppId();
+			String appsecret = WXHelper.getServiceAppSecret();
+			WxAccessToken wxAccessToken = getWxAccessToken(appid, appsecret);
+			accessToken = wxAccessToken != null && wxAccessToken.getAccess_token() != null
+					? wxAccessToken.getAccess_token() : null;
+		}
 		String url = WXHelper.getServiceTicketURL() + "?access_token=" + accessToken + "&type=jsapi";
 		System.out.println("微信getJsapiTicket=" + url);
 		String response = org.frameworkset.spi.remote.http.HttpReqeust.httpPostforString(url);
@@ -198,9 +208,75 @@ public class WXAPIServiceImpl implements WXAPIService {
 	@Override
 	public String getPaySign(long timestamp, String nodeStr) throws Exception {
 		// TODO Auto-generated method stub
-		
-		
+
 		return null;
+	}
+
+	@Override
+	public String getJSSDKSign(String nonceStr, String jsapiTicket, long timestamp, String currentUrl)
+			throws Exception {
+		// String appid = WXHelper.getServiceAppId();
+		// String appsecret = WXHelper.getServiceAppSecret();
+		// String accessToken = getWxAccessToken(appid,
+		// appsecret).getAccess_token();
+		// String jsapiTicket = getJsapiTicket(accessToken).getTicket();
+		// long timestamp = System.currentTimeMillis() / 1000;
+		String sign = WXBizMsgCrypt.getJSSDKSign(nonceStr, jsapiTicket, timestamp, currentUrl);
+		return sign;
+	}
+	/**
+	 * 调用微信公众号的商户号支付接口
+	 */
+	@Override
+	public String ServiceCompanyPay(WxServiceCompany wxServiceCompany) throws Exception {
+
+		String sendUrl = WXHelper.getServiceCompanyURL();
+		wxServiceCompany.setMchAppid(WXHelper.getServiceAppId());
+		wxServiceCompany.setMchid(WXHelper.getServiceMchId());
+		wxServiceCompany.setNonceStr(RandomUtil.generateString(24)); //
+		String apiKey = WXHelper.getServiceMchKey();
+		String columnName[] = { "mch_appid", "mchid", "device_info", "nonce_str", "sign", "partner_trade_no", "openid",
+				"check_name", "re_user_name", "amount", "desc", "spbill_create_ip" };
+		String sign = WXBizMsgCrypt.getWXSign(wxServiceCompany.getClass(), wxServiceCompany, apiKey, columnName); // 获得随机数
+		log.debug("微信发送消息URL=" + sendUrl);
+		wxServiceCompany.setSign(sign);
+		String xml = XMLParse.generateServiceCompanyPayXML(wxServiceCompany, columnName);
+		ApiXml apiXml = new ApiXml();
+		apiXml.setData(xml);
+		apiXml.setType(EnumTransDataType.WEIXIN_TRANSDATA_OUT.getCode());
+		apiXml.setSrcIp(wxServiceCompany.getSpbillCreateIp());
+//		apiXmlService.addApiXml(apiXml);
+		// 封装发送消息请求json
+		log.debug("微信发送消息xml=\n" + xml);
+		System.out.println(xml);
+		try {
+			URL url = new URL(sendUrl);
+			HttpsURLConnection http = (HttpsURLConnection) url.openConnection();
+			http.setRequestMethod("POST");
+			http.setRequestProperty("Content-Type", "application/xml;charset=UTF-8");
+			http.setDoOutput(true);
+			http.setDoInput(true);
+			System.setProperty("sun.net.client.defaultConnectTimeout", "30000");
+			// 连接超时30秒
+			System.setProperty("sun.net.client.defaultReadTimeout", "30000");
+			// 读取超时30秒
+			http.connect();
+			OutputStream os = http.getOutputStream();
+			os.write(xml.getBytes("UTF-8"));// 传入参数
+			InputStream is = http.getInputStream();
+			int size = is.available();
+			byte[] jsonBytes = new byte[size];
+			is.read(jsonBytes);
+			os.flush();
+			os.close();
+			apiXml.setType(EnumTransDataType.WEIXIN_TRANSDATA_OUT_RES.getCode());
+			apiXml.setData(new String(jsonBytes, "UTF-8"));
+//			apiXmlService.addApiXml(apiXml);
+			return new String(jsonBytes, "UTF-8");
+		} catch (Exception e) {
+			log.debug("推送消息给微信端出错：" + e.getMessage(), e);
+			return "";
+		}
 	}
 
 }

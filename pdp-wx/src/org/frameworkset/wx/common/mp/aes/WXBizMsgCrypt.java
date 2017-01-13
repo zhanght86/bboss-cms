@@ -15,8 +15,14 @@ package org.frameworkset.wx.common.mp.aes;
 
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -24,14 +30,15 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.frameworkset.wx.common.entity.WxJSAPISign;
-import org.frameworkset.wx.common.entity.WxJsapiTicket;
 import org.frameworkset.wx.common.entity.WxNotify;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
+import org.frameworkset.wx.common.entity.WxServiceCompany;
+import org.frameworkset.wx.common.enums.EnumWeiXinEncodeType;
 import org.frameworkset.wx.common.util.Md5;
-import org.frameworkset.wx.common.util.RandomUtil;
 import org.frameworkset.wx.common.util.WXHelper;
-import org.jfree.util.Log;
+ 
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -49,6 +56,8 @@ import org.jfree.util.Log;
  * </ol>
  */
 public class WXBizMsgCrypt {
+	private static Logger log = Logger.getLogger(WXBizMsgCrypt.class);
+
 	static Charset CHARSET = Charset.forName("utf-8");
 	Base64 base64 = new Base64();
 	byte[] aesKey;
@@ -423,6 +432,7 @@ public class WXBizMsgCrypt {
 		String sign = null;
 		try {
 			Arrays.sort(COLUMN_NAME);
+			// Class t = Class.forName(className);
 			int i = 0;
 			StringBuffer pingStr = new StringBuffer();
 			for (String column : WXHelper.getMethodByASCIIsort(COLUMN_NAME)) {
@@ -430,11 +440,11 @@ public class WXBizMsgCrypt {
 				try {
 					m = t.getMethod(column);
 				} catch (NoSuchMethodException e) {
-					Log.debug("the method:  " + column + " not found in class:" + t.getName());
+					log.debug("the method:  " + column + " not found in class:" + t.getName());
 					i++;
 					continue;
 				}
-				String value = (String) m.invoke(obj, null);
+				Object value = m.invoke(obj, null);
 				if (value == null || "".equals(value) || "sign".equals(column)) {
 					i++;
 					continue;
@@ -442,7 +452,7 @@ public class WXBizMsgCrypt {
 				if (COLUMN_NAME[i].equals("package"))
 					pingStr.append(new BasicNameValuePair(COLUMN_NAME[i], "prepay_id=" + value));
 				else
-					pingStr.append(new BasicNameValuePair(COLUMN_NAME[i], value));
+					pingStr.append(new BasicNameValuePair(COLUMN_NAME[i], value.toString()));
 				System.out.println(pingStr.toString());
 				if (i < COLUMN_NAME.length - 1) {
 					pingStr.append("&");
@@ -450,10 +460,15 @@ public class WXBizMsgCrypt {
 				i++;
 			}
 			System.out.println(pingStr);
+			// if(enumWeiXinEncodeType==EnumWeiXinEncodeType.MD5){
 			String stringA = "";
 			stringA = pingStr.toString() + "&key=" + apiKey;
 			System.out.println(stringA);
 			sign = new Md5().getMD5ofStr(stringA).toUpperCase();
+			// }else if(EnumWeiXinEncodeType.SHA1==enumWeiXinEncodeType){
+			// SHA1.getSHA1(token, timestamp, nonce)
+			// }
+
 			System.out.println(sign);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -538,62 +553,147 @@ public class WXBizMsgCrypt {
 		return true;
 	}
 
+	/**
+	 * 获得签名
+	 * 
+	 * @param noncestr
+	 * @param jsapiTicket
+	 * @param timestamp
+	 * @param currentUrl
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static String getJSSDKSign(String noncestr, String jsapiTicket, long timestamp, String currentUrl)
+			throws NoSuchAlgorithmException {
+		Map<String, Object> keyMap = new TreeMap<String, Object>();
+		keyMap.put("noncestr", noncestr);
+		keyMap.put("jsapi_ticket", jsapiTicket);
+		keyMap.put("timestamp", timestamp);
+		keyMap.put("url", currentUrl);
+		return buildSign(keyMap, null, EnumWeiXinEncodeType.SHA1);
+	}
+
+	public static String buildSign(Map<String, Object> map, String key, EnumWeiXinEncodeType enumWeiXinEncodeType)
+			throws NoSuchAlgorithmException {
+		Set<Entry<String, Object>> set = map.entrySet();
+		StringBuffer sb = new StringBuffer();
+		// 取出排序后的参数，逐一连接起来
+		for (Iterator<Map.Entry<String, Object>> it = set.iterator(); it.hasNext();) {
+			Map.Entry<String, Object> me = it.next();
+			sb.append(me.getKey() + "=" + me.getValue() + "&");
+		}
+		if (key != null)
+			sb.append(key);
+		else
+			sb.deleteCharAt(sb.length() - 1); // 删除最后的&符号
+		log.debug(sb.toString());
+		System.out.println(sb);
+		if (EnumWeiXinEncodeType.SHA1 == enumWeiXinEncodeType) { // sha1 加密算法
+			return SHA1.getSha1(sb.toString());
+		} else if (EnumWeiXinEncodeType.MD5 == enumWeiXinEncodeType) { // md5加密算法
+
+		}
+		return sb.toString().toUpperCase();// 返回最终排序后的结果，这里key不参与排序中，具体看接口规约
+		// return
+		// (Md5Encrypt.encrypt(sb.toString())).toUpperCase();//这个带有md5加密的，算法就不贴了，网上很多
+	}
+
+	/**
+	 * 根据map对象，获得签名
+	 * 
+	 * @param keyMap
+	 * @param sha1
+	 * @return
+	 */
+	private static String getSignByMap(Map<String, Object> keyMap, EnumWeiXinEncodeType sha1) {
+		Map<String, String> map = new TreeMap<String, String>();
+
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public static void main(String args[]) throws Exception {
-
-		WxNotify wxNotify = new WxNotify();
-		wxNotify.setAppid("222");
-		wxNotify.setMchId("12331231232");
-		wxNotify.setDeviceInfo("fasfsad");
-		wxNotify.setNonceStr("ddddd");
-		wxNotify.setTotalFee("1");
-//		verifyNotifySign(wxNotify);
-
-		String COLUMN_NAME[] = { "noncestr", "jsapi_ticket", "timestamp", "url" };
-		WxJsapiTicket wxJsapiTicket = new WxJsapiTicket();
+		// System.out.println(getJSSDKSign("I6RnqxhBq0ypLBHNiDZSi68b",
+		// "kgt8ON7yVITDhtdwci0qeed5e-WiIPDO9Mh0sbHhXyNG9ITKSwMpYjbjYCgvNt5F4GIcQvfGliBEbn3-0ie2dQ",
+		// 1481640214,
+		// "http://www.besct.com.cn/sd/testVoice.page"));
+		// getJSSDKSign(noncestr, jsapiTicket, timestamp, currentUrl);
+		// WxNotify wxNotify = new WxNotify();
+		// wxNotify.setAppid("222");
+		// wxNotify.setMchId("12331231232");
+		// wxNotify.setDeviceInfo("fasfsad");
+		// wxNotify.setNonceStr("ddddd");
+		// wxNotify.setTotalFee("1");
+		// // verifyNotifySign(wxNotify);
+		//
+		// String COLUMN_NAME[] = { "noncestr", "jsapi_ticket", "timestamp",
+		// "url" };
+		// WxJsapiTicket wxJsapiTicket = new WxJsapiTicket();
 		// getWXPaySign(WxJsapiTicket.class, wxJsapiTicket, null, COLUMN_NAME)
 		// WXBizMsgCrypt b=new WXBizMsgCrypt("wowo4l6zkjs1zimtdzswylhn",
 		// "AxBhanBqb1hinGg3IwnOBbykN2q421m3mTCWbIiQuSq", "wxe88cfaa46b73c192");
 		// b.VerifyURL("fc536012323ebd4d74947ec1da3d790064b53e86", "1477853717",
 		// "1683104923", "701889282266065751");
-		WxJSAPISign wxJSAPISign = new WxJSAPISign();
-		wxJSAPISign.setAppId("wxe88cfaa46b73c192");
-		wxJSAPISign.setNonceStr("5K8264ILTKCH16CQ2502SI8ZNMTM67VS");
-		wxJSAPISign.setPrepayId("123456789");
-		wxJSAPISign.setSignType("MD5");
-		wxJSAPISign.setTimeStamp("1414561699");
-		String payxml = XMLParse.generateJsAPIXML(wxJSAPISign);
-		String paySign1 = getWXSign(wxJSAPISign.getClass(), wxJSAPISign,
-				"administratorwowo201612345678901", COLUMN_NAME);
-		System.out.println("---" + paySign1);
+		// WxConfig config = new WxConfig();
+		// config.setAppId("wxf8b4f85f3a794e77");
+		// config.setNonceStr("DMrOcbgYt0OIvICO");
+		// config.setPrepayId("123456789");
+		// config.setSignType("sha1");
+		// config.setTimestamp("1481566139");
+		// String payxml = XMLParse.generateJsAPIXML(config);
+		// String paySign1 = getWXSign(config.getClass(), config,
+		// "administratorwowo201612345678901", COLUMN_NAME);
+		// System.out.println("---" + paySign1);
 
-		String paySign = getWXPaySign("org.frameworkset.wx.common.entity.WxJSAPISign", wxJSAPISign,
-				"administratorwowo201612345678901");
-		System.out.println(payxml + "---" + paySign);
+		// String paySign =
+		// getWXPaySign("org.frameworkset.wx.common.entity.WxJSAPISign",
+		// wxJSAPISign,
+		// "administratorwowo201612345678901");
+		// System.out.println(payxml + "---" + paySign);
 
-		WxOrderMessage orderMsg = new WxOrderMessage();
-		orderMsg.setAppid("wxe88cfaa46b73c192");
-		orderMsg.setMchId("1379567102");
-		orderMsg.setBody("wowo-charge");
-		// orderMsg.setBody("test");
-		orderMsg.setNotifyUrl("https://www.becst.com.cn/wowo-service-server-1.0.0/hessian/payNotify");
-		orderMsg.setOutTradeNo("w1000001");
-		orderMsg.setSpbillCreateIp("139.224.19.207");
-		orderMsg.setTotalFee("0.01");
-		orderMsg.setTradeType("JSAPI");
-		orderMsg.setDeviceInfo("1000");
+		// WxOrderMessage orderMsg = new WxOrderMessage();
+		// orderMsg.setAppid("wxe88cfaa46b73c192");
+		// orderMsg.setMchId("1379567102");
+		// orderMsg.setBody("wowo-charge");
+		// // orderMsg.setBody("test");
+		// orderMsg.setNotifyUrl("https://www.becst.com.cn/wowo-service-server-1.0.0/hessian/payNotify");
+		// orderMsg.setOutTradeNo("w1000001");
+		// orderMsg.setSpbillCreateIp("139.224.19.207");
+		// orderMsg.setTotalFee("0.01");
+		// orderMsg.setTradeType("JSAPI");
+		// orderMsg.setDeviceInfo("1000");
 		// orderMsg.setNonceStr("ibuaiVcKdpRxkhJA");
 		// orderMsg.setOutTradeNo("w1000001" );
 		// orderMsg.setSpbillCreateIp("139");
 		// orderMsg.setTotalFee("001");
 		// orderMsg.setNotifyUrl("htty");
 		// orderMsg.setTradeType("JSAPI");
-		orderMsg.setNonceStr(RandomUtil.generateString(24)); //
-		// getWXUnifiedOrderNonce(orderMsg, "ec81fb87c5436d44c5faf1edf47bc5a"));
-		String xml = XMLParse.generateUnifiedOrderXML(orderMsg);
-		System.out.println(xml);
-		String sign = getWXSign(orderMsg, "ec81fb87c5436d44c5faf1edf47bc5a9");
-		System.out.println(sign);
+		// orderMsg.setNonceStr(RandomUtil.generateString(24)); //
+		// // getWXUnifiedOrderNonce(orderMsg,
+		// "ec81fb87c5436d44c5faf1edf47bc5a"));
+		// String xml = XMLParse.generateUnifiedOrderXML(orderMsg);
+		// System.out.println(xml);
+		// String sign = getWXSign(orderMsg,
+		// "ec81fb87c5436d44c5faf1edf47bc5a9");
+		// System.out.println(sign);
 		// System.out.println(MD5Util.toMD5(
 		// "appid=wxd930ea5d5a258f4f&body=test&device_info=1000&mch_id=10000100&nonce_str=ibuaiVcKdpRxkhJA&key=192006250b4c09247ec02edce69f6a2d"));
+		String columnName[] = { "mch_appid", "mchid", "device_info", "nonce_str", "sign", "partner_trade_no", "openid",
+				"check_name", "re_user_name", "amount", "desc", "spbill_create_ip" };
+
+		WxServiceCompany wxServiceCompany = new WxServiceCompany();
+		wxServiceCompany.setMchAppid("ec81fb87c5436d44c5faf1edf47bc5a9");
+		wxServiceCompany.setMchid("1379567102");
+		wxServiceCompany.setDeviceInfo("ddddddddd");
+		wxServiceCompany.setNonceStr("DMrOcbgYt0OIvICO");
+		wxServiceCompany.setSign("sign");
+		wxServiceCompany.setPartnerTradeNo("partnerTradeNo");
+		wxServiceCompany.setOpenid("dddddddddddddd");
+		wxServiceCompany.setCheckName("etCheckName");
+		wxServiceCompany.setReUserName("reUserName");
+		wxServiceCompany.setAmount(100l);
+		wxServiceCompany.setDesc("descddddddddddd");
+		wxServiceCompany.setSpbillCreateIp("139.224.19.207");
+		XMLParse.generateServiceCompanyPayXML(wxServiceCompany, columnName);
 	}
 }

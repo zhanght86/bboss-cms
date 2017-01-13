@@ -107,6 +107,37 @@ public class WXHelper {
 				"weixin");
 		return (String) p.getValue();
 	}
+	/**
+	 * 获得公众号的商户支付地址（提现使用）
+	 * @return
+	 */
+	public static String getServiceCompanyURL() {
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.service.company.url",
+				"weixin");
+		return (String) p.getValue();
+	}
+
+	/**
+	 * 获得微信语音下载地址
+	 * 
+	 * @return
+	 */
+	public static String getServiceVoiceDownloadURL() {
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.voicie.download.url",
+				"weixin");
+		return (String) p.getValue();
+	}
+
+	/**
+	 * 获取微信语音下载保存到服务器的地址
+	 * 
+	 * @return
+	 */
+	public static String getServiceVoiceDownloadPath() {
+		Param p = ParamsHandler.getParamsHandler("cms.siteparamshandler").getParam("weixin", "wx.voice.download.path",
+				"weixin");
+		return (String) p.getValue();
+	}
 
 	/**
 	 * 获取微信公众的AppId
@@ -288,6 +319,7 @@ public class WXHelper {
 	}
 
 	public static void main(String args[]) {
-		getMethodByASCIIsort();
+		// getMethodByASCIIsort();
+		System.out.println(PropertiesUtil.getUrl("weixin.service.download.url"));
 	}
 }

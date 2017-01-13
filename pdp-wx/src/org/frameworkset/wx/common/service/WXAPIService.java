@@ -4,13 +4,15 @@ import org.frameworkset.wx.common.entity.OAuthSnsAPIBase;
 import org.frameworkset.wx.common.entity.WxAccessToken;
 import org.frameworkset.wx.common.entity.WxJsapiTicket;
 import org.frameworkset.wx.common.entity.WxOrderMessage;
-import org.frameworkset.wx.common.enums.EnumWeiXinAccountFlag;
+import org.frameworkset.wx.common.entity.WxServiceCompany;
 import org.frameworkset.wx.common.enums.EnumWeiXinOAuthScope;
 
 public interface WXAPIService {
 	/**
-	 * Appid（数据库设置好）、 MchId（数据库设置好）、 sign（自动计算）、 NonceStr（自动计算） 以上四个参数自动赋值，不需要传。
-	 * 
+	 * @Appid （数据库设置好）
+	 * @MchId （数据库设置好）
+	 * @sign （自动计算）
+	 * @NonceStr （自动计算） 以上四个参数自动赋值，不需要传。
 	 * @param orderMsg
 	 *            统一下单的对象
 	 * @return
@@ -61,7 +63,7 @@ public interface WXAPIService {
 	 * @return
 	 * @throws Exception
 	 */
-	public WxAccessToken getWxAccessToken(String appid, String appsecret, EnumWeiXinAccountFlag enumWeiXinAccountFlag)
+	public WxAccessToken getWxAccessToken(String appid, String appsecret)
 			throws Exception;
 
 	/**
@@ -73,5 +75,29 @@ public interface WXAPIService {
 	 */
 	public WxJsapiTicket getJsapiTicket(String accessToken) throws Exception;
 
+	/**
+	 * 获取jssdk签名
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String getJSSDKSign(String nonceStr, String jsapiTicket, long timestamp, String currentUrl) throws Exception;
+
+	/**
+	 * 获得支付签名
+	 * 
+	 * @param timestamp
+	 * @param nodeStr
+	 * @return
+	 * @throws Exception
+	 */
 	public String getPaySign(long timestamp, String nodeStr) throws Exception;
+
+	/**
+	 * 获得公众号的商户支付签名
+	 * @param wxServiceCompany
+	 * @return
+	 * @throws Exception
+	 */
+	public String ServiceCompanyPay(WxServiceCompany wxServiceCompany) throws Exception;
 }
