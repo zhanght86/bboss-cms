@@ -41,7 +41,6 @@ import org.frameworkset.event.EventImpl;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.event.SimpleEventType;
-import org.frameworkset.spi.ApplicationContext;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.BaseSPIManager2;
 import org.frameworkset.spi.BeanNameAware;
@@ -1151,9 +1150,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 
 	private String tableName = "ESB_PARAMS";
 
-	private String configContextPath = null;
-
-	private ApplicationContext applicationContext;
+	 
 
 	public String getTableName() {
 		return tableName;
@@ -1163,13 +1160,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		this.tableName = tableName;
 	}
 
-	public String getConfigContextPath() {
-		return configContextPath;
-	}
-
-	public void setConfigContextPath(String configContextPath) {
-		this.configContextPath = configContextPath;
-	}
+	 
 
 	public String getDbname() {
 		return dbname;
@@ -1179,82 +1170,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		this.dbname = dbname;
 	}
 
-	/**
-	 * 根据配置的map属性名称获取map集中的所有属性名称，属性名称根据有split分隔符拼接一个字符串返回
-	 * 
-	 * @param map
-	 *            <String,Object> map
-	 * @param split
-	 *            连接key字符串的分隔连接符号
-	 * @return
-	 */
-	public String getNodeParamsMapKeyStrings(String propertyMapName,
-			String split) {
-		ProMap proMap = (ProMap) applicationContext
-				.getMapProperty(propertyMapName);
-		if (proMap == null || proMap.size() == 0)
-			throw new ParamException("请确认是否配置了属性名为：" + propertyMapName
-					+ "的map属性集合！");
-		Iterator<String> iterator = proMap.keySet().iterator();
-		StringBuffer sb = new StringBuffer();
-		while (iterator.hasNext()) {
-			if (sb.length() == 0) {
-				sb.append("'").append(iterator.next().toString()).append("'");
-			} else {
-				sb.append(split).append("'").append(iterator.next().toString())
-						.append("'");
-			}
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * 从数据库中获取已经配置的参数
-	 * 
-	 * @param propertyMapName
-	 *            模板参数map配置的名称
-	 * @param nodeId
-	 *            配置节点id
-	 * @@param params_type 参数类型
-	 * @return
-	 * 
-	 */
-	public ProMap<String, Pro> getNodeParamsWithProMapName(
-			String propertyMapName, String nodeId, String params_type) {
-		// 获取配置文件中的map参数属性配置名称
-		String nameParam = getNodeParamsMapKeyStrings(propertyMapName, ",");
-		StringBuilder sql = new StringBuilder();
-		// 根据配置的map参数属性配置查找数据库，防止以前存在多余的字段
-		sql.append("select NAME,VALUE from ").append(tableName).append(
-				" where NODE_ID = ? and PARAM_TYPE=? and name in(").append(
-				nameParam).append(")  order by name,rn asc");
-		final ProMap<String, Pro> params = new ProMap<String, Pro>();
-		PreparedDBUtil dbutil = new PreparedDBUtil();
-		try {
-			dbutil.preparedSelect(getDbname(), sql.toString());
-			dbutil.setString(1, nodeId);
-			dbutil.setString(2, params_type);
-			dbutil.executePreparedWithRowHandler(new NullRowHandler() {
-				@Override
-				public void handleRow(Record record) {
-					try {
-						Pro rowValue = new Pro();
-						rowValue.setName(record.getString("name"));
-
-						rowValue.setValue(record.getString("value"));
-
-						params.put(rowValue.getName(), rowValue);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-
-				}
-			});
-			return params;
-		} catch (Exception e) {
-			throw new ParamException(e);
-		}
-	}
+	  
 
 	/**
 	 * 从数据库中获取给定参数名称，配置节点id，参数类型的参数对象
@@ -1351,79 +1267,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seecom.frameworkset.platform.mq.client.MqNodeServiceInf#
-	 * getInitConnectionParamsMapProperty()
-	 */
-	public List<Pro> getInitNodeParams(String... properMapnames) {
-
-		if (properMapnames == null || properMapnames.length == 0)
-			return null;
-		List<Pro> initParams = new ArrayList<Pro>();
-		for (String name : properMapnames) {
-			ProMap paramsConfMap = (ProMap) applicationContext
-					.getMapProperty(name);
-			Iterator it = paramsConfMap.keySet().iterator();
-			Pro pro = null;
-			String key = null;
-			while (it.hasNext()) {
-
-				key = (String) it.next();
-				pro = paramsConfMap.getPro(key);
-				initParams.add(pro);
-			}
-		}
-
-		return initParams;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.frameworkset.platform.mq.client.MqNodeServiceInf#insertConParams(java.lang
-	 * .String, java.util.List)
-	 */
-	public boolean insertNodeParams(int NODE_ID, List<Pro> newparamvalues,
-			String paramstype, String... properMapnames) {
-		String sql_del = "delete from " + tableName
-				+ " where NODE_ID=? and param_type= ?";
-		// TransactionManager tm = new TransactionManager();
-		PreparedDBUtil dbutil = new PreparedDBUtil();
-		try {
-			// tm.begin();
-			dbutil.preparedDelete(this.getDbname(), sql_del);
-			dbutil.setString(1, String.valueOf(NODE_ID));
-			dbutil.setString(2, paramstype);
-			dbutil.addPreparedBatch();
-			if (newparamvalues == null || newparamvalues.size() == 0) {
-				newparamvalues = getInitNodeParams(properMapnames);
-			}
-			StringBuffer sql = new StringBuffer();
-			Pro mq_con_params = null;
-			for (int i = 0; i < newparamvalues.size(); i++) {
-				mq_con_params = newparamvalues.get(i);
-				sql.append("insert into ").append(tableName).append(
-						"(NODE_ID,NAME,VALUE,PARAM_TYPE) values(?,?,?,?)");
-				dbutil.preparedInsert(this.getDbname(), sql.toString());
-				dbutil.setString(1, String.valueOf(NODE_ID));
-				dbutil.setString(2, mq_con_params.getName());
-				dbutil.setString(3, mq_con_params.getString());
-				dbutil.setString(4, paramstype);
-				dbutil.addPreparedBatch();
-				sql.setLength(0);
-			}
-			dbutil.executePreparedBatch();
-			return true;
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			throw new ParamException(e);
-		}
-	}
-
+	  
 	/**
 	 * 根据节点id和参数类型删除参数配置
 	 * 
@@ -1540,8 +1384,7 @@ public class ParamsHandler implements org.frameworkset.spi.InitializingBean,List
 	}
 
 	public void afterPropertiesSet() throws Exception {
-		this.applicationContext = ApplicationContext
-				.getApplicationContext(this.configContextPath);
+		 
 		eventtype = new SimpleEventType("org_frameworkset_util_"+this.beanName);
 		NotifiableFactory.addListener(this, eventtype);
 	}
