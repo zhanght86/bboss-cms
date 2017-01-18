@@ -2,21 +2,21 @@
 
 <properties>
 
-	
-	<!-- 
-		微信开发套件
-	    author: yinbp
-		CopyRight: SANY Group Co, Ltd
-		version: v1.0
-	    Date: 2012-03-21
-	-->
-	
+
+	<!-- 微信开发套件 author: yinbp CopyRight: SANY Group Co, Ltd version: v1.0 Date: 
+		2012-03-21 -->
+
 	<!-- Relational database template -->
 	<property name="wx.enterprise.securityService"
-		class="org.frameworkset.wx.enterprise.WXSecurityServiceImp"/>
-		
-	<property name="wx.enterprise.APIService"
-		class="org.frameworkset.wx.publics.WXAPIServiceImpl"/>	
-		
+		class="org.frameworkset.wx.enterprise.WXSecurityServiceImp" />
+	<property name="wx.enterprise.APIService" class="org.frameworkset.wx.publics.WXAPIServiceImpl" />
+	<property name="wx.smUserWxService" f:executor="attr:wx.configsqlexecutor"
+		class="org.frameworkset.wx.common.service.SmUserWxServiceImpl" />
+	<property name="wx.configsqlexecutor"
+		class="com.frameworkset.common.poolman.ConfigSQLExecutor">
+		<construction>
+			<property value="org/frameworkset/wx/common/service/smUserWx.xml" />
+		</construction>
+	</property>
 </properties>
 	

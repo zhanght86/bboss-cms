@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+**
+ *  Copyright 2008-2010 biaoping.yin
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *
+ * Title: smUserWx.xml
+ * Description: wx管理sql配置文件 
+ * Company:wowo
+ * Copyright (c) 2015
+ * @Date 2017-01-18 23:42:32
+ * @author suwei
+ * @version v1.0 
+ **
+ -->
+<properties>
+	
+		<property name="addSmUserWx">
+		<![CDATA[
+			insert into td_sm_user_wx (wxid,access_token,city,country,create_time,errcode,errmsg,expires_in,headimgurl,nickname,openid,privilege,province,refresh_token,scope,sex,state,unionid,USER_ID) values(#[wxid],#[accessToken],#[city],#[country],#[createTime],#[errcode],#[errmsg],#[expiresIn],#[headimgurl],#[nickname],#[openid],#[privilege],#[province],#[refreshToken],#[scope],#[sex],#[state],#[unionid],#[userId])
+		]]>
+	</property>
+		<property name="deleteByKey">
+		<![CDATA[
+			delete from td_sm_user_wx where wxid=?
+		]]>
+	</property>
+		<property name="updateSmUserWx">
+		<![CDATA[
+			update td_sm_user_wx set wxid=#[wxid],access_token=#[accessToken],city=#[city],country=#[country],create_time=#[createTime],errcode=#[errcode],errmsg=#[errmsg],expires_in=#[expiresIn],headimgurl=#[headimgurl],nickname=#[nickname],openid=#[openid],privilege=#[privilege],province=#[province],refresh_token=#[refreshToken],scope=#[scope],sex=#[sex],state=#[state],unionid=#[unionid],USER_ID=#[userId] where wxid=#[wxid]
+		]]>
+	</property>
+		<property name="selectById">
+		<![CDATA[
+			select * from td_sm_user_wx where wxid=?
+		]]>
+	</property>
+		<property name="queryListSmUserWx">
+		<![CDATA[
+			select * from td_sm_user_wx where 1=1
+										#if($wxid && $wxid > 0)
+					and wxid=#[wxid]
+				#end
+											#if($accessToken && !$accessToken.equals(""))
+				and access_token =#[accessToken]		
+			#end
+								#if($city && !$city.equals(""))
+				and city =#[city]		
+			#end
+								#if($country && !$country.equals(""))
+				and country =#[country]		
+			#end
+												#if($createTime_start )
+					and create_time>=#[createTime_start]
+				#end
+				#if($createTime_end )
+					and create_time<=#[createTime_end]
+				#end
+															#if($errcode && $errcode > 0)
+					and errcode=#[errcode]
+				#end
+											#if($errmsg && !$errmsg.equals(""))
+				and errmsg =#[errmsg]		
+			#end
+								#if($expiresIn && !$expiresIn.equals(""))
+				and expires_in =#[expiresIn]		
+			#end
+								#if($headimgurl && !$headimgurl.equals(""))
+				and headimgurl =#[headimgurl]		
+			#end
+								#if($nickname && !$nickname.equals(""))
+				and nickname =#[nickname]		
+			#end
+								#if($openid && !$openid.equals(""))
+				and openid =#[openid]		
+			#end
+								#if($privilege && !$privilege.equals(""))
+				and privilege =#[privilege]		
+			#end
+								#if($province && !$province.equals(""))
+				and province =#[province]		
+			#end
+								#if($refreshToken && !$refreshToken.equals(""))
+				and refresh_token =#[refreshToken]		
+			#end
+								#if($scope && !$scope.equals(""))
+				and scope =#[scope]		
+			#end
+								#if($sex && !$sex.equals(""))
+				and sex =#[sex]		
+			#end
+								#if($state && !$state.equals(""))
+				and state =#[state]		
+			#end
+								#if($unionid && !$unionid.equals(""))
+				and unionid =#[unionid]		
+			#end
+												#if($userId && $userId > 0)
+					and USER_ID=#[userId]
+				#end
+						
+		]]>
+	</property>
+	</properties>

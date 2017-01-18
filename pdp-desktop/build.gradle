@@ -17,13 +17,11 @@ project.tasks.compileJava.dependsOn(project(':pdp-application').tasks.install)
 project.tasks.compileJava.dependsOn(project(':pdp-wx').tasks.install)
 
 dependencies {
-	
+   compile project(':pdp-wx')
    compile (
       			fileTree(dir: '../lib', include: '**/*.jar'),
       [group: 'com.bbossgroups.pdp', name: 'pdp-application', version: "${PROJ_VERSION}", transitive: true],         
-        [group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: false],         
-            
-
+//    [group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: false],         
     )
     
     testCompile(

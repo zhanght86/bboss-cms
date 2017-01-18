@@ -6,6 +6,7 @@ import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.DefaultApplicationContext;
 import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
+import org.frameworkset.wx.common.service.SmUserWxService;
 import org.frameworkset.wx.common.service.WXAPIService;
 import org.frameworkset.wx.common.service.WXSecurityService;
 
@@ -34,6 +35,13 @@ public class WXHelper {
 		BaseApplicationContext context = DefaultApplicationContext
 				.getApplicationContext("org/frameworkset/wx/common/util/bboss-wx.xml");
 		return context.getTBeanObject("wx.enterprise.APIService", WXAPIService.class);
+	}
+
+	public static SmUserWxService getSmUserWxService() {
+		BaseApplicationContext context = DefaultApplicationContext
+				.getApplicationContext("org/frameworkset/wx/common/service/smUserWx.xml");
+		return context.getTBeanObject("wx.smUserWxService", SmUserWxService.class);
+
 	}
 
 	public static boolean uselocalsession() {
@@ -107,8 +115,10 @@ public class WXHelper {
 				"weixin");
 		return (String) p.getValue();
 	}
+
 	/**
 	 * 获得公众号的商户支付地址（提现使用）
+	 * 
 	 * @return
 	 */
 	public static String getServiceCompanyURL() {
