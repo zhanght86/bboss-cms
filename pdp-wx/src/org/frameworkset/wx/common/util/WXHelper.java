@@ -39,7 +39,7 @@ public class WXHelper {
 
 	public static SmUserWxService getSmUserWxService() {
 		BaseApplicationContext context = DefaultApplicationContext
-				.getApplicationContext("org/frameworkset/wx/common/service/smUserWx.xml");
+				.getApplicationContext("org/frameworkset/wx/common/util/bboss-wx.xml");
 		return context.getTBeanObject("wx.smUserWxService", SmUserWxService.class);
 
 	}
