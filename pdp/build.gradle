@@ -87,5 +87,10 @@ dependencies {
     
    
 }
+task releaseArchives(type: Zip,dependsOn:"war") {
+    //appendix = 'wrapper'
+   baseName='dbinit-system'
+   from '../dbinit-system'   
+}
 
 webAppDirName = 'WebRoot'  
