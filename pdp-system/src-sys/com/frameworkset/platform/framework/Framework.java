@@ -496,11 +496,11 @@ public class Framework implements ResourceInitial,MessageSource {
 				{
 					
 					Item it = (Item) item;
-					PermissionToken token = new PermissionToken("column", it.getId(),
-							"visible");
+					PermissionToken token = null;
 					if(it.getWorkspaceContent() != null && !it.getWorkspaceContent().equals(""))
 					{
-						
+						token = new PermissionToken("column", it.getId(),
+								"visible");
 						permissionTokenMap.addPermissionToken(PermissionTokenMap.buildResourceToken(it.getWorkspaceContent()),this.getSystemid(), token);
 					}
 					if(it.getAuthorResources() != null)
@@ -508,6 +508,8 @@ public class Framework implements ResourceInitial,MessageSource {
 						List<ResourceToken> authorResources = it.getAuthorResources();
 						for(ResourceToken authorResource:authorResources)
 						{
+							token = new PermissionToken("column", it.getId(),
+									"visible");
 							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
 						}
 					}
@@ -515,11 +517,11 @@ public class Framework implements ResourceInitial,MessageSource {
 				else if(item instanceof Module)
 				{
 					Module it = (Module) item;
-					PermissionToken token = new PermissionToken("column", it.getId(),
-							"visible");
+					PermissionToken token = null;
 					if(it.getUrl() != null && !it.getUrl().equals(""))
 					{
-						
+						token = new PermissionToken("column", it.getId(),
+								"visible");
 						permissionTokenMap.addPermissionToken(PermissionTokenMap.buildResourceToken(it.getUrl()),this.getSystemid(), token);
 					}
 					if(it.getAuthorResources() != null)
@@ -527,6 +529,8 @@ public class Framework implements ResourceInitial,MessageSource {
 						List<ResourceToken> authorResources = it.getAuthorResources();
 						for(ResourceToken authorResource:authorResources)
 						{
+							token = new PermissionToken("column", it.getId(),
+									"visible");
 							permissionTokenMap.addPermissionToken(authorResource,this.getSystemid(), token);
 						}
 					}
@@ -548,6 +552,8 @@ public class Framework implements ResourceInitial,MessageSource {
 					List<ResourceToken> authorResources = publicItem.getAuthorResources();
 					for(ResourceToken authorResource:authorResources)
 					{
+						token = new PermissionToken("column", "publicItem",
+								"visible");
 						permissionTokenMap.addUnprotectedPermissionToken(authorResource,this.getSystemid(), token);
 					}
 				}
