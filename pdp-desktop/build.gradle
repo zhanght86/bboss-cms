@@ -24,7 +24,5 @@ dependencies {
 //    [group: 'com.bbossgroups.pdp', name: 'pdp-wx', version: "${PROJ_VERSION}", transitive: false],         
     )
     
-    testCompile(
-    		 
-    )
+     
 }

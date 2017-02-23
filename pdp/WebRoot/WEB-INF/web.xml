@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
          version="2.4">
 
-    <display-name>SanyPDP Web Application</display-name>
+    <display-name>BBoss PDP Web Application</display-name>
 	<listener>
 	<description><![CDATA[应用销毁监听器：
 		在应用销毁之前调用系统shutdown 回调函数，前提是所有的shutdown回调函数
