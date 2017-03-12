@@ -1,6 +1,7 @@
 package com.sany.application.service.impl;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +61,7 @@ public class AppcreateServiceImpl implements AppcreateService {
     	
     	try {
     		WfApp wfApp = executor.queryObject(WfApp.class, "selectWfApp", wfAppId);
-    		SimpleKeyPair keypair = TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
+    		SimpleKeyPair keypair = TokenHelper.getTokenService().getSimpleKey(wfApp.getSystem_id(), "RSA");
     		if(keypair != null)
     		{
     			wfApp.setPrivateKey(keypair.getPrivateKey());
@@ -155,7 +156,7 @@ public class AppcreateServiceImpl implements AppcreateService {
     			executor.updateBean("updateWfApp", wfApp);
     			if(wfApp.getNeedsign() == 1)
     			{
-    				TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
+    				TokenHelper.getTokenService().getSimpleKey(wfApp.getSystem_id(), "RSA");
     			}
     		}else{
     			
@@ -166,7 +167,7 @@ public class AppcreateServiceImpl implements AppcreateService {
     			executor.insertBean("insertWfApp", wfApp);
     			if(wfApp.getNeedsign() == 1)
     			{
-    				TokenHelper.getTokenService().getSimpleKeyPair(wfApp.getSystem_id());
+    				TokenHelper.getTokenService().getSimpleKey(wfApp.getSystem_id(), "RSA");
     			}
     		}
     	}
@@ -194,6 +195,11 @@ public class AppcreateServiceImpl implements AppcreateService {
 		},AppValidateResult.class, "validateAppSecret", appid,secret);
 		return result;
 		
+	}
+	
+	public WfApp getApplication(String appid) throws Exception{
+		WfApp wfApp = executor.queryObject(WfApp.class, "selectWfAppCode", appid);
+		return wfApp;
 	}
 
 	@Override

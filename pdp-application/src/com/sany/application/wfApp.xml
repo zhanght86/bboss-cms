@@ -105,6 +105,33 @@
 		]]>
 	</property>
 	
+	
+	<property name="selectWfAppCode">
+		<![CDATA[
+			SELECT A.ID,
+			       A.SYSTEM_ID,
+			       A.SYSTEM_NAME,
+			       A.WF_PUBLISHED_URL,
+			       A.WF_MANAGE_URL,
+			       A.APP_MODE_TYPE,
+			       A.CREATOR,
+			       A.CREATE_DATE,
+			       A.UPDATE_PERSON,
+			       A.UPDATE_DATE,
+			       A.TODO_URL,
+			       A.APP_URL,
+			       A.SYSTEM_SECRET,
+			       A.SYSTEM_SECRET_TEXT,
+			       A.PENDING_TYPE,
+			       A.PENDING_USED,
+			       A.PIC_NAME,
+			       A.TICKETTIME ,
+			         A.needsign
+			FROM TD_WF_APP A
+			 where a.SYSTEM_ID = ?
+		]]>
+	</property>
+	
 	<property name="deleteWfApp">
 		<![CDATA[
 			delete from td_wf_app  

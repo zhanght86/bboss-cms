@@ -20,7 +20,7 @@ public interface AppcreateService {
      * @return
      */
     public ListInfo findListPage(long offset, int pagesize, WfApp condition) throws Exception;
-    
+    public WfApp getApplication(String appid) throws Exception;
     /**
      * 根据ID加载应用
      * @param wfAppId

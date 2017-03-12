@@ -112,7 +112,7 @@ public class AppcreateAction {
     	
 		try {
 			
-			InputStream input =  AuthorHelper.generateCAStream(appcode);
+			InputStream input =  AuthorHelper.generateCAStream(appcode,"RSA","RSA");
 	        FileBlob fb = new FileBlob ("token.certificate",input);//下载文件流
 	        return fb;
 		} catch (Exception e) {
