@@ -1,8 +1,8 @@
 <property name="datasource" class="com.frameworkset.commons.dbcp2.BasicDataSource">
  	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>  
-	<property name="url" value="jdbc:oracle:thin:@//localhost:1521/orcl"/>  
-	<property name="username" value="BBOSSTEST"/>  
-	<property name="password" value="BBOSSTEST"/>  
+	<property name="url" value="jdbc:oracle:thin:@//yumenjia.vicp.net:1521/orcl"/>  
+	<property name="username" value="ybp"/>  
+	<property name="password" value="ybp"/>  
 	<!--initialSize: 初始化连接-->  
 	<property name="initialSize" value="5"/>  
 	<property name="maxTotal" value="20"/>  
