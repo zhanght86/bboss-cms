@@ -29,7 +29,7 @@ dependencies {
             [group: 'com.bbossgroups', name: 'bboss-http', version: "${bboss_version}", transitive: true],
               
 		 	[group: 'com.bbossgroups', name: 'bboss-data', version: "${bboss_version}", transitive: false],
-            [group: 'com.bbossgroups', name: 'bboss-schedule', version: "${bboss_version}", transitive: false],
+            [group: 'com.bbossgroups', name: 'bboss-schedule', version: "${bboss_version}", transitive: true],
             [group: 'com.bbossgroups', name: 'bboss-velocity', version: "${bboss_version}", transitive: false],
             [group: 'com.bbossgroups.security', name: 'bboss-security', version: "${bboss_security_version}", transitive: false],
             [group: 'com.bbossgroups.security', name: 'bboss-security-web', version: "${bboss_security_version}", transitive: false],
@@ -63,8 +63,6 @@ dependencies {
             [group: 'org.apache.poi', name: 'poi-scratchpad', version: '3.10-FINAL', transitive: false],
             [group: 'org.jasig.cas.client', name: 'cas-client-core', version: '3.4.1', transitive: false],
             [group: 'cas', name: 'casclient', version: '2.1.1', transitive: false],
-            [group: 'org.quartz-scheduler', name: 'quartz', version: '1.8.6', transitive: false],
-            [group: 'bsh', name: 'bsh', version: '2.0b1', transitive: false],
 // 			[group: 'net.sf.jasperreports', name: 'jasperreports', version: '6.3.0', transitive: false],
 //			[group: 'net.sf.jasperreports', name: 'jasperreports-fonts', version: '6.0.0', transitive: false],
            
