@@ -172,8 +172,7 @@ dependencies {
             [group: 'trove', name: 'trove', version: '1.0.2', transitive: false],
             [group: 'com.trilead', name: 'trilead-ssh2', version: '1.0.0-build215', transitive: false],
             [group: 'org.testng', name: 'testng', version: '6.9.10', transitive: false],
-            [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.2', transitive: false],
-           	[group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.2', transitive: false],
+            
             [group: 'swarmcache', name: 'swarmcache', version: '1.0RC2', transitive: false],
             [group: 'org.jfree', name: 'swtgraphics2d', version: '1.0', transitive: false],
             [group: 'org.openoffice', name: 'ridl', version: '4.1.2', transitive: false],
@@ -196,7 +195,7 @@ dependencies {
             [group: 'net.sf.jacob-project', name: 'jacob', version: '1.14.3', transitive: false],
            	[group: 'javassist', name: 'javassist', version: "3.12.0.GA", transitive: false],            
            	[group: 'jaxen', name: 'jaxen', version: '1.1.1', transitive: false],
-            [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.2', transitive: false],
+          //  [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.2', transitive: false],
             [group: 'jfree', name: 'jcommon', version: '1.0.16', transitive: false],
           	[group: 'com.sleepycat', name: 'je', version: '5.0.73', transitive: false],
            	[group: 'redis.clients', name: 'jedis', version: '2.9.0', transitive: false],
