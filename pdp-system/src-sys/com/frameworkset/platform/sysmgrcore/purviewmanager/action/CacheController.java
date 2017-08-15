@@ -25,7 +25,7 @@ import com.frameworkset.util.ValueObjectUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-12-20 下午2:51:42

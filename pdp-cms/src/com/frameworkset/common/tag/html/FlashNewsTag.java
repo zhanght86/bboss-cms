@@ -4,10 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.log4j.Logger;
-
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.common.tag.pager.tags.CellTag;
@@ -17,6 +15,9 @@ import com.frameworkset.platform.cms.sitemanager.SiteManagerException;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.util.StringUtil;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 /**
  * flash新闻标签 m_second时间没有控制
  * <p>Title: FlashNewsTag.java</p>
@@ -25,13 +26,13 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-9-12 11:00:31
  * @author ge.tao
  * @version 1.0
  */
 public class FlashNewsTag extends CMSListTag{
-	protected Logger log = Logger.getLogger(FlashNewsTag.class);
+	protected Logger log = LoggerFactory.getLogger(FlashNewsTag.class);
 	protected CMSTagUtil tagUtil = new CMSTagUtil();
 	protected SiteManagerImpl siteUtil = new SiteManagerImpl();
 	protected String cssVmpath = "css/imageNews.css";

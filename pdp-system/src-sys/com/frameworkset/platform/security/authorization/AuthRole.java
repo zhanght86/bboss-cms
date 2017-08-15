@@ -8,7 +8,7 @@ import java.io.Serializable;
  * 
  * version: 1.0
  * 创建日期：2006-9-26
- * 公司：三一集团
+ * 公司：bbossgroups
  * @author biaoping.yin
  */
 public class AuthRole implements Serializable{

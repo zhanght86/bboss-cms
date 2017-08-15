@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -36,7 +37,7 @@ import com.frameworkset.platform.sysmgrcore.manager.OperManager;
  * @author 
  */
 public class OperManagerImpl extends EventHandle implements OperManager {
-	private static Logger logger = Logger.getLogger(OperManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(OperManagerImpl.class
 			.getName());
 
 

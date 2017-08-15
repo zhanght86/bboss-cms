@@ -16,7 +16,7 @@ import com.frameworkset.platform.security.AccessControl;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2008-3-6 9:33:50
  * @author ge.tao
  * @version 1.0

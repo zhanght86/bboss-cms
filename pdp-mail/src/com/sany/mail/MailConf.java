@@ -18,7 +18,7 @@ import org.frameworkset.spi.InitializingBean;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2013-5-20 下午4:57:05

@@ -25,7 +25,7 @@ import com.frameworkset.platform.cms.votemanager.VoteManagerImpl;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007 3:25:14 PM
  * @author da.wei
  * @version 1.0

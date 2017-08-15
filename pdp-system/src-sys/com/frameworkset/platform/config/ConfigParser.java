@@ -13,7 +13,6 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.assemble.InterceptorInfo;
 import org.frameworkset.spi.assemble.ManagerImport;
@@ -24,6 +23,8 @@ import org.frameworkset.spi.assemble.RollbackException;
 import org.frameworkset.spi.assemble.SecurityProviderInfo;
 import org.frameworkset.spi.assemble.SynchronizedMethod;
 import org.frameworkset.spi.assemble.Transactions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -57,13 +58,13 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class ConfigParser extends I18nXMLParser  {
-    private static Logger log = Logger.getLogger(ConfigParser.class) ;
+    private static Logger log = LoggerFactory.getLogger(ConfigParser.class) ;
     private Stack traceStack;
     private StringBuffer currentValue;
     private Map<String,ApplicationInfo> applicationInfos;

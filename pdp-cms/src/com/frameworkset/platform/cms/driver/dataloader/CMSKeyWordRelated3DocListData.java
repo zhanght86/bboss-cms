@@ -15,7 +15,7 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-9-20 8:20:40
  * @author ge.tao
  * @version 1.0

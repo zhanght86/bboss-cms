@@ -4,8 +4,8 @@
  * Copyright @ 2001-2012 SANY Group Co.,Ltd.
  * All right reserved.
  * 
- * 这个软件是属于三一集团有限公司机密的和私有信息，不得泄露。
- * 并且只能由三一集团有限公司内部员工在得到许可的情况下才允许使用。
+ * 这个软件是属于bbossgroups有限公司机密的和私有信息，不得泄露。
+ * 并且只能由bbossgroups有限公司内部员工在得到许可的情况下才允许使用。
  * This software is the confidential and proprietary information
  * of SANY Group Co, Ltd. You shall not disclose such
  * Confidential Information and shall use it only in accordance
@@ -19,10 +19,11 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.cms.container.Container;
@@ -44,7 +45,7 @@ import com.frameworkset.util.StringUtil;
 public class DocCommentController {
 
 	private DocCommentManager docCommentManager;
-	private static Logger log = Logger.getLogger(DocCommentController.class);
+	private static Logger log = LoggerFactory.getLogger(DocCommentController.class);
 	
 	public String showAllComments(String siteId,int docId, long channelId, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

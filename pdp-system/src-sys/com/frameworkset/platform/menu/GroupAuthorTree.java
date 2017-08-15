@@ -21,7 +21,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-10-26 14:20:38
  * @author biaoping.yin
  * @version 1.0

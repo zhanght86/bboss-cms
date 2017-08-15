@@ -12,7 +12,8 @@ import java.util.List;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.exception.FormulaException;
 import com.frameworkset.common.tag.pager.tags.CellTag;
@@ -31,7 +32,7 @@ import com.frameworkset.util.StringUtil;
  */
 public class XMLBaseTag extends CellTag 
 {
-    private static Logger log = Logger.getLogger(XMLBaseTag.class);
+    private static Logger log = LoggerFactory.getLogger(XMLBaseTag.class);
     
     protected AccessControl accesscontroler = null;
     private boolean defaultCell;

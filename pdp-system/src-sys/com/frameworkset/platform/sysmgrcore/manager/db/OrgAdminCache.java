@@ -24,7 +24,7 @@ import com.frameworkset.platform.sysmgrcore.manager.OrgAdministrator;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 22, 2008 9:55:15 AM
  * @author biaoping.yin,尹标平
  * @version 1.0

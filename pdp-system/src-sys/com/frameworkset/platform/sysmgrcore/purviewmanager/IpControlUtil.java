@@ -1,6 +1,7 @@
 package com.frameworkset.platform.sysmgrcore.purviewmanager;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.platform.config.ConfigManager;
@@ -13,7 +14,7 @@ import com.frameworkset.platform.config.ConfigManager;
  *
  */
 public class IpControlUtil {
-	private static Logger log = Logger.getLogger(IpControlUtil.class);
+	private static Logger log = LoggerFactory.getLogger(IpControlUtil.class);
 	
 	 /**
      * 登录用户IP控制判断

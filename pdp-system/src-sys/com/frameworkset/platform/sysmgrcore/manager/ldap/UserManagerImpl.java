@@ -14,11 +14,12 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.MoreListInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.config.ConfigManager;
@@ -58,7 +59,7 @@ import com.frameworkset.util.ListInfo;
  */    
 public class UserManagerImpl extends BaseUserManager {
      
-	private Logger logger = Logger.getLogger(UserManagerImpl.class.getName());
+	private Logger logger = LoggerFactory.getLogger(UserManagerImpl.class.getName());
 
 	
 
@@ -89,7 +90,7 @@ public class UserManagerImpl extends BaseUserManager {
 				attr = attrs.get(propName);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return attr;
@@ -115,7 +116,7 @@ public class UserManagerImpl extends BaseUserManager {
 			if (list != null && !list.isEmpty())
 				r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -141,7 +142,7 @@ public class UserManagerImpl extends BaseUserManager {
 			if (list != null && !list.isEmpty())
 				r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -169,7 +170,7 @@ public class UserManagerImpl extends BaseUserManager {
 					r = true;
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -205,7 +206,7 @@ public class UserManagerImpl extends BaseUserManager {
 
 			r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -276,7 +277,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -348,7 +349,7 @@ public class UserManagerImpl extends BaseUserManager {
 			
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -395,8 +396,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -469,7 +469,7 @@ public class UserManagerImpl extends BaseUserManager {
 			    }
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -585,7 +585,7 @@ public class UserManagerImpl extends BaseUserManager {
 			    
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -637,7 +637,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -716,7 +716,7 @@ public class UserManagerImpl extends BaseUserManager {
 				user.setUserRealname(attrs.get("displayName").get().toString());
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return user;
@@ -761,7 +761,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return userList;
@@ -839,7 +839,7 @@ public class UserManagerImpl extends BaseUserManager {
 			if (list != null && !list.isEmpty())
 				r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -917,7 +917,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return user;
@@ -1018,7 +1018,7 @@ public class UserManagerImpl extends BaseUserManager {
 			dc.execute(p);
 			r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1114,7 +1114,7 @@ public class UserManagerImpl extends BaseUserManager {
 				logger.error("无法找用户组 “" + group.getGroupName() + "”");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1169,7 +1169,7 @@ public class UserManagerImpl extends BaseUserManager {
 				logger.error("无法找用户组 “" + org.getOrgName() + "”");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1278,7 +1278,7 @@ public class UserManagerImpl extends BaseUserManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1343,7 +1343,7 @@ public class UserManagerImpl extends BaseUserManager {
 				logger.error("无法找用户组 “" + org.getOrgName() + "”");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1416,7 +1416,7 @@ public class UserManagerImpl extends BaseUserManager {
 			
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -1494,7 +1494,7 @@ public class UserManagerImpl extends BaseUserManager {
 			
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;

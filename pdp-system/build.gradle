@@ -16,14 +16,12 @@ sourceSets {
     
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-parameters-handler').tasks.install)
 dependencies {
-	
+	compile project(':pdp-parameters-handler')
    compile (
    			fileTree(dir: '../lib', include: '**/*.jar'),
              
     //----------------system begin---------------//
-   			[group: 'com.bbossgroups.pdp', name: 'pdp-parameters-handler', version: "${PROJ_VERSION}", transitive: true],
 			[group: 'com.bbossgroups', name: 'bboss-event', version: "${bboss_version}", transitive: false],
             [group: 'com.bbossgroups', name: 'bboss-tabpane', version: "${bboss_version}", transitive: false],
             [group: 'com.bbossgroups', name: 'bboss-http', version: "${bboss_version}", transitive: true],

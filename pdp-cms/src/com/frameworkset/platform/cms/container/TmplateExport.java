@@ -10,7 +10,7 @@ package com.frameworkset.platform.cms.container;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-9-27 17:33:05
  * @author ge.tao
  * @version 1.0

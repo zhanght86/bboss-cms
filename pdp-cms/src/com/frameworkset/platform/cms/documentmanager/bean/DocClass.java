@@ -13,7 +13,7 @@ package com.frameworkset.platform.cms.documentmanager.bean;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-8-13 下午3:38:27

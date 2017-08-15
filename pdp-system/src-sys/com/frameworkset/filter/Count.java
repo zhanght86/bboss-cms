@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date Sep 4, 2008 4:53:56 PM
  * @author biaoping.yin,尹标平
  * @version 1.0

@@ -23,7 +23,7 @@ import com.frameworkset.platform.cms.driver.jsp.InternalImplConverter;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-7-16 上午11:00:21

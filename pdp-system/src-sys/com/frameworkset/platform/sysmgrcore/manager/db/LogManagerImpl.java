@@ -11,10 +11,11 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.assemble.Pro;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -65,7 +66,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 	/* 保存模块信息的全局变量 */
 	static Map map = new java.util.concurrent.ConcurrentHashMap();
 
-	private static Logger logger = Logger.getLogger(LogManagerImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(LogManagerImpl.class);
 
 	/**
 	 * 没有被使用的方法
@@ -785,8 +786,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 			preparedDBUtil.executePrepared();
 			return logId;
 		} catch (Exception e1) {
-			e1.printStackTrace();
-			logger.error(e1);
+			logger.error("",e1);
 			preparedDBUtil.resetPrepare();
 		}
 		// DBUtil dbUtil = new DBUtil();
@@ -903,8 +903,7 @@ public class LogManagerImpl extends EventHandle implements LogManager {
 							detailContent, operType)).toString();
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 		} finally {
 			dbUtil = null;
 		}

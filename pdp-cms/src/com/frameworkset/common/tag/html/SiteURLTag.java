@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.CMSBaseCellTag;
 import com.frameworkset.common.tag.CMSTagUtil;
@@ -34,7 +35,7 @@ import com.frameworkset.util.SimpleStringUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-7-16 上午10:16:55
@@ -42,7 +43,7 @@ import com.frameworkset.util.SimpleStringUtil;
  * @version 1.0.0
  */
 public class SiteURLTag extends CMSBaseCellTag {
-	private static Logger log = Logger.getLogger(SiteURLTag.class);
+	private static Logger log = LoggerFactory.getLogger(SiteURLTag.class);
 	private String link;	
 	
 

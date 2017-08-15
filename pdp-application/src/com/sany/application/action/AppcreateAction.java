@@ -4,8 +4,8 @@
  * Copyright @ 2001-2012 SANY Group Co.,Ltd.
  * All right reserved.
  * 
- * 这个软件是属于三一集团有限公司机密的和私有信息，不得泄露。
- * 并且只能由三一集团有限公司内部员工在得到许可的情况下才允许使用。
+ * 这个软件是属于bbossgroups有限公司机密的和私有信息，不得泄露。
+ * 并且只能由bbossgroups有限公司内部员工在得到许可的情况下才允许使用。
  * This software is the confidential and proprietary information
  * of SANY Group Co, Ltd. You shall not disclose such
  * Confidential Information and shall use it only in accordance
@@ -22,7 +22,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.frameworkset.http.FileBlob;
 import org.frameworkset.util.CollectionUtils;
 import org.frameworkset.util.annotations.PagerParam;
@@ -30,6 +29,8 @@ import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.auth.AuthorHelper;
 import org.frameworkset.web.multipart.MultipartFile;
 import org.frameworkset.web.servlet.ModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.authentication.EncrpyPwd;
@@ -45,7 +46,7 @@ import com.sany.application.service.AppcreateService;
  */
 public class AppcreateAction {
 	
-	private static Logger logger = Logger.getLogger(AppcreateAction.class);
+	private static Logger logger = LoggerFactory.getLogger(AppcreateAction.class);
 	
 	
 	private AppcreateService appcreateService;
@@ -199,7 +200,7 @@ public class AppcreateAction {
 				
 				appcreateService.saveWfApp(wfApp);
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("",e);
 				return e.getMessage();
 			}
 		}else{

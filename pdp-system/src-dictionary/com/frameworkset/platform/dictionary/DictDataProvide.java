@@ -4,21 +4,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventType;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.dictionary.Data;
 import com.frameworkset.dictionary.DataManager;
 import com.frameworkset.dictionary.Item;
 import com.frameworkset.dictionary.ProfessionDataManagerException;
+import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 
 /**
  * 项目：SysMgrCore <br>
@@ -30,7 +30,7 @@ import com.frameworkset.dictionary.ProfessionDataManagerException;
  */
 public class DictDataProvide implements DataManager,Listener {
 
-	private static Logger logger = Logger.getLogger(DictDataProvide.class);
+	private static Logger logger = LoggerFactory.getLogger(DictDataProvide.class);
 	private Map datas = new ConcurrentHashMap();	
 	private Map datasbyid = new ConcurrentHashMap();
 	
@@ -80,8 +80,7 @@ public class DictDataProvide implements DataManager,Listener {
 			
 			
 		} catch (Exception e1) {
-			logger.error(e1);
-			e1.printStackTrace();
+			logger.error("",e1);
 		} 
 		return dictDataUserOrgs;
     }
@@ -117,8 +116,7 @@ public class DictDataProvide implements DataManager,Listener {
 			
 			
 		} catch (Exception e1) {
-			logger.error(e1);
-			e1.printStackTrace();
+			logger.error("",e1);
 		} 
 		return dictDataUserOrgs;
     }
@@ -161,11 +159,9 @@ public class DictDataProvide implements DataManager,Listener {
 			}
 			return data;
 		} catch (ManagerException e1) {
-			logger.error(e1);
-			e1.printStackTrace();
+			logger.error("",e1);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 		}
 		return null;
 	}
@@ -214,11 +210,9 @@ public class DictDataProvide implements DataManager,Listener {
 			}
 			return data;
 		} catch (ManagerException e1) {
-			logger.error(e1);
-			e1.printStackTrace();
+			logger.error("",e1);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 		}
 		return null;
 	}
@@ -271,8 +265,7 @@ public class DictDataProvide implements DataManager,Listener {
 				}
 			}
 		}  catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 		}
 		return state;
 	}

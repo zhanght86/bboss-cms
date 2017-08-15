@@ -11,12 +11,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.config.ConfigManager;
+import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -27,14 +28,14 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-8-8 18:00:36
  * @author biaoping.yin
  * @version 1.0
  */
 public class TelListSn extends DataInfoImpl implements Serializable{
 //	private List userList;
-	private static final Logger log = Logger.getLogger(TelListSn.class);
+	private static final Logger log = LoggerFactory.getLogger(TelListSn.class);
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {

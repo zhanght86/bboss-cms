@@ -41,7 +41,7 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-4-11 20:49:42
  * @author biaoping.yin
  * @version 1.0
@@ -103,7 +103,6 @@ public class CMSListTag extends PagerDataSet {
 	
 	public void setPageContext(PageContext pageContext)
 	{
-		org.apache.log4j.ConsoleAppender s;
 		super.setPageContext(pageContext);
 		cmsrequest = InternalImplConverter.getInternalRequest(this.request);
 		cmsresponse = InternalImplConverter.getInternalResponse(this.response);

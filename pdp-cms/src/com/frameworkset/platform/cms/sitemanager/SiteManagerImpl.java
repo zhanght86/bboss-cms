@@ -11,11 +11,12 @@ import java.util.zip.ZipException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.security.AccessControlInf;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -62,7 +63,7 @@ public class SiteManagerImpl extends EventHandle implements SiteManager {
     	//list = null;
     }
 	
-	private Logger log = Logger.getLogger(SiteManagerImpl.class);
+	private Logger log = LoggerFactory.getLogger(SiteManagerImpl.class);
 
 	/**
 	 * 根据站点中文名或英文名判断站点是否存在

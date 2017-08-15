@@ -1,13 +1,12 @@
 package com.frameworkset.platform.sysmgrcore.authenticate;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.spi.support.MessageSource;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.orm.annotation.TransactionType;
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.ca.CaProperties;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authentication.ACLLoginModule;
@@ -32,7 +31,7 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
@@ -40,7 +39,7 @@ import com.frameworkset.util.StringUtil;
 
 public class UserPasswordLoginModule extends ACLLoginModule
 {
-    private static Logger log = Logger.getLogger(UserPasswordLoginModule.class);
+    private static Logger log = LoggerFactory.getLogger(UserPasswordLoginModule.class);
 
    /** 
     * @roseuid 43FEB6D6001F

@@ -21,10 +21,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.security.auth.AuthPermission;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.config.LoginModuleInfoQueue;
@@ -44,7 +44,7 @@ public class SimpleLoginContext {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(LoginContext.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginContext.class);
     private static final String INIT_METHOD		= "initialize";
     private static final String LOGIN_METHOD		= "login";
     private static final String COMMIT_METHOD		= "commit";

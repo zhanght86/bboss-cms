@@ -6,21 +6,20 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
-import com.frameworkset.platform.config.model.OperationGroup;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.resource.ResourceManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.contextmenu.Menu;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.util.StringUtil;
 
 /**
@@ -34,7 +33,7 @@ public class SiteApp extends COMTree implements java.io.Serializable {
 //	MenuHelper menuHelper = null;
 	Framework framework;
 	CMSManager cmsManager;
-    private static final Logger log = Logger.getLogger(SiteApp.class);
+    private static final Logger log = LoggerFactory.getLogger(SiteApp.class);
 	public void setPageContext(PageContext context) {
 		super.setPageContext(context);
 //		menuHelper = new MenuHelper(accessControl);//经过菜单权限过滤

@@ -7,9 +7,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.web.servlet.support.RequestContextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
  
 
@@ -41,7 +42,7 @@ public class Item extends BaseMenuItem {
 	private String main;
 	private String left;
 	private String left_cols = "30";
-	private static final Logger log = Logger.getLogger(Item.class);
+	private static final Logger log = LoggerFactory.getLogger(Item.class);
 	
 	
 	private String navigatorToolbar;

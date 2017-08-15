@@ -4,17 +4,18 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.db.OrgManagerImpl;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 public class JobSubList extends DataInfoImpl implements Serializable {
-	private Logger logger = Logger.getLogger(JobSubList.class.getName());
+	private Logger logger = LoggerFactory.getLogger(JobSubList.class.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {

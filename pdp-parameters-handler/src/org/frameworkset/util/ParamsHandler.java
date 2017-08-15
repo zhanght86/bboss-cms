@@ -34,7 +34,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
@@ -50,6 +49,8 @@ import org.frameworkset.spi.assemble.ProMap;
 import org.frameworkset.util.ClassUtil.ClassInfo;
 import org.frameworkset.util.ClassUtil.PropertieDescription;
 import org.frameworkset.util.beans.PropertyAccessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
@@ -80,7 +81,7 @@ import com.frameworkset.util.ValueObjectUtil;
  */
 public class ParamsHandler implements org.frameworkset.spi.InitializingBean,Listener<Map<String,Serializable>>,BeanNameAware {
 	
-	private static final Logger log = Logger.getLogger(ParamsHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(ParamsHandler.class);
 	private static Map<String,ParamsHandler> handlers = new HashMap<String,ParamsHandler>();
 	private String beanName;
 	private SimpleEventType eventtype ;

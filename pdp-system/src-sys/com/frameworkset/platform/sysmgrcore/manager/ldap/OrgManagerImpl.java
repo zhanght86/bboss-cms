@@ -10,11 +10,12 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
-import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.pager.ListInfo;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.sysmgrcore.control.LdapControl;
 import com.frameworkset.platform.sysmgrcore.control.Parameter;
@@ -30,11 +31,10 @@ import com.frameworkset.platform.sysmgrcore.entity.User;
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.AbsttractOrgManager;
 import com.frameworkset.platform.sysmgrcore.manager.OrgManager;
-import com.frameworkset.common.tag.pager.ListInfo;
   
 public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
       
-	private Logger logger = Logger.getLogger(OrgManagerImpl.class);
+	private Logger logger = LoggerFactory.getLogger(OrgManagerImpl.class);
  
 	
 
@@ -61,7 +61,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
 			if (list != null && !list.isEmpty())
 				r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -137,7 +137,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -322,7 +322,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
 
 			r = true;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return r;
@@ -361,7 +361,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager {
 				attr = attrs.get(propName);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return attr;

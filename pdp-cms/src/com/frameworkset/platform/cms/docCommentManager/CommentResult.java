@@ -13,7 +13,7 @@ package com.frameworkset.platform.cms.docCommentManager;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-9-6 下午3:32:55

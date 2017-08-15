@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-import org.frameworkset.task.TaskService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.AccessControl;
@@ -41,7 +41,7 @@ import com.frameworkset.util.VelocityUtil;
  */
 public class FrameworkServlet extends HttpServlet implements java.io.Serializable
 {
-	private static Logger log = Logger.getLogger(FrameworkServlet.class);
+	private static Logger log = LoggerFactory.getLogger(FrameworkServlet.class);
 
 	public static final String CONTENT_TYPE = "text/html; charset=UTF-8";
 

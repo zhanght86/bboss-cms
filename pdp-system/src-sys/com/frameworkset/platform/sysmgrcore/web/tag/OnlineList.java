@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.LineUser;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 public class OnlineList extends DataInfoImpl implements Serializable{
 
-	private Logger logger = Logger.getLogger(OnlineList.class.getName());
+	private Logger logger = LoggerFactory.getLogger(OnlineList.class.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {

@@ -10,7 +10,7 @@ import com.frameworkset.common.ecs.TR;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-4-12 16:52:00
  * @author biaoping.yin
  * @version 1.0

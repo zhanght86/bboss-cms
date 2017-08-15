@@ -38,10 +38,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.j2ee.servlets.ImageServlet;
-
-import org.apache.log4j.Logger;
 
 /**
  * jasperreport打印的服务器端
@@ -50,7 +51,7 @@ import org.apache.log4j.Logger;
  */
 public class JasperPrintServlet extends HttpServlet {
 
-	private  Logger logger = Logger.getLogger(JasperPrintServlet.class
+	private  Logger logger = LoggerFactory.getLogger(JasperPrintServlet.class
 			.getName());
 	/**
 	 * 

@@ -19,7 +19,7 @@ import com.frameworkset.util.ListInfo;
  * @author meiyu.liu 
  * version 1.0
  * 日期：@date 
- * 公司：三一集团
+ * 公司：bbossgroups
  */
 public class UserSelfResList  extends DataInfoImpl implements Serializable{
 

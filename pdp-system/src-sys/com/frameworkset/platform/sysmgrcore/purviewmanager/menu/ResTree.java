@@ -23,7 +23,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date  Jan 20, 2009 4:20:18 PM
  * @author gao.tang
  * @version 1.0

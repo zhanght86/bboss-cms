@@ -14,10 +14,11 @@ import java.util.Set;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -43,7 +44,7 @@ import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 public class GroupManagerImpl extends EventHandle implements GroupManager {
 	
 	private List userList;
-	private Logger logger = Logger.getLogger(GroupManagerImpl.class.getName());
+	private Logger logger = LoggerFactory.getLogger(GroupManagerImpl.class.getName());
 
 	
 	/**
@@ -614,8 +615,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 			db.executeSelect(sql);
 			list = this.dbutilToGroupList(db);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -962,7 +962,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				r = true;
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 		return r;
@@ -1062,8 +1062,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 			db.executeSelect(hql);
 			list = this.dbutilToGroupList(db);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -1075,8 +1074,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				db.executeSelect(sql);
 				list = this.dbutilToGroupList(db);
 			} catch (Exception e) {
-				logger.error(e);
-				e.printStackTrace();
+				logger.error("",e);
 			}
 			return list;		 
 	 }
@@ -1092,7 +1090,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				group = this.dbutilToGrou(db);
 			}
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 		return group;
 	}
@@ -1108,7 +1106,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				group = this.dbutilToGrou(db);
 			}
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 		return group;
 	}
@@ -1144,8 +1142,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				listInfo.setDatas(list);
 				listInfo.setTotalSize(dBUtil.getTotalSize());
 			} catch (Exception e) {
-				logger.error(e);
-				e.printStackTrace();
+				logger.error("",e);
 			}
 			return listInfo;
 		}

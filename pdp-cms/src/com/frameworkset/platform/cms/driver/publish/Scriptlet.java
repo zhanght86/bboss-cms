@@ -10,16 +10,11 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.util.tokenizer.TextGrammarParser;
 import org.frameworkset.util.tokenizer.TextGrammarParser.GrammarToken;
 import org.htmlparser.util.ParserException;
-
-import bboss.org.apache.velocity.Template;
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.exception.MethodInvocationException;
-import bboss.org.apache.velocity.exception.ParseErrorException;
-import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.driver.context.CMSContext;
 import com.frameworkset.platform.cms.driver.context.ChannelContext;
@@ -40,6 +35,12 @@ import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.util.VelocityUtil;
 
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+
 /**
  * 
  * <p>Title: com.frameworkset.platform.cms.driver.publish.Scriptlet.java</p>
@@ -58,7 +59,7 @@ import com.frameworkset.util.VelocityUtil;
  * @version 1.0
  */
 public class Scriptlet {
-	private static Logger log = Logger.getLogger(Scriptlet.class);
+	private static Logger log = LoggerFactory.getLogger(Scriptlet.class);
 	/**
 	 * jsp定义头部
 	 */

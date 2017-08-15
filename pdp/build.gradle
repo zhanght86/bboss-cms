@@ -24,19 +24,7 @@ sourceSets {
  
 
 
-project.tasks.compileJava.dependsOn(project(':pdp-ldap').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-desktop').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-datasource').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-appbom').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-mail').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-wordpdfdemo').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-masterdata').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-log').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-sanymbp').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-sap').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-sms').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-wx').tasks.install) 
-project.tasks.compileJava.dependsOn(project(':pdp-workflow-demo').tasks.install)
+
 dependencies {
    
 

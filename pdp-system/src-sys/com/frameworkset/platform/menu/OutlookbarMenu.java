@@ -10,13 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
-
-import bboss.org.apache.velocity.Template;
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.exception.MethodInvocationException;
-import bboss.org.apache.velocity.exception.ParseErrorException;
-import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
@@ -31,6 +26,12 @@ import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
 import com.frameworkset.util.VelocityUtil;
 
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+
 /**
  * <p>Title: 生成系统主菜单</p>
  *
@@ -44,7 +45,7 @@ import com.frameworkset.util.VelocityUtil;
  * @version 1.0 
  */
 public class OutlookbarMenu implements Serializable{
-    private static final Logger log = Logger.getLogger(OutlookbarMenu.class);
+    private static final Logger log = LoggerFactory.getLogger(OutlookbarMenu.class);
 
     private String parent;
     private PageContext pageContext;

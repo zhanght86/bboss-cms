@@ -7,12 +7,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.fiyu.edit.UploadBean;
 
-import org.apache.log4j.Logger;
-
 public class CMSWebHelper {
-	private static Logger log = Logger.getLogger(CMSWebHelper.class);
+	private static Logger log = LoggerFactory.getLogger(CMSWebHelper.class);
 	private Map<String,UploadBean > styles = new HashMap<String,UploadBean >();
 	private String fileName;
 	public String getFileName() {

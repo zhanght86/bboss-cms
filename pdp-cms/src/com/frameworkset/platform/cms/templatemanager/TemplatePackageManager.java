@@ -25,11 +25,12 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -59,13 +60,13 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-10-15 11:06:19
  * @author ge.tao
  * @version 1.0
  */
 public class TemplatePackageManager implements java.io.Serializable {
-	private static Logger log = Logger.getLogger(TemplatePackageManager.class);
+	private static Logger log = LoggerFactory.getLogger(TemplatePackageManager.class);
 	private static final int EOF = -1;
 	/**
 	 * 覆盖已有模板,覆盖模板附件

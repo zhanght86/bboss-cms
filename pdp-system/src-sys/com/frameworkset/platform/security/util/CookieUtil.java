@@ -5,7 +5,8 @@ import java.security.Principal;
 
 import javax.security.auth.Subject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.authentication.CheckCallBack;
 import com.frameworkset.platform.security.authentication.Credential;
@@ -19,13 +20,13 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class CookieUtil implements Serializable{
-    private static Logger log = Logger.getLogger(CookieUtil.class);
+    private static Logger log = LoggerFactory.getLogger(CookieUtil.class);
 
     /**
      * 定义principal分隔符正则表达式
@@ -98,7 +99,7 @@ public class CookieUtil implements Serializable{
             String identitys[] = StringUtil.split(principals[i],identityRegexExpress);
             AuthPrincipal authPrincipal = new AuthPrincipal(identitys[1],null,
                      identitys[0]);
-            log.debug(authPrincipal);
+            log.debug(authPrincipal.toString());
             principalIdxs = authPrincipal;
             
         }

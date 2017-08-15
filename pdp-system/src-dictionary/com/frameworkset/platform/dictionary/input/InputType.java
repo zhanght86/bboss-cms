@@ -8,7 +8,7 @@ package com.frameworkset.platform.dictionary.input;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-11-29 19:52:44
  * @author ge.tao
  * @version 1.0

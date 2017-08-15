@@ -45,9 +45,9 @@ public class MailSend {
 		String content = " <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" height=\"96\">"
 	+"<tr>"
     +"<td width=\"24%\" height=\"94\"><a href='http://ippresource.sany.com.cn/qikan/html/2013-04/29/node_1.htm' target='_blank'><img width='80' height='90' border='0' src='uploadfiles/201207/20120731060411867.jpg'></a></td>"
-    +"<td width=\"76%\" valign=\"top\"><div><strong>三一集团报</strong></div>"
-    +  "<div><span class=\"red\">三一集团报</span> <a href=\"javascript:void('0')\" onclick=\"showPdf('http://ippresource.sany.com.cn/qikan/html/2013-04/29/node_1.htm')\">浏览</a>|<a href='brands/magazine/default.htm' target='_blank'>更多 >></a></div>"
-    +  "<div>做一流企业，办一流企业报。《三一集团》报1999年创刊，它见证记载了三一发展的艰辛和辉煌。</div></td>"
+    +"<td width=\"76%\" valign=\"top\"><div><strong>bbossgroups报</strong></div>"
+    +  "<div><span class=\"red\">bbossgroups报</span> <a href=\"javascript:void('0')\" onclick=\"showPdf('http://ippresource.sany.com.cn/qikan/html/2013-04/29/node_1.htm')\">浏览</a>|<a href='brands/magazine/default.htm' target='_blank'>更多 >></a></div>"
+    +  "<div>做一流企业，办一流企业报。《bbossgroups》报1999年创刊，它见证记载了三一发展的艰辛和辉煌。</div></td>"
   +"</tr>"
   +"</table>"
 		 ;

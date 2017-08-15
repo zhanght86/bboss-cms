@@ -9,10 +9,11 @@ import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Listener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.pager.ListInfo;
 import com.frameworkset.common.tag.pager.config.PageConfig;
@@ -30,7 +31,7 @@ import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
   
 public class GroupManagerImpl extends EventHandle implements GroupManager {
 
-	private static Logger logger = Logger.getLogger(GroupManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(GroupManagerImpl.class
 			.getName());
 
 //	private LdapControl dc = new LdapControl();
@@ -60,7 +61,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				attr = attrs.get(propName);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 
 		return attr;
@@ -191,7 +192,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -275,8 +276,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 			if (list != null && !list.isEmpty())
 				r = true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -371,8 +371,7 @@ public class GroupManagerImpl extends EventHandle implements GroupManager {
 
 			r = true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 

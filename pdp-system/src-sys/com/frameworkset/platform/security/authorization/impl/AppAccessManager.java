@@ -2,7 +2,8 @@
 
 package com.frameworkset.platform.security.authorization.impl;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
@@ -28,7 +29,7 @@ import com.frameworkset.platform.security.context.AppAccessContext;
  */
 public class AppAccessManager extends BaseAccessManager
 {
-	 private static Logger log = Logger.getLogger(ResourceManager.class);
+	 private static Logger log = LoggerFactory.getLogger(ResourceManager.class);
 
 	/** 
 	 * @since 2004.12.15
@@ -149,8 +150,7 @@ public class AppAccessManager extends BaseAccessManager
 		}
 		catch (ConfigException e)
 		{
-			log.error(e);
-			e.printStackTrace();
+			log.error("",e);
 		}
     	if(resInfo == null)
     	{
@@ -195,8 +195,7 @@ public class AppAccessManager extends BaseAccessManager
 		}
 		catch (ConfigException e)
 		{
-			log.error(e);
-			e.printStackTrace();
+			log.error("",e);
 		}
     	if(resInfo == null)
     	{

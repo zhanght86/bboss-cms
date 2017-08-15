@@ -10,8 +10,12 @@ import java.util.Set;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.contextmenu.Menu;
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
@@ -27,12 +31,9 @@ import com.frameworkset.platform.sysmgrcore.manager.CSMenuManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenu;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenus;
-import com.frameworkset.common.tag.contextmenu.Menu;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class MenuResTree extends COMTree implements Serializable{
-	private static final Logger log = Logger.getLogger(AuthorColumnTree.class);    
+	private static final Logger log = LoggerFactory.getLogger(AuthorColumnTree.class);    
     private Map menuHelpers = null;
     public static boolean isCS = false;//标示是否有CS菜单
     private ReportMenus reportMenus = null;

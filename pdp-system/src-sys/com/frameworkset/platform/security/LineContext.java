@@ -11,7 +11,7 @@ import java.util.Date;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 7, 2008 6:43:38 PM
  * @author biaoping.yin,尹标平
  * @version 1.0

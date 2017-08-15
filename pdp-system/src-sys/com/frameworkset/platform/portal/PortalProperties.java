@@ -7,7 +7,7 @@ import org.frameworkset.spi.BaseSPIManager2;
 /** 
  * <p>类说明:portal相关的配置属性</p>
  * <p>Copyright: Copyright (c) 2009</p>
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @author  gao.tang 
  * @version V1.0  创建时间：Oct 19, 2009 9:42:17 AM 
  */

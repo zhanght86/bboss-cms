@@ -22,7 +22,7 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2008-3-6 10:42:51
  * @author ge.tao
  * @version 1.0

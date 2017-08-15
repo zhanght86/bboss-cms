@@ -30,7 +30,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-4-11 20:30:23
  * @author biaoping.yin
  * @version 1.0

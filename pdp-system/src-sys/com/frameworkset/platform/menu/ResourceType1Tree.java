@@ -6,16 +6,17 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ResourceInfoQueue;
 import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.resource.ResourceManager;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class ResourceType1Tree extends COMTree implements Serializable{
-	private static final Logger log = Logger.getLogger(ColumnTree.class);
+	private static final Logger log = LoggerFactory.getLogger(ColumnTree.class);
 //    private MenuHelper menuHelper;
     private ResourceManager resourceManager;
     String subsystem = "";

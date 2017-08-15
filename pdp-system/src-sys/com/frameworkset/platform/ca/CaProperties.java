@@ -7,7 +7,7 @@ import org.frameworkset.spi.BaseSPIManager2;
  * 认证中心使用到的开关属性配置
  * </p>
  * <p>Copyright: Copyright (c) 2009</p>
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @author  gao.tang 
  * @version V1.0  创建时间：Oct 23, 2009 11:45:18 AM 
  */

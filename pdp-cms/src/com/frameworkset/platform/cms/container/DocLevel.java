@@ -5,7 +5,7 @@ package com.frameworkset.platform.cms.container;
  * @作者 xinwang.jiao 
  * @日期 2007-1-23 9:47:31
  * @版本 v1.0
- * @版权所有 三一集团
+ * @版权所有 bbossgroups
  */
 
 public class DocLevel implements java.io.Serializable

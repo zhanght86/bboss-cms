@@ -1,6 +1,7 @@
 package com.frameworkset.platform.cms.driver.dataloader;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 数据装载器元信息
@@ -10,13 +11,13 @@ import org.apache.log4j.Logger;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-5-8 14:33:43
  * @author biaoping.yin
  * @version 1.0
  */
 public class DataLoaderInfo {
-	private static final Logger log = Logger.getLogger(DataLoaderInfo.class);
+	private static final Logger log = LoggerFactory.getLogger(DataLoaderInfo.class);
 	private String name;
 	private String type;
 	private boolean single = false;

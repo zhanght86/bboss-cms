@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.transaction.RollbackException;
-
-import org.apache.log4j.Logger;
 import org.frameworkset.util.annotations.PagerParam;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.servlet.ModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.holiday.area.bean.Area;
@@ -30,8 +29,8 @@ import com.frameworkset.util.ListInfo;
 
 public class AreaController {
 	private AreaManager areaManager;
-	private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-	private static Logger logger = Logger.getLogger(AreaController.class);
+//	private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+	private static Logger logger = LoggerFactory.getLogger(AreaController.class);
 
 	
 		
@@ -143,6 +142,7 @@ public  @ResponseBody Area querySingleArea(String areaId) throws Exception {
 @SuppressWarnings("unchecked")
 public  @ResponseBody String addArea(String areaName , String areaDesc,String areaDefault) throws Exception {  
 	String areaId = UUID.randomUUID().toString();
+	 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
 	String createTime = df.format(new Date());
 	String creator = AccessControl.getAccessControl().getUserAccount();
 	/*判断默认区域是否重复设置   */

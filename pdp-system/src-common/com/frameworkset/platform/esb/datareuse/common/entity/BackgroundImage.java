@@ -3,7 +3,7 @@
 * @Package com.frameworkset.platform.esb.datareuse.common.entity
 * @Description: TODO(用一句话描述该文件做什么)
 * @Copyright:Copyright (c) 2011
-* @Company:三一集团
+* @Company:bbossgroups
 * @author qian.wang
 * @date 2011-9-20 上午10:02:45
 * @version V1.0  

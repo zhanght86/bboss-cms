@@ -1,13 +1,15 @@
 package com.frameworkset.platform.menu;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Item;
 import com.frameworkset.platform.framework.ItemQueue;
@@ -16,8 +18,6 @@ import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * <p>Title: </p>
@@ -26,13 +26,13 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class ColumnCmsTree extends COMTree {
-    private static final Logger log = Logger.getLogger(ColumnCmsTree.class);
+    private static final Logger log = LoggerFactory.getLogger(ColumnCmsTree.class);
     
     MenuHelper menuHelper ;
     

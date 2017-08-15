@@ -9,8 +9,11 @@ import java.util.Set;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.Item;
@@ -24,11 +27,9 @@ import com.frameworkset.platform.sysmgrcore.manager.CSMenuManager;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenu;
 import com.frameworkset.platform.sysmgrcore.manager.db.CSMenuManagerImpl.ReportMenus;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class MenuTree extends COMTree {
-	private static final Logger log = Logger.getLogger(MenuTree.class);
+	private static final Logger log = LoggerFactory.getLogger(MenuTree.class);
 	private Map menuHelpers = null;
 	private String restypeId = "";
 	private ReportMenus reportMenus = null;

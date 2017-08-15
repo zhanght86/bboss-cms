@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.framework.Framework;
@@ -38,7 +39,7 @@ import com.frameworkset.platform.util.EventUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author feng.jing
@@ -48,7 +49,7 @@ public class RoleManagerAction   {
 	public RoleManagerAction() {
 	}
 
-	private static Logger log = Logger.getLogger(RoleManagerAction.class
+	private static Logger log = LoggerFactory.getLogger(RoleManagerAction.class
 			.getName());
 
 	  

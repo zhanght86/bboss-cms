@@ -4,10 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.log4j.Logger;
-
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
@@ -16,6 +14,9 @@ import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerException;
 import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.CMSUtil;
+
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.context.Context;
 /**
  * 被FlashNewsTag.java取代
  * <p>Title: ImageNewsTag.java</p>
@@ -24,13 +25,13 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-9-12 18:45:50
  * @author ge.tao
  * @version 1.0
  */
 public class ImageNewsTag extends CMSListTag{
-	protected Logger log = Logger.getLogger(ImageNewsTag.class);
+	protected Logger log = LoggerFactory.getLogger(ImageNewsTag.class);
 	protected CMSTagUtil tagUtil = new CMSTagUtil();
 	protected SiteManagerImpl siteUtil = new SiteManagerImpl();
 	protected String cssVmpath = "css/imageNews.css";

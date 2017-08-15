@@ -6,7 +6,7 @@ import java.util.Date;
  * @作者 xinwang.jiao 
  * @日期 2007-3-5 9:47:31
  * @版本 v1.0
- * @版权所有 三一集团
+ * @版权所有 bbossgroups
  */
 public class ArrangeDoc implements java.io.Serializable {
 	

@@ -5,15 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.sysmgrcore.manager.db.ResManagerImpl;
 import com.frameworkset.util.ListInfo;
 
 public class ResParentList extends DataInfoImpl implements Serializable{
-	private Logger logger = Logger.getLogger(ResSearchList.class.getName());
+	private Logger logger = LoggerFactory.getLogger(ResSearchList.class.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {

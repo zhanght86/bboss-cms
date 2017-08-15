@@ -27,7 +27,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-11-26 21:14:05
  * @author da.wei
  * @version 1.0

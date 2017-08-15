@@ -31,7 +31,7 @@ import com.frameworkset.util.StringUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author biaoping.yin

@@ -15,7 +15,7 @@ import java.net.URLConnection;
  * @作者 biaoping.yin 
  * @日期 2006-12-31 8:47:31
  * @版本 v1.0
- * @版权所有 三一集团
+ * @版权所有 bbossgroups
  */
 public class RemoteFileHandle implements Serializable
 { 

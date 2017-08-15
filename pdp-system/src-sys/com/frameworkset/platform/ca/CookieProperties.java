@@ -7,7 +7,7 @@ import org.frameworkset.spi.BaseSPIManager2;
 /** 
  * <p>类说明:</p>
  * <p>Copyright: Copyright (c) 2009</p>
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @author  gao.tang 
  * @version V1.0  创建时间：Oct 23, 2009 12:00:45 PM 
  */

@@ -5,9 +5,12 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.esb.datareuse.common.entity.DeskTopMenuBean;
 import com.frameworkset.platform.esb.datareuse.common.service.DeskTopMenuShorcutManager;
@@ -18,11 +21,9 @@ import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
 import com.frameworkset.platform.menu.ColumnTree;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class DeskTopMenuTree extends COMTree {
-	private static final Logger log = Logger.getLogger(ColumnTree.class);
+	private static final Logger log = LoggerFactory.getLogger(ColumnTree.class);
 	private MenuHelper menuHelper;
 	private Map<String,String> defaults;
 	

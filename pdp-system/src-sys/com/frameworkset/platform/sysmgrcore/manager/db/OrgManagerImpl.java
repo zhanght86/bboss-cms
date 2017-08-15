@@ -9,11 +9,12 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.SPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -59,7 +60,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 	private  SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
 	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 
-	private static Logger logger = Logger.getLogger(OrgManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(OrgManagerImpl.class
 			.getName());
 	
 	
@@ -540,8 +541,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			dBUtil.executeSelect(sql);
 			return dbutilToOrganziation(dBUtil);
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 	}
@@ -564,8 +564,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			});
 			return o;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 	}
@@ -588,8 +587,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			});
 			return o;
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 	}
@@ -662,8 +660,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			dBUtil.executeSelect(sql);
 			list = this.dbutilToOrganziationList(dBUtil);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -686,8 +683,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			dBUtil.executeSelect(sql);
 			list = this.dbutilToOrganziationList(dBUtil);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -709,8 +705,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			dBUtil.executeSelect(sql);
 			list = this.dbutilToOrganziationList(dBUtil);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -1737,7 +1732,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 			}, sql, parentOrg.getOrgId() );
 //			list = this.dbutilToOrganziationList(dBUtil);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -1803,7 +1798,7 @@ public class OrgManagerImpl extends AbsttractOrgManager implements OrgManager  {
 				return this.dbutilToOrganziationList(dbUtil);
 				
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("",e);
 				throw new ManagerException(e.getMessage());
 			}
 		}

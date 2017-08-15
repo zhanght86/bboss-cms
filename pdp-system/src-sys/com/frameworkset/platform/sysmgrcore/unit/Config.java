@@ -5,7 +5,8 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 项目：SysMgrCore <br>
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class Config implements Serializable{
 
-    private static Logger logger = Logger.getLogger(Config.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(Config.class.getName());
 
     /**
      * 访问服务器的路径
@@ -47,7 +48,7 @@ public class Config implements Serializable{
                 isUseBufferStore = Boolean.valueOf(
                         props.getProperty("isusebufferstore")).booleanValue();
             } catch (Exception e) {
-                logger.error(e);
+                logger.error("",e);
             }
         } else
             logger

@@ -3,7 +3,8 @@ package com.frameworkset.platform.sysmgrcore.web.struts.action;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.sysmgrcore.entity.Group;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
@@ -12,7 +13,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
 import com.frameworkset.platform.util.EventUtil;
 
 public class GroupAction   implements Serializable{
-	private Logger logger = Logger.getLogger(GroupAction.class.getName());
+	private Logger logger = LoggerFactory.getLogger(GroupAction.class.getName());
 
 	public GroupAction() {
 	}

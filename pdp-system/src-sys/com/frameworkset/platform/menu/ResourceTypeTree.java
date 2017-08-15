@@ -12,15 +12,16 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ResourceInfoQueue;
 import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 public class ResourceTypeTree extends COMTree implements Serializable{
 
@@ -221,6 +222,6 @@ public class ResourceTypeTree extends COMTree implements Serializable{
 	private ResourceManager resourceManager;
 
 	static {
-		log = Logger.getLogger(com.frameworkset.platform.menu.ResourceTypeTree.class);
+		log = LoggerFactory.getLogger(com.frameworkset.platform.menu.ResourceTypeTree.class);
 	}
 }

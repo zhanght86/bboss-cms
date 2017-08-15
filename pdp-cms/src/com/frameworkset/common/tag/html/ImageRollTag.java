@@ -16,7 +16,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date Jun 22, 2007 6:35:01 PM
  * @author ge.tao
  * @version 1.0

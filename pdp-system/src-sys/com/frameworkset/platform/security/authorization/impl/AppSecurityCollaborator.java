@@ -6,8 +6,9 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
@@ -31,7 +32,7 @@ import com.frameworkset.platform.security.context.AppAccessContext;
  */
 public class AppSecurityCollaborator extends SecurityCollaborator
 {
-	private static Logger log = Logger.getLogger(AppSecurityCollaborator.class);
+	private static Logger log = LoggerFactory.getLogger(AppSecurityCollaborator.class);
 
 	private static AppSecurityCollaborator securityCollaboratorInstance;
 	
@@ -118,8 +119,7 @@ public class AppSecurityCollaborator extends SecurityCollaborator
 		}
 		catch (ConfigException e)
 		{
-			log.error(e);
-			e.printStackTrace();
+			log.error("",e);
 		}
 		if (resInfo == null)
 		{
@@ -164,8 +164,7 @@ public class AppSecurityCollaborator extends SecurityCollaborator
 		}
 		catch (ConfigException e)
 		{
-			log.error(e);
-			e.printStackTrace();
+			log.error("",e);
 		}
 		if (resInfo == null)
 		{

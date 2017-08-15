@@ -7,10 +7,11 @@ import java.util.Iterator;
 
 import javax.servlet.jsp.JspException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.frameworkset.dictionary.ProfessionDataManagerException;
 import com.frameworkset.util.StringUtil;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author biaoping.yin
@@ -18,7 +19,7 @@ import org.apache.log4j.Logger;
  */
 public class XMLItemvalueTag extends XMLBaseTag
 {
-    private static Logger log = Logger.getLogger(XMLItemvalueTag.class);
+    private static Logger log = LoggerFactory.getLogger(XMLItemvalueTag.class);
 	private String itemName;
 	private String defaultItemValue;
 	/* (non-Javadoc)

@@ -21,7 +21,7 @@ import com.frameworkset.dictionary.Item;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-12-15 9:15:15
  * @author ge.tao
  * @version 1.0

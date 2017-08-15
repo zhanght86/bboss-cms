@@ -7,7 +7,7 @@ package com.frameworkset.platform.cms.templatemanager;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-12-10 11:01:47
  * @author peng.yang
  * @version 1.0

@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.jws.WebService;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.container.ContainerImpl;
 import com.frameworkset.platform.cms.driver.context.Context;
@@ -19,7 +20,7 @@ import com.frameworkset.platform.cms.voteservice.VoteMobileService;
 public class VoteWebServiceImpl implements VoteWebService {
 	private VoteMobileService voteService;
 
-	private static Logger logger = Logger.getLogger(VoteWebServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(VoteWebServiceImpl.class);
 
 	@Override
 	public List<VoteTitle> getVoteListByWorkNo(String workNo, String siteName,

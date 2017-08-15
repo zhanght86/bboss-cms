@@ -14,14 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.driver.context.Context;
 import com.frameworkset.platform.cms.driver.url.CMSURL;
 import com.frameworkset.platform.cms.driver.url.CMSURLParameter;
 
 public class CMSServletRequestImpl extends HttpServletRequestWrapper implements java.io.Serializable,CMSServletRequest {
-	private static final Logger LOG = Logger.getLogger(CMSServletRequestImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CMSServletRequestImpl.class);
 	/**
 	 * jsp页面标识
 	 */

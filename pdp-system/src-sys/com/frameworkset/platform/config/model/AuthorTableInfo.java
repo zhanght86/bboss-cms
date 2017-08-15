@@ -1,6 +1,7 @@
 package com.frameworkset.platform.config.model;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTable;
@@ -12,13 +13,13 @@ import com.frameworkset.platform.security.authorization.impl.BaseAuthorizationTa
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class AuthorTableInfo implements java.io.Serializable {
-    private static Logger log = Logger.getLogger(AuthorTableInfo.class);
+    private static Logger log = LoggerFactory.getLogger(AuthorTableInfo.class);
     private String moduleName;
     private String authorizetableClass ;
     private boolean cachable ;
@@ -76,14 +77,11 @@ public class AuthorTableInfo implements java.io.Serializable {
                 authorizationTable.setAuthorTableInfo(this);
                 
             } catch (ClassNotFoundException ex) {
-                log.error(ex);
-                ex.printStackTrace();
+                log.error("",ex);
             } catch (IllegalAccessException ex) {
-                log.error(ex);
-                ex.printStackTrace();
+                log.error("",ex);
             } catch (InstantiationException ex) {
-                log.error(ex);
-                ex.printStackTrace();
+                log.error("",ex);
             }
         }
         return authorizationTable;

@@ -15,7 +15,8 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //import sun.security.util.ResourcesMgr;
 
@@ -137,7 +138,7 @@ public class LoginContext implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Logger.getLogger(LoginContext.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginContext.class);
     private static final String INIT_METHOD		= "initialize";
     private static final String LOGIN_METHOD		= "login";
     private static final String COMMIT_METHOD		= "commit";

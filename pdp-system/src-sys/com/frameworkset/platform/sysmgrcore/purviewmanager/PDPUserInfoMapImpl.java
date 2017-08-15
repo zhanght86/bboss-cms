@@ -18,7 +18,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2013-5-28 下午3:49:39

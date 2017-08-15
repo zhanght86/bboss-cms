@@ -23,13 +23,11 @@ sourceSets {
     }
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
 dependencies {
-	
+	compile project(':pdp-system')
    compile (
      fileTree(dir: '../lib', include: '**/*.jar'),        
-      [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
-      
+       
                  
     )
     compileOnly(

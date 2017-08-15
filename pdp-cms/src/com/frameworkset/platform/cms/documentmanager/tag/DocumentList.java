@@ -1,19 +1,16 @@
 package com.frameworkset.platform.cms.documentmanager.tag;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.cms.documentmanager.DocumentManager;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerException;
 import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
-import com.frameworkset.platform.cms.driver.config.DocumentStatus;
-import com.frameworkset.platform.config.ConfigManager;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 public class DocumentList extends DataInfoImpl implements java.io.Serializable
 {
-     protected Logger log = Logger.getLogger(DocumentList.class);
+     protected Logger log = LoggerFactory.getLogger(DocumentList.class);
 	 protected ListInfo getDataList(String sortKey, boolean desc, long offset,
              int maxPagesize) {	
 		 DocumentManagerImpl 	  docManager = new DocumentManagerImpl();

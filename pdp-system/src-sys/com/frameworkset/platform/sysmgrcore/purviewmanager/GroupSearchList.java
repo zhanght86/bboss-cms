@@ -2,18 +2,19 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.sysmgrcore.manager.GroupManager;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
 
 public class GroupSearchList extends DataInfoImpl implements Serializable {
 
-	private static final Logger logger = Logger.getLogger(GroupSearchList.class
+	private static final Logger logger = LoggerFactory.getLogger(GroupSearchList.class
 			.getName());
 	
 	protected ListInfo  getDataList(String sortKey, boolean desc, long offset,
@@ -51,8 +52,7 @@ public class GroupSearchList extends DataInfoImpl implements Serializable {
 				return  groupManager.getGroupList(sql,offset,maxPagesize);
 				
 			} catch (Exception e) {
-				e.printStackTrace();
-				logger.error(e);
+				logger.error("",e);
 			}
 			return null;
 	}

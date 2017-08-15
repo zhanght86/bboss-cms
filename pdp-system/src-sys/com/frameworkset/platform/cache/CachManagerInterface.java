@@ -8,7 +8,7 @@ package com.frameworkset.platform.cache;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-5-18 10:28:18
  * @author biaoping.yin
  * @version 1.0

@@ -38,7 +38,7 @@ import com.frameworkset.platform.cms.util.CMSDBFunction;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2007-6-13 17:04:36 

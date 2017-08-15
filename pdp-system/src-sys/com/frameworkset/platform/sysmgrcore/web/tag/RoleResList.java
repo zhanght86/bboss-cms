@@ -5,18 +5,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.poolman.DBUtil;
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.sysmgrcore.entity.Roleresop;
-import com.frameworkset.common.poolman.DBUtil;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 public class RoleResList extends DataInfoImpl implements Serializable{
-	private Logger logger = Logger.getLogger(RoleResList.class.getName());
+	private Logger logger = LoggerFactory.getLogger(RoleResList.class.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {

@@ -7,7 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.pager.tags.LoadDataException;
 import com.frameworkset.common.tag.pager.tags.PagerDataSet;
@@ -25,13 +26,13 @@ import com.frameworkset.platform.cms.driver.dataloader.DefaultDetailDataLoader;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-3-12 18:01:50
  * @author biaoping.yin
  * @version 1.0
  */
 public class CMSRequestDispatcherImpl implements CMSRequestDispatcher {
-    private static Logger LOG = Logger.getLogger(CMSRequestDispatcherImpl.class);;
+    private static Logger LOG = LoggerFactory.getLogger(CMSRequestDispatcherImpl.class);;
  // Private Member Variables ------------------------------------------------
     
     /** The nested servlet request dispatcher instance. */

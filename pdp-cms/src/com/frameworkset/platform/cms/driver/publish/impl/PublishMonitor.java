@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.Context;
@@ -46,7 +47,7 @@ public class PublishMonitor implements java.io.Serializable {
 	private String pageUrl;
 	private String multidocspub;
 	
-	private static Logger log = Logger.getLogger(PublishMonitor.class);
+	private static Logger log = LoggerFactory.getLogger(PublishMonitor.class);
 	
 
 	/**

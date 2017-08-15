@@ -5,17 +5,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.sysmgrcore.manager.db.GroupManagerImpl;
 import com.frameworkset.util.ListInfo;
 import com.frameworkset.util.StringUtil;
 
 public class GroupList extends DataInfoImpl implements Serializable{
 
-	private static final Logger logger = Logger.getLogger(GroupList.class
+	private static final Logger logger = LoggerFactory.getLogger(GroupList.class
 			.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
@@ -44,7 +45,7 @@ public class GroupList extends DataInfoImpl implements Serializable{
 
 			return listInfo;
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			return null;
 		}
 	}
@@ -64,7 +65,7 @@ public class GroupList extends DataInfoImpl implements Serializable{
 			listinfo.setTotalSize(db.getTotalSize());
 			listinfo.setDatas(list);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			e.printStackTrace();
 		}
 		return listinfo;

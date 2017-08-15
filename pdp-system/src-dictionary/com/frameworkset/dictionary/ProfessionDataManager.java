@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -23,7 +24,7 @@ import com.frameworkset.util.ResourceInitial;
  
 
 class ProfessionDataManager implements ResourceInitial,DataManager {
-    private static Logger log = Logger.getLogger(ProfessionDataManager.class);
+    private static Logger log = LoggerFactory.getLogger(ProfessionDataManager.class);
     private Map datas;
     private String description; 
     private String version;
@@ -184,10 +185,10 @@ class ProfessionDataManager implements ResourceInitial,DataManager {
                     }
                 }
             } catch (XMLParserException e1) {
-                log.error(e1);
+                log.error("",e1);
                 throw new ProfessionDataManagerException(e1.getMessage());
             } catch (IOException e1) {
-                log.error(e1);
+                log.error("",e1);
                 throw new ProfessionDataManagerException(e1.getMessage());
             } catch (IllegalAccessException e) {
                 // TODO Auto-generated catch block

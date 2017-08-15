@@ -51,11 +51,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.security.AccessControlInf;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.web.token.TokenHelper;
 import org.frameworkset.web.token.TokenStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -118,7 +119,7 @@ import com.frameworkset.util.StringUtil;
  * @author biaoping.yin created on 2005-9-29 version 1.0
  */
 public class AccessControl implements AccessControlInf{
-	private static final Logger log = Logger.getLogger(AccessControl.class);
+	private static final Logger log = LoggerFactory.getLogger(AccessControl.class);
 
 	// public static final String LOGINCONTEXT_CACHE_KEY = "LOGIN_CONTEXT";
 	public static final String accesscontrol_request_attribute_key = "com.frameworkset.platform.security.AccessControl";

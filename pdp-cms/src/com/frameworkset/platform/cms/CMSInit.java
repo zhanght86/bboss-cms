@@ -1,6 +1,7 @@
 package com.frameworkset.platform.cms;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.sitemanager.SiteCacheManager;
 import com.frameworkset.platform.config.BaseSystemInit;
@@ -15,13 +16,13 @@ import com.frameworkset.platform.config.InitException;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-5-17 19:03:18
  * @author biaoping.yin
  * @version 1.0
  */
 public class CMSInit extends BaseSystemInit implements java.io.Serializable{
-	private static final Logger log = Logger.getLogger(CMSInit.class);
+	private static final Logger log = LoggerFactory.getLogger(CMSInit.class);
 	public void init() throws InitException{
 		/**
 		 * 初始化站点缓冲信息

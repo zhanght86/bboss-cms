@@ -12,7 +12,7 @@ package com.frameworkset.platform.dictionary;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-11-21 15:58:02
  * @author ge.tao
  * @version 1.0

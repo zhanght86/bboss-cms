@@ -21,7 +21,7 @@ import com.frameworkset.util.StringUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-8-15 下午3:36:25

@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.exception.FormulaException;
 import com.frameworkset.common.tag.pager.tags.CellTag;
@@ -15,7 +16,7 @@ public class UserTag extends CellTag {
 	private boolean isAccount = true;
 	private String attribute = "userName";
 	private Object defaultValue;
-	private static final Logger log = Logger.getLogger(UserTag.class);
+	private static final Logger log = LoggerFactory.getLogger(UserTag.class);
 	public int doStartTag()
 			throws JspException
 	{

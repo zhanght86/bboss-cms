@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.driver.publish.NestedPublishException;
 import com.frameworkset.platform.cms.driver.publish.PublishCallBack;
@@ -29,7 +30,7 @@ import com.frameworkset.platform.cms.driver.publish.PublishObject;
  */
 
 public class PublishEngineImpl implements PublishEngine {
-	private final static Logger log = Logger.getLogger(PublishEngineImpl.class);
+	private final static Logger log = LoggerFactory.getLogger(PublishEngineImpl.class);
 	
 	/**
 	 * 保存系统当前正在执行的发布任务对象

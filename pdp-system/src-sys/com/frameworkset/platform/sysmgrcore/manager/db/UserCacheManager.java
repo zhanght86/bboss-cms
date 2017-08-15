@@ -6,8 +6,9 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.BaseApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.Record;
 import com.frameworkset.common.poolman.SQLExecutor;
@@ -59,7 +60,7 @@ public class UserCacheManager {
 	private Map<String,CheckCallBack> usersByID = new HashMap<String,CheckCallBack>();
 	private Map<String,CheckCallBack> usersByWorkNo = new HashMap<String,CheckCallBack>();
 	private static UserCacheManager instance;
-	private static final Logger log = Logger.getLogger(UserCacheManager.class);
+	private static final Logger log = LoggerFactory.getLogger(UserCacheManager.class);
 	private static boolean hasloadUsers =false;
 	private static Method loadUsers;
 	static 

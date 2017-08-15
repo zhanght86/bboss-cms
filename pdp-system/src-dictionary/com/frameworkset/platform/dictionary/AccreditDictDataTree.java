@@ -19,7 +19,7 @@ import com.frameworkset.dictionary.Item;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2008-1-15
  * @author gao.tang
  * @version 1.0

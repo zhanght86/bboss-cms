@@ -18,7 +18,7 @@ import com.frameworkset.common.tag.pager.tags.PagerDataSet;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date Jul 3, 2007 3:27:52 PM
  * @author ge.tao
  * @version 1.0

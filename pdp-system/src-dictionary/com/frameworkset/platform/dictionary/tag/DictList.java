@@ -1,15 +1,16 @@
 package com.frameworkset.platform.dictionary.tag;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.dictionary.DictManager;
 import com.frameworkset.platform.dictionary.DictManagerImpl;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 public class DictList extends DataInfoImpl implements java.io.Serializable {
 
-	private static final Logger logger = Logger.getLogger(DictList.class
+	private static final Logger logger = LoggerFactory.getLogger(DictList.class
 			.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
@@ -59,7 +60,7 @@ public class DictList extends DataInfoImpl implements java.io.Serializable {
 			return listInfo;
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			return null;
 		}
 	}
@@ -109,7 +110,7 @@ public class DictList extends DataInfoImpl implements java.io.Serializable {
 			return listInfo;
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			return null;
 		}
 	}

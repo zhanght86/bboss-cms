@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.index.DirectoryReader;
@@ -21,11 +20,13 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
 
 public class CMSMultiSearcher implements java.io.Serializable {
-	private static final Logger log = Logger.getLogger(CMSMultiSearcher.class);
+	private static final Logger log = LoggerFactory.getLogger(CMSMultiSearcher.class);
 	
 	private String queryStr;	//要查询的字符串，用and或者or隔开
 	

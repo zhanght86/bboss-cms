@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date  Apr 26, 2008 11:00:44 AM
  * @author gao.tang
  * @version 1.0

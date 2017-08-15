@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
 import org.codehaus.swizzle.stream.StringTemplate;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.util.DataFormatUtil;
@@ -37,11 +36,8 @@ import org.frameworkset.util.ParamsHandler;
 import org.frameworkset.util.ParamsHandler.Param;
 import org.frameworkset.util.ParamsHandler.Params;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
-
-import bboss.org.apache.velocity.Template;
-import bboss.org.apache.velocity.exception.MethodInvocationException;
-import bboss.org.apache.velocity.exception.ParseErrorException;
-import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.channelmanager.ChannelCacheManager;
@@ -79,6 +75,11 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+
 /**
  * 
  * <p>Title: com.frameworkset.platform.cms.util.CMSUtil.java</p>
@@ -93,7 +94,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  * @version 1.0 
  */
 public class CMSUtil{
-	private static final Logger log = Logger.getLogger(CMSUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(CMSUtil.class);
 
 	private static final ListResourceBundle mimeTypes = new FileMIMETypes();
 

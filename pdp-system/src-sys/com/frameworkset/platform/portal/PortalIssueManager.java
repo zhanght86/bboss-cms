@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  * Copyright: Copyright (c) 2009
  * </p>
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author gao.tang

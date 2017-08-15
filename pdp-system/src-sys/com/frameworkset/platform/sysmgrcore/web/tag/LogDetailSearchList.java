@@ -5,16 +5,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.sysmgrcore.entity.LogDetail;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.sysmgrcore.entity.LogDetail;
 import com.frameworkset.util.ListInfo;
 
 public class LogDetailSearchList  extends DataInfoImpl implements Serializable {
 
-	private Logger log = Logger.getLogger(LogDetailSearchList.class);
+	private Logger log = LoggerFactory.getLogger(LogDetailSearchList.class);
 	
 	protected ListInfo getDataList(String arg0, boolean arg1) {
 		return null;

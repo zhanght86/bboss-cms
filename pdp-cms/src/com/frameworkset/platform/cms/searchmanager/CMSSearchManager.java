@@ -9,11 +9,9 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.StoredField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -25,6 +23,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -44,7 +44,7 @@ import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.util.SimpleStringUtil;
 
 public class CMSSearchManager {
-	private static Logger log = Logger.getLogger(CMSSearchManager.class);
+	private static Logger log = LoggerFactory.getLogger(CMSSearchManager.class);
 	/**类型-站点频道索引*/
 	public static final int SEARCHTYPE_SITECHANNEL = 0;
 	/**类型-站外索引*/

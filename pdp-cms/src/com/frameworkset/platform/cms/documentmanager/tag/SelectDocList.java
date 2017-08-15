@@ -13,7 +13,7 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-9-12 13:19:01
  * @author huiqiong.zeng
  * @version 1.0

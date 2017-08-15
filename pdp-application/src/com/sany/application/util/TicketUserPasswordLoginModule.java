@@ -1,7 +1,8 @@
 package com.sany.application.util;
 
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.authentication.CheckCallBackWrapper;
 import com.frameworkset.platform.sysmgrcore.authenticate.UserPasswordLoginModule;
@@ -12,7 +13,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 
 public class TicketUserPasswordLoginModule extends UserPasswordLoginModule {
 	
-	private static Logger logger = Logger.getLogger(TicketUserPasswordLoginModule.class); 
+	private static Logger logger = LoggerFactory.getLogger(TicketUserPasswordLoginModule.class); 
 
 	@Override
 	protected void buildCallback(CheckCallBackWrapper checkCallBack, User user,
@@ -33,7 +34,7 @@ public class TicketUserPasswordLoginModule extends UserPasswordLoginModule {
 //			String ticket_ = accesscontroler.getUserAttribute("ticket");
 //			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 		
 	}

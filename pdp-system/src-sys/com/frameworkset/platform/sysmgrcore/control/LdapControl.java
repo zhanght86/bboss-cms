@@ -10,7 +10,8 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.ldap.LdapManagerFactory;
 import com.frameworkset.platform.sysmgrcore.exception.ControlException;
@@ -24,7 +25,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ControlException;
  */
 public class LdapControl  {
 
-    private static Logger logger = Logger
+    private static Logger logger = LoggerFactory
             .getLogger(LdapControl.class.getName());
 
     private DirContext dc = LdapManagerFactory.getDirContext();
@@ -53,7 +54,7 @@ public class LdapControl  {
             dc.createSubcontext(name, attrs);
             r = true;
         } catch (NamingException e) {
-            logger.error(e);
+            logger.error("",e);
             throw new ControlException(e.getMessage());
         }
 
@@ -92,7 +93,7 @@ public class LdapControl  {
             dc.modifyAttributes(name, modifyoption, attrs);
             r = true;
         } catch (NamingException e) {
-            logger.error(e);
+            logger.error("",e);
             throw new ControlException(e.getMessage());
         }
 
@@ -118,7 +119,7 @@ public class LdapControl  {
             dc.destroySubcontext(name);
             r = true;
         } catch (NamingException e) {
-            logger.error(e);
+            logger.error("",e);
             throw new ControlException(e.getMessage());
         }
 
@@ -158,7 +159,7 @@ public class LdapControl  {
                 }
             }
         } catch (NamingException e) {
-            logger.error(e);
+            logger.error("",e);
         }
 
         return list;

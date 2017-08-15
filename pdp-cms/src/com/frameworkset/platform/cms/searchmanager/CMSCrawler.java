@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.cn.smart.SmartChineseAnalyzer;
 //import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -33,6 +32,8 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.cms.searchmanager.bean.CMSSearchIndex;
@@ -56,14 +57,14 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date Jul 14, 2007 12:11:55 PM
  * @author huiqiong.zeng
  * @version 1.0
  */
 
 public class CMSCrawler  { 
-	private static final Logger log = Logger.getLogger(CMSCrawler.class);
+	private static final Logger log = LoggerFactory.getLogger(CMSCrawler.class);
 	private CMSSearchIndex index;
 	private int searchType; 
 //	private IndexReader reader;

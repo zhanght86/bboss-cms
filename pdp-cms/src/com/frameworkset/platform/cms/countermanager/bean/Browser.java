@@ -13,7 +13,7 @@ package com.frameworkset.platform.cms.countermanager.bean;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-9-12 下午4:50:45

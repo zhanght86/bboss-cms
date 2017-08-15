@@ -6,8 +6,11 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.framework.Framework;
 import com.frameworkset.platform.framework.FrameworkServlet;
@@ -17,8 +20,6 @@ import com.frameworkset.platform.framework.MenuHelper;
 import com.frameworkset.platform.framework.MenuItem;
 import com.frameworkset.platform.framework.Module;
 import com.frameworkset.platform.framework.ModuleQueue;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.util.StringUtil;
 
 
@@ -30,13 +31,13 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class BaseColumnTree extends COMTree implements Serializable{
-    private static final Logger log = Logger.getLogger(BaseColumnTree.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseColumnTree.class);
     
     private MenuHelper menuHelper;
     private String subsystem;

@@ -14,13 +14,14 @@ import java.util.Set;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
 import org.frameworkset.spi.SPIException;
 import org.frameworkset.util.MoreListInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -79,7 +80,7 @@ public class UserManagerImpl extends EventHandle implements UserManager {
 
 	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 
-	private static Logger logger = Logger.getLogger(UserManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(UserManagerImpl.class
 			.getName());
 
 	public class UserComparator implements Comparator {

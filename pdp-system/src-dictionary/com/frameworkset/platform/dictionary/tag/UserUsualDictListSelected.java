@@ -1,10 +1,12 @@
 package com.frameworkset.platform.dictionary.tag;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.dictionary.DictManager;
 import com.frameworkset.platform.dictionary.DictManagerImpl;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -23,7 +25,7 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-12-24 8:39:24
  * @author ge.tao
  * @version 1.0
@@ -31,7 +33,7 @@ import com.frameworkset.util.ListInfo;
 
 public class UserUsualDictListSelected extends DataInfoImpl implements java.io.Serializable {
 
-	private static final Logger logger = Logger.getLogger(UserUsualDictList.class
+	private static final Logger logger = LoggerFactory.getLogger(UserUsualDictList.class
 			.getName());
 
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
@@ -92,7 +94,7 @@ public class UserUsualDictListSelected extends DataInfoImpl implements java.io.S
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			return null;
 		}
 		

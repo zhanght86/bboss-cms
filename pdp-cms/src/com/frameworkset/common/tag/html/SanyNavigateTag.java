@@ -27,7 +27,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-7-18 上午8:33:02

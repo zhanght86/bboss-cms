@@ -7,7 +7,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -23,7 +24,7 @@ import com.frameworkset.util.ListInfo;
 
 public class IpControlList  extends DataInfoImpl implements Serializable{
 	private static final long serialVersionUID = 3685038777331165348L;
-	private static final Logger log = Logger.getLogger(IpControlList.class);
+	private static final Logger log = LoggerFactory.getLogger(IpControlList.class);
 	@Override
 	protected ListInfo getDataList(String arg0, boolean arg1) {
 		// TODO Auto-generated method stub

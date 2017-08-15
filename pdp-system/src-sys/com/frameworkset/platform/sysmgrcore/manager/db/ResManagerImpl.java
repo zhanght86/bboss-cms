@@ -1,7 +1,6 @@
 package com.frameworkset.platform.sysmgrcore.manager.db;
 
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,16 +8,16 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
-import com.frameworkset.orm.adapter.DB;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
@@ -31,7 +30,6 @@ import com.frameworkset.platform.resource.ExcludeResourceQueue;
 import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.resource.UNProtectedResource;
 import com.frameworkset.platform.resource.UNProtectedResourceQueue;
-import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.entity.Attrdesc;
 import com.frameworkset.platform.sysmgrcore.entity.Operation;
@@ -55,7 +53,7 @@ import com.frameworkset.util.ListInfo;
  */
 public class ResManagerImpl extends EventHandle implements ResManager {
 
-	private static Logger logger = Logger.getLogger(ResManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(ResManagerImpl.class
 			.getName());
 
 	

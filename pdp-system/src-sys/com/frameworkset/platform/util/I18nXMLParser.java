@@ -5,12 +5,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public abstract class I18nXMLParser extends DefaultHandler {
-	private static Logger log = Logger.getLogger(I18nXMLParser.class);
+	private static Logger log = LoggerFactory.getLogger(I18nXMLParser.class);
 	protected Map<String, Locale> languages;
 
 	public void setLanguages(Map<String, Locale> languages) {

@@ -6,11 +6,12 @@ import java.util.List;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
 import org.frameworkset.persitent.util.SQLUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -65,7 +66,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 	private  SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(RoleManagerImpl.class );
+	private static Logger logger = LoggerFactory.getLogger(RoleManagerImpl.class );
 
 
 	/**
@@ -215,7 +216,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				logger.error(e);
+				logger.error("",e);
 				
 				throw new ManagerException(e.getMessage());
 			} catch (Exception e) {
@@ -225,7 +226,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				logger.error(e);
+				logger.error("",e);
 				throw new ManagerException(e.getMessage());
 			}finally{
 				db.resetBatch();
@@ -729,7 +730,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 						ACLEventType.ROLE_INFO_CHANGE);
 				super.change(event);
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("",e);
 				throw new ManagerException(e.getMessage());
 			}
 		}
@@ -770,7 +771,7 @@ public class RoleManagerImpl extends EventHandle implements RoleManager {
 						ACLEventType.ROLE_INFO_CHANGE);
 				super.change(event);
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("",e);
 				throw new ManagerException(e.getMessage());
 			}
 		}

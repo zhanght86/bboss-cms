@@ -2,8 +2,9 @@ package com.frameworkset.platform.sysmgrcore.web.struts.action;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
@@ -25,7 +26,7 @@ import com.frameworkset.platform.sysmgrcore.manager.UserManager;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author feng.jing
@@ -33,7 +34,7 @@ import com.frameworkset.platform.sysmgrcore.manager.UserManager;
  */
 public class UserJobManagerAction   implements Serializable {
 
-	private static Logger logger = Logger.getLogger(UserJobManagerAction.class
+	private static Logger logger = LoggerFactory.getLogger(UserJobManagerAction.class
 			.getName());
 
 	public UserJobManagerAction() {

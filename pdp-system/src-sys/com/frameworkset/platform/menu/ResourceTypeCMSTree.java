@@ -7,14 +7,15 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.config.ResourceInfoQueue;
-import com.frameworkset.platform.config.model.ResourceInfo;
-import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.tree.COMTree;
 import com.frameworkset.common.tag.tree.itf.ITreeNode;
+import com.frameworkset.platform.config.ResourceInfoQueue;
+import com.frameworkset.platform.config.model.ResourceInfo;
+import com.frameworkset.platform.resource.ResourceManager;
 
 /**
  * 用于内容管理中的资源管理
@@ -229,6 +230,6 @@ public class ResourceTypeCMSTree extends COMTree implements Serializable
 
     static
     {
-        log = Logger.getLogger(com.frameworkset.platform.menu.ResourceTypeCMSTree.class);
+        log = LoggerFactory.getLogger(com.frameworkset.platform.menu.ResourceTypeCMSTree.class);
     }
 }

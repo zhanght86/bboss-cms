@@ -11,7 +11,7 @@ import org.frameworkset.event.AbstractEventType;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 23, 2008 9:56:57 AM
  * @author biaoping.yin,尹标平
  * @version 1.0

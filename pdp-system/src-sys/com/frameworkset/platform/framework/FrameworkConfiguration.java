@@ -10,7 +10,8 @@ import java.util.Map;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: </p>
@@ -25,7 +26,7 @@ import org.apache.log4j.Logger;
  * @version 1.0
  */
 public class FrameworkConfiguration  {
-    private static Logger log = Logger.getLogger(FrameworkConfiguration.class);
+    private static Logger log = LoggerFactory.getLogger(FrameworkConfiguration.class);
 
     private String configFile = "module.xml" ;
     private ConfigParser handler;

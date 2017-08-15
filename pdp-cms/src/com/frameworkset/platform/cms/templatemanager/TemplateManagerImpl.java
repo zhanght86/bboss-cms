@@ -21,12 +21,13 @@ import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.util.DataFormatUtil;
 import org.frameworkset.util.TimeUtil;
 import org.htmlparser.util.ParserException;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -67,7 +68,7 @@ import com.frameworkset.util.ListInfo;
  */
 
 public class TemplateManagerImpl implements TemplateManager{ 
-	private static Logger log = Logger.getLogger(TemplateManagerImpl.class);
+	private static Logger log = LoggerFactory.getLogger(TemplateManagerImpl.class);
     
     /**
 	 * 创建公共模板

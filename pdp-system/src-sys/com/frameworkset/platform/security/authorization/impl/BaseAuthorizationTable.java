@@ -24,11 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.event.ResourceChangeEventType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.model.AuthorTableInfo;
 import com.frameworkset.platform.security.authorization.AuthRole;
@@ -45,7 +46,7 @@ import com.frameworkset.platform.security.event.ACLEventType;
  */
 public abstract class BaseAuthorizationTable implements AuthorizationTable,
         Listener {
-    private static final Logger log = Logger.getLogger(BaseAuthorizationTable.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseAuthorizationTable.class);
     /**
      * 当用户没有授予任何角色时，将本空角色数组付给用户的缓冲
      */

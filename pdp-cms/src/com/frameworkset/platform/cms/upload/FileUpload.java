@@ -11,13 +11,11 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.fiyu.edit.RemotePic;
-import net.fiyu.edit.UploadBean;
-
-import org.apache.log4j.Logger;
 import org.frameworkset.util.annotations.ResponseBody;
 import org.frameworkset.web.multipart.MultipartFile;
 import org.frameworkset.web.servlet.ModelMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.imagemanager.ImageManagerImpl;
@@ -27,6 +25,9 @@ import com.frameworkset.platform.cms.util.CMSWebHelper;
 import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.platform.security.AccessControl;
 import com.frameworkset.util.StringUtil;
+
+import net.fiyu.edit.RemotePic;
+import net.fiyu.edit.UploadBean;
 
 
 /**
@@ -43,7 +44,7 @@ import com.frameworkset.util.StringUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-9-12 下午3:00:38
@@ -51,7 +52,7 @@ import com.frameworkset.util.StringUtil;
  * @version 1.0.0
  */
 public class FileUpload implements org.frameworkset.spi.InitializingBean{
-	private static Logger log = Logger.getLogger(FileUpload.class);
+	private static Logger log = LoggerFactory.getLogger(FileUpload.class);
 	/**
 	 * 文档附件上传
 	 * @param UploadFileName

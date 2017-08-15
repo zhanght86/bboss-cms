@@ -21,7 +21,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-4-17 16:24:33
  * @author biaoping.yin
  * @version 1.0

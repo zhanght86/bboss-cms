@@ -14,17 +14,11 @@ import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 
-import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
-
-import bboss.org.apache.velocity.Template;
-import bboss.org.apache.velocity.VelocityContext;
-import bboss.org.apache.velocity.exception.MethodInvocationException;
-import bboss.org.apache.velocity.exception.ParseErrorException;
-import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
-import com.frameworkset.platform.cms.channelmanager.Channel;
 import com.frameworkset.platform.cms.driver.config.DriverConfigurationException;
 import com.frameworkset.platform.cms.driver.context.ContentContext;
 import com.frameworkset.platform.cms.driver.context.Context;
@@ -42,7 +36,6 @@ import com.frameworkset.platform.cms.driver.jsp.CMSException;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestContext;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcher;
 import com.frameworkset.platform.cms.driver.jsp.CMSRequestDispatcherImpl;
-import com.frameworkset.platform.cms.driver.jsp.CMSServletRequest;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletRequestImpl;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponse;
 import com.frameworkset.platform.cms.driver.jsp.CMSServletResponseImpl;
@@ -59,6 +52,12 @@ import com.frameworkset.platform.cms.util.FileUtil;
 import com.frameworkset.util.SimpleStringUtil;
 import com.frameworkset.util.VelocityUtil;
 
+import bboss.org.apache.velocity.Template;
+import bboss.org.apache.velocity.VelocityContext;
+import bboss.org.apache.velocity.exception.MethodInvocationException;
+import bboss.org.apache.velocity.exception.ParseErrorException;
+import bboss.org.apache.velocity.exception.ResourceNotFoundException;
+
 /**
  * 
   * <p>Title: PublishObject</p>
@@ -67,7 +66,7 @@ import com.frameworkset.util.VelocityUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
@@ -76,7 +75,7 @@ public abstract class PublishObject implements java.io.Serializable
 
 {
 	
-	private static final Logger log = Logger.getLogger(PublishObject.class);
+	private static final Logger log = LoggerFactory.getLogger(PublishObject.class);
 	protected boolean synchronize = true;
 	
 	

@@ -14,7 +14,8 @@ import java.util.TreeSet;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -27,7 +28,7 @@ import com.frameworkset.platform.cms.sitemanager.SiteManagerImpl;
 import com.frameworkset.platform.cms.util.FileUtil;
 
 public class FileManagerImpl implements FileManager {
-	private static Logger Log = Logger.getLogger(FileManagerImpl.class);
+	private static Logger Log = LoggerFactory.getLogger(FileManagerImpl.class);
 	private String templatePath;
 
 	private String webprjPath;

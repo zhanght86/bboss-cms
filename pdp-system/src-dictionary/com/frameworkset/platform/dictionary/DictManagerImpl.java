@@ -13,10 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -66,7 +67,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 		accessControl = AccessControl.getAccessControl();
 	}
 
-	private static Logger logger = Logger.getLogger(DictManagerImpl.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(DictManagerImpl.class.getName());
 
 	/**
 	 * 根据名称获取字典类型
@@ -1201,7 +1202,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			Event event = new EventImpl(dictdata, DictionaryChangeEvent.DICTIONARY_DATA_DELETE);
 			super.change(event,true);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();
@@ -1297,7 +1298,7 @@ public class DictManagerImpl extends EventHandle implements DictManager  {
 			Event event = new EventImpl(dictdata, DictionaryChangeEvent.DICTIONARY_DATA_DELETE);
 			super.change(event,true);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 
 			//throw new ManagerException(e.getMessage());
 			e.printStackTrace();

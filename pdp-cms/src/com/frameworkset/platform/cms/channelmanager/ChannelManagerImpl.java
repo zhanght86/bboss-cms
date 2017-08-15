@@ -12,10 +12,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -63,7 +64,7 @@ public class ChannelManagerImpl extends EventHandle implements ChannelManager {
 
 	private ConfigSQLExecutor executor;
 
-	private Logger log = Logger.getLogger(ChannelManagerImpl.class);
+	private Logger log = LoggerFactory.getLogger(ChannelManagerImpl.class);
 
 	public boolean channelIsExist(String siteId, String parentChannelId, String channelName)
 			throws ChannelManagerException {

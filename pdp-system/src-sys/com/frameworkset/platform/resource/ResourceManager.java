@@ -2,7 +2,8 @@ package com.frameworkset.platform.resource;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.ConfigException;
 import com.frameworkset.platform.config.ConfigManager;
@@ -20,13 +21,13 @@ import com.frameworkset.platform.config.model.Resources;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author biaoping.yin
  * @version 1.0
  */
 public class ResourceManager {
-    private static Logger log = Logger.getLogger(ResourceManager.class);
+    private static Logger log = LoggerFactory.getLogger(ResourceManager.class);
     public ResourceInfo getResourceInfoByTypeOfModule(String module,
             String type) {
 	    	ResourceInfo resInfo = null;
@@ -37,8 +38,7 @@ public class ResourceManager {
 			}
 			catch (ConfigException e)
 			{
-				log.error(e);
-				e.printStackTrace();
+				log.error("",e);
 			}
 	    	
             return resInfo;
@@ -54,8 +54,7 @@ public class ResourceManager {
 			}
 			catch (ConfigException e)
 			{
-				log.error(e);
-				e.printStackTrace();
+				log.error("",e);
 			}
 	    	
             return resInfo;
@@ -73,7 +72,7 @@ public class ResourceManager {
 			}
 			catch (ConfigException e)
 			{
-				log.error(e);
+				log.error("",e);
 			}
 			return null;
         }

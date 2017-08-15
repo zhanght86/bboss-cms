@@ -17,10 +17,11 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.util.DataFormatUtil;
 import org.frameworkset.util.TimeUtil;
 import org.htmlparser.util.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -86,7 +87,7 @@ public class DocumentManagerImpl implements DocumentManager {
 
  
 
-	protected static Logger log = Logger.getLogger(DocumentManagerImpl.class);
+	protected static Logger log = LoggerFactory.getLogger(DocumentManagerImpl.class);
 
 	public DocumentManagerImpl() {
 

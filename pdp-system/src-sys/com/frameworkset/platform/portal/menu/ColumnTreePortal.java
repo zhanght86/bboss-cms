@@ -9,7 +9,8 @@ import java.util.Set;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.tree.COMTree;
 import com.frameworkset.common.tag.tree.itf.ITreeNode;
@@ -31,14 +32,14 @@ import com.frameworkset.platform.framework.SubSystem;
  * Copyright: Copyright (c) 2009
  * </p>
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author gao.tang
  * @version V1.0 创建时间：Oct 15, 2009 2:55:01 PM
  */
 public class ColumnTreePortal extends COMTree implements Serializable {
-	private static final Logger log = Logger.getLogger(ColumnTreePortal.class);
+	private static final Logger log = LoggerFactory.getLogger(ColumnTreePortal.class);
 	private Map menuHelpers = null;
 
 	@Override

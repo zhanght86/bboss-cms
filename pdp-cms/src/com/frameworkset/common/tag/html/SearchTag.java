@@ -27,7 +27,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-7-14 12:07:50
  * @author huiqiong.zeng
  * @version 1.0

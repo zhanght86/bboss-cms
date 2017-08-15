@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-3-12 18:05:35
  * @author biaoping.yin
  * @version 1.0

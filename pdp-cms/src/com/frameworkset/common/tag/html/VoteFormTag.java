@@ -15,7 +15,7 @@ import com.frameworkset.common.tag.CMSBaseTag;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007 3:10:50 PM
  * @author da.wei
  * @version 1.0

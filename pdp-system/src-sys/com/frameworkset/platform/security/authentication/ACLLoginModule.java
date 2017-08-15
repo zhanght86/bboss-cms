@@ -2,15 +2,12 @@
 
 package com.frameworkset.platform.security.authentication;
 
-import java.io.IOException;
 import java.security.Principal;
-
-
-
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.authorization.AuthPrincipal;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -19,13 +16,13 @@ import com.frameworkset.platform.sysmgrcore.entity.Organization;
  * <p>Title: </p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @author biaoping.yin
  * @version 1.0
  */
 public abstract class ACLLoginModule implements LoginModule {
 
-    private static Logger log = Logger.getLogger(ACLLoginModule.class);
+    private static Logger log = LoggerFactory.getLogger(ACLLoginModule.class);
     protected String loginModuleName;
 
     /**注册表类型*/

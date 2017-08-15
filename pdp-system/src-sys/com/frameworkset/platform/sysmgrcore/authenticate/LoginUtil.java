@@ -17,7 +17,8 @@ package com.frameworkset.platform.sysmgrcore.authenticate;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.dictionary.Data;
 import com.frameworkset.dictionary.DataManagerFactory;
@@ -37,7 +38,7 @@ import com.frameworkset.util.StringUtil;
  * @version 1.0
  */
 public class LoginUtil {
-	private static Logger log = Logger.getLogger(LoginUtil.class);
+	private static Logger log = LoggerFactory.getLogger(LoginUtil.class);
 	private static String specialusers = "specialusers" ;
 	public static String isSpesialUser(String ip)
 	{

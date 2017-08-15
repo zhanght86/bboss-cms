@@ -3709,7 +3709,7 @@ public class CmsLinkProcessor extends CmsHtmlParser implements CmsLinkProcessorI
 	 *
 	 * <p>Copyright: Copyright (c) 2006</p>
 	 *
-	 * <p>Company: 三一集团</p>
+	 * <p>Company: bbossgroups</p>
 	 * @Date 2007-4-23 10:19:06
 	 * @author biaoping.yin
 	 * @version 1.0

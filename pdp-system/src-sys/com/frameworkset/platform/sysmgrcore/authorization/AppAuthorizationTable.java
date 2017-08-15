@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.SPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.config.ConfigManager;
 import com.frameworkset.platform.security.authorization.AuthRole;
 import com.frameworkset.platform.security.authorization.AuthUser;
@@ -32,7 +32,7 @@ import com.frameworkset.platform.sysmgrcore.manager.UserManager;
  * @version 1.0
  */
 public class AppAuthorizationTable extends BaseAuthorizationTable implements Serializable{
-	private static final Logger log = Logger
+	private static final Logger log = LoggerFactory
 			.getLogger(AppAuthorizationTable.class);
 
 //	/** 

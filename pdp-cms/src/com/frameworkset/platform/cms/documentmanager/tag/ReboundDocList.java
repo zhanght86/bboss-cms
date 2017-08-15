@@ -1,13 +1,15 @@
 package com.frameworkset.platform.cms.documentmanager.tag;
 
-import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.cms.documentmanager.DocumentManagerImpl;
 import com.frameworkset.util.ListInfo;
-import org.apache.log4j.*;
 
 public class ReboundDocList extends DataInfoImpl implements java.io.Serializable {
-    private Logger log = Logger.getLogger(ReboundDocList.class);
+    private Logger log = LoggerFactory.getLogger(ReboundDocList.class);
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
             int maxPagesize) {
 		String flag = request.getParameter("flag");

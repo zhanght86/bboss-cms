@@ -55,7 +55,7 @@ import com.frameworkset.platform.sysmgrcore.purviewmanager.PurviewManager;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2008-3-6 9:34:20

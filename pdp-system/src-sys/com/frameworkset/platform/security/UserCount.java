@@ -9,7 +9,7 @@ package com.frameworkset.platform.security;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 11, 2008 5:20:17 PM
  * @author biaoping.yin,尹标平
  * @version 1.0

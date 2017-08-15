@@ -17,7 +17,7 @@ import com.frameworkset.platform.dictionary.DictAttachField;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-12-15 10:23:24
  * @author ge.tao
  * @version 1.0

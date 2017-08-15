@@ -4,9 +4,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.support.MessageSource;
 import org.frameworkset.web.servlet.support.WebApplicationContextUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -32,7 +33,7 @@ import com.frameworkset.platform.util.EventUtil;
 import com.frameworkset.util.StringUtil;
 
 public class CommonUserManger implements CommonUserManagerInf,org.frameworkset.spi.InitializingBean{
-	private static Logger log = Logger.getLogger(CommonUserManger.class);
+	private static Logger log = LoggerFactory.getLogger(CommonUserManger.class);
 	private ConfigSQLExecutor executor ;
 	private UserOrgParamManager userOrgParamManager = new UserOrgParamManager();
 	public CommonUserManger() {

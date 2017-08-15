@@ -21,7 +21,7 @@ import com.frameworkset.platform.cms.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 30, 2007 5:02:22 PM
  * @author ge.tao
  * @version 1.0

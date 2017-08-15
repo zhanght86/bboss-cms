@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 6, 2008 10:50:04 AM
  * @author biaoping.yin,尹标平
  * @version 1.0

@@ -8,8 +8,9 @@ import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 
-import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.CMSTagUtil;
 import com.frameworkset.platform.cms.channelmanager.Channel;
@@ -69,7 +70,7 @@ import com.frameworkset.util.StringUtil;
  */
 public class ContentPublishObject extends PublishObject {
 	
-	private static final Logger log = Logger.getLogger(ContentPublishObject.class);
+	private static final Logger log = LoggerFactory.getLogger(ContentPublishObject.class);
 	/**
 	 * 预览文档内容时的
 	 */

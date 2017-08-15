@@ -2,7 +2,8 @@ package com.frameworkset.platform.sysmgrcore.web.struts.action;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.platform.sysmgrcore.entity.Job;
@@ -28,14 +29,14 @@ import com.frameworkset.platform.sysmgrcore.manager.UserManager;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author hongyu.deng
  * @version 1.0
  */
 public class OrgJobAction   {
-	private Logger logger = Logger.getLogger(OrgJobAction.class.getName());
+	private Logger logger = LoggerFactory.getLogger(OrgJobAction.class.getName());
 
 	      
 	/**

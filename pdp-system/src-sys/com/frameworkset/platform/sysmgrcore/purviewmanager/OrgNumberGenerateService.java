@@ -14,7 +14,7 @@ import com.frameworkset.platform.sysmgrcore.entity.Organization;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date  Sep 5, 2008 1:08:53 PM
  * @author gao.tang
  * @version 1.0

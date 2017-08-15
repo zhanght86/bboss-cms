@@ -1,6 +1,5 @@
 package com.frameworkset.platform.sysmgrcore.web.tag;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.persitent.util.SQLUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -38,14 +38,14 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  *
  * @author feng.jing
  * @version 1.0
  */
 public class UserSearchList extends DataInfoImpl{
    
-    private static final Logger log = Logger.getLogger(UserSearchList.class);
+    private static final Logger log = LoggerFactory.getLogger(UserSearchList.class);
     static ConfigSQLExecutor executor = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/manager/db/user.xml");
     
     public static SQLUtil sqlUtilInsert = SQLUtil.getInstance("org/frameworkset/insert.xml");

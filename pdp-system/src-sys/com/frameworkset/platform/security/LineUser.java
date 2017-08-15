@@ -20,7 +20,7 @@ import java.util.Set;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date May 6, 2008 9:50:35 AM
  * @author biaoping.yin,尹标平
  * @version 1.0

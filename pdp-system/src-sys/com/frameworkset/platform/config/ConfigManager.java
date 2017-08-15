@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.Notifiable;
 import org.frameworkset.event.NotifiableFactory;
@@ -22,6 +21,8 @@ import org.frameworkset.spi.assemble.LinkConfigFile;
 import org.frameworkset.spi.assemble.ProviderInfoQueue;
 import org.frameworkset.spi.assemble.ProviderManagerInfo;
 import org.frameworkset.spi.assemble.SecurityProviderInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.model.ApplicationInfo;
 import com.frameworkset.platform.config.model.AuthorTableInfo;
@@ -64,7 +65,7 @@ import com.frameworkset.util.ResourceInitial;
  * @version 1.0
  */
 public class ConfigManager implements ResourceInitial {
-    private static Logger log = Logger.getLogger(ConfigManager.class);
+    private static Logger log = LoggerFactory.getLogger(ConfigManager.class);
     private static ConfigManager instance;    
     private boolean inited = false;
     

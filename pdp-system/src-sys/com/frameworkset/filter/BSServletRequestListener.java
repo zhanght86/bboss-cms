@@ -4,7 +4,8 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.ca.CAManager;
@@ -21,14 +22,14 @@ import com.frameworkset.platform.security.AccessControl;
  *
  * <p>Copyright: Copyright (c) 2007</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date Jul 24, 2008 11:24:52 AM
  * @author biaoping.yin,尹标平
  * @version 1.0
  */
 public class BSServletRequestListener implements javax.servlet.ServletRequestListener
 {
-	private static final Logger log = Logger.getLogger(BSServletRequestListener.class);
+	private static final Logger log = LoggerFactory.getLogger(BSServletRequestListener.class);
 	  
 	public void requestDestroyed(ServletRequestEvent requestEvent) {
 //		System.out.println("requestDestroyed Thread.currentThread():" + Thread.currentThread());

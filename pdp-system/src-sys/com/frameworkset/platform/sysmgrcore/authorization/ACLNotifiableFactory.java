@@ -2,9 +2,10 @@ package com.frameworkset.platform.sysmgrcore.authorization;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Notifiable;
 import org.frameworkset.event.NotifiableFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: </p>
@@ -19,7 +20,7 @@ import org.frameworkset.event.NotifiableFactory;
  * @version 1.0
  */
 public class ACLNotifiableFactory extends NotifiableFactory implements Serializable{
-    private static Logger log = Logger.getLogger(ACLNotifiableFactory.class);
+    private static Logger log = LoggerFactory.getLogger(ACLNotifiableFactory.class);
     private static NotifiableFactory instance;
 
     public static void main(String[] args) {

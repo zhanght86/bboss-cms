@@ -3,11 +3,12 @@
  */
 package com.frameworkset.platform.dictionary.tag;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.platform.dictionary.DictManager;
 import com.frameworkset.platform.dictionary.DictManagerImpl;
-import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
 
 /**
@@ -17,13 +18,13 @@ import com.frameworkset.util.ListInfo;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-12-8 11:14:46
  * @author ge.tao
  * @version 1.0
  */
 public class DictAttachFieldList extends DataInfoImpl implements java.io.Serializable {
-	private static final Logger logger = Logger.getLogger(DictAttachFieldList.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(DictAttachFieldList.class.getName());
 	
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,
 			int maxPagesize) {
@@ -47,7 +48,7 @@ public class DictAttachFieldList extends DataInfoImpl implements java.io.Seriali
 			return listInfo;
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			return null;
 		}
 	}

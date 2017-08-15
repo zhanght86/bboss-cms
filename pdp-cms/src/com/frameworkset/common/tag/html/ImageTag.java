@@ -16,7 +16,7 @@ import com.frameworkset.common.tag.CMSTagUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-4-14 23:02:32
  * @author biaoping.yin
  * @version 1.0

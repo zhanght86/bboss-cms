@@ -26,7 +26,7 @@ import com.frameworkset.platform.cms.util.CMSUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @author biaoping.yin

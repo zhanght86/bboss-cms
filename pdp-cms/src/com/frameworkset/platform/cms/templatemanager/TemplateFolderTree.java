@@ -18,7 +18,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-10-10 17:41:00
  * @author ge.tao
  * @version 1.0

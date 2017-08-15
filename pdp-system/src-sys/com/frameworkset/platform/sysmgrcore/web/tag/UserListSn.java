@@ -14,7 +14,8 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.Record;
@@ -35,7 +36,7 @@ import com.frameworkset.util.ListInfo;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class UserListSn extends DataInfoImpl implements Serializable{
-	private Logger log = Logger.getLogger(UserListSn.class);
+	private Logger log = LoggerFactory.getLogger(UserListSn.class);
     private ConfigSQLExecutor executor_ = new ConfigSQLExecutor("com/frameworkset/platform/sysmgrcore/web/tag/userListSn.xml");
     //sql盲注修复：将sql硬编码改成sql模板形式 houtt2 2014.04.29
 	protected ListInfo getDataList(String sortKey, boolean desc, long offset,

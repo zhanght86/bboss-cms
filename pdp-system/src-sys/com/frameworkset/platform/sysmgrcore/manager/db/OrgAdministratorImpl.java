@@ -44,7 +44,7 @@ import com.frameworkset.util.ListInfo;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2007-11-6 17:12:34

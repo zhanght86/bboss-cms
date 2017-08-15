@@ -22,7 +22,7 @@ import com.frameworkset.platform.cms.util.StringUtil;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-8-11 下午4:54:33

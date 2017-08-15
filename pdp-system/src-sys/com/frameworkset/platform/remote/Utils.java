@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.spi.ClientProxyContext;
 import org.frameworkset.spi.remote.JGroupHelper;
 import org.frameworkset.spi.remote.RPCAddress;
 import org.frameworkset.spi.remote.RPCHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import bboss.org.jgroups.Channel;
 import bboss.org.jgroups.util.RspList;
@@ -29,7 +30,7 @@ import bboss.org.jgroups.util.RspList;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date Jul 1, 2008 6:15:40 PM
@@ -38,7 +39,7 @@ import bboss.org.jgroups.util.RspList;
  */
 public class Utils {
 
-	private static final Logger log = Logger.getLogger(Utils.class);
+	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	
 	
 	
@@ -324,13 +325,11 @@ public class Utils {
 				}
 				catch(Exception e)
 				{
-					e.printStackTrace();
-					log.error(e);
+					log.error("",e);
 					UserOrgChangeHandle.getInstance().addRequests(eventtype,
 					"localhost");
 				} catch (Throwable e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error("",e);
 				}
 			}
 			else

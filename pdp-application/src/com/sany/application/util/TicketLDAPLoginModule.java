@@ -1,6 +1,7 @@
 package com.sany.application.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.authentication.CheckCallBackWrapper;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -9,7 +10,7 @@ import com.frameworkset.platform.sysmgrcore.exception.ManagerException;
 import com.sany.ldap.LdapLoginModule;
 
 public class TicketLDAPLoginModule extends LdapLoginModule{
-	private static Logger logger = Logger.getLogger(TicketLDAPLoginModule.class); 
+	private static Logger logger = LoggerFactory.getLogger(TicketLDAPLoginModule.class); 
 
 	@Override
 	protected void buildCallback(CheckCallBackWrapper checkCallBack, User user,
@@ -25,7 +26,7 @@ public class TicketLDAPLoginModule extends LdapLoginModule{
 			checkCallBack.setUserAttribute("ticket", ticket);
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 		}
 		
 	}

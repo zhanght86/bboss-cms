@@ -1,9 +1,9 @@
 package com.frameworkset.platform.sysmgrcore.manager;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.PreparedDBUtil;
 import com.frameworkset.common.poolman.Record;
@@ -20,7 +20,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
  *
  */
 public class LogGetNameById{
-	private static Logger log = Logger.getLogger(LogGetNameById.class);
+	private static Logger log = LoggerFactory.getLogger(LogGetNameById.class);
 	/**
 	 * 通过用户ID返回用户名称
 	 * @param userId

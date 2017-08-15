@@ -16,7 +16,7 @@ import java.util.List;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-9-6 上午11:16:32

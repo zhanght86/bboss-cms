@@ -13,7 +13,7 @@ package com.sany.workflow.service;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-12-21 下午3:26:47

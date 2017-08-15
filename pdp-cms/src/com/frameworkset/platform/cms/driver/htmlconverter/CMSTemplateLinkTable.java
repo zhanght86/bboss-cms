@@ -19,7 +19,7 @@ import com.frameworkset.platform.cms.driver.htmlconverter.CmsLinkProcessor.CMSLi
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2012-7-17 上午11:27:15

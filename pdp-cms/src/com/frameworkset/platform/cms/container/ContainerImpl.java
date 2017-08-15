@@ -23,7 +23,7 @@ import com.frameworkset.util.SimpleStringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-6-22 9:29:27
  * @author biaoping.yin
  * @version 1.0

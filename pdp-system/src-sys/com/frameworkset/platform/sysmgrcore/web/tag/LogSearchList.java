@@ -5,13 +5,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.platform.sysmgrcore.entity.Log;
-import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl;
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.tag.pager.DataInfoImpl;
+import com.frameworkset.platform.sysmgrcore.entity.Log;
+import com.frameworkset.platform.sysmgrcore.manager.db.OrgAdministratorImpl;
 import com.frameworkset.util.ListInfo;
 
 
@@ -22,7 +22,7 @@ public class LogSearchList  extends DataInfoImpl implements Serializable{
 	 */
 	private static final long serialVersionUID = 4944931965615278488L;
 	
-	private Logger log = Logger.getLogger(LogSearchList.class);
+	private Logger log = LoggerFactory.getLogger(LogSearchList.class);
 	    /*
 	     * (non-Javadoc)
 	     * 

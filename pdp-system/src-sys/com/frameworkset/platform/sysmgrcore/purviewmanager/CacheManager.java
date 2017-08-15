@@ -3,12 +3,13 @@ package com.frameworkset.platform.sysmgrcore.purviewmanager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.event.SimpleEventType;
 import org.frameworkset.util.ParamsHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.dictionary.DataManagerFactory;
@@ -21,7 +22,7 @@ import com.frameworkset.platform.sysmgrcore.manager.db.UserCacheManager;
 import com.frameworkset.util.StringUtil;
 
 public class CacheManager  implements Listener<String>{
-	private static final Logger log = Logger.getLogger(CacheManager.class);
+	private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
 	public static final String clearAll = "clearAll";
 	public static final String clearOrg = "clearOrg";
 	public static final String refreshMasterData = "refreshMasterData";

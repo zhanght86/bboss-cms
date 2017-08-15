@@ -7,12 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.spi.BaseApplicationContext;
 import org.frameworkset.spi.SPIException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.security.event.ACLEventType;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
@@ -27,7 +28,7 @@ import com.frameworkset.platform.sysmgrcore.manager.SecurityDatabase;
  * 
  */
 public class OrgCacheManager implements Listener,OrgCacheCallback{
-	private static Logger log = Logger.getLogger(OrgCacheManager.class);
+	private static Logger log = LoggerFactory.getLogger(OrgCacheManager.class);
 	OrgManager orgManager = SecurityDatabase.getOrgManager();
 	/** 机构的缓冲器 */
 	Map<String,Organization> orgMap;

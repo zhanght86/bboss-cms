@@ -13,7 +13,7 @@ package com.sany.sms;
  * </p>
  * 
  * <p>
- * Company: 三一集团
+ * Company: bbossgroups
  * </p>
  * 
  * @Date 2013-1-25 下午2:56:19

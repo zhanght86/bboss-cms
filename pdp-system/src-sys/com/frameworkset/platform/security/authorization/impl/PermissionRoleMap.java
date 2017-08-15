@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.Listener;
 import org.frameworkset.event.NotifiableFactory;
 import org.frameworkset.event.ResourceChangeEventType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.platform.config.model.PermissionRoleMapInfo;
 import com.frameworkset.platform.security.authorization.AuthRole;
@@ -26,7 +27,7 @@ import com.frameworkset.platform.security.event.ACLEventType;
  * @version 1.0
  */
 public abstract class PermissionRoleMap implements Listener {
-    private static Logger log = Logger.getLogger(PermissionRoleMap.class);
+    private static Logger log = LoggerFactory.getLogger(PermissionRoleMap.class);
     public static AuthRole NO_REQUIRED_ROLES[] = new AuthRole[0];
     public static AuthRole EMPTY_REQUIRED_ROLES[] = new AuthRole[0];
     /**资源许可与角色关系缓冲器*/
@@ -100,7 +101,7 @@ public abstract class PermissionRoleMap implements Listener {
             }
             this.inited = true;
         } catch (Exception e) {
-            log.error(e);
+            log.error("",e);
         }
 
     }

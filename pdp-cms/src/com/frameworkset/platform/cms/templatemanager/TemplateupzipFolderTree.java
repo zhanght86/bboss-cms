@@ -3,15 +3,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.cms.CMSManager;
 import com.frameworkset.platform.cms.sitemanager.Site;
 import com.frameworkset.platform.cms.util.CMSUtil;
 import com.frameworkset.platform.cms.util.FileUtil;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
-import com.frameworkset.util.StringUtil;
 
 /**
  * 本地上传无描述文件的模板包,解压后,临时目录的html/htm文件树形
@@ -21,13 +21,13 @@ import com.frameworkset.util.StringUtil;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-10-16 16:51:16
  * @author ge.tao
  * @version 1.0
  */
 public class TemplateupzipFolderTree extends COMTree implements java.io.Serializable{
-	private static Logger log = Logger.getLogger(TemplateupzipFolderTree.class);
+	private static Logger log = LoggerFactory.getLogger(TemplateupzipFolderTree.class);
 	private String rootPath;
 	private String siteId;
     

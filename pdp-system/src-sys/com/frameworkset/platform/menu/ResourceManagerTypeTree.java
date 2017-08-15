@@ -11,14 +11,15 @@ import java.util.Map;
 
 import javax.servlet.jsp.PageContext;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.frameworkset.common.tag.tree.COMTree;
+import com.frameworkset.common.tag.tree.itf.ITreeNode;
 import com.frameworkset.platform.config.ResourceInfoQueue;
 import com.frameworkset.platform.config.model.ResourceInfo;
 import com.frameworkset.platform.resource.ResourceManager;
 import com.frameworkset.platform.security.AccessControl;
-import com.frameworkset.common.tag.tree.COMTree;
-import com.frameworkset.common.tag.tree.itf.ITreeNode;
 
 /**
  * 
@@ -28,7 +29,7 @@ import com.frameworkset.common.tag.tree.itf.ITreeNode;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2007-10-29 11:08:04
  * @author biaoping.yin
  * @version 1.0
@@ -192,6 +193,6 @@ public class ResourceManagerTypeTree extends COMTree implements Serializable
 
     static
     {
-        log = Logger.getLogger(ResourceManagerTypeTree.class);
+        log = LoggerFactory.getLogger(ResourceManagerTypeTree.class);
     }
 }

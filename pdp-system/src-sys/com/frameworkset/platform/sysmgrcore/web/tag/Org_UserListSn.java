@@ -8,7 +8,8 @@ package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.DBUtil;
 import com.frameworkset.common.poolman.PreparedDBUtil;
@@ -28,7 +29,7 @@ public class Org_UserListSn extends DataInfoImpl {
 
    
 
-    private Logger log = Logger.getLogger(UserListSn.class);
+    private Logger log = LoggerFactory.getLogger(UserListSn.class);
 
     protected ListInfo getDataListOld(String sortKey, boolean desc, long offset, int maxPagesize) {
 

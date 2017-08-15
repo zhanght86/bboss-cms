@@ -15,7 +15,7 @@ import com.frameworkset.platform.cms.driver.i18n.CmsEncoder;
  *
  * <p>Copyright: Copyright (c) 2006</p>
  *
- * <p>Company: 三一集团</p>
+ * <p>Company: bbossgroups</p>
  * @Date 2006-9-19 9:14:53
  * @author biaoping.yin
  * @version 1.0

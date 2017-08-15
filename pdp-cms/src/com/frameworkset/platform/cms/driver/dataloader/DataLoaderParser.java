@@ -3,15 +3,15 @@ package com.frameworkset.platform.cms.driver.dataloader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.AttributeList;
 import org.xml.sax.HandlerBase;
 
-import com.frameworkset.platform.config.ConfigParser;
 import com.frameworkset.util.StringUtil;
 
 public class DataLoaderParser extends HandlerBase implements java.io.Serializable{
-	private static Logger log = Logger.getLogger(DataLoaderParser.class) ;
+	private static Logger log = LoggerFactory.getLogger(DataLoaderParser.class) ;
 //    private Stack traceStack;
     private StringBuffer currentValue;
     

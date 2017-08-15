@@ -14,10 +14,11 @@ import java.util.Map;
 
 import javax.transaction.RollbackException;
 
-import org.apache.log4j.Logger;
 import org.frameworkset.event.Event;
 import org.frameworkset.event.EventHandle;
 import org.frameworkset.event.EventImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.poolman.ConfigSQLExecutor;
 import com.frameworkset.common.poolman.DBUtil;
@@ -28,7 +29,6 @@ import com.frameworkset.common.poolman.handle.RowHandler;
 import com.frameworkset.orm.transaction.TransactionException;
 import com.frameworkset.orm.transaction.TransactionManager;
 import com.frameworkset.platform.security.event.ACLEventType;
-
 import com.frameworkset.platform.sysmgrcore.entity.Job;
 import com.frameworkset.platform.sysmgrcore.entity.Organization;
 import com.frameworkset.platform.sysmgrcore.entity.User;
@@ -49,7 +49,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 
 
 
-	private static Logger logger = Logger.getLogger(JobManagerImpl.class
+	private static Logger logger = LoggerFactory.getLogger(JobManagerImpl.class
 			.getName());
 
 	public boolean deleteJob(Job job) throws ManagerException { // 删除岗位
@@ -118,7 +118,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			Event event = new EventImpl("", ACLEventType.USER_ROLE_INFO_CHANGE);
 			super.change(event,true);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			throw new ManagerException(e.getMessage());
 		}
 
@@ -468,7 +468,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			list = getJobList(dBUtil);
 			
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("",e);
 			e.printStackTrace();
 		}
 		return list;
@@ -537,8 +537,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			
 			
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return datas;
 	}
@@ -550,8 +549,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			dBUtil.executeSelect(hql);
 			list = getJobList(dBUtil);
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return list;
 	}
@@ -571,8 +569,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 			}, Job.class,hql, offset, maxsize);
 		
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return null;
 	
@@ -592,8 +589,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 				dBUtil.executeSelect(sql);
 				list = getJobList(dBUtil);
 			} catch (Exception e) {
-				logger.error(e);
-				e.printStackTrace();
+				logger.error("",e);
 			}
 		}		
 		return list;
@@ -1131,8 +1127,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return null;
 	}
@@ -1149,8 +1144,7 @@ public class JobManagerImpl extends EventHandle implements JobManager {
 		}
 		catch(Exception e)
 		{
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("",e);
 		}
 		return null;
 	}

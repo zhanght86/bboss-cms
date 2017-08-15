@@ -8,7 +8,8 @@ package com.frameworkset.platform.sysmgrcore.web.tag;
 
 import java.io.Serializable;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.frameworkset.common.tag.pager.DataInfoImpl;
 import com.frameworkset.util.ListInfo;
@@ -24,7 +25,7 @@ public class OperList extends DataInfoImpl implements Serializable {
       /* (non-Javadoc)
        * @see com.frameworkset.common.tag.pager.DataInfoImpl#getDataList(java.lang.String, boolean, long, int)
        */
-      private Logger logger = Logger.getLogger(UserList.class.getName());
+      private Logger logger = LoggerFactory.getLogger(UserList.class.getName());
       protected ListInfo getDataList(String sortKey, boolean desc, long offset,
                   int maxPagesize) {
             ListInfo listInfo = new ListInfo();
