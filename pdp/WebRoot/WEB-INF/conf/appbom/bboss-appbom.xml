@@ -22,7 +22,7 @@
 		class="com.sany.appbom.action.AppBomController" >
 	</property>
 	
-	<property name="appbom.appBomService"
+	<property name="appbom.appBomService" enablerpc="true" 
 		f:executor="attr:appbom.configsqlexecutor"
 		class="com.sany.appbom.service.AppBomServiceImpl"
 		/>
