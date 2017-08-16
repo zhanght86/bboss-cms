@@ -13,15 +13,10 @@ sourceSets {
     
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-trans').tasks.install)
 dependencies {
-	
-   compile (
-    	//[group: 'it.sauronsoftware.jave', name: 'jave', version: '1.0.2', transitive: true],                   
-     	[group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
-     	[group: 'com.bbossgroups.pdp', name: 'pdp-trans', version: "${PROJ_VERSION}", transitive: true],
-    )
+	compile project(':pdp-system')
+	compile project(':pdp-trans')
+   
     compile ( 
 	    fileTree(dir: '../lib', include: '**/*.jar'), 
 	)

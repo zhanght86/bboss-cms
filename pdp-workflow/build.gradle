@@ -13,15 +13,11 @@ sourceSets {
     
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-workflow-web').tasks.install)
-project.tasks.compileJava.dependsOn(project(':pdp-mail').tasks.install)
 
 dependencies {
-	
+	compile project(':pdp-mail')
+	compile project(':pdp-workflow-web')
    compile (
-      [group: 'com.bbossgroups.pdp', name: 'pdp-workflow-web', version: "${PROJ_VERSION}", transitive: true],         
-       [group: 'com.bbossgroups.pdp', name: 'pdp-mail', version: "${PROJ_VERSION}", transitive: true],         
-           
 	fileTree(dir: '../lib', include: '**/*.jar'),
       
     )

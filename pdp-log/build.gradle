@@ -13,16 +13,9 @@ sourceSets {
     
     
 }
- project.tasks.compileJava.dependsOn(project(':pdp-cms').tasks.install)
 dependencies {
-	
-   compile (
-   //fileTree(dir: '../lib', include: '**/*.jar'),
-           
-       [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],         
-       [group: 'com.bbossgroups.pdp', name: 'pdp-cms', version: "${PROJ_VERSION}", transitive: false],         
-          
-
-    )
+	compile project(':pdp-system')
+	compile project(':pdp-cms')
+   
    
 }

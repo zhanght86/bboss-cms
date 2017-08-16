@@ -13,16 +13,9 @@ sourceSets {
     
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-system').tasks.install)
 dependencies {
-	
-   compile (
-    		// [group: 'log4j', name: 'log4j', version: '1.2.17', transitive: false],          
-              
-     [group: 'com.bbossgroups.pdp', name: 'pdp-system', version: "${PROJ_VERSION}", transitive: true],
-           
-
-    )
+	compile project(':pdp-system')
+   
      compileOnly (  
      	[group: 'commons-logging', name: 'commons-logging', version: '1.1', transitive: false],
         [group: 'commons-collections', name: 'commons-collections', version: '3.2.1', transitive: false],

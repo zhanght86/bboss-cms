@@ -17,7 +17,7 @@ sourceSets {
     
 }
 dependencies {
-	compile project(':pdp-parameters-handler')
+   compile project(':pdp-parameters-handler')
    compile (
    			fileTree(dir: '../lib', include: '**/*.jar'),
              

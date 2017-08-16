@@ -16,11 +16,7 @@ sourceSets {
 project.tasks.compileJava.dependsOn(project(':pdp-application').tasks.install)
 
 dependencies {
-	
-   compile (
-      [group: 'com.bbossgroups.pdp', name: 'pdp-application', version: "${PROJ_VERSION}", transitive: true],         
-            
-
-    )
+	compile project(':pdp-application')
+   
      
 }

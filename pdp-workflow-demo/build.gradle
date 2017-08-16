@@ -20,12 +20,10 @@ sourceSets {
     }
     
 }
-project.tasks.compileJava.dependsOn(project(':pdp-workflow-bussiness').tasks.install)
 
 dependencies {
-	
+	compile project(':pdp-workflow-bussiness')
    compile (
-      [group: 'com.bbossgroups.pdp', name: 'pdp-workflow-bussiness', version: "${PROJ_VERSION}", transitive: true],         
         
       		fileTree(dir: '../lib', include: '**/*.jar'),
       
