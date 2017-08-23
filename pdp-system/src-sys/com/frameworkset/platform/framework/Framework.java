@@ -632,6 +632,14 @@ public class Framework implements ResourceInitial,MessageSource {
 				config.setOwnersubsystem(frameworkmeta);
 			config.setLanguages(languages);
 			buildFramework( config);
+			if(this.systemid == null || this.systemid.equals("module"))
+			{
+				this.rootsystem = new SubSystem();
+				rootsystem.setSuccessRedirect(config.getSuccessRedirect());
+				rootsystem.setLogoutredirect(config.getLogoutredirect());
+				rootsystem.setId("module");
+				rootsystem.setModule("module.xml");
+			}
 			Map temp_sys = config.getSubsystems();
 			this.subsystemList = config.getSubsystemList();
 			synSubsystems(temp_sys);
@@ -683,6 +691,11 @@ public class Framework implements ResourceInitial,MessageSource {
 //				this.showrootleftmenu = config.isShowrootleftmenu();
 //				
 				buildFramework( config);
+				this.rootsystem = new SubSystem();
+				rootsystem.setSuccessRedirect(config.getSuccessRedirect());
+				rootsystem.setLogoutredirect(config.getLogoutredirect());
+				rootsystem.setId("module");
+				rootsystem.setModule(this.configFile);
 				this.subsystems = config.getSubsystems();
 				this.subsystemList = config.getSubsystemList();
 				initSubSystems();
@@ -693,7 +706,7 @@ public class Framework implements ResourceInitial,MessageSource {
 			
 		}
 	}
-
+	private SubSystem rootsystem = null;
 	private void setParentPath(String configFile) {
 		if (configFile == null || configFile.equals(""))
 			return;
@@ -2201,6 +2214,8 @@ public class Framework implements ResourceInitial,MessageSource {
 		return Framework.getInstance()._getSubSystem( systemid);
 	}
 	private SubSystem _getSubSystem(String systemid) {
+		if(systemid == null || systemid.equals("module"))
+			return this.rootsystem;
 		if(this.subsystems != null)
 		{
 			return subsystems.get(systemid);
@@ -2208,7 +2223,9 @@ public class Framework implements ResourceInitial,MessageSource {
 		return null;
 		
 	}
-
+	public SubSystem getRootsystem() {
+		return rootsystem;
+	}
 	public Map<Locale, String> getLocaleDescriptions() {
 		return localeDescriptions;
 	}

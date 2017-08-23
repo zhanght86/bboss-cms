@@ -185,8 +185,18 @@ public class FrameworkConfiguration  {
             this.messagesourcefiles = handler.getMessagesourcefiles();
             this.languages = handler.getLanguages();
             this.localeDescriptions = handler.getLocaleDescriptions();
+            this.logoutredirect = handler.getLogoutredirect();
+            this.successRedirect = handler.getSuccessRedirect();
     }
+    private String successRedirect;
+	private String logoutredirect;
+	public String getSuccessRedirect() {
+		return successRedirect;
+	}
 
+	public String getLogoutredirect() {
+		return logoutredirect;
+	}
     private static ClassLoader getTCL()
         throws IllegalAccessException, InvocationTargetException
     {

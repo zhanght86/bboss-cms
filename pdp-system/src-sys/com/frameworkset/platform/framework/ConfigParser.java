@@ -46,6 +46,8 @@ public class ConfigParser extends I18nXMLParser  {
     private MenuQueue menus; 
     private ItemQueue items;
     private SubSystem ownersubsystem;
+    private String successRedirect;
+	private String logoutredirect;
     private String file;
     private String systemid;
     /**
@@ -88,7 +90,13 @@ public class ConfigParser extends I18nXMLParser  {
     private String messagesourcefiles;
      
     
+    public String getSuccessRedirect() {
+		return successRedirect;
+	}
 
+	public String getLogoutredirect() {
+		return logoutredirect;
+	}
 	public String getMessagesourcefiles() {
 		return messagesourcefiles;
 	}
@@ -228,6 +236,9 @@ public class ConfigParser extends I18nXMLParser  {
             String las = attributes.getValue("languages");
             if(las != null && !las.equals(""))
             	this.languages = this.converLocales(las);
+            this.logoutredirect = attributes.getValue("logoutredirect");
+            this.successRedirect = attributes.getValue("successRedirect");
+            
            
         }
         else if(name.toLowerCase().equals("module"))
